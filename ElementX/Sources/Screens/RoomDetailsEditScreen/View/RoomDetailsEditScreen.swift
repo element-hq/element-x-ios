@@ -68,7 +68,7 @@ struct RoomDetailsEditScreen: View {
                                    name: context.viewState.initialName,
                                    contentID: context.viewState.roomID,
                                    avatarSize: .user(on: .memberDetails),
-                                   imageProvider: context.imageProvider)
+                                   mediaProvider: context.mediaProvider)
                 .overlay(alignment: .bottomTrailing) {
                     if context.viewState.canEditAvatar {
                         avatarOverlayIcon

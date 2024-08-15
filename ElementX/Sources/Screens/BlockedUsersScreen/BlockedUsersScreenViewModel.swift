@@ -35,7 +35,7 @@ class BlockedUsersScreenViewModel: BlockedUsersScreenViewModelType, BlockedUsers
         let ignoredUsers = clientProxy.ignoredUsersPublisher.value?.map { UserProfileProxy(userID: $0) }
         
         super.init(initialViewState: BlockedUsersScreenViewState(blockedUsers: ignoredUsers ?? []),
-                   imageProvider: mediaProvider)
+                   mediaProvider: mediaProvider)
         
         showLoadingIndicator()
         

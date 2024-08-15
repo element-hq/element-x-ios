@@ -44,7 +44,7 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                                                                     initialName: roomName ?? "",
                                                                     initialTopic: roomTopic ?? "",
                                                                     avatarURL: roomAvatar,
-                                                                    bindings: .init(name: roomName ?? "", topic: roomTopic ?? "")), imageProvider: mediaProvider)
+                                                                    bindings: .init(name: roomName ?? "", topic: roomTopic ?? "")), mediaProvider: mediaProvider)
         
         Task {
             // Can't use async let because the mocks aren't thread safe when calling the same method 🤦‍♂️

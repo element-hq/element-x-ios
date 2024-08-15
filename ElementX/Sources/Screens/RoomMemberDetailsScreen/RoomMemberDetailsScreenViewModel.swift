@@ -48,7 +48,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         
         let initialViewState = RoomMemberDetailsScreenViewState(userID: userID, bindings: .init())
         
-        super.init(initialViewState: initialViewState, imageProvider: mediaProvider)
+        super.init(initialViewState: initialViewState, mediaProvider: mediaProvider)
         
         showMemberLoadingIndicator()
         Task {

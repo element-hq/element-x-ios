@@ -29,7 +29,7 @@ struct CallNotificationRoomTimelineView: View {
                                 name: timelineItem.sender.displayName ?? timelineItem.sender.id,
                                 contentID: timelineItem.sender.id,
                                 avatarSize: .user(on: .timeline),
-                                imageProvider: context.imageProvider)
+                                mediaProvider: context.mediaProvider)
                 .accessibilityHidden(true)
             
             VStack(alignment: .leading, spacing: 0) {

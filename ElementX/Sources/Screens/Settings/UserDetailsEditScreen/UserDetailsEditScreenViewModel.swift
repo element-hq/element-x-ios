@@ -36,7 +36,7 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: UserDetailsEditScreenViewState(userID: clientProxy.userID,
-                                                                    bindings: .init()), imageProvider: mediaProvider)
+                                                                    bindings: .init()), mediaProvider: mediaProvider)
         
         clientProxy.userAvatarURLPublisher
             .receive(on: DispatchQueue.main)

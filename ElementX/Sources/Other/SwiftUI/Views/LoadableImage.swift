@@ -29,7 +29,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
     private let mediaType: LoadableImageMediaType
     private let blurhash: String?
     private let size: CGSize?
-    private let imageProvider: ImageProviderProtocol?
+    private let mediaProvider: MediaProviderProtocol?
     private let transformer: (AnyView) -> TransformerView
     private let placeholder: () -> PlaceholderView
     
@@ -45,14 +45,14 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
          mediaType: LoadableImageMediaType = .generic,
          blurhash: String? = nil,
          size: CGSize? = nil,
-         imageProvider: ImageProviderProtocol?,
+         mediaProvider: MediaProviderProtocol?,
          transformer: @escaping (AnyView) -> TransformerView = { $0 },
          placeholder: @escaping () -> PlaceholderView) {
         self.mediaSource = mediaSource
         self.mediaType = mediaType
         self.blurhash = blurhash
         self.size = size
-        self.imageProvider = imageProvider
+        self.mediaProvider = mediaProvider
         self.transformer = transformer
         self.placeholder = placeholder
     }
@@ -61,14 +61,14 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
          mediaType: LoadableImageMediaType = .generic,
          blurhash: String? = nil,
          size: CGSize? = nil,
-         imageProvider: ImageProviderProtocol?,
+         mediaProvider: MediaProviderProtocol?,
          transformer: @escaping (AnyView) -> TransformerView = { $0 },
          placeholder: @escaping () -> PlaceholderView) {
         self.init(mediaSource: MediaSourceProxy(url: url, mimeType: nil),
                   mediaType: mediaType,
                   blurhash: blurhash,
                   size: size,
-                  imageProvider: imageProvider,
+                  mediaProvider: mediaProvider,
                   transformer: transformer,
                   placeholder: placeholder)
     }
@@ -78,7 +78,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
                              mediaType: mediaType,
                              blurhash: blurhash,
                              size: size,
-                             imageProvider: imageProvider,
+                             mediaProvider: mediaProvider,
                              transformer: transformer,
                              placeholder: placeholder)
             // Binds the lifecycle of the LoadableImage to the associated URL.
@@ -100,17 +100,17 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
          mediaType: LoadableImageMediaType,
          blurhash: String? = nil,
          size: CGSize? = nil,
-         imageProvider: ImageProviderProtocol?,
+         mediaProvider: MediaProviderProtocol?,
          transformer: @escaping (AnyView) -> TransformerView,
          placeholder: @escaping () -> PlaceholderView) {
-        assert(imageProvider != nil, "Missing image provider, make sure one has been supplied to the view model.")
+        assert(mediaProvider != nil, "Missing image provider, make sure one has been supplied to the view model.")
         
         self.mediaSource = mediaSource
         self.mediaType = mediaType
         self.blurhash = blurhash
         self.transformer = transformer
         self.placeholder = placeholder
-        _contentLoader = StateObject(wrappedValue: ContentLoader(mediaSource: mediaSource, size: size, imageProvider: imageProvider))
+        _contentLoader = StateObject(wrappedValue: ContentLoader(mediaSource: mediaSource, size: size, mediaProvider: mediaProvider))
     }
     
     var body: some View {
@@ -164,7 +164,7 @@ private class ContentLoader: ObservableObject {
         case gifData(Data)
     }
     
-    private let imageProvider: ImageProviderProtocol?
+    private let mediaProvider: MediaProviderProtocol?
     private let mediaSource: MediaSourceProxy
     private let size: CGSize?
     private var imageLoadingCancellable: AnyCancellable?
@@ -177,31 +177,31 @@ private class ContentLoader: ObservableObject {
         }
         
         if isGIF {
-            if let image = imageProvider?.imageFromSource(mediaSource),
+            if let image = mediaProvider?.imageFromSource(mediaSource),
                let data = image.kf.data(format: .GIF) {
                 return .gifData(data)
             }
-        } else if let image = imageProvider?.imageFromSource(mediaSource, size: size) {
+        } else if let image = mediaProvider?.imageFromSource(mediaSource, size: size) {
             return .image(image)
         }
         
         return cachedContent
     }
     
-    init(mediaSource: MediaSourceProxy, size: CGSize?, imageProvider: ImageProviderProtocol?) {
+    init(mediaSource: MediaSourceProxy, size: CGSize?, mediaProvider: MediaProviderProtocol?) {
         self.mediaSource = mediaSource
         self.size = size
-        self.imageProvider = imageProvider
+        self.mediaProvider = mediaProvider
     }
     
     @MainActor
     func load() async {
         if isGIF {
-            if case let .success(data) = await imageProvider?.loadImageDataFromSource(mediaSource) {
+            if case let .success(data) = await mediaProvider?.loadImageDataFromSource(mediaSource) {
                 cachedContent = .gifData(data)
             }
         } else {
-            guard let task = imageProvider?.loadImageRetryingOnReconnection(mediaSource, size: size) else {
+            guard let task = mediaProvider?.loadImageRetryingOnReconnection(mediaSource, size: size) else {
                 MXLog.error("Failed loading image, invalid reconnection retry task.")
                 return
             }

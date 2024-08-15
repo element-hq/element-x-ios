@@ -57,7 +57,7 @@ struct ComposerToolbar: View {
     }
     
     private var suggestionView: some View {
-        CompletionSuggestionView(imageProvider: context.imageProvider,
+        CompletionSuggestionView(mediaProvider: context.mediaProvider,
                                  items: context.viewState.suggestions,
                                  showBackgroundShadow: !context.composerExpanded) { suggestion in
             context.send(viewAction: .selectedSuggestion(suggestion))

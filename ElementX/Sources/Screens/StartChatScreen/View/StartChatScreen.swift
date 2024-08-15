@@ -90,7 +90,7 @@ struct StartChatScreen: View {
                 ForEach(context.viewState.usersSection.users, id: \.userID) { user in
                     UserProfileListRow(user: user,
                                        membership: nil,
-                                       imageProvider: context.imageProvider,
+                                       mediaProvider: context.mediaProvider,
                                        kind: .button {
                                            context.send(viewAction: .selectUser(user))
                                        })

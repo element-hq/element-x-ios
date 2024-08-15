@@ -20,7 +20,7 @@ import SwiftUI
 
 struct RoomChangeRolesScreenRow: View {
     let member: RoomMemberDetails
-    let imageProvider: ImageProviderProtocol?
+    let mediaProvider: MediaProviderProtocol?
     
     let isSelected: Bool
     let action: () -> Void
@@ -38,7 +38,7 @@ struct RoomChangeRolesScreenRow: View {
                             name: member.name,
                             contentID: member.id,
                             avatarSize: .user(on: .startChat),
-                            imageProvider: imageProvider)
+                            mediaProvider: mediaProvider)
     }
 }
 
@@ -48,34 +48,34 @@ struct RoomChangeRolesScreenRow_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         Form {
             RoomChangeRolesScreenRow(member: .init(withProxy: RoomMemberProxyMock.mockAlice),
-                                     imageProvider: MockMediaProvider(),
+                                     mediaProvider: MockMediaProvider(),
                                      isSelected: true,
                                      action: action)
             
             RoomChangeRolesScreenRow(member: .init(withProxy: RoomMemberProxyMock.mockBob),
-                                     imageProvider: MockMediaProvider(),
+                                     mediaProvider: MockMediaProvider(),
                                      isSelected: false,
                                      action: action)
             
             RoomChangeRolesScreenRow(member: .init(withProxy: RoomMemberProxyMock.mockInvited),
-                                     imageProvider: MockMediaProvider(),
+                                     mediaProvider: MockMediaProvider(),
                                      isSelected: false,
                                      action: action)
             
             RoomChangeRolesScreenRow(member: .init(withProxy: RoomMemberProxyMock.mockCharlie),
-                                     imageProvider: MockMediaProvider(),
+                                     mediaProvider: MockMediaProvider(),
                                      isSelected: true,
                                      action: action)
                 .disabled(true)
             
             RoomChangeRolesScreenRow(member: .init(withProxy: RoomMemberProxyMock(with: .init(userID: "@someone:matrix.org", membership: .join))),
-                                     imageProvider: MockMediaProvider(),
+                                     mediaProvider: MockMediaProvider(),
                                      isSelected: false,
                                      action: action)
                 .disabled(true)
             
             RoomChangeRolesScreenRow(member: .init(withProxy: RoomMemberProxyMock(with: .init(userID: "@someone:matrix.org", membership: .join))),
-                                     imageProvider: MockMediaProvider(),
+                                     mediaProvider: MockMediaProvider(),
                                      isSelected: false,
                                      action: action)
         }

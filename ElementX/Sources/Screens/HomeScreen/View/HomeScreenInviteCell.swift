@@ -30,7 +30,7 @@ struct HomeScreenInviteCell: View {
             if dynamicTypeSize < .accessibility3 {
                 RoomAvatarImage(avatar: room.avatar,
                                 avatarSize: .custom(52),
-                                imageProvider: context.imageProvider)
+                                mediaProvider: context.mediaProvider)
                     .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                     .accessibilityHidden(true)
             }
@@ -79,7 +79,7 @@ struct HomeScreenInviteCell: View {
     @ViewBuilder
     private var inviterView: some View {
         if let inviter = room.inviter, !room.isDirect {
-            RoomInviterLabel(inviter: inviter, imageProvider: context.imageProvider)
+            RoomInviterLabel(inviter: inviter, mediaProvider: context.mediaProvider)
                 .font(.compound.bodyMD)
                 .foregroundStyle(.compound.textPlaceholder)
         }

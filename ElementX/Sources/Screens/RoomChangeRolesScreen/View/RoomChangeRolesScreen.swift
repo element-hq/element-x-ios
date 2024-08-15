@@ -74,7 +74,7 @@ struct RoomChangeRolesScreen: View {
             ScrollViewReader { scrollView in
                 HStack(spacing: 16) {
                     ForEach(context.viewState.membersWithRole, id: \.id) { member in
-                        RoomChangeRolesScreenSelectedItem(member: member, imageProvider: context.imageProvider) {
+                        RoomChangeRolesScreenSelectedItem(member: member, mediaProvider: context.mediaProvider) {
                             context.send(viewAction: .demoteMember(member))
                         }
                         .frame(width: cellWidth)

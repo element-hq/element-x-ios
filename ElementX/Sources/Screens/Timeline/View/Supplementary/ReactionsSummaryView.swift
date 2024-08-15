@@ -19,7 +19,7 @@ import SwiftUI
 struct ReactionsSummaryView: View {
     let reactions: [AggregatedReaction]
     let members: [String: RoomMemberState]
-    let imageProvider: ImageProviderProtocol?
+    let mediaProvider: MediaProviderProtocol?
     
     @State var selectedReactionKey: String
     
@@ -64,7 +64,7 @@ struct ReactionsSummaryView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 8) {
                         ForEach(reaction.senders) { sender in
-                            ReactionSummarySenderView(sender: sender, member: members[sender.id], imageProvider: imageProvider)
+                            ReactionSummarySenderView(sender: sender, member: members[sender.id], mediaProvider: mediaProvider)
                                 .padding(.horizontal, 16)
                         }
                     }
@@ -110,7 +110,7 @@ private struct ReactionSummaryButton: View {
 private struct ReactionSummarySenderView: View {
     var sender: ReactionSender
     var member: RoomMemberState?
-    let imageProvider: ImageProviderProtocol?
+    let mediaProvider: MediaProviderProtocol?
     
     var displayName: String {
         member?.displayName ?? sender.id
@@ -122,7 +122,7 @@ private struct ReactionSummarySenderView: View {
                                 name: displayName,
                                 contentID: sender.id,
                                 avatarSize: .user(on: .timeline),
-                                imageProvider: imageProvider)
+                                mediaProvider: mediaProvider)
             
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 8) {
@@ -147,7 +147,7 @@ struct ReactionsSummaryView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         ReactionsSummaryView(reactions: AggregatedReaction.mockReactions,
                              members: [:],
-                             imageProvider: MockMediaProvider(),
+                             mediaProvider: MockMediaProvider(),
                              selectedReactionKey: AggregatedReaction.mockReactions[0].key)
     }
 }

@@ -66,7 +66,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                            roomAvatar: roomProxy.avatar,
                                            hasOngoingCall: roomProxy.hasOngoingCall,
                                            bindings: .init()),
-                   imageProvider: mediaProvider)
+                   mediaProvider: mediaProvider)
         
         setupSubscriptions()
     }

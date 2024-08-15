@@ -75,7 +75,7 @@ struct RoomMemberDetailsScreen: View {
         if let memberDetails = context.viewState.memberDetails {
             AvatarHeaderView(member: memberDetails,
                              avatarSize: .user(on: .memberDetails),
-                             imageProvider: context.imageProvider) {
+                             mediaProvider: context.mediaProvider) {
                 context.send(viewAction: .displayAvatar)
             } footer: {
                 otherUserFooter
@@ -83,7 +83,7 @@ struct RoomMemberDetailsScreen: View {
         } else {
             AvatarHeaderView(user: UserProfileProxy(userID: context.viewState.userID),
                              avatarSize: .user(on: .memberDetails),
-                             imageProvider: context.imageProvider,
+                             mediaProvider: context.mediaProvider,
                              footer: { })
         }
     }

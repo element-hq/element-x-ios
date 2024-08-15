@@ -29,7 +29,7 @@ struct RoomChangeRolesScreenSection: View {
             Section {
                 ForEach(members, id: \.id) { member in
                     RoomChangeRolesScreenRow(member: member,
-                                             imageProvider: context.imageProvider,
+                                             mediaProvider: context.mediaProvider,
                                              isSelected: isMemberSelected(member)) {
                         context.send(viewAction: .toggleMember(member))
                     }

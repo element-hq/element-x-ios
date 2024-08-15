@@ -29,7 +29,7 @@ struct RoomMembersListManageMemberSheet: View {
         Form {
             AvatarHeaderView(member: member,
                              avatarSize: .user(on: .memberDetails),
-                             imageProvider: context.imageProvider) {
+                             mediaProvider: context.mediaProvider) {
                 EmptyView()
             }
             

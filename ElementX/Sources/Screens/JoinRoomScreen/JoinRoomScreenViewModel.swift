@@ -46,7 +46,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: JoinRoomScreenViewState(roomID: roomID), imageProvider: mediaProvider)
+        super.init(initialViewState: JoinRoomScreenViewState(roomID: roomID), mediaProvider: mediaProvider)
         
         Task {
             await loadRoomDetails()

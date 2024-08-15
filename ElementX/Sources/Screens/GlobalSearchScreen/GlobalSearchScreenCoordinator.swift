@@ -41,7 +41,7 @@ class GlobalSearchScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: GlobalSearchScreenCoordinatorParameters) {
         viewModel = GlobalSearchScreenViewModel(roomSummaryProvider: parameters.roomSummaryProvider,
-                                                imageProvider: parameters.mediaProvider)
+                                                mediaProvider: parameters.mediaProvider)
         
         viewModel.actions
             .sink { [weak self] action in

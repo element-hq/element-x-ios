@@ -67,7 +67,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         super.init(initialViewState: ComposerToolbarViewState(audioPlayerState: .init(id: .recorderPreview, duration: 0),
                                                               audioRecorderState: .init(),
                                                               bindings: .init()),
-                   imageProvider: mediaProvider)
+                   mediaProvider: mediaProvider)
 
         context.$viewState
             .map(\.composerMode)

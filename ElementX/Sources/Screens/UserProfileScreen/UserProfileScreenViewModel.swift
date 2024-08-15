@@ -47,7 +47,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
                                                           isPresentedModally: isPresentedModally,
                                                           bindings: .init())
         
-        super.init(initialViewState: initialViewState, imageProvider: mediaProvider)
+        super.init(initialViewState: initialViewState, mediaProvider: mediaProvider)
         
         showLoadingIndicator(allowsInteraction: true)
         Task {

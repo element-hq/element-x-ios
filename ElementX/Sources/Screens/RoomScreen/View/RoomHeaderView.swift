@@ -22,7 +22,7 @@ struct RoomHeaderView: View {
     let roomName: String
     let roomAvatar: RoomAvatar
     
-    let imageProvider: ImageProviderProtocol?
+    let mediaProvider: MediaProviderProtocol?
     
     var body: some View {
         HStack(spacing: 12) {
@@ -39,7 +39,7 @@ struct RoomHeaderView: View {
     private var avatarImage: some View {
         RoomAvatarImage(avatar: roomAvatar,
                         avatarSize: .room(on: .timeline),
-                        imageProvider: imageProvider)
+                        mediaProvider: mediaProvider)
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.avatar)
     }
 }
@@ -50,7 +50,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
                        roomAvatar: .room(id: "1",
                                          name: "Some Room Name",
                                          avatarURL: URL.picturesDirectory),
-                       imageProvider: MockMediaProvider())
+                       mediaProvider: MockMediaProvider())
             .previewLayout(.sizeThatFits)
             .padding()
         
@@ -58,7 +58,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
                        roomAvatar: .room(id: "1",
                                          name: "Some Room Name",
                                          avatarURL: nil),
-                       imageProvider: MockMediaProvider())
+                       mediaProvider: MockMediaProvider())
             .previewLayout(.sizeThatFits)
             .padding()
     }

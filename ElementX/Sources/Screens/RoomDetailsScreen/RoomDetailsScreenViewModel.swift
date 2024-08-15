@@ -82,7 +82,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            joinedMembersCount: roomProxy.joinedMembersCount,
                                            notificationSettingsState: .loading,
                                            bindings: .init()),
-                   imageProvider: mediaProvider)
+                   mediaProvider: mediaProvider)
         
         appSettings.$pinningEnabled
             .weakAssign(to: \.state.isPinningEnabled, on: self)

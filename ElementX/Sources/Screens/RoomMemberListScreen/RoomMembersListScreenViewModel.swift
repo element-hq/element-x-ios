@@ -43,7 +43,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         
         super.init(initialViewState: .init(joinedMembersCount: roomProxy.joinedMembersCount,
                                            bindings: .init(mode: initialMode)),
-                   imageProvider: mediaProvider)
+                   mediaProvider: mediaProvider)
         
         setupMembers()
     }
