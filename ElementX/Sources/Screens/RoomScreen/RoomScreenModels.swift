@@ -22,6 +22,7 @@ enum RoomScreenViewModelAction {
     case displayPinnedEventsTimeline
     case displayRoomDetails
     case displayCall
+    case removeComposerFocus
 }
 
 enum RoomScreenViewAction {

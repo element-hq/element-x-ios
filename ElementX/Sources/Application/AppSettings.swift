@@ -252,7 +252,8 @@ final class AppSettings {
 
     // MARK: - Element Call
     
-    let elementCallBaseURL: URL = "https://call.element.io"
+    #warning("Temporary base URL whilst PiP support is being added.")
+    let elementCallBaseURL: URL = "https://pr2563--element-call.netlify.app/"
     
     @UserPreference(key: UserDefaultsKeys.elementCallBaseURLOverride, defaultValue: nil, storageType: .userDefaults(store))
     var elementCallBaseURLOverride: URL?

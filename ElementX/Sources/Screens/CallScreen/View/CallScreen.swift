@@ -15,6 +15,7 @@
 //
 
 import Combine
+import SFSafeSymbols
 import SwiftUI
 import WebKit
 
@@ -22,9 +23,22 @@ struct CallScreen: View {
     @ObservedObject var context: CallScreenViewModel.Context
     
     var body: some View {
-        content
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        NavigationStack {
+            content
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button { context.send(viewAction: .navigateBack) } label: {
+                            Image(systemSymbol: .chevronBackward)
+                                .fontWeight(.semibold)
+                        }
+                        .offset(y: -8)
+                        // .padding(.leading, -8) // Fixes the button alignment, but harder to tap.
+                    }
+                }
+        }
     }
     
     @ViewBuilder
@@ -194,6 +208,7 @@ struct CallScreen_Previews: PreviewProvider {
     static let viewModel = {
         let clientProxy = ClientProxyMock()
         clientProxy.getElementWellKnownReturnValue = .success(nil)
+        clientProxy.deviceID = "call-device-id"
         
         let roomProxy = RoomProxyMock()
         roomProxy.sendCallNotificationIfNeeededReturnValue = .success(())

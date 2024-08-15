@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import AVKit
 import CallKit
 import Combine
 import SwiftUI
@@ -151,6 +152,23 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                     syncUpdateCancellable = nil
                 }
             }, receiveValue: { _ in })
+        
+        // Use did start otherwise there's a black box left on the screen during the pip controller animation.
+        NotificationCenter.default.publisher(for: .init("AVPictureInPictureControllerDidStartNotification"))
+            .sink { [weak self] notification in
+                guard let self else { return }
+                let controller = notification.object as? AVPictureInPictureController
+                actionsSubject.send(.pictureInPictureStarted(controller))
+            }
+            .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: .init("AVPictureInPictureControllerWillStopNotification"))
+            .sink { [weak self] _ in
+                guard let self else { return }
+                actionsSubject.send(.pictureInPictureStopped)
+                Task { try await self.state.bindings.javaScriptEvaluator?("controls.disableCompatPip()") }
+            }
+            .store(in: &cancellables)
     }
     
     override func process(viewAction: CallScreenViewAction) {
@@ -158,6 +176,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         case .urlChanged(let url):
             guard let url else { return }
             MXLog.info("URL changed to: \(url)")
+        case .navigateBack:
+            handleBackwardsNavigation()
         }
     }
     
@@ -170,6 +190,29 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     }
     
     // MARK: - Private
+    
+    private func handleBackwardsNavigation() {
+        #if targetEnvironment(simulator)
+        if UIDevice.current.isPhone {
+            MXLog.warning("The iPhone simulator doesn't support PiP.")
+            actionsSubject.send(.dismiss)
+            return
+        }
+        #endif
+        
+        guard state.url != nil else {
+            actionsSubject.send(.dismiss)
+            return
+        }
+        
+        Task {
+            try await state.bindings.javaScriptEvaluator?("controls.enableCompatPip()")
+            // TODO: Enable this check when implemented on web.
+            // if result as? Bool != true {
+            //    actionsSubject.send(.dismiss)
+            // }
+        }
+    }
     
     private func setAudioEnabled(_ enabled: Bool) async {
         let message = ElementCallWidgetMessage(direction: .toWidget,

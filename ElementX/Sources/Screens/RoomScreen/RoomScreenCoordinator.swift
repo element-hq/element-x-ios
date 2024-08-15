@@ -156,6 +156,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentRoomDetails)
                 case .displayCall:
                     actionsSubject.send(.presentCallScreen)
+                case .removeComposerFocus:
+                    composerViewModel.process(timelineAction: .removeFocus)
                 }
             }
             .store(in: &cancellables)
