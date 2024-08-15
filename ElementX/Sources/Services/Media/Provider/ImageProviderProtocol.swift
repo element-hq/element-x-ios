@@ -22,10 +22,16 @@ protocol ImageProviderProtocol {
     func loadImageFromSource(_ source: MediaSourceProxy, size: CGSize?) async -> Result<UIImage, MediaProviderError>
     
     func loadImageDataFromSource(_ source: MediaSourceProxy) async -> Result<Data, MediaProviderError>
+    
+    func loadImageRetryingOnReconnection(_ source: MediaSourceProxy, size: CGSize?) -> Task<UIImage, Error>
 }
 
 extension ImageProviderProtocol {
     func imageFromSource(_ source: MediaSourceProxy?) -> UIImage? {
         imageFromSource(source, size: nil)
+    }
+    
+    func loadImageRetryingOnReconnection(_ source: MediaSourceProxy) -> Task<UIImage, Error> {
+        loadImageRetryingOnReconnection(source, size: nil)
     }
 }

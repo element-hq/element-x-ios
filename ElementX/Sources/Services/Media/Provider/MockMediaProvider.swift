@@ -58,4 +58,14 @@ struct MockMediaProvider: MediaProviderProtocol {
         }
         return .failure(.failedRetrievingFile)
     }
+    
+    func loadImageRetryingOnReconnection(_ source: MediaSourceProxy, size: CGSize?) -> Task<UIImage, any Error> {
+        Task {
+            guard let image = UIImage(systemName: "photo") else {
+                fatalError()
+            }
+            
+            return image
+        }
+    }
 }

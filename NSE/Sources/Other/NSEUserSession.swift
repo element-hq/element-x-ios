@@ -22,7 +22,8 @@ final class NSEUserSession {
     private let notificationClient: NotificationClient
     private let userID: String
     private(set) lazy var mediaProvider: MediaProviderProtocol = MediaProvider(mediaLoader: MediaLoader(client: baseClient),
-                                                                               imageCache: .onlyOnDisk)
+                                                                               imageCache: .onlyOnDisk,
+                                                                               networkMonitor: nil)
     private let delegateHandle: TaskHandle?
 
     init(credentials: KeychainCredentials, clientSessionDelegate: ClientSessionDelegate, simplifiedSlidingSyncEnabled: Bool, appHooks: AppHooks) async throws {

@@ -22,6 +22,7 @@ enum MediaProviderError: Error {
     case failedRetrievingFile
     case invalidImageData
     case failedRetrievingThumbnail
+    case cancelled
 }
 
 protocol MediaProviderProtocol: ImageProviderProtocol {

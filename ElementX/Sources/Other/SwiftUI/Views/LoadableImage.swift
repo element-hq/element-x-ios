@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import Kingfisher
 import SwiftUI
 
@@ -166,6 +167,7 @@ private class ContentLoader: ObservableObject {
     private let imageProvider: ImageProviderProtocol?
     private let mediaSource: MediaSourceProxy
     private let size: CGSize?
+    private var imageLoadingCancellable: AnyCancellable?
     
     @Published private var cachedContent: Content?
     
@@ -199,7 +201,14 @@ private class ContentLoader: ObservableObject {
                 cachedContent = .gifData(data)
             }
         } else {
-            if case let .success(image) = await imageProvider?.loadImageFromSource(mediaSource, size: size) {
+            guard let task = imageProvider?.loadImageRetryingOnReconnection(mediaSource, size: size) else {
+                MXLog.error("Failed loading image, invalid reconnection retry task.")
+                return
+            }
+            
+            imageLoadingCancellable = task.asCancellable()
+            
+            if let image = try? await task.value {
                 cachedContent = .image(image)
             }
         }
