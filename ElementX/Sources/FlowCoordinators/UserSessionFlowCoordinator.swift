@@ -666,7 +666,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentRoomDirectorySearch() {
         let coordinator = RoomDirectorySearchScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
-                                                                                 imageProvider: userSession.mediaProvider,
+                                                                                 mediaProvider: userSession.mediaProvider,
                                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController))
         
         coordinator.actionsPublisher.sink { [weak self] action in

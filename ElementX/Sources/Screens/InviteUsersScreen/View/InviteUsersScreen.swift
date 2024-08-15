@@ -88,7 +88,7 @@ struct InviteUsersScreen: View {
                 ForEach(context.viewState.usersSection.users, id: \.userID) { user in
                     UserProfileListRow(user: user,
                                        membership: context.viewState.membershipState(user),
-                                       imageProvider: context.imageProvider,
+                                       mediaProvider: context.mediaProvider,
                                        kind: .multiSelection(isSelected: context.viewState.isUserSelected(user)) {
                                            context.send(viewAction: .toggleUser(user))
                                        })
@@ -113,7 +113,7 @@ struct InviteUsersScreen: View {
             ScrollViewReader { scrollView in
                 HStack(spacing: 16) {
                     ForEach(context.viewState.selectedUsers, id: \.userID) { user in
-                        InviteUsersScreenSelectedItem(user: user, imageProvider: context.imageProvider) {
+                        InviteUsersScreenSelectedItem(user: user, mediaProvider: context.mediaProvider) {
                             deselect(user)
                         }
                         .frame(width: cellWidth)

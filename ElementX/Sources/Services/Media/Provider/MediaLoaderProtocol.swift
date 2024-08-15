@@ -16,6 +16,7 @@
 
 import Foundation
 
+// sourcery: AutoMockable
 protocol MediaLoaderProtocol {
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data
 

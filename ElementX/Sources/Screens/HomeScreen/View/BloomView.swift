@@ -38,6 +38,6 @@ struct BloomView: View {
                             name: context.viewState.userDisplayName,
                             contentID: context.viewState.userID,
                             avatarSize: .custom(256),
-                            imageProvider: context.imageProvider)
+                            mediaProvider: context.mediaProvider)
     }
 }

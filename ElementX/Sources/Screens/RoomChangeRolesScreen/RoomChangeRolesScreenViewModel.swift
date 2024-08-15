@@ -45,7 +45,7 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
                                                                     moderators: [],
                                                                     users: [],
                                                                     bindings: .init()),
-                   imageProvider: mediaProvider)
+                   mediaProvider: mediaProvider)
         
         roomProxy.membersPublisher
             .receive(on: DispatchQueue.main)

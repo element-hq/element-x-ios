@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct PillView: View {
-    let imageProvider: ImageProviderProtocol?
+    let mediaProvider: MediaProviderProtocol?
     @ObservedObject var context: PillContext
     /// callback triggerd by changes in the display text
     let didChangeText: () -> Void
@@ -49,23 +49,23 @@ struct PillView_Previews: PreviewProvider, TestablePreview {
     static let mockMediaProvider = MockMediaProvider()
     
     static var previews: some View {
-        PillView(imageProvider: mockMediaProvider,
+        PillView(mediaProvider: mockMediaProvider,
                  context: PillContext.mock(type: .loadUser(isOwn: false))) { }
             .frame(maxWidth: PillConstants.mockMaxWidth)
             .previewDisplayName("Loading")
-        PillView(imageProvider: mockMediaProvider,
+        PillView(mediaProvider: mockMediaProvider,
                  context: PillContext.mock(type: .loadUser(isOwn: true))) { }
             .frame(maxWidth: PillConstants.mockMaxWidth)
             .previewDisplayName("Loading Own")
-        PillView(imageProvider: mockMediaProvider,
+        PillView(mediaProvider: mockMediaProvider,
                  context: PillContext.mock(type: .loadedUser(isOwn: false))) { }
             .frame(maxWidth: PillConstants.mockMaxWidth)
             .previewDisplayName("Loaded Long")
-        PillView(imageProvider: mockMediaProvider,
+        PillView(mediaProvider: mockMediaProvider,
                  context: PillContext.mock(type: .loadedUser(isOwn: true))) { }
             .frame(maxWidth: PillConstants.mockMaxWidth)
             .previewDisplayName("Loaded Long Own")
-        PillView(imageProvider: mockMediaProvider,
+        PillView(mediaProvider: mockMediaProvider,
                  context: PillContext.mock(type: .allUsers)) { }
             .frame(maxWidth: PillConstants.mockMaxWidth)
             .previewDisplayName("All Users")

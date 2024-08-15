@@ -59,7 +59,7 @@ struct HomeScreenRoomCell: View {
         if dynamicTypeSize < .accessibility3 {
             RoomAvatarImage(avatar: room.avatar,
                             avatarSize: .room(on: .home),
-                            imageProvider: context.imageProvider)
+                            mediaProvider: context.mediaProvider)
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                 .accessibilityHidden(true)
         }

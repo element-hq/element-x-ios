@@ -29,7 +29,7 @@ struct RoomMembersListScreenMemberCell: View {
                                     name: avatarName,
                                     contentID: member.id,
                                     avatarSize: .user(on: .roomDetails),
-                                    imageProvider: context.imageProvider)
+                                    mediaProvider: context.mediaProvider)
                     .accessibilityHidden(true)
                 
                 HStack(alignment: .firstTextBaseline, spacing: 4) {

@@ -18,7 +18,7 @@ import SwiftUI
 
 struct InviteUsersScreenSelectedItem: View {
     let user: UserProfileProxy
-    let imageProvider: ImageProviderProtocol?
+    let mediaProvider: MediaProviderProtocol?
     let dismissAction: () -> Void
     
     var body: some View {
@@ -39,7 +39,7 @@ struct InviteUsersScreenSelectedItem: View {
                             name: user.displayName,
                             contentID: user.userID,
                             avatarSize: .user(on: .inviteUsers),
-                            imageProvider: imageProvider)
+                            mediaProvider: mediaProvider)
             .overlay(alignment: .topTrailing) {
                 Button(action: dismissAction) {
                     Image(systemName: "xmark.circle.fill")
@@ -59,7 +59,7 @@ struct InviteUsersScreenSelectedItem_Previews: PreviewProvider, TestablePreview 
         ScrollView(.horizontal) {
             HStack(spacing: 28) {
                 ForEach(people, id: \.userID) { user in
-                    InviteUsersScreenSelectedItem(user: user, imageProvider: MockMediaProvider(), dismissAction: { })
+                    InviteUsersScreenSelectedItem(user: user, mediaProvider: MockMediaProvider(), dismissAction: { })
                         .frame(width: 72)
                 }
             }

@@ -74,7 +74,7 @@ struct RoomDetailsScreen: View {
     private var normalRoomHeaderSection: some View {
         AvatarHeaderView(room: context.viewState.details,
                          avatarSize: .room(on: .details),
-                         imageProvider: context.imageProvider) {
+                         mediaProvider: context.mediaProvider) {
             context.send(viewAction: .displayAvatar)
         } footer: {
             if !context.viewState.shortcuts.isEmpty {
@@ -87,7 +87,7 @@ struct RoomDetailsScreen: View {
     private func dmHeaderSection(accountOwner: RoomMemberDetails, recipient: RoomMemberDetails) -> some View {
         AvatarHeaderView(accountOwner: accountOwner,
                          dmRecipient: recipient,
-                         imageProvider: context.imageProvider) {
+                         mediaProvider: context.mediaProvider) {
             context.send(viewAction: .displayAvatar)
         } footer: {
             if !context.viewState.shortcuts.isEmpty {

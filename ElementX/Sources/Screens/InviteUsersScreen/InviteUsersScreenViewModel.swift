@@ -42,7 +42,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         self.userDiscoveryService = userDiscoveryService
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value, isCreatingRoom: roomType.isCreatingRoom), imageProvider: mediaProvider)
+        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value, isCreatingRoom: roomType.isCreatingRoom), mediaProvider: mediaProvider)
                 
         setupSubscriptions(selectedUsers: selectedUsers)
         fetchMembersIfNeeded()

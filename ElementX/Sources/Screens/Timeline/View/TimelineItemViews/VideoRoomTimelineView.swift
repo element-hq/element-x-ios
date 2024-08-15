@@ -36,7 +36,7 @@ struct VideoRoomTimelineView: View {
         if let thumbnailSource = timelineItem.content.thumbnailSource {
             LoadableImage(mediaSource: thumbnailSource,
                           blurhash: timelineItem.content.blurhash,
-                          imageProvider: context.imageProvider) { imageView in
+                          mediaProvider: context.mediaProvider) { imageView in
                 imageView
                     .overlay { playIcon }
             } placeholder: {

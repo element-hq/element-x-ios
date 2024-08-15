@@ -30,7 +30,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
                                            userID: userSession.clientProxy.userID,
                                            showDeveloperOptions: AppSettings.isDevelopmentBuild),
-                   imageProvider: userSession.mediaProvider)
+                   mediaProvider: userSession.mediaProvider)
         
         userSession.clientProxy.userAvatarURLPublisher
             .receive(on: DispatchQueue.main)

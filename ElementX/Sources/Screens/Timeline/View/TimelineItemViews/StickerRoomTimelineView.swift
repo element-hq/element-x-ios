@@ -25,7 +25,7 @@ struct StickerRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             LoadableImage(url: timelineItem.imageURL,
                           blurhash: timelineItem.blurhash,
-                          imageProvider: context.imageProvider) {
+                          mediaProvider: context.mediaProvider) {
                 placeholder
             }
             .timelineMediaFrame(height: timelineItem.height,

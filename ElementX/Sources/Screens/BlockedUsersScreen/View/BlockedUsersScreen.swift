@@ -54,7 +54,7 @@ struct BlockedUsersScreen: View {
                             name: user.displayName,
                             contentID: user.userID,
                             avatarSize: .user(on: .blockedUsers),
-                            imageProvider: context.imageProvider)
+                            mediaProvider: context.mediaProvider)
             .accessibilityHidden(true)
     }
 }

@@ -18,7 +18,7 @@ import SwiftUI
 
 struct RoomChangeRolesScreenSelectedItem: View {
     let member: RoomMemberDetails
-    let imageProvider: ImageProviderProtocol?
+    let mediaProvider: MediaProviderProtocol?
     let dismissAction: () -> Void
     
     var body: some View {
@@ -39,7 +39,7 @@ struct RoomChangeRolesScreenSelectedItem: View {
                             name: member.name,
                             contentID: member.id,
                             avatarSize: .user(on: .inviteUsers),
-                            imageProvider: imageProvider)
+                            mediaProvider: mediaProvider)
             .overlay(alignment: .topTrailing) {
                 if member.role != .administrator {
                     Button(action: dismissAction) {
@@ -69,7 +69,7 @@ struct RoomChangeRolesScreenSelectedItem_Previews: PreviewProvider, TestablePrev
         HStack(spacing: 12) {
             ForEach(members, id: \.id) { member in
                 RoomChangeRolesScreenSelectedItem(member: member,
-                                                  imageProvider: MockMediaProvider(),
+                                                  mediaProvider: MockMediaProvider(),
                                                   dismissAction: { })
                     .frame(width: 72)
             }

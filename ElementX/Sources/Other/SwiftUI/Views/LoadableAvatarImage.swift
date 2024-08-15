@@ -21,16 +21,16 @@ struct LoadableAvatarImage: View {
     private let name: String?
     private let contentID: String?
     private let avatarSize: AvatarSize
-    private let imageProvider: ImageProviderProtocol?
+    private let mediaProvider: MediaProviderProtocol?
     
     @ScaledMetric private var frameSize: CGFloat
     
-    init(url: URL?, name: String?, contentID: String?, avatarSize: AvatarSize, imageProvider: ImageProviderProtocol?) {
+    init(url: URL?, name: String?, contentID: String?, avatarSize: AvatarSize, mediaProvider: MediaProviderProtocol?) {
         self.url = url
         self.name = name
         self.contentID = contentID
         self.avatarSize = avatarSize
-        self.imageProvider = imageProvider
+        self.mediaProvider = mediaProvider
         
         _frameSize = ScaledMetric(wrappedValue: avatarSize.value)
     }
@@ -48,7 +48,7 @@ struct LoadableAvatarImage: View {
             LoadableImage(url: url,
                           mediaType: .avatar,
                           size: avatarSize.scaledSize,
-                          imageProvider: imageProvider) { image in
+                          mediaProvider: mediaProvider) { image in
                 image
                     .scaledToFill()
             } placeholder: {

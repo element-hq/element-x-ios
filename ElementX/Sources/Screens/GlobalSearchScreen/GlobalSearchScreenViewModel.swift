@@ -28,11 +28,11 @@ class GlobalSearchScreenViewModel: GlobalSearchScreenViewModelType, GlobalSearch
     }
 
     init(roomSummaryProvider: RoomSummaryProviderProtocol,
-         imageProvider: ImageProviderProtocol) {
+         mediaProvider: MediaProviderProtocol) {
         self.roomSummaryProvider = roomSummaryProvider
         
         super.init(initialViewState: GlobalSearchScreenViewState(bindings: .init(searchQuery: "")),
-                   imageProvider: imageProvider)
+                   mediaProvider: mediaProvider)
         
         roomSummaryProvider.roomListPublisher
             .receive(on: DispatchQueue.main)

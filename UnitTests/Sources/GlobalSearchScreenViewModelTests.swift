@@ -28,7 +28,7 @@ class GlobalSearchScreenViewModelTests: XCTestCase {
     override func setUpWithError() throws {
         cancellables.removeAll()
         viewModel = GlobalSearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
-                                                imageProvider: MockMediaProvider())
+                                                mediaProvider: MockMediaProvider())
         context = viewModel.context
     }
             

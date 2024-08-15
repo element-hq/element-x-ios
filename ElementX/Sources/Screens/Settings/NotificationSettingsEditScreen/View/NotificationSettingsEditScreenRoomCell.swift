@@ -41,7 +41,7 @@ struct NotificationSettingsEditScreenRoomCell: View {
         if dynamicTypeSize < .accessibility3 {
             RoomAvatarImage(avatar: room.avatar,
                             avatarSize: .room(on: .notificationSettings),
-                            imageProvider: context.imageProvider)
+                            mediaProvider: context.mediaProvider)
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                 .accessibilityHidden(true)
         }

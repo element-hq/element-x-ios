@@ -19,7 +19,7 @@ import SwiftUI
 struct ReadReceiptCell: View {
     let readReceipt: ReadReceipt
     let memberState: RoomMemberState?
-    let imageProvider: ImageProviderProtocol?
+    let mediaProvider: MediaProviderProtocol?
     
     private var title: String {
         memberState?.displayName ?? readReceipt.userID
@@ -38,7 +38,7 @@ struct ReadReceiptCell: View {
                                 name: memberState?.displayName,
                                 contentID: readReceipt.userID,
                                 avatarSize: .user(on: .readReceiptSheet),
-                                imageProvider: imageProvider)
+                                mediaProvider: mediaProvider)
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 12) {
                     Text(title)
@@ -70,18 +70,18 @@ struct ReadReceiptCell_Previews: PreviewProvider, TestablePreview {
                                            formattedTimestamp: "10:00"),
                         memberState: .init(displayName: "Test",
                                            avatarURL: nil),
-                        imageProvider: MockMediaProvider())
+                        mediaProvider: MockMediaProvider())
             .previewDisplayName("No Image")
         ReadReceiptCell(readReceipt: .init(userID: "@test:matrix.org",
                                            formattedTimestamp: "10:00"),
                         memberState: .init(displayName: "Test",
                                            avatarURL: URL.documentsDirectory),
-                        imageProvider: MockMediaProvider())
+                        mediaProvider: MockMediaProvider())
             .previewDisplayName("With Image")
         ReadReceiptCell(readReceipt: .init(userID: "@test:matrix.org",
                                            formattedTimestamp: "10:00"),
                         memberState: nil,
-                        imageProvider: MockMediaProvider())
+                        mediaProvider: MockMediaProvider())
             .previewDisplayName("Loading Member")
     }
 }

@@ -37,7 +37,7 @@ struct GlobalSearchScreenListRow: View {
         if dynamicTypeSize < .accessibility3 {
             RoomAvatarImage(avatar: room.avatar,
                             avatarSize: .room(on: .messageForwarding),
-                            imageProvider: context.imageProvider)
+                            mediaProvider: context.mediaProvider)
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                 .accessibilityHidden(true)
         }
@@ -46,7 +46,7 @@ struct GlobalSearchScreenListRow: View {
 
 struct GlobalSearchScreenListRow_Previews: PreviewProvider, TestablePreview {
     static let viewModel = GlobalSearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
-                                                       imageProvider: MockMediaProvider())
+                                                       mediaProvider: MockMediaProvider())
     
     static var previews: some View {
         List {

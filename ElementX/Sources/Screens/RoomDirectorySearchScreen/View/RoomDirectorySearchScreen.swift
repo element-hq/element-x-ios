@@ -25,7 +25,7 @@ struct RoomDirectorySearchScreen: View {
             List {
                 Section {
                     ForEach(context.viewState.rooms) { room in
-                        RoomDirectorySearchCell(result: room, imageProvider: context.imageProvider) {
+                        RoomDirectorySearchCell(result: room, mediaProvider: context.mediaProvider) {
                             context.send(viewAction: .select(room: room))
                         }
                     }
@@ -102,7 +102,7 @@ struct RoomDirectorySearchScreen_Previews: PreviewProvider, TestablePreview {
         
         return RoomDirectorySearchScreenViewModel(clientProxy: clientProxy,
                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                  imageProvider: MockMediaProvider())
+                                                  mediaProvider: MockMediaProvider())
     }()
     
     static var previews: some View {

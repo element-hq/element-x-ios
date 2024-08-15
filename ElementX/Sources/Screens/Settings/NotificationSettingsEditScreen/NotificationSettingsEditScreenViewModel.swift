@@ -44,7 +44,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
         
         super.init(initialViewState: NotificationSettingsEditScreenViewState(bindings: bindings,
                                                                              strings: NotificationSettingsEditScreenStrings(chatType: chatType)),
-                   imageProvider: userSession.mediaProvider)
+                   mediaProvider: userSession.mediaProvider)
         
         setupNotificationSettingsSubscription()
         setupRoomSummaryProviderSubscription()

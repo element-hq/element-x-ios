@@ -42,7 +42,7 @@ struct JoinRoomScreen: View {
         VStack(spacing: 16) {
             RoomAvatarImage(avatar: context.viewState.avatar,
                             avatarSize: .room(on: .joinRoom),
-                            imageProvider: context.imageProvider)
+                            mediaProvider: context.mediaProvider)
                 .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
             
             VStack(spacing: 8) {
@@ -63,7 +63,7 @@ struct JoinRoomScreen: View {
                 }
                 
                 if let inviter = context.viewState.roomDetails?.inviter {
-                    RoomInviterLabel(inviter: inviter, imageProvider: context.imageProvider)
+                    RoomInviterLabel(inviter: inviter, mediaProvider: context.mediaProvider)
                         .font(.compound.bodyMD)
                         .foregroundStyle(.compound.textSecondary)
                 }

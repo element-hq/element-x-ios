@@ -38,8 +38,8 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
         set { context.viewState = newValue }
     }
 
-    init(initialViewState: State, imageProvider: ImageProviderProtocol? = nil) {
-        context = Context(initialViewState: initialViewState, imageProvider: imageProvider)
+    init(initialViewState: State, mediaProvider: MediaProviderProtocol? = nil) {
+        context = Context(initialViewState: initialViewState, mediaProvider: mediaProvider)
         context.viewModel = self
     }
 
@@ -73,7 +73,7 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
     
         /// An optional image loading service so that views can manage themselves
         /// Intentionally non-generic so that it doesn't grow uncontrollably
-        let imageProvider: ImageProviderProtocol?
+        let mediaProvider: MediaProviderProtocol?
     
         /// Set-able/Bindable access to the bindable state.
         subscript<T>(dynamicMember keyPath: WritableKeyPath<State.BindStateType, T>) -> T {
@@ -87,9 +87,9 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
             viewModel?.process(viewAction: viewAction)
         }
     
-        fileprivate init(initialViewState: State, imageProvider: ImageProviderProtocol?) {
+        fileprivate init(initialViewState: State, mediaProvider: MediaProviderProtocol?) {
             self.viewState = initialViewState
-            self.imageProvider = imageProvider
+            self.mediaProvider = mediaProvider
         }
     }
 }

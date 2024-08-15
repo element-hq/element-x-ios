@@ -214,7 +214,7 @@ private class GlobalSearchTextField: UITextField {
 
 struct GlobalSearchScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = GlobalSearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
-                                                       imageProvider: MockMediaProvider())
+                                                       mediaProvider: MockMediaProvider())
     
     static var previews: some View {
         NavigationStack {

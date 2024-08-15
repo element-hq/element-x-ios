@@ -41,7 +41,7 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         self.roomSummaryProvider = roomSummaryProvider
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: MessageForwardingScreenViewState(), imageProvider: mediaProvider)
+        super.init(initialViewState: MessageForwardingScreenViewState(), mediaProvider: mediaProvider)
         
         roomSummaryProvider.roomListPublisher
             .receive(on: DispatchQueue.main)

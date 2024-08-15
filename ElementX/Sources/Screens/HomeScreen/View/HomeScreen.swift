@@ -148,7 +148,7 @@ struct HomeScreen: View {
                                     name: context.viewState.userDisplayName,
                                     contentID: context.viewState.userID,
                                     avatarSize: .user(on: .home),
-                                    imageProvider: context.imageProvider)
+                                    mediaProvider: context.mediaProvider)
                     .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
                     .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
                     .compositingGroup()

@@ -70,7 +70,7 @@ struct TimelineItemMenu: View {
                                     name: item.sender.displayName,
                                     contentID: item.sender.id,
                                     avatarSize: .user(on: .timeline),
-                                    imageProvider: context.imageProvider)
+                                    mediaProvider: context.mediaProvider)
                     .accessibilityHidden(true)
                 
                 Spacer(minLength: 8.0)
