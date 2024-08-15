@@ -194,6 +194,22 @@
 			<string>Vale PIN-kood. Saad proovida veel %1$d korda</string>
 		</dict>
 	</dict>
+	<key>screen_pinned_timeline_screen_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d esiletõstetud sõnum</string>
+			<key>other</key>
+			<string>%1$d esiletõstetud sõnumit</string>
+		</dict>
+	</dict>
 	<key>screen_room_member_list_header_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>

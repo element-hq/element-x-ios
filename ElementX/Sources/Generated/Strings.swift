@@ -660,6 +660,10 @@ internal enum L10n {
   internal static var notificationRoomInviteBody: String { return L10n.tr("Localizable", "notification_room_invite_body") }
   /// Me
   internal static var notificationSenderMe: String { return L10n.tr("Localizable", "notification_sender_me") }
+  /// %1$@ mentioned or replied
+  internal static func notificationSenderMentionReply(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "notification_sender_mention_reply", String(describing: p1))
+  }
   /// You are viewing the notification! Click me!
   internal static var notificationTestPushNotificationContent: String { return L10n.tr("Localizable", "notification_test_push_notification_content") }
   /// %1$@: %2$@
@@ -1425,6 +1429,8 @@ internal enum L10n {
   internal static var screenResetEncryptionConfirmationAlertSubtitle: String { return L10n.tr("Localizable", "screen_reset_encryption_confirmation_alert_subtitle") }
   /// Are you sure you want to reset your encryption?
   internal static var screenResetEncryptionConfirmationAlertTitle: String { return L10n.tr("Localizable", "screen_reset_encryption_confirmation_alert_title") }
+  /// An unknown error happened. Please check your account password is correct and try again.
+  internal static var screenResetEncryptionPasswordError: String { return L10n.tr("Localizable", "screen_reset_encryption_password_error") }
   /// Enter…
   internal static var screenResetEncryptionPasswordPlaceholder: String { return L10n.tr("Localizable", "screen_reset_encryption_password_placeholder") }
   /// Confirm that you want to reset your encryption.

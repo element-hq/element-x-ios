@@ -283,6 +283,7 @@
 "notification_reaction_body" = "Reacted with %1$@";
 "notification_room_invite_body" = "Invited you to join the room";
 "notification_sender_me" = "Me";
+"notification_sender_mention_reply" = "%1$@ mentioned or replied";
 "notification_test_push_notification_content" = "You are viewing the notification! Click me!";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -318,6 +319,7 @@
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_pinned_timeline_screen_title_empty" = "Pinned messages";
+"screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
 "screen_room_mentions_at_room_subtitle" = "Notify the whole room";
 "screen_room_pinned_banner_indicator" = "%1$@ of %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Pinned messages";
