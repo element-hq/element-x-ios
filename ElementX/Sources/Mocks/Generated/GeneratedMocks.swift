@@ -5816,6 +5816,231 @@ class KeychainControllerMock: KeychainControllerProtocol {
         removePINCodeBiometricStateClosure?()
     }
 }
+class MediaLoaderMock: MediaLoaderProtocol {
+
+    //MARK: - loadMediaContentForSource
+
+    var loadMediaContentForSourceThrowableError: Error?
+    var loadMediaContentForSourceUnderlyingCallsCount = 0
+    var loadMediaContentForSourceCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadMediaContentForSourceUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadMediaContentForSourceUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadMediaContentForSourceUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadMediaContentForSourceUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadMediaContentForSourceCalled: Bool {
+        return loadMediaContentForSourceCallsCount > 0
+    }
+    var loadMediaContentForSourceReceivedSource: MediaSourceProxy?
+    var loadMediaContentForSourceReceivedInvocations: [MediaSourceProxy] = []
+
+    var loadMediaContentForSourceUnderlyingReturnValue: Data!
+    var loadMediaContentForSourceReturnValue: Data! {
+        get {
+            if Thread.isMainThread {
+                return loadMediaContentForSourceUnderlyingReturnValue
+            } else {
+                var returnValue: Data? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadMediaContentForSourceUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadMediaContentForSourceUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadMediaContentForSourceUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadMediaContentForSourceClosure: ((MediaSourceProxy) async throws -> Data)?
+
+    func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {
+        if let error = loadMediaContentForSourceThrowableError {
+            throw error
+        }
+        loadMediaContentForSourceCallsCount += 1
+        loadMediaContentForSourceReceivedSource = source
+        DispatchQueue.main.async {
+            self.loadMediaContentForSourceReceivedInvocations.append(source)
+        }
+        if let loadMediaContentForSourceClosure = loadMediaContentForSourceClosure {
+            return try await loadMediaContentForSourceClosure(source)
+        } else {
+            return loadMediaContentForSourceReturnValue
+        }
+    }
+    //MARK: - loadMediaThumbnailForSource
+
+    var loadMediaThumbnailForSourceWidthHeightThrowableError: Error?
+    var loadMediaThumbnailForSourceWidthHeightUnderlyingCallsCount = 0
+    var loadMediaThumbnailForSourceWidthHeightCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadMediaThumbnailForSourceWidthHeightUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadMediaThumbnailForSourceWidthHeightUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadMediaThumbnailForSourceWidthHeightUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadMediaThumbnailForSourceWidthHeightUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadMediaThumbnailForSourceWidthHeightCalled: Bool {
+        return loadMediaThumbnailForSourceWidthHeightCallsCount > 0
+    }
+    var loadMediaThumbnailForSourceWidthHeightReceivedArguments: (source: MediaSourceProxy, width: UInt, height: UInt)?
+    var loadMediaThumbnailForSourceWidthHeightReceivedInvocations: [(source: MediaSourceProxy, width: UInt, height: UInt)] = []
+
+    var loadMediaThumbnailForSourceWidthHeightUnderlyingReturnValue: Data!
+    var loadMediaThumbnailForSourceWidthHeightReturnValue: Data! {
+        get {
+            if Thread.isMainThread {
+                return loadMediaThumbnailForSourceWidthHeightUnderlyingReturnValue
+            } else {
+                var returnValue: Data? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadMediaThumbnailForSourceWidthHeightUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadMediaThumbnailForSourceWidthHeightUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadMediaThumbnailForSourceWidthHeightUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadMediaThumbnailForSourceWidthHeightClosure: ((MediaSourceProxy, UInt, UInt) async throws -> Data)?
+
+    func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data {
+        if let error = loadMediaThumbnailForSourceWidthHeightThrowableError {
+            throw error
+        }
+        loadMediaThumbnailForSourceWidthHeightCallsCount += 1
+        loadMediaThumbnailForSourceWidthHeightReceivedArguments = (source: source, width: width, height: height)
+        DispatchQueue.main.async {
+            self.loadMediaThumbnailForSourceWidthHeightReceivedInvocations.append((source: source, width: width, height: height))
+        }
+        if let loadMediaThumbnailForSourceWidthHeightClosure = loadMediaThumbnailForSourceWidthHeightClosure {
+            return try await loadMediaThumbnailForSourceWidthHeightClosure(source, width, height)
+        } else {
+            return loadMediaThumbnailForSourceWidthHeightReturnValue
+        }
+    }
+    //MARK: - loadMediaFileForSource
+
+    var loadMediaFileForSourceBodyThrowableError: Error?
+    var loadMediaFileForSourceBodyUnderlyingCallsCount = 0
+    var loadMediaFileForSourceBodyCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadMediaFileForSourceBodyUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadMediaFileForSourceBodyUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadMediaFileForSourceBodyUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadMediaFileForSourceBodyUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadMediaFileForSourceBodyCalled: Bool {
+        return loadMediaFileForSourceBodyCallsCount > 0
+    }
+    var loadMediaFileForSourceBodyReceivedArguments: (source: MediaSourceProxy, body: String?)?
+    var loadMediaFileForSourceBodyReceivedInvocations: [(source: MediaSourceProxy, body: String?)] = []
+
+    var loadMediaFileForSourceBodyUnderlyingReturnValue: MediaFileHandleProxy!
+    var loadMediaFileForSourceBodyReturnValue: MediaFileHandleProxy! {
+        get {
+            if Thread.isMainThread {
+                return loadMediaFileForSourceBodyUnderlyingReturnValue
+            } else {
+                var returnValue: MediaFileHandleProxy? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadMediaFileForSourceBodyUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadMediaFileForSourceBodyUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadMediaFileForSourceBodyUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadMediaFileForSourceBodyClosure: ((MediaSourceProxy, String?) async throws -> MediaFileHandleProxy)?
+
+    func loadMediaFileForSource(_ source: MediaSourceProxy, body: String?) async throws -> MediaFileHandleProxy {
+        if let error = loadMediaFileForSourceBodyThrowableError {
+            throw error
+        }
+        loadMediaFileForSourceBodyCallsCount += 1
+        loadMediaFileForSourceBodyReceivedArguments = (source: source, body: body)
+        DispatchQueue.main.async {
+            self.loadMediaFileForSourceBodyReceivedInvocations.append((source: source, body: body))
+        }
+        if let loadMediaFileForSourceBodyClosure = loadMediaFileForSourceBodyClosure {
+            return try await loadMediaFileForSourceBodyClosure(source, body)
+        } else {
+            return loadMediaFileForSourceBodyReturnValue
+        }
+    }
+}
 class MediaPlayerMock: MediaPlayerProtocol {
     var mediaSource: MediaSourceProxy?
     var duration: TimeInterval {
