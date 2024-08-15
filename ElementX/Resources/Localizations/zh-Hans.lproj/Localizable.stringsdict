@@ -170,6 +170,20 @@
 			<string>PIN 码错误。还剩 %1$d 次机会</string>
 		</dict>
 	</dict>
+	<key>screen_pinned_timeline_screen_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>%1$d 置顶消息</string>
+		</dict>
+	</dict>
 	<key>screen_room_member_list_header_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
