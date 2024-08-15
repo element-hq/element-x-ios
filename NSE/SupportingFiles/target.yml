@@ -73,8 +73,12 @@ targets:
     sources:
     - path: ../Sources
     - path: ../SupportingFiles
+    - path: ../../ElementX/Sources/AppHooks/AppHooks.swift
+    - path: ../../ElementX/Sources/AppHooks/Hooks/ClientBuilderHook.swift
+    - path: ../../ElementX/Sources/Application/AppSettings.swift
     - path: ../../ElementX/Sources/Generated
     - path: ../../ElementX/Sources/Other/AvatarSize.swift
+    - path: ../../ElementX/Sources/Other/CurrentValuePublisher.swift
     - path: ../../ElementX/Sources/Other/Extensions/AttributedString.swift
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
     - path: ../../ElementX/Sources/Other/Extensions/ClientBuilder.swift
@@ -92,12 +96,14 @@ targets:
     - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
     - path: ../../ElementX/Sources/Other/Logging
     - path: ../../ElementX/Sources/Other/MatrixEntityRegex.swift
+    - path: ../../ElementX/Sources/Other/NetworkMonitor
+    - path: ../../ElementX/Sources/Other/Pills/PillConstants.swift
+    - path: ../../ElementX/Sources/Other/Pills/PlainMentionBuilder.swift
     - path: ../../ElementX/Sources/Other/SwiftUI/Views/PlaceholderAvatarImage.swift
+    - path: ../../ElementX/Sources/Other/TestablePreview.swift
     - path: ../../ElementX/Sources/Other/UserAgentBuilder.swift
     - path: ../../ElementX/Sources/Other/UserPreference.swift
-    - path: ../../ElementX/Sources/Other/TestablePreview.swift
-    - path: ../../ElementX/Sources/Other/Pills/PlainMentionBuilder.swift
-    - path: ../../ElementX/Sources/Other/Pills/PillConstants.swift
+    - path: ../../ElementX/Sources/Services/ElementCall/ElementCallServiceConstants.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainController.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainControllerProtocol.swift
     - path: ../../ElementX/Sources/Services/Media/Provider
@@ -105,7 +111,3 @@ targets:
     - path: ../../ElementX/Sources/Services/Notification/Proxy
     - path: ../../ElementX/Sources/Services/Room/RoomSummary/RoomMessageEventStringBuilder.swift
     - path: ../../ElementX/Sources/Services/UserSession/RestorationToken.swift
-    - path: ../../ElementX/Sources/Services/ElementCall/ElementCallServiceConstants.swift
-    - path: ../../ElementX/Sources/Application/AppSettings.swift
-    - path: ../../ElementX/Sources/AppHooks/AppHooks.swift
-    - path: ../../ElementX/Sources/AppHooks/Hooks/ClientBuilderHook.swift
