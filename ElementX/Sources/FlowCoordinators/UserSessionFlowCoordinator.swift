@@ -573,6 +573,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                             clientID: InfoPlistReader.main.bundleIdentifier,
                                                                             elementCallBaseURL: appSettings.elementCallBaseURL,
                                                                             elementCallBaseURLOverride: appSettings.elementCallBaseURLOverride,
+                                                                            elementCallPictureInPictureEnabled: appSettings.elementCallPictureInPictureEnabled,
                                                                             colorScheme: colorScheme,
                                                                             appHooks: appHooks))
         

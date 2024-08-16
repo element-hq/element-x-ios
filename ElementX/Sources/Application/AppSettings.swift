@@ -252,8 +252,7 @@ final class AppSettings {
 
     // MARK: - Element Call
     
-    #warning("Temporary base URL whilst PiP support is being added.")
-    let elementCallBaseURL: URL = "https://pr2563--element-call.netlify.app/"
+    let elementCallBaseURL: URL = "https://call.element.io"
     
     @UserPreference(key: UserDefaultsKeys.elementCallBaseURLOverride, defaultValue: nil, storageType: .userDefaults(store))
     var elementCallBaseURLOverride: URL?
@@ -289,6 +288,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.timelineItemAuthenticityEnabled, defaultValue: false, storageType: .userDefaults(store))
     var timelineItemAuthenticityEnabled
+    
+    // Not user configurable as it depends on work in EC too.
+    let elementCallPictureInPictureEnabled = false
         
     #endif
     

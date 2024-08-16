@@ -24,6 +24,7 @@ typealias CallScreenViewModelType = StateStoreViewModel<CallScreenViewState, Cal
 class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol {
     private let elementCallService: ElementCallServiceProtocol
     private let roomProxy: RoomProxyProtocol
+    private let isPictureInPictureEnabled: Bool
     
     private let widgetDriver: ElementCallWidgetDriverProtocol
     
@@ -46,12 +47,14 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
          clientID: String,
          elementCallBaseURL: URL,
          elementCallBaseURLOverride: URL?,
+         elementCallPictureInPictureEnabled: Bool,
          colorScheme: ColorScheme,
          appHooks: AppHooks) {
         guard let deviceID = clientProxy.deviceID else { fatalError("Missing device ID for the call.") }
         
         self.elementCallService = elementCallService
         self.roomProxy = roomProxy
+        isPictureInPictureEnabled = elementCallPictureInPictureEnabled
         
         widgetDriver = roomProxy.elementCallWidgetDriver(deviceID: deviceID)
         
@@ -200,14 +203,14 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         }
         #endif
         
-        guard state.url != nil else {
+        guard isPictureInPictureEnabled, state.url != nil else {
             actionsSubject.send(.dismiss)
             return
         }
         
         Task {
             try await state.bindings.javaScriptEvaluator?("controls.enableCompatPip()")
-            // TODO: Enable this check when implemented on web.
+            // Enable this check when implemented on web.
             // if result as? Bool != true {
             //    actionsSubject.send(.dismiss)
             // }
