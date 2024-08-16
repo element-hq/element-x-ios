@@ -150,7 +150,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                     
                     await elementCallService.setupCallSession(roomID: roomProxy.id, roomDisplayName: roomProxy.roomTitle)
                     
-                    _ = await roomProxy.sendCallNotificationIfNeeeded()
+                    _ = await roomProxy.sendCallNotificationIfNeeded()
                     
                     syncUpdateCancellable = nil
                 }
@@ -237,7 +237,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         do {
             let data = try JSONEncoder().encode(message)
             let json = String(decoding: data, as: UTF8.self)
-            _ = await widgetDriver.sendMessage(json)
             
             await postJSONToWidget(json)
         } catch {

@@ -11129,17 +11129,17 @@ class RoomProxyMock: RoomProxyProtocol {
             return elementCallWidgetDriverDeviceIDReturnValue
         }
     }
-    //MARK: - sendCallNotificationIfNeeeded
+    //MARK: - sendCallNotificationIfNeeded
 
-    var sendCallNotificationIfNeeededUnderlyingCallsCount = 0
-    var sendCallNotificationIfNeeededCallsCount: Int {
+    var sendCallNotificationIfNeededUnderlyingCallsCount = 0
+    var sendCallNotificationIfNeededCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendCallNotificationIfNeeededUnderlyingCallsCount
+                return sendCallNotificationIfNeededUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendCallNotificationIfNeeededUnderlyingCallsCount
+                    returnValue = sendCallNotificationIfNeededUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -11147,27 +11147,27 @@ class RoomProxyMock: RoomProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                sendCallNotificationIfNeeededUnderlyingCallsCount = newValue
+                sendCallNotificationIfNeededUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendCallNotificationIfNeeededUnderlyingCallsCount = newValue
+                    sendCallNotificationIfNeededUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var sendCallNotificationIfNeeededCalled: Bool {
-        return sendCallNotificationIfNeeededCallsCount > 0
+    var sendCallNotificationIfNeededCalled: Bool {
+        return sendCallNotificationIfNeededCallsCount > 0
     }
 
-    var sendCallNotificationIfNeeededUnderlyingReturnValue: Result<Void, RoomProxyError>!
-    var sendCallNotificationIfNeeededReturnValue: Result<Void, RoomProxyError>! {
+    var sendCallNotificationIfNeededUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var sendCallNotificationIfNeededReturnValue: Result<Void, RoomProxyError>! {
         get {
             if Thread.isMainThread {
-                return sendCallNotificationIfNeeededUnderlyingReturnValue
+                return sendCallNotificationIfNeededUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, RoomProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendCallNotificationIfNeeededUnderlyingReturnValue
+                    returnValue = sendCallNotificationIfNeededUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -11175,22 +11175,22 @@ class RoomProxyMock: RoomProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                sendCallNotificationIfNeeededUnderlyingReturnValue = newValue
+                sendCallNotificationIfNeededUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendCallNotificationIfNeeededUnderlyingReturnValue = newValue
+                    sendCallNotificationIfNeededUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var sendCallNotificationIfNeeededClosure: (() async -> Result<Void, RoomProxyError>)?
+    var sendCallNotificationIfNeededClosure: (() async -> Result<Void, RoomProxyError>)?
 
-    func sendCallNotificationIfNeeeded() async -> Result<Void, RoomProxyError> {
-        sendCallNotificationIfNeeededCallsCount += 1
-        if let sendCallNotificationIfNeeededClosure = sendCallNotificationIfNeeededClosure {
-            return await sendCallNotificationIfNeeededClosure()
+    func sendCallNotificationIfNeeded() async -> Result<Void, RoomProxyError> {
+        sendCallNotificationIfNeededCallsCount += 1
+        if let sendCallNotificationIfNeededClosure = sendCallNotificationIfNeededClosure {
+            return await sendCallNotificationIfNeededClosure()
         } else {
-            return sendCallNotificationIfNeeededReturnValue
+            return sendCallNotificationIfNeededReturnValue
         }
     }
     //MARK: - matrixToPermalink

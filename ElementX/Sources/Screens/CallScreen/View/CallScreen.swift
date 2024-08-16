@@ -211,7 +211,7 @@ struct CallScreen_Previews: PreviewProvider {
         clientProxy.deviceID = "call-device-id"
         
         let roomProxy = RoomProxyMock()
-        roomProxy.sendCallNotificationIfNeeededReturnValue = .success(())
+        roomProxy.sendCallNotificationIfNeededReturnValue = .success(())
         
         let widgetDriver = ElementCallWidgetDriverMock()
         widgetDriver.underlyingMessagePublisher = .init()
