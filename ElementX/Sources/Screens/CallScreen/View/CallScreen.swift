@@ -15,6 +15,7 @@
 //
 
 import Combine
+import SFSafeSymbols
 import SwiftUI
 import WebKit
 
@@ -22,6 +23,26 @@ struct CallScreen: View {
     @ObservedObject var context: CallScreenViewModel.Context
     
     var body: some View {
+        NavigationStack {
+            content
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button { context.send(viewAction: .navigateBack) } label: {
+                            Image(systemSymbol: .chevronBackward)
+                                .fontWeight(.semibold)
+                        }
+                        .offset(y: -8)
+                        // .padding(.leading, -8) // Fixes the button alignment, but harder to tap.
+                    }
+                }
+        }
+    }
+    
+    @ViewBuilder
+    var content: some View {
         if context.viewState.url == nil {
             ProgressView()
         } else {
@@ -187,6 +208,7 @@ struct CallScreen_Previews: PreviewProvider {
     static let viewModel = {
         let clientProxy = ClientProxyMock()
         clientProxy.getElementWellKnownReturnValue = .success(nil)
+        clientProxy.deviceID = "call-device-id"
         
         let roomProxy = RoomProxyMock()
         roomProxy.sendCallNotificationIfNeeededReturnValue = .success(())
@@ -204,6 +226,7 @@ struct CallScreen_Previews: PreviewProvider {
                                    clientID: "io.element.elementx",
                                    elementCallBaseURL: "https://call.element.io",
                                    elementCallBaseURLOverride: nil,
+                                   elementCallPictureInPictureEnabled: false,
                                    colorScheme: .light,
                                    appHooks: AppHooks())
     }()

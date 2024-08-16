@@ -84,6 +84,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actionsSubject.send(.displayRoomDetails)
         case .displayCall:
             actionsSubject.send(.displayCall)
+            actionsSubject.send(.removeComposerFocus)
             analyticsService.trackInteraction(name: .MobileRoomCallButton)
         }
     }

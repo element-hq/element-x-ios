@@ -26,6 +26,8 @@ enum ElementCallServiceAction {
 protocol ElementCallServiceProtocol {
     var actions: AnyPublisher<ElementCallServiceAction, Never> { get }
     
+    var ongoingCallRoomID: String? { get }
+    
     func setClientProxy(_ clientProxy: ClientProxyProtocol)
     
     func setupCallSession(roomID: String, roomDisplayName: String) async

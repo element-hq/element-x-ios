@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import AVKit
 import Combine
 import SwiftUI
 
@@ -557,7 +558,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
     // MARK: Calls
     
+    private var callScreenPictureInPictureController: AVPictureInPictureController?
     private func presentCallScreen(roomProxy: RoomProxyProtocol) {
+        guard elementCallService.ongoingCallRoomID != roomProxy.id else {
+            MXLog.info("Returning to existing call.")
+            callScreenPictureInPictureController?.stopPictureInPicture()
+            return
+        }
+        
         let colorScheme: ColorScheme = appMediator.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
         let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: elementCallService,
                                                                             clientProxy: userSession.clientProxy,
@@ -565,19 +573,29 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                             clientID: InfoPlistReader.main.bundleIdentifier,
                                                                             elementCallBaseURL: appSettings.elementCallBaseURL,
                                                                             elementCallBaseURLOverride: appSettings.elementCallBaseURLOverride,
+                                                                            elementCallPictureInPictureEnabled: appSettings.elementCallPictureInPictureEnabled,
                                                                             colorScheme: colorScheme,
                                                                             appHooks: appHooks))
         
         callScreenCoordinator.actions
             .sink { [weak self] action in
+                guard let self else { return }
                 switch action {
+                case .pictureInPictureStarted(let controller):
+                    MXLog.info("Hiding call for PiP presentation.")
+                    callScreenPictureInPictureController = controller
+                    navigationSplitCoordinator.setOverlayPresentationMode(.minimized)
+                case .pictureInPictureStopped:
+                    MXLog.info("Restoring call after PiP presentation.")
+                    navigationSplitCoordinator.setOverlayPresentationMode(.fullScreen)
+                    callScreenPictureInPictureController = nil
                 case .dismiss:
-                    self?.navigationSplitCoordinator.setSheetCoordinator(nil)
+                    navigationSplitCoordinator.setOverlayCoordinator(nil)
                 }
             }
             .store(in: &cancellables)
         
-        navigationSplitCoordinator.setSheetCoordinator(callScreenCoordinator, animated: true)
+        navigationSplitCoordinator.setOverlayCoordinator(callScreenCoordinator, animated: true)
         
         analytics.track(screen: .RoomCall)
     }

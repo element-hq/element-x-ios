@@ -288,6 +288,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.timelineItemAuthenticityEnabled, defaultValue: false, storageType: .userDefaults(store))
     var timelineItemAuthenticityEnabled
+    
+    // Not user configurable as it depends on work in EC too.
+    let elementCallPictureInPictureEnabled = false
         
     #endif
     

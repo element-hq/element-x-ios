@@ -59,6 +59,8 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     private var ongoingCallID: CallID?
     
+    var ongoingCallRoomID: String? { ongoingCallID?.roomID }
+    
     private let actionsSubject: PassthroughSubject<ElementCallServiceAction, Never> = .init()
     var actions: AnyPublisher<ElementCallServiceAction, Never> {
         actionsSubject.eraseToAnyPublisher()

@@ -14,9 +14,12 @@
 // limitations under the License.
 //
 
+import AVKit
 import Foundation
 
 enum CallScreenViewModelAction {
+    case pictureInPictureStarted(AVPictureInPictureController?)
+    case pictureInPictureStopped
     case dismiss
 }
 
@@ -39,4 +42,5 @@ struct Bindings {
 
 enum CallScreenViewAction {
     case urlChanged(URL?)
+    case navigateBack
 }

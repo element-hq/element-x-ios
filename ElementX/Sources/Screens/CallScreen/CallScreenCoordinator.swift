@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import AVKit
 import Combine
 import SwiftUI
 
@@ -24,11 +25,17 @@ struct CallScreenCoordinatorParameters {
     let clientID: String
     let elementCallBaseURL: URL
     let elementCallBaseURLOverride: URL?
+    let elementCallPictureInPictureEnabled: Bool
     let colorScheme: ColorScheme
     let appHooks: AppHooks
 }
 
 enum CallScreenCoordinatorAction {
+    /// The call is still ongoing but the user wishes to navigate around the app.
+    case pictureInPictureStarted(AVPictureInPictureController?)
+    /// The call is hidden and the user wishes to return to it.
+    case pictureInPictureStopped
+    /// The call is finished and the screen is done with.
     case dismiss
 }
 
@@ -48,6 +55,7 @@ final class CallScreenCoordinator: CoordinatorProtocol {
                                         clientID: parameters.clientID,
                                         elementCallBaseURL: parameters.elementCallBaseURL,
                                         elementCallBaseURLOverride: parameters.elementCallBaseURLOverride,
+                                        elementCallPictureInPictureEnabled: parameters.elementCallPictureInPictureEnabled,
                                         colorScheme: parameters.colorScheme,
                                         appHooks: parameters.appHooks)
     }
@@ -57,6 +65,10 @@ final class CallScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             
             switch action {
+            case .pictureInPictureStarted(let controller):
+                actionsSubject.send(.pictureInPictureStarted(controller))
+            case .pictureInPictureStopped:
+                actionsSubject.send(.pictureInPictureStopped)
             case .dismiss:
                 actionsSubject.send(.dismiss)
             }
