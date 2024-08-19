@@ -32,6 +32,7 @@ enum TimelineViewModelAction {
     case displayLocation(body: String, geoURI: GeoURI, description: String?)
     case composer(action: TimelineComposerAction)
     case hasScrolled(direction: ScrollDirection)
+    case viewInRoomTimeline(eventID: String)
 }
 
 enum TimelineViewPollAction {
@@ -89,6 +90,7 @@ enum TimelineComposerAction {
 }
 
 struct TimelineViewState: BindableState {
+    let isPinnedEventsTimeline: Bool
     var roomID: String
     var members: [String: RoomMemberState] = [:]
     var typingMembers: [String] = []

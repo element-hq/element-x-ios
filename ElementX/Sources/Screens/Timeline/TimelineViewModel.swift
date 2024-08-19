@@ -52,6 +52,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     init(roomProxy: JoinedRoomProxyProtocol,
          focussedEventID: String? = nil,
          timelineController: RoomTimelineControllerProtocol,
+         isPinnedEventsTimeline: Bool,
          mediaProvider: MediaProviderProtocol,
          mediaPlayerProvider: MediaPlayerProviderProtocol,
          voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
@@ -80,7 +81,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                                 appSettings: appSettings,
                                                                 analyticsService: analyticsService)
         
-        super.init(initialViewState: TimelineViewState(roomID: roomProxy.id,
+        super.init(initialViewState: TimelineViewState(isPinnedEventsTimeline: isPinnedEventsTimeline,
+                                                       roomID: roomProxy.id,
                                                        isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
                                                        timelineViewState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                        ownUserID: roomProxy.ownUserID,
@@ -429,6 +431,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     }
                 case .showDebugInfo(let debugInfo):
                     state.bindings.debugInfo = debugInfo
+                case .viewInRoomTimeline(let eventID):
+                    actionsSubject.send(.viewInRoomTimeline(eventID: eventID))
                 }
             }
             .store(in: &cancellables)
@@ -641,13 +645,13 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             } else {
                 for (index, item) in itemGroup.enumerated() {
                     if index == 0 {
-                        timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: .first),
+                        timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: state.isPinnedEventsTimeline ? .single : .first),
                                                             forKey: item.id.timelineID)
                     } else if index == itemGroup.count - 1 {
-                        timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: .last),
+                        timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: state.isPinnedEventsTimeline ? .single : .last),
                                                             forKey: item.id.timelineID)
                     } else {
-                        timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: .middle),
+                        timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: state.isPinnedEventsTimeline ? .single : .middle),
                                                             forKey: item.id.timelineID)
                     }
                 }
@@ -822,6 +826,7 @@ extension TimelineViewModel {
     static let mock = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                         focussedEventID: nil,
                                         timelineController: MockRoomTimelineController(),
+                                        isPinnedEventsTimeline: false,
                                         mediaProvider: MockMediaProvider(),
                                         mediaPlayerProvider: MediaPlayerProviderMock(),
                                         voiceMessageMediaManager: VoiceMessageMediaManagerMock(),

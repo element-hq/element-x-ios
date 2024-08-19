@@ -102,6 +102,7 @@
 "action_tap_for_options" = "Tap for options";
 "action_try_again" = "Try again";
 "action_unpin" = "Unpin";
+"action_view_in_timeline" = "View in timeline";
 "action_view_source" = "View source";
 "action_yes" = "Yes";
 "action.load_more" = "Load more";

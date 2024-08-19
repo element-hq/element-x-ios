@@ -63,6 +63,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     case endPoll(pollStartID: String)
     case pin
     case unpin
+    case viewInRoomTimeline
     
     var id: Self { self }
     
@@ -106,6 +107,15 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         }
     }
     
+    var canAppearInPinnedEventsTimeline: Bool {
+        switch self {
+        case .viewInRoomTimeline, .pin, .unpin, .forward, .redact:
+            return true
+        default:
+            return false
+        }
+    }
+    
     /// The action's label.
     @ViewBuilder
     var label: some View {
@@ -139,6 +149,8 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             Label(L10n.actionPin, icon: \.pin)
         case .unpin:
             Label(L10n.actionUnpin, icon: \.unpin)
+        case .viewInRoomTimeline:
+            Label(L10n.actionViewInTimeline, icon: \.visibilityOn)
         }
     }
 }

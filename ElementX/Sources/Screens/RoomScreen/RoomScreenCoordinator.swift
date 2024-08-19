@@ -73,6 +73,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                               focussedEventID: parameters.focussedEventID,
                                               timelineController: parameters.timelineController,
+                                              isPinnedEventsTimeline: false,
                                               mediaProvider: parameters.mediaProvider,
                                               mediaPlayerProvider: parameters.mediaPlayerProvider,
                                               voiceMessageMediaManager: parameters.voiceMessageMediaManager,
@@ -133,6 +134,9 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     composerViewModel.process(timelineAction: action)
                 case .hasScrolled(direction: let direction):
                     roomViewModel.timelineHasScrolled(direction: direction)
+                case .viewInRoomTimeline(eventID: let eventID):
+                    // Not handled in this screen
+                    break
                 }
             }
             .store(in: &cancellables)

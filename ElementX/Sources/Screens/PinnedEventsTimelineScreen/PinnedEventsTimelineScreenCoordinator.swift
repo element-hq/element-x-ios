@@ -50,6 +50,7 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
         viewModel = PinnedEventsTimelineScreenViewModel()
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                               timelineController: parameters.timelineController,
+                                              isPinnedEventsTimeline: true,
                                               mediaProvider: parameters.mediaProvider,
                                               mediaPlayerProvider: parameters.mediaPlayerProvider,
                                               voiceMessageMediaManager: parameters.voiceMessageMediaManager,

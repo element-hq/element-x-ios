@@ -24,6 +24,7 @@ struct TimelineItemMenuActionProvider {
     let pinnedEventIDs: Set<String>
     let isDM: Bool
     let isViewSourceEnabled: Bool
+    let isPinnedEventsTimeline: Bool
     
     // swiftlint:disable:next cyclomatic_complexity
     func makeActions() -> TimelineItemMenuActions? {
@@ -102,8 +103,13 @@ struct TimelineItemMenuActionProvider {
         if item.isRedacted {
             actions = actions.filter(\.canAppearInRedacted)
         }
+        
+        if isPinnedEventsTimeline {
+            actions.insert(.viewInRoomTimeline, at: 0)
+            actions = actions.filter(\.canAppearInPinnedEventsTimeline)
+        }
 
-        return .init(isReactable: item.isReactable, actions: actions, debugActions: debugActions)
+        return .init(isReactable: isPinnedEventsTimeline ? false : item.isReactable, actions: actions, debugActions: debugActions)
     }
     
     private func canRedactItem(_ item: EventBasedTimelineItemProtocol) -> Bool {

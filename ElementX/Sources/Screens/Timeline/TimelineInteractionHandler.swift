@@ -31,6 +31,8 @@ enum TimelineInteractionHandlerAction {
     
     case displayAudioRecorderPermissionError
     case displayErrorToast(String)
+    
+    case viewInRoomTimeline(eventID: String)
 }
 
 @MainActor
@@ -176,6 +178,9 @@ class TimelineInteractionHandler {
         case .unpin:
             guard let eventID = itemID.eventID else { return }
             Task { await timelineController.unpin(eventID: eventID) }
+        case .viewInRoomTimeline:
+            guard let eventID = itemID.eventID else { return }
+            actionsSubject.send(.viewInRoomTimeline(eventID: eventID))
         }
         
         if action.switchToDefaultComposer {
