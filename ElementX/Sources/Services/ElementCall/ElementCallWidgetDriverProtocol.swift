@@ -40,5 +40,6 @@ protocol ElementCallWidgetDriverProtocol {
     
     func start(baseURL: URL, clientID: String, colorScheme: ColorScheme) async -> Result<URL, ElementCallWidgetDriverError>
     
-    func sendMessage(_ message: String) async -> Result<Bool, ElementCallWidgetDriverError>
+    /// Passes a message from the Widget to the SDK to handle, returning a Bool that represents whether or not the widget driver is still running.
+    func handleMessage(_ message: String) async -> Result<Bool, ElementCallWidgetDriverError>
 }

@@ -23,7 +23,7 @@ typealias CallScreenViewModelType = StateStoreViewModel<CallScreenViewState, Cal
 
 class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol {
     private let elementCallService: ElementCallServiceProtocol
-    private let roomProxy: RoomProxyProtocol
+    private let configuration: ElementCallConfiguration
     private let isPictureInPictureEnabled: Bool
     
     private let widgetDriver: ElementCallWidgetDriverProtocol
@@ -42,35 +42,28 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     ///   - callBaseURL: Which Element Call instance should be used
     ///   - clientID: Something to identify the current client on the Element Call side
     init(elementCallService: ElementCallServiceProtocol,
-         clientProxy: ClientProxyProtocol,
-         roomProxy: RoomProxyProtocol,
-         clientID: String,
-         elementCallBaseURL: URL,
-         elementCallBaseURLOverride: URL?,
+         configuration: ElementCallConfiguration,
          elementCallPictureInPictureEnabled: Bool,
-         colorScheme: ColorScheme,
          appHooks: AppHooks) {
-        guard let deviceID = clientProxy.deviceID else { fatalError("Missing device ID for the call.") }
-        
         self.elementCallService = elementCallService
-        self.roomProxy = roomProxy
+        self.configuration = configuration
         isPictureInPictureEnabled = elementCallPictureInPictureEnabled
         
-        widgetDriver = roomProxy.elementCallWidgetDriver(deviceID: deviceID)
+        switch configuration.kind {
+        case .genericCallLink(let url):
+            widgetDriver = GenericCallLinkWidgetDriver(url: url)
+        case .roomCall(let roomProxy, let clientProxy, _, _, _, _):
+            guard let deviceID = clientProxy.deviceID else { fatalError("Missing device ID for the call.") }
+            widgetDriver = roomProxy.elementCallWidgetDriver(deviceID: deviceID)
+        }
         
         super.init(initialViewState: CallScreenViewState(messageHandler: Self.eventHandlerName,
                                                          script: Self.eventHandlerInjectionScript,
                                                          certificateValidator: appHooks.certificateValidatorHook))
         
         state.bindings.javaScriptMessageHandler = { [weak self] message in
-            guard let self,
-                  let message = message as? String else {
-                return
-            }
-            
-            Task {
-                await self.widgetDriver.sendMessage(message)
-            }
+            guard let self, let message = message as? String else { return }
+            Task { await self.widgetDriver.handleMessage(message) }
         }
         
         elementCallService.actions
@@ -80,8 +73,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 
                 switch action {
                 case let .setAudioEnabled(enabled, roomID):
-                    guard roomID == roomProxy.id else {
-                        MXLog.error("Received mute request for a different room: \(roomID) != \(roomProxy.id)")
+                    guard roomID == configuration.callID else {
+                        MXLog.error("Received mute request for a different room: \(roomID) != \(configuration.callID)")
                         return
                     }
                     
@@ -114,47 +107,10 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 case .callEnded:
                     actionsSubject.send(.dismiss)
                 case .mediaStateChanged(let audioEnabled, _):
-                    elementCallService.setAudioEnabled(audioEnabled, roomID: roomProxy.id)
+                    elementCallService.setAudioEnabled(audioEnabled, roomID: configuration.callID)
                 }
             }
             .store(in: &cancellables)
-        
-        // Wait for room states to be up to date before starting the call and notifying others
-        syncUpdateCancellable = clientProxy.actionsPublisher
-            .filter(\.isSyncUpdate)
-            .timeout(.seconds(5), scheduler: DispatchQueue.main)
-            .first() // Timeout will make the publisher complete, use first to handle both branches in the same place
-            .sink(receiveCompletion: { [weak self] _ in
-                Task { [weak self] in
-                    guard let self else { return }
-                    
-                    let baseURL = if let elementCallBaseURLOverride {
-                        elementCallBaseURLOverride
-                    } else if case .success(let wellKnown) = await clientProxy.getElementWellKnown(), let wellKnownCall = wellKnown?.call {
-                        wellKnownCall.widgetURL
-                    } else {
-                        elementCallBaseURL
-                    }
-                    
-                    switch await widgetDriver.start(baseURL: baseURL, clientID: clientID, colorScheme: colorScheme) {
-                    case .success(let url):
-                        state.url = url
-                    case .failure(let error):
-                        MXLog.error("Failed starting ElementCall Widget Driver with error: \(error)")
-                        state.bindings.alertInfo = .init(id: UUID(), title: L10n.errorUnknown, primaryButton: .init(title: L10n.actionOk, action: { [weak self] in
-                            self?.actionsSubject.send(.dismiss)
-                        }))
-                        
-                        return
-                    }
-                    
-                    await elementCallService.setupCallSession(roomID: roomProxy.id, roomDisplayName: roomProxy.roomTitle)
-                    
-                    _ = await roomProxy.sendCallNotificationIfNeeeded()
-                    
-                    syncUpdateCancellable = nil
-                }
-            }, receiveValue: { _ in })
         
         // Use did start otherwise there's a black box left on the screen during the pip controller animation.
         NotificationCenter.default.publisher(for: .init("AVPictureInPictureControllerDidStartNotification"))
@@ -172,6 +128,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 Task { try await self.state.bindings.javaScriptEvaluator?("controls.disableCompatPip()") }
             }
             .store(in: &cancellables)
+        
+        setupCall()
     }
     
     override func process(viewAction: CallScreenViewAction) {
@@ -193,6 +151,54 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     }
     
     // MARK: - Private
+    
+    private func setupCall() {
+        switch configuration.kind {
+        case .genericCallLink(let url):
+            state.url = url
+            // We need widget messaging to work before enabling CallKit, otherwise mute, hangup etc do nothing.
+        
+        case .roomCall(let roomProxy, let clientProxy, let clientID, let elementCallBaseURL, let elementCallBaseURLOverride, let colorScheme):
+            // Wait for room states to be up to date before starting the call and notifying others
+            syncUpdateCancellable = clientProxy.actionsPublisher
+                .filter(\.isSyncUpdate)
+                .timeout(.seconds(5), scheduler: DispatchQueue.main)
+                .first() // Timeout will make the publisher complete, use first to handle both branches in the same place
+                .sink(receiveCompletion: { [weak self] _ in
+                    Task { [weak self] in
+                        guard let self else { return }
+                        
+                        let baseURL = if let elementCallBaseURLOverride {
+                            elementCallBaseURLOverride
+                        } else if case .success(let wellKnown) = await clientProxy.getElementWellKnown(), let wellKnownCall = wellKnown?.call {
+                            wellKnownCall.widgetURL
+                        } else {
+                            elementCallBaseURL
+                        }
+                        
+                        switch await widgetDriver.start(baseURL: baseURL, clientID: clientID, colorScheme: colorScheme) {
+                        case .success(let url):
+                            state.url = url
+                        case .failure(let error):
+                            MXLog.error("Failed starting ElementCall Widget Driver with error: \(error)")
+                            state.bindings.alertInfo = .init(id: UUID(),
+                                                             title: L10n.errorUnknown,
+                                                             primaryButton: .init(title: L10n.actionOk) {
+                                                                 self.actionsSubject.send(.dismiss)
+                                                             })
+                            
+                            return
+                        }
+                        
+                        await elementCallService.setupCallSession(roomID: roomProxy.id, roomDisplayName: roomProxy.roomTitle)
+                        
+                        _ = await roomProxy.sendCallNotificationIfNeeded()
+                        
+                        syncUpdateCancellable = nil
+                    }
+                }, receiveValue: { _ in })
+        }
+    }
     
     private func handleBackwardsNavigation() {
         #if targetEnvironment(simulator)
@@ -237,7 +243,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         do {
             let data = try JSONEncoder().encode(message)
             let json = String(decoding: data, as: UTF8.self)
-            _ = await widgetDriver.sendMessage(json)
             
             await postJSONToWidget(json)
         } catch {

@@ -147,7 +147,7 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
         return .success(url)
     }
     
-    func sendMessage(_ message: String) async -> Result<Bool, ElementCallWidgetDriverError> {
+    func handleMessage(_ message: String) async -> Result<Bool, ElementCallWidgetDriverError> {
         guard let widgetDriver else {
             return .failure(.driverNotSetup)
         }

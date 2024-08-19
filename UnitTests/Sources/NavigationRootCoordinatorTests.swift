@@ -40,6 +40,22 @@ class NavigationRootCoordinatorTests: XCTestCase {
         assertCoordinatorsEqual(secondRootCoordinator, navigationRootCoordinator.rootCoordinator)
     }
     
+    func testOverlay() {
+        let rootCoordinator = SomeTestCoordinator()
+        navigationRootCoordinator.setRootCoordinator(rootCoordinator)
+        
+        let overlayCoordinator = SomeTestCoordinator()
+        navigationRootCoordinator.setOverlayCoordinator(overlayCoordinator)
+        
+        assertCoordinatorsEqual(rootCoordinator, navigationRootCoordinator.rootCoordinator)
+        assertCoordinatorsEqual(overlayCoordinator, navigationRootCoordinator.overlayCoordinator)
+        
+        navigationRootCoordinator.setOverlayCoordinator(nil)
+        
+        assertCoordinatorsEqual(rootCoordinator, navigationRootCoordinator.rootCoordinator)
+        XCTAssertNil(navigationRootCoordinator.overlayCoordinator)
+    }
+    
     func testReplacementDismissalCallbacks() {
         XCTAssertNil(navigationRootCoordinator.rootCoordinator)
         
@@ -51,6 +67,18 @@ class NavigationRootCoordinatorTests: XCTestCase {
         }
         
         navigationRootCoordinator.setRootCoordinator(nil)
+        waitForExpectations(timeout: 1.0)
+    }
+    
+    func testOverlayDismissalCallback() {
+        let overlayCoordinator = SomeTestCoordinator()
+        
+        let expectation = expectation(description: "Wait for callback")
+        navigationRootCoordinator.setOverlayCoordinator(overlayCoordinator) {
+            expectation.fulfill()
+        }
+        
+        navigationRootCoordinator.setOverlayCoordinator(nil)
         waitForExpectations(timeout: 1.0)
     }
     

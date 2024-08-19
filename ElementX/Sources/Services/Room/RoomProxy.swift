@@ -609,7 +609,7 @@ class RoomProxy: RoomProxyProtocol {
         ElementCallWidgetDriver(room: room, deviceID: deviceID)
     }
     
-    func sendCallNotificationIfNeeeded() async -> Result<Void, RoomProxyError> {
+    func sendCallNotificationIfNeeded() async -> Result<Void, RoomProxyError> {
         do {
             try await room.sendCallNotificationIfNeeded()
             return .success(())

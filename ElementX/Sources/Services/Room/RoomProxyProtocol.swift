@@ -141,7 +141,7 @@ protocol RoomProxyProtocol {
     func canUserJoinCall(userID: String) async -> Result<Bool, RoomProxyError>
     func elementCallWidgetDriver(deviceID: String) -> ElementCallWidgetDriverProtocol
     
-    func sendCallNotificationIfNeeeded() async -> Result<Void, RoomProxyError>
+    func sendCallNotificationIfNeeded() async -> Result<Void, RoomProxyError>
     
     // MARK: - Permalinks
     

@@ -457,6 +457,7 @@ private struct NavigationSplitCoordinatorView: View {
                 }
             }
             .animation(.elementDefault, value: navigationSplitCoordinator.overlayPresentationMode)
+            .animation(.elementDefault, value: navigationSplitCoordinator.overlayModule)
         }
         // Handle `horizontalSizeClass` changes breaking the navigation bar
         // https://github.com/element-hq/element-x-ios/issues/617

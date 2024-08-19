@@ -34,11 +34,11 @@ struct CallScreen: View {
                             Image(systemSymbol: .chevronBackward)
                                 .fontWeight(.semibold)
                         }
-                        .offset(y: -8)
                         // .padding(.leading, -8) // Fixes the button alignment, but harder to tap.
                     }
                 }
         }
+        .alert(item: $context.alertInfo)
     }
     
     @ViewBuilder
@@ -50,8 +50,6 @@ struct CallScreen: View {
                 // This URL is stable, forces view reloads if this representable is ever reused for another url
                 .id(context.viewState.url)
                 .ignoresSafeArea(edges: .bottom)
-                .presentationDragIndicator(.visible)
-                .alert(item: $context.alertInfo)
         }
     }
 }
@@ -211,7 +209,7 @@ struct CallScreen_Previews: PreviewProvider {
         clientProxy.deviceID = "call-device-id"
         
         let roomProxy = RoomProxyMock()
-        roomProxy.sendCallNotificationIfNeeededReturnValue = .success(())
+        roomProxy.sendCallNotificationIfNeededReturnValue = .success(())
         
         let widgetDriver = ElementCallWidgetDriverMock()
         widgetDriver.underlyingMessagePublisher = .init()
@@ -221,13 +219,13 @@ struct CallScreen_Previews: PreviewProvider {
         roomProxy.elementCallWidgetDriverDeviceIDReturnValue = widgetDriver
         
         return CallScreenViewModel(elementCallService: ElementCallServiceMock(.init()),
-                                   clientProxy: clientProxy,
-                                   roomProxy: roomProxy,
-                                   clientID: "io.element.elementx",
-                                   elementCallBaseURL: "https://call.element.io",
-                                   elementCallBaseURLOverride: nil,
+                                   configuration: .init(roomProxy: roomProxy,
+                                                        clientProxy: clientProxy,
+                                                        clientID: "io.element.elementx",
+                                                        elementCallBaseURL: "https://call.element.io",
+                                                        elementCallBaseURLOverride: nil,
+                                                        colorScheme: .light),
                                    elementCallPictureInPictureEnabled: false,
-                                   colorScheme: .light,
                                    appHooks: AppHooks())
     }()
     
