@@ -24,14 +24,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     /// The Matrix ID of the current user.
     private let userID: String
-    private let encryptionAuthenticityEnabled: Bool
     
     init(userID: String,
-         encryptionAuthenticityEnabled: Bool,
          attributedStringBuilder: AttributedStringBuilderProtocol,
          stateEventStringBuilder: RoomStateEventStringBuilder) {
         self.userID = userID
-        self.encryptionAuthenticityEnabled = encryptionAuthenticityEnabled
         self.attributedStringBuilder = attributedStringBuilder
         self.stateEventStringBuilder = stateEventStringBuilder
     }
@@ -503,8 +500,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
     
     private func authenticity(_ shieldState: ShieldState?) -> EncryptionAuthenticity? {
-        guard encryptionAuthenticityEnabled else { return nil }
-        return shieldState.flatMap(EncryptionAuthenticity.init)
+        shieldState.flatMap(EncryptionAuthenticity.init)
     }
     
     // MARK: - Message events content
