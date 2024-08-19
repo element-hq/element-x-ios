@@ -34,11 +34,11 @@ struct CallScreen: View {
                             Image(systemSymbol: .chevronBackward)
                                 .fontWeight(.semibold)
                         }
-                        .offset(y: -8)
                         // .padding(.leading, -8) // Fixes the button alignment, but harder to tap.
                     }
                 }
         }
+        .alert(item: $context.alertInfo)
     }
     
     @ViewBuilder
@@ -50,8 +50,6 @@ struct CallScreen: View {
                 // This URL is stable, forces view reloads if this representable is ever reused for another url
                 .id(context.viewState.url)
                 .ignoresSafeArea(edges: .bottom)
-                .presentationDragIndicator(.visible)
-                .alert(item: $context.alertInfo)
         }
     }
 }

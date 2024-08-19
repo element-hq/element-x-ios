@@ -129,7 +129,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        start()
+        setupCall()
     }
     
     override func process(viewAction: CallScreenViewAction) {
@@ -152,7 +152,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     
     // MARK: - Private
     
-    private func start() {
+    private func setupCall() {
         switch configuration.kind {
         case .genericCallLink(let url):
             state.url = url
