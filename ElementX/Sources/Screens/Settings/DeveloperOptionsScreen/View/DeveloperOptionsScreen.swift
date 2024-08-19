@@ -50,13 +50,6 @@ struct DeveloperOptionsScreen: View {
                     Text("Fuzzy searching")
                 }
             }
-            
-            Section("Encryption") {
-                Toggle(isOn: $context.timelineItemAuthenticityEnabled) {
-                    Text("Message authenticity warnings")
-                    Text("Requires app reboot")
-                }
-            }
                                     
             Section("Element Call") {
                 TextField(context.viewState.elementCallBaseURL.absoluteString, text: $elementCallBaseURLString)

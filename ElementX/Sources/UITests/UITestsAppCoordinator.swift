@@ -637,7 +637,6 @@ class MockScreen: Identifiable {
                                                             timelineProxy: roomProxy.timeline,
                                                             initialFocussedEventID: nil,
                                                             timelineItemFactory: RoomTimelineItemFactory(userID: "@alice:matrix.org",
-                                                                                                         encryptionAuthenticityEnabled: true,
                                                                                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: "@alice:matrix.org")),
                                                             appSettings: ServiceLocator.shared.settings)

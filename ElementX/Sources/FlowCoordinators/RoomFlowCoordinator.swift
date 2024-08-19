@@ -562,7 +562,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let userID = userSession.clientProxy.userID
         
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
-                                                          encryptionAuthenticityEnabled: appSettings.timelineItemAuthenticityEnabled,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
                 
@@ -968,7 +967,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentPinnedEventsTimeline() async {
         let userID = userSession.clientProxy.userID
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
-                                                          encryptionAuthenticityEnabled: appSettings.timelineItemAuthenticityEnabled,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
                 
@@ -1098,7 +1096,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let userID = userSession.clientProxy.userID
         
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
-                                                          encryptionAuthenticityEnabled: appSettings.timelineItemAuthenticityEnabled,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
                 
