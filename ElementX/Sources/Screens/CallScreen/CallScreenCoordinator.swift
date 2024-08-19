@@ -20,13 +20,8 @@ import SwiftUI
 
 struct CallScreenCoordinatorParameters {
     let elementCallService: ElementCallServiceProtocol
-    let clientProxy: ClientProxyProtocol
-    let roomProxy: RoomProxyProtocol
-    let clientID: String
-    let elementCallBaseURL: URL
-    let elementCallBaseURLOverride: URL?
+    let configuration: ElementCallConfiguration
     let elementCallPictureInPictureEnabled: Bool
-    let colorScheme: ColorScheme
     let appHooks: AppHooks
 }
 
@@ -50,13 +45,8 @@ final class CallScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: CallScreenCoordinatorParameters) {
         viewModel = CallScreenViewModel(elementCallService: parameters.elementCallService,
-                                        clientProxy: parameters.clientProxy,
-                                        roomProxy: parameters.roomProxy,
-                                        clientID: parameters.clientID,
-                                        elementCallBaseURL: parameters.elementCallBaseURL,
-                                        elementCallBaseURLOverride: parameters.elementCallBaseURLOverride,
+                                        configuration: parameters.configuration,
                                         elementCallPictureInPictureEnabled: parameters.elementCallPictureInPictureEnabled,
-                                        colorScheme: parameters.colorScheme,
                                         appHooks: parameters.appHooks)
     }
     

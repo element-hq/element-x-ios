@@ -5142,17 +5142,17 @@ class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol {
             return startBaseURLClientIDColorSchemeReturnValue
         }
     }
-    //MARK: - sendMessage
+    //MARK: - handleMessage
 
-    var sendMessageUnderlyingCallsCount = 0
-    var sendMessageCallsCount: Int {
+    var handleMessageUnderlyingCallsCount = 0
+    var handleMessageCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendMessageUnderlyingCallsCount
+                return handleMessageUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendMessageUnderlyingCallsCount
+                    returnValue = handleMessageUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -5160,29 +5160,29 @@ class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol {
         }
         set {
             if Thread.isMainThread {
-                sendMessageUnderlyingCallsCount = newValue
+                handleMessageUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendMessageUnderlyingCallsCount = newValue
+                    handleMessageUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var sendMessageCalled: Bool {
-        return sendMessageCallsCount > 0
+    var handleMessageCalled: Bool {
+        return handleMessageCallsCount > 0
     }
-    var sendMessageReceivedMessage: String?
-    var sendMessageReceivedInvocations: [String] = []
+    var handleMessageReceivedMessage: String?
+    var handleMessageReceivedInvocations: [String] = []
 
-    var sendMessageUnderlyingReturnValue: Result<Bool, ElementCallWidgetDriverError>!
-    var sendMessageReturnValue: Result<Bool, ElementCallWidgetDriverError>! {
+    var handleMessageUnderlyingReturnValue: Result<Bool, ElementCallWidgetDriverError>!
+    var handleMessageReturnValue: Result<Bool, ElementCallWidgetDriverError>! {
         get {
             if Thread.isMainThread {
-                return sendMessageUnderlyingReturnValue
+                return handleMessageUnderlyingReturnValue
             } else {
                 var returnValue: Result<Bool, ElementCallWidgetDriverError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendMessageUnderlyingReturnValue
+                    returnValue = handleMessageUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -5190,26 +5190,26 @@ class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol {
         }
         set {
             if Thread.isMainThread {
-                sendMessageUnderlyingReturnValue = newValue
+                handleMessageUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendMessageUnderlyingReturnValue = newValue
+                    handleMessageUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var sendMessageClosure: ((String) async -> Result<Bool, ElementCallWidgetDriverError>)?
+    var handleMessageClosure: ((String) async -> Result<Bool, ElementCallWidgetDriverError>)?
 
-    func sendMessage(_ message: String) async -> Result<Bool, ElementCallWidgetDriverError> {
-        sendMessageCallsCount += 1
-        sendMessageReceivedMessage = message
+    func handleMessage(_ message: String) async -> Result<Bool, ElementCallWidgetDriverError> {
+        handleMessageCallsCount += 1
+        handleMessageReceivedMessage = message
         DispatchQueue.main.async {
-            self.sendMessageReceivedInvocations.append(message)
+            self.handleMessageReceivedInvocations.append(message)
         }
-        if let sendMessageClosure = sendMessageClosure {
-            return await sendMessageClosure(message)
+        if let handleMessageClosure = handleMessageClosure {
+            return await handleMessageClosure(message)
         } else {
-            return sendMessageReturnValue
+            return handleMessageReturnValue
         }
     }
 }

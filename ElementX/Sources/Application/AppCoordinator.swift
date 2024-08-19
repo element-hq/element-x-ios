@@ -212,7 +212,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 if let userSessionFlowCoordinator {
                     userSessionFlowCoordinator.handleAppRoute(route, animated: true)
                 } else {
-                    navigationRootCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)))
+                    presentCallScreen(genericCallLink: url)
                 }
             case .userProfile(let userID):
                 if isExternalURL {
@@ -647,6 +647,31 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         elementCallService.setClientProxy(userSession.clientProxy)
+    }
+    
+    private func presentCallScreen(genericCallLink url: URL) {
+        let configuration = ElementCallConfiguration(genericCallLink: url)
+        
+        let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: elementCallService,
+                                                                            configuration: configuration,
+                                                                            elementCallPictureInPictureEnabled: false,
+                                                                            appHooks: appHooks))
+        
+        callScreenCoordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .pictureInPictureStarted, .pictureInPictureStopped:
+                    // Don't allow PiP when signed out - the user could login at which point we'd
+                    // need to hand over the call from here to the user session flow coordinator.
+                    MXLog.error("Picture in Picture not supported before login.")
+                case .dismiss:
+                    navigationRootCoordinator.setOverlayCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationRootCoordinator.setOverlayCoordinator(callScreenCoordinator, animated: false)
     }
 
     private func configureNotificationManager() {

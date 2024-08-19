@@ -268,11 +268,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         case .userProfile(let userID):
             stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
         case .call(let roomID):
-            Task {
-                await presentCallScreen(roomID: roomID)
-            }
+            Task { await presentCallScreen(roomID: roomID) }
         case .genericCallLink(let url):
-            navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
+            presentCallScreen(genericCallLink: url)
         case .settings, .chatBackupSettings:
             settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
         case .oidcCallback:
@@ -558,23 +556,39 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
     // MARK: Calls
     
-    private var callScreenPictureInPictureController: AVPictureInPictureController?
+    private func presentCallScreen(genericCallLink url: URL) {
+        presentCallScreen(configuration: .init(genericCallLink: url))
+    }
+    
+    private func presentCallScreen(roomID: String) async {
+        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            return
+        }
+        
+        presentCallScreen(roomProxy: roomProxy)
+    }
+    
     private func presentCallScreen(roomProxy: RoomProxyProtocol) {
-        guard elementCallService.ongoingCallRoomID != roomProxy.id else {
+        let colorScheme: ColorScheme = appMediator.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
+        presentCallScreen(configuration: .init(roomProxy: roomProxy,
+                                               clientProxy: userSession.clientProxy,
+                                               clientID: InfoPlistReader.main.bundleIdentifier,
+                                               elementCallBaseURL: appSettings.elementCallBaseURL,
+                                               elementCallBaseURLOverride: appSettings.elementCallBaseURLOverride,
+                                               colorScheme: colorScheme))
+    }
+    
+    private var callScreenPictureInPictureController: AVPictureInPictureController?
+    private func presentCallScreen(configuration: ElementCallConfiguration) {
+        guard elementCallService.ongoingCallRoomID != configuration.callID else {
             MXLog.info("Returning to existing call.")
             callScreenPictureInPictureController?.stopPictureInPicture()
             return
         }
         
-        let colorScheme: ColorScheme = appMediator.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
         let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: elementCallService,
-                                                                            clientProxy: userSession.clientProxy,
-                                                                            roomProxy: roomProxy,
-                                                                            clientID: InfoPlistReader.main.bundleIdentifier,
-                                                                            elementCallBaseURL: appSettings.elementCallBaseURL,
-                                                                            elementCallBaseURLOverride: appSettings.elementCallBaseURLOverride,
+                                                                            configuration: configuration,
                                                                             elementCallPictureInPictureEnabled: appSettings.elementCallPictureInPictureEnabled,
-                                                                            colorScheme: colorScheme,
                                                                             appHooks: appHooks))
         
         callScreenCoordinator.actions
@@ -598,14 +612,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setOverlayCoordinator(callScreenCoordinator, animated: true)
         
         analytics.track(screen: .RoomCall)
-    }
-    
-    private func presentCallScreen(roomID: String) async {
-        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
-            return
-        }
-        
-        presentCallScreen(roomProxy: roomProxy)
     }
     
     private func dismissCallScreenIfNeeded() {

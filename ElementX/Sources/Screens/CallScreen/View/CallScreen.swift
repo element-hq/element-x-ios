@@ -221,13 +221,13 @@ struct CallScreen_Previews: PreviewProvider {
         roomProxy.elementCallWidgetDriverDeviceIDReturnValue = widgetDriver
         
         return CallScreenViewModel(elementCallService: ElementCallServiceMock(.init()),
-                                   clientProxy: clientProxy,
-                                   roomProxy: roomProxy,
-                                   clientID: "io.element.elementx",
-                                   elementCallBaseURL: "https://call.element.io",
-                                   elementCallBaseURLOverride: nil,
+                                   configuration: .init(roomProxy: roomProxy,
+                                                        clientProxy: clientProxy,
+                                                        clientID: "io.element.elementx",
+                                                        elementCallBaseURL: "https://call.element.io",
+                                                        elementCallBaseURLOverride: nil,
+                                                        colorScheme: .light),
                                    elementCallPictureInPictureEnabled: false,
-                                   colorScheme: .light,
                                    appHooks: AppHooks())
     }()
     
