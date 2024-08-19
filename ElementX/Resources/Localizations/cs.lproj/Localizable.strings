@@ -319,7 +319,7 @@
 "screen_pinned_timeline_empty_state_description" = "Přidržte zprávu a vyberte „%1$@“, kterou chcete zahrnout sem.";
 "screen_pinned_timeline_empty_state_headline" = "Připněte důležité zprávy, aby je bylo možné snadno najít";
 "screen_pinned_timeline_screen_title_empty" = "Připnuté zprávy";
-"screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
+"screen_reset_encryption_password_error" = "Došlo k neznámé chybě. Zkontrolujte, zda je heslo k účtu správné a zkuste to znovu.";
 "screen_room_mentions_at_room_subtitle" = "Informujte celou místnost";
 "screen_room_pinned_banner_indicator" = "%1$@ z %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Připnuté zprávy";

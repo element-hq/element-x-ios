@@ -70,7 +70,7 @@
 "action_ok" = "OK";
 "action_open_settings" = "Seadistused";
 "action_open_with" = "Ava rakendusega";
-"action_pin" = "Kinnita";
+"action_pin" = "Tõsta esile";
 "action_quick_reply" = "Kiirvastus";
 "action_quote" = "Tsiteeri";
 "action_react" = "Reageeri";
@@ -101,7 +101,7 @@
 "action_take_photo" = "Tee pilt";
 "action_tap_for_options" = "Valikuteks klõpsa";
 "action_try_again" = "Proovi uuesti";
-"action_unpin" = "Eemalda kinnitus";
+"action_unpin" = "Eemalda esiletõstmine";
 "action_view_source" = "Vaata lähtekoodi";
 "action_yes" = "Jah";
 "action.load_more" = "Näita veel";
@@ -319,7 +319,7 @@
 "screen_pinned_timeline_empty_state_description" = "Siia lisamiseks vajuta sõnumil ja vali „%1$@“.";
 "screen_pinned_timeline_empty_state_headline" = "Et olulisi sõnumeid oleks lihtsam leida, tõsta nad esile";
 "screen_pinned_timeline_screen_title_empty" = "Esiletõstetud sõnumid";
-"screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
+"screen_reset_encryption_password_error" = "Tekkis teadmata viga. Palun kontrolli, kas sinu kasutajakonto salasõna on õige ja proovi uuesti.";
 "screen_room_mentions_at_room_subtitle" = "Teavita kogu jututuba";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ esiletõstetud sõnumit";

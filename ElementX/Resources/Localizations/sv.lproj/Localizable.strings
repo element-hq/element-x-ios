@@ -319,7 +319,7 @@
 "screen_pinned_timeline_empty_state_description" = "Tryck på ett meddelande och välj ”%1$@” för att inkludera det här.";
 "screen_pinned_timeline_empty_state_headline" = "Fäst viktiga meddelanden så att de lätt kan upptäckas";
 "screen_pinned_timeline_screen_title_empty" = "Fästa meddelanden";
-"screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
+"screen_reset_encryption_password_error" = "Ett okänt fel inträffade. Kontrollera att ditt kontolösenord är korrekt och försök igen.";
 "screen_room_mentions_at_room_subtitle" = "Meddela hela rummet";
 "screen_room_pinned_banner_indicator" = "%1$@ av %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Fästa meddelanden";
