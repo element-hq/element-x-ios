@@ -1328,6 +1328,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                               userSession: userSession,
                                                               roomTimelineControllerFactory: roomTimelineControllerFactory,
                                                               roomProxy: roomProxy,
+                                                              userIndicatorController: userIndicatorController,
                                                               appMediator: appMediator)
         
         coordinator.actionsPublisher.sink { [weak self] action in
@@ -1335,12 +1336,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return
             }
             
+            navigationStackCoordinator.setSheetCoordinator(nil)
             switch action {
             case .finished:
-                navigationStackCoordinator.setSheetCoordinator(nil)
+                break
             case .displayUser(let userID):
-                navigationStackCoordinator.setSheetCoordinator(nil)
                 stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID))
+            case .startChildRoomFlow(let roomID):
+                stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
             }
         }
         .store(in: &cancellables)

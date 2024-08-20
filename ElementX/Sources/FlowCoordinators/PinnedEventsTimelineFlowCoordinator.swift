@@ -20,6 +20,7 @@ import Foundation
 enum PinnedEventsTimelineFlowCoordinatorAction {
     case finished
     case displayUser(userID: String)
+    case startChildRoomFlow(roomID: String)
 }
 
 class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
@@ -27,6 +28,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
     private let roomProxy: RoomProxyProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
     
     private let actionsSubject: PassthroughSubject<PinnedEventsTimelineFlowCoordinatorAction, Never> = .init()
@@ -40,11 +42,13 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
          userSession: UserSessionProtocol,
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
          roomProxy: RoomProxyProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol,
          appMediator: AppMediatorProtocol) {
         self.navigationStackCoordinator = navigationStackCoordinator
         self.userSession = userSession
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.roomProxy = roomProxy
+        self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
     }
     
@@ -88,6 +92,8 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                     actionsSubject.send(.displayUser(userID: userID))
                 case .presentLocationViewer(let geoURI, let description):
                     presentMapNavigator(geoURI: geoURI, description: description)
+                case .displayMessageForwarding(let forwardingItem):
+                    presentMessageForwarding(with: forwardingItem)
                 }
             }
             .store(in: &cancellables)
@@ -115,6 +121,38 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         
         stackCoordinator.setRootCoordinator(coordinator)
         
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator)
+    }
+    
+    private func presentMessageForwarding(with forwardingItem: MessageForwardingItem) {
+        guard let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider else {
+            fatalError()
+        }
+        
+        let stackCoordinator = NavigationStackCoordinator()
+        
+        let parameters = MessageForwardingScreenCoordinatorParameters(forwardingItem: forwardingItem,
+                                                                      clientProxy: userSession.clientProxy,
+                                                                      roomSummaryProvider: roomSummaryProvider,
+                                                                      mediaProvider: userSession.mediaProvider,
+                                                                      userIndicatorController: userIndicatorController)
+        let coordinator = MessageForwardingScreenCoordinator(parameters: parameters)
+        
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .dismiss:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            case .sent(let roomID):
+                navigationStackCoordinator.setSheetCoordinator(nil)
+                actionsSubject.send(.startChildRoomFlow(roomID: roomID))
+            }
+        }
+        .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+
         navigationStackCoordinator.setSheetCoordinator(stackCoordinator)
     }
 }

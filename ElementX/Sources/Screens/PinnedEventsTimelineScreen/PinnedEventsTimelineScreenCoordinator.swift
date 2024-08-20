@@ -30,6 +30,7 @@ enum PinnedEventsTimelineScreenCoordinatorAction {
     case dismiss
     case displayUser(userID: String)
     case presentLocationViewer(geoURI: GeoURI, description: String?)
+    case displayMessageForwarding(forwardingItem: MessageForwardingItem)
 }
 
 final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
@@ -79,8 +80,8 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .tappedOnSenderDetails(let userID):
                 actionsSubject.send(.displayUser(userID: userID))
-            case .displayMessageForwarding(forwardingItem: let forwardingItem):
-                break
+            case .displayMessageForwarding(let forwardingItem):
+                actionsSubject.send(.displayMessageForwarding(forwardingItem: forwardingItem))
             case .displayLocation(_, let geoURI, let description):
                 actionsSubject.send(.presentLocationViewer(geoURI: geoURI, description: description))
             case .viewInRoomTimeline(let eventID):
