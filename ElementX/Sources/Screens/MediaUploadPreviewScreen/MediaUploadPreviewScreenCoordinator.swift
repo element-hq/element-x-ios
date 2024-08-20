@@ -19,7 +19,7 @@ import SwiftUI
 
 struct MediaUploadPreviewScreenCoordinatorParameters {
     let userIndicatorController: UserIndicatorControllerProtocol
-    let roomProxy: RoomProxyProtocol
+    let roomProxy: JoinedRoomProxyProtocol
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     let title: String?
     let url: URL

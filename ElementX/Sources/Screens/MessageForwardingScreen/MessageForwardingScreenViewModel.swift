@@ -118,7 +118,7 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
             fatalError()
         }
         
-        guard let targetRoomProxy = await clientProxy.roomForIdentifier(roomID) else {
+        guard case let .joined(targetRoomProxy) = await clientProxy.roomForIdentifier(roomID) else {
             MXLog.error("Failed retrieving room to forward to with id: \(roomID)")
             userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
             return

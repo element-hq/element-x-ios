@@ -561,14 +561,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentCallScreen(roomID: String) async {
-        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+        guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             return
         }
         
         presentCallScreen(roomProxy: roomProxy)
     }
     
-    private func presentCallScreen(roomProxy: RoomProxyProtocol) {
+    private func presentCallScreen(roomProxy: JoinedRoomProxyProtocol) {
         let colorScheme: ColorScheme = appMediator.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
         presentCallScreen(configuration: .init(roomProxy: roomProxy,
                                                clientProxy: userSession.clientProxy,

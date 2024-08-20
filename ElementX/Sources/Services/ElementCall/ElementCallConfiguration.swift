@@ -25,7 +25,7 @@ private enum GenericCallLinkQueryParameters {
 struct ElementCallConfiguration {
     enum Kind {
         case genericCallLink(URL)
-        case roomCall(roomProxy: RoomProxyProtocol,
+        case roomCall(roomProxy: JoinedRoomProxyProtocol,
                       clientProxy: ClientProxyProtocol,
                       clientID: String,
                       elementCallBaseURL: URL,
@@ -62,7 +62,7 @@ struct ElementCallConfiguration {
     }
     
     /// Creates a configuration for an internal room call.
-    init(roomProxy: RoomProxyProtocol,
+    init(roomProxy: JoinedRoomProxyProtocol,
          clientProxy: ClientProxyProtocol,
          clientID: String,
          elementCallBaseURL: URL,

@@ -443,23 +443,13 @@ class ClientProxy: ClientProxyProtocol {
         return result
     }
     
-    func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
-        guard let roomListService else {
-            MXLog.error("Failed retrieving room, room list service not set up")
-            return nil
-        }
-        
+    func roomForIdentifier(_ identifier: String) async -> RoomProxyType? {
         // Try fetching the room from the cold cache (if available) first
-        var (roomListItem, room) = await roomTupleForIdentifier(identifier)
-        
-        if let roomListItem, let room {
-            return await RoomProxy(roomListService: roomListService,
-                                   roomListItem: roomListItem,
-                                   room: room)
+        if let room = await buildRoomForIdentifier(identifier) {
+            return room
         }
         
         // Else wait for the visible rooms list to go into fully loaded
-        
         guard let roomSummaryProvider else {
             MXLog.error("Rooms summary provider not setup yet")
             return nil
@@ -469,21 +459,7 @@ class ClientProxy: ClientProxyProtocol {
             _ = await roomSummaryProvider.statePublisher.values.first(where: { $0.isLoaded })
         }
         
-        (roomListItem, room) = await roomTupleForIdentifier(identifier)
-        
-        guard let roomListItem else {
-            MXLog.error("Invalid roomListItem for identifier \(identifier)")
-            return nil
-        }
-        
-        guard let room else {
-            MXLog.error("Invalid roomListItem fullRoom for identifier \(identifier)")
-            return nil
-        }
-        
-        return await RoomProxy(roomListService: roomListService,
-                               roomListItem: roomListItem,
-                               room: room)
+        return await buildRoomForIdentifier(identifier)
     }
     
     func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewDetails, ClientProxyError> {
@@ -703,9 +679,9 @@ class ClientProxy: ClientProxyProtocol {
         var users: OrderedSet<UserProfileProxy> = []
         
         for roomID in roomIdentifiers {
-            guard let room = await roomForIdentifier(roomID),
-                  room.isDirect,
-                  let members = await room.members() else {
+            guard case let .joined(roomProxy) = await roomForIdentifier(roomID),
+                  roomProxy.isDirect,
+                  let members = await roomProxy.members() else {
                 continue
             }
             
@@ -868,19 +844,46 @@ class ClientProxy: ClientProxyProtocol {
         
         return .exclude(eventTypes: stateEventFilters.map { FilterTimelineEventType.state(eventType: $0) })
     }()
-
-    private func roomTupleForIdentifier(_ identifier: String) async -> (RoomListItem?, Room?) {
-        do {
-            let roomListItem = try roomListService?.room(roomId: identifier)
-            if roomListItem?.isTimelineInitialized() == false {
-                try await roomListItem?.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
+    
+    private func buildRoomForIdentifier(_ identifier: String) async -> RoomProxyType? {
+        guard let roomListService else {
+            MXLog.error("Failed retrieving room, room list service not set up")
+            return nil
+        }
+        
+        guard let roomListItem = try? roomListService.room(roomId: identifier) else {
+            MXLog.error("Failed retrieving room, invalid room list item")
+            return nil
+        }
+        
+        if roomListItem.isTimelineInitialized() == false {
+            do {
+                try await roomListItem.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
+            } catch {
+                MXLog.error("Failed initializing room timeline with error: \(error)")
+                return nil
             }
-            let fullRoom = try roomListItem?.fullRoom()
+        }
+        
+        guard let room = try? roomListItem.fullRoom() else {
+            MXLog.error("Failed retrieving room, invalid room list item full room")
+            return nil
+        }
+        
+        switch room.membership() {
+        case .invited:
+            return .invited(InvitedRoomProxy(roomListItem: roomListItem,
+                                             room: room))
+        case .joined:
+            guard let roomProxy = await JoinedRoomProxy(roomListService: roomListService,
+                                                        roomListItem: roomListItem,
+                                                        room: room) else {
+                return nil
+            }
             
-            return (roomListItem, fullRoom)
-        } catch {
-            MXLog.error("Failed retrieving/initialising room with identifier: \(identifier)")
-            return (nil, nil)
+            return .joined(roomProxy)
+        case .left:
+            return .left
         }
     }
     

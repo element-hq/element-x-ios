@@ -22,18 +22,18 @@ import XCTest
 
 @MainActor
 class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
-    var roomProxyMock: RoomProxyMock!
+    var roomProxyMock: JoinedRoomProxyMock!
     var notificationSettingsProxyMock: NotificationSettingsProxyMock!
     var cancellables = Set<AnyCancellable>()
 
     override func setUpWithError() throws {
         cancellables.removeAll()
-        roomProxyMock = RoomProxyMock(.init(name: "Test"))
+        roomProxyMock = JoinedRoomProxyMock(.init(name: "Test"))
         notificationSettingsProxyMock = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
     }
     
     func testInitialStateDefaultModeEncryptedRoom() async throws {
-        let roomProxyMock = RoomProxyMock(.init(name: "Test", isEncrypted: true))
+        let roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isEncrypted: true))
         let notificationSettingsProxyMock = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
         
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: true))
@@ -55,7 +55,7 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
     }
     
     func testInitialStateDefaultModeEncryptedRoomWithCanPushEncrypted() async throws {
-        let roomProxyMock = RoomProxyMock(.init(name: "Test", isEncrypted: true))
+        let roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isEncrypted: true))
         let notificationSettingsProxyMock = NotificationSettingsProxyMock(with: .init(canPushEncryptedEvents: true))
         
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: true))
@@ -77,7 +77,7 @@ class RoomNotificationSettingsScreenViewModelTests: XCTestCase {
     }
     
     func testInitialStateDefaultModeUnencryptedRoom() async throws {
-        let roomProxyMock = RoomProxyMock(.init(name: "Test", isEncrypted: false))
+        let roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isEncrypted: false))
         let notificationSettingsProxyMock = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
         
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: true))

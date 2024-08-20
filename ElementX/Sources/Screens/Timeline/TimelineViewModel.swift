@@ -29,7 +29,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         static let toastErrorID = "RoomScreenToastError"
     }
 
-    private let roomProxy: RoomProxyProtocol
+    private let roomProxy: JoinedRoomProxyProtocol
     private let timelineController: RoomTimelineControllerProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -49,7 +49,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private var paginateBackwardsTask: Task<Void, Never>?
     private var paginateForwardsTask: Task<Void, Never>?
 
-    init(roomProxy: RoomProxyProtocol,
+    init(roomProxy: JoinedRoomProxyProtocol,
          focussedEventID: String? = nil,
          timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -819,7 +819,7 @@ private extension RoomProxyProtocol {
 // MARK: - Mocks
 
 extension TimelineViewModel {
-    static let mock = TimelineViewModel(roomProxy: RoomProxyMock(.init(name: "Preview room")),
+    static let mock = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                         focussedEventID: nil,
                                         timelineController: MockRoomTimelineController(),
                                         mediaProvider: MockMediaProvider(),

@@ -18,7 +18,7 @@ import Combine
 import SwiftUI
 
 struct RoomDetailsScreenCoordinatorParameters {
-    let roomProxy: RoomProxyProtocol
+    let roomProxy: JoinedRoomProxyProtocol
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let analyticsService: AnalyticsService

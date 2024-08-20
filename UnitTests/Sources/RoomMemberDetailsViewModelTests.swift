@@ -21,12 +21,12 @@ import XCTest
 @MainActor
 class RoomMemberDetailsViewModelTests: XCTestCase {
     var viewModel: RoomMemberDetailsScreenViewModelProtocol!
-    var roomProxyMock: RoomProxyMock!
+    var roomProxyMock: JoinedRoomProxyMock!
     var roomMemberProxyMock: RoomMemberProxyMock!
     var context: RoomMemberDetailsScreenViewModelType.Context { viewModel.context }
 
     override func setUp() async throws {
-        roomProxyMock = RoomProxyMock(.init(name: ""))
+        roomProxyMock = JoinedRoomProxyMock(.init(name: ""))
         
         roomProxyMock.getMemberUserIDClosure = { _ in
             .success(self.roomMemberProxyMock)

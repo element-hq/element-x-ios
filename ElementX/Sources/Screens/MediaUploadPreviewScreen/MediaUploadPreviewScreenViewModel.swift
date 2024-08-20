@@ -22,7 +22,7 @@ typealias MediaUploadPreviewScreenViewModelType = StateStoreViewModel<MediaUploa
 
 class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, MediaUploadPreviewScreenViewModelProtocol {
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let roomProxy: RoomProxyProtocol
+    private let roomProxy: JoinedRoomProxyProtocol
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     private let url: URL
     private var requestHandle: SendAttachmentJoinHandleProtocol? {
@@ -38,7 +38,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     }
 
     init(userIndicatorController: UserIndicatorControllerProtocol,
-         roomProxy: RoomProxyProtocol,
+         roomProxy: JoinedRoomProxyProtocol,
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          title: String?,
          url: URL) {

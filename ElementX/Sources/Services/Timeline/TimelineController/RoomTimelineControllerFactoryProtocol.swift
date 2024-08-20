@@ -18,10 +18,10 @@ import Foundation
 
 @MainActor
 protocol RoomTimelineControllerFactoryProtocol {
-    func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
+    func buildRoomTimelineController(roomProxy: JoinedRoomProxyProtocol,
                                      initialFocussedEventID: String?,
                                      timelineItemFactory: RoomTimelineItemFactoryProtocol) -> RoomTimelineControllerProtocol
-    func buildRoomPinnedTimelineController(roomProxy: RoomProxyProtocol,
+    func buildRoomPinnedTimelineController(roomProxy: JoinedRoomProxyProtocol,
                                            timelineItemFactory: RoomTimelineItemFactoryProtocol) async -> RoomTimelineControllerProtocol?
 }
 

@@ -17,7 +17,7 @@
 import Foundation
 
 struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
-    func buildRoomTimelineController(roomProxy: RoomProxyProtocol,
+    func buildRoomTimelineController(roomProxy: JoinedRoomProxyProtocol,
                                      initialFocussedEventID: String?,
                                      timelineItemFactory: RoomTimelineItemFactoryProtocol) -> RoomTimelineControllerProtocol {
         RoomTimelineController(roomProxy: roomProxy,
@@ -27,7 +27,7 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
                                appSettings: ServiceLocator.shared.settings)
     }
     
-    func buildRoomPinnedTimelineController(roomProxy: RoomProxyProtocol,
+    func buildRoomPinnedTimelineController(roomProxy: JoinedRoomProxyProtocol,
                                            timelineItemFactory: RoomTimelineItemFactoryProtocol) async -> RoomTimelineControllerProtocol? {
         guard let pinnedEventsTimeline = await roomProxy.pinnedEventsTimeline else {
             return nil

@@ -22,7 +22,7 @@ import SwiftUI
 typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, RoomScreenViewAction>
 
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
-    private let roomProxy: RoomProxyProtocol
+    private let roomProxy: JoinedRoomProxyProtocol
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
@@ -51,7 +51,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    init(roomProxy: RoomProxyProtocol,
+    init(roomProxy: JoinedRoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
@@ -183,7 +183,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 }
 
 extension RoomScreenViewModel {
-    static func mock(roomProxyMock: RoomProxyMock) -> RoomScreenViewModel {
+    static func mock(roomProxyMock: JoinedRoomProxyMock) -> RoomScreenViewModel {
         RoomScreenViewModel(roomProxy: roomProxyMock,
                             mediaProvider: MockMediaProvider(),
                             appMediator: AppMediatorMock.default,

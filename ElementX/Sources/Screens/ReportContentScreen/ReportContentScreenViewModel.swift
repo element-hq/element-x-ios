@@ -22,7 +22,7 @@ typealias ReportContentScreenViewModelType = StateStoreViewModel<ReportContentSc
 class ReportContentScreenViewModel: ReportContentScreenViewModelType, ReportContentScreenViewModelProtocol {
     private let eventID: String
     private let senderID: String
-    private let roomProxy: RoomProxyProtocol
+    private let roomProxy: JoinedRoomProxyProtocol
     private let clientProxy: ClientProxyProtocol
     private let actionsSubject: PassthroughSubject<ReportContentScreenViewModelAction, Never> = .init()
     
@@ -30,7 +30,7 @@ class ReportContentScreenViewModel: ReportContentScreenViewModelType, ReportCont
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(eventID: String, senderID: String, roomProxy: RoomProxyProtocol, clientProxy: ClientProxyProtocol) {
+    init(eventID: String, senderID: String, roomProxy: JoinedRoomProxyProtocol, clientProxy: ClientProxyProtocol) {
         self.eventID = eventID
         self.senderID = senderID
         self.roomProxy = roomProxy

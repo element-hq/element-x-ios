@@ -179,10 +179,10 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         }
         
         return RoomMembersListScreenViewModel(initialMode: initialMode,
-                                              roomProxy: RoomProxyMock(.init(name: "Some room",
-                                                                             members: members,
-                                                                             ownUserID: ownUserID,
-                                                                             canUserInvite: false)),
+                                              roomProxy: JoinedRoomProxyMock(.init(name: "Some room",
+                                                                                   members: members,
+                                                                                   ownUserID: ownUserID,
+                                                                                   canUserInvite: false)),
                                               mediaProvider: MockMediaProvider(),
                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                               analytics: ServiceLocator.shared.analytics)

@@ -22,7 +22,7 @@ typealias RoomNotificationSettingsScreenViewModelType = StateStoreViewModel<Room
 class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenViewModelType, RoomNotificationSettingsScreenViewModelProtocol {
     private let actionsSubject: PassthroughSubject<RoomNotificationSettingsScreenViewModelAction, Never> = .init()
     private let notificationSettingsProxy: NotificationSettingsProxyProtocol
-    private let roomProxy: RoomProxyProtocol
+    private let roomProxy: JoinedRoomProxyProtocol
     
     // periphery:ignore - cancellable tasks cancel when reassigned
     @CancellableTask private var fetchNotificationSettingsTask: Task<Void, Error>?
@@ -31,7 +31,7 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(notificationSettingsProxy: NotificationSettingsProxyProtocol, roomProxy: RoomProxyProtocol, displayAsUserDefinedRoomSettings: Bool) {
+    init(notificationSettingsProxy: NotificationSettingsProxyProtocol, roomProxy: JoinedRoomProxyProtocol, displayAsUserDefinedRoomSettings: Bool) {
         let bindings = RoomNotificationSettingsScreenViewStateBindings()
         self.notificationSettingsProxy = notificationSettingsProxy
         self.roomProxy = roomProxy

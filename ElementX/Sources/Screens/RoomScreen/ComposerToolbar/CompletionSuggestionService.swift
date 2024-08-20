@@ -22,13 +22,13 @@ private enum SuggestionTriggerPattern: Character {
 }
 
 final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
-    private let roomProxy: RoomProxyProtocol
+    private let roomProxy: JoinedRoomProxyProtocol
     private var canMentionAllUsers = false
     private(set) var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> = Empty().eraseToAnyPublisher()
     
     private let suggestionTriggerSubject = CurrentValueSubject<SuggestionTrigger?, Never>(nil)
     
-    init(roomProxy: RoomProxyProtocol) {
+    init(roomProxy: JoinedRoomProxyProtocol) {
         self.roomProxy = roomProxy
         
         suggestionsPublisher = suggestionTriggerSubject

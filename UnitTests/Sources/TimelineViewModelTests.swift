@@ -328,10 +328,10 @@ class TimelineViewModelTests: XCTestCase {
     // swiftlint:enable force_unwrapping
     // swiftlint:disable:next large_tuple
     private func readReceiptsConfiguration(with items: [RoomTimelineItemProtocol]) -> (TimelineViewModel,
-                                                                                       RoomProxyMock,
+                                                                                       JoinedRoomProxyMock,
                                                                                        TimelineProxyMock,
                                                                                        MockRoomTimelineController) {
-        let roomProxy = RoomProxyMock(.init(name: ""))
+        let roomProxy = JoinedRoomProxyMock(.init(name: ""))
         
         let timelineProxy = TimelineProxyMock()
         
@@ -367,7 +367,7 @@ class TimelineViewModelTests: XCTestCase {
         // When showing them in a timeline.
         let timelineController = MockRoomTimelineController()
         timelineController.timelineItems = [message]
-        let viewModel = TimelineViewModel(roomProxy: RoomProxyMock(.init(name: "", members: [RoomMemberProxyMock.mockAlice, RoomMemberProxyMock.mockCharlie])),
+        let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "", members: [RoomMemberProxyMock.mockAlice, RoomMemberProxyMock.mockCharlie])),
                                           timelineController: timelineController,
                                           mediaProvider: MockMediaProvider(),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -388,9 +388,9 @@ class TimelineViewModelTests: XCTestCase {
     // MARK: - Pins
     
     func testPinnedEvents() async throws {
-        let roomProxyMock = RoomProxyMock(.init(name: "",
-                                                pinnedEventIDs: .init(["test1"])))
-        let actionsSubject = PassthroughSubject<RoomProxyAction, Never>()
+        let roomProxyMock = JoinedRoomProxyMock(.init(name: "",
+                                                      pinnedEventIDs: .init(["test1"])))
+        let actionsSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
         roomProxyMock.underlyingActionsPublisher = actionsSubject.eraseToAnyPublisher()
         let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                           timelineController: MockRoomTimelineController(),
@@ -417,8 +417,8 @@ class TimelineViewModelTests: XCTestCase {
     
     func testCanUserPinEvents() async throws {
         ServiceLocator.shared.settings.pinningEnabled = true
-        let roomProxyMock = RoomProxyMock(.init(name: "", canUserPin: false))
-        let actionsSubject = PassthroughSubject<RoomProxyAction, Never>()
+        let roomProxyMock = JoinedRoomProxyMock(.init(name: "", canUserPin: false))
+        let actionsSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
         roomProxyMock.underlyingActionsPublisher = actionsSubject.eraseToAnyPublisher()
         let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                           timelineController: MockRoomTimelineController(),
@@ -445,10 +445,10 @@ class TimelineViewModelTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeViewModel(roomProxy: RoomProxyProtocol? = nil,
+    private func makeViewModel(roomProxy: JoinedRoomProxyProtocol? = nil,
                                focussedEventID: String? = nil,
                                timelineController: RoomTimelineControllerProtocol) -> TimelineViewModel {
-        TimelineViewModel(roomProxy: roomProxy ?? RoomProxyMock(.init(name: "")),
+        TimelineViewModel(roomProxy: roomProxy ?? JoinedRoomProxyMock(.init(name: "")),
                           focussedEventID: focussedEventID,
                           timelineController: timelineController,
                           mediaProvider: MockMediaProvider(),

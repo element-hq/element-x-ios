@@ -20,7 +20,7 @@ import SwiftUI
 typealias RoomMembersListScreenViewModelType = StateStoreViewModel<RoomMembersListScreenViewState, RoomMembersListScreenViewAction>
 
 class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMembersListScreenViewModelProtocol {
-    private let roomProxy: RoomProxyProtocol
+    private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let analytics: AnalyticsService
     
@@ -33,7 +33,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     }
 
     init(initialMode: RoomMembersListScreenMode = .members,
-         roomProxy: RoomProxyProtocol,
+         roomProxy: JoinedRoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          analytics: AnalyticsService) {

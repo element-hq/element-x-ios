@@ -35,7 +35,7 @@ enum TimelineInteractionHandlerAction {
 
 @MainActor
 class TimelineInteractionHandler {
-    private let roomProxy: RoomProxyProtocol
+    private let roomProxy: JoinedRoomProxyProtocol
     private let timelineController: RoomTimelineControllerProtocol
     private let mediaProvider: MediaProviderProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
@@ -60,7 +60,7 @@ class TimelineInteractionHandler {
     
     private var resumeVoiceMessagePlaybackAfterScrubbing = false
     
-    init(roomProxy: RoomProxyProtocol,
+    init(roomProxy: JoinedRoomProxyProtocol,
          timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          mediaPlayerProvider: MediaPlayerProviderProtocol,

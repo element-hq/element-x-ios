@@ -9863,6 +9863,82 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
         try await unmuteRoomRoomIdIsEncryptedIsOneToOneClosure?(roomId, isEncrypted, isOneToOne)
     }
 }
+open class OidcAuthorizationDataSDKMock: MatrixRustSDK.OidcAuthorizationData {
+    init() {
+        super.init(noPointer: .init())
+    }
+
+    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    }
+
+    fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - loginUrl
+
+    var loginUrlUnderlyingCallsCount = 0
+    open var loginUrlCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loginUrlUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loginUrlUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loginUrlUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loginUrlUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var loginUrlCalled: Bool {
+        return loginUrlCallsCount > 0
+    }
+
+    var loginUrlUnderlyingReturnValue: String!
+    open var loginUrlReturnValue: String! {
+        get {
+            if Thread.isMainThread {
+                return loginUrlUnderlyingReturnValue
+            } else {
+                var returnValue: String? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loginUrlUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loginUrlUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loginUrlUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var loginUrlClosure: (() -> String)?
+
+    open override func loginUrl() -> String {
+        loginUrlCallsCount += 1
+        if let loginUrlClosure = loginUrlClosure {
+            return loginUrlClosure()
+        } else {
+            return loginUrlReturnValue
+        }
+    }
+}
 open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData {
     init() {
         super.init(noPointer: .init())

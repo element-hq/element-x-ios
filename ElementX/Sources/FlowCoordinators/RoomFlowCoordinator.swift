@@ -20,7 +20,7 @@ import SwiftUI
 import UserNotifications
 
 enum RoomFlowCoordinatorAction: Equatable {
-    case presentCallScreen(roomProxy: RoomProxyProtocol)
+    case presentCallScreen(roomProxy: JoinedRoomProxyProtocol)
     case finished
     
     static func == (lhs: RoomFlowCoordinatorAction, rhs: RoomFlowCoordinatorAction) -> Bool {
@@ -63,7 +63,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     
-    private var roomProxy: RoomProxyProtocol!
+    private var roomProxy: JoinedRoomProxyProtocol!
     
     private var roomScreenCoordinator: RoomScreenCoordinator?
     private weak var joinRoomScreenCoordinator: JoinRoomScreenCoordinator?
@@ -139,7 +139,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             
             Task {
                 if roomProxy == nil {
-                    guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+                    guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
                         return
                     }
                     
@@ -173,7 +173,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentCallScreen(roomID: String) async {
-        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+        guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             return
         }
         
@@ -183,13 +183,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func handleRoomRoute(roomID: String, via: [String], focussedEventID: String? = nil, animated: Bool) async {
         guard roomID == self.roomID else { fatalError("Navigation route doesn't belong to this room flow.") }
         
-        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+        guard let room = await userSession.clientProxy.roomForIdentifier(roomID) else {
             stateMachine.tryEvent(.presentJoinRoomScreen(via: via), userInfo: EventUserInfo(animated: animated))
             return
         }
         
-        switch roomProxy.membership {
-        case .joined:
+        switch room {
+        case .joined(let roomProxy):
             await storeAndSubscribeToRoomProxy(roomProxy)
             stateMachine.tryEvent(.presentRoom(focussedEventID: focussedEventID), userInfo: EventUserInfo(animated: animated))
         default:
@@ -207,7 +207,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: - Private
     
-    private func storeAndSubscribeToRoomProxy(_ roomProxy: RoomProxyProtocol) async {
+    private func storeAndSubscribeToRoomProxy(_ roomProxy: JoinedRoomProxyProtocol) async {
         if let oldRoomProxy = self.roomProxy {
             if oldRoomProxy.id != roomProxy.id {
                 fatalError("Trying to create different room proxies for the same flow coordinator")
@@ -216,11 +216,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             MXLog.warning("Found an existing proxy, returning.")
             return
         }
-        
-        guard roomProxy.membership == .joined else {
-            fatalError("Requesting room details for an unjoined room")
-        }
-        
+                
         await roomProxy.subscribeForUpdates()
         
         // Make sure not to set this until after the subscription has succeeded, otherwise the
@@ -658,7 +654,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     Task { [weak self] in
                         guard let self else { return }
                         
-                        if let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) {
+                        if case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) {
                             await storeAndSubscribeToRoomProxy(roomProxy)
                             stateMachine.tryEvent(.presentRoom(focussedEventID: nil), userInfo: EventUserInfo(animated: animated))
                             
@@ -1300,7 +1296,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func inviteUsers(_ users: [String], in room: RoomProxyProtocol) {
+    private func inviteUsers(_ users: [String], in room: JoinedRoomProxyProtocol) {
         navigationStackCoordinator.setSheetCoordinator(nil)
         
         Task {

@@ -18,7 +18,7 @@ import Combine
 import SwiftUI
 
 struct RoomDetailsEditScreenCoordinatorParameters {
-    let roomProxy: RoomProxyProtocol
+    let roomProxy: JoinedRoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
     weak var navigationStackCoordinator: NavigationStackCoordinator?
     let userIndicatorController: UserIndicatorControllerProtocol

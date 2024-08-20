@@ -57,7 +57,7 @@ final class NotificationSettingsEditScreenCoordinator: CoordinatorProtocol {
     // MARK: - Private
     
     private func presentRoomNotificationSettings(roomID: String) async {
-        guard let roomProxy = await parameters.userSession.clientProxy.roomForIdentifier(roomID) else { return }
+        guard case let .joined(roomProxy) = await parameters.userSession.clientProxy.roomForIdentifier(roomID) else { return }
          
         let roomNotificationSettingsParameters = RoomNotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: parameters.navigationStackCoordinator,
                                                                                                      notificationSettingsProxy: parameters.notificationSettings,

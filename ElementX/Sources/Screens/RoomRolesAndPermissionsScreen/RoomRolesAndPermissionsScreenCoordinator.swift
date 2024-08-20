@@ -18,7 +18,7 @@ import Combine
 import SwiftUI
 
 struct RoomRolesAndPermissionsScreenCoordinatorParameters {
-    let roomProxy: RoomProxyProtocol
+    let roomProxy: JoinedRoomProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let analytics: AnalyticsService
 }

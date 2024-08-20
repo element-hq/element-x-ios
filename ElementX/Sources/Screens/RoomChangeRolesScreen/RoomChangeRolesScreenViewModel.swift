@@ -20,7 +20,7 @@ import SwiftUI
 typealias RoomChangeRolesScreenViewModelType = StateStoreViewModel<RoomChangeRolesScreenViewState, RoomChangeRolesScreenViewAction>
 
 class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomChangeRolesScreenViewModelProtocol {
-    private let roomProxy: RoomProxyProtocol
+    private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let analytics: AnalyticsService
     
@@ -30,7 +30,7 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
     }
 
     init(mode: RoomMemberDetails.Role,
-         roomProxy: RoomProxyProtocol,
+         roomProxy: JoinedRoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          analytics: AnalyticsService) {

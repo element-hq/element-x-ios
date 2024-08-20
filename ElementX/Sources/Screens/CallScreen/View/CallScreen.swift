@@ -208,7 +208,7 @@ struct CallScreen_Previews: PreviewProvider {
         clientProxy.getElementWellKnownReturnValue = .success(nil)
         clientProxy.deviceID = "call-device-id"
         
-        let roomProxy = RoomProxyMock()
+        let roomProxy = JoinedRoomProxyMock()
         roomProxy.sendCallNotificationIfNeededReturnValue = .success(())
         
         let widgetDriver = ElementCallWidgetDriverMock()

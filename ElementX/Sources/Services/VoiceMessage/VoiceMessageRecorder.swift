@@ -154,7 +154,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         return .success(waveformData)
     }
     
-    func sendVoiceMessage(inRoom roomProxy: RoomProxyProtocol, audioConverter: AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError> {
+    func sendVoiceMessage(inRoom roomProxy: JoinedRoomProxyProtocol, audioConverter: AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError> {
         guard let url = audioRecorder.audioFileURL else {
             return .failure(VoiceMessageRecorderError.missingRecordingFile)
         }

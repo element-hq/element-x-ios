@@ -18,9 +18,9 @@ import Foundation
 
 class PollInteractionHandler: PollInteractionHandlerProtocol {
     let analyticsService: AnalyticsService
-    let roomProxy: RoomProxyProtocol
+    let roomProxy: JoinedRoomProxyProtocol
     
-    init(analyticsService: AnalyticsService, roomProxy: RoomProxyProtocol) {
+    init(analyticsService: AnalyticsService, roomProxy: JoinedRoomProxyProtocol) {
         self.analyticsService = analyticsService
         self.roomProxy = roomProxy
     }
