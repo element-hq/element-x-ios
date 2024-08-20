@@ -23,6 +23,7 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
         RoomTimelineController(roomProxy: roomProxy,
                                timelineProxy: roomProxy.timeline,
                                initialFocussedEventID: initialFocussedEventID,
+                               shouldHideStart: false,
                                timelineItemFactory: timelineItemFactory,
                                appSettings: ServiceLocator.shared.settings)
     }
@@ -35,6 +36,7 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
         return RoomTimelineController(roomProxy: roomProxy,
                                       timelineProxy: pinnedEventsTimeline,
                                       initialFocussedEventID: nil,
+                                      shouldHideStart: true,
                                       timelineItemFactory: timelineItemFactory,
                                       appSettings: ServiceLocator.shared.settings)
     }

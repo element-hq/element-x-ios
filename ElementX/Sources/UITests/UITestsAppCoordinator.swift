@@ -649,6 +649,7 @@ class MockScreen: Identifiable {
             let timelineController = RoomTimelineController(roomProxy: roomProxy,
                                                             timelineProxy: roomProxy.timeline,
                                                             initialFocussedEventID: nil,
+                                                            shouldHideStart: false,
                                                             timelineItemFactory: RoomTimelineItemFactory(userID: "@alice:matrix.org",
                                                                                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: "@alice:matrix.org")),

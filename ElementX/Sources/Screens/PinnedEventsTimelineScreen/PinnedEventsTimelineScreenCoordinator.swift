@@ -29,6 +29,7 @@ struct PinnedEventsTimelineScreenCoordinatorParameters {
 enum PinnedEventsTimelineScreenCoordinatorAction {
     case dismiss
     case displayUser(userID: String)
+    case presentLocationViewer(geoURI: GeoURI, description: String?)
 }
 
 final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
@@ -76,13 +77,13 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .tappedOnSenderDetails(userID: let userID):
+            case .tappedOnSenderDetails(let userID):
                 actionsSubject.send(.displayUser(userID: userID))
             case .displayMessageForwarding(forwardingItem: let forwardingItem):
                 break
-            case .displayLocation(body: let body, geoURI: let geoURI, description: let description):
-                break
-            case .viewInRoomTimeline(eventID: let eventID):
+            case .displayLocation(_, let geoURI, let description):
+                actionsSubject.send(.presentLocationViewer(geoURI: geoURI, description: description))
+            case .viewInRoomTimeline(let eventID):
                 break
             // These other actions will not be handled in this view
             case .displayEmojiPicker, .displayReportContent, .displayCameraPicker, .displayMediaPicker, .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediaUploadPreviewScreen, .composer, .hasScrolled:

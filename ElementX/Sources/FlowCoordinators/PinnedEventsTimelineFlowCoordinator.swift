@@ -23,7 +23,7 @@ enum PinnedEventsTimelineFlowCoordinatorAction {
 }
 
 class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
-    private let stackCoordinator: NavigationStackCoordinator
+    private let navigationStackCoordinator: NavigationStackCoordinator
     private let userSession: UserSessionProtocol
     private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
     private let roomProxy: RoomProxyProtocol
@@ -36,12 +36,12 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(stackCoordinator: NavigationStackCoordinator,
+    init(navigationStackCoordinator: NavigationStackCoordinator,
          userSession: UserSessionProtocol,
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
          roomProxy: RoomProxyProtocol,
          appMediator: AppMediatorProtocol) {
-        self.stackCoordinator = stackCoordinator
+        self.navigationStackCoordinator = navigationStackCoordinator
         self.userSession = userSession
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.roomProxy = roomProxy
@@ -86,10 +86,35 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                     actionsSubject.send(.finished)
                 case .displayUser(let userID):
                     actionsSubject.send(.displayUser(userID: userID))
+                case .presentLocationViewer(let geoURI, let description):
+                    presentMapNavigator(geoURI: geoURI, description: description)
                 }
             }
             .store(in: &cancellables)
         
+        navigationStackCoordinator.setRootCoordinator(coordinator)
+    }
+    
+    private func presentMapNavigator(geoURI: GeoURI, description: String?) {
+        let stackCoordinator = NavigationStackCoordinator()
+        
+        let params = StaticLocationScreenCoordinatorParameters(interactionMode: .viewOnly(geoURI: geoURI, description: description), appMediator: appMediator)
+        let coordinator = StaticLocationScreenCoordinator(parameters: params)
+        
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .selectedLocation:
+                // We don't handle the sending/picker case in this flow
+                break
+            case .close:
+                self.navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
         stackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator)
     }
 }

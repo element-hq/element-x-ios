@@ -134,7 +134,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     composerViewModel.process(timelineAction: action)
                 case .hasScrolled(direction: let direction):
                     roomViewModel.timelineHasScrolled(direction: direction)
-                case .viewInRoomTimeline(eventID: let eventID):
+                case .viewInRoomTimeline:
                     // Not handled in this screen
                     break
                 }

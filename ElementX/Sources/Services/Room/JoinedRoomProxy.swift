@@ -44,7 +44,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                     }
                     
                     do {
-                        let timeline = try await TimelineProxy(timeline: room.pinnedEventsTimeline(internalIdPrefix: nil, maxEventsToLoad: 100), isLive: false)
+                        let timeline = try await TimelineProxy(timeline: room.pinnedEventsTimeline(internalIdPrefix: nil, maxEventsToLoad: 100), isLive: true)
                         await timeline.subscribeForUpdates()
                         innerPinnedEventsTimeline = timeline
                         return timeline

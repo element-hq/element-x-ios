@@ -834,6 +834,18 @@ extension TimelineViewModel {
                                         appMediator: AppMediatorMock.default,
                                         appSettings: ServiceLocator.shared.settings,
                                         analyticsService: ServiceLocator.shared.analytics)
+    
+    static let pinnedEventsTimelineMock = TimelineViewModel(roomProxy: RoomProxyMock(.init(name: "Preview room")),
+                                                            focussedEventID: nil,
+                                                            timelineController: MockRoomTimelineController(),
+                                                            isPinnedEventsTimeline: true,
+                                                            mediaProvider: MockMediaProvider(),
+                                                            mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                                            userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                            appMediator: AppMediatorMock.default,
+                                                            appSettings: ServiceLocator.shared.settings,
+                                                            analyticsService: ServiceLocator.shared.analytics)
 }
 
 private struct TimelineContextKey: EnvironmentKey {

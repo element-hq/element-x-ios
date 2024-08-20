@@ -24,6 +24,10 @@ struct GeoURI: Hashable {
     let latitude: Double
     let longitude: Double
     let uncertainty: Double?
+    
+    var bodyMessage: String {
+        "Location was shared at \(string)"
+    }
 
     // MARK: - Setup
 

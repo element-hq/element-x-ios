@@ -1324,7 +1324,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentPinnedEventsTimeline() {
         let stackCoordinator = NavigationStackCoordinator()
-        let coordinator = PinnedEventsTimelineFlowCoordinator(stackCoordinator: stackCoordinator,
+        let coordinator = PinnedEventsTimelineFlowCoordinator(navigationStackCoordinator: stackCoordinator,
                                                               userSession: userSession,
                                                               roomTimelineControllerFactory: roomTimelineControllerFactory,
                                                               roomProxy: roomProxy,
@@ -1501,12 +1501,6 @@ private extension RoomFlowCoordinator {
         // Child room flow events
         case startChildFlow(roomID: String, via: [String], entryPoint: RoomFlowCoordinatorEntryPoint)
         case dismissChildFlow
-    }
-}
-
-private extension GeoURI {
-    var bodyMessage: String {
-        "Location was shared at \(string)"
     }
 }
 
