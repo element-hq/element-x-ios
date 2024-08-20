@@ -28,8 +28,7 @@ struct PinnedEventsTimelineScreenCoordinatorParameters {
 
 enum PinnedEventsTimelineScreenCoordinatorAction {
     case dismiss
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
+    case displayUser(userID: String)
 }
 
 final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
@@ -68,6 +67,26 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .dismiss:
                 self.actionsSubject.send(.dismiss)
+            }
+        }
+        .store(in: &cancellables)
+        
+        timelineViewModel.actions.sink { [weak self] action in
+            MXLog.info("Coordinator: received timeline view model action: \(action)")
+            guard let self else { return }
+            
+            switch action {
+            case .tappedOnSenderDetails(userID: let userID):
+                actionsSubject.send(.displayUser(userID: userID))
+            case .displayMessageForwarding(forwardingItem: let forwardingItem):
+                break
+            case .displayLocation(body: let body, geoURI: let geoURI, description: let description):
+                break
+            case .viewInRoomTimeline(eventID: let eventID):
+                break
+            // These other actions will not be handled in this view
+            case .displayEmojiPicker, .displayReportContent, .displayCameraPicker, .displayMediaPicker, .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediaUploadPreviewScreen, .composer, .hasScrolled:
+                break
             }
         }
         .store(in: &cancellables)

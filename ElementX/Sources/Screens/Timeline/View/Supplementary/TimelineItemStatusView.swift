@@ -32,7 +32,10 @@ struct TimelineItemStatusView: View {
 
     @ViewBuilder
     private var mainContent: some View {
-        if context.viewState.showReadReceipts, !timelineItem.properties.orderedReadReceipts.isEmpty {
+        if context.viewState.isPinnedEventsTimeline {
+            // Do not display any status when is a pinned events timeline
+            EmptyView()
+        } else if context.viewState.showReadReceipts, !timelineItem.properties.orderedReadReceipts.isEmpty {
             readReceipts
         } else {
             deliveryStatusBadge
