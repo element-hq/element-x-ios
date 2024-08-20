@@ -17,8 +17,12 @@
 import Combine
 import Foundation
 
+enum RoomProxyMockError: Error {
+    case generic
+}
+
 @MainActor
-struct RoomProxyMockConfiguration {
+struct JoinedRoomProxyMockConfiguration {
     var id = UUID().uuidString
     var name: String?
     var topic: String?
@@ -45,13 +49,9 @@ struct RoomProxyMockConfiguration {
     var shouldUseAutoUpdatingTimeline = false
 }
 
-enum RoomProxyMockError: Error {
-    case generic
-}
-
-extension RoomProxyMock {
+extension JoinedRoomProxyMock {
     @MainActor
-    convenience init(_ configuration: RoomProxyMockConfiguration) {
+    convenience init(_ configuration: JoinedRoomProxyMockConfiguration) {
         self.init()
 
         id = configuration.id
@@ -86,8 +86,6 @@ extension RoomProxyMock {
         self.timeline = timeline
 
         ownUserID = configuration.ownUserID
-        membership = .joined
-        inviterClosure = { configuration.inviter }
         
         membersPublisher = CurrentValueSubject(configuration.members).asCurrentValuePublisher()
         typingMembersPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
@@ -96,7 +94,6 @@ extension RoomProxyMock {
         activeMembersCount = configuration.members.filter { $0.membership == .join || $0.membership == .invite }.count
 
         updateMembersClosure = { }
-        acceptInvitationClosure = { .success(()) }
         underlyingActionsPublisher = Empty(completeImmediately: false).eraseToAnyPublisher()
         setNameClosure = { _ in .success(()) }
         setTopicClosure = { _ in .success(()) }

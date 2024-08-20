@@ -21,7 +21,7 @@ import XCTest
 @MainActor
 class RoomMembersListScreenViewModelTests: XCTestCase {
     var viewModel: RoomMembersListScreenViewModel!
-    var roomProxy: RoomProxyMock!
+    var roomProxy: JoinedRoomProxyMock!
     
     var context: RoomMembersListScreenViewModel.Context {
         viewModel.context
@@ -286,7 +286,7 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
     }
     
     private func setup(with members: [RoomMemberProxyMock]) {
-        roomProxy = RoomProxyMock(.init(name: "test", members: members))
+        roomProxy = JoinedRoomProxyMock(.init(name: "test", members: members))
         viewModel = .init(roomProxy: roomProxy,
                           mediaProvider: MockMediaProvider(),
                           userIndicatorController: ServiceLocator.shared.userIndicatorController,

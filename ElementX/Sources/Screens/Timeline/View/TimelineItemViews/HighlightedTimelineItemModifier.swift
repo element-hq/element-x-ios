@@ -93,7 +93,7 @@ struct HighlightedTimelineItemModifier_Previews: PreviewProvider, TestablePrevie
 
 /// A preview that allows quick testing of the highlight appearance across various timeline scenarios.
 struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
-    static let roomProxyMock = RoomProxyMock(.init(name: "Preview room"))
+    static let roomProxyMock = JoinedRoomProxyMock(.init(name: "Preview room"))
     static let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
     static let focussedEventID = "RoomTimelineItemFixtures.default.5"
     static let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,

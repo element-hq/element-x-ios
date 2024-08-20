@@ -20,7 +20,7 @@ import SwiftUI
 typealias RoomRolesAndPermissionsScreenViewModelType = StateStoreViewModel<RoomRolesAndPermissionsScreenViewState, RoomRolesAndPermissionsScreenViewAction>
 
 class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewModelType, RoomRolesAndPermissionsScreenViewModelProtocol {
-    private let roomProxy: RoomProxyProtocol
+    private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let analytics: AnalyticsService
     
@@ -29,7 +29,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(initialPermissions: RoomPermissions? = nil, roomProxy: RoomProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol, analytics: AnalyticsService) {
+    init(initialPermissions: RoomPermissions? = nil, roomProxy: JoinedRoomProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol, analytics: AnalyticsService) {
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics

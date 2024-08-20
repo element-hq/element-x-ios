@@ -34,8 +34,8 @@ class RoomScreenViewModelTests: XCTestCase {
     func testPinnedEventsBanner() async throws {
         ServiceLocator.shared.settings.pinningEnabled = true
         let timelineSubject = PassthroughSubject<TimelineProxyProtocol, Never>()
-        let updateSubject = PassthroughSubject<RoomProxyAction, Never>()
-        let roomProxyMock = RoomProxyMock(.init())
+        let updateSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
+        let roomProxyMock = JoinedRoomProxyMock(.init())
         // setup a way to inject the mock of the pinned events timeline
         roomProxyMock.pinnedEventsTimelineClosure = {
             await timelineSubject.values.first()
@@ -105,8 +105,8 @@ class RoomScreenViewModelTests: XCTestCase {
     }
     
     func testRoomInfoUpdate() async throws {
-        let updateSubject = PassthroughSubject<RoomProxyAction, Never>()
-        let roomProxyMock = RoomProxyMock(.init(id: "TestID", name: "StartingName", avatarURL: nil, hasOngoingCall: false))
+        let updateSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
+        let roomProxyMock = JoinedRoomProxyMock(.init(id: "TestID", name: "StartingName", avatarURL: nil, hasOngoingCall: false))
         // setup the room proxy actions publisher
         roomProxyMock.canUserJoinCallUserIDReturnValue = .success(false)
         roomProxyMock.underlyingActionsPublisher = updateSubject.eraseToAnyPublisher()

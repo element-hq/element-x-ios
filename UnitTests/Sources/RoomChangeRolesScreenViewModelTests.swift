@@ -21,7 +21,7 @@ import XCTest
 @MainActor
 class RoomChangeRolesScreenViewModelTests: XCTestCase {
     var viewModel: RoomChangeRolesScreenViewModelProtocol!
-    var roomProxy: RoomProxyMock!
+    var roomProxy: JoinedRoomProxyMock!
     
     var context: RoomChangeRolesScreenViewModelType.Context {
         viewModel.context
@@ -202,7 +202,7 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
     }
     
     private func setupViewModel(mode: RoomMemberDetails.Role) {
-        roomProxy = RoomProxyMock(.init(members: .allMembersAsAdmin))
+        roomProxy = JoinedRoomProxyMock(.init(members: .allMembersAsAdmin))
         viewModel = RoomChangeRolesScreenViewModel(mode: mode,
                                                    roomProxy: roomProxy,
                                                    mediaProvider: MockMediaProvider(),

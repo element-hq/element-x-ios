@@ -19,7 +19,7 @@ import Foundation
 import MatrixRustSDK
 import UIKit
 
-class RoomProxy: RoomProxyProtocol {
+class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private let roomListService: RoomListServiceProtocol
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
@@ -77,12 +77,18 @@ class RoomProxy: RoomProxyProtocol {
         typingMembersSubject.asCurrentValuePublisher()
     }
         
-    private let actionsSubject = PassthroughSubject<RoomProxyAction, Never>()
-    var actionsPublisher: AnyPublisher<RoomProxyAction, Never> {
+    private let actionsSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
+    var actionsPublisher: AnyPublisher<JoinedRoomProxyAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
+    // A room identifier is constant and lazy stops it from being fetched
+    // multiple times over FFI
     lazy var id: String = room.id()
+    
+    var canonicalAlias: String? {
+        room.canonicalAlias()
+    }
     
     var ownUserID: String {
         room.ownUserId()
@@ -96,14 +102,20 @@ class RoomProxy: RoomProxyProtocol {
         room.topic()
     }
     
-    var membership: Membership {
-        room.membership()
+    var avatarURL: URL? {
+        roomListItem.avatarUrl().flatMap(URL.init(string:))
     }
     
-    var inviter: RoomMemberProxyProtocol? {
-        get async {
-            await (try? roomListItem.roomInfo().inviter).map(RoomMemberProxy.init)
+    var avatar: RoomAvatar {
+        if isDirect, avatarURL == nil {
+            let heroes = room.heroes()
+            
+            if heroes.count == 1 {
+                return .heroes(heroes.map(UserProfileProxy.init))
+            }
         }
+        
+        return .room(id: id, name: name, avatarURL: avatarURL)
     }
     
     var isDirect: Bool {
@@ -116,6 +128,14 @@ class RoomProxy: RoomProxyProtocol {
     
     var isSpace: Bool {
         room.isSpace()
+    }
+    
+    var joinedMembersCount: Int {
+        Int(room.joinedMembersCount())
+    }
+    
+    var activeMembersCount: Int {
+        Int(room.activeMembersCount())
     }
     
     var isEncrypted: Bool {
@@ -143,34 +163,6 @@ class RoomProxy: RoomProxyProtocol {
     
     var activeRoomCallParticipants: [String] {
         room.activeRoomCallParticipants()
-    }
-    
-    var canonicalAlias: String? {
-        room.canonicalAlias()
-    }
-    
-    var avatarURL: URL? {
-        roomListItem.avatarUrl().flatMap(URL.init(string:))
-    }
-    
-    var avatar: RoomAvatar {
-        if isDirect, avatarURL == nil {
-            let heroes = room.heroes()
-            
-            if heroes.count == 1 {
-                return .heroes(heroes.map(UserProfileProxy.init))
-            }
-        }
-        
-        return .room(id: id, name: name, avatarURL: avatarURL)
-    }
-
-    var joinedMembersCount: Int {
-        Int(room.joinedMembersCount())
-    }
-    
-    var activeMembersCount: Int {
-        Int(room.activeMembersCount())
     }
     
     init?(roomListService: RoomListServiceProtocol,
@@ -311,25 +303,6 @@ class RoomProxy: RoomProxyProtocol {
             return .success(())
         } catch {
             MXLog.error("Failed leaving room with error: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
-    
-    func rejectInvitation() async -> Result<Void, RoomProxyError> {
-        do {
-            return try await .success(room.leave())
-        } catch {
-            MXLog.error("Failed rejecting invitiation with error: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
-    
-    func acceptInvitation() async -> Result<Void, RoomProxyError> {
-        do {
-            try await room.join()
-            return .success(())
-        } catch {
-            MXLog.error("Failed accepting invitation with error: \(error)")
             return .failure(.sdkError(error))
         }
     }

@@ -21,7 +21,7 @@ import SwiftUI
 typealias RoomChangePermissionsScreenViewModelType = StateStoreViewModel<RoomChangePermissionsScreenViewState, RoomChangePermissionsScreenViewAction>
 
 class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModelType, RoomChangePermissionsScreenViewModelProtocol {
-    private let roomProxy: RoomProxyProtocol
+    private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let analytics: AnalyticsService
     
@@ -32,7 +32,7 @@ class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModel
     
     init(currentPermissions: RoomPermissions,
          group: RoomRolesAndPermissionsScreenPermissionsGroup,
-         roomProxy: RoomProxyProtocol,
+         roomProxy: JoinedRoomProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          analytics: AnalyticsService) {
         self.roomProxy = roomProxy

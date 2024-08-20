@@ -19,7 +19,7 @@ import SwiftUI
 
 struct RoomChangeRolesScreenCoordinatorParameters {
     let mode: RoomMemberDetails.Role
-    let roomProxy: RoomProxyProtocol
+    let roomProxy: JoinedRoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let analytics: AnalyticsService

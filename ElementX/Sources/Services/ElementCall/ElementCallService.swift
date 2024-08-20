@@ -276,7 +276,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             return
         }
         
-        guard let roomProxy = await clientProxy.roomForIdentifier(incomingCallID.roomID) else {
+        guard case let .joined(roomProxy) = await clientProxy.roomForIdentifier(incomingCallID.roomID) else {
             return
         }
         

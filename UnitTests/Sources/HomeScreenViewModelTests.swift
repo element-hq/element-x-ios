@@ -87,7 +87,7 @@ class HomeScreenViewModelTests: XCTestCase {
     func testLeaveRoomAlert() async throws {
         let mockRoomId = "1"
         
-        clientProxy.roomForIdentifierClosure = { _ in RoomProxyMock(.init(id: mockRoomId, name: "Some room")) }
+        clientProxy.roomForIdentifierClosure = { _ in .joined(JoinedRoomProxyMock(.init(id: mockRoomId, name: "Some room"))) }
         
         let deferred = deferFulfillment(context.$viewState) { value in
             value.bindings.leaveRoomAlertItem != nil
@@ -102,10 +102,10 @@ class HomeScreenViewModelTests: XCTestCase {
     
     func testLeaveRoomError() async throws {
         let mockRoomId = "1"
-        let room = RoomProxyMock(.init(id: mockRoomId, name: "Some room"))
+        let room = JoinedRoomProxyMock(.init(id: mockRoomId, name: "Some room"))
         room.leaveRoomClosure = { .failure(.sdkError(ClientProxyMockError.generic)) }
         
-        clientProxy.roomForIdentifierClosure = { _ in room }
+        clientProxy.roomForIdentifierClosure = { _ in .joined(room) }
 
         let deferred = deferFulfillment(context.$viewState) { value in
             value.bindings.alertInfo != nil
@@ -133,10 +133,10 @@ class HomeScreenViewModelTests: XCTestCase {
                 expectation.fulfill()
             }
             .store(in: &cancellables)
-        let room = RoomProxyMock(.init(id: mockRoomId, name: "Some room"))
+        let room = JoinedRoomProxyMock(.init(id: mockRoomId, name: "Some room"))
         room.leaveRoomClosure = { .success(()) }
         
-        clientProxy.roomForIdentifierClosure = { _ in room }
+        clientProxy.roomForIdentifierClosure = { _ in .joined(room) }
         
         context.send(viewAction: .confirmLeaveRoom(roomIdentifier: mockRoomId))
         await fulfillment(of: [expectation])

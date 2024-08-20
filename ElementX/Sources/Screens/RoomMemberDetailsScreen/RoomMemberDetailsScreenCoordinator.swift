@@ -19,7 +19,7 @@ import SwiftUI
 
 struct RoomMemberDetailsScreenCoordinatorParameters {
     let userID: String
-    let roomProxy: RoomProxyProtocol
+    let roomProxy: JoinedRoomProxyProtocol
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol

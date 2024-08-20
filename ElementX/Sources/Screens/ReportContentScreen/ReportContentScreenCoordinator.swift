@@ -20,7 +20,7 @@ import SwiftUI
 struct ReportContentScreenCoordinatorParameters {
     let eventID: String
     let senderID: String
-    let roomProxy: RoomProxyProtocol
+    let roomProxy: JoinedRoomProxyProtocol
     let clientProxy: ClientProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }

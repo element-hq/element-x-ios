@@ -18,7 +18,7 @@ import Combine
 import SwiftUI
 
 struct PinnedEventsTimelineScreenCoordinatorParameters {
-    let roomProxy: RoomProxyProtocol
+    let roomProxy: JoinedRoomProxyProtocol
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol

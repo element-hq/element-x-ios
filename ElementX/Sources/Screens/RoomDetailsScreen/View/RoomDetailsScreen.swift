@@ -311,20 +311,20 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
             .mockBob,
             .mockCharlie
         ]
-        let roomProxy = RoomProxyMock(.init(id: "room_a_id",
-                                            name: "Room A",
-                                            topic: """
-                                            Discussions about Element X iOS | https://github.com/vector-im/element-x-ios
-                                            
-                                            Feature Status: https://github.com/vector-im/element-x-ios/issues/1225
-                                            
-                                            App Store: https://apple.co/3r6LJHZ
-                                            TestFlight: https://testflight.apple.com/join/uZbeZCOi
-                                            """,
-                                            isDirect: false,
-                                            isEncrypted: true,
-                                            canonicalAlias: "#alias:domain.com",
-                                            members: members))
+        let roomProxy = JoinedRoomProxyMock(.init(id: "room_a_id",
+                                                  name: "Room A",
+                                                  topic: """
+                                                  Discussions about Element X iOS | https://github.com/vector-im/element-x-ios
+                                                  
+                                                  Feature Status: https://github.com/vector-im/element-x-ios/issues/1225
+                                                  
+                                                  App Store: https://apple.co/3r6LJHZ
+                                                  TestFlight: https://testflight.apple.com/join/uZbeZCOi
+                                                  """,
+                                                  isDirect: false,
+                                                  isEncrypted: true,
+                                                  canonicalAlias: "#alias:domain.com",
+                                                  members: members))
         
         var notificationSettingsProxyMockConfiguration = NotificationSettingsProxyMockConfiguration()
         notificationSettingsProxyMockConfiguration.roomMode.isDefault = false
@@ -349,13 +349,13 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
             .mockDan
         ]
         
-        let roomProxy = RoomProxyMock(.init(id: "dm_room_id",
-                                            name: "DM Room",
-                                            topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                                            isDirect: true,
-                                            isEncrypted: true,
-                                            canonicalAlias: "#alias:domain.com",
-                                            members: members))
+        let roomProxy = JoinedRoomProxyMock(.init(id: "dm_room_id",
+                                                  name: "DM Room",
+                                                  topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                                                  isDirect: true,
+                                                  isEncrypted: true,
+                                                  canonicalAlias: "#alias:domain.com",
+                                                  members: members))
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         let appSettings = AppSettings()
         appSettings.pinningEnabled = true
@@ -378,11 +378,11 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
             .mockBob,
             .mockCharlie
         ]
-        let roomProxy = RoomProxyMock(.init(id: "simple_room_id",
-                                            name: "Room A",
-                                            isDirect: false,
-                                            isEncrypted: false,
-                                            members: members))
+        let roomProxy = JoinedRoomProxyMock(.init(id: "simple_room_id",
+                                                  name: "Room A",
+                                                  isDirect: false,
+                                                  isEncrypted: false,
+                                                  members: members))
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         let appSettings = AppSettings()
         appSettings.pinningEnabled = true

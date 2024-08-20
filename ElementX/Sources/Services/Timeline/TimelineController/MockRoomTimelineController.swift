@@ -26,7 +26,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     /// An array of timeline items that will be appended in order when ``simulateIncomingItems()`` is called.
     var incomingItems: [RoomTimelineItemProtocol] = []
     
-    var roomProxy: RoomProxyProtocol?
+    var roomProxy: JoinedRoomProxyProtocol?
     var roomID: String { roomProxy?.id ?? "MockRoomIdentifier" }
     
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()

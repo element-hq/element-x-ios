@@ -20,7 +20,7 @@ import SwiftUI
 struct RoomNotificationSettingsScreenCoordinatorParameters {
     weak var navigationStackCoordinator: NavigationStackCoordinator?
     let notificationSettingsProxy: NotificationSettingsProxyProtocol
-    let roomProxy: RoomProxyProtocol
+    let roomProxy: JoinedRoomProxyProtocol
     let displayAsUserDefinedRoomSettings: Bool
 }
 

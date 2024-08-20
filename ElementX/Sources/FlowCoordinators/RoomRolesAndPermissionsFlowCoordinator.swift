@@ -24,7 +24,7 @@ enum RoomRolesAndPermissionsFlowCoordinatorAction: Equatable {
 }
 
 struct RoomRolesAndPermissionsFlowCoordinatorParameters {
-    let roomProxy: RoomProxyProtocol
+    let roomProxy: JoinedRoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let navigationStackCoordinator: NavigationStackCoordinator
     let userIndicatorController: UserIndicatorControllerProtocol
@@ -32,7 +32,7 @@ struct RoomRolesAndPermissionsFlowCoordinatorParameters {
 }
 
 class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
-    private let roomProxy: RoomProxyProtocol
+    private let roomProxy: JoinedRoomProxyProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let mediaProvider: MediaProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol

@@ -325,10 +325,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         guard let roomID = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
             return
         }
-        let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID)
-        switch await roomProxy?.timeline.sendMessage(replyText,
-                                                     html: nil,
-                                                     intentionalMentions: .empty) {
+        
+        guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            MXLog.error("Tried to reply in an unjoined room: \(roomID)")
+            return
+        }
+        
+        switch await roomProxy.timeline.sendMessage(replyText,
+                                                    html: nil,
+                                                    intentionalMentions: .empty) {
         case .success:
             break
         default:

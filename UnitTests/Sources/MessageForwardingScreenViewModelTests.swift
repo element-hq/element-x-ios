@@ -32,7 +32,7 @@ class MessageForwardingScreenViewModelTests: XCTestCase {
         cancellables.removeAll()
         
         let clientProxy = ClientProxyMock(.init())
-        clientProxy.roomForIdentifierClosure = { RoomProxyMock(.init(id: $0)) }
+        clientProxy.roomForIdentifierClosure = { .joined(JoinedRoomProxyMock(.init(id: $0))) }
         
         viewModel = MessageForwardingScreenViewModel(forwardingItem: forwardingItem,
                                                      clientProxy: clientProxy,

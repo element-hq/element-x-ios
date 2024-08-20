@@ -146,7 +146,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError>
     
-    func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol?
+    func roomForIdentifier(_ identifier: String) async -> RoomProxyType?
     
     func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewDetails, ClientProxyError>
     

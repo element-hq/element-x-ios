@@ -31,7 +31,7 @@ enum InviteUsersScreenViewModelAction {
 
 enum InviteUsersScreenRoomType {
     case draft
-    case room(roomProxy: RoomProxyProtocol)
+    case room(roomProxy: JoinedRoomProxyProtocol)
 }
 
 struct InviteUsersScreenViewState: BindableState {

@@ -26,46 +26,62 @@ enum RoomProxyError: Error {
     case eventNotFound
 }
 
-enum RoomProxyAction {
-    case roomInfoUpdate
+enum RoomProxyType {
+    case joined(JoinedRoomProxyProtocol)
+    case invited(InvitedRoomProxyProtocol)
+    case left
 }
 
 // sourcery: AutoMockable
 protocol RoomProxyProtocol {
     var id: String { get }
-    var isDirect: Bool { get }
-    var isPublic: Bool { get }
-    var isSpace: Bool { get }
-    var isEncrypted: Bool { get }
-    var isFavourite: Bool { get async }
-    var pinnedEventIDs: Set<String> { get async }
-    var membership: Membership { get }
-    var inviter: RoomMemberProxyProtocol? { get async }
-    
-    var hasOngoingCall: Bool { get }
-    var activeRoomCallParticipants: [String] { get }
-    
     var canonicalAlias: String? { get }
+    
     var ownUserID: String { get }
     
     var name: String? { get }
-    
     var topic: String? { get }
     
     /// The room's avatar info for use in a ``RoomAvatarImage``.
     var avatar: RoomAvatar { get }
     /// The room's avatar URL. Use this for editing and favour ``avatar`` for display.
     var avatarURL: URL? { get }
+    
+    var isPublic: Bool { get }
+    var isDirect: Bool { get }
+    var isSpace: Bool { get }
+    
+    var joinedMembersCount: Int { get }
+    
+    var activeMembersCount: Int { get }
+}
+
+// sourcery: AutoMockable
+protocol InvitedRoomProxyProtocol: RoomProxyProtocol {
+    var inviter: RoomMemberProxyProtocol? { get async }
+    
+    func rejectInvitation() async -> Result<Void, RoomProxyError>
+    func acceptInvitation() async -> Result<Void, RoomProxyError>
+}
+
+enum JoinedRoomProxyAction {
+    case roomInfoUpdate
+}
+
+// sourcery: AutoMockable
+protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
+    var isEncrypted: Bool { get }
+    var isFavourite: Bool { get async }
+    var pinnedEventIDs: Set<String> { get async }
+    
+    var hasOngoingCall: Bool { get }
+    var activeRoomCallParticipants: [String] { get }
 
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> { get }
     
     var typingMembersPublisher: CurrentValuePublisher<[String], Never> { get }
     
-    var joinedMembersCount: Int { get }
-    
-    var activeMembersCount: Int { get }
-    
-    var actionsPublisher: AnyPublisher<RoomProxyAction, Never> { get }
+    var actionsPublisher: AnyPublisher<JoinedRoomProxyAction, Never> { get }
     
     var timeline: TimelineProxyProtocol { get }
     
@@ -86,10 +102,6 @@ protocol RoomProxyProtocol {
     func updateMembers() async
 
     func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError>
-    
-    func rejectInvitation() async -> Result<Void, RoomProxyError>
-    
-    func acceptInvitation() async -> Result<Void, RoomProxyError>
     
     func invite(userID: String) async -> Result<Void, RoomProxyError>
     
@@ -155,7 +167,7 @@ protocol RoomProxyProtocol {
     func clearDraft() async -> Result<Void, RoomProxyError>
 }
 
-extension RoomProxyProtocol {
+extension JoinedRoomProxyProtocol {
     var details: RoomDetails {
         RoomDetails(id: id,
                     name: name,

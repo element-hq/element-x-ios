@@ -20,7 +20,7 @@ import SwiftUI
 struct RoomChangePermissionsScreenCoordinatorParameters {
     let permissions: RoomPermissions
     let permissionsGroup: RoomRolesAndPermissionsScreenPermissionsGroup
-    let roomProxy: RoomProxyProtocol
+    let roomProxy: JoinedRoomProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let analytics: AnalyticsService
 }

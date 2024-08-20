@@ -171,7 +171,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         
         // "Join" the room
         clientProxy.roomForIdentifierClosure = { _ in
-            RoomProxyMock(.init())
+            .joined(JoinedRoomProxyMock(.init()))
         }
         
         try await process(route: .room(roomID: "InvitedRoomID", via: []))
@@ -201,7 +201,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         
         // "Join" the room
         clientProxy.roomForIdentifierClosure = { _ in
-            RoomProxyMock(.init())
+            .joined(JoinedRoomProxyMock(.init()))
         }
         
         try await process(route: .room(roomID: "InvitedRoomID", via: []))

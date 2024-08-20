@@ -20,7 +20,7 @@ import MatrixRustSDK
 import UIKit
 
 class RoomTimelineController: RoomTimelineControllerProtocol {
-    private let roomProxy: RoomProxyProtocol
+    private let roomProxy: JoinedRoomProxyProtocol
     private let liveTimelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let appSettings: AppSettings
@@ -41,7 +41,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         roomProxy.id
     }
     
-    init(roomProxy: RoomProxyProtocol,
+    init(roomProxy: JoinedRoomProxyProtocol,
          timelineProxy: TimelineProxyProtocol,
          initialFocussedEventID: String?,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,

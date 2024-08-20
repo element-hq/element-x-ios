@@ -19,11 +19,11 @@ import Foundation
 import MatrixRustSDK
 
 final class ComposerDraftService: ComposerDraftServiceProtocol {
-    private let roomProxy: RoomProxyProtocol
+    private let roomProxy: JoinedRoomProxyProtocol
     private let timelineItemfactory: RoomTimelineItemFactoryProtocol
     private var volatileDraft: ComposerDraftProxy?
     
-    init(roomProxy: RoomProxyProtocol, timelineItemfactory: RoomTimelineItemFactoryProtocol) {
+    init(roomProxy: JoinedRoomProxyProtocol, timelineItemfactory: RoomTimelineItemFactoryProtocol) {
         self.roomProxy = roomProxy
         self.timelineItemfactory = timelineItemfactory
     }

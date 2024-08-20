@@ -142,9 +142,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         case .showRoomDetails(roomIdentifier: let roomIdentifier):
             actionsSubject.send(.presentRoomDetails(roomIdentifier: roomIdentifier))
         case .leaveRoom(roomIdentifier: let roomIdentifier):
-            startLeaveRoomProcess(roomId: roomIdentifier)
+            startLeaveRoomProcess(roomID: roomIdentifier)
         case .confirmLeaveRoom(roomIdentifier: let roomIdentifier):
-            leaveRoom(roomId: roomIdentifier)
+            Task { await leaveRoom(roomID: roomIdentifier) }
         case .showSettings:
             actionsSubject.send(.presentSettingsScreen)
         case .confirmRecoveryKey:
@@ -159,7 +159,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             actionsSubject.send(.presentGlobalSearch)
         case .markRoomAsUnread(let roomIdentifier):
             Task {
-                guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomIdentifier) else {
+                guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomIdentifier) else {
                     MXLog.error("Failed retrieving room for identifier: \(roomIdentifier)")
                     return
                 }
@@ -173,7 +173,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
         case .markRoomAsRead(let roomIdentifier):
             Task {
-                guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomIdentifier) else {
+                guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomIdentifier) else {
                     MXLog.error("Failed retrieving room for identifier: \(roomIdentifier)")
                     return
                 }
@@ -367,7 +367,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     private func markRoomAsFavourite(_ roomID: String, isFavourite: Bool) async {
-        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+        guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             MXLog.error("Failed retrieving room for identifier: \(roomID)")
             return
         }
@@ -382,53 +382,47 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     private static let leaveRoomLoadingID = "LeaveRoomLoading"
     
-    private func startLeaveRoomProcess(roomId: String) {
+    private func startLeaveRoomProcess(roomID: String) {
         Task {
             defer {
                 userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
             }
             userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLoading, persistent: true))
             
-            let room = await userSession.clientProxy.roomForIdentifier(roomId)
-            
-            guard let room else {
+            guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
                 state.bindings.alertInfo = AlertInfo(id: UUID(), title: L10n.errorUnknown)
                 return
             }
             
-            if room.isPublic {
-                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomId, isDM: room.isEncryptedOneToOneRoom, state: .public)
+            if roomProxy.isPublic {
+                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isEncryptedOneToOneRoom, state: .public)
             } else {
-                state.bindings.leaveRoomAlertItem = if room.joinedMembersCount > 1 {
-                    LeaveRoomAlertItem(roomID: roomId, isDM: room.isEncryptedOneToOneRoom, state: .private)
+                state.bindings.leaveRoomAlertItem = if roomProxy.joinedMembersCount > 1 {
+                    LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isEncryptedOneToOneRoom, state: .private)
                 } else {
-                    LeaveRoomAlertItem(roomID: roomId, isDM: room.isEncryptedOneToOneRoom, state: .empty)
+                    LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isEncryptedOneToOneRoom, state: .empty)
                 }
             }
         }
     }
     
-    private func leaveRoom(roomId: String) {
-        Task {
-            defer {
-                userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
-            }
-            userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLeavingRoom, persistent: true))
-            
-            let room = await userSession.clientProxy.roomForIdentifier(roomId)
-            let result = await room?.leaveRoom()
-            
-            switch result {
-            case .none, .some(.failure):
-                state.bindings.alertInfo = AlertInfo(id: UUID(), title: L10n.errorUnknown)
-            case .some(.success):
-                userIndicatorController.submitIndicator(UserIndicator(id: UUID().uuidString,
-                                                                      type: .toast,
-                                                                      title: L10n.commonCurrentUserLeftRoom,
-                                                                      iconName: "checkmark"))
-                actionsSubject.send(.roomLeft(roomIdentifier: roomId))
-            }
+    private func leaveRoom(roomID: String) async {
+        defer {
+            userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
         }
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLeavingRoom, persistent: true))
+        
+        guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID),
+              case .success = await roomProxy.leaveRoom() else {
+            state.bindings.alertInfo = AlertInfo(id: UUID(), title: L10n.errorUnknown)
+            return
+        }
+        
+        userIndicatorController.submitIndicator(UserIndicator(id: UUID().uuidString,
+                                                              type: .toast,
+                                                              title: L10n.commonCurrentUserLeftRoom,
+                                                              iconName: "checkmark"))
+        actionsSubject.send(.roomLeft(roomIdentifier: roomID))
     }
     
     // MARK: Invites
@@ -440,7 +434,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
         
-        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+        guard case let .invited(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             displayError()
             return
         }
@@ -478,7 +472,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
         
-        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+        guard case let .invited(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             displayError()
             return
         }

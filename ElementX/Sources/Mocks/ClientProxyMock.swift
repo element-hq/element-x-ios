@@ -94,7 +94,7 @@ extension ClientProxyMock {
                 return nil
             }
             
-            return await RoomProxyMock(.init(id: room.id, name: room.name))
+            return await .joined(JoinedRoomProxyMock(.init(id: room.id, name: room.name)))
         }
     }
 }

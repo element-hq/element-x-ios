@@ -77,7 +77,7 @@ struct ReportContentScreen: View {
 struct ReportContentScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = ReportContentScreenViewModel(eventID: "",
                                                         senderID: "",
-                                                        roomProxy: RoomProxyMock(.init()),
+                                                        roomProxy: JoinedRoomProxyMock(.init()),
                                                         clientProxy: ClientProxyMock(.init()))
     
     static var previews: some View {

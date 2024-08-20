@@ -20,7 +20,7 @@ import SwiftUI
 import WysiwygComposer
 
 struct RoomScreenCoordinatorParameters {
-    let roomProxy: RoomProxyProtocol
+    let roomProxy: JoinedRoomProxyProtocol
     var focussedEventID: String?
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol

@@ -210,9 +210,9 @@ struct RoomScreen: View {
 // MARK: - Previews
 
 struct RoomScreen_Previews: PreviewProvider, TestablePreview {
-    static let roomProxyMock = RoomProxyMock(.init(id: "stable_id",
-                                                   name: "Preview room",
-                                                   hasOngoingCall: true))
+    static let roomProxyMock = JoinedRoomProxyMock(.init(id: "stable_id",
+                                                         name: "Preview room",
+                                                         hasOngoingCall: true))
     static let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
     static let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                                      timelineController: MockRoomTimelineController(),
