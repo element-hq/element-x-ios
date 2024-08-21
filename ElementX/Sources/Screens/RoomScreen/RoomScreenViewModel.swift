@@ -27,6 +27,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
     private let pinnedEventStringBuilder: RoomEventStringBuilder
+    private var initialSelectedPinEventID: String?
     
     private let actionsSubject: PassthroughSubject<RoomScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<RoomScreenViewModelAction, Never> {
@@ -52,6 +53,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     init(roomProxy: JoinedRoomProxyProtocol,
+         initialSelectedPinEventID: String?,
          mediaProvider: MediaProviderProtocol,
          ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>,
          appMediator: AppMediatorProtocol,
@@ -61,6 +63,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.appMediator = appMediator
         self.appSettings = appSettings
         self.analyticsService = analyticsService
+        self.initialSelectedPinEventID = initialSelectedPinEventID
         pinnedEventStringBuilder = .pinnedEventStringBuilder(userID: roomProxy.ownUserID)
 
         super.init(initialViewState: .init(roomTitle: roomProxy.roomTitle,
@@ -69,9 +72,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                            bindings: .init()),
                    mediaProvider: mediaProvider)
         
+        Task {
+            await handleRoomInfoUpdate()
+        }
+        
         setupSubscriptions(ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher)
     }
-    
+
     override func process(viewAction: RoomScreenViewAction) {
         switch viewAction {
         case .tappedPinnedEventsBanner:
@@ -94,6 +101,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         state.lastScrollDirection = direction
     }
     
+    func setSelectedPinEventID(_ eventID: String) {
+        state.pinnedEventsBannerState.setSelectedPinEventID(eventID)
+    }
+    
     private func setupSubscriptions(ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>) {
         let roomInfoSubscription = roomProxy
             .actionsPublisher
@@ -110,13 +121,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .store(in: &cancellables)
         
         Task { [weak self] in
-            // Don't guard let self here, otherwise the for await will strongify the self reference creating a strong reference cycle.
-            // If the subscription has sent a value before the Task has started it might be lost, so before entering the loop we always do an update.
-            await self?.handleRoomInfoUpdate()
             for await _ in roomInfoSubscription.receive(on: DispatchQueue.main).values {
                 guard !Task.isCancelled else {
                     return
                 }
+                
                 await self?.handleRoomInfoUpdate()
             }
         }
@@ -159,6 +168,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         state.pinnedEventsBannerState.setPinnedEventContents(pinnedEventContents)
+        
+        // If is the first time we are setting the pinned events, we should select the initial event if available.
+        if let initialSelectedPinEventID {
+            state.pinnedEventsBannerState.setSelectedPinEventID(initialSelectedPinEventID)
+            self.initialSelectedPinEventID = nil
+        }
     }
     
     private func handleRoomInfoUpdate() async {
@@ -194,6 +209,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 extension RoomScreenViewModel {
     static func mock(roomProxyMock: JoinedRoomProxyMock) -> RoomScreenViewModel {
         RoomScreenViewModel(roomProxy: roomProxyMock,
+                            initialSelectedPinEventID: nil,
                             mediaProvider: MockMediaProvider(),
                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                             appMediator: AppMediatorMock.default,

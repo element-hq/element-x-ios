@@ -168,7 +168,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             } else if roomID != roomProxy.id {
                 stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: via, entryPoint: .eventID(eventID)), userInfo: EventUserInfo(animated: animated))
             } else {
-                roomScreenCoordinator?.focusOnEvent(eventID: eventID)
+                roomScreenCoordinator?.focusOnEvent(focusEvent: .init(eventID: eventID, shouldSetPin: false))
             }
         case .roomAlias, .childRoomAlias, .eventOnRoomAlias, .childEventOnRoomAlias:
             break // These are converted to a room ID route one level above.
@@ -196,7 +196,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         switch room {
         case .joined(let roomProxy):
             await storeAndSubscribeToRoomProxy(roomProxy)
-            stateMachine.tryEvent(.presentRoom(focussedEventID: focussedEventID), userInfo: EventUserInfo(animated: animated))
+            let focusEvent = focussedEventID.map { FocusEvent(eventID: $0, shouldSetPin: false) }
+            stateMachine.tryEvent(.presentRoom(focusEvent: focusEvent), userInfo: EventUserInfo(animated: animated))
         default:
             stateMachine.tryEvent(.presentJoinRoomScreen(via: via), userInfo: EventUserInfo(animated: animated))
         }
@@ -380,8 +381,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (_, .dismissJoinRoomScreen, .complete):
                 dismissFlow(animated: animated)
             
-            case (_, .presentRoom(let focussedEventID), .room):
-                Task { await self.presentRoom(fromState: context.fromState, focussedEventID: focussedEventID, animated: animated) }
+            case (_, .presentRoom(let focusEvent), .room):
+                Task { await self.presentRoom(fromState: context.fromState, focusEvent: focusEvent, animated: animated) }
             case (_, .dismissFlow, .complete):
                 dismissFlow(animated: animated)
             
@@ -538,9 +539,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     /// Updates the navigation stack so it displays the timeline for the given room
     /// - Parameters:
     ///   - fromState: The state that asked for the room presentation.
-    ///   - focussedEventID: An (optional) event ID that the timeline should be focussed around.
+    ///   - focusEvent: An (optional) struct that contains the event ID that the timeline should be focussed around, and a boolean telling if such event should update the pinned events banner
     ///   - animated: whether it should animate the transition
-    private func presentRoom(fromState: State, focussedEventID: String? = nil, animated: Bool) async {
+    private func presentRoom(fromState: State, focusEvent: FocusEvent?, animated: Bool) async {
         // If any sheets are presented dismiss them, rely on their dismissal callbacks to transition the state machine
         // through the correct states before presenting the room
         navigationStackCoordinator.setSheetCoordinator(nil)
@@ -558,8 +559,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 // The room is already on the stack, no need to present it again
                 
                 // Check if we need to focus on an event
-                if let focussedEventID {
-                    roomScreenCoordinator?.focusOnEvent(eventID: focussedEventID)
+                if let focusEvent {
+                    roomScreenCoordinator?.focusOnEvent(focusEvent: focusEvent)
                 }
                 
                 return
@@ -578,7 +579,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
                 
         let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
-                                                                                           initialFocussedEventID: focussedEventID,
+                                                                                           initialFocussedEventID: focusEvent?.eventID,
                                                                                            timelineItemFactory: timelineItemFactory)
         self.timelineController = timelineController
         
@@ -589,7 +590,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let composerDraftService = ComposerDraftService(roomProxy: roomProxy, timelineItemfactory: timelineItemFactory)
         
         let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy,
-                                                         focussedEventID: focussedEventID,
+                                                         focusEvent: focusEvent,
                                                          timelineController: timelineController,
                                                          mediaProvider: userSession.mediaProvider,
                                                          mediaPlayerProvider: MediaPlayerProvider(),
@@ -673,7 +674,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                         
                         if case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) {
                             await storeAndSubscribeToRoomProxy(roomProxy)
-                            stateMachine.tryEvent(.presentRoom(focussedEventID: nil), userInfo: EventUserInfo(animated: animated))
+                            stateMachine.tryEvent(.presentRoom(focusEvent: nil), userInfo: EventUserInfo(animated: animated))
                             
                             analytics.trackJoinedRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace, activeMemberCount: UInt(roomProxy.activeMembersCount))
                         } else {
@@ -1344,6 +1345,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID))
             case .startChildRoomFlow(let roomID):
                 stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
+            case .displayRoomScreenWithFocussedPin(let eventID):
+                stateMachine.tryEvent(.presentRoom(focusEvent: .init(eventID: eventID, shouldSetPin: true)))
             }
         }
         .store(in: &cancellables)
@@ -1444,7 +1447,7 @@ private extension RoomFlowCoordinator {
         case presentJoinRoomScreen(via: [String])
         case dismissJoinRoomScreen
         
-        case presentRoom(focussedEventID: String?)
+        case presentRoom(focusEvent: FocusEvent?)
         case dismissFlow
         
         case presentReportContent(itemID: TimelineItemIdentifier, senderID: String)
@@ -1521,4 +1524,11 @@ private extension Result {
 private enum PinnedEventsTimelineSource: Hashable {
     case room
     case details(isRoot: Bool)
+}
+
+struct FocusEvent: Hashable {
+    /// The event ID that the timeline should be focussed around
+    let eventID: String
+    /// if the focus is coming from the pinned timeline, this should also update the pin banner
+    let shouldSetPin: Bool
 }

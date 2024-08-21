@@ -31,6 +31,7 @@ enum PinnedEventsTimelineScreenCoordinatorAction {
     case displayUser(userID: String)
     case presentLocationViewer(geoURI: GeoURI, description: String?)
     case displayMessageForwarding(forwardingItem: MessageForwardingItem)
+    case displayRoomScreenWithFocussedPin(eventID: String)
 }
 
 final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
@@ -85,7 +86,7 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
             case .displayLocation(_, let geoURI, let description):
                 actionsSubject.send(.presentLocationViewer(geoURI: geoURI, description: description))
             case .viewInRoomTimeline(let eventID):
-                break
+                actionsSubject.send(.displayRoomScreenWithFocussedPin(eventID: eventID))
             // These other actions will not be handled in this view
             case .displayEmojiPicker, .displayReportContent, .displayCameraPicker, .displayMediaPicker, .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediaUploadPreviewScreen, .composer, .hasScrolled:
                 break

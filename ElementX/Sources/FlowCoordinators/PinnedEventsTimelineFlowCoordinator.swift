@@ -21,6 +21,7 @@ enum PinnedEventsTimelineFlowCoordinatorAction {
     case finished
     case displayUser(userID: String)
     case startChildRoomFlow(roomID: String)
+    case displayRoomScreenWithFocussedPin(eventID: String)
 }
 
 class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
@@ -94,6 +95,8 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                     presentMapNavigator(geoURI: geoURI, description: description)
                 case .displayMessageForwarding(let forwardingItem):
                     presentMessageForwarding(with: forwardingItem)
+                case .displayRoomScreenWithFocussedPin(let eventID):
+                    actionsSubject.send(.displayRoomScreenWithFocussedPin(eventID: eventID))
                 }
             }
             .store(in: &cancellables)
