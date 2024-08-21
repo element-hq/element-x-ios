@@ -117,9 +117,8 @@ class RoomScreenViewModelTests: XCTestCase {
         // setup a way to inject the mock of the pinned events timeline
         let pinnedTimelineMock = TimelineProxyMock()
         let pinnedTimelineProviderMock = RoomTimelineProviderMock()
-        let providerUpdateSubject = PassthroughSubject<([TimelineItemProxy], PaginationState), Never>()
-        pinnedTimelineProviderMock.underlyingUpdatePublisher = providerUpdateSubject.eraseToAnyPublisher()
         pinnedTimelineMock.timelineProvider = pinnedTimelineProviderMock
+        pinnedTimelineProviderMock.underlyingUpdatePublisher = Empty<([TimelineItemProxy], PaginationState), Never>().eraseToAnyPublisher()
         pinnedTimelineProviderMock.itemProxies = [.event(.init(item: EventTimelineItemSDKMock(configuration: .init(eventID: "test1")), id: "1")),
                                                   .event(.init(item: EventTimelineItemSDKMock(configuration: .init(eventID: "test2")), id: "2")),
                                                   .event(.init(item: EventTimelineItemSDKMock(configuration: .init(eventID: "test3")), id: "3"))]
