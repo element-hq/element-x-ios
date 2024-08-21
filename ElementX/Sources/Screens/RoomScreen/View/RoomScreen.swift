@@ -177,7 +177,7 @@ struct RoomScreen: View {
             ToolbarItem(placement: .primaryAction) {
                 if roomContext.viewState.shouldShowCallButton {
                     callButton
-                        .disabled(roomContext.viewState.canJoinCall == false)
+                        .disabled(!roomContext.viewState.canJoinCall)
                 }
             }
         }

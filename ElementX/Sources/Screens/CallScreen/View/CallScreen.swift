@@ -57,7 +57,7 @@ struct CallScreen: View {
 
 private struct CallView: UIViewRepresentable {
     /// The top-level view this representable displays. It wraps the web view when picture in picture isn't running.
-    class WebViewWrapper: UIView { }
+    typealias WebViewWrapper = UIView
     
     let url: URL?
     let viewModelContext: CallScreenViewModel.Context
