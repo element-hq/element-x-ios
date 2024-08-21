@@ -73,8 +73,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 
                 switch action {
                 case let .setAudioEnabled(enabled, roomID):
-                    guard roomID == configuration.callID else {
-                        MXLog.error("Received mute request for a different room: \(roomID) != \(configuration.callID)")
+                    guard roomID == configuration.callRoomID else {
+                        MXLog.error("Received mute request for a different room: \(roomID) != \(configuration.callRoomID)")
                         return
                     }
                     
@@ -107,25 +107,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 case .callEnded:
                     actionsSubject.send(.dismiss)
                 case .mediaStateChanged(let audioEnabled, _):
-                    elementCallService.setAudioEnabled(audioEnabled, roomID: configuration.callID)
+                    elementCallService.setAudioEnabled(audioEnabled, roomID: configuration.callRoomID)
                 }
-            }
-            .store(in: &cancellables)
-        
-        // Use did start otherwise there's a black box left on the screen during the pip controller animation.
-        NotificationCenter.default.publisher(for: .init("AVPictureInPictureControllerDidStartNotification"))
-            .sink { [weak self] notification in
-                guard let self else { return }
-                let controller = notification.object as? AVPictureInPictureController
-                actionsSubject.send(.pictureInPictureStarted(controller))
-            }
-            .store(in: &cancellables)
-        
-        NotificationCenter.default.publisher(for: .init("AVPictureInPictureControllerWillStopNotification"))
-            .sink { [weak self] _ in
-                guard let self else { return }
-                actionsSubject.send(.pictureInPictureStopped)
-                Task { try await self.state.bindings.javaScriptEvaluator?("controls.disableCompatPip()") }
             }
             .store(in: &cancellables)
         
@@ -139,6 +122,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             MXLog.info("URL changed to: \(url)")
         case .navigateBack:
             handleBackwardsNavigation()
+        case .pictureInPictureWillStop:
+            actionsSubject.send(.pictureInPictureStopped)
         }
     }
     
@@ -209,18 +194,16 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         }
         #endif
         
-        guard isPictureInPictureEnabled, state.url != nil else {
+        guard state.url != nil,
+              isPictureInPictureEnabled,
+              AVPictureInPictureController.isPictureInPictureSupported(),
+              let requestPictureInPictureHandler = state.bindings.requestPictureInPictureHandler else {
             actionsSubject.send(.dismiss)
             return
         }
         
-        Task {
-            try await state.bindings.javaScriptEvaluator?("controls.enableCompatPip()")
-            // Enable this check when implemented on web.
-            // if result as? Bool != true {
-            //    actionsSubject.send(.dismiss)
-            // }
-        }
+        let controller = requestPictureInPictureHandler()
+        actionsSubject.send(.pictureInPictureStarted(controller))
     }
     
     private func setAudioEnabled(_ enabled: Bool) async {

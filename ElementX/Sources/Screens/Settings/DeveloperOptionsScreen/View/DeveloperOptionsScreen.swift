@@ -61,6 +61,11 @@ struct DeveloperOptionsScreen: View {
                     .autocorrectionDisabled(true)
                     .autocapitalization(.none)
                     .foregroundColor(URL(string: elementCallBaseURLString) == nil ? .red : .primary)
+                
+                Toggle(isOn: $context.elementCallPictureInPictureEnabled) {
+                    Text("Picture in Picture support")
+                    Text("You may get stuck in the call until some backend updates have been deployed.")
+                }
             }
             
             Section {

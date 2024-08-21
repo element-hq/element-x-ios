@@ -27,7 +27,7 @@ struct CallScreenCoordinatorParameters {
 
 enum CallScreenCoordinatorAction {
     /// The call is still ongoing but the user wishes to navigate around the app.
-    case pictureInPictureStarted(AVPictureInPictureController?)
+    case pictureInPictureStarted(AVPictureInPictureController)
     /// The call is hidden and the user wishes to return to it.
     case pictureInPictureStopped
     /// The call is finished and the screen is done with.

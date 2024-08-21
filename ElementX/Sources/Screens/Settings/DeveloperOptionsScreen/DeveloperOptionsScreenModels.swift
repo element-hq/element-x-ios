@@ -53,6 +53,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var elementCallBaseURLOverride: URL? { get set }
     var fuzzyRoomListSearchEnabled: Bool { get set }
     var pinningEnabled: Bool { get set }
+    var elementCallPictureInPictureEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

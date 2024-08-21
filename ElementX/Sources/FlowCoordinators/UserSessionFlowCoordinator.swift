@@ -580,7 +580,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private var callScreenPictureInPictureController: AVPictureInPictureController?
     private func presentCallScreen(configuration: ElementCallConfiguration) {
-        guard elementCallService.ongoingCallRoomID != configuration.callID else {
+        guard elementCallService.ongoingCallRoomID != configuration.callRoomID else {
             MXLog.info("Returning to existing call.")
             callScreenPictureInPictureController?.stopPictureInPicture()
             return
