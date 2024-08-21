@@ -100,7 +100,7 @@ private struct CallView: UIViewRepresentable {
             
             DispatchQueue.main.async { // Avoid `Publishing changes from within view update warnings`
                 viewModelContext.javaScriptEvaluator = self.evaluateJavaScript
-                viewModelContext.requestPictureInPictureHandler = self.startPictureInPicture
+                viewModelContext.requestPictureInPictureHandler = self.requestPictureInPicture
             }
             
             let configuration = WKWebViewConfiguration()
@@ -208,20 +208,15 @@ private struct CallView: UIViewRepresentable {
         
         // MARK: - Picture in Picture
         
-        func startPictureInPicture() async -> Result<AVPictureInPictureController, CallScreenError> {
-            guard let pictureInPictureController, pictureInPictureController.isPictureInPicturePossible else {
-                return .failure(.pictureInPictureNotSupported)
+        func requestPictureInPicture() async -> Result<AVPictureInPictureController, CallScreenError> {
+            guard let pictureInPictureController,
+                  pictureInPictureController.isPictureInPicturePossible,
+                  case .success(true) = await webViewCanEnterPictureInPicture() else {
+                return .failure(.pictureInPictureNotAvailable)
             }
             
-            do {
-                // Ideally we will replace this with a controls.isPipPossible call in the future.
-                _ = try await evaluateJavaScript("controls.enablePip()")
-                pictureInPictureController.startPictureInPicture()
-                return .success(pictureInPictureController)
-            } catch {
-                MXLog.error("Error starting picture in picture \(error)")
-                return .failure(.webViewError(error))
-            }
+            pictureInPictureController.startPictureInPicture()
+            return .success(pictureInPictureController)
         }
         
         func stopPictureInPicture() {
@@ -230,9 +225,8 @@ private struct CallView: UIViewRepresentable {
         
         nonisolated func pictureInPictureControllerWillStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
             Task { @MainActor in
-                // We move the view via the delegate so it works when you background the app without calling startPictureInPicture
+                // We move the view via the delegate so it works when you background the app without calling requestPictureInPicture
                 pictureInPictureViewController.view.addMatchedSubview(webView)
-                // Similarly this is a redundant call when calling calling startPictureInPicture, but is necessary when backgrounding the app.
                 _ = try? await evaluateJavaScript("controls.enablePip()")
             }
         }
@@ -245,6 +239,21 @@ private struct CallView: UIViewRepresentable {
             Task { @MainActor in
                 webViewWrapper.addMatchedSubview(webView)
                 _ = try? await evaluateJavaScript("controls.disablePip()")
+            }
+        }
+        
+        /// Whether the web view can do picture in picture or not (e.g. it is showing an error or the page didn't load).
+        private func webViewCanEnterPictureInPicture() async -> Result<Bool, CallScreenError> {
+            do {
+                guard let canEnterPictureInPicture = try await evaluateJavaScript("controls.canEnterPip()") as? Bool else {
+                    MXLog.error("canEnterPip returned an unexpected value, skipping picture in picture.")
+                    return .failure(.pictureInPictureNotAvailable)
+                }
+                MXLog.info("canEnterPip returned \(canEnterPictureInPicture)")
+                return .success(canEnterPictureInPicture)
+            } catch {
+                MXLog.error("Error checking canEnterPip: \(error)")
+                return .failure(.pictureInPictureNotAvailable)
             }
         }
     }

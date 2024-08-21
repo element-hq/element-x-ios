@@ -49,6 +49,5 @@ enum CallScreenViewAction {
 }
 
 enum CallScreenError: Error {
-    case webViewError(Error)
-    case pictureInPictureNotSupported
+    case pictureInPictureNotAvailable
 }
