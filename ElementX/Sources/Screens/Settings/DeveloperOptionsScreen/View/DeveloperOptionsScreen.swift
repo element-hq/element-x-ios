@@ -64,7 +64,7 @@ struct DeveloperOptionsScreen: View {
                 
                 Toggle(isOn: $context.elementCallPictureInPictureEnabled) {
                     Text("Picture in Picture support")
-                    Text("You may get stuck in the call until some backend updates have been deployed.")
+                    Text("Requires an Element Call deployment with support for signalling PiP availability.")
                 }
             }
             
