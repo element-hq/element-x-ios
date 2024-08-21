@@ -46,6 +46,7 @@ struct RoomScreenViewState: BindableState {
     
     var canJoinCall = false
     var hasOngoingCall: Bool
+    var shouldShowCallButton = true
     
     var bindings: RoomScreenViewStateBindings
 }

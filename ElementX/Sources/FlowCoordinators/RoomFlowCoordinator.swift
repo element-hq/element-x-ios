@@ -58,6 +58,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let emojiProvider: EmojiProviderProtocol
+    private let ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
@@ -90,6 +91,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
          emojiProvider: EmojiProviderProtocol,
+         ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          analytics: AnalyticsService,
@@ -100,6 +102,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.navigationStackCoordinator = navigationStackCoordinator
         self.emojiProvider = emojiProvider
+        self.ongoingCallRoomIDPublisher = ongoingCallRoomIDPublisher
         self.appMediator = appMediator
         self.appSettings = appSettings
         self.analytics = analytics
@@ -580,6 +583,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                          voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                          emojiProvider: emojiProvider,
                                                          completionSuggestionService: completionSuggestionService,
+                                                         ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher,
                                                          appMediator: appMediator,
                                                          appSettings: appSettings,
                                                          composerDraftService: composerDraftService)
@@ -1350,6 +1354,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                     roomTimelineControllerFactory: roomTimelineControllerFactory,
                                                     navigationStackCoordinator: navigationStackCoordinator,
                                                     emojiProvider: emojiProvider,
+                                                    ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher,
                                                     appMediator: appMediator,
                                                     appSettings: appSettings,
                                                     analytics: analytics,

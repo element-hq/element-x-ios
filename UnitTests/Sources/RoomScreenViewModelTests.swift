@@ -44,6 +44,7 @@ class RoomScreenViewModelTests: XCTestCase {
         roomProxyMock.underlyingActionsPublisher = updateSubject.eraseToAnyPublisher()
         let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
                                             mediaProvider: MockMediaProvider(),
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
                                             analyticsService: ServiceLocator.shared.analytics)
@@ -112,6 +113,7 @@ class RoomScreenViewModelTests: XCTestCase {
         roomProxyMock.underlyingActionsPublisher = updateSubject.eraseToAnyPublisher()
         let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
                                             mediaProvider: MockMediaProvider(),
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
                                             analyticsService: ServiceLocator.shared.analytics)
@@ -139,5 +141,43 @@ class RoomScreenViewModelTests: XCTestCase {
         
         updateSubject.send(.roomInfoUpdate)
         try await deferred.fulfill()
+    }
+    
+    func testCallButtonVisibility() async throws {
+        // Given a room screen with no ongoing call.
+        let ongoingCallRoomIDSubject = CurrentValueSubject<String?, Never>(nil)
+        let roomProxyMock = JoinedRoomProxyMock(.init(id: "MyRoomID"))
+        let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
+                                            mediaProvider: MockMediaProvider(),
+                                            ongoingCallRoomIDPublisher: ongoingCallRoomIDSubject.asCurrentValuePublisher(),
+                                            appMediator: AppMediatorMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics)
+        self.viewModel = viewModel
+        XCTAssertTrue(viewModel.state.shouldShowCallButton)
+        
+        // When a call starts in this room.
+        var deferred = deferFulfillment(viewModel.context.$viewState) { !$0.shouldShowCallButton }
+        ongoingCallRoomIDSubject.send("MyRoomID")
+        try await deferred.fulfill()
+        
+        // Then the call button should be hidden.
+        XCTAssertFalse(viewModel.state.shouldShowCallButton)
+        
+        // When a call starts in a different room.
+        deferred = deferFulfillment(viewModel.context.$viewState) { $0.shouldShowCallButton }
+        ongoingCallRoomIDSubject.send("OtherRoomID")
+        try await deferred.fulfill()
+        
+        // Then the call button should be shown again.
+        XCTAssertTrue(viewModel.state.shouldShowCallButton)
+        
+        // When the call from the other room finishes.
+        let deferredFailure = deferFailure(viewModel.context.$viewState, timeout: 1) { !$0.shouldShowCallButton }
+        ongoingCallRoomIDSubject.send(nil)
+        try await deferredFailure.fulfill()
+        
+        // Then the call button should remain visible shown.
+        XCTAssertTrue(viewModel.state.shouldShowCallButton)
     }
 }

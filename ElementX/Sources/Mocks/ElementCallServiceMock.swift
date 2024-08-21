@@ -17,12 +17,15 @@
 import Combine
 import Foundation
 
-struct ElementCallServiceMockConfiguration { }
+struct ElementCallServiceMockConfiguration {
+    var ongoingCallRoomID: String?
+}
 
 extension ElementCallServiceMock {
     convenience init(_ configuration: ElementCallServiceMockConfiguration) {
         self.init()
         
         underlyingActions = PassthroughSubject().eraseToAnyPublisher()
+        underlyingOngoingCallRoomIDPublisher = .init(.init(configuration.ongoingCallRoomID))
     }
 }
