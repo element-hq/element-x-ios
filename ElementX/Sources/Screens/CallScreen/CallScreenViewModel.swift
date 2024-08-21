@@ -121,9 +121,11 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             guard let url else { return }
             MXLog.info("URL changed to: \(url)")
         case .navigateBack:
-            handleBackwardsNavigation()
+            Task { await handleBackwardsNavigation() }
         case .pictureInPictureWillStop:
             actionsSubject.send(.pictureInPictureStopped)
+        case .endCall:
+            actionsSubject.send(.dismiss)
         }
     }
     
@@ -185,25 +187,20 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         }
     }
     
-    private func handleBackwardsNavigation() {
-        #if targetEnvironment(simulator)
-        if UIDevice.current.isPhone {
-            MXLog.warning("The iPhone simulator doesn't support PiP.")
-            actionsSubject.send(.dismiss)
-            return
-        }
-        #endif
-        
+    private func handleBackwardsNavigation() async {
         guard state.url != nil,
               isPictureInPictureEnabled,
-              AVPictureInPictureController.isPictureInPictureSupported(),
               let requestPictureInPictureHandler = state.bindings.requestPictureInPictureHandler else {
             actionsSubject.send(.dismiss)
             return
         }
         
-        let controller = requestPictureInPictureHandler()
-        actionsSubject.send(.pictureInPictureStarted(controller))
+        switch await requestPictureInPictureHandler() {
+        case .success(let controller):
+            actionsSubject.send(.pictureInPictureStarted(controller))
+        case .failure:
+            actionsSubject.send(.dismiss)
+        }
     }
     
     private func setAudioEnabled(_ enabled: Bool) async {

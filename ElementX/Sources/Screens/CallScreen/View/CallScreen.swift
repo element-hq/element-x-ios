@@ -82,7 +82,7 @@ private struct CallView: UIViewRepresentable {
         private let certificateValidator: CertificateValidatorHookProtocol
         
         private var webView: WKWebView!
-        private var pictureInPictureController: AVPictureInPictureController!
+        private var pictureInPictureController: AVPictureInPictureController?
         private let pictureInPictureViewController: AVPictureInPictureVideoCallViewController
         
         /// The view to be shown in the app. This will contain the web view when picture in picture isn't running.
@@ -132,9 +132,12 @@ private struct CallView: UIViewRepresentable {
             
             webViewWrapper.addMatchedSubview(webView)
             
-            pictureInPictureController = .init(contentSource: .init(activeVideoCallSourceView: webViewWrapper,
-                                                                    contentViewController: pictureInPictureViewController))
-            pictureInPictureController.delegate = self
+            if AVPictureInPictureController.isPictureInPictureSupported() {
+                let pictureInPictureController = AVPictureInPictureController(contentSource: .init(activeVideoCallSourceView: webViewWrapper,
+                                                                                                   contentViewController: pictureInPictureViewController))
+                pictureInPictureController.delegate = self
+                self.pictureInPictureController = pictureInPictureController
+            }
         }
         
         func load(_ url: URL) {
@@ -205,20 +208,32 @@ private struct CallView: UIViewRepresentable {
         
         // MARK: - Picture in Picture
         
-        func startPictureInPicture() -> AVPictureInPictureController {
-            pictureInPictureController.startPictureInPicture()
-            return pictureInPictureController
+        func startPictureInPicture() async -> Result<AVPictureInPictureController, CallScreenError> {
+            guard let pictureInPictureController, pictureInPictureController.isPictureInPicturePossible else {
+                return .failure(.pictureInPictureNotSupported)
+            }
+            
+            do {
+                // Ideally we will replace this with a controls.isPipPossible call in the future.
+                _ = try await evaluateJavaScript("controls.enablePip()")
+                pictureInPictureController.startPictureInPicture()
+                return .success(pictureInPictureController)
+            } catch {
+                MXLog.error("Error starting picture in picture \(error)")
+                return .failure(.webViewError(error))
+            }
         }
         
         func stopPictureInPicture() {
-            pictureInPictureController.stopPictureInPicture()
+            pictureInPictureController?.stopPictureInPicture()
         }
         
-        // Note: We handle moving the view via the delegate so it works when you background the app without calling startPictureInPicture
         nonisolated func pictureInPictureControllerWillStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
             Task { @MainActor in
+                // We move the view via the delegate so it works when you background the app without calling startPictureInPicture
                 pictureInPictureViewController.view.addMatchedSubview(webView)
-                _ = try await evaluateJavaScript("controls.enablePip()")
+                // Similarly this is a redundant call when calling calling startPictureInPicture, but is necessary when backgrounding the app.
+                _ = try? await evaluateJavaScript("controls.enablePip()")
             }
         }
         
@@ -229,7 +244,7 @@ private struct CallView: UIViewRepresentable {
         nonisolated func pictureInPictureControllerDidStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
             Task { @MainActor in
                 webViewWrapper.addMatchedSubview(webView)
-                _ = try await evaluateJavaScript("controls.disablePip()")
+                _ = try? await evaluateJavaScript("controls.disablePip()")
             }
         }
     }

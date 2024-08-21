@@ -36,7 +36,7 @@ struct CallScreenViewState: BindableState {
 struct Bindings {
     var javaScriptMessageHandler: ((Any) -> Void)?
     var javaScriptEvaluator: ((String) async throws -> Any)?
-    var requestPictureInPictureHandler: (() -> AVPictureInPictureController)?
+    var requestPictureInPictureHandler: (() async -> Result<AVPictureInPictureController, CallScreenError>)?
     
     var alertInfo: AlertInfo<UUID>?
 }
@@ -45,4 +45,10 @@ enum CallScreenViewAction {
     case urlChanged(URL?)
     case navigateBack
     case pictureInPictureWillStop
+    case endCall
+}
+
+enum CallScreenError: Error {
+    case webViewError(Error)
+    case pictureInPictureNotSupported
 }
