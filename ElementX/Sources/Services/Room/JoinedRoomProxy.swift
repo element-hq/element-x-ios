@@ -165,19 +165,14 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         room.activeRoomCallParticipants()
     }
     
-    init?(roomListService: RoomListServiceProtocol,
-          roomListItem: RoomListItemProtocol,
-          room: RoomProtocol) async {
+    init(roomListService: RoomListServiceProtocol,
+         roomListItem: RoomListItemProtocol,
+         room: RoomProtocol) async throws {
         self.roomListService = roomListService
         self.roomListItem = roomListItem
         self.room = room
         
-        do {
-            timeline = try await TimelineProxy(timeline: room.timeline(), isLive: true)
-        } catch {
-            MXLog.error("Failed creating timeline with error: \(error)")
-            return nil
-        }
+        timeline = try await TimelineProxy(timeline: room.timeline(), isLive: true)
         
         Task {
             await updateMembers()
