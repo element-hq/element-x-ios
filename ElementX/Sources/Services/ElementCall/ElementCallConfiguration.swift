@@ -77,7 +77,7 @@ struct ElementCallConfiguration {
     }
     
     /// A string representing the call being configured.
-    var callID: String {
+    var callRoomID: String {
         switch kind {
         case .genericCallLink(let url):
             url.absoluteString

@@ -477,6 +477,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                     roomTimelineControllerFactory: roomTimelineControllerFactory,
                                                     navigationStackCoordinator: detailNavigationStackCoordinator,
                                                     emojiProvider: EmojiProvider(),
+                                                    ongoingCallRoomIDPublisher: elementCallService.ongoingCallRoomIDPublisher,
                                                     appMediator: appMediator,
                                                     appSettings: appSettings,
                                                     analytics: analytics,
@@ -580,7 +581,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private var callScreenPictureInPictureController: AVPictureInPictureController?
     private func presentCallScreen(configuration: ElementCallConfiguration) {
-        guard elementCallService.ongoingCallRoomID != configuration.callID else {
+        guard elementCallService.ongoingCallRoomIDPublisher.value != configuration.callRoomID else {
             MXLog.info("Returning to existing call.")
             callScreenPictureInPictureController?.stopPictureInPicture()
             return

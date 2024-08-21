@@ -61,6 +61,11 @@ struct DeveloperOptionsScreen: View {
                     .autocorrectionDisabled(true)
                     .autocapitalization(.none)
                     .foregroundColor(URL(string: elementCallBaseURLString) == nil ? .red : .primary)
+                
+                Toggle(isOn: $context.elementCallPictureInPictureEnabled) {
+                    Text("Picture in Picture support")
+                    Text("Requires an Element Call deployment with support for signalling PiP availability.")
+                }
             }
             
             Section {

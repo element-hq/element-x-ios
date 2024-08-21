@@ -4894,7 +4894,11 @@ class ElementCallServiceMock: ElementCallServiceProtocol {
         set(value) { underlyingActions = value }
     }
     var underlyingActions: AnyPublisher<ElementCallServiceAction, Never>!
-    var ongoingCallRoomID: String?
+    var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> {
+        get { return underlyingOngoingCallRoomIDPublisher }
+        set(value) { underlyingOngoingCallRoomIDPublisher = value }
+    }
+    var underlyingOngoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>!
 
     //MARK: - setClientProxy
 

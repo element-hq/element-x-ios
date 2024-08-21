@@ -175,8 +175,10 @@ struct RoomScreen: View {
         
         if !ProcessInfo.processInfo.isiOSAppOnMac {
             ToolbarItem(placement: .primaryAction) {
-                callButton
-                    .disabled(roomContext.viewState.canJoinCall == false)
+                if roomContext.viewState.shouldShowCallButton {
+                    callButton
+                        .disabled(!roomContext.viewState.canJoinCall)
+                }
             }
         }
     }

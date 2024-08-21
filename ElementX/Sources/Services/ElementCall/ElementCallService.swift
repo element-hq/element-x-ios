@@ -57,9 +57,14 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     private var endUnansweredCallTask: Task<Void, Never>?
     
-    private var ongoingCallID: CallID?
+    private var ongoingCallID: CallID? {
+        didSet { ongoingCallRoomIDSubject.send(ongoingCallID?.roomID) }
+    }
     
-    var ongoingCallRoomID: String? { ongoingCallID?.roomID }
+    let ongoingCallRoomIDSubject = CurrentValueSubject<String?, Never>(nil)
+    var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> {
+        ongoingCallRoomIDSubject.asCurrentValuePublisher()
+    }
     
     private let actionsSubject: PassthroughSubject<ElementCallServiceAction, Never> = .init()
     var actions: AnyPublisher<ElementCallServiceAction, Never> {

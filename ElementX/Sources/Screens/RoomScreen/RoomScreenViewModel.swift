@@ -53,6 +53,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     init(roomProxy: JoinedRoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
+         ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          analyticsService: AnalyticsService) {
@@ -68,7 +69,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                            bindings: .init()),
                    mediaProvider: mediaProvider)
         
-        setupSubscriptions()
+        setupSubscriptions(ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher)
     }
     
     override func process(viewAction: RoomScreenViewAction) {
@@ -93,7 +94,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         state.lastScrollDirection = direction
     }
     
-    private func setupSubscriptions() {
+    private func setupSubscriptions(ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>) {
         let roomInfoSubscription = roomProxy
             .actionsPublisher
             .filter { $0 == .roomInfoUpdate }
@@ -133,6 +134,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.setupPinnedEventsTimelineProviderIfNeeded()
+            }
+            .store(in: &cancellables)
+        
+        ongoingCallRoomIDPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] ongoingCallRoomID in
+                guard let self else { return }
+                state.shouldShowCallButton = ongoingCallRoomID != roomProxy.id
             }
             .store(in: &cancellables)
     }
@@ -186,6 +195,7 @@ extension RoomScreenViewModel {
     static func mock(roomProxyMock: JoinedRoomProxyMock) -> RoomScreenViewModel {
         RoomScreenViewModel(roomProxy: roomProxyMock,
                             mediaProvider: MockMediaProvider(),
+                            ongoingCallRoomIDPublisher: .init(.init(nil)),
                             appMediator: AppMediatorMock.default,
                             appSettings: ServiceLocator.shared.settings,
                             analyticsService: ServiceLocator.shared.analytics)

@@ -255,6 +255,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()))
@@ -272,6 +273,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()))
@@ -289,6 +291,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()))
@@ -306,6 +309,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()))
@@ -326,6 +330,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()))
@@ -346,6 +351,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()))
@@ -366,6 +372,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()))
@@ -387,6 +394,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()))
@@ -407,6 +415,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()))
@@ -426,6 +435,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()))
@@ -459,6 +469,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()))
@@ -479,6 +490,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()))
@@ -499,6 +511,7 @@ class MockScreen: Identifiable {
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                              emojiProvider: EmojiProvider(),
                                                              completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
+                                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()))

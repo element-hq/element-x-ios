@@ -18,7 +18,7 @@ import AVKit
 import Foundation
 
 enum CallScreenViewModelAction {
-    case pictureInPictureStarted(AVPictureInPictureController?)
+    case pictureInPictureStarted(AVPictureInPictureController)
     case pictureInPictureStopped
     case dismiss
 }
@@ -36,6 +36,7 @@ struct CallScreenViewState: BindableState {
 struct Bindings {
     var javaScriptMessageHandler: ((Any) -> Void)?
     var javaScriptEvaluator: ((String) async throws -> Any)?
+    var requestPictureInPictureHandler: (() async -> Result<AVPictureInPictureController, CallScreenError>)?
     
     var alertInfo: AlertInfo<UUID>?
 }
@@ -43,4 +44,10 @@ struct Bindings {
 enum CallScreenViewAction {
     case urlChanged(URL?)
     case navigateBack
+    case pictureInPictureWillStop
+    case endCall
+}
+
+enum CallScreenError: Error {
+    case pictureInPictureNotAvailable
 }

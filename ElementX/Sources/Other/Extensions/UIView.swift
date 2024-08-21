@@ -14,18 +14,17 @@
 // limitations under the License.
 //
 
-import Combine
-import Foundation
+import SwiftUI
 
-struct ElementCallServiceMockConfiguration {
-    var ongoingCallRoomID: String?
-}
-
-extension ElementCallServiceMock {
-    convenience init(_ configuration: ElementCallServiceMockConfiguration) {
-        self.init()
-        
-        underlyingActions = PassthroughSubject().eraseToAnyPublisher()
-        underlyingOngoingCallRoomIDPublisher = .init(.init(configuration.ongoingCallRoomID))
+extension UIView {
+    func addMatchedSubview(_ subview: UIView) {
+        addSubview(subview)
+        subview.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            subview.topAnchor.constraint(equalTo: topAnchor),
+            subview.leadingAnchor.constraint(equalTo: leadingAnchor),
+            subview.trailingAnchor.constraint(equalTo: trailingAnchor),
+            subview.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
     }
 }

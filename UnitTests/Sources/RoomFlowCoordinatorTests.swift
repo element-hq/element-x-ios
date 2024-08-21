@@ -308,6 +308,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
                                                         roomTimelineControllerFactory: timelineControllerFactory,
                                                         navigationStackCoordinator: navigationStackCoordinator,
                                                         emojiProvider: EmojiProvider(),
+                                                        ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                         appMediator: AppMediatorMock.default,
                                                         appSettings: ServiceLocator.shared.settings,
                                                         analytics: ServiceLocator.shared.analytics,
