@@ -4591,6 +4591,77 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
     }
 
+    //MARK: - roomKeyRecipientStrategy
+
+    var roomKeyRecipientStrategyStrategyUnderlyingCallsCount = 0
+    open var roomKeyRecipientStrategyStrategyCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return roomKeyRecipientStrategyStrategyUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomKeyRecipientStrategyStrategyUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomKeyRecipientStrategyStrategyUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomKeyRecipientStrategyStrategyUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var roomKeyRecipientStrategyStrategyCalled: Bool {
+        return roomKeyRecipientStrategyStrategyCallsCount > 0
+    }
+    open var roomKeyRecipientStrategyStrategyReceivedStrategy: CollectStrategy?
+    open var roomKeyRecipientStrategyStrategyReceivedInvocations: [CollectStrategy] = []
+
+    var roomKeyRecipientStrategyStrategyUnderlyingReturnValue: ClientBuilder!
+    open var roomKeyRecipientStrategyStrategyReturnValue: ClientBuilder! {
+        get {
+            if Thread.isMainThread {
+                return roomKeyRecipientStrategyStrategyUnderlyingReturnValue
+            } else {
+                var returnValue: ClientBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomKeyRecipientStrategyStrategyUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomKeyRecipientStrategyStrategyUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomKeyRecipientStrategyStrategyUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var roomKeyRecipientStrategyStrategyClosure: ((CollectStrategy) -> ClientBuilder)?
+
+    open override func roomKeyRecipientStrategy(strategy: CollectStrategy) -> ClientBuilder {
+        roomKeyRecipientStrategyStrategyCallsCount += 1
+        roomKeyRecipientStrategyStrategyReceivedStrategy = strategy
+        DispatchQueue.main.async {
+            self.roomKeyRecipientStrategyStrategyReceivedInvocations.append(strategy)
+        }
+        if let roomKeyRecipientStrategyStrategyClosure = roomKeyRecipientStrategyStrategyClosure {
+            return roomKeyRecipientStrategyStrategyClosure(strategy)
+        } else {
+            return roomKeyRecipientStrategyStrategyReturnValue
+        }
+    }
+
     //MARK: - serverName
 
     var serverNameServerNameUnderlyingCallsCount = 0
@@ -15784,6 +15855,75 @@ open class RoomListItemSDKMock: MatrixRustSDK.RoomListItem {
         try await initTimelineEventTypeFilterInternalIdPrefixClosure?(eventTypeFilter, internalIdPrefix)
     }
 
+    //MARK: - invitedRoom
+
+    open var invitedRoomThrowableError: Error?
+    var invitedRoomUnderlyingCallsCount = 0
+    open var invitedRoomCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return invitedRoomUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = invitedRoomUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                invitedRoomUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    invitedRoomUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var invitedRoomCalled: Bool {
+        return invitedRoomCallsCount > 0
+    }
+
+    var invitedRoomUnderlyingReturnValue: Room!
+    open var invitedRoomReturnValue: Room! {
+        get {
+            if Thread.isMainThread {
+                return invitedRoomUnderlyingReturnValue
+            } else {
+                var returnValue: Room? = nil
+                DispatchQueue.main.sync {
+                    returnValue = invitedRoomUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                invitedRoomUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    invitedRoomUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var invitedRoomClosure: (() throws -> Room)?
+
+    open override func invitedRoom() throws -> Room {
+        if let error = invitedRoomThrowableError {
+            throw error
+        }
+        invitedRoomCallsCount += 1
+        if let invitedRoomClosure = invitedRoomClosure {
+            return try invitedRoomClosure()
+        } else {
+            return invitedRoomReturnValue
+        }
+    }
+
     //MARK: - isDirect
 
     var isDirectUnderlyingCallsCount = 0
@@ -16041,6 +16181,71 @@ open class RoomListItemSDKMock: MatrixRustSDK.RoomListItem {
             return await latestEventClosure()
         } else {
             return latestEventReturnValue
+        }
+    }
+
+    //MARK: - membership
+
+    var membershipUnderlyingCallsCount = 0
+    open var membershipCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return membershipUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = membershipUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                membershipUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    membershipUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var membershipCalled: Bool {
+        return membershipCallsCount > 0
+    }
+
+    var membershipUnderlyingReturnValue: Membership!
+    open var membershipReturnValue: Membership! {
+        get {
+            if Thread.isMainThread {
+                return membershipUnderlyingReturnValue
+            } else {
+                var returnValue: Membership? = nil
+                DispatchQueue.main.sync {
+                    returnValue = membershipUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                membershipUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    membershipUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var membershipClosure: (() -> Membership)?
+
+    open override func membership() -> Membership {
+        membershipCallsCount += 1
+        if let membershipClosure = membershipClosure {
+            return membershipClosure()
+        } else {
+            return membershipReturnValue
         }
     }
 
