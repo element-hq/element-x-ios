@@ -28,7 +28,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let userSession: UserSessionProtocol
     private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
-    private let roomProxy: RoomProxyProtocol
+    private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
     
@@ -42,7 +42,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     init(navigationStackCoordinator: NavigationStackCoordinator,
          userSession: UserSessionProtocol,
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
-         roomProxy: RoomProxyProtocol,
+         roomProxy: JoinedRoomProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          appMediator: AppMediatorProtocol) {
         self.navigationStackCoordinator = navigationStackCoordinator

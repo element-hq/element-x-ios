@@ -112,8 +112,8 @@ class RoomScreenViewModelTests: XCTestCase {
     func testPinnedEventsBannerSelection() async throws {
         ServiceLocator.shared.settings.pinningEnabled = true
         let timelineSubject = PassthroughSubject<TimelineProxyProtocol, Never>()
-        let updateSubject = PassthroughSubject<RoomProxyAction, Never>()
-        let roomProxyMock = RoomProxyMock(.init())
+        let updateSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
+        let roomProxyMock = JoinedRoomProxyMock(.init())
         // setup a way to inject the mock of the pinned events timeline
         let pinnedTimelineMock = TimelineProxyMock()
         let pinnedTimelineProviderMock = RoomTimelineProviderMock()

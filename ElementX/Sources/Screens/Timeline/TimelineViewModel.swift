@@ -836,7 +836,7 @@ extension TimelineViewModel {
                                         appSettings: ServiceLocator.shared.settings,
                                         analyticsService: ServiceLocator.shared.analytics)
     
-    static let pinnedEventsTimelineMock = TimelineViewModel(roomProxy: RoomProxyMock(.init(name: "Preview room")),
+    static let pinnedEventsTimelineMock = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                                             focussedEventID: nil,
                                                             timelineController: MockRoomTimelineController(),
                                                             isPinnedEventsTimeline: true,
