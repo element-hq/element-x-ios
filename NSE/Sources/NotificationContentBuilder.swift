@@ -103,9 +103,7 @@ struct NotificationContentBuilder {
         var notification = try await processCommonRoomMessage(notificationItem: notificationItem, mediaProvider: mediaProvider)
         
         let displayName = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
-        let message = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName).characters)
-        
-        notification.body = notificationItem.hasMention ? L10n.notificationMentionedYouBody(message) : message
+        notification.body = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName).characters)
         
         switch messageType {
         case .image(content: let content):
@@ -153,9 +151,14 @@ struct NotificationContentBuilder {
         }
         notification.categoryIdentifier = NotificationConstants.Category.message
 
+        let senderName = if let displayName = notificationItem.senderDisplayName {
+            notificationItem.hasMention ? L10n.notificationSenderMentionReply(displayName) : displayName
+        } else {
+            notificationItem.roomDisplayName
+        }
         notification = try await notification.addSenderIcon(using: mediaProvider,
                                                             senderID: notificationItem.senderID,
-                                                            senderName: notificationItem.senderDisplayName ?? notificationItem.roomDisplayName,
+                                                            senderName: senderName,
                                                             icon: icon(for: notificationItem))
         return notification
     }
