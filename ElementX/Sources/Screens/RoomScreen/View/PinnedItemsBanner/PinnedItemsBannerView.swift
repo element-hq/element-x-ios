@@ -38,7 +38,7 @@ struct PinnedItemsBannerView: View {
         Button { onMainButtonTap() } label: {
             HStack(spacing: 0) {
                 HStack(spacing: 10) {
-                    PinnedItemsIndicatorView(pinIndex: state.selectedPinIndex, pinsCount: state.count)
+                    PinnedItemsIndicatorView(pinIndex: state.selectedPinnedIndex, pinsCount: state.count)
                         .accessibilityHidden(true)
                     CompoundIcon(\.pinSolid, size: .small, relativeTo: .compound.bodyMD)
                         .foregroundColor(Color.compound.iconSecondaryAlpha)
@@ -98,16 +98,16 @@ struct PinnedItemsBannerView_Previews: PreviewProvider, TestablePreview {
             PinnedItemsBannerView(state: .loaded(state: .init(pinnedEventContents: ["1": "Content",
                                                                                     "2": "2",
                                                                                     "3": "3"],
-                selectedPinEventID: "1")),
+                selectedPinnedEventID: "1")),
                                   onMainButtonTap: { },
                                   onViewAllButtonTap: { })
             PinnedItemsBannerView(state: .loaded(state: .init(pinnedEventContents: ["1": "Very very very very long content here",
                                                                                     "2": "2"],
-                selectedPinEventID: "1")),
+                selectedPinnedEventID: "1")),
                                   onMainButtonTap: { },
                                   onViewAllButtonTap: { })
             PinnedItemsBannerView(state: .loaded(state: .init(pinnedEventContents: ["1": attributedContent],
-                                                              selectedPinEventID: "1")),
+                                                              selectedPinnedEventID: "1")),
                                   onMainButtonTap: { },
                                   onViewAllButtonTap: { })
             PinnedItemsBannerView(state: .loading(numbersOfEvents: 5),

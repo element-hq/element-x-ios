@@ -54,6 +54,7 @@ struct ReadReceiptsSummaryView_Previews: PreviewProvider, TestablePreview {
         let roomProxyMock = JoinedRoomProxyMock(.init(name: "Room", members: members))
         let mock = TimelineViewModel(roomProxy: roomProxyMock,
                                      timelineController: MockRoomTimelineController(),
+                                     isPinnedEventsTimeline: false,
                                      mediaProvider: MockMediaProvider(),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock(),

@@ -238,6 +238,8 @@ internal enum L10n {
   internal static var actionTryAgain: String { return L10n.tr("Localizable", "action_try_again") }
   /// Unpin
   internal static var actionUnpin: String { return L10n.tr("Localizable", "action_unpin") }
+  /// View in timeline
+  internal static var actionViewInTimeline: String { return L10n.tr("Localizable", "action_view_in_timeline") }
   /// View source
   internal static var actionViewSource: String { return L10n.tr("Localizable", "action_view_source") }
   /// Yes

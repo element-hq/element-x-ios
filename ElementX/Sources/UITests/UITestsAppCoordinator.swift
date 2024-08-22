@@ -446,7 +446,7 @@ class MockScreen: Identifiable {
                 let client = try UITestsSignalling.Client(mode: .app)
                 client.signals.sink { [weak self] signal in
                     guard case .timeline(.focusOnEvent(let eventID)) = signal else { return }
-                    coordinator.focusOnEvent(eventID: eventID)
+                    coordinator.focusOnEvent(.init(eventID: eventID, shouldSetPin: false))
                     try? client.send(.success)
                 }
                 .store(in: &cancellables)
@@ -649,6 +649,7 @@ class MockScreen: Identifiable {
             let timelineController = RoomTimelineController(roomProxy: roomProxy,
                                                             timelineProxy: roomProxy.timeline,
                                                             initialFocussedEventID: nil,
+                                                            shouldHideStart: false,
                                                             timelineItemFactory: RoomTimelineItemFactory(userID: "@alice:matrix.org",
                                                                                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: "@alice:matrix.org")),

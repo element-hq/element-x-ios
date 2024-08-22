@@ -23,21 +23,48 @@ enum PollViewAction {
     case end
 }
 
+enum PollViewState {
+    case preview
+    case full(isEditable: Bool)
+    
+    var isPreview: Bool {
+        switch self {
+        case .preview:
+            return true
+        case .full:
+            return false
+        }
+    }
+    
+    var isEditable: Bool {
+        switch self {
+        case .preview:
+            return false
+        case .full(let isEditable):
+            return isEditable
+        }
+    }
+}
+
 struct PollView: View {
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     
     let poll: Poll
-    let editable: Bool
+    let state: PollViewState
     let actionHandler: (PollViewAction) -> Void
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        if state.isPreview {
             questionView
-            optionsView
-            summaryView
-            toolbarView
+        } else {
+            VStack(alignment: .leading, spacing: 16) {
+                questionView
+                optionsView
+                summaryView
+                toolbarView
+            }
+            .frame(maxWidth: 450)
         }
-        .frame(maxWidth: 450)
     }
 
     // MARK: - Private
@@ -88,7 +115,7 @@ struct PollView: View {
             Button {
                 toolbarAction()
             } label: {
-                Text(editable ? L10n.actionEditPoll : L10n.actionEndPoll)
+                Text(state.isEditable ? L10n.actionEditPoll : L10n.actionEndPoll)
                     .lineLimit(2, reservesSpace: false)
                     .font(.compound.bodyLGSemibold)
                     .foregroundColor(.compound.textOnSolidPrimary)
@@ -105,7 +132,7 @@ struct PollView: View {
     }
     
     private func toolbarAction() {
-        if editable {
+        if state.isEditable {
             actionHandler(.edit)
         } else {
             actionHandler(.end)
@@ -146,28 +173,32 @@ private extension Poll {
 
 struct PollView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        PollView(poll: .disclosed(), editable: false) { _ in }
+        PollView(poll: .disclosed(), state: .full(isEditable: false)) { _ in }
             .padding()
             .previewDisplayName("Disclosed")
 
-        PollView(poll: .undisclosed(), editable: false) { _ in }
+        PollView(poll: .undisclosed(), state: .full(isEditable: false)) { _ in }
             .padding()
             .previewDisplayName("Undisclosed")
 
-        PollView(poll: .endedDisclosed, editable: false) { _ in }
+        PollView(poll: .endedDisclosed, state: .full(isEditable: false)) { _ in }
             .padding()
             .previewDisplayName("Ended, Disclosed")
 
-        PollView(poll: .endedUndisclosed, editable: false) { _ in }
+        PollView(poll: .endedUndisclosed, state: .full(isEditable: false)) { _ in }
             .padding()
             .previewDisplayName("Ended, Undisclosed")
 
-        PollView(poll: .disclosed(createdByAccountOwner: true), editable: true) { _ in }
+        PollView(poll: .disclosed(createdByAccountOwner: true), state: .full(isEditable: true)) { _ in }
             .padding()
             .previewDisplayName("Creator, disclosed")
         
-        PollView(poll: .emptyDisclosed, editable: true) { _ in }
+        PollView(poll: .emptyDisclosed, state: .full(isEditable: true)) { _ in }
             .padding()
             .previewDisplayName("Creator, no votes")
+        
+        PollView(poll: .emptyDisclosed, state: .preview) { _ in }
+            .padding()
+            .previewDisplayName("Preview")
     }
 }

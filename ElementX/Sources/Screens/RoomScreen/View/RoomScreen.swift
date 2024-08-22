@@ -75,7 +75,9 @@ struct RoomScreen: View {
                                                              canCurrentUserPin: timelineContext.viewState.canCurrentUserPin,
                                                              pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
                                                              isDM: timelineContext.viewState.isEncryptedOneToOneRoom,
-                                                             isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled).makeActions()
+                                                             isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
+                                                             isPinnedEventsTimeline: timelineContext.viewState.isPinnedEventsTimeline)
+                    .makeActions()
                 if let actions {
                     TimelineItemMenu(item: info.item, actions: actions)
                         .environmentObject(timelineContext)
@@ -218,6 +220,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
     static let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
     static let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                                      timelineController: MockRoomTimelineController(),
+                                                     isPinnedEventsTimeline: false,
                                                      mediaProvider: MockMediaProvider(),
                                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock(),

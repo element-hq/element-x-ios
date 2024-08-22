@@ -345,6 +345,7 @@ class TimelineViewModelTests: XCTestCase {
 
         let viewModel = TimelineViewModel(roomProxy: roomProxy,
                                           timelineController: timelineController,
+                                          isPinnedEventsTimeline: false,
                                           mediaProvider: MockMediaProvider(),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
@@ -369,6 +370,7 @@ class TimelineViewModelTests: XCTestCase {
         timelineController.timelineItems = [message]
         let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "", members: [RoomMemberProxyMock.mockAlice, RoomMemberProxyMock.mockCharlie])),
                                           timelineController: timelineController,
+                                          isPinnedEventsTimeline: false,
                                           mediaProvider: MockMediaProvider(),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
@@ -394,6 +396,7 @@ class TimelineViewModelTests: XCTestCase {
         roomProxyMock.underlyingActionsPublisher = actionsSubject.eraseToAnyPublisher()
         let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                           timelineController: MockRoomTimelineController(),
+                                          isPinnedEventsTimeline: false,
                                           mediaProvider: MockMediaProvider(),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
@@ -422,6 +425,7 @@ class TimelineViewModelTests: XCTestCase {
         roomProxyMock.underlyingActionsPublisher = actionsSubject.eraseToAnyPublisher()
         let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                           timelineController: MockRoomTimelineController(),
+                                          isPinnedEventsTimeline: false,
                                           mediaProvider: MockMediaProvider(),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
@@ -451,6 +455,7 @@ class TimelineViewModelTests: XCTestCase {
         TimelineViewModel(roomProxy: roomProxy ?? JoinedRoomProxyMock(.init(name: "")),
                           focussedEventID: focussedEventID,
                           timelineController: timelineController,
+                          isPinnedEventsTimeline: false,
                           mediaProvider: MockMediaProvider(),
                           mediaPlayerProvider: MediaPlayerProviderMock(),
                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),

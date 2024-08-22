@@ -32,6 +32,7 @@ enum TimelineViewModelAction {
     case displayLocation(body: String, geoURI: GeoURI, description: String?)
     case composer(action: TimelineComposerAction)
     case hasScrolled(direction: ScrollDirection)
+    case viewInRoomTimeline(eventID: String)
 }
 
 enum TimelineViewPollAction {
@@ -89,6 +90,7 @@ enum TimelineComposerAction {
 }
 
 struct TimelineViewState: BindableState {
+    let isPinnedEventsTimeline: Bool
     var roomID: String
     var members: [String: RoomMemberState] = [:]
     var typingMembers: [String] = []
@@ -221,53 +223,4 @@ struct TimelineState {
 enum ScrollDirection: Equatable {
     case top
     case bottom
-}
-
-struct PinnedEventsState: Equatable {
-    var pinnedEventContents: OrderedDictionary<String, AttributedString> = [:] {
-        didSet {
-            if selectedPinEventID == nil, !pinnedEventContents.keys.isEmpty {
-                // The default selected event should always be the last one.
-                selectedPinEventID = pinnedEventContents.keys.last
-            } else if pinnedEventContents.isEmpty {
-                selectedPinEventID = nil
-            } else if let selectedPinEventID, !pinnedEventContents.keys.set.contains(selectedPinEventID) {
-                self.selectedPinEventID = pinnedEventContents.keys.last
-            }
-        }
-    }
-    
-    private(set) var selectedPinEventID: String?
-    
-    var selectedPinIndex: Int {
-        let defaultValue = pinnedEventContents.isEmpty ? 0 : pinnedEventContents.count - 1
-        guard let selectedPinEventID else {
-            return defaultValue
-        }
-        return pinnedEventContents.keys.firstIndex(of: selectedPinEventID) ?? defaultValue
-    }
-    
-    var selectedPinContent: AttributedString {
-        var content = AttributedString(" ")
-        if let selectedPinEventID,
-           let pinnedEventContent = pinnedEventContents[selectedPinEventID] {
-            content = pinnedEventContent
-        }
-        content.font = .compound.bodyMD
-        content.link = nil
-        return content
-    }
-    
-    mutating func previousPin() {
-        guard !pinnedEventContents.isEmpty else {
-            return
-        }
-        let currentIndex = selectedPinIndex
-        let nextIndex = currentIndex - 1
-        if nextIndex == -1 {
-            selectedPinEventID = pinnedEventContents.keys.last
-        } else {
-            selectedPinEventID = pinnedEventContents.keys[nextIndex % pinnedEventContents.count]
-        }
-    }
 }

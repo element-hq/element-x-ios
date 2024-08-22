@@ -22,4 +22,5 @@ protocol RoomScreenViewModelProtocol {
     var context: RoomScreenViewModel.Context { get }
     
     func timelineHasScrolled(direction: ScrollDirection)
+    func setSelectedPinnedEventID(_ eventID: String)
 }

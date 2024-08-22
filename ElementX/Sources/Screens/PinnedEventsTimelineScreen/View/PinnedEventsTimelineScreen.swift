@@ -35,8 +35,24 @@ struct PinnedEventsTimelineScreen: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .background(.compound.bgCanvasDefault)
-            .interactiveQuickLook(item: $timelineContext.mediaPreviewItem)
             .interactiveDismissDisabled()
+            .interactiveQuickLook(item: $timelineContext.mediaPreviewItem)
+            .sheet(item: $timelineContext.debugInfo) { TimelineItemDebugView(info: $0) }
+            .sheet(item: $timelineContext.actionMenuInfo) { info in
+                let actions = TimelineItemMenuActionProvider(timelineItem: info.item,
+                                                             canCurrentUserRedactSelf: timelineContext.viewState.canCurrentUserRedactSelf,
+                                                             canCurrentUserRedactOthers: timelineContext.viewState.canCurrentUserRedactOthers,
+                                                             canCurrentUserPin: timelineContext.viewState.canCurrentUserPin,
+                                                             pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
+                                                             isDM: timelineContext.viewState.isEncryptedOneToOneRoom,
+                                                             isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
+                                                             isPinnedEventsTimeline: timelineContext.viewState.isPinnedEventsTimeline)
+                    .makeActions()
+                if let actions {
+                    TimelineItemMenu(item: info.item, actions: actions)
+                        .environmentObject(timelineContext)
+                }
+            }
     }
     
     @ViewBuilder
@@ -83,6 +99,7 @@ struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
         timelineController.timelineItems = []
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                  timelineController: timelineController,
+                                 isPinnedEventsTimeline: true,
                                  mediaProvider: MockMediaProvider(),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  voiceMessageMediaManager: VoiceMessageMediaManagerMock(),

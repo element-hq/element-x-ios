@@ -25,6 +25,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let appSettings: AppSettings
     private let serialDispatchQueue: DispatchQueue
+    private let shouldHideStart: Bool
     
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
@@ -44,12 +45,14 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     init(roomProxy: JoinedRoomProxyProtocol,
          timelineProxy: TimelineProxyProtocol,
          initialFocussedEventID: String?,
+         shouldHideStart: Bool,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          appSettings: AppSettings) {
         self.roomProxy = roomProxy
         liveTimelineProvider = timelineProxy.timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.appSettings = appSettings
+        self.shouldHideStart = shouldHideStart
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         
         activeTimeline = timelineProxy
@@ -364,7 +367,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         // Check if we need to add anything to the top of the timeline.
         switch paginationState.backward {
         case .timelineEndReached:
-            if !roomProxy.isEncryptedOneToOneRoom {
+            if !shouldHideStart, !roomProxy.isEncryptedOneToOneRoom {
                 let timelineStart = TimelineStartRoomTimelineItem(name: roomProxy.name)
                 newTimelineItems.insert(timelineStart, at: 0)
             }

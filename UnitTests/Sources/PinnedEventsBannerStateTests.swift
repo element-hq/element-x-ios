@@ -37,9 +37,9 @@ class PinnedEventsBannerStateTests: XCTestCase {
         
         XCTAssertTrue(state.isLoading)
         XCTAssertFalse(state.isEmpty)
-        XCTAssertNil(state.selectedPinEventID)
+        XCTAssertNil(state.selectedPinnedEventID)
         XCTAssertEqual(state.displayedMessage.string, L10n.screenRoomPinnedBannerLoadingDescription)
-        XCTAssertEqual(state.selectedPinIndex, 4)
+        XCTAssertEqual(state.selectedPinnedIndex, 4)
         XCTAssertEqual(state.count, 5)
         XCTAssertEqual(state.bannerIndicatorDescription.string, L10n.screenRoomPinnedBannerIndicatorDescription(L10n.screenRoomPinnedBannerIndicator(5, 5)))
     }
@@ -48,42 +48,42 @@ class PinnedEventsBannerStateTests: XCTestCase {
         var state = PinnedEventsBannerState.loading(numbersOfEvents: 2)
         XCTAssertTrue(state.isLoading)
         state.setPinnedEventContents(["1": "test1", "2": "test2"])
-        XCTAssertEqual(state, .loaded(state: .init(pinnedEventContents: ["1": "test1", "2": "test2"], selectedPinEventID: "2")))
+        XCTAssertEqual(state, .loaded(state: .init(pinnedEventContents: ["1": "test1", "2": "test2"], selectedPinnedEventID: "2")))
         XCTAssertFalse(state.isLoading)
     }
     
     func testLoaded() {
-        let state = PinnedEventsBannerState.loaded(state: .init(pinnedEventContents: ["1": "test1", "2": "test2"], selectedPinEventID: "2"))
+        let state = PinnedEventsBannerState.loaded(state: .init(pinnedEventContents: ["1": "test1", "2": "test2"], selectedPinnedEventID: "2"))
         XCTAssertFalse(state.isLoading)
         XCTAssertFalse(state.isEmpty)
-        XCTAssertEqual(state.selectedPinEventID, "2")
+        XCTAssertEqual(state.selectedPinnedEventID, "2")
         XCTAssertEqual(state.displayedMessage.string, "test2")
-        XCTAssertEqual(state.selectedPinIndex, 1)
+        XCTAssertEqual(state.selectedPinnedIndex, 1)
         XCTAssertEqual(state.count, 2)
         XCTAssertEqual(state.bannerIndicatorDescription.string, L10n.screenRoomPinnedBannerIndicatorDescription(L10n.screenRoomPinnedBannerIndicator(2, 2)))
     }
     
     func testPreviousPin() {
-        var state = PinnedEventsBannerState.loaded(state: .init(pinnedEventContents: ["1": "test1", "2": "test2", "3": "test3"], selectedPinEventID: "1"))
-        XCTAssertEqual(state.selectedPinEventID, "1")
-        XCTAssertEqual(state.selectedPinIndex, 0)
+        var state = PinnedEventsBannerState.loaded(state: .init(pinnedEventContents: ["1": "test1", "2": "test2", "3": "test3"], selectedPinnedEventID: "1"))
+        XCTAssertEqual(state.selectedPinnedEventID, "1")
+        XCTAssertEqual(state.selectedPinnedIndex, 0)
         XCTAssertEqual(state.displayedMessage.string, "test1")
         
         state.previousPin()
-        XCTAssertEqual(state.selectedPinEventID, "3")
-        XCTAssertEqual(state.selectedPinIndex, 2)
+        XCTAssertEqual(state.selectedPinnedEventID, "3")
+        XCTAssertEqual(state.selectedPinnedIndex, 2)
         XCTAssertEqual(state.displayedMessage.string, "test3")
         
         state.previousPin()
-        XCTAssertEqual(state.selectedPinEventID, "2")
-        XCTAssertEqual(state.selectedPinIndex, 1)
+        XCTAssertEqual(state.selectedPinnedEventID, "2")
+        XCTAssertEqual(state.selectedPinnedIndex, 1)
         XCTAssertEqual(state.displayedMessage.string, "test2")
     }
     
     func testSetContent() {
-        var state = PinnedEventsBannerState.loaded(state: .init(pinnedEventContents: ["1": "test1", "2": "test2", "3": "test3", "4": "test4"], selectedPinEventID: "2"))
-        XCTAssertEqual(state.selectedPinEventID, "2")
-        XCTAssertEqual(state.selectedPinIndex, 1)
+        var state = PinnedEventsBannerState.loaded(state: .init(pinnedEventContents: ["1": "test1", "2": "test2", "3": "test3", "4": "test4"], selectedPinnedEventID: "2"))
+        XCTAssertEqual(state.selectedPinnedEventID, "2")
+        XCTAssertEqual(state.selectedPinnedIndex, 1)
         XCTAssertEqual(state.displayedMessage.string, "test2")
         XCTAssertEqual(state.count, 4)
         XCTAssertFalse(state.isEmpty)
@@ -91,8 +91,8 @@ class PinnedEventsBannerStateTests: XCTestCase {
         // let's remove the selected item
         state.setPinnedEventContents(["1": "test1", "3": "test3", "4": "test4"])
         // new selected item is the new latest
-        XCTAssertEqual(state.selectedPinEventID, "4")
-        XCTAssertEqual(state.selectedPinIndex, 2)
+        XCTAssertEqual(state.selectedPinnedEventID, "4")
+        XCTAssertEqual(state.selectedPinnedIndex, 2)
         XCTAssertEqual(state.displayedMessage.string, "test4")
         XCTAssertEqual(state.count, 3)
         XCTAssertFalse(state.isEmpty)
@@ -100,9 +100,9 @@ class PinnedEventsBannerStateTests: XCTestCase {
         // let's add a new item at the top
         state.setPinnedEventContents(["0": "test0", "1": "test1", "3": "test3", "4": "test4"])
         // selected item doesn't change
-        XCTAssertEqual(state.selectedPinEventID, "4")
+        XCTAssertEqual(state.selectedPinnedEventID, "4")
         // but the index is updated
-        XCTAssertEqual(state.selectedPinIndex, 3)
+        XCTAssertEqual(state.selectedPinnedIndex, 3)
         XCTAssertEqual(state.displayedMessage.string, "test4")
         XCTAssertEqual(state.count, 4)
         XCTAssertFalse(state.isEmpty)
@@ -110,9 +110,9 @@ class PinnedEventsBannerStateTests: XCTestCase {
         // let's add a new item at the bottom
         state.setPinnedEventContents(["0": "test0", "1": "test1", "3": "test3", "4": "test4", "5": "test5"])
         // selected item doesn't change
-        XCTAssertEqual(state.selectedPinEventID, "4")
+        XCTAssertEqual(state.selectedPinnedEventID, "4")
         // and index stays the same
-        XCTAssertEqual(state.selectedPinIndex, 3)
+        XCTAssertEqual(state.selectedPinnedIndex, 3)
         XCTAssertEqual(state.displayedMessage.string, "test4")
         XCTAssertEqual(state.count, 5)
         XCTAssertFalse(state.isEmpty)
@@ -120,12 +120,12 @@ class PinnedEventsBannerStateTests: XCTestCase {
         // set to tempty
         state.setPinnedEventContents([:])
         XCTAssertTrue(state.isEmpty)
-        XCTAssertNil(state.selectedPinEventID)
+        XCTAssertNil(state.selectedPinnedEventID)
         
         // set to one item
         state.setPinnedEventContents(["6": "test6", "7": "test7"])
-        XCTAssertEqual(state.selectedPinEventID, "7")
-        XCTAssertEqual(state.selectedPinIndex, 1)
+        XCTAssertEqual(state.selectedPinnedEventID, "7")
+        XCTAssertEqual(state.selectedPinnedIndex, 1)
         XCTAssertEqual(state.displayedMessage.string, "test7")
         XCTAssertEqual(state.count, 2)
         XCTAssertFalse(state.isEmpty)

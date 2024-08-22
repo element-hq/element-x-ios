@@ -67,7 +67,8 @@ struct RoomPollsHistoryScreen: View {
                 Text(DateFormatter.pollTimestamp.string(from: pollTimelineItem.timestamp))
                     .font(.compound.bodySM)
                     .foregroundColor(.compound.textSecondary)
-                PollView(poll: pollTimelineItem.item.poll, editable: pollTimelineItem.item.isEditable) { action in
+                PollView(poll: pollTimelineItem.item.poll,
+                         state: .full(isEditable: pollTimelineItem.item.isEditable)) { action in
                     switch action {
                     case .selectOption(let optionID):
                         guard let pollStartID = pollTimelineItem.item.id.eventID else { return }

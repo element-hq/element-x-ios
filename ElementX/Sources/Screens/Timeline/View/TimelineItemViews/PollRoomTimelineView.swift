@@ -20,9 +20,18 @@ struct PollRoomTimelineView: View {
     let timelineItem: PollRoomTimelineItem
     @EnvironmentObject private var context: TimelineViewModel.Context
     
+    private var state: PollViewState {
+        if context.viewState.isPinnedEventsTimeline {
+            return .preview
+        } else {
+            return .full(isEditable: timelineItem.isEditable)
+        }
+    }
+    
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            PollView(poll: poll, editable: timelineItem.isEditable) { action in
+            PollView(poll: poll,
+                     state: state) { action in
                 switch action {
                 case .selectOption(let optionID):
                     guard let eventID, let option = poll.options.first(where: { $0.id == optionID }), !option.isSelected else { return }
@@ -51,6 +60,7 @@ struct PollRoomTimelineView: View {
 
 struct PollRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
+    static let pinnedEventsTimelineViewModel = TimelineViewModel.pinnedEventsTimelineMock
 
     static var previews: some View {
         PollRoomTimelineView(timelineItem: .mock(poll: .disclosed(), isOutgoing: false))
@@ -76,5 +86,9 @@ struct PollRoomTimelineView_Previews: PreviewProvider, TestablePreview {
         PollRoomTimelineView(timelineItem: .mock(poll: .emptyDisclosed, isEditable: true))
             .environmentObject(viewModel.context)
             .previewDisplayName("Creator, no votes, Bubble")
+        
+        PollRoomTimelineView(timelineItem: .mock(poll: .disclosed(), isEditable: true))
+            .environmentObject(pinnedEventsTimelineViewModel.context)
+            .previewDisplayName("Preview")
     }
 }

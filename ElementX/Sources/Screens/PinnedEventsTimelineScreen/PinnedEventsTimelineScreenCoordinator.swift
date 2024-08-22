@@ -28,8 +28,10 @@ struct PinnedEventsTimelineScreenCoordinatorParameters {
 
 enum PinnedEventsTimelineScreenCoordinatorAction {
     case dismiss
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
+    case displayUser(userID: String)
+    case presentLocationViewer(geoURI: GeoURI, description: String?)
+    case displayMessageForwarding(forwardingItem: MessageForwardingItem)
+    case displayRoomScreenWithFocussedPin(eventID: String)
 }
 
 final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
@@ -50,6 +52,7 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
         viewModel = PinnedEventsTimelineScreenViewModel()
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                               timelineController: parameters.timelineController,
+                                              isPinnedEventsTimeline: true,
                                               mediaProvider: parameters.mediaProvider,
                                               mediaPlayerProvider: parameters.mediaPlayerProvider,
                                               voiceMessageMediaManager: parameters.voiceMessageMediaManager,
@@ -67,6 +70,27 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .dismiss:
                 self.actionsSubject.send(.dismiss)
+            }
+        }
+        .store(in: &cancellables)
+        
+        timelineViewModel.actions.sink { [weak self] action in
+            MXLog.info("Coordinator: received timeline view model action: \(action)")
+            guard let self else { return }
+            
+            switch action {
+            case .tappedOnSenderDetails(let userID):
+                actionsSubject.send(.displayUser(userID: userID))
+            case .displayMessageForwarding(let forwardingItem):
+                actionsSubject.send(.displayMessageForwarding(forwardingItem: forwardingItem))
+            case .displayLocation(_, let geoURI, let description):
+                actionsSubject.send(.presentLocationViewer(geoURI: geoURI, description: description))
+            case .viewInRoomTimeline(let eventID):
+                actionsSubject.send(.displayRoomScreenWithFocussedPin(eventID: eventID))
+            // These other actions will not be handled in this view
+            case .displayEmojiPicker, .displayReportContent, .displayCameraPicker, .displayMediaPicker, .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediaUploadPreviewScreen, .composer, .hasScrolled:
+                // These actions are not handled in this coordinator
+                break
             }
         }
         .store(in: &cancellables)
