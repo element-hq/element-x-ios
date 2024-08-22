@@ -55,7 +55,7 @@ struct PinnedItemsBannerView: View {
     @ViewBuilder
     private var viewAllButton: some View {
         Button { onViewAllButtonTap() } label: {
-            Text(L10n.screenRoomPinnedBannerViewAllButtonTitle)
+            Text(state.isLoading ? "" : L10n.screenRoomPinnedBannerViewAllButtonTitle)
                 .font(.compound.bodyMDSemibold)
                 .foregroundStyle(Color.compound.textPrimary)
                 .opacity(state.isLoading ? 0 : 1)
