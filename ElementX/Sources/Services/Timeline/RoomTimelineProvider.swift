@@ -42,7 +42,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             .eraseToAnyPublisher()
     }
     
-    private(set) var isLive: Bool
+    let kind: TimelineKind
     
     private let membershipChangeSubject = PassthroughSubject<Void, Never>()
     var membershipChangePublisher: AnyPublisher<Void, Never> {
@@ -54,10 +54,10 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         roomTimelineObservationToken?.cancel()
     }
 
-    init(timeline: Timeline, isLive: Bool, paginationStatePublisher: AnyPublisher<PaginationState, Never>) {
+    init(timeline: Timeline, kind: TimelineKind, paginationStatePublisher: AnyPublisher<PaginationState, Never>) {
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         itemProxiesSubject = CurrentValueSubject<[TimelineItemProxy], Never>([])
-        self.isLive = isLive
+        self.kind = kind
         
         paginationStatePublisher
             .sink { [weak self] in

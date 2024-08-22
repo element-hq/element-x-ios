@@ -11910,11 +11910,11 @@ class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
         set(value) { underlyingPaginationState = value }
     }
     var underlyingPaginationState: PaginationState!
-    var isLive: Bool {
-        get { return underlyingIsLive }
-        set(value) { underlyingIsLive = value }
+    var kind: TimelineKind {
+        get { return underlyingKind }
+        set(value) { underlyingKind = value }
     }
-    var underlyingIsLive: Bool!
+    var underlyingKind: TimelineKind!
     var membershipChangePublisher: AnyPublisher<Void, Never> {
         get { return underlyingMembershipChangePublisher }
         set(value) { underlyingMembershipChangePublisher = value }
@@ -12590,6 +12590,11 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
     }
 }
 class TimelineProxyMock: TimelineProxyProtocol {
+    var kind: TimelineKind {
+        get { return underlyingKind }
+        set(value) { underlyingKind = value }
+    }
+    var underlyingKind: TimelineKind!
     var timelineProvider: RoomTimelineProviderProtocol {
         get { return underlyingTimelineProvider }
         set(value) { underlyingTimelineProvider = value }

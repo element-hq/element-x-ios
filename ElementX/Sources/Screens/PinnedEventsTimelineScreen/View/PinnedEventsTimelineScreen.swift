@@ -95,11 +95,10 @@ struct PinnedEventsTimelineScreen: View {
 struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = PinnedEventsTimelineScreenViewModel()
     static let emptyTimelineViewModel: TimelineViewModel = {
-        let timelineController = MockRoomTimelineController()
+        let timelineController = MockRoomTimelineController(timelineKind: .pinned)
         timelineController.timelineItems = []
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                  timelineController: timelineController,
-                                 isPinnedEventsTimeline: true,
                                  mediaProvider: MockMediaProvider(),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  voiceMessageMediaManager: VoiceMessageMediaManagerMock(),

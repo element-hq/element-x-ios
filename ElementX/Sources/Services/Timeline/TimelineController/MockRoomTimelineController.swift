@@ -28,6 +28,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     var roomProxy: JoinedRoomProxyProtocol?
     var roomID: String { roomProxy?.id ?? "MockRoomIdentifier" }
+    var timelineKind: TimelineKind
     
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
@@ -36,7 +37,8 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     private var client: UITestsSignalling.Client?
     
-    init(listenForSignals: Bool = false) {
+    init(timelineKind: TimelineKind = .live, listenForSignals: Bool = false) {
+        self.timelineKind = timelineKind
         callbacks.send(.paginationState(PaginationState(backward: .idle, forward: .timelineEndReached)))
         callbacks.send(.isLive(true))
         

@@ -79,7 +79,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                               focussedEventID: parameters.focussedEvent?.eventID,
                                               timelineController: parameters.timelineController,
-                                              isPinnedEventsTimeline: false,
                                               mediaProvider: parameters.mediaProvider,
                                               mediaPlayerProvider: parameters.mediaPlayerProvider,
                                               voiceMessageMediaManager: parameters.voiceMessageMediaManager,

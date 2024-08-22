@@ -18,6 +18,12 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
+enum TimelineKind {
+    case live
+    case detached
+    case pinned
+}
+
 enum TimelineProxyError: Error {
     case sdkError(Error)
     
@@ -28,6 +34,8 @@ enum TimelineProxyError: Error {
 
 // sourcery: AutoMockable
 protocol TimelineProxyProtocol {
+    var kind: TimelineKind { get }
+    
     var timelineProvider: RoomTimelineProviderProtocol { get }
     
     func subscribeForUpdates() async

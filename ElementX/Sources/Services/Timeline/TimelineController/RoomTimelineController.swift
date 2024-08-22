@@ -25,7 +25,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let appSettings: AppSettings
     private let serialDispatchQueue: DispatchQueue
-    private let shouldHideStart: Bool
     
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
@@ -42,17 +41,19 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         roomProxy.id
     }
     
+    var timelineKind: TimelineKind {
+        liveTimelineProvider.kind
+    }
+    
     init(roomProxy: JoinedRoomProxyProtocol,
          timelineProxy: TimelineProxyProtocol,
          initialFocussedEventID: String?,
-         shouldHideStart: Bool,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          appSettings: AppSettings) {
         self.roomProxy = roomProxy
         liveTimelineProvider = timelineProxy.timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.appSettings = appSettings
-        self.shouldHideStart = shouldHideStart
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         
         activeTimeline = timelineProxy
@@ -312,7 +313,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         
         // Inform the world that the initial items are loading from the store
         callbacks.send(.paginationState(.init(backward: .paginating, forward: .paginating)))
-        callbacks.send(.isLive(activeTimelineProvider.isLive))
+        callbacks.send(.isLive(activeTimelineProvider.kind == .live))
         
         updateTimelineItemsCancellable = activeTimelineProvider
             .updatePublisher
@@ -367,7 +368,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         // Check if we need to add anything to the top of the timeline.
         switch paginationState.backward {
         case .timelineEndReached:
-            if !shouldHideStart, !roomProxy.isEncryptedOneToOneRoom {
+            if timelineKind != .pinned, !roomProxy.isEncryptedOneToOneRoom {
                 let timelineStart = TimelineStartRoomTimelineItem(name: roomProxy.name)
                 newTimelineItems.insert(timelineStart, at: 0)
             }

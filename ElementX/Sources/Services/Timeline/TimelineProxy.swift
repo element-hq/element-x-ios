@@ -27,7 +27,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     private let backPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
     private let forwardPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
     
-    let isLive: Bool
+    let kind: TimelineKind
    
     private var innerTimelineProvider: RoomTimelineProviderProtocol!
     var timelineProvider: RoomTimelineProviderProtocol {
@@ -38,9 +38,9 @@ final class TimelineProxy: TimelineProxyProtocol {
         backPaginationStatusObservationToken?.cancel()
     }
     
-    init(timeline: Timeline, isLive: Bool) {
+    init(timeline: Timeline, kind: TimelineKind) {
         self.timeline = timeline
-        self.isLive = isLive
+        self.kind = kind
     }
     
     func subscribeForUpdates() async {
@@ -56,7 +56,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         await subscribeToPagination()
         
-        let provider = await RoomTimelineProvider(timeline: timeline, isLive: isLive, paginationStatePublisher: paginationStatePublisher)
+        let provider = await RoomTimelineProvider(timeline: timeline, kind: kind, paginationStatePublisher: paginationStatePublisher)
         // Make sure the existing items are built so that we have content in the timeline before
         // determining whether or not the timeline should paginate to load more items.
         await provider.waitForInitialItems()
@@ -84,10 +84,13 @@ final class TimelineProxy: TimelineProxyProtocol {
         // We can't subscribe to back pagination on detached timelines and as live timelines
         // can be shared between multiple instances of the same room on the stack, it is
         // safer to still use the subscription logic for back pagination when live.
-        await if isLive {
-            paginateBackwardsOnLive(requestSize: requestSize)
-        } else {
-            focussedPaginate(.backwards, requestSize: requestSize)
+        switch kind {
+        case .live:
+            return await paginateBackwardsOnLive(requestSize: requestSize)
+        case .detached:
+            return await focussedPaginate(.backwards, requestSize: requestSize)
+        case .pinned:
+            return .success(())
         }
     }
     
@@ -538,7 +541,8 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     private func subscribeToPagination() async {
-        if isLive {
+        switch kind {
+        case .live:
             let backPaginationListener = RoomPaginationStatusListener { [weak self] status in
                 guard let self else {
                     return
@@ -557,13 +561,14 @@ final class TimelineProxy: TimelineProxyProtocol {
             } catch {
                 MXLog.error("Failed to subscribe to back pagination status with error: \(error)")
             }
-        } else {
+        case .detached:
             // Detached timelines don't support observation, set the initial state ourself.
             backPaginationStatusSubject.send(.idle)
+            forwardPaginationStatusSubject.send(.idle)
+        case .pinned:
+            backPaginationStatusSubject.send(.timelineEndReached)
+            forwardPaginationStatusSubject.send(.timelineEndReached)
         }
-        
-        // Detached timelines don't support observation, set the initial state ourself.
-        forwardPaginationStatusSubject.send(isLive ? .timelineEndReached : .idle)
     }
 }
 
