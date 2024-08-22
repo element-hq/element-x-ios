@@ -208,6 +208,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let ongoingCallRoomIDSubject = CurrentValueSubject<String?, Never>(nil)
         let roomProxyMock = JoinedRoomProxyMock(.init(id: "MyRoomID"))
         let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
+                                            initialSelectedPinEventID: nil,
                                             mediaProvider: MockMediaProvider(),
                                             ongoingCallRoomIDPublisher: ongoingCallRoomIDSubject.asCurrentValuePublisher(),
                                             appMediator: AppMediatorMock.default,
