@@ -28,7 +28,6 @@ class PillContextTests: XCTestCase {
         proxyMock.membersPublisher = subject.asCurrentValuePublisher()
         let mock = TimelineViewModel(roomProxy: proxyMock,
                                      timelineController: MockRoomTimelineController(),
-                                     isPinnedEventsTimeline: false,
                                      mediaProvider: MockMediaProvider(),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
@@ -57,7 +56,6 @@ class PillContextTests: XCTestCase {
         proxyMock.membersPublisher = subject.asCurrentValuePublisher()
         let mock = TimelineViewModel(roomProxy: proxyMock,
                                      timelineController: MockRoomTimelineController(),
-                                     isPinnedEventsTimeline: false,
                                      mediaProvider: MockMediaProvider(),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
@@ -79,7 +77,6 @@ class PillContextTests: XCTestCase {
         mockController.roomProxy = proxyMock
         let mock = TimelineViewModel(roomProxy: proxyMock,
                                      timelineController: mockController,
-                                     isPinnedEventsTimeline: false,
                                      mediaProvider: MockMediaProvider(),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock(),

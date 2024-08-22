@@ -38,6 +38,7 @@ enum RoomTimelineControllerError: Error {
 @MainActor
 protocol RoomTimelineControllerProtocol {
     var roomID: String { get }
+    var timelineKind: TimelineKind { get }
     
     var timelineItems: [RoomTimelineItemProtocol] { get }
     var callbacks: PassthroughSubject<RoomTimelineControllerCallback, Never> { get }

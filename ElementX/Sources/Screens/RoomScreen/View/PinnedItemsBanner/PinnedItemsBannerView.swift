@@ -54,19 +54,20 @@ struct PinnedItemsBannerView: View {
     
     @ViewBuilder
     private var viewAllButton: some View {
-        switch state {
-        case .loaded:
-            Button { onViewAllButtonTap() } label: {
-                Text(L10n.screenRoomPinnedBannerViewAllButtonTitle)
-                    .font(.compound.bodyMDSemibold)
-                    .foregroundStyle(Color.compound.textPrimary)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 5)
-            }
-        case .loading:
-            ProgressView()
+        Button { onViewAllButtonTap() } label: {
+            Text(state.isLoading ? "" : L10n.screenRoomPinnedBannerViewAllButtonTitle)
+                .font(.compound.bodyMDSemibold)
+                .foregroundStyle(Color.compound.textPrimary)
+                .opacity(state.isLoading ? 0 : 1)
+                // Use overlay instead otherwise the sliding animation would not work
+                .overlay(alignment: .trailing) {
+                    ProgressView()
+                        .opacity(state.isLoading ? 1 : 0)
+                }
                 .padding(.horizontal, 16)
+                .padding(.vertical, 5)
         }
+        .disabled(state.isLoading)
     }
     
     private var content: some View {

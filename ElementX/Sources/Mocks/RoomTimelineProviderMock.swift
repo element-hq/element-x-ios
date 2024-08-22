@@ -35,7 +35,7 @@ class AutoUpdatingRoomTimelineProviderMock: RoomTimelineProvider {
         }
         
         super.init(timeline: timelineMock,
-                   isLive: true,
+                   kind: .live,
                    paginationStatePublisher: innerPaginationStatePublisher.eraseToAnyPublisher())
         
         Task.detached {

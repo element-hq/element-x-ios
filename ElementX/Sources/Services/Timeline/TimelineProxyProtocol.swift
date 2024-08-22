@@ -18,6 +18,12 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
+enum TimelineKind {
+    case live
+    case detached
+    case pinned
+}
+
 enum TimelineProxyError: Error {
     case sdkError(Error)
     

@@ -52,7 +52,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     init(roomProxy: JoinedRoomProxyProtocol,
          focussedEventID: String? = nil,
          timelineController: RoomTimelineControllerProtocol,
-         isPinnedEventsTimeline: Bool,
          mediaProvider: MediaProviderProtocol,
          mediaPlayerProvider: MediaPlayerProviderProtocol,
          voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
@@ -81,7 +80,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                                 appSettings: appSettings,
                                                                 analyticsService: analyticsService)
         
-        super.init(initialViewState: TimelineViewState(isPinnedEventsTimeline: isPinnedEventsTimeline,
+        super.init(initialViewState: TimelineViewState(isPinnedEventsTimeline: timelineController.timelineKind == .pinned,
                                                        roomID: roomProxy.id,
                                                        isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
                                                        timelineViewState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
@@ -827,7 +826,6 @@ extension TimelineViewModel {
     static let mock = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                         focussedEventID: nil,
                                         timelineController: MockRoomTimelineController(),
-                                        isPinnedEventsTimeline: false,
                                         mediaProvider: MockMediaProvider(),
                                         mediaPlayerProvider: MediaPlayerProviderMock(),
                                         voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
@@ -838,8 +836,7 @@ extension TimelineViewModel {
     
     static let pinnedEventsTimelineMock = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                                             focussedEventID: nil,
-                                                            timelineController: MockRoomTimelineController(),
-                                                            isPinnedEventsTimeline: true,
+                                                            timelineController: MockRoomTimelineController(timelineKind: .pinned),
                                                             mediaProvider: MockMediaProvider(),
                                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),

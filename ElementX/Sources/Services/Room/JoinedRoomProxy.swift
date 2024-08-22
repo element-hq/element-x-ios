@@ -44,7 +44,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                     }
                     
                     do {
-                        let timeline = try await TimelineProxy(timeline: room.pinnedEventsTimeline(internalIdPrefix: nil, maxEventsToLoad: 100), isLive: true)
+                        let timeline = try await TimelineProxy(timeline: room.pinnedEventsTimeline(internalIdPrefix: nil, maxEventsToLoad: 100), kind: .pinned)
                         await timeline.subscribeForUpdates()
                         innerPinnedEventsTimeline = timeline
                         return timeline
@@ -172,7 +172,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         self.roomListItem = roomListItem
         self.room = room
         
-        timeline = try await TimelineProxy(timeline: room.timeline(), isLive: true)
+        timeline = try await TimelineProxy(timeline: room.timeline(), kind: .live)
         
         Task {
             await updateMembers()
@@ -216,7 +216,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError> {
         do {
             let timeline = try await room.timelineFocusedOnEvent(eventId: eventID, numContextEvents: numberOfEvents, internalIdPrefix: UUID().uuidString)
-            return .success(TimelineProxy(timeline: timeline, isLive: false))
+            return .success(TimelineProxy(timeline: timeline, kind: .detached))
         } catch let error as FocusEventError {
             switch error {
             case .InvalidEventId(_, let error):
