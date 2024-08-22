@@ -12590,11 +12590,6 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
     }
 }
 class TimelineProxyMock: TimelineProxyProtocol {
-    var kind: TimelineKind {
-        get { return underlyingKind }
-        set(value) { underlyingKind = value }
-    }
-    var underlyingKind: TimelineKind!
     var timelineProvider: RoomTimelineProviderProtocol {
         get { return underlyingTimelineProvider }
         set(value) { underlyingTimelineProvider = value }

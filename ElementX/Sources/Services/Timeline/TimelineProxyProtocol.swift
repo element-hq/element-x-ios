@@ -34,8 +34,6 @@ enum TimelineProxyError: Error {
 
 // sourcery: AutoMockable
 protocol TimelineProxyProtocol {
-    var kind: TimelineKind { get }
-    
     var timelineProvider: RoomTimelineProviderProtocol { get }
     
     func subscribeForUpdates() async

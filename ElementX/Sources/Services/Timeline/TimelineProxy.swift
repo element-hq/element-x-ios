@@ -27,7 +27,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     private let backPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
     private let forwardPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
     
-    let kind: TimelineKind
+    private let kind: TimelineKind
    
     private var innerTimelineProvider: RoomTimelineProviderProtocol!
     var timelineProvider: RoomTimelineProviderProtocol {
