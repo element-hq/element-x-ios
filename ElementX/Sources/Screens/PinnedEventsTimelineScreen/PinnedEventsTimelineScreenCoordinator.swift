@@ -89,7 +89,7 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.displayRoomScreenWithFocussedPin(eventID: eventID))
             // These other actions will not be handled in this view
             case .displayEmojiPicker, .displayReportContent, .displayCameraPicker, .displayMediaPicker, .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediaUploadPreviewScreen, .composer, .hasScrolled:
-                break
+                fatalError("The action: \(action) should not be handled in this coordinator")
             }
         }
         .store(in: &cancellables)

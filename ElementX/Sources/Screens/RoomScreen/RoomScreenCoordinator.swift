@@ -21,7 +21,7 @@ import WysiwygComposer
 
 struct RoomScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
-    var focusEvent: FocusEvent?
+    var focussedEvent: FocusEvent?
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
@@ -63,13 +63,13 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: RoomScreenCoordinatorParameters) {
-        var selectedPinEventID: String?
-        if let focusEvent = parameters.focusEvent {
-            selectedPinEventID = focusEvent.shouldSetPin ? focusEvent.eventID : nil
+        var selectedPinnedEventID: String?
+        if let focussedEvent = parameters.focussedEvent {
+            selectedPinnedEventID = focussedEvent.shouldSetPin ? focussedEvent.eventID : nil
         }
         
         roomViewModel = RoomScreenViewModel(roomProxy: parameters.roomProxy,
-                                            initialSelectedPinEventID: selectedPinEventID,
+                                            initialSelectedPinnedEventID: selectedPinnedEventID,
                                             mediaProvider: parameters.mediaProvider,
                                             ongoingCallRoomIDPublisher: parameters.ongoingCallRoomIDPublisher,
                                             appMediator: parameters.appMediator,
@@ -77,7 +77,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                             analyticsService: ServiceLocator.shared.analytics)
         
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
-                                              focussedEventID: parameters.focusEvent?.eventID,
+                                              focussedEventID: parameters.focussedEvent?.eventID,
                                               timelineController: parameters.timelineController,
                                               isPinnedEventsTimeline: false,
                                               mediaProvider: parameters.mediaProvider,
@@ -141,8 +141,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 case .hasScrolled(direction: let direction):
                     roomViewModel.timelineHasScrolled(direction: direction)
                 case .viewInRoomTimeline:
-                    // Not handled in this screen
-                    break
+                    fatalError("The action: \(action) should not be handled in this coordinator")
                 }
             }
             .store(in: &cancellables)
@@ -161,7 +160,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 
                 switch actions {
                 case .focusEvent(eventID: let eventID):
-                    focusOnEvent(focusEvent: FocusEvent(eventID: eventID, shouldSetPin: false))
+                    focusOnEvent(FocusEvent(eventID: eventID, shouldSetPin: false))
                 case .displayPinnedEventsTimeline:
                     actionsSubject.send(.presentPinnedEventsTimeline)
                 case .displayRoomDetails:
@@ -178,10 +177,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         composerViewModel.loadDraft()
     }
     
-    func focusOnEvent(focusEvent: FocusEvent) {
-        let eventID = focusEvent.eventID
-        if focusEvent.shouldSetPin {
-            roomViewModel.setSelectedPinEventID(eventID)
+    func focusOnEvent(_ focussedEvent: FocusEvent) {
+        let eventID = focussedEvent.eventID
+        if focussedEvent.shouldSetPin {
+            roomViewModel.setSelectedPinnedEventID(eventID)
         }
         Task { await timelineViewModel.focusOnEvent(eventID: eventID) }
     }

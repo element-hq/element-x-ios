@@ -446,7 +446,7 @@ class MockScreen: Identifiable {
                 let client = try UITestsSignalling.Client(mode: .app)
                 client.signals.sink { [weak self] signal in
                     guard case .timeline(.focusOnEvent(let eventID)) = signal else { return }
-                    coordinator.focusOnEvent(focusEvent: .init(eventID: eventID, shouldSetPin: false))
+                    coordinator.focusOnEvent(.init(eventID: eventID, shouldSetPin: false))
                     try? client.send(.success)
                 }
                 .store(in: &cancellables)

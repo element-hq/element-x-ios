@@ -27,7 +27,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
     private let pinnedEventStringBuilder: RoomEventStringBuilder
-    private var initialSelectedPinEventID: String?
+    private var initialSelectedPinnedEventID: String?
     
     private let actionsSubject: PassthroughSubject<RoomScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<RoomScreenViewModelAction, Never> {
@@ -53,7 +53,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     init(roomProxy: JoinedRoomProxyProtocol,
-         initialSelectedPinEventID: String?,
+         initialSelectedPinnedEventID: String?,
          mediaProvider: MediaProviderProtocol,
          ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>,
          appMediator: AppMediatorProtocol,
@@ -63,7 +63,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.appMediator = appMediator
         self.appSettings = appSettings
         self.analyticsService = analyticsService
-        self.initialSelectedPinEventID = initialSelectedPinEventID
+        self.initialSelectedPinnedEventID = initialSelectedPinnedEventID
         pinnedEventStringBuilder = .pinnedEventStringBuilder(userID: roomProxy.ownUserID)
 
         super.init(initialViewState: .init(roomTitle: roomProxy.roomTitle,
@@ -82,7 +82,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     override func process(viewAction: RoomScreenViewAction) {
         switch viewAction {
         case .tappedPinnedEventsBanner:
-            if let eventID = state.pinnedEventsBannerState.selectedPinEventID {
+            if let eventID = state.pinnedEventsBannerState.selectedPinnedEventID {
                 actionsSubject.send(.focusEvent(eventID: eventID))
             }
             state.pinnedEventsBannerState.previousPin()
@@ -101,8 +101,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         state.lastScrollDirection = direction
     }
     
-    func setSelectedPinEventID(_ eventID: String) {
-        state.pinnedEventsBannerState.setSelectedPinEventID(eventID)
+    func setSelectedPinnedEventID(_ eventID: String) {
+        state.pinnedEventsBannerState.setSelectedPinnedEventID(eventID)
     }
     
     private func setupSubscriptions(ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>) {
@@ -169,10 +169,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         state.pinnedEventsBannerState.setPinnedEventContents(pinnedEventContents)
         
-        // If is the first time we are setting the pinned events, we should select the initial event if available.
-        if let initialSelectedPinEventID {
-            state.pinnedEventsBannerState.setSelectedPinEventID(initialSelectedPinEventID)
-            self.initialSelectedPinEventID = nil
+        // If it's the first time we are setting the pinned events, we should select the initial event if available.
+        if let initialSelectedPinnedEventID {
+            state.pinnedEventsBannerState.setSelectedPinnedEventID(initialSelectedPinnedEventID)
+            self.initialSelectedPinnedEventID = nil
         }
     }
     
@@ -209,7 +209,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 extension RoomScreenViewModel {
     static func mock(roomProxyMock: JoinedRoomProxyMock) -> RoomScreenViewModel {
         RoomScreenViewModel(roomProxy: roomProxyMock,
-                            initialSelectedPinEventID: nil,
+                            initialSelectedPinnedEventID: nil,
                             mediaProvider: MockMediaProvider(),
                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                             appMediator: AppMediatorMock.default,

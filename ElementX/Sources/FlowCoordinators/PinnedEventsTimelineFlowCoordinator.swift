@@ -20,7 +20,7 @@ import Foundation
 enum PinnedEventsTimelineFlowCoordinatorAction {
     case finished
     case displayUser(userID: String)
-    case startChildRoomFlow(roomID: String)
+    case forwardedMessageToRoom(roomID: String)
     case displayRoomScreenWithFocussedPin(eventID: String)
 }
 
@@ -149,7 +149,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                 navigationStackCoordinator.setSheetCoordinator(nil)
             case .sent(let roomID):
                 navigationStackCoordinator.setSheetCoordinator(nil)
-                actionsSubject.send(.startChildRoomFlow(roomID: roomID))
+                actionsSubject.send(.forwardedMessageToRoom(roomID: roomID))
             }
         }
         .store(in: &cancellables)
