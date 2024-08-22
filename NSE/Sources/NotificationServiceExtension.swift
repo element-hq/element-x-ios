@@ -59,8 +59,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
         guard !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory),
-              let roomId = request.roomId,
-              let eventId = request.eventId,
+              let roomID = request.roomID,
+              let eventID = request.eventID,
               let clientID = request.pusherNotificationClientIdentifier,
               let credentials = keychainController.restorationTokens().first(where: { $0.restorationToken.pusherNotificationClientIdentifier == clientID }) else {
             // We cannot process this notification, it might be due to one of these:
@@ -103,8 +103,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
         Task {
             await run(with: credentials,
-                      roomId: roomId,
-                      eventId: eventId,
+                      roomID: roomID,
+                      eventID: eventID,
                       unreadCount: request.unreadCount)
         }
     }
@@ -117,10 +117,10 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     }
 
     private func run(with credentials: KeychainCredentials,
-                     roomId: String,
-                     eventId: String,
+                     roomID: String,
+                     eventID: String,
                      unreadCount: Int?) async {
-        MXLog.info("\(tag) run with roomId: \(roomId), eventId: \(eventId)")
+        MXLog.info("\(tag) run with roomId: \(roomID), eventId: \(eventID)")
         
         guard let userSession = Self.userSession else {
             MXLog.error("Invalid NSE User Session, discarding.")
@@ -128,12 +128,16 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         }
 
         do {
-            guard let itemProxy = await userSession.notificationItemProxy(roomID: roomId, eventID: eventId) else {
+            guard let itemProxy = await userSession.notificationItemProxy(roomID: roomID, eventID: eventID) else {
                 MXLog.info("\(tag) no notification for the event, discard")
                 return discard(unreadCount: unreadCount)
             }
             
             guard await shouldHandleCallNotification(itemProxy) else {
+                return discard(unreadCount: unreadCount)
+            }
+            
+            if await handleRedactionNotification(itemProxy) {
                 return discard(unreadCount: unreadCount)
             }
             
@@ -245,6 +249,29 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         }
         
         return false
+    }
+    
+    /// Handles a notification for an `m.room.redaction` event.
+    /// - Returns: A boolean indicating whether the notification was handled.
+    private func handleRedactionNotification(_ itemProxy: NotificationItemProxyProtocol) async -> Bool {
+        guard case let .timeline(event) = itemProxy.event,
+              case let .messageLike(content) = try? event.eventType(),
+              case let .roomRedaction(redactedEventID, _) = content else {
+            return false
+        }
+        
+        guard let redactedEventID else {
+            MXLog.error("Unable to redact notification due to missing event ID.")
+            return true // Return true as there's no point showing this notification.
+        }
+        
+        let deliveredNotifications = await UNUserNotificationCenter.current().deliveredNotifications()
+        
+        if let targetNotification = deliveredNotifications.first(where: { $0.request.content.eventID == redactedEventID }) {
+            UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [targetNotification.request.identifier])
+        }
+        
+        return true
     }
 }
 
