@@ -18,11 +18,11 @@ import Foundation
 import UserNotifications
 
 extension UNNotificationRequest {
-    var roomId: String? {
+    var roomID: String? {
         content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String
     }
 
-    var eventId: String? {
+    var eventID: String? {
         content.userInfo[NotificationConstants.UserInfoKey.eventIdentifier] as? String
     }
 
