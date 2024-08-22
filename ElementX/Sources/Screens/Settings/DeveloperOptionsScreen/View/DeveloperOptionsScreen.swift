@@ -19,7 +19,12 @@ import SwiftUI
 struct DeveloperOptionsScreen: View {
     @ObservedObject var context: DeveloperOptionsScreenViewModel.Context
     @State private var showConfetti = false
-    @State private var elementCallBaseURLString = ""
+    @State private var elementCallURLOverrideString: String
+    
+    init(context: DeveloperOptionsScreenViewModel.Context) {
+        self.context = context
+        elementCallURLOverrideString = context.elementCallBaseURLOverride?.absoluteString ?? ""
+    }
     
     var body: some View {
         Form {
@@ -50,22 +55,29 @@ struct DeveloperOptionsScreen: View {
                     Text("Fuzzy searching")
                 }
             }
-                                    
-            Section("Element Call") {
-                TextField(context.viewState.elementCallBaseURL.absoluteString, text: $elementCallBaseURLString)
-                    .submitLabel(.done)
-                    .onSubmit {
-                        guard let url = URL(string: elementCallBaseURLString) else { return }
-                        context.elementCallBaseURLOverride = url
-                    }
+            
+            Section {
+                TextField(context.viewState.elementCallBaseURL.absoluteString, text: $elementCallURLOverrideString)
                     .autocorrectionDisabled(true)
                     .autocapitalization(.none)
-                    .foregroundColor(URL(string: elementCallBaseURLString) == nil ? .red : .primary)
+                    .foregroundColor(URL(string: elementCallURLOverrideString) == nil ? .red : .primary)
+                    .submitLabel(.done)
+                    .onSubmit {
+                        if elementCallURLOverrideString.isEmpty {
+                            context.elementCallBaseURLOverride = nil
+                        } else if let url = URL(string: elementCallURLOverrideString) {
+                            context.elementCallBaseURLOverride = url
+                        }
+                    }
                 
                 Toggle(isOn: $context.elementCallPictureInPictureEnabled) {
                     Text("Picture in Picture support")
                     Text("Requires an Element Call deployment with support for signalling PiP availability.")
                 }
+            } header: {
+                Text("Element Call")
+            } footer: {
+                Text("The default call URL may be overridden by your homeserver.")
             }
             
             Section {
