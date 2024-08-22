@@ -77,7 +77,9 @@ struct DeveloperOptionsScreen: View {
             } header: {
                 Text("Element Call")
             } footer: {
-                Text("The default call URL may be overridden by your homeserver.")
+                if context.elementCallBaseURLOverride == nil {
+                    Text("The call URL may be overridden by your homeserver.")
+                }
             }
             
             Section {
