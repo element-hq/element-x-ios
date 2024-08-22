@@ -126,6 +126,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
                                             initialSelectedPinEventID: "test1",
                                             mediaProvider: MockMediaProvider(),
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
                                             analyticsService: ServiceLocator.shared.analytics)
