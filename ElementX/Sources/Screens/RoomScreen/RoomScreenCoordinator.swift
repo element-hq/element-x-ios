@@ -141,7 +141,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 case .hasScrolled(direction: let direction):
                     roomViewModel.timelineHasScrolled(direction: direction)
                 case .viewInRoomTimeline:
-                    fatalError("The action: \(action) should not be handled in this coordinator")
+                    fatalError("The action: \(action) should not be sent to this coordinator")
                 }
             }
             .store(in: &cancellables)
