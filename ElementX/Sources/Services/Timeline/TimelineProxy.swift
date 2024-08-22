@@ -95,7 +95,10 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
-        await focussedPaginate(.forwards, requestSize: requestSize)
+        guard kind != .pinned else {
+            return .success(())
+        }
+        return await focussedPaginate(.forwards, requestSize: requestSize)
     }
     
     /// Paginate backwards using the subscription from Rust to drive the pagination state.
@@ -561,6 +564,7 @@ final class TimelineProxy: TimelineProxyProtocol {
             } catch {
                 MXLog.error("Failed to subscribe to back pagination status with error: \(error)")
             }
+            forwardPaginationStatusSubject.send(.timelineEndReached)
         case .detached:
             // Detached timelines don't support observation, set the initial state ourself.
             backPaginationStatusSubject.send(.idle)
