@@ -559,7 +559,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             fatalError("Only events can have send info.")
         }
         
-        if eventTimelineItem.properties.deliveryStatus == .sendingFailed {
+        if case .sendingFailed = eventTimelineItem.properties.deliveryStatus {
+            // In the future we will show different errors for the various failure reasons.
             displayAlert(.sendingFailed)
         } else if let authenticityMessage = eventTimelineItem.properties.encryptionAuthenticity?.message {
             displayAlert(.encryptionAuthenticity(authenticityMessage))

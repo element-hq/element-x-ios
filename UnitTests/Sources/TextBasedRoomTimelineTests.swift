@@ -70,7 +70,7 @@ final class TextBasedRoomTimelineTests: XCTestCase {
                                                 sender: .init(id: UUID().uuidString),
                                                 content: .init(body: "Test"))
         timelineItem.properties.isEdited = true
-        timelineItem.properties.deliveryStatus = .sendingFailed
+        timelineItem.properties.deliveryStatus = .sendingFailed(.unknown)
         let editedCount = L10n.commonEditedSuffix.count
         XCTAssertEqual(timelineItem.additionalWhitespaces(), timestamp.count + editedCount + 5)
     }

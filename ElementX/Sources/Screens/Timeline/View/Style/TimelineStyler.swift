@@ -35,11 +35,13 @@ struct TimelineStyler<Content: View>: View {
     var body: some View {
         mainContent
             .onChange(of: timelineItem.properties.deliveryStatus) { newStatus in
-                if newStatus == .sendingFailed {
+                if case .sendingFailed = newStatus {
                     guard task == nil else {
                         return
                     }
                     task = Task {
+                        // Add a short delay so that an immediate failure when retrying
+                        // shows as sending for long enough to be visible to the user.
                         try? await Task.sleep(for: .milliseconds(700))
                         if !Task.isCancelled {
                             adjustedDeliveryStatus = newStatus
@@ -101,7 +103,7 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
 
     static let failed: TextRoomTimelineItem = {
         var result = base
-        result.properties.deliveryStatus = .sendingFailed
+        result.properties.deliveryStatus = .sendingFailed(.unknown)
         return result
     }()
 

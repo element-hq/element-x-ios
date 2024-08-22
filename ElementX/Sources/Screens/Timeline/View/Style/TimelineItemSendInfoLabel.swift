@@ -150,7 +150,7 @@ private extension TimelineItemSendInfo {
         itemID = timelineItem.id
         localizedString = timelineItem.localizedSendInfo
         
-        status = if adjustedDeliveryStatus == .sendingFailed {
+        status = if case .sendingFailed = adjustedDeliveryStatus {
             .sendingFailed
         } else if let authenticity = timelineItem.properties.encryptionAuthenticity {
             .encryptionAuthenticity(authenticity)
