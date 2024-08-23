@@ -28,6 +28,7 @@ enum EncryptionAuthenticity: Hashable {
     case unknownDevice(color: Color)
     case unsignedDevice(color: Color)
     case unverifiedIdentity(color: Color)
+    case previouslyVerified(color: Color)
     case sentInClear(color: Color)
     
     var message: String {
@@ -40,6 +41,8 @@ enum EncryptionAuthenticity: Hashable {
             L10n.eventShieldReasonUnsignedDevice
         case .unverifiedIdentity:
             L10n.eventShieldReasonUnverifiedIdentity
+        case .previouslyVerified:
+            L10n.eventShieldReasonPreviouslyVerified
         case .sentInClear:
             L10n.eventShieldReasonSentInClear
         }
@@ -51,6 +54,7 @@ enum EncryptionAuthenticity: Hashable {
              .unknownDevice(let color),
              .unsignedDevice(let color),
              .unverifiedIdentity(let color),
+             .previouslyVerified(let color),
              .sentInClear(let color):
             color
         }
@@ -59,7 +63,7 @@ enum EncryptionAuthenticity: Hashable {
     var icon: KeyPath<CompoundIcons, Image> {
         switch self {
         case .notGuaranteed: \.info
-        case .unknownDevice, .unsignedDevice, .unverifiedIdentity: \.helpSolid
+        case .unknownDevice, .unsignedDevice, .unverifiedIdentity, .previouslyVerified: \.helpSolid
         case .sentInClear: \.lockOff
         }
     }
@@ -87,6 +91,8 @@ extension EncryptionAuthenticity {
             self = .unsignedDevice(color: color)
         case .unverifiedIdentity:
             self = .unverifiedIdentity(color: color)
+        case .previouslyVerified:
+            self = .previouslyVerified(color: color)
         case .sentInClear:
             self = .sentInClear(color: color)
         }
