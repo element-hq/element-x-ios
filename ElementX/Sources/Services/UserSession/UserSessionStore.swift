@@ -64,7 +64,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             
             // On any restoration failure reset the token and restart
             keychainController.removeRestorationTokenForUsername(credentials.userID)
-            deleteSessionDirectory(for: credentials)
+            deleteSessionDirectories(for: credentials)
             
             return .failure(error)
         }
@@ -96,7 +96,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         keychainController.removeRestorationTokenForUsername(userID)
         
         if let credentials {
-            deleteSessionDirectory(for: credentials)
+            deleteSessionDirectories(for: credentials)
         }
     }
     
@@ -158,22 +158,36 @@ class UserSessionStore: UserSessionStoreProtocol {
                           appSettings: appSettings)
     }
     
-    private func deleteSessionDirectory(for credentials: KeychainCredentials) {
+    private func deleteSessionDirectories(for credentials: KeychainCredentials) {
         do {
             try FileManager.default.removeItem(at: credentials.restorationToken.sessionDirectory)
         } catch {
             MXLog.failure("Failed deleting the session data: \(error)")
         }
+        do {
+            try FileManager.default.removeItem(at: credentials.restorationToken.cacheDirectory)
+        } catch {
+            MXLog.failure("Failed deleting the session caches: \(error)")
+        }
     }
     
     private func deleteCaches(for credentials: KeychainCredentials) {
         do {
-            let sessionDirectoryContents = try FileManager.default.contentsOfDirectory(at: credentials.restorationToken.sessionDirectory, includingPropertiesForKeys: nil)
-            for url in sessionDirectoryContents where url.path.contains(matrixSDKStateKey) {
-                try FileManager.default.removeItem(at: url)
-            }
+            try deleteContentsOfDirectory(at: credentials.restorationToken.sessionDirectory)
         } catch {
-            MXLog.failure("Failed clearing caches: \(error)")
+            MXLog.failure("Failed clearing state store: \(error)")
+        }
+        do {
+            try deleteContentsOfDirectory(at: credentials.restorationToken.cacheDirectory)
+        } catch {
+            MXLog.failure("Failed clearing event cache store: \(error)")
+        }
+    }
+    
+    private func deleteContentsOfDirectory(at url: URL) throws {
+        let sessionDirectoryContents = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)
+        for url in sessionDirectoryContents where url.path.contains(matrixSDKStateKey) {
+            try FileManager.default.removeItem(at: url)
         }
     }
 }
