@@ -70,14 +70,15 @@ class UserSessionStore: UserSessionStoreProtocol {
         }
     }
     
-    func userSession(for client: Client, sessionDirectory: URL, passphrase: String?) async -> Result<UserSessionProtocol, UserSessionStoreError> {
+    func userSession(for client: Client, sessionDirectories: SessionDirectories, passphrase: String?) async -> Result<UserSessionProtocol, UserSessionStoreError> {
         do {
             let session = try client.session()
             let userID = try client.userId()
             let clientProxy = await setupProxyForClient(client)
             
             keychainController.setRestorationToken(RestorationToken(session: session,
-                                                                    sessionDirectory: sessionDirectory,
+                                                                    sessionDirectory: sessionDirectories.dataDirectory,
+                                                                    cacheDirectory: sessionDirectories.cacheDirectory,
                                                                     passphrase: passphrase,
                                                                     pusherNotificationClientIdentifier: clientProxy.pusherNotificationClientIdentifier),
                                                    forUsername: userID)
@@ -133,7 +134,8 @@ class UserSessionStore: UserSessionStoreProtocol {
                          slidingSync: appSettings.simplifiedSlidingSyncEnabled ? .simplified : .restored,
                          sessionDelegate: keychainController,
                          appHooks: appHooks)
-            .sessionPath(path: credentials.restorationToken.sessionDirectory.path(percentEncoded: false))
+            .sessionPaths(dataPath: credentials.restorationToken.sessionDirectory.path(percentEncoded: false),
+                          cachePath: credentials.restorationToken.cacheDirectory.path(percentEncoded: false))
             .username(username: credentials.userID)
             .homeserverUrl(url: homeserverURL)
             .passphrase(passphrase: credentials.restorationToken.passphrase)

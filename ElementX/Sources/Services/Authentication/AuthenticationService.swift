@@ -20,7 +20,7 @@ import MatrixRustSDK
 
 class AuthenticationService: AuthenticationServiceProtocol {
     private var client: Client?
-    private var sessionDirectory: URL
+    private var sessionDirectories: SessionDirectories
     private let passphrase: String
     
     private let userSessionStore: UserSessionStoreProtocol
@@ -31,7 +31,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
     
     init(userSessionStore: UserSessionStoreProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, appSettings: AppSettings, appHooks: AppHooks) {
-        sessionDirectory = .sessionsBaseDirectory.appending(component: UUID().uuidString)
+        sessionDirectories = .init()
         passphrase = encryptionKeyProvider.generateKey().base64EncodedString()
         self.userSessionStore = userSessionStore
         self.appSettings = appSettings
@@ -149,20 +149,24 @@ class AuthenticationService: AuthenticationServiceProtocol {
                          slidingSyncProxy: appSettings.slidingSyncProxyURL,
                          sessionDelegate: userSessionStore.clientSessionDelegate,
                          appHooks: appHooks)
-            .sessionPath(path: sessionDirectory.path(percentEncoded: false))
+            .sessionPaths(dataPath: sessionDirectories.dataPath,
+                          cachePath: sessionDirectories.cachePath)
             .passphrase(passphrase: passphrase)
     }
     
     private func rotateSessionDirectory() {
-        if FileManager.default.directoryExists(at: sessionDirectory) {
-            try? FileManager.default.removeItem(at: sessionDirectory)
+        if FileManager.default.directoryExists(at: sessionDirectories.dataDirectory) {
+            try? FileManager.default.removeItem(at: sessionDirectories.dataDirectory)
+        }
+        if FileManager.default.directoryExists(at: sessionDirectories.cacheDirectory) {
+            try? FileManager.default.removeItem(at: sessionDirectories.cacheDirectory)
         }
         
-        sessionDirectory = .sessionsBaseDirectory.appending(component: UUID().uuidString)
+        sessionDirectories = .init()
     }
     
     private func userSession(for client: Client) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
-        switch await userSessionStore.userSession(for: client, sessionDirectory: sessionDirectory, passphrase: passphrase) {
+        switch await userSessionStore.userSession(for: client, sessionDirectories: sessionDirectories, passphrase: passphrase) {
         case .success(let clientProxy):
             return .success(clientProxy)
         case .failure:

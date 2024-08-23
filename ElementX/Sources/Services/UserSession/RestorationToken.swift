@@ -20,6 +20,7 @@ import MatrixRustSDK
 struct RestorationToken: Equatable {
     let session: MatrixRustSDK.Session
     let sessionDirectory: URL
+    let cacheDirectory: URL
     let passphrase: String?
     let pusherNotificationClientIdentifier: String?
 }
@@ -29,10 +30,22 @@ extension RestorationToken: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         let session = try container.decode(MatrixRustSDK.Session.self, forKey: .session)
-        let sessionDirectory = try container.decodeIfPresent(URL.self, forKey: .sessionDirectory)
+        let dataDirectory = try container.decodeIfPresent(URL.self, forKey: .sessionDirectory)
+        let cacheDirectory = try container.decodeIfPresent(URL.self, forKey: .cacheDirectory)
+        
+        let sessionDirectories = if let dataDirectory {
+            if let cacheDirectory {
+                SessionDirectories(dataDirectory: dataDirectory, cacheDirectory: cacheDirectory)
+            } else {
+                SessionDirectories(dataDirectory: dataDirectory)
+            }
+        } else {
+            SessionDirectories(userID: session.userId)
+        }
         
         self = try .init(session: session,
-                         sessionDirectory: sessionDirectory ?? .legacySessionDirectory(for: session.userId),
+                         sessionDirectory: sessionDirectories.dataDirectory,
+                         cacheDirectory: sessionDirectories.cacheDirectory,
                          passphrase: container.decodeIfPresent(String.self, forKey: .passphrase),
                          pusherNotificationClientIdentifier: container.decodeIfPresent(String.self, forKey: .pusherNotificationClientIdentifier))
     }
@@ -64,20 +77,5 @@ extension MatrixRustSDK.Session: Codable {
     
     enum CodingKeys: String, CodingKey {
         case accessToken, refreshToken, userId, deviceId, homeserverUrl, oidcData, slidingSyncProxy
-    }
-}
-
-// MARK: Migrations
-
-private extension URL {
-    /// Gets the store directory of a legacy session that hasn't been migrated to the new token format.
-    ///
-    /// This should only be used to fill in the missing value when restoring a token as older versions of
-    /// the SDK set the session directory for us, based on the user's ID. Newer sessions now use a UUID,
-    /// which is generated app side during authentication.
-    static func legacySessionDirectory(for userID: String) -> URL {
-        // Rust sanitises the user ID replacing invalid characters with an _
-        let sanitisedUserID = userID.replacingOccurrences(of: ":", with: "_")
-        return .sessionsBaseDirectory.appendingPathComponent(sanitisedUserID)
     }
 }
