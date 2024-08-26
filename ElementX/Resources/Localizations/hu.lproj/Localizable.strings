@@ -102,6 +102,7 @@
 "action_tap_for_options" = "Koppintson a beállításokért";
 "action_try_again" = "Próbálja újra";
 "action_unpin" = "Kitűzés feloldása";
+"action_view_in_timeline" = "Megtekintés az idővonalon";
 "action_view_source" = "Forrás megtekintése";
 "action_yes" = "Igen";
 "action.load_more" = "Továbbiak betöltése";
@@ -216,6 +217,7 @@
 "common_waiting_for_decryption_key" = "Várakozás a visszafejtési kulcsra";
 "common.do_not_show_this_again" = "Ne jelenjen meg többé";
 "common.open_source_licenses" = "Nyílt forráskódú licencek";
+"common.pinned" = "Kitűzve";
 "common.send_to" = "Címzett";
 "common_no_room_name" = "Nincs szobanév";
 "common_poll_end_confirmation" = "Biztos, hogy befejezi ezt a szavazást?";
@@ -256,6 +258,7 @@
 "error_some_messages_have_not_been_sent" = "Néhány üzenet nem került elküldésre";
 "error_unknown" = "Elnézést, hiba történt";
 "event_shield_reason_authenticity_not_guaranteed" = "A titkosított üzenetek valódiságát ezen az eszközön nem lehet garantálni.";
+"event_shield_reason_previously_verified" = "Egy korábban ellenőrzött felhasználó által titkosítva.";
 "event_shield_reason_sent_in_clear" = "Nincs titkosítva.";
 "event_shield_reason_unknown_device" = "Ismeretlen vagy törölt eszköz által titkosítva.";
 "event_shield_reason_unsigned_device" = "A tulajdonos által nem ellenőrzött eszköz által titkosítva.";
@@ -283,7 +286,7 @@
 "notification_reaction_body" = "Ezzel reagált: %1$@";
 "notification_room_invite_body" = "Meghívta, hogy csatlakozzon a szobához";
 "notification_sender_me" = "Én";
-"notification_sender_mention_reply" = "%1$@ mentioned or replied";
+"notification_sender_mention_reply" = "%1$@ megemlítette vagy válaszolt";
 "notification_test_push_notification_content" = "Az értesítést nézi! Kattintson ide!";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -316,10 +319,10 @@
 "screen_advanced_settings_element_call_base_url" = "Egyéni Element Call alapwebcím";
 "screen_advanced_settings_element_call_base_url_description" = "Egyéni alapwebcím beállítása az Element Callhoz.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Érvénytelen webcím, győződjön meg arról, hogy szerepel-e benne a protokoll (http/https), és hogy helyes-e a cím.";
-"screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
-"screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
-"screen_pinned_timeline_screen_title_empty" = "Pinned messages";
-"screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
+"screen_pinned_timeline_empty_state_description" = "Nyomjon hosszan az üzenetre, és válassza a „%1$@” lehetőséget, hogy itt szerepeljen.";
+"screen_pinned_timeline_empty_state_headline" = "Tűzze ki a fontos üzeneteket, hogy könnyen felfedezhetők legyenek";
+"screen_pinned_timeline_screen_title_empty" = "Kitűzött üzenetek";
+"screen_reset_encryption_password_error" = "Ismeretlen hiba történt. Ellenőrizze, hogy a fiókja jelszava helyes-e, és próbálja meg újra.";
 "screen_room_mentions_at_room_subtitle" = "Az egész szoba értesítése";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ kitűzött üzenet";
@@ -601,6 +604,8 @@
 "screen_reset_encryption_password_placeholder" = "Adja meg…";
 "screen_reset_encryption_password_subtitle" = "Erősítse meg, hogy vissza szeretné állítani a titkosítást.";
 "screen_reset_encryption_password_title" = "A folytatáshoz adja meg fiókja jelszavát";
+"screen_reset_identity_confirmation_subtitle" = "Arra készül, hogy belépjen a(z) %1$@ fiókjába, hogy visszaállítsa a személyazonosságát. Ezután vissza fog térni az alkalmazásba.";
+"screen_reset_identity_confirmation_title" = "Nem tudja megerősíteni? Ugorjon a fiókjához, és állítsa vissza a személyazonosságát.";
 "screen_room_alias_resolver_resolve_alias_failure" = "Nem sikerült a szoba álnevének feloldása.";
 "screen_room_attachment_source_camera" = "Kamera";
 "screen_room_attachment_source_camera_video" = "Videó rögzítése";

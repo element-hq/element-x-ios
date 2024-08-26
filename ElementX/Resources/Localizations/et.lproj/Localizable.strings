@@ -102,6 +102,7 @@
 "action_tap_for_options" = "Valikuteks klõpsa";
 "action_try_again" = "Proovi uuesti";
 "action_unpin" = "Eemalda esiletõstmine";
+"action_view_in_timeline" = "Vaata ajajoonel";
 "action_view_source" = "Vaata lähtekoodi";
 "action_yes" = "Jah";
 "action.load_more" = "Näita veel";
@@ -216,6 +217,7 @@
 "common_waiting_for_decryption_key" = "Ootame selle sõnumi dekrüptimisvõtit";
 "common.do_not_show_this_again" = "Ära enam näita seda uuesti";
 "common.open_source_licenses" = "Avatud lähtekoodiga litsentsid";
+"common.pinned" = "Esiletõstetud";
 "common.send_to" = "Saada kasutajale";
 "common_no_room_name" = "Jututoal puudub nimi";
 "common_poll_end_confirmation" = "Kas oled kindel, et soovid selle küsitluse lõpetada?";
@@ -256,6 +258,7 @@
 "error_some_messages_have_not_been_sent" = "Mõned sõnumid on saatmata";
 "error_unknown" = "Vabandust, ilmnes viga";
 "event_shield_reason_authenticity_not_guaranteed" = "Selle krüptitud sõnumi tõepärasus pole selles seadmes tagatud.";
+"event_shield_reason_previously_verified" = "Krüptitud varem verifitseeritud kasutaja poolt";
 "event_shield_reason_sent_in_clear" = "Pole krüptitud.";
 "event_shield_reason_unknown_device" = "Krüptitud tundmatu või kustutatud seadme poolt.";
 "event_shield_reason_unsigned_device" = "Krüptitud seadme poolt, mida tema omanik pole verifitseerinud.";
@@ -283,7 +286,7 @@
 "notification_reaction_body" = "Reageeris nii: %1$@";
 "notification_room_invite_body" = "Saatis sulle kutse jututuppa";
 "notification_sender_me" = "Mina";
-"notification_sender_mention_reply" = "%1$@ mentioned or replied";
+"notification_sender_mention_reply" = "%1$@ mainis või vastas";
 "notification_test_push_notification_content" = "See ongi teavitus! Klõpsi mind!";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -601,6 +604,8 @@
 "screen_reset_encryption_password_placeholder" = "Sisesta...";
 "screen_reset_encryption_password_subtitle" = "Palun kinnita, et soovid oma andmete krüptimist lähtestada.";
 "screen_reset_encryption_password_title" = "Jätkamaks sisesta oma kasutajakonto salasõna";
+"screen_reset_identity_confirmation_subtitle" = "Oma võrguidentiteedi lähtestamiseks suuname sind %1$@ kasutajakonto halduse lehele. Hiljem suunatakse sind tagasi sama rakenduse juurde.";
+"screen_reset_identity_confirmation_title" = "Sa ei saa seda kinnitada? Ava oma kasutajakonto haldus ja lähtesta oma võrguidentiteet.";
 "screen_room_alias_resolver_resolve_alias_failure" = "Jututoa aliasele vastava aadressi tuvastamine ei õnnestunud.";
 "screen_room_attachment_source_camera" = "Kaamera";
 "screen_room_attachment_source_camera_video" = "Salvesta video";

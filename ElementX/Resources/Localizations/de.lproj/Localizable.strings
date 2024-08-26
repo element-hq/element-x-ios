@@ -102,6 +102,7 @@
 "action_tap_for_options" = "Für Optionen tippen";
 "action_try_again" = "Erneut versuchen";
 "action_unpin" = "Entpinnen";
+"action_view_in_timeline" = "View in timeline";
 "action_view_source" = "Quellcode anzeigen";
 "action_yes" = "Ja";
 "action.load_more" = "Mehr laden ...";
@@ -216,6 +217,7 @@
 "common_waiting_for_decryption_key" = "Warte auf diese Nachricht";
 "common.do_not_show_this_again" = "Nicht mehr anzeigen";
 "common.open_source_licenses" = "Open-Source-Lizenzen";
+"common.pinned" = "Pinned";
 "common.send_to" = "Senden an";
 "common_no_room_name" = "Kein Raumname";
 "common_poll_end_confirmation" = "Bist du sicher, dass du diese Umfrage beenden möchtest?";
@@ -256,6 +258,7 @@
 "error_some_messages_have_not_been_sent" = "Einige Nachrichten wurden nicht gesendet";
 "error_unknown" = "Entschuldigung, es ist ein Fehler aufgetreten";
 "event_shield_reason_authenticity_not_guaranteed" = "Die Authentizität dieser verschlüsselten Nachricht kann auf diesem Gerät nicht garantiert werden.";
+"event_shield_reason_previously_verified" = "Encrypted by a previously-verified user.";
 "event_shield_reason_sent_in_clear" = "Not encrypted.";
 "event_shield_reason_unknown_device" = "Verschlüsselt von einem unbekannten oder gelöschten Gerät.";
 "event_shield_reason_unsigned_device" = "Verschlüsselt durch ein Gerät, das nicht von seinem Besitzer verifiziert wurde.";
@@ -321,7 +324,7 @@
 "screen_pinned_timeline_screen_title_empty" = "Pinned messages";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
 "screen_room_mentions_at_room_subtitle" = "Alle Mitglieder benachrichtigen";
-"screen_room_pinned_banner_indicator" = "%1$@von %2$@";
+"screen_room_pinned_banner_indicator" = "%1$@ von %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Angepinnte Nachrichten";
 "screen_room_pinned_banner_loading_description" = "Loading message…";
 "screen_room_pinned_banner_view_all_button_title" = "Alle anzeigen";
@@ -597,10 +600,12 @@
 "screen_report_content_hint" = "Grund für die Meldung dieses Inhalts";
 "screen_reset_encryption_confirmation_alert_action" = "Yes, reset now";
 "screen_reset_encryption_confirmation_alert_subtitle" = "This process is irreversible.";
-"screen_reset_encryption_confirmation_alert_title" = "Are you sure you want to reset your encryption?";
+"screen_reset_encryption_confirmation_alert_title" = "Are you sure you want to reset your identity?";
 "screen_reset_encryption_password_placeholder" = "Enter…";
-"screen_reset_encryption_password_subtitle" = "Confirm that you want to reset your encryption.";
+"screen_reset_encryption_password_subtitle" = "Confirm that you want to reset your identity.";
 "screen_reset_encryption_password_title" = "Enter your account password to continue";
+"screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.";
+"screen_reset_identity_confirmation_title" = "Can't confirm? Go to your account to reset your identity.";
 "screen_room_alias_resolver_resolve_alias_failure" = "Der Raum-Alias konnte nicht ermittelt werden.";
 "screen_room_attachment_source_camera" = "Kamera";
 "screen_room_attachment_source_camera_video" = "Video aufnehmen";

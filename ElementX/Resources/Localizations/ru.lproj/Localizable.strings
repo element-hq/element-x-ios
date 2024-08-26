@@ -102,6 +102,7 @@
 "action_tap_for_options" = "Нажмите для просмотра вариантов";
 "action_try_again" = "Повторить попытку";
 "action_unpin" = "Открепить";
+"action_view_in_timeline" = "Просмотр в хронологии";
 "action_view_source" = "Показать источник";
 "action_yes" = "Да";
 "action.load_more" = "Загрузить еще";
@@ -216,6 +217,7 @@
 "common_waiting_for_decryption_key" = "Ожидание ключа расшифровки";
 "common.do_not_show_this_again" = "Не показывать больше";
 "common.open_source_licenses" = "Лицензии с открытым исходным кодом";
+"common.pinned" = "Закрепленный";
 "common.send_to" = "Отправить";
 "common_no_room_name" = "Нету названия комнаты";
 "common_poll_end_confirmation" = "Вы действительно хотите завершить данный опрос?";
@@ -256,6 +258,7 @@
 "error_some_messages_have_not_been_sent" = "Некоторые сообщения не были отправлены";
 "error_unknown" = "Извините, произошла ошибка";
 "event_shield_reason_authenticity_not_guaranteed" = "Подлинность этого зашифрованного сообщения не может быть гарантирована на этом устройстве.";
+"event_shield_reason_previously_verified" = "Encrypted by a previously-verified user.";
 "event_shield_reason_sent_in_clear" = "Не зашифровано.";
 "event_shield_reason_unknown_device" = "Зашифровано неизвестным или удаленным устройством.";
 "event_shield_reason_unsigned_device" = "Зашифровано устройством, не проверенным его владельцем.";
@@ -601,6 +604,8 @@
 "screen_reset_encryption_password_placeholder" = "Ввод...";
 "screen_reset_encryption_password_subtitle" = "Подтвердите, что вы хотите сбросить шифрование.";
 "screen_reset_encryption_password_title" = "Введите пароль своей учетной записи, чтобы продолжить";
+"screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.";
+"screen_reset_identity_confirmation_title" = "Can't confirm? Go to your account to reset your identity.";
 "screen_room_alias_resolver_resolve_alias_failure" = "Не удалось определить псевдоним комнаты.";
 "screen_room_attachment_source_camera" = "Камера";
 "screen_room_attachment_source_camera_video" = "Записать видео";

@@ -102,6 +102,7 @@
 "action_tap_for_options" = "Tryck för alternativ";
 "action_try_again" = "Försök igen";
 "action_unpin" = "Frigör";
+"action_view_in_timeline" = "Visa i tidslinjen";
 "action_view_source" = "Visa källkod";
 "action_yes" = "Ja";
 "action.load_more" = "Ladda mer";
@@ -216,6 +217,7 @@
 "common_waiting_for_decryption_key" = "Väntar på detta meddelande";
 "common.do_not_show_this_again" = "Visa inte detta igen";
 "common.open_source_licenses" = "Licenser för öppen källkod";
+"common.pinned" = "Fäst";
 "common.send_to" = "Skicka till";
 "common_no_room_name" = "Inget rumsnamn";
 "common_poll_end_confirmation" = "Är du säker på att du vill avsluta den här omröstningen?";
@@ -256,6 +258,7 @@
 "error_some_messages_have_not_been_sent" = "Vissa meddelanden har inte skickats";
 "error_unknown" = "Tyvärr, ett fel uppstod";
 "event_shield_reason_authenticity_not_guaranteed" = "Detta krypterade meddelandes äkthet kan inte garanteras på den här enheten.";
+"event_shield_reason_previously_verified" = "Encrypted by a previously-verified user.";
 "event_shield_reason_sent_in_clear" = "Inte krypterad.";
 "event_shield_reason_unknown_device" = "Krypterad av en okänd eller raderad enhet.";
 "event_shield_reason_unsigned_device" = "Krypterad av en enhet som inte verifierats av ägaren.";
@@ -601,6 +604,8 @@
 "screen_reset_encryption_password_placeholder" = "Ange …";
 "screen_reset_encryption_password_subtitle" = "Bekräfta att du vill återställa din kryptering.";
 "screen_reset_encryption_password_title" = "Ange ditt kontolösenord för att fortsätta";
+"screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.";
+"screen_reset_identity_confirmation_title" = "Can't confirm? Go to your account to reset your identity.";
 "screen_room_alias_resolver_resolve_alias_failure" = "Misslyckades med att slå upp rumsalias.";
 "screen_room_attachment_source_camera" = "Kamera";
 "screen_room_attachment_source_camera_video" = "Spela in video";
