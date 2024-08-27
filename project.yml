@@ -1,7 +1,7 @@
 ---
-name: ElementX
+name: TchapX
 attributes:
-  ORGANIZATIONNAME: Element
+  ORGANIZATIONNAME: Tchap
 
 fileGroups:
 - project.yml
