@@ -5,7 +5,8 @@
 --disable wrapMultiLineStatementBraces
 --disable hoistPatternLet
 --disable preferForLoop
---disable consistentSwitchCaseSpacing
+# Tchap: disable this option which trigger a "option not found" error
+# --disable consistentSwitchCaseSpacing
 
 --commas inline
 --ifdef no-indent
