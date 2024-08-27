@@ -24,7 +24,7 @@ typealias CallScreenViewModelType = StateStoreViewModel<CallScreenViewState, Cal
 class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol {
     private let elementCallService: ElementCallServiceProtocol
     private let configuration: ElementCallConfiguration
-    private let isPictureInPictureEnabled: Bool
+    private let isPictureInPictureAllowed: Bool
     
     private let widgetDriver: ElementCallWidgetDriverProtocol
     
@@ -43,11 +43,11 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     ///   - clientID: Something to identify the current client on the Element Call side
     init(elementCallService: ElementCallServiceProtocol,
          configuration: ElementCallConfiguration,
-         elementCallPictureInPictureEnabled: Bool,
+         allowPictureInPicture: Bool,
          appHooks: AppHooks) {
         self.elementCallService = elementCallService
         self.configuration = configuration
-        isPictureInPictureEnabled = elementCallPictureInPictureEnabled
+        isPictureInPictureAllowed = allowPictureInPicture
         
         switch configuration.kind {
         case .genericCallLink(let url):
@@ -189,7 +189,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     
     private func handleBackwardsNavigation() async {
         guard state.url != nil,
-              isPictureInPictureEnabled,
+              isPictureInPictureAllowed,
               let requestPictureInPictureHandler = state.bindings.requestPictureInPictureHandler else {
             actionsSubject.send(.dismiss)
             return
