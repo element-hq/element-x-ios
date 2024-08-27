@@ -47,7 +47,6 @@ final class AppSettings {
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
         case pinningEnabled
-        case elementCallPictureInPictureEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -285,9 +284,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.pinningEnabled, defaultValue: false, storageType: .userDefaults(store))
     var pinningEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.elementCallPictureInPictureEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var elementCallPictureInPictureEnabled
         
     #endif
     

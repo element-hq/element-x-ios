@@ -69,11 +69,6 @@ struct DeveloperOptionsScreen: View {
                             context.elementCallBaseURLOverride = url
                         }
                     }
-                
-                Toggle(isOn: $context.elementCallPictureInPictureEnabled) {
-                    Text("Picture in Picture support")
-                    Text("Requires an Element Call deployment with support for signalling PiP availability.")
-                }
             } header: {
                 Text("Element Call")
             } footer: {

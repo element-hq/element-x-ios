@@ -589,7 +589,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: elementCallService,
                                                                             configuration: configuration,
-                                                                            elementCallPictureInPictureEnabled: appSettings.elementCallPictureInPictureEnabled,
+                                                                            allowPictureInPicture: true,
                                                                             appHooks: appHooks))
         
         callScreenCoordinator.actions
