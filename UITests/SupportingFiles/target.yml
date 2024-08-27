@@ -26,7 +26,7 @@ targets:
     platform: iOS
 
     dependencies:
-    - target: ElementX
+    - target: TchapX
     - package: MatrixRustSDK
     - package: AnalyticsEvents
     - package: DeviceKit

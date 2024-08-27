@@ -19,7 +19,7 @@ schemes:
       disableMainThreadChecker: false
       gatherCoverageData: true
       coverageTargets:
-        - ElementX
+        - TchapX
       testPlans:
         - path: IntegrationTests.xctestplan
           defaultPlan: true
@@ -30,7 +30,7 @@ targets:
     platform: iOS
 
     dependencies:
-    - target: ElementX
+    - target: TchapX
     - package: MatrixRustSDK
     - package: DeviceKit
     - package: DTCoreText

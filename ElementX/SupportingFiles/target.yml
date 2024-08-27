@@ -8,7 +8,7 @@ schemes:
       config: Release
     build:
       targets:
-        ElementX:
+        TchapX:
           - running
           - testing
           - profiling
@@ -32,13 +32,13 @@ schemes:
       config: Debug
       gatherCoverageData: true
       coverageTargets:
-        - ElementX
+        - TchapX
       testPlans:
         - path: ../../UnitTests/SupportingFiles/UnitTests.xctestplan
           defaultPlan: true
 
 targets:
-  ElementX:
+  TchapX:
     type: application
     platform: iOS
 
