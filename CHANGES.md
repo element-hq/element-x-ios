@@ -1,3 +1,48 @@
+## Changes in 1.7.4 (2024-08-27)
+
+### What's Changed
+
+✨ Features
+* Show encryption authenticity warnings on messages in the timeline. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3180
+* Picture in Picture support for Calls (requires a supported widget deployment). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3204
+
+🙌 Improvements
+* Clarify the copy for Mentions in notifications. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3142
+* Remove a notification if its event has been redacted. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3191
+
+🐛 Bugfixes
+* RoomScreenViewModel refactor part 2 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3169
+* Automatically try reloading failed images on network changes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3170
+* Fixes problems processing invites, build rooms differently based on their membership by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3189
+
+⚠️ API Changes
+* Introduce a new `RoomProxyType` and treat rooms differently based on their membership state by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3187
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3172
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3179
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3201
+
+🚧 In development 🚧
+* RoomScreenViewModel is now TimelineViewModel by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3157
+* PinnedBanner is now managed by the RoomScreenViewModel  by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3163
+* Navigation support for upcoming Element Call Picture in Picture mode. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3174
+* Use native video call picture in picture! by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3190
+* Pinned Events Timeline actions and differentiation by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3182
+* `TimelineKind` refactor by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3193
+
+Others
+* Add a danger check for PR titles that contain a "Fixes #1234" prefix. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3161
+* Update package acknowledgements (after resetting the packages). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3167
+* Bump the SDK to v1.0.39 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3171
+* Remove GenericCallLinkCoordinator, merging it into CallScreen. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3181
+* Fix the call URL input field in Developer Options by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3192
+* Update the SDK by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3196
+* Update the client's request timeout to match the SDK's default. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3205
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.7.3...1.7.4
+
 ## Changes in 1.7.3 (2024-08-13)
 
 ### What's Changed
