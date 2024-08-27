@@ -41,6 +41,7 @@ class KeychainControllerTests: XCTestCase {
                                                                oidcData: "oidcData",
                                                                slidingSyncProxy: "https://my.sync.proxy"),
                                                 sessionDirectory: .homeDirectory.appending(component: UUID().uuidString),
+                                                cacheDirectory: .homeDirectory.appending(component: UUID().uuidString),
                                                 passphrase: "passphrase",
                                                 pusherNotificationClientIdentifier: "pusherClientID")
         keychain.setRestorationToken(restorationToken, forUsername: username)
@@ -60,6 +61,7 @@ class KeychainControllerTests: XCTestCase {
                                                                oidcData: "oidcData",
                                                                slidingSyncProxy: "https://my.sync.proxy"),
                                                 sessionDirectory: .homeDirectory.appending(component: UUID().uuidString),
+                                                cacheDirectory: .homeDirectory.appending(component: UUID().uuidString),
                                                 passphrase: "passphrase",
                                                 pusherNotificationClientIdentifier: "pusherClientID")
         keychain.setRestorationToken(restorationToken, forUsername: username)
@@ -85,6 +87,7 @@ class KeychainControllerTests: XCTestCase {
                                                                    oidcData: "oidcData",
                                                                    slidingSyncProxy: "https://my.sync.proxy"),
                                                     sessionDirectory: .homeDirectory.appending(component: UUID().uuidString),
+                                                    cacheDirectory: .homeDirectory.appending(component: UUID().uuidString),
                                                     passphrase: "passphrase",
                                                     pusherNotificationClientIdentifier: "pusherClientID")
             keychain.setRestorationToken(restorationToken, forUsername: "@test\(index):example.com")
@@ -109,6 +112,7 @@ class KeychainControllerTests: XCTestCase {
                                                                    oidcData: "oidcData",
                                                                    slidingSyncProxy: "https://my.sync.proxy"),
                                                     sessionDirectory: .homeDirectory.appending(component: UUID().uuidString),
+                                                    cacheDirectory: .homeDirectory.appending(component: UUID().uuidString),
                                                     passphrase: "passphrase",
                                                     pusherNotificationClientIdentifier: "pusherClientID")
             keychain.setRestorationToken(restorationToken, forUsername: "@test\(index):example.com")
@@ -141,6 +145,7 @@ class KeychainControllerTests: XCTestCase {
                                                                oidcData: "oidcData",
                                                                slidingSyncProxy: nil),
                                                 sessionDirectory: .homeDirectory.appending(component: UUID().uuidString),
+                                                cacheDirectory: .homeDirectory.appending(component: UUID().uuidString),
                                                 passphrase: "passphrase",
                                                 pusherNotificationClientIdentifier: "pusherClientID")
         keychain.setRestorationToken(restorationToken, forUsername: username)

@@ -68,6 +68,22 @@ extension URL: ExpressibleByStringLiteral {
         return url
     }
     
+    /// The base directory where all application support data is stored.
+    static var cachesBaseDirectory: URL {
+        let url = appGroupContainerDirectory
+            .appendingPathComponent("Library", isDirectory: true)
+            .appendingPathComponent("Caches", isDirectory: true)
+            .appendingPathComponent(InfoPlistReader.main.baseBundleIdentifier, isDirectory: true)
+            .appendingPathComponent("Sessions", isDirectory: true)
+
+        try? FileManager.default.createDirectoryIfNeeded(at: url)
+        
+        // Caches are excluded from backups automatically anyway.
+        // https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html
+
+        return url
+    }
+    
     var globalProxy: String? {
         if let proxySettingsUnmanaged = CFNetworkCopySystemProxySettings() {
             let proxySettings = proxySettingsUnmanaged.takeRetainedValue()

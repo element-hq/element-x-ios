@@ -64,20 +64,21 @@ class UserSessionStore: UserSessionStoreProtocol {
             
             // On any restoration failure reset the token and restart
             keychainController.removeRestorationTokenForUsername(credentials.userID)
-            deleteSessionDirectory(for: credentials)
+            deleteSessionDirectories(for: credentials)
             
             return .failure(error)
         }
     }
     
-    func userSession(for client: Client, sessionDirectory: URL, passphrase: String?) async -> Result<UserSessionProtocol, UserSessionStoreError> {
+    func userSession(for client: Client, sessionDirectories: SessionDirectories, passphrase: String?) async -> Result<UserSessionProtocol, UserSessionStoreError> {
         do {
             let session = try client.session()
             let userID = try client.userId()
             let clientProxy = await setupProxyForClient(client)
             
             keychainController.setRestorationToken(RestorationToken(session: session,
-                                                                    sessionDirectory: sessionDirectory,
+                                                                    sessionDirectory: sessionDirectories.dataDirectory,
+                                                                    cacheDirectory: sessionDirectories.cacheDirectory,
                                                                     passphrase: passphrase,
                                                                     pusherNotificationClientIdentifier: clientProxy.pusherNotificationClientIdentifier),
                                                    forUsername: userID)
@@ -95,7 +96,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         keychainController.removeRestorationTokenForUsername(userID)
         
         if let credentials {
-            deleteSessionDirectory(for: credentials)
+            deleteSessionDirectories(for: credentials)
         }
     }
     
@@ -133,7 +134,8 @@ class UserSessionStore: UserSessionStoreProtocol {
                          slidingSync: appSettings.simplifiedSlidingSyncEnabled ? .simplified : .restored,
                          sessionDelegate: keychainController,
                          appHooks: appHooks)
-            .sessionPath(path: credentials.restorationToken.sessionDirectory.path(percentEncoded: false))
+            .sessionPaths(dataPath: credentials.restorationToken.sessionDirectory.path(percentEncoded: false),
+                          cachePath: credentials.restorationToken.cacheDirectory.path(percentEncoded: false))
             .username(username: credentials.userID)
             .homeserverUrl(url: homeserverURL)
             .passphrase(passphrase: credentials.restorationToken.passphrase)
@@ -156,22 +158,36 @@ class UserSessionStore: UserSessionStoreProtocol {
                           appSettings: appSettings)
     }
     
-    private func deleteSessionDirectory(for credentials: KeychainCredentials) {
+    private func deleteSessionDirectories(for credentials: KeychainCredentials) {
         do {
             try FileManager.default.removeItem(at: credentials.restorationToken.sessionDirectory)
         } catch {
             MXLog.failure("Failed deleting the session data: \(error)")
         }
+        do {
+            try FileManager.default.removeItem(at: credentials.restorationToken.cacheDirectory)
+        } catch {
+            MXLog.failure("Failed deleting the session caches: \(error)")
+        }
     }
     
     private func deleteCaches(for credentials: KeychainCredentials) {
         do {
-            let sessionDirectoryContents = try FileManager.default.contentsOfDirectory(at: credentials.restorationToken.sessionDirectory, includingPropertiesForKeys: nil)
-            for url in sessionDirectoryContents where url.path.contains(matrixSDKStateKey) {
-                try FileManager.default.removeItem(at: url)
-            }
+            try deleteContentsOfDirectory(at: credentials.restorationToken.sessionDirectory)
         } catch {
-            MXLog.failure("Failed clearing caches: \(error)")
+            MXLog.failure("Failed clearing state store: \(error)")
+        }
+        do {
+            try deleteContentsOfDirectory(at: credentials.restorationToken.cacheDirectory)
+        } catch {
+            MXLog.failure("Failed clearing event cache store: \(error)")
+        }
+    }
+    
+    private func deleteContentsOfDirectory(at url: URL) throws {
+        let sessionDirectoryContents = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)
+        for url in sessionDirectoryContents where url.path.contains(matrixSDKStateKey) {
+            try FileManager.default.removeItem(at: url)
         }
     }
 }

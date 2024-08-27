@@ -120,6 +120,7 @@ class KeychainController: KeychainControllerProtocol {
         }
         let restorationToken = RestorationToken(session: session,
                                                 sessionDirectory: oldToken.sessionDirectory,
+                                                cacheDirectory: oldToken.cacheDirectory,
                                                 passphrase: oldToken.passphrase,
                                                 pusherNotificationClientIdentifier: oldToken.pusherNotificationClientIdentifier)
         setRestorationToken(restorationToken, forUsername: session.userId)

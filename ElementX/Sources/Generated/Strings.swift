@@ -572,6 +572,8 @@ internal enum L10n {
   internal static var errorUnknown: String { return L10n.tr("Localizable", "error_unknown") }
   /// The authenticity of this encrypted message can't be guaranteed on this device.
   internal static var eventShieldReasonAuthenticityNotGuaranteed: String { return L10n.tr("Localizable", "event_shield_reason_authenticity_not_guaranteed") }
+  /// Encrypted by a previously-verified user.
+  internal static var eventShieldReasonPreviouslyVerified: String { return L10n.tr("Localizable", "event_shield_reason_previously_verified") }
   /// Not encrypted.
   internal static var eventShieldReasonSentInClear: String { return L10n.tr("Localizable", "event_shield_reason_sent_in_clear") }
   /// Encrypted by an unknown or deleted device.

@@ -39,7 +39,8 @@ final class NSEUserSession {
                          slidingSync: simplifiedSlidingSyncEnabled ? .simplified : .restored,
                          sessionDelegate: clientSessionDelegate,
                          appHooks: appHooks)
-            .sessionPath(path: credentials.restorationToken.sessionDirectory.path(percentEncoded: false))
+            .sessionPaths(dataPath: credentials.restorationToken.sessionDirectory.path(percentEncoded: false),
+                          cachePath: credentials.restorationToken.cacheDirectory.path(percentEncoded: false))
             .username(username: credentials.userID)
             .homeserverUrl(url: homeserverURL)
             .passphrase(passphrase: credentials.restorationToken.passphrase)

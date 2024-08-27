@@ -56,7 +56,7 @@ extension EventBasedTimelineItemProtocol {
     }
     
     var hasFailedToSend: Bool {
-        properties.deliveryStatus == .sendingFailed
+        properties.deliveryStatus?.isSendingFailed == true
     }
 
     var hasFailedDecryption: Bool {

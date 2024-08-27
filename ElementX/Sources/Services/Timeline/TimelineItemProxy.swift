@@ -68,7 +68,20 @@ enum TimelineItemProxy {
 enum TimelineItemDeliveryStatus: Hashable {
     case sending
     case sent
-    case sendingFailed
+    case sendingFailed(SendFailureReason)
+    
+    enum SendFailureReason: Hashable {
+        case verifiedUserHasUnsignedDevice(devices: [String: [String]])
+        case verifiedUserChangedIdentity(users: [String])
+        case unknown
+    }
+    
+    var isSendingFailed: Bool {
+        switch self {
+        case .sending, .sent: false
+        case .sendingFailed: true
+        }
+    }
 }
 
 /// A light wrapper around event timeline items returned from Rust.
@@ -88,11 +101,15 @@ class EventTimelineItemProxy {
         
         switch localSendState {
         case .sendingFailed(_, let isRecoverable):
-            return isRecoverable ? .sending : .sendingFailed
+            return isRecoverable ? .sending : .sendingFailed(.unknown)
         case .notSentYet:
             return .sending
         case .sent:
             return .sent
+        case .verifiedUserHasUnsignedDevice(devices: let devices):
+            return .sendingFailed(.verifiedUserHasUnsignedDevice(devices: devices))
+        case .verifiedUserChangedIdentity(users: let users):
+            return .sendingFailed(.verifiedUserChangedIdentity(users: users))
         }
     }()
     

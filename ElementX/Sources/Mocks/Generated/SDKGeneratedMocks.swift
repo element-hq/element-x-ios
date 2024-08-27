@@ -4804,17 +4804,17 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
     }
 
-    //MARK: - sessionPath
+    //MARK: - sessionPaths
 
-    var sessionPathPathUnderlyingCallsCount = 0
-    open var sessionPathPathCallsCount: Int {
+    var sessionPathsDataPathCachePathUnderlyingCallsCount = 0
+    open var sessionPathsDataPathCachePathCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sessionPathPathUnderlyingCallsCount
+                return sessionPathsDataPathCachePathUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sessionPathPathUnderlyingCallsCount
+                    returnValue = sessionPathsDataPathCachePathUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -4822,29 +4822,29 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
         set {
             if Thread.isMainThread {
-                sessionPathPathUnderlyingCallsCount = newValue
+                sessionPathsDataPathCachePathUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sessionPathPathUnderlyingCallsCount = newValue
+                    sessionPathsDataPathCachePathUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var sessionPathPathCalled: Bool {
-        return sessionPathPathCallsCount > 0
+    open var sessionPathsDataPathCachePathCalled: Bool {
+        return sessionPathsDataPathCachePathCallsCount > 0
     }
-    open var sessionPathPathReceivedPath: String?
-    open var sessionPathPathReceivedInvocations: [String] = []
+    open var sessionPathsDataPathCachePathReceivedArguments: (dataPath: String, cachePath: String?)?
+    open var sessionPathsDataPathCachePathReceivedInvocations: [(dataPath: String, cachePath: String?)] = []
 
-    var sessionPathPathUnderlyingReturnValue: ClientBuilder!
-    open var sessionPathPathReturnValue: ClientBuilder! {
+    var sessionPathsDataPathCachePathUnderlyingReturnValue: ClientBuilder!
+    open var sessionPathsDataPathCachePathReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
-                return sessionPathPathUnderlyingReturnValue
+                return sessionPathsDataPathCachePathUnderlyingReturnValue
             } else {
                 var returnValue: ClientBuilder? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sessionPathPathUnderlyingReturnValue
+                    returnValue = sessionPathsDataPathCachePathUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -4852,26 +4852,26 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
         set {
             if Thread.isMainThread {
-                sessionPathPathUnderlyingReturnValue = newValue
+                sessionPathsDataPathCachePathUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sessionPathPathUnderlyingReturnValue = newValue
+                    sessionPathsDataPathCachePathUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var sessionPathPathClosure: ((String) -> ClientBuilder)?
+    open var sessionPathsDataPathCachePathClosure: ((String, String?) -> ClientBuilder)?
 
-    open override func sessionPath(path: String) -> ClientBuilder {
-        sessionPathPathCallsCount += 1
-        sessionPathPathReceivedPath = path
+    open override func sessionPaths(dataPath: String, cachePath: String?) -> ClientBuilder {
+        sessionPathsDataPathCachePathCallsCount += 1
+        sessionPathsDataPathCachePathReceivedArguments = (dataPath: dataPath, cachePath: cachePath)
         DispatchQueue.main.async {
-            self.sessionPathPathReceivedInvocations.append(path)
+            self.sessionPathsDataPathCachePathReceivedInvocations.append((dataPath: dataPath, cachePath: cachePath))
         }
-        if let sessionPathPathClosure = sessionPathPathClosure {
-            return sessionPathPathClosure(path)
+        if let sessionPathsDataPathCachePathClosure = sessionPathsDataPathCachePathClosure {
+            return sessionPathsDataPathCachePathClosure(dataPath, cachePath)
         } else {
-            return sessionPathPathReturnValue
+            return sessionPathsDataPathCachePathReturnValue
         }
     }
 
