@@ -13,9 +13,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d digit entered</string>
+			<string>%1$d cijfer ingevoerd</string>
 			<key>other</key>
-			<string>%1$d digits entered</string>
+			<string>%1$d cijfers ingevoerd</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -29,9 +29,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Read by %1$@ and %2$d other</string>
+			<string>Gelezen door %1$@ en %2$d andere</string>
 			<key>other</key>
-			<string>Read by %1$@ and %2$d others</string>
+			<string>Gelezen door %1$@ en %2$d anderen</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -173,9 +173,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %1$d attempt to unlock</string>
+			<string>Je hebt %1$d poging om te ontgrendelen</string>
 			<key>other</key>
-			<string>You have %1$d attempts to unlock</string>
+			<string>Je hebt %1$d pogingen om te ontgrendelen</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -189,9 +189,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Wrong PIN. You have %1$d more chance</string>
+			<string>Verkeerde pincode. Je hebt nog %1$d kans</string>
 			<key>other</key>
-			<string>Wrong PIN. You have %1$d more chances</string>
+			<string>Verkeerde pincode. Je hebt nog %1$d kansen</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -253,9 +253,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@, %2$@ and %3$d other</string>
+			<string>%1$@, %2$@ en %3$d andere</string>
 			<key>other</key>
-			<string>%1$@, %2$@ and %3$d others</string>
+			<string>%1$@, %2$@ en %3$d anderen</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members_second_component_ios</key>
@@ -269,9 +269,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d other</string>
+			<string>%d andere</string>
 			<key>other</key>
-			<string>%d others</string>
+			<string>%d anderen</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>
@@ -285,9 +285,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ is typing</string>
+			<string>%1$@ is aan het typen</string>
 			<key>other</key>
-			<string>%1$@ are typing</string>
+			<string>%1$@ zijn aan het typen</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>

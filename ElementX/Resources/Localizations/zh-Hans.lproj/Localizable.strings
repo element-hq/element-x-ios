@@ -102,6 +102,7 @@
 "action_tap_for_options" = "点按查看选项";
 "action_try_again" = "再试一次";
 "action_unpin" = "取消置顶";
+"action_view_in_timeline" = "View in timeline";
 "action_view_source" = "查看源码";
 "action_yes" = "是";
 "action.load_more" = "载入更多";
@@ -216,6 +217,7 @@
 "common_waiting_for_decryption_key" = "正在等待解密密钥";
 "common.do_not_show_this_again" = "不再显示此内容";
 "common.open_source_licenses" = "开源许可证";
+"common.pinned" = "Pinned";
 "common.send_to" = "发送至";
 "common_no_room_name" = "无房间名";
 "common_poll_end_confirmation" = "确定要结束这个投票吗？";
@@ -256,6 +258,7 @@
 "error_some_messages_have_not_been_sent" = "某些信息尚未发送";
 "error_unknown" = "抱歉，发生了错误";
 "event_shield_reason_authenticity_not_guaranteed" = "此加密消息的真实性无法在此设备上保证。";
+"event_shield_reason_previously_verified" = "Encrypted by a previously-verified user.";
 "event_shield_reason_sent_in_clear" = "未加密。";
 "event_shield_reason_unknown_device" = "由未知或已删除的设备加密。";
 "event_shield_reason_unsigned_device" = "由未经其所有者验证的设备加密。";
@@ -601,6 +604,8 @@
 "screen_reset_encryption_password_placeholder" = "输入...";
 "screen_reset_encryption_password_subtitle" = "确认您要重置加密。";
 "screen_reset_encryption_password_title" = "输入您的账户密码以继续";
+"screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.";
+"screen_reset_identity_confirmation_title" = "Can't confirm? Go to your account to reset your identity.";
 "screen_room_alias_resolver_resolve_alias_failure" = "无法解析房间别名。";
 "screen_room_attachment_source_camera" = "相机";
 "screen_room_attachment_source_camera_video" = "录制视频";

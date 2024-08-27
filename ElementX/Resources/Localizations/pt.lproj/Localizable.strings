@@ -102,6 +102,7 @@
 "action_tap_for_options" = "Toca para ver as opções";
 "action_try_again" = "Tentar novamente";
 "action_unpin" = "Desafixar";
+"action_view_in_timeline" = "View in timeline";
 "action_view_source" = "Ver fonte";
 "action_yes" = "Sim";
 "action.load_more" = "Carrega mais";
@@ -216,6 +217,7 @@
 "common_waiting_for_decryption_key" = "À espera desta mensagem";
 "common.do_not_show_this_again" = "Não mostrar novamente";
 "common.open_source_licenses" = "Licenças de código aberto";
+"common.pinned" = "Pinned";
 "common.send_to" = "Enviar para";
 "common_no_room_name" = "Sala sem nome";
 "common_poll_end_confirmation" = "Tens a certeza que queres concluir esta sondagem?";
@@ -256,6 +258,7 @@
 "error_some_messages_have_not_been_sent" = "Algumas mensagens não foram enviadas";
 "error_unknown" = "Ocorreu um erro, desculpa";
 "event_shield_reason_authenticity_not_guaranteed" = "A autenticidade desta mensagem cifrada não pode ser garantida neste dispositivo.";
+"event_shield_reason_previously_verified" = "Encrypted by a previously-verified user.";
 "event_shield_reason_sent_in_clear" = "Not encrypted.";
 "event_shield_reason_unknown_device" = "Cifragem com origem num dispositivo eliminado ou desconhecido.";
 "event_shield_reason_unsigned_device" = "Cifragem com origem num dispositivo não verificado pelo seu dono.";
@@ -601,6 +604,8 @@
 "screen_reset_encryption_password_placeholder" = "Inserir…";
 "screen_reset_encryption_password_subtitle" = "Confirma que pretendes realmente repor a tua cifra.";
 "screen_reset_encryption_password_title" = "Insere a tua palavra-passe para continuares";
+"screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.";
+"screen_reset_identity_confirmation_title" = "Can't confirm? Go to your account to reset your identity.";
 "screen_room_alias_resolver_resolve_alias_failure" = "Não foi possível encontrar esse endereço de sala";
 "screen_room_attachment_source_camera" = "Câmara";
 "screen_room_attachment_source_camera_video" = "Gravar vídeo";

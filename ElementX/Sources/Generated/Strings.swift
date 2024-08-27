@@ -1431,16 +1431,22 @@ internal enum L10n {
   internal static var screenResetEncryptionConfirmationAlertAction: String { return L10n.tr("Localizable", "screen_reset_encryption_confirmation_alert_action") }
   /// This process is irreversible.
   internal static var screenResetEncryptionConfirmationAlertSubtitle: String { return L10n.tr("Localizable", "screen_reset_encryption_confirmation_alert_subtitle") }
-  /// Are you sure you want to reset your encryption?
+  /// Are you sure you want to reset your identity?
   internal static var screenResetEncryptionConfirmationAlertTitle: String { return L10n.tr("Localizable", "screen_reset_encryption_confirmation_alert_title") }
   /// An unknown error happened. Please check your account password is correct and try again.
   internal static var screenResetEncryptionPasswordError: String { return L10n.tr("Localizable", "screen_reset_encryption_password_error") }
   /// Enter…
   internal static var screenResetEncryptionPasswordPlaceholder: String { return L10n.tr("Localizable", "screen_reset_encryption_password_placeholder") }
-  /// Confirm that you want to reset your encryption.
+  /// Confirm that you want to reset your identity.
   internal static var screenResetEncryptionPasswordSubtitle: String { return L10n.tr("Localizable", "screen_reset_encryption_password_subtitle") }
   /// Enter your account password to continue
   internal static var screenResetEncryptionPasswordTitle: String { return L10n.tr("Localizable", "screen_reset_encryption_password_title") }
+  /// You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.
+  internal static func screenResetIdentityConfirmationSubtitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_reset_identity_confirmation_subtitle", String(describing: p1))
+  }
+  /// Can't confirm? Go to your account to reset your identity.
+  internal static var screenResetIdentityConfirmationTitle: String { return L10n.tr("Localizable", "screen_reset_identity_confirmation_title") }
   /// Failed to resolve room alias.
   internal static var screenRoomAliasResolverResolveAliasFailure: String { return L10n.tr("Localizable", "screen_room_alias_resolver_resolve_alias_failure") }
   /// Camera
@@ -2328,6 +2334,8 @@ internal enum L10n {
     internal static var doNotShowThisAgain: String { return L10n.tr("Localizable", "common.do_not_show_this_again") }
     /// Open source licenses
     internal static var openSourceLicenses: String { return L10n.tr("Localizable", "common.open_source_licenses") }
+    /// Pinned
+    internal static var pinned: String { return L10n.tr("Localizable", "common.pinned") }
     /// Send to
     internal static var sendTo: String { return L10n.tr("Localizable", "common.send_to") }
   }

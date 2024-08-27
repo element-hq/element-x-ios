@@ -102,6 +102,7 @@
 "action_tap_for_options" = "點擊以查看選項";
 "action_try_again" = "再試一次";
 "action_unpin" = "Unpin";
+"action_view_in_timeline" = "View in timeline";
 "action_view_source" = "檢視原始碼";
 "action_yes" = "是";
 "action.load_more" = "載入更多";
@@ -216,6 +217,7 @@
 "common_waiting_for_decryption_key" = "等待此則訊息";
 "common.do_not_show_this_again" = "不再顯示";
 "common.open_source_licenses" = "Open source licenses";
+"common.pinned" = "Pinned";
 "common.send_to" = "傳送給";
 "common_no_room_name" = "無聊天室名稱";
 "common_poll_end_confirmation" = "您確定要結束這項投票嗎？";
@@ -256,6 +258,7 @@
 "error_some_messages_have_not_been_sent" = "有些訊息尚未傳送";
 "error_unknown" = "Sorry, an error occurred";
 "event_shield_reason_authenticity_not_guaranteed" = "The authenticity of this encrypted message can't be guaranteed on this device.";
+"event_shield_reason_previously_verified" = "Encrypted by a previously-verified user.";
 "event_shield_reason_sent_in_clear" = "Not encrypted.";
 "event_shield_reason_unknown_device" = "Encrypted by an unknown or deleted device.";
 "event_shield_reason_unsigned_device" = "Encrypted by a device not verified by its owner.";
@@ -597,10 +600,12 @@
 "screen_report_content_hint" = "檢舉這個內容的原因";
 "screen_reset_encryption_confirmation_alert_action" = "Yes, reset now";
 "screen_reset_encryption_confirmation_alert_subtitle" = "This process is irreversible.";
-"screen_reset_encryption_confirmation_alert_title" = "Are you sure you want to reset your encryption?";
+"screen_reset_encryption_confirmation_alert_title" = "Are you sure you want to reset your identity?";
 "screen_reset_encryption_password_placeholder" = "Enter…";
-"screen_reset_encryption_password_subtitle" = "Confirm that you want to reset your encryption.";
+"screen_reset_encryption_password_subtitle" = "Confirm that you want to reset your identity.";
 "screen_reset_encryption_password_title" = "Enter your account password to continue";
+"screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.";
+"screen_reset_identity_confirmation_title" = "Can't confirm? Go to your account to reset your identity.";
 "screen_room_alias_resolver_resolve_alias_failure" = "Failed to resolve room alias.";
 "screen_room_attachment_source_camera" = "照相機";
 "screen_room_attachment_source_camera_video" = "錄影";

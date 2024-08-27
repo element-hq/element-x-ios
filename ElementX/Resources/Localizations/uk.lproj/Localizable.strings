@@ -102,6 +102,7 @@
 "action_tap_for_options" = "Натисніть, щоб переглянути параметри";
 "action_try_again" = "Спробуйте ще раз";
 "action_unpin" = "Відкріпити";
+"action_view_in_timeline" = "View in timeline";
 "action_view_source" = "Переглянути джерело";
 "action_yes" = "Так";
 "action.load_more" = "Завантажити ще";
@@ -216,6 +217,7 @@
 "common_waiting_for_decryption_key" = "Чекаємо на це повідомлення";
 "common.do_not_show_this_again" = "Не показувати це знову";
 "common.open_source_licenses" = "Ліцензії відкритого коду";
+"common.pinned" = "Pinned";
 "common.send_to" = "Надіслати до";
 "common_no_room_name" = "Немає назви кімнати";
 "common_poll_end_confirmation" = "Ви впевнені, що хочете закінчити це опитування?";
@@ -256,6 +258,7 @@
 "error_some_messages_have_not_been_sent" = "Деякі повідомлення не були надіслані";
 "error_unknown" = "Вибачте, сталася помилка";
 "event_shield_reason_authenticity_not_guaranteed" = "Автентичність цього зашифрованого повідомлення не може бути гарантована на цьому пристрої.";
+"event_shield_reason_previously_verified" = "Encrypted by a previously-verified user.";
 "event_shield_reason_sent_in_clear" = "Not encrypted.";
 "event_shield_reason_unknown_device" = "Зашифрований невідомим або видаленим пристроєм.";
 "event_shield_reason_unsigned_device" = "Зашифровано пристроєм, який не підтверджено його власником.";
@@ -601,6 +604,8 @@
 "screen_reset_encryption_password_placeholder" = "Ввести…";
 "screen_reset_encryption_password_subtitle" = "Підтвердьте, що ви хочете скинути шифрування.";
 "screen_reset_encryption_password_title" = "Введіть пароль облікового запису, щоб продовжити";
+"screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.";
+"screen_reset_identity_confirmation_title" = "Can't confirm? Go to your account to reset your identity.";
 "screen_room_alias_resolver_resolve_alias_failure" = "Не вдалося розв'язати псевдонім кімнати.";
 "screen_room_attachment_source_camera" = "Камера";
 "screen_room_attachment_source_camera_video" = "Записати відео";

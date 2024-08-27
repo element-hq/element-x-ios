@@ -1,5 +1,5 @@
-"NSCameraUsageDescription" = "To take pictures or videos and send them as a message Element X needs access to the camera.";
-"NSFaceIDUsageDescription" = "Face ID is used to access your app.";
-"NSLocationWhenInUseUsageDescription" = "Grant location access so that Element X can share your location.";
-"NSMicrophoneUsageDescription" = "To record and send messages with audio, Element X needs to access the microphone.";
+"NSCameraUsageDescription" = "Om foto's of video's te maken en deze als bericht te verzenden, heeft Element X toegang tot de camera nodig.";
+"NSFaceIDUsageDescription" = "Face ID wordt gebruikt om toegang te krijgen tot je app.";
+"NSLocationWhenInUseUsageDescription" = "Geef toegang tot je locatie, zodat Element X je locatie kan delen.";
+"NSMicrophoneUsageDescription" = "Om berichten met audio op te nemen en te verzenden, heeft Element X toegang tot de microfoon nodig.";
 "NSPhotoLibraryUsageDescription" = "Maakt het mogelijk om foto's en video's op te slaan in je bibliotheek.";

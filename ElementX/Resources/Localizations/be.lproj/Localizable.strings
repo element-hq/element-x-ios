@@ -102,6 +102,7 @@
 "action_tap_for_options" = "Дакраніцеся, каб убачыць параметры";
 "action_try_again" = "Паўтарыць спробу";
 "action_unpin" = "Адмацаваць";
+"action_view_in_timeline" = "Прагляд у хроніцы";
 "action_view_source" = "Прагляд зыходнага кода";
 "action_yes" = "Так";
 "action.load_more" = "Загрузіць больш";
@@ -216,6 +217,7 @@
 "common_waiting_for_decryption_key" = "Чакаю гэта паведамленне";
 "common.do_not_show_this_again" = "Не паказваць гэта зноў";
 "common.open_source_licenses" = "Ліцэнзіі з адкрытым зыходным кодам";
+"common.pinned" = "Замацаваны";
 "common.send_to" = "Адправіць";
 "common_no_room_name" = "Няма назвы пакоя";
 "common_poll_end_confirmation" = "Вы ўпэўнены, што хочаце скончыць гэтае апытанне?";
@@ -256,6 +258,7 @@
 "error_some_messages_have_not_been_sent" = "Некаторыя паведамленні не былі адпраўлены";
 "error_unknown" = "Выбачце, адбылася памылка";
 "event_shield_reason_authenticity_not_guaranteed" = "Сапраўднасць гэтага зашыфраванага паведамлення не можа быць гарантаваная на гэтай прыладзе.";
+"event_shield_reason_previously_verified" = "Encrypted by a previously-verified user.";
 "event_shield_reason_sent_in_clear" = "Не зашыфраваны.";
 "event_shield_reason_unknown_device" = "Зашыфравана невядомай ці выдаленай прыладай.";
 "event_shield_reason_unsigned_device" = "Зашыфравана прыладай, не пацверджанай яе ўладальнікам.";
@@ -601,6 +604,8 @@
 "screen_reset_encryption_password_placeholder" = "Увод...";
 "screen_reset_encryption_password_subtitle" = "Пацвердзіце, што вы хочаце скінуць шыфраванне";
 "screen_reset_encryption_password_title" = "Каб працягнуць, увядзіце пароль уліковага запісу";
+"screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.";
+"screen_reset_identity_confirmation_title" = "Can't confirm? Go to your account to reset your identity.";
 "screen_room_alias_resolver_resolve_alias_failure" = "Не ўдалося разабрацца з псеўданімам пакоя.";
 "screen_room_attachment_source_camera" = "Камера";
 "screen_room_attachment_source_camera_video" = "Запісаць відэа";

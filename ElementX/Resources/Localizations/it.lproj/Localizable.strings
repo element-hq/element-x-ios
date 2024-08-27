@@ -102,6 +102,7 @@
 "action_tap_for_options" = "Tocca per le opzioni";
 "action_try_again" = "Riprova";
 "action_unpin" = "Rimuovi dai fissati";
+"action_view_in_timeline" = "View in timeline";
 "action_view_source" = "Vedi codice sorgente";
 "action_yes" = "Sì";
 "action.load_more" = "Carica altro";
@@ -216,6 +217,7 @@
 "common_waiting_for_decryption_key" = "In attesa del messaggio";
 "common.do_not_show_this_again" = "Non mostrarlo più";
 "common.open_source_licenses" = "Licenze open source";
+"common.pinned" = "Pinned";
 "common.send_to" = "Invia a";
 "common_no_room_name" = "Nessun nome della stanza";
 "common_poll_end_confirmation" = "Vuoi davvero terminare questo sondaggio?";
@@ -256,6 +258,7 @@
 "error_some_messages_have_not_been_sent" = "Alcuni messaggi non sono stati inviati";
 "error_unknown" = "Siamo spiacenti, si è verificato un errore";
 "event_shield_reason_authenticity_not_guaranteed" = "L'autenticità di questo messaggio cifrato non può essere garantita su questo dispositivo.";
+"event_shield_reason_previously_verified" = "Encrypted by a previously-verified user.";
 "event_shield_reason_sent_in_clear" = "Non cifrato.";
 "event_shield_reason_unknown_device" = "Cifrato da un dispositivo sconosciuto o eliminato.";
 "event_shield_reason_unsigned_device" = "Cifrato da un dispositivo non verificato dal proprietario.";
@@ -601,6 +604,8 @@
 "screen_reset_encryption_password_placeholder" = "Inserisci…";
 "screen_reset_encryption_password_subtitle" = "Conferma di voler reimpostare la crittografia.";
 "screen_reset_encryption_password_title" = "Inserisci la password del tuo account per continuare";
+"screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.";
+"screen_reset_identity_confirmation_title" = "Can't confirm? Go to your account to reset your identity.";
 "screen_room_alias_resolver_resolve_alias_failure" = "Impossibile risolvere l'alias della stanza.";
 "screen_room_attachment_source_camera" = "Fotocamera";
 "screen_room_attachment_source_camera_video" = "Registra video";

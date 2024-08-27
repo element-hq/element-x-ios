@@ -102,6 +102,7 @@
 "action_tap_for_options" = "Klepnutím zobrazíte možnosti";
 "action_try_again" = "Zkusit znovu";
 "action_unpin" = "Odepnout";
+"action_view_in_timeline" = "Zobrazit na časové ose";
 "action_view_source" = "Zobrazit zdroj";
 "action_yes" = "Ano";
 "action.load_more" = "Načíst více";
@@ -216,6 +217,7 @@
 "common_waiting_for_decryption_key" = "Čekání na dešifrovací klíč";
 "common.do_not_show_this_again" = "Znovu nezobrazovat";
 "common.open_source_licenses" = "Licence s otevřeným zdrojovým kódem";
+"common.pinned" = "Připnuto";
 "common.send_to" = "Odeslat do";
 "common_no_room_name" = "Žádný název místnosti";
 "common_poll_end_confirmation" = "Opravdu chcete ukončit toto hlasování?";
@@ -256,6 +258,7 @@
 "error_some_messages_have_not_been_sent" = "Některé zprávy nebyly odeslány";
 "error_unknown" = "Omlouváme se, došlo k chybě";
 "event_shield_reason_authenticity_not_guaranteed" = "Autenticitu této zašifrované zprávy nelze na tomto zařízení zaručit.";
+"event_shield_reason_previously_verified" = "Zašifrováno dříve ověřeným uživatelem.";
 "event_shield_reason_sent_in_clear" = "Není zašifrováno.";
 "event_shield_reason_unknown_device" = "Šifrováno neznámým nebo smazaným zařízením.";
 "event_shield_reason_unsigned_device" = "Šifrováno zařízením, které nebylo ověřeno jeho vlastníkem.";
@@ -283,7 +286,7 @@
 "notification_reaction_body" = "Reagoval(a) s %1$@";
 "notification_room_invite_body" = "Vás pozval(a) do místnosti";
 "notification_sender_me" = "Já";
-"notification_sender_mention_reply" = "%1$@ mentioned or replied";
+"notification_sender_mention_reply" = "%1$@ zmínil(a) nebo odpověděl(a)";
 "notification_test_push_notification_content" = "Prohlížíte si oznámení! Klikněte na mě!";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -601,6 +604,8 @@
 "screen_reset_encryption_password_placeholder" = "Zadat...";
 "screen_reset_encryption_password_subtitle" = "Potvrďte, že chcete obnovit šifrování.";
 "screen_reset_encryption_password_title" = "Pro pokračování zadejte heslo k účtu";
+"screen_reset_identity_confirmation_subtitle" = "Chystáte se přejít na svůj %1$@ účet a obnovit svou identitu. Poté budete přesměrováni zpět do aplikace.";
+"screen_reset_identity_confirmation_title" = "Nemůžete to potvrdit? Přejděte na svůj účet a resetujte svou identitu.";
 "screen_room_alias_resolver_resolve_alias_failure" = "Nepodařilo se přeložit alias místnosti.";
 "screen_room_attachment_source_camera" = "Fotoaparát";
 "screen_room_attachment_source_camera_video" = "Natočit video";
