@@ -65,7 +65,7 @@ targets:
         MARKETING_VERSION: $(MARKETING_VERSION)
         CURRENT_PROJECT_VERSION: $(CURRENT_PROJECT_VERSION)
         DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
-        CODE_SIGN_ENTITLEMENTS: NSE/SupportingFiles/NSE.entitlements
+        CODE_SIGN_ENTITLEMENTS: TchapX/SupportingFiles/NSE.entitlements
         SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
         OTHER_SWIFT_FLAGS:
         - "-DIS_NSE"
