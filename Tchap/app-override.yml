@@ -1,0 +1,6 @@
+settings:
+  APP_DISPLAY_NAME: Dev Tchap X
+  PRODUCTION_APP_NAME: Tchap
+  BASE_APP_GROUP_IDENTIFIER: fr.gouv.tchap
+  BASE_BUNDLE_IDENTIFIER: fr.gouv.tchapx.dev
+  DEVELOPMENT_TEAM: NVMQD635C6

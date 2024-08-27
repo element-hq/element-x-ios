@@ -55,6 +55,7 @@ include:
 - path: NSE/SupportingFiles/target.yml
 # - path: NCE/SupportingFiles/target.yml (not used yet)
 # - path: MyAppVariant/override.yml
+- path: Tchap/app-override.yml
 
 packages:
   # Element/Matrix dependencies
