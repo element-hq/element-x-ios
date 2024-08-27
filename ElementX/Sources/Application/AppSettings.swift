@@ -105,8 +105,10 @@ final class AppSettings {
         
     /// The default homeserver address used. This is intentionally a string without a scheme
     /// so that it can be passed to Rust as a ServerName for well-known discovery.
-    private(set) var defaultHomeserverAddress = "matrix.org"
-    
+    // Tchap: define Tchap DEV default HomeServer
+    // private(set) var defaultHomeserverAddress = "matrix.org"
+    private(set) var defaultHomeserverAddress = "matrix.dev01.tchap.incubateur.net"
+
     /// An override of the homeserver's Sliding Sync proxy URL. This allows development against servers
     /// that don't yet have an officially trusted proxy configured in their well-known.
     let slidingSyncProxyURL: URL? = nil
