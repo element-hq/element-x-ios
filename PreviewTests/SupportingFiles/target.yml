@@ -19,7 +19,7 @@ schemes:
       disableMainThreadChecker: false
       gatherCoverageData: true
       coverageTargets:
-        - TchapX
+        - ElementX
       testPlans:
         - path: PreviewTests.xctestplan
           defaultPlan: true
@@ -34,7 +34,7 @@ targets:
       package: Prefire
 
     dependencies:
-    - target: TchapX
+    - target: ElementX
     - package: SnapshotTesting
 
     info:
