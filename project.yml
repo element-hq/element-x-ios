@@ -1,7 +1,7 @@
 ---
-name: TchapX
+name: ElementX
 attributes:
-  ORGANIZATIONNAME: Tchap
+  ORGANIZATIONNAME: Element
 
 fileGroups:
 - project.yml
@@ -55,7 +55,6 @@ include:
 - path: NSE/SupportingFiles/target.yml
 # - path: NCE/SupportingFiles/target.yml (not used yet)
 # - path: MyAppVariant/override.yml
-- path: TchapX/app-override.yml
 
 packages:
   # Element/Matrix dependencies
