@@ -143,6 +143,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):
             timelineInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
+        case .handleTimelineSendFailureAction(let action):
+            timelineInteractionHandler.handleTimelineSendFailureAction(action)
         case .tappedOnSenderDetails(userID: let userID):
             actionsSubject.send(.tappedOnSenderDetails(userID: userID))
         case .displayEmojiPicker(let itemID):
@@ -550,9 +552,11 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             fatalError("Only events can have send info.")
         }
         
-        if case .sendingFailed = eventTimelineItem.properties.deliveryStatus {
+        if case .sendingFailed(.unknown) = eventTimelineItem.properties.deliveryStatus {
             // In the future we will show different errors for the various failure reasons.
             displayAlert(.sendingFailed)
+        } else if case let .sendingFailed(failure) = eventTimelineItem.properties.deliveryStatus {
+            state.bindings.sendFailureInfo = .init(id: itemID, failure: failure)
         } else if let authenticityMessage = eventTimelineItem.properties.encryptionAuthenticity?.message {
             displayAlert(.encryptionAuthenticity(authenticityMessage))
         }

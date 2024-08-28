@@ -74,6 +74,9 @@ struct RoomScreen: View {
                         .environmentObject(timelineContext)
                 }
             }
+            .sheet(item: $timelineContext.sendFailureInfo) {
+                ResolveTimelineItemSendFailureView(info: $0, context: timelineContext)
+            }
             .sheet(item: $timelineContext.reactionSummaryInfo) {
                 ReactionsSummaryView(reactions: $0.reactions, members: timelineContext.viewState.members, mediaProvider: timelineContext.mediaProvider, selectedReactionKey: $0.selectedKey)
                     .edgesIgnoringSafeArea([.bottom])

@@ -65,6 +65,14 @@ enum TimelineItemDeliveryStatus: Hashable {
         case verifiedUserHasUnsignedDevice(devices: [String: [String]])
         case verifiedUserChangedIdentity(users: [String])
         case unknown
+        
+        var affectedUserIDs: [String] {
+            switch self {
+            case .verifiedUserHasUnsignedDevice(let devices): Array(devices.keys)
+            case .verifiedUserChangedIdentity(let users): users
+            case .unknown: []
+            }
+        }
     }
     
     var isSendingFailed: Bool {

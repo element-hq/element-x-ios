@@ -178,6 +178,24 @@ class TimelineInteractionHandler {
         }
     }
     
+    func handleTimelineSendFailureAction(_ action: TimelineSendFailureAction) {
+        switch action {
+        case .resolveAndSend(let info):
+            switch info.failure {
+            case .verifiedUserHasUnsignedDevice(let devices):
+                break // ignore devices and send.
+            case .verifiedUserChangedIdentity(let users):
+                break // withdraw verification and send.
+            case .unknown:
+                break
+            }
+        case .retry(let timelineItemSendFailureInfo):
+            break // retry sending.
+        case .cancel:
+            break
+        }
+    }
+    
     private func processEditMessageEvent(_ messageTimelineItem: EventBasedMessageTimelineItemProtocol) {
         let text: String
         var htmlText: String?

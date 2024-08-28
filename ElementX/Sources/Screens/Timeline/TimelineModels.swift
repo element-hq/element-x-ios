@@ -51,6 +51,7 @@ enum TimelineViewAction {
     
     case displayTimelineItemMenu(itemID: TimelineItemIdentifier)
     case handleTimelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
+    case handleTimelineSendFailureAction(TimelineSendFailureAction)
     
     case tappedOnSenderDetails(userID: String)
     case displayReactionSummary(itemID: TimelineItemIdentifier, key: String)
@@ -78,6 +79,12 @@ enum TimelineComposerAction {
     case setText(plainText: String, htmlText: String?)
     case removeFocus
     case clear
+}
+
+enum TimelineSendFailureAction {
+    case resolveAndSend(TimelineItemSendFailureInfo)
+    case retry(TimelineItemSendFailureInfo)
+    case cancel
 }
 
 struct TimelineViewState: BindableState {
@@ -122,6 +129,8 @@ struct TimelineViewStateBindings {
     
     var actionMenuInfo: TimelineItemActionMenuInfo?
     
+    var sendFailureInfo: TimelineItemSendFailureInfo?
+    
     var reactionSummaryInfo: ReactionSummaryInfo?
     
     var readReceiptsSummaryInfo: ReadReceiptSummaryInfo?
@@ -137,6 +146,11 @@ struct TimelineItemActionMenuInfo: Equatable, Identifiable {
     var id: TimelineItemIdentifier {
         item.id
     }
+}
+
+struct TimelineItemSendFailureInfo: Identifiable {
+    let id: TimelineItemIdentifier
+    let failure: TimelineItemDeliveryStatus.SendFailureReason
 }
 
 struct ReactionSummaryInfo: Identifiable {

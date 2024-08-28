@@ -4,6 +4,18 @@
 /* Used for testing */
 "untranslated" = "Untranslated";
 
+// MARK: - Resolve Send Failures
+
+"screen_room_send_failure_unsigned_device_menu_title" = "Message not sent because %1$@ has not verified one or more devices.";
+"screen_room_send_failure_unsigned_device_resolve_title" = "Your message was not sent because %1$@ has not verified one or more devices";
+"screen_room_send_failure_unsigned_device_resolve_subtitle" = "%1$@ is using one or more unverified devices. You can send the message anyway, or you can cancel for now and try again later after %2$@ has verified all their devices.";
+"screen_room_send_failure_unsigned_device_resolve_primary_button_title" = "Send message anyway";
+"screen_room_send_failure_identity_changed_menu_title" = "Message not sent because %1$@’s verified identity has changed.";
+"screen_room_send_failure_identity_changed_resolve_title" = "Your message was not sent because %1$@’s verified identity has changed";
+"screen_room_send_failure_identity_changed_resolve_subtitle" = "You can withdraw your verification and send this message anyway, or you can cancel for now and try again later after reverifying %1$@.";
+"screen_room_send_failure_identity_changed_resolve_primary_button_title" = "Withdraw verification and send";
+"action_cancel_for_now" = "Cancel for now";
+
 // MARK: - Soft logout
 
 "soft_logout_signin_title" = "Sign in";
