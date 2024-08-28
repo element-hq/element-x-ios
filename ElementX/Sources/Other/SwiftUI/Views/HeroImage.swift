@@ -14,33 +14,36 @@ import SwiftUI
 struct HeroImage: View {
     enum Style {
         case normal
-        case positive
         case subtle
+        case success
         case critical
+        case criticalOnSecondary
         
         var foregroundColor: Color {
             switch self {
             case .normal:
-                return .compound.iconPrimary
-            case .positive:
-                return .compound.iconSuccessPrimary
+                .compound.iconPrimary
             case .subtle:
-                return .compound.iconSecondary
-            case .critical:
-                return .compound.iconCriticalPrimary
+                .compound.iconSecondary
+            case .success:
+                .compound.iconSuccessPrimary
+            case .critical, .criticalOnSecondary:
+                .compound.iconCriticalPrimary
             }
         }
         
         var backgroundFillColor: Color {
             switch self {
             case .normal:
-                return .compound.bgSubtleSecondary
-            case .positive:
-                return .compound.bgSuccessSubtle
+                .compound.bgSubtleSecondary
             case .subtle:
-                return .compound.bgSubtlePrimary
+                .compound.bgSubtlePrimary
+            case .success:
+                .compound.bgSuccessSubtle
             case .critical:
-                return .compound.bgCanvasDefault
+                .compound.bgCriticalSubtle
+            case .criticalOnSecondary:
+                .compound.bgCanvasDefault
             }
         }
     }
@@ -86,12 +89,21 @@ private struct HeroImageModifier: ViewModifier {
 
 struct HeroImage_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        HStack(spacing: 20) {
-            HeroImage(icon: \.lockSolid)
-            Image(systemName: "hourglass")
-                .heroImage()
-            Image(asset: Asset.Images.serverSelectionIcon)
-                .heroImage(insets: 19)
+        VStack(spacing: 20) {
+            HStack(spacing: 20) {
+                HeroImage(icon: \.lockSolid)
+                Image(systemName: "hourglass")
+                    .heroImage()
+                Image(asset: Asset.Images.serverSelectionIcon)
+                    .heroImage(insets: 19)
+            }
+            
+            HStack(spacing: 20) {
+                HeroImage(icon: \.helpSolid, style: .subtle)
+                HeroImage(icon: \.checkCircleSolid, style: .success)
+                HeroImage(icon: \.error, style: .critical)
+                HeroImage(icon: \.error, style: .criticalOnSecondary)
+            }
         }
     }
 }
