@@ -1057,6 +1057,8 @@ internal enum L10n {
   internal static var screenEditProfileTitle: String { return L10n.tr("Localizable", "screen_edit_profile_title") }
   /// Updating profile…
   internal static var screenEditProfileUpdatingDetails: String { return L10n.tr("Localizable", "screen_edit_profile_updating_details") }
+  /// Continue reset
+  internal static var screenEncryptionResetActionContinueReset: String { return L10n.tr("Localizable", "screen_encryption_reset_action_continue_reset") }
   /// Your account details, contacts, preferences, and chat list will be kept
   internal static var screenEncryptionResetBullet1: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_1") }
   /// You will lose your existing message history
@@ -1065,9 +1067,7 @@ internal enum L10n {
   internal static var screenEncryptionResetBullet3: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_3") }
   /// Only reset your identity if you don’t have access to another signed-in device and you’ve lost your recovery key.
   internal static var screenEncryptionResetFooter: String { return L10n.tr("Localizable", "screen_encryption_reset_footer") }
-  /// If you’re not signed in to any other devices and you’ve lost your recovery key, then you’ll need to reset your identity to continue using the app. 
-  internal static var screenEncryptionResetSubtitle: String { return L10n.tr("Localizable", "screen_encryption_reset_subtitle") }
-  /// Reset your identity in case you can’t confirm another way
+  /// Can't confirm? You’ll need to reset your identity.
   internal static var screenEncryptionResetTitle: String { return L10n.tr("Localizable", "screen_encryption_reset_title") }
   /// Can't confirm?
   internal static var screenIdentityConfirmationCannotConfirm: String { return L10n.tr("Localizable", "screen_identity_confirmation_cannot_confirm") }
@@ -1075,7 +1075,7 @@ internal enum L10n {
   internal static var screenIdentityConfirmationCreateNewRecoveryKey: String { return L10n.tr("Localizable", "screen_identity_confirmation_create_new_recovery_key") }
   /// Verify this device to set up secure messaging.
   internal static var screenIdentityConfirmationSubtitle: String { return L10n.tr("Localizable", "screen_identity_confirmation_subtitle") }
-  /// Confirm that it's you
+  /// Confirm your identity
   internal static var screenIdentityConfirmationTitle: String { return L10n.tr("Localizable", "screen_identity_confirmation_title") }
   /// Use another device
   internal static var screenIdentityConfirmationUseAnotherDevice: String { return L10n.tr("Localizable", "screen_identity_confirmation_use_another_device") }

@@ -24,7 +24,7 @@ struct EncryptionResetScreen: View {
         FullscreenDialog {
             mainContent
         } bottomContent: {
-            Button(L10n.actionContinue, role: .destructive) {
+            Button(L10n.screenEncryptionResetActionContinueReset, role: .destructive) {
                 context.send(viewAction: .reset)
             }
             .buttonStyle(.compound(.primary))
@@ -55,11 +55,6 @@ struct EncryptionResetScreen: View {
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
-            
-            Text(L10n.screenEncryptionResetSubtitle)
-                .font(.compound.bodyMD)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.compound.textSecondary)
         }
     }
     
