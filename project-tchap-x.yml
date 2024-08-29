@@ -1,0 +1,35 @@
+---
+name: TchapX
+attributes:
+  ORGANIZATIONNAME: Tchap
+
+fileGroups:
+- project-tchap-x.yml
+
+options:
+  groupOrdering:REPLACE:
+  - order:
+    - TchapX
+    - ElementX
+    - UnitTests
+    - UITests
+    - IntegrationTests
+    - Tools
+  - pattern: TchapX
+    order:
+    - Sources
+    - Resources
+    - SupportingFiles
+
+settingGroups:
+  MARKETING_VERSION: 1.8.0
+  CURRENT_PROJECT_VERSION: 1
+
+include:
+- path: project.yml
+- path: TchapX/production/SupportingFiles/target.yml
+- path: TchapX/production/SupportingFiles/NSE/target.yml
+- path: TchapX/staging/SupportingFiles/target.yml
+- path: TchapX/staging/SupportingFiles/NSE/target.yml
+- path: TchapX/development/SupportingFiles/target.yml
+- path: TchapX/development/SupportingFiles/NSE/target.yml
