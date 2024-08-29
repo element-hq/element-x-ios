@@ -178,12 +178,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async {
         MXLog.info("Toggle reaction in \(roomID)")
-        guard let eventID = itemID.eventID else {
-            MXLog.error("Failed toggling reaction: missing eventID")
-            return
-        }
-
-        switch await activeTimeline.toggleReaction(reaction, to: eventID) {
+        
+        switch await activeTimeline.toggleReaction(reaction, to: itemID) {
         case .success:
             MXLog.info("Finished toggling reaction")
         case .failure(let error):

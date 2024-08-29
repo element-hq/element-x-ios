@@ -9974,82 +9974,6 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
         try await unmuteRoomRoomIdIsEncryptedIsOneToOneClosure?(roomId, isEncrypted, isOneToOne)
     }
 }
-open class OidcAuthorizationDataSDKMock: MatrixRustSDK.OidcAuthorizationData {
-    init() {
-        super.init(noPointer: .init())
-    }
-
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
-    }
-
-    fileprivate var pointer: UnsafeMutableRawPointer!
-
-    //MARK: - loginUrl
-
-    var loginUrlUnderlyingCallsCount = 0
-    open var loginUrlCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return loginUrlUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loginUrlUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loginUrlUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loginUrlUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var loginUrlCalled: Bool {
-        return loginUrlCallsCount > 0
-    }
-
-    var loginUrlUnderlyingReturnValue: String!
-    open var loginUrlReturnValue: String! {
-        get {
-            if Thread.isMainThread {
-                return loginUrlUnderlyingReturnValue
-            } else {
-                var returnValue: String? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loginUrlUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loginUrlUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loginUrlUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var loginUrlClosure: (() -> String)?
-
-    open override func loginUrl() -> String {
-        loginUrlCallsCount += 1
-        if let loginUrlClosure = loginUrlClosure {
-            return loginUrlClosure()
-        } else {
-            return loginUrlReturnValue
-        }
-    }
-}
 open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData {
     init() {
         super.init(noPointer: .init())
@@ -20067,16 +19991,16 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
 
     //MARK: - toggleReaction
 
-    open var toggleReactionEventIdKeyThrowableError: Error?
-    var toggleReactionEventIdKeyUnderlyingCallsCount = 0
-    open var toggleReactionEventIdKeyCallsCount: Int {
+    open var toggleReactionUniqueIdKeyThrowableError: Error?
+    var toggleReactionUniqueIdKeyUnderlyingCallsCount = 0
+    open var toggleReactionUniqueIdKeyCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return toggleReactionEventIdKeyUnderlyingCallsCount
+                return toggleReactionUniqueIdKeyUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = toggleReactionEventIdKeyUnderlyingCallsCount
+                    returnValue = toggleReactionUniqueIdKeyUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -20084,31 +20008,31 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         set {
             if Thread.isMainThread {
-                toggleReactionEventIdKeyUnderlyingCallsCount = newValue
+                toggleReactionUniqueIdKeyUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    toggleReactionEventIdKeyUnderlyingCallsCount = newValue
+                    toggleReactionUniqueIdKeyUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var toggleReactionEventIdKeyCalled: Bool {
-        return toggleReactionEventIdKeyCallsCount > 0
+    open var toggleReactionUniqueIdKeyCalled: Bool {
+        return toggleReactionUniqueIdKeyCallsCount > 0
     }
-    open var toggleReactionEventIdKeyReceivedArguments: (eventId: String, key: String)?
-    open var toggleReactionEventIdKeyReceivedInvocations: [(eventId: String, key: String)] = []
-    open var toggleReactionEventIdKeyClosure: ((String, String) async throws -> Void)?
+    open var toggleReactionUniqueIdKeyReceivedArguments: (uniqueId: String, key: String)?
+    open var toggleReactionUniqueIdKeyReceivedInvocations: [(uniqueId: String, key: String)] = []
+    open var toggleReactionUniqueIdKeyClosure: ((String, String) async throws -> Void)?
 
-    open override func toggleReaction(eventId: String, key: String) async throws {
-        if let error = toggleReactionEventIdKeyThrowableError {
+    open override func toggleReaction(uniqueId: String, key: String) async throws {
+        if let error = toggleReactionUniqueIdKeyThrowableError {
             throw error
         }
-        toggleReactionEventIdKeyCallsCount += 1
-        toggleReactionEventIdKeyReceivedArguments = (eventId: eventId, key: key)
+        toggleReactionUniqueIdKeyCallsCount += 1
+        toggleReactionUniqueIdKeyReceivedArguments = (uniqueId: uniqueId, key: key)
         DispatchQueue.main.async {
-            self.toggleReactionEventIdKeyReceivedInvocations.append((eventId: eventId, key: key))
+            self.toggleReactionUniqueIdKeyReceivedInvocations.append((uniqueId: uniqueId, key: key))
         }
-        try await toggleReactionEventIdKeyClosure?(eventId, key)
+        try await toggleReactionUniqueIdKeyClosure?(uniqueId, key)
     }
 
     //MARK: - unpinEvent
