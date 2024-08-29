@@ -232,7 +232,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentDeveloperOptions() {
-        let coordinator = DeveloperOptionsScreenCoordinator()
+        let coordinator = DeveloperOptionsScreenCoordinator(isUsingNativeSlidingSync: parameters.userSession.clientProxy.slidingSyncVersion == .native)
         
         coordinator.actions
             .sink { [weak self] action in
@@ -241,8 +241,6 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .clearCache:
                     actionsSubject.send(.clearCache)
-                case .forceLogout:
-                    actionsSubject.send(.forceLogout)
                 }
             }
             .store(in: &cancellables)

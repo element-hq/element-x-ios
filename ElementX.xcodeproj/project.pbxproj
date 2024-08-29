@@ -615,6 +615,7 @@
 		89B909AC66B96FA054EF3C14 /* InvitedRoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E95B3BDB80531C85CD50AE6 /* InvitedRoomProxy.swift */; };
 		8A0BD60CA4A6004DB06B5403 /* MediaUploadingPreprocessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669F35C505ACE1110589F875 /* MediaUploadingPreprocessor.swift */; };
 		8A5064CAC8E5F3B18645621D /* CallNotificationRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6E082B0507FB28F966516A /* CallNotificationRoomTimelineView.swift */; };
+		8A6CB15C8FC68F557750BF54 /* AuthenticationClientBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F569CFB77E0D40BD82203D9 /* AuthenticationClientBuilder.swift */; };
 		8A83D715940378B9BA9F739E /* RoomInviterLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB58E4E8D6D634C246AD5C2 /* RoomInviterLabel.swift */; };
 		8AA84EF202F2EFC8453A97BD /* SecureBackupRecoveryKeyScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645E027C112740573D27765C /* SecureBackupRecoveryKeyScreenModels.swift */; };
 		8AB8ED1051216546CB35FA0E /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5E9C044BEB7C70B1378E91 /* UserSession.swift */; };
@@ -1248,6 +1249,7 @@
 		0E95B3BDB80531C85CD50AE6 /* InvitedRoomProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitedRoomProxy.swift; sourceTree = "<group>"; };
 		0EE9EAF0309A2A1D67D8FAF5 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sv; path = sv.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		0F5567A7EF6F2AB9473236F6 /* DocumentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
+		0F569CFB77E0D40BD82203D9 /* AuthenticationClientBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationClientBuilder.swift; sourceTree = "<group>"; };
 		0F64447FF544298A6A3BEF85 /* NotificationSettingsScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsScreenModels.swift; sourceTree = "<group>"; };
 		0FA60F848D1C14F873F9621A /* RoomMemberDetailsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMemberDetailsScreenCoordinator.swift; sourceTree = "<group>"; };
 		105429F29096729EDD3152CF /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/SAS.strings; sourceTree = "<group>"; };
@@ -4586,6 +4588,7 @@
 		AAFDD509929A0CCF8BCE51EB /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				0F569CFB77E0D40BD82203D9 /* AuthenticationClientBuilder.swift */,
 				F3A1AB5A84D843B6AC8D5F1E /* AuthenticationService.swift */,
 				5E75948AA1FE1D1A7809931F /* AuthenticationServiceProtocol.swift */,
 				65C2B80DD0BF6F10BB5FA922 /* MockAuthenticationServiceProxy.swift */,
@@ -6181,6 +6184,7 @@
 				88F348E2CB14FF71CBBB665D /* AudioRoomTimelineItemContent.swift in Sources */,
 				7BD2123144A32F082CECC108 /* AudioRoomTimelineView.swift in Sources */,
 				9278EC51D24E57445B290521 /* AudioSessionProtocol.swift in Sources */,
+				8A6CB15C8FC68F557750BF54 /* AuthenticationClientBuilder.swift in Sources */,
 				67E9926C4572C54F59FCA91A /* AuthenticationFlowCoordinator.swift in Sources */,
 				9847B056C1A216C314D21E68 /* AuthenticationService.swift in Sources */,
 				56DACDD379A86A1F5DEFE7BE /* AuthenticationServiceProtocol.swift in Sources */,

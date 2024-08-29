@@ -43,7 +43,7 @@ final class AppSettings {
         case elementCallEncryptionEnabled
         
         // Feature flags
-        case simplifiedSlidingSyncEnabled
+        case slidingSyncDiscovery
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
         case pinningEnabled
@@ -105,10 +105,6 @@ final class AppSettings {
     /// The default homeserver address used. This is intentionally a string without a scheme
     /// so that it can be passed to Rust as a ServerName for well-known discovery.
     private(set) var defaultHomeserverAddress = "matrix.org"
-    
-    /// An override of the homeserver's Sliding Sync proxy URL. This allows development against servers
-    /// that don't yet have an officially trusted proxy configured in their well-known.
-    let slidingSyncProxyURL: URL? = nil
     
     /// The task identifier used for background app refresh. Also used in main target's the Info.plist
     let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"
@@ -284,6 +280,10 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.pinningEnabled, defaultValue: false, storageType: .userDefaults(store))
     var pinningEnabled
+    
+    enum SlidingSyncDiscovery: Codable { case proxy, native, forceNative }
+    @UserPreference(key: UserDefaultsKeys.slidingSyncDiscovery, defaultValue: .proxy, storageType: .userDefaults(store))
+    var slidingSyncDiscovery: SlidingSyncDiscovery
         
     #endif
     
@@ -291,9 +291,4 @@ final class AppSettings {
         
     @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
     var logLevel
-    
-    // MARK: Shared Feature Flags
-    
-    @UserPreference(key: UserDefaultsKeys.simplifiedSlidingSyncEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var simplifiedSlidingSyncEnabled
 }

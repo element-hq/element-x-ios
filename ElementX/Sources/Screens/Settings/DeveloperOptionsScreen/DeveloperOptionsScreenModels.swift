@@ -18,13 +18,16 @@ import Foundation
 
 enum DeveloperOptionsScreenViewModelAction {
     case clearCache
-    /// Logout without a confirmation to avoid losing keys when trying SSS.
-    case forceLogout
 }
 
 struct DeveloperOptionsScreenViewState: BindableState {
     let elementCallBaseURL: URL
+    let isUsingNativeSlidingSync: Bool
     var bindings: DeveloperOptionsScreenViewStateBindings
+    
+    var slidingSyncFooter: String {
+        "The method used to configure sliding sync when signing in. Changing this setting has no effect until you sign out.\n\nYour current session is using \(isUsingNativeSlidingSync ? "native sliding sync." : "a sliding sync proxy.")"
+    }
 }
 
 // periphery: ignore - subscripts are seen as false positive
@@ -48,7 +51,7 @@ enum DeveloperOptionsScreenViewAction {
 
 protocol DeveloperOptionsProtocol: AnyObject {
     var logLevel: TracingConfiguration.LogLevel { get set }
-    var simplifiedSlidingSyncEnabled: Bool { get set }
+    var slidingSyncDiscovery: AppSettings.SlidingSyncDiscovery { get set }
     var hideUnreadMessagesBadge: Bool { get set }
     var elementCallBaseURLOverride: URL? { get set }
     var fuzzyRoomListSearchEnabled: Bool { get set }
