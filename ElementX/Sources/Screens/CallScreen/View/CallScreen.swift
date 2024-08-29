@@ -50,7 +50,7 @@ struct CallScreen: View {
             CallView(url: context.viewState.url, viewModelContext: context)
                 // This URL is stable, forces view reloads if this representable is ever reused for another url
                 .id(context.viewState.url)
-                .ignoresSafeArea(edges: .bottom)
+                .ignoresSafeArea()
         }
     }
 }
@@ -78,6 +78,12 @@ private struct CallView: UIViewRepresentable {
     
     @MainActor
     class Coordinator: NSObject, WKUIDelegate, WKNavigationDelegate, AVPictureInPictureControllerDelegate {
+        private class FullScreenWKWebView: WKWebView {
+            override var safeAreaInsets: UIEdgeInsets {
+                .zero
+            }
+        }
+        
         private weak var viewModelContext: CallScreenViewModel.Context?
         private let certificateValidator: CertificateValidatorHookProtocol
         
@@ -117,7 +123,7 @@ private struct CallView: UIViewRepresentable {
                 configuration.userContentController.addUserScript(userScript)
             }
             
-            webView = WKWebView(frame: .zero, configuration: configuration)
+            webView = FullScreenWKWebView(frame: .zero, configuration: configuration)
             webView.uiDelegate = self
             webView.navigationDelegate = self
             webView.isInspectable = true
