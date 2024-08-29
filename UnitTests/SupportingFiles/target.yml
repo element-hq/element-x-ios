@@ -19,7 +19,7 @@ schemes:
       disableMainThreadChecker: false
       gatherCoverageData: true
       coverageTargets:
-        - TchapX
+        - ElementX
       testPlans:
         - path: UnitTests.xctestplan
           defaultPlan: true
@@ -30,7 +30,7 @@ targets:
     platform: iOS
 
     dependencies:
-    - target: TchapX
+    - target: ElementX
 
     info:
       path: ../SupportingFiles/Info.plist
