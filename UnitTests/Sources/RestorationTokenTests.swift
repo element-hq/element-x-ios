@@ -28,7 +28,7 @@ class RestorationTokenTests: XCTestCase {
                                                                 deviceId: "D3V1C3",
                                                                 homeserverUrl: "https://matrix.example.com",
                                                                 oidcData: nil,
-                                                                slidingSyncProxy: "https://sync.example.com"))
+                                                                slidingSyncVersion: .proxy(url: "https://sync.example.com")))
         let data = try JSONEncoder().encode(originalToken)
         
         // When decoding the data to the current restoration token format.
@@ -53,7 +53,7 @@ class RestorationTokenTests: XCTestCase {
                                                                 deviceId: "D3V1C3",
                                                                 homeserverUrl: "https://matrix.example.com",
                                                                 oidcData: "data-from-mas",
-                                                                slidingSyncProxy: "https://sync.example.com"),
+                                                                slidingSyncVersion: .proxy(url: "https://sync.example.com")),
                                                sessionDirectory: .sessionsBaseDirectory.appending(component: sessionDirectoryName),
                                                passphrase: "passphrase",
                                                pusherNotificationClientIdentifier: "pusher-identifier")
@@ -81,7 +81,7 @@ class RestorationTokenTests: XCTestCase {
                                                               deviceId: "D3V1C3",
                                                               homeserverUrl: "https://matrix.example.com",
                                                               oidcData: "data-from-mas",
-                                                              slidingSyncProxy: nil),
+                                                              slidingSyncVersion: .native),
                                              sessionDirectory: .sessionsBaseDirectory.appending(component: sessionDirectoryName),
                                              cacheDirectory: .cachesBaseDirectory.appending(component: sessionDirectoryName),
                                              passphrase: "passphrase",

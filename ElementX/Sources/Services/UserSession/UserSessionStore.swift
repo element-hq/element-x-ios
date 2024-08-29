@@ -131,7 +131,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         
         let builder = ClientBuilder
             .baseBuilder(httpProxy: URL(string: homeserverURL)?.globalProxy,
-                         slidingSync: appSettings.simplifiedSlidingSyncEnabled ? .simplified : .restored,
+                         slidingSync: .restored,
                          sessionDelegate: keychainController,
                          appHooks: appHooks)
             .sessionPaths(dataPath: credentials.restorationToken.sessionDirectory.path(percentEncoded: false),

@@ -210,6 +210,16 @@ class ClientProxy: ClientProxyProtocol {
         client.homeserver()
     }
     
+    var slidingSyncVersion: SlidingSyncVersion {
+        client.slidingSyncVersion()
+    }
+    
+    var availableSlidingSyncVersions: [SlidingSyncVersion] {
+        get async {
+            await client.availableSlidingSyncVersions()
+        }
+    }
+    
     var userIDServerName: String? {
         do {
             return try client.userIdServerName()

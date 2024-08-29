@@ -54,14 +54,14 @@ extension RestorationToken: Codable {
 extension MatrixRustSDK.Session: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        let slidingSyncVersion: SlidingSyncVersion = try container.decodeIfPresent(String.self, forKey: .slidingSyncProxy).map { .proxy(url: $0) } ?? .native
         self = try .init(accessToken: container.decode(String.self, forKey: .accessToken),
                          refreshToken: container.decodeIfPresent(String.self, forKey: .refreshToken),
                          userId: container.decode(String.self, forKey: .userId),
                          deviceId: container.decode(String.self, forKey: .deviceId),
                          homeserverUrl: container.decode(String.self, forKey: .homeserverUrl),
                          oidcData: container.decodeIfPresent(String.self, forKey: .oidcData),
-                         // Note: the proxy is optional now that we support Simplified Sliding Sync.
-                         slidingSyncProxy: container.decodeIfPresent(String.self, forKey: .slidingSyncProxy))
+                         slidingSyncVersion: slidingSyncVersion)
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -72,10 +72,17 @@ extension MatrixRustSDK.Session: Codable {
         try container.encode(deviceId, forKey: .deviceId)
         try container.encode(homeserverUrl, forKey: .homeserverUrl)
         try container.encode(oidcData, forKey: .oidcData)
-        try container.encode(slidingSyncProxy, forKey: .slidingSyncProxy)
+        try container.encode(slidingSyncVersion.proxyURL, forKey: .slidingSyncProxy)
     }
     
     enum CodingKeys: String, CodingKey {
         case accessToken, refreshToken, userId, deviceId, homeserverUrl, oidcData, slidingSyncProxy
+    }
+}
+
+private extension SlidingSyncVersion {
+    var proxyURL: String? {
+        guard case let .proxy(url) = self else { return nil }
+        return url
     }
 }
