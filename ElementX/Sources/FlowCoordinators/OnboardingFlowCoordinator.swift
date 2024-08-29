@@ -18,6 +18,10 @@ import Combine
 import Foundation
 import SwiftState
 
+enum OnboardingFlowCoordinatorAction {
+    case logout
+}
+
 class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let appLockService: AppLockServiceProtocol
@@ -51,6 +55,11 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     
     // periphery: ignore - used to store the coordinator to avoid deallocation
     private var appLockFlowCoordinator: AppLockSetupFlowCoordinator?
+    
+    private let actionsSubject: PassthroughSubject<OnboardingFlowCoordinatorAction, Never> = .init()
+    var actions: AnyPublisher<OnboardingFlowCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(userSession: UserSessionProtocol,
          appLockService: AppLockServiceProtocol,
@@ -234,6 +243,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.nextSkippingIdentityConfimed)
             case .reset:
                 presentEncryptionResetScreen()
+            case .logout:
+                actionsSubject.send(.logout)
             }
         }
         .store(in: &cancellables)

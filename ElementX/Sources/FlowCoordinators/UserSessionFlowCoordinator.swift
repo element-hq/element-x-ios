@@ -185,6 +185,17 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 }
             }
             .store(in: &cancellables)
+        
+        onboardingFlowCoordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .logout:
+                    logout()
+                }
+            }
+            .store(in: &cancellables)
     }
     
     func start() {
@@ -429,12 +440,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         guard isLastDevice else {
-            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
-                                                                            title: L10n.screenSignoutConfirmationDialogTitle,
-                                                                            message: L10n.screenSignoutConfirmationDialogContent,
-                                                                            primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
-                                                                                self?.actionsSubject.send(.logout)
-                                                                            })
+            logout()
             return
         }
         
@@ -463,6 +469,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         presentSecureBackupLogoutConfirmationScreen()
+    }
+    
+    private func logout() {
+        ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                        title: L10n.screenSignoutConfirmationDialogTitle,
+                                                                        message: L10n.screenSignoutConfirmationDialogContent,
+                                                                        primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
+                                                                            self?.actionsSubject.send(.logout)
+                                                                        })
     }
     
     // MARK: Room Flow
