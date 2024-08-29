@@ -168,8 +168,7 @@ class TimelineInteractionHandler {
         case .react:
             displayEmojiPicker(for: itemID)
         case .toggleReaction(let key):
-            guard let eventID = itemID.eventID else { return }
-            Task { await roomProxy.timeline.toggleReaction(key, to: eventID) }
+            Task { await timelineController.toggleReaction(key, to: itemID) }
         case .endPoll(let pollStartID):
             endPoll(pollStartID: pollStartID)
         case .pin:
