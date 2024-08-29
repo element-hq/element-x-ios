@@ -62,6 +62,10 @@ final class TimelineProxy: TimelineProxyProtocol {
         await provider.waitForInitialItems()
         
         innerTimelineProvider = provider
+        
+        Task {
+            await timeline.fetchMembers()
+        }
     }
     
     func fetchDetails(for eventID: String) {
