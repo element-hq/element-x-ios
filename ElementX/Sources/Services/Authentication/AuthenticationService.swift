@@ -47,8 +47,10 @@ class AuthenticationService: AuthenticationServiceProtocol {
         do {
             var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)
             
-            let client = try await makeClientBuilder().serverNameOrHomeserverUrl(serverNameOrUrl: homeserverAddress).build()
+            let client = try await makeClientBuilder().build(homeserverAddress: homeserverAddress)
             let loginDetails = await client.homeserverLoginDetails()
+            
+            MXLog.info("Sliding sync: \(client.slidingSyncVersion())")
             
             if loginDetails.supportsOidcLogin() {
                 homeserver.loginMode = .oidc
@@ -64,8 +66,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
         } catch ClientBuildError.WellKnownDeserializationError(let error) {
             MXLog.error("The user entered a server with an invalid well-known file: \(error)")
             return .failure(.invalidWellKnown(error))
-        } catch ClientBuildError.SlidingSyncNotAvailable {
-            MXLog.info("User entered a homeserver that isn't configured for sliding sync.")
+        } catch ClientBuildError.SlidingSyncVersion(let error) {
+            MXLog.info("User entered a homeserver that isn't configured for sliding sync: \(error)")
             return .failure(.slidingSyncNotAvailable)
         } catch {
             MXLog.error("Failed configuring a server: \(error)")
@@ -138,20 +140,16 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     // MARK: - Private
     
-    private func makeClientBuilder() -> ClientBuilder {
+    private func makeClientBuilder() -> AuthenticationClientBuilder {
         // Use a fresh session directory each time the user enters a different server
         // so that caches (e.g. server versions) are always fresh for the new server.
         rotateSessionDirectory()
         
-        return ClientBuilder
-            .baseBuilder(httpProxy: appSettings.websiteURL.globalProxy,
-                         slidingSync: appSettings.simplifiedSlidingSyncEnabled ? .simplified : .discovered,
-                         slidingSyncProxy: appSettings.slidingSyncProxyURL,
-                         sessionDelegate: userSessionStore.clientSessionDelegate,
-                         appHooks: appHooks)
-            .sessionPaths(dataPath: sessionDirectories.dataPath,
-                          cachePath: sessionDirectories.cachePath)
-            .passphrase(passphrase: passphrase)
+        return AuthenticationClientBuilder(sessionDirectories: sessionDirectories,
+                                           passphrase: passphrase,
+                                           clientSessionDelegate: userSessionStore.clientSessionDelegate,
+                                           appSettings: appSettings,
+                                           appHooks: appHooks)
     }
     
     private func rotateSessionDirectory() {

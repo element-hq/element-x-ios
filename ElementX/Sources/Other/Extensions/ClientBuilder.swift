@@ -22,19 +22,18 @@ extension ClientBuilder {
     static func baseBuilder(setupEncryption: Bool = true,
                             httpProxy: String? = nil,
                             slidingSync: ClientBuilderSlidingSync,
-                            slidingSyncProxy: URL? = nil,
                             sessionDelegate: ClientSessionDelegate,
                             appHooks: AppHooks) -> ClientBuilder {
         var builder = ClientBuilder()
-            .slidingSyncProxy(slidingSyncProxy: slidingSyncProxy?.absoluteString)
             .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier, sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
             .requestConfig(config: .init(retryLimit: 0, timeout: 30000, maxConcurrentRequests: nil, retryTimeout: nil))
         
         builder = switch slidingSync {
         case .restored: builder
-        case .discovered: builder.requiresSlidingSync()
-        case .simplified: builder.simplifiedSlidingSync(enable: true)
+        case .discoverProxy: builder.slidingSyncVersionBuilder(versionBuilder: .discoverProxy)
+        case .discoverNative: builder.slidingSyncVersionBuilder(versionBuilder: .discoverNative)
+        case .forceNative: builder.slidingSyncVersionBuilder(versionBuilder: .native)
         }
         
         if setupEncryption {
@@ -56,7 +55,9 @@ enum ClientBuilderSlidingSync {
     /// The proxy will be supplied when restoring the Session.
     case restored
     /// A proxy must be discovered whilst building the session.
-    case discovered
-    /// Use Simplified Sliding Sync (discovery isn't a thing yet).
-    case simplified
+    case discoverProxy
+    /// Native sliding sync must be discovered whilst building the session.
+    case discoverNative
+    /// Forces native sliding sync without discovering it.
+    case forceNative
 }

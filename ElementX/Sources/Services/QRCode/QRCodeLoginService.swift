@@ -57,9 +57,10 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
         }
         
         do {
-            let client = try await makeClientBuilder().buildWithQrCode(qrCodeData: qrData,
-                                                                       oidcConfiguration: appSettings.oidcConfiguration.rustValue,
+            let client = try await makeClientBuilder().buildWithQRCode(qrCodeData: qrData,
+                                                                       oidcConfiguration: appSettings.oidcConfiguration,
                                                                        progressListener: listener)
+            MXLog.info("Sliding sync: \(client.slidingSyncVersion())")
             return await userSession(for: client)
         } catch let error as HumanQrLoginError {
             MXLog.error("QRCode login error: \(error)")
@@ -72,20 +73,16 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
     
     // MARK: - Private
     
-    private func makeClientBuilder() -> ClientBuilder {
+    private func makeClientBuilder() -> AuthenticationClientBuilder {
         // Use a fresh session directory each time the user scans a QR code to ensure caches
         // (e.g. server versions) are always fresh in case a different server is used.
         rotateSessionDirectory()
         
-        return ClientBuilder
-            .baseBuilder(httpProxy: appSettings.websiteURL.globalProxy,
-                         slidingSync: appSettings.simplifiedSlidingSyncEnabled ? .simplified : .discovered,
-                         slidingSyncProxy: appSettings.slidingSyncProxyURL,
-                         sessionDelegate: userSessionStore.clientSessionDelegate,
-                         appHooks: appHooks)
-            .sessionPaths(dataPath: sessionDirectories.dataPath,
-                          cachePath: sessionDirectories.cachePath)
-            .passphrase(passphrase: passphrase)
+        return AuthenticationClientBuilder(sessionDirectories: sessionDirectories,
+                                           passphrase: passphrase,
+                                           clientSessionDelegate: userSessionStore.clientSessionDelegate,
+                                           appSettings: appSettings,
+                                           appHooks: appHooks)
     }
     
     private func rotateSessionDirectory() {
