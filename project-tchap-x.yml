@@ -21,7 +21,8 @@ options:
     - Resources
     - SupportingFiles
 
-settingGroups:
+settings:
+  DEVELOPMENT_TEAM: NVMQD635C6
   MARKETING_VERSION: 1.8.0
   CURRENT_PROJECT_VERSION: 1
 

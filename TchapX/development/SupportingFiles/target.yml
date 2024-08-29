@@ -113,7 +113,6 @@ targets:
 
     settings:
       base:
-        DEVELOPMENT_TEAM: NVMQD635C6
         PRODUCTION_APP_NAME: Tchap DEVELOPMENT
         BASE_APP_GROUP_IDENTIFIER: fr.gouv.tchapx.dev
         BASE_BUNDLE_IDENTIFIER: fr.gouv.tchapx.dev
