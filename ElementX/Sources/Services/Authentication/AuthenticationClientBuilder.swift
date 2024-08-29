@@ -62,8 +62,6 @@ struct AuthenticationClientBuilder {
             } catch HumanQrLoginError.SlidingSyncNotAvailable {
                 MXLog.warning("Native sliding sync not available")
                 MXLog.info("Falling back to a sliding sync proxy.")
-            } catch {
-                throw error
             }
         }
         
