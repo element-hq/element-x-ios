@@ -104,8 +104,11 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     var homeserver: String { get }
     
+    var slidingSyncVersion: SlidingSyncVersion { get }
+    var availableSlidingSyncVersions: [SlidingSyncVersion] { get async }
+    
     var userIDServerName: String? { get }
-        
+    
     var userDisplayNamePublisher: CurrentValuePublisher<String?, Never> { get }
 
     var userAvatarURLPublisher: CurrentValuePublisher<URL?, Never> { get }

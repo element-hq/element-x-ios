@@ -18,7 +18,6 @@ import Foundation
 
 protocol NSESettingsProtocol {
     var logLevel: TracingConfiguration.LogLevel { get }
-    var simplifiedSlidingSyncEnabled: Bool { get }
 }
 
 extension AppSettings: NSESettingsProtocol { }
