@@ -101,7 +101,7 @@ protocol TimelineProxyProtocol {
                      inReplyTo eventID: String?,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError>
     
-    func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, TimelineProxyError>
+    func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async -> Result<Void, TimelineProxyError>
     
     // Polls
     func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError>
