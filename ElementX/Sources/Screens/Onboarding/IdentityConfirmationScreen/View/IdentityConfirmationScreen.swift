@@ -34,9 +34,9 @@ struct IdentityConfirmationScreen: View {
         } bottomContent: {
             actionButtons
         }
+        .toolbar { toolbar }
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
-        .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .interactiveDismissDisabled()
     }
@@ -102,6 +102,15 @@ struct IdentityConfirmationScreen: View {
             }
             .buttonStyle(.compound(.plain))
             .padding(.vertical, 14)
+        }
+    }
+    
+    @ToolbarContentBuilder
+    var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .destructiveAction) {
+            Button(L10n.actionSignout) {
+                context.send(viewAction: .logout)
+            }
         }
     }
 }

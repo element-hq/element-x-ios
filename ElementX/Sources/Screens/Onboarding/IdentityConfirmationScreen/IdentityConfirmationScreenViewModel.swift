@@ -61,6 +61,8 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
             actionsSubject.send(.skip)
         case .reset:
             actionsSubject.send(.reset)
+        case .logout:
+            actionsSubject.send(.logout)
         }
     }
     

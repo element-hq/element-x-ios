@@ -22,6 +22,7 @@ enum IdentityConfirmationScreenViewModelAction {
     /// Only possible in debug builds.
     case skip
     case reset
+    case logout
 }
 
 struct IdentityConfirmationScreenViewState: BindableState {
@@ -40,4 +41,5 @@ enum IdentityConfirmationScreenViewAction {
     /// Only possible in debug builds.
     case skip
     case reset
+    case logout
 }
