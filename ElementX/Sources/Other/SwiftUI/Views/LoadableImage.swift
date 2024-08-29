@@ -114,6 +114,16 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
     }
     
     var body: some View {
+        // Tried putting this in the body's .task but it randomly
+        // decides to not execute the request
+        let _ = Task {
+            guard contentLoader.content == nil else {
+                return
+            }
+            
+            await contentLoader.load()
+        }
+        
         ZStack {
             switch contentLoader.content {
             case .image(let image):
@@ -133,13 +143,6 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
             }
         }
         .animation(mediaType == .avatar ? .noAnimation : .elementDefault, value: contentLoader.content)
-        .task(id: mediaSource) {
-            guard contentLoader.content == nil else {
-                return
-            }
-            
-            await contentLoader.load()
-        }
         .onDisappear {
             guard contentLoader.content == nil else {
                 return
