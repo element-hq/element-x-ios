@@ -282,7 +282,7 @@ final class AppSettings {
     var pinningEnabled
     
     enum SlidingSyncDiscovery: Codable { case proxy, native, forceNative }
-    @UserPreference(key: UserDefaultsKeys.slidingSyncDiscovery, defaultValue: .proxy, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.slidingSyncDiscovery, defaultValue: .native, storageType: .userDefaults(store))
     var slidingSyncDiscovery: SlidingSyncDiscovery
         
     #endif

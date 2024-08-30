@@ -54,14 +54,14 @@ extension RestorationToken: Codable {
 extension MatrixRustSDK.Session: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let slidingSyncVersion: SlidingSyncVersion = try container.decodeIfPresent(String.self, forKey: .slidingSyncProxy).map { .proxy(url: $0) } ?? .native
+        let slidingSyncProxy = try container.decodeIfPresent(String.self, forKey: .slidingSyncProxy)
         self = try .init(accessToken: container.decode(String.self, forKey: .accessToken),
                          refreshToken: container.decodeIfPresent(String.self, forKey: .refreshToken),
                          userId: container.decode(String.self, forKey: .userId),
                          deviceId: container.decode(String.self, forKey: .deviceId),
                          homeserverUrl: container.decode(String.self, forKey: .homeserverUrl),
                          oidcData: container.decodeIfPresent(String.self, forKey: .oidcData),
-                         slidingSyncVersion: slidingSyncVersion)
+                         slidingSyncVersion: slidingSyncProxy.map { .proxy(url: $0) } ?? .native)
     }
     
     public func encode(to encoder: Encoder) throws {
