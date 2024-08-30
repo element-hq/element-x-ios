@@ -553,9 +553,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
         
         if case .sendingFailed(.unknown) = eventTimelineItem.properties.deliveryStatus {
-            // In the future we will show different errors for the various failure reasons.
             displayAlert(.sendingFailed)
-        } else if case let .sendingFailed(failure) = eventTimelineItem.properties.deliveryStatus {
+        } else if case let .sendingFailed(.verifiedUser(failure)) = eventTimelineItem.properties.deliveryStatus {
             state.bindings.sendFailureInfo = .init(id: itemID, failure: failure)
         } else if let authenticityMessage = eventTimelineItem.properties.encryptionAuthenticity?.message {
             displayAlert(.encryptionAuthenticity(authenticityMessage))

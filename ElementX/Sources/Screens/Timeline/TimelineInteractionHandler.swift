@@ -180,16 +180,16 @@ class TimelineInteractionHandler {
     
     func handleTimelineSendFailureAction(_ action: TimelineSendFailureAction) {
         switch action {
-        case .resolveAndSend(let info):
-            switch info.failure {
-            case .verifiedUserHasUnsignedDevice(let devices):
-                break // ignore devices and send.
-            case .verifiedUserChangedIdentity(let users):
-                break // withdraw verification and send.
-            case .unknown:
-                break
+        case .resolveAndSend(let failure, let itemID):
+            switch failure {
+            case .hasUnsignedDevice(let devices):
+                #warning("How to handle failures??")
+                Task { await roomProxy.ignoreDeviceTrustAndResend(devices: devices, itemID: itemID) }
+            case .changedIdentity(let users):
+                #warning("How to handle failures??")
+                Task { await roomProxy.withdrawVerificationAndResend(userIDs: users, itemID: itemID) }
             }
-        case .retry(let timelineItemSendFailureInfo):
+        case .retrySending(let itemID):
             break // retry sending.
         case .cancel:
             break

@@ -89,11 +89,11 @@ struct TimelineItemMenu: View {
             }
             .accessibilityElement(children: .combine)
             
-            if case let .sendingFailed(failure) = item.properties.deliveryStatus, failure != .unknown {
+            if case let .sendingFailed(.verifiedUser(failure)) = item.properties.deliveryStatus {
                 Divider()
                     .padding(.horizontal, -16)
                 
-                SendFailureRow(failure: failure, members: context.viewState.members) {
+                VerifiedUserSendFailureRow(failure: failure, members: context.viewState.members) {
                     send(.itemSendInfoTapped(itemID: item.id))
                 }
                 .padding(.bottom, 8)
@@ -181,44 +181,38 @@ struct TimelineItemMenu: View {
     }
 }
 
-private struct SendFailureRow: View {
-    let failure: TimelineItemDeliveryStatus.SendFailureReason
+private struct VerifiedUserSendFailureRow: View {
+    let failure: TimelineItemSendFailure.VerifiedUser
     let action: () -> Void
     
-    private let names: String
+    private let memberDisplayName: String
     
-    init(failure: TimelineItemDeliveryStatus.SendFailureReason,
+    init(failure: TimelineItemSendFailure.VerifiedUser,
          members: [String: RoomMemberState],
          action: @escaping () -> Void) {
         self.failure = failure
         self.action = action
         
         let userIDs = failure.affectedUserIDs
-        names = userIDs.map { members[$0]?.displayName ?? $0 }.formatted(.list(type: .and))
+        memberDisplayName = userIDs.first.map { members[$0]?.displayName ?? $0 } ?? ""
     }
     
     var title: String {
         switch failure {
-        case .verifiedUserHasUnsignedDevice: UntranslatedL10n.screenRoomSendFailureUnsignedDeviceMenuTitle(names)
-        case .verifiedUserChangedIdentity: UntranslatedL10n.screenRoomSendFailureIdentityChangedMenuTitle(names)
-        case .unknown: ""
+        case .hasUnsignedDevice: UntranslatedL10n.screenRoomSendFailureUnsignedDeviceMenuTitle(memberDisplayName)
+        case .changedIdentity: UntranslatedL10n.screenRoomSendFailureIdentityChangedMenuTitle(memberDisplayName)
         }
     }
     
     var body: some View {
-        switch failure {
-        case .verifiedUserChangedIdentity, .verifiedUserHasUnsignedDevice:
-            Button(action: action) {
-                HStack(spacing: 8) {
-                    Label(title, icon: \.error, iconSize: .small, relativeTo: .compound.bodySMSemibold)
-                        .font(.compound.bodySMSemibold)
-                        .foregroundStyle(.compound.textCriticalPrimary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    ListRowAccessory.navigationLink
-                }
+        Button(action: action) {
+            HStack(spacing: 8) {
+                Label(title, icon: \.error, iconSize: .small, relativeTo: .compound.bodySMSemibold)
+                    .font(.compound.bodySMSemibold)
+                    .foregroundStyle(.compound.textCriticalPrimary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                ListRowAccessory.navigationLink
             }
-        case .unknown:
-            EmptyView()
         }
     }
 }
@@ -241,12 +235,12 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
     static let (unsignedItem, _) = makeItem(authenticity: .unsignedDevice(color: .red))
     static let (unencryptedItem, _) = makeItem(authenticity: .sentInClear(color: .red))
     static let (unknownFailureItem, _) = makeItem(deliveryStatus: .sendingFailed(.unknown))
-    static let (identityChangedItem, _) = makeItem(deliveryStatus: .sendingFailed(.verifiedUserChangedIdentity(users: [
+    static let (identityChangedItem, _) = makeItem(deliveryStatus: .sendingFailed(.verifiedUser(.changedIdentity(users: [
         "@alice:matrix.org"
-    ])))
-    static let (unsignedDevicesItem, _) = makeItem(deliveryStatus: .sendingFailed(.verifiedUserHasUnsignedDevice(devices: [
+    ]))))
+    static let (unsignedDevicesItem, _) = makeItem(deliveryStatus: .sendingFailed(.verifiedUser(.hasUnsignedDevice(devices: [
         "@alice:matrix.org": ["DEVICE1", "DEVICE2"]
-    ])))
+    ]))))
 
     static var previews: some View {
         TimelineItemMenu(item: item, actions: actions)

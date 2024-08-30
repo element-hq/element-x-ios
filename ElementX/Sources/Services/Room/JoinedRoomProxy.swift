@@ -377,6 +377,40 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
+    func resend(itemID: TimelineItemIdentifier) async -> Result<Void, RoomProxyError> {
+        fatalError("Not implemented.")
+    }
+    
+    func ignoreDeviceTrustAndResend(devices: [String: [String]], itemID: TimelineItemIdentifier) async -> Result<Void, RoomProxyError> {
+        guard let transactionID = itemID.transactionID else {
+            MXLog.error("Attempting to resend an item that has no transaction ID: \(itemID)")
+            return .failure(.missingTransactionID)
+        }
+        
+        do {
+            try await room.trustDevicesAndResend(devices: devices, transactionId: transactionID)
+            return .success(())
+        } catch {
+            MXLog.error("Failed trusting devices \(devices) and resending \(transactionID) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func withdrawVerificationAndResend(userIDs: [String], itemID: TimelineItemIdentifier) async -> Result<Void, RoomProxyError> {
+        guard let transactionID = itemID.transactionID else {
+            MXLog.error("Attempting to resend an item that has no transaction ID: \(itemID)")
+            return .failure(.missingTransactionID)
+        }
+        
+        do {
+            try await room.withdrawVerificationAndResend(userIds: userIDs, transactionId: transactionID)
+            return .success(())
+        } catch {
+            MXLog.error("Failed withdrawing verification of \(userIDs) and resending \(transactionID) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     // MARK: - Room flags
     
     func flagAsUnread(_ isUnread: Bool) async -> Result<Void, RoomProxyError> {

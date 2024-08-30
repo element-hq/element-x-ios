@@ -82,8 +82,8 @@ enum TimelineComposerAction {
 }
 
 enum TimelineSendFailureAction {
-    case resolveAndSend(TimelineItemSendFailureInfo)
-    case retry(TimelineItemSendFailureInfo)
+    case resolveAndSend(failure: TimelineItemSendFailure.VerifiedUser, itemID: TimelineItemIdentifier)
+    case retrySending(itemID: TimelineItemIdentifier)
     case cancel
 }
 
@@ -150,7 +150,7 @@ struct TimelineItemActionMenuInfo: Equatable, Identifiable {
 
 struct TimelineItemSendFailureInfo: Identifiable {
     let id: TimelineItemIdentifier
-    let failure: TimelineItemDeliveryStatus.SendFailureReason
+    let failure: TimelineItemSendFailure.VerifiedUser
 }
 
 struct ReactionSummaryInfo: Identifiable {
