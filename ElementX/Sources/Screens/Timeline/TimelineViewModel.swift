@@ -143,8 +143,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):
             timelineInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
-        case .handleTimelineSendFailureAction(let action):
-            timelineInteractionHandler.handleTimelineSendFailureAction(action)
         case .tappedOnSenderDetails(userID: let userID):
             actionsSubject.send(.tappedOnSenderDetails(userID: userID))
         case .displayEmojiPicker(let itemID):
@@ -555,7 +553,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         if case .sendingFailed(.unknown) = eventTimelineItem.properties.deliveryStatus {
             displayAlert(.sendingFailed)
         } else if case let .sendingFailed(.verifiedUser(failure)) = eventTimelineItem.properties.deliveryStatus {
-            state.bindings.sendFailureInfo = .init(id: itemID, failure: failure)
+            actionsSubject.send(.displayResolveSendFailure(failure: failure, itemID: itemID))
         } else if let authenticityMessage = eventTimelineItem.properties.encryptionAuthenticity?.message {
             displayAlert(.encryptionAuthenticity(authenticityMessage))
         }

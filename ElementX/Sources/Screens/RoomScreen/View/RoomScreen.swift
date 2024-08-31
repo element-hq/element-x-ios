@@ -74,9 +74,6 @@ struct RoomScreen: View {
                         .environmentObject(timelineContext)
                 }
             }
-            .sheet(item: $timelineContext.sendFailureInfo) {
-                ResolveVerifiedUserSendFailureView(viewState: .init(info: $0, context: timelineContext))
-            }
             .sheet(item: $timelineContext.reactionSummaryInfo) {
                 ReactionsSummaryView(reactions: $0.reactions,
                                      members: timelineContext.viewState.members,

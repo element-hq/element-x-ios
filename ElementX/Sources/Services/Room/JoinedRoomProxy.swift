@@ -388,7 +388,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
         
         do {
-            try await room.trustDevicesAndResend(devices: devices, transactionId: transactionID)
+            try await room.ignoreDeviceTrustAndResend(devices: devices, transactionId: transactionID)
             return .success(())
         } catch {
             MXLog.error("Failed trusting devices \(devices) and resending \(transactionID) with error: \(error)")

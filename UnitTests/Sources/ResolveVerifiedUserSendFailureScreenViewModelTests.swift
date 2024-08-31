@@ -1,5 +1,5 @@
 //
-// Copyright 2024 New Vector Ltd
+// Copyright 2022 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,21 +19,15 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class ResolveVerifiedUserSendFailureViewStateTests: XCTestCase {
-    var viewModel: TimelineViewModel!
-    var context: TimelineViewModel.Context!
-    var viewState: ResolveVerifiedUserSendFailureViewState!
-    
-    override func setUp() async throws {
-        viewModel = .mock
-        context = viewModel.context
-    }
+class ResolveVerifiedUserSendFailureScreenViewModelTests: XCTestCase {
+    let roomProxy = JoinedRoomProxyMock(.init())
+    var viewModel: ResolveVerifiedUserSendFailureScreenViewModel!
+    var context: ResolveVerifiedUserSendFailureScreenViewModel.Context { viewModel.context }
     
     func testUnsignedDevice() async throws {
         // Given a failure where a single user has an unverified device
         let userID = "@alice:matrix.org"
-        viewState = makeViewState(with: .hasUnsignedDevice(devices: [userID: ["DEVICE1"]]))
-        XCTAssertNotNil(context.sendFailureInfo)
+        viewModel = makeViewModel(with: .hasUnsignedDevice(devices: [userID: ["DEVICE1"]]))
         
         try await verifyResolving(userIDs: [userID])
     }
@@ -42,8 +36,7 @@ class ResolveVerifiedUserSendFailureViewStateTests: XCTestCase {
         // Given a failure where a multiple users have unverified devices.
         let userIDs = ["@alice:matrix.org", "@bob:matrix.org", "@charlie:matrix.org"]
         let devices = Dictionary(uniqueKeysWithValues: userIDs.map { (key: $0, value: ["DEVICE1, DEVICE2"]) })
-        viewState = makeViewState(with: .hasUnsignedDevice(devices: devices))
-        XCTAssertNotNil(context.sendFailureInfo)
+        viewModel = makeViewModel(with: .hasUnsignedDevice(devices: devices))
         
         try await verifyResolving(userIDs: userIDs, assertStrings: false)
     }
@@ -51,8 +44,7 @@ class ResolveVerifiedUserSendFailureViewStateTests: XCTestCase {
     func testChangedIdentity() async throws {
         // Given a failure where a single user's identity has changed.
         let userID = "@alice:matrix.org"
-        viewState = makeViewState(with: .changedIdentity(users: [userID]))
-        XCTAssertNotNil(context.sendFailureInfo)
+        viewModel = makeViewModel(with: .changedIdentity(users: [userID]))
         
         try await verifyResolving(userIDs: [userID])
     }
@@ -60,18 +52,15 @@ class ResolveVerifiedUserSendFailureViewStateTests: XCTestCase {
     func testMultipleChangedIdentities() async throws {
         // Given a failure where a multiple users have unverified devices.
         let userIDs = ["@alice:matrix.org", "@bob:matrix.org", "@charlie:matrix.org"]
-        viewState = makeViewState(with: .changedIdentity(users: userIDs))
-        XCTAssertNotNil(context.sendFailureInfo)
+        viewModel = makeViewModel(with: .changedIdentity(users: userIDs))
         
         try await verifyResolving(userIDs: userIDs)
     }
     
     // MARK: Helpers
     
-    private func makeViewState(with failure: TimelineItemSendFailure.VerifiedUser) -> ResolveVerifiedUserSendFailureViewState {
-        let sendFailureInfo = TimelineItemSendFailureInfo(id: .random, failure: failure)
-        context.sendFailureInfo = sendFailureInfo
-        return ResolveVerifiedUserSendFailureViewState(info: sendFailureInfo, context: context)
+    private func makeViewModel(with failure: TimelineItemSendFailure.VerifiedUser) -> ResolveVerifiedUserSendFailureScreenViewModel {
+        ResolveVerifiedUserSendFailureScreenViewModel(failure: failure, itemID: .random, roomProxy: roomProxy)
     }
     
     private func verifyResolving(userIDs: [String], assertStrings: Bool = true) async throws {
@@ -84,12 +73,11 @@ class ResolveVerifiedUserSendFailureViewStateTests: XCTestCase {
             }
             
             // When resolving the first failure.
-            let deferredFailure = deferFailure(context.$viewState, timeout: 1) { $0.bindings.sendFailureInfo == nil }
-            viewState.resolveAndSend()
-            try await deferredFailure.fulfill()
+            let deferredFailure = deferFailure(viewModel.actionsPublisher, timeout: 1) { $0.isDismiss }
+            context.send(viewAction: .resolveAndResend)
             
             // Then the sheet should remain open for the next failure.
-            XCTAssertNotNil(context.sendFailureInfo)
+            try await deferredFailure.fulfill()
             
             remainingUserIDs.removeFirst()
         }
@@ -100,12 +88,11 @@ class ResolveVerifiedUserSendFailureViewStateTests: XCTestCase {
         }
         
         // When resolving the final failure.
-        let deferred = deferFulfillment(context.$viewState) { $0.bindings.sendFailureInfo == nil }
-        viewState.resolveAndSend()
-        try await deferred.fulfill()
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0.isDismiss }
+        context.send(viewAction: .resolveAndResend)
         
         // Then the sheet should be dismissed.
-        XCTAssertNil(context.sendFailureInfo)
+        try await deferred.fulfill()
     }
     
     private func verifyDisplayName(from remainingUserIDs: [String]) {
@@ -114,12 +101,21 @@ class ResolveVerifiedUserSendFailureViewStateTests: XCTestCase {
             return
         }
         
-        guard let displayName = context.viewState.members[userID]?.displayName else {
+        guard let displayName = roomProxy.membersPublisher.value.first(where: { $0.userID == userID })?.displayName else {
             XCTFail("There should be a matching mock user")
             return
         }
         
-        XCTAssertTrue(viewState.title.contains(displayName))
-        XCTAssertTrue(viewState.subtitle.contains(displayName))
+        XCTAssertTrue(context.viewState.title.contains(displayName))
+        XCTAssertTrue(context.viewState.subtitle.contains(displayName))
+    }
+}
+
+private extension ResolveVerifiedUserSendFailureScreenViewModelAction {
+    var isDismiss: Bool {
+        switch self {
+        case .dismiss: true
+        default: false
+        }
     }
 }

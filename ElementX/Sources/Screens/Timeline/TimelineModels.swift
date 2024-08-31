@@ -21,6 +21,7 @@ enum TimelineViewModelAction {
     case tappedOnSenderDetails(userID: String)
     case displayMessageForwarding(forwardingItem: MessageForwardingItem)
     case displayLocation(body: String, geoURI: GeoURI, description: String?)
+    case displayResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, itemID: TimelineItemIdentifier)
     case composer(action: TimelineComposerAction)
     case hasScrolled(direction: ScrollDirection)
     case viewInRoomTimeline(eventID: String)
@@ -51,7 +52,6 @@ enum TimelineViewAction {
     
     case displayTimelineItemMenu(itemID: TimelineItemIdentifier)
     case handleTimelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
-    case handleTimelineSendFailureAction(TimelineSendFailureAction)
     
     case tappedOnSenderDetails(userID: String)
     case displayReactionSummary(itemID: TimelineItemIdentifier, key: String)
@@ -79,12 +79,6 @@ enum TimelineComposerAction {
     case setText(plainText: String, htmlText: String?)
     case removeFocus
     case clear
-}
-
-enum TimelineSendFailureAction {
-    case resolveAndSend(failure: TimelineItemSendFailure.VerifiedUser, itemID: TimelineItemIdentifier)
-    case retrySending(itemID: TimelineItemIdentifier)
-    case cancel
 }
 
 struct TimelineViewState: BindableState {
@@ -129,8 +123,6 @@ struct TimelineViewStateBindings {
     
     var actionMenuInfo: TimelineItemActionMenuInfo?
     
-    var sendFailureInfo: TimelineItemSendFailureInfo?
-    
     var reactionSummaryInfo: ReactionSummaryInfo?
     
     var readReceiptsSummaryInfo: ReadReceiptSummaryInfo?
@@ -146,11 +138,6 @@ struct TimelineItemActionMenuInfo: Equatable, Identifiable {
     var id: TimelineItemIdentifier {
         item.id
     }
-}
-
-struct TimelineItemSendFailureInfo: Identifiable {
-    let id: TimelineItemIdentifier
-    let failure: TimelineItemSendFailure.VerifiedUser
 }
 
 struct ReactionSummaryInfo: Identifiable {

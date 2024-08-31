@@ -1,5 +1,5 @@
 //
-// Copyright 2024 New Vector Ltd
+// Copyright 2022 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,11 +14,11 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
-@MainActor
-struct ResolveVerifiedUserSendFailureView: View {
-    @StateObject var viewState: ResolveVerifiedUserSendFailureViewState
+struct ResolveVerifiedUserSendFailureScreen: View {
+    @ObservedObject var context: ResolveVerifiedUserSendFailureScreenViewModel.Context
     @State private var sheetFrame: CGRect = .zero
     
     var body: some View {
@@ -41,12 +41,12 @@ struct ResolveVerifiedUserSendFailureView: View {
             HeroImage(icon: \.error, style: .critical)
                 .padding(.bottom, 8)
             
-            Text(viewState.title)
+            Text(context.viewState.title)
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
             
-            Text(viewState.subtitle)
+            Text(context.viewState.subtitle)
                 .font(.compound.bodyMD)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
@@ -55,17 +55,17 @@ struct ResolveVerifiedUserSendFailureView: View {
     
     var buttons: some View {
         VStack(spacing: 16) {
-            Button(viewState.primaryButtonTitle) {
-                viewState.resolveAndSend()
+            Button(context.viewState.primaryButtonTitle) {
+                context.send(viewAction: .resolveAndResend)
             }
             .buttonStyle(.compound(.primary))
             
             Button(L10n.actionRetry) {
-                viewState.retry()
+                context.send(viewAction: .resend)
             }
             .buttonStyle(.compound(.secondary))
             
-            Button { viewState.cancel() } label: {
+            Button { context.send(viewAction: .cancel) } label: {
                 Text(UntranslatedL10n.actionCancelForNow)
                     .padding(.vertical, 14)
             }
@@ -76,31 +76,34 @@ struct ResolveVerifiedUserSendFailureView: View {
 
 // MARK: - Previews
 
-struct TimelineSendFailureInfoView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = TimelineViewModel.mock
+struct ResolveVerifiedUserSendFailureScreen_Previews: PreviewProvider, TestablePreview {
+    static let unsignedDeviceViewModel = makeViewModel(failure: .hasUnsignedDevice(devices: ["@alice:matrix.org": []]))
+    static let changedIdentityViewModel = makeViewModel(failure: .changedIdentity(users: ["@alice:matrix.org"]))
     
     static var previews: some View {
-        ResolveVerifiedUserSendFailureView(viewState: .init(info: .init(id: .random,
-                                                                        failure: .hasUnsignedDevice(devices: ["@alice:matrix.org": []])),
-                                                            context: viewModel.context))
+        ResolveVerifiedUserSendFailureScreen(context: unsignedDeviceViewModel.context)
             .previewDisplayName("Unsigned Device")
         
-        ResolveVerifiedUserSendFailureView(viewState: .init(info: .init(id: .random,
-                                                                        failure: .changedIdentity(users: ["@alice:matrix.org"])),
-                                                            context: viewModel.context))
+        ResolveVerifiedUserSendFailureScreen(context: changedIdentityViewModel.context)
             .previewDisplayName("Identity Changed")
+    }
+    
+    static func makeViewModel(failure: TimelineItemSendFailure.VerifiedUser) -> ResolveVerifiedUserSendFailureScreenViewModel {
+        ResolveVerifiedUserSendFailureScreenViewModel(failure: failure,
+                                                      itemID: .random,
+                                                      roomProxy: JoinedRoomProxyMock(.init()))
     }
 }
 
-struct TimelineSendFailureInfoViewSheet_Previews: PreviewProvider {
-    static let viewModel = TimelineViewModel.mock
+struct ResolveVerifiedUserSendFailureScreenSheet_Previews: PreviewProvider, TestablePreview {
+    static let viewModel = ResolveVerifiedUserSendFailureScreenViewModel(failure: .changedIdentity(users: ["@alice:matrix.org"]),
+                                                                         itemID: .random,
+                                                                         roomProxy: JoinedRoomProxyMock(.init()))
     
     static var previews: some View {
         Text("Hello")
             .sheet(isPresented: .constant(true)) {
-                ResolveVerifiedUserSendFailureView(viewState: .init(info: .init(id: .random,
-                                                                                failure: .changedIdentity(users: ["@alice:matrix.org"])),
-                                                                    context: viewModel.context))
+                ResolveVerifiedUserSendFailureScreen(context: viewModel.context)
             }
             .previewDisplayName("Sheet")
     }

@@ -178,24 +178,6 @@ class TimelineInteractionHandler {
         }
     }
     
-    func handleTimelineSendFailureAction(_ action: TimelineSendFailureAction) {
-        switch action {
-        case .resolveAndSend(let failure, let itemID):
-            switch failure {
-            case .hasUnsignedDevice(let devices):
-                #warning("How to handle failures??")
-                Task { await roomProxy.ignoreDeviceTrustAndResend(devices: devices, itemID: itemID) }
-            case .changedIdentity(let users):
-                #warning("How to handle failures??")
-                Task { await roomProxy.withdrawVerificationAndResend(userIDs: users, itemID: itemID) }
-            }
-        case .retrySending(let itemID):
-            break // retry sending.
-        case .cancel:
-            break
-        }
-    }
-    
     private func processEditMessageEvent(_ messageTimelineItem: EventBasedMessageTimelineItemProtocol) {
         let text: String
         var htmlText: String?

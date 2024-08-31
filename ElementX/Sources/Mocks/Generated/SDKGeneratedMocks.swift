@@ -11664,6 +11664,52 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
     }
 
+    //MARK: - ignoreDeviceTrustAndResend
+
+    open var ignoreDeviceTrustAndResendDevicesTransactionIdThrowableError: Error?
+    var ignoreDeviceTrustAndResendDevicesTransactionIdUnderlyingCallsCount = 0
+    open var ignoreDeviceTrustAndResendDevicesTransactionIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return ignoreDeviceTrustAndResendDevicesTransactionIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = ignoreDeviceTrustAndResendDevicesTransactionIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                ignoreDeviceTrustAndResendDevicesTransactionIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    ignoreDeviceTrustAndResendDevicesTransactionIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var ignoreDeviceTrustAndResendDevicesTransactionIdCalled: Bool {
+        return ignoreDeviceTrustAndResendDevicesTransactionIdCallsCount > 0
+    }
+    open var ignoreDeviceTrustAndResendDevicesTransactionIdReceivedArguments: (devices: [String: [String]], transactionId: String)?
+    open var ignoreDeviceTrustAndResendDevicesTransactionIdReceivedInvocations: [(devices: [String: [String]], transactionId: String)] = []
+    open var ignoreDeviceTrustAndResendDevicesTransactionIdClosure: (([String: [String]], String) async throws -> Void)?
+
+    open override func ignoreDeviceTrustAndResend(devices: [String: [String]], transactionId: String) async throws {
+        if let error = ignoreDeviceTrustAndResendDevicesTransactionIdThrowableError {
+            throw error
+        }
+        ignoreDeviceTrustAndResendDevicesTransactionIdCallsCount += 1
+        ignoreDeviceTrustAndResendDevicesTransactionIdReceivedArguments = (devices: devices, transactionId: transactionId)
+        DispatchQueue.main.async {
+            self.ignoreDeviceTrustAndResendDevicesTransactionIdReceivedInvocations.append((devices: devices, transactionId: transactionId))
+        }
+        try await ignoreDeviceTrustAndResendDevicesTransactionIdClosure?(devices, transactionId)
+    }
+
     //MARK: - ignoreUser
 
     open var ignoreUserUserIdThrowableError: Error?
@@ -14419,52 +14465,6 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         } else {
             return topicReturnValue
         }
-    }
-
-    //MARK: - trustDevicesAndResend
-
-    open var trustDevicesAndResendDevicesTransactionIdThrowableError: Error?
-    var trustDevicesAndResendDevicesTransactionIdUnderlyingCallsCount = 0
-    open var trustDevicesAndResendDevicesTransactionIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return trustDevicesAndResendDevicesTransactionIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = trustDevicesAndResendDevicesTransactionIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                trustDevicesAndResendDevicesTransactionIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    trustDevicesAndResendDevicesTransactionIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var trustDevicesAndResendDevicesTransactionIdCalled: Bool {
-        return trustDevicesAndResendDevicesTransactionIdCallsCount > 0
-    }
-    open var trustDevicesAndResendDevicesTransactionIdReceivedArguments: (devices: [String: [String]], transactionId: String)?
-    open var trustDevicesAndResendDevicesTransactionIdReceivedInvocations: [(devices: [String: [String]], transactionId: String)] = []
-    open var trustDevicesAndResendDevicesTransactionIdClosure: (([String: [String]], String) async throws -> Void)?
-
-    open override func trustDevicesAndResend(devices: [String: [String]], transactionId: String) async throws {
-        if let error = trustDevicesAndResendDevicesTransactionIdThrowableError {
-            throw error
-        }
-        trustDevicesAndResendDevicesTransactionIdCallsCount += 1
-        trustDevicesAndResendDevicesTransactionIdReceivedArguments = (devices: devices, transactionId: transactionId)
-        DispatchQueue.main.async {
-            self.trustDevicesAndResendDevicesTransactionIdReceivedInvocations.append((devices: devices, transactionId: transactionId))
-        }
-        try await trustDevicesAndResendDevicesTransactionIdClosure?(devices, transactionId)
     }
 
     //MARK: - typingNotice
