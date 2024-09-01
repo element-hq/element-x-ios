@@ -324,7 +324,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         visibleItemRangeObservationToken = visibleItemRangePublisher
             .filter { $0.isScrolling == false }
             .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
-            .removeDuplicates(by: { $0.isScrolling == $1.isScrolling && $0.range == $1.range })
             .sink { [weak self] value in
                 guard let self else { return }
                 
