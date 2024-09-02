@@ -133,6 +133,8 @@ struct ComposerToolbarViewStateBindings {
     var composerExpanded = false
     var formatItems: [FormatItem] = .init()
     var alertInfo: AlertInfo<UUID>?
+    
+    var presendCallback: (() -> Void)?
 }
 
 /// An item in the toolbar

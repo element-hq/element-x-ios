@@ -18,6 +18,7 @@ import SwiftUI
 struct MessageComposerTextField: View {
     let placeholder: String
     @Binding var text: NSAttributedString
+    @Binding var presendCallback: (() -> Void)?
 
     let maxHeight: CGFloat
     let keyHandler: GenericKeyHandler
@@ -25,6 +26,7 @@ struct MessageComposerTextField: View {
 
     var body: some View {
         UITextViewWrapper(text: $text,
+                          presendCallback: $presendCallback,
                           maxHeight: maxHeight,
                           keyHandler: keyHandler,
                           pasteHandler: pasteHandler)
@@ -58,6 +60,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
     @Environment(\.timelineContext) private var timelineContext
 
     @Binding var text: NSAttributedString
+    @Binding var presendCallback: (() -> Void)?
 
     let maxHeight: CGFloat
 
@@ -68,8 +71,8 @@ private struct UITextViewWrapper: UIViewRepresentable {
 
     func makeUIView(context: UIViewRepresentableContext<UITextViewWrapper>) -> UITextView {
         // Need to use TextKit 1 for mentions
-        let textView = ElementTextView(usingTextLayoutManager: false)
-        textView.timelineContext = timelineContext
+        let textView = ElementTextView(timelineContext: timelineContext,
+                                       presendCallback: $presendCallback)
         
         textView.delegate = context.coordinator
         textView.elementDelegate = context.coordinator
@@ -182,12 +185,29 @@ private protocol ElementTextViewDelegate: AnyObject {
 }
 
 private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
-    var timelineContext: TimelineViewModel.Context?
+    private(set) var timelineContext: TimelineViewModel.Context?
+    private var presendCallback: Binding<(() -> Void)?>
+    private var pillViews = NSHashTable<UIView>.weakObjects()
     
     weak var elementDelegate: ElementTextViewDelegate?
     
-    private var pillViews = NSHashTable<UIView>.weakObjects()
-
+    init(timelineContext: TimelineViewModel.Context?,
+         presendCallback: Binding<(() -> Void)?>) {
+        self.timelineContext = timelineContext
+        self.presendCallback = presendCallback
+        
+        super.init(frame: .zero, textContainer: nil)
+        
+        presendCallback.wrappedValue = { [weak self] in
+            self?.acceptCurrentSuggestionWithoutResigningFirstResponder()
+        }
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+    
     override var keyCommands: [UIKeyCommand]? {
         [UIKeyCommand(input: "\r", modifierFlags: .shift, action: #selector(shiftEnterKeyPressed)),
          UIKeyCommand(input: "\r", modifierFlags: [], action: #selector(enterKeyPressed))]
@@ -270,6 +290,19 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
         }
         pillViews.removeAllObjects()
     }
+    
+    // MARK: - Private
+    
+    private func acceptCurrentSuggestionWithoutResigningFirstResponder() {
+        let temporaryTextField = UITextField()
+        temporaryTextField.isHidden = true
+        addSubview(temporaryTextField)
+        
+        temporaryTextField.becomeFirstResponder()
+        becomeFirstResponder()
+        
+        temporaryTextField.removeFromSuperview()
+    }
 }
 
 struct MessageComposerTextField_Previews: PreviewProvider, TestablePreview {
@@ -292,6 +325,7 @@ struct MessageComposerTextField_Previews: PreviewProvider, TestablePreview {
         var body: some View {
             MessageComposerTextField(placeholder: "Placeholder",
                                      text: $text,
+                                     presendCallback: .constant(nil),
                                      maxHeight: 300,
                                      keyHandler: { _ in },
                                      pasteHandler: { _ in })
