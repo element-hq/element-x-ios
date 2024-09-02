@@ -199,7 +199,7 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
         super.init(frame: .zero, textContainer: nil)
         
         presendCallback.wrappedValue = { [weak self] in
-            self?.acceptCurrentSuggestionWithoutResigningFirstResponder()
+            self?.acceptCurrentSuggestion()
         }
     }
     
@@ -293,15 +293,13 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
     
     // MARK: - Private
     
-    private func acceptCurrentSuggestionWithoutResigningFirstResponder() {
-        let temporaryTextField = UITextField()
-        temporaryTextField.isHidden = true
-        addSubview(temporaryTextField)
+    private func acceptCurrentSuggestion() {
+        guard isFirstResponder else {
+            return
+        }
         
-        temporaryTextField.becomeFirstResponder()
-        becomeFirstResponder()
-        
-        temporaryTextField.removeFromSuperview()
+        inputDelegate?.selectionWillChange(self)
+        inputDelegate?.selectionDidChange(self)
     }
 }
 
