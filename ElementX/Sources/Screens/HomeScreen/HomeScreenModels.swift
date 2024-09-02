@@ -40,7 +40,7 @@ enum HomeScreenViewAction {
     case startChat
     case confirmRecoveryKey
     case skipRecoveryKeyConfirmation
-    case updateVisibleItemRange(range: Range<Int>, isScrolling: Bool)
+    case updateVisibleItemRange(Range<Int>)
     case globalSearch
     case markRoomAsUnread(roomIdentifier: String)
     case markRoomAsRead(roomIdentifier: String)

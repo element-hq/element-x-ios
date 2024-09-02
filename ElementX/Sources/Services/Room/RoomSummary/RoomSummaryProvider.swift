@@ -30,6 +30,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     private let serialDispatchQueue: DispatchQueue
     
+    private let visibleItemRangePublisher = CurrentValueSubject<Range<Int>, Never>(0..<0)
+    
     // periphery:ignore - retaining purpose
     private var roomList: RoomListProtocol?
     
@@ -80,6 +82,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             .sink { [weak self] in self?.updateRoomsWithDiffs($0) }
             .store(in: &cancellables)
         
+        setupVisibleRangeObservers()
+        
         setupNotificationSettingsSubscription()
     }
     
@@ -114,38 +118,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     func updateVisibleRange(_ range: Range<Int>) {
-        if range.upperBound >= rooms.count {
-            listUpdatesSubscriptionResult?.controller().addOnePage()
-        } else if range.lowerBound == 0 {
-            listUpdatesSubscriptionResult?.controller().resetToOnePage()
-        }
-        
-        guard shouldUpdateVisibleRange else {
-            return
-        }
-        
-        // The scroll view content size based visible range calculations might create large ranges
-        // This is just a safety check to not overload the backend
-        var range = range
-        if range.upperBound - range.lowerBound > SlidingSyncConstants.maximumVisibleRangeSize {
-            let upperBound = range.lowerBound + SlidingSyncConstants.maximumVisibleRangeSize
-            range = range.lowerBound..<upperBound
-        }
-
-        MXLog.info("\(name): Requesting subscriptions for visible range: \(range)")
-        
-        let roomIDs = range
-            .filter { $0 < rooms.count }
-            .map { rooms[$0].id }
-        
-        do {
-            try roomListService.subscribeToRooms(roomIds: roomIDs,
-                                                 settings: .init(requiredState: SlidingSyncConstants.defaultRequiredState,
-                                                                 timelineLimit: SlidingSyncConstants.defaultTimelineLimit,
-                                                                 includeHeroes: false))
-        } catch {
-            MXLog.error("Failed subscribing to rooms with error: \(error)")
-        }
+        visibleItemRangePublisher.send(range)
     }
     
     func setFilter(_ filter: RoomSummaryProviderFilter) {
@@ -167,7 +140,63 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     // MARK: - Private
+    
+    private func setupVisibleRangeObservers() {
+        visibleItemRangePublisher
+            .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
+            .removeDuplicates()
+            .sink { [weak self] range in
+                guard let self else { return }
+                
+                MXLog.info("\(self.name): Updating visible range: \(range)")
+                
+                if range.upperBound >= rooms.count {
+                    listUpdatesSubscriptionResult?.controller().addOnePage()
+                } else if range.lowerBound == 0 {
+                    listUpdatesSubscriptionResult?.controller().resetToOnePage()
+                }
+            }
+            .store(in: &cancellables)
         
+        visibleItemRangePublisher
+            .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
+            .filter { [weak self] range in
+                guard let self else { return false }
+                return !range.isEmpty && shouldUpdateVisibleRange
+            }
+            .compactMap { [weak self] (range: Range) -> [String]? in
+                guard let self else { return nil }
+                
+                // The scroll view content size based visible range calculations might create large ranges
+                // This is just a safety check to not overload the backend
+                var range = range
+                if range.upperBound - range.lowerBound > SlidingSyncConstants.maximumVisibleRangeSize {
+                    let upperBound = range.lowerBound + SlidingSyncConstants.maximumVisibleRangeSize
+                    range = range.lowerBound..<upperBound
+                }
+                
+                return range
+                    .filter { $0 < self.rooms.count }
+                    .map { self.rooms[$0].id }
+            }
+            .removeDuplicates()
+            .sink { [weak self] roomIDs in
+                guard let self else { return }
+                
+                MXLog.debug("\(self.name): Updating subscriptions for visible rooms: \(roomIDs)")
+                
+                do {
+                    try roomListService.subscribeToRooms(roomIds: roomIDs,
+                                                         settings: .init(requiredState: SlidingSyncConstants.defaultRequiredState,
+                                                                         timelineLimit: SlidingSyncConstants.defaultTimelineLimit,
+                                                                         includeHeroes: false))
+                } catch {
+                    MXLog.error("Failed subscribing to rooms with error: \(error)")
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
     fileprivate func updateRoomsWithDiffs(_ diffs: [RoomListEntriesUpdate]) {
         let span = MXLog.createSpan("\(name).process_room_list_diffs")
         span.enter()

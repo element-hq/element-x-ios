@@ -200,6 +200,8 @@ struct HomeScreenContent: View {
     
     private func delayedUpdateVisibleRange() {
         guard let scrollView = scrollViewAdapter.scrollView,
+              scrollViewAdapter.isScrolling.value == false, // Ignore while scrolling
+              context.searchQuery.isEmpty == true, // Ignore while filtering
               context.viewState.visibleRooms.count > 0 else {
             return
         }
@@ -215,6 +217,6 @@ struct HomeScreenContent: View {
         let lastIndex = Int(max(0.0, scrollView.contentOffset.y + scrollView.bounds.height) / cellHeight)
         
         // This will be deduped and throttled on the view model layer
-        context.send(viewAction: .updateVisibleItemRange(range: firstIndex..<lastIndex, isScrolling: scrollViewAdapter.isScrolling.value))
+        context.send(viewAction: .updateVisibleItemRange(firstIndex..<lastIndex))
     }
 }
