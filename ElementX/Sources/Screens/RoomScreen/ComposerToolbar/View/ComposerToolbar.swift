@@ -137,7 +137,7 @@ struct ComposerToolbar: View {
     
     private var sendButton: some View {
         Button {
-            context.send(viewAction: .sendMessage)
+            sendMessage()
         } label: {
             CompoundIcon(context.viewState.composerMode.isEdit ? \.check : \.sendSolid)
                 .scaledPadding(6, relativeTo: .title)
@@ -156,12 +156,13 @@ struct ComposerToolbar: View {
     
     private var messageComposer: some View {
         MessageComposer(plainComposerText: $context.plainComposerText,
+                        presendCallback: $context.presendCallback,
                         composerView: composerView,
                         mode: context.viewState.composerMode,
                         composerFormattingEnabled: context.composerFormattingEnabled,
                         showResizeGrabber: context.composerFormattingEnabled,
                         isExpanded: $context.composerExpanded) {
-            context.send(viewAction: .sendMessage)
+            sendMessage()
         } editAction: {
             context.send(viewAction: .editLastMessage)
         } pasteAction: { provider in
@@ -202,6 +203,17 @@ struct ComposerToolbar: View {
         }
         .onAppear {
             composerFocused = context.composerFocused
+        }
+    }
+    
+    private func sendMessage() {
+        // Allow the inner TextField do apply any final processing before
+        // sending e.g. accepting current autocorrection.
+        // Fixes https://github.com/element-hq/element-x-ios/issues/3216
+        context.presendCallback?()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            context.send(viewAction: .sendMessage)
         }
     }
     
