@@ -30,9 +30,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     private var migrationCancellable: AnyCancellable?
     
-    private var visibleItemRangeObservationToken: AnyCancellable?
-    private let visibleItemRangePublisher = CurrentValueSubject<(range: Range<Int>, isScrolling: Bool), Never>((0..<0, false))
-    
     private var actionsSubject: PassthroughSubject<HomeScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<HomeScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -151,8 +148,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             actionsSubject.send(.presentSecureBackupSettings)
         case .skipRecoveryKeyConfirmation:
             state.securityBannerMode = .dismissed
-        case .updateVisibleItemRange(let range, let isScrolling):
-            visibleItemRangePublisher.send((range, isScrolling))
+        case .updateVisibleItemRange(let range):
+            roomSummaryProvider?.updateVisibleRange(range)
         case .startChat:
             actionsSubject.send(.presentStartChatScreen)
         case .globalSearch:
@@ -266,14 +263,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .store(in: &cancellables)
         
         roomSummaryProvider.roomListPublisher
-            .dropFirst(1) // We don't care about its initial value
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.updateRooms()
-                
-                // Wait for the all rooms view to receive its first update before installing
-                // dynamic timeline modifiers
-                self?.installListRangeModifiers()
             }
             .store(in: &cancellables)
     }
@@ -315,27 +307,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
         }
     }
-    
-    private func installListRangeModifiers() {
-        guard visibleItemRangeObservationToken == nil else {
-            return
-        }
-        
-        visibleItemRangeObservationToken = visibleItemRangePublisher
-            .filter { $0.isScrolling == false }
-            .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
-            .removeDuplicates(by: { $0.isScrolling == $1.isScrolling && $0.range == $1.range })
-            .sink { [weak self] value in
-                guard let self else { return }
-                
-                // Ignore scrolling while filtering rooms
-                guard self.state.bindings.searchQuery.isEmpty else {
-                    return
-                }
-                
-                self.updateVisibleRange(value.range)
-            }
-    }
         
     private func updateRooms() {
         guard let roomSummaryProvider else {
@@ -352,20 +323,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         state.rooms = rooms
     }
-    
-    private func updateVisibleRange(_ range: Range<Int>) {
-        guard !range.isEmpty else {
-            return
-        }
         
-        guard let roomSummaryProvider else {
-            MXLog.error("Visible rooms summary provider unavailable")
-            return
-        }
-        
-        roomSummaryProvider.updateVisibleRange(range)
-    }
-    
     private func markRoomAsFavourite(_ roomID: String, isFavourite: Bool) async {
         guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             MXLog.error("Failed retrieving room for identifier: \(roomID)")
