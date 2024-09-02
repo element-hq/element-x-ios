@@ -106,6 +106,8 @@
 "action_view_source" = "Переглянути джерело";
 "action_yes" = "Так";
 "action.load_more" = "Завантажити ще";
+"banner.set_up_recovery.content" = "Generate a new recovery key that can be used to restore your encrypted message history in case you lose access to your devices.";
+"banner.set_up_recovery.title" = "Set up recovery";
 "common_about" = "Відомості";
 "common_acceptable_use_policy" = "Політика прийнятного використання";
 "common_advanced_settings" = "Додаткові налаштування";
@@ -441,11 +443,11 @@
 "screen_edit_profile_error_title" = "Неможливо оновити профіль";
 "screen_edit_profile_title" = "Редагувати профіль";
 "screen_edit_profile_updating_details" = "Оновлення профілю...";
+"screen_encryption_reset_action_continue_reset" = "Continue reset";
 "screen_encryption_reset_bullet_1" = "Дані вашого облікового запису, контакти, налаштування й чати будуть збережені";
 "screen_encryption_reset_bullet_2" = "Ви втратите свою наявну історію повідомлень";
 "screen_encryption_reset_bullet_3" = "Вам доведеться підтвердити всі наявні пристрої та контакти знову";
 "screen_encryption_reset_footer" = "Скидайте ідентичність тільки якщо ви не маєте доступу до інших пристроїв в обліковому записі та втратили свій ключ відновлення.";
-"screen_encryption_reset_subtitle" = "Якщо ви не увійшли на інших пристроях та втратили свій ключ відновлення, то вам доведеться скинути свою ідентичність, щоб продовжити використовувати застосунок. ";
 "screen_encryption_reset_title" = "Скиньте свою ідентичність, якщо не можете підтвердити іншим способом";
 "screen_identity_confirmation_cannot_confirm" = "Не можете підтвердити?";
 "screen_identity_confirmation_create_new_recovery_key" = "Створити новий ключ відновлення";

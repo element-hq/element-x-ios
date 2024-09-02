@@ -106,6 +106,8 @@
 "action_view_source" = "查看源码";
 "action_yes" = "是";
 "action.load_more" = "载入更多";
+"banner.set_up_recovery.content" = "Generate a new recovery key that can be used to restore your encrypted message history in case you lose access to your devices.";
+"banner.set_up_recovery.title" = "Set up recovery";
 "common_about" = "关于";
 "common_acceptable_use_policy" = "可接受的使用政策";
 "common_advanced_settings" = "高级设置";
@@ -441,11 +443,11 @@
 "screen_edit_profile_error_title" = "无法更新个人资料";
 "screen_edit_profile_title" = "编辑个人资料";
 "screen_edit_profile_updating_details" = "更新个人资料……";
+"screen_encryption_reset_action_continue_reset" = "Continue reset";
 "screen_encryption_reset_bullet_1" = "您的账户信息、联系人、偏好设置和聊天列表将被保留";
 "screen_encryption_reset_bullet_2" = "您将丢失现有的消息历史记录";
 "screen_encryption_reset_bullet_3" = "您将需要再次验证所有您的现有设备和联系人";
 "screen_encryption_reset_footer" = "仅当您无法访问其他已登录设备并且丢失了恢复密钥时才重置您的身份。";
-"screen_encryption_reset_subtitle" = "如果您未登录任何其他设备，并且丢失了恢复密钥，则需要重置身份才能继续使用该应用。";
 "screen_encryption_reset_title" = "如果您无法通过其他方式确认，请重置您的身份";
 "screen_identity_confirmation_cannot_confirm" = "无法确认？";
 "screen_identity_confirmation_create_new_recovery_key" = "创建新的恢复密钥";

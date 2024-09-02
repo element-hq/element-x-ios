@@ -106,6 +106,8 @@
 "action_view_source" = "Visa källkod";
 "action_yes" = "Ja";
 "action.load_more" = "Ladda mer";
+"banner.set_up_recovery.content" = "Skapa en ny återställningsnyckel som kan användas för att återställa din krypterade meddelandehistorik om du förlorar åtkomst till dina enheter.";
+"banner.set_up_recovery.title" = "Ställ in återställning";
 "common_about" = "Om";
 "common_acceptable_use_policy" = "Policy för godtagbar användning";
 "common_advanced_settings" = "Avancerade inställningar";
@@ -258,7 +260,7 @@
 "error_some_messages_have_not_been_sent" = "Vissa meddelanden har inte skickats";
 "error_unknown" = "Tyvärr, ett fel uppstod";
 "event_shield_reason_authenticity_not_guaranteed" = "Detta krypterade meddelandes äkthet kan inte garanteras på den här enheten.";
-"event_shield_reason_previously_verified" = "Encrypted by a previously-verified user.";
+"event_shield_reason_previously_verified" = "Krypterat av en tidigare verifierad användare.";
 "event_shield_reason_sent_in_clear" = "Inte krypterad.";
 "event_shield_reason_unknown_device" = "Krypterad av en okänd eller raderad enhet.";
 "event_shield_reason_unsigned_device" = "Krypterad av en enhet som inte verifierats av ägaren.";
@@ -286,7 +288,7 @@
 "notification_reaction_body" = "Reagerade med %1$@";
 "notification_room_invite_body" = "Bjöd in dig att gå med i rummet";
 "notification_sender_me" = "Jag";
-"notification_sender_mention_reply" = "%1$@ mentioned or replied";
+"notification_sender_mention_reply" = "%1$@ nämnde eller svarade";
 "notification_test_push_notification_content" = "Du tittar på aviseringen! Klicka på mig!";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -441,11 +443,11 @@
 "screen_edit_profile_error_title" = "Kunde inte uppdatera profilen";
 "screen_edit_profile_title" = "Redigera profil";
 "screen_edit_profile_updating_details" = "Uppdaterar profil …";
+"screen_encryption_reset_action_continue_reset" = "Fortsätt återställning";
 "screen_encryption_reset_bullet_1" = "Dina kontouppgifter, kontakter, inställningar och chattlistor kommer bevaras";
 "screen_encryption_reset_bullet_2" = "Du kommer att förlora din befintliga meddelandehistorik";
 "screen_encryption_reset_bullet_3" = "Du måste verifiera alla dina befintliga enheter och kontakter igen";
 "screen_encryption_reset_footer" = "Återställ bara din identitet om du inte har tillgång till en annan inloggad enhet och du har tappat bort din återställningsnyckel.";
-"screen_encryption_reset_subtitle" = "Om du inte är inloggad på någon annan enhet och du har tappat bort din återställningsnyckel måste du återställa din identitet för att fortsätta använda appen. ";
 "screen_encryption_reset_title" = "Återställ din identitet ifall du inte kan bekräfta på annat sätt";
 "screen_identity_confirmation_cannot_confirm" = "Kan du inte bekräfta?";
 "screen_identity_confirmation_create_new_recovery_key" = "Skapa en ny återställningsnyckel";
@@ -604,8 +606,8 @@
 "screen_reset_encryption_password_placeholder" = "Ange …";
 "screen_reset_encryption_password_subtitle" = "Bekräfta att du vill återställa din kryptering.";
 "screen_reset_encryption_password_title" = "Ange ditt kontolösenord för att fortsätta";
-"screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.";
-"screen_reset_identity_confirmation_title" = "Can't confirm? Go to your account to reset your identity.";
+"screen_reset_identity_confirmation_subtitle" = "Du är på väg att gå till ditt %1$@-konto för att återställa din identitet. Därefter kommer du att tas tillbaka till appen.";
+"screen_reset_identity_confirmation_title" = "Kan du inte bekräfta? Gå till ditt konto för att återställa din identitet.";
 "screen_room_alias_resolver_resolve_alias_failure" = "Misslyckades med att slå upp rumsalias.";
 "screen_room_attachment_source_camera" = "Kamera";
 "screen_room_attachment_source_camera_video" = "Spela in video";

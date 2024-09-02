@@ -106,6 +106,8 @@
 "action_view_source" = "Ver fonte";
 "action_yes" = "Sim";
 "action.load_more" = "Carrega mais";
+"banner.set_up_recovery.content" = "Generate a new recovery key that can be used to restore your encrypted message history in case you lose access to your devices.";
+"banner.set_up_recovery.title" = "Set up recovery";
 "common_about" = "Sobre";
 "common_acceptable_use_policy" = "Política de utilização aceitável";
 "common_advanced_settings" = "Configurações avançadas";
@@ -441,11 +443,11 @@
 "screen_edit_profile_error_title" = "Não foi possível atualizar o perfil";
 "screen_edit_profile_title" = "Editar perfil";
 "screen_edit_profile_updating_details" = "A atualizar o perfil…";
+"screen_encryption_reset_action_continue_reset" = "Continue reset";
 "screen_encryption_reset_bullet_1" = "Os detalhes da tua conta, contactos, preferências e lista de conversas serão mantidos.";
 "screen_encryption_reset_bullet_2" = "Perderás o acesso ao teu histórico de mensagens existente";
 "screen_encryption_reset_bullet_3" = "Necessitarás de verificar todos os teus dispositivos e contactos novamente.";
 "screen_encryption_reset_footer" = "Repõe a tua identidade apenas se não tiveres acesso a mais nenhum dispositivo com sessão iniciada e se tiveres perdido a tua chave de recuperação.";
-"screen_encryption_reset_subtitle" = "Se não tiveres sessão iniciada em nenhum outro dispositivo e perdeste o acesso à tua chave de recuperação, precisarás de repor a tua identidade para continuares a usar a aplicação. ";
 "screen_encryption_reset_title" = "Repõe a tua identidade caso não consigas confirmar de outra forma";
 "screen_identity_confirmation_cannot_confirm" = "Não é possível confirmar?";
 "screen_identity_confirmation_create_new_recovery_key" = "Criar uma nova chave de recuperação";

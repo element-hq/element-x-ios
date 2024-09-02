@@ -2329,6 +2329,15 @@ internal enum L10n {
     internal static var loadMore: String { return L10n.tr("Localizable", "action.load_more") }
   }
 
+  internal enum Banner {
+    internal enum SetUpRecovery {
+      /// Generate a new recovery key that can be used to restore your encrypted message history in case you lose access to your devices.
+      internal static var content: String { return L10n.tr("Localizable", "banner.set_up_recovery.content") }
+      /// Set up recovery
+      internal static var title: String { return L10n.tr("Localizable", "banner.set_up_recovery.title") }
+    }
+  }
+
   internal enum Common {
     /// Do not show this again
     internal static var doNotShowThisAgain: String { return L10n.tr("Localizable", "common.do_not_show_this_again") }

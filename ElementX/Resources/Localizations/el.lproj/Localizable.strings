@@ -106,6 +106,8 @@
 "action_view_source" = "Προβολή πηγής";
 "action_yes" = "Ναι";
 "action.load_more" = "Φόρτωσε περισσότερα";
+"banner.set_up_recovery.content" = "Generate a new recovery key that can be used to restore your encrypted message history in case you lose access to your devices.";
+"banner.set_up_recovery.title" = "Set up recovery";
 "common_about" = "Σχετικά";
 "common_acceptable_use_policy" = "Πολιτική αποδεκτής χρήσης";
 "common_advanced_settings" = "Ρυθμίσεις για προχωρημένους";
@@ -441,12 +443,12 @@
 "screen_edit_profile_error_title" = "Δεν είναι δυνατή η ενημέρωση του προφίλ";
 "screen_edit_profile_title" = "Επεξεργασία προφίλ";
 "screen_edit_profile_updating_details" = "Ενημέρωση προφίλ...";
+"screen_encryption_reset_action_continue_reset" = "Continue reset";
 "screen_encryption_reset_bullet_1" = "Your account details, contacts, preferences, and chat list will be kept";
 "screen_encryption_reset_bullet_2" = "You will lose your existing message history";
 "screen_encryption_reset_bullet_3" = "You will need to verify all your existing devices and contacts again";
 "screen_encryption_reset_footer" = "Only reset your identity if you don’t have access to another signed-in device and you’ve lost your recovery key.";
-"screen_encryption_reset_subtitle" = "If you’re not signed in to any other devices and you’ve lost your recovery key, then you’ll need to reset your identity to continue using the app. ";
-"screen_encryption_reset_title" = "Reset your identity in case you can’t confirm another way";
+"screen_encryption_reset_title" = "Can't confirm? You’ll need to reset your identity.";
 "screen_identity_confirmation_cannot_confirm" = "Can't confirm?";
 "screen_identity_confirmation_create_new_recovery_key" = "Δημιουργία νέου κλειδιού ανάκτησης";
 "screen_identity_confirmation_subtitle" = "Επαλήθευσε αυτήν τη συσκευή για να ρυθμίσεις την ασφαλή επικοινωνία.";

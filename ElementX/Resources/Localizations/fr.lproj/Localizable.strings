@@ -106,6 +106,8 @@
 "action_view_source" = "Afficher la source";
 "action_yes" = "Oui";
 "action.load_more" = "Voir plus";
+"banner.set_up_recovery.content" = "Generate a new recovery key that can be used to restore your encrypted message history in case you lose access to your devices.";
+"banner.set_up_recovery.title" = "Set up recovery";
 "common_about" = "À propos";
 "common_acceptable_use_policy" = "Politique d’utilisation acceptable";
 "common_advanced_settings" = "Paramètres avancés";
@@ -258,7 +260,7 @@
 "error_some_messages_have_not_been_sent" = "Certains messages n’ont pas été envoyés";
 "error_unknown" = "Désolé, une erreur s’est produite";
 "event_shield_reason_authenticity_not_guaranteed" = "L'authenticité de ce message chiffré ne peut être garantie sur cet appareil.";
-"event_shield_reason_previously_verified" = "Encrypted by a previously-verified user.";
+"event_shield_reason_previously_verified" = "Chiffré par un utilisateur précédemment vérifié.";
 "event_shield_reason_sent_in_clear" = "Non chiffré.";
 "event_shield_reason_unknown_device" = "Chiffré par un appareil inconnu ou supprimé.";
 "event_shield_reason_unsigned_device" = "Chiffré par un appareil non vérifié par son propriétaire.";
@@ -286,7 +288,7 @@
 "notification_reaction_body" = "A réagi avec %1$@";
 "notification_room_invite_body" = "Vous a invité(e) à rejoindre le salon";
 "notification_sender_me" = "Moi";
-"notification_sender_mention_reply" = "%1$@ mentioned or replied";
+"notification_sender_mention_reply" = "%1$@ mentionné ou en réponse";
 "notification_test_push_notification_content" = "Vous êtes en train de voir la notification ! Cliquez-moi !";
 "notification_ticker_text_dm" = "%1$@ : %2$@";
 "notification_ticker_text_group" = "%1$@ : %2$@ %3$@";
@@ -441,12 +443,12 @@
 "screen_edit_profile_error_title" = "Impossible de mettre à jour le profil";
 "screen_edit_profile_title" = "Modifier le profil";
 "screen_edit_profile_updating_details" = "Mise à jour du profil...";
+"screen_encryption_reset_action_continue_reset" = "Continue reset";
 "screen_encryption_reset_bullet_1" = "Les détails de votre compte, vos contacts, vos préférences et votre liste de discussions seront conservés";
 "screen_encryption_reset_bullet_2" = "Vous perdrez l’historique de vos messages";
 "screen_encryption_reset_bullet_3" = "Vous devrez vérifier à nouveau tous vos appareils et tous vos contacts";
-"screen_encryption_reset_footer" = "Only reset your identity if you don’t have access to another signed-in device and you’ve lost your recovery key.";
-"screen_encryption_reset_subtitle" = "If you’re not signed in to any other devices and you’ve lost your recovery key, then you’ll need to reset your identity to continue using the app. ";
-"screen_encryption_reset_title" = "Reset your identity in case you can’t confirm another way";
+"screen_encryption_reset_footer" = "Ne réinitialisez votre identité que si vous n'avez plus accès à aucune autre session et que vous avez perdu votre clé de récupération.";
+"screen_encryption_reset_title" = "Can't confirm? You’ll need to reset your identity.";
 "screen_identity_confirmation_cannot_confirm" = "Confirmation impossible ?";
 "screen_identity_confirmation_create_new_recovery_key" = "Créer une nouvelle clé de récupération";
 "screen_identity_confirmation_subtitle" = "Vérifier cette session pour configurer votre messagerie sécurisée.";
@@ -602,7 +604,7 @@
 "screen_reset_encryption_confirmation_alert_subtitle" = "Cette opération ne peut pas être annulée.";
 "screen_reset_encryption_confirmation_alert_title" = "Are you sure you want to reset your identity?";
 "screen_reset_encryption_password_placeholder" = "Saisissez...";
-"screen_reset_encryption_password_subtitle" = "Confirm that you want to reset your identity.";
+"screen_reset_encryption_password_subtitle" = "Veuillez confirmec que vous souhaitez réinitialiser votre identité.";
 "screen_reset_encryption_password_title" = "Saisissez le mot de passe de votre compte pour continuer";
 "screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.";
 "screen_reset_identity_confirmation_title" = "Can't confirm? Go to your account to reset your identity.";
