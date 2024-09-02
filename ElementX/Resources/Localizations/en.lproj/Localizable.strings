@@ -106,6 +106,8 @@
 "action_view_source" = "View source";
 "action_yes" = "Yes";
 "action.load_more" = "Load more";
+"banner.set_up_recovery.content" = "Generate a new recovery key that can be used to restore your encrypted message history in case you lose access to your devices.";
+"banner.set_up_recovery.title" = "Set up recovery";
 "common_about" = "About";
 "common_acceptable_use_policy" = "Acceptable use policy";
 "common_advanced_settings" = "Advanced settings";

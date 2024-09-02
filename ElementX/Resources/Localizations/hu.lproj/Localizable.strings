@@ -106,6 +106,8 @@
 "action_view_source" = "Forrás megtekintése";
 "action_yes" = "Igen";
 "action.load_more" = "Továbbiak betöltése";
+"banner.set_up_recovery.content" = "Hozzon létre egy új helyreállítási kulcsot, amellyel visszaállíthatja a titkosított üzenetek előzményeit, ha elveszíti az eszközökhöz való hozzáférést.";
+"banner.set_up_recovery.title" = "Helyreállítás beállítása";
 "common_about" = "Névjegy";
 "common_acceptable_use_policy" = "Elfogadható használatra vonatkozó szabályzat";
 "common_advanced_settings" = "Speciális beállítások";
@@ -441,11 +443,11 @@
 "screen_edit_profile_error_title" = "Nem sikerült frissíteni a profilt";
 "screen_edit_profile_title" = "Profil szerkesztése";
 "screen_edit_profile_updating_details" = "Profil frissítése…";
+"screen_encryption_reset_action_continue_reset" = "Visszaállítás folytatása";
 "screen_encryption_reset_bullet_1" = "A fiókadatok, a kapcsolatok, a beállítások és a csevegéslista megmarad";
 "screen_encryption_reset_bullet_2" = "Elveszíti meglévő üzenetelőzményeit";
 "screen_encryption_reset_bullet_3" = "Újból ellenőriznie kell az összes meglévő eszközét és csevegőpartnerét";
 "screen_encryption_reset_footer" = "Csak akkor állítsa vissza a személyazonosságát, ha nem fér hozzá másik bejelentkezett eszközhöz, és elvesztette a helyreállítási kulcsot.";
-"screen_encryption_reset_subtitle" = "Ha nincs bejelentkezve más eszközre, és elvesztette a helyreállítási kulcsot, akkor az alkalmazás használatának folytatásához vissza kell állítania személyazonosságát. ";
 "screen_encryption_reset_title" = "Állítsa vissza a személyazonosságát, ha más módon nem tudja megerősíteni";
 "screen_identity_confirmation_cannot_confirm" = "Nem tudja megerősíteni?";
 "screen_identity_confirmation_create_new_recovery_key" = "Új helyreállítási kulcs létrehozása";
