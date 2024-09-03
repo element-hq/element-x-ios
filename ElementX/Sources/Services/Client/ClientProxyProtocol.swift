@@ -54,7 +54,8 @@ enum SlidingSyncConstants {
         RequiredState(key: "m.room.topic", value: ""),
         RequiredState(key: "m.room.avatar", value: ""),
         RequiredState(key: "m.room.canonical_alias", value: ""),
-        RequiredState(key: "m.room.join_rules", value: "")
+        RequiredState(key: "m.room.join_rules", value: ""),
+        RequiredState(key: "m.room.pinned_events", value: "")
     ]
 }
 
