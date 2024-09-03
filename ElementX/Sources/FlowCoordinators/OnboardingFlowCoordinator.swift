@@ -262,8 +262,6 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                     if value == .verified {
                         appSettings.hasRunIdentityConfirmationOnboarding = true
                         stateMachine.tryEvent(.nextSkippingIdentityConfimed)
-                    } else {
-                        // Captured by the block below, nil-ing it wouldn't work
                         verificationStateCancellable?.cancel()
                     }
                 }
