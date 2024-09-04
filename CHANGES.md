@@ -1,3 +1,35 @@
+## Changes in 1.7.5 (2024-09-04)
+
+### What's Changed
+
+✨ Features
+* Add a logout button on the identity confirmation screen by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3212
+
+🐛 Bugfixes
+* Make sure reactions always go through the timeline controller. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3209
+* Prevent issues when loading user profiles by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3213
+* Accept current autocorrection/suggestion before sending a message by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3219
+* Update subscriptions if visible range rooms change without the range itself changing by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3220
+* Prevent verification state changes other than `verified` from blocking the user on the session verification screen by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3224
+* Make pinned events required state in SlidingSync by @jmartinesp in https://github.com/element-hq/element-x-ios/pull/3225
+* Force room title headers to layout on one single line by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3229
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3218
+
+🚧 In development 🚧
+* Native Sliding Sync Discovery by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3211
+
+Others
+* Update GitHub Actions (major) by @renovate in https://github.com/element-hq/element-x-ios/pull/3222
+* Update GitHub Actions (major) by @renovate in https://github.com/element-hq/element-x-ios/pull/3227
+* Bump the RustSDK to v1.0.44 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3230
+
+### New Contributors
+* @jmartinesp made their first contribution in https://github.com/element-hq/element-x-ios/pull/3225
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.7.4...1.7.5
+
 ## Changes in 1.7.4 (2024-08-27)
 
 ### What's Changed
