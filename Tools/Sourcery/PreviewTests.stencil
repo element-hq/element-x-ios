@@ -3,7 +3,7 @@
 
 import XCTest
 import SwiftUI
-import Prefire
+@testable import ElementX
 @testable import SnapshotTesting
 #if canImport(AccessibilitySnapshot)
     import AccessibilitySnapshot
@@ -24,9 +24,9 @@ import {{ import }}
 
 class PreviewTests: XCTestCase {
     private let deviceConfig: ViewImageConfig = .iPhoneX
-    private var simulatorDevice: String?{% if argument.simulatorDevice %} = "{{ argument.simulatorDevice|default:nil }}"{% endif %}
-    private var requiredOSVersion: Int?{% if argument.simulatorOSVersion %} = {{ argument.simulatorOSVersion }}{% endif %}
-    private let snapshotDevices: [String]{% if argument.snapshotDevices %} = {{ argument.snapshotDevices|split:"|" }}{% else %} = []{% endif %}
+    private var simulatorDevice: String? = "iPhone14,6" // iPhone SE 3rd Generation
+    private var requiredOSVersion: Int? = 17
+    private let snapshotDevices = ["iPhone 15", "iPad"]
     
     
     {% if argument.file %}
@@ -43,7 +43,7 @@ class PreviewTests: XCTestCase {
 
     // MARK: - PreviewProvider
 
-    {% for type in types.types where (type.implements.PrefireProvider or type.based.PrefireProvider or type|annotated:"PrefireProvider") and type.name != "TestablePreview" %}
+    {% for type in types.types where (type.implements.TestablePreview or type.based.TestablePreview or type|annotated:"TestablePreview") and type.name != "TestablePreview" %}
     func test_{{ type.name|lowerFirstLetter|replace:"_Previews", "" }}() {
         for preview in {{ type.name }}._allPreviews {
             assertSnapshots(matching: preview)
@@ -278,6 +278,47 @@ private extension UIEdgeInsets {
     /// A custom inset that prevents the snapshotting library from rendering the
     /// origin at (10000, 10000) which breaks some of our views such as MessageText.
     static var one: UIEdgeInsets { UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1) }
+}
+
+public struct DelayPreferenceKey: PreferenceKey {
+    public static var defaultValue: TimeInterval = 0.0
+
+    public static func reduce(value: inout TimeInterval, nextValue: () -> TimeInterval) {
+        value = nextValue()
+    }
+}
+
+public struct PrecisionPreferenceKey: PreferenceKey {
+    public static var defaultValue: Float = 1.0
+
+    public static func reduce(value: inout Float, nextValue: () -> Float) {
+        value = nextValue()
+    }
+}
+
+public struct PerceptualPrecisionPreferenceKey: PreferenceKey {
+    public static var defaultValue: Float = 1.0
+
+    public static func reduce(value: inout Float, nextValue: () -> Float) {
+        value = nextValue()
+    }
+}
+
+extension SwiftUI.View {
+    /// Use this modifier when you want to apply snapshot-specific preferences,
+    /// like delay and precision, to the view.
+    /// These preferences can then be retrieved and used elsewhere in your view hierarchy.
+    ///
+    /// - Parameters:
+    ///   - delay: The delay time in seconds that you want to set as a preference to the View.
+    ///   - precision: The percentage of pixels that must match.
+    ///   - perceptualPrecision: The percentage a pixel must match the source pixel to be considered a match. 98-99% mimics the precision of the human eye.
+    @inlinable
+    func snapshot(delay: TimeInterval = .zero, precision: Float = 1.0, perceptualPrecision: Float = 1.0) -> some SwiftUI.View {
+        preference(key: DelayPreferenceKey.self, value: delay)
+            .preference(key: PrecisionPreferenceKey.self, value: precision)
+            .preference(key: PerceptualPrecisionPreferenceKey.self, value: perceptualPrecision)
+    }
 }
 
 // swiftlint:enable all

@@ -40,7 +40,6 @@ targets:
       - package: DeviceKit
       - package: DTCoreText
       - package: LRUCache
-      - package: Prefire
       - package: Version
 
     info:
@@ -76,7 +75,8 @@ targets:
     - path: ../../ElementX/Sources/AppHooks/AppHooks.swift
     - path: ../../ElementX/Sources/AppHooks/Hooks/ClientBuilderHook.swift
     - path: ../../ElementX/Sources/Application/AppSettings.swift
-    - path: ../../ElementX/Sources/Generated
+    - path: ../../ElementX/Sources/Generated/Assets.swift
+    - path: ../../ElementX/Sources/Generated/Strings.swift
     - path: ../../ElementX/Sources/Other/AvatarSize.swift
     - path: ../../ElementX/Sources/Other/CurrentValuePublisher.swift
     - path: ../../ElementX/Sources/Other/Extensions/AttributedString.swift
