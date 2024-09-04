@@ -45,4 +45,6 @@ targets:
 
     sources:
     - path: ../Sources
+      excludes:
+        - "**/__Snapshots__/**"
     - path: ../SupportingFiles
