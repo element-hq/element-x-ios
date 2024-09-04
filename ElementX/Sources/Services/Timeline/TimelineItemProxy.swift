@@ -110,6 +110,8 @@ class EventTimelineItemProxy {
             return .sendingFailed(.verifiedUserHasUnsignedDevice(devices: devices))
         case .verifiedUserChangedIdentity(users: let users):
             return .sendingFailed(.verifiedUserChangedIdentity(users: users))
+        case .crossSigningNotSetup, .sendingFromUnverifiedDevice:
+            return .sendingFailed(.unknown)
         }
     }()
     
