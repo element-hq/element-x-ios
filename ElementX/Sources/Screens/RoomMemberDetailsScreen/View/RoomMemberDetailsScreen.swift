@@ -133,13 +133,13 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         RoomMemberDetailsScreen(context: otherUserViewModel.context)
             .previewDisplayName("Other User")
-            .snapshot(delay: 0.25)
+            .snapshotPreferences(delay: 0.25)
         RoomMemberDetailsScreen(context: accountOwnerViewModel.context)
             .previewDisplayName("Account Owner")
-            .snapshot(delay: 0.25)
+            .snapshotPreferences(delay: 0.25)
         RoomMemberDetailsScreen(context: ignoredUserViewModel.context)
             .previewDisplayName("Ignored User")
-            .snapshot(delay: 0.25)
+            .snapshotPreferences(delay: 0.25)
     }
     
     static func makeViewModel(member: RoomMemberProxyMock) -> RoomMemberDetailsScreenViewModel {

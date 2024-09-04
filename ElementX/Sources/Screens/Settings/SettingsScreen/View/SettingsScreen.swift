@@ -233,7 +233,7 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         NavigationStack {
             SettingsScreen(context: viewModel.context)
-                .snapshot(delay: 1.0)
+                .snapshotPreferences(delay: 1.0)
         }
     }
 }

@@ -126,31 +126,31 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             RoomMembersListScreen(context: viewModel.context)
         }
-        .snapshot(delay: 1.0)
+        .snapshotPreferences(delay: 1.0)
         .previewDisplayName("Member")
         
         NavigationStack {
             RoomMembersListScreen(context: invitesViewModel.context)
         }
-        .snapshot(delay: 1.0)
+        .snapshotPreferences(delay: 1.0)
         .previewDisplayName("Invites")
         
         NavigationStack {
             RoomMembersListScreen(context: adminViewModel.context)
         }
-        .snapshot(delay: 1.0)
+        .snapshotPreferences(delay: 1.0)
         .previewDisplayName("Admin: Members")
         
         NavigationStack {
             RoomMembersListScreen(context: bannedViewModel.context)
         }
-        .snapshot(delay: 1.0)
+        .snapshotPreferences(delay: 1.0)
         .previewDisplayName("Admin: Banned")
         
         NavigationStack {
             RoomMembersListScreen(context: emptyBannedViewModel.context)
         }
-        .snapshot(delay: 1.0)
+        .snapshotPreferences(delay: 1.0)
         .previewDisplayName("Admin: Empty Banned")
     }
     

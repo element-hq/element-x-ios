@@ -106,10 +106,10 @@ struct UserProfileScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         UserProfileScreen(context: otherUserViewModel.context)
             .previewDisplayName("Other User")
-            .snapshot(delay: 0.25)
+            .snapshotPreferences(delay: 0.25)
         UserProfileScreen(context: accountOwnerViewModel.context)
             .previewDisplayName("Account Owner")
-            .snapshot(delay: 0.25)
+            .snapshotPreferences(delay: 0.25)
     }
     
     static func makeViewModel(userID: String) -> UserProfileScreenViewModel {

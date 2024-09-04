@@ -280,46 +280,5 @@ private extension UIEdgeInsets {
     static var one: UIEdgeInsets { UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1) }
 }
 
-public struct DelayPreferenceKey: PreferenceKey {
-    public static var defaultValue: TimeInterval = 0.0
-
-    public static func reduce(value: inout TimeInterval, nextValue: () -> TimeInterval) {
-        value = nextValue()
-    }
-}
-
-public struct PrecisionPreferenceKey: PreferenceKey {
-    public static var defaultValue: Float = 1.0
-
-    public static func reduce(value: inout Float, nextValue: () -> Float) {
-        value = nextValue()
-    }
-}
-
-public struct PerceptualPrecisionPreferenceKey: PreferenceKey {
-    public static var defaultValue: Float = 1.0
-
-    public static func reduce(value: inout Float, nextValue: () -> Float) {
-        value = nextValue()
-    }
-}
-
-extension SwiftUI.View {
-    /// Use this modifier when you want to apply snapshot-specific preferences,
-    /// like delay and precision, to the view.
-    /// These preferences can then be retrieved and used elsewhere in your view hierarchy.
-    ///
-    /// - Parameters:
-    ///   - delay: The delay time in seconds that you want to set as a preference to the View.
-    ///   - precision: The percentage of pixels that must match.
-    ///   - perceptualPrecision: The percentage a pixel must match the source pixel to be considered a match. 98-99% mimics the precision of the human eye.
-    @inlinable
-    func snapshot(delay: TimeInterval = .zero, precision: Float = 1.0, perceptualPrecision: Float = 1.0) -> some SwiftUI.View {
-        preference(key: DelayPreferenceKey.self, value: delay)
-            .preference(key: PrecisionPreferenceKey.self, value: precision)
-            .preference(key: PerceptualPrecisionPreferenceKey.self, value: perceptualPrecision)
-    }
-}
-
 // swiftlint:enable all
 // swiftformat:enable all
