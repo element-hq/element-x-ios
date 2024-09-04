@@ -29,6 +29,7 @@ struct RoomHeaderView: View {
             avatarImage
                 .accessibilityHidden(true)
             Text(roomName)
+                .lineLimit(1)
                 .font(.compound.bodyLGSemibold)
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.name)
         }
