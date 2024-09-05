@@ -92,6 +92,8 @@ class ClientProxy: ClientProxyProtocol {
             .asCurrentValuePublisher()
     }
     
+    private let roomListServiceStateSubject = CurrentValueSubject<RoomListServiceState, Never>(.initial)
+    
     private var cancellables = Set<AnyCancellable>()
     
     /// Will be `true` whilst the app cleans up and forces a logout. Prevents the sync service from restarting
@@ -759,6 +761,7 @@ class ClientProxy: ClientProxyProtocol {
                                                             shouldPrefixSenderName: true)
             
             roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
+                                                      roomListServiceStatePublisher: roomListServiceStateSubject.asCurrentValuePublisher(),
                                                       eventStringBuilder: eventStringBuilder,
                                                       name: "AllRooms",
                                                       shouldUpdateVisibleRange: true,
@@ -767,6 +770,7 @@ class ClientProxy: ClientProxyProtocol {
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
             
             alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
+                                                               roomListServiceStatePublisher: roomListServiceStateSubject.asCurrentValuePublisher(),
                                                                eventStringBuilder: eventStringBuilder,
                                                                name: "MessageForwarding",
                                                                notificationSettings: notificationSettings,
@@ -802,9 +806,13 @@ class ClientProxy: ClientProxyProtocol {
 
     private func createRoomListServiceObserver(_ roomListService: RoomListService) -> TaskHandle {
         roomListService.state(listener: RoomListStateListenerProxy { [weak self] state in
+            guard let self else { return }
+            
             MXLog.info("Received room list update: \(state)")
-            guard let self,
-                  state != .error,
+            
+            roomListServiceStateSubject.send(state)
+            
+            guard state != .error,
                   state != .terminated else {
                 // The sync service is responsible of handling error and termination
                 return

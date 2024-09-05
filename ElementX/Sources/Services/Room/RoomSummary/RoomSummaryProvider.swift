@@ -20,6 +20,7 @@ import MatrixRustSDK
 
 class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let roomListService: RoomListServiceProtocol
+    private let roomListServiceStatePublisher: CurrentValuePublisher<RoomListServiceState, Never>
     private let eventStringBuilder: RoomEventStringBuilder
     private let name: String
     private let shouldUpdateVisibleRange: Bool
@@ -36,6 +37,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private var roomList: RoomListProtocol?
     
     private var cancellables = Set<AnyCancellable>()
+    private var roomListServiceStateCancellable: AnyCancellable?
     private var listUpdatesSubscriptionResult: RoomListEntriesWithDynamicAdaptersResult?
     private var stateUpdatesTaskHandle: TaskHandle?
     
@@ -64,12 +66,14 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     ///   to the room list service through the `applyInput(input: .viewport(ranges` api. Only useful for
     ///   lists that need to update the visible range on Sliding Sync
     init(roomListService: RoomListServiceProtocol,
+         roomListServiceStatePublisher: CurrentValuePublisher<RoomListServiceState, Never>,
          eventStringBuilder: RoomEventStringBuilder,
          name: String,
          shouldUpdateVisibleRange: Bool = false,
          notificationSettings: NotificationSettingsProxyProtocol,
          appSettings: AppSettings) {
         self.roomListService = roomListService
+        self.roomListServiceStatePublisher = roomListServiceStatePublisher
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .default)
         self.eventStringBuilder = eventStringBuilder
         self.name = name
@@ -82,7 +86,16 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             .sink { [weak self] in self?.updateRoomsWithDiffs($0) }
             .store(in: &cancellables)
         
-        setupVisibleRangeObservers()
+        roomListServiceStateCancellable = roomListServiceStatePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                guard let self else { return }
+                
+                if state == .running {
+                    setupVisibleRangeObservers()
+                    roomListServiceStateCancellable = nil
+                }
+            }
         
         setupNotificationSettingsSubscription()
     }
