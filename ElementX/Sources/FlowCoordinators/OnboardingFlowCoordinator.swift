@@ -61,6 +61,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
+    private var verificationStateCancellable: AnyCancellable?
+    
     init(userSession: UserSessionProtocol,
          appLockService: AppLockServiceProtocol,
          analyticsService: AnalyticsService,
@@ -83,6 +85,21 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         self.navigationStackCoordinator = NavigationStackCoordinator()
         
         stateMachine = .init(state: .initial)
+        
+        // Always react to verification changes, not only when freshly
+        // verified from
+        verificationStateCancellable = userSession.sessionSecurityStatePublisher
+            .map(\.verificationState)
+            .removeDuplicates()
+            .sink { [weak self] value in
+                guard let self,
+                      value == .verified,
+                      stateMachine.state == .identityConfirmation else { return }
+                
+                appSettings.hasRunIdentityConfirmationOnboarding = true
+                stateMachine.tryEvent(.nextSkippingIdentityConfimed)
+                self.verificationStateCancellable = nil
+            }
     }
     
     var shouldStart: Bool {
@@ -249,27 +266,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        // If the verification state is still unknown wait for it to resolve
-        // and just move on to the next steps if verified
-        var verificationStateCancellable: AnyCancellable?
-        if userSession.sessionSecurityStatePublisher.value.verificationState == .unknown {
-            verificationStateCancellable = userSession.sessionSecurityStatePublisher
-                .map(\.verificationState)
-                .removeDuplicates()
-                .sink { [weak self] value in
-                    guard let self else { return }
-                    
-                    if value == .verified {
-                        appSettings.hasRunIdentityConfirmationOnboarding = true
-                        stateMachine.tryEvent(.nextSkippingIdentityConfimed)
-                        verificationStateCancellable?.cancel()
-                    }
-                }
-        }
-        
-        presentCoordinator(coordinator) { [verificationStateCancellable] in
-            verificationStateCancellable?.cancel()
-        }
+        presentCoordinator(coordinator)
     }
     
     private func presentSessionVerificationScreen() async {
@@ -287,8 +284,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .done:
-                    appSettings.hasRunIdentityConfirmationOnboarding = true
-                    stateMachine.tryEvent(.next)
+                    break // Moving to next state is handled by the global session verification listener
                 }
             }
             .store(in: &cancellables)
@@ -309,8 +305,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .recoveryFixed:
-                    appSettings.hasRunIdentityConfirmationOnboarding = true
-                    stateMachine.tryEvent(.next)
+                    break // Moving to next state is Handled by the global session verification listener
                 case .resetEncryption:
                     presentEncryptionResetScreen()
                 default:
@@ -338,8 +333,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             case .requestOIDCAuthorisation(let url):
                 presentOIDCAuthorisationScreen(url: url)
             case .resetFinished:
-                appSettings.hasRunIdentityConfirmationOnboarding = true
-                stateMachine.tryEvent(.next)
+                // Moving to next state is handled by the global session verification listener
                 navigationStackCoordinator.setSheetCoordinator(nil)
             }
         }
