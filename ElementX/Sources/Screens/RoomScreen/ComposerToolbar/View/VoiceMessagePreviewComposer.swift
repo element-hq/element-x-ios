@@ -106,6 +106,7 @@ private extension DateFormatter {
 
 struct VoiceMessagePreviewComposer_Previews: PreviewProvider, TestablePreview {
     static let playerState = AudioPlayerState(id: .recorderPreview,
+                                              title: L10n.commonVoiceMessage,
                                               duration: 10.0,
                                               waveform: EstimatedWaveform.mockWaveform,
                                               progress: 0.4)

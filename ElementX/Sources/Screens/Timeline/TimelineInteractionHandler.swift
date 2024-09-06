@@ -488,6 +488,7 @@ class TimelineInteractionHandler {
         }
         
         let playerState = AudioPlayerState(id: .timelineItemIdentifier(itemID),
+                                           title: L10n.commonVoiceMessage,
                                            duration: voiceMessageRoomTimelineItem.content.duration,
                                            waveform: voiceMessageRoomTimelineItem.content.waveform)
         mediaPlayerProvider.register(audioPlayerState: playerState)

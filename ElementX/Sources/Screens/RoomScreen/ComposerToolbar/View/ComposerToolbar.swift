@@ -401,7 +401,11 @@ extension ComposerToolbar {
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                  analyticsService: ServiceLocator.shared.analytics,
                                                  composerDraftService: ComposerDraftServiceMock())
-            model.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, duration: 10.0), waveform: .data(waveformData), isUploading: uploading)
+            model.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview,
+                                                                                    title: L10n.commonVoiceMessage,
+                                                                                    duration: 10.0),
+                                                            waveform: .data(waveformData),
+                                                            isUploading: uploading)
             return model
         }
         return ComposerToolbar(context: composerViewModel.context,

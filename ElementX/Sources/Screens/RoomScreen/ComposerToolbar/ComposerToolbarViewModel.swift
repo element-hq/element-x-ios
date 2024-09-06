@@ -64,7 +64,9 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         mentionBuilder = MentionBuilder()
         attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", mentionBuilder: mentionBuilder)
         
-        super.init(initialViewState: ComposerToolbarViewState(audioPlayerState: .init(id: .recorderPreview, duration: 0),
+        super.init(initialViewState: ComposerToolbarViewState(audioPlayerState: .init(id: .recorderPreview,
+                                                                                      title: L10n.commonVoiceMessage,
+                                                                                      duration: 0),
                                                               audioRecorderState: .init(),
                                                               bindings: .init()),
                    mediaProvider: mediaProvider)

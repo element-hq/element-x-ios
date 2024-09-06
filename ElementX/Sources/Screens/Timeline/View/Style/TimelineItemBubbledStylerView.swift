@@ -434,7 +434,10 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                              replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                                    eventID: "123",
                                                                                    eventContent: .message(.text(.init(body: "Short"))))),
-                                         playerState: AudioPlayerState(id: .timelineItemIdentifier(.random), duration: 10, waveform: EstimatedWaveform.mockWaveform))
+                                         playerState: AudioPlayerState(id: .timelineItemIdentifier(.random),
+                                                                       title: L10n.commonVoiceMessage,
+                                                                       duration: 10,
+                                                                       waveform: EstimatedWaveform.mockWaveform))
         }
         .environmentObject(viewModel.context)
     }
@@ -552,7 +555,10 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                             source: nil,
                                                                             contentType: nil),
                                                              properties: RoomTimelineItemProperties(encryptionAuthenticity: .notGuaranteed(color: .gray))),
-                                         playerState: AudioPlayerState(id: .timelineItemIdentifier(.random), duration: 10, waveform: EstimatedWaveform.mockWaveform))
+                                         playerState: AudioPlayerState(id: .timelineItemIdentifier(.random),
+                                                                       title: L10n.commonVoiceMessage,
+                                                                       duration: 10,
+                                                                       waveform: EstimatedWaveform.mockWaveform))
         }
         .environmentObject(viewModel.context)
     }

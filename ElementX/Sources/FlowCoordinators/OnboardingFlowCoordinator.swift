@@ -282,9 +282,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = SessionVerificationScreenCoordinator(parameters: parameters)
         
         coordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                
+            .sink { action in
                 switch action {
                 case .done:
                     break // Moving to next state is handled by the global session verification listener
