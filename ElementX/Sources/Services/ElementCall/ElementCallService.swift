@@ -260,8 +260,6 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     // MARK: - Private
     
     func tearDownCallSession(sendEndCallAction: Bool = true) {
-        try? AVAudioSession.sharedInstance().setActive(false)
-        
         if sendEndCallAction, let ongoingCallID {
             let transaction = CXTransaction(action: CXEndCallAction(call: ongoingCallID.callKitID))
             callController.request(transaction) { error in

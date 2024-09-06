@@ -142,7 +142,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     private func setupAudioSession() {
         releaseAudioSessionTask = nil
         do {
-            try audioSession.setCategory(AVAudioSession.Category.playback)
+            try audioSession.setCategory(.playback)
             try audioSession.setActive(true)
         } catch {
             MXLog.error("Could not redirect audio playback to speakers.")
@@ -166,7 +166,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         releaseAudioSessionTask = nil
         if audioSession.category == .playback, !audioSession.isOtherAudioPlaying {
             MXLog.info("releasing audio session")
-            try? audioSession.setActive(false)
+            try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
         }
     }
     
@@ -216,16 +216,6 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
             .sink { [weak self] _ in
                 guard let self else { return }
                 self.setInternalState(.finishedPlaying)
-            }
-            .store(in: &cancellables)
-        
-        // Pause playback uppon UIApplication.didBecomeActiveNotification notification
-        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                self.pause()
-                // Release the audio session right away, as we don't play audio in the background
-                self.releaseAudioSession()
             }
             .store(in: &cancellables)
     }

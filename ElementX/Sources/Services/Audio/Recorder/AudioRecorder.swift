@@ -128,7 +128,7 @@ class AudioRecorder: AudioRecorderProtocol {
     
     private func releaseAudioSession() {
         MXLog.info("releasing audio session")
-        try? audioSession.setActive(false)
+        try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
         removeObservers()
     }
     
