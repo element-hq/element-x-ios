@@ -131,7 +131,7 @@ class TimelineTableViewController: UIViewController {
     /// Updates the typing members but also updates table view items
     func setTypingMembers(_ members: [String]) {
         DispatchQueue.main.async {
-            // Avoid `Publishing changes from within view update warnings`
+            // Avoid `Publishing changes from within view update` warnings
             self.typingMembers.members = members
         }
     }

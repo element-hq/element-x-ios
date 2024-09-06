@@ -89,7 +89,7 @@ private struct CallView: UIViewRepresentable {
             
             super.init()
             
-            DispatchQueue.main.async { // Avoid `Publishing changes from within view update warnings`
+            DispatchQueue.main.async { // Avoid `Publishing changes from within view update` warnings
                 viewModelContext.javaScriptEvaluator = self.evaluateJavaScript
                 viewModelContext.requestPictureInPictureHandler = self.requestPictureInPicture
             }
