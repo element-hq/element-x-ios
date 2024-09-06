@@ -196,8 +196,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             .sink { [weak self] roomIDs in
                 guard let self else { return }
                 
-                MXLog.debug("\(self.name): Updating subscriptions for visible rooms: \(roomIDs)")
-                
                 do {
                     try roomListService.subscribeToRooms(roomIds: roomIDs,
                                                          settings: .init(requiredState: SlidingSyncConstants.defaultRequiredState,
@@ -217,13 +215,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             span.exit()
         }
         
-        MXLog.info("\(name): Received \(diffs.count) diffs")
-        
         rooms = diffs.reduce(rooms) { currentItems, diff in
             processDiff(diff, on: currentItems)
         }
-        
-        MXLog.info("Finished processing room list diffs")
     }
     
     private func processDiff(_ diff: RoomListEntriesUpdate, on currentItems: [RoomSummary]) -> [RoomSummary] {
