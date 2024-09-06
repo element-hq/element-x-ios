@@ -86,8 +86,11 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         
         stateMachine = .init(state: .initial)
         
-        // Always react to verification changes, not only when freshly
-        // verified from
+        // Verification can change as part of the onboarding flow by verifying with
+        // another device, using a recovery key or by resetting one's crypto identity.
+        // It can also happen that onboarding started before it had a chance to update,
+        // usually seen when registering a new account.
+        // Handle all those cases here instead of spreading them throughout the code.
         verificationStateCancellable = userSession.sessionSecurityStatePublisher
             .map(\.verificationState)
             .removeDuplicates()
