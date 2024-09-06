@@ -148,8 +148,8 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         releaseAudioSessionTask = Task { [weak self] in
             try? await Task.sleep(for: .seconds(timeInterval))
             guard !Task.isCancelled else { return }
-            guard let self else { return }
-            self.releaseAudioSession()
+            
+            self?.releaseAudioSession()
         }
     }
     
@@ -180,10 +180,10 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
             
             switch playerItem.status {
             case .failed:
-                self.setInternalState(.error(playerItem.error ?? AudioPlayerError.genericError))
+                setInternalState(.error(playerItem.error ?? AudioPlayerError.genericError))
             case .readyToPlay:
                 guard state == .loading else { return }
-                self.setInternalState(.readyToPlay)
+                setInternalState(.readyToPlay)
             default:
                 break
             }
@@ -193,20 +193,20 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
             guard let self else { return }
             
             if internalAudioPlayer.rate == 0 {
-                if self.isStopped {
-                    self.setInternalState(.stopped)
+                if isStopped {
+                    setInternalState(.stopped)
                 } else {
-                    self.setInternalState(.paused)
+                    setInternalState(.paused)
                 }
             } else {
-                self.setInternalState(.playing)
+                setInternalState(.playing)
             }
         }
                 
         NotificationCenter.default.publisher(for: Notification.Name.AVPlayerItemDidPlayToEndTime)
             .sink { [weak self] _ in
                 guard let self else { return }
-                self.setInternalState(.finishedPlaying)
+                setInternalState(.finishedPlaying)
             }
             .store(in: &cancellables)
     }

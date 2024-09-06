@@ -323,7 +323,9 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel.context.composerFormattingEnabled = false
         let waveformData: [Float] = Array(repeating: 1.0, count: 1000)
         viewModel.context.plainComposerText = .init(string: "Hello world!")
-        viewModel.process(timelineAction: .setMode(mode: .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, duration: 10.0), waveform: .data(waveformData), isUploading: false)))
+        viewModel.process(timelineAction: .setMode(mode: .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, title: "", duration: 10.0),
+                                                                              waveform: .data(waveformData),
+                                                                              isUploading: false)))
         viewModel.saveDraft()
 
         await fulfillment(of: [expectation], timeout: 10)

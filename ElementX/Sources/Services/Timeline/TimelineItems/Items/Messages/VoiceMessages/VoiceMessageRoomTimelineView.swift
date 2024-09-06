@@ -70,6 +70,7 @@ struct VoiceMessageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                                    contentType: nil))
     
     static let playerState = AudioPlayerState(id: .timelineItemIdentifier(timelineItemIdentifier),
+                                              title: L10n.commonVoiceMessage,
                                               duration: 10.0,
                                               waveform: EstimatedWaveform.mockWaveform,
                                               progress: 0.4)

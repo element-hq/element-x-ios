@@ -64,7 +64,7 @@ class MediaPlayerProviderTests: XCTestCase {
         // By default, there should be no player state
         XCTAssertNil(mediaPlayerProvider.playerState(for: audioPlayerStateId))
         
-        let audioPlayerState = AudioPlayerState(id: audioPlayerStateId, duration: 10.0)
+        let audioPlayerState = AudioPlayerState(id: audioPlayerStateId, title: "", duration: 10.0)
         mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
         XCTAssertEqual(audioPlayerState, mediaPlayerProvider.playerState(for: audioPlayerStateId))
         
@@ -76,7 +76,7 @@ class MediaPlayerProviderTests: XCTestCase {
         let audioPlayer = AudioPlayerMock()
         audioPlayer.actions = PassthroughSubject<AudioPlayerAction, Never>().eraseToAnyPublisher()
         
-        let audioPlayerStates = Array(repeating: AudioPlayerState(id: .timelineItemIdentifier(.random), duration: 0), count: 10)
+        let audioPlayerStates = Array(repeating: AudioPlayerState(id: .timelineItemIdentifier(.random), title: "", duration: 0), count: 10)
         for audioPlayerState in audioPlayerStates {
             mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
             audioPlayerState.attachAudioPlayer(audioPlayer)
@@ -95,7 +95,7 @@ class MediaPlayerProviderTests: XCTestCase {
         let audioPlayer = AudioPlayerMock()
         audioPlayer.actions = PassthroughSubject<AudioPlayerAction, Never>().eraseToAnyPublisher()
         
-        let audioPlayerStates = Array(repeating: AudioPlayerState(id: .timelineItemIdentifier(.random), duration: 0), count: 10)
+        let audioPlayerStates = Array(repeating: AudioPlayerState(id: .timelineItemIdentifier(.random), title: "", duration: 0), count: 10)
         for audioPlayerState in audioPlayerStates {
             mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
             audioPlayerState.attachAudioPlayer(audioPlayer)

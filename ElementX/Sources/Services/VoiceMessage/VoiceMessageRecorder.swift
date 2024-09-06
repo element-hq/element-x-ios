@@ -239,7 +239,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         }
 
         // Build the preview audio player state
-        previewAudioPlayerState = await AudioPlayerState(id: .recorderPreview, duration: recordingDuration, waveform: EstimatedWaveform(data: []))
+        previewAudioPlayerState = await AudioPlayerState(id: .recorderPreview, title: L10n.commonVoiceMessage, duration: recordingDuration, waveform: EstimatedWaveform(data: []))
 
         // Build the preview audio player
         let mediaSource = MediaSourceProxy(url: url, mimeType: mp4accMimeType)
