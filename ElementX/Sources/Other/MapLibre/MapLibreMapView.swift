@@ -182,7 +182,7 @@ extension MapLibreMapView {
         }
         
         func mapView(_ mapView: MGLMapView, regionDidChangeAnimated animated: Bool) {
-            // Fixes: "Publishing changes from within view updates is not allowed, this will cause undefined behavior."
+            // Avoid `Publishing changes from within view update` warnings
             DispatchQueue.main.async { [mapLibreView] in
                 mapLibreView.mapCenterCoordinate = mapView.centerCoordinate
             }

@@ -198,8 +198,11 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
         
         super.init(frame: .zero, textContainer: nil)
         
-        presendCallback.wrappedValue = { [weak self] in
-            self?.acceptCurrentSuggestion()
+        // Avoid `Publishing changes from within view update` warnings
+        DispatchQueue.main.async {
+            presendCallback.wrappedValue = { [weak self] in
+                self?.acceptCurrentSuggestion()
+            }
         }
     }
     
