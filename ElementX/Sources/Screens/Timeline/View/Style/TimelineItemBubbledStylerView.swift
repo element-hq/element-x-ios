@@ -102,7 +102,9 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
                 }
             
-            if !timelineItem.properties.reactions.isEmpty {
+            // Do not display reactions in the pinned events timeline
+            if !context.viewState.isPinnedEventsTimeline,
+               !timelineItem.properties.reactions.isEmpty {
                 TimelineReactionsView(context: context,
                                       itemID: timelineItem.id,
                                       reactions: timelineItem.properties.reactions,

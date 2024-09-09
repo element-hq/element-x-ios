@@ -58,13 +58,13 @@ struct TimelineItemMenuActionProvider {
         if item.isForwardable {
             actions.append(.forward(itemID: item.id))
         }
-        
-        if canCurrentUserPin, let eventID = item.id.eventID {
-            actions.append(pinnedEventIDs.contains(eventID) ? .unpin : .pin)
-        }
 
         if item.isEditable {
             actions.append(.edit)
+        }
+        
+        if canCurrentUserPin, let eventID = item.id.eventID {
+            actions.append(pinnedEventIDs.contains(eventID) ? .unpin : .pin)
         }
 
         if item.isCopyable {
