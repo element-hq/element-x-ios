@@ -93,7 +93,7 @@ struct TimelineItemMenu: View {
                 Divider()
                     .padding(.horizontal, -16)
                 
-                VerifiedUserSendFailureRow(failure: failure, members: context.viewState.members) {
+                VerifiedUserSendFailureView(failure: failure, members: context.viewState.members) {
                     send(.itemSendInfoTapped(itemID: item.id))
                 }
                 .padding(.bottom, 8)
@@ -181,7 +181,7 @@ struct TimelineItemMenu: View {
     }
 }
 
-private struct VerifiedUserSendFailureRow: View {
+private struct VerifiedUserSendFailureView: View {
     let failure: TimelineItemSendFailure.VerifiedUser
     let action: () -> Void
     
