@@ -604,7 +604,7 @@
 "screen_reset_encryption_confirmation_alert_subtitle" = "Cette opération ne peut pas être annulée.";
 "screen_reset_encryption_confirmation_alert_title" = "Are you sure you want to reset your identity?";
 "screen_reset_encryption_password_placeholder" = "Saisissez...";
-"screen_reset_encryption_password_subtitle" = "Veuillez confirmec que vous souhaitez réinitialiser votre identité.";
+"screen_reset_encryption_password_subtitle" = "Veuillez confirmer que vous souhaitez réinitialiser votre identité.";
 "screen_reset_encryption_password_title" = "Saisissez le mot de passe de votre compte pour continuer";
 "screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.";
 "screen_reset_identity_confirmation_title" = "Can't confirm? Go to your account to reset your identity.";
