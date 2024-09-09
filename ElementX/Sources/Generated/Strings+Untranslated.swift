@@ -10,36 +10,6 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum UntranslatedL10n {
-  /// Cancel for now
-  internal static var actionCancelForNow: String { return UntranslatedL10n.tr("Untranslated", "action_cancel_for_now") }
-  /// Message not sent because %1$@’s verified identity has changed.
-  internal static func screenRoomSendFailureIdentityChangedMenuTitle(_ p1: Any) -> String {
-    return UntranslatedL10n.tr("Untranslated", "screen_room_send_failure_identity_changed_menu_title", String(describing: p1))
-  }
-  /// Withdraw verification and send
-  internal static var screenRoomSendFailureIdentityChangedResolvePrimaryButtonTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_room_send_failure_identity_changed_resolve_primary_button_title") }
-  /// You can withdraw your verification and send this message anyway, or you can cancel for now and try again later after reverifying %1$@.
-  internal static func screenRoomSendFailureIdentityChangedResolveSubtitle(_ p1: Any) -> String {
-    return UntranslatedL10n.tr("Untranslated", "screen_room_send_failure_identity_changed_resolve_subtitle", String(describing: p1))
-  }
-  /// Your message was not sent because %1$@’s verified identity has changed
-  internal static func screenRoomSendFailureIdentityChangedResolveTitle(_ p1: Any) -> String {
-    return UntranslatedL10n.tr("Untranslated", "screen_room_send_failure_identity_changed_resolve_title", String(describing: p1))
-  }
-  /// Message not sent because %1$@ has not verified one or more devices.
-  internal static func screenRoomSendFailureUnsignedDeviceMenuTitle(_ p1: Any) -> String {
-    return UntranslatedL10n.tr("Untranslated", "screen_room_send_failure_unsigned_device_menu_title", String(describing: p1))
-  }
-  /// Send message anyway
-  internal static var screenRoomSendFailureUnsignedDeviceResolvePrimaryButtonTitle: String { return UntranslatedL10n.tr("Untranslated", "screen_room_send_failure_unsigned_device_resolve_primary_button_title") }
-  /// %1$@ is using one or more unverified devices. You can send the message anyway, or you can cancel for now and try again later after %2$@ has verified all their devices.
-  internal static func screenRoomSendFailureUnsignedDeviceResolveSubtitle(_ p1: Any, _ p2: Any) -> String {
-    return UntranslatedL10n.tr("Untranslated", "screen_room_send_failure_unsigned_device_resolve_subtitle", String(describing: p1), String(describing: p2))
-  }
-  /// Your message was not sent because %1$@ has not verified one or more devices
-  internal static func screenRoomSendFailureUnsignedDeviceResolveTitle(_ p1: Any) -> String {
-    return UntranslatedL10n.tr("Untranslated", "screen_room_send_failure_unsigned_device_resolve_title", String(describing: p1))
-  }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }

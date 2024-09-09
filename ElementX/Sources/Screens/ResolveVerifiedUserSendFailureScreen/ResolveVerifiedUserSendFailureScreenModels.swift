@@ -26,23 +26,22 @@ struct ResolveVerifiedUserSendFailureScreenViewState: BindableState {
     
     var title: String {
         switch currentFailure {
-        case .hasUnsignedDevice: UntranslatedL10n.screenRoomSendFailureUnsignedDeviceResolveTitle(currentMemberDisplayName)
-        case .changedIdentity: UntranslatedL10n.screenRoomSendFailureIdentityChangedResolveTitle(currentMemberDisplayName)
+        case .hasUnsignedDevice: L10n.screenResolveSendFailureUnsignedDeviceTitle(currentMemberDisplayName)
+        case .changedIdentity: L10n.screenResolveSendFailureChangedIdentityTitle(currentMemberDisplayName)
         }
     }
     
     var subtitle: String {
         switch currentFailure {
-        case .hasUnsignedDevice: UntranslatedL10n.screenRoomSendFailureUnsignedDeviceResolveSubtitle(currentMemberDisplayName,
-                                                                                                     currentMemberDisplayName)
-        case .changedIdentity: UntranslatedL10n.screenRoomSendFailureIdentityChangedResolveSubtitle(currentMemberDisplayName)
+        case .hasUnsignedDevice: L10n.screenResolveSendFailureUnsignedDeviceSubtitle(currentMemberDisplayName, currentMemberDisplayName)
+        case .changedIdentity: L10n.screenResolveSendFailureChangedIdentitySubtitle(currentMemberDisplayName)
         }
     }
     
     var primaryButtonTitle: String {
         switch currentFailure {
-        case .hasUnsignedDevice: UntranslatedL10n.screenRoomSendFailureUnsignedDeviceResolvePrimaryButtonTitle
-        case .changedIdentity: UntranslatedL10n.screenRoomSendFailureIdentityChangedResolvePrimaryButtonTitle
+        case .hasUnsignedDevice: L10n.screenResolveSendFailureUnsignedDevicePrimaryButtonTitle
+        case .changedIdentity: L10n.screenResolveSendFailureChangedIdentityPrimaryButtonTitle
         }
     }
 }

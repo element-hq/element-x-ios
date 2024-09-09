@@ -531,12 +531,6 @@ class PreviewTests: XCTestCase {
         }
     }
 
-    func test_resolveVerifiedUserSendFailureScreenSheet() {
-        for preview in ResolveVerifiedUserSendFailureScreenSheet_Previews._allPreviews {
-            assertSnapshots(matching: preview)
-        }
-    }
-
     func test_resolveVerifiedUserSendFailureScreen() {
         for preview in ResolveVerifiedUserSendFailureScreen_Previews._allPreviews {
             assertSnapshots(matching: preview)

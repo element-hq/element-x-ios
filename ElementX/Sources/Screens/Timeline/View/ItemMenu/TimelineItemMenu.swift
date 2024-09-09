@@ -199,8 +199,8 @@ private struct VerifiedUserSendFailureView: View {
     
     var title: String {
         switch failure {
-        case .hasUnsignedDevice: UntranslatedL10n.screenRoomSendFailureUnsignedDeviceMenuTitle(memberDisplayName)
-        case .changedIdentity: UntranslatedL10n.screenRoomSendFailureIdentityChangedMenuTitle(memberDisplayName)
+        case .hasUnsignedDevice: L10n.screenTimelineItemMenuSendFailureUnsignedDevice(memberDisplayName)
+        case .changedIdentity: L10n.screenTimelineItemMenuSendFailureChangedIdentity(memberDisplayName)
         }
     }
     

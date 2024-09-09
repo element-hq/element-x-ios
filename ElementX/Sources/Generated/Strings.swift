@@ -84,6 +84,8 @@ internal enum L10n {
   internal static var actionCall: String { return L10n.tr("Localizable", "action_call") }
   /// Cancel
   internal static var actionCancel: String { return L10n.tr("Localizable", "action_cancel") }
+  /// Cancel for now
+  internal static var actionCancelForNow: String { return L10n.tr("Localizable", "action_cancel_for_now") }
   /// Choose photo
   internal static var actionChoosePhoto: String { return L10n.tr("Localizable", "action_choose_photo") }
   /// Clear
@@ -244,6 +246,14 @@ internal enum L10n {
   internal static var actionViewSource: String { return L10n.tr("Localizable", "action_view_source") }
   /// Yes
   internal static var actionYes: String { return L10n.tr("Localizable", "action_yes") }
+  /// Log Out & Upgrade
+  internal static var bannerMigrateToNativeSlidingSyncAction: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_action") }
+  /// Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.
+  internal static var bannerMigrateToNativeSlidingSyncDescription: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_description") }
+  /// Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.
+  internal static var bannerMigrateToNativeSlidingSyncForceLogoutTitle: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_force_logout_title") }
+  /// Upgrade available
+  internal static var bannerMigrateToNativeSlidingSyncTitle: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_title") }
   /// About
   internal static var commonAbout: String { return L10n.tr("Localizable", "common_about") }
   /// Acceptable use policy
@@ -1383,8 +1393,6 @@ internal enum L10n {
   internal static var screenRecoveryKeyConfirmErrorTitle: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_error_title") }
   /// If you have a security key or security phrase, this will work too.
   internal static var screenRecoveryKeyConfirmKeyDescription: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_description") }
-  /// Recovery key or passcode
-  internal static var screenRecoveryKeyConfirmKeyLabel: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_label") }
   /// Enter…
   internal static var screenRecoveryKeyConfirmKeyPlaceholder: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_placeholder") }
   /// Lost your recovery key?
@@ -1447,6 +1455,26 @@ internal enum L10n {
   }
   /// Can't confirm? Go to your account to reset your identity.
   internal static var screenResetIdentityConfirmationTitle: String { return L10n.tr("Localizable", "screen_reset_identity_confirmation_title") }
+  /// Withdraw verification and send
+  internal static var screenResolveSendFailureChangedIdentityPrimaryButtonTitle: String { return L10n.tr("Localizable", "screen_resolve_send_failure_changed_identity_primary_button_title") }
+  /// You can withdraw your verification and send this message anyway, or you can cancel for now and try again later after reverifying %1$@.
+  internal static func screenResolveSendFailureChangedIdentitySubtitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_resolve_send_failure_changed_identity_subtitle", String(describing: p1))
+  }
+  /// Your message was not sent because %1$@’s verified identity has changed
+  internal static func screenResolveSendFailureChangedIdentityTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_resolve_send_failure_changed_identity_title", String(describing: p1))
+  }
+  /// Send message anyway
+  internal static var screenResolveSendFailureUnsignedDevicePrimaryButtonTitle: String { return L10n.tr("Localizable", "screen_resolve_send_failure_unsigned_device_primary_button_title") }
+  /// %1$@ is using one or more unverified devices. You can send the message anyway, or you can cancel for now and try again later after %2$@ has verified all their devices.
+  internal static func screenResolveSendFailureUnsignedDeviceSubtitle(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "screen_resolve_send_failure_unsigned_device_subtitle", String(describing: p1), String(describing: p2))
+  }
+  /// Your message was not sent because %1$@ has not verified one or more devices
+  internal static func screenResolveSendFailureUnsignedDeviceTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_resolve_send_failure_unsigned_device_title", String(describing: p1))
+  }
   /// Failed to resolve room alias.
   internal static var screenRoomAliasResolverResolveAliasFailure: String { return L10n.tr("Localizable", "screen_room_alias_resolver_resolve_alias_failure") }
   /// Camera
@@ -1945,22 +1973,16 @@ internal enum L10n {
   internal static var screenSignoutSaveRecoveryKeyTitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_title") }
   /// An error occurred when trying to start a chat
   internal static var screenStartChatErrorStartingChat: String { return L10n.tr("Localizable", "screen_start_chat_error_starting_chat") }
+  /// Message not sent because %1$@’s verified identity has changed.
+  internal static func screenTimelineItemMenuSendFailureChangedIdentity(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_changed_identity", String(describing: p1))
+  }
+  /// Message not sent because %1$@ has not verified one or more devices.
+  internal static func screenTimelineItemMenuSendFailureUnsignedDevice(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_unsigned_device", String(describing: p1))
+  }
   /// Location
   internal static var screenViewLocationTitle: String { return L10n.tr("Localizable", "screen_view_location_title") }
-  /// There's a high demand for %1$@ on %2$@ at the moment. Come back to the app in a few days and try again.
-  /// 
-  /// Thanks for your patience!
-  internal static func screenWaitlistMessage(_ p1: Any, _ p2: Any) -> String {
-    return L10n.tr("Localizable", "screen_waitlist_message", String(describing: p1), String(describing: p2))
-  }
-  /// Welcome to %1$@!
-  internal static func screenWaitlistMessageSuccess(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "screen_waitlist_message_success", String(describing: p1))
-  }
-  /// You’re almost there.
-  internal static var screenWaitlistTitle: String { return L10n.tr("Localizable", "screen_waitlist_title") }
-  /// You're in.
-  internal static var screenWaitlistTitleSuccess: String { return L10n.tr("Localizable", "screen_waitlist_title_success") }
   /// Calls, polls, search and more will be added later this year.
   internal static var screenWelcomeBullet1: String { return L10n.tr("Localizable", "screen_welcome_bullet_1") }
   /// Message history for encrypted rooms isn’t available yet.

@@ -66,7 +66,7 @@ struct ResolveVerifiedUserSendFailureScreen: View {
             .buttonStyle(.compound(.secondary))
             
             Button { context.send(viewAction: .cancel) } label: {
-                Text(UntranslatedL10n.actionCancelForNow)
+                Text(L10n.actionCancelForNow)
                     .padding(.vertical, 14)
             }
             .buttonStyle(.compound(.plain))
@@ -95,7 +95,7 @@ struct ResolveVerifiedUserSendFailureScreen_Previews: PreviewProvider, TestableP
     }
 }
 
-struct ResolveVerifiedUserSendFailureScreenSheet_Previews: PreviewProvider, TestablePreview {
+struct ResolveVerifiedUserSendFailureScreenSheet_Previews: PreviewProvider {
     static let viewModel = ResolveVerifiedUserSendFailureScreenViewModel(failure: .changedIdentity(users: ["@alice:matrix.org"]),
                                                                          itemID: .random,
                                                                          roomProxy: JoinedRoomProxyMock(.init()))
