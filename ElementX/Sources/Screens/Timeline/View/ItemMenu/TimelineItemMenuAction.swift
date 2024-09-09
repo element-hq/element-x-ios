@@ -100,7 +100,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     
     var canAppearInPinnedEventsTimeline: Bool {
         switch self {
-        case .viewInRoomTimeline, .pin, .unpin, .forward, .redact:
+        case .viewInRoomTimeline, .pin, .unpin, .forward:
             return true
         default:
             return false

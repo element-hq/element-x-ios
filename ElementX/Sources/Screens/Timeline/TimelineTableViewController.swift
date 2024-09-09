@@ -308,8 +308,12 @@ class TimelineTableViewController: UIViewController {
         guard let dataSource else { return }
 
         var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, String>()
-        snapshot.appendSections([.typingIndicator])
-        snapshot.appendItems([TimelineTypingIndicatorCell.reuseIdentifier])
+        
+        // We don't want to display the typing notification in this timeline
+        if !coordinator.context.viewState.isPinnedEventsTimeline {
+            snapshot.appendSections([.typingIndicator])
+            snapshot.appendItems([TimelineTypingIndicatorCell.reuseIdentifier])
+        }
         snapshot.appendSections([.main])
         snapshot.appendItems(timelineItemsIDs)
         

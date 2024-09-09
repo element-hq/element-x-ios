@@ -63,10 +63,13 @@ struct PinnedItemsBannerView: View {
     
     private var content: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(state.bannerIndicatorDescription)
-                .font(.compound.bodySM)
-                .foregroundColor(.compound.textActionAccent)
-                .lineLimit(1)
+            // Only the display the indicator description for more than 1 pinned item
+            if state.count > 1 {
+                Text(state.bannerIndicatorDescription)
+                    .font(.compound.bodySM)
+                    .foregroundColor(.compound.textActionAccent)
+                    .lineLimit(1)
+            }
             Text(state.displayedMessage)
                 .font(.compound.bodyMD)
                 .foregroundColor(.compound.textPrimary)
