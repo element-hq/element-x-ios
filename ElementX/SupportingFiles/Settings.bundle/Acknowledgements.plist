@@ -12,9 +12,9 @@
 		</dict>
 		<dict>
 			<key>File</key>
-			<string>Packages/CompoundDesignTokens</string>
+			<string>Packages/compound-design-tokens</string>
 			<key>Title</key>
-			<string>CompoundDesignTokens</string>
+			<string>compound-design-tokens</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
@@ -52,9 +52,9 @@
 		</dict>
 		<dict>
 			<key>File</key>
-			<string>Packages/Emojibase</string>
+			<string>Packages/emojibase-bindings</string>
 			<key>Title</key>
-			<string>Emojibase</string>
+			<string>emojibase-bindings</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
@@ -108,57 +108,57 @@
 		</dict>
 		<dict>
 			<key>File</key>
-			<string>Packages/MapLibre GL Native</string>
+			<string>Packages/maplibre-gl-native-distribution</string>
 			<key>Title</key>
-			<string>MapLibre GL Native</string>
+			<string>maplibre-gl-native-distribution</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
 		<dict>
 			<key>File</key>
-			<string>Packages/AnalyticsEvents</string>
+			<string>Packages/matrix-analytics-events</string>
 			<key>Title</key>
-			<string>AnalyticsEvents</string>
+			<string>matrix-analytics-events</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
 		<dict>
 			<key>File</key>
-			<string>Packages/WysiwygComposer</string>
+			<string>Packages/matrix-rich-text-editor-swift</string>
 			<key>Title</key>
-			<string>WysiwygComposer</string>
+			<string>matrix-rich-text-editor-swift</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
 		<dict>
 			<key>File</key>
-			<string>Packages/MatrixRustSDK</string>
+			<string>Packages/matrix-rust-components-swift</string>
 			<key>Title</key>
-			<string>MatrixRustSDK</string>
+			<string>matrix-rust-components-swift</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
 		<dict>
 			<key>File</key>
-			<string>Packages/YbridOgg</string>
+			<string>Packages/ogg-swift</string>
 			<key>Title</key>
-			<string>YbridOgg</string>
+			<string>ogg-swift</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
 		<dict>
 			<key>File</key>
-			<string>Packages/YbridOpus</string>
+			<string>Packages/opus-swift</string>
 			<key>Title</key>
-			<string>YbridOpus</string>
+			<string>opus-swift</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
 		<dict>
 			<key>File</key>
-			<string>Packages/PostHog</string>
+			<string>Packages/posthog-ios</string>
 			<key>Title</key>
-			<string>PostHog</string>
+			<string>posthog-ios</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
@@ -172,9 +172,9 @@
 		</dict>
 		<dict>
 			<key>File</key>
-			<string>Packages/Sentry</string>
+			<string>Packages/sentry-cocoa</string>
 			<key>Title</key>
-			<string>Sentry</string>
+			<string>sentry-cocoa</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
@@ -212,9 +212,9 @@
 		</dict>
 		<dict>
 			<key>File</key>
-			<string>Packages/SwiftOGG</string>
+			<string>Packages/swift-ogg</string>
 			<key>Title</key>
-			<string>SwiftOGG</string>
+			<string>swift-ogg</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
@@ -244,9 +244,9 @@
 		</dict>
 		<dict>
 			<key>File</key>
-			<string>Packages/swiftui-introspect</string>
+			<string>Packages/SwiftUI-Introspect</string>
 			<key>Title</key>
-			<string>swiftui-introspect</string>
+			<string>SwiftUI-Introspect</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
