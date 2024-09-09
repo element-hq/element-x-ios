@@ -969,18 +969,6 @@ class PreviewTests: XCTestCase {
         }
     }
 
-    func test_waitingDialog() {
-        for preview in WaitingDialog_Previews._allPreviews {
-            assertSnapshots(matching: preview)
-        }
-    }
-
-    func test_waitlistScreen() {
-        for preview in WaitlistScreen_Previews._allPreviews {
-            assertSnapshots(matching: preview)
-        }
-    }
-
     func test_waveformCursorView() {
         for preview in WaveformCursorView_Previews._allPreviews {
             assertSnapshots(matching: preview)
