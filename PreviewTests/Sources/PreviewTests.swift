@@ -1042,9 +1042,9 @@ class PreviewTests: XCTestCase {
         var perceptualPrecision: Float = 1
 
         let view = view
-            .onPreferenceChange(DelayPreferenceKey.self) { delay = $0 }
-            .onPreferenceChange(PrecisionPreferenceKey.self) { precision = $0 }
-            .onPreferenceChange(PerceptualPrecisionPreferenceKey.self) { perceptualPrecision = $0 }
+            .onPreferenceChange(SnapshotDelayPreferenceKey.self) { delay = $0 }
+            .onPreferenceChange(SnapshotPrecisionPreferenceKey.self) { precision = $0 }
+            .onPreferenceChange(SnapshotPerceptualPrecisionPreferenceKey.self) { perceptualPrecision = $0 }
 
         let matchingView = isScreen ? AnyView(view) : AnyView(view
             .frame(width: device.size?.width)
