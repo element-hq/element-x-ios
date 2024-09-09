@@ -30,6 +30,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gems-
 
+      - name: Free disk space
+        run: ci_scripts/free_space.sh
+
       - name: Setup environment
         run: source ci_scripts/ci_common.sh && setup_github_actions_environment
 
