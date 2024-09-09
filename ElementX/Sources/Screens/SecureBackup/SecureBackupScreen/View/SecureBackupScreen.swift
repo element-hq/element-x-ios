@@ -148,7 +148,7 @@ struct SecureBackupScreen_Previews: PreviewProvider, TestablePreview {
             }
             .previewDisplayName("Recovery incomplete")
         }
-        .snapshot(delay: 1.0)
+        .snapshotPreferences(delay: 1.0)
     }
     
     static func viewModel(keyBackupState: SecureBackupKeyBackupState,

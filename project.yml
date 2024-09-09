@@ -122,9 +122,6 @@ packages:
   PostHog:
     url: https://github.com/PostHog/posthog-ios
     minorVersion: 3.2.5
-  Prefire:
-    url: https://github.com/BarredEwe/Prefire
-    minorVersion: 2.8.0
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
     minorVersion: 8.30.0

@@ -111,25 +111,25 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
             JoinRoomScreen(context: unknownViewModel.context)
         }
         .previewDisplayName("Unknown")
-        .snapshot(delay: 0.25)
+        .snapshotPreferences(delay: 0.25)
         
         NavigationStack {
             JoinRoomScreen(context: knockViewModel.context)
         }
         .previewDisplayName("Knock")
-        .snapshot(delay: 0.25)
+        .snapshotPreferences(delay: 0.25)
         
         NavigationStack {
             JoinRoomScreen(context: joinViewModel.context)
         }
         .previewDisplayName("Join")
-        .snapshot(delay: 0.25)
+        .snapshotPreferences(delay: 0.25)
         
         NavigationStack {
             JoinRoomScreen(context: inviteViewModel.context)
         }
         .previewDisplayName("Invite")
-        .snapshot(delay: 0.25)
+        .snapshotPreferences(delay: 0.25)
     }
     
     static func makeViewModel(mode: JoinRoomScreenInteractionMode) -> JoinRoomScreenViewModel {

@@ -253,9 +253,9 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
 
     static var previews: some View {
         NotificationSettingsScreen(context: viewModel.context)
-            .snapshot(delay: 2.0)
+            .snapshotPreferences(delay: 2.0)
         NotificationSettingsScreen(context: viewModelConfigurationMismatch.context)
-            .snapshot(delay: 2.0)
+            .snapshotPreferences(delay: 2.0)
             .previewDisplayName("Configuration mismatch")
     }
 }

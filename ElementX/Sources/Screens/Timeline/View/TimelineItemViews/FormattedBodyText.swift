@@ -205,7 +205,7 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
             .padding()
         }
         .previewLayout(.sizeThatFits)
-        .snapshot(delay: 0.25)
+        .snapshotPreferences(delay: 0.25)
     }
 }
 
