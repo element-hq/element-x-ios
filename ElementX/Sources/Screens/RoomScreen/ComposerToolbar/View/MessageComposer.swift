@@ -79,7 +79,7 @@ struct MessageComposer: View {
                 MessageComposerTextField(placeholder: L10n.richTextEditorComposerPlaceholder,
                                          text: $plainComposerText,
                                          presendCallback: $presendCallback,
-                                         maxHeight: 300,
+                                         maxHeight: ComposerConstant.maxHeight,
                                          keyHandler: { handleKeyPress($0) },
                                          pasteHandler: pasteAction)
                     .tint(.compound.iconAccentTertiary)
