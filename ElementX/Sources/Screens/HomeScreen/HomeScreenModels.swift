@@ -65,7 +65,7 @@ enum HomeScreenRoomListMode: CustomStringConvertible {
 enum HomeScreenBannerMode {
     case none
     case dismissed
-    case shown
+    case show
 }
 
 struct HomeScreenViewState: BindableState {

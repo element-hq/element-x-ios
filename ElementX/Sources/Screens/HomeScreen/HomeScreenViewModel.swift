@@ -63,7 +63,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     state.requiresExtraAccountSetup = true
                     
                     if state.securityBannerMode != .dismissed {
-                        state.securityBannerMode = .shown
+                        state.securityBannerMode = .show
                     }
                 default:
                     state.securityBannerMode = .none
@@ -318,7 +318,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         if versions.contains(.native) {
             // Both available, prompt for migration
             if versions.contains(where: \.isProxy) {
-                state.slidingSyncMigrationBannerMode = .shown
+                state.slidingSyncMigrationBannerMode = .show
             } else { // The proxy has been removed and logout is needed
                 // Delay setting the alert otherwise it automatically gets dismissed. Same as the crashed last run one
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
