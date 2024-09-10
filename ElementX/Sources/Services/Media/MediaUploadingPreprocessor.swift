@@ -77,7 +77,7 @@ private struct VideoProcessingInfo {
     let url: URL
     let height: Double
     let width: Double
-    let duration: Double
+    let duration: Double // seconds
     let mimeType: String
 }
 
@@ -213,7 +213,7 @@ struct MediaUploadingPreprocessor {
             return .failure(.failedProcessingAudio)
         }
         
-        let audioInfo = AudioInfo(duration: durationInSeconds * 1000, size: fileSize, mimetype: mimeType)
+        let audioInfo = AudioInfo(duration: durationInSeconds, size: fileSize, mimetype: mimeType)
         return .success(.audio(audioURL: url, audioInfo: audioInfo))
     }
     
@@ -413,7 +413,7 @@ struct MediaUploadingPreprocessor {
                 return .success(.init(url: newOutputURL,
                                       height: adjustedNaturalSize.height,
                                       width: adjustedNaturalSize.width,
-                                      duration: durationInSeconds * 1000,
+                                      duration: durationInSeconds,
                                       mimeType: "video/mp4"))
             } catch {
                 return .failure(.failedConvertingVideo)
