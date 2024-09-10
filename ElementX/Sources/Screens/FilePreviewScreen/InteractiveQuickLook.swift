@@ -60,6 +60,7 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
         let previewItem: MediaPreviewItem
         let allowEditing: Bool
         let onDismiss: () -> Void
+        let sourceView = UIView()
         
         private var dismissalObserver: AnyCancellable?
         
@@ -93,10 +94,23 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
         
         override func viewDidLoad() {
             view.backgroundColor = .clear
+            view.addSubview(sourceView)
+            
+            sourceView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                sourceView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                sourceView.centerYAnchor.constraint(equalTo: view.bottomAnchor),
+                sourceView.widthAnchor.constraint(equalToConstant: 200),
+                sourceView.heightAnchor.constraint(equalToConstant: 200)
+            ])
         }
         
-        override func viewWillAppear(_ animated: Bool) {
-            super.viewWillAppear(animated)
+        // Don't use viewWillAppear due to the following warning:
+        // Presenting view controller <QLPreviewController> from detached view controller <HostingController> is not supported,
+        // and may result in incorrect safe area insets and a corrupt root presentation. Make sure <HostingController> is in
+        // the view controller hierarchy before presenting from it. Will become a hard exception in a future release.
+        override func viewDidAppear(_ animated: Bool) {
+            super.viewDidAppear(animated)
             
             guard self.previewController == nil else { return }
             
@@ -122,6 +136,10 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
         
         func previewController(_ controller: QLPreviewController, editingModeFor previewItem: QLPreviewItem) -> QLPreviewItemEditingMode {
             allowEditing ? .createCopy : .disabled
+        }
+        
+        func previewController(_ controller: QLPreviewController, transitionViewFor item: any QLPreviewItem) -> UIView? {
+            sourceView
         }
         
         func previewControllerDidDismiss(_ controller: QLPreviewController) {
