@@ -266,7 +266,7 @@ struct QRCodeLoginScreen: View {
         case .connectionNotSecure:
             VStack(spacing: 40) {
                 VStack(spacing: 16) {
-                    HeroImage(icon: \.error, style: .critical)
+                    HeroImage(icon: \.error, style: .criticalOnSecondary)
                     
                     VStack(spacing: 8) {
                         Text(L10n.screenQrCodeLoginConnectionNoteSecureStateTitle)
@@ -332,7 +332,7 @@ struct QRCodeLoginScreen: View {
         }
         
         VStack(spacing: 16) {
-            HeroImage(icon: \.error, style: .critical)
+            HeroImage(icon: \.error, style: .criticalOnSecondary)
             
             VStack(spacing: 8) {
                 Text(title)

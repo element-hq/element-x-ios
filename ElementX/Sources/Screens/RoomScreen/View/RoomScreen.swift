@@ -75,7 +75,10 @@ struct RoomScreen: View {
                 }
             }
             .sheet(item: $timelineContext.reactionSummaryInfo) {
-                ReactionsSummaryView(reactions: $0.reactions, members: timelineContext.viewState.members, mediaProvider: timelineContext.mediaProvider, selectedReactionKey: $0.selectedKey)
+                ReactionsSummaryView(reactions: $0.reactions,
+                                     members: timelineContext.viewState.members,
+                                     mediaProvider: timelineContext.mediaProvider,
+                                     selectedReactionKey: $0.selectedKey)
                     .edgesIgnoringSafeArea([.bottom])
             }
             .sheet(item: $timelineContext.readReceiptsSummaryInfo) {

@@ -20,7 +20,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private var innerPinnedEventsTimelineTask: Task<TimelineProxyProtocol?, Never>?
     var pinnedEventsTimeline: TimelineProxyProtocol? {
         get async {
-            // Check if is alrrady available.
+            // Check if is already available.
             if let innerPinnedEventsTimeline {
                 return innerPinnedEventsTimeline
                 // Otherwise check if there is already a task loading it, and wait for it.
@@ -35,7 +35,10 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                     }
                     
                     do {
-                        let timeline = try await TimelineProxy(timeline: room.pinnedEventsTimeline(internalIdPrefix: nil, maxEventsToLoad: 100), kind: .pinned)
+                        let timeline = try await TimelineProxy(timeline: room.pinnedEventsTimeline(internalIdPrefix: nil,
+                                                                                                   maxEventsToLoad: 100,
+                                                                                                   maxConcurrentRequests: 10),
+                                                               kind: .pinned)
                         await timeline.subscribeForUpdates()
                         innerPinnedEventsTimeline = timeline
                         return timeline
@@ -373,6 +376,51 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             return .success(())
         } catch {
             MXLog.error("Failed sending typing notice with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func resend(itemID: TimelineItemIdentifier) async -> Result<Void, RoomProxyError> {
+        guard let transactionID = itemID.transactionID else {
+            MXLog.error("Attempting to resend an item that has no transaction ID: \(itemID)")
+            return .failure(.missingTransactionID)
+        }
+        
+        do {
+            try await room.tryResend(transactionId: transactionID)
+            return .success(())
+        } catch {
+            MXLog.error("Failed resending \(transactionID) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func ignoreDeviceTrustAndResend(devices: [String: [String]], itemID: TimelineItemIdentifier) async -> Result<Void, RoomProxyError> {
+        guard let transactionID = itemID.transactionID else {
+            MXLog.error("Attempting to resend an item that has no transaction ID: \(itemID)")
+            return .failure(.missingTransactionID)
+        }
+        
+        do {
+            try await room.ignoreDeviceTrustAndResend(devices: devices, transactionId: transactionID)
+            return .success(())
+        } catch {
+            MXLog.error("Failed trusting devices \(devices) and resending \(transactionID) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func withdrawVerificationAndResend(userIDs: [String], itemID: TimelineItemIdentifier) async -> Result<Void, RoomProxyError> {
+        guard let transactionID = itemID.transactionID else {
+            MXLog.error("Attempting to resend an item that has no transaction ID: \(itemID)")
+            return .failure(.missingTransactionID)
+        }
+        
+        do {
+            try await room.withdrawVerificationAndResend(userIds: userIDs, transactionId: transactionID)
+            return .success(())
+        } catch {
+            MXLog.error("Failed withdrawing verification of \(userIDs) and resending \(transactionID) with error: \(error)")
             return .failure(.sdkError(error))
         }
     }

@@ -59,13 +59,7 @@ enum TimelineItemProxy {
 enum TimelineItemDeliveryStatus: Hashable {
     case sending
     case sent
-    case sendingFailed(SendFailureReason)
-    
-    enum SendFailureReason: Hashable {
-        case verifiedUserHasUnsignedDevice(devices: [String: [String]])
-        case verifiedUserChangedIdentity(users: [String])
-        case unknown
-    }
+    case sendingFailed(TimelineItemSendFailure)
     
     var isSendingFailed: Bool {
         switch self {
@@ -73,6 +67,24 @@ enum TimelineItemDeliveryStatus: Hashable {
         case .sendingFailed: true
         }
     }
+}
+
+/// The reason a timeline item failed to send.
+enum TimelineItemSendFailure: Hashable {
+    enum VerifiedUser: Hashable {
+        case hasUnsignedDevice(devices: [String: [String]])
+        case changedIdentity(users: [String])
+        
+        var affectedUserIDs: [String] {
+            switch self {
+            case .hasUnsignedDevice(let devices): Array(devices.keys)
+            case .changedIdentity(let users): users
+            }
+        }
+    }
+    
+    case verifiedUser(VerifiedUser)
+    case unknown
 }
 
 /// A light wrapper around event timeline items returned from Rust.
@@ -98,9 +110,9 @@ class EventTimelineItemProxy {
         case .sent:
             return .sent
         case .verifiedUserHasUnsignedDevice(devices: let devices):
-            return .sendingFailed(.verifiedUserHasUnsignedDevice(devices: devices))
+            return .sendingFailed(.verifiedUser(.hasUnsignedDevice(devices: devices)))
         case .verifiedUserChangedIdentity(users: let users):
-            return .sendingFailed(.verifiedUserChangedIdentity(users: users))
+            return .sendingFailed(.verifiedUser(.changedIdentity(users: users)))
         case .crossSigningNotSetup, .sendingFromUnverifiedDevice:
             return .sendingFailed(.unknown)
         }

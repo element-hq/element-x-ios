@@ -39,7 +39,7 @@ struct EncryptionResetScreen: View {
     
     private var header: some View {
         VStack(spacing: 8) {
-            HeroImage(icon: \.error, style: .critical)
+            HeroImage(icon: \.error, style: .criticalOnSecondary)
                 .padding(.bottom, 8)
             
             Text(L10n.screenEncryptionResetTitle)

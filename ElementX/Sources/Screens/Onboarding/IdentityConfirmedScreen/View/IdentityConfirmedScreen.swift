@@ -29,7 +29,7 @@ struct IdentityConfirmedScreen: View {
     @ViewBuilder
     private var screenHeader: some View {
         VStack(spacing: 0) {
-            HeroImage(icon: \.checkCircle, style: .positive)
+            HeroImage(icon: \.checkCircle, style: .success)
                 .padding(.bottom, 16)
             
             Text(L10n.screenIdentityConfirmedTitle)
