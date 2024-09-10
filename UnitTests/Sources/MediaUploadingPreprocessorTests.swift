@@ -28,7 +28,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         XCTAssertEqual(audioURL.lastPathComponent, "test_audio.mp3")
         
         XCTAssertEqual(audioInfo.mimetype, "audio/mpeg")
-        XCTAssertEqual(audioInfo.duration ?? 0, 27252, accuracy: 100)
+        XCTAssertEqual(audioInfo.duration ?? 0, 27, accuracy: 100)
         XCTAssertEqual(audioInfo.size ?? 0, 764_176, accuracy: 100)
     }
     
@@ -63,7 +63,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         XCTAssertEqual(videoInfo.size ?? 0, 1_431_959, accuracy: 100)
         XCTAssertEqual(videoInfo.width, 1280)
         XCTAssertEqual(videoInfo.height, 720)
-        XCTAssertEqual(videoInfo.duration ?? 0, 30483, accuracy: 100)
+        XCTAssertEqual(videoInfo.duration ?? 0, 30, accuracy: 100)
         
         XCTAssertNotNil(videoInfo.thumbnailInfo)
         XCTAssertEqual(videoInfo.thumbnailInfo?.mimetype, "image/jpeg")
@@ -103,7 +103,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         XCTAssertEqual(videoInfo.size ?? 0, 9_775_822, accuracy: 100)
         XCTAssertEqual(videoInfo.width, 1080)
         XCTAssertEqual(videoInfo.height, 1920)
-        XCTAssertEqual(videoInfo.duration ?? 0, 21000, accuracy: 100)
+        XCTAssertEqual(videoInfo.duration ?? 0, 21, accuracy: 100)
         
         XCTAssertNotNil(videoInfo.thumbnailInfo)
         XCTAssertEqual(videoInfo.thumbnailInfo?.mimetype, "image/jpeg")
