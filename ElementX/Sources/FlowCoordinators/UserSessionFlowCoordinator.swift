@@ -407,12 +407,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
                 case .presentStartChatScreen:
                     stateMachine.processEvent(.showStartChatScreen)
-                case .logout:
-                    Task { await self.runLogoutFlow() }
                 case .presentGlobalSearch:
                     presentGlobalSearch()
                 case .presentRoomDirectorySearch:
                     stateMachine.processEvent(.showRoomDirectorySearchScreen)
+                case .logoutWithoutConfirmation:
+                    self.actionsSubject.send(.logout)
+                case .logout:
+                    Task { await self.runLogoutFlow() }
                 }
             }
             .store(in: &cancellables)
