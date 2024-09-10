@@ -327,6 +327,7 @@ private struct PinnedIndicatorViewModifier: ViewModifier {
                 pinnedIndicator
             }
             content
+                .layoutPriority(1)
             if !isOutgoing {
                 pinnedIndicator
             }
@@ -352,6 +353,21 @@ private extension View {
 
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
+    static let viewModelWithPins: TimelineViewModel = {
+        var settings = AppSettings()
+        settings.pinningEnabled = true
+        let roomProxy = JoinedRoomProxyMock(.init(name: "Preview Room", pinnedEventIDs: [""]))
+        return TimelineViewModel(roomProxy: roomProxy,
+                                 focussedEventID: nil,
+                                 timelineController: MockRoomTimelineController(),
+                                 mediaProvider: MockMediaProvider(),
+                                 mediaPlayerProvider: MediaPlayerProviderMock(),
+                                 voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                 userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                 appMediator: AppMediatorMock.default,
+                                 appSettings: settings,
+                                 analyticsService: ServiceLocator.shared.analytics)
+    }()
 
     static var previews: some View {
         mockTimeline
@@ -365,6 +381,9 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             .previewDisplayName("Thread decorator")
         encryptionAuthenticity
             .previewDisplayName("Encryption Indicators")
+        pinned
+            .previewDisplayName("Pinned messages")
+            .snapshotPreferences(delay: 1.0)
     }
     
     // These akwats include a reply
@@ -593,5 +612,98 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                        waveform: EstimatedWaveform.mockWaveform))
         }
         .environmentObject(viewModel.context)
+    }
+        
+    // These akwats include a reply
+    static var pinned: some View {
+        ScrollView {
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: "", eventID: ""),
+                                                                             timestamp: "10:42",
+                                                                             isOutgoing: true,
+                                                                             isEditable: false,
+                                                                             canBeRepliedTo: true,
+                                                                             isThreaded: false,
+                                                                             sender: .init(id: "whoever"),
+                                                                             content: .init(body: "A long message that should be on multiple lines."),
+                                                                             replyDetails: nil),
+                                                  groupStyle: .single))
+
+            AudioRoomTimelineView(timelineItem: .init(id: .init(timelineID: "", eventID: ""),
+                                                      timestamp: "10:42",
+                                                      isOutgoing: true,
+                                                      isEditable: false,
+                                                      canBeRepliedTo: true,
+                                                      isThreaded: false,
+                                                      sender: .init(id: ""),
+                                                      content: .init(body: "audio.ogg",
+                                                                     duration: 100,
+                                                                     waveform: EstimatedWaveform.mockWaveform,
+                                                                     source: nil,
+                                                                     contentType: nil),
+                                                      replyDetails: nil))
+            
+            FileRoomTimelineView(timelineItem: .init(id: .init(timelineID: "", eventID: ""),
+                                                     timestamp: "10:42",
+                                                     isOutgoing: false,
+                                                     isEditable: false,
+                                                     canBeRepliedTo: true,
+                                                     isThreaded: false,
+                                                     sender: .init(id: ""),
+                                                     content: .init(body: "File",
+                                                                    source: nil,
+                                                                    thumbnailSource: nil,
+                                                                    contentType: nil),
+                                                     replyDetails: nil))
+            ImageRoomTimelineView(timelineItem: .init(id: .init(timelineID: "", eventID: ""),
+                                                      timestamp: "10:42",
+                                                      isOutgoing: true,
+                                                      isEditable: true,
+                                                      canBeRepliedTo: true,
+                                                      isThreaded: false,
+                                                      sender: .init(id: ""),
+                                                      content: .init(body: "Some image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil),
+                                                      replyDetails: nil))
+            LocationRoomTimelineView(timelineItem: .init(id: .init(timelineID: "", eventID: ""),
+                                                         timestamp: "Now",
+                                                         isOutgoing: false,
+                                                         isEditable: false,
+                                                         canBeRepliedTo: true,
+                                                         isThreaded: false,
+                                                         sender: .init(id: "Bob"),
+                                                         content: .init(body: "Fallback geo uri description",
+                                                                        geoURI: .init(latitude: 41.902782,
+                                                                                      longitude: 12.496366),
+                                                                        description: "Location description description description description description description description description"),
+                                                         replyDetails: nil))
+            LocationRoomTimelineView(timelineItem: .init(id: .init(timelineID: "", eventID: ""),
+                                                         timestamp: "Now",
+                                                         isOutgoing: false,
+                                                         isEditable: false,
+                                                         canBeRepliedTo: true,
+                                                         isThreaded: false,
+                                                         sender: .init(id: "Bob"),
+                                                         content: .init(body: "Fallback geo uri description",
+                                                                        geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: nil),
+                                                         replyDetails: nil))
+            
+            VoiceMessageRoomTimelineView(timelineItem: .init(id: .init(timelineID: "", eventID: ""),
+                                                             timestamp: "10:42",
+                                                             isOutgoing: true,
+                                                             isEditable: false,
+                                                             canBeRepliedTo: true,
+                                                             isThreaded: false,
+                                                             sender: .init(id: ""),
+                                                             content: .init(body: "audio.ogg",
+                                                                            duration: 100,
+                                                                            waveform: EstimatedWaveform.mockWaveform,
+                                                                            source: nil,
+                                                                            contentType: nil),
+                                                             replyDetails: nil),
+                                         playerState: AudioPlayerState(id: .timelineItemIdentifier(.random),
+                                                                       title: L10n.commonVoiceMessage,
+                                                                       duration: 10,
+                                                                       waveform: EstimatedWaveform.mockWaveform))
+        }
+        .environmentObject(viewModelWithPins.context)
     }
 }

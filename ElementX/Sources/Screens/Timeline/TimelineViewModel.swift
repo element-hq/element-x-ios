@@ -440,7 +440,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     private func updatePinnedEventIDs() async {
-        state.pinnedEventIDs = await roomProxy.pinnedEventIDs
+        if appSettings.pinningEnabled {
+            state.pinnedEventIDs = await roomProxy.pinnedEventIDs
+        }
     }
 
     private func setupDirectRoomSubscriptionsIfNeeded() {
