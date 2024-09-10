@@ -68,7 +68,7 @@ body:
     attributes:
       label: Will you send logs?
       description:  |
-        Did you know that you can shake your phone to submit logs for this issue? Trigger the defect, then shake your phone and you will see a popup asking if you would like to open the bug report screen. Click YES, and describe the issue, mentioning that you have also filed a bug (it's helpful if you can include a link to the bug). Send the report to submit anonymous logs to the developers.
+        You can submit logs for this issue from the login screen or the application settings by chosing `Report a problem`. Describe the issue, mentioning that you have also filed a bug (it's helpful if you can include a link to the bug). Send the report to submit anonymous logs to the developers.
       options:
         - 'Yes'
         - 'No'
