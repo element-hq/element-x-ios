@@ -14,7 +14,8 @@ extension ClientBuilder {
                             httpProxy: String? = nil,
                             slidingSync: ClientBuilderSlidingSync,
                             sessionDelegate: ClientSessionDelegate,
-                            appHooks: AppHooks) -> ClientBuilder {
+                            appHooks: AppHooks,
+                            appSettings: CommonSettingsProtocol) -> ClientBuilder {
         var builder = ClientBuilder()
             .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier, sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
@@ -33,6 +34,10 @@ extension ClientBuilder {
                 .autoEnableCrossSigning(autoEnableCrossSigning: true)
                 .backupDownloadStrategy(backupDownloadStrategy: .afterDecryptionFailure)
                 .autoEnableBackups(autoEnableBackups: true)
+                
+            if appSettings.invisibleCryptoEnabled {
+                builder = builder.roomKeyRecipientStrategy(strategy: CollectStrategy.identityBasedStrategy)
+            }
         }
         
         if let httpProxy {

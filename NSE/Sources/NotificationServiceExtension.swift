@@ -32,7 +32,7 @@ import UserNotifications
 // We keep a global `environment` singleton to ensure that our app context,
 // database, logging, etc. are only ever setup once per *process*
 
-private let settings: NSESettingsProtocol = AppSettings()
+private let settings: CommonSettingsProtocol = AppSettings()
 private let notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder()), prefix: .none))
 private let keychainController = KeychainController(service: .sessions,
                                                     accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
@@ -81,7 +81,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                     do {
                         Self.userSession = try await NSEUserSession(credentials: credentials,
                                                                     clientSessionDelegate: keychainController,
-                                                                    appHooks: appHooks)
+                                                                    appHooks: appHooks,
+                                                                    appSettings: settings)
                     } catch {
                         MXLog.error("Failed creating user session with error: \(error)")
                     }

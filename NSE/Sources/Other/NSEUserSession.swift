@@ -19,7 +19,7 @@ final class NSEUserSession {
                                                                                networkMonitor: nil)
     private let delegateHandle: TaskHandle?
 
-    init(credentials: KeychainCredentials, clientSessionDelegate: ClientSessionDelegate, appHooks: AppHooks) async throws {
+    init(credentials: KeychainCredentials, clientSessionDelegate: ClientSessionDelegate, appHooks: AppHooks, appSettings: CommonSettingsProtocol) async throws {
         sessionDirectories = credentials.restorationToken.sessionDirectories
         
         userID = credentials.userID
@@ -33,7 +33,8 @@ final class NSEUserSession {
                          httpProxy: URL(string: homeserverURL)?.globalProxy,
                          slidingSync: .restored,
                          sessionDelegate: clientSessionDelegate,
-                         appHooks: appHooks)
+                         appHooks: appHooks,
+                         appSettings: appSettings)
             .sessionPaths(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                           cachePath: credentials.restorationToken.sessionDirectories.cachePath)
             .username(username: credentials.userID)

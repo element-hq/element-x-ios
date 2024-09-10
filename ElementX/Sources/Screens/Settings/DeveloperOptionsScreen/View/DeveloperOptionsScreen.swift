@@ -53,6 +53,17 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section {
+                Toggle(isOn: $context.invisibleCryptoEnabled) {
+                    Text("Enabled Invisible Crypto")
+                    Text("Requires app reboot")
+                }
+            } header: {
+                Text("Trust and Decoration")
+            } footer: {
+                Text("This setting controls how end-to-end encryption (E2E) keys are shared. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
+            }
+
+            Section {
                 TextField(context.viewState.elementCallBaseURL.absoluteString, text: $elementCallURLOverrideString)
                     .autocorrectionDisabled(true)
                     .autocapitalization(.none)
