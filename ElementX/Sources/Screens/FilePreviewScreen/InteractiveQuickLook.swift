@@ -12,19 +12,22 @@ import SwiftUI
 extension View {
     /// Preview a media file using a QuickLook Preview Controller. The preview is interactive with
     /// the dismiss gesture working as expected if it was presented from UIKit.
-    func interactiveQuickLook(item: Binding<MediaPreviewItem?>) -> some View {
-        modifier(InteractiveQuickLookModifier(item: item))
+    func interactiveQuickLook(item: Binding<MediaPreviewItem?>, allowEditing: Bool = true) -> some View {
+        modifier(InteractiveQuickLookModifier(item: item, allowEditing: allowEditing))
     }
 }
 
 private struct InteractiveQuickLookModifier: ViewModifier {
     @Binding var item: MediaPreviewItem?
+    let allowEditing: Bool
+    
     @State private var dismissalPublisher = PassthroughSubject<Void, Never>()
     
     func body(content: Content) -> some View {
         content.background {
             if let item {
                 MediaPreviewViewController(previewItem: item,
+                                           allowEditing: allowEditing,
                                            dismissalPublisher: dismissalPublisher) { self.item = nil }
             } else {
                 // Work around QLPreviewController dismissal issues, see below.
@@ -36,11 +39,13 @@ private struct InteractiveQuickLookModifier: ViewModifier {
 
 private struct MediaPreviewViewController: UIViewControllerRepresentable {
     let previewItem: MediaPreviewItem
+    let allowEditing: Bool
     let dismissalPublisher: PassthroughSubject<Void, Never>
     let onDismiss: () -> Void
 
     func makeUIViewController(context: Context) -> PreviewHostingController {
         PreviewHostingController(previewItem: previewItem,
+                                 allowEditing: allowEditing,
                                  dismissalPublisher: dismissalPublisher,
                                  onDismiss: onDismiss)
     }
@@ -53,6 +58,7 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
     /// animations and interactions which don't work if you represent it directly to SwiftUI 🤷‍♂️
     class PreviewHostingController: UIViewController, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
         let previewItem: MediaPreviewItem
+        let allowEditing: Bool
         let onDismiss: () -> Void
         
         private var dismissalObserver: AnyCancellable?
@@ -60,9 +66,11 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
         var previewController: QLPreviewController?
 
         init(previewItem: MediaPreviewItem,
+             allowEditing: Bool,
              dismissalPublisher: PassthroughSubject<Void, Never>,
              onDismiss: @escaping () -> Void) {
             self.previewItem = previewItem
+            self.allowEditing = allowEditing
             self.onDismiss = onDismiss
 
             super.init(nibName: nil, bundle: nil)
@@ -113,7 +121,7 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
         // MARK: QLPreviewControllerDelegate
         
         func previewController(_ controller: QLPreviewController, editingModeFor previewItem: QLPreviewItem) -> QLPreviewItemEditingMode {
-            .disabled
+            allowEditing ? .createCopy : .disabled
         }
         
         func previewControllerDidDismiss(_ controller: QLPreviewController) {
@@ -144,6 +152,7 @@ struct PreviewView_Previews: PreviewProvider {
     
     static var previews: some View {
         MediaPreviewViewController(previewItem: previewItem,
+                                   allowEditing: false,
                                    dismissalPublisher: .init()) { }
     }
 }
