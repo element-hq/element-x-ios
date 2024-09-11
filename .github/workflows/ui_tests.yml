@@ -58,10 +58,8 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
-      - name: Collect coverage & results
-        run: |
-          xcresultparser -q -o cobertura -t ElementX -p $(pwd) fastlane/test_output/UITests.xcresult > fastlane/test_output/ui-cobertura.xml
-          xcresultparser -q -o junit -t ElementX -p $(pwd) fastlane/test_output/UITests.xcresult > fastlane/test_output/ui-junit.xml
+      - name: Collect coverage
+        run: xcresultparser -q -o cobertura -t ElementX -p $(pwd) fastlane/test_output/UITests.xcresult > fastlane/test_output/ui-cobertura.xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
@@ -69,6 +67,10 @@ jobs:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: uitests
+
+      - name: Collect results
+        if: ${{ !cancelled() }}
+        run: xcresultparser -q -o junit -t ElementX -p $(pwd) fastlane/test_output/UITests.xcresult > fastlane/test_output/ui-junit.xml
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
