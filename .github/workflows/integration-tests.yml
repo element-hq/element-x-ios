@@ -72,7 +72,7 @@ jobs:
 
       - name: Collect results
         if: ${{ !cancelled() }}
-        run: xcresultparser -q -o junit -t ElementX -p $(pwd) fastlane/test_output/IntegrationTests.xcresult > fastlane/test_output/integration-junit.xml
+        run: xcresultparser -q -o junit -p $(pwd) fastlane/test_output/IntegrationTests.xcresult > fastlane/test_output/integration-junit.xml
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
