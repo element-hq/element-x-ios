@@ -10,10 +10,17 @@ import MatrixRustSDK
 
 struct RestorationToken: Equatable {
     let session: MatrixRustSDK.Session
-    let sessionDirectory: URL
-    let cacheDirectory: URL
+    let sessionDirectories: SessionDirectories
     let passphrase: String?
     let pusherNotificationClientIdentifier: String?
+    
+    enum CodingKeys: CodingKey {
+        case session
+        case sessionDirectory
+        case cacheDirectory
+        case passphrase
+        case pusherNotificationClientIdentifier
+    }
 }
 
 extension RestorationToken: Codable {
@@ -35,10 +42,18 @@ extension RestorationToken: Codable {
         }
         
         self = try .init(session: session,
-                         sessionDirectory: sessionDirectories.dataDirectory,
-                         cacheDirectory: sessionDirectories.cacheDirectory,
+                         sessionDirectories: sessionDirectories,
                          passphrase: container.decodeIfPresent(String.self, forKey: .passphrase),
                          pusherNotificationClientIdentifier: container.decodeIfPresent(String.self, forKey: .pusherNotificationClientIdentifier))
+    }
+    
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(session, forKey: .session)
+        try container.encode(sessionDirectories.dataDirectory, forKey: .sessionDirectory)
+        try container.encode(sessionDirectories.cacheDirectory, forKey: .cacheDirectory)
+        try container.encode(passphrase, forKey: .passphrase)
+        try container.encode(pusherNotificationClientIdentifier, forKey: .pusherNotificationClientIdentifier)
     }
 }
 

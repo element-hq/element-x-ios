@@ -13,6 +13,50 @@ struct SessionDirectories: Hashable, Codable {
     
     var dataPath: String { dataDirectory.path(percentEncoded: false) }
     var cachePath: String { cacheDirectory.path(percentEncoded: false) }
+    
+    // MARK: Data Management
+    
+    /// Removes the directories from disk if they have been created.
+    func delete() {
+        do {
+            if FileManager.default.directoryExists(at: dataDirectory) {
+                try FileManager.default.removeItem(at: dataDirectory)
+            }
+        } catch {
+            MXLog.failure("Failed deleting the session data: \(error)")
+        }
+        do {
+            if FileManager.default.directoryExists(at: cacheDirectory) {
+                try FileManager.default.removeItem(at: cacheDirectory)
+            }
+        } catch {
+            MXLog.failure("Failed deleting the session caches: \(error)")
+        }
+    }
+    
+    /// Deletes the Rust state store and event cache data, leaving the crypto store and both
+    /// session directories in place along with any other data that may have been written in them.
+    func deleteTransientUserData() {
+        do {
+            let prefix = "matrix-sdk-state"
+            try deleteFiles(at: dataDirectory, with: prefix)
+        } catch {
+            MXLog.failure("Failed clearing state store: \(error)")
+        }
+        do {
+            let prefix = "matrix-sdk-event-cache"
+            try deleteFiles(at: cacheDirectory, with: prefix)
+        } catch {
+            MXLog.failure("Failed clearing event cache store: \(error)")
+        }
+    }
+    
+    private func deleteFiles(at url: URL, with prefix: String) throws {
+        let sessionDirectoryContents = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)
+        for url in sessionDirectoryContents where url.lastPathComponent.hasPrefix(prefix) {
+            try FileManager.default.removeItem(at: url)
+        }
+    }
 }
 
 extension SessionDirectories {
