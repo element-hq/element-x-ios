@@ -60,8 +60,10 @@ jobs:
           retention-days: 2
           if-no-files-found: ignore
 
-      - name: Collect coverage
-        run: xcresultparser -q -o junit -t ElementX -p $(pwd) fastlane/test_output/IntegrationTests.xcresult > fastlane/test_output/integration-junit.xml
+      - name: Collect coverage & results
+        run: |
+          xcresultparser -q -o cobertura -t ElementX -p $(pwd) fastlane/test_output/IntegrationTests.xcresult > fastlane/test_output/integration-cobertura.xml
+          xcresultparser -q -o junit -t ElementX -p $(pwd) fastlane/test_output/IntegrationTests.xcresult > fastlane/test_output/integration-junit.xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
