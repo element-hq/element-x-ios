@@ -15,7 +15,7 @@ import SwiftUI
 class PreviewTests: XCTestCase {
     private let deviceConfig: ViewImageConfig = .iPhoneX
     private var simulatorDevice: String? = "iPhone14,6" // iPhone SE 3rd Generation
-    private var requiredOSVersion: Int? = 17
+    private var requiredOSVersion = (major: 17, minor: 5)
     private let snapshotDevices = ["iPhone 15", "iPad"]
 
     override func setUp() {
@@ -1084,11 +1084,9 @@ class PreviewTests: XCTestCase {
             }
         }
 
-        if let requiredOSVersion {
-            let osVersion = ProcessInfo().operatingSystemVersion
-            guard osVersion.majorVersion == requiredOSVersion else {
-                fatalError("Switch to iOS \(requiredOSVersion) for these tests.")
-            }
+        let osVersion = ProcessInfo().operatingSystemVersion
+        guard osVersion.majorVersion == requiredOSVersion.major, osVersion.minorVersion == requiredOSVersion.minor else {
+            fatalError("Switch to iOS \(requiredOSVersion) for these tests.")
         }
     }
 }
