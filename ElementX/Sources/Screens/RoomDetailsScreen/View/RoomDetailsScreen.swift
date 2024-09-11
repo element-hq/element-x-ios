@@ -57,7 +57,7 @@ struct RoomDetailsScreen: View {
         .navigationTitle(L10n.screenRoomDetailsTitle)
         .navigationBarTitleDisplayMode(.inline)
         .track(screen: .RoomDetails)
-        .interactiveQuickLook(item: $context.mediaPreviewItem, shouldHideControls: true)
+        .interactiveQuickLook(item: $context.mediaPreviewItem, allowEditing: false)
     }
     
     // MARK: - Private
