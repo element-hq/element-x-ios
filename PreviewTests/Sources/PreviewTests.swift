@@ -267,6 +267,12 @@ class PreviewTests: XCTestCase {
         }
     }
 
+    func test_homeScreenSlidingSyncMigrationBanner() {
+        for preview in HomeScreenSlidingSyncMigrationBanner_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_homeScreen() {
         for preview in HomeScreen_Previews._allPreviews {
             assertSnapshots(matching: preview)

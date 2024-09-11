@@ -1,5 +1,5 @@
 //
-// Copyright 2023, 2024 New Vector Ltd.
+// Copyright 2024 New Vector Ltd.
 //
 // SPDX-License-Identifier: AGPL-3.0-only
 // Please see LICENSE in the repository root for full details.
@@ -8,38 +8,37 @@
 import Combine
 import SwiftUI
 
-struct HomeScreenRecoveryKeyConfirmationBanner: View {
+struct HomeScreenSlidingSyncMigrationBanner: View {
     var context: HomeScreenViewModel.Context
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 16) {
-                    Text(L10n.confirmRecoveryKeyBannerTitle)
+                    Text(L10n.bannerMigrateToNativeSlidingSyncTitle)
                         .font(.compound.bodyLGSemibold)
                         .foregroundColor(.compound.textPrimary)
                     
                     Spacer()
                     
                     Button {
-                        context.send(viewAction: .skipRecoveryKeyConfirmation)
+                        context.send(viewAction: .skipSlidingSyncUpgrade)
                     } label: {
                         Image(systemName: "xmark")
                             .foregroundColor(.compound.iconSecondary)
                             .frame(width: 12, height: 12)
                     }
                 }
-                Text(L10n.confirmRecoveryKeyBannerMessage)
+                Text(L10n.bannerMigrateToNativeSlidingSyncDescription)
                     .font(.compound.bodyMD)
                     .foregroundColor(.compound.textSecondary)
             }
             
-            Button(L10n.actionContinue) {
-                context.send(viewAction: .confirmRecoveryKey)
+            Button(L10n.bannerMigrateToNativeSlidingSyncAction) {
+                context.send(viewAction: .confirmSlidingSyncUpgrade)
             }
             .frame(maxWidth: .infinity)
             .buttonStyle(.compound(.primary, size: .medium))
-            .accessibilityIdentifier(A11yIdentifiers.homeScreen.recoveryKeyConfirmationBannerContinue)
         }
         .padding(16)
         .background(Color.compound.bgSubtleSecondary)
@@ -48,16 +47,15 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
     }
 }
 
-struct HomeScreenRecoveryKeyConfirmationBanner_Previews: PreviewProvider, TestablePreview {
+struct HomeScreenSlidingSyncMigrationBanner_Previews: PreviewProvider, TestablePreview {
     static let viewModel = buildViewModel()
     
     static var previews: some View {
-        HomeScreenRecoveryKeyConfirmationBanner(context: viewModel.context)
+        HomeScreenSlidingSyncMigrationBanner(context: viewModel.context)
     }
     
     static func buildViewModel() -> HomeScreenViewModel {
-        let clientProxy = ClientProxyMock(.init(userID: "@alice:example.com",
-                                                roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loading))))
+        let clientProxy = ClientProxyMock(.init())
         
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         

@@ -7,6 +7,7 @@
 
 import AnalyticsEvents
 import Combine
+import MatrixRustSDK
 import SwiftUI
 
 typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, HomeScreenViewAction>
@@ -62,7 +63,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     state.requiresExtraAccountSetup = true
                     
                     if state.securityBannerMode != .dismissed {
-                        state.securityBannerMode = .recoveryKeyConfirmation
+                        state.securityBannerMode = .show
                     }
                 default:
                     state.securityBannerMode = .none
@@ -117,6 +118,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         setupRoomListSubscriptions()
         
         updateRooms()
+        
+        Task {
+            await checkSlidingSyncMigration()
+        }
     }
     
     // MARK: - Public
@@ -137,6 +142,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             actionsSubject.send(.presentSecureBackupSettings)
         case .skipRecoveryKeyConfirmation:
             state.securityBannerMode = .dismissed
+        case .confirmSlidingSyncUpgrade:
+            actionsSubject.send(.logout)
+        case .skipSlidingSyncUpgrade:
+            state.slidingSyncMigrationBannerMode = .dismissed
         case .updateVisibleItemRange(let range):
             roomSummaryProvider?.updateVisibleRange(range)
         case .startChat:
@@ -192,12 +201,15 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // perphery: ignore - used in release mode
     func presentCrashedLastRunAlert() {
-        state.bindings.alertInfo = AlertInfo(id: UUID(),
-                                             title: L10n.crashDetectionDialogContent(InfoPlistReader.main.bundleDisplayName),
-                                             primaryButton: .init(title: L10n.actionNo, action: nil),
-                                             secondaryButton: .init(title: L10n.actionYes) { [weak self] in
-                                                 self?.actionsSubject.send(.presentFeedbackScreen)
-                                             })
+        // Delay setting the alert otherwise it automatically gets dismissed. Same as the force logout one.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.state.bindings.alertInfo = AlertInfo(id: UUID(),
+                                                      title: L10n.crashDetectionDialogContent(InfoPlistReader.main.bundleDisplayName),
+                                                      primaryButton: .init(title: L10n.actionNo, action: nil),
+                                                      secondaryButton: .init(title: L10n.actionYes) { [weak self] in
+                                                          self?.actionsSubject.send(.presentFeedbackScreen)
+                                                      })
+        }
     }
     
     // MARK: - Private
@@ -287,7 +299,40 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         state.rooms = rooms
     }
+    
+    /// Check whether we can inform the user about potential migrations
+    /// or have him logout as his proxy is no longer available
+    private func checkSlidingSyncMigration() async {
+        // Not logged in with a proxy, don't need to do anything
+        guard userSession.clientProxy.slidingSyncVersion.isProxy else {
+            return
+        }
         
+        let versions = await userSession.clientProxy.availableSlidingSyncVersions
+        
+        // Native not available, nothing we can do
+        guard versions.contains(.native) else {
+            return
+        }
+        
+        if versions.contains(.native) {
+            // Both available, prompt for migration
+            if versions.contains(where: \.isProxy) {
+                state.slidingSyncMigrationBannerMode = .show
+            } else { // The proxy has been removed and logout is needed
+                // Delay setting the alert otherwise it automatically gets dismissed. Same as the crashed last run one
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.state.bindings.alertInfo = AlertInfo(id: UUID(),
+                                                              title: L10n.bannerMigrateToNativeSlidingSyncForceLogoutTitle,
+                                                              primaryButton: .init(title: L10n.bannerMigrateToNativeSlidingSyncAction,
+                                                                                   action: { [weak self] in
+                                                                                       self?.actionsSubject.send(.logoutWithoutConfirmation)
+                                                                                   }))
+                }
+            }
+        }
+    }
+    
     private func markRoomAsFavourite(_ roomID: String, isFavourite: Bool) async {
         guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             MXLog.error("Failed retrieving room for identifier: \(roomID)")
@@ -410,5 +455,16 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         state.bindings.alertInfo = .init(id: UUID(),
                                          title: L10n.commonError,
                                          message: L10n.errorUnknown)
+    }
+}
+
+extension SlidingSyncVersion {
+    var isProxy: Bool {
+        switch self {
+        case .proxy:
+            return true
+        default:
+            return false
+        }
     }
 }

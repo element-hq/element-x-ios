@@ -19,6 +19,7 @@ enum HomeScreenViewModelAction {
     case presentStartChatScreen
     case presentGlobalSearch
     case presentRoomDirectorySearch
+    case logoutWithoutConfirmation
     case logout
 }
 
@@ -31,6 +32,8 @@ enum HomeScreenViewAction {
     case startChat
     case confirmRecoveryKey
     case skipRecoveryKeyConfirmation
+    case confirmSlidingSyncUpgrade
+    case skipSlidingSyncUpgrade
     case updateVisibleItemRange(Range<Int>)
     case globalSearch
     case markRoomAsUnread(roomIdentifier: String)
@@ -59,10 +62,10 @@ enum HomeScreenRoomListMode: CustomStringConvertible {
     }
 }
 
-enum SecurityBannerMode {
+enum HomeScreenBannerMode {
     case none
     case dismissed
-    case recoveryKeyConfirmation
+    case show
 }
 
 struct HomeScreenViewState: BindableState {
@@ -70,7 +73,9 @@ struct HomeScreenViewState: BindableState {
     var userDisplayName: String?
     var userAvatarURL: URL?
     
-    var securityBannerMode = SecurityBannerMode.none
+    var securityBannerMode = HomeScreenBannerMode.none
+    var slidingSyncMigrationBannerMode = HomeScreenBannerMode.none
+    
     var requiresExtraAccountSetup = false
         
     var rooms: [HomeScreenRoom] = []
@@ -109,10 +114,6 @@ struct HomeScreenViewState: BindableState {
     
     var shouldShowFilters: Bool {
         !bindings.isSearchFieldFocused && roomListMode == .rooms
-    }
-    
-    var shouldShowRecoveryKeyConfirmationBanner: Bool {
-        securityBannerMode == .recoveryKeyConfirmation
     }
 }
 
