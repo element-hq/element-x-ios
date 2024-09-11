@@ -68,7 +68,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: uitests
 
-      - name: Collect results
+      - name: Collect test results
         if: ${{ !cancelled() }}
         run: xcresultparser -q -o junit -p $(pwd) fastlane/test_output/UITests.xcresult > fastlane/test_output/ui-junit.xml
 
