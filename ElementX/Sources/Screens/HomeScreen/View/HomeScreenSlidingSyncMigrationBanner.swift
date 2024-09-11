@@ -9,7 +9,7 @@ import Combine
 import SwiftUI
 
 struct HomeScreenSlidingSyncMigrationBanner: View {
-    @ObservedObject var context: HomeScreenViewModel.Context
+    var context: HomeScreenViewModel.Context
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
