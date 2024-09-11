@@ -61,7 +61,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Collect coverage
-        run: xcresultparser -q -o cobertura -t ElementX -p $(pwd) fastlane/test_output/IntegrationTests.xcresult > fastlane/test_output/integration-cobertura.xml
+        run: xcresultparser -q -o junit -t ElementX -p $(pwd) fastlane/test_output/IntegrationTests.xcresult > fastlane/test_output/integration-junit.xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
@@ -70,3 +70,8 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: integrationtests
 
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

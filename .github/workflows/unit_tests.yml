@@ -56,8 +56,8 @@ jobs:
       
       - name: Collect coverage
         run: |
-          xcresultparser -q -o cobertura -t ElementX -p $(pwd) fastlane/test_output/UnitTests.xcresult > fastlane/test_output/unit-cobertura.xml
-          xcresultparser -q -o cobertura -t ElementX -p $(pwd) fastlane/test_output/PreviewTests.xcresult > fastlane/test_output/preview-cobertura.xml
+          xcresultparser -q -o junit -t ElementX -p $(pwd) fastlane/test_output/UnitTests.xcresult > fastlane/test_output/unit-junit.xml
+          xcresultparser -q -o junit -t ElementX -p $(pwd) fastlane/test_output/PreviewTests.xcresult > fastlane/test_output/preview-junit.xml
       
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
@@ -65,3 +65,9 @@ jobs:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: unittests
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
