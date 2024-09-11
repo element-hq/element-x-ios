@@ -97,6 +97,9 @@ class SessionDirectoriesTests: XCTestCase {
         XCTAssertTrue(fileManager.directoryExists(at: sessionDirectories.cacheDirectory))
         XCTAssertEqual(try fileManager.numberOfItems(at: sessionDirectories.cacheDirectory), 0)
         XCTAssertFalse(fileManager.fileExists(atPath: sessionDirectories.mockEventCachePath))
+        
+        // The tests are done, tidy up these useless directories 🧹
+        sessionDirectories.delete()
     }
 }
 
