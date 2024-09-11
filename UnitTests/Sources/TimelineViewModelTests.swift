@@ -379,6 +379,7 @@ class TimelineViewModelTests: XCTestCase {
     // MARK: - Pins
     
     func testPinnedEvents() async throws {
+        ServiceLocator.shared.settings.pinningEnabled = true
         let roomProxyMock = JoinedRoomProxyMock(.init(name: "",
                                                       pinnedEventIDs: .init(["test1"])))
         let actionsSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()

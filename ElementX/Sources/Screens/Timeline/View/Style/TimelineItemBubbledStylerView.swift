@@ -322,24 +322,25 @@ private struct PinnedIndicatorViewModifier: ViewModifier {
     let isOutgoing: Bool
     
     func body(content: Content) -> some View {
-        HStack(alignment: .top, spacing: 8) {
-            if isOutgoing {
-                pinnedIndicator
+        if isPinned {
+            HStack(alignment: .top, spacing: 8) {
+                if isOutgoing {
+                    pinnedIndicator
+                }
+                content
+                    .layoutPriority(1)
+                if !isOutgoing {
+                    pinnedIndicator
+                }
             }
+        } else {
             content
-                .layoutPriority(1)
-            if !isOutgoing {
-                pinnedIndicator
-            }
         }
     }
     
-    @ViewBuilder
     private var pinnedIndicator: some View {
-        if isPinned {
-            CompoundIcon(\.pinSolid, size: .xSmall, relativeTo: .compound.bodyMD)
-                .foregroundStyle(Color.compound.iconTertiary)
-        }
+        CompoundIcon(\.pinSolid, size: .xSmall, relativeTo: .compound.bodyMD)
+            .foregroundStyle(Color.compound.iconTertiary)
     }
 }
 
@@ -386,7 +387,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             .snapshotPreferences(delay: 1.0)
     }
     
-    // These akwats include a reply
+    // These always include a reply
     static var threads: some View {
         ScrollView {
             RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
@@ -614,7 +615,6 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
         .environmentObject(viewModel.context)
     }
         
-    // These akwats include a reply
     static var pinned: some View {
         ScrollView {
             RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: "", eventID: ""),
