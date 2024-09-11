@@ -57,4 +57,8 @@ extension FileManager {
         
         return size
     }
+    
+    func numberOfItems(at url: URL) throws -> Int {
+        try contentsOfDirectory(at: url, includingPropertiesForKeys: nil).count
+    }
 }

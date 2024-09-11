@@ -77,13 +77,7 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
     }
     
     private func rotateSessionDirectory() {
-        if FileManager.default.directoryExists(at: sessionDirectories.dataDirectory) {
-            try? FileManager.default.removeItem(at: sessionDirectories.dataDirectory)
-        }
-        if FileManager.default.directoryExists(at: sessionDirectories.cacheDirectory) {
-            try? FileManager.default.removeItem(at: sessionDirectories.cacheDirectory)
-        }
-        
+        sessionDirectories.delete()
         sessionDirectories = .init()
     }
     

@@ -110,8 +110,7 @@ class KeychainController: KeychainControllerProtocol {
             fatalError("Something has gone mega wrong, all bets are off.")
         }
         let restorationToken = RestorationToken(session: session,
-                                                sessionDirectory: oldToken.sessionDirectory,
-                                                cacheDirectory: oldToken.cacheDirectory,
+                                                sessionDirectories: oldToken.sessionDirectories,
                                                 passphrase: oldToken.passphrase,
                                                 pusherNotificationClientIdentifier: oldToken.pusherNotificationClientIdentifier)
         setRestorationToken(restorationToken, forUsername: session.userId)
