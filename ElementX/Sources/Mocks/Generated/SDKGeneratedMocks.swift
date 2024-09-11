@@ -9974,82 +9974,6 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
         try await unmuteRoomRoomIdIsEncryptedIsOneToOneClosure?(roomId, isEncrypted, isOneToOne)
     }
 }
-open class OidcAuthorizationDataSDKMock: MatrixRustSDK.OidcAuthorizationData {
-    init() {
-        super.init(noPointer: .init())
-    }
-
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
-    }
-
-    fileprivate var pointer: UnsafeMutableRawPointer!
-
-    //MARK: - loginUrl
-
-    var loginUrlUnderlyingCallsCount = 0
-    open var loginUrlCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return loginUrlUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loginUrlUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loginUrlUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loginUrlUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var loginUrlCalled: Bool {
-        return loginUrlCallsCount > 0
-    }
-
-    var loginUrlUnderlyingReturnValue: String!
-    open var loginUrlReturnValue: String! {
-        get {
-            if Thread.isMainThread {
-                return loginUrlUnderlyingReturnValue
-            } else {
-                var returnValue: String? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loginUrlUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loginUrlUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loginUrlUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var loginUrlClosure: (() -> String)?
-
-    open override func loginUrl() -> String {
-        loginUrlCallsCount += 1
-        if let loginUrlClosure = loginUrlClosure {
-            return loginUrlClosure()
-        } else {
-            return loginUrlReturnValue
-        }
-    }
-}
 open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData {
     init() {
         super.init(noPointer: .init())
@@ -18686,8 +18610,8 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
     open var editItemNewContentCalled: Bool {
         return editItemNewContentCallsCount > 0
     }
-    open var editItemNewContentReceivedArguments: (item: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation)?
-    open var editItemNewContentReceivedInvocations: [(item: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation)] = []
+    open var editItemNewContentReceivedArguments: (item: EventTimelineItem, newContent: EditedContent)?
+    open var editItemNewContentReceivedInvocations: [(item: EventTimelineItem, newContent: EditedContent)] = []
 
     var editItemNewContentUnderlyingReturnValue: Bool!
     open var editItemNewContentReturnValue: Bool! {
@@ -18713,9 +18637,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
             }
         }
     }
-    open var editItemNewContentClosure: ((EventTimelineItem, RoomMessageEventContentWithoutRelation) async throws -> Bool)?
+    open var editItemNewContentClosure: ((EventTimelineItem, EditedContent) async throws -> Bool)?
 
-    open override func edit(item: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation) async throws -> Bool {
+    open override func edit(item: EventTimelineItem, newContent: EditedContent) async throws -> Bool {
         if let error = editItemNewContentThrowableError {
             throw error
         }
@@ -18729,52 +18653,6 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         } else {
             return editItemNewContentReturnValue
         }
-    }
-
-    //MARK: - editPoll
-
-    open var editPollQuestionAnswersMaxSelectionsPollKindEditItemThrowableError: Error?
-    var editPollQuestionAnswersMaxSelectionsPollKindEditItemUnderlyingCallsCount = 0
-    open var editPollQuestionAnswersMaxSelectionsPollKindEditItemCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return editPollQuestionAnswersMaxSelectionsPollKindEditItemUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = editPollQuestionAnswersMaxSelectionsPollKindEditItemUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                editPollQuestionAnswersMaxSelectionsPollKindEditItemUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    editPollQuestionAnswersMaxSelectionsPollKindEditItemUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var editPollQuestionAnswersMaxSelectionsPollKindEditItemCalled: Bool {
-        return editPollQuestionAnswersMaxSelectionsPollKindEditItemCallsCount > 0
-    }
-    open var editPollQuestionAnswersMaxSelectionsPollKindEditItemReceivedArguments: (question: String, answers: [String], maxSelections: UInt8, pollKind: PollKind, editItem: EventTimelineItem)?
-    open var editPollQuestionAnswersMaxSelectionsPollKindEditItemReceivedInvocations: [(question: String, answers: [String], maxSelections: UInt8, pollKind: PollKind, editItem: EventTimelineItem)] = []
-    open var editPollQuestionAnswersMaxSelectionsPollKindEditItemClosure: ((String, [String], UInt8, PollKind, EventTimelineItem) async throws -> Void)?
-
-    open override func editPoll(question: String, answers: [String], maxSelections: UInt8, pollKind: PollKind, editItem: EventTimelineItem) async throws {
-        if let error = editPollQuestionAnswersMaxSelectionsPollKindEditItemThrowableError {
-            throw error
-        }
-        editPollQuestionAnswersMaxSelectionsPollKindEditItemCallsCount += 1
-        editPollQuestionAnswersMaxSelectionsPollKindEditItemReceivedArguments = (question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind, editItem: editItem)
-        DispatchQueue.main.async {
-            self.editPollQuestionAnswersMaxSelectionsPollKindEditItemReceivedInvocations.append((question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind, editItem: editItem))
-        }
-        try await editPollQuestionAnswersMaxSelectionsPollKindEditItemClosure?(question, answers, maxSelections, pollKind, editItem)
     }
 
     //MARK: - endPoll
