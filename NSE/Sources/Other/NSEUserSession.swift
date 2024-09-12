@@ -9,6 +9,8 @@ import Foundation
 import MatrixRustSDK
 
 final class NSEUserSession {
+    let sessionDirectories: SessionDirectories
+    
     private let baseClient: Client
     private let notificationClient: NotificationClient
     private let userID: String
@@ -18,6 +20,8 @@ final class NSEUserSession {
     private let delegateHandle: TaskHandle?
 
     init(credentials: KeychainCredentials, clientSessionDelegate: ClientSessionDelegate, appHooks: AppHooks) async throws {
+        sessionDirectories = credentials.restorationToken.sessionDirectories
+        
         userID = credentials.userID
         if credentials.restorationToken.passphrase != nil {
             MXLog.info("Restoring client with encrypted store.")
