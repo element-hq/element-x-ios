@@ -643,6 +643,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             .sink { [weak self] action in
                 guard let self else { return }
                 switch action {
+                case .pictureInPictureIsAvailable:
+                    break
                 case .pictureInPictureStarted, .pictureInPictureStopped:
                     // Don't allow PiP when signed out - the user could login at which point we'd
                     // need to hand over the call from here to the user session flow coordinator.

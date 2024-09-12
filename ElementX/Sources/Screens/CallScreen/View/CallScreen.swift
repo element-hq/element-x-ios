@@ -128,6 +128,7 @@ private struct CallView: UIViewRepresentable {
                                                                                                    contentViewController: pictureInPictureViewController))
                 pictureInPictureController.delegate = self
                 self.pictureInPictureController = pictureInPictureController
+                viewModelContext.send(viewAction: .pictureInPictureIsAvailable(pictureInPictureController))
             }
         }
         

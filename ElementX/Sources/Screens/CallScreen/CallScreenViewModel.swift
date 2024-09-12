@@ -111,6 +111,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         case .urlChanged(let url):
             guard let url else { return }
             MXLog.info("URL changed to: \(url)")
+        case .pictureInPictureIsAvailable(let controller):
+            actionsSubject.send(.pictureInPictureIsAvailable(controller))
         case .navigateBack:
             Task { await handleBackwardsNavigation() }
         case .pictureInPictureWillStop:
@@ -188,7 +190,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         
         switch await requestPictureInPictureHandler() {
         case .success(let controller):
-            actionsSubject.send(.pictureInPictureStarted(controller))
+            actionsSubject.send(.pictureInPictureStarted)
         case .failure:
             actionsSubject.send(.dismiss)
         }

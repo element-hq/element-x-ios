@@ -319,6 +319,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 } else {
                     Task { await self.startRoomFlow(roomID: roomID, via: via, entryPoint: entryPoint, animated: animated) }
                 }
+                hideCallScreenOverlay() // Turn any active call into a PiP so that navigation from a notification is visible to the user.
             case(.roomList, .deselectRoom, .roomList):
                 dismissRoomFlow(animated: animated)
                                 
@@ -604,15 +605,16 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] action in
                 guard let self else { return }
                 switch action {
-                case .pictureInPictureStarted(let controller):
-                    MXLog.info("Hiding call for PiP presentation.")
+                case .pictureInPictureIsAvailable(let controller):
                     callScreenPictureInPictureController = controller
+                case .pictureInPictureStarted:
+                    MXLog.info("Hiding call for PiP presentation.")
                     navigationSplitCoordinator.setOverlayPresentationMode(.minimized)
                 case .pictureInPictureStopped:
                     MXLog.info("Restoring call after PiP presentation.")
                     navigationSplitCoordinator.setOverlayPresentationMode(.fullScreen)
-                    callScreenPictureInPictureController = nil
                 case .dismiss:
+                    callScreenPictureInPictureController = nil
                     navigationSplitCoordinator.setOverlayCoordinator(nil)
                 }
             }
@@ -623,12 +625,24 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         analytics.track(screen: .RoomCall)
     }
     
-    private func dismissCallScreenIfNeeded() {
-        guard navigationSplitCoordinator.sheetCoordinator is CallScreenCoordinator else {
+    private func hideCallScreenOverlay() {
+        guard let callScreenPictureInPictureController else {
+            MXLog.warning("Picture in picture isn't available, dismissing the call screen.")
+            dismissCallScreenIfNeeded()
             return
         }
         
-        navigationSplitCoordinator.setSheetCoordinator(nil)
+        MXLog.info("Starting picture in picture to hide the call screen overlay.")
+        callScreenPictureInPictureController.startPictureInPicture()
+        navigationSplitCoordinator.setOverlayPresentationMode(.minimized)
+    }
+    
+    private func dismissCallScreenIfNeeded() {
+        guard navigationSplitCoordinator.overlayCoordinator is CallScreenCoordinator else {
+            return
+        }
+        
+        navigationSplitCoordinator.setOverlayCoordinator(nil)
     }
     
     // MARK: Secure backup confirmation

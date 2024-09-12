@@ -9,7 +9,8 @@ import AVKit
 import Foundation
 
 enum CallScreenViewModelAction {
-    case pictureInPictureStarted(AVPictureInPictureController)
+    case pictureInPictureIsAvailable(AVPictureInPictureController)
+    case pictureInPictureStarted
     case pictureInPictureStopped
     case dismiss
 }
@@ -34,6 +35,7 @@ struct Bindings {
 
 enum CallScreenViewAction {
     case urlChanged(URL?)
+    case pictureInPictureIsAvailable(AVPictureInPictureController)
     case navigateBack
     case pictureInPictureWillStop
     case endCall
