@@ -143,6 +143,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         case .skipRecoveryKeyConfirmation:
             state.securityBannerMode = .dismissed
         case .confirmSlidingSyncUpgrade:
+            appSettings.slidingSyncDiscovery = .native
             actionsSubject.send(.logout)
         case .skipSlidingSyncUpgrade:
             state.slidingSyncMigrationBannerMode = .dismissed
@@ -326,6 +327,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                                                               title: L10n.bannerMigrateToNativeSlidingSyncForceLogoutTitle,
                                                               primaryButton: .init(title: L10n.bannerMigrateToNativeSlidingSyncAction,
                                                                                    action: { [weak self] in
+                                                                                       self?.appSettings.slidingSyncDiscovery = .native
                                                                                        self?.actionsSubject.send(.logoutWithoutConfirmation)
                                                                                    }))
                 }
