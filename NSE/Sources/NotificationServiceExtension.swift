@@ -72,7 +72,9 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         MXLog.info("\(tag) Payload came: \(request.content.userInfo)")
         
         Self.serialQueue.sync {
-            if Self.userSession == nil {
+            // If the session directories have changed, the user has logged out and back in (even if they entered the same user ID).
+            // We can't do this comparison with the access token of the existing session here due to token refresh when using OIDC.
+            if Self.userSession == nil || Self.userSession?.sessionDirectories != credentials.restorationToken.sessionDirectories {
                 // This function might be run concurrently and from different processes
                 // It's imperative that we create **at most** one UserSession/Client per process
                 Task.synchronous { [appHooks] in
