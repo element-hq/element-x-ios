@@ -223,6 +223,18 @@ private struct CallView: UIViewRepresentable {
             }
         }
         
+        nonisolated func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+            Task { @MainActor in
+                // Double check that the controller is definitely showing a page that supports picture in picture.
+                // This is necessary as it doesn't get checked when backgrounding the app or tapping a notification.
+                guard case .success(true) = await webViewCanEnterPictureInPicture() else {
+                    MXLog.error("Picture in picture started on a webpage that doesn't support it. Ending the call.")
+                    viewModelContext?.send(viewAction: .endCall)
+                    return
+                }
+            }
+        }
+        
         nonisolated func pictureInPictureControllerWillStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
             Task { await viewModelContext?.send(viewAction: .pictureInPictureWillStop) }
         }
