@@ -126,8 +126,8 @@ class UserSessionStore: UserSessionStoreProtocol {
                          sessionDelegate: keychainController,
                          appHooks: appHooks,
                          invisibleCryptoEnabled: appSettings.enableNotifications)
-            .sessionPaths(dataPath: credentials.restorationToken.sessionDirectory.path(percentEncoded: false),
-                          cachePath: credentials.restorationToken.cacheDirectory.path(percentEncoded: false))
+            .sessionPaths(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
+                          cachePath: credentials.restorationToken.sessionDirectories.cachePath)
             .username(username: credentials.userID)
             .homeserverUrl(url: homeserverURL)
             .passphrase(passphrase: credentials.restorationToken.passphrase)
