@@ -1,3 +1,20 @@
+## Changes in 1.8.1 (2024-09-13)
+
+### What's Changed
+
+🐛 Bugfixes
+* Make sure we don't reuse an old NSEUserSession after logging out and back in. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3273
+* Make sure we reset the feature flag when upgrading to SSS. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3272
+* Fix interactive dismissal of our QLPreviewController iOS 18 (when built with Xcode 16). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3274
+* Replace client side room awaiting with the SDKs new `awaitRoomRemoteEcho` method by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3279
+* Handle notifications properly when a call is happening. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3276
+
+🧱 Build
+* Upload test results to Codecov. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3266
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.8.0...1.8.1
+
 ## Changes in 1.8.0 (2024-09-11)
 
 ### What's Changed
