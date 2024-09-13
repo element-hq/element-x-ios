@@ -26,6 +26,7 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
             .sink { [weak self] homeserver in
                 guard let self else { return }
                 state.homeserverAddress = homeserver.address
+                state.homeserverSupportsRegistration = homeserver.loginMode == .oidc || homeserver.address == "matrix.org"
             }
             .store(in: &cancellables)
     }

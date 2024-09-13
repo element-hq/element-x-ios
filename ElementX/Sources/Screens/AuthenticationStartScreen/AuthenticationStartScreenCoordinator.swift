@@ -8,6 +8,10 @@
 import Combine
 import SwiftUI
 
+struct AuthenticationStartScreenParameters {
+    let webRegistrationEnabled: Bool
+}
+
 final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
     private var viewModel: AuthenticationStartScreenViewModelProtocol
     private let actionsSubject: PassthroughSubject<AuthenticationStartScreenCoordinatorAction, Never> = .init()
@@ -17,8 +21,8 @@ final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init() {
-        viewModel = AuthenticationStartScreenViewModel()
+    init(parameters: AuthenticationStartScreenParameters) {
+        viewModel = AuthenticationStartScreenViewModel(webRegistrationEnabled: parameters.webRegistrationEnabled)
     }
     
     // MARK: - Public
@@ -33,6 +37,8 @@ final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.loginManually)
                 case .loginWithQR:
                     actionsSubject.send(.loginWithQR)
+                case .register:
+                    actionsSubject.send(.register)
                 case .reportProblem:
                     actionsSubject.send(.reportProblem)
                 }

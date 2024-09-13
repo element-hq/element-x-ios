@@ -52,6 +52,7 @@ struct ServerConfirmationScreen: View {
             }
             .buttonStyle(.compound(.primary))
             .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.continue)
+            .disabled(!context.viewState.canContinue)
             
             Button { context.send(viewAction: .changeServer) } label: {
                 Text(L10n.screenServerConfirmationChangeServer)

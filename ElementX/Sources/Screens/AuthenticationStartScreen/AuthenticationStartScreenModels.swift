@@ -12,21 +12,25 @@ import SwiftUI
 enum AuthenticationStartScreenCoordinatorAction {
     case loginManually
     case loginWithQR
+    case register
     case reportProblem
 }
 
 enum AuthenticationStartScreenViewModelAction {
     case loginManually
     case loginWithQR
+    case register
     case reportProblem
 }
 
 struct AuthenticationStartScreenViewState: BindableState {
-    var isQRCodeLoginEnabled = false
+    let isWebRegistrationEnabled: Bool
+    let isQRCodeLoginEnabled: Bool
 }
 
 enum AuthenticationStartScreenViewAction {
     case loginManually
     case loginWithQR
+    case register
     case reportProblem
 }

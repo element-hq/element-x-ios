@@ -19,6 +19,8 @@ struct ServerConfirmationScreenViewState: BindableState {
     var homeserverAddress: String
     /// The flow being attempted on the selected homeserver.
     let authenticationFlow: AuthenticationFlow
+    /// Whether or not the homeserver supports registration.
+    var homeserverSupportsRegistration = false
     /// The presentation anchor used for OIDC authentication.
     var window: UIWindow?
     
@@ -37,14 +39,26 @@ struct ServerConfirmationScreenViewState: BindableState {
         switch authenticationFlow {
         case .login:
             if homeserverAddress == "matrix.org" {
-                return L10n.screenServerConfirmationMessageLoginMatrixDotOrg
+                L10n.screenServerConfirmationMessageLoginMatrixDotOrg
             } else if homeserverAddress == "element.io" {
-                return L10n.screenServerConfirmationMessageLoginElementDotIo
+                L10n.screenServerConfirmationMessageLoginElementDotIo
             } else {
-                return ""
+                ""
             }
         case .register:
-            return L10n.screenServerConfirmationMessageRegister
+            if canContinue {
+                L10n.screenServerConfirmationMessageRegister
+            } else {
+                L10n.errorAccountCreationNotPossible
+            }
+        }
+    }
+    
+    /// Whether or not it is valid to continue the flow.
+    var canContinue: Bool {
+        switch authenticationFlow {
+        case .login: true
+        case .register: homeserverSupportsRegistration
         }
     }
 }
