@@ -34,7 +34,7 @@ final class NSEUserSession {
                          slidingSync: .restored,
                          sessionDelegate: clientSessionDelegate,
                          appHooks: appHooks,
-                         appSettings: appSettings)
+                         invisibleCryptoEnabled: appSettings.invisibleCryptoEnabled)
             .sessionPaths(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                           cachePath: credentials.restorationToken.sessionDirectories.cachePath)
             .username(username: credentials.userID)

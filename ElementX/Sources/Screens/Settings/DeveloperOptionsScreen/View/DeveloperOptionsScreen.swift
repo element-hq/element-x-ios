@@ -60,7 +60,7 @@ struct DeveloperOptionsScreen: View {
             } header: {
                 Text("Trust and Decoration")
             } footer: {
-                Text("This setting controls how end-to-end encryption (E2E) keys are shared. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
+                Text("This setting controls how end-to-end encryption (E2EE) keys are shared. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
             }
 
             Section {

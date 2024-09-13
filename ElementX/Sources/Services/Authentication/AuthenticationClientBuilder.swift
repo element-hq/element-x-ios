@@ -70,7 +70,7 @@ struct AuthenticationClientBuilder {
                          slidingSync: slidingSync,
                          sessionDelegate: clientSessionDelegate,
                          appHooks: appHooks,
-                         appSettings: appSettings)
+                         invisibleCryptoEnabled: appSettings.invisibleCryptoEnabled)
             .sessionPaths(dataPath: sessionDirectories.dataPath,
                           cachePath: sessionDirectories.cachePath)
             .passphrase(passphrase: passphrase)

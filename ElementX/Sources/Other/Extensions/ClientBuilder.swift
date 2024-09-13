@@ -15,7 +15,7 @@ extension ClientBuilder {
                             slidingSync: ClientBuilderSlidingSync,
                             sessionDelegate: ClientSessionDelegate,
                             appHooks: AppHooks,
-                            appSettings: CommonSettingsProtocol) -> ClientBuilder {
+                            invisibleCryptoEnabled: Bool) -> ClientBuilder {
         var builder = ClientBuilder()
             .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier, sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
@@ -34,7 +34,7 @@ extension ClientBuilder {
                 .backupDownloadStrategy(backupDownloadStrategy: .afterDecryptionFailure)
                 .autoEnableBackups(autoEnableBackups: true)
                 
-            if appSettings.invisibleCryptoEnabled {
+            if invisibleCryptoEnabled {
                 builder = builder.roomKeyRecipientStrategy(strategy: CollectStrategy.identityBasedStrategy)
             } else {
                 builder = builder.roomKeyRecipientStrategy(strategy: .deviceBasedStrategy(onlyAllowTrustedDevices: false, errorOnVerifiedUserProblem: true))
