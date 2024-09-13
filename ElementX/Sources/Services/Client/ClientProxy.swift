@@ -594,20 +594,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func getElementWellKnown() async -> Result<ElementWellKnown?, ClientProxyError> {
-        guard let userIDServerName,
-              var url = URL(string: "https://\(userIDServerName)") else {
-            return .failure(.invalidUserIDServerName)
-        }
-        
-        url.append(path: "/.well-known/element/element.json")
-        
-        do {
-            let response = try await client.getUrl(url: url.absoluteString)
-            let sdkWellKnown = try makeElementWellKnown(string: response)
-            return .success(ElementWellKnown(sdkWellKnown))
-        } catch {
-            return .failure(.sdkError(error))
-        }
+        await client.getElementWellKnown().map(ElementWellKnown.init)
     }
         
     // MARK: Ignored users

@@ -13,6 +13,8 @@ struct LoginHomeserver: Equatable {
     let address: String
     /// The types login supported by the homeserver.
     var loginMode: LoginMode
+    /// A temporary helper URL that can be used for registration.
+    var registrationHelperURL: URL?
     
     /// Creates a new homeserver value.
     init(address: String, loginMode: LoginMode) {

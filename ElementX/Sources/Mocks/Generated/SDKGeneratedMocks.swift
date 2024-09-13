@@ -341,6 +341,81 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
     }
 
+    //MARK: - awaitRoomRemoteEcho
+
+    open var awaitRoomRemoteEchoRoomIdThrowableError: Error?
+    var awaitRoomRemoteEchoRoomIdUnderlyingCallsCount = 0
+    open var awaitRoomRemoteEchoRoomIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return awaitRoomRemoteEchoRoomIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = awaitRoomRemoteEchoRoomIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                awaitRoomRemoteEchoRoomIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    awaitRoomRemoteEchoRoomIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var awaitRoomRemoteEchoRoomIdCalled: Bool {
+        return awaitRoomRemoteEchoRoomIdCallsCount > 0
+    }
+    open var awaitRoomRemoteEchoRoomIdReceivedRoomId: String?
+    open var awaitRoomRemoteEchoRoomIdReceivedInvocations: [String] = []
+
+    var awaitRoomRemoteEchoRoomIdUnderlyingReturnValue: Room!
+    open var awaitRoomRemoteEchoRoomIdReturnValue: Room! {
+        get {
+            if Thread.isMainThread {
+                return awaitRoomRemoteEchoRoomIdUnderlyingReturnValue
+            } else {
+                var returnValue: Room? = nil
+                DispatchQueue.main.sync {
+                    returnValue = awaitRoomRemoteEchoRoomIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                awaitRoomRemoteEchoRoomIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    awaitRoomRemoteEchoRoomIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var awaitRoomRemoteEchoRoomIdClosure: ((String) async throws -> Room)?
+
+    open override func awaitRoomRemoteEcho(roomId: String) async throws -> Room {
+        if let error = awaitRoomRemoteEchoRoomIdThrowableError {
+            throw error
+        }
+        awaitRoomRemoteEchoRoomIdCallsCount += 1
+        awaitRoomRemoteEchoRoomIdReceivedRoomId = roomId
+        DispatchQueue.main.async {
+            self.awaitRoomRemoteEchoRoomIdReceivedInvocations.append(roomId)
+        }
+        if let awaitRoomRemoteEchoRoomIdClosure = awaitRoomRemoteEchoRoomIdClosure {
+            return try await awaitRoomRemoteEchoRoomIdClosure(roomId)
+        } else {
+            return awaitRoomRemoteEchoRoomIdReturnValue
+        }
+    }
+
     //MARK: - cachedAvatarUrl
 
     open var cachedAvatarUrlThrowableError: Error?
@@ -2659,6 +2734,71 @@ open class ClientSDKMock: MatrixRustSDK.Client {
             return try await searchUsersSearchTermLimitClosure(searchTerm, limit)
         } else {
             return searchUsersSearchTermLimitReturnValue
+        }
+    }
+
+    //MARK: - server
+
+    var serverUnderlyingCallsCount = 0
+    open var serverCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return serverUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = serverUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                serverUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    serverUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var serverCalled: Bool {
+        return serverCallsCount > 0
+    }
+
+    var serverUnderlyingReturnValue: String?
+    open var serverReturnValue: String? {
+        get {
+            if Thread.isMainThread {
+                return serverUnderlyingReturnValue
+            } else {
+                var returnValue: String?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = serverUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                serverUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    serverUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var serverClosure: (() -> String?)?
+
+    open override func server() -> String? {
+        serverCallsCount += 1
+        if let serverClosure = serverClosure {
+            return serverClosure()
+        } else {
+            return serverReturnValue
         }
     }
 
@@ -9972,6 +10112,82 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
             self.unmuteRoomRoomIdIsEncryptedIsOneToOneReceivedInvocations.append((roomId: roomId, isEncrypted: isEncrypted, isOneToOne: isOneToOne))
         }
         try await unmuteRoomRoomIdIsEncryptedIsOneToOneClosure?(roomId, isEncrypted, isOneToOne)
+    }
+}
+open class OidcAuthorizationDataSDKMock: MatrixRustSDK.OidcAuthorizationData {
+    init() {
+        super.init(noPointer: .init())
+    }
+
+    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    }
+
+    fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - loginUrl
+
+    var loginUrlUnderlyingCallsCount = 0
+    open var loginUrlCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loginUrlUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loginUrlUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loginUrlUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loginUrlUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var loginUrlCalled: Bool {
+        return loginUrlCallsCount > 0
+    }
+
+    var loginUrlUnderlyingReturnValue: String!
+    open var loginUrlReturnValue: String! {
+        get {
+            if Thread.isMainThread {
+                return loginUrlUnderlyingReturnValue
+            } else {
+                var returnValue: String? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loginUrlUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loginUrlUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loginUrlUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var loginUrlClosure: (() -> String)?
+
+    open override func loginUrl() -> String {
+        loginUrlCallsCount += 1
+        if let loginUrlClosure = loginUrlClosure {
+            return loginUrlClosure()
+        } else {
+            return loginUrlReturnValue
+        }
     }
 }
 open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData {

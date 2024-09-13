@@ -9,7 +9,7 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-class MockAuthenticationServiceProxy: AuthenticationServiceProtocol {
+class MockAuthenticationService: AuthenticationServiceProtocol {
     let validCredentials = (username: "alice", password: "12345678")
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
@@ -57,5 +57,9 @@ class MockAuthenticationServiceProxy: AuthenticationServiceProtocol {
         
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: username))))
         return .success(userSession)
+    }
+    
+    func completeWebRegistration(using credentials: WebRegistrationCredentials) async -> Result<any UserSessionProtocol, AuthenticationServiceError> {
+        .failure(.failedLoggingIn)
     }
 }

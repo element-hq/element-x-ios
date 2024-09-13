@@ -111,20 +111,20 @@ class MockScreen: Identifiable {
         switch id {
         case .login:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = LoginScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
+            let coordinator = LoginScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationService(),
                                                                        analytics: ServiceLocator.shared.analytics,
                                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .serverSelection:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = ServerSelectionScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
+            let coordinator = ServerSelectionScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationService(),
                                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                                  isModallyPresented: true))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .authenticationFlow:
-            let flowCoordinator = AuthenticationFlowCoordinator(authenticationService: MockAuthenticationServiceProxy(),
+            let flowCoordinator = AuthenticationFlowCoordinator(authenticationService: MockAuthenticationService(),
                                                                 qrCodeLoginService: QRCodeLoginServiceMock(),
                                                                 bugReportService: BugReportServiceMock(),
                                                                 navigationRootCoordinator: navigationRootCoordinator,
