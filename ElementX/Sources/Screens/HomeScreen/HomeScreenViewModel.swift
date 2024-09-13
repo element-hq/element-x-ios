@@ -316,21 +316,18 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
-        if versions.contains(.native) {
-            // Both available, prompt for migration
-            if versions.contains(where: \.isProxy) {
-                state.slidingSyncMigrationBannerMode = .show
-            } else { // The proxy has been removed and logout is needed
-                // Delay setting the alert otherwise it automatically gets dismissed. Same as the crashed last run one
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.state.bindings.alertInfo = AlertInfo(id: UUID(),
-                                                              title: L10n.bannerMigrateToNativeSlidingSyncForceLogoutTitle,
-                                                              primaryButton: .init(title: L10n.bannerMigrateToNativeSlidingSyncAction,
-                                                                                   action: { [weak self] in
-                                                                                       self?.appSettings.slidingSyncDiscovery = .native
-                                                                                       self?.actionsSubject.send(.logoutWithoutConfirmation)
-                                                                                   }))
-                }
+        if versions.contains(where: \.isProxy) { // Both available, prompt for migration
+            state.slidingSyncMigrationBannerMode = .show
+        } else { // The proxy has been removed and logout is needed
+            // Delay setting the alert otherwise it automatically gets dismissed. Same as the crashed last run one
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.state.bindings.alertInfo = AlertInfo(id: UUID(),
+                                                          title: L10n.bannerMigrateToNativeSlidingSyncForceLogoutTitle,
+                                                          primaryButton: .init(title: L10n.bannerMigrateToNativeSlidingSyncAction,
+                                                                               action: { [weak self] in
+                                                                                   self?.appSettings.slidingSyncDiscovery = .native
+                                                                                   self?.actionsSubject.send(.logoutWithoutConfirmation)
+                                                                               }))
             }
         }
     }
