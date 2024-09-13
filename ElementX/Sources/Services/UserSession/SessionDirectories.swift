@@ -80,6 +80,12 @@ extension SessionDirectories {
     }
 }
 
+extension SessionDirectories: CustomStringConvertible {
+    var description: String {
+        "Data: \(dataPath) Caches: \(cachePath)"
+    }
+}
+
 // MARK: Migrations
 
 private extension URL {

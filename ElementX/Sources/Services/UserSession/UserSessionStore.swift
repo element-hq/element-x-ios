@@ -72,6 +72,8 @@ class UserSessionStore: UserSessionStoreProtocol {
                                                                     pusherNotificationClientIdentifier: clientProxy.pusherNotificationClientIdentifier),
                                                    forUsername: userID)
             
+            MXLog.info("Set up session for user \(userID) at: \(sessionDirectories)")
+            
             return .success(buildUserSessionWithClient(clientProxy))
         } catch {
             MXLog.error("Failed creating user session with error: \(error)")
@@ -133,6 +135,8 @@ class UserSessionStore: UserSessionStoreProtocol {
             let client = try await builder.build()
             
             try await client.restoreSession(session: credentials.restorationToken.session)
+            
+            MXLog.info("Set up session for user \(credentials.userID) at: \(credentials.restorationToken.sessionDirectories)")
             
             return await .success(setupProxyForClient(client))
         } catch {
