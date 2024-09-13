@@ -17,8 +17,13 @@ struct CallScreenCoordinatorParameters {
 }
 
 enum CallScreenCoordinatorAction {
-    /// The call is still ongoing but the user wishes to navigate around the app.
-    case pictureInPictureStarted(AVPictureInPictureController)
+    /// The call is able to be minimised to picture in picture with the provided controller.
+    ///
+    /// **Note:** Manually starting the PiP will not trigger the action below as we don't want
+    /// to change the app's navigation when backgrounding the app with the call screen visible.
+    case pictureInPictureIsAvailable(AVPictureInPictureController)
+    /// The call is still ongoing but the user requested to navigate around the app.
+    case pictureInPictureStarted
     /// The call is hidden and the user wishes to return to it.
     case pictureInPictureStopped
     /// The call is finished and the screen is done with.
@@ -46,8 +51,10 @@ final class CallScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .pictureInPictureStarted(let controller):
-                actionsSubject.send(.pictureInPictureStarted(controller))
+            case .pictureInPictureIsAvailable(let controller):
+                actionsSubject.send(.pictureInPictureIsAvailable(controller))
+            case .pictureInPictureStarted:
+                actionsSubject.send(.pictureInPictureStarted)
             case .pictureInPictureStopped:
                 actionsSubject.send(.pictureInPictureStopped)
             case .dismiss:
