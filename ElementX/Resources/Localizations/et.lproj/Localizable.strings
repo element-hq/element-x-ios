@@ -27,6 +27,7 @@
 "action_back" = "Tagasi";
 "action_call" = "Helista kasutajale";
 "action_cancel" = "Loobu";
+"action_cancel_for_now" = "Hetkel jäta tegemata";
 "action_choose_photo" = "Vali foto";
 "action_clear" = "Selge";
 "action_close" = "Sulge";
@@ -106,6 +107,10 @@
 "action_view_source" = "Vaata lähtekoodi";
 "action_yes" = "Jah";
 "action.load_more" = "Näita veel";
+"banner_migrate_to_native_sliding_sync_action" = "Logi välja ja uuenda";
+"banner_migrate_to_native_sliding_sync_description" = "Sinu koduserver toetab uut ja kiiremat protokolli. Uuendamiseks logi korraks rakendusest välja ja siis tagasi. Mingil hetkel tulevikus vana protokoll eemaldatakse kasutusest ja tehes uuenduse nüüd väldid hilisemat sundkorras uuendust.";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "Sinu koduserver enam ei toeta vana protokolli. Jätkamaks rakenduse kasutamist palun logi välja ning seejärel tagasi.";
+"banner_migrate_to_native_sliding_sync_title" = "Saadaval on uuendus";
 "banner.set_up_recovery.content" = "Loo uus taastevõti, mida saad kasutada oma krüptitud sõnumite ajaloo taastamisel olukorras, kus kaotad ligipääsu oma seadmetele.";
 "banner.set_up_recovery.title" = "Seadista taastamine";
 "common_about" = "Rakenduse teave";
@@ -250,6 +255,7 @@
 "emoji_picker_category_people" = "Emotikonid ja inimesed";
 "emoji_picker_category_places" = "Reisimine ja kohad";
 "emoji_picker_category_symbols" = "Sümbolid";
+"error_account_creation_not_possible" = "Selleks et koos kasutajakonto loomisega toimiks Matrix Authentication Serveri tugi, vajab sinu koduserver uuendamist.";
 "error_failed_creating_the_permalink" = "Püsilingi loomine ei õnnestumud";
 "error_failed_loading_map" = "%1$@ kaardi laadimine ei õnnestunud. Palun proovi hiljem uuesti.";
 "error_failed_loading_messages" = "Sõnumite laadimine ei õnnestunud";
@@ -325,12 +331,20 @@
 "screen_pinned_timeline_empty_state_headline" = "Et olulisi sõnumeid oleks lihtsam leida, tõsta nad esile";
 "screen_pinned_timeline_screen_title_empty" = "Esiletõstetud sõnumid";
 "screen_reset_encryption_password_error" = "Tekkis teadmata viga. Palun kontrolli, kas sinu kasutajakonto salasõna on õige ja proovi uuesti.";
+"screen_resolve_send_failure_changed_identity_primary_button_title" = "Unusta verifitseerimine ja saada ikkagi";
+"screen_resolve_send_failure_changed_identity_subtitle" = "Sa võid jätta verifitseerimisvea tähelepanuta ja sõnumi ikkagi saata või katkestad saatmise ja peale kasutaja %1$@ verifitseerimist proovid seda uuesti.";
+"screen_resolve_send_failure_changed_identity_title" = "Sinu sõnum on saatmata, kuna kasutaja %1$@ verifitseeritud identiteet on muutunud.";
+"screen_resolve_send_failure_unsigned_device_primary_button_title" = "Saada sõnum ikkagi";
+"screen_resolve_send_failure_unsigned_device_subtitle" = "%1$@ kasutab ühte või enamat verifitseerimata seadet. Sa võid sõnumi ikkagi saata või katkestad selle ning ootad kuni %2$@ on kõik oma seadmed verifitseerinud ning proovid seejärel uuesti.";
+"screen_resolve_send_failure_unsigned_device_title" = "Sinu sõnum on saatmata, kuna %1$@ pole verifitseerinud ühte või enamat oma seadet";
 "screen_room_mentions_at_room_subtitle" = "Teavita kogu jututuba";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ esiletõstetud sõnumit";
 "screen_room_pinned_banner_loading_description" = "Laadime sõnumit…";
 "screen_room_pinned_banner_view_all_button_title" = "Näita kõiki";
 "screen_room_details_pinned_events_row_title" = "Esiletõstetud sõnumid";
+"screen_timeline_item_menu_send_failure_changed_identity" = "Sõnum on saatmata, kuna kasutaja %1$@ verifitseeritud identiteet on muutunud.";
+"screen_timeline_item_menu_send_failure_unsigned_device" = "Sõnum on saatmata, kuna %1$@ pole verifitseerinud ühte või enamat oma seadet.";
 "screen_account_provider_change" = "Muuda teenusepakkujat";
 "screen_account_provider_form_hint" = "Koduserveri aadress";
 "screen_account_provider_form_notice" = "Sisesta otsingusõna või domeeni nimi.";
@@ -413,6 +427,7 @@
 "screen_chat_backup_recovery_action_confirm_description" = "Sinu vestluste krüptograafia varukoopia pole hetkel enam sünkroonis.";
 "screen_chat_backup_recovery_action_setup" = "Seadista krüptovõtmete varundus";
 "screen_chat_backup_recovery_action_setup_description" = "Säilita ligipääs oma krüptitud sõnumitele ka siis, kui sa kaotad kõik oma seadmed ja/või logid kõikjal välja rakendusest %1$@.";
+"screen_create_account_title" = "Loo kasutajakonto";
 "screen_create_new_recovery_key_list_item_1" = "Ava %1$@ töölauaga seadmes";
 "screen_create_new_recovery_key_list_item_2" = "Logi uuesti sisse oma kasutajakontole";
 "screen_create_new_recovery_key_list_item_3" = "Kui sul palutakse seadet verifitseerida, vali %1$@";
@@ -579,7 +594,6 @@
 "screen_recovery_key_confirm_error_content" = "Kinnitamaks ligipääsu sinu vestluse varukoopiale, palun proovi uuesti";
 "screen_recovery_key_confirm_error_title" = "Vigane taastevõti";
 "screen_recovery_key_confirm_key_description" = "Kui sul on turvavõti või turvafraas, siis need toimivad ka.";
-"screen_recovery_key_confirm_key_label" = "Taastevõti või turvafraas";
 "screen_recovery_key_confirm_key_placeholder" = "Sisesta...";
 "screen_recovery_key_confirm_lost_recovery_key" = "Kas sa oled taastevõtme kaotanud?";
 "screen_recovery_key_confirm_success" = "Taastevõti on kinnitatud";
@@ -806,9 +820,6 @@
 "screen_signout_save_recovery_key_title" = "Kas sa oled oma taastevõtme salvestanud?";
 "screen_start_chat_error_starting_chat" = "Vestluse alustamisel tekkis viga";
 "screen_view_location_title" = "Asukoht";
-"screen_waitlist_message" = "%1$@ kasutamiseks %2$@ koduserveris on hetkel palju huvilisi. Proovi seda samast rakendusest mõne päeva pärast.\n\nTäname kannatlikkuse eest!";
-"screen_waitlist_title" = "Peaaegu olemas.";
-"screen_waitlist_title_success" = "Oled nüüd jututoas.";
 "screen_welcome_bullet_1" = "Kõned, küsitlused, otsing ja palju muud lisanduvad hiljem selle aasta jooksul.";
 "screen_welcome_bullet_2" = "Krüptitud jututubade sõnumite ajalugu pole veel saadaval.";
 "screen_welcome_bullet_3" = "Me soovime teada mida sa arvad. Seadistuste lehel olevast valikust võid saata meile oma kommentaare.";
@@ -983,4 +994,3 @@
 "screen_signout_confirmation_dialog_submit" = "Logi välja";
 "screen_signout_confirmation_dialog_title" = "Logi välja";
 "screen_signout_preference_item" = "Logi välja";
-"screen_waitlist_message_success" = "Tere tulemast rakendusse %1$@!";

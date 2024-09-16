@@ -27,6 +27,7 @@
 "action_back" = "Späť";
 "action_call" = "Zavolať";
 "action_cancel" = "Zrušiť";
+"action_cancel_for_now" = "Zatiaľ zrušiť";
 "action_choose_photo" = "Vybrať fotku";
 "action_clear" = "Vyčistiť";
 "action_close" = "Zavrieť";
@@ -106,6 +107,10 @@
 "action_view_source" = "Zobraziť zdroj";
 "action_yes" = "Áno";
 "action.load_more" = "Načítať viac";
+"banner_migrate_to_native_sliding_sync_action" = "Odhlásiť sa a aktualizovať";
+"banner_migrate_to_native_sliding_sync_description" = "Váš server teraz podporuje nový, rýchlejší protokol. Odhláste sa a prihláste sa znova, aby ste mohli aktualizovať. Ak to urobíte teraz, pomôže vám vyhnúť sa nútenému odhláseniu, keď sa starý protokol neskôr odstráni.";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "Váš domovský server už nepodporuje starý protokol. Ak chcete pokračovať v používaní aplikácie, odhláste sa a znova sa prihláste.";
+"banner_migrate_to_native_sliding_sync_title" = "Aktualizácia je k dispozícii";
 "banner.set_up_recovery.content" = "Vytvorte nový kľúč na obnovenie, ktorý môžete použiť na obnovenie vašej histórie šifrovaných správ v prípade straty prístupu k vašim zariadeniam.";
 "banner.set_up_recovery.title" = "Nastaviť obnovenie";
 "common_about" = "O aplikácii";
@@ -250,6 +255,7 @@
 "emoji_picker_category_people" = "Smajlíky a ľudia";
 "emoji_picker_category_places" = "Cestovanie a miesta";
 "emoji_picker_category_symbols" = "Symboly";
+"error_account_creation_not_possible" = "Your homeserver needs to be upgraded to support Matrix Authentication Server and account creation.";
 "error_failed_creating_the_permalink" = "Nepodarilo sa vytvoriť trvalý odkaz";
 "error_failed_loading_map" = "%1$@ nedokázal načítať mapu. Skúste to prosím neskôr.";
 "error_failed_loading_messages" = "Načítanie správ zlyhalo";
@@ -325,12 +331,20 @@
 "screen_pinned_timeline_empty_state_headline" = "Pripnite dôležité správy, aby sa dali ľahko nájsť";
 "screen_pinned_timeline_screen_title_empty" = "Pripnuté správy";
 "screen_reset_encryption_password_error" = "Nastala neznáma chyba. Skontrolujte, či je heslo vášho účtu správne a skúste to znova.";
+"screen_resolve_send_failure_changed_identity_primary_button_title" = "Odvolať overenie a odoslať";
+"screen_resolve_send_failure_changed_identity_subtitle" = "Svoje overenie môžete odvolať a odoslať túto správu aj tak, alebo ju môžete zatiaľ zrušiť a po opätovnom overení to skúsiť znova %1$@ .";
+"screen_resolve_send_failure_changed_identity_title" = "Vaša správa nebola odoslaná, pretože sa zmenila overená totožnosť používateľa %1$@.";
+"screen_resolve_send_failure_unsigned_device_primary_button_title" = "Odoslať správu aj tak";
+"screen_resolve_send_failure_unsigned_device_subtitle" = "%1$@ používa jedno alebo viac neoverených zariadení. Správu môžete odoslať aj tak, alebo ju môžete zatiaľ zrušiť a skúsiť to znova neskôr po %2$@ overení všetkých zariadení.";
+"screen_resolve_send_failure_unsigned_device_title" = "Vaša správa nebola odoslaná, pretože %1$@ neoveril/a jedno alebo viac zariadení";
 "screen_room_mentions_at_room_subtitle" = "Informovať celú miestnosť";
 "screen_room_pinned_banner_indicator" = "%1$@ z %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Pripnutých správ";
 "screen_room_pinned_banner_loading_description" = "Načítava sa správa...";
 "screen_room_pinned_banner_view_all_button_title" = "Zobraziť všetko";
 "screen_room_details_pinned_events_row_title" = "Pripnuté správy";
+"screen_timeline_item_menu_send_failure_changed_identity" = "Správa nebola odoslaná, pretože sa zmenila overená totožnosť používateľa %1$@.";
+"screen_timeline_item_menu_send_failure_unsigned_device" = "Správa nebola odoslaná, pretože %1$@ neoveril/a jedno alebo viac zariadení.";
 "screen_account_provider_change" = "Zmeniť poskytovateľa účtu";
 "screen_account_provider_form_hint" = "Adresa domovského servera";
 "screen_account_provider_form_notice" = "Zadajte hľadaný výraz alebo adresu domény.";
@@ -413,6 +427,7 @@
 "screen_chat_backup_recovery_action_confirm_description" = "Vaša záloha konverzácie nie je momentálne synchronizovaná.";
 "screen_chat_backup_recovery_action_setup" = "Nastaviť obnovovanie";
 "screen_chat_backup_recovery_action_setup_description" = "Získajte prístup k vašim šifrovaným správam aj keď stratíte všetky svoje zariadenia alebo sa odhlásite zo všetkých %1$@ zariadení.";
+"screen_create_account_title" = "Create account";
 "screen_create_new_recovery_key_list_item_1" = "Otvoriť %1$@ v stolnom počítači";
 "screen_create_new_recovery_key_list_item_2" = "Znova sa prihláste do svojho účtu";
 "screen_create_new_recovery_key_list_item_3" = "Keď sa zobrazí výzva na overenie vášho zariadenia, vyberte %1$@";
@@ -579,7 +594,6 @@
 "screen_recovery_key_confirm_error_content" = "Skúste prosím znova potvrdiť prístup k vašej zálohe konverzácie.";
 "screen_recovery_key_confirm_error_title" = "Nesprávny kľúč na obnovenie";
 "screen_recovery_key_confirm_key_description" = "Ak máte bezpečnostný kľúč alebo bezpečnostnú frázu, bude to fungovať tiež.";
-"screen_recovery_key_confirm_key_label" = "Kľúč na obnovenie alebo prístupový kód";
 "screen_recovery_key_confirm_key_placeholder" = "Zadať...";
 "screen_recovery_key_confirm_lost_recovery_key" = "Stratili ste kľúč na obnovenie?";
 "screen_recovery_key_confirm_success" = "Kľúč na obnovu potvrdený";
@@ -806,9 +820,6 @@
 "screen_signout_save_recovery_key_title" = "Uložili ste si kľúč na obnovenie?";
 "screen_start_chat_error_starting_chat" = "Pri pokuse o spustenie konverzácie sa vyskytla chyba";
 "screen_view_location_title" = "Poloha";
-"screen_waitlist_message" = "Momentálne je veľký dopyt po %1$@ na %2$@. Vráťte sa do aplikácie za pár dní a skúste to znova.\n\nĎakujeme za trpezlivosť!";
-"screen_waitlist_title" = "Ste na čakanej listine!";
-"screen_waitlist_title_success" = "Ste dnu!";
 "screen_welcome_bullet_1" = "Hovory, ankety, vyhľadávanie a ďalšie funkcie pribudnú neskôr v tomto roku.";
 "screen_welcome_bullet_2" = "História správ pre zašifrované miestnosti nebude v tejto aktualizácii k dispozícii.";
 "screen_welcome_bullet_3" = "Radi by sme od vás počuli, dajte nám vedieť, čo si myslíte, prostredníctvom stránky nastavení.";
@@ -983,4 +994,3 @@
 "screen_signout_confirmation_dialog_submit" = "Odhlásiť sa";
 "screen_signout_confirmation_dialog_title" = "Odhlásiť sa";
 "screen_signout_preference_item" = "Odhlásiť sa";
-"screen_waitlist_message_success" = "Vitajte v %1$@!";
