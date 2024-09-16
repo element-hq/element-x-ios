@@ -29,6 +29,8 @@ struct SettingsScreen: View {
             }
             
             generalSection
+            
+            signOutSection
         }
         .compoundList()
         .navigationTitle(L10n.commonSettings)
@@ -167,7 +169,11 @@ struct SettingsScreen: View {
                         })
                         .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
             }
-            
+        }
+    }
+    
+    private var signOutSection: some View {
+        Section {
             ListRow(label: .action(title: L10n.screenSignoutPreferenceItem,
                                    icon: \.signOut,
                                    role: .destructive),
@@ -175,6 +181,14 @@ struct SettingsScreen: View {
                         context.send(viewAction: .logout)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.logout)
+            if context.viewState.showAccountDeactivation {
+                ListRow(label: .action(title: L10n.actionDeactivateAccount,
+                                       icon: \.warning,
+                                       role: .destructive),
+                        kind: .button {
+                            context.send(viewAction: .deactivateAccount)
+                        })
+            }
         } footer: {
             VStack(spacing: 0) {
                 versionText

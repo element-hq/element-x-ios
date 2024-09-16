@@ -36,6 +36,7 @@ struct EncryptionResetPasswordScreen: View {
             }
             .buttonStyle(.compound(.primary))
         }
+        .background()
         .backgroundStyle(.compound.bgCanvasDefault)
         .interactiveDismissDisabled()
         .onAppear { textFieldFocus = true }
@@ -49,6 +50,7 @@ struct EncryptionResetPasswordScreen: View {
                 .font(.compound.bodySMSemibold)
             
             SecureField(L10n.screenResetEncryptionPasswordPlaceholder, text: $context.password)
+                .tint(.compound.iconAccentTertiary)
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(Color.compound.bgSubtleSecondaryLevel0)

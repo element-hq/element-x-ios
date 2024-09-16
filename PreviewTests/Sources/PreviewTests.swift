@@ -147,6 +147,12 @@ class PreviewTests: XCTestCase {
         }
     }
 
+    func test_deactivateAccountScreen() {
+        for preview in DeactivateAccountScreen_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_emojiPickerScreenHeaderView() {
         for preview in EmojiPickerScreenHeaderView_Previews._allPreviews {
             assertSnapshots(matching: preview)

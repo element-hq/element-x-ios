@@ -485,6 +485,71 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
     }
 
+    //MARK: - canDeactivateAccount
+
+    var canDeactivateAccountUnderlyingCallsCount = 0
+    open var canDeactivateAccountCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return canDeactivateAccountUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canDeactivateAccountUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canDeactivateAccountUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canDeactivateAccountUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var canDeactivateAccountCalled: Bool {
+        return canDeactivateAccountCallsCount > 0
+    }
+
+    var canDeactivateAccountUnderlyingReturnValue: Bool!
+    open var canDeactivateAccountReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return canDeactivateAccountUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canDeactivateAccountUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canDeactivateAccountUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canDeactivateAccountUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var canDeactivateAccountClosure: (() -> Bool)?
+
+    open override func canDeactivateAccount() -> Bool {
+        canDeactivateAccountCallsCount += 1
+        if let canDeactivateAccountClosure = canDeactivateAccountClosure {
+            return canDeactivateAccountClosure()
+        } else {
+            return canDeactivateAccountReturnValue
+        }
+    }
+
     //MARK: - createRoom
 
     open var createRoomRequestThrowableError: Error?
@@ -558,6 +623,52 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         } else {
             return createRoomRequestReturnValue
         }
+    }
+
+    //MARK: - deactivateAccount
+
+    open var deactivateAccountAuthDataEraseDataThrowableError: Error?
+    var deactivateAccountAuthDataEraseDataUnderlyingCallsCount = 0
+    open var deactivateAccountAuthDataEraseDataCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return deactivateAccountAuthDataEraseDataUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = deactivateAccountAuthDataEraseDataUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                deactivateAccountAuthDataEraseDataUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    deactivateAccountAuthDataEraseDataUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var deactivateAccountAuthDataEraseDataCalled: Bool {
+        return deactivateAccountAuthDataEraseDataCallsCount > 0
+    }
+    open var deactivateAccountAuthDataEraseDataReceivedArguments: (authData: AuthData?, eraseData: Bool)?
+    open var deactivateAccountAuthDataEraseDataReceivedInvocations: [(authData: AuthData?, eraseData: Bool)] = []
+    open var deactivateAccountAuthDataEraseDataClosure: ((AuthData?, Bool) async throws -> Void)?
+
+    open override func deactivateAccount(authData: AuthData?, eraseData: Bool) async throws {
+        if let error = deactivateAccountAuthDataEraseDataThrowableError {
+            throw error
+        }
+        deactivateAccountAuthDataEraseDataCallsCount += 1
+        deactivateAccountAuthDataEraseDataReceivedArguments = (authData: authData, eraseData: eraseData)
+        DispatchQueue.main.async {
+            self.deactivateAccountAuthDataEraseDataReceivedInvocations.append((authData: authData, eraseData: eraseData))
+        }
+        try await deactivateAccountAuthDataEraseDataClosure?(authData, eraseData)
     }
 
     //MARK: - deletePusher

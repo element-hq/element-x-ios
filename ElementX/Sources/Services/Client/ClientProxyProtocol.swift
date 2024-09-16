@@ -99,6 +99,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var slidingSyncVersion: SlidingSyncVersion { get }
     var availableSlidingSyncVersions: [SlidingSyncVersion] { get async }
     
+    var canDeactivateAccount: Bool { get }
+    
     var userIDServerName: String? { get }
     
     var userDisplayNamePublisher: CurrentValuePublisher<String?, Never> { get }
@@ -157,6 +159,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
         
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError>
 
+    func deactivateAccount(password: String?, eraseData: Bool) async -> Result<Void, ClientProxyError>
+    
     func logout() async -> URL?
 
     func setPusher(with configuration: PusherConfiguration) async throws
