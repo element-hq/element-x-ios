@@ -21,6 +21,7 @@ enum ServerSelectionScreenCoordinatorAction {
     case dismiss
 }
 
+// Note: This code was brought over from Riot, we should move the authentication service logic into the view model.
 final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
     private let parameters: ServerSelectionScreenCoordinatorParameters
     private let userIndicatorController: UserIndicatorControllerProtocol

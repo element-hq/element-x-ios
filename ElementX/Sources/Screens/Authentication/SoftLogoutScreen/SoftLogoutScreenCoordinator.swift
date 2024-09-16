@@ -32,6 +32,7 @@ enum SoftLogoutScreenCoordinatorResult: CustomStringConvertible {
     }
 }
 
+// Note: This code was brought over from Riot, we should move the authentication service logic into the view model.
 final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
     private let parameters: SoftLogoutScreenCoordinatorParameters
     private var viewModel: SoftLogoutScreenViewModelProtocol

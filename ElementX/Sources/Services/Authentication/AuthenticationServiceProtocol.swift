@@ -27,6 +27,7 @@ enum AuthenticationServiceError: Error {
     case accountDeactivated
     case failedLoggingIn
     case sessionTokenRefreshNotSupported
+    case failedUsingWebCredentials
 }
 
 protocol AuthenticationServiceProtocol {

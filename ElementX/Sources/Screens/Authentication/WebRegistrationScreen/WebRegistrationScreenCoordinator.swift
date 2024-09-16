@@ -28,6 +28,7 @@ enum WebRegistrationScreenCoordinatorAction: CustomStringConvertible {
     }
 }
 
+// Note: This code was based on the LoginScreen, we should move the authentication service logic into the view model.
 final class WebRegistrationScreenCoordinator: CoordinatorProtocol {
     private let parameters: WebRegistrationScreenCoordinatorParameters
     private let viewModel: WebRegistrationScreenViewModelProtocol
@@ -75,6 +76,7 @@ final class WebRegistrationScreenCoordinator: CoordinatorProtocol {
         case .success(let userSession):
             actionsSubject.send(.signedIn(userSession))
         case .failure(let error):
+            MXLog.error("Failed registration: \(error)")
             parameters.userIndicatorController.alertInfo = .init(id: UUID(), title: L10n.errorUnknown, message: String(describing: error))
         }
     }

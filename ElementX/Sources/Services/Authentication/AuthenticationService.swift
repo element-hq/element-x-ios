@@ -145,7 +145,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
             try await client.restoreSession(session: session)
             return await userSession(for: client)
         } catch {
-            return .failure(.failedLoggingIn)
+            MXLog.error("Failed restoring the client using the provided credentials.")
+            return .failure(.failedUsingWebCredentials)
         }
     }
     
