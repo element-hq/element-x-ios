@@ -17,9 +17,9 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init() {
-        super.init(initialViewState: AuthenticationStartScreenViewState())
-        state.isQRCodeLoginEnabled = !ProcessInfo.processInfo.isiOSAppOnMac && AppSettings.isDevelopmentBuild
+    init(webRegistrationEnabled: Bool) {
+        super.init(initialViewState: AuthenticationStartScreenViewState(isWebRegistrationEnabled: webRegistrationEnabled,
+                                                                        isQRCodeLoginEnabled: !ProcessInfo.processInfo.isiOSAppOnMac && AppSettings.isDevelopmentBuild))
     }
 
     override func process(viewAction: AuthenticationStartScreenViewAction) {
@@ -28,6 +28,8 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             actionsSubject.send(.loginManually)
         case .loginWithQR:
             actionsSubject.send(.loginWithQR)
+        case .register:
+            actionsSubject.send(.register)
         case .reportProblem:
             actionsSubject.send(.reportProblem)
         }

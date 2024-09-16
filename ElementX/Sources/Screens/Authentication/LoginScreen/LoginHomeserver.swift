@@ -17,11 +17,12 @@ struct LoginHomeserver: Equatable {
     var registrationHelperURL: URL?
     
     /// Creates a new homeserver value.
-    init(address: String, loginMode: LoginMode) {
+    init(address: String, loginMode: LoginMode, registrationHelperURL: URL? = nil) {
         let address = Self.sanitized(address).components(separatedBy: "://").last ?? address
         
         self.address = address
         self.loginMode = loginMode
+        self.registrationHelperURL = registrationHelperURL
     }
     
     /// Sanitizes a user entered homeserver address with the following rules
@@ -47,7 +48,7 @@ struct LoginHomeserver: Equatable {
 extension LoginHomeserver {
     /// A mock homeserver that is configured just like matrix.org.
     static var mockMatrixDotOrg: LoginHomeserver {
-        LoginHomeserver(address: "matrix.org", loginMode: .password)
+        LoginHomeserver(address: "matrix.org", loginMode: .password, registrationHelperURL: "https://develop.element.io/#/mobile_register")
     }
     
     /// A mock homeserver that supports login and registration via a password but has no SSO providers.

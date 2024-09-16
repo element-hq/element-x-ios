@@ -25,12 +25,19 @@ class ServerConfirmationScreenViewStateTests: XCTestCase {
     }
     
     func testRegisterMessageString() {
-        let matrixDotOrgLogin = ServerConfirmationScreenViewState(homeserverAddress: LoginHomeserver.mockMatrixDotOrg.address,
-                                                                  authenticationFlow: .register)
-        XCTAssertEqual(matrixDotOrgLogin.message, L10n.screenServerConfirmationMessageRegister, "The registration message should always be the same.")
+        let matrixDotOrgRegister = ServerConfirmationScreenViewState(homeserverAddress: LoginHomeserver.mockMatrixDotOrg.address,
+                                                                     authenticationFlow: .register,
+                                                                     homeserverSupportsRegistration: true)
+        XCTAssertEqual(matrixDotOrgRegister.message, L10n.screenServerConfirmationMessageRegister, "The registration message should always be the same.")
         
-        let otherLogin = ServerConfirmationScreenViewState(homeserverAddress: LoginHomeserver.mockOIDC.address,
-                                                           authenticationFlow: .register)
-        XCTAssertEqual(otherLogin.message, L10n.screenServerConfirmationMessageRegister, "The registration message should always be the same.")
+        let oidcRegister = ServerConfirmationScreenViewState(homeserverAddress: LoginHomeserver.mockOIDC.address,
+                                                             authenticationFlow: .register,
+                                                             homeserverSupportsRegistration: true)
+        XCTAssertEqual(oidcRegister.message, L10n.screenServerConfirmationMessageRegister, "The registration message should always be the same.")
+        
+        let otherRegister = ServerConfirmationScreenViewState(homeserverAddress: LoginHomeserver.mockBasicServer.address,
+                                                              authenticationFlow: .register,
+                                                              homeserverSupportsRegistration: false)
+        XCTAssertEqual(otherRegister.message, L10n.errorAccountCreationNotPossible, "The registration message should always be the same.")
     }
 }

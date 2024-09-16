@@ -18,14 +18,18 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
     }
 
     init(authenticationService: AuthenticationServiceProtocol, authenticationFlow: AuthenticationFlow) {
-        super.init(initialViewState: ServerConfirmationScreenViewState(homeserverAddress: authenticationService.homeserver.value.address,
-                                                                       authenticationFlow: authenticationFlow))
+        let homeserver = authenticationService.homeserver.value
+        
+        super.init(initialViewState: ServerConfirmationScreenViewState(homeserverAddress: homeserver.address,
+                                                                       authenticationFlow: authenticationFlow,
+                                                                       homeserverSupportsRegistration: homeserver.supportsRegistration))
         
         authenticationService.homeserver
             .receive(on: DispatchQueue.main)
             .sink { [weak self] homeserver in
                 guard let self else { return }
                 state.homeserverAddress = homeserver.address
+                state.homeserverSupportsRegistration = homeserver.supportsRegistration
             }
             .store(in: &cancellables)
     }
@@ -42,5 +46,11 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
         case .changeServer:
             actionsSubject.send(.changeServer)
         }
+    }
+}
+
+extension LoginHomeserver {
+    var supportsRegistration: Bool {
+        loginMode == .oidc || (address == "matrix.org" && registrationHelperURL != nil)
     }
 }

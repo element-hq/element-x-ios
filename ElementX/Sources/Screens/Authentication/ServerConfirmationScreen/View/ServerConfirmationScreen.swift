@@ -5,6 +5,7 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct ServerConfirmationScreen: View {
@@ -52,6 +53,7 @@ struct ServerConfirmationScreen: View {
             }
             .buttonStyle(.compound(.primary))
             .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.continue)
+            .disabled(!context.viewState.canContinue)
             
             Button { context.send(viewAction: .changeServer) } label: {
                 Text(L10n.screenServerConfirmationChangeServer)

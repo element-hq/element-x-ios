@@ -159,6 +159,9 @@ final class AppSettings {
                                                                      staticRegistrations: oidcStaticRegistrations.mapKeys { $0.absoluteString },
                                                                      dynamicRegistrationsFile: .sessionsBaseDirectory.appending(path: "oidc/registrations.json"))
     
+    /// A temporary hack to allow registration on matrix.org until MAS is deployed.
+    let webRegistrationEnabled = true
+    
     // MARK: - Notifications
     
     var pusherAppId: String {
