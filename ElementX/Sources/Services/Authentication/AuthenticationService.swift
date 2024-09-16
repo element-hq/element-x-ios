@@ -40,15 +40,21 @@ class AuthenticationService: AuthenticationServiceProtocol {
             
             let client = try await makeClientBuilder().build(homeserverAddress: homeserverAddress)
             let loginDetails = await client.homeserverLoginDetails()
+            let elementWellKnown = await client.getElementWellKnown()
             
             MXLog.info("Sliding sync: \(client.slidingSyncVersion())")
             
-            if loginDetails.supportsOidcLogin() {
-                homeserver.loginMode = .oidc
+            homeserver.loginMode = if loginDetails.supportsOidcLogin() {
+                .oidc
             } else if loginDetails.supportsPasswordLogin() {
-                homeserver.loginMode = .password
+                .password
             } else {
-                homeserver.loginMode = .unsupported
+                .unsupported
+            }
+            
+            homeserver.registrationHelperURL = switch elementWellKnown {
+            case .success(let wellKnown): wellKnown.registrationHelperUrl.flatMap(URL.init)
+            case .failure: nil
             }
             
             self.client = client
@@ -122,6 +128,25 @@ class AuthenticationService: AuthenticationServiceProtocol {
             default:
                 return .failure(.failedLoggingIn)
             }
+        }
+    }
+    
+    func completeWebRegistration(using credentials: WebRegistrationCredentials) async -> Result<any UserSessionProtocol, AuthenticationServiceError> {
+        guard let client else { return .failure(.failedLoggingIn) }
+        let session = Session(accessToken: credentials.accessToken,
+                              refreshToken: nil,
+                              userId: credentials.userID,
+                              deviceId: credentials.deviceID,
+                              homeserverUrl: client.homeserver(),
+                              oidcData: nil,
+                              slidingSyncVersion: client.slidingSyncVersion())
+        
+        do {
+            try await client.restoreSession(session: session)
+            return await userSession(for: client)
+        } catch {
+            MXLog.error("Failed restoring the client using the provided credentials.")
+            return .failure(.failedUsingWebCredentials)
         }
     }
     

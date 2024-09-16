@@ -19,8 +19,10 @@ struct ElementWellKnown {
     }
     
     let call: Call?
+    let registrationHelperURL: URL?
     
     init?(_ wellKnown: MatrixRustSDK.ElementWellKnown) {
-        call = Call(wellKnown.call)
+        call = wellKnown.call.flatMap(Call.init)
+        registrationHelperURL = wellKnown.registrationHelperUrl.flatMap(URL.init)
     }
 }

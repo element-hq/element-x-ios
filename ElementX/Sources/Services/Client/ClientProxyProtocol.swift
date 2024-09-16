@@ -32,7 +32,7 @@ enum ClientProxyError: Error {
     case sdkError(Error)
     
     case invalidMedia
-    case invalidUserIDServerName
+    case invalidServerName
     case failedUploadingMedia(Error, MatrixErrorCode)
     case roomPreviewIsPrivate
 }
