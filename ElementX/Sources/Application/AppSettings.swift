@@ -160,7 +160,7 @@ final class AppSettings {
                                                                      dynamicRegistrationsFile: .sessionsBaseDirectory.appending(path: "oidc/registrations.json"))
     
     /// A temporary hack to allow registration on matrix.org until MAS is deployed.
-    let webRegistrationEnabled = true; #warning("Disable this if merging before the well-known is updated.")
+    let webRegistrationEnabled = true
     
     // MARK: - Notifications
     

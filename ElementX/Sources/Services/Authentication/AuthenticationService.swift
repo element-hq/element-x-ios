@@ -57,9 +57,6 @@ class AuthenticationService: AuthenticationServiceProtocol {
             case .failure: nil
             }
             
-            #warning("Temporary testing hack.")
-            homeserver.registrationHelperURL = "https://pr42--matrix-react-sdk.netlify.app/#/mobile_register"
-            
             self.client = client
             homeserverSubject.send(homeserver)
             return .success(())
