@@ -11,12 +11,15 @@ import SwiftUI
 typealias PinnedEventsTimelineScreenViewModelType = StateStoreViewModel<PinnedEventsTimelineScreenViewState, PinnedEventsTimelineScreenViewAction>
 
 class PinnedEventsTimelineScreenViewModel: PinnedEventsTimelineScreenViewModelType, PinnedEventsTimelineScreenViewModelProtocol {
+    private let analyticsService: AnalyticsService
+    
     private let actionsSubject: PassthroughSubject<PinnedEventsTimelineScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<PinnedEventsTimelineScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init() {
+    init(analyticsService: AnalyticsService) {
+        self.analyticsService = analyticsService
         super.init(initialViewState: PinnedEventsTimelineScreenViewState())
     }
     
@@ -27,6 +30,7 @@ class PinnedEventsTimelineScreenViewModel: PinnedEventsTimelineScreenViewModelTy
         
         switch viewAction {
         case .close:
+            analyticsService.trackInteraction(name: .PinnedMessageBannerCloseListButton)
             actionsSubject.send(.dismiss)
         }
     }

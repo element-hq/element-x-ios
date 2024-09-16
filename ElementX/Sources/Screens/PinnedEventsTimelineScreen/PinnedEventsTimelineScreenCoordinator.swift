@@ -40,7 +40,7 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
     init(parameters: PinnedEventsTimelineScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = PinnedEventsTimelineScreenViewModel()
+        viewModel = PinnedEventsTimelineScreenViewModel(analyticsService: ServiceLocator.shared.analytics)
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                               timelineController: parameters.timelineController,
                                               mediaProvider: parameters.mediaProvider,

@@ -73,11 +73,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     override func process(viewAction: RoomScreenViewAction) {
         switch viewAction {
         case .tappedPinnedEventsBanner:
+            analyticsService.trackInteraction(name: .PinnedMessageBannerClick)
             if let eventID = state.pinnedEventsBannerState.selectedPinnedEventID {
                 actionsSubject.send(.focusEvent(eventID: eventID))
             }
             state.pinnedEventsBannerState.previousPin()
         case .viewAllPins:
+            analyticsService.trackInteraction(name: .PinnedMessageBannerViewAllButton)
             actionsSubject.send(.displayPinnedEventsTimeline)
         case .displayRoomDetails:
             actionsSubject.send(.displayRoomDetails)
