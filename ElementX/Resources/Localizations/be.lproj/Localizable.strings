@@ -27,6 +27,7 @@
 "action_back" = "Назад";
 "action_call" = "Званок";
 "action_cancel" = "Скасаваць";
+"action_cancel_for_now" = "Cancel for now";
 "action_choose_photo" = "Выбраць фота";
 "action_clear" = "Ачысціць";
 "action_close" = "Закрыць";
@@ -106,6 +107,10 @@
 "action_view_source" = "Прагляд зыходнага кода";
 "action_yes" = "Так";
 "action.load_more" = "Загрузіць больш";
+"banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
+"banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.";
+"banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
 "banner.set_up_recovery.content" = "Generate a new recovery key that can be used to restore your encrypted message history in case you lose access to your devices.";
 "banner.set_up_recovery.title" = "Set up recovery";
 "common_about" = "Аб праграме";
@@ -250,6 +255,7 @@
 "emoji_picker_category_people" = "Усмешкі & Удзельнікі";
 "emoji_picker_category_places" = "Падарожжы & Месцы";
 "emoji_picker_category_symbols" = "Сімвалы";
+"error_account_creation_not_possible" = "Your homeserver needs to be upgraded to support Matrix Authentication Server and account creation.";
 "error_failed_creating_the_permalink" = "Не атрымалася стварыць пастаянную спасылку";
 "error_failed_loading_map" = "%1$@ не атрымалася загрузіць карту. Калі ласка паспрабуйце зноў пазней.";
 "error_failed_loading_messages" = "Не ўдалося загрузіць паведамленні";
@@ -325,12 +331,20 @@
 "screen_pinned_timeline_empty_state_headline" = "Замацуеце важныя паведамленні, каб іх можна было лёгка знайсці";
 "screen_pinned_timeline_screen_title_empty" = "Замацаваныя паведамленні";
 "screen_reset_encryption_password_error" = "Адбылася невядомая памылка. Калі ласка, праверце правільнасць пароля вашага ўліковага запісу і паўтарыце спробу.";
+"screen_resolve_send_failure_changed_identity_primary_button_title" = "Withdraw verification and send";
+"screen_resolve_send_failure_changed_identity_subtitle" = "You can withdraw your verification and send this message anyway, or you can cancel for now and try again later after reverifying %1$@.";
+"screen_resolve_send_failure_changed_identity_title" = "Your message was not sent because %1$@’s verified identity has changed";
+"screen_resolve_send_failure_unsigned_device_primary_button_title" = "Send message anyway";
+"screen_resolve_send_failure_unsigned_device_subtitle" = "%1$@ is using one or more unverified devices. You can send the message anyway, or you can cancel for now and try again later after %2$@ has verified all their devices.";
+"screen_resolve_send_failure_unsigned_device_title" = "Your message was not sent because %1$@ has not verified one or more devices";
 "screen_room_mentions_at_room_subtitle" = "Апавясціць увесь пакой";
 "screen_room_pinned_banner_indicator" = "%1$@ з %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Замацаваныя паведамленні";
 "screen_room_pinned_banner_loading_description" = "Загрузка паведамлення…";
 "screen_room_pinned_banner_view_all_button_title" = "Паглядзець усе";
 "screen_room_details_pinned_events_row_title" = "Замацаваныя паведамленні";
+"screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
+"screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified one or more devices.";
 "screen_account_provider_change" = "Змяніць правайдара ўліковага запісу";
 "screen_account_provider_form_hint" = "Адрас хатняга сервера";
 "screen_account_provider_form_notice" = "Увядзіце пошукавы запыт або адрас дамена.";
@@ -413,6 +427,7 @@
 "screen_chat_backup_recovery_action_confirm_description" = "Ваша рэзервовая копія чата зараз не сінхранізавана.";
 "screen_chat_backup_recovery_action_setup" = "Наладзьце аднаўленне";
 "screen_chat_backup_recovery_action_setup_description" = "Атрымайце доступ да зашыфраваных паведамленняў, калі вы страціце ўсе свае прылады або выйдзеце з сістэмы %1$@ усюды.";
+"screen_create_account_title" = "Create account";
 "screen_create_new_recovery_key_list_item_1" = "Адкрыйце %1$@ на настольнай прыладзе";
 "screen_create_new_recovery_key_list_item_2" = "Увайдзіце ў свой уліковы запіс яшчэ раз";
 "screen_create_new_recovery_key_list_item_3" = "Калі будзе прапанавана пацвердзіць вашу прыладу, выберыце %1$@";
@@ -579,7 +594,6 @@
 "screen_recovery_key_confirm_error_content" = "Паўтарыце спробу, каб пацвердзіць доступ да рэзервовай копіі чата.";
 "screen_recovery_key_confirm_error_title" = "Няправільны ключ аднаўлення";
 "screen_recovery_key_confirm_key_description" = "Калі ў вас ёсць ключ аднаўлення або парольная фраза, гэта таксама будзе працаваць.";
-"screen_recovery_key_confirm_key_label" = "Ключ аднаўлення або код доступу";
 "screen_recovery_key_confirm_key_placeholder" = "Увесці...";
 "screen_recovery_key_confirm_lost_recovery_key" = "Страцілі ключ аднаўлення?";
 "screen_recovery_key_confirm_success" = "Ключ аднаўлення пацверджаны";
@@ -806,9 +820,6 @@
 "screen_signout_save_recovery_key_title" = "Вы захавалі свой ключ аднаўлення?";
 "screen_start_chat_error_starting_chat" = "Пры спробе пачаць чат адбылася памылка";
 "screen_view_location_title" = "Месцазнаходжанне";
-"screen_waitlist_message" = "Зараз існуе высокі попыт на %1$@ на %2$@. Калі ласка, вярніцеся ў праграму праз некалькі дзён і паспрабуйце зноў.\n\nДзякуй за цярпенне!";
-"screen_waitlist_title" = "Амаль гатова.";
-"screen_waitlist_title_success" = "Вы зарэгістраваны.";
 "screen_welcome_bullet_1" = "Званкі, апытанні, пошук і многае іншае будзе дададзена пазней у гэтым годзе.";
 "screen_welcome_bullet_2" = "Гісторыя паведамленняў для зашыфраваных пакояў пакуль недаступна.";
 "screen_welcome_bullet_3" = "Мы будзем рады пачуць вашае меркаванне, паведаміце нам аб гэтым праз старонку налад.";
@@ -983,4 +994,3 @@
 "screen_signout_confirmation_dialog_submit" = "Выйсці";
 "screen_signout_confirmation_dialog_title" = "Выйсці";
 "screen_signout_preference_item" = "Выйсці";
-"screen_waitlist_message_success" = "Вітаем у %1$@!";

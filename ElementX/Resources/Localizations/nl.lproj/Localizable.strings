@@ -27,6 +27,7 @@
 "action_back" = "Terug";
 "action_call" = "Call";
 "action_cancel" = "Annuleren";
+"action_cancel_for_now" = "Cancel for now";
 "action_choose_photo" = "Kies foto";
 "action_clear" = "Wissen";
 "action_close" = "Sluiten";
@@ -106,6 +107,10 @@
 "action_view_source" = "Bron weergeven";
 "action_yes" = "Ja";
 "action.load_more" = "Meer laden";
+"banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
+"banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.";
+"banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
 "banner.set_up_recovery.content" = "Generate a new recovery key that can be used to restore your encrypted message history in case you lose access to your devices.";
 "banner.set_up_recovery.title" = "Set up recovery";
 "common_about" = "Over";
@@ -250,6 +255,7 @@
 "emoji_picker_category_people" = "Smileys & Mensen";
 "emoji_picker_category_places" = "Reizen & Locaties";
 "emoji_picker_category_symbols" = "Symbolen";
+"error_account_creation_not_possible" = "Your homeserver needs to be upgraded to support Matrix Authentication Server and account creation.";
 "error_failed_creating_the_permalink" = "Het aanmaken van de permanente link is mislukt";
 "error_failed_loading_map" = "%1$@ kon de kaart niet laden. Probeer het later opnieuw.";
 "error_failed_loading_messages" = "Het laden van berichten is mislukt";
@@ -325,12 +331,20 @@
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_pinned_timeline_screen_title_empty" = "Pinned messages";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
+"screen_resolve_send_failure_changed_identity_primary_button_title" = "Withdraw verification and send";
+"screen_resolve_send_failure_changed_identity_subtitle" = "You can withdraw your verification and send this message anyway, or you can cancel for now and try again later after reverifying %1$@.";
+"screen_resolve_send_failure_changed_identity_title" = "Your message was not sent because %1$@’s verified identity has changed";
+"screen_resolve_send_failure_unsigned_device_primary_button_title" = "Send message anyway";
+"screen_resolve_send_failure_unsigned_device_subtitle" = "%1$@ is using one or more unverified devices. You can send the message anyway, or you can cancel for now and try again later after %2$@ has verified all their devices.";
+"screen_resolve_send_failure_unsigned_device_title" = "Your message was not sent because %1$@ has not verified one or more devices";
 "screen_room_mentions_at_room_subtitle" = "Stuur een melding naar de hele kamer";
 "screen_room_pinned_banner_indicator" = "%1$@ of %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Pinned messages";
 "screen_room_pinned_banner_loading_description" = "Loading message…";
 "screen_room_pinned_banner_view_all_button_title" = "View All";
 "screen_room_details_pinned_events_row_title" = "Pinned messages";
+"screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
+"screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified one or more devices.";
 "screen_account_provider_change" = "Wijzig accountprovider";
 "screen_account_provider_form_hint" = "Homeserver-adres";
 "screen_account_provider_form_notice" = "Voer een zoekterm of een domeinnaam in.";
@@ -413,6 +427,7 @@
 "screen_chat_backup_recovery_action_confirm_description" = "Je chatback-up is momenteel niet gesynchroniseerd.";
 "screen_chat_backup_recovery_action_setup" = "Herstelmogelijkheid instellen";
 "screen_chat_backup_recovery_action_setup_description" = "Krijg toegang tot je versleutelde berichten als je al je apparaten kwijtraakt of overal uit %1$@ bent uitgelogd.";
+"screen_create_account_title" = "Create account";
 "screen_create_new_recovery_key_list_item_1" = "Open %1$@ in a desktop device";
 "screen_create_new_recovery_key_list_item_2" = "Sign into your account again";
 "screen_create_new_recovery_key_list_item_3" = "When asked to verify your device, select %1$@";
@@ -579,7 +594,6 @@
 "screen_recovery_key_confirm_error_content" = "Probeer het opnieuw om toegang tot je chatback-up te bevestigen.";
 "screen_recovery_key_confirm_error_title" = "Onjuiste herstelsleutel";
 "screen_recovery_key_confirm_key_description" = "Als je een beveiligingssleutel of beveiligingszin hebt, werkt dit ook.";
-"screen_recovery_key_confirm_key_label" = "Recovery key or passcode";
 "screen_recovery_key_confirm_key_placeholder" = "Voer in...";
 "screen_recovery_key_confirm_lost_recovery_key" = "Lost your recovery key?";
 "screen_recovery_key_confirm_success" = "Herstelsleutel bevestigd";
@@ -806,9 +820,6 @@
 "screen_signout_save_recovery_key_title" = "Heb je je herstelsleutel opgeslagen?";
 "screen_start_chat_error_starting_chat" = "Er is een fout opgetreden bij het starten van een chat";
 "screen_view_location_title" = "Locatie";
-"screen_waitlist_message" = "Er is momenteel veel vraag naar %1$@ op %2$@. Kom over een paar dagen terug naar de app en probeer het opnieuw.\n\nBedankt voor je geduld!";
-"screen_waitlist_title" = "Je bent er bijna.";
-"screen_waitlist_title_success" = "Je bent binnen.";
 "screen_welcome_bullet_1" = "Oproepen, peilingen, zoekopdrachten en meer zullen later dit jaar worden toegevoegd.";
 "screen_welcome_bullet_2" = "Berichtgeschiedenis voor versleutelde kamers is nog niet beschikbaar.";
 "screen_welcome_bullet_3" = "We horen graag van je, laat ons weten wat je ervan vindt via de instellingenpagina.";
@@ -983,4 +994,3 @@
 "screen_signout_confirmation_dialog_submit" = "Uitloggen";
 "screen_signout_confirmation_dialog_title" = "Uitloggen";
 "screen_signout_preference_item" = "Uitloggen";
-"screen_waitlist_message_success" = "Welkom bij %1$@!";

@@ -27,6 +27,7 @@
 "action_back" = "返回";
 "action_call" = "呼叫";
 "action_cancel" = "取消";
+"action_cancel_for_now" = "Cancel for now";
 "action_choose_photo" = "选择照片";
 "action_clear" = "清除";
 "action_close" = "关闭";
@@ -106,6 +107,10 @@
 "action_view_source" = "查看源码";
 "action_yes" = "是";
 "action.load_more" = "载入更多";
+"banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
+"banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.";
+"banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
 "banner.set_up_recovery.content" = "Generate a new recovery key that can be used to restore your encrypted message history in case you lose access to your devices.";
 "banner.set_up_recovery.title" = "Set up recovery";
 "common_about" = "关于";
@@ -250,6 +255,7 @@
 "emoji_picker_category_people" = "表情和人物";
 "emoji_picker_category_places" = "旅行和地点";
 "emoji_picker_category_symbols" = "符号";
+"error_account_creation_not_possible" = "Your homeserver needs to be upgraded to support Matrix Authentication Server and account creation.";
 "error_failed_creating_the_permalink" = "创建固定链接失败";
 "error_failed_loading_map" = "%1$@ 无法加载地图，请稍后再试。";
 "error_failed_loading_messages" = "加载消息失败";
@@ -325,12 +331,20 @@
 "screen_pinned_timeline_empty_state_headline" = "固定重要消息，以便轻松发现它们";
 "screen_pinned_timeline_screen_title_empty" = "置顶消息";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
+"screen_resolve_send_failure_changed_identity_primary_button_title" = "Withdraw verification and send";
+"screen_resolve_send_failure_changed_identity_subtitle" = "You can withdraw your verification and send this message anyway, or you can cancel for now and try again later after reverifying %1$@.";
+"screen_resolve_send_failure_changed_identity_title" = "Your message was not sent because %1$@’s verified identity has changed";
+"screen_resolve_send_failure_unsigned_device_primary_button_title" = "Send message anyway";
+"screen_resolve_send_failure_unsigned_device_subtitle" = "%1$@ is using one or more unverified devices. You can send the message anyway, or you can cancel for now and try again later after %2$@ has verified all their devices.";
+"screen_resolve_send_failure_unsigned_device_title" = "Your message was not sent because %1$@ has not verified one or more devices";
 "screen_room_mentions_at_room_subtitle" = "通知整个房间";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";
 "screen_room_pinned_banner_indicator_description" = "置顶消息 %1$@";
 "screen_room_pinned_banner_loading_description" = "正在加载消息...";
 "screen_room_pinned_banner_view_all_button_title" = "查看全部";
 "screen_room_details_pinned_events_row_title" = "置顶消息";
+"screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
+"screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified one or more devices.";
 "screen_account_provider_change" = "更改账户提供者";
 "screen_account_provider_form_hint" = "服务器地址";
 "screen_account_provider_form_notice" = "输入搜索词或域名地址。";
@@ -413,6 +427,7 @@
 "screen_chat_backup_recovery_action_confirm_description" = "您的聊天备份当前不同步。";
 "screen_chat_backup_recovery_action_setup" = "设置恢复密钥";
 "screen_chat_backup_recovery_action_setup_description" = "在丢失或从 %1$@ 登出所有设备的情况下访问加密消息。";
+"screen_create_account_title" = "Create account";
 "screen_create_new_recovery_key_list_item_1" = "在桌面设备中打开 %1$@";
 "screen_create_new_recovery_key_list_item_2" = "再次登录您的账户";
 "screen_create_new_recovery_key_list_item_3" = "当要求验证您的设备时，选择 %1$@";
@@ -579,7 +594,6 @@
 "screen_recovery_key_confirm_error_content" = "请重试以访问您的聊天备份。";
 "screen_recovery_key_confirm_error_title" = "恢复密钥不正确";
 "screen_recovery_key_confirm_key_description" = "如果您有安全密钥或安全短语，也可以用。";
-"screen_recovery_key_confirm_key_label" = "恢复密钥或密码";
 "screen_recovery_key_confirm_key_placeholder" = "输入……";
 "screen_recovery_key_confirm_lost_recovery_key" = "丢失了恢复密钥？";
 "screen_recovery_key_confirm_success" = "恢复密钥已确认";
@@ -806,9 +820,6 @@
 "screen_signout_save_recovery_key_title" = "您保存了恢复密钥吗？";
 "screen_start_chat_error_starting_chat" = "在开始聊天时发生了错误";
 "screen_view_location_title" = "位置";
-"screen_waitlist_message" = "目前 %1$@ 上 %2$@ 的负载很大。过几天再回来试试吧。\n\n感谢您的耐心！";
-"screen_waitlist_title" = "马上就好。";
-"screen_waitlist_title_success" = "您已加入。";
 "screen_welcome_bullet_1" = "今年晚些时候将增加通话、投票、搜索等功能。";
 "screen_welcome_bullet_2" = "加密房间的消息历史记录尚不可用。";
 "screen_welcome_bullet_3" = "我们很乐意听取您的意见，请通过设置页面告诉我们您的想法。";
@@ -983,4 +994,3 @@
 "screen_signout_confirmation_dialog_submit" = "登出";
 "screen_signout_confirmation_dialog_title" = "登出";
 "screen_signout_preference_item" = "登出";
-"screen_waitlist_message_success" = "欢迎使用 %1$@";

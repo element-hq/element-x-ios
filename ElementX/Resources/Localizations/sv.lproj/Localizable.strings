@@ -27,6 +27,7 @@
 "action_back" = "Tillbaka";
 "action_call" = "Ring";
 "action_cancel" = "Avbryt";
+"action_cancel_for_now" = "Cancel for now";
 "action_choose_photo" = "Välj bild";
 "action_clear" = "Rensa";
 "action_close" = "Stäng";
@@ -106,6 +107,10 @@
 "action_view_source" = "Visa källkod";
 "action_yes" = "Ja";
 "action.load_more" = "Ladda mer";
+"banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
+"banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.";
+"banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
 "banner.set_up_recovery.content" = "Skapa en ny återställningsnyckel som kan användas för att återställa din krypterade meddelandehistorik om du förlorar åtkomst till dina enheter.";
 "banner.set_up_recovery.title" = "Ställ in återställning";
 "common_about" = "Om";
@@ -250,6 +255,7 @@
 "emoji_picker_category_people" = "Smileys & personer";
 "emoji_picker_category_places" = "Resor & platser";
 "emoji_picker_category_symbols" = "Symboler";
+"error_account_creation_not_possible" = "Your homeserver needs to be upgraded to support Matrix Authentication Server and account creation.";
 "error_failed_creating_the_permalink" = "Misslyckades att skapa permalänken";
 "error_failed_loading_map" = "%1$@ kunde inte ladda kartan. Vänligen försök igen senare.";
 "error_failed_loading_messages" = "Misslyckades att ladda meddelanden";
@@ -325,12 +331,20 @@
 "screen_pinned_timeline_empty_state_headline" = "Fäst viktiga meddelanden så att de lätt kan upptäckas";
 "screen_pinned_timeline_screen_title_empty" = "Fästa meddelanden";
 "screen_reset_encryption_password_error" = "Ett okänt fel inträffade. Kontrollera att ditt kontolösenord är korrekt och försök igen.";
+"screen_resolve_send_failure_changed_identity_primary_button_title" = "Withdraw verification and send";
+"screen_resolve_send_failure_changed_identity_subtitle" = "You can withdraw your verification and send this message anyway, or you can cancel for now and try again later after reverifying %1$@.";
+"screen_resolve_send_failure_changed_identity_title" = "Your message was not sent because %1$@’s verified identity has changed";
+"screen_resolve_send_failure_unsigned_device_primary_button_title" = "Send message anyway";
+"screen_resolve_send_failure_unsigned_device_subtitle" = "%1$@ is using one or more unverified devices. You can send the message anyway, or you can cancel for now and try again later after %2$@ has verified all their devices.";
+"screen_resolve_send_failure_unsigned_device_title" = "Your message was not sent because %1$@ has not verified one or more devices";
 "screen_room_mentions_at_room_subtitle" = "Meddela hela rummet";
 "screen_room_pinned_banner_indicator" = "%1$@ av %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Fästa meddelanden";
 "screen_room_pinned_banner_loading_description" = "Laddar meddelande …";
 "screen_room_pinned_banner_view_all_button_title" = "Visa alla";
 "screen_room_details_pinned_events_row_title" = "Fästa meddelanden";
+"screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
+"screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified one or more devices.";
 "screen_account_provider_change" = "Byt kontoleverantör";
 "screen_account_provider_form_hint" = "Hemserveradress";
 "screen_account_provider_form_notice" = "Ange ett sökord eller en domänadress.";
@@ -413,6 +427,7 @@
 "screen_chat_backup_recovery_action_confirm_description" = "Din chattsäkerhetskopia är för närvarande osynkroniserad.";
 "screen_chat_backup_recovery_action_setup" = "Ställ in återställning";
 "screen_chat_backup_recovery_action_setup_description" = "Få tillgång till dina krypterade meddelanden om du tappar bort alla dina enheter eller blir utloggad ur %1$@ överallt.";
+"screen_create_account_title" = "Create account";
 "screen_create_new_recovery_key_list_item_1" = "Öppna %1$@ på en skrivbordsenhet";
 "screen_create_new_recovery_key_list_item_2" = "Logga in på ditt konto igen";
 "screen_create_new_recovery_key_list_item_3" = "När du ombeds att verifiera din enhet, välj %1$@";
@@ -579,7 +594,6 @@
 "screen_recovery_key_confirm_error_content" = "Vänligen pröva igen för att bekräfta åtkomsten till din chattsäkerhetskopia.";
 "screen_recovery_key_confirm_error_title" = "Felaktig återställningsnyckel";
 "screen_recovery_key_confirm_key_description" = "Om du har en säkerhetsnyckel eller säkerhetsfras så funkar den också.";
-"screen_recovery_key_confirm_key_label" = "Återställningsnyckel eller lösenkod";
 "screen_recovery_key_confirm_key_placeholder" = "Ange …";
 "screen_recovery_key_confirm_lost_recovery_key" = "Blivit av med din återställningsnyckel?";
 "screen_recovery_key_confirm_success" = "Återställningsnyckel bekräftad";
@@ -806,9 +820,6 @@
 "screen_signout_save_recovery_key_title" = "Har du sparat din återställningsnyckel?";
 "screen_start_chat_error_starting_chat" = "Ett fel uppstod när du försökte starta en chatt";
 "screen_view_location_title" = "Plats";
-"screen_waitlist_message" = "Det finns en stor efterfrågan på %1$@ på %2$@ just nu. Kom tillbaka till appen om några dagar och försök igen.\n\nTack för ditt tålamod!";
-"screen_waitlist_title" = "Du är nästan framme.";
-"screen_waitlist_title_success" = "Du är inne.";
 "screen_welcome_bullet_1" = "Samtal, omröstningar, sökning och mer kommer att läggas till senare i år.";
 "screen_welcome_bullet_2" = "Meddelandehistorik för krypterade rum är inte tillgänglig än.";
 "screen_welcome_bullet_3" = "Vi vill gärna höra från dig, låt oss veta vad du tycker via inställningssidan.";
@@ -983,4 +994,3 @@
 "screen_signout_confirmation_dialog_submit" = "Logga ut";
 "screen_signout_confirmation_dialog_title" = "Logga ut";
 "screen_signout_preference_item" = "Logga ut";
-"screen_waitlist_message_success" = "Välkommen till %1$@!";

@@ -27,6 +27,7 @@
 "action_back" = "Zurück";
 "action_call" = "Anruf";
 "action_cancel" = "Abbrechen";
+"action_cancel_for_now" = "Cancel for now";
 "action_choose_photo" = "Foto auswählen";
 "action_clear" = "Löschen";
 "action_close" = "Schließen";
@@ -106,6 +107,10 @@
 "action_view_source" = "Quellcode anzeigen";
 "action_yes" = "Ja";
 "action.load_more" = "Mehr laden ...";
+"banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
+"banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.";
+"banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
 "banner.set_up_recovery.content" = "Generate a new recovery key that can be used to restore your encrypted message history in case you lose access to your devices.";
 "banner.set_up_recovery.title" = "Set up recovery";
 "common_about" = "Über";
@@ -250,6 +255,7 @@
 "emoji_picker_category_people" = "Smileys & Menschen";
 "emoji_picker_category_places" = "Reisen & Orte";
 "emoji_picker_category_symbols" = "Symbole";
+"error_account_creation_not_possible" = "Your homeserver needs to be upgraded to support Matrix Authentication Server and account creation.";
 "error_failed_creating_the_permalink" = "Fehler beim Erstellen des Permalinks";
 "error_failed_loading_map" = "%1$@ konnte die Karte nicht laden. Bitte versuche es später erneut.";
 "error_failed_loading_messages" = "Fehler beim Laden der Nachrichten";
@@ -325,12 +331,20 @@
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_pinned_timeline_screen_title_empty" = "Pinned messages";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
+"screen_resolve_send_failure_changed_identity_primary_button_title" = "Withdraw verification and send";
+"screen_resolve_send_failure_changed_identity_subtitle" = "You can withdraw your verification and send this message anyway, or you can cancel for now and try again later after reverifying %1$@.";
+"screen_resolve_send_failure_changed_identity_title" = "Your message was not sent because %1$@’s verified identity has changed";
+"screen_resolve_send_failure_unsigned_device_primary_button_title" = "Send message anyway";
+"screen_resolve_send_failure_unsigned_device_subtitle" = "%1$@ is using one or more unverified devices. You can send the message anyway, or you can cancel for now and try again later after %2$@ has verified all their devices.";
+"screen_resolve_send_failure_unsigned_device_title" = "Your message was not sent because %1$@ has not verified one or more devices";
 "screen_room_mentions_at_room_subtitle" = "Alle Mitglieder benachrichtigen";
 "screen_room_pinned_banner_indicator" = "%1$@ von %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Angepinnte Nachrichten";
 "screen_room_pinned_banner_loading_description" = "Loading message…";
 "screen_room_pinned_banner_view_all_button_title" = "Alle anzeigen";
 "screen_room_details_pinned_events_row_title" = "Pinned messages";
+"screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
+"screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified one or more devices.";
 "screen_account_provider_change" = "Kontoanbieter ändern";
 "screen_account_provider_form_hint" = "Homeserver-Adresse";
 "screen_account_provider_form_notice" = "Gib einen Suchbegriff oder eine Domainadresse ein.";
@@ -413,6 +427,7 @@
 "screen_chat_backup_recovery_action_confirm_description" = "Dein Chat-Backup ist derzeit nicht synchronisiert.";
 "screen_chat_backup_recovery_action_setup" = "Wiederherstellung einrichten";
 "screen_chat_backup_recovery_action_setup_description" = "Erhalte Zugriff auf deine verschlüsselten Nachrichten, wenn du alle deine Geräte verlierst oder von %1$@ überall abgemeldet bist.";
+"screen_create_account_title" = "Create account";
 "screen_create_new_recovery_key_list_item_1" = "Öffne <b>%1$@</b> auf einem <b>Desktop-Gerät</b>";
 "screen_create_new_recovery_key_list_item_2" = "Melde dich erneut bei deinem Konto an";
 "screen_create_new_recovery_key_list_item_3" = "Wenn du aufgefordert wirst dein Gerät zu verifizieren, wähle \"%1$@\".";
@@ -579,7 +594,6 @@
 "screen_recovery_key_confirm_error_content" = "Bitte versuche es noch einmal, um den Zugriff auf dein Chat-Backup zu bestätigen.";
 "screen_recovery_key_confirm_error_title" = "Falscher Wiederherstellungsschlüssel";
 "screen_recovery_key_confirm_key_description" = "Dies funktioniert auch mit einem Sicherheitsschlüssel oder Sicherheitsphrase.";
-"screen_recovery_key_confirm_key_label" = "<b>Wiederherstellungsschlüssel</b> oder Passcode";
 "screen_recovery_key_confirm_key_placeholder" = "Eingeben...";
 "screen_recovery_key_confirm_lost_recovery_key" = "Hast du deinen Wiederherstellungschlüssel vergessen?";
 "screen_recovery_key_confirm_success" = "Wiederherstellungsschlüssel bestätigt";
@@ -806,9 +820,6 @@
 "screen_signout_save_recovery_key_title" = "Hast du deinen Wiederherstellungsschlüssel gespeichert?";
 "screen_start_chat_error_starting_chat" = "Beim Versuch, einen Chat zu starten, ist ein Fehler aufgetreten";
 "screen_view_location_title" = "Standort";
-"screen_waitlist_message" = "Derzeit besteht eine hohe Nachfrage nach %1$@ auf %2$@. Kehre in ein paar Tagen zur App zurück und versuche es erneut.\n\nDanke für deine Geduld!";
-"screen_waitlist_title" = "Du bist fast am Ziel.";
-"screen_waitlist_title_success" = "Du bist dabei.";
 "screen_welcome_bullet_1" = "Anrufe, Umfragen, Suchfunktionen und mehr werden im Laufe des Jahres hinzugefügt.";
 "screen_welcome_bullet_2" = "Der Nachrichtenverlauf für verschlüsselte Räume wird in diesem Update nicht verfügbar sein.";
 "screen_welcome_bullet_3" = "Wir würden uns freuen, von dir zu hören. Teile uns deine Meinung über die Einstellungsseite mit.";
@@ -983,4 +994,3 @@
 "screen_signout_confirmation_dialog_submit" = "Abmelden";
 "screen_signout_confirmation_dialog_title" = "Abmelden";
 "screen_signout_preference_item" = "Abmelden";
-"screen_waitlist_message_success" = "Willkommen bei %1$@!";

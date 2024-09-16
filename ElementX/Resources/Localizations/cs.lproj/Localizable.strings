@@ -27,6 +27,7 @@
 "action_back" = "Zpět";
 "action_call" = "Hovor";
 "action_cancel" = "Zrušit";
+"action_cancel_for_now" = "Prozatím zrušit";
 "action_choose_photo" = "Vybrat fotku";
 "action_clear" = "Vymazat";
 "action_close" = "Zavřít";
@@ -106,6 +107,10 @@
 "action_view_source" = "Zobrazit zdroj";
 "action_yes" = "Ano";
 "action.load_more" = "Načíst více";
+"banner_migrate_to_native_sliding_sync_action" = "Odhlásit se a upgradovat";
+"banner_migrate_to_native_sliding_sync_description" = "Váš server nyní podporuje nový, rychlejší protokol. Chcete-li upgradovat, odhlaste se a znovu se přihlaste. Pokud to uděláte nyní, pomůže vám vyhnout se nucenému odhlášení, když bude starý protokol později odstraněn.";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "Váš domovský server již nepodporuje starý protokol. Chcete-li pokračovat v používání aplikace, odhlaste se a znovu se přihlaste.";
+"banner_migrate_to_native_sliding_sync_title" = "Upgrade k dispozici";
 "banner.set_up_recovery.content" = "Vygenerujte nový klíč pro obnovení, který lze použít k obnovení historie šifrovaných zpráv v případě, že ztratíte přístup ke svým zařízením.";
 "banner.set_up_recovery.title" = "Nastavení obnovy";
 "common_about" = "O aplikaci";
@@ -250,6 +255,7 @@
 "emoji_picker_category_people" = "Smajlíci a lidé";
 "emoji_picker_category_places" = "Cestování a místa";
 "emoji_picker_category_symbols" = "Symboly";
+"error_account_creation_not_possible" = "Your homeserver needs to be upgraded to support Matrix Authentication Server and account creation.";
 "error_failed_creating_the_permalink" = "Vytvoření trvalého odkazu se nezdařilo";
 "error_failed_loading_map" = "%1$@ nemohl načíst mapu. Zkuste to prosím později.";
 "error_failed_loading_messages" = "Načítání zpráv se nezdařilo";
@@ -325,12 +331,20 @@
 "screen_pinned_timeline_empty_state_headline" = "Připněte důležité zprávy, aby je bylo možné snadno najít";
 "screen_pinned_timeline_screen_title_empty" = "Připnuté zprávy";
 "screen_reset_encryption_password_error" = "Došlo k neznámé chybě. Zkontrolujte, zda je heslo k účtu správné a zkuste to znovu.";
+"screen_resolve_send_failure_changed_identity_primary_button_title" = "Zrušit ověření a odeslat";
+"screen_resolve_send_failure_changed_identity_subtitle" = "Ověření můžete zrušit a přesto odeslat tuto zprávu, nebo můžete prozatím zrušit a zkusit to znovu později po opětovném ověření %1$@.";
+"screen_resolve_send_failure_changed_identity_title" = "Vaše zpráva nebyla odeslána, protože ověřená identita uživatele %1$@ se změnila";
+"screen_resolve_send_failure_unsigned_device_primary_button_title" = "Přesto odeslat zprávu";
+"screen_resolve_send_failure_unsigned_device_subtitle" = "%1$@ používá jedno nebo více neověřených zařízení. Zprávu můžete přesto odeslat, nebo můžete prozatím zrušit a zkusit to znovu později poté, co %2$@ ověří všechna svá zařízení.";
+"screen_resolve_send_failure_unsigned_device_title" = "Vaše zpráva nebyla odeslána, protože%1$@ neověřil jedno nebo více zařízení";
 "screen_room_mentions_at_room_subtitle" = "Informujte celou místnost";
 "screen_room_pinned_banner_indicator" = "%1$@ z %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Připnuté zprávy";
 "screen_room_pinned_banner_loading_description" = "Načítání zprávy...";
 "screen_room_pinned_banner_view_all_button_title" = "Zobrazit vše";
 "screen_room_details_pinned_events_row_title" = "Připnuté zprávy";
+"screen_timeline_item_menu_send_failure_changed_identity" = "Zpráva nebyla odeslána, protože ověřená identita uživatele %1$@ se změnila.";
+"screen_timeline_item_menu_send_failure_unsigned_device" = "Zpráva nebyla odeslána, protože%1$@ neověřil jedno nebo více zařízení.";
 "screen_account_provider_change" = "Změna poskytovatele účtu";
 "screen_account_provider_form_hint" = "Adresa domovského serveru";
 "screen_account_provider_form_notice" = "Zadejte hledaný výraz nebo adresu domény.";
@@ -413,6 +427,7 @@
 "screen_chat_backup_recovery_action_confirm_description" = "Vaše záloha chatu není aktuálně synchronizována.";
 "screen_chat_backup_recovery_action_setup" = "Nastavení obnovy";
 "screen_chat_backup_recovery_action_setup_description" = "Získejte přístup ke svým zašifrovaným zprávám, pokud ztratíte všechna zařízení nebo jste všude odhlášeni z %1$@.";
+"screen_create_account_title" = "Create account";
 "screen_create_new_recovery_key_list_item_1" = "Otevřít %1$@ na stolním počítači";
 "screen_create_new_recovery_key_list_item_2" = "Znovu se přihlaste ke svému účtu";
 "screen_create_new_recovery_key_list_item_3" = "Když budete vyzváni k ověření vašeho zařízení, vyberte %1$@";
@@ -579,7 +594,6 @@
 "screen_recovery_key_confirm_error_content" = "Zkuste prosím znovu potvrdit přístup k záloze chatu.";
 "screen_recovery_key_confirm_error_title" = "Nesprávný klíč pro obnovení";
 "screen_recovery_key_confirm_key_description" = "Pokud máte bezpečnostní klíč nebo bezpečnostní frázi, bude to fungovat také.";
-"screen_recovery_key_confirm_key_label" = "Klíč pro obnovení nebo přístupový kód";
 "screen_recovery_key_confirm_key_placeholder" = "Zadejte...";
 "screen_recovery_key_confirm_lost_recovery_key" = "Ztratili jste klíč pro obnovení?";
 "screen_recovery_key_confirm_success" = "Klíč pro obnovení potvrzen";
@@ -806,9 +820,6 @@
 "screen_signout_save_recovery_key_title" = "Uložili jste si klíč pro obnovení?";
 "screen_start_chat_error_starting_chat" = "Při pokusu o zahájení chatu došlo k chybě";
 "screen_view_location_title" = "Poloha";
-"screen_waitlist_message" = "Na %2$@ je momentálně vysoká poptávka po %1$@. Vraťte se do aplikace za pár dní a zkuste to znovu.\n\nDíky za trpělivost!";
-"screen_waitlist_title" = "Jste v pořadníku!";
-"screen_waitlist_title_success" = "Jdete do toho!";
 "screen_welcome_bullet_1" = "Hovory, hlasování, vyhledávání a další budou přidány koncem tohoto roku.";
 "screen_welcome_bullet_2" = "Historie zpráv šifrovaných místností nebude v této aktualizaci k dispozici.";
 "screen_welcome_bullet_3" = "Rádi bychom se od vás dozvěděli, co si o tom myslíte, dejte nám vědět prostřednictvím stránky s nastavením.";
@@ -983,4 +994,3 @@
 "screen_signout_confirmation_dialog_submit" = "Odhlásit se";
 "screen_signout_confirmation_dialog_title" = "Odhlásit se";
 "screen_signout_preference_item" = "Odhlásit se";
-"screen_waitlist_message_success" = "Vítá vás %1$@!";

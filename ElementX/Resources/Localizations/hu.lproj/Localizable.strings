@@ -27,6 +27,7 @@
 "action_back" = "Vissza";
 "action_call" = "Hívás";
 "action_cancel" = "Mégse";
+"action_cancel_for_now" = "Cancel for now";
 "action_choose_photo" = "Fénykép kiválasztása";
 "action_clear" = "Törlés";
 "action_close" = "Bezárás";
@@ -106,6 +107,10 @@
 "action_view_source" = "Forrás megtekintése";
 "action_yes" = "Igen";
 "action.load_more" = "Továbbiak betöltése";
+"banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
+"banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
+"banner_migrate_to_native_sliding_sync_force_logout_title" = "Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.";
+"banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
 "banner.set_up_recovery.content" = "Hozzon létre egy új helyreállítási kulcsot, amellyel visszaállíthatja a titkosított üzenetek előzményeit, ha elveszíti az eszközökhöz való hozzáférést.";
 "banner.set_up_recovery.title" = "Helyreállítás beállítása";
 "common_about" = "Névjegy";
@@ -250,6 +255,7 @@
 "emoji_picker_category_people" = "Mosolyok és emberek";
 "emoji_picker_category_places" = "Utazás és helyek";
 "emoji_picker_category_symbols" = "Szimbólumok";
+"error_account_creation_not_possible" = "Your homeserver needs to be upgraded to support Matrix Authentication Server and account creation.";
 "error_failed_creating_the_permalink" = "Nem sikerült létrehozni az állandó hivatkozást";
 "error_failed_loading_map" = "Az %1$@ nem tudta betölteni a térképet. Próbálja meg újra később.";
 "error_failed_loading_messages" = "Nem sikerült betölteni az üzeneteket";
@@ -325,12 +331,20 @@
 "screen_pinned_timeline_empty_state_headline" = "Tűzze ki a fontos üzeneteket, hogy könnyen felfedezhetők legyenek";
 "screen_pinned_timeline_screen_title_empty" = "Kitűzött üzenetek";
 "screen_reset_encryption_password_error" = "Ismeretlen hiba történt. Ellenőrizze, hogy a fiókja jelszava helyes-e, és próbálja meg újra.";
+"screen_resolve_send_failure_changed_identity_primary_button_title" = "Withdraw verification and send";
+"screen_resolve_send_failure_changed_identity_subtitle" = "You can withdraw your verification and send this message anyway, or you can cancel for now and try again later after reverifying %1$@.";
+"screen_resolve_send_failure_changed_identity_title" = "Your message was not sent because %1$@’s verified identity has changed";
+"screen_resolve_send_failure_unsigned_device_primary_button_title" = "Send message anyway";
+"screen_resolve_send_failure_unsigned_device_subtitle" = "%1$@ is using one or more unverified devices. You can send the message anyway, or you can cancel for now and try again later after %2$@ has verified all their devices.";
+"screen_resolve_send_failure_unsigned_device_title" = "Your message was not sent because %1$@ has not verified one or more devices";
 "screen_room_mentions_at_room_subtitle" = "Az egész szoba értesítése";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ kitűzött üzenet";
 "screen_room_pinned_banner_loading_description" = "Üzenet betöltése…";
 "screen_room_pinned_banner_view_all_button_title" = "Összes megtekintése";
 "screen_room_details_pinned_events_row_title" = "Kitűzött üzenetek";
+"screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
+"screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified one or more devices.";
 "screen_account_provider_change" = "Fiókszolgáltató módosítása";
 "screen_account_provider_form_hint" = "Matrix-kiszolgáló webcíme";
 "screen_account_provider_form_notice" = "Adjon meg egy keresési kifejezést vagy egy tartománycímet.";
@@ -413,6 +427,7 @@
 "screen_chat_backup_recovery_action_confirm_description" = "A csevegéselőzményei nincsenek szinkronban.";
 "screen_chat_backup_recovery_action_setup" = "Helyreállítás beállítása";
 "screen_chat_backup_recovery_action_setup_description" = "Szerezzen hozzáférést a titkosított üzeneteihez, ha elvesztette az összes eszközét, vagy ha mindenütt kijelentkezett az %1$@ből.";
+"screen_create_account_title" = "Create account";
 "screen_create_new_recovery_key_list_item_1" = "Nyissa meg az %1$@et egy asztali eszközön";
 "screen_create_new_recovery_key_list_item_2" = "Jelentkezzen be újra a fiókjába";
 "screen_create_new_recovery_key_list_item_3" = "Amikor az eszköz ellenőrzését kéri, válassza ezt a lehetőséget: %1$@";
@@ -579,7 +594,6 @@
 "screen_recovery_key_confirm_error_content" = "Próbálja meg újra megerősíteni a csevegés biztonsági mentéséhez való hozzáférését.";
 "screen_recovery_key_confirm_error_title" = "Helytelen helyreállítási kulcs";
 "screen_recovery_key_confirm_key_description" = "Ha van biztonsági kulcsa vagy biztonsági jelmondata, akkor ez is fog működni.";
-"screen_recovery_key_confirm_key_label" = "Helyreállítási kulcs vagy jelkód";
 "screen_recovery_key_confirm_key_placeholder" = "Megadás…";
 "screen_recovery_key_confirm_lost_recovery_key" = "Elvesztette a helyreállítási kulcsát?";
 "screen_recovery_key_confirm_success" = "Helyreállítási kulcs megerősítve";
@@ -806,9 +820,6 @@
 "screen_signout_save_recovery_key_title" = "Mentette a helyreállítási kulcsát?";
 "screen_start_chat_error_starting_chat" = "Hiba történt a csevegés indításakor";
 "screen_view_location_title" = "Hely";
-"screen_waitlist_message" = "Jelenleg nagy a kereslet a(z) %2$@ oldalon futó %1$@ iránt. Térjen vissza néhány nap múlva az alkalmazáshoz, és próbálja újra.\n\nKöszönjük a türelmét!";
-"screen_waitlist_title" = "Már majdnem kész van.";
-"screen_waitlist_title_success" = "Bent van.";
 "screen_welcome_bullet_1" = "A hívások, szavazások, keresések és egyebek az év további részében kerülnek hozzáadásra.";
 "screen_welcome_bullet_2" = "A titkosított szobák üzenetelőzményei nem lesznek elérhetők ebben a frissítésben.";
 "screen_welcome_bullet_3" = "Szeretnénk hallani a véleményét, ossza meg velünk a beállítások oldalon.";
@@ -983,4 +994,3 @@
 "screen_signout_confirmation_dialog_submit" = "Kijelentkezés";
 "screen_signout_confirmation_dialog_title" = "Kijelentkezés";
 "screen_signout_preference_item" = "Kijelentkezés";
-"screen_waitlist_message_success" = "Üdvözli az %1$@!";
