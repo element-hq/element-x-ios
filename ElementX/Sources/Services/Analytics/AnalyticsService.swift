@@ -243,4 +243,8 @@ extension AnalyticsService {
     func updateUserProperties(_ userProperties: AnalyticsEvent.UserProperties) {
         client.updateUserProperties(userProperties)
     }
+    
+    func trackPinUnpinEvent(_ event: AnalyticsEvent.PinUnpinAction) {
+        capture(event: event)
+    }
 }

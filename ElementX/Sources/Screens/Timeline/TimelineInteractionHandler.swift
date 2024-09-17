@@ -163,12 +163,17 @@ class TimelineInteractionHandler {
         case .endPoll(let pollStartID):
             endPoll(pollStartID: pollStartID)
         case .pin:
+            analyticsService.trackPinUnpinEvent(.init(from: timelineController.timelineKind == .pinned ? .MessagePinningList : .Timeline,
+                                                      kind: .Pin))
             guard let eventID = itemID.eventID else { return }
             Task { await timelineController.pin(eventID: eventID) }
         case .unpin:
+            analyticsService.trackPinUnpinEvent(.init(from: timelineController.timelineKind == .pinned ? .MessagePinningList : .Timeline,
+                                                      kind: .Unpin))
             guard let eventID = itemID.eventID else { return }
             Task { await timelineController.unpin(eventID: eventID) }
         case .viewInRoomTimeline:
+            analyticsService.trackInteraction(name: .PinnedMessageListViewTimeline)
             guard let eventID = itemID.eventID else { return }
             actionsSubject.send(.viewInRoomTimeline(eventID: eventID))
         }
