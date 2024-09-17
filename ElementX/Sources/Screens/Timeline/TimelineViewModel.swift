@@ -7,6 +7,7 @@
 
 import Algorithms
 import Combine
+import MatrixRustSDK
 import OrderedCollections
 import SwiftUI
 
@@ -561,19 +562,18 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
     }
 
-    private func handleSlashCommands(_ message: String) async -> Bool {
-        let joinSlashCommand = "/join "
-        if message.starts(with: joinSlashCommand) {
-            let alias = message.dropFirst(joinSlashCommand.count)
-            if let url = URL(string: "https://matrix.to/#/" + alias) {
-                if let openURL = context.openURLHandler {
-                    openURL(url)
-                }
-            }
+    private func handleJoinCommand(message: String) -> Bool {
+        let joinCommand = "/join "
+        if message.starts(with: joinCommand),
+           let alias = String(message.dropFirst(joinCommand.count))
+           .components(separatedBy: .whitespacesAndNewlines)
+           .first,
+           let urlString = try? matrixToRoomAliasPermalink(roomAlias: alias),
+           let url = URL(string: urlString) {
+            context.openURLHandler?(url)
             return true
-        } else {
-            return false
         }
+        return false
     }
     
     private func sendCurrentMessage(_ message: String, html: String?, mode: ComposerMode, intentionalMentions: IntentionalMentions) async {
@@ -595,14 +595,12 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                           html: html,
                                           intentionalMentions: intentionalMentions)
         case .default:
-            let hasSlashCommands = await handleSlashCommands(message)
-            if hasSlashCommands {
+            guard !handleJoinCommand(message: message) else {
                 return
-            } else {
-                await timelineController.sendMessage(message,
-                                                     html: html,
-                                                     intentionalMentions: intentionalMentions)
             }
+            await timelineController.sendMessage(message,
+                                                 html: html,
+                                                 intentionalMentions: intentionalMentions)
         case .recordVoiceMessage, .previewVoiceMessage:
             fatalError("invalid composer mode.")
         }
