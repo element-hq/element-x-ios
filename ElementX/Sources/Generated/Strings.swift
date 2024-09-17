@@ -1071,7 +1071,7 @@ internal enum L10n {
   internal static var screenDeactivateAccountListItem3: String { return L10n.tr("Localizable", "screen_deactivate_account_list_item_3") }
   /// Your messages will still be visible to registered users but won’t be available to new or unregistered users if you choose to delete them.
   internal static var screenDeactivateAccountListItem4: String { return L10n.tr("Localizable", "screen_deactivate_account_list_item_4") }
-  /// Account deactivation
+  /// Deactivate account
   internal static var screenDeactivateAccountTitle: String { return L10n.tr("Localizable", "screen_deactivate_account_title") }
   /// Block
   internal static var screenDmDetailsBlockAlertAction: String { return L10n.tr("Localizable", "screen_dm_details_block_alert_action") }

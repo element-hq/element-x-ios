@@ -11,6 +11,7 @@ import XCTest
 
 @MainActor
 class DeactivateAccountScreenViewModelTests: XCTestCase {
+    var clientProxy: ClientProxyMock!
     var viewModel: DeactivateAccountScreenViewModelProtocol!
     
     var context: DeactivateAccountScreenViewModelType.Context {
@@ -18,6 +19,73 @@ class DeactivateAccountScreenViewModelTests: XCTestCase {
     }
     
     override func setUpWithError() throws {
-        viewModel = DeactivateAccountScreenViewModel(clientProxy: ClientProxyMock(.init()), userIndicatorController: UserIndicatorControllerMock())
+        clientProxy = ClientProxyMock(.init())
+        viewModel = DeactivateAccountScreenViewModel(clientProxy: clientProxy, userIndicatorController: UserIndicatorControllerMock())
+    }
+    
+    func testDeactivate() async throws {
+        try await validateDeactivate(erasingData: false)
+    }
+    
+    func testDeactivateAndErase() async throws {
+        try await validateDeactivate(erasingData: true)
+    }
+    
+    func validateDeactivate(erasingData shouldErase: Bool) async throws {
+        let enteredPassword = UUID().uuidString
+        
+        clientProxy.deactivateAccountPasswordEraseDataClosure = { [weak self] password, eraseData in
+            guard let self else { return .failure(.sdkError(ClientProxyMockError.generic)) }
+            
+            if clientProxy.deactivateAccountPasswordEraseDataCallsCount == 1 {
+                if password != nil {
+                    XCTFail("The password shouldn't be sent first time round.")
+                }
+                if eraseData != shouldErase {
+                    XCTFail("The erase parameter is unexpected.")
+                }
+                return .failure(.sdkError(ClientProxyMockError.generic))
+            } else {
+                if password != enteredPassword {
+                    XCTFail("The password should match the user's input on the second call.")
+                }
+                if eraseData != shouldErase {
+                    XCTFail("The erase parameter is unexpected.")
+                }
+                return .success(())
+            }
+        }
+        
+        context.eraseData = shouldErase
+        context.password = enteredPassword
+        
+        XCTAssertNil(context.alertInfo)
+        
+        let deferredState = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
+        context.send(viewAction: .deactivate)
+        try await deferredState.fulfill()
+        
+        guard let confirmationAction = context.alertInfo?.primaryButton.action else {
+            XCTFail("Couldn't find the confirmation action.")
+            return
+        }
+        
+        let deferredAction = deferFulfillment(viewModel.actionsPublisher) { $0 == .accountDeactivated }
+        confirmationAction()
+        try await deferredAction.fulfill()
+        
+        XCTAssertEqual(clientProxy.deactivateAccountPasswordEraseDataCallsCount, 2)
+        XCTAssertEqual(clientProxy.deactivateAccountPasswordEraseDataReceivedArguments?.password, enteredPassword)
+        XCTAssertEqual(clientProxy.deactivateAccountPasswordEraseDataReceivedArguments?.eraseData, shouldErase)
+    }
+    
+    func testCancel() async throws {
+        // When cancelling the view.
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .cancel }
+        context.send(viewAction: .cancel)
+        try await deferred.fulfill()
+        
+        // Then no API call should be made to deactivate the account.
+        XCTAssertFalse(clientProxy.deactivateAccountPasswordEraseDataCalled)
     }
 }

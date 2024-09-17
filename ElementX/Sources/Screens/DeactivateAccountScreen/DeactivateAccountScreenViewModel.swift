@@ -33,13 +33,23 @@ class DeactivateAccountScreenViewModel: DeactivateAccountScreenViewModelType, De
         case .cancel:
             actionsSubject.send(.cancel)
         case .deactivate:
-            Task { await deactivateAccount() }
+            showDeactivationConfirmation()
         }
     }
     
     // MARK: - Private
     
     private let deactivatingIndicatorID = "\(DeactivateAccountScreenViewModel.self)-Deactivating"
+    
+    func showDeactivationConfirmation() {
+        state.bindings.alertInfo = .init(id: .confirmation,
+                                         title: L10n.screenDeactivateAccountTitle,
+                                         message: L10n.screenDeactivateAccountConfirmationDialogContent,
+                                         primaryButton: .init(title: L10n.actionDeactivate, action: {
+                                             Task { await self.deactivateAccount() }
+                                         }),
+                                         secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+    }
 
     func deactivateAccount() async {
         userIndicatorController.submitIndicator(UserIndicator(id: deactivatingIndicatorID,
@@ -65,7 +75,9 @@ class DeactivateAccountScreenViewModel: DeactivateAccountScreenViewModelType, De
             return
         case .failure(let failure):
             MXLog.info("Deactivation failed \(failure).")
-            state.bindings.alertInfo = .init(id: .init(), title: L10n.errorUnknown, message: String(describing: failure))
+            state.bindings.alertInfo = .init(id: .deactivationFailed,
+                                             title: L10n.errorUnknown,
+                                             message: String(describing: failure))
             userIndicatorController.retractIndicatorWithId(deactivatingIndicatorID)
         }
     }

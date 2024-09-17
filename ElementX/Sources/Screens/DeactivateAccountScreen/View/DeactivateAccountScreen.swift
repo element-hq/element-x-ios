@@ -30,6 +30,7 @@ struct DeactivateAccountScreen: View {
         .navigationTitle(L10n.screenDeactivateAccountTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
+        .alert(item: $context.alertInfo)
     }
     
     private var infoSection: some View {

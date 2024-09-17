@@ -40,7 +40,12 @@ struct DeactivateAccountScreenViewState: BindableState {
 struct DeactivateAccountScreenViewStateBindings {
     var password = ""
     var eraseData = false
-    var alertInfo: AlertInfo<UUID>?
+    var alertInfo: AlertInfo<DeactivateAccountScreenAlert>?
+}
+
+enum DeactivateAccountScreenAlert {
+    case confirmation
+    case deactivationFailed
 }
 
 enum DeactivateAccountScreenViewAction {
