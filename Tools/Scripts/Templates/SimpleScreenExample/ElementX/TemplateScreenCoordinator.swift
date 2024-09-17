@@ -42,7 +42,7 @@ final class TemplateScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .done:
-                self.actionsSubject.send(.done)
+                actionsSubject.send(.done)
             }
         }
         .store(in: &cancellables)

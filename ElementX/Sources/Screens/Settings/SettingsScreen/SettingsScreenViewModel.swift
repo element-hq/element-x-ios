@@ -20,6 +20,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
     init(userSession: UserSessionProtocol) {
         super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
                                            userID: userSession.clientProxy.userID,
+                                           showAccountDeactivation: userSession.clientProxy.canDeactivateAccount,
                                            showDeveloperOptions: AppSettings.isDevelopmentBuild),
                    mediaProvider: userSession.mediaProvider)
         
@@ -105,6 +106,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             state.showDeveloperOptions = true
         case .developerOptions:
             actionsSubject.send(.developerOptions)
+        case .deactivateAccount:
+            actionsSubject.send(.deactivateAccount)
         }
     }
 }

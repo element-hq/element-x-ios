@@ -27,6 +27,7 @@ enum SettingsScreenCoordinatorAction {
     case notifications
     case advancedSettings
     case developerOptions
+    case deactivateAccount
 }
 
 final class SettingsScreenCoordinator: CoordinatorProtocol {
@@ -75,6 +76,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.developerOptions)
                 case .logout:
                     actionsSubject.send(.logout)
+                case .deactivateAccount:
+                    actionsSubject.send(.deactivateAccount)
                 }
             }
             .store(in: &cancellables)

@@ -126,6 +126,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentAdvancedSettings()
                 case .developerOptions:
                     presentDeveloperOptions()
+                case .deactivateAccount:
+                    presentDeactivateAccount()
                 }
             }
             .store(in: &cancellables)
@@ -237,6 +239,30 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func presentDeactivateAccount() {
+        let navigationCoordinator = NavigationStackCoordinator()
+        
+        let parameters = DeactivateAccountScreenCoordinatorParameters(clientProxy: parameters.userSession.clientProxy,
+                                                                      userIndicatorController: parameters.userIndicatorController)
+        let coordinator = DeactivateAccountScreenCoordinator(parameters: parameters)
+        
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .cancel:
+                    navigationStackCoordinator.setSheetCoordinator(nil)
+                case .accountDeactivated:
+                    actionsSubject.send(.forceLogout)
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(navigationCoordinator)
     }
 
     // MARK: OIDC Account Management

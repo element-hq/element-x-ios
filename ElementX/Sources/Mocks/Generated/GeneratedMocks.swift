@@ -1947,6 +1947,11 @@ class ClientProxyMock: ClientProxyProtocol {
     }
     var underlyingAvailableSlidingSyncVersions: [SlidingSyncVersion]!
     var availableSlidingSyncVersionsClosure: (() async -> [SlidingSyncVersion])?
+    var canDeactivateAccount: Bool {
+        get { return underlyingCanDeactivateAccount }
+        set(value) { underlyingCanDeactivateAccount = value }
+    }
+    var underlyingCanDeactivateAccount: Bool!
     var userIDServerName: String?
     var userDisplayNamePublisher: CurrentValuePublisher<String?, Never> {
         get { return underlyingUserDisplayNamePublisher }
@@ -3207,6 +3212,76 @@ class ClientProxyMock: ClientProxyProtocol {
             return await sessionVerificationControllerProxyClosure()
         } else {
             return sessionVerificationControllerProxyReturnValue
+        }
+    }
+    //MARK: - deactivateAccount
+
+    var deactivateAccountPasswordEraseDataUnderlyingCallsCount = 0
+    var deactivateAccountPasswordEraseDataCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return deactivateAccountPasswordEraseDataUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = deactivateAccountPasswordEraseDataUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                deactivateAccountPasswordEraseDataUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    deactivateAccountPasswordEraseDataUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var deactivateAccountPasswordEraseDataCalled: Bool {
+        return deactivateAccountPasswordEraseDataCallsCount > 0
+    }
+    var deactivateAccountPasswordEraseDataReceivedArguments: (password: String?, eraseData: Bool)?
+    var deactivateAccountPasswordEraseDataReceivedInvocations: [(password: String?, eraseData: Bool)] = []
+
+    var deactivateAccountPasswordEraseDataUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var deactivateAccountPasswordEraseDataReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return deactivateAccountPasswordEraseDataUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = deactivateAccountPasswordEraseDataUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                deactivateAccountPasswordEraseDataUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    deactivateAccountPasswordEraseDataUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var deactivateAccountPasswordEraseDataClosure: ((String?, Bool) async -> Result<Void, ClientProxyError>)?
+
+    func deactivateAccount(password: String?, eraseData: Bool) async -> Result<Void, ClientProxyError> {
+        deactivateAccountPasswordEraseDataCallsCount += 1
+        deactivateAccountPasswordEraseDataReceivedArguments = (password: password, eraseData: eraseData)
+        DispatchQueue.main.async {
+            self.deactivateAccountPasswordEraseDataReceivedInvocations.append((password: password, eraseData: eraseData))
+        }
+        if let deactivateAccountPasswordEraseDataClosure = deactivateAccountPasswordEraseDataClosure {
+            return await deactivateAccountPasswordEraseDataClosure(password, eraseData)
+        } else {
+            return deactivateAccountPasswordEraseDataReturnValue
         }
     }
     //MARK: - logout

@@ -196,6 +196,7 @@ struct SecureBackupRecoveryKeyScreen: View {
                 .font(.compound.bodySMSemibold)
             
             SecureField(L10n.screenRecoveryKeyConfirmKeyPlaceholder, text: $context.confirmationRecoveryKey)
+                .tint(.compound.iconAccentTertiary)
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(Color.compound.bgSubtleSecondaryLevel0)

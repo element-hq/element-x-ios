@@ -22,6 +22,7 @@ enum SettingsScreenViewModelAction: Equatable {
     case advancedSettings
     case developerOptions
     case logout
+    case deactivateAccount
 }
 
 enum SettingsScreenSecuritySectionMode {
@@ -34,6 +35,7 @@ struct SettingsScreenViewState: BindableState {
     var userID: String
     var accountProfileURL: URL?
     var accountSessionsListURL: URL?
+    var showAccountDeactivation: Bool
     var userAvatarURL: URL?
     var userDisplayName: String?
     var showDeveloperOptions: Bool
@@ -42,6 +44,12 @@ struct SettingsScreenViewState: BindableState {
     var showSecuritySectionBadge = false
     
     var showBlockedUsers = false
+    
+    var bindings = SettingsScreenViewStateBindings()
+}
+
+struct SettingsScreenViewStateBindings {
+    var isPresentingAccountDeactivationConfirmation = false
 }
 
 enum SettingsScreenViewAction {
@@ -59,4 +67,5 @@ enum SettingsScreenViewAction {
     case developerOptions
     case advancedSettings
     case logout
+    case deactivateAccount
 }

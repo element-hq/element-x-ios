@@ -96,6 +96,8 @@ internal enum L10n {
   internal static var actionCompleteVerification: String { return L10n.tr("Localizable", "action_complete_verification") }
   /// Confirm
   internal static var actionConfirm: String { return L10n.tr("Localizable", "action_confirm") }
+  /// Confirm password
+  internal static var actionConfirmPassword: String { return L10n.tr("Localizable", "action_confirm_password") }
   /// Continue
   internal static var actionContinue: String { return L10n.tr("Localizable", "action_continue") }
   /// Copy
@@ -108,6 +110,10 @@ internal enum L10n {
   internal static var actionCreate: String { return L10n.tr("Localizable", "action_create") }
   /// Create a room
   internal static var actionCreateARoom: String { return L10n.tr("Localizable", "action_create_a_room") }
+  /// Deactivate
+  internal static var actionDeactivate: String { return L10n.tr("Localizable", "action_deactivate") }
+  /// Deactivate account
+  internal static var actionDeactivateAccount: String { return L10n.tr("Localizable", "action_deactivate_account") }
   /// Decline
   internal static var actionDecline: String { return L10n.tr("Localizable", "action_decline") }
   /// Delete Poll
@@ -558,7 +564,7 @@ internal enum L10n {
   internal static var emojiPickerCategoryPlaces: String { return L10n.tr("Localizable", "emoji_picker_category_places") }
   /// Symbols
   internal static var emojiPickerCategorySymbols: String { return L10n.tr("Localizable", "emoji_picker_category_symbols") }
-  /// Your homeserver needs to be upgraded to support Matrix Authentication Server and account creation.
+  /// Your homeserver needs to be upgraded to support Matrix Authentication Service and account creation.
   internal static var errorAccountCreationNotPossible: String { return L10n.tr("Localizable", "error_account_creation_not_possible") }
   /// Failed creating the permalink
   internal static var errorFailedCreatingThePermalink: String { return L10n.tr("Localizable", "error_failed_creating_the_permalink") }
@@ -1041,6 +1047,32 @@ internal enum L10n {
   internal static var screenCreateRoomTitle: String { return L10n.tr("Localizable", "screen_create_room_title") }
   /// Topic (optional)
   internal static var screenCreateRoomTopicLabel: String { return L10n.tr("Localizable", "screen_create_room_topic_label") }
+  /// Please confirm that you want to deactivate your account. This action cannot be undone.
+  internal static var screenDeactivateAccountConfirmationDialogContent: String { return L10n.tr("Localizable", "screen_deactivate_account_confirmation_dialog_content") }
+  /// Delete all my messages
+  internal static var screenDeactivateAccountDeleteAllMessages: String { return L10n.tr("Localizable", "screen_deactivate_account_delete_all_messages") }
+  /// Warning: Future users may see incomplete conversations.
+  internal static var screenDeactivateAccountDeleteAllMessagesNotice: String { return L10n.tr("Localizable", "screen_deactivate_account_delete_all_messages_notice") }
+  /// Deactivating your account is %1$@, it will:
+  internal static func screenDeactivateAccountDescription(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_deactivate_account_description", String(describing: p1))
+  }
+  /// irreversible
+  internal static var screenDeactivateAccountDescriptionBoldPart: String { return L10n.tr("Localizable", "screen_deactivate_account_description_bold_part") }
+  /// %1$@ your account (you can't log back in, and your ID can't be reused).
+  internal static func screenDeactivateAccountListItem1(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_deactivate_account_list_item_1", String(describing: p1))
+  }
+  /// Permanently disable
+  internal static var screenDeactivateAccountListItem1BoldPart: String { return L10n.tr("Localizable", "screen_deactivate_account_list_item_1_bold_part") }
+  /// Remove you from all chat rooms.
+  internal static var screenDeactivateAccountListItem2: String { return L10n.tr("Localizable", "screen_deactivate_account_list_item_2") }
+  /// Delete your account information from our identity server.
+  internal static var screenDeactivateAccountListItem3: String { return L10n.tr("Localizable", "screen_deactivate_account_list_item_3") }
+  /// Your messages will still be visible to registered users but won’t be available to new or unregistered users if you choose to delete them.
+  internal static var screenDeactivateAccountListItem4: String { return L10n.tr("Localizable", "screen_deactivate_account_list_item_4") }
+  /// Deactivate account
+  internal static var screenDeactivateAccountTitle: String { return L10n.tr("Localizable", "screen_deactivate_account_title") }
   /// Block
   internal static var screenDmDetailsBlockAlertAction: String { return L10n.tr("Localizable", "screen_dm_details_block_alert_action") }
   /// Blocked users won't be able to send you messages and all their messages will be hidden. You can unblock them anytime.
@@ -1475,10 +1507,14 @@ internal enum L10n {
   internal static func screenResolveSendFailureUnsignedDeviceSubtitle(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_resolve_send_failure_unsigned_device_subtitle", String(describing: p1), String(describing: p2))
   }
-  /// Your message was not sent because %1$@ has not verified one or more devices
+  /// Your message was not sent because %1$@ has not verified all devices
   internal static func screenResolveSendFailureUnsignedDeviceTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_resolve_send_failure_unsigned_device_title", String(describing: p1))
   }
+  /// One or more of your devices are unverified. You can send the message anyway, or you can cancel for now and try again later after you have verified all of your devices.
+  internal static var screenResolveSendFailureYouUnsignedDeviceSubtitle: String { return L10n.tr("Localizable", "screen_resolve_send_failure_you_unsigned_device_subtitle") }
+  /// Your message was not sent because you have not verified one or more of your devices
+  internal static var screenResolveSendFailureYouUnsignedDeviceTitle: String { return L10n.tr("Localizable", "screen_resolve_send_failure_you_unsigned_device_title") }
   /// Failed to resolve room alias.
   internal static var screenRoomAliasResolverResolveAliasFailure: String { return L10n.tr("Localizable", "screen_room_alias_resolver_resolve_alias_failure") }
   /// Camera
@@ -1981,10 +2017,12 @@ internal enum L10n {
   internal static func screenTimelineItemMenuSendFailureChangedIdentity(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_changed_identity", String(describing: p1))
   }
-  /// Message not sent because %1$@ has not verified one or more devices.
+  /// Message not sent because %1$@ has not verified all devices.
   internal static func screenTimelineItemMenuSendFailureUnsignedDevice(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_unsigned_device", String(describing: p1))
   }
+  /// Message not sent because you have not verified one or more of your devices.
+  internal static var screenTimelineItemMenuSendFailureYouUnsignedDevice: String { return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_you_unsigned_device") }
   /// Location
   internal static var screenViewLocationTitle: String { return L10n.tr("Localizable", "screen_view_location_title") }
   /// Calls, polls, search and more will be added later this year.
