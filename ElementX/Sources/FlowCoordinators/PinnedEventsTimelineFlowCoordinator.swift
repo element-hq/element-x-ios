@@ -67,7 +67,6 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         let coordinator = PinnedEventsTimelineScreenCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                                  clientProxy: userSession.clientProxy,
                                                                                   timelineController: timelineController,
                                                                                   mediaProvider: userSession.mediaProvider,
                                                                                   mediaPlayerProvider: MediaPlayerProvider(),

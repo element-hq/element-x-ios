@@ -357,10 +357,8 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
     static let viewModelWithPins: TimelineViewModel = {
         var settings = AppSettings()
         settings.pinningEnabled = true
-        let roomProxyMock = JoinedRoomProxyMock(.init(name: "Preview Room", pinnedEventIDs: [""]))
-        let clientProxyMock = ClientProxyMock()
-        return TimelineViewModel(roomProxy: roomProxyMock,
-                                 clientProxy: clientProxyMock,
+        let roomProxy = JoinedRoomProxyMock(.init(name: "Preview Room", pinnedEventIDs: [""]))
+        return TimelineViewModel(roomProxy: roomProxy,
                                  focussedEventID: nil,
                                  timelineController: MockRoomTimelineController(),
                                  mediaProvider: MockMediaProvider(),

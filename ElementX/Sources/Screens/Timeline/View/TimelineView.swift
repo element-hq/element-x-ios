@@ -17,7 +17,6 @@ struct TimelineView: UIViewControllerRepresentable {
         let tableViewController = TimelineTableViewController(coordinator: context.coordinator,
                                                               isScrolledToBottom: $viewModelContext.isScrolledToBottom,
                                                               scrollToBottomPublisher: viewModelContext.viewState.timelineViewState.scrollToBottomPublisher)
-        
         viewModelContext.openURLHandler = { url in openURL(url) }
         return tableViewController
     }
@@ -75,10 +74,8 @@ struct TimelineView: UIViewControllerRepresentable {
 struct TimelineView_Previews: PreviewProvider, TestablePreview {
     static let roomProxyMock = JoinedRoomProxyMock(.init(id: "stable_id",
                                                          name: "Preview room"))
-    static let clientProxyMock = ClientProxyMock()
     static let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
     static let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
-                                                     clientProxy: clientProxyMock,
                                                      timelineController: MockRoomTimelineController(),
                                                      mediaProvider: MockMediaProvider(),
                                                      mediaPlayerProvider: MediaPlayerProviderMock(),
