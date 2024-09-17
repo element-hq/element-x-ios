@@ -117,7 +117,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             return await userSession(for: client)
         } catch {
             MXLog.error("Failed logging in with error: \(error)")
-            // FIXME: How about we make a proper type in the FFI? 😅
+            // How about we make a proper type in the FFI? 😅
             guard let error = error as? ClientError else { return .failure(.failedLoggingIn) }
             
             switch error.code {

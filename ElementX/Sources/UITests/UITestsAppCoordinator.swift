@@ -240,6 +240,7 @@ class MockScreen: Identifiable {
         case .roomPlainNoAvatar:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let parameters = RoomScreenCoordinatorParameters(roomProxy: JoinedRoomProxyMock(.init(name: "Some room name", avatarURL: nil)),
+                                                             clientProxy: ClientProxyMock(),
                                                              timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -258,6 +259,7 @@ class MockScreen: Identifiable {
             let timelineController = MockRoomTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.smallChunk
             let parameters = RoomScreenCoordinatorParameters(roomProxy: JoinedRoomProxyMock(.init(name: "New room", avatarURL: URL.picturesDirectory)),
+                                                             clientProxy: ClientProxyMock(),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -276,6 +278,7 @@ class MockScreen: Identifiable {
             let timelineController = MockRoomTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.default
             let parameters = RoomScreenCoordinatorParameters(roomProxy: JoinedRoomProxyMock(.init(name: "New room", avatarURL: URL.picturesDirectory)),
+                                                             clientProxy: ClientProxyMock(),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -294,6 +297,7 @@ class MockScreen: Identifiable {
             let timelineController = MockRoomTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.smallChunkWithReadReceipts
             let parameters = RoomScreenCoordinatorParameters(roomProxy: JoinedRoomProxyMock(.init(name: "New room", avatarURL: URL.picturesDirectory)),
+                                                             clientProxy: ClientProxyMock(),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -315,6 +319,7 @@ class MockScreen: Identifiable {
             timelineController.backPaginationResponses = [RoomTimelineItemFixtures.singleMessageChunk]
             timelineController.incomingItems = [RoomTimelineItemFixtures.incomingMessage]
             let parameters = RoomScreenCoordinatorParameters(roomProxy: JoinedRoomProxyMock(.init(name: "Small timeline", avatarURL: URL.picturesDirectory)),
+                                                             clientProxy: ClientProxyMock(),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -336,6 +341,7 @@ class MockScreen: Identifiable {
             timelineController.timelineItems = RoomTimelineItemFixtures.smallChunk
             timelineController.backPaginationResponses = [RoomTimelineItemFixtures.largeChunk]
             let parameters = RoomScreenCoordinatorParameters(roomProxy: JoinedRoomProxyMock(.init(name: "Small timeline, paginating", avatarURL: URL.picturesDirectory)),
+                                                             clientProxy: ClientProxyMock(),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -357,6 +363,7 @@ class MockScreen: Identifiable {
             timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
             timelineController.backPaginationResponses = [RoomTimelineItemFixtures.largeChunk]
             let parameters = RoomScreenCoordinatorParameters(roomProxy: JoinedRoomProxyMock(.init(name: "Large timeline", avatarURL: URL.picturesDirectory)),
+                                                             clientProxy: ClientProxyMock(),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -379,6 +386,7 @@ class MockScreen: Identifiable {
             timelineController.backPaginationResponses = [RoomTimelineItemFixtures.largeChunk]
             timelineController.incomingItems = [RoomTimelineItemFixtures.incomingMessage]
             let parameters = RoomScreenCoordinatorParameters(roomProxy: JoinedRoomProxyMock(.init(name: "Large timeline", avatarURL: URL.picturesDirectory)),
+                                                             clientProxy: ClientProxyMock(),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -400,6 +408,7 @@ class MockScreen: Identifiable {
             timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
             timelineController.incomingItems = [RoomTimelineItemFixtures.incomingMessage]
             let parameters = RoomScreenCoordinatorParameters(roomProxy: JoinedRoomProxyMock(.init(name: "Large timeline", avatarURL: URL.picturesDirectory)),
+                                                             clientProxy: ClientProxyMock(),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -420,6 +429,7 @@ class MockScreen: Identifiable {
             let timelineController = MockRoomTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.permalinkChunk
             let parameters = RoomScreenCoordinatorParameters(roomProxy: JoinedRoomProxyMock(.init(name: "Timeline highlight", avatarURL: URL.picturesDirectory)),
+                                                             clientProxy: ClientProxyMock(),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -454,6 +464,7 @@ class MockScreen: Identifiable {
             timelineController.timelineItems = RoomTimelineItemFixtures.disclosedPolls
             timelineController.incomingItems = []
             let parameters = RoomScreenCoordinatorParameters(roomProxy: JoinedRoomProxyMock(.init(name: "Polls timeline", avatarURL: URL.picturesDirectory)),
+                                                             clientProxy: ClientProxyMock(),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -475,6 +486,7 @@ class MockScreen: Identifiable {
             timelineController.timelineItems = RoomTimelineItemFixtures.undisclosedPolls
             timelineController.incomingItems = []
             let parameters = RoomScreenCoordinatorParameters(roomProxy: JoinedRoomProxyMock(.init(name: "Polls timeline", avatarURL: URL.picturesDirectory)),
+                                                             clientProxy: ClientProxyMock(),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
@@ -496,6 +508,7 @@ class MockScreen: Identifiable {
             timelineController.timelineItems = RoomTimelineItemFixtures.outgoingPolls
             timelineController.incomingItems = []
             let parameters = RoomScreenCoordinatorParameters(roomProxy: JoinedRoomProxyMock(.init(name: "Polls timeline", avatarURL: URL.picturesDirectory)),
+                                                             clientProxy: ClientProxyMock(),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),

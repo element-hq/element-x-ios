@@ -591,6 +591,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let composerDraftService = ComposerDraftService(roomProxy: roomProxy, timelineItemfactory: timelineItemFactory)
         
         let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy,
+                                                         clientProxy: userSession.clientProxy,
                                                          focussedEvent: focussedEvent,
                                                          timelineController: timelineController,
                                                          mediaProvider: userSession.mediaProvider,

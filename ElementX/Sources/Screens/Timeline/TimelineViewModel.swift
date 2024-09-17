@@ -21,6 +21,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
 
     private let roomProxy: JoinedRoomProxyProtocol
+    private let clientProxy: ClientProxyProtocol
     private let timelineController: RoomTimelineControllerProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -41,6 +42,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private var paginateForwardsTask: Task<Void, Never>?
 
     init(roomProxy: JoinedRoomProxyProtocol,
+         clientProxy: ClientProxyProtocol,
          focussedEventID: String? = nil,
          timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -51,6 +53,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
          appSettings: AppSettings,
          analyticsService: AnalyticsService) {
         self.timelineController = timelineController
+        self.clientProxy = clientProxy
         self.mediaPlayerProvider = mediaPlayerProvider
         self.roomProxy = roomProxy
         self.appSettings = appSettings
@@ -560,6 +563,23 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             displayAlert(.encryptionAuthenticity(authenticityMessage))
         }
     }
+    
+    private func handleSlashCommands(_ message: String) async -> Bool {
+        let joinSlashCommand = "/join "
+        if message.starts(with: joinSlashCommand) {
+            let alias = message.dropFirst(joinSlashCommand.count)
+            _ = await clientProxy.joinRoomAlias(String(alias))
+            
+            if let url = URL(string: "https://matrix.to/#/" + alias) {
+                if let openURL = context.openURLHandler {
+                    openURL(url)
+                }
+            }
+            return true
+        } else {
+            return false
+        }
+    }
 
     private func sendCurrentMessage(_ message: String, html: String?, mode: ComposerMode, intentionalMentions: IntentionalMentions) async {
         guard !message.isEmpty else {
@@ -580,9 +600,14 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                           html: html,
                                           intentionalMentions: intentionalMentions)
         case .default:
-            await timelineController.sendMessage(message,
-                                                 html: html,
-                                                 intentionalMentions: intentionalMentions)
+            let hasSlashCommands = await handleSlashCommands(message)
+            if hasSlashCommands {
+                return
+            } else {
+                await timelineController.sendMessage(message,
+                                                     html: html,
+                                                     intentionalMentions: intentionalMentions)
+            }
         case .recordVoiceMessage, .previewVoiceMessage:
             fatalError("invalid composer mode.")
         }
@@ -819,6 +844,7 @@ private extension RoomProxyProtocol {
 
 extension TimelineViewModel {
     static let mock = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
+                                        clientProxy: ClientProxyMock(),
                                         focussedEventID: nil,
                                         timelineController: MockRoomTimelineController(),
                                         mediaProvider: MockMediaProvider(),
@@ -830,6 +856,7 @@ extension TimelineViewModel {
                                         analyticsService: ServiceLocator.shared.analytics)
     
     static let pinnedEventsTimelineMock = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
+                                                            clientProxy: ClientProxyMock(),
                                                             focussedEventID: nil,
                                                             timelineController: MockRoomTimelineController(timelineKind: .pinned),
                                                             mediaProvider: MockMediaProvider(),

@@ -46,7 +46,7 @@ class AppMediator: AppMediatorProtocol {
     func open(_ url: URL) {
         application.open(url, options: [:], completionHandler: nil)
     }
-    
+            
     func openAppSettings() {
         guard let url = URL(string: UIApplication.openSettingsURLString) else {
             return

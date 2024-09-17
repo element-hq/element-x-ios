@@ -12,6 +12,7 @@ import WysiwygComposer
 
 struct RoomScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
+    let clientProxy: ClientProxyProtocol
     var focussedEvent: FocusEvent?
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
@@ -69,6 +70,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                             analyticsService: ServiceLocator.shared.analytics)
         
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
+                                              clientProxy: parameters.clientProxy,
                                               focussedEventID: parameters.focussedEvent?.eventID,
                                               timelineController: parameters.timelineController,
                                               mediaProvider: parameters.mediaProvider,

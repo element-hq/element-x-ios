@@ -126,6 +126,9 @@ struct TimelineViewStateBindings {
     var reactionSummaryInfo: ReactionSummaryInfo?
     
     var readReceiptsSummaryInfo: ReadReceiptSummaryInfo?
+    
+    /// an openURL closure which opens URLs first using the App's environment rather than skipping out to external apps
+    var openURLHandler: ((URL) -> Void)?
 }
 
 struct TimelineItemActionMenuInfo: Equatable, Identifiable {

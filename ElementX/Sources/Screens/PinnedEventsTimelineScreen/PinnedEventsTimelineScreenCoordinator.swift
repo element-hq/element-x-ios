@@ -10,6 +10,7 @@ import SwiftUI
 
 struct PinnedEventsTimelineScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
+    let clientProxy: ClientProxyProtocol
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
@@ -42,6 +43,7 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
         
         viewModel = PinnedEventsTimelineScreenViewModel(analyticsService: ServiceLocator.shared.analytics)
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
+                                              clientProxy: parameters.clientProxy,
                                               timelineController: parameters.timelineController,
                                               mediaProvider: parameters.mediaProvider,
                                               mediaPlayerProvider: parameters.mediaPlayerProvider,
