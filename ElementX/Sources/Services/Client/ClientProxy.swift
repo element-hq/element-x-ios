@@ -83,8 +83,6 @@ class ClientProxy: ClientProxyProtocol {
             .asCurrentValuePublisher()
     }
     
-    private let roomListServiceStateSubject = CurrentValueSubject<RoomListServiceState, Never>(.initial)
-    
     private var cancellables = Set<AnyCancellable>()
     
     /// Will be `true` whilst the app cleans up and forces a logout. Prevents the sync service from restarting
@@ -735,7 +733,6 @@ class ClientProxy: ClientProxyProtocol {
                                                             shouldPrefixSenderName: true)
             
             roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
-                                                      roomListServiceStatePublisher: roomListServiceStateSubject.asCurrentValuePublisher(),
                                                       eventStringBuilder: eventStringBuilder,
                                                       name: "AllRooms",
                                                       shouldUpdateVisibleRange: true,
@@ -744,7 +741,6 @@ class ClientProxy: ClientProxyProtocol {
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
             
             alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
-                                                               roomListServiceStatePublisher: roomListServiceStateSubject.asCurrentValuePublisher(),
                                                                eventStringBuilder: eventStringBuilder,
                                                                name: "MessageForwarding",
                                                                notificationSettings: notificationSettings,
@@ -783,8 +779,6 @@ class ClientProxy: ClientProxyProtocol {
             guard let self else { return }
             
             MXLog.info("Received room list update: \(state)")
-            
-            roomListServiceStateSubject.send(state)
             
             guard state != .error,
                   state != .terminated else {
