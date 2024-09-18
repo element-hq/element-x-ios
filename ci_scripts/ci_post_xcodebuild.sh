@@ -4,15 +4,15 @@ source ci_common.sh
 
 setup_xcode_cloud_environment
 
-# Upload dsyms no matter the workflow
-# Perform this step before releasing to github in case it fails.
-bundle exec fastlane upload_dsyms_to_sentry dsym_path:"$CI_ARCHIVE_PATH/dSYMs"
+set -e
 
-generate_what_to_test_notes
+echo "Script executed from: ${PWD}"
 
-if [ "$CI_WORKFLOW" = "Release" ]; then
-    bundle exec fastlane release_to_github
-    bundle exec fastlane prepare_next_release
-elif [ "$CI_WORKFLOW" = "Nightly" ]; then
-    bundle exec fastlane tag_nightly build_number:"$CI_BUILD_NUMBER"
+git=$(which git)
+
+if [[ -d "$CI_APP_STORE_SIGNED_APP_PATH" ]]; then
+  TESTFLIGHT_DIR_PATH=../TestFlight
+  mkdir $TESTFLIGHT_DIR_PATH
+  # Get the message of the last commit, set this as the What To Test text for this build on TestFlight
+  git fetch --deepen 1 && git log -1 --pretty=format:"%s%+b" > $TESTFLIGHT_DIR_PATH/WhatToTest.en-US.txt
 fi
