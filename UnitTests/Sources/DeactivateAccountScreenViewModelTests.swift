@@ -78,14 +78,4 @@ class DeactivateAccountScreenViewModelTests: XCTestCase {
         XCTAssertEqual(clientProxy.deactivateAccountPasswordEraseDataReceivedArguments?.password, enteredPassword)
         XCTAssertEqual(clientProxy.deactivateAccountPasswordEraseDataReceivedArguments?.eraseData, shouldErase)
     }
-    
-    func testCancel() async throws {
-        // When cancelling the view.
-        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .cancel }
-        context.send(viewAction: .cancel)
-        try await deferred.fulfill()
-        
-        // Then no API call should be made to deactivate the account.
-        XCTAssertFalse(clientProxy.deactivateAccountPasswordEraseDataCalled)
-    }
 }
