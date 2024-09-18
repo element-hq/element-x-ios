@@ -1,7 +1,13 @@
 import Danger
 import Foundation
 
-SwiftLint.lint(inline: true)
+SwiftLint.lint(.modifiedAndCreatedFiles(directory: nil),
+               inline: true,
+               configFile: nil,
+               strict: false,
+               quiet: true,
+               swiftlintPath: nil,
+               markdownAction: { _ in })
 
 let danger = Danger()
 
@@ -34,21 +40,10 @@ if let ticketNumberRegex = try? NSRegularExpression(pattern: "#\\d+") {
 let signOff = "Signed-off-by:"
 
 let allowList = ["stefanceriu",
-                 "Johennes",
-                 "yostyle",
-                 "SBiOSoftWhare",
-                 "ismailgulek",
-                 "Anderas",
                  "pixlwave",
                  "langleyd",
                  "manuroe",
-                 "gileluard",
-                 "phlniji",
-                 "aringenbach",
-                 "flescio",
-                 "Velin92",
-                 "alfogrillo",
-                 "nimau"]
+                 "Velin92"]
 
 let requiresSignOff = !allowList.contains(where: {
     $0.caseInsensitiveCompare(danger.github.pullRequest.user.login) == .orderedSame
