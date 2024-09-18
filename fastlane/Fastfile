@@ -1,8 +1,12 @@
+update_fastlane
+
 default_platform(:ios)
 
 platform :ios do
   desc "Lane to build app"
   lane :build do
+    UI.important("Starting build process...")
+    UI.important("Current directory: #{Dir.pwd}")
     build_ios_app(
         project: "ElementX.xcodeproj",
         scheme: "Zero",

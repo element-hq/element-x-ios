@@ -26,23 +26,5 @@ setup_xcode_cloud_environment () {
     gem install bundler
 
     bundle config path vendor/bundle
-    bundle install --jobs 4 --retry 3
-}
-
-install_xcode_cloud_brew_dependencies () {
-    brew update && brew install xcodegen
-    
-    if [ "$CI_WORKFLOW" = "Nightly" ]; then
-        brew install imagemagick@6
-        brew link imagemagick@6 # imagemagick@6 is keg-only, which means it was not symlinked into /usr/local,
-    fi
-}
-
-setup_github_actions_translations_environment() {
-    unset HOMEBREW_NO_INSTALL_FROM_API
-    export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
-
-    brew update && brew install swiftgen mint localazy/tools/localazy
-
-    mint install Asana/locheck
+    bundle install
 }
