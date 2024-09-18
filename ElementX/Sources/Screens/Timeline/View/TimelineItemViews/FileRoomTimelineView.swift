@@ -5,7 +5,7 @@
 // Please see LICENSE in the repository root for full details.
 //
 
-import Foundation
+import Compound
 import SwiftUI
 
 struct FileRoomTimelineView: View {
@@ -13,15 +13,15 @@ struct FileRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            Label(title: { Text(timelineItem.body) },
-                  icon: { Image(systemName: "doc.text.fill")
-                      .foregroundColor(.compound.iconPrimary)
-                  })
-                  .labelStyle(RoomTimelineViewLabelStyle())
-                  .font(.compound.bodyLG)
-                  .padding(.vertical, 12)
-                  .padding(.horizontal, 6)
-                  .accessibilityLabel(L10n.commonFile)
+            Label { Text(timelineItem.body) } icon: {
+                CompoundIcon(\.document)
+                    .foregroundColor(.compound.iconPrimary)
+            }
+            .labelStyle(RoomTimelineViewLabelStyle())
+            .font(.compound.bodyLG)
+            .padding(.vertical, 8)
+            .padding(.horizontal, 6)
+            .accessibilityLabel(L10n.commonFile)
         }
     }
 }
