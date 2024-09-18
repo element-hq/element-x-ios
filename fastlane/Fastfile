@@ -4,7 +4,7 @@ platform :ios do
   desc "Lane to build app"
   lane :build do
     build_ios_app(
-        workspace: "ElementX.xcodeproj",
+        project: "ElementX.xcodeproj",
         scheme: "Zero",
         configuration: "Release",
         output_directory: "build",
