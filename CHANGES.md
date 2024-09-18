@@ -1,3 +1,32 @@
+## Changes in 1.8.2 (2024-09-18)
+
+### What's Changed
+
+✨ Features
+* Allow registration on matrix.org using a custom helper URL. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3282
+
+🙌 Improvements
+* Allow account deactivation when not using OIDC. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3295
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3283
+
+🧱 Build
+* Bump SDK to 1.0.51 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3298
+
+🚧 In development 🚧
+* Add a WebRegistrationScreen (not included in the flow yet). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3281
+* Added analytics for message pinning by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3284
+
+Others
+* Bump the RustSDK to v1.0.50 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3292
+* Push the deactivate account screen. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3297
+* Use the new strings for send failures when the unsigned devices are your own. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3299
+* Stop delaying subscriptions until after startup by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3294
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.8.1...1.8.2
+
 ## Changes in 1.8.1 (2024-09-13)
 
 ### What's Changed
