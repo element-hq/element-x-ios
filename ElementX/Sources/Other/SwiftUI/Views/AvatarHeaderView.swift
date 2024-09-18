@@ -44,9 +44,9 @@ struct AvatarHeaderView<Footer: View>: View {
         
         var badges = [Badge]()
         badges.append(.encrypted(room.isEncrypted))
-        if room.isPublic {
-            badges.append(.public)
-        }
+//        if room.isPublic {
+//            badges.append(.public)
+//        }
         self.badges = badges
     }
     
@@ -125,15 +125,25 @@ struct AvatarHeaderView<Footer: View>: View {
     private var avatar: some View {
         switch avatarInfo {
         case .room(let roomAvatar):
-            RoomAvatarImage(avatar: roomAvatar,
-                            avatarSize: avatarSize,
-                            mediaProvider: mediaProvider)
-        case .user(let userProfile):
-            LoadableAvatarImage(url: userProfile.avatarURL,
-                                name: userProfile.displayName,
-                                contentID: userProfile.userID,
+            switch roomAvatar {
+            case .room(let id, let name, let avatarURL):
+                AvatarView(url: avatarURL,
+                           placeholder: Asset.Images.defaultAvatarIcon,
+                           style: .extraLarge)
+            default:
+                RoomAvatarImage(avatar: roomAvatar,
                                 avatarSize: avatarSize,
                                 mediaProvider: mediaProvider)
+            }
+        case .user(let userProfile):
+//            LoadableAvatarImage(url: userProfile.avatarURL,
+//                                name: userProfile.displayName,
+//                                contentID: userProfile.userID,
+//                                avatarSize: avatarSize,
+//                                mediaProvider: mediaProvider)
+            AvatarView(url: userProfile.avatarURL,
+                       placeholder: Asset.Images.defaultAvatarIcon,
+                       style: .extraLarge)
         }
     }
     
@@ -155,13 +165,13 @@ struct AvatarHeaderView<Footer: View>: View {
                 .multilineTextAlignment(.center)
                 .textSelection(.enabled)
             
-            if let subtitle {
-                Text(subtitle)
-                    .foregroundColor(.compound.textSecondary)
-                    .font(.compound.bodyLG)
-                    .multilineTextAlignment(.center)
-                    .textSelection(.enabled)
-            }
+//            if let subtitle {
+//                Text(subtitle)
+//                    .foregroundColor(.compound.textSecondary)
+//                    .font(.compound.bodyLG)
+//                    .multilineTextAlignment(.center)
+//                    .textSelection(.enabled)
+//            }
             
             if !badges.isEmpty {
                 badgesStack

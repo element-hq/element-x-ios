@@ -16,7 +16,8 @@ class TimelineItemFactoryTests: XCTestCase {
 
         let factory = RoomTimelineItemFactory(userID: ownUserID,
                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                              stateEventStringBuilder: RoomStateEventStringBuilder(userID: ownUserID))
+                                              stateEventStringBuilder: RoomStateEventStringBuilder(userID: ownUserID),
+                                              zeroUsers: [])
         
         let eventTimelineItem = EventTimelineItemSDKMock()
         eventTimelineItem.isOwnReturnValue = true

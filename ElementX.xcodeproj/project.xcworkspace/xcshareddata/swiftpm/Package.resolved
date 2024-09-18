@@ -1,6 +1,15 @@
 {
-  "originHash" : "52385e2a478cc9455693d0b93dc33b988ac1d4742acceeaee288944dff8b78e0",
+  "originHash" : "e18f1e05d6fb8720357bf4cb12c23d797592c9e486f59bde4d710ef11ea14be6",
   "pins" : [
+    {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Alamofire/Alamofire",
+      "state" : {
+        "revision" : "f455c2975872ccd2d9c81594c658af65716e9b9a",
+        "version" : "5.9.1"
+      }
+    },
     {
       "identity" : "compound-design-tokens",
       "kind" : "remoteSourceControl",
@@ -16,6 +25,15 @@
       "location" : "https://github.com/element-hq/compound-ios",
       "state" : {
         "revision" : "a9270392b3269ef072c47dea623815a9fb87311d"
+      }
+    },
+    {
+      "identity" : "cryptoswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/krzyzanowskim/CryptoSwift",
+      "state" : {
+        "revision" : "678d442c6f7828def400a70ae15968aef67ef52d",
+        "version" : "1.8.3"
       }
     },
     {
@@ -259,6 +277,15 @@
       "state" : {
         "revision" : "74203046135342e4a4a627476dd6caf8b28fe11b",
         "version" : "509.0.0"
+      }
+    },
+    {
+      "identity" : "swift-tagged",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/swift-tagged",
+      "state" : {
+        "revision" : "3907a9438f5b57d317001dc99f3f11b46882272b",
+        "version" : "0.10.0"
       }
     },
     {

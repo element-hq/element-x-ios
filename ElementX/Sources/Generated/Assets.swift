@@ -27,8 +27,14 @@ internal enum Asset {
   internal enum Colors {
     internal static let accentColor = ColorAsset(name: "colors/accent-color")
     internal static let backgroundColor = ColorAsset(name: "colors/background-color")
+    internal static let blue11 = ColorAsset(name: "colors/blue-11")
     internal static let brandColor = ColorAsset(name: "colors/brand-color")
     internal static let grabber = ColorAsset(name: "colors/grabber")
+    internal static let greyScale150 = ColorAsset(name: "colors/grey-scale-150")
+    internal static let textPrimary = ColorAsset(name: "colors/text-primary")
+    internal static let textSecondary = ColorAsset(name: "colors/text-secondary")
+    internal static let textWarning = ColorAsset(name: "colors/text-warning")
+    internal static let zeroDarkGrey = ColorAsset(name: "colors/zero-dark-grey")
   }
   internal enum Images {
     internal static let appLogo = ImageAsset(name: "images/app-logo")
@@ -46,6 +52,21 @@ internal enum Asset {
     internal static let notificationsPromptGraphic = ImageAsset(name: "images/notifications-prompt-graphic")
     internal static let pollWinner = ImageAsset(name: "images/poll-winner")
     internal static let waitingGradient = ImageAsset(name: "images/waiting-gradient")
+    internal static let alertCircleIcon = ImageAsset(name: "images/alert-circle-icon")
+    internal static let alertFillCircleIcon = ImageAsset(name: "images/alert-fill-circle-icon")
+    internal static let backgroundLevel1 = ImageAsset(name: "images/background-level-1")
+    internal static let backgroundLevel2 = ImageAsset(name: "images/background-level-2")
+    internal static let backgroundLevel3 = ImageAsset(name: "images/background-level-3")
+    internal static let checkIcon = ImageAsset(name: "images/check-icon")
+    internal static let conversationsListHeader = ImageAsset(name: "images/conversations-list-header")
+    internal static let crossIcon = ImageAsset(name: "images/cross-icon")
+    internal static let defaultAuthTextfield = ImageAsset(name: "images/default-auth-textfield")
+    internal static let defaultAvatarIcon = ImageAsset(name: "images/default-avatar-icon")
+    internal static let defaultLoginButton = ImageAsset(name: "images/default-login-button")
+    internal static let defaultWalletConnectButton = ImageAsset(name: "images/default-wallet-connect-button")
+    internal static let landingBackground = ImageAsset(name: "images/landing-background")
+    internal static let zeroBackupHeader = ImageAsset(name: "images/zero-backup-header")
+    internal static let zeroLogoMark = ImageAsset(name: "images/zero-logo-mark")
   }
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name

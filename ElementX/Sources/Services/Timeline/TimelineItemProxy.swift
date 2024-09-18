@@ -35,9 +35,11 @@ enum TimelineItemProxy {
     case virtual(MatrixRustSDK.VirtualTimelineItem, timelineID: String)
     case unknown(MatrixRustSDK.TimelineItem)
     
-    init(item: MatrixRustSDK.TimelineItem) {
+    init(item: MatrixRustSDK.TimelineItem, allRoomUsers: [ZMatrixUser]) {
         if let eventItem = item.asEvent() {
-            self = .event(EventTimelineItemProxy(item: eventItem, id: String(item.uniqueId())))
+            let eventSenderId = eventItem.sender()
+            let eventSender = allRoomUsers.first(where: { $0.matrixId == eventSenderId })
+            self = .event(EventTimelineItemProxy(item: eventItem, id: String(item.uniqueId()), eventSender: eventSender))
         } else if let virtualItem = item.asVirtual() {
             self = .virtual(virtualItem, timelineID: String(item.uniqueId()))
         } else {
@@ -91,10 +93,12 @@ enum TimelineItemSendFailure: Hashable {
 class EventTimelineItemProxy {
     let item: MatrixRustSDK.EventTimelineItem
     let id: TimelineItemIdentifier
+    let eventSender: ZMatrixUser?
     
-    init(item: MatrixRustSDK.EventTimelineItem, id: String) {
+    init(item: MatrixRustSDK.EventTimelineItem, id: String, eventSender: ZMatrixUser? = nil) {
         self.item = item
         self.id = TimelineItemIdentifier(timelineID: id, eventID: item.eventId(), transactionID: item.transactionId())
+        self.eventSender = eventSender
     }
     
     lazy var deliveryStatus: TimelineItemDeliveryStatus? = {
@@ -132,9 +136,9 @@ class EventTimelineItemProxy {
         switch profile {
         case let .ready(displayName, isDisplayNameAmbiguous, avatarUrl):
             return .init(id: item.sender(),
-                         displayName: displayName,
+                         displayName: eventSender?.displayName ?? displayName,
                          isDisplayNameAmbiguous: isDisplayNameAmbiguous,
-                         avatarURL: avatarUrl.flatMap(URL.init(string:)))
+                         avatarURL: URL(string: (eventSender?.profileSummary?.profileImage ?? "")))
         default:
             return .init(id: item.sender(),
                          displayName: nil,

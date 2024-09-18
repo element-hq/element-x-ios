@@ -61,18 +61,18 @@ struct RoomDetailsScreenViewState: BindableState {
     var accountOwner: RoomMemberDetails?
     
     var shortcuts: [RoomDetailsScreenViewShortcut] {
-        var shortcuts: [RoomDetailsScreenViewShortcut] = [.mute]
-        if !ProcessInfo.processInfo.isiOSAppOnMac, canJoinCall {
-            shortcuts.append(.call)
-        }
-        if dmRecipient == nil, canInviteUsers {
-            shortcuts.append(.invite)
-        }
-        if let permalink = dmRecipient?.permalink {
-            shortcuts.append(.share(link: permalink))
-        } else if let permalink {
-            shortcuts.append(.share(link: permalink))
-        }
+        let shortcuts: [RoomDetailsScreenViewShortcut] = [.mute]
+//        if !ProcessInfo.processInfo.isiOSAppOnMac, canJoinCall {
+//            shortcuts.append(.call)
+//        }
+//        if dmRecipient == nil, canInviteUsers {
+//            shortcuts.append(.invite)
+//        }
+//        if let permalink = dmRecipient?.permalink {
+//            shortcuts.append(.share(link: permalink))
+//        } else if let permalink {
+//            shortcuts.append(.share(link: permalink))
+//        }
         return shortcuts
     }
     

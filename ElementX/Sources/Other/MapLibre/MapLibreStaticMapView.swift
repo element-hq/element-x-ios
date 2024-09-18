@@ -90,11 +90,11 @@ private extension ColorScheme {
     var mapStyle: MapTilerStyle {
         switch self {
         case .light:
-            return .light
+            return .dark
         case .dark:
             return .dark
         @unknown default:
-            return .light
+            return .dark
         }
     }
 }

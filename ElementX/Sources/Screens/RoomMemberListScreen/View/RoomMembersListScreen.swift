@@ -13,16 +13,16 @@ struct RoomMembersListScreen: View {
     
     var body: some View {
         ScrollView {
-            if context.viewState.canBanUsers {
-                Picker("", selection: $context.mode) {
-                    Text(L10n.screenRoomMemberListModeMembers)
-                        .tag(RoomMembersListScreenMode.members)
-                    Text(L10n.screenRoomMemberListModeBanned)
-                        .tag(RoomMembersListScreenMode.banned)
-                }
-                .pickerStyle(.segmented)
-                .padding(.horizontal, 16)
-            }
+//            if context.viewState.canBanUsers {
+//                Picker("", selection: $context.mode) {
+//                    Text(L10n.screenRoomMemberListModeMembers)
+//                        .tag(RoomMembersListScreenMode.members)
+//                    Text(L10n.screenRoomMemberListModeBanned)
+//                        .tag(RoomMembersListScreenMode.banned)
+//                }
+//                .pickerStyle(.segmented)
+//                .padding(.horizontal, 16)
+//            }
             
             if context.mode == .members {
                 roomMembers
@@ -51,7 +51,7 @@ struct RoomMembersListScreen: View {
             RoomMembersListManageMemberSheet(member: $0.member, actions: $0.actions, context: context)
         }
         .alert(item: $context.alertInfo)
-        .toolbar { toolbar }
+//        .toolbar { toolbar }
         .track(screen: .RoomMembers)
     }
     

@@ -21,7 +21,10 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
     private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let appSettings: AppSettings
     private let appMediator: AppMediatorProtocol
+    
+    private let zeroAttachmentService: ZeroAttachmentService
     
     private let actionsSubject: PassthroughSubject<PinnedEventsTimelineFlowCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<PinnedEventsTimelineFlowCoordinatorAction, Never> {
@@ -35,13 +38,17 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
          roomProxy: JoinedRoomProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
+         appSettings: AppSettings,
          appMediator: AppMediatorProtocol) {
         self.navigationStackCoordinator = navigationStackCoordinator
         self.userSession = userSession
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
+        self.appSettings = appSettings
         self.appMediator = appMediator
+        
+        zeroAttachmentService = ZeroAttachmentService(appSettings: appSettings, isRoomEncrypted: roomProxy.isEncrypted)
     }
     
     func start() {
@@ -60,7 +67,8 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         let userID = userSession.clientProxy.userID
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
+                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID), zeroAttachmentService: zeroAttachmentService,
+                                                          zeroUsers: appSettings.zeroMatrixUsers ?? [])
                 
         guard let timelineController = await roomTimelineControllerFactory.buildRoomPinnedTimelineController(roomProxy: roomProxy, timelineItemFactory: timelineItemFactory) else {
             fatalError("This can never fail because we allow this view to be presented only when the timeline is fully loaded and not nil")

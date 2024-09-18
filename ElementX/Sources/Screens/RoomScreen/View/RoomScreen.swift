@@ -58,7 +58,7 @@ struct RoomScreen: View {
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .overlay { loadingIndicator }
             .alert(item: $timelineContext.alertInfo)
-            .sheet(item: $timelineContext.debugInfo) { TimelineItemDebugView(info: $0) }
+//            .sheet(item: $timelineContext.debugInfo) { TimelineItemDebugView(info: $0) }
             .sheet(item: $timelineContext.actionMenuInfo) { info in
                 let actions = TimelineItemMenuActionProvider(timelineItem: info.item,
                                                              canCurrentUserRedactSelf: timelineContext.viewState.canCurrentUserRedactSelf,
@@ -169,14 +169,16 @@ struct RoomScreen: View {
                 }
         }
         
-        if !ProcessInfo.processInfo.isiOSAppOnMac {
-            ToolbarItem(placement: .primaryAction) {
-                if roomContext.viewState.shouldShowCallButton {
-                    callButton
-                        .disabled(!roomContext.viewState.canJoinCall)
-                }
-            }
-        }
+        /// Hiding `call button` for zero
+        
+//        if !ProcessInfo.processInfo.isiOSAppOnMac {
+//            ToolbarItem(placement: .primaryAction) {
+//                if roomContext.viewState.shouldShowCallButton {
+//                    callButton
+//                        .disabled(!roomContext.viewState.canJoinCall)
+//                }
+//            }
+//        }
     }
     
     @ViewBuilder

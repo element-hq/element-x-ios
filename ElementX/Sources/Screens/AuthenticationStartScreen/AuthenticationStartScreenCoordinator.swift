@@ -47,6 +47,6 @@ final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        AnyView(AuthenticationStartScreen(context: viewModel.context))
+        AnyView(LandingScreen(context: viewModel.context))
     }
 }

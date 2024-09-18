@@ -124,7 +124,8 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
             case .gifData:
                 transformer(AnyView(KFAnimatedImage(source: .provider(self))))
             case .none:
-                if let blurhash,
+                if
+                    let blurhash,
                    // Build a small blurhash image so that it's fast
                    let image = UIImage(blurHash: blurhash, size: .init(width: 10.0, height: 10.0)) {
                     transformer(AnyView(Image(uiImage: image).resizable()))

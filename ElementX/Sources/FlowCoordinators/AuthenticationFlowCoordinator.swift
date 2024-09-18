@@ -143,7 +143,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         switch await authenticationService.configure(for: appSettings.defaultHomeserverAddress) {
         case .success:
             stopLoading()
-            showServerConfirmationScreen(authenticationFlow: flow)
+            showLoginScreen()
+            // showServerConfirmationScreen(authenticationFlow: flow)
         case .failure:
             stopLoading()
             showServerSelectionScreen(authenticationFlow: flow, isModallyPresented: false)
@@ -301,7 +302,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private func startLoading() {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
                                                               type: .modal,
-                                                              title: L10n.commonLoading,
+                                                              title: "",
                                                               persistent: true))
     }
     

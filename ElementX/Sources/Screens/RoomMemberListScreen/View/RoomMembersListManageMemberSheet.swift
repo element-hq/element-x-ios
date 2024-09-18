@@ -39,14 +39,14 @@ struct RoomMembersListManageMemberSheet: View {
                             })
                 }
                 
-                if actions.contains(.ban) {
-                    ListRow(label: .default(title: L10n.screenRoomMemberListManageMemberBan,
-                                            icon: \.block,
-                                            role: .destructive),
-                            kind: .button {
-                                isPresentingBanConfirmation = true
-                            })
-                }
+//                if actions.contains(.ban) {
+//                    ListRow(label: .default(title: L10n.screenRoomMemberListManageMemberBan,
+//                                            icon: \.block,
+//                                            role: .destructive),
+//                            kind: .button {
+//                                isPresentingBanConfirmation = true
+//                            })
+//                }
             }
         }
         .compoundList()

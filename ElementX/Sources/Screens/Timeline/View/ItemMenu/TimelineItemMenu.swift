@@ -20,11 +20,12 @@ struct TimelineItemMenu: View {
     
     var body: some View {
         VStack(spacing: 8) {
-            messagePreview
-                .padding(.horizontal, 16)
-                .padding(.top, 32.0)
-                .padding(.bottom, 4.0)
-                .frame(idealWidth: 300.0)
+            //Hiding it
+//            messagePreview
+//                .padding(.horizontal, 16)
+//                .padding(.top, 32.0)
+//                .padding(.bottom, 4.0)
+//                .frame(idealWidth: 300.0)
             
             Divider()
                 .background(Color.compound.bgSubtlePrimary)
@@ -46,7 +47,9 @@ struct TimelineItemMenu: View {
                             .background(Color.compound.bgSubtlePrimary)
                     }
                     
-                    viewsForActions(actions.debugActions)
+                    if !actions.debugActions.isEmpty {
+                        viewsForActions(actions.debugActions)
+                    }
                 }
             }
         }

@@ -51,11 +51,15 @@ struct RoomMessageEventStringBuilder {
         case .notice(content: let content):
             if let attributedMessage = attributedMessageFrom(formattedBody: content.formatted) {
                 message = attributedMessage
+            } else if let attributedMessage = attributedStringBuilder.fromPlain(content.body) {
+                message = attributedMessage
             } else {
                 message = AttributedString(content.body)
             }
         case .text(content: let content):
             if let attributedMessage = attributedMessageFrom(formattedBody: content.formatted) {
+                message = attributedMessage
+            } else if let attributedMessage = attributedStringBuilder.fromPlain(content.body) {
                 message = attributedMessage
             } else {
                 message = AttributedString(content.body)

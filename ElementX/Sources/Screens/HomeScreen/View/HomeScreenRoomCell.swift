@@ -48,11 +48,18 @@ struct HomeScreenRoomCell: View {
     @ViewBuilder @MainActor
     private var avatar: some View {
         if dynamicTypeSize < .accessibility3 {
-            RoomAvatarImage(avatar: room.avatar,
-                            avatarSize: .room(on: .home),
-                            mediaProvider: context.mediaProvider)
-                .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
-                .accessibilityHidden(true)
+            switch room.avatar {
+            case .room(let id, let name, let avatarURL):
+                AvatarView(url: avatarURL,
+                           placeholder: Asset.Images.defaultAvatarIcon,
+                           style: .large)
+            default:
+                RoomAvatarImage(avatar: room.avatar,
+                                avatarSize: .room(on: .home),
+                                mediaProvider: context.mediaProvider)
+                    .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
+                    .accessibilityHidden(true)
+            }
         }
     }
     
@@ -106,18 +113,18 @@ struct HomeScreenRoomCell: View {
             Spacer()
             
             HStack(spacing: 8) {
-                if room.badges.isCallShown {
-                    CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
-                }
+//                if room.badges.isCallShown {
+//                    CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
+//                }
                 
                 if room.badges.isMuteShown {
                     CompoundIcon(\.notificationsOffSolid, size: .custom(15), relativeTo: .compound.bodyMD)
                         .accessibilityLabel(L10n.a11yNotificationsMuted)
                 }
                 
-                if room.badges.isMentionShown {
-                    mentionIcon
-                }
+//                if room.badges.isMentionShown {
+//                    mentionIcon
+//                }
                 
                 if room.badges.isDotShown {
                     Circle()

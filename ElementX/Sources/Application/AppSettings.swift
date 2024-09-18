@@ -37,6 +37,10 @@ final class AppSettings {
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
         case pinningEnabled
+        case elementCallPictureInPictureEnabled
+        
+        case zeroAccessToken
+        case zeroMatrixUsers
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -94,7 +98,8 @@ final class AppSettings {
         
     /// The default homeserver address used. This is intentionally a string without a scheme
     /// so that it can be passed to Rust as a ServerName for well-known discovery.
-    private(set) var defaultHomeserverAddress = "matrix.org"
+    private(set) var defaultHomeserverAddress = "https://zos-home-2-e24b9412096f.herokuapp.com"
+    //DEV: private(set) var defaultHomeserverAddress = "https://zero-staging-new-9476d8d7e22a.herokuapp.com"
     
     /// The task identifier used for background app refresh. Also used in main target's the Info.plist
     let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"
@@ -117,6 +122,8 @@ final class AppSettings {
     let chatBackupDetailsURL: URL = "https://element.io/help#encryption5"
     /// Any domains that Element web may be hosted on - used for handling links.
     let elementWebHosts = ["app.element.io", "staging.element.io", "develop.element.io"]
+    
+    let zeroHomeServerPostfix = "zos-home-2.zero.tech"
     
     @UserPreference(key: UserDefaultsKeys.appAppearance, defaultValue: .system, storageType: .userDefaults(store))
     var appAppearance: AppAppearance
@@ -172,7 +179,7 @@ final class AppSettings {
         #endif
     }
     
-    let pushGatewayBaseURL: URL = "https://matrix.org/_matrix/push/v1/notify"
+    let pushGatewayBaseURL: URL = "https://zos-push-gateway-c101e2f4da49.herokuapp.com/_matrix/push/v1/notify"
     
     @UserPreference(key: UserDefaultsKeys.enableNotifications, defaultValue: true, storageType: .userDefaults(store))
     var enableNotifications
@@ -212,7 +219,7 @@ final class AppSettings {
     #endif
         
     /// Whether the user has opted in to send analytics.
-    @UserPreference(key: UserDefaultsKeys.analyticsConsentState, defaultValue: AnalyticsConsentState.unknown, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.analyticsConsentState, defaultValue: AnalyticsConsentState.optedOut, storageType: .userDefaults(store))
     var analyticsConsentState
     
     @UserPreference(key: UserDefaultsKeys.hasRunNotificationPermissionsOnboarding, defaultValue: false, storageType: .userDefaults(store))
@@ -268,7 +275,7 @@ final class AppSettings {
     var pinningEnabled
     
     enum SlidingSyncDiscovery: Codable { case proxy, native, forceNative }
-    @UserPreference(key: UserDefaultsKeys.slidingSyncDiscovery, defaultValue: .native, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.slidingSyncDiscovery, defaultValue: .forceNative, storageType: .userDefaults(store))
     var slidingSyncDiscovery: SlidingSyncDiscovery
         
     #endif
@@ -277,4 +284,14 @@ final class AppSettings {
         
     @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
     var logLevel
+    
+    // MARK: - ZERO Access Token
+    
+    @UserPreference(key: UserDefaultsKeys.zeroAccessToken, defaultValue: nil, storageType: .userDefaults(store))
+    var zeroAccessToken: String?
+    
+    // MARK: - ZERO Users
+    
+    @UserPreference(key: UserDefaultsKeys.zeroMatrixUsers, defaultValue: nil, storageType: .userDefaults(store))
+    var zeroMatrixUsers: [ZMatrixUser]?
 }

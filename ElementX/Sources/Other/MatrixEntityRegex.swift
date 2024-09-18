@@ -15,6 +15,7 @@ enum MatrixEntityRegex: String {
     case roomAlias
     case uri
     case allUsers
+    case zeroUsers
     
     var rawValue: String {
         switch self {
@@ -28,6 +29,8 @@ enum MatrixEntityRegex: String {
             return "matrix:(r|u|roomid)\\/[A-Z0-9\\-._~:/?#\\[\\]@!$&'()*+,;=%]*(?:\\?[A-Z0-9\\-._~:/?#\\[\\]@!$&'()*+,;=%]*)?"
         case .allUsers:
             return PillConstants.atRoom
+        case .zeroUsers:
+            return "@\\[[^\\]]+\\]\\(user:[^\\)]+\\)"
         }
     }
     
@@ -37,6 +40,7 @@ enum MatrixEntityRegex: String {
     static var roomAliasRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.roomAlias.rawValue, options: .caseInsensitive)
     static var uriRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.uri.rawValue, options: .caseInsensitive)
     static var allUsersRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.allUsers.rawValue)
+    static var zeroUsersRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.zeroUsers.rawValue)
     static var linkRegex = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
     // swiftlint:enable force_try
     
@@ -54,6 +58,17 @@ enum MatrixEntityRegex: String {
         }
         
         return match.range.length == identifier.count
+    }
+    
+    static func extractUsername(from match: String) -> String? {
+        if let startIndex = match.firstIndex(of: "["),
+           let endIndex = match.firstIndex(of: "]") {
+            let range = match.index(after: startIndex) ..< endIndex
+            let username = match[range]
+            return username.description
+        }
+        
+        return nil
     }
     
     static func isMatrixRoomAlias(_ alias: String) -> Bool {

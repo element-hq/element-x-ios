@@ -15,9 +15,9 @@ struct RoomMemberDetailsScreen: View {
         Form {
             headerSection
             
-            if context.viewState.memberDetails != nil, !context.viewState.isOwnMemberDetails {
-                blockUserSection
-            }
+//            if context.viewState.memberDetails != nil, !context.viewState.isOwnMemberDetails {
+//                blockUserSection
+//            }
         }
         .compoundList()
         .navigationTitle(L10n.screenRoomMemberDetailsTitle)
@@ -42,21 +42,21 @@ struct RoomMemberDetailsScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.directChat)
             }
             
-            if let roomID = context.viewState.dmRoomID {
-                Button {
-                    context.send(viewAction: .startCall(roomID: roomID))
-                } label: {
-                    CompoundIcon(\.videoCall)
-                }
-                .buttonStyle(FormActionButtonStyle(title: L10n.actionCall))
-            }
+//            if let roomID = context.viewState.dmRoomID {
+//                Button {
+//                    context.send(viewAction: .startCall(roomID: roomID))
+//                } label: {
+//                    CompoundIcon(\.videoCall)
+//                }
+//                .buttonStyle(FormActionButtonStyle(title: L10n.actionCall))
+//            }
             
-            if let permalink = context.viewState.memberDetails?.permalink {
-                ShareLink(item: permalink) {
-                    CompoundIcon(\.shareIos)
-                }
-                .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
-            }
+//            if let permalink = context.viewState.memberDetails?.permalink {
+//                ShareLink(item: permalink) {
+//                    CompoundIcon(\.shareIos)
+//                }
+//                .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
+//            }
         }
         .padding(.top, 32)
     }

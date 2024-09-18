@@ -77,6 +77,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private var timelineController: RoomTimelineControllerProtocol?
+    private let zeroAttachmentService: ZeroAttachmentService
     
     init(roomID: String,
          userSession: UserSessionProtocol,
@@ -100,6 +101,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         self.appSettings = appSettings
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
+        zeroAttachmentService = ZeroAttachmentService(appSettings: appSettings)
         
         setupStateMachine()
         
@@ -220,6 +222,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         // early return above could result in trying to access the room's timeline provider
         // before it has been set which triggers a fatal error.
         self.roomProxy = roomProxy
+        zeroAttachmentService.setRoomEncrypted(roomProxy.isEncrypted)
     }
     
     // swiftlint:disable:next function_body_length
@@ -577,7 +580,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
+                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
+                                                          zeroAttachmentService: zeroAttachmentService,
+                                                          zeroUsers: appSettings.zeroMatrixUsers ?? [])
                 
         let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
                                                                                            initialFocussedEventID: focussedEvent?.eventID,
@@ -1078,7 +1083,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
+                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
+                                                          zeroAttachmentService: zeroAttachmentService,
+                                                          zeroUsers: appSettings.zeroMatrixUsers ?? [])
                 
         let roomTimelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
                                                                                                initialFocussedEventID: nil,
@@ -1333,6 +1340,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                               roomTimelineControllerFactory: roomTimelineControllerFactory,
                                                               roomProxy: roomProxy,
                                                               userIndicatorController: userIndicatorController,
+                                                              appSettings: appSettings,
                                                               appMediator: appMediator)
         
         coordinator.actionsPublisher.sink { [weak self] action in

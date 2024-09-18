@@ -14,14 +14,15 @@ struct RoomEventStringBuilder {
     let shouldDisambiguateDisplayNames: Bool
     let shouldPrefixSenderName: Bool
     
-    func buildAttributedString(for eventItemProxy: EventTimelineItemProxy) -> AttributedString? {
+    func buildAttributedString(for eventItemProxy: EventTimelineItemProxy, author: ZMatrixUser?) -> AttributedString? {
         let sender = eventItemProxy.sender
         let isOutgoing = eventItemProxy.isOwn
-        let displayName = if shouldDisambiguateDisplayNames {
-            sender.disambiguatedDisplayName ?? sender.id
-        } else {
-            sender.displayName ?? sender.id
-        }
+//        let displayName = if shouldDisambiguateDisplayNames {
+//            sender.disambiguatedDisplayName ?? sender.id
+//        } else {
+//            sender.displayName ?? sender.id
+//        }
+        let displayName = author?.displayName ?? sender.id
         
         switch eventItemProxy.content.kind() {
         case .unableToDecrypt(let encryptedMessage):

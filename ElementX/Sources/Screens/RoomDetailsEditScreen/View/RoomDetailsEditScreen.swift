@@ -21,7 +21,7 @@ struct RoomDetailsEditScreen: View {
         Form {
             avatar
             nameSection
-            topicSection
+//            topicSection
         }
         .compoundList()
         .scrollDismissesKeyboard(.immediately)

@@ -225,7 +225,7 @@ private extension MapTilerStyle {
     init(_ colorScheme: ColorScheme) {
         switch colorScheme {
         case .light:
-            self = .light
+            self = .dark
         case .dark:
             self = .dark
         @unknown default:

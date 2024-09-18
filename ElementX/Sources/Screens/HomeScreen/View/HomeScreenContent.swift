@@ -47,7 +47,7 @@ struct HomeScreenContent: View {
                                 HomeScreenRoomList(context: context)
                             }
                         } header: {
-                            topSection
+                            //topSection
                         }
                     }
                     .isSearching($context.isSearchFieldFocused)

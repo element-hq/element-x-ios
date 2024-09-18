@@ -14,13 +14,16 @@ struct TimelineSenderAvatarView: View {
     let timelineItem: EventBasedTimelineItemProtocol
         
     var body: some View {
-        LoadableAvatarImage(url: timelineItem.sender.avatarURL,
-                            name: timelineItem.sender.displayName,
-                            contentID: timelineItem.sender.id,
-                            avatarSize: .user(on: .timeline),
-                            mediaProvider: context.mediaProvider)
-            .overlay {
-                Circle().stroke(Color.compound.bgCanvasDefault, lineWidth: 3)
-            }
+//        LoadableAvatarImage(url: timelineItem.sender.avatarURL,
+//                            name: timelineItem.sender.displayName,
+//                            contentID: timelineItem.sender.id,
+//                            avatarSize: .user(on: .timeline),
+//                            mediaProvider: context.mediaProvider)
+//            .overlay {
+//                Circle().stroke(Color.compound.bgCanvasDefault, lineWidth: 3)
+//            }
+        AvatarView(url: timelineItem.sender.avatarURL,
+                   placeholder: Asset.Images.defaultAvatarIcon,
+                   style: .small)
     }
 }

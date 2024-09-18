@@ -29,20 +29,22 @@ struct TimelineItemMenuActionProvider {
             return nil
         }
 
-        var debugActions: [TimelineItemMenuAction] = []
-        if isViewSourceEnabled {
-            debugActions.append(.viewSource)
-        }
+        let debugActions: [TimelineItemMenuAction] = []
+//        if isViewSourceEnabled {
+//            debugActions.append(.viewSource)
+//        }
 
         if let encryptedItem = timelineItem as? EncryptedRoomTimelineItem {
             switch encryptedItem.encryptionType {
-            case .megolmV1AesSha2(let sessionID, _):
-                debugActions.append(.retryDecryption(sessionID: sessionID))
+//            case .megolmV1AesSha2(let sessionID, _):
+//                debugActions.append(.retryDecryption(sessionID: sessionID))                
             default:
                 break
             }
             
-            return .init(isReactable: false, actions: [.copyPermalink], debugActions: debugActions)
+//            return .init(isReactable: false, actions: [.copyPermalink], debugActions: debugActions)
+            
+            return .init(isReactable: false, actions: [], debugActions: debugActions)
         }
         
         var actions: [TimelineItemMenuAction] = []
@@ -63,29 +65,29 @@ struct TimelineItemMenuActionProvider {
             actions.append(.edit)
         }
         
-        if canCurrentUserPin, let eventID = item.id.eventID {
-            actions.append(pinnedEventIDs.contains(eventID) ? .unpin : .pin)
-        }
+//        if canCurrentUserPin, let eventID = item.id.eventID {
+//            actions.append(pinnedEventIDs.contains(eventID) ? .unpin : .pin)
+//        }
 
         if item.isCopyable {
             actions.append(.copy)
         }
         
-        if item.isRemoteMessage {
-            actions.append(.copyPermalink)
-        }
+//        if item.isRemoteMessage {
+//            actions.append(.copyPermalink)
+//        }
 
-        if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded, let eventID = item.id.eventID {
-            actions.append(.endPoll(pollStartID: eventID))
-        }
+//        if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded, let eventID = item.id.eventID {
+//            actions.append(.endPoll(pollStartID: eventID))
+//        }
         
         if canRedactItem(item) {
             actions.append(.redact)
         }
 
-        if !item.isOutgoing {
-            actions.append(.report)
-        }
+//        if !item.isOutgoing {
+//            actions.append(.report)
+//        }
 
         if item.hasFailedToSend {
             actions = actions.filter(\.canAppearInFailedEcho)
@@ -95,12 +97,14 @@ struct TimelineItemMenuActionProvider {
             actions = actions.filter(\.canAppearInRedacted)
         }
         
-        if isPinnedEventsTimeline {
-            actions.insert(.viewInRoomTimeline, at: 0)
-            actions = actions.filter(\.canAppearInPinnedEventsTimeline)
-        }
+//        if isPinnedEventsTimeline {
+//            actions.insert(.viewInRoomTimeline, at: 0)
+//            actions = actions.filter(\.canAppearInPinnedEventsTimeline)
+//        }
 
-        return .init(isReactable: isPinnedEventsTimeline ? false : item.isReactable, actions: actions, debugActions: debugActions)
+//        return .init(isReactable: isPinnedEventsTimeline ? false : item.isReactable, actions: actions, debugActions: debugActions)
+        
+        return .init(isReactable: item.isReactable, actions: actions, debugActions: debugActions)
     }
     
     private func canRedactItem(_ item: EventBasedTimelineItemProtocol) -> Bool {

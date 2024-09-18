@@ -95,7 +95,7 @@ public struct AuthenticationTextFieldStyle: TextFieldStyle {
     
     @MainActor
     public func _body(configuration: TextField<_Label>) -> some View {
-        let rectangle = RoundedRectangle(cornerRadius: 14.0)
+        let rectangle = RoundedRectangle(cornerRadius: 7.0)
         
         return VStack(alignment: .leading, spacing: 8) {
             labelText

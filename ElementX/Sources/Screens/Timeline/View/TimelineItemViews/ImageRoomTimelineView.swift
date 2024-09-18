@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Kingfisher
 
 struct ImageRoomTimelineView: View {
     @EnvironmentObject private var context: TimelineViewModel.Context
@@ -14,15 +15,37 @@ struct ImageRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            LoadableImage(mediaSource: source,
-                          blurhash: timelineItem.content.blurhash,
-                          mediaProvider: context.mediaProvider) {
-                placeholder
+            HStack {
+                if timelineItem.content.isZeroImage {
+                    if let remoteURL = timelineItem.content.imageURL {
+                        KFAnimatedImage(URL(string: remoteURL))
+                            .placeholder { _ in
+                               placeholder
+                            }
+                            .startLoadingBeforeViewAppear(false)
+                    } else if let imageData =
+                                timelineItem.content.imageData {
+                        Image(uiImage: UIImage(data: imageData)!)
+                            .resizable()
+                    } else {
+                        loadableImage
+                    }
+                } else {
+                    loadableImage
+                }
             }
             .timelineMediaFrame(height: timelineItem.content.height,
                                 aspectRatio: timelineItem.content.aspectRatio)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(L10n.commonImage)
+        }
+    }
+    
+    var loadableImage: some View {
+        LoadableImage(mediaSource: source,
+                      blurhash: timelineItem.content.blurhash,
+                      mediaProvider: context.mediaProvider) {
+            placeholder
         }
     }
     

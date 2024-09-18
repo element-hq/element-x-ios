@@ -15,27 +15,30 @@ struct RoomDetailsScreen: View {
     
     var body: some View {
         Form {
-            if let recipient = context.viewState.dmRecipient,
-               let accountOwner = context.viewState.accountOwner {
-                dmHeaderSection(accountOwner: accountOwner,
-                                recipient: recipient)
-            } else {
-                normalRoomHeaderSection
-            }
+//            if let recipient = context.viewState.dmRecipient,
+//               let accountOwner = context.viewState.accountOwner {
+//                dmHeaderSection(accountOwner: accountOwner,
+//                                recipient: recipient)
+//            } else {
+//                normalRoomHeaderSection
+//            }
+            normalRoomHeaderSection
 
-            topicSection
+//            topicSection
             
             configurationSection
 
             aboutSection
 
-            securitySection
+//            securitySection
 
-            if let recipient = context.viewState.dmRecipient {
-                ignoreUserSection(user: recipient)
-            }
+//            if let recipient = context.viewState.dmRecipient {
+//                ignoreUserSection(user: recipient)
+//            }
             
-            leaveRoomSection
+            if context.viewState.dmRecipient.isNil {
+                leaveRoomSection
+            }
         }
         .compoundList()
         .alert(item: $context.alertInfo)
@@ -46,13 +49,13 @@ struct RoomDetailsScreen: View {
                actions: blockUserAlertActions,
                message: blockUserAlertMessage)
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                if context.viewState.canEdit {
-                    Button(L10n.actionEdit) {
-                        context.send(viewAction: .processTapEdit)
-                    }
-                }
-            }
+//            ToolbarItem(placement: .navigationBarTrailing) {
+//                if context.viewState.canEdit {
+//                    Button(L10n.actionEdit) {
+//                        context.send(viewAction: .processTapEdit)
+//                    }
+//                }
+//            }
         }
         .navigationTitle(L10n.screenRoomDetailsTitle)
         .navigationBarTitleDisplayMode(.inline)
@@ -160,12 +163,12 @@ struct RoomDetailsScreen: View {
                         })
                         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
             }
-            ListRow(label: .default(title: L10n.screenPollsHistoryTitle,
-                                    icon: \.polls),
-                    kind: .navigationLink {
-                        context.send(viewAction: .processTapPolls)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
+//            ListRow(label: .default(title: L10n.screenPollsHistoryTitle,
+//                                    icon: \.polls),
+//                    kind: .navigationLink {
+//                        context.send(viewAction: .processTapPolls)
+//                    })
+//                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
         }
     }
     
@@ -182,30 +185,30 @@ struct RoomDetailsScreen: View {
                     .disabled(context.viewState.notificationSettingsState.isLoading)
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
             
-            ListRow(label: .default(title: L10n.commonFavourite, icon: \.favourite),
-                    kind: .toggle($context.isFavourite))
-                .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.favourite)
-                .onChange(of: context.isFavourite) { newValue in
-                    context.send(viewAction: .toggleFavourite(isFavourite: newValue))
-                }
+//            ListRow(label: .default(title: L10n.commonFavourite, icon: \.favourite),
+//                    kind: .toggle($context.isFavourite))
+//                .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.favourite)
+//                .onChange(of: context.isFavourite) { newValue in
+//                    context.send(viewAction: .toggleFavourite(isFavourite: newValue))
+//                }
             
-            if context.viewState.isPinningEnabled {
-                ListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
-                                        icon: \.pin),
-                        details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
-                        kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink(action: {
-                            context.send(viewAction: .processTapPinnedEvents)
-                        }))
-                        .disabled(context.viewState.pinnedEventsActionState.isLoading)
-            }
+//            if context.viewState.isPinningEnabled {
+//                ListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
+//                                        icon: \.pin),
+//                        details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
+//                        kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink(action: {
+//                            context.send(viewAction: .processTapPinnedEvents)
+//                        }))
+//                        .disabled(context.viewState.pinnedEventsActionState.isLoading)
+//            }
             
-            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
-                ListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
-                                        icon: \.admin),
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapRolesAndPermissions)
-                        })
-            }
+//            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
+//                ListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
+//                                        icon: \.admin),
+//                        kind: .navigationLink {
+//                            context.send(viewAction: .processTapRolesAndPermissions)
+//                        })
+//            }
         }
         .disabled(context.viewState.notificationSettingsState.isLoading)
     }

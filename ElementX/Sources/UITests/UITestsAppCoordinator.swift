@@ -634,12 +634,16 @@ class MockScreen: Identifiable {
             
             clientProxy.roomForIdentifierReturnValue = .joined(roomProxy)
             
+            let zeroAttachmentService = ZeroAttachmentService(appSettings: ServiceLocator.shared.settings, isRoomEncrypted: roomProxy.isEncrypted)
+            
             let timelineController = RoomTimelineController(roomProxy: roomProxy,
                                                             timelineProxy: roomProxy.timeline,
                                                             initialFocussedEventID: nil,
                                                             timelineItemFactory: RoomTimelineItemFactory(userID: "@alice:matrix.org",
                                                                                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                                                                         stateEventStringBuilder: RoomStateEventStringBuilder(userID: "@alice:matrix.org")),
+                                                                                                         stateEventStringBuilder: RoomStateEventStringBuilder(userID: "@alice:matrix.org"),
+                                                                                                         zeroAttachmentService: zeroAttachmentService,
+                                                                                                        zeroUsers: []),
                                                             appSettings: ServiceLocator.shared.settings)
             
             let flowCoordinator = UserSessionFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),

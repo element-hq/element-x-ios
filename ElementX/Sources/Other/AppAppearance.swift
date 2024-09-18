@@ -16,11 +16,11 @@ enum AppAppearance: CaseIterable, Codable {
     var interfaceStyle: UIUserInterfaceStyle {
         switch self {
         case .light:
-            return .light
+            return .dark
         case .dark:
             return .dark
         case .system:
-            return .unspecified
+            return .dark
         }
     }
 }

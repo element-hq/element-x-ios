@@ -81,18 +81,20 @@ struct ComposerToolbarViewState: BindableState {
     }
 
     var showSendButton: Bool {
-        switch composerMode {
-        case .recordVoiceMessage:
-            return false
-        case .previewVoiceMessage:
-            return true
-        default:
-            if bindings.composerFormattingEnabled {
-                return !composerEmpty
-            } else {
-                return !bindings.plainComposerText.string.isEmpty
-            }
-        }
+        return true
+        
+//        switch composerMode {
+//        case .recordVoiceMessage:
+//            return false
+//        case .previewVoiceMessage:
+//            return true
+//        default:
+//            if bindings.composerFormattingEnabled {
+//                return !composerEmpty
+//            } else {
+//                return !bindings.plainComposerText.string.isEmpty
+//            }
+//        }
     }
     
     var sendButtonDisabled: Bool {

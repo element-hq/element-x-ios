@@ -44,10 +44,10 @@ struct ReadReceiptCell: View {
                             .lineLimit(1)
                     }
                 }
-                Text(subtitle)
-                    .font(.compound.bodySM)
-                    .foregroundColor(.compound.textSecondary)
-                    .lineLimit(1)
+//                Text(subtitle)
+//                    .font(.compound.bodySM)
+//                    .foregroundColor(.compound.textSecondary)
+//                    .lineLimit(1)
             }
         }
         .padding(.vertical, 8)

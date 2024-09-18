@@ -78,7 +78,7 @@
 "action_quote" = "Quote";
 "action_react" = "React";
 "action_reject" = "Reject";
-"action_remove" = "Remove";
+"action_remove" = "Delete";
 "action_reply" = "Reply";
 "action_reply_in_thread" = "Reply in thread";
 "action_report_bug" = "Report bug";

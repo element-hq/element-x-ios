@@ -28,11 +28,19 @@ struct RoomHeaderView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
     
+    @ViewBuilder
     private var avatarImage: some View {
-        RoomAvatarImage(avatar: roomAvatar,
-                        avatarSize: .room(on: .timeline),
-                        mediaProvider: mediaProvider)
+        switch roomAvatar {
+        case .room(let id, let name, let avatarURL):
+            AvatarView(url: avatarURL,
+                       placeholder: Asset.Images.defaultAvatarIcon,
+                       style: .small)
+        default:
+            RoomAvatarImage(avatar: roomAvatar,
+                            avatarSize: .room(on: .timeline),
+                            mediaProvider: mediaProvider)
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.avatar)
+        }
     }
 }
 

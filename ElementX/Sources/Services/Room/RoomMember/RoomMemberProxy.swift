@@ -10,14 +10,21 @@ import MatrixRustSDK
 
 final class RoomMemberProxy: RoomMemberProxyProtocol {
     private let member: RoomMember
+    private let zeroMember: ZMatrixUser?
     
     init(member: RoomMember) {
         self.member = member
+        self.zeroMember = nil
+    }
+    
+    init(member: RoomMember, zeroMember: ZMatrixUser? = nil) {
+        self.member = member
+        self.zeroMember = zeroMember
     }
     
     var userID: String { member.userId }
-    var displayName: String? { member.displayName }
-    var avatarURL: URL? { member.avatarUrl.flatMap(URL.init(string:)) }
+    var displayName: String? { zeroMember?.displayName ?? member.displayName }
+    var avatarURL: URL? { URL(string: zeroMember?.profileSummary?.profileImage ?? member.avatarUrl ?? "") }
     
     var membership: MembershipState { member.membership }
     var isIgnored: Bool { member.isIgnored }

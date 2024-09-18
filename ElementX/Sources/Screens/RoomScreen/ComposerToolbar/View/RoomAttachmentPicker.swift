@@ -36,29 +36,31 @@ struct RoomAttachmentPicker: View {
             }
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)
             
-            Button {
-                context.send(viewAction: .attach(.poll))
-            } label: {
-                Label(L10n.screenRoomAttachmentSourcePoll, icon: \.polls)
-                    .labelStyle(.menuSheet)
-            }
-            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)
+            /// Hiding `menu item` which are not needed for `zero`
             
-            Button {
-                context.send(viewAction: .attach(.location))
-            } label: {
-                Label(L10n.screenRoomAttachmentSourceLocation, icon: \.locationPin)
-                    .labelStyle(.menuSheet)
-            }
-            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerLocation)
-            
-            Button {
-                context.send(viewAction: .attach(.file))
-            } label: {
-                Label(L10n.screenRoomAttachmentSourceFiles, icon: \.attachment)
-                    .labelStyle(.menuSheet)
-            }
-            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerDocuments)
+//            Button {
+//                context.send(viewAction: .attach(.poll))
+//            } label: {
+//                Label(L10n.screenRoomAttachmentSourcePoll, icon: \.polls)
+//                    .labelStyle(.menuSheet)
+//            }
+//            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)
+//            
+//            Button {
+//                context.send(viewAction: .attach(.location))
+//            } label: {
+//                Label(L10n.screenRoomAttachmentSourceLocation, icon: \.locationPin)
+//                    .labelStyle(.menuSheet)
+//            }
+//            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerLocation)
+//            
+//            Button {
+//                context.send(viewAction: .attach(.file))
+//            } label: {
+//                Label(L10n.screenRoomAttachmentSourceFiles, icon: \.attachment)
+//                    .labelStyle(.menuSheet)
+//            }
+//            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerDocuments)
             
             Button {
                 context.send(viewAction: .attach(.photoLibrary))

@@ -192,7 +192,7 @@ internal enum L10n {
   internal static var actionReact: String { return L10n.tr("Localizable", "action_react") }
   /// Reject
   internal static var actionReject: String { return L10n.tr("Localizable", "action_reject") }
-  /// Remove
+  /// Delete
   internal static var actionRemove: String { return L10n.tr("Localizable", "action_remove") }
   /// Reply
   internal static var actionReply: String { return L10n.tr("Localizable", "action_reply") }

@@ -28,31 +28,31 @@ struct HomeScreen: View {
             .alert(item: $context.leaveRoomAlertItem,
                    actions: leaveRoomAlertActions,
                    message: leaveRoomAlertMessage)
-            .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
-            .toolbar { toolbar }
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-            .track(screen: .Home)
-            .introspect(.viewController, on: .supportedVersions) { controller in
-                Task {
-                    if bloomView == nil {
-                        makeBloomView(controller: controller)
-                    }
-                }
-                let isTopController = controller.navigationController?.topViewController != controller
-                let isHidden = isTopController || context.isSearchFieldFocused
-                if let bloomView {
-                    bloomView.isHidden = isHidden
-                    UIView.transition(with: bloomView, duration: 1.75, options: .curveEaseInOut) {
-                        bloomView.alpha = isTopController ? 0 : 1
-                    }
-                }
-                gradientView?.isHidden = isHidden
-                navigationBarContainer?.clipsToBounds = !isHidden
-                hairlineView?.isHidden = isHidden || !scrollViewAdapter.isAtTopEdge.value
-                if !isHidden {
-                    updateBloomCenter()
-                }
-            }
+//            .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
+//            .toolbar { toolbar }
+//            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+//            .track(screen: .Home)
+//            .introspect(.viewController, on: .supportedVersions) { controller in
+//                Task {
+//                    if bloomView == nil {
+//                        makeBloomView(controller: controller)
+//                    }
+//                }
+//                let isTopController = controller.navigationController?.topViewController != controller
+//                let isHidden = isTopController || context.isSearchFieldFocused
+//                if let bloomView {
+//                    bloomView.isHidden = isHidden
+//                    UIView.transition(with: bloomView, duration: 1.75, options: .curveEaseInOut) {
+//                        bloomView.alpha = isTopController ? 0 : 1
+//                    }
+//                }
+//                gradientView?.isHidden = isHidden
+//                navigationBarContainer?.clipsToBounds = !isHidden
+//                hairlineView?.isHidden = isHidden || !scrollViewAdapter.isAtTopEdge.value
+//                if !isHidden {
+//                    updateBloomCenter()
+//                }
+//            }
             .onReceive(scrollViewAdapter.isAtTopEdge.removeDuplicates()) { value in
                 hairlineView?.isHidden = !value
                 guard let gradientView else {

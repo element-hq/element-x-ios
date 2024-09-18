@@ -17,7 +17,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let shouldUpdateVisibleRange: Bool
     private let notificationSettings: NotificationSettingsProxyProtocol
     private let appSettings: AppSettings
-
+    private let zeroMatrixUsersService: ZeroMatrixUsersService
+    
     private let roomListPageSize = 200
     
     private let serialDispatchQueue: DispatchQueue
@@ -40,7 +41,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
         roomListSubject.asCurrentValuePublisher()
     }
-
+    
     var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> {
         stateSubject.asCurrentValuePublisher()
     }
@@ -62,7 +63,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
          name: String,
          shouldUpdateVisibleRange: Bool = false,
          notificationSettings: NotificationSettingsProxyProtocol,
-         appSettings: AppSettings) {
+         appSettings: AppSettings,
+         zeroMatrixUsersService: ZeroMatrixUsersService) {
         self.roomListService = roomListService
         self.roomListServiceStatePublisher = roomListServiceStatePublisher
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .default)
@@ -71,6 +73,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.shouldUpdateVisibleRange = shouldUpdateVisibleRange
         self.notificationSettings = notificationSettings
         self.appSettings = appSettings
+        self.zeroMatrixUsersService = zeroMatrixUsersService
         
         diffsPublisher
             .receive(on: serialDispatchQueue)
@@ -191,7 +194,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                     try roomListService.subscribeToRooms(roomIds: roomIDs,
                                                          settings: .init(requiredState: SlidingSyncConstants.defaultRequiredState,
                                                                          timelineLimit: SlidingSyncConstants.defaultTimelineLimit,
-                                                                         includeHeroes: false))
+                                                                         includeHeroes: true))
                 } catch {
                     MXLog.error("Failed subscribing to rooms with error: \(error)")
                 }
@@ -207,7 +210,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         rooms = diffs.reduce(rooms) { currentItems, diff in
-            processDiff(diff, on: currentItems)
+            fetchAllRoomMembers()
+            return processDiff(diff, on: currentItems)
         }
     }
     
@@ -259,8 +263,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         if let latestRoomMessage = roomDetails.latestEvent {
             let lastMessage = EventTimelineItemProxy(item: latestRoomMessage, id: "0")
+            let author = zeroMatrixUsersService.getMatrixUser(userId: lastMessage.sender.id)
             lastMessageFormattedTimestamp = lastMessage.timestamp.formattedMinimal()
-            attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage)
+            attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage, author: author)
         }
         
         var inviterProxy: RoomMemberProxyProtocol?
@@ -270,13 +275,22 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         let notificationMode = roomInfo.cachedUserDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
         
+        var displayName: String? = roomInfo.displayName ?? roomInfo.rawName
+        var roomAvatar: String? = roomInfo.avatarUrl
+        
+        if displayName?.stringMatchesUserIdFormatRegex() == true {
+            let user = zeroMatrixUsersService.getMatrixUserCleaned(userId: displayName!)
+            displayName = user?.displayName
+            roomAvatar = user?.profileSummary?.profileImage
+        }
+        
         return RoomSummary(roomListItem: roomListItem,
                            id: roomInfo.id,
                            isInvite: roomInfo.membership == .invited,
                            inviter: inviterProxy,
-                           name: roomInfo.displayName ?? roomInfo.id,
+                           name: displayName ?? "",
                            isDirect: roomInfo.isDirect,
-                           avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
+                           avatarURL: URL(string: roomAvatar ?? ""),
                            heroes: roomInfo.heroes.map(UserProfileProxy.init),
                            lastMessage: attributedLastMessage,
                            lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
@@ -371,12 +385,32 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         MXLog.info("\(name): Rebuilding room summaries for \(rooms.count) rooms")
-        
+                
         rooms = rooms.map {
             self.buildRoomSummary(from: $0.roomListItem)
         }
         
         MXLog.info("\(name): Finished rebuilding room summaries (\(rooms.count) rooms)")
+    }
+    
+    private func fetchAllRoomMembers() {
+        if !rooms.isEmpty {
+            Task {
+                do {
+                    let members = try await rooms.concurrentMap { room -> [String] in
+                        let roomInfo = try await room.roomListItem.roomInfo()
+                        let roomLastEvent = await room.roomListItem.latestEvent()
+                        return self.zeroMatrixUsersService.getRoomMemberIds(roomInfo: roomInfo, lastEventSender: roomLastEvent?.sender())
+                    }
+                        .flatMap { $0 }
+                        .uniqued { $0 }
+                    let _ = try await zeroMatrixUsersService.fetchZeroUsers(userIds: members)
+                } catch {
+                    print("Error while fetching all room members userIds")
+                    print(error)
+                }
+            }
+        }
     }
 }
 
