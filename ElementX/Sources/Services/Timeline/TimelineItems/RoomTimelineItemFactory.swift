@@ -598,7 +598,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 do {
                     attachmentData = try await zeroAttachmentService.downloadMessageAttachment(messageContent)
                 } catch {
-                    print(error)
+                    MXLog.error(error)
                 }
             }
             semaphore.signal()

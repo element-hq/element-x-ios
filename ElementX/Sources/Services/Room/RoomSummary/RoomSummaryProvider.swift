@@ -406,8 +406,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                         .uniqued { $0 }
                     let _ = try await zeroMatrixUsersService.fetchZeroUsers(userIds: members)
                 } catch {
-                    print("Error while fetching all room members userIds")
-                    print(error)
+                    MXLog.verbose("Error while fetching all room members userIds")
+                    MXLog.error(error)
                 }
             }
         }
