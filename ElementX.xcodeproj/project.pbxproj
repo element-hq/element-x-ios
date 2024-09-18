@@ -1131,8 +1131,7 @@
 		2F623DA1122140A987B34D08 /* NotificationSettingsEditScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7BB497B2F539C17E88F6B7 /* NotificationSettingsEditScreenViewModelProtocol.swift */; };
 		2F94054F50E312AF30BE07F3 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B21E611DADDEF00307E7AC /* String.swift */; };
 		2FEC6652055984389CE1BBEC /* TimelineProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50F03079F6B5EF9CA005F14 /* TimelineProxyProtocol.swift */; };
-		303A687D2C9AD44300EF1844 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 303A687C2C9AD44300EF1844 /* Alamofire */; };
-		303A687F2C9AD44300EF1844 /* AlamofireDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 303A687E2C9AD44300EF1844 /* AlamofireDynamic */; };
+		300FA9692C9B9769000B445D /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 300FA9682C9B9769000B445D /* Alamofire */; };
 		3041EBA2660F28FFB7BDA339 /* EncryptionResetScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0FF9CB3EFA753277291F609 /* EncryptionResetScreenCoordinator.swift */; };
 		3042527CB344A9EF1157FC26 /* AudioRecorderStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55CC239AE12339C565F6C9A /* AudioRecorderStateTests.swift */; };
 		308BD9343B95657FAA583FB7 /* SwiftState in Frameworks */ = {isa = PBXBuildFile; productRef = 19CD5B074D7DD44AF4C58BB6 /* SwiftState */; };
@@ -3393,7 +3392,6 @@
 				6F2AB43A1EFAD8A97AF41A15 /* Collections in Frameworks */,
 				93BA4A81B6D893271101F9F0 /* DeviceKit in Frameworks */,
 				9AC5F8142413862A9E3A2D98 /* DTCoreText in Frameworks */,
-				303A687F2C9AD44300EF1844 /* AlamofireDynamic in Frameworks */,
 				CB137BFB3E083C33E398A6CB /* KeychainAccess in Frameworks */,
 				3C549A0BF39F8A854D45D9FD /* Kingfisher in Frameworks */,
 				41DFDD212D1BE57CA50D783B /* KZFileWatchers in Frameworks */,
@@ -3408,7 +3406,7 @@
 				1882EB822C8F85C7001DA2A9 /* TaggedTime in Frameworks */,
 				B0CB16349B96262AA65A04AF /* Sentry in Frameworks */,
 				36AD4DD4C798E22584ED3200 /* SentrySwiftUI in Frameworks */,
-				303A687D2C9AD44300EF1844 /* Alamofire in Frameworks */,
+				300FA9692C9B9769000B445D /* Alamofire in Frameworks */,
 				36CD6E11B37396E14F032CB6 /* Version in Frameworks */,
 				18E99FF92C9459DE0082DDA4 /* CryptoSwift in Frameworks */,
 				1882EB7E2C8F85C7001DA2A9 /* Tagged in Frameworks */,
@@ -6925,8 +6923,7 @@
 				1882EB7F2C8F85C7001DA2A9 /* TaggedMoney */,
 				1882EB812C8F85C7001DA2A9 /* TaggedTime */,
 				18E99FF82C9459DE0082DDA4 /* CryptoSwift */,
-				303A687C2C9AD44300EF1844 /* Alamofire */,
-				303A687E2C9AD44300EF1844 /* AlamofireDynamic */,
+				300FA9682C9B9769000B445D /* Alamofire */,
 			);
 			productName = ElementX;
 			productReference = 4CD6AC7546E8D7E5C73CEA48 /* ElementX.app */;
@@ -7078,7 +7075,7 @@
 				44FA555384AD79668D886043 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */,
 				1882EB7C2C8F85C7001DA2A9 /* XCRemoteSwiftPackageReference "swift-tagged" */,
 				18E99FF72C9459DE0082DDA4 /* XCRemoteSwiftPackageReference "CryptoSwift" */,
-				303A687B2C9AD44300EF1844 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				300FA9672C9B9769000B445D /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			projectDirPath = "";
 			projectRoot = "";
@@ -10301,7 +10298,7 @@
 				minimumVersion = 1.8.3;
 			};
 		};
-		303A687B2C9AD44300EF1844 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+		300FA9672C9B9769000B445D /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
 			requirement = {
@@ -10736,15 +10733,10 @@
 			package = EC6D0C817B1C21D9D096505A /* XCRemoteSwiftPackageReference "Version" */;
 			productName = Version;
 		};
-		303A687C2C9AD44300EF1844 /* Alamofire */ = {
+		300FA9682C9B9769000B445D /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 303A687B2C9AD44300EF1844 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			package = 300FA9672C9B9769000B445D /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
-		};
-		303A687E2C9AD44300EF1844 /* AlamofireDynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 303A687B2C9AD44300EF1844 /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = AlamofireDynamic;
 		};
 		36B7FC232711031AA2B0D188 /* DTCoreText */ = {
 			isa = XCSwiftPackageProductDependency;
