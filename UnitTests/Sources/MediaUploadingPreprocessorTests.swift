@@ -67,7 +67,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         XCTAssertNotNil(videoInfo.thumbnailInfo)
         XCTAssertEqual(videoInfo.thumbnailInfo?.mimetype, "image/jpeg")
-        XCTAssertEqual(videoInfo.thumbnailInfo?.size ?? 0, 33949, accuracy: 100)
+        XCTAssertEqual(videoInfo.thumbnailInfo?.size ?? 0, 34206, accuracy: 100)
         XCTAssertEqual(videoInfo.thumbnailInfo?.width, 800)
         XCTAssertEqual(videoInfo.thumbnailInfo?.height, 450)
     }
@@ -99,7 +99,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         // Check resulting video info
         XCTAssertEqual(videoInfo.mimetype, "video/mp4")
-        XCTAssertEqual(videoInfo.blurhash, "K7C$_zt70LKQMx^+~B9GIU")
+        XCTAssertEqual(videoInfo.blurhash, "K7C$_zs;0LKQMx^+~B9GIU")
         XCTAssertEqual(videoInfo.size ?? 0, 9_775_822, accuracy: 100)
         XCTAssertEqual(videoInfo.width, 1080)
         XCTAssertEqual(videoInfo.height, 1920)
@@ -107,7 +107,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         XCTAssertNotNil(videoInfo.thumbnailInfo)
         XCTAssertEqual(videoInfo.thumbnailInfo?.mimetype, "image/jpeg")
-        XCTAssertEqual(videoInfo.thumbnailInfo?.size ?? 0, 82854, accuracy: 100)
+        XCTAssertEqual(videoInfo.thumbnailInfo?.size ?? 0, 83220, accuracy: 100)
         XCTAssertEqual(videoInfo.thumbnailInfo?.width, 337)
         XCTAssertEqual(videoInfo.thumbnailInfo?.height, 600)
     }

@@ -139,7 +139,7 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
     func testSelectUserAsAdmin() async throws {
         // Given the room list viewed as an admin.
         setup(with: .allMembersAsAdmin)
-        var deferred = deferFulfillment(context.$viewState) { !$0.visibleInvitedMembers.isEmpty }
+        var deferred = deferFulfillment(context.$viewState) { !$0.visibleInvitedMembers.isEmpty && $0.canKickUsers && $0.canBanUsers }
         try await deferred.fulfill()
         XCTAssertNil(context.memberToManage)
         
@@ -160,7 +160,7 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
     func testSelectModeratorAsAdmin() async throws {
         // Given the room list viewed as an admin.
         setup(with: .allMembersAsAdmin)
-        var deferred = deferFulfillment(context.$viewState) { !$0.visibleInvitedMembers.isEmpty }
+        var deferred = deferFulfillment(context.$viewState) { !$0.visibleInvitedMembers.isEmpty && $0.canKickUsers && $0.canBanUsers }
         try await deferred.fulfill()
         XCTAssertNil(context.memberToManage)
         
