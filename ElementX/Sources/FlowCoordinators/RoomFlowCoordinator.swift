@@ -43,6 +43,7 @@ enum RoomFlowCoordinatorEntryPoint: Hashable {
 
 // swiftlint:disable:next type_body_length
 class RoomFlowCoordinator: FlowCoordinatorProtocol {
+    private static let loadingID = "RoomFlowCoordinatorLoadingID"
     private let roomID: String
     private let userSession: UserSessionProtocol
     private let isChildFlow: Bool
@@ -179,10 +180,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func handleRoomRoute(roomID: String, via: [String], focussedEventID: String? = nil, animated: Bool) async {
         guard roomID == self.roomID else { fatalError("Navigation route doesn't belong to this room flow.") }
         
+        userIndicatorController.submitIndicator(.init(id: RoomFlowCoordinator.loadingID, type: .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: false), title: L10n.commonLoading, persistent: true))
         guard let room = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            userIndicatorController.retractIndicatorWithId(Self.loadingID)
             stateMachine.tryEvent(.presentJoinRoomScreen(via: via), userInfo: EventUserInfo(animated: animated))
             return
         }
+        userIndicatorController.retractIndicatorWithId(Self.loadingID)
         
         switch room {
         case .joined(let roomProxy):
