@@ -124,7 +124,8 @@ class UserSessionStore: UserSessionStoreProtocol {
             .baseBuilder(httpProxy: URL(string: homeserverURL)?.globalProxy,
                          slidingSync: .restored,
                          sessionDelegate: keychainController,
-                         appHooks: appHooks)
+                         appHooks: appHooks,
+                         invisibleCryptoEnabled: appSettings.enableNotifications)
             .sessionPaths(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                           cachePath: credentials.restorationToken.sessionDirectories.cachePath)
             .username(username: credentials.userID)

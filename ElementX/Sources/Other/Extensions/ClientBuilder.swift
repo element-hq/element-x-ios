@@ -14,12 +14,12 @@ extension ClientBuilder {
                             httpProxy: String? = nil,
                             slidingSync: ClientBuilderSlidingSync,
                             sessionDelegate: ClientSessionDelegate,
-                            appHooks: AppHooks) -> ClientBuilder {
+                            appHooks: AppHooks,
+                            invisibleCryptoEnabled: Bool) -> ClientBuilder {
         var builder = ClientBuilder()
             .enableCrossProcessRefreshLock(processId: InfoPlistReader.main.bundleIdentifier, sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
             .requestConfig(config: .init(retryLimit: 0, timeout: 30000, maxConcurrentRequests: nil, retryTimeout: nil))
-            .roomKeyRecipientStrategy(strategy: .deviceBasedStrategy(onlyAllowTrustedDevices: false, errorOnVerifiedUserProblem: true))
         
         builder = switch slidingSync {
         case .restored: builder
@@ -33,6 +33,12 @@ extension ClientBuilder {
                 .autoEnableCrossSigning(autoEnableCrossSigning: true)
                 .backupDownloadStrategy(backupDownloadStrategy: .afterDecryptionFailure)
                 .autoEnableBackups(autoEnableBackups: true)
+                
+            if invisibleCryptoEnabled {
+                builder = builder.roomKeyRecipientStrategy(strategy: CollectStrategy.identityBasedStrategy)
+            } else {
+                builder = builder.roomKeyRecipientStrategy(strategy: .deviceBasedStrategy(onlyAllowTrustedDevices: false, errorOnVerifiedUserProblem: true))
+            }
         }
         
         if let httpProxy {

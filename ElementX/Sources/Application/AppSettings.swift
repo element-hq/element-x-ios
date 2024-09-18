@@ -8,6 +8,12 @@
 import Foundation
 import SwiftUI
 
+// Common settings between app and NSE
+protocol CommonSettingsProtocol {
+    var logLevel: TracingConfiguration.LogLevel { get }
+    var invisibleCryptoEnabled: Bool { get }
+}
+
 /// Store Element specific app settings.
 final class AppSettings {
     private enum UserDefaultsKeys: String {
@@ -37,6 +43,7 @@ final class AppSettings {
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
         case pinningEnabled
+        case invisibleCryptoEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -270,11 +277,17 @@ final class AppSettings {
     enum SlidingSyncDiscovery: Codable { case proxy, native, forceNative }
     @UserPreference(key: UserDefaultsKeys.slidingSyncDiscovery, defaultValue: .native, storageType: .userDefaults(store))
     var slidingSyncDiscovery: SlidingSyncDiscovery
-        
+
     #endif
     
     // MARK: - Shared
         
     @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
     var logLevel
+    
+    /// Configuration to enable invisible crypto. In this mode only devices signed by their owner will be considered in e2ee rooms.
+    @UserPreference(key: UserDefaultsKeys.invisibleCryptoEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var invisibleCryptoEnabled
 }
+
+extension AppSettings: CommonSettingsProtocol { }
