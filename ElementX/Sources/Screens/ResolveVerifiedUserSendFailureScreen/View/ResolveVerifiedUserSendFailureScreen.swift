@@ -78,11 +78,15 @@ struct ResolveVerifiedUserSendFailureScreen: View {
 
 struct ResolveVerifiedUserSendFailureScreen_Previews: PreviewProvider, TestablePreview {
     static let unsignedDeviceViewModel = makeViewModel(failure: .hasUnsignedDevice(devices: ["@alice:matrix.org": []]))
+    static let ownUnsignedDeviceViewModel = makeViewModel(failure: .hasUnsignedDevice(devices: [RoomMemberProxyMock.mockMe.userID: []]))
     static let changedIdentityViewModel = makeViewModel(failure: .changedIdentity(users: ["@alice:matrix.org"]))
     
     static var previews: some View {
         ResolveVerifiedUserSendFailureScreen(context: unsignedDeviceViewModel.context)
             .previewDisplayName("Unsigned Device")
+        
+        ResolveVerifiedUserSendFailureScreen(context: ownUnsignedDeviceViewModel.context)
+            .previewDisplayName("Own Unsigned Device")
         
         ResolveVerifiedUserSendFailureScreen(context: changedIdentityViewModel.context)
             .previewDisplayName("Identity Changed")
