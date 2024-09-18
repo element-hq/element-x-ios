@@ -4,4 +4,4 @@ sources:
 templates:
   - PreviewTests.stencil
 output:
-  ../../PreviewTests/Sources/PreviewTests.swift
+  ../../PreviewTests/Sources/GeneratedPreviewTests.swift
