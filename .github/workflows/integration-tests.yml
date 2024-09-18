@@ -77,6 +77,8 @@ jobs:
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
         uses: codecov/test-results-action@v1
+        continue-on-error: true
         with:
+          fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: integrationtests
