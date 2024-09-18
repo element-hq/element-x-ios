@@ -1,7 +1,13 @@
 import Danger
 import Foundation
 
-SwiftLint.lint(inline: true)
+SwiftLint.lint(.modifiedAndCreatedFiles(directory: nil),
+               inline: true,
+               configFile: nil,
+               strict: false,
+               quiet: true,
+               swiftlintPath: nil,
+               markdownAction: { _ in })
 
 let danger = Danger()
 
