@@ -28,18 +28,20 @@ enum Application {
     }
     
     private static func checkEnvironments() {
-        let requirediPhoneSimulator = "iPhone15,4" // iPhone 15
+        let requirediPhoneSimulator = "iPhone17,3" // iPhone 16
         let requirediPadSimulator = "iPad13,18" // iPad (10th generation)
-        let requiredOSVersion = 17
+        let requiredOSVersion = 18
         
         let osVersion = ProcessInfo().operatingSystemVersion
         guard osVersion.majorVersion == requiredOSVersion else {
             fatalError("Switch to iOS \(requiredOSVersion) for these tests.")
         }
         
-        guard let deviceModel = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"],
-              deviceModel == requirediPhoneSimulator || deviceModel == requirediPadSimulator else {
-            fatalError("Switch to using \(requirediPhoneSimulator) or \(requirediPadSimulator) for these tests.")
+        guard let deviceModel = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] else {
+            fatalError("Unknown simulator.")
+        }
+        guard deviceModel == requirediPhoneSimulator || deviceModel == requirediPadSimulator else {
+            fatalError("Running on \(deviceModel) but we only support \(requirediPhoneSimulator) and \(requirediPadSimulator).")
         }
     }
 }
