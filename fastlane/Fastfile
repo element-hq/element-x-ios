@@ -7,7 +7,7 @@ if File.exist?(enterprise)
 end
 
 before_all do
-  xcversion(version: "15.4")
+  xcversion(version: "16.0")
 
   ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "180"
   ENV["FASTLANE_XCODE_LIST_TIMEOUT"] = "180"
@@ -106,15 +106,15 @@ lane :ui_tests do |options|
   reset_simulator_contents()
   
   create_simulator_if_necessary(
-    name: "iPhone 15",
-    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-15",
-    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-17-5"
+    name: "iPhone 16",
+    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-16",
+    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-18-0"
   )
   
   create_simulator_if_necessary(
     name: "iPad (10th generation)",
     type: "com.apple.CoreSimulator.SimDeviceType.iPad-10th-generation",
-    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-17-5"
+    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-18-0"
   )
 
   if options[:test_name]
@@ -125,7 +125,7 @@ lane :ui_tests do |options|
 
   run_tests(
     scheme: "UITests",
-    devices: ["iPhone 15", "iPad (10th generation)"],
+    devices: ["iPhone 16", "iPad (10th generation)"],
     ensure_devices_found: true,
     prelaunch_simulator: true,
     result_bundle: true,
