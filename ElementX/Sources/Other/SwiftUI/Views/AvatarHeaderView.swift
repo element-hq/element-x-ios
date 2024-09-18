@@ -5,6 +5,7 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct AvatarHeaderView<Footer: View>: View {
@@ -193,7 +194,7 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
                              mediaProvider: MockMediaProvider()) {
                 HStack(spacing: 32) {
                     ShareLink(item: "test") {
-                        Image(systemName: "square.and.arrow.up")
+                        CompoundIcon(\.shareIos)
                     }
                     .buttonStyle(FormActionButtonStyle(title: "Test"))
                 }
@@ -207,7 +208,7 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
                              mediaProvider: MockMediaProvider()) {
                 HStack(spacing: 32) {
                     ShareLink(item: "test") {
-                        Image(systemName: "square.and.arrow.up")
+                        CompoundIcon(\.shareIos)
                     }
                     .buttonStyle(FormActionButtonStyle(title: "Test"))
                 }

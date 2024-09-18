@@ -18,8 +18,8 @@ import AccessibilitySnapshot
 class PreviewTests: XCTestCase {
     private let deviceConfig: ViewImageConfig = .iPhoneX
     private var simulatorDevice: String? = "iPhone14,6" // iPhone SE 3rd Generation
-    private var requiredOSVersion = (major: 17, minor: 5)
-    private let snapshotDevices = ["iPhone 15", "iPad"]
+    private var requiredOSVersion = (major: 18, minor: 0)
+    private let snapshotDevices = ["iPhone 16", "iPad"]
 
     override func setUp() {
         super.setUp()
@@ -27,18 +27,28 @@ class PreviewTests: XCTestCase {
         checkEnvironments()
         UIView.setAnimationsEnabled(false)
     }
+    
+    /// Check environments to avoid problems with snapshots on different devices or OS.
+    private func checkEnvironments() {
+        if let simulatorDevice {
+            let deviceModel = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"]
+            guard deviceModel?.contains(simulatorDevice) ?? false else {
+                fatalError("\(deviceModel ?? "Unknown") is the wrong one. Switch to using \(simulatorDevice) for these tests.")
+            }
+        }
+
+        let osVersion = ProcessInfo().operatingSystemVersion
+        guard osVersion.majorVersion == requiredOSVersion.major, osVersion.minorVersion == requiredOSVersion.minor else {
+            fatalError("Switch to iOS \(requiredOSVersion) for these tests.")
+        }
+        guard !snapshotDevices.isEmpty else {
+            fatalError("Specify at least one snapshot device to test on.")
+        }
+    }
+    
+    // MARK: - Snapshots
 
     func assertSnapshots(matching preview: _Preview, testName: String = #function) {
-        guard !snapshotDevices.isEmpty else {
-            if let failure = assertSnapshots(matching: AnyView(preview.content),
-                                             name: preview.displayName,
-                                             isScreen: preview.layout == .device,
-                                             device: preview.device?.snapshotDevice() ?? deviceConfig,
-                                             testName: testName) {
-                XCTFail(failure)
-            }
-            return
-        }
         for deviceName in snapshotDevices {
             guard var device = PreviewDevice(rawValue: deviceName).snapshotDevice() else {
                 fatalError("Unknown device name: \(deviceName)")
@@ -91,15 +101,17 @@ class PreviewTests: XCTestCase {
             .frame(width: device.size?.width)
             .fixedSize(horizontal: false, vertical: true)
         )
-
-        let failure = verifySnapshot(of: matchingView,
-                                     as: .prefireImage(precision: { precision },
-                                                       perceptualPrecision: { perceptualPrecision },
-                                                       duration: { delay },
-                                                       layout: isScreen ? .device(config: device) : .sizeThatFits,
-                                                       traits: traits),
-                                     named: name,
-                                     testName: testName)
+        
+        let failure = withSnapshotTesting(record: .missing) {
+            verifySnapshot(of: matchingView,
+                           as: .prefireImage(precision: { precision },
+                                             perceptualPrecision: { perceptualPrecision },
+                                             duration: { delay },
+                                             layout: isScreen ? .device(config: device) : .sizeThatFits,
+                                             traits: traits),
+                           named: name,
+                           testName: testName)
+        }
 
         #if canImport(AccessibilitySnapshot)
         let vc = UIHostingController(rootView: matchingView)
@@ -111,21 +123,6 @@ class PreviewTests: XCTestCase {
         #endif
         return failure
     }
-
-    /// Check environments to avoid problems with snapshots on different devices or OS.
-    private func checkEnvironments() {
-        if let simulatorDevice {
-            let deviceModel = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"]
-            guard deviceModel?.contains(simulatorDevice) ?? false else {
-                fatalError("\(deviceModel ?? "Unknown") is the wrong one. Switch to using \(simulatorDevice) for these tests.")
-            }
-        }
-
-        let osVersion = ProcessInfo().operatingSystemVersion
-        guard osVersion.majorVersion == requiredOSVersion.major, osVersion.minorVersion == requiredOSVersion.minor else {
-            fatalError("Switch to iOS \(requiredOSVersion) for these tests.")
-        }
-    }
 }
 
 // MARK: - SnapshotTesting + Extensions
@@ -133,7 +130,7 @@ class PreviewTests: XCTestCase {
 private extension PreviewDevice {
     func snapshotDevice() -> ViewImageConfig? {
         switch rawValue {
-        case "iPhone 15", "iPhone 14", "iPhone 13", "iPhone 12", "iPhone 11", "iPhone 10":
+        case "iPhone 16", "iPhone 15", "iPhone 14", "iPhone 13", "iPhone 12", "iPhone 11", "iPhone 10":
             return .iPhoneX
         case "iPhone 6", "iPhone 6s", "iPhone 7", "iPhone 8":
             return .iPhone8
