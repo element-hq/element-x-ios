@@ -17,7 +17,7 @@ struct TimelineView: UIViewControllerRepresentable {
         let tableViewController = TimelineTableViewController(coordinator: context.coordinator,
                                                               isScrolledToBottom: $viewModelContext.isScrolledToBottom,
                                                               scrollToBottomPublisher: viewModelContext.viewState.timelineViewState.scrollToBottomPublisher)
-        // Needs to be dispatched on main asynchrnously otherwise we get a runtime warning
+        // Needs to be dispatched on main asynchronously otherwise we get a runtime warning
         DispatchQueue.main.async {
             viewModelContext.send(viewAction: .setOpenURLHandler { url in
                 openURL(url)
