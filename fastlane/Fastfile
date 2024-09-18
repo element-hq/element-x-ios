@@ -140,14 +140,14 @@ lane :integration_tests do
   clear_derived_data()
   
   create_simulator_if_necessary(
-    name: "iPhone 15 Pro",
-    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro",
-    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-17-5"
+    name: "iPhone 16 Pro",
+    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro",
+    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-18-0"
   )
 
   run_tests(
     scheme: "IntegrationTests",
-    devices: ["iPhone 15 Pro"],
+    devices: ["iPhone 16 Pro"],
     ensure_devices_found: true,
     result_bundle: true,
     reset_simulator: true
