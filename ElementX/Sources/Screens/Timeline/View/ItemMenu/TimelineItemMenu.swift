@@ -93,7 +93,9 @@ struct TimelineItemMenu: View {
                 Divider()
                     .padding(.horizontal, -16)
                 
-                VerifiedUserSendFailureView(failure: failure, members: context.viewState.members) {
+                VerifiedUserSendFailureView(failure: failure,
+                                            members: context.viewState.members,
+                                            ownUserID: context.viewState.ownUserID) {
                     send(.itemSendInfoTapped(itemID: item.id))
                 }
                 .padding(.bottom, 8)
@@ -186,21 +188,26 @@ private struct VerifiedUserSendFailureView: View {
     let action: () -> Void
     
     private let memberDisplayName: String
+    private let isYou: Bool
     
     init(failure: TimelineItemSendFailure.VerifiedUser,
          members: [String: RoomMemberState],
+         ownUserID: String,
          action: @escaping () -> Void) {
         self.failure = failure
         self.action = action
         
         let userIDs = failure.affectedUserIDs
         memberDisplayName = userIDs.first.map { members[$0]?.displayName ?? $0 } ?? ""
+        isYou = ownUserID == userIDs.first
     }
     
     var title: String {
         switch failure {
-        case .hasUnsignedDevice: L10n.screenTimelineItemMenuSendFailureUnsignedDevice(memberDisplayName)
-        case .changedIdentity: L10n.screenTimelineItemMenuSendFailureChangedIdentity(memberDisplayName)
+        case .hasUnsignedDevice:
+            isYou ? L10n.screenTimelineItemMenuSendFailureYouUnsignedDevice : L10n.screenTimelineItemMenuSendFailureUnsignedDevice(memberDisplayName)
+        case .changedIdentity:
+            L10n.screenTimelineItemMenuSendFailureChangedIdentity(memberDisplayName)
         }
     }
     
@@ -241,6 +248,9 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
     static let (unsignedDevicesItem, _) = makeItem(deliveryStatus: .sendingFailed(.verifiedUser(.hasUnsignedDevice(devices: [
         "@alice:matrix.org": ["DEVICE1", "DEVICE2"]
     ]))))
+    static let (ownUnsignedDevicesItem, _) = makeItem(deliveryStatus: .sendingFailed(.verifiedUser(.hasUnsignedDevice(devices: [
+        RoomMemberProxyMock.mockMe.userID: ["DEVICE1"]
+    ]))))
 
     static var previews: some View {
         TimelineItemMenu(item: item, actions: actions)
@@ -271,6 +281,10 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
         TimelineItemMenu(item: unsignedDevicesItem, actions: actions)
             .environmentObject(viewModel.context)
             .previewDisplayName("Unsigned Devices")
+        
+        TimelineItemMenu(item: ownUnsignedDevicesItem, actions: actions)
+            .environmentObject(viewModel.context)
+            .previewDisplayName("Own Unsigned Devices")
         
         TimelineItemMenu(item: identityChangedItem, actions: actions)
             .environmentObject(viewModel.context)
