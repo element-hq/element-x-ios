@@ -168,6 +168,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             Task { state.timelineViewState.isSwitchingTimelines = false }
         case let .hasScrolled(direction):
             actionsSubject.send(.hasScrolled(direction: direction))
+        case .setOpenURLHandler(let handler):
+            state.openURLHandler = handler
         }
     }
 
@@ -570,7 +572,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
            .first,
            let urlString = try? matrixToRoomAliasPermalink(roomAlias: alias),
            let url = URL(string: urlString) {
-            context.openURLHandler?(url)
+            state.openURLHandler?(url)
             return true
         }
         return false

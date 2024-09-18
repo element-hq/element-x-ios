@@ -72,6 +72,7 @@ enum TimelineViewAction {
     case hasSwitchedTimeline
     
     case hasScrolled(direction: ScrollDirection)
+    case setOpenURLHandler((URL) -> Void)
 }
 
 enum TimelineComposerAction {
@@ -101,6 +102,9 @@ struct TimelineViewState: BindableState {
     // It's updated from the room info, so it's faster than using the timeline
     var pinnedEventIDs: Set<String> = []
     
+    /// an openURL closure which opens URLs first using the App's environment rather than skipping out to external apps
+    var openURLHandler: ((URL) -> Void)?
+    
     var bindings: TimelineViewStateBindings
     
     /// A closure providing the associated audio player state for an item in the timeline.
@@ -126,9 +130,6 @@ struct TimelineViewStateBindings {
     var reactionSummaryInfo: ReactionSummaryInfo?
     
     var readReceiptsSummaryInfo: ReadReceiptSummaryInfo?
-    
-    /// an openURL closure which opens URLs first using the App's environment rather than skipping out to external apps
-    var openURLHandler: ((URL) -> Void)?
 }
 
 struct TimelineItemActionMenuInfo: Equatable, Identifiable {
