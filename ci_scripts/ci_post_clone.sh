@@ -14,3 +14,6 @@ xcodebuild -version
 
 echo "Available schemes:"
 xcodebuild -list -project ElementX.xcodeproj
+
+echo "Resolving packages"
+xcodebuild -resolvePackageDependencies -project /Volumes/workspace/repository/ElementX.xcodeproj -scheme Zero -derivedDataPath /Volumes/workspace/DerivedData -hideShellScriptEnvironment
