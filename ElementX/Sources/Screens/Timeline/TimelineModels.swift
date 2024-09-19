@@ -72,7 +72,7 @@ enum TimelineViewAction {
     case hasSwitchedTimeline
     
     case hasScrolled(direction: ScrollDirection)
-    case setOpenURLHandler((URL) -> Void)
+    case setOpenURLAction(OpenURLAction)
 }
 
 enum TimelineComposerAction {
@@ -103,7 +103,7 @@ struct TimelineViewState: BindableState {
     var pinnedEventIDs: Set<String> = []
     
     /// an openURL closure which opens URLs first using the App's environment rather than skipping out to external apps
-    var openURLHandler: ((URL) -> Void)?
+    var openURL: OpenURLAction?
     
     var bindings: TimelineViewStateBindings
     
