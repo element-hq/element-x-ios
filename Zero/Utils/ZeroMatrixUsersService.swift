@@ -17,6 +17,22 @@ class ZeroMatrixUsersService {
         allZeroUsers = appSettings.zeroMatrixUsers ?? []
     }
     
+    func fetchZeroUser(userId: String) async throws -> ZMatrixUser? {
+        if let user = getMatrixUser(userId: userId) {
+            return user
+        } else {
+            let zeroUsersResponse = try await zeroUsersApi.fetchUsers(fromMatrixIds: [userId])
+            switch zeroUsersResponse {
+            case .success(let zeroUsers):
+                storeUsers(zeroUsers: zeroUsers)
+                return zeroUsers.first
+            case .failure(let error):
+                print(error)
+                return nil
+            }
+        }
+    }
+    
     func fetchZeroUsers(userIds: [String]) async throws -> [ZMatrixUser] {
         let newUsersToFetch = getZeroUsersToFetch(userIds)
         if !newUsersToFetch.isEmpty {
@@ -90,6 +106,10 @@ class ZeroMatrixUsersService {
     }
     
     private func saveZeroUsersLocally() {
-        appSettings.zeroMatrixUsers = allZeroUsers
+        do {
+            appSettings.zeroMatrixUsers = allZeroUsers
+        } catch {
+            MXLog.error(error)
+        }
     }
 }

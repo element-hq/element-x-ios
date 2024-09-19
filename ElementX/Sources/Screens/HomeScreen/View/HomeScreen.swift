@@ -29,7 +29,7 @@ struct HomeScreen: View {
                    actions: leaveRoomAlertActions,
                    message: leaveRoomAlertMessage)
 //            .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
-//            .toolbar { toolbar }
+            .toolbar { toolbar }
 //            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
 //            .track(screen: .Home)
 //            .introspect(.viewController, on: .supportedVersions) { controller in
@@ -135,21 +135,24 @@ struct HomeScreen: View {
             Button {
                 context.send(viewAction: .showSettings)
             } label: {
-                LoadableAvatarImage(url: context.viewState.userAvatarURL,
-                                    name: context.viewState.userDisplayName,
-                                    contentID: context.viewState.userID,
-                                    avatarSize: .user(on: .home),
-                                    mediaProvider: context.mediaProvider)
-                    .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
-                    .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
-                    .compositingGroup()
+//                LoadableAvatarImage(url: context.viewState.userAvatarURL,
+//                                    name: context.viewState.userDisplayName,
+//                                    contentID: context.viewState.userID,
+//                                    avatarSize: .user(on: .home),
+//                                    mediaProvider: context.mediaProvider)
+//                    .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
+//                    .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
+//                    .compositingGroup()
+                AvatarView(url: context.viewState.userAvatarURL,
+                           placeholder: Asset.Images.defaultAvatarIcon,
+                           style: .small)
             }
             .accessibilityLabel(L10n.commonSettings)
         }
         
-        ToolbarItem(placement: .primaryAction) {
-            newRoomButton
-        }
+//        ToolbarItem(placement: .primaryAction) {
+//            newRoomButton
+//        }
     }
     
     private var bloom: some View {

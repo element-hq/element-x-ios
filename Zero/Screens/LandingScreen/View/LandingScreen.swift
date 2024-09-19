@@ -28,7 +28,7 @@ struct LandingScreen: View {
                 
                 actionButton
                 
-                Spacer()
+//                Spacer()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }

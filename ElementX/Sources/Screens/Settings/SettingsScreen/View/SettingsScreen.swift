@@ -24,17 +24,17 @@ struct SettingsScreen: View {
             
             manageMyAppSection
             
-            if !shouldHideManageAccountSection {
-                manageAccountSection
-            }
-            
-            generalSection
+//            if !shouldHideManageAccountSection {
+//                manageAccountSection
+//            }
+//            
+//            generalSection
             
             signOutSection
         }
         .compoundList()
-        .navigationTitle(L10n.commonSettings)
-        .navigationBarTitleDisplayMode(.inline)
+        //.navigationTitle(L10n.commonSettings)
+        //.navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
     }
     
@@ -42,28 +42,31 @@ struct SettingsScreen: View {
         Section {
             ListRow(kind: .custom {
                 Button {
-                    context.send(viewAction: .userDetails)
+                    //context.send(viewAction: .userDetails)
                 } label: {
                     HStack(spacing: 12) {
-                        LoadableAvatarImage(url: context.viewState.userAvatarURL,
-                                            name: context.viewState.userDisplayName,
-                                            contentID: context.viewState.userID,
-                                            avatarSize: .user(on: .settings),
-                                            mediaProvider: context.mediaProvider)
-                            .accessibilityHidden(true)
+//                        LoadableAvatarImage(url: context.viewState.userAvatarURL,
+//                                            name: context.viewState.userDisplayName,
+//                                            contentID: context.viewState.userID,
+//                                            avatarSize: .user(on: .settings),
+//                                            mediaProvider: context.mediaProvider)
+//                            .accessibilityHidden(true)
+                        AvatarView(url: context.viewState.userAvatarURL,
+                                   placeholder: Asset.Images.defaultAvatarIcon,
+                                   style: .large)
                         
                         VStack(alignment: .leading, spacing: 2) {
                             Text(context.viewState.userDisplayName ?? "")
                                 .font(.compound.headingMD)
                                 .foregroundColor(.compound.textPrimary)
-                            Text(context.viewState.userID)
-                                .font(.compound.bodySM)
-                                .foregroundColor(.compound.textSecondary)
+//                            Text(context.viewState.userID)
+//                                .font(.compound.bodySM)
+//                                .foregroundColor(.compound.textSecondary)
                         }
                         
-                        Spacer()
-                        
-                        ListRowAccessory.navigationLink
+//                        Spacer()
+//                        
+//                        ListRowAccessory.navigationLink
                     }
                     .padding(.horizontal, ListRowPadding.horizontal)
                     .padding(.vertical, 8)
@@ -81,12 +84,12 @@ struct SettingsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.notifications)
             
-            ListRow(label: .default(title: L10n.commonScreenLock,
-                                    icon: \.lock),
-                    kind: .navigationLink {
-                        context.send(viewAction: .appLock)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.screenLock)
+//            ListRow(label: .default(title: L10n.commonScreenLock,
+//                                    icon: \.lock),
+//                    kind: .navigationLink {
+//                        context.send(viewAction: .appLock)
+//                    })
+//                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.screenLock)
             
             switch context.viewState.securitySectionMode {
             case .secureBackup:
@@ -181,22 +184,22 @@ struct SettingsScreen: View {
                         context.send(viewAction: .logout)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.logout)
-            if context.viewState.showAccountDeactivation {
-                ListRow(label: .action(title: L10n.actionDeactivateAccount,
-                                       icon: \.warning,
-                                       role: .destructive),
-                        kind: .button {
-                            context.send(viewAction: .deactivateAccount)
-                        })
-            }
+//            if context.viewState.showAccountDeactivation {
+//                ListRow(label: .action(title: L10n.actionDeactivateAccount,
+//                                       icon: \.warning,
+//                                       role: .destructive),
+//                        kind: .button {
+//                            context.send(viewAction: .deactivateAccount)
+//                        })
+//            }
         } footer: {
             VStack(spacing: 0) {
                 versionText
                     .frame(maxWidth: .infinity)
                 
-                if let deviceID = context.viewState.deviceID {
-                    Text(deviceID)
-                }
+//                if let deviceID = context.viewState.deviceID {
+//                    Text(deviceID)
+//                }
             }
             .compoundListSectionFooter()
             .textSelection(.enabled)
