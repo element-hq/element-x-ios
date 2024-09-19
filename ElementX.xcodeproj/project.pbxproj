@@ -1028,7 +1028,6 @@
 		18E9A7822C9829970082DDA4 /* Version in Frameworks */ = {isa = PBXBuildFile; productRef = 18E9A4052C9829970082DDA4 /* Version */; };
 		18E9A7832C9829970082DDA4 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 18E9A4172C9829970082DDA4 /* CryptoSwift */; };
 		18E9A7842C9829970082DDA4 /* Tagged in Frameworks */ = {isa = PBXBuildFile; productRef = 18E9A4132C9829970082DDA4 /* Tagged */; };
-		18E9A7852C9829970082DDA4 /* AlamofireDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 18E9A4122C9829970082DDA4 /* AlamofireDynamic */; };
 		18E9A7862C9829970082DDA4 /* Emojibase in Frameworks */ = {isa = PBXBuildFile; productRef = 18E9A4072C9829970082DDA4 /* Emojibase */; };
 		18E9A7872C9829970082DDA4 /* WysiwygComposer in Frameworks */ = {isa = PBXBuildFile; productRef = 18E9A4092C9829970082DDA4 /* WysiwygComposer */; };
 		18E9A7882C9829970082DDA4 /* SwiftOGG in Frameworks */ = {isa = PBXBuildFile; productRef = 18E9A40B2C9829970082DDA4 /* SwiftOGG */; };
@@ -1131,12 +1130,12 @@
 		2F623DA1122140A987B34D08 /* NotificationSettingsEditScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7BB497B2F539C17E88F6B7 /* NotificationSettingsEditScreenViewModelProtocol.swift */; };
 		2F94054F50E312AF30BE07F3 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B21E611DADDEF00307E7AC /* String.swift */; };
 		2FEC6652055984389CE1BBEC /* TimelineProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B50F03079F6B5EF9CA005F14 /* TimelineProxyProtocol.swift */; };
-		300FA9692C9B9769000B445D /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 300FA9682C9B9769000B445D /* Alamofire */; };
 		3041EBA2660F28FFB7BDA339 /* EncryptionResetScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0FF9CB3EFA753277291F609 /* EncryptionResetScreenCoordinator.swift */; };
 		3042527CB344A9EF1157FC26 /* AudioRecorderStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55CC239AE12339C565F6C9A /* AudioRecorderStateTests.swift */; };
 		308BD9343B95657FAA583FB7 /* SwiftState in Frameworks */ = {isa = PBXBuildFile; productRef = 19CD5B074D7DD44AF4C58BB6 /* SwiftState */; };
 		30CC1DB7CE357659C82AA115 /* MediaProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85EB16E7FE59A947CA441531 /* MediaProviderProtocol.swift */; };
 		30CC4F796B27BE8B1DFDBF5A /* NSEUserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEAA2832D93EC7D2608703FB /* NSEUserSession.swift */; };
+		30E009912C9CBBFB00CF9115 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 30E009902C9CBBFB00CF9115 /* Alamofire */; };
 		30E5628F74AD3C27A061BF25 /* QRCodeLoginScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC1B7CB061C9865B2B91B56 /* QRCodeLoginScreenViewModel.swift */; };
 		3113065AABBC14CEAE6843FA /* UserSessionFlowCoordinatorStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8774CF614849664B5B3C2A1 /* UserSessionFlowCoordinatorStateMachine.swift */; };
 		3116693C5EB476E028990416 /* XCTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74611A4182DCF5F4D42696EC /* XCTestCase.swift */; };
@@ -3311,7 +3310,6 @@
 				18E9A7822C9829970082DDA4 /* Version in Frameworks */,
 				18E9A7832C9829970082DDA4 /* CryptoSwift in Frameworks */,
 				18E9A7842C9829970082DDA4 /* Tagged in Frameworks */,
-				18E9A7852C9829970082DDA4 /* AlamofireDynamic in Frameworks */,
 				18E9A7862C9829970082DDA4 /* Emojibase in Frameworks */,
 				18E9A7872C9829970082DDA4 /* WysiwygComposer in Frameworks */,
 				18E9A7882C9829970082DDA4 /* SwiftOGG in Frameworks */,
@@ -3406,7 +3404,7 @@
 				1882EB822C8F85C7001DA2A9 /* TaggedTime in Frameworks */,
 				B0CB16349B96262AA65A04AF /* Sentry in Frameworks */,
 				36AD4DD4C798E22584ED3200 /* SentrySwiftUI in Frameworks */,
-				300FA9692C9B9769000B445D /* Alamofire in Frameworks */,
+				30E009912C9CBBFB00CF9115 /* Alamofire in Frameworks */,
 				36CD6E11B37396E14F032CB6 /* Version in Frameworks */,
 				18E99FF92C9459DE0082DDA4 /* CryptoSwift in Frameworks */,
 				1882EB7E2C8F85C7001DA2A9 /* Tagged in Frameworks */,
@@ -6825,7 +6823,6 @@
 				18E9A40D2C9829970082DDA4 /* DSWaveformImageViews */,
 				18E9A40F2C9829970082DDA4 /* Alamofire */,
 				18E9A4102C9829970082DDA4 /* Alamofire */,
-				18E9A4122C9829970082DDA4 /* AlamofireDynamic */,
 				18E9A4132C9829970082DDA4 /* Tagged */,
 				18E9A4152C9829970082DDA4 /* TaggedMoney */,
 				18E9A4162C9829970082DDA4 /* TaggedTime */,
@@ -6923,7 +6920,7 @@
 				1882EB7F2C8F85C7001DA2A9 /* TaggedMoney */,
 				1882EB812C8F85C7001DA2A9 /* TaggedTime */,
 				18E99FF82C9459DE0082DDA4 /* CryptoSwift */,
-				300FA9682C9B9769000B445D /* Alamofire */,
+				30E009902C9CBBFB00CF9115 /* Alamofire */,
 			);
 			productName = ElementX;
 			productReference = 4CD6AC7546E8D7E5C73CEA48 /* ElementX.app */;
@@ -7075,7 +7072,7 @@
 				44FA555384AD79668D886043 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */,
 				1882EB7C2C8F85C7001DA2A9 /* XCRemoteSwiftPackageReference "swift-tagged" */,
 				18E99FF72C9459DE0082DDA4 /* XCRemoteSwiftPackageReference "CryptoSwift" */,
-				300FA9672C9B9769000B445D /* XCRemoteSwiftPackageReference "Alamofire" */,
+				30E0098F2C9CBBFB00CF9115 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			projectDirPath = "";
 			projectRoot = "";
@@ -9605,7 +9602,7 @@
 				);
 				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				OTHER_SWIFT_FLAGS = "-DIS_NSE";
-				PRODUCT_BUNDLE_IDENTIFIER = com.zero.ios.messenger.NotificationService;
+				PRODUCT_BUNDLE_IDENTIFIER = "${BASE_BUNDLE_IDENTIFIER}.NotificationService";
 				PRODUCT_DISPLAY_NAME = "$(APP_DISPLAY_NAME)";
 				PRODUCT_NAME = NSE;
 				SDKROOT = iphoneos;
@@ -9928,7 +9925,7 @@
 				);
 				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				OTHER_SWIFT_FLAGS = "-DIS_NSE";
-				PRODUCT_BUNDLE_IDENTIFIER = com.zero.ios.messenger.NotificationService;
+				PRODUCT_BUNDLE_IDENTIFIER = "${BASE_BUNDLE_IDENTIFIER}.NotificationService";
 				PRODUCT_DISPLAY_NAME = "$(APP_DISPLAY_NAME)";
 				PRODUCT_NAME = NSE;
 				SDKROOT = iphoneos;
@@ -10308,7 +10305,7 @@
 				minimumVersion = 1.8.3;
 			};
 		};
-		300FA9672C9B9769000B445D /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+		30E0098F2C9CBBFB00CF9115 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
 			requirement = {
@@ -10668,11 +10665,6 @@
 			package = 18E9A4112C9829970082DDA4 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
-		18E9A4122C9829970082DDA4 /* AlamofireDynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 18E9A4112C9829970082DDA4 /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = AlamofireDynamic;
-		};
 		18E9A4132C9829970082DDA4 /* Tagged */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 18E9A4142C9829970082DDA4 /* XCRemoteSwiftPackageReference "swift-tagged" */;
@@ -10743,9 +10735,9 @@
 			package = EC6D0C817B1C21D9D096505A /* XCRemoteSwiftPackageReference "Version" */;
 			productName = Version;
 		};
-		300FA9682C9B9769000B445D /* Alamofire */ = {
+		30E009902C9CBBFB00CF9115 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 300FA9672C9B9769000B445D /* XCRemoteSwiftPackageReference "Alamofire" */;
+			package = 30E0098F2C9CBBFB00CF9115 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
 		36B7FC232711031AA2B0D188 /* DTCoreText */ = {
