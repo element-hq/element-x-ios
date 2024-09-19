@@ -9591,6 +9591,9 @@
 		4CB921EC997F763064B8E436 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APP_NAME = Zero;
+				BASE_APP_GROUP_IDENTIFIER = com.zero.ios.messenger;
+				BASE_BUNDLE_IDENTIFIER = com.zero.ios.messenger;
 				CODE_SIGN_ENTITLEMENTS = NSE/SupportingFiles/NSE.entitlements;
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEVELOPMENT_TEAM = UDZQVRDAAC;
@@ -9602,7 +9605,7 @@
 				);
 				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				OTHER_SWIFT_FLAGS = "-DIS_NSE";
-				PRODUCT_BUNDLE_IDENTIFIER = "--BASE-BUNDLE-IDENTIFIER-.NotificationService-";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zero.ios.messenger.NotificationService;
 				PRODUCT_DISPLAY_NAME = "$(APP_DISPLAY_NAME)";
 				PRODUCT_NAME = NSE;
 				SDKROOT = iphoneos;
@@ -9911,6 +9914,9 @@
 		A46EFA0820A3F5A3A0C74CFE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APP_NAME = Zero;
+				BASE_APP_GROUP_IDENTIFIER = com.zero.ios.messenger;
+				BASE_BUNDLE_IDENTIFIER = com.zero.ios.messenger;
 				CODE_SIGN_ENTITLEMENTS = NSE/SupportingFiles/NSE.entitlements;
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEVELOPMENT_TEAM = UDZQVRDAAC;
@@ -9922,7 +9928,7 @@
 				);
 				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				OTHER_SWIFT_FLAGS = "-DIS_NSE";
-				PRODUCT_BUNDLE_IDENTIFIER = "--BASE-BUNDLE-IDENTIFIER-.NotificationService-";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zero.ios.messenger.NotificationService;
 				PRODUCT_DISPLAY_NAME = "$(APP_DISPLAY_NAME)";
 				PRODUCT_NAME = NSE;
 				SDKROOT = iphoneos;
