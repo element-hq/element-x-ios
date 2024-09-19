@@ -31,42 +31,7 @@ struct SwipeRightAction<Label: View>: ViewModifier {
         content
             .offset(x: xOffset, y: 0.0)
             .animation(.interactiveSpring().speed(0.5), value: xOffset)
-            .gesture(DragGesture()
-                .updating($dragGestureActive) { _, state, _ in
-                    // Available actions should be computed on the fly so we use a gesture state change
-                    // to ask whether the move should be started or not.
-                    state = true
-                }
-                .onChanged { value in
-                    guard canStartAction else {
-                        return
-                    }
-                    
-                    // We want to add a spring like behavior to the drag in which the view
-                    // moves slower the more it's dragged. We use a circular easing function
-                    // to generate those values up to the `swipeThreshold`
-                    // The final translation will be between 0 and `swipeThreshold` with the action being enabled from
-                    // `actionThreshold` onwards
-                    let screenWidthNormalisedTranslation = max(0.0, min(value.translation.width, swipeThreshold)) / swipeThreshold
-                    let easedTranslation = circularEaseOut(screenWidthNormalisedTranslation)
-                    xOffset = easedTranslation * xOffsetThreshold
-                    
-                    if xOffset > actionThreshold {
-                        if !hasReachedActionThreshold {
-                            feedbackGenerator.impactOccurred()
-                            hasReachedActionThreshold = true
-                        }
-                    } else {
-                        hasReachedActionThreshold = false
-                    }
-                }
-                .onEnded { _ in
-                    if xOffset > actionThreshold {
-                        action()
-                    }
-                    
-                    xOffset = 0.0
-                })
+            .simultaneousGesture(gesture)
             .onChange(of: dragGestureActive) { value in
                 if value == true {
                     if shouldStartAction() {
@@ -83,6 +48,55 @@ struct SwipeRightAction<Label: View>: ViewModifier {
                     .opacity(xOffset / 50)
                     .animation(.interactiveSpring().speed(0.5), value: xOffset)
                     .offset(x: -actionThreshold + min(xOffset, actionThreshold), y: 0.0)
+            }
+    }
+    
+    private var gesture: some Gesture {
+        DragGesture()
+            .updating($dragGestureActive) { _, state, _ in
+                // Available actions should be computed on the fly so we use a gesture state change
+                // to ask whether the move should be started or not.
+                state = true
+            }
+            .onChanged { value in
+                guard canStartAction, value.translation.width > value.translation.height else {
+                    return
+                }
+                
+                // Due to https://forums.developer.apple.com/forums/thread/760035 we had to make
+                // the drag a simultaneous gesture otherwise it was impossible to scroll the timeline.
+                // Therefore we need to prevent the animation to run if the user is to scrolling vertically.
+                // It would be nice if we could somehow abort the gesture in this case.
+                let width: CGFloat = if value.translation.width > abs(value.translation.height) {
+                    value.translation.width
+                } else {
+                    0.0
+                }
+                
+                // We want to add a spring like behaviour to the drag in which the view
+                // moves slower the more it's dragged. We use a circular easing function
+                // to generate those values up to the `swipeThreshold`
+                // The final translation will be between 0 and `swipeThreshold` with the action being enabled from
+                // `actionThreshold` onwards
+                let screenWidthNormalisedTranslation = max(0.0, min(width, swipeThreshold)) / swipeThreshold
+                let easedTranslation = circularEaseOut(screenWidthNormalisedTranslation)
+                xOffset = easedTranslation * xOffsetThreshold
+                
+                if xOffset > actionThreshold {
+                    if !hasReachedActionThreshold {
+                        feedbackGenerator.impactOccurred()
+                        hasReachedActionThreshold = true
+                    }
+                } else {
+                    hasReachedActionThreshold = false
+                }
+            }
+            .onEnded { _ in
+                if xOffset > actionThreshold {
+                    action()
+                }
+                
+                xOffset = 0.0
             }
     }
     

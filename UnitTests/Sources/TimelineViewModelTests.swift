@@ -380,10 +380,13 @@ class TimelineViewModelTests: XCTestCase {
     
     func testPinnedEvents() async throws {
         ServiceLocator.shared.settings.pinningEnabled = true
+        
+        // Note: We need to start the test with a non-default value so we know the view model has finished the Task.
         let roomProxyMock = JoinedRoomProxyMock(.init(name: "",
                                                       pinnedEventIDs: .init(["test1"])))
         let actionsSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
         roomProxyMock.underlyingActionsPublisher = actionsSubject.eraseToAnyPublisher()
+        
         let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                           timelineController: MockRoomTimelineController(),
                                           mediaProvider: MockMediaProvider(),
@@ -409,9 +412,12 @@ class TimelineViewModelTests: XCTestCase {
     
     func testCanUserPinEvents() async throws {
         ServiceLocator.shared.settings.pinningEnabled = true
-        let roomProxyMock = JoinedRoomProxyMock(.init(name: "", canUserPin: false))
+        
+        // Note: We need to start the test with the non-default value so we know the view model has finished the Task.
+        let roomProxyMock = JoinedRoomProxyMock(.init(name: "", canUserPin: true))
         let actionsSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
         roomProxyMock.underlyingActionsPublisher = actionsSubject.eraseToAnyPublisher()
+        
         let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                           timelineController: MockRoomTimelineController(),
                                           mediaProvider: MockMediaProvider(),
@@ -423,13 +429,13 @@ class TimelineViewModelTests: XCTestCase {
                                           analyticsService: ServiceLocator.shared.analytics)
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { value in
-            !value.canCurrentUserPin
+            value.canCurrentUserPin
         }
         try await deferred.fulfill()
         
-        roomProxyMock.canUserPinOrUnpinUserIDReturnValue = .success(true)
+        roomProxyMock.canUserPinOrUnpinUserIDReturnValue = .success(false)
         deferred = deferFulfillment(viewModel.context.$viewState) { value in
-            value.canCurrentUserPin
+            !value.canCurrentUserPin
         }
         actionsSubject.send(.roomInfoUpdate)
         try await deferred.fulfill()

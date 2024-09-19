@@ -379,6 +379,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     return
                 }
                 await self?.updatePinnedEventIDs()
+                await self?.updatePermissions()
             }
         }
         .store(in: &cancellables)
