@@ -9535,6 +9535,8 @@
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEVELOPMENT_TEAM = UDZQVRDAAC;
 				INFOPLIST_FILE = "Zero/Zero-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Zero;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -9567,6 +9569,8 @@
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEVELOPMENT_TEAM = UDZQVRDAAC;
 				INFOPLIST_FILE = "Zero/Zero-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Zero;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -9598,7 +9602,7 @@
 				);
 				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				OTHER_SWIFT_FLAGS = "-DIS_NSE";
-				PRODUCT_BUNDLE_IDENTIFIER = "${BASE_BUNDLE_IDENTIFIER}.NotificationService";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zero.ios.messenger.NotificationService;
 				PRODUCT_DISPLAY_NAME = "$(APP_DISPLAY_NAME)";
 				PRODUCT_NAME = NSE;
 				SDKROOT = iphoneos;
@@ -9918,7 +9922,7 @@
 				);
 				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				OTHER_SWIFT_FLAGS = "-DIS_NSE";
-				PRODUCT_BUNDLE_IDENTIFIER = "${BASE_BUNDLE_IDENTIFIER}.NotificationService";
+				PRODUCT_BUNDLE_IDENTIFIER = com.zero.ios.messenger.NotificationService;
 				PRODUCT_DISPLAY_NAME = "$(APP_DISPLAY_NAME)";
 				PRODUCT_NAME = NSE;
 				SDKROOT = iphoneos;
