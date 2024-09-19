@@ -9602,7 +9602,7 @@
 				);
 				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				OTHER_SWIFT_FLAGS = "-DIS_NSE";
-				PRODUCT_BUNDLE_IDENTIFIER = com.zero.ios.messenger.NotificationService;
+				PRODUCT_BUNDLE_IDENTIFIER = "--BASE-BUNDLE-IDENTIFIER-.NotificationService-";
 				PRODUCT_DISPLAY_NAME = "$(APP_DISPLAY_NAME)";
 				PRODUCT_NAME = NSE;
 				SDKROOT = iphoneos;
@@ -9922,7 +9922,7 @@
 				);
 				MARKETING_VERSION = "$(MARKETING_VERSION)";
 				OTHER_SWIFT_FLAGS = "-DIS_NSE";
-				PRODUCT_BUNDLE_IDENTIFIER = com.zero.ios.messenger.NotificationService;
+				PRODUCT_BUNDLE_IDENTIFIER = "--BASE-BUNDLE-IDENTIFIER-.NotificationService-";
 				PRODUCT_DISPLAY_NAME = "$(APP_DISPLAY_NAME)";
 				PRODUCT_NAME = NSE;
 				SDKROOT = iphoneos;
