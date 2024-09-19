@@ -10,6 +10,10 @@ import XCTest
 
 enum Application {
     static func launch(_ identifier: UITestsScreenIdentifier, disableTimelineAccessibility: Bool = true) -> XCUIApplication {
+        if ProcessInfo().environment["RECORD_FAILURES"].map(Bool.init) == true {
+            XCUIApplication.recordMode = .failed
+        }
+        
         checkEnvironments()
         
         let app = XCUIApplication()
@@ -47,6 +51,8 @@ enum Application {
 }
 
 extension XCUIApplication {
+    static var recordMode: SnapshotTestingConfiguration.Record = .missing
+    
     @MainActor
     /// Assert screenshot for a screen with the given identifier. Does not fail if a screenshot is newly created.
     /// - Parameter identifier: Identifier of the UI test screen
@@ -69,17 +75,17 @@ extension XCUIApplication {
             snapshot = snapshot.inset(by: insets)
         }
 
-        let failure = verifySnapshot(of: snapshot,
-                                     as: .image(precision: precision,
-                                                perceptualPrecision: 0.98,
-                                                scale: nil),
-                                     // use any kind of suffix here to snapshot the same file multiple times and avoid countering on the library side
-                                     named: "UI",
-                                     testName: snapshotName)
+        let failure = withSnapshotTesting(record: Self.recordMode) {
+            verifySnapshot(of: snapshot,
+                           as: .image(precision: precision,
+                                      perceptualPrecision: 0.98,
+                                      scale: nil),
+                           // use any kind of suffix here to snapshot the same file multiple times and avoid countering on the library side
+                           named: "UI",
+                           testName: snapshotName)
+        }
         
-        if let failure,
-           !failure.contains("No reference was found on disk."),
-           !failure.contains("to test against the newly-recorded snapshot") {
+        if let failure {
             XCTFail(failure)
         }
     }

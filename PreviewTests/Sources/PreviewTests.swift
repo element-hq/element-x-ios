@@ -11,18 +11,19 @@ import XCTest
 @testable import ElementX
 @testable import SnapshotTesting
 
-#if canImport(AccessibilitySnapshot)
-import AccessibilitySnapshot
-#endif
-
 class PreviewTests: XCTestCase {
     private let deviceConfig: ViewImageConfig = .iPhoneX
-    private var simulatorDevice: String? = "iPhone14,6" // iPhone SE 3rd Generation
-    private var requiredOSVersion = (major: 18, minor: 0)
+    private let simulatorDevice: String? = "iPhone14,6" // iPhone SE 3rd Generation
+    private let requiredOSVersion = (major: 18, minor: 0)
     private let snapshotDevices = ["iPhone 16", "iPad"]
+    private var recordMode: SnapshotTestingConfiguration.Record = .missing
 
     override func setUp() {
         super.setUp()
+        
+        if ProcessInfo().environment["RECORD_FAILURES"].map(Bool.init) == true {
+            recordMode = .failed
+        }
 
         checkEnvironments()
         UIView.setAnimationsEnabled(false)
@@ -102,7 +103,7 @@ class PreviewTests: XCTestCase {
             .fixedSize(horizontal: false, vertical: true)
         )
         
-        let failure = withSnapshotTesting(record: .missing) {
+        return withSnapshotTesting(record: recordMode) {
             verifySnapshot(of: matchingView,
                            as: .prefireImage(precision: { precision },
                                              perceptualPrecision: { perceptualPrecision },
@@ -112,16 +113,6 @@ class PreviewTests: XCTestCase {
                            named: name,
                            testName: testName)
         }
-
-        #if canImport(AccessibilitySnapshot)
-        let vc = UIHostingController(rootView: matchingView)
-        vc.view.frame = UIScreen.main.bounds
-        assertSnapshot(matching: vc,
-                       as: .wait(for: delay, on: .accessibilityImage(showActivationPoints: .always)),
-                       named: name.flatMap { $0 + ".accessibility" },
-                       testName: testName)
-        #endif
-        return failure
     }
 }
 
