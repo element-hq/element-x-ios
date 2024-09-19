@@ -1,3 +1,23 @@
+## Changes in 1.8.3 (2024-09-19)
+
+### What's Changed
+
+✨ Features
+* crypto: Add configuration flag to enable invisible crypto by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/3247
+* quick and dirty /join command by @ara4n in https://github.com/element-hq/element-x-ios/pull/3288
+
+🐛 Bugfixes
+* Await for room sync only for push notification invites by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3307
+
+🧱 Build
+* Try to stop random codecov test result action failures from failing the whole test run. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3301
+
+Others
+* Various Danger fixes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3304
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.8.2...1.8.3
+
 ## Changes in 1.8.2 (2024-09-18)
 
 ### What's Changed
