@@ -112,6 +112,8 @@ class ClientProxy: ClientProxyProtocol {
         verificationStateSubject.asCurrentValuePublisher()
     }
     
+    var roomsToAwait: Set<String> = []
+    
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
     
     init(client: ClientProtocol,
@@ -431,6 +433,8 @@ class ClientProxy: ClientProxyProtocol {
     }
         
     func roomForIdentifier(_ identifier: String) async -> RoomProxyType? {
+        let shouldAwait = roomsToAwait.remove(identifier) != nil
+        
         // Try fetching the room from the cold cache (if available) first
         if let room = await buildRoomForIdentifier(identifier) {
             return room
@@ -444,6 +448,10 @@ class ClientProxy: ClientProxyProtocol {
         
         if !roomSummaryProvider.statePublisher.value.isLoaded {
             _ = await roomSummaryProvider.statePublisher.values.first(where: { $0.isLoaded })
+        }
+        
+        if shouldAwait {
+            await waitForRoomToSync(roomID: identifier)
         }
         
         return await buildRoomForIdentifier(identifier)
@@ -836,9 +844,7 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.error("Failed retrieving room: \(roomID), room list service not set up")
             return nil
         }
-        
-        await waitForRoomToSync(roomID: roomID)
-        
+                
         do {
             let roomListItem = try roomListService.room(roomId: roomID)
             
