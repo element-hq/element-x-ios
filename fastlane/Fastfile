@@ -103,7 +103,8 @@ end
 
 lane :ui_tests do |options|
   # Use a fresh simulator state to ensure hardware keyboard isn't attached.
-  reset_simulator_contents()
+  # Not necessary when running on GitHub.
+  # reset_simulator_contents()
   
   create_simulator_if_necessary(
     name: "iPhone 16",
