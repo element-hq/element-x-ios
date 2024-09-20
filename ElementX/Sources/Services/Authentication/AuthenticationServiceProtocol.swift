@@ -16,7 +16,7 @@ enum AuthenticationFlow {
     case register
 }
 
-enum AuthenticationServiceError: Error {
+enum AuthenticationServiceError: Error, Equatable {
     /// An error occurred during OIDC authentication.
     case oidcError(OIDCError)
     case invalidServer

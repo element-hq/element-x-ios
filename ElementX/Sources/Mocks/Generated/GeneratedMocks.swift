@@ -1819,6 +1819,230 @@ class AudioSessionMock: AudioSessionProtocol {
         try setActiveOptionsClosure?(active, options)
     }
 }
+class AuthenticationClientBuilderFactoryMock: AuthenticationClientBuilderFactoryProtocol {
+
+    //MARK: - makeBuilder
+
+    var makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount = 0
+    var makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCalled: Bool {
+        return makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount > 0
+    }
+    var makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedArguments: (sessionDirectories: SessionDirectories, passphrase: String, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks)?
+    var makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedInvocations: [(sessionDirectories: SessionDirectories, passphrase: String, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks)] = []
+
+    var makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue: AuthenticationClientBuilderProtocol!
+    var makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReturnValue: AuthenticationClientBuilderProtocol! {
+        get {
+            if Thread.isMainThread {
+                return makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue
+            } else {
+                var returnValue: AuthenticationClientBuilderProtocol? = nil
+                DispatchQueue.main.sync {
+                    returnValue = makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure: ((SessionDirectories, String, ClientSessionDelegate, AppSettings, AppHooks) -> AuthenticationClientBuilderProtocol)?
+
+    func makeBuilder(sessionDirectories: SessionDirectories, passphrase: String, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks) -> AuthenticationClientBuilderProtocol {
+        makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount += 1
+        makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedArguments = (sessionDirectories: sessionDirectories, passphrase: passphrase, clientSessionDelegate: clientSessionDelegate, appSettings: appSettings, appHooks: appHooks)
+        DispatchQueue.main.async {
+            self.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedInvocations.append((sessionDirectories: sessionDirectories, passphrase: passphrase, clientSessionDelegate: clientSessionDelegate, appSettings: appSettings, appHooks: appHooks))
+        }
+        if let makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure = makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure {
+            return makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure(sessionDirectories, passphrase, clientSessionDelegate, appSettings, appHooks)
+        } else {
+            return makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReturnValue
+        }
+    }
+}
+class AuthenticationClientBuilderMock: AuthenticationClientBuilderProtocol {
+
+    //MARK: - build
+
+    var buildHomeserverAddressThrowableError: Error?
+    var buildHomeserverAddressUnderlyingCallsCount = 0
+    var buildHomeserverAddressCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return buildHomeserverAddressUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = buildHomeserverAddressUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                buildHomeserverAddressUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    buildHomeserverAddressUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var buildHomeserverAddressCalled: Bool {
+        return buildHomeserverAddressCallsCount > 0
+    }
+    var buildHomeserverAddressReceivedHomeserverAddress: String?
+    var buildHomeserverAddressReceivedInvocations: [String] = []
+
+    var buildHomeserverAddressUnderlyingReturnValue: ClientProtocol!
+    var buildHomeserverAddressReturnValue: ClientProtocol! {
+        get {
+            if Thread.isMainThread {
+                return buildHomeserverAddressUnderlyingReturnValue
+            } else {
+                var returnValue: ClientProtocol? = nil
+                DispatchQueue.main.sync {
+                    returnValue = buildHomeserverAddressUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                buildHomeserverAddressUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    buildHomeserverAddressUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var buildHomeserverAddressClosure: ((String) async throws -> ClientProtocol)?
+
+    func build(homeserverAddress: String) async throws -> ClientProtocol {
+        if let error = buildHomeserverAddressThrowableError {
+            throw error
+        }
+        buildHomeserverAddressCallsCount += 1
+        buildHomeserverAddressReceivedHomeserverAddress = homeserverAddress
+        DispatchQueue.main.async {
+            self.buildHomeserverAddressReceivedInvocations.append(homeserverAddress)
+        }
+        if let buildHomeserverAddressClosure = buildHomeserverAddressClosure {
+            return try await buildHomeserverAddressClosure(homeserverAddress)
+        } else {
+            return buildHomeserverAddressReturnValue
+        }
+    }
+    //MARK: - buildWithQRCode
+
+    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerThrowableError: Error?
+    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount = 0
+    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerCalled: Bool {
+        return buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerCallsCount > 0
+    }
+    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReceivedArguments: (qrCodeData: QrCodeData, oidcConfiguration: OIDCConfigurationProxy, progressListener: QrLoginProgressListenerProxy)?
+    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReceivedInvocations: [(qrCodeData: QrCodeData, oidcConfiguration: OIDCConfigurationProxy, progressListener: QrLoginProgressListenerProxy)] = []
+
+    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingReturnValue: ClientProtocol!
+    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReturnValue: ClientProtocol! {
+        get {
+            if Thread.isMainThread {
+                return buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingReturnValue
+            } else {
+                var returnValue: ClientProtocol? = nil
+                DispatchQueue.main.sync {
+                    returnValue = buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerClosure: ((QrCodeData, OIDCConfigurationProxy, QrLoginProgressListenerProxy) async throws -> ClientProtocol)?
+
+    func buildWithQRCode(qrCodeData: QrCodeData, oidcConfiguration: OIDCConfigurationProxy, progressListener: QrLoginProgressListenerProxy) async throws -> ClientProtocol {
+        if let error = buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerThrowableError {
+            throw error
+        }
+        buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerCallsCount += 1
+        buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReceivedArguments = (qrCodeData: qrCodeData, oidcConfiguration: oidcConfiguration, progressListener: progressListener)
+        DispatchQueue.main.async {
+            self.buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReceivedInvocations.append((qrCodeData: qrCodeData, oidcConfiguration: oidcConfiguration, progressListener: progressListener))
+        }
+        if let buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerClosure = buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerClosure {
+            return try await buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerClosure(qrCodeData, oidcConfiguration, progressListener)
+        } else {
+            return buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReturnValue
+        }
+    }
+}
 class BugReportServiceMock: BugReportServiceProtocol {
     var crashedLastRun: Bool {
         get { return underlyingCrashedLastRun }
@@ -15295,6 +15519,271 @@ class UserSessionMock: UserSessionProtocol {
     }
     var underlyingCallbacks: PassthroughSubject<UserSessionCallback, Never>!
 
+}
+class UserSessionStoreMock: UserSessionStoreProtocol {
+    var hasSessions: Bool {
+        get { return underlyingHasSessions }
+        set(value) { underlyingHasSessions = value }
+    }
+    var underlyingHasSessions: Bool!
+    var userIDs: [String] = []
+    var clientSessionDelegate: ClientSessionDelegate {
+        get { return underlyingClientSessionDelegate }
+        set(value) { underlyingClientSessionDelegate = value }
+    }
+    var underlyingClientSessionDelegate: ClientSessionDelegate!
+
+    //MARK: - reset
+
+    var resetUnderlyingCallsCount = 0
+    var resetCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return resetUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = resetUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                resetUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    resetUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var resetCalled: Bool {
+        return resetCallsCount > 0
+    }
+    var resetClosure: (() -> Void)?
+
+    func reset() {
+        resetCallsCount += 1
+        resetClosure?()
+    }
+    //MARK: - restoreUserSession
+
+    var restoreUserSessionUnderlyingCallsCount = 0
+    var restoreUserSessionCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return restoreUserSessionUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = restoreUserSessionUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                restoreUserSessionUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    restoreUserSessionUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var restoreUserSessionCalled: Bool {
+        return restoreUserSessionCallsCount > 0
+    }
+
+    var restoreUserSessionUnderlyingReturnValue: Result<UserSessionProtocol, UserSessionStoreError>!
+    var restoreUserSessionReturnValue: Result<UserSessionProtocol, UserSessionStoreError>! {
+        get {
+            if Thread.isMainThread {
+                return restoreUserSessionUnderlyingReturnValue
+            } else {
+                var returnValue: Result<UserSessionProtocol, UserSessionStoreError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = restoreUserSessionUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                restoreUserSessionUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    restoreUserSessionUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var restoreUserSessionClosure: (() async -> Result<UserSessionProtocol, UserSessionStoreError>)?
+
+    func restoreUserSession() async -> Result<UserSessionProtocol, UserSessionStoreError> {
+        restoreUserSessionCallsCount += 1
+        if let restoreUserSessionClosure = restoreUserSessionClosure {
+            return await restoreUserSessionClosure()
+        } else {
+            return restoreUserSessionReturnValue
+        }
+    }
+    //MARK: - userSession
+
+    var userSessionForSessionDirectoriesPassphraseUnderlyingCallsCount = 0
+    var userSessionForSessionDirectoriesPassphraseCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return userSessionForSessionDirectoriesPassphraseUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = userSessionForSessionDirectoriesPassphraseUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                userSessionForSessionDirectoriesPassphraseUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    userSessionForSessionDirectoriesPassphraseUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var userSessionForSessionDirectoriesPassphraseCalled: Bool {
+        return userSessionForSessionDirectoriesPassphraseCallsCount > 0
+    }
+    var userSessionForSessionDirectoriesPassphraseReceivedArguments: (client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String?)?
+    var userSessionForSessionDirectoriesPassphraseReceivedInvocations: [(client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String?)] = []
+
+    var userSessionForSessionDirectoriesPassphraseUnderlyingReturnValue: Result<UserSessionProtocol, UserSessionStoreError>!
+    var userSessionForSessionDirectoriesPassphraseReturnValue: Result<UserSessionProtocol, UserSessionStoreError>! {
+        get {
+            if Thread.isMainThread {
+                return userSessionForSessionDirectoriesPassphraseUnderlyingReturnValue
+            } else {
+                var returnValue: Result<UserSessionProtocol, UserSessionStoreError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = userSessionForSessionDirectoriesPassphraseUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                userSessionForSessionDirectoriesPassphraseUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    userSessionForSessionDirectoriesPassphraseUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var userSessionForSessionDirectoriesPassphraseClosure: ((ClientProtocol, SessionDirectories, String?) async -> Result<UserSessionProtocol, UserSessionStoreError>)?
+
+    func userSession(for client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String?) async -> Result<UserSessionProtocol, UserSessionStoreError> {
+        userSessionForSessionDirectoriesPassphraseCallsCount += 1
+        userSessionForSessionDirectoriesPassphraseReceivedArguments = (client: client, sessionDirectories: sessionDirectories, passphrase: passphrase)
+        DispatchQueue.main.async {
+            self.userSessionForSessionDirectoriesPassphraseReceivedInvocations.append((client: client, sessionDirectories: sessionDirectories, passphrase: passphrase))
+        }
+        if let userSessionForSessionDirectoriesPassphraseClosure = userSessionForSessionDirectoriesPassphraseClosure {
+            return await userSessionForSessionDirectoriesPassphraseClosure(client, sessionDirectories, passphrase)
+        } else {
+            return userSessionForSessionDirectoriesPassphraseReturnValue
+        }
+    }
+    //MARK: - logout
+
+    var logoutUserSessionUnderlyingCallsCount = 0
+    var logoutUserSessionCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return logoutUserSessionUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = logoutUserSessionUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                logoutUserSessionUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    logoutUserSessionUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var logoutUserSessionCalled: Bool {
+        return logoutUserSessionCallsCount > 0
+    }
+    var logoutUserSessionReceivedUserSession: UserSessionProtocol?
+    var logoutUserSessionReceivedInvocations: [UserSessionProtocol] = []
+    var logoutUserSessionClosure: ((UserSessionProtocol) -> Void)?
+
+    func logout(userSession: UserSessionProtocol) {
+        logoutUserSessionCallsCount += 1
+        logoutUserSessionReceivedUserSession = userSession
+        DispatchQueue.main.async {
+            self.logoutUserSessionReceivedInvocations.append(userSession)
+        }
+        logoutUserSessionClosure?(userSession)
+    }
+    //MARK: - clearCache
+
+    var clearCacheForUnderlyingCallsCount = 0
+    var clearCacheForCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return clearCacheForUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = clearCacheForUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                clearCacheForUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    clearCacheForUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var clearCacheForCalled: Bool {
+        return clearCacheForCallsCount > 0
+    }
+    var clearCacheForReceivedUserID: String?
+    var clearCacheForReceivedInvocations: [String] = []
+    var clearCacheForClosure: ((String) -> Void)?
+
+    func clearCache(for userID: String) {
+        clearCacheForCallsCount += 1
+        clearCacheForReceivedUserID = userID
+        DispatchQueue.main.async {
+            self.clearCacheForReceivedInvocations.append(userID)
+        }
+        clearCacheForClosure?(userID)
+    }
 }
 class VoiceMessageCacheMock: VoiceMessageCacheProtocol {
     var urlForRecording: URL {

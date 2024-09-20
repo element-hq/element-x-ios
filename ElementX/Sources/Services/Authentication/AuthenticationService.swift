@@ -10,10 +10,11 @@ import Foundation
 import MatrixRustSDK
 
 class AuthenticationService: AuthenticationServiceProtocol {
-    private var client: Client?
+    private var client: ClientProtocol?
     private var sessionDirectories: SessionDirectories
     private let passphrase: String
     
+    private let clientBuilderFactory: AuthenticationClientBuilderFactoryProtocol
     private let userSessionStore: UserSessionStoreProtocol
     private let appSettings: AppSettings
     private let appHooks: AppHooks
@@ -22,9 +23,14 @@ class AuthenticationService: AuthenticationServiceProtocol {
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
     private(set) var flow: AuthenticationFlow
     
-    init(userSessionStore: UserSessionStoreProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, appSettings: AppSettings, appHooks: AppHooks) {
+    init(userSessionStore: UserSessionStoreProtocol,
+         encryptionKeyProvider: EncryptionKeyProviderProtocol,
+         clientBuilderFactory: AuthenticationClientBuilderFactoryProtocol = AuthenticationClientBuilderFactory(),
+         appSettings: AppSettings,
+         appHooks: AppHooks) {
         sessionDirectories = .init()
         passphrase = encryptionKeyProvider.generateKey().base64EncodedString()
+        self.clientBuilderFactory = clientBuilderFactory
         self.userSessionStore = userSessionStore
         self.appSettings = appSettings
         self.appHooks = appHooks
@@ -165,16 +171,16 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     // MARK: - Private
     
-    private func makeClientBuilder() -> AuthenticationClientBuilder {
+    private func makeClientBuilder() -> AuthenticationClientBuilderProtocol {
         // Use a fresh session directory each time the user enters a different server
         // so that caches (e.g. server versions) are always fresh for the new server.
         rotateSessionDirectory()
         
-        return AuthenticationClientBuilder(sessionDirectories: sessionDirectories,
-                                           passphrase: passphrase,
-                                           clientSessionDelegate: userSessionStore.clientSessionDelegate,
-                                           appSettings: appSettings,
-                                           appHooks: appHooks)
+        return clientBuilderFactory.makeBuilder(sessionDirectories: sessionDirectories,
+                                                passphrase: passphrase,
+                                                clientSessionDelegate: userSessionStore.clientSessionDelegate,
+                                                appSettings: appSettings,
+                                                appHooks: appHooks)
     }
     
     private func rotateSessionDirectory() {
@@ -182,7 +188,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         sessionDirectories = .init()
     }
     
-    private func userSession(for client: Client) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+    private func userSession(for client: ClientProtocol) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         switch await userSessionStore.userSession(for: client, sessionDirectories: sessionDirectories, passphrase: passphrase) {
         case .success(let clientProxy):
             return .success(clientProxy)
