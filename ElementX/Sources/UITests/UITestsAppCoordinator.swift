@@ -119,8 +119,9 @@ class MockScreen: Identifiable {
         case .serverSelection:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = ServerSelectionScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationService(),
-                                                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                                 isModallyPresented: true))
+                                                                                 authenticationFlow: .login,
+                                                                                 slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
+                                                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .authenticationFlow:

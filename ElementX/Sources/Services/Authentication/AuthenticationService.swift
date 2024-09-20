@@ -20,6 +20,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
+    private(set) var flow: AuthenticationFlow
     
     init(userSessionStore: UserSessionStoreProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, appSettings: AppSettings, appHooks: AppHooks) {
         sessionDirectories = .init()
@@ -28,13 +29,14 @@ class AuthenticationService: AuthenticationServiceProtocol {
         self.appSettings = appSettings
         self.appHooks = appHooks
         
-        homeserverSubject = .init(LoginHomeserver(address: appSettings.defaultHomeserverAddress,
-                                                  loginMode: .unknown))
+        // When updating these, don't forget to update the reset method too.
+        homeserverSubject = .init(LoginHomeserver(address: appSettings.defaultHomeserverAddress, loginMode: .unknown))
+        flow = .login
     }
     
     // MARK: - Public
     
-    func configure(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError> {
+    func configure(for homeserverAddress: String, flow: AuthenticationFlow) async -> Result<Void, AuthenticationServiceError> {
         do {
             var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)
             
@@ -57,7 +59,12 @@ class AuthenticationService: AuthenticationServiceProtocol {
             case .failure: nil
             }
             
+            if flow == .register, !homeserver.supportsRegistration {
+                return .failure(.registrationNotSupported)
+            }
+            
             self.client = client
+            self.flow = flow
             homeserverSubject.send(homeserver)
             return .success(())
         } catch ClientBuildError.WellKnownDeserializationError(let error) {
@@ -148,6 +155,12 @@ class AuthenticationService: AuthenticationServiceProtocol {
             MXLog.error("Failed restoring the client using the provided credentials.")
             return .failure(.failedUsingWebCredentials)
         }
+    }
+    
+    func reset() {
+        homeserverSubject.send(LoginHomeserver(address: appSettings.defaultHomeserverAddress, loginMode: .unknown))
+        flow = .login
+        client = nil
     }
     
     // MARK: - Private

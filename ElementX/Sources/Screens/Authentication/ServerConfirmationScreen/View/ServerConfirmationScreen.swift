@@ -19,6 +19,7 @@ struct ServerConfirmationScreen: View {
         }
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
+        .alert(item: $context.alertInfo)
         .introspect(.window, on: .supportedVersions) { window in
             context.send(viewAction: .updateWindow(window))
         }
@@ -53,7 +54,6 @@ struct ServerConfirmationScreen: View {
             }
             .buttonStyle(.compound(.primary))
             .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.continue)
-            .disabled(!context.viewState.canContinue)
             
             Button { context.send(viewAction: .changeServer) } label: {
                 Text(L10n.screenServerConfirmationChangeServer)
@@ -68,10 +68,8 @@ struct ServerConfirmationScreen: View {
 // MARK: - Previews
 
 struct ServerConfirmationScreen_Previews: PreviewProvider, TestablePreview {
-    static let loginViewModel = ServerConfirmationScreenViewModel(authenticationService: MockAuthenticationService(),
-                                                                  authenticationFlow: .login)
-    static let registerViewModel = ServerConfirmationScreenViewModel(authenticationService: MockAuthenticationService(),
-                                                                     authenticationFlow: .register)
+    static let loginViewModel = makeViewModel(flow: .login)
+    static let registerViewModel = makeViewModel(flow: .register)
     
     static var previews: some View {
         NavigationStack {
@@ -85,5 +83,12 @@ struct ServerConfirmationScreen_Previews: PreviewProvider, TestablePreview {
                 .toolbar(.visible, for: .navigationBar)
         }
         .previewDisplayName("Register")
+    }
+    
+    static func makeViewModel(flow: AuthenticationFlow) -> ServerConfirmationScreenViewModel {
+        ServerConfirmationScreenViewModel(authenticationService: MockAuthenticationService(),
+                                          authenticationFlow: flow,
+                                          slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
+                                          userIndicatorController: UserIndicatorControllerMock())
     }
 }

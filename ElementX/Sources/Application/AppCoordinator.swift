@@ -485,7 +485,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                               encryptionKeyProvider: EncryptionKeyProvider(),
                                                               appSettings: appSettings,
                                                               appHooks: appHooks)
-            _ = await authenticationService.configure(for: userSession.clientProxy.homeserver)
+            _ = await authenticationService.configure(for: userSession.clientProxy.homeserver, flow: .login)
             
             let parameters = SoftLogoutScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                    credentials: credentials,

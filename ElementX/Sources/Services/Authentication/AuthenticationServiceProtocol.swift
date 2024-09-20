@@ -24,6 +24,7 @@ enum AuthenticationServiceError: Error {
     case invalidHomeserverAddress
     case invalidWellKnown(String)
     case slidingSyncNotAvailable
+    case registrationNotSupported
     case accountDeactivated
     case failedLoggingIn
     case sessionTokenRefreshNotSupported
@@ -33,9 +34,11 @@ enum AuthenticationServiceError: Error {
 protocol AuthenticationServiceProtocol {
     /// The currently configured homeserver.
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { get }
+    /// The type of flow the service is currently configured with.
+    var flow: AuthenticationFlow { get }
         
     /// Sets up the service for login on the specified homeserver address.
-    func configure(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError>
+    func configure(for homeserverAddress: String, flow: AuthenticationFlow) async -> Result<Void, AuthenticationServiceError>
     /// Performs login using OIDC for the current homeserver.
     func urlForOIDCLogin() async -> Result<OIDCAuthorizationDataProxy, AuthenticationServiceError>
     /// Asks the SDK to abort an ongoing OIDC login if we didn't get a callback to complete the request with.
@@ -46,6 +49,9 @@ protocol AuthenticationServiceProtocol {
     func login(username: String, password: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError>
     /// Completes registration using the credentials obtained via the helper URL.
     func completeWebRegistration(using credentials: WebRegistrationCredentials) async -> Result<UserSessionProtocol, AuthenticationServiceError>
+    
+    /// Resets the current configuration requiring `configure(for:flow:)` to be called again.
+    func reset()
 }
 
 // MARK: - OIDC

@@ -24,6 +24,8 @@ struct ServerConfirmationScreenViewState: BindableState {
     /// The presentation anchor used for OIDC authentication.
     var window: UIWindow?
     
+    var bindings = ServerConfirmationScreenBindings()
+    
     /// The screen's title.
     var title: String {
         switch authenticationFlow {
@@ -46,21 +48,14 @@ struct ServerConfirmationScreenViewState: BindableState {
                 ""
             }
         case .register:
-            if canContinue {
-                L10n.screenServerConfirmationMessageRegister
-            } else {
-                L10n.errorAccountCreationNotPossible
-            }
+            L10n.screenServerConfirmationMessageRegister
         }
     }
-    
-    /// Whether or not it is valid to continue the flow.
-    var canContinue: Bool {
-        switch authenticationFlow {
-        case .login: true
-        case .register: homeserverSupportsRegistration
-        }
-    }
+}
+
+struct ServerConfirmationScreenBindings {
+    /// Information describing the currently displayed alert.
+    var alertInfo: AlertInfo<ServerConfirmationScreenAlert>?
 }
 
 enum ServerConfirmationScreenViewAction {
@@ -70,4 +65,17 @@ enum ServerConfirmationScreenViewAction {
     case confirm
     /// The user would like to change to a different homeserver.
     case changeServer
+}
+
+enum ServerConfirmationScreenAlert: Hashable {
+    /// An alert that informs the user that a server could not be found.
+    case homeserverNotFound
+    /// An alert that informs the user about a bad well-known file.
+    case invalidWellKnown(String)
+    /// An alert that allows the user to learn about sliding sync.
+    case slidingSync
+    /// An alert that informs the user that registration isn't supported.
+    case registration
+    /// An unknown error has occurred.
+    case unknownError
 }

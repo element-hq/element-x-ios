@@ -86,11 +86,11 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .loginManually:
-                    Task { await self.startAuthentication(flow: .login) }
+                    showServerConfirmationScreen(authenticationFlow: .login)
                 case .loginWithQR:
                     startQRCodeLogin()
                 case .register:
-                    Task { await self.startAuthentication(flow: .register) }
+                    showServerConfirmationScreen(authenticationFlow: .register)
                 case .reportProblem:
                     showReportProblemScreen()
                 }
@@ -113,7 +113,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .signInManually:
                 navigationStackCoordinator.setSheetCoordinator(nil)
-                Task { await self.startAuthentication(flow: .login) }
+                showServerConfirmationScreen(authenticationFlow: .login)
             case .cancel:
                 navigationStackCoordinator.setSheetCoordinator(nil)
             case .done(let userSession):
@@ -137,25 +137,14 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         bugReportFlowCoordinator?.start()
     }
     
-    private func startAuthentication(flow: AuthenticationFlow) async {
-        startLoading()
-        
-        switch await authenticationService.configure(for: appSettings.defaultHomeserverAddress) {
-        case .success:
-            stopLoading()
-            showServerConfirmationScreen(authenticationFlow: flow)
-        case .failure:
-            stopLoading()
-            showServerSelectionScreen(authenticationFlow: flow, isModallyPresented: false)
-        }
-    }
-    
-    private func showServerSelectionScreen(authenticationFlow: AuthenticationFlow, isModallyPresented: Bool) {
+    // TODO: Move this method after showServerConfirmationScreen
+    private func showServerSelectionScreen(authenticationFlow: AuthenticationFlow) {
         let navigationCoordinator = NavigationStackCoordinator()
         
         let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
-                                                                    userIndicatorController: userIndicatorController,
-                                                                    isModallyPresented: isModallyPresented)
+                                                                    authenticationFlow: authenticationFlow,
+                                                                    slidingSyncLearnMoreURL: appSettings.slidingSyncLearnMoreURL,
+                                                                    userIndicatorController: userIndicatorController)
         let coordinator = ServerSelectionScreenCoordinator(parameters: parameters)
         
         coordinator.actions
@@ -164,42 +153,26 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .updated:
-                    if isModallyPresented {
-                        navigationStackCoordinator.setSheetCoordinator(nil)
-                    } else {
-                        // We are here because the default server failed to respond.
-                        if authenticationService.homeserver.value.loginMode == .password {
-                            if authenticationFlow == .login {
-                                // Add the password login screen directly to the flow, its fine.
-                                showLoginScreen()
-                            } else {
-                                // Add the web registration screen directly to the flow, its fine.
-                                showWebRegistration()
-                            }
-                        } else {
-                            // OIDC is presented from the confirmation screen so replace the
-                            // server selection screen which was inserted to handle the failure.
-                            navigationStackCoordinator.pop()
-                            showServerConfirmationScreen(authenticationFlow: authenticationFlow)
-                        }
-                    }
+                    navigationStackCoordinator.setSheetCoordinator(nil)
                 case .dismiss:
                     navigationStackCoordinator.setSheetCoordinator(nil)
                 }
             }
             .store(in: &cancellables)
         
-        if isModallyPresented {
-            navigationCoordinator.setRootCoordinator(coordinator)
-            navigationStackCoordinator.setSheetCoordinator(navigationCoordinator)
-        } else {
-            navigationStackCoordinator.push(coordinator)
-        }
+        navigationCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(navigationCoordinator)
     }
     
     private func showServerConfirmationScreen(authenticationFlow: AuthenticationFlow) {
+        // Reset the service back to the default homeserver before continuing. This ensures
+        // we check that registration is supported if it was previously configured for login.
+        authenticationService.reset()
+        
         let parameters = ServerConfirmationScreenCoordinatorParameters(authenticationService: authenticationService,
-                                                                       authenticationFlow: authenticationFlow)
+                                                                       authenticationFlow: authenticationFlow,
+                                                                       slidingSyncLearnMoreURL: appSettings.slidingSyncLearnMoreURL,
+                                                                       userIndicatorController: userIndicatorController)
         let coordinator = ServerConfirmationScreenCoordinator(parameters: parameters)
         
         coordinator.actions.sink { [weak self] action in
@@ -215,7 +188,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                     showLoginScreen()
                 }
             case .changeServer:
-                showServerSelectionScreen(authenticationFlow: authenticationFlow, isModallyPresented: true)
+                showServerSelectionScreen(authenticationFlow: authenticationFlow)
             }
         }
         .store(in: &cancellables)

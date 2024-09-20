@@ -25,6 +25,11 @@ struct LoginHomeserver: Equatable {
         self.registrationHelperURL = registrationHelperURL
     }
     
+    /// Whether or not the app is able to register on this homeserver.
+    var supportsRegistration: Bool {
+        loginMode == .oidc || (address == "matrix.org" && registrationHelperURL != nil)
+    }
+    
     /// Sanitizes a user entered homeserver address with the following rules
     /// - Trim any whitespace.
     /// - Lowercase the address.

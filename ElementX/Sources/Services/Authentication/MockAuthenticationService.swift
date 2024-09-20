@@ -14,23 +14,29 @@ class MockAuthenticationService: AuthenticationServiceProtocol {
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
+    private(set) var flow: AuthenticationFlow = .login
     
     init(homeserver: LoginHomeserver = .mockMatrixDotOrg) {
         homeserverSubject = .init(homeserver)
     }
     
-    func configure(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError> {
+    func configure(for homeserverAddress: String, flow: AuthenticationFlow) async -> Result<Void, AuthenticationServiceError> {
+        #warning("[DOUG] Handle flow (or lets mock the real service?)")
         // Map the address to the mock homeservers
         if LoginHomeserver.mockMatrixDotOrg.address.contains(homeserverAddress) {
+            self.flow = flow
             homeserverSubject.send(.mockMatrixDotOrg)
             return .success(())
         } else if LoginHomeserver.mockOIDC.address.contains(homeserverAddress) {
+            self.flow = flow
             homeserverSubject.send(.mockOIDC)
             return .success(())
         } else if LoginHomeserver.mockBasicServer.address.contains(homeserverAddress) {
+            self.flow = flow
             homeserverSubject.send(.mockBasicServer)
             return .success(())
         } else if LoginHomeserver.mockUnsupported.address.contains(homeserverAddress) {
+            self.flow = flow
             homeserverSubject.send(.mockUnsupported)
             return .success(())
         } else {
@@ -61,5 +67,9 @@ class MockAuthenticationService: AuthenticationServiceProtocol {
     
     func completeWebRegistration(using credentials: WebRegistrationCredentials) async -> Result<any UserSessionProtocol, AuthenticationServiceError> {
         .failure(.failedLoggingIn)
+    }
+    
+    func reset() {
+        fatalError("Not mocked")
     }
 }
