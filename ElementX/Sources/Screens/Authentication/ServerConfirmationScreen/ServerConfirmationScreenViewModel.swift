@@ -66,7 +66,6 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
         // If the login mode is unknown, the service hasn't be configured and we need to do it now.
         // Otherwise we can continue the flow as server selection has been performed and succeeded.
         guard homeserver.loginMode == .unknown || authenticationService.flow != authenticationFlow else {
-            // TODO: [DOUG] Test this.
             actionsSubject.send(.confirm)
             return
         }
@@ -86,7 +85,7 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
             case .slidingSyncNotAvailable:
                 displayError(.slidingSync)
             case .registrationNotSupported:
-                displayError(.registration) // TODO: [DOUG] Test me!
+                displayError(.registration)
             default:
                 displayError(.unknownError)
             }
