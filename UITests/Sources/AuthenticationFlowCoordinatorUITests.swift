@@ -19,6 +19,10 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         // Server Confirmation: Tap continue button
         app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
         
+        // Login Screen: Wait for continue button to appear
+        let continueButton = app.buttons[A11yIdentifiers.loginScreen.continue]
+        XCTAssertTrue(continueButton.waitForExistence(timeout: 2.0))
+        
         // Login Screen: Enter valid credentials
         app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("alice\n")
         app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("12345678")
@@ -39,18 +43,41 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         // Server Confirmation: Tap continue button
         app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
         
+        // Login Screen: Wait for continue button to appear
+        let continueButton = app.buttons[A11yIdentifiers.loginScreen.continue]
+        XCTAssertTrue(continueButton.waitForExistence(timeout: 2.0))
+        
         // Login Screen: Enter invalid credentials
         app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("alice")
         app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("87654321")
 
-        // Login Screen: Tap next
-        let nextButton = app.buttons[A11yIdentifiers.loginScreen.continue]
-        XCTAssertTrue(nextButton.waitForExistence(timeout: 2.0))
-        XCTAssertTrue(nextButton.isEnabled)
-        nextButton.tap()
+        // Login Screen: Tap continue
+        XCTAssertTrue(continueButton.isEnabled)
+        continueButton.tap()
         
         // Then login should fail.
         XCTAssertTrue(app.alerts.element.waitForExistence(timeout: 2.0), "An error alert should be shown when attempting login with invalid credentials.")
+    }
+    
+    func testLoginWithUnsupportedUserID() async throws {
+        // Given the authentication flow.
+        let app = Application.launch(.authenticationFlow)
+        
+        // Splash Screen: Tap get started button
+        app.buttons[A11yIdentifiers.authenticationStartScreen.signIn].tap()
+        
+        // Server Confirmation: Tap continue button
+        app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
+        
+        // Login Screen: Wait for continue button to appear
+        let continueButton = app.buttons[A11yIdentifiers.loginScreen.continue]
+        XCTAssertTrue(continueButton.waitForExistence(timeout: 2.0))
+        
+        // When entering a username on a homeserver with an unsupported flow.
+        app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("@test:server.net\n")
+        
+        // Then the screen should not allow login to continue.
+        try await app.assertScreenshot(.authenticationFlow, step: 1)
     }
     
     func testSelectingOIDCServer() {

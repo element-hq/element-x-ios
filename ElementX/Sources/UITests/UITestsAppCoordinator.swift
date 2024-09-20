@@ -109,23 +109,16 @@ class MockScreen: Identifiable {
     
     lazy var coordinator: CoordinatorProtocol? = {
         switch id {
-        case .login:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = LoginScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationService(),
-                                                                       analytics: ServiceLocator.shared.analytics,
-                                                                       userIndicatorController: ServiceLocator.shared.userIndicatorController))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
         case .serverSelection:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = ServerSelectionScreenCoordinator(parameters: .init(authenticationService: MockAuthenticationService(),
+            let coordinator = ServerSelectionScreenCoordinator(parameters: .init(authenticationService: AuthenticationService.mock,
                                                                                  authenticationFlow: .login,
                                                                                  slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
                                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .authenticationFlow:
-            let flowCoordinator = AuthenticationFlowCoordinator(authenticationService: MockAuthenticationService(),
+            let flowCoordinator = AuthenticationFlowCoordinator(authenticationService: AuthenticationService.mock,
                                                                 qrCodeLoginService: QRCodeLoginServiceMock(),
                                                                 bugReportService: BugReportServiceMock(),
                                                                 navigationRootCoordinator: navigationRootCoordinator,

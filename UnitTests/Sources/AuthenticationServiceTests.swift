@@ -29,7 +29,7 @@ class AuthenticationServiceTests: XCTestCase {
         XCTAssertEqual(service.flow, .login)
         XCTAssertEqual(service.homeserver.value, .mockMatrixDotOrg)
         
-        switch await service.login(username: "alice", password: "p4ssw0rd", initialDeviceName: nil, deviceID: nil) {
+        switch await service.login(username: "alice", password: "12345678", initialDeviceName: nil, deviceID: nil) {
         case .success:
             XCTAssertEqual(client.loginUsernamePasswordInitialDeviceNameDeviceIdCallsCount, 1)
             XCTAssertEqual(userSessionStore.userSessionForSessionDirectoriesPassphraseCallsCount, 1)
@@ -55,9 +55,10 @@ class AuthenticationServiceTests: XCTestCase {
     }
     
     func testConfigureRegisterNoSupport() async {
-        setupMocks(clientConfiguration: .init(elementWellKnown: ""))
+        let homeserverAddress = "example.com"
+        setupMocks(serverAddress: homeserverAddress)
         
-        switch await service.configure(for: "matrix.org", flow: .register) {
+        switch await service.configure(for: homeserverAddress, flow: .register) {
         case .success:
             XCTFail("Configuration should have failed")
         case .failure(let error):
@@ -70,14 +71,17 @@ class AuthenticationServiceTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func setupMocks(clientConfiguration: ClientSDKMock.Configuration = .init()) {
-        client = ClientSDKMock(configuration: clientConfiguration)
+    private func setupMocks(serverAddress: String = "matrix.org") {
+        let configuration: AuthenticationClientBuilderMock.Configuration = .init()
+        let clientBuilderFactory = AuthenticationClientBuilderFactoryMock(configuration: .init(builderConfiguration: configuration))
+        
+        client = configuration.homeserverClients[serverAddress]
         userSessionStore = UserSessionStoreMock(configuration: .init())
         encryptionKeyProvider = MockEncryptionKeyProvider()
         
         service = AuthenticationService(userSessionStore: userSessionStore,
                                         encryptionKeyProvider: encryptionKeyProvider,
-                                        clientBuilderFactory: AuthenticationClientBuilderFactoryMock(configuration: .init(builtClient: client)),
+                                        clientBuilderFactory: clientBuilderFactory,
                                         appSettings: ServiceLocator.shared.settings,
                                         appHooks: AppHooks())
     }

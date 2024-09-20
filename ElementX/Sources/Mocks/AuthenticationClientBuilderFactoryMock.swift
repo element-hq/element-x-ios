@@ -10,13 +10,13 @@ import MatrixRustSDK
 
 extension AuthenticationClientBuilderFactoryMock {
     struct Configuration {
-        var builtClient: ClientProtocol
+        var builderConfiguration: AuthenticationClientBuilderMock.Configuration = .init()
     }
     
     convenience init(configuration: Configuration) {
         self.init()
         
-        let clientBuilder = AuthenticationClientBuilderMock(configuration: .init(builtClient: configuration.builtClient))
+        let clientBuilder = AuthenticationClientBuilderMock(configuration: configuration.builderConfiguration)
         makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReturnValue = clientBuilder
     }
 }
