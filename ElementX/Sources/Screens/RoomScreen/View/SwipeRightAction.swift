@@ -31,7 +31,7 @@ struct SwipeRightAction<Label: View>: ViewModifier {
         content
             .offset(x: xOffset, y: 0.0)
             .animation(.interactiveSpring().speed(0.5), value: xOffset)
-            .simultaneousGesture(gesture)
+            .timelineGesture(gesture)
             .onChange(of: dragGestureActive) { value in
                 if value == true {
                     if shouldStartAction() {
@@ -112,6 +112,18 @@ extension View {
                           shouldStartAction: @escaping () -> Bool,
                           action: @escaping () -> Void) -> some View {
         modifier(SwipeRightAction(label: label, shouldStartAction: shouldStartAction, action: action))
+    }
+    
+    @ViewBuilder
+    fileprivate func timelineGesture(_ gesture: some Gesture) -> some View {
+        if #available(iOS 18.0, *) {
+            // iOS 18 has a bug https://forums.developer.apple.com/forums/thread/760035 and you
+            // can't scroll the timeline when `gesture` is used.
+            simultaneousGesture(gesture)
+        } else {
+            // Equally on iOS 17 you can't scroll the timeline when `simultaneousGesture` is used.
+            self.gesture(gesture)
+        }
     }
 }
 
