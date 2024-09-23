@@ -31,12 +31,12 @@ struct HomeScreenRoomCell: View {
                 
                 content
                     .padding(.vertical, verticalInsets)
-                    .overlay(alignment: .bottom) {
-                        Rectangle()
-                            .fill(Color.compound.borderDisabled)
-                            .frame(height: 1 / UIScreen.main.scale)
-                            .padding(.trailing, -horizontalInsets)
-                    }
+//                    .overlay(alignment: .bottom) {
+//                        Rectangle()
+//                            .fill(Color.compound.borderDisabled)
+//                            .frame(height: 1 / UIScreen.main.scale)
+//                            .padding(.trailing, -horizontalInsets)
+//                    }
             }
             .padding(.horizontal, horizontalInsets)
             .accessibilityElement(children: .combine)
@@ -84,7 +84,7 @@ struct HomeScreenRoomCell: View {
     private var header: some View {
         HStack(alignment: .top, spacing: 16) {
             Text(room.name)
-                .font(.compound.bodyLGSemibold)
+                .font(.compound.bodyMD)
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -131,7 +131,7 @@ struct HomeScreenRoomCell: View {
                         .frame(width: 12, height: 12)
                 }
             }
-            .foregroundColor(room.isHighlighted ? .compound.iconAccentTertiary : .compound.iconQuaternary)
+            .foregroundColor(room.isHighlighted ? Asset.Colors.blue11.swiftUIColor : .compound.iconQuaternary)
         }
     }
             
@@ -154,7 +154,8 @@ struct HomeScreenRoomCellButtonStyle: ButtonStyle {
     
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .background(isSelected ? Color.compound.bgSubtleSecondary : Color.compound.bgCanvasDefault)
+//            .background(isSelected ? Color.compound.bgSubtleSecondary : Asset.Colors.backgroundColor.swiftUIColor)
+            .background(isSelected ? Color.compound.bgSubtleSecondary : .clear)
             .contentShape(Rectangle())
             .animation(isSelected ? .none : .easeOut(duration: 0.1).disabledDuringTests(), value: isSelected)
     }

@@ -173,7 +173,7 @@ class TimelineTableViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
         tableView.keyboardDismissMode = .onDrag
-        tableView.backgroundColor = UIColor(.compound.bgCanvasDefault)
+        //tableView.backgroundColor = UIColor(Asset.Colors.backgroundColor.swiftUIColor)
         tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
         view.addSubview(tableView)
         

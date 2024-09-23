@@ -27,7 +27,7 @@ struct RoomScreen: View {
 
     var body: some View {
         timeline
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+            
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 composerToolbar
                     .padding(.bottom, composerToolbarContext.composerFormattingEnabled ? 8 : 12)
@@ -39,7 +39,7 @@ struct RoomScreen: View {
                         }
                     }
                     .padding(.top, 8)
-                    .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+                    
                     .environmentObject(timelineContext)
                     .environment(\.timelineContext, timelineContext)
             }
