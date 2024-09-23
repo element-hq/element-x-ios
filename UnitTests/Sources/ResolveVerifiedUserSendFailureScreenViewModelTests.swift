@@ -60,7 +60,10 @@ class ResolveVerifiedUserSendFailureScreenViewModelTests: XCTestCase {
     // MARK: Helpers
     
     private func makeViewModel(with failure: TimelineItemSendFailure.VerifiedUser) -> ResolveVerifiedUserSendFailureScreenViewModel {
-        ResolveVerifiedUserSendFailureScreenViewModel(failure: failure, itemID: .random, roomProxy: roomProxy)
+        ResolveVerifiedUserSendFailureScreenViewModel(failure: failure,
+                                                      itemID: .random,
+                                                      roomProxy: roomProxy,
+                                                      userIndicatorController: UserIndicatorControllerMock())
     }
     
     private func verifyResolving(userIDs: [String], assertStrings: Bool = true) async throws {

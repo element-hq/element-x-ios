@@ -1366,7 +1366,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, itemID: TimelineItemIdentifier) {
         let coordinator = ResolveVerifiedUserSendFailureScreenCoordinator(parameters: .init(failure: failure,
                                                                                             itemID: itemID,
-                                                                                            roomProxy: roomProxy))
+                                                                                            roomProxy: roomProxy,
+                                                                                            userIndicatorController: userIndicatorController))
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             

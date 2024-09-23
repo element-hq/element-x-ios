@@ -21,6 +21,7 @@ struct ResolveVerifiedUserSendFailureScreenCoordinatorParameters {
     let failure: TimelineItemSendFailure.VerifiedUser
     let itemID: TimelineItemIdentifier
     let roomProxy: JoinedRoomProxyProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum ResolveVerifiedUserSendFailureScreenCoordinatorAction {
@@ -43,7 +44,8 @@ final class ResolveVerifiedUserSendFailureScreenCoordinator: CoordinatorProtocol
         
         viewModel = ResolveVerifiedUserSendFailureScreenViewModel(failure: parameters.failure,
                                                                   itemID: parameters.itemID,
-                                                                  roomProxy: parameters.roomProxy)
+                                                                  roomProxy: parameters.roomProxy,
+                                                                  userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {

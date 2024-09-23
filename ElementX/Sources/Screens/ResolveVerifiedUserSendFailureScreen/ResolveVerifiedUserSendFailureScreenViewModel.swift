@@ -26,12 +26,17 @@ class ResolveVerifiedUserSendFailureScreenViewModel: ResolveVerifiedUserSendFail
     private let roomProxy: JoinedRoomProxyProtocol
     private var members: [String: RoomMemberProxyProtocol]
     
+    private let userIndicatorController: UserIndicatorControllerProtocol
+    
     private let actionsSubject: PassthroughSubject<ResolveVerifiedUserSendFailureScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<ResolveVerifiedUserSendFailureScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(failure: TimelineItemSendFailure.VerifiedUser, itemID: TimelineItemIdentifier, roomProxy: JoinedRoomProxyProtocol) {
+    init(failure: TimelineItemSendFailure.VerifiedUser,
+         itemID: TimelineItemIdentifier,
+         roomProxy: JoinedRoomProxyProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol) {
         iterator = switch failure {
         case .hasUnsignedDevice(let devices): UnsignedDeviceFailureIterator(devices: devices)
         case .changedIdentity(let users): ChangedIdentityFailureIterator(users: users)
@@ -40,6 +45,7 @@ class ResolveVerifiedUserSendFailureScreenViewModel: ResolveVerifiedUserSendFail
         self.failure = failure
         self.itemID = itemID
         self.roomProxy = roomProxy
+        self.userIndicatorController = userIndicatorController
         
         members = Dictionary(uniqueKeysWithValues: roomProxy.membersPublisher.value.map { ($0.userID, $0) })
         
@@ -77,7 +83,8 @@ class ResolveVerifiedUserSendFailureScreenViewModel: ResolveVerifiedUserSendFail
         }
         
         if case let .failure(error) = result {
-            #warning("Show the error?")
+            MXLog.error("Failed to resolve send failure: \(error)")
+            showFailureIndicator()
             return
         }
         
@@ -94,9 +101,19 @@ class ResolveVerifiedUserSendFailureScreenViewModel: ResolveVerifiedUserSendFail
         switch await roomProxy.resend(itemID: itemID) {
         case .success:
             actionsSubject.send(.dismiss)
-        case .failure(let failure):
-            #warning("Show the error?")
+        case .failure(let error):
+            MXLog.error("Failed to resend message: \(error)")
+            showFailureIndicator()
         }
+    }
+    
+    private static let failureIndicatorIdentifier = "\(ResolveVerifiedUserSendFailureScreenViewModel.self)-Failure"
+    
+    private func showFailureIndicator() {
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorIdentifier,
+                                                                                    type: .toast,
+                                                                                    title: L10n.errorUnknown,
+                                                                                    iconName: "xmark"))
     }
 }
 
