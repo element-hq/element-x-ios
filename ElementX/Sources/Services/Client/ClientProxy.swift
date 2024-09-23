@@ -83,8 +83,6 @@ class ClientProxy: ClientProxyProtocol {
             .asCurrentValuePublisher()
     }
     
-    private let roomListServiceStateSubject = CurrentValueSubject<RoomListServiceState, Never>(.initial)
-    
     private var cancellables = Set<AnyCancellable>()
     
     /// Will be `true` whilst the app cleans up and forces a logout. Prevents the sync service from restarting
@@ -113,6 +111,8 @@ class ClientProxy: ClientProxyProtocol {
     var verificationStatePublisher: CurrentValuePublisher<SessionVerificationState, Never> {
         verificationStateSubject.asCurrentValuePublisher()
     }
+    
+    var roomsToAwait: Set<String> = []
     
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
     
@@ -440,6 +440,8 @@ class ClientProxy: ClientProxyProtocol {
     }
         
     func roomForIdentifier(_ identifier: String) async -> RoomProxyType? {
+        let shouldAwait = roomsToAwait.remove(identifier) != nil
+        
         // Try fetching the room from the cold cache (if available) first
         if let room = await buildRoomForIdentifier(identifier) {
             return room
@@ -453,6 +455,10 @@ class ClientProxy: ClientProxyProtocol {
         
         if !roomSummaryProvider.statePublisher.value.isLoaded {
             _ = await roomSummaryProvider.statePublisher.values.first(where: { $0.isLoaded })
+        }
+        
+        if shouldAwait {
+            await waitForRoomToSync(roomID: identifier)
         }
         
         return await buildRoomForIdentifier(identifier)
@@ -744,7 +750,6 @@ class ClientProxy: ClientProxyProtocol {
                                                             shouldPrefixSenderName: true)
             
             roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
-                                                      roomListServiceStatePublisher: roomListServiceStateSubject.asCurrentValuePublisher(),
                                                       eventStringBuilder: eventStringBuilder,
                                                       name: "AllRooms",
                                                       shouldUpdateVisibleRange: true,
@@ -754,7 +759,6 @@ class ClientProxy: ClientProxyProtocol {
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
             
             alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
-                                                               roomListServiceStatePublisher: roomListServiceStateSubject.asCurrentValuePublisher(),
                                                                eventStringBuilder: eventStringBuilder,
                                                                name: "MessageForwarding",
                                                                notificationSettings: notificationSettings,
@@ -794,8 +798,6 @@ class ClientProxy: ClientProxyProtocol {
             guard let self else { return }
             
             MXLog.info("Received room list update: \(state)")
-            
-            roomListServiceStateSubject.send(state)
             
             guard state != .error,
                   state != .terminated else {
@@ -853,9 +855,7 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.error("Failed retrieving room: \(roomID), room list service not set up")
             return nil
         }
-        
-        await waitForRoomToSync(roomID: roomID)
-        
+                
         do {
             let roomListItem = try roomListService.room(roomId: roomID)
             

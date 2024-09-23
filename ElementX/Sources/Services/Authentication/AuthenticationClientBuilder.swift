@@ -69,7 +69,8 @@ struct AuthenticationClientBuilder {
             .baseBuilder(httpProxy: appSettings.websiteURL.globalProxy,
                          slidingSync: slidingSync,
                          sessionDelegate: clientSessionDelegate,
-                         appHooks: appHooks)
+                         appHooks: appHooks,
+                         invisibleCryptoEnabled: appSettings.invisibleCryptoEnabled)
             .sessionPaths(dataPath: sessionDirectories.dataPath,
                           cachePath: sessionDirectories.cachePath)
             .passphrase(passphrase: passphrase)

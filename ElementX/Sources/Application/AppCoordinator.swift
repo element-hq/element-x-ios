@@ -32,7 +32,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private var userSession: UserSessionProtocol? {
         didSet {
             userSessionObserver?.cancel()
-            if userSession != nil {
+            if let userSession {
+                userSession.clientProxy.roomsToAwait = storedRoomsToAwait
                 configureElementCallService()
                 configureNotificationManager()
                 observeUserSessionChanges()
@@ -57,6 +58,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
     private let appRouteURLParser: AppRouteURLParser
     @Consumable private var storedAppRoute: AppRoute?
+    private var storedRoomsToAwait: Set<String> = []
 
     init(appDelegate: AppDelegate) {
         let appHooks = AppHooks()
@@ -301,6 +303,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         guard let roomID = content.roomID,
               content.receiverID != nil else {
             return
+        }
+        
+        if content.categoryIdentifier == NotificationConstants.Category.invite {
+            if let userSession {
+                userSession.clientProxy.roomsToAwait.insert(roomID)
+            } else {
+                storedRoomsToAwait.insert(roomID)
+            }
         }
         
         handleAppRoute(.room(roomID: roomID, via: []))

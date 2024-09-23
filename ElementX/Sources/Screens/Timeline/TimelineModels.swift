@@ -72,6 +72,7 @@ enum TimelineViewAction {
     case hasSwitchedTimeline
     
     case hasScrolled(direction: ScrollDirection)
+    case setOpenURLAction(OpenURLAction)
 }
 
 enum TimelineComposerAction {
@@ -100,6 +101,9 @@ struct TimelineViewState: BindableState {
     // The `pinnedEventIDs` are used only to determine if an item is already pinned or not.
     // It's updated from the room info, so it's faster than using the timeline
     var pinnedEventIDs: Set<String> = []
+    
+    /// an openURL closure which opens URLs first using the App's environment rather than skipping out to external apps
+    var openURL: OpenURLAction?
     
     var bindings: TimelineViewStateBindings
     

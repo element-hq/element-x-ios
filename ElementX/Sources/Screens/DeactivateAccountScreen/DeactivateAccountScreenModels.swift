@@ -8,7 +8,6 @@
 import Foundation
 
 enum DeactivateAccountScreenViewModelAction {
-    case cancel
     case accountDeactivated
 }
 
@@ -50,5 +49,4 @@ enum DeactivateAccountScreenAlert {
 
 enum DeactivateAccountScreenViewAction {
     case deactivate
-    case cancel
 }

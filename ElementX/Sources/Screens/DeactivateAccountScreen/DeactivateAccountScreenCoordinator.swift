@@ -14,7 +14,6 @@ struct DeactivateAccountScreenCoordinatorParameters {
 }
 
 enum DeactivateAccountScreenCoordinatorAction {
-    case cancel
     case accountDeactivated
 }
 
@@ -42,8 +41,6 @@ final class DeactivateAccountScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
-            case .cancel:
-                actionsSubject.send(.cancel)
             case .accountDeactivated:
                 actionsSubject.send(.accountDeactivated)
             }

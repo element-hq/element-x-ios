@@ -29,7 +29,6 @@ struct DeactivateAccountScreen: View {
         }
         .navigationTitle(L10n.screenDeactivateAccountTitle)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar { toolbar }
         .alert(item: $context.alertInfo)
     }
     
@@ -69,14 +68,6 @@ struct DeactivateAccountScreen: View {
         } header: {
             Text(L10n.actionConfirmPassword)
                 .compoundListSectionHeader()
-        }
-    }
-    
-    private var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .cancellationAction) {
-            Button(L10n.actionCancel) {
-                context.send(viewAction: .cancel)
-            }
         }
     }
 }

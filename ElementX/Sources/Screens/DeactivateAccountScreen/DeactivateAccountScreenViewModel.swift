@@ -30,8 +30,6 @@ class DeactivateAccountScreenViewModel: DeactivateAccountScreenViewModelType, De
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
-        case .cancel:
-            actionsSubject.send(.cancel)
         case .deactivate:
             showDeactivationConfirmation()
         }

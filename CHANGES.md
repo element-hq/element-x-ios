@@ -1,3 +1,52 @@
+## Changes in 1.8.3 (2024-09-19)
+
+### What's Changed
+
+✨ Features
+* crypto: Add configuration flag to enable invisible crypto by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/3247
+* quick and dirty /join command by @ara4n in https://github.com/element-hq/element-x-ios/pull/3288
+
+🐛 Bugfixes
+* Await for room sync only for push notification invites by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3307
+
+🧱 Build
+* Try to stop random codecov test result action failures from failing the whole test run. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3301
+
+Others
+* Various Danger fixes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3304
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.8.2...1.8.3
+
+## Changes in 1.8.2 (2024-09-18)
+
+### What's Changed
+
+✨ Features
+* Allow registration on matrix.org using a custom helper URL. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3282
+
+🙌 Improvements
+* Allow account deactivation when not using OIDC. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3295
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3283
+
+🧱 Build
+* Bump SDK to 1.0.51 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3298
+
+🚧 In development 🚧
+* Add a WebRegistrationScreen (not included in the flow yet). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3281
+* Added analytics for message pinning by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3284
+
+Others
+* Bump the RustSDK to v1.0.50 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3292
+* Push the deactivate account screen. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3297
+* Use the new strings for send failures when the unsigned devices are your own. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3299
+* Stop delaying subscriptions until after startup by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3294
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.8.1...1.8.2
+
 ## Changes in 1.8.1 (2024-09-13)
 
 ### What's Changed

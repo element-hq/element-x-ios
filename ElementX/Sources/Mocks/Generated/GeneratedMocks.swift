@@ -1970,6 +1970,11 @@ class ClientProxyMock: ClientProxyProtocol {
     var underlyingIgnoredUsersPublisher: CurrentValuePublisher<[String]?, Never>!
     var pusherNotificationClientIdentifier: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol?
+    var roomsToAwait: Set<String> {
+        get { return underlyingRoomsToAwait }
+        set(value) { underlyingRoomsToAwait = value }
+    }
+    var underlyingRoomsToAwait: Set<String>!
     var alternateRoomSummaryProvider: RoomSummaryProviderProtocol?
     var notificationSettings: NotificationSettingsProxyProtocol {
         get { return underlyingNotificationSettings }

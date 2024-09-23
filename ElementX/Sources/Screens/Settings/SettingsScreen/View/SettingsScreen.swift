@@ -184,11 +184,12 @@ struct SettingsScreen: View {
                         context.send(viewAction: .logout)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.logout)
+            
 //            if context.viewState.showAccountDeactivation {
 //                ListRow(label: .action(title: L10n.actionDeactivateAccount,
 //                                       icon: \.warning,
 //                                       role: .destructive),
-//                        kind: .button {
+//                        kind: .navigationLink {
 //                            context.send(viewAction: .deactivateAccount)
 //                        })
 //            }

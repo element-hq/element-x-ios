@@ -49,7 +49,8 @@ class ResolveVerifiedUserSendFailureScreenViewModel: ResolveVerifiedUserSendFail
         }
         
         super.init(initialViewState: ResolveVerifiedUserSendFailureScreenViewState(currentFailure: failure,
-                                                                                   currentMemberDisplayName: members[userID]?.displayName ?? userID))
+                                                                                   currentMemberDisplayName: members[userID]?.displayName ?? userID,
+                                                                                   isYou: userID == roomProxy.ownUserID))
     }
     
     // MARK: Public
@@ -83,6 +84,7 @@ class ResolveVerifiedUserSendFailureScreenViewModel: ResolveVerifiedUserSendFail
         if let (userID, failure) = iterator.next() {
             state.currentMemberDisplayName = members[userID]?.displayName ?? userID
             state.currentFailure = failure
+            state.isYou = userID == roomProxy.ownUserID
         } else {
             actionsSubject.send(.dismiss)
         }

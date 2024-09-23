@@ -7,6 +7,7 @@
 
 import Algorithms
 import Combine
+import MatrixRustSDK
 import OrderedCollections
 import SwiftUI
 
@@ -167,6 +168,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             Task { state.timelineViewState.isSwitchingTimelines = false }
         case let .hasScrolled(direction):
             actionsSubject.send(.hasScrolled(direction: direction))
+        case .setOpenURLAction(let action):
+            state.openURL = action
         }
     }
 
@@ -560,7 +563,27 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             displayAlert(.encryptionAuthenticity(authenticityMessage))
         }
     }
+    
+    private func slashCommand(message: String) -> SlashCommand? {
+        for command in SlashCommand.allCases {
+            if message.starts(with: command.rawValue) {
+                return command
+            }
+        }
+        return nil
+    }
 
+    private func handleJoinCommand(message: String) {
+        guard let alias = String(message.dropFirst(SlashCommand.join.rawValue.count))
+            .components(separatedBy: .whitespacesAndNewlines)
+            .first,
+            let urlString = try? matrixToRoomAliasPermalink(roomAlias: alias),
+            let url = URL(string: urlString) else {
+            return
+        }
+        state.openURL?(url)
+    }
+    
     private func sendCurrentMessage(_ message: String, html: String?, mode: ComposerMode, intentionalMentions: IntentionalMentions) async {
         guard !message.isEmpty else {
             fatalError("This message should never be empty")
@@ -580,9 +603,14 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                           html: html,
                                           intentionalMentions: intentionalMentions)
         case .default:
-            await timelineController.sendMessage(message,
-                                                 html: html,
-                                                 intentionalMentions: intentionalMentions)
+            switch slashCommand(message: message) {
+            case .join:
+                handleJoinCommand(message: message)
+            case .none:
+                await timelineController.sendMessage(message,
+                                                     html: html,
+                                                     intentionalMentions: intentionalMentions)
+            }
         case .recordVoiceMessage, .previewVoiceMessage:
             fatalError("invalid composer mode.")
         }
@@ -861,4 +889,8 @@ extension EnvironmentValues {
         get { self[FocussedEventID.self] }
         set { self[FocussedEventID.self] = newValue }
     }
+}
+
+private enum SlashCommand: String, CaseIterable {
+    case join = "/join "
 }
