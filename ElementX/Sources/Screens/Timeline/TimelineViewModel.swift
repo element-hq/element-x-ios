@@ -565,10 +565,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     private func slashCommand(message: String) -> SlashCommand? {
-        for command in SlashCommand.allCases {
-            if message.starts(with: command.rawValue) {
-                return command
-            }
+        for command in SlashCommand.allCases where message.starts(with: command.rawValue) {
+            return command
         }
         return nil
     }
