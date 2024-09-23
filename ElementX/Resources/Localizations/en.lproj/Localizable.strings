@@ -292,10 +292,12 @@
 "notification_inline_reply_failed" = "** Failed to send - please open room";
 "notification_invitation_action_reject" = "Reject";
 "notification_invite_body" = "Invited you to chat";
+"notification_invite_body_with_sender" = "%1$@ invited you to chat";
 "notification_mentioned_you_body" = "Mentioned you: %1$@";
 "notification_new_messages" = "New Messages";
 "notification_reaction_body" = "Reacted with %1$@";
 "notification_room_invite_body" = "Invited you to join the room";
+"notification_room_invite_body_with_sender" = "%1$@ invited you to join the room";
 "notification_sender_me" = "Me";
 "notification_sender_mention_reply" = "%1$@ mentioned or replied";
 "notification_test_push_notification_content" = "You are viewing the notification! Click me!";

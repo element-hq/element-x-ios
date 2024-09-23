@@ -660,6 +660,10 @@ internal enum L10n {
   }
   /// Invited you to chat
   internal static var notificationInviteBody: String { return L10n.tr("Localizable", "notification_invite_body") }
+  /// %1$@ invited you to chat
+  internal static func notificationInviteBodyWithSender(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "notification_invite_body_with_sender", String(describing: p1))
+  }
   /// Mentioned you: %1$@
   internal static func notificationMentionedYouBody(_ p1: Any) -> String {
     return L10n.tr("Localizable", "notification_mentioned_you_body", String(describing: p1))
@@ -680,6 +684,10 @@ internal enum L10n {
   internal static var notificationRoomActionQuickReply: String { return L10n.tr("Localizable", "notification_room_action_quick_reply") }
   /// Invited you to join the room
   internal static var notificationRoomInviteBody: String { return L10n.tr("Localizable", "notification_room_invite_body") }
+  /// %1$@ invited you to join the room
+  internal static func notificationRoomInviteBodyWithSender(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "notification_room_invite_body_with_sender", String(describing: p1))
+  }
   /// Me
   internal static var notificationSenderMe: String { return L10n.tr("Localizable", "notification_sender_me") }
   /// %1$@ mentioned or replied

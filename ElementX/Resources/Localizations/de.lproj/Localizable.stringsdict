@@ -189,9 +189,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Falsche PIN. Du hast %1$d weitere Chance</string>
+			<string>Falsche PIN. Du hast %1$d weiteren Versuch</string>
 			<key>other</key>
-			<string>Falsche PIN. Du hast %1$d weitere Chancen</string>
+			<string>Falsche PIN. Du hast %1$d weitere Versuche</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -205,9 +205,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Pinned message</string>
+			<string>%1$d fixierte Nachricht</string>
 			<key>other</key>
-			<string>%1$d Pinned messages</string>
+			<string>%1$d fixierte Nachrichten</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
