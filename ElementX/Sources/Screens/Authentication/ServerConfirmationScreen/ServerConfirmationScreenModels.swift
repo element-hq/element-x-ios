@@ -19,8 +19,6 @@ struct ServerConfirmationScreenViewState: BindableState {
     var homeserverAddress: String
     /// The flow being attempted on the selected homeserver.
     let authenticationFlow: AuthenticationFlow
-    /// Whether or not the homeserver supports registration.
-    var homeserverSupportsRegistration = false
     /// The presentation anchor used for OIDC authentication.
     var window: UIWindow?
     

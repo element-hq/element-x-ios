@@ -33,15 +33,13 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
         
         let homeserver = authenticationService.homeserver.value
         super.init(initialViewState: ServerConfirmationScreenViewState(homeserverAddress: homeserver.address,
-                                                                       authenticationFlow: authenticationFlow,
-                                                                       homeserverSupportsRegistration: homeserver.supportsRegistration))
+                                                                       authenticationFlow: authenticationFlow))
         
         authenticationService.homeserver
             .receive(on: DispatchQueue.main)
             .sink { [weak self] homeserver in
                 guard let self else { return }
                 state.homeserverAddress = homeserver.address
-                state.homeserverSupportsRegistration = homeserver.supportsRegistration
             }
             .store(in: &cancellables)
     }

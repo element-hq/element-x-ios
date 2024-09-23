@@ -26,18 +26,11 @@ class ServerConfirmationScreenViewStateTests: XCTestCase {
     
     func testRegisterMessageString() {
         let matrixDotOrgRegister = ServerConfirmationScreenViewState(homeserverAddress: LoginHomeserver.mockMatrixDotOrg.address,
-                                                                     authenticationFlow: .register,
-                                                                     homeserverSupportsRegistration: true)
+                                                                     authenticationFlow: .register)
         XCTAssertEqual(matrixDotOrgRegister.message, L10n.screenServerConfirmationMessageRegister, "The registration message should always be the same.")
         
         let oidcRegister = ServerConfirmationScreenViewState(homeserverAddress: LoginHomeserver.mockOIDC.address,
-                                                             authenticationFlow: .register,
-                                                             homeserverSupportsRegistration: true)
+                                                             authenticationFlow: .register)
         XCTAssertEqual(oidcRegister.message, L10n.screenServerConfirmationMessageRegister, "The registration message should always be the same.")
-        
-        let otherRegister = ServerConfirmationScreenViewState(homeserverAddress: LoginHomeserver.mockBasicServer.address,
-                                                              authenticationFlow: .register,
-                                                              homeserverSupportsRegistration: false)
-        XCTAssertEqual(otherRegister.message, L10n.errorAccountCreationNotPossible, "The registration message should always be the same.")
     }
 }
