@@ -336,8 +336,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             state.canCurrentUserRedactSelf = false
         }
         
-        if appSettings.pinningEnabled,
-           case let .success(value) = await roomProxy.canUserPinOrUnpin(userID: roomProxy.ownUserID) {
+        if case let .success(value) = await roomProxy.canUserPinOrUnpin(userID: roomProxy.ownUserID) {
             state.canCurrentUserPin = value
         } else {
             state.canCurrentUserPin = false
@@ -444,9 +443,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     private func updatePinnedEventIDs() async {
-        if appSettings.pinningEnabled {
-            state.pinnedEventIDs = await roomProxy.pinnedEventIDs
-        }
+        state.pinnedEventIDs = await roomProxy.pinnedEventIDs
     }
 
     private func setupDirectRoomSubscriptionsIfNeeded() {

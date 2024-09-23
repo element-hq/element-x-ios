@@ -75,13 +75,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            bindings: .init()),
                    mediaProvider: mediaProvider)
         
-        appSettings.$pinningEnabled
-            .weakAssign(to: \.state.isPinningEnabled, on: self)
-            .store(in: &cancellables)
-        
-        appSettings.$pinningEnabled
-            .combineLatest(appMediator.networkMonitor.reachabilityPublisher)
-            .filter { $0.0 && $0.1 == .reachable }
+        appMediator.networkMonitor.reachabilityPublisher
+            .filter { $0 == .reachable }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.setupPinnedEventsTimelineProviderIfNeeded()

@@ -271,9 +271,6 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.fuzzyRoomListSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
     var fuzzyRoomListSearchEnabled
     
-    @UserPreference(key: UserDefaultsKeys.pinningEnabled, defaultValue: true, storageType: .userDefaults(store))
-    var pinningEnabled
-    
     enum SlidingSyncDiscovery: Codable { case proxy, native, forceNative }
     @UserPreference(key: UserDefaultsKeys.slidingSyncDiscovery, defaultValue: .native, storageType: .userDefaults(store))
     var slidingSyncDiscovery: SlidingSyncDiscovery
