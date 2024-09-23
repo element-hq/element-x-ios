@@ -67,7 +67,7 @@ struct TracingConfiguration {
     }
     
     static let targets: OrderedDictionary<Target, LogLevel> = [
-        .common: .info,
+        .common: .info, // Never set this lower than info - 3rd-party crates may start logging user data.
         .elementx: .info,
         .hyper: .warn,
         .matrix_sdk_ffi: .info,
@@ -106,7 +106,7 @@ struct TracingConfiguration {
         
         let overrides = Self.targets.keys.reduce(into: [Target: LogLevel]()) { partialResult, target in
             // Keep the defaults here
-            let ignoredTargets: [Target] = [.common,
+            let ignoredTargets: [Target] = [.common, // Never remove common from the ignored targets (see above for more info).
                                             .hyper,
                                             .matrix_sdk_ffi,
                                             .matrix_sdk_oidc,
