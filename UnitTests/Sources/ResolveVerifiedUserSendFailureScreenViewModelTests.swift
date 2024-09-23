@@ -73,7 +73,7 @@ class ResolveVerifiedUserSendFailureScreenViewModelTests: XCTestCase {
             }
             
             // When resolving the first failure.
-            let deferredFailure = deferFailure(viewModel.actionsPublisher, timeout: 1) { $0.isDismiss }
+            let deferredFailure = deferFailure(viewModel.actionsPublisher, timeout: 1) { $0 == .dismiss }
             context.send(viewAction: .resolveAndResend)
             
             // Then the sheet should remain open for the next failure.
@@ -88,7 +88,7 @@ class ResolveVerifiedUserSendFailureScreenViewModelTests: XCTestCase {
         }
         
         // When resolving the final failure.
-        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0.isDismiss }
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .dismiss }
         context.send(viewAction: .resolveAndResend)
         
         // Then the sheet should be dismissed.
@@ -108,14 +108,5 @@ class ResolveVerifiedUserSendFailureScreenViewModelTests: XCTestCase {
         
         XCTAssertTrue(context.viewState.title.contains(displayName))
         XCTAssertTrue(context.viewState.subtitle.contains(displayName))
-    }
-}
-
-private extension ResolveVerifiedUserSendFailureScreenViewModelAction {
-    var isDismiss: Bool {
-        switch self {
-        case .dismiss: true
-        default: false
-        }
     }
 }
