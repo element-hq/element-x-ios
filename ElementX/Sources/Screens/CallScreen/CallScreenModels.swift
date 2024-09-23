@@ -28,7 +28,7 @@ struct CallScreenViewState: BindableState {
 struct Bindings {
     var javaScriptMessageHandler: ((Any) -> Void)?
     var javaScriptEvaluator: ((String) async throws -> Any)?
-    var requestPictureInPictureHandler: (() async -> Result<AVPictureInPictureController, CallScreenError>)?
+    var requestPictureInPictureHandler: (() async -> Result<Void, CallScreenError>)?
     
     var alertInfo: AlertInfo<UUID>?
 }

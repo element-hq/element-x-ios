@@ -23,6 +23,7 @@ struct GlobalSearchScreen: View {
                     GlobalSearchScreenListRow(room: room, context: context)
                         .listRowBackground(backgroundColor(for: room))
                         .listRowInsets(.init())
+                        .contentShape(.rect)
                         .onTapGesture {
                             context.send(viewAction: .select(roomID: room.id))
                         }

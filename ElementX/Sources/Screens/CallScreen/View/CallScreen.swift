@@ -200,7 +200,7 @@ private struct CallView: UIViewRepresentable {
         
         // MARK: - Picture in Picture
         
-        func requestPictureInPicture() async -> Result<AVPictureInPictureController, CallScreenError> {
+        func requestPictureInPicture() async -> Result<Void, CallScreenError> {
             guard let pictureInPictureController,
                   pictureInPictureController.isPictureInPicturePossible,
                   case .success(true) = await webViewCanEnterPictureInPicture() else {
@@ -208,7 +208,7 @@ private struct CallView: UIViewRepresentable {
             }
             
             pictureInPictureController.startPictureInPicture()
-            return .success(pictureInPictureController)
+            return .success(())
         }
         
         func stopPictureInPicture() {
