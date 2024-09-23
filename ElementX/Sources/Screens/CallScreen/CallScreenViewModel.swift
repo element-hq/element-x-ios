@@ -189,7 +189,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         }
         
         switch await requestPictureInPictureHandler() {
-        case .success(let controller):
+        case .success:
             actionsSubject.send(.pictureInPictureStarted)
         case .failure:
             actionsSubject.send(.dismiss)
