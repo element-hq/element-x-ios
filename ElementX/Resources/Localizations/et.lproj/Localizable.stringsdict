@@ -253,9 +253,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@, %2$@ ja veel %3$d huviline</string>
+			<string>%1$@, %2$@ ja veel %3$d osaleja</string>
 			<key>other</key>
-			<string>%1$@, %2$@ ja veel %3$d huvilist</string>
+			<string>%1$@, %2$@ ja veel %3$d osalejat</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members_second_component_ios</key>
