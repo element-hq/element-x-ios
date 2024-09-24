@@ -28,6 +28,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gems-
 
+      - name: Available simulators
+        run: xcrun simctl list
+
       - name: Setup environment
         run:
           source ci_scripts/ci_common.sh && setup_github_actions_environment
