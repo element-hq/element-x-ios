@@ -57,7 +57,7 @@ struct MediaProvider: MediaProviderProtocol {
                 return .failure(.invalidImageData)
             }
 
-            imageCache.store(image, forKey: cacheKey)
+            try await imageCache.store(image, forKey: cacheKey)
 
             return .success(image)
         } catch {

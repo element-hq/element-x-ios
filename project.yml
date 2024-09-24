@@ -106,7 +106,7 @@ packages:
     minorVersion: 4.2.0
   Kingfisher:
     url: https://github.com/onevcat/Kingfisher
-    minorVersion: 7.6.0
+    minorVersion: 8.0.3
   KZFileWatchers:
     url: https://github.com/krzysztofzablocki/KZFileWatchers
     minorVersion: 1.2.0
