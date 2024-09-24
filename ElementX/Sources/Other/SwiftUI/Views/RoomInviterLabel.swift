@@ -71,7 +71,7 @@ struct RoomInviterLabel_Previews: PreviewProvider, TestablePreview {
                              mediaProvider: MockMediaProvider())
                 .foregroundStyle(.compound.textPrimary)
         }
-        .font(.compound.bodyMD)
+        .font(.zero.bodyMD)
         .foregroundStyle(.compound.textSecondary)
     }
 }

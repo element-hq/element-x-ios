@@ -33,19 +33,19 @@ struct ReadReceiptCell: View {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 12) {
                     Text(title)
-                        .font(.compound.bodyMDSemibold)
+                        .font(.zero.bodyMDSemibold)
                         .foregroundColor(.compound.textPrimary)
                         .lineLimit(1)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     if let formattedTimestamp = readReceipt.formattedTimestamp {
                         Text(formattedTimestamp)
-                            .font(.compound.bodyXS)
+                            .font(.zero.bodyXS)
                             .foregroundColor(.compound.textSecondary)
                             .lineLimit(1)
                     }
                 }
 //                Text(subtitle)
-//                    .font(.compound.bodySM)
+//                    .font(.zero.bodySM)
 //                    .foregroundColor(.compound.textSecondary)
 //                    .lineLimit(1)
             }

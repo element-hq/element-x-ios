@@ -38,13 +38,13 @@ struct JoinRoomScreen: View {
             
             VStack(spacing: 8) {
                 Text(context.viewState.title)
-                    .font(.compound.headingMDBold)
+                    .font(.zero.headingMDBold)
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)
                 
                 if let subtitle = context.viewState.subtitle {
                     Text(subtitle)
-                        .font(.compound.bodyMD)
+                        .font(.zero.bodyMD)
                         .foregroundStyle(.compound.textSecondary)
                         .multilineTextAlignment(.center)
                 }
@@ -55,13 +55,13 @@ struct JoinRoomScreen: View {
                 
                 if let inviter = context.viewState.roomDetails?.inviter {
                     RoomInviterLabel(inviter: inviter, mediaProvider: context.mediaProvider)
-                        .font(.compound.bodyMD)
+                        .font(.zero.bodyMD)
                         .foregroundStyle(.compound.textSecondary)
                 }
                 
                 if let topic = context.viewState.roomDetails?.topic {
                     Text(topic)
-                        .font(.compound.bodyMD)
+                        .font(.zero.bodyMD)
                         .foregroundStyle(.compound.textSecondary)
                         .multilineTextAlignment(.center)
                         .lineLimit(3)

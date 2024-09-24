@@ -43,14 +43,14 @@ struct RoomScreen: View {
                     .environmentObject(timelineContext)
                     .environment(\.timelineContext, timelineContext)
             }
-            .overlay(alignment: .top) {
-                Group {
-                    if roomContext.viewState.shouldShowPinnedEventsBanner {
-                        pinnedItemsBanner
-                    }
-                }
-                .animation(.elementDefault, value: roomContext.viewState.shouldShowPinnedEventsBanner)
-            }
+//            .overlay(alignment: .top) {
+//                Group {
+//                    if roomContext.viewState.shouldShowPinnedEventsBanner {
+//                        pinnedItemsBanner
+//                    }
+//                }
+//                .animation(.elementDefault, value: roomContext.viewState.shouldShowPinnedEventsBanner)
+//            }
             .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(isNavigationBarHidden)
@@ -119,7 +119,7 @@ struct RoomScreen: View {
     private var scrollToBottomButton: some View {
         Button { timelineContext.send(viewAction: .scrollToBottom) } label: {
             Image(systemName: "chevron.down")
-                .font(.compound.bodyLG)
+                .font(.zero.bodyLG)
                 .fontWeight(.semibold)
                 .foregroundColor(.compound.iconSecondary)
                 .padding(13)

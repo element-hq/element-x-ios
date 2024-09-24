@@ -69,7 +69,7 @@ struct PollView: View {
 
             Text(poll.question)
                 .multilineTextAlignment(.leading)
-                .font(.compound.bodyLGSemibold)
+                .font(.zero.bodyLGSemibold)
         }
     }
 
@@ -93,7 +93,7 @@ struct PollView: View {
     private var summaryView: some View {
         if let summaryText = poll.summaryText {
             Text(summaryText)
-                .font(.compound.bodySM)
+                .font(.zero.bodySM)
                 .scaledPadding(.leading, showVotes ? 0 : 32)
                 .foregroundColor(.compound.textSecondary)
                 .frame(maxWidth: .infinity, alignment: showVotes ? .trailing : .leading)
@@ -108,7 +108,7 @@ struct PollView: View {
             } label: {
                 Text(state.isEditable ? L10n.actionEditPoll : L10n.actionEndPoll)
                     .lineLimit(2, reservesSpace: false)
-                    .font(.compound.bodyLGSemibold)
+                    .font(.zero.bodyLGSemibold)
                     .foregroundColor(.compound.textOnSolidPrimary)
                     .padding(.horizontal, 24)
                     .padding(.vertical, 10)

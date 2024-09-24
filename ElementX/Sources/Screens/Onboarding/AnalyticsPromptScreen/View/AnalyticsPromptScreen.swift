@@ -39,13 +39,13 @@ struct AnalyticsPromptScreen: View {
                 .padding(.bottom, 8)
             
             Text(L10n.screenAnalyticsPromptTitle(InfoPlistReader.main.bundleDisplayName))
-                .font(.compound.headingMDBold)
+                .font(.zero.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
                 .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.title)
             
             Text(context.viewState.strings.optInContent)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
         }
@@ -80,7 +80,7 @@ struct AnalyticsPromptScreen: View {
             
             Button { context.send(viewAction: .disable) } label: {
                 Text(L10n.actionNotNow)
-                    .font(.compound.bodyLGSemibold)
+                    .font(.zero.bodyLGSemibold)
                     .padding(14)
             }
             .accessibilityIdentifier(A11yIdentifiers.analyticsPromptScreen.notNow)

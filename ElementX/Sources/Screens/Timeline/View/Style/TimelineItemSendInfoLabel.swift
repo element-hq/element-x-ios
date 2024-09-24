@@ -103,7 +103,7 @@ private struct TimelineItemSendInfoLabel: View {
                     .accessibilityHidden(statusIconAccessibilityLabel == nil)
             }
         }
-        .font(.compound.bodyXS)
+        .font(.zero.bodyXS)
         .foregroundStyle(sendInfo.foregroundStyle)
     }
 }

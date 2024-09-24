@@ -39,7 +39,7 @@ struct VoiceMessageRecordingView: View {
 
             Text(timeLabelContent)
                 .lineLimit(1)
-                .font(.compound.bodySMSemibold)
+                .font(.zero.bodySMSemibold)
                 .foregroundColor(.compound.textSecondary)
                 .monospacedDigit()
                 .fixedSize()

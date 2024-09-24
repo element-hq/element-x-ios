@@ -36,12 +36,12 @@ struct ServerSelectionScreen: View {
                 .padding(.bottom, 8)
             
             Text(L10n.screenChangeServerTitle)
-                .font(.compound.headingMDBold)
+                .font(.zero.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
             
             Text(L10n.screenChangeServerSubtitle)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
         }

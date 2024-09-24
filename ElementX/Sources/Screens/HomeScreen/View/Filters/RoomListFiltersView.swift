@@ -55,7 +55,7 @@ struct RoomListFiltersView: View {
             }
         }, label: {
             Image(systemName: "xmark.circle.fill")
-                .font(.system(size: 24))
+                .font(.zero.headingMD)
                 .foregroundColor(.compound.bgActionPrimaryRest)
         })
     }

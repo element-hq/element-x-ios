@@ -30,6 +30,7 @@
 		02A92F8F4538CECDFB4F2607 /* RoomDirectorySearchScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1562EAF6231151A675BED7A9 /* RoomDirectorySearchScreenCoordinator.swift */; };
 		02D8DF8EB7537EB4E9019DDB /* EventBasedTimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218AB05B4E3889731959C5F1 /* EventBasedTimelineItemProtocol.swift */; };
 		037006FB6DF1374F94E4058D /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDCAC6CAAD65A2C24EA9C4B /* Dictionary.swift */; };
+		038AB2E86960FD240231D4C2 /* GeneratedPreviewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95A2E4BD7C0CAD25EF924A4C /* GeneratedPreviewTests.swift */; };
 		03CDCA6243F89B194E3FAD17 /* EncryptionAuthenticity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 955336CBD5ED73C792D1F580 /* EncryptionAuthenticity.swift */; };
 		0437765FF480249486893CC7 /* ScreenTrackerViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 196004E7695FBA292A7944AF /* ScreenTrackerViewModifier.swift */; };
 		044DD8F80231BC30570F7965 /* UserDiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AAD845E53B0C8B5E0812C2 /* UserDiscoveryService.swift */; };
@@ -129,6 +130,36 @@
 		184D6FD22C7D8C8D006266D8 /* ZMatrixSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FD12C7D8C8D006266D8 /* ZMatrixSession.swift */; };
 		184D6FD42C7D8F45006266D8 /* ZSessionDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FD32C7D8F45006266D8 /* ZSessionDataResponse.swift */; };
 		184D6FD62C7D9261006266D8 /* ZSSOToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FD52C7D9261006266D8 /* ZSSOToken.swift */; };
+		1868A88F2CA2181200DC382D /* ZeroFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A88E2CA2181200DC382D /* ZeroFonts.swift */; };
+		1868A8902CA2181200DC382D /* ZeroFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A88E2CA2181200DC382D /* ZeroFonts.swift */; };
+		1868A8952CA2198200DC382D /* Font+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8942CA2198200DC382D /* Font+Extensions.swift */; };
+		1868A8962CA2198200DC382D /* Font+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8942CA2198200DC382D /* Font+Extensions.swift */; };
+		1868A8A22CA21A2200DC382D /* RobotoMono.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1868A8972CA21A1F00DC382D /* RobotoMono.ttf */; };
+		1868A8A32CA21A2200DC382D /* RobotoMono.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1868A8972CA21A1F00DC382D /* RobotoMono.ttf */; };
+		1868A8A62CA21A2200DC382D /* Inter-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1868A8992CA21A1F00DC382D /* Inter-Light.ttf */; };
+		1868A8A72CA21A2200DC382D /* Inter-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1868A8992CA21A1F00DC382D /* Inter-Light.ttf */; };
+		1868A8A82CA21A2200DC382D /* Inter-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1868A89A2CA21A1F00DC382D /* Inter-ExtraLight.ttf */; };
+		1868A8A92CA21A2200DC382D /* Inter-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1868A89A2CA21A1F00DC382D /* Inter-ExtraLight.ttf */; };
+		1868A8AA2CA21A2200DC382D /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1868A89B2CA21A2000DC382D /* Inter-ExtraBold.ttf */; };
+		1868A8AB2CA21A2200DC382D /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1868A89B2CA21A2000DC382D /* Inter-ExtraBold.ttf */; };
+		1868A8AE2CA21A2200DC382D /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1868A89D2CA21A2000DC382D /* Inter-Medium.ttf */; };
+		1868A8AF2CA21A2200DC382D /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1868A89D2CA21A2000DC382D /* Inter-Medium.ttf */; };
+		1868A8B02CA21A2200DC382D /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1868A89E2CA21A2100DC382D /* Inter-Regular.ttf */; };
+		1868A8B12CA21A2200DC382D /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1868A89E2CA21A2100DC382D /* Inter-Regular.ttf */; };
+		1868A8B22CA21A2200DC382D /* Inter-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1868A89F2CA21A2100DC382D /* Inter-Black.ttf */; };
+		1868A8B32CA21A2200DC382D /* Inter-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1868A89F2CA21A2100DC382D /* Inter-Black.ttf */; };
+		1868A8B42CA21A2200DC382D /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1868A8A02CA21A2100DC382D /* Inter-SemiBold.ttf */; };
+		1868A8B52CA21A2200DC382D /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1868A8A02CA21A2100DC382D /* Inter-SemiBold.ttf */; };
+		1868A8B62CA21A2200DC382D /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1868A8A12CA21A2100DC382D /* Inter-Bold.ttf */; };
+		1868A8B72CA21A2200DC382D /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1868A8A12CA21A2100DC382D /* Inter-Bold.ttf */; };
+		1868A8B92CA2D18600DC382D /* ZeroChatApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8B82CA2D18600DC382D /* ZeroChatApi.swift */; };
+		1868A8BA2CA2D18600DC382D /* ZeroChatApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8B82CA2D18600DC382D /* ZeroChatApi.swift */; };
+		1868A8BF2CA2D91000DC382D /* ZSentMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8BE2CA2D91000DC382D /* ZSentMessage.swift */; };
+		1868A8C02CA2D91000DC382D /* ZSentMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8BE2CA2D91000DC382D /* ZSentMessage.swift */; };
+		1868A8C22CA338DF00DC382D /* Encodable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8C12CA338DF00DC382D /* Encodable+Extensions.swift */; };
+		1868A8C32CA338DF00DC382D /* Encodable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8C12CA338DF00DC382D /* Encodable+Extensions.swift */; };
+		1868A8C52CA33BBE00DC382D /* EmptyResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */; };
+		1868A8C62CA33BBE00DC382D /* EmptyResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */; };
 		1882EB792C8F84BD001DA2A9 /* ZeroUsersApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB782C8F84BD001DA2A9 /* ZeroUsersApi.swift */; };
 		1882EB7B2C8F8542001DA2A9 /* ZMatrixUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB7A2C8F8542001DA2A9 /* ZMatrixUser.swift */; };
 		1882EB7E2C8F85C7001DA2A9 /* Tagged in Frameworks */ = {isa = PBXBuildFile; productRef = 1882EB7D2C8F85C7001DA2A9 /* Tagged */; };
@@ -2257,6 +2288,21 @@
 		184D6FD12C7D8C8D006266D8 /* ZMatrixSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixSession.swift; sourceTree = "<group>"; };
 		184D6FD32C7D8F45006266D8 /* ZSessionDataResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZSessionDataResponse.swift; sourceTree = "<group>"; };
 		184D6FD52C7D9261006266D8 /* ZSSOToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZSSOToken.swift; sourceTree = "<group>"; };
+		1868A88E2CA2181200DC382D /* ZeroFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroFonts.swift; sourceTree = "<group>"; };
+		1868A8942CA2198200DC382D /* Font+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Extensions.swift"; sourceTree = "<group>"; };
+		1868A8972CA21A1F00DC382D /* RobotoMono.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = RobotoMono.ttf; sourceTree = "<group>"; };
+		1868A8992CA21A1F00DC382D /* Inter-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Light.ttf"; sourceTree = "<group>"; };
+		1868A89A2CA21A1F00DC382D /* Inter-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-ExtraLight.ttf"; sourceTree = "<group>"; };
+		1868A89B2CA21A2000DC382D /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
+		1868A89D2CA21A2000DC382D /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Medium.ttf"; sourceTree = "<group>"; };
+		1868A89E2CA21A2100DC382D /* Inter-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Regular.ttf"; sourceTree = "<group>"; };
+		1868A89F2CA21A2100DC382D /* Inter-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Black.ttf"; sourceTree = "<group>"; };
+		1868A8A02CA21A2100DC382D /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
+		1868A8A12CA21A2100DC382D /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Bold.ttf"; sourceTree = "<group>"; };
+		1868A8B82CA2D18600DC382D /* ZeroChatApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroChatApi.swift; sourceTree = "<group>"; };
+		1868A8BE2CA2D91000DC382D /* ZSentMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZSentMessage.swift; path = Zero/Network/Models/Response/ZSentMessage.swift; sourceTree = SOURCE_ROOT; };
+		1868A8C12CA338DF00DC382D /* Encodable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Extensions.swift"; sourceTree = "<group>"; };
+		1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyResponse.swift; sourceTree = "<group>"; };
 		1882EB782C8F84BD001DA2A9 /* ZeroUsersApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroUsersApi.swift; sourceTree = "<group>"; };
 		1882EB7A2C8F8542001DA2A9 /* ZMatrixUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixUser.swift; sourceTree = "<group>"; };
 		1882EB832C8F85F5001DA2A9 /* ZMatrixUserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixUserProfile.swift; sourceTree = "<group>"; };
@@ -2816,6 +2862,7 @@
 		94D670124FC3E84F23A62CCF /* APNSPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APNSPayload.swift; sourceTree = "<group>"; };
 		9501D11B4258DFA33BA3B40F /* ServerSelectionScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectionScreenModels.swift; sourceTree = "<group>"; };
 		955336CBD5ED73C792D1F580 /* EncryptionAuthenticity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionAuthenticity.swift; sourceTree = "<group>"; };
+		95A2E4BD7C0CAD25EF924A4C /* GeneratedPreviewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedPreviewTests.swift; sourceTree = "<group>"; };
 		95BAC0F6C9644336E9567EE6 /* NSRegularExpresion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSRegularExpresion.swift; sourceTree = "<group>"; };
 		969694F67E844FCA51F7E051 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		96C4762F8D6112E43117DB2F /* CustomStringConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStringConvertible.swift; sourceTree = "<group>"; };
@@ -3677,6 +3724,7 @@
 		184D6FBF2C7D8036006266D8 /* Zero */ = {
 			isa = PBXGroup;
 			children = (
+				1868A86B2CA2175A00DC382D /* Resources */,
 				18E99FEE2C9447620082DDA4 /* Models */,
 				1882EB982C91B9F6001DA2A9 /* Utils */,
 				1882EB8A2C90C8DC001DA2A9 /* Extensions */,
@@ -3711,6 +3759,7 @@
 				184D6FCC2C7D8AC2006266D8 /* ZeroAuthApi.swift */,
 				1882EB782C8F84BD001DA2A9 /* ZeroUsersApi.swift */,
 				18E99FF32C944F670082DDA4 /* ZeroAttachmentApi.swift */,
+				1868A8B82CA2D18600DC382D /* ZeroChatApi.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -3727,6 +3776,7 @@
 		184D6FCF2C7D8B87006266D8 /* Request */ = {
 			isa = PBXGroup;
 			children = (
+				1868A8BE2CA2D91000DC382D /* ZSentMessage.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -3740,8 +3790,34 @@
 				1882EB7A2C8F8542001DA2A9 /* ZMatrixUser.swift */,
 				1882EB832C8F85F5001DA2A9 /* ZMatrixUserProfile.swift */,
 				18E99FF52C9450F00082DDA4 /* ZAttachmentUploadInfo.swift */,
+				1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */,
 			);
 			path = Response;
+			sourceTree = "<group>";
+		};
+		1868A86B2CA2175A00DC382D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				1868A86C2CA2176100DC382D /* Fonts */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		1868A86C2CA2176100DC382D /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				1868A89F2CA21A2100DC382D /* Inter-Black.ttf */,
+				1868A8A12CA21A2100DC382D /* Inter-Bold.ttf */,
+				1868A89B2CA21A2000DC382D /* Inter-ExtraBold.ttf */,
+				1868A89A2CA21A1F00DC382D /* Inter-ExtraLight.ttf */,
+				1868A8992CA21A1F00DC382D /* Inter-Light.ttf */,
+				1868A89D2CA21A2000DC382D /* Inter-Medium.ttf */,
+				1868A89E2CA21A2100DC382D /* Inter-Regular.ttf */,
+				1868A8A02CA21A2100DC382D /* Inter-SemiBold.ttf */,
+				1868A8972CA21A1F00DC382D /* RobotoMono.ttf */,
+				1868A88E2CA2181200DC382D /* ZeroFonts.swift */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		1882EB872C8F8A8E001DA2A9 /* Frameworks */ = {
@@ -3757,6 +3833,8 @@
 				1882EB8B2C90C8EC001DA2A9 /* Sequence+Extensions.swift */,
 				1882EB8D2C90E9E7001DA2A9 /* RoomInfo+Extensions.swift */,
 				1882EB922C90FE9C001DA2A9 /* String+Extensions.swift */,
+				1868A8942CA2198200DC382D /* Font+Extensions.swift */,
+				1868A8C12CA338DF00DC382D /* Encodable+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -3850,6 +3928,7 @@
 		21E5BB69FC9058BED96B9EFD /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				95A2E4BD7C0CAD25EF924A4C /* GeneratedPreviewTests.swift */,
 				E9B796D347E53631576F631C /* PreviewTests.swift */,
 			);
 			path = Sources;
@@ -7093,15 +7172,24 @@
 			files = (
 				18E9A75E2C9829970082DDA4 /* Assets.xcassets in Resources */,
 				18E9A75F2C9829970082DDA4 /* ConfettiScene.scn in Resources */,
+				1868A8A72CA21A2200DC382D /* Inter-Light.ttf in Resources */,
+				1868A8A92CA21A2200DC382D /* Inter-ExtraLight.ttf in Resources */,
+				1868A8A32CA21A2200DC382D /* RobotoMono.ttf in Resources */,
 				18E9A7602C9829970082DDA4 /* InfoPlist.strings in Resources */,
 				18E9A7612C9829970082DDA4 /* Localizable.strings in Resources */,
 				18E9A7622C9829970082DDA4 /* Localizable.stringsdict in Resources */,
+				1868A8AF2CA21A2200DC382D /* Inter-Medium.ttf in Resources */,
 				18E9A7632C9829970082DDA4 /* MapAssets.xcassets in Resources */,
 				18E9A7642C9829970082DDA4 /* PrivacyInfo.xcprivacy in Resources */,
+				1868A8AB2CA21A2200DC382D /* Inter-ExtraBold.ttf in Resources */,
+				1868A8B12CA21A2200DC382D /* Inter-Regular.ttf in Resources */,
 				18E9A7652C9829970082DDA4 /* SAS.strings in Resources */,
 				18E9A7662C9829970082DDA4 /* Settings.bundle in Resources */,
 				18E9A7672C9829970082DDA4 /* Untranslated.strings in Resources */,
+				1868A8B32CA21A2200DC382D /* Inter-Black.ttf in Resources */,
+				1868A8B72CA21A2200DC382D /* Inter-Bold.ttf in Resources */,
 				18E9A7682C9829970082DDA4 /* Untranslated.stringsdict in Resources */,
+				1868A8B52CA21A2200DC382D /* Inter-SemiBold.ttf in Resources */,
 				18E9A7692C9829970082DDA4 /* message.caf in Resources */,
 				18E9A76A2C9829970082DDA4 /* target.yml in Resources */,
 			);
@@ -7113,15 +7201,24 @@
 			files = (
 				992F5E750F5030C4BA2D0D03 /* Assets.xcassets in Resources */,
 				2CA6ABBC9A88EB89EA52FCCB /* ConfettiScene.scn in Resources */,
+				1868A8A62CA21A2200DC382D /* Inter-Light.ttf in Resources */,
+				1868A8A82CA21A2200DC382D /* Inter-ExtraLight.ttf in Resources */,
+				1868A8A22CA21A2200DC382D /* RobotoMono.ttf in Resources */,
 				B6DA66EFC13A90846B625836 /* InfoPlist.strings in Resources */,
 				5F5488FBC9CFEB6F433D74A4 /* Localizable.strings in Resources */,
 				0EA6537A07E2DC882AEA5962 /* Localizable.stringsdict in Resources */,
+				1868A8AE2CA21A2200DC382D /* Inter-Medium.ttf in Resources */,
 				6860721DB3091BE08164C132 /* MapAssets.xcassets in Resources */,
 				8B408C574E35E1C9B43A50CE /* PrivacyInfo.xcprivacy in Resources */,
+				1868A8AA2CA21A2200DC382D /* Inter-ExtraBold.ttf in Resources */,
+				1868A8B02CA21A2200DC382D /* Inter-Regular.ttf in Resources */,
 				C3317EF833AB4060988DF098 /* SAS.strings in Resources */,
 				5FCD8AFA364206EE32B909A3 /* Settings.bundle in Resources */,
 				CE1694C7BB93C3311524EF28 /* Untranslated.strings in Resources */,
+				1868A8B22CA21A2200DC382D /* Inter-Black.ttf in Resources */,
+				1868A8B62CA21A2200DC382D /* Inter-Bold.ttf in Resources */,
 				2797C9D9BA642370F1C85D78 /* Untranslated.stringsdict in Resources */,
+				1868A8B42CA21A2200DC382D /* Inter-SemiBold.ttf in Resources */,
 				E67418DACEDBC29E988E6ACD /* message.caf in Resources */,
 				DFF7D6A6C26DDD40D00AE579 /* target.yml in Resources */,
 			);
@@ -7905,6 +8002,7 @@
 				18E9A54F2C9829970082DDA4 /* LABiometryType.swift in Sources */,
 				18E9A5502C9829970082DDA4 /* LAContextMock.swift in Sources */,
 				18E9A5512C9829970082DDA4 /* Label.swift in Sources */,
+				1868A8902CA2181200DC382D /* ZeroFonts.swift in Sources */,
 				18E9A5522C9829970082DDA4 /* LayoutDirection.swift in Sources */,
 				18E9A5532C9829970082DDA4 /* LegalInformationScreen.swift in Sources */,
 				18E9A5542C9829970082DDA4 /* LegalInformationScreenCoordinator.swift in Sources */,
@@ -7940,6 +8038,7 @@
 				18E9A5722C9829970082DDA4 /* MapTilerAuthorization.swift in Sources */,
 				18E9A5732C9829970082DDA4 /* MapTilerStaticMap.swift in Sources */,
 				18E9A5742C9829970082DDA4 /* MapTilerStaticMapProtocol.swift in Sources */,
+				1868A8BA2CA2D18600DC382D /* ZeroChatApi.swift in Sources */,
 				18E9A5752C9829970082DDA4 /* MapTilerStyle.swift in Sources */,
 				18E9A5762C9829970082DDA4 /* MapTilerStyleBuilder.swift in Sources */,
 				18E9A5772C9829970082DDA4 /* MapTilerStyleBuilderProtocol.swift in Sources */,
@@ -8156,6 +8255,7 @@
 				18E9A64A2C9829970082DDA4 /* RoomMembersListManageMemberSheet.swift in Sources */,
 				18E9A64B2C9829970082DDA4 /* RoomMembersListScreen.swift in Sources */,
 				18E9A64C2C9829970082DDA4 /* RoomMembersListScreenCoordinator.swift in Sources */,
+				1868A8C02CA2D91000DC382D /* ZSentMessage.swift in Sources */,
 				18E9A64D2C9829970082DDA4 /* RoomMembersListScreenMemberCell.swift in Sources */,
 				18E9A64E2C9829970082DDA4 /* RoomMembersListScreenModels.swift in Sources */,
 				18E9A64F2C9829970082DDA4 /* RoomMembersListScreenViewModel.swift in Sources */,
@@ -8227,6 +8327,7 @@
 				18E9A6902C9829970082DDA4 /* Search.swift in Sources */,
 				18E9A6912C9829970082DDA4 /* Section.swift in Sources */,
 				18E9A6922C9829970082DDA4 /* SecureBackupController.swift in Sources */,
+				1868A8C62CA33BBE00DC382D /* EmptyResponse.swift in Sources */,
 				18E9A6932C9829970082DDA4 /* SecureBackupControllerProtocol.swift in Sources */,
 				18E9A6942C9829970082DDA4 /* SecureBackupKeyBackupScreen.swift in Sources */,
 				18E9A6952C9829970082DDA4 /* SecureBackupKeyBackupScreenCoordinator.swift in Sources */,
@@ -8239,6 +8340,7 @@
 				18E9A69C2C9829970082DDA4 /* SecureBackupLogoutConfirmationScreenViewModel.swift in Sources */,
 				18E9A69D2C9829970082DDA4 /* SecureBackupLogoutConfirmationScreenViewModelProtocol.swift in Sources */,
 				18E9A69E2C9829970082DDA4 /* SecureBackupRecoveryKeyScreen.swift in Sources */,
+				1868A8962CA2198200DC382D /* Font+Extensions.swift in Sources */,
 				18E9A69F2C9829970082DDA4 /* SecureBackupRecoveryKeyScreenCoordinator.swift in Sources */,
 				18E9A6A02C9829970082DDA4 /* SecureBackupRecoveryKeyScreenModels.swift in Sources */,
 				18E9A6A12C9829970082DDA4 /* SecureBackupRecoveryKeyScreenViewModel.swift in Sources */,
@@ -8249,6 +8351,7 @@
 				18E9A6A62C9829970082DDA4 /* SecureBackupScreenViewModel.swift in Sources */,
 				18E9A6A72C9829970082DDA4 /* SecureBackupScreenViewModelProtocol.swift in Sources */,
 				18E9A6A82C9829970082DDA4 /* SeparatorRoomTimelineItem.swift in Sources */,
+				1868A8C32CA338DF00DC382D /* Encodable+Extensions.swift in Sources */,
 				18E9A6A92C9829970082DDA4 /* SeparatorRoomTimelineView.swift in Sources */,
 				18E9A6AA2C9829970082DDA4 /* ServerConfirmationScreen.swift in Sources */,
 				18E9A6AB2C9829970082DDA4 /* ServerConfirmationScreenCoordinator.swift in Sources */,
@@ -8443,6 +8546,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				038AB2E86960FD240231D4C2 /* GeneratedPreviewTests.swift in Sources */,
 				ED635D7F00FA07E94D3CE1E8 /* PreviewTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8467,6 +8571,7 @@
 				54C774874BED4A8FAD1F22FE /* AnalyticsConfiguration.swift in Sources */,
 				8DDC6F28C797D8685F2F8E32 /* AnalyticsConsentState.swift in Sources */,
 				24A1BBADAC43DC3F3A7347DA /* AnalyticsPromptScreen.swift in Sources */,
+				1868A8B92CA2D18600DC382D /* ZeroChatApi.swift in Sources */,
 				DCFE7CB3B9A104330BBB96AD /* AnalyticsPromptScreenCoordinator.swift in Sources */,
 				1882EB792C8F84BD001DA2A9 /* ZeroUsersApi.swift in Sources */,
 				6DC8E43BA04AC2AC4EB2EB97 /* AnalyticsPromptScreenModels.swift in Sources */,
@@ -8708,6 +8813,7 @@
 				9F11E743EA01482E78A438B0 /* GlobalSearchScreenCell.swift in Sources */,
 				7D261B5119E78CC8E771CA15 /* GlobalSearchScreenCoordinator.swift in Sources */,
 				D34E328E9E65904358248FDD /* GlobalSearchScreenModels.swift in Sources */,
+				1868A8952CA2198200DC382D /* Font+Extensions.swift in Sources */,
 				55D18AA4F4A2257642EBDB94 /* GlobalSearchScreenViewModel.swift in Sources */,
 				E32A18802EB37EEE3EF7B965 /* GlobalSearchScreenViewModelProtocol.swift in Sources */,
 				D4D5595C4A2A702CFF4E94FF /* HeroImage.swift in Sources */,
@@ -8859,6 +8965,7 @@
 				1882EB912C90F0F5001DA2A9 /* AvatarView.swift in Sources */,
 				06D3942496E9E0E655F14D21 /* NotificationManagerProtocol.swift in Sources */,
 				5139F4BD5A5DF6F8D11A9BDE /* NotificationPermissionsScreen.swift in Sources */,
+				1868A88F2CA2181200DC382D /* ZeroFonts.swift in Sources */,
 				454311EAC17D778E19F46592 /* NotificationPermissionsScreenCoordinator.swift in Sources */,
 				3E7B65C2C97748D5D65AAA8B /* NotificationPermissionsScreenModels.swift in Sources */,
 				D4D7CCECC6C0AAFC42E165BB /* NotificationPermissionsScreenViewModel.swift in Sources */,
@@ -8957,6 +9064,7 @@
 				8285FF4B2C2331758C437FF7 /* ReportContentScreenViewModelProtocol.swift in Sources */,
 				4715FE33667C5899E64DD0E6 /* ResolveVerifiedUserSendFailureScreen.swift in Sources */,
 				583A41A4BE76E2E9E0B97881 /* ResolveVerifiedUserSendFailureScreenCoordinator.swift in Sources */,
+				1868A8C22CA338DF00DC382D /* Encodable+Extensions.swift in Sources */,
 				108D3C0707A90B0F848CDBB9 /* ResolveVerifiedUserSendFailureScreenModels.swift in Sources */,
 				9A0326D2375075871D2AB537 /* ResolveVerifiedUserSendFailureScreenViewModel.swift in Sources */,
 				ED3E91E6166E4923791ACA84 /* ResolveVerifiedUserSendFailureScreenViewModelProtocol.swift in Sources */,
@@ -9060,6 +9168,7 @@
 				2ABF11717C64054CEF2819A3 /* RoomTimelineController.swift in Sources */,
 				38896D54D6D675534E606195 /* RoomTimelineControllerFactory.swift in Sources */,
 				B31E5493C99381D4E204438B /* RoomTimelineControllerFactoryMock.swift in Sources */,
+				1868A8BF2CA2D91000DC382D /* ZSentMessage.swift in Sources */,
 				7ECF12D5DCD69F67BD3E3842 /* RoomTimelineControllerFactoryProtocol.swift in Sources */,
 				18E99FF42C944F670082DDA4 /* ZeroAttachmentApi.swift in Sources */,
 				E89536FC8C0E4B79E9842A78 /* RoomTimelineControllerProtocol.swift in Sources */,
@@ -9211,6 +9320,7 @@
 				7A0D335D38ECA095A575B4F7 /* TimelineStyler.swift in Sources */,
 				6583A95947E78767736CB51A /* TimelineTableViewController.swift in Sources */,
 				67EFF46180B939CBF389AECD /* TimelineView.swift in Sources */,
+				1868A8C52CA33BBE00DC382D /* EmptyResponse.swift in Sources */,
 				98EE4259A4A49BC757BA442C /* TimelineViewModel.swift in Sources */,
 				F8B2F5CBCF2A0E0798E8D646 /* TimelineViewModelProtocol.swift in Sources */,
 				E37044401D9951D6C02C0855 /* TracingConfiguration.swift in Sources */,
@@ -9759,7 +9869,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				KEYCHAIN_ACCESS_GROUP_IDENTIFIER = "$(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)";
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
-				MARKETING_VERSION = 0.8.0;
+				MARKETING_VERSION = 0.8.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCTION_APP_NAME = Element;
@@ -9836,7 +9946,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				KEYCHAIN_ACCESS_GROUP_IDENTIFIER = "$(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)";
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
-				MARKETING_VERSION = 0.8.0;
+				MARKETING_VERSION = 0.8.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -10362,7 +10472,7 @@
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 1.0.51;
+				version = 1.0.52;
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {
@@ -10458,7 +10568,7 @@
 			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 1.17.2;
+				minimumVersion = 1.17.5;
 			};
 		};
 		EC6D0C817B1C21D9D096505A /* XCRemoteSwiftPackageReference "Version" */ = {
@@ -10474,7 +10584,7 @@
 			repositoryURL = "https://github.com/element-hq/compound-ios";
 			requirement = {
 				kind = revision;
-				revision = a9270392b3269ef072c47dea623815a9fb87311d;
+				revision = 92110afc158ac6ee7c68d5e975144bafa6c58396;
 			};
 		};
 		F76A08D0EA29A07A54F4EB4D /* XCRemoteSwiftPackageReference "swift-collections" */ = {

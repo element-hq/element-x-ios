@@ -194,7 +194,7 @@ private struct MessageComposerHeaderLabelStyle: LabelStyle {
             configuration.icon
             configuration.title
         }
-        .font(.compound.bodySMSemibold)
+        .font(.zero.bodySMSemibold)
         .foregroundColor(.compound.textSecondary)
         .lineLimit(1)
     }

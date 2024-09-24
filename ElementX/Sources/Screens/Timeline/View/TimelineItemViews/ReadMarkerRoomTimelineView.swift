@@ -15,7 +15,7 @@ struct ReadMarkerRoomTimelineView: View {
         VStack(alignment: .trailing, spacing: 2) {
             Text(L10n.screenRoomTimelineReadMarkerTitle)
                 .textCase(.uppercase)
-                .font(.compound.bodyXSSemibold)
+                .font(.zero.bodyXSSemibold)
                 .foregroundColor(.compound.textSecondary)
             Rectangle()
                 .frame(height: 0.5)

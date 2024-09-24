@@ -125,7 +125,7 @@ class UserSessionStore: UserSessionStoreProtocol {
                          slidingSync: .restored,
                          sessionDelegate: keychainController,
                          appHooks: appHooks,
-                         invisibleCryptoEnabled: appSettings.enableNotifications)
+                         invisibleCryptoEnabled: appSettings.invisibleCryptoEnabled)
             .sessionPaths(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                           cachePath: credentials.restorationToken.sessionDirectories.cachePath)
             .username(username: credentials.userID)

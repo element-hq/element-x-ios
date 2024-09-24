@@ -29,7 +29,7 @@ struct EncryptedRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             Label(timelineItem.body, icon: icon, iconSize: .small, relativeTo: .compound.bodyLG)
                 .labelStyle(RoomTimelineViewLabelStyle())
-                .font(.compound.bodyLG)
+                .font(.zero.bodyLG)
         }
     }
 }

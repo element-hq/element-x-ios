@@ -12,7 +12,7 @@ struct StateRoomTimelineView: View {
     
     var body: some View {
         Text(timelineItem.body)
-            .font(.compound.bodySM)
+            .font(.zero.bodySM)
             .multilineTextAlignment(.center)
             .foregroundColor(.compound.textSecondary)
             .frame(maxWidth: .infinity, alignment: .center)

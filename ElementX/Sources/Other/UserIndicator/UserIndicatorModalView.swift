@@ -24,11 +24,11 @@ struct UserIndicatorModalView: View {
                 HStack(spacing: 8) {
                     if let iconName = indicator.iconName {
                         Image(systemName: iconName)
-                            .font(.compound.bodyLG)
+                            .font(.zero.bodyLG)
                             .foregroundColor(.compound.iconPrimary)
                     }
                     Text(indicator.title)
-                        .font(.compound.bodyLG)
+                        .font(.zero.bodyLG)
                         .foregroundColor(.compound.textPrimary)
                 }
             }

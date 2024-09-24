@@ -19,7 +19,7 @@ struct UserDetailsEditScreen: View {
             } footer: {
                 Text(context.viewState.userID)
                     .frame(maxWidth: .infinity)
-                    .font(.compound.bodyLG)
+                    .font(.zero.bodyLG)
                     .foregroundColor(.compound.textPrimary)
                     .padding(.bottom, 16)
             }

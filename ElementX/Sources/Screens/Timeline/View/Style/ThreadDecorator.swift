@@ -14,7 +14,7 @@ struct ThreadDecorator: View {
         Label {
             Text(L10n.commonThread)
                 .foregroundColor(.compound.textPrimary)
-                .font(.compound.bodyXS)
+                .font(.zero.bodyXS)
         } icon: {
             CompoundIcon(\.threads, size: .xSmall, relativeTo: .compound.bodyXS)
                 .foregroundColor(.compound.iconSecondary)

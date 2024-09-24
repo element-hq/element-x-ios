@@ -26,24 +26,30 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     private let zeroMatrixUsersService: ZeroMatrixUsersService
+    private let room: RoomProtocol
+    private let zeroChatApi: ZeroChatApiProtocol
     
     deinit {
         backPaginationStatusObservationToken?.cancel()
     }
     
-    init(timeline: Timeline, room: RoomProtocol, kind: TimelineKind, zeroMatrixUsersService: ZeroMatrixUsersService) {
+    init(timeline: Timeline,
+         room: RoomProtocol,
+         kind: TimelineKind,
+         zeroMatrixUsersService: ZeroMatrixUsersService,
+         zeroChatApi: ZeroChatApiProtocol) {
         self.timeline = timeline
         self.kind = kind
         self.zeroMatrixUsersService = zeroMatrixUsersService
+        self.room = room
+        self.zeroChatApi = zeroChatApi
         
-        Task {
-            await fetchAllRoomUsers(room: room)
-        }
+        Task { await fetchAllRoomUsers() }
     }
     
-    private func fetchAllRoomUsers(room: RoomProtocol) async {
+    private func fetchAllRoomUsers() async {
         do {
-            let membersIterator = try await room.members()
+            let membersIterator = try await self.room.members()
             if let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) {
                 try await zeroMatrixUsersService.fetchZeroUsers(userIds: members.map({ $0.userId }))
             }
@@ -257,6 +263,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         do {
             try await handle.join()
             MXLog.info("Finished sending audio")
+            _ = try await zeroChatApi.notifyAboutMessage(roomId: room.id())
         } catch {
             MXLog.error("Failed sending audio with error: \(error)")
             return .failure(.sdkError(error))
@@ -280,6 +287,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         do {
             try await handle.join()
             MXLog.info("Finished sending file")
+            _ = try await zeroChatApi.notifyAboutMessage(roomId: room.id())
         } catch {
             MXLog.error("Failed sending file with error: \(error)")
             return .failure(.sdkError(error))
@@ -304,6 +312,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         do {
             try await handle.join()
             MXLog.info("Finished sending image")
+            _ = try await zeroChatApi.notifyAboutMessage(roomId: room.id())
         } catch {
             MXLog.error("Failed sending image with error: \(error)")
             return .failure(.sdkError(error))
@@ -326,7 +335,11 @@ final class TimelineProxy: TimelineProxyProtocol {
                                     assetType: assetType)
         
         MXLog.info("Finished sending location")
-        
+        do {
+            _ = try await zeroChatApi.notifyAboutMessage(roomId: room.id())
+        } catch {
+            MXLog.error(error)
+        }
         return .success(())
     }
     
@@ -346,6 +359,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         do {
             try await handle.join()
             MXLog.info("Finished sending video")
+            _ = try await zeroChatApi.notifyAboutMessage(roomId: room.id())
         } catch {
             MXLog.error("Failed sending video with error: \(error)")
             return .failure(.sdkError(error))
@@ -370,6 +384,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         do {
             try await handle.join()
             MXLog.info("Finished sending voice message")
+            _ = try await zeroChatApi.notifyAboutMessage(roomId: room.id())
         } catch {
             MXLog.error("Failed sending vocie message with error: \(error)")
             return .failure(.sdkError(error))
@@ -400,6 +415,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                 _ = try await timeline.send(msg: messageContent)
                 MXLog.info("Finished sending message")
             }
+            _ = try await zeroChatApi.notifyAboutMessage(roomId: room.id())
         } catch {
             if let eventID {
                 MXLog.error("Failed sending reply to eventID: \(eventID) with error: \(error)")
@@ -418,6 +434,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         do {
             _ = try await timeline.send(msg: messageContent)
+            _ = try await zeroChatApi.notifyAboutMessage(roomId: room.id())
         } catch {
             MXLog.error("Failed sending message with error: \(error)")
         }

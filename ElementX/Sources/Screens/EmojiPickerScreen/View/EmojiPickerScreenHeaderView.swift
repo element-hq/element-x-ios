@@ -12,7 +12,7 @@ struct EmojiPickerScreenHeaderView: View {
     
     var body: some View {
         Text(title)
-            .font(.compound.bodyMD.bold())
+            .font(.zero.bodyMD.bold())
             .foregroundColor(.compound.textPrimary)
             .frame(maxWidth: .infinity, alignment: .leading)
     }

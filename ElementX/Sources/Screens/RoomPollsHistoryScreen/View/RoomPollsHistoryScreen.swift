@@ -56,7 +56,7 @@ struct RoomPollsHistoryScreen: View {
         ForEach(context.viewState.pollTimelineItems, id: \.item.id.eventID) { pollTimelineItem in
             VStack(alignment: .leading, spacing: 8) {
                 Text(DateFormatter.pollTimestamp.string(from: pollTimelineItem.timestamp))
-                    .font(.compound.bodySM)
+                    .font(.zero.bodySM)
                     .foregroundColor(.compound.textSecondary)
                 PollView(poll: pollTimelineItem.item.poll,
                          state: .full(isEditable: pollTimelineItem.item.isEditable)) { action in
@@ -81,7 +81,7 @@ struct RoomPollsHistoryScreen: View {
     
     private var emptyStateMessage: some View {
         Text(context.viewState.emptyStateMessage)
-            .font(.compound.bodyLG)
+            .font(.zero.bodyLG)
             .foregroundColor(.compound.textSecondary)
             .multilineTextAlignment(.center)
             .padding(.vertical, 12)
@@ -92,7 +92,7 @@ struct RoomPollsHistoryScreen: View {
             context.send(viewAction: .loadMore)
         } label: {
             Text(L10n.Action.loadMore)
-                .font(.compound.bodyLGSemibold)
+                .font(.zero.bodyLGSemibold)
                 .padding(.horizontal, 12)
         }
         .accessibilityIdentifier(A11yIdentifiers.roomPollsHistoryScreen.loadMore)

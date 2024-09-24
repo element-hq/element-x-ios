@@ -19,11 +19,11 @@ struct UserIndicatorToastView: View {
             }
             if let iconName = indicator.iconName {
                 Image(systemName: iconName)
-                    .font(.compound.bodyMD)
+                    .font(.zero.bodyMD)
                     .foregroundColor(.compound.iconPrimary)
             }
             Text(indicator.title)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .foregroundColor(.compound.textPrimary)
         }
         .id(indicator.id)

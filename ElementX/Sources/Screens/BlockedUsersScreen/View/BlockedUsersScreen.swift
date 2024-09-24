@@ -26,7 +26,7 @@ struct BlockedUsersScreen: View {
     private var content: some View {
         if context.viewState.blockedUsers.isEmpty {
             Text(L10n.screenBlockedUsersEmpty)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .foregroundColor(.compound.textSecondary)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else {

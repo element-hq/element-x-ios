@@ -47,7 +47,7 @@ struct PinnedItemsBannerView: View {
     private var viewAllButton: some View {
         Button { onViewAllButtonTap() } label: {
             Text(state.isLoading ? "" : L10n.screenRoomPinnedBannerViewAllButtonTitle)
-                .font(.compound.bodyMDSemibold)
+                .font(.zero.bodyMDSemibold)
                 .foregroundStyle(Color.compound.textPrimary)
                 .opacity(state.isLoading ? 0 : 1)
                 // Use overlay instead otherwise the sliding animation would not work
@@ -66,12 +66,12 @@ struct PinnedItemsBannerView: View {
             // Only the display the indicator description for more than 1 pinned item
             if state.count > 1 {
                 Text(state.bannerIndicatorDescription)
-                    .font(.compound.bodySM)
+                    .font(.zero.bodySM)
                     .foregroundColor(.compound.textActionAccent)
                     .lineLimit(1)
             }
             Text(state.displayedMessage)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
         }

@@ -68,10 +68,10 @@ struct NotificationSettingsScreen: View {
                         .foregroundColor(.compound.iconTertiaryAlpha)
                     VStack(alignment: .leading, spacing: 2) {
                         Text(L10n.screenNotificationSettingsSystemNotificationsTurnedOff)
-                            .font(.compound.bodyLG)
+                            .font(.zero.bodyLG)
                             .foregroundColor(.compound.textPrimary)
                         Text(context.viewState.strings.changeYourSystemSettings)
-                            .font(.compound.bodySM)
+                            .font(.zero.bodySM)
                             .foregroundColor(.compound.textSecondary)
                             .tint(.compound.textPrimary)
                     }
@@ -173,9 +173,9 @@ struct NotificationSettingsScreen: View {
                 VStack(alignment: .leading, spacing: 16) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(L10n.screenNotificationSettingsConfigurationMismatch)
-                            .font(.compound.bodyLGSemibold)
+                            .font(.zero.bodyLGSemibold)
                         Text(L10n.screenNotificationSettingsConfigurationMismatchDescription)
-                            .font(.compound.bodyMD)
+                            .font(.zero.bodyMD)
                             .foregroundColor(.compound.textSecondary)
                     }
                     Button {

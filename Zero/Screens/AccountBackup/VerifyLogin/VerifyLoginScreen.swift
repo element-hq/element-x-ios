@@ -42,7 +42,7 @@ struct VerifyLoginScreen: View {
             }
         }, message: {
             Text("You have not verified this login, messages from past conversations may be hidden.")
-                .font(.system(size: 13))
+                .font(.zero.bodySM)
         })
     }
     
@@ -66,13 +66,13 @@ struct VerifyLoginScreen: View {
     var content: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Verify Login")
-                .font(.system(size: 18))
+                .font(.zero.bodyLG)
                 .foregroundStyle(Asset.Colors.textPrimary.swiftUIColor)
                 .padding(.top, 24)
             
             Text("It looks like this is a new device or login for your account. Enter your account backup phrase to see past messages.")
                 .multilineTextAlignment(.leading)
-                .font(.system(size: 14))
+                .font(.zero.bodySM)
                 .foregroundStyle(Asset.Colors.textPrimary.swiftUIColor)
             
             Button {
@@ -80,11 +80,11 @@ struct VerifyLoginScreen: View {
                 HStack {
                     Text("Learn more")
                         .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
-                        .font(.system(size: 14))
+                        .font(.zero.bodySM)
                     
                     Image(systemName: "arrow.right")
                         .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
-                        .font(.system(size: 10))
+                        .font(.inter(size: 10))
                 }
             }
             
@@ -97,7 +97,7 @@ struct VerifyLoginScreen: View {
                     
                     Text("Your account has a backup phrase")
                         .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
-                        .font(.system(size: 14))
+                        .font(.zero.bodySM)
                 }
                 
                 HStack(alignment: .top) {
@@ -106,7 +106,7 @@ struct VerifyLoginScreen: View {
                     
                     Text("Your current login is not verified, some message history may be hidden.")
                         .foregroundStyle(Asset.Colors.textWarning.swiftUIColor)
-                        .font(.system(size: 14))
+                        .font(.zero.bodySM)
                 }
             }
             
@@ -120,7 +120,7 @@ struct VerifyLoginScreen: View {
             context.send(viewAction: .recoveryKey)
         } label: {
             Text("Verify with backup phrase")
-                .font(.system(size: 15, weight: .semibold))
+                .font(.zero.bodyMDSemibold)
                 .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
                 .frame(height: 48)
                 .frame(maxWidth: .infinity)

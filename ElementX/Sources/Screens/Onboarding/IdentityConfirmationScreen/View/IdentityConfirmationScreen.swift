@@ -41,13 +41,13 @@ struct IdentityConfirmationScreen: View {
                 .padding(.bottom, 16)
             
             Text(L10n.screenIdentityConfirmationTitle)
-                .font(.compound.headingMDBold)
+                .font(.zero.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
                 .padding(.bottom, 8)
 
             Text(L10n.screenIdentityConfirmationSubtitle)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
             

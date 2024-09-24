@@ -57,13 +57,13 @@ struct SecureBackupRecoveryKeyScreen: View {
             
             Text(context.viewState.title)
                 .foregroundColor(.compound.textPrimary)
-                .font(.compound.headingMDBold)
+                .font(.zero.headingMDBold)
                 .multilineTextAlignment(.center)
             
             if let subtitle = context.viewState.subtitle {
                 Text(subtitle)
                     .foregroundColor(.compound.textSecondary)
-                    .font(.compound.bodyMD)
+                    .font(.zero.bodyMD)
                     .multilineTextAlignment(.center)
             }
         }
@@ -138,19 +138,19 @@ struct SecureBackupRecoveryKeyScreen: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(L10n.commonRecoveryKey)
                 .foregroundColor(.compound.textPrimary)
-                .font(.compound.bodySMSemibold)
+                .font(.zero.bodySMSemibold)
             
             Group {
                 if context.viewState.recoveryKey == nil {
                     Button(generateButtonTitle) {
                         context.send(viewAction: .generateKey)
                     }
-                    .font(.compound.bodyLGSemibold)
+                    .font(.zero.bodyLGSemibold)
                 } else {
                     HStack(alignment: .top, spacing: 8) {
                         Text(context.viewState.recoveryKey ?? "")
                             .foregroundColor(.compound.textPrimary)
-                            .font(.compound.bodyLG)
+                            .font(.zero.bodyLG)
                         
                         Spacer()
                         
@@ -173,7 +173,7 @@ struct SecureBackupRecoveryKeyScreen: View {
                 Label {
                     Text(subtitle)
                         .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodySM)
+                        .font(.zero.bodySM)
                 } icon: {
                     if context.viewState.recoveryKey == nil {
                         CompoundIcon(\.infoSolid, size: .small, relativeTo: .compound.bodySM)
@@ -193,7 +193,7 @@ struct SecureBackupRecoveryKeyScreen: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(L10n.commonRecoveryKey)
                 .foregroundColor(.compound.textPrimary)
-                .font(.compound.bodySMSemibold)
+                .font(.zero.bodySMSemibold)
             
             SecureField(L10n.screenRecoveryKeyConfirmKeyPlaceholder, text: $context.confirmationRecoveryKey)
                 .tint(.compound.iconAccentTertiary)
@@ -211,7 +211,7 @@ struct SecureBackupRecoveryKeyScreen: View {
             if let subtitle = context.viewState.recoveryKeySubtitle {
                 Text(subtitle)
                     .foregroundColor(.compound.textSecondary)
-                    .font(.compound.bodySM)
+                    .font(.zero.bodySM)
             }
         }
     }

@@ -47,7 +47,7 @@ struct LoginScreen: View {
                 .padding(.bottom, 8)
             
             Text(L10n.screenLoginTitleWithHomeserver(context.viewState.homeserver.address))
-                .font(.compound.headingMDBold)
+                .font(.zero.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
         }
@@ -58,7 +58,7 @@ struct LoginScreen: View {
     var loginForm: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(L10n.screenLoginFormHeader)
-                .font(.compound.bodySM)
+                .font(.zero.bodySM)
                 .foregroundColor(.compound.textPrimary)
                 .padding(.horizontal, 16)
                 .padding(.bottom, 8)

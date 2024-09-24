@@ -105,7 +105,7 @@ struct PINDigitField: View {
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                     .fill(Color.compound.bgSubtlePrimary)
                 Text(String(digit))
-                    .font(.compound.headingMDBold)
+                    .font(.zero.headingMDBold)
             } else {
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                     .inset(by: 0.5)

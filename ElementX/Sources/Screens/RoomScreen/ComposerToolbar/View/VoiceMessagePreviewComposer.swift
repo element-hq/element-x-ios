@@ -37,7 +37,7 @@ struct VoiceMessagePreviewComposer: View {
                                action: onPlayPause)
             Text(timeLabelContent)
                 .lineLimit(1)
-                .font(.compound.bodySMSemibold)
+                .font(.zero.bodySMSemibold)
                 .foregroundColor(.compound.textSecondary)
                 .monospacedDigit()
                 .fixedSize(horizontal: true, vertical: true)

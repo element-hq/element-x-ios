@@ -99,13 +99,13 @@ public struct AuthenticationTextFieldStyle: TextFieldStyle {
         
         return VStack(alignment: .leading, spacing: 8) {
             labelText
-                .font(.compound.bodySM)
+                .font(.zero.bodySM)
                 .foregroundColor(labelColor)
                 .padding(.horizontal, 16)
             
             configuration
                 .focused($isFocused)
-                .font(.compound.bodyLG)
+                .font(.zero.bodyLG)
                 .foregroundColor(textColor)
                 .accentColor(accentColor)
                 .padding(.leading, 16.0)
@@ -128,7 +128,7 @@ public struct AuthenticationTextFieldStyle: TextFieldStyle {
  
             footerText
                 .tint(.compound.textLinkExternal)
-                .font(.compound.bodyXS)
+                .font(.zero.bodyXS)
                 .foregroundColor(footerColor)
                 .padding(.horizontal, 16)
         }

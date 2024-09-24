@@ -67,14 +67,14 @@ struct SessionVerificationScreen: View {
             }
             
             Text(context.viewState.title ?? "")
-                .font(.compound.headingMDBold)
+                .font(.zero.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
                 .padding(.bottom, 8)
                 .accessibilityIdentifier(context.viewState.titleAccessibilityIdentifier)
 
             Text(context.viewState.message)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
         }
@@ -150,7 +150,7 @@ struct SessionVerificationScreen: View {
                 Button(L10n.screenSessionVerificationTheyDontMatch) {
                     context.send(viewAction: .decline)
                 }
-                .font(.compound.bodyLGSemibold)
+                .font(.zero.bodyLGSemibold)
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.declineChallenge)
             }
             
@@ -170,7 +170,7 @@ struct SessionVerificationScreen: View {
                 Button(L10n.screenSessionVerificationTheyDontMatch) {
                     context.send(viewAction: .decline)
                 }
-                .font(.compound.bodyLGSemibold)
+                .font(.zero.bodyLGSemibold)
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.declineChallenge)
                 .disabled(true)
             }
@@ -186,9 +186,9 @@ struct SessionVerificationScreen: View {
         var body: some View {
             VStack(spacing: 16.0) {
                 Text(emoji.symbol)
-                    .font(.compound.headingXLBold)
+                    .font(.zero.headingXLBold)
                 Text(emoji.localizedDescription)
-                    .font(.compound.bodyMD)
+                    .font(.zero.bodyMD)
                     .foregroundColor(.compound.textSecondary)
             }
             .padding(8.0)

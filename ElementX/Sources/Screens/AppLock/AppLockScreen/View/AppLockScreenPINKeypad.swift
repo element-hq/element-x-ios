@@ -59,7 +59,7 @@ private struct KeypadButtonStyle: ButtonStyle {
             .frame(width: 80, height: 80)
             .overlay {
                 configuration.label
-                    .font(.compound.headingXLBold)
+                    .font(.zero.headingXLBold)
                     .foregroundColor(.compound.textPrimary)
             }
             .opacity(configuration.isPressed ? 0.3 : 1.0)
@@ -83,7 +83,7 @@ struct AppLockScreenPINKeypad_Previews: PreviewProvider {
         var body: some View {
             VStack(spacing: 32) {
                 Text(model.output)
-                    .font(.compound.headingMD)
+                    .font(.zero.headingMD)
                     .animation(.noAnimation, value: model.pinCode)
                 AppLockScreenPINKeypad(pinCode: $model.pinCode)
             }

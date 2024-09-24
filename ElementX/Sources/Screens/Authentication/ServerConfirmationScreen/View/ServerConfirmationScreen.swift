@@ -32,13 +32,13 @@ struct ServerConfirmationScreen: View {
                 .padding(.bottom, 8)
             
             Text(context.viewState.title)
-                .font(.compound.headingMDBold)
+                .font(.zero.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
                 .fixedSize(horizontal: false, vertical: true)
             
             Text(context.viewState.message)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
         }
@@ -57,7 +57,7 @@ struct ServerConfirmationScreen: View {
             
             Button { context.send(viewAction: .changeServer) } label: {
                 Text(L10n.screenServerConfirmationChangeServer)
-                    .font(.compound.bodyLGSemibold)
+                    .font(.zero.bodyLGSemibold)
                     .padding(14)
             }
             .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.changeServer)

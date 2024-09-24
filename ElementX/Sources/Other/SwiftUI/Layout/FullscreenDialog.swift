@@ -209,16 +209,16 @@ struct FullscreenDialog_Previews: PreviewProvider, TestablePreview {
     private static var content: some View {
         VStack(spacing: 8) {
             Image(systemName: "globe")
-                .font(.system(size: 50))
+                .font(.inter(size: 50))
                 .foregroundColor(.compound.textPrimary)
                 .padding()
                 .background(Color.compound.bgSubtlePrimary, in: Circle())
                 .padding(.bottom, 8)
             Text("Hello, World")
-                .font(.compound.headingLG)
+                .font(.zero.headingLG)
                 .foregroundColor(.compound.textPrimary)
             Text("I am a subtitle")
-                .font(.compound.bodyLG)
+                .font(.zero.bodyLG)
                 .foregroundColor(.compound.textSecondary)
                 .padding(.bottom)
             
@@ -235,13 +235,13 @@ struct FullscreenDialog_Previews: PreviewProvider, TestablePreview {
         VStack(spacing: 16) {
             Button { } label: {
                 Text("Continue")
-                    .font(.compound.bodyLGSemibold)
+                    .font(.zero.bodyLGSemibold)
             }
             .buttonStyle(.compound(.primary))
             
             Button { } label: {
                 Text("More options")
-                    .font(.compound.bodyLGSemibold)
+                    .font(.zero.bodyLGSemibold)
                     .padding(14)
             }
         }

@@ -29,13 +29,13 @@ struct RoomMembersListScreenMemberCell: View {
                 HStack(alignment: .firstTextBaseline, spacing: 4) {
                     VStack(alignment: .leading, spacing: 0) {
                         Text(title)
-                            .font(.compound.bodyMDSemibold)
+                            .font(.zero.bodyMDSemibold)
                             .foregroundColor(.compound.textPrimary)
                             .lineLimit(1)
                         
 //                        if let subtitle {
 //                            Text(subtitle)
-//                                .font(.compound.bodySM)
+//                                .font(.zero.bodySM)
 //                                .foregroundColor(.compound.textSecondary)
 //                                .lineLimit(1)
 //                        }
@@ -44,7 +44,7 @@ struct RoomMembersListScreenMemberCell: View {
                     
                     if let role {
                         Text(role)
-                            .font(.compound.bodyXS)
+                            .font(.zero.bodyXS)
                             .foregroundStyle(.compound.textSecondary)
                     }
                 }

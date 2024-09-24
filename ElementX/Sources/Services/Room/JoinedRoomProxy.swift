@@ -16,6 +16,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private let room: RoomProtocol
     private let zeroMatrixUsersService: ZeroMatrixUsersService
     let timeline: TimelineProxyProtocol
+    private let zeroChatApi: ZeroChatApiProtocol
     
     private var innerPinnedEventsTimeline: TimelineProxyProtocol?
     private var innerPinnedEventsTimelineTask: Task<TimelineProxyProtocol?, Never>?
@@ -41,7 +42,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                                    maxConcurrentRequests: 10),
                                                                room: room,
                                                                kind: .pinned,
-                                                               zeroMatrixUsersService: zeroMatrixUsersService)
+                                                               zeroMatrixUsersService: zeroMatrixUsersService,
+                                                               zeroChatApi: zeroChatApi)
                         await timeline.subscribeForUpdates()
                         innerPinnedEventsTimeline = timeline
                         return timeline
@@ -168,13 +170,19 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     init(roomListService: RoomListServiceProtocol,
          roomListItem: RoomListItemProtocol,
          room: RoomProtocol,
-         zeroMatrixUsersService: ZeroMatrixUsersService) async throws {
+         zeroMatrixUsersService: ZeroMatrixUsersService,
+         zeroChatApi: ZeroChatApiProtocol) async throws {
         self.roomListService = roomListService
         self.roomListItem = roomListItem
         self.room = room
         self.zeroMatrixUsersService = zeroMatrixUsersService
+        self.zeroChatApi = zeroChatApi
         
-        timeline = try await TimelineProxy(timeline: room.timeline(), room: room, kind: .live, zeroMatrixUsersService: zeroMatrixUsersService)
+        timeline = try await TimelineProxy(timeline: room.timeline(),
+                                           room: room,
+                                           kind: .live,
+                                           zeroMatrixUsersService: zeroMatrixUsersService,
+                                           zeroChatApi: zeroChatApi)
         
         Task {
             await fetchAllRoomUsers()
@@ -224,7 +232,11 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError> {
         do {
             let timeline = try await room.timelineFocusedOnEvent(eventId: eventID, numContextEvents: numberOfEvents, internalIdPrefix: UUID().uuidString)
-            return .success(TimelineProxy(timeline: timeline, room: room, kind: .detached, zeroMatrixUsersService: zeroMatrixUsersService))
+            return .success(TimelineProxy(timeline: timeline,
+                                          room: room,
+                                          kind: .detached,
+                                          zeroMatrixUsersService: zeroMatrixUsersService,
+                                          zeroChatApi: zeroChatApi))
         } catch let error as FocusEventError {
             switch error {
             case .InvalidEventId(_, let error):

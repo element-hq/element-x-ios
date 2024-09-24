@@ -18,7 +18,7 @@ struct PollOptionView: View {
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 12) {
             Image(systemSymbol: pollOption.isSelected ? .checkmarkCircleFill : .circle)
-                .font(.compound.bodyLG)
+                .font(.zero.bodyLG)
                 .foregroundColor(pollOption.isSelected && isEnabled ? .compound.iconPrimary : .compound.iconTertiary)
                 .accessibilityAddTraits(pollOption.isSelected ? .isSelected : [])
 
@@ -37,12 +37,12 @@ struct PollOptionView: View {
                                     .foregroundColor(.compound.iconAccentTertiary)
                                 
                                 Text(L10n.commonPollVotesCount(pollOption.votes))
-                                    .font(.compound.bodySMSemibold)
+                                    .font(.zero.bodySMSemibold)
                                     .foregroundColor(.compound.textPrimary)
                             }
                         } else {
                             Text(L10n.commonPollVotesCount(pollOption.votes))
-                                .font(.compound.bodySM)
+                                .font(.zero.bodySM)
                                 .foregroundColor(.compound.textSecondary)
                         }
                     }

@@ -17,7 +17,7 @@ struct InviteUsersScreenSelectedItem: View {
             avatar
             
             Text(user.displayName ?? user.userID)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
         }

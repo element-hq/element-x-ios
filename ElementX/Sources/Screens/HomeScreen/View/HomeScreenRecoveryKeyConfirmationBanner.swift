@@ -16,7 +16,7 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 16) {
                     Text(L10n.confirmRecoveryKeyBannerTitle)
-                        .font(.compound.bodyLGSemibold)
+                        .font(.zero.bodyLGSemibold)
                         .foregroundColor(.compound.textPrimary)
                     
                     Spacer()
@@ -30,7 +30,7 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
                     }
                 }
                 Text(L10n.confirmRecoveryKeyBannerMessage)
-                    .font(.compound.bodyMD)
+                    .font(.zero.bodyMD)
                     .foregroundColor(.compound.textSecondary)
             }
             

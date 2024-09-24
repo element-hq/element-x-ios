@@ -43,7 +43,7 @@ struct AppLockScreen: View {
             Button(L10n.screenAppLockForgotPin) {
                 context.send(viewAction: .forgotPIN)
             }
-            .font(.compound.bodyMDSemibold)
+            .font(.zero.bodyMDSemibold)
         }
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
@@ -62,12 +62,12 @@ struct AppLockScreen: View {
                 .accessibilityHidden(true)
             
             Text(L10n.commonEnterYourPin)
-                .font(.compound.headingMDBold)
+                .font(.zero.headingMDBold)
                 .foregroundColor(.compound.textPrimary)
                 .multilineTextAlignment(.center)
             
             Text(context.viewState.subtitle)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .foregroundColor(subtitleColor)
                 .multilineTextAlignment(.center)
                 .accessibilityFocused($accessibilitySubtitleFocus)

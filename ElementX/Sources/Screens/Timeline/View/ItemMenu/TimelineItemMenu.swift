@@ -54,6 +54,7 @@ struct TimelineItemMenu: View {
             }
         }
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.timelineItemActionMenu)
+        .presentationPage()
         .presentationDetents([.medium, .large])
         .presentationBackground(Color.compound.bgCanvasDefault)
         .presentationDragIndicator(.visible)
@@ -73,12 +74,12 @@ struct TimelineItemMenu: View {
                 
                 VStack(alignment: .leading, spacing: 0) {
                     Text(item.sender.displayName ?? item.sender.id)
-                        .font(.compound.bodySMSemibold)
+                        .font(.zero.bodySMSemibold)
                         .foregroundColor(.compound.textPrimary)
                         .textSelection(.enabled)
                     
                     Text(item.timelineMenuDescription)
-                        .font(.compound.bodyMD)
+                        .font(.zero.bodyMD)
                         .foregroundColor(.compound.textSecondary)
                         .lineLimit(1)
                 }
@@ -87,7 +88,7 @@ struct TimelineItemMenu: View {
                 Spacer(minLength: 16.0)
                 
                 Text(item.timestamp)
-                    .font(.compound.bodyXS)
+                    .font(.zero.bodyXS)
                     .foregroundColor(.compound.textSecondary)
             }
             .accessibilityElement(children: .combine)
@@ -104,7 +105,7 @@ struct TimelineItemMenu: View {
                 .padding(.bottom, 8)
             } else if let authenticity = item.properties.encryptionAuthenticity {
                 Label(authenticity.message, icon: authenticity.icon, iconSize: .small, relativeTo: .compound.bodySMSemibold)
-                    .font(.compound.bodySMSemibold)
+                    .font(.zero.bodySMSemibold)
                     .foregroundStyle(authenticity.foregroundStyle)
             }
         }
@@ -145,7 +146,7 @@ struct TimelineItemMenu: View {
             context.send(viewAction: .toggleReaction(key: emoji, itemID: item.id))
         } label: {
             Text(emoji)
-                .font(.compound.headingLG)
+                .font(.zero.headingLG)
                 .padding(8)
                 .background(Circle()
                     .foregroundColor(reactionBackgroundColor(for: emoji)))
@@ -218,7 +219,7 @@ private struct VerifiedUserSendFailureView: View {
         Button(action: action) {
             HStack(spacing: 8) {
                 Label(title, icon: \.error, iconSize: .small, relativeTo: .compound.bodySMSemibold)
-                    .font(.compound.bodySMSemibold)
+                    .font(.zero.bodySMSemibold)
                     .foregroundStyle(.compound.textCriticalPrimary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 ListRowAccessory.navigationLink
@@ -232,6 +233,17 @@ private extension EncryptionAuthenticity {
         switch color {
         case .red: .compound.textCriticalPrimary
         case .gray: .compound.textSecondary
+        }
+    }
+}
+
+private extension View {
+    /// Uses the old page style modal so that on iPadOS 18 the presentation detents have no effect.
+    @ViewBuilder func presentationPage() -> some View {
+        if #available(iOS 18.0, *) {
+            presentationSizing(.page)
+        } else {
+            self
         }
     }
 }

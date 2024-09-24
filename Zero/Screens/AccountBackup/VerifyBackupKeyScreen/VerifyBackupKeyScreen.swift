@@ -61,13 +61,13 @@ struct VerifyBackupKeyScreen: View {
     var content: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Verify Login")
-                .font(.system(size: 18))
+                .font(.zero.bodyLG)
                 .foregroundStyle(Asset.Colors.textPrimary.swiftUIColor)
                 .padding(.top, 24)
             
             Text("Enter your account backup phrase to restore access to messages from previous logins and devices.")
                 .multilineTextAlignment(.leading)
-                .font(.system(size: 14))
+                .font(.zero.bodySM)
                 .foregroundStyle(Asset.Colors.textPrimary.swiftUIColor)
             
             Spacer()
@@ -76,7 +76,7 @@ struct VerifyBackupKeyScreen: View {
                 
                 Text("Account backup phrase")
                     .foregroundStyle(Asset.Colors.textPrimary.swiftUIColor)
-                    .font(.system(size: 14))
+                    .font(.zero.bodySM)
                 
                 backupkeyField
                 
@@ -128,7 +128,7 @@ struct VerifyBackupKeyScreen: View {
                     Text(alert.message ?? "Error occured will verifying backup key.")
                         .multilineTextAlignment(.leading)
                         .foregroundStyle(Asset.Colors.textWarning.swiftUIColor)
-                        .font(.system(size: 12))
+                        .font(.zero.bodyXS)
                     
                     Spacer()
                 }
@@ -149,7 +149,7 @@ struct VerifyBackupKeyScreen: View {
             context.send(viewAction: .confirmKey)
         } label: {
             Text("Verify")
-                .font(.system(size: 15, weight: .semibold))
+                .font(.zero.bodyMDSemibold)
                 .foregroundStyle(Asset.Colors.textPrimary.swiftUIColor)
                 .frame(height: 48)
                 .frame(maxWidth: 94)

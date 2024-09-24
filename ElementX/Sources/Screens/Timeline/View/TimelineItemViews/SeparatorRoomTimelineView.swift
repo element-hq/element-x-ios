@@ -12,7 +12,7 @@ struct SeparatorRoomTimelineView: View {
     
     var body: some View {
         Text(timelineItem.text)
-            .font(.compound.bodySMSemibold)
+            .font(.zero.bodySMSemibold)
             .foregroundColor(.compound.textPrimary)
             .frame(maxWidth: .infinity)
             .multilineTextAlignment(.center)

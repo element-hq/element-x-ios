@@ -23,7 +23,7 @@ struct PillView: View {
         
     var body: some View {
         Text(context.viewState.displayText)
-            .font(.compound.bodyLGSemibold)
+            .font(.zero.bodyLGSemibold)
             .foregroundColor(textColor)
             .lineLimit(1)
             .padding(.leading, 4)

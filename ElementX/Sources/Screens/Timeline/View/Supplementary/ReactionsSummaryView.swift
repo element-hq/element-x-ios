@@ -79,11 +79,11 @@ private struct ReactionSummaryButton: View {
     var label: some View {
         HStack(spacing: 4) {
             Text(reaction.displayKey)
-                .font(.compound.headingSM)
+                .font(.zero.headingSM)
                 .foregroundColor(textColor)
             if reaction.count > 1 {
                 Text(String(reaction.count))
-                    .font(.compound.headingSM)
+                    .font(.zero.headingSM)
                     .foregroundColor(textColor)
             }
         }
@@ -118,14 +118,14 @@ private struct ReactionSummarySenderView: View {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 8) {
                     Text(displayName)
-                        .font(.compound.bodyMDSemibold)
+                        .font(.zero.bodyMDSemibold)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Text(sender.timestamp.formattedMinimal())
-                        .font(.compound.bodyXS)
+                        .font(.zero.bodyXS)
                         .foregroundColor(.compound.textSecondary)
                 }
                 Text(sender.id)
-                    .font(.compound.bodySM)
+                    .font(.zero.bodySM)
                     .foregroundColor(.compound.textSecondary)
             }
         }

@@ -45,7 +45,7 @@ struct DeactivateAccountScreen: View {
                 }
             }
             .foregroundColor(.compound.textSecondary)
-            .font(.compound.bodyMD)
+            .font(.zero.bodyMD)
             .listRowBackground(Color.clear)
         })
     }

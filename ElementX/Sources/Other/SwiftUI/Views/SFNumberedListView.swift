@@ -24,7 +24,7 @@ struct SFNumberedListView: View {
                         .foregroundColor(.compound.textPlaceholder)
                 }
                 .foregroundColor(.compound.textPrimary)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
             }
         }
     }

@@ -867,11 +867,13 @@ class ClientProxy: ClientProxyProtocol {
                 if roomListItem.isTimelineInitialized() == false {
                     try await roomListItem.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
                 }
+                let zeroChatApi = ZeroChatApi(appSettings: appSettings)
                 
                 let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,
                                                           roomListItem: roomListItem,
                                                           room: roomListItem.fullRoom(),
-                                                          zeroMatrixUsersService: zeroMatrixUsersService)
+                                                          zeroMatrixUsersService: zeroMatrixUsersService,
+                                                          zeroChatApi: zeroChatApi)
                 
                 return .joined(roomProxy)
             case .left:

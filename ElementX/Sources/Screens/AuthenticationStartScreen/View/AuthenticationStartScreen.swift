@@ -38,7 +38,7 @@ struct AuthenticationStartScreen: View {
                     context.send(viewAction: .reportProblem)
                 } label: {
                     Text(L10n.commonReportAProblem)
-                        .font(.compound.bodySM)
+                        .font(.zero.bodySM)
                         .foregroundColor(.compound.textSecondary)
                         .padding(.bottom)
                 }
@@ -65,11 +65,11 @@ struct AuthenticationStartScreen: View {
             
             VStack(spacing: 8) {
                 Text(L10n.screenOnboardingWelcomeTitle)
-                    .font(.compound.headingLGBold)
+                    .font(.zero.headingLGBold)
                     .foregroundColor(.compound.textPrimary)
                     .multilineTextAlignment(.center)
                 Text(L10n.screenOnboardingWelcomeMessage(InfoPlistReader.main.productionAppName))
-                    .font(.compound.bodyLG)
+                    .font(.zero.bodyLG)
                     .foregroundColor(.compound.textSecondary)
                     .multilineTextAlignment(.center)
             }

@@ -1,3 +1,29 @@
+## Changes in 1.8.4 (2024-09-24)
+
+### What's Changed
+
+✨ Features
+* Enable message pinning by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3308
+
+🐛 Bugfixes
+* Fix: confusion of lab flags for invisible crypto by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/3319
+* Fix a regression where you can't scroll the timeline on iOS 17 by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3320
+* Fix a bug where the Join Room screen was sometimes shown instead of the Room. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3323
+* Fix a bug on iOS 18 where the timeline background would use the wrong colour scheme when using the app switcher. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3324
+* Don't use the new iPad modal presentation mode for the timeline item menu by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3325
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3315
+
+🧱 Build
+* Update the project to use Xcode 16. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3303
+
+Others
+* A bunch of random tweaks. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3317
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.8.3...1.8.4
+
 ## Changes in 1.8.3 (2024-09-19)
 
 ### What's Changed

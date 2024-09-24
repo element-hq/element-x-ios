@@ -44,7 +44,7 @@ private struct BadgeLabelStyle: LabelStyle {
             configuration.title
                 .foregroundStyle(titleColor)
         }
-        .font(.compound.bodySM)
+        .font(.zero.bodySM)
         .padding(.leading, 8)
         .padding(.trailing, 12)
         .padding(.vertical, 4)

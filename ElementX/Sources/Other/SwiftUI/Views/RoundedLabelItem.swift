@@ -53,7 +53,7 @@ private struct CheckmarkLabelStyle: LabelStyle {
             configuration.icon
             configuration.title
         }
-        .font(.compound.bodyMD)
+        .font(.zero.bodyMD)
         .foregroundColor(.compound.textPrimary)
     }
 }

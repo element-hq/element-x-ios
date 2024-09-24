@@ -131,7 +131,7 @@ struct TimelineCollapseButtonLabel: View {
                 .frame(height: lineHeight, alignment: .center)
                 .padding(.vertical, 6)
                 .padding(.horizontal, 12)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .foregroundColor(.compound.textPrimary)
         }
     }
@@ -162,10 +162,10 @@ struct TimelineReactionButton: View {
                 // emojis too big. bodySM gives a more appropriate size when compared
                 // to the count text and the lineHeight/padding in the designs.
                 Text(reaction.displayKey)
-                    .font(.compound.bodySM)
+                    .font(.zero.bodySM)
                 if reaction.count > 1 {
                     Text(String(reaction.count))
-                        .font(.compound.bodyMD)
+                        .font(.zero.bodyMD)
                         .foregroundColor(textColor)
                 }
             }

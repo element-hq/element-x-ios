@@ -65,7 +65,7 @@ struct InviteUsersScreen: View {
     
     private var noResultsContent: some View {
         Text(L10n.commonNoResults)
-            .font(.compound.bodyLG)
+            .font(.zero.bodyLG)
             .foregroundColor(.compound.textSecondary)
             .frame(maxWidth: .infinity)
             .listRowBackground(Color.clear)

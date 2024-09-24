@@ -44,19 +44,19 @@ struct SecureBackupKeyBackupScreen: View {
             
             Text(L10n.screenKeyBackupDisableTitle)
                 .foregroundColor(.compound.textPrimary)
-                .font(.compound.headingMDBold)
+                .font(.zero.headingMDBold)
                 .multilineTextAlignment(.center)
             
             Text(L10n.screenKeyBackupDisableDescription)
                 .foregroundColor(.compound.textSecondary)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .multilineTextAlignment(.center)
             
             VStack(alignment: .leading, spacing: 10) {
                 Label {
                     Text(L10n.screenKeyBackupDisableDescriptionPoint1)
                         .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodyMD)
+                        .font(.zero.bodyMD)
                 } icon: {
                     CompoundIcon(\.close)
                         .foregroundColor(.compound.iconCriticalPrimary)
@@ -65,7 +65,7 @@ struct SecureBackupKeyBackupScreen: View {
                 Label {
                     Text(L10n.screenKeyBackupDisableDescriptionPoint2(InfoPlistReader.main.bundleDisplayName))
                         .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodyMD)
+                        .font(.zero.bodyMD)
                 } icon: {
                     CompoundIcon(\.close)
                         .foregroundColor(.compound.iconCriticalPrimary)

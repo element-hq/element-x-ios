@@ -32,7 +32,7 @@ struct EmojiPickerScreen: View {
                                 } label: {
                                     Text(emoji.value)
                                         .padding(9.0)
-                                        .font(.compound.headingXL)
+                                        .font(.zero.headingXL)
                                         .background(Circle()
                                             .foregroundColor(emojiBackgroundColor(for: emoji.value)))
                                 }

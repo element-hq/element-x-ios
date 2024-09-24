@@ -16,19 +16,19 @@ struct HomeScreenEmptyStateView: View {
     var body: some View {
         VStack(spacing: 6) {
             Text(L10n.screenRoomlistEmptyTitle)
-                .font(.compound.bodyLG)
+                .font(.zero.bodyLG)
                 .foregroundColor(.compound.textSecondary)
                 .multilineTextAlignment(.center)
             
             Text(L10n.screenRoomlistEmptyMessage)
-                .font(.compound.bodyLG)
+                .font(.zero.bodyLG)
                 .foregroundColor(.compound.textSecondary)
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 12)
             
             Button { context.send(viewAction: .startChat) } label: {
                 Label(L10n.actionStartChat, icon: \.compose)
-                    .font(.compound.bodyLGSemibold)
+                    .font(.zero.bodyLGSemibold)
                     .foregroundColor(.compound.textOnSolidPrimary)
                     .padding(.vertical, 6)
                     .padding(.horizontal, 22)
@@ -128,7 +128,7 @@ struct HomeScreenEmptyStateView_Previews: PreviewProvider, TestablePreview {
     
     static var banner: some View {
         Text("This is a title that is very long")
-            .font(.compound.headingXLBold)
+            .font(.zero.headingXLBold)
             .multilineTextAlignment(.center)
             .frame(maxWidth: .infinity)
             .padding()

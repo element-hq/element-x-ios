@@ -52,11 +52,11 @@ struct PinnedEventsTimelineScreen: View {
             VStack(spacing: 16) {
                 HeroImage(icon: \.pin, style: .normal)
                 Text(L10n.screenPinnedTimelineEmptyStateHeadline)
-                    .font(.compound.headingSMSemibold)
+                    .font(.zero.headingSMSemibold)
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)
                 Text(L10n.screenPinnedTimelineEmptyStateDescription(L10n.actionPin))
-                    .font(.compound.bodyMD)
+                    .font(.zero.bodyMD)
                     .foregroundStyle(.compound.textSecondary)
                     .multilineTextAlignment(.center)
                 Spacer()

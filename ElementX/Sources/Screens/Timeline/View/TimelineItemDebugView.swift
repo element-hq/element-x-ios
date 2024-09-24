@@ -59,7 +59,7 @@ struct TimelineItemDebugView: View {
                 DisclosureGroup(title, isExpanded: $isExpanded) {
                     disclosureGroupContent
                 }
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .padding()
                 
                 Divider()
@@ -73,7 +73,7 @@ struct TimelineItemDebugView: View {
                     .padding(.vertical, 8)
                 
                 TextField("", text: .constant(text), axis: .vertical)
-                    .font(.compound.bodyXS.monospaced())
+                    .font(.zero.bodyXS.monospaced())
                     .foregroundColor(.compound.textPrimary)
                     .fixedSize(horizontal: false, vertical: true)
             }

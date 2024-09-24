@@ -45,7 +45,7 @@ struct QRCodeLoginScreen: View {
                     
                     Text(L10n.screenQrCodeLoginInitialStateTitle(InfoPlistReader.main.productionAppName))
                         .foregroundColor(.compound.textPrimary)
-                        .font(.compound.headingMDBold)
+                        .font(.zero.headingMDBold)
                         .multilineTextAlignment(.center)
                 }
                 .padding(.horizontal, 24)
@@ -76,7 +76,7 @@ struct QRCodeLoginScreen: View {
                         ProgressView()
                         Text(L10n.screenQrCodeLoginVerifyCodeLoading)
                             .foregroundColor(.compound.textSecondary)
-                            .font(.compound.bodySM)
+                            .font(.zero.bodySM)
                             .multilineTextAlignment(.center)
                     }
                 }
@@ -99,12 +99,12 @@ struct QRCodeLoginScreen: View {
                 VStack(spacing: 8) {
                     Text(L10n.screenQrCodeLoginDeviceCodeTitle)
                         .foregroundColor(.compound.textPrimary)
-                        .font(.compound.headingMDBold)
+                        .font(.zero.headingMDBold)
                         .multilineTextAlignment(.center)
                     
                     Text(L10n.screenQrCodeLoginDeviceCodeSubtitle)
                         .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodyMD)
+                        .font(.zero.bodyMD)
                         .multilineTextAlignment(.center)
                 }
             case .verificationCode:
@@ -113,12 +113,12 @@ struct QRCodeLoginScreen: View {
                 VStack(spacing: 8) {
                     Text(L10n.screenQrCodeLoginVerifyCodeTitle)
                         .foregroundColor(.compound.textPrimary)
-                        .font(.compound.headingMDBold)
+                        .font(.zero.headingMDBold)
                         .multilineTextAlignment(.center)
                     
                     Text(L10n.screenQrCodeLoginVerifyCodeSubtitle)
                         .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodyMD)
+                        .font(.zero.bodyMD)
                         .multilineTextAlignment(.center)
                 }
             }
@@ -133,7 +133,7 @@ struct QRCodeLoginScreen: View {
                     
                     Text(L10n.screenQrCodeLoginScanningStateTitle)
                         .foregroundColor(.compound.textPrimary)
-                        .font(.compound.headingMDBold)
+                        .font(.zero.headingMDBold)
                         .multilineTextAlignment(.center)
                 }
                 
@@ -154,7 +154,7 @@ struct QRCodeLoginScreen: View {
                     ProgressView()
                     Text(L10n.screenQrCodeLoginConnectingSubtitle)
                         .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodySM)
+                        .font(.zero.bodySM)
                         .multilineTextAlignment(.center)
                 }
             case .scanning:
@@ -175,12 +175,12 @@ struct QRCodeLoginScreen: View {
                               iconSize: .medium,
                               relativeTo: .compound.bodyMDSemibold)
                             .labelStyle(.custom(spacing: 10))
-                            .font(.compound.bodyMDSemibold)
+                            .font(.zero.bodyMDSemibold)
                             .foregroundColor(.compound.textCriticalPrimary)
                         
                         Text(L10n.screenQrCodeLoginInvalidScanStateDescription)
                             .foregroundColor(.compound.textSecondary)
-                            .font(.compound.bodySM)
+                            .font(.zero.bodySM)
                             .multilineTextAlignment(.center)
                     }
                 }
@@ -197,12 +197,12 @@ struct QRCodeLoginScreen: View {
                               iconSize: .medium,
                               relativeTo: .compound.bodyMDSemibold)
                             .labelStyle(.custom(spacing: 10))
-                            .font(.compound.bodyMDSemibold)
+                            .font(.zero.bodyMDSemibold)
                             .foregroundColor(.compound.textCriticalPrimary)
                         
                         Text(L10n.screenQrCodeLoginDeviceNotSignedInScanStateDescription)
                             .foregroundColor(.compound.textSecondary)
-                            .font(.compound.bodySM)
+                            .font(.zero.bodySM)
                             .multilineTextAlignment(.center)
                     }
                 }
@@ -254,12 +254,12 @@ struct QRCodeLoginScreen: View {
                 VStack(spacing: 8) {
                     Text(L10n.screenQrCodeLoginNoCameraPermissionStateTitle)
                         .foregroundColor(.compound.textPrimary)
-                        .font(.compound.headingMDBold)
+                        .font(.zero.headingMDBold)
                         .multilineTextAlignment(.center)
                     
                     Text(L10n.screenQrCodeLoginNoCameraPermissionStateDescription(InfoPlistReader.main.productionAppName))
                         .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodyMD)
+                        .font(.zero.bodyMD)
                         .multilineTextAlignment(.center)
                 }
             }
@@ -271,12 +271,12 @@ struct QRCodeLoginScreen: View {
                     VStack(spacing: 8) {
                         Text(L10n.screenQrCodeLoginConnectionNoteSecureStateTitle)
                             .foregroundColor(.compound.textPrimary)
-                            .font(.compound.headingMDBold)
+                            .font(.zero.headingMDBold)
                             .multilineTextAlignment(.center)
                         
                         Text(L10n.screenQrCodeLoginConnectionNoteSecureStateDescription)
                             .foregroundColor(.compound.textSecondary)
-                            .font(.compound.bodyMD)
+                            .font(.zero.bodyMD)
                             .multilineTextAlignment(.center)
                     }
                 }
@@ -284,7 +284,7 @@ struct QRCodeLoginScreen: View {
                 VStack(spacing: 24) {
                     Text(L10n.screenQrCodeLoginConnectionNoteSecureStateListHeader)
                         .foregroundColor(.compound.textPrimary)
-                        .font(.compound.bodyLGSemibold)
+                        .font(.zero.bodyLGSemibold)
                         .multilineTextAlignment(.center)
                     
                     SFNumberedListView(items: context.viewState.connectionNotSecureListItems)
@@ -337,12 +337,12 @@ struct QRCodeLoginScreen: View {
             VStack(spacing: 8) {
                 Text(title)
                     .foregroundColor(.compound.textPrimary)
-                    .font(.compound.headingMDBold)
+                    .font(.zero.headingMDBold)
                     .multilineTextAlignment(.center)
                 
                 Text(subtitle)
                     .foregroundColor(.compound.textSecondary)
-                    .font(.compound.bodyMD)
+                    .font(.zero.bodyMD)
                     .multilineTextAlignment(.center)
             }
         }

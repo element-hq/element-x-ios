@@ -41,11 +41,11 @@ struct SecureBackupScreen: View {
             ListRow(kind: .custom {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(L10n.screenChatBackupKeyBackupTitle)
-                        .font(.compound.bodyLGSemibold)
+                        .font(.zero.bodyLGSemibold)
                         .foregroundColor(.compound.textPrimary)
                     
                     Text(keyBackupDescriptionWithLearnMoreLink)
-                        .font(.compound.bodySM)
+                        .font(.zero.bodySM)
                         .foregroundColor(.compound.textSecondary)
                 }
                 .padding(.horizontal, ListRowPadding.horizontal)

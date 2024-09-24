@@ -25,14 +25,14 @@ struct CallNotificationRoomTimelineView: View {
             
             VStack(alignment: .leading, spacing: 0) {
                 Text(timelineItem.sender.disambiguatedDisplayName ?? timelineItem.sender.id)
-                    .font(.compound.bodyLGSemibold)
+                    .font(.zero.bodyLGSemibold)
                     .foregroundColor(.compound.textPrimary)
                     .lineLimit(1)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 Label(title: { Text(L10n.commonCallStarted) },
                       icon: { CompoundIcon(\.videoCallSolid, size: .medium, relativeTo: .compound.bodyMD) })
-                    .font(.compound.bodyMD)
+                    .font(.zero.bodyMD)
                     .foregroundColor(.compound.textSecondary)
                     .labelStyle(.custom(spacing: 4))
             }
@@ -40,7 +40,7 @@ struct CallNotificationRoomTimelineView: View {
             Spacer()
             
             Text(timelineItem.timestamp)
-                .font(.compound.bodyXS)
+                .font(.zero.bodyXS)
                 .foregroundColor(.compound.textSecondary)
         }
         .padding(12)

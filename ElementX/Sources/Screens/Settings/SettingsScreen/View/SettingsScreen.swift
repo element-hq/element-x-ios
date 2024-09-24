@@ -57,10 +57,10 @@ struct SettingsScreen: View {
                         
                         VStack(alignment: .leading, spacing: 2) {
                             Text(context.viewState.userDisplayName ?? "")
-                                .font(.compound.headingMD)
+                                .font(.zero.headingMD)
                                 .foregroundColor(.compound.textPrimary)
 //                            Text(context.viewState.userID)
-//                                .font(.compound.bodySM)
+//                                .font(.zero.bodySM)
 //                                .foregroundColor(.compound.textSecondary)
                         }
                         

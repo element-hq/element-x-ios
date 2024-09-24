@@ -13,7 +13,7 @@ struct TypingIndicatorView: View {
     
     var body: some View {
         content
-            .font(.compound.bodySM)
+            .font(.zero.bodySM)
             .foregroundColor(.compound.textPlaceholder)
             .lineLimit(1)
             .truncationMode(.middle)

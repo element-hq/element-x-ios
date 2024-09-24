@@ -43,7 +43,7 @@ struct PinnedItemsIndicatorView_Previews: PreviewProvider, TestablePreview {
     static func indicator(index: Int, count: Int) -> some View {
         VStack(spacing: 0) {
             Text("\(index + 1)/\(count)")
-                .font(.compound.bodyXS)
+                .font(.zero.bodyXS)
             PinnedItemsIndicatorView(pinIndex: index, pinsCount: count)
         }
     }

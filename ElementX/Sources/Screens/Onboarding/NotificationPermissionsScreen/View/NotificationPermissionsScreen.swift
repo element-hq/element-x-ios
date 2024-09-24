@@ -31,12 +31,12 @@ struct NotificationPermissionsScreen: View {
                 .padding(.bottom, 8)
             
             Text(L10n.screenNotificationOptinTitle)
-                .font(.compound.headingMDBold)
+                .font(.zero.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
             
             Text(L10n.screenNotificationOptinSubtitle)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
             
@@ -51,7 +51,7 @@ struct NotificationPermissionsScreen: View {
             
             Button { context.send(viewAction: .notNow) } label: {
                 Text(L10n.actionNotNow)
-                    .font(.compound.bodyLGSemibold)
+                    .font(.zero.bodyLGSemibold)
                     .padding(14)
             }
         }

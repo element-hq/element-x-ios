@@ -42,12 +42,12 @@ struct ResolveVerifiedUserSendFailureScreen: View {
                 .padding(.bottom, 8)
             
             Text(context.viewState.title)
-                .font(.compound.headingMDBold)
+                .font(.zero.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
             
             Text(context.viewState.subtitle)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
         }

@@ -32,12 +32,12 @@ struct SecureBackupLogoutConfirmationScreen: View {
     private var content: some View {
         Text(title)
             .foregroundColor(.compound.textPrimary)
-            .font(.compound.headingMDBold)
+            .font(.zero.headingMDBold)
             .multilineTextAlignment(.center)
         
         Text(subtitle)
             .foregroundColor(.compound.textSecondary)
-            .font(.compound.bodyMD)
+            .font(.zero.bodyMD)
             .multilineTextAlignment(.center)
         
         if context.viewState.mode == .backupOngoing {

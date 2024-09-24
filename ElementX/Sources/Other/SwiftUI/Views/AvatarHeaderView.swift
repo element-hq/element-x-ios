@@ -5,6 +5,7 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct AvatarHeaderView<Footer: View>: View {
@@ -161,14 +162,14 @@ struct AvatarHeaderView<Footer: View>: View {
             
             Text(title)
                 .foregroundColor(.compound.textPrimary)
-                .font(.compound.headingMDBold)
+                .font(.zero.headingMDBold)
                 .multilineTextAlignment(.center)
                 .textSelection(.enabled)
             
 //            if let subtitle {
 //                Text(subtitle)
 //                    .foregroundColor(.compound.textSecondary)
-//                    .font(.compound.bodyLG)
+//                    .font(.zero.bodyLG)
 //                    .multilineTextAlignment(.center)
 //                    .textSelection(.enabled)
 //            }
@@ -203,7 +204,7 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
                              mediaProvider: MockMediaProvider()) {
                 HStack(spacing: 32) {
                     ShareLink(item: "test") {
-                        Image(systemName: "square.and.arrow.up")
+                        CompoundIcon(\.shareIos)
                     }
                     .buttonStyle(FormActionButtonStyle(title: "Test"))
                 }
@@ -217,7 +218,7 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
                              mediaProvider: MockMediaProvider()) {
                 HStack(spacing: 32) {
                     ShareLink(item: "test") {
-                        Image(systemName: "square.and.arrow.up")
+                        CompoundIcon(\.shareIos)
                     }
                     .buttonStyle(FormActionButtonStyle(title: "Test"))
                 }

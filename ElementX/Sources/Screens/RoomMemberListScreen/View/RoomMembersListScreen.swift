@@ -33,7 +33,7 @@ struct RoomMembersListScreen: View {
         .overlay {
             if context.mode == .banned, context.viewState.bannedMembersCount == 0 {
                 Text(L10n.screenRoomMemberListBannedEmpty)
-                    .font(.compound.bodyMD)
+                    .font(.zero.bodyMD)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
@@ -81,7 +81,7 @@ struct RoomMembersListScreen: View {
                 if let sectionTitle {
                     Text(sectionTitle)
                         .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodyLG)
+                        .font(.zero.bodyLG)
                         .padding(.top, 12)
                 } else {
                     // Put something in here to maintain constant top padding.

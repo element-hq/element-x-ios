@@ -19,7 +19,7 @@ struct StaticLocationScreen: View {
                 Text(locationDescription)
                     .lineLimit(2)
                     .foregroundColor(Color.compound.textPrimary)
-                    .font(.compound.bodyMD)
+                    .font(.zero.bodyMD)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
             }

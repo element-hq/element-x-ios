@@ -37,18 +37,18 @@ struct AppLockSetupBiometricsScreen: View {
     var header: some View {
         VStack(spacing: 8) {
             Image(systemSymbol: context.viewState.icon)
-                .font(.system(size: 72))
+                .font(.inter(size: 72))
                 .padding(.top, 58)
                 .padding(.bottom, 26)
                 .accessibilityHidden(true)
             
             Text(context.viewState.title)
-                .font(.compound.headingMDBold)
+                .font(.zero.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
             
             Text(context.viewState.subtitle)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
         }
@@ -62,7 +62,7 @@ struct AppLockSetupBiometricsScreen: View {
             
             Button { context.send(viewAction: .skip) } label: {
                 Text(L10n.screenAppLockSetupBiometricUnlockSkip)
-                    .font(.compound.bodyLGSemibold)
+                    .font(.zero.bodyLGSemibold)
                     .padding(14)
             }
         }

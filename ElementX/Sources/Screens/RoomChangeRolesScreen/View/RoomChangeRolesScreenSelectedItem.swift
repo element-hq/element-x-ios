@@ -17,7 +17,7 @@ struct RoomChangeRolesScreenSelectedItem: View {
             avatar
             
             Text(member.name ?? member.id)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
         }

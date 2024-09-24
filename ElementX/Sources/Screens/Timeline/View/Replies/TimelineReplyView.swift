@@ -132,12 +132,12 @@ struct TimelineReplyView: View {
                 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(sender.displayName ?? sender.id)
-                        .font(.compound.bodySMSemibold)
+                        .font(.zero.bodySMSemibold)
                         .foregroundColor(.compound.textPrimary)
                         .accessibilityLabel(L10n.commonInReplyTo(sender.displayName ?? sender.id))
                     
                     Text(messagePreview)
-                        .font(.compound.bodyMD)
+                        .font(.zero.bodyMD)
                         .foregroundColor(.compound.textSecondary)
                         .tint(.compound.textLinkExternal)
                         .lineLimit(2)

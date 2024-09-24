@@ -130,7 +130,7 @@ struct RoomDetailsScreen: View {
                 if let topic = context.viewState.topic, !topic.characters.isEmpty, let topicSummary = context.viewState.topicSummary {
                     ListRow(kind: .custom {
                         Text(isTopicExpanded ? topic : topicSummary)
-                            .font(.compound.bodySM)
+                            .font(.zero.bodySM)
                             .foregroundColor(.compound.textSecondary)
                             .lineLimit(isTopicExpanded ? nil : 3)
                             .accentColor(.compound.textLinkExternal)

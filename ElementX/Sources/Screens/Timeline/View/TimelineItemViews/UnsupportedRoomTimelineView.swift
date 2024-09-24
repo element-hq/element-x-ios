@@ -20,7 +20,7 @@ struct UnsupportedRoomTimelineView: View {
                     
                     Text(timelineItem.error)
                         .fixedSize(horizontal: false, vertical: true)
-                        .font(.compound.bodySM)
+                        .font(.zero.bodySM)
                 }
             } icon: {
                 CompoundIcon(\.warning, size: .small, relativeTo: .compound.bodyLG)

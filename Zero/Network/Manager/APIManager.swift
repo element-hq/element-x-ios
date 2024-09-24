@@ -50,6 +50,30 @@ class APIManager {
         })
     }
     
+    func authorisedRequest(_ url: String,
+                                         method: HTTPMethod,
+                                         appSettings: AppSettings,
+                                         parameters: Parameters? = nil,
+                                         headers: HTTPHeaders? = nil,
+                                         encoding: ParameterEncoding = JSONEncoding.default) async throws -> Result<Void, Error> {
+        var authHeaders = headers
+        if let accessToken = appSettings.zeroAccessToken {
+            authHeaders = getAuthHeaders(headers: headers, accessToken: accessToken)
+        }
+        return try await withCheckedThrowingContinuation({ continuation in
+            AF.request(url, method: method, parameters: parameters, encoding: encoding, headers: authHeaders)
+                .validate()
+                .response { response in
+                    switch response.result {
+                    case .success:
+                        continuation.resume(returning: .success(()))
+                    case .failure(let error):
+                        continuation.resume(returning: .failure(error))
+                    }
+                }
+        })
+    }
+    
     private func getAuthHeaders(headers: HTTPHeaders?, accessToken: String) -> HTTPHeaders {
         var mHeaders = headers ?? HTTPHeaders()
         mHeaders.add(name: "Authorization", value: "Bearer \(accessToken)")

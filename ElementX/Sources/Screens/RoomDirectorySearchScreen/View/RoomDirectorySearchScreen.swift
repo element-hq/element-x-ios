@@ -27,7 +27,7 @@ struct RoomDirectorySearchScreen: View {
                                 .frame(maxWidth: .infinity)
                         } else if context.viewState.rooms.isEmpty {
                             Text(L10n.commonNoResults)
-                                .font(.compound.bodyLG)
+                                .font(.zero.bodyLG)
                                 .foregroundColor(.compound.textSecondary)
                                 .frame(maxWidth: .infinity)
                                 .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)

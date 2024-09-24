@@ -19,12 +19,12 @@ struct EncryptionResetPasswordScreen: View {
                 
                 Text(L10n.screenResetEncryptionPasswordTitle)
                     .foregroundColor(.compound.textPrimary)
-                    .font(.compound.headingMDBold)
+                    .font(.zero.headingMDBold)
                     .multilineTextAlignment(.center)
                 
                 Text(L10n.screenResetEncryptionPasswordSubtitle)
                     .foregroundColor(.compound.textSecondary)
-                    .font(.compound.bodyMD)
+                    .font(.zero.bodyMD)
                     .multilineTextAlignment(.center)
                 
                 passwordSection
@@ -47,7 +47,7 @@ struct EncryptionResetPasswordScreen: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(L10n.commonPassword)
                 .foregroundColor(.compound.textPrimary)
-                .font(.compound.bodySMSemibold)
+                .font(.zero.bodySMSemibold)
             
             SecureField(L10n.screenResetEncryptionPasswordPlaceholder, text: $context.password)
                 .tint(.compound.iconAccentTertiary)

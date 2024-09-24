@@ -32,7 +32,7 @@ struct TimelineReadReceiptsView: View {
             }
             if timelineItem.properties.orderedReadReceipts.count > displayNumber {
                 Text("+\(remaining)")
-                    .font(.compound.bodySM)
+                    .font(.zero.bodySM)
                     .foregroundColor(.compound.textPrimary)
             }
         }

@@ -39,12 +39,12 @@ struct RoomListFiltersEmptyStateView: View {
         VStack(spacing: 24) {
             Text(emptyStateTitle)
                 .multilineTextAlignment(.center)
-                .font(.compound.headingSMSemibold)
+                .font(.zero.headingSMSemibold)
                 .foregroundColor(.compound.textPrimary)
             
             Text(emptyStateSubtitle)
                 .multilineTextAlignment(.center)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .foregroundColor(.compound.textSecondary)
         }
         .padding(.horizontal, 60)

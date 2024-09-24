@@ -20,12 +20,12 @@ struct MentionSuggestionItemView: View {
                                 mediaProvider: mediaProvider)
             VStack(alignment: .leading, spacing: 0) {
                 Text(item.displayName ?? item.id)
-                    .font(.compound.bodyLG)
+                    .font(.zero.bodyLG)
                     .foregroundColor(.compound.textPrimary)
                     .lineLimit(1)
                 if item.displayName != nil {
                     Text(item.id)
-                        .font(.compound.bodySM)
+                        .font(.zero.bodySM)
                         .foregroundColor(.compound.textSecondary)
                         .lineLimit(1)
                 }

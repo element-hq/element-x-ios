@@ -4,6 +4,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Please see LICENSE in the repository root for full details.
 //
+
+import Compound
 import SwiftUI
 
 struct MessageComposerTextField: View {
@@ -96,7 +98,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
     func updateUIView(_ textView: UITextView, context: UIViewRepresentableContext<UITextViewWrapper>) {
         // Prevent the textView from inheriting attributes from mention pills
         textView.typingAttributes = [.font: font,
-                                     .foregroundColor: UIColor(.compound.textPrimary)]
+                                     .foregroundColor: UIColor.compound.textPrimary]
         
         if textView.attributedText != text {
             // Remember the selection if only the attributes have changed.
@@ -311,7 +313,7 @@ struct MessageComposerTextField_Previews: PreviewProvider, TestablePreview {
 
         init(text: String) {
             _text = .init(initialValue: .init(string: text, attributes: [.font: UIFont.preferredFont(forTextStyle: .body),
-                                                                         .foregroundColor: UIColor(.compound.textPrimary)]))
+                                                                         .foregroundColor: UIColor.compound.textPrimary]))
         }
 
         var body: some View {

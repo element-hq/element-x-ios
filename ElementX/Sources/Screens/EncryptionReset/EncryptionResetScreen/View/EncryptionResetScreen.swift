@@ -43,7 +43,7 @@ struct EncryptionResetScreen: View {
                 .padding(.bottom, 8)
             
             Text(L10n.screenEncryptionResetTitle)
-                .font(.compound.headingMDBold)
+                .font(.zero.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
         }
@@ -51,7 +51,7 @@ struct EncryptionResetScreen: View {
     
     private var footer: some View {
         Text(L10n.screenEncryptionResetFooter)
-            .font(.compound.bodyMDSemibold)
+            .font(.zero.bodyMDSemibold)
             .multilineTextAlignment(.center)
             .foregroundColor(.compound.textPrimary)
     }

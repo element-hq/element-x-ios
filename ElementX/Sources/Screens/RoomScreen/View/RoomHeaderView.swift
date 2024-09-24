@@ -21,7 +21,7 @@ struct RoomHeaderView: View {
                 .accessibilityHidden(true)
             Text(roomName)
                 .lineLimit(1)
-                .font(.compound.bodyLGSemibold)
+                .font(.zero.bodyLGSemibold)
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.name)
         }
         // Leading align whilst using the principal toolbar position.

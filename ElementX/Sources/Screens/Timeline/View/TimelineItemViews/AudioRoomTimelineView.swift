@@ -18,7 +18,7 @@ struct AudioRoomTimelineView: View {
                       .foregroundColor(.compound.iconPrimary)
                   })
                   .labelStyle(RoomTimelineViewLabelStyle())
-                  .font(.compound.bodyLG)
+                  .font(.zero.bodyLG)
                   .padding(.vertical, 12)
                   .padding(.horizontal, 6)
                   .accessibilityLabel(L10n.commonAudio)

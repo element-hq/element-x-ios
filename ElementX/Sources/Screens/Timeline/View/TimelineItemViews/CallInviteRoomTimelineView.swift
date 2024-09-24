@@ -15,7 +15,7 @@ struct CallInviteRoomTimelineView: View {
     var body: some View {
         Label(title: { Text(L10n.commonCallInvite) },
               icon: { CompoundIcon(\.voiceCall, size: .medium, relativeTo: .compound.bodyMD) })
-            .font(.compound.bodyMD)
+            .font(.zero.bodyMD)
             .foregroundColor(.compound.textSecondary)
             .frame(maxWidth: .infinity, alignment: .center)
             .padding()

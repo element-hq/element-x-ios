@@ -30,7 +30,7 @@ struct MediaUploadPreviewScreen: View {
     private var mainContent: some View {
         if ProcessInfo.processInfo.isiOSAppOnMac {
             Text(title)
-                .font(.compound.headingMD)
+                .font(.zero.headingMD)
                 .foregroundColor(.compound.textSecondary)
         } else {
             PreviewView(fileURL: context.viewState.url,

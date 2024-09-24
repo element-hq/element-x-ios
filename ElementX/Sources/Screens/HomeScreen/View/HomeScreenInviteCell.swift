@@ -71,7 +71,7 @@ struct HomeScreenInviteCell: View {
     private var inviterView: some View {
         if let inviter = room.inviter, !room.isDirect {
             RoomInviterLabel(inviter: inviter, mediaProvider: context.mediaProvider)
-                .font(.compound.bodyMD)
+                .font(.zero.bodyMD)
                 .foregroundStyle(.compound.textPlaceholder)
         }
     }
@@ -80,13 +80,13 @@ struct HomeScreenInviteCell: View {
     private var textualContent: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(title)
-                .font(.compound.bodyLGSemibold)
+                .font(.zero.bodyLGSemibold)
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(2)
             
             if let subtitle {
                 Text(subtitle)
-                    .font(.compound.bodyMD)
+                    .font(.zero.bodyMD)
                     .foregroundColor(.compound.textPlaceholder)
             }
         }

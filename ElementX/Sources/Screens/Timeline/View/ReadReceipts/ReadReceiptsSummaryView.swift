@@ -14,7 +14,7 @@ struct ReadReceiptsSummaryView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(L10n.commonSeenBy)
-                .font(.compound.bodyLGSemibold)
+                .font(.zero.bodyLGSemibold)
                 .foregroundColor(.compound.textPrimary)
                 .padding(.horizontal, 16)
             ScrollView {
