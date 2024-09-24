@@ -64,7 +64,7 @@ packages:
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
-    revision: 0d6248492aa577b3747a34c50104cc738b628478
+    revision: 92110afc158ac6ee7c68d5e975144bafa6c58396
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
