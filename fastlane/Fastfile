@@ -82,7 +82,7 @@ end
 lane :unit_tests do |options|
   run_tests(
     scheme: "UnitTests",
-    device: 'iPhone 16',
+    destination: "platform=iOS Simulator,name=iPhone 16,OS=18.0",
     ensure_devices_found: true,
     result_bundle: true,
     number_of_retries: 3,
@@ -91,7 +91,7 @@ lane :unit_tests do |options|
   if !options[:skip_previews]
     run_tests(
       scheme: "PreviewTests",
-      device: 'iPhone SE (3rd generation)',
+      destination: "platform=iOS Simulator,name=iPhone SE (3rd generation),OS=18.0",
       ensure_devices_found: true,
       result_bundle: true,
       number_of_retries: 3,
@@ -147,7 +147,7 @@ lane :integration_tests do
 
   run_tests(
     scheme: "IntegrationTests",
-    devices: ["iPhone 16 Pro"],
+    destination: "platform=iOS Simulator,name=iPhone 16 Pro,OS=18.0",
     ensure_devices_found: true,
     result_bundle: true,
     reset_simulator: true
