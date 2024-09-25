@@ -58,7 +58,7 @@ class PreviewTests: XCTestCase {
             device.safeArea = .one
             // Ignore specific device display scale
             let traits = UITraitCollection(displayScale: 2.0)
-            if let failure = assertSnapshots(matching: AnyView(preview.content),
+            if let failure = assertSnapshots(matching: preview.content,
                                              name: preview.displayName,
                                              isScreen: preview.layout == .device,
                                              device: device,
@@ -205,7 +205,7 @@ private extension Snapshotting where Value: SwiftUI.View, Format == UIImage {
 
 private extension Diffing where Value == UIImage {
     static func prefireImage(precision: @escaping () -> Float, perceptualPrecision: @escaping () -> Float, scale: CGFloat?) -> Diffing {
-        lazy var originalDiffing = Diffing.image(precision: precision(), perceptualPrecision: 0.98, scale: scale)
+        lazy var originalDiffing = Diffing.image(precision: precision(), perceptualPrecision: perceptualPrecision(), scale: scale)
         return Diffing(toData: { originalDiffing.toData($0) },
                        fromData: { originalDiffing.fromData($0) },
                        diff: { originalDiffing.diff($0, $1) })
