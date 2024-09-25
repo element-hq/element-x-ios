@@ -80,15 +80,14 @@ class UserFlowTests: XCTestCase {
         XCTAssertTrue(sendButton.waitForExistence(timeout: 10.0))
         sendButton.tap()
         
-        sleep(10) // Wait for the message to be sent
+        sleep(5) // Wait for the message to be sent
     }
         
     private func checkPhotoSharing() {
-        // Open attachments picker
         tapOnMenu(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
-
-        // Open photo library picker
         tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary)
+        
+        sleep(10) // Wait for the picker to load
         
         // Tap on the second image. First one is always broken on simulators.
         let secondImage = app.scrollViews.images.element(boundBy: 1)
@@ -106,12 +105,16 @@ class UserFlowTests: XCTestCase {
         tapOnMenu(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
         tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerDocuments)
         
+        sleep(10) // Wait for the picker to load
+        
         tapOnButton("Cancel", waitForDisappearance: true)
     }
     
     private func checkLocationSharing() {
         tapOnMenu(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
         tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerLocation)
+        
+        sleep(10) // Wait for the picker to load
         
         // The order of the alerts is a bit of a mistery so try twice
         
