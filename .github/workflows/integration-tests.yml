@@ -37,6 +37,9 @@ jobs:
           INTEGRATION_TESTS_USERNAME: ${{ secrets.INTEGRATION_TESTS_USERNAME }}
           INTEGRATION_TESTS_PASSWORD: ${{ secrets.INTEGRATION_TESTS_PASSWORD }}
 
+      - name: Check logs for private data
+        run: (! grep 'Go down in flames!' /Users/Shared -qR)
+
       - name: Zip results # for faster upload
         if: failure()
         working-directory: fastlane/test_output

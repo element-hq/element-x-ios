@@ -13,7 +13,13 @@ enum RustTracing {
     /// name and other log management metadata during rotation.
     static let filePrefix = "console"
     /// The directory that stores all of the log files.
-    static var logsDirectory: URL { .appGroupContainerDirectory }
+    static var logsDirectory: URL {
+        if ProcessInfo.isRunningIntegrationTests {
+            "/Users/Shared"
+        } else {
+            .appGroupContainerDirectory
+        }
+    }
     
     private(set) static var currentTracingConfiguration: TracingConfiguration?
     static func setup(configuration: TracingConfiguration) {

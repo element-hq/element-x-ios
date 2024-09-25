@@ -8,6 +8,9 @@
 import XCTest
 
 class UserFlowTests: XCTestCase {
+    private static let integrationTestsRoomName = "Element X iOS Integration Tests"
+    private static let integrationTestsMessage = "Go down in flames!"
+    
     private var app: XCUIApplication!
     
     override func setUp() {
@@ -16,14 +19,35 @@ class UserFlowTests: XCTestCase {
     }
     
     func testUserFlow() {
+        checkRoomFlows()
+        
         checkSettings()
         
         checkRoomCreation()
         
-        // Open the first room in the list.
-        let firstRoom = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", A11yIdentifiers.homeScreen.roomNamePrefix)).firstMatch
+        app.logout()
+    }
+    
+    // Assumes app is on the home screen
+    private func checkRoomFlows() {
+        // Search for the special test room
+        let searchField = app.searchFields.firstMatch
+        searchField.clearAndTypeText(Self.integrationTestsRoomName)
+        
+        // And open it
+        let firstRoom = app.buttons.matching(NSPredicate(format: "identifier CONTAINS %@", Self.integrationTestsRoomName)).firstMatch
         XCTAssertTrue(firstRoom.waitForExistence(timeout: 10.0))
         firstRoom.tap()
+        
+        let composerTextField = app.textViews[A11yIdentifiers.roomScreen.messageComposer].firstMatch
+        XCTAssertTrue(composerTextField.waitForExistence(timeout: 10.0))
+        composerTextField.clearAndTypeText(Self.integrationTestsMessage)
+        
+        let sendButton = app.buttons[A11yIdentifiers.roomScreen.sendButton].firstMatch
+        XCTAssertTrue(sendButton.waitForExistence(timeout: 10.0))
+        sendButton.tap()
+        
+        sleep(10) // Wait for the message to be sent
         
         checkPhotoSharing()
         
@@ -35,7 +59,10 @@ class UserFlowTests: XCTestCase {
         
         checkRoomDetails()
         
-        app.logout()
+        // Cancel initial the room search
+        let searchCancelButton = app.buttons["Cancel"].firstMatch
+        XCTAssertTrue(searchCancelButton.waitForExistence(timeout: 10.0))
+        searchCancelButton.forceTap()
     }
         
     private func checkPhotoSharing() {
