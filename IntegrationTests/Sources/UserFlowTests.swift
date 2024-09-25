@@ -157,7 +157,7 @@ class UserFlowTests: XCTestCase {
         tapOnButton(A11yIdentifiers.roomDetailsScreen.people)
         
         // Open the first member's details. Loading members for big rooms can take a while.
-        let firstRoomMember = app.scrollViews.buttons.firstMatch
+        let firstRoomMember = app.scrollViews.buttons.element(boundBy: 2) // First 2 are the segmented control
         XCTAssertTrue(firstRoomMember.waitForExistence(timeout: 1000.0))
         firstRoomMember.tap()
         
