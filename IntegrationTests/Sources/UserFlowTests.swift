@@ -81,6 +81,9 @@ class UserFlowTests: XCTestCase {
         sendButton.tap()
         
         sleep(5) // Wait for the message to be sent
+        
+        // Close the formatting options
+        app.buttons[A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions].tap()
     }
         
     private func checkPhotoSharing() {
