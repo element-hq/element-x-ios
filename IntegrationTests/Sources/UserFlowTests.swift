@@ -77,6 +77,9 @@ class UserFlowTests: XCTestCase {
         XCTAssertTrue(secondImage.waitForExistence(timeout: 20.0)) // Photo library takes a bit to load
         secondImage.tap()
         
+        // Wait for the image to be processed and the new screen to appear
+        sleep(10)
+        
         // Cancel the upload flow
         tapOnButton("Cancel", waitForDisappearance: true)
     }
