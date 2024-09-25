@@ -29,7 +29,13 @@ enum RustTracing {
         // as the app is unlikely to be running continuously.
         let maxFiles: UInt64 = 24 * 7
         
-        setupTracing(config: .init(filter: configuration.filter,
+        let filter = if ProcessInfo.isRunningIntegrationTests {
+            "trace"
+        } else {
+            configuration.filter
+        }
+        
+        setupTracing(config: .init(filter: filter,
                                    writeToStdoutOrSystem: true,
                                    writeToFiles: .init(path: logsDirectory.path(percentEncoded: false),
                                                        filePrefix: configuration.fileName,
