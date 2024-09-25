@@ -39,15 +39,7 @@ class UserFlowTests: XCTestCase {
         XCTAssertTrue(firstRoom.waitForExistence(timeout: 10.0))
         firstRoom.tap()
         
-        let composerTextField = app.textViews[A11yIdentifiers.roomScreen.messageComposer].firstMatch
-        XCTAssertTrue(composerTextField.waitForExistence(timeout: 10.0))
-        composerTextField.clearAndTypeText(Self.integrationTestsMessage)
-        
-        let sendButton = app.buttons[A11yIdentifiers.roomScreen.sendButton].firstMatch
-        XCTAssertTrue(sendButton.waitForExistence(timeout: 10.0))
-        sendButton.tap()
-        
-        sleep(10) // Wait for the message to be sent
+        sendMessages()
         
         checkPhotoSharing()
         
@@ -63,6 +55,32 @@ class UserFlowTests: XCTestCase {
         let searchCancelButton = app.buttons["Cancel"].firstMatch
         XCTAssertTrue(searchCancelButton.waitForExistence(timeout: 10.0))
         searchCancelButton.forceTap()
+    }
+    
+    private func sendMessages() {
+        var composerTextField = app.textViews[A11yIdentifiers.roomScreen.messageComposer].firstMatch
+        XCTAssertTrue(composerTextField.waitForExistence(timeout: 10.0))
+        composerTextField.clearAndTypeText(Self.integrationTestsMessage)
+        
+        var sendButton = app.buttons[A11yIdentifiers.roomScreen.sendButton].firstMatch
+        XCTAssertTrue(sendButton.waitForExistence(timeout: 10.0))
+        sendButton.tap()
+        
+        sleep(10) // Wait for the message to be sent
+        
+        // Switch to the rich text editor
+        tapOnMenu(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
+        tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)
+        
+        composerTextField = app.textViews[A11yIdentifiers.roomScreen.messageComposer].firstMatch
+        XCTAssertTrue(composerTextField.waitForExistence(timeout: 10.0))
+        composerTextField.clearAndTypeText(Self.integrationTestsMessage)
+        
+        sendButton = app.buttons[A11yIdentifiers.roomScreen.sendButton].firstMatch
+        XCTAssertTrue(sendButton.waitForExistence(timeout: 10.0))
+        sendButton.tap()
+        
+        sleep(10) // Wait for the message to be sent
     }
         
     private func checkPhotoSharing() {
