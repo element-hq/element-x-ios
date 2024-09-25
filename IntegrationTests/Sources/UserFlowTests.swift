@@ -74,7 +74,7 @@ class UserFlowTests: XCTestCase {
         
         // Tap on the second image. First one is always broken on simulators.
         let secondImage = app.scrollViews.images.element(boundBy: 1)
-        XCTAssertTrue(secondImage.waitForExistence(timeout: 10.0)) // Photo library takes a bit to load
+        XCTAssertTrue(secondImage.waitForExistence(timeout: 20.0)) // Photo library takes a bit to load
         secondImage.tap()
         
         // Cancel the upload flow
