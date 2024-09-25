@@ -145,7 +145,7 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
         startLoading(isInteractionBlocking: false)
         
         Task {
-            switch await authenticationService.configure(for: homeserverDomain) {
+            switch await authenticationService.configure(for: homeserverDomain, flow: .login) {
             case .success:
                 stopLoading()
                 if authenticationService.homeserver.value.loginMode == .oidc {

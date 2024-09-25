@@ -81,7 +81,7 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
         sessionDirectories = .init()
     }
     
-    private func userSession(for client: Client) async -> Result<UserSessionProtocol, QRCodeLoginServiceError> {
+    private func userSession(for client: ClientProtocol) async -> Result<UserSessionProtocol, QRCodeLoginServiceError> {
         switch await userSessionStore.userSession(for: client, sessionDirectories: sessionDirectories, passphrase: passphrase) {
         case .success(let session):
             return .success(session)

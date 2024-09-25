@@ -22,17 +22,10 @@ struct ServerSelectionScreenViewState: BindableState {
     var bindings: ServerSelectionScreenBindings
     /// An error message to be shown in the text field footer.
     var footerErrorMessage: String?
-    /// Whether the screen is presented modally or within a navigation stack.
-    var isModallyPresented: Bool
     
     /// The message to show in the text field footer.
     var footerMessage: AttributedString {
         footerErrorMessage.map(AttributedString.init) ?? regularFooterMessage
-    }
-    
-    /// The title shown on the confirm button.
-    var buttonTitle: String {
-        isModallyPresented ? L10n.actionContinue : L10n.actionNext
     }
     
     /// The text field is showing an error.
@@ -45,10 +38,9 @@ struct ServerSelectionScreenViewState: BindableState {
         bindings.homeserverAddress.isEmpty || isShowingFooterError
     }
     
-    init(slidingSyncLearnMoreURL: URL, bindings: ServerSelectionScreenBindings, footerErrorMessage: String? = nil, isModallyPresented: Bool) {
+    init(slidingSyncLearnMoreURL: URL, bindings: ServerSelectionScreenBindings, footerErrorMessage: String? = nil) {
         self.bindings = bindings
         self.footerErrorMessage = footerErrorMessage
-        self.isModallyPresented = isModallyPresented
         
         let linkPlaceholder = "{link}"
         var message = AttributedString(L10n.screenChangeServerFormNotice(linkPlaceholder))
@@ -82,4 +74,6 @@ enum ServerSelectionScreenErrorType: Hashable {
     case invalidWellKnownAlert(String)
     /// An alert that allows the user to learn about sliding sync.
     case slidingSyncAlert
+    /// An alert that informs the user that registration isn't supported.
+    case registrationAlert
 }

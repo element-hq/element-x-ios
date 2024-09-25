@@ -11,9 +11,9 @@ import SwiftUI
 struct ServerSelectionScreenCoordinatorParameters {
     /// The service used to authenticate the user.
     let authenticationService: AuthenticationServiceProtocol
+    let authenticationFlow: AuthenticationFlow
+    let slidingSyncLearnMoreURL: URL
     let userIndicatorController: UserIndicatorControllerProtocol
-    /// Whether the screen is presented modally or within a navigation stack.
-    let isModallyPresented: Bool
 }
 
 enum ServerSelectionScreenCoordinatorAction {
@@ -38,8 +38,7 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
     init(parameters: ServerSelectionScreenCoordinatorParameters) {
         self.parameters = parameters
         viewModel = ServerSelectionScreenViewModel(homeserverAddress: parameters.authenticationService.homeserver.value.address,
-                                                   slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
-                                                   isModallyPresented: parameters.isModallyPresented)
+                                                   slidingSyncLearnMoreURL: parameters.slidingSyncLearnMoreURL)
         userIndicatorController = parameters.userIndicatorController
     }
     
@@ -85,7 +84,7 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
         startLoading()
         
         Task {
-            switch await authenticationService.configure(for: homeserverAddress) {
+            switch await authenticationService.configure(for: homeserverAddress, flow: parameters.authenticationFlow) {
             case .success:
                 MXLog.info("Selected homeserver: \(homeserverAddress)")
                 actionsSubject.send(.updated)
@@ -107,6 +106,8 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
             viewModel.displayError(.invalidWellKnownAlert(error))
         case .slidingSyncNotAvailable:
             viewModel.displayError(.slidingSyncAlert)
+        case .registrationNotSupported:
+            viewModel.displayError(.registrationAlert) // TODO: [DOUG] Test me!
         default:
             viewModel.displayError(.footerMessage(L10n.errorUnknown))
         }

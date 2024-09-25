@@ -8,8 +8,16 @@
 import Foundation
 import MatrixRustSDK
 
+// sourcery: AutoMockable
+protocol AuthenticationClientBuilderProtocol {
+    func build(homeserverAddress: String) async throws -> ClientProtocol
+    func buildWithQRCode(qrCodeData: QrCodeData,
+                         oidcConfiguration: OIDCConfigurationProxy,
+                         progressListener: QrLoginProgressListenerProxy) async throws -> ClientProtocol
+}
+
 /// A wrapper around `ClientBuilder` to share reusable code between Normal and QR logins.
-struct AuthenticationClientBuilder {
+struct AuthenticationClientBuilder: AuthenticationClientBuilderProtocol {
     let sessionDirectories: SessionDirectories
     let passphrase: String
     let clientSessionDelegate: ClientSessionDelegate
@@ -18,7 +26,7 @@ struct AuthenticationClientBuilder {
     let appHooks: AppHooks
     
     /// Builds a Client for login using OIDC or password authentication.
-    func build(homeserverAddress: String) async throws -> Client {
+    func build(homeserverAddress: String) async throws -> ClientProtocol {
         if appSettings.slidingSyncDiscovery == .forceNative {
             return try await makeClientBuilder(slidingSync: .forceNative).serverNameOrHomeserverUrl(serverNameOrUrl: homeserverAddress).build()
         }
@@ -38,7 +46,7 @@ struct AuthenticationClientBuilder {
     /// Builds a Client, authenticating with the given QR code data.
     func buildWithQRCode(qrCodeData: QrCodeData,
                          oidcConfiguration: OIDCConfigurationProxy,
-                         progressListener: QrLoginProgressListenerProxy) async throws -> Client {
+                         progressListener: QrLoginProgressListenerProxy) async throws -> ClientProtocol {
         if appSettings.slidingSyncDiscovery == .forceNative {
             return try await makeClientBuilder(slidingSync: .forceNative).buildWithQrCode(qrCodeData: qrCodeData,
                                                                                           oidcConfiguration: oidcConfiguration.rustValue,
