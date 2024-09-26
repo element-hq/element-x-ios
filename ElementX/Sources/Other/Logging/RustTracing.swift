@@ -29,8 +29,10 @@ enum RustTracing {
         // as the app is unlikely to be running continuously.
         let maxFiles: UInt64 = 24 * 7
         
+        // Log everything on integration tests to check whether
+        // the logs contain any sensitive data. See `UserFlowTests.swift`
         let filter = if ProcessInfo.isRunningIntegrationTests {
-            "trace"
+            TracingConfiguration(logLevel: .trace, target: nil).filter
         } else {
             configuration.filter
         }

@@ -51,6 +51,9 @@ class UserFlowTests: XCTestCase {
         
         checkRoomDetails()
         
+        // Go back to the room list
+        tapOnBackButton("Chats")
+        
         // Cancel initial the room search
         let searchCancelButton = app.buttons["Cancel"].firstMatch
         XCTAssertTrue(searchCancelButton.waitForExistence(timeout: 10.0))
@@ -193,9 +196,6 @@ class UserFlowTests: XCTestCase {
         
         // Go back to the room
         tapOnBackButton("Chat")
-        
-        // Go back to the room list
-        tapOnBackButton("Chats")
     }
     
     private func checkSettings() {
