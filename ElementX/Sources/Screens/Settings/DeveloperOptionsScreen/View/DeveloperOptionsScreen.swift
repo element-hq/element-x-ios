@@ -135,16 +135,8 @@ struct DeveloperOptionsScreen: View {
 private struct LogLevelConfigurationView: View {
     @Binding var logLevel: TracingConfiguration.LogLevel
     
-    @State private var customTracingConfiguration: String
-
     init(logLevel: Binding<TracingConfiguration.LogLevel>) {
         _logLevel = logLevel
-        
-        if case .custom(let configuration) = logLevel.wrappedValue {
-            customTracingConfiguration = configuration
-        } else {
-            customTracingConfiguration = TracingConfiguration(logLevel: .info, target: nil).filter
-        }
     }
     
     var body: some View {
@@ -156,24 +148,11 @@ private struct LogLevelConfigurationView: View {
             Text("Log level")
             Text("Requires app reboot")
         }
-        
-        if case .custom = logLevel {
-            TextEditor(text: $customTracingConfiguration)
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled()
-                .onChange(of: customTracingConfiguration) { newValue in
-                    logLevel = .custom(newValue)
-                }
-        }
     }
     
     /// Allows the picker to work with associated values
     private var logLevels: [TracingConfiguration.LogLevel] {
-        if case let .custom(filter) = logLevel {
-            return [.error, .warn, .info, .debug, .trace, .custom(filter)]
-        } else {
-            return [.error, .warn, .info, .debug, .trace, .custom("")]
-        }
+        [.error, .warn, .info, .debug, .trace]
     }
 }
 
