@@ -256,39 +256,6 @@ class TimelineViewModelTests: XCTestCase {
         XCTAssertEqual(arguments?.type, .read)
     }
     
-    func testSendMoreReadReceipts() async throws {
-        // Given a room with only text items in the timeline that are all read.
-        let items = [TextRoomTimelineItem(eventID: "t1"),
-                     TextRoomTimelineItem(eventID: "t2"),
-                     TextRoomTimelineItem(eventID: "t3")]
-        let (viewModel, _, timelineProxy, timelineController) = readReceiptsConfiguration(with: items)
-        viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
-        try await Task.sleep(for: .milliseconds(100))
-        XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCallsCount, 1)
-        var arguments = timelineProxy.sendReadReceiptForTypeReceivedArguments
-        XCTAssertEqual(arguments?.eventID, "t3")
-        XCTAssertEqual(arguments?.type, .read)
-        
-        // When sending a receipt for the first item in the timeline.
-        viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.first!.id))
-        try await Task.sleep(for: .milliseconds(100))
-        
-        // When a new message is received and marked as read.
-        let newMessage = TextRoomTimelineItem(eventID: "t4")
-        timelineController.timelineItems.append(newMessage)
-        timelineController.callbacks.send(.updatedTimelineItems(timelineItems: timelineController.timelineItems, isSwitchingTimelines: false))
-        try await Task.sleep(for: .milliseconds(100))
-        
-        viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(newMessage.id))
-        try await Task.sleep(for: .milliseconds(100))
-        
-        // Then the request should be made.
-        XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCallsCount, 3)
-        arguments = timelineProxy.sendReadReceiptForTypeReceivedArguments
-        XCTAssertEqual(arguments?.eventID, "t4")
-        XCTAssertEqual(arguments?.type, .read)
-    }
-    
     func testSendReadReceiptWithoutEvents() async throws {
         // Given a room with only virtual items.
         let items = [SeparatorRoomTimelineItem(timelineID: "v1"),

@@ -24,8 +24,8 @@ struct RoomHeaderView: View {
                 .font(.zero.bodyLGSemibold)
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.name)
         }
-        // Leading align whilst using the principal toolbar position.
-        .frame(maxWidth: .infinity, alignment: .leading)
+        // Take up as much space as possible, with a leading alignment for use in the principal toolbar position.
+        .frame(idealWidth: .greatestFiniteMagnitude, maxWidth: .infinity, alignment: .leading)
     }
     
     @ViewBuilder
