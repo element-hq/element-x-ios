@@ -143,6 +143,7 @@ struct ComposerToolbar: View {
         .disabled(context.viewState.sendButtonDisabled)
         .animation(.linear(duration: 0.1).disabledDuringTests(), value: context.viewState.sendButtonDisabled)
         .keyboardShortcut(.return, modifiers: [.command])
+        .accessibilityIdentifier(A11yIdentifiers.roomScreen.sendButton)
     }
     
     private var messageComposer: some View {
@@ -174,6 +175,7 @@ struct ComposerToolbar: View {
         .focused($composerFocused)
         .padding(.leading, context.composerFormattingEnabled ? 7 : 0)
         .padding(.trailing, context.composerFormattingEnabled ? 4 : 0)
+        .accessibilityIdentifier(A11yIdentifiers.roomScreen.messageComposer)
         .onTapGesture {
             guard !composerFocused else { return }
             composerFocused = true

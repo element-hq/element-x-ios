@@ -13,7 +13,13 @@ enum RustTracing {
     /// name and other log management metadata during rotation.
     static let filePrefix = "console"
     /// The directory that stores all of the log files.
-    static var logsDirectory: URL { .appGroupContainerDirectory }
+    static var logsDirectory: URL {
+        if ProcessInfo.isRunningIntegrationTests {
+            "/Users/Shared"
+        } else {
+            .appGroupContainerDirectory
+        }
+    }
     
     private(set) static var currentTracingConfiguration: TracingConfiguration?
     static func setup(configuration: TracingConfiguration) {
@@ -23,7 +29,15 @@ enum RustTracing {
         // as the app is unlikely to be running continuously.
         let maxFiles: UInt64 = 24 * 7
         
-        setupTracing(config: .init(filter: configuration.filter,
+        // Log everything on integration tests to check whether
+        // the logs contain any sensitive data. See `UserFlowTests.swift`
+        let filter = if ProcessInfo.isRunningIntegrationTests {
+            TracingConfiguration(logLevel: .trace, target: nil).filter
+        } else {
+            configuration.filter
+        }
+        
+        setupTracing(config: .init(filter: filter,
                                    writeToStdoutOrSystem: true,
                                    writeToFiles: .init(path: logsDirectory.path(percentEncoded: false),
                                                        filePrefix: configuration.fileName,
