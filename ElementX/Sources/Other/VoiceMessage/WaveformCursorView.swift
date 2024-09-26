@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct WaveformCursorView: View {
-    var color: Color = .compound.iconAccentTertiary
+    var color: Color = .zero.iconAccentTertiary
 
     var body: some View {
         RoundedRectangle(cornerRadius: 1)
@@ -19,7 +19,7 @@ struct WaveformCursorView: View {
 
 struct WaveformCursorView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        WaveformCursorView(color: .compound.iconAccentTertiary)
+        WaveformCursorView(color: .zero.iconAccentTertiary)
             .frame(width: 2, height: 25)
     }
 }

@@ -13,7 +13,7 @@ struct ElementCallButtonStyle: ButtonStyle {
             .padding(.horizontal, 16.0)
             .padding(.vertical, 4.0)
             .foregroundColor(.compound.bgCanvasDefault)
-            .background(Color.compound.iconAccentTertiary)
+            .background(Color.zero.iconAccentTertiary)
             .clipShape(Capsule())
     }
 }

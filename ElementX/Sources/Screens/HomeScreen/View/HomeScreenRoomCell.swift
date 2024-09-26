@@ -92,7 +92,7 @@ struct HomeScreenRoomCell: View {
             if let timestamp = room.timestamp {
                 Text(timestamp)
                     .font(room.isHighlighted ? .compound.bodySMSemibold : .compound.bodySM)
-                    .foregroundColor(room.isHighlighted ? .compound.textActionAccent : .compound.textSecondary)
+                    .foregroundColor(room.isHighlighted ? .zero.textActionAccent : .compound.textSecondary)
             }
         }
     }

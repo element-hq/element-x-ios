@@ -41,7 +41,7 @@ private extension FormatItem {
     var foregroundColor: Color {
         switch state {
         case .reversed:
-            return .compound.iconSuccessPrimary
+            return .zero.iconSuccessPrimary
         case .enabled:
             return .compound.iconSecondary
         case .disabled:
@@ -52,7 +52,7 @@ private extension FormatItem {
     var backgroundColor: Color {
         switch state {
         case .reversed:
-            return .compound._bgAccentSelected
+            return .zero._bgAccentSelected
         case .enabled, .disabled:
             return .compound.bgCanvasDefault
         }

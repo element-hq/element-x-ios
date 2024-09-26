@@ -26,7 +26,7 @@ struct HeroImage: View {
             case .subtle:
                 .compound.iconSecondary
             case .success:
-                .compound.iconSuccessPrimary
+                .zero.iconSuccessPrimary
             case .critical, .criticalOnSecondary:
                 .compound.iconCriticalPrimary
             }
@@ -39,7 +39,7 @@ struct HeroImage: View {
             case .subtle:
                 .compound.bgSubtlePrimary
             case .success:
-                .compound.bgSuccessSubtle
+                .zero.bgSuccessSubtle
             case .critical:
                 .compound.bgCriticalSubtle
             case .criticalOnSecondary:

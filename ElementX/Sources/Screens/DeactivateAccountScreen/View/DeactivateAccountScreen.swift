@@ -83,7 +83,7 @@ private struct InfoItem: View {
             CompoundIcon(isSuccess ? \.check : \.close,
                          size: .small,
                          relativeTo: .compound.bodyMD)
-                .foregroundStyle(isSuccess ? .compound.iconSuccessPrimary : .compound.iconCriticalPrimary)
+                .foregroundStyle(isSuccess ? .zero.iconSuccessPrimary : .compound.iconCriticalPrimary)
         }
         .labelStyle(.custom(spacing: 8, alignment: .top))
     }

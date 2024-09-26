@@ -23,15 +23,15 @@ private struct HighlightedTimelineItemModifier: ViewModifier {
             .background {
                 if isHighlighted {
                     VStack(spacing: 0) {
-                        Color.compound._bgBubbleHighlighted
-                        LinearGradient(colors: [.compound._bgBubbleHighlighted, .clear],
+                        Color.zero._bgBubbleHighlighted
+                        LinearGradient(colors: [.zero._bgBubbleHighlighted, .clear],
                                        startPoint: .top,
                                        endPoint: .bottom)
                             .frame(maxHeight: 200)
                             .layoutPriority(1)
                     }
                     .overlay(alignment: .top) {
-                        Color.compound.bgAccentRest
+                        Color.zero.bgAccentRest
                             .frame(height: 1)
                     }
                 }

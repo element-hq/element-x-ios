@@ -70,7 +70,7 @@ struct MessageComposer: View {
                     }
                     .frame(minHeight: ComposerConstant.minHeight, maxHeight: max(composerHeight, composerFrame.height),
                            alignment: .top)
-                    .tint(.compound.iconAccentTertiary)
+                    .tint(.zero.iconAccentTertiary)
                     .padding(.vertical, 10)
                     .onAppear {
                         onAppearAction()
@@ -82,7 +82,7 @@ struct MessageComposer: View {
                                          maxHeight: ComposerConstant.maxHeight,
                                          keyHandler: { handleKeyPress($0) },
                                          pasteHandler: pasteAction)
-                    .tint(.compound.iconAccentTertiary)
+                    .tint(.zero.iconAccentTertiary)
                     .padding(.vertical, 10)
             }
         }

@@ -136,7 +136,7 @@ struct ComposerToolbar: View {
                 .foregroundColor(context.viewState.sendButtonDisabled ? .compound.iconDisabled : .white)
                 .background {
                     Circle()
-                        .foregroundColor(context.viewState.sendButtonDisabled ? .clear : .compound.iconAccentTertiary)
+                        .foregroundColor(context.viewState.sendButtonDisabled ? .clear : .zero.iconAccentTertiary)
                 }
                 .scaledPadding(4, relativeTo: .title)
         }

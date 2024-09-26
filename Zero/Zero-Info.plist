@@ -87,10 +87,9 @@
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchScreen</key>
-	<dict>
-		<key>UIColorName</key>
-		<string>colors/background-color</string>
-	</dict>
+	<dict/>
+	<key>UILaunchStoryboardName</key>
+	<string>ZeroLaunchScreen</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

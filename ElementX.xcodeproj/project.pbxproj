@@ -124,6 +124,8 @@
 		182725732C9995B400B513B5 /* WebRegistrationScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F418426410F3823F3EB0828 /* WebRegistrationScreenViewModelProtocol.swift */; };
 		182725742C9995B800B513B5 /* WebRegistrationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B065EC39C99C1303A101C1C /* WebRegistrationScreen.swift */; };
 		182725752C99990100B513B5 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		18326FD82CA53E7400389CB2 /* ZeroColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18326FD72CA53E6D00389CB2 /* ZeroColors.swift */; };
+		18326FD92CA53E7400389CB2 /* ZeroColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18326FD72CA53E6D00389CB2 /* ZeroColors.swift */; };
 		184D6FC22C7D83B1006266D8 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 184D6FC12C7D83B1006266D8 /* Alamofire */; };
 		184D6FC82C7D86D6006266D8 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FC72C7D86D6006266D8 /* APIManager.swift */; };
 		184D6FCA2C7D88D2006266D8 /* APIConfigs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FC92C7D88D2006266D8 /* APIConfigs.swift */; };
@@ -188,6 +190,8 @@
 		18A042172C9AB5FA00727739 /* DeactivateAccountScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC3FDB58F57386741A4FC7F /* DeactivateAccountScreenViewModel.swift */; };
 		18A042182C9AB5FE00727739 /* DeactivateAccountScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82EE3B877D91030248B1242D /* DeactivateAccountScreenViewModelProtocol.swift */; };
 		18A042192C9AB60300727739 /* DeactivateAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E49D10BFA7E4D70A947888C /* DeactivateAccountScreen.swift */; };
+		18BF59CF2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18BF59CE2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard */; };
+		18BF59D02CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18BF59CE2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard */; };
 		18CB801E2C7F2CE2003BC289 /* ZeroLoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB801D2C7F2CE2003BC289 /* ZeroLoginScreen.swift */; };
 		18CB80212C7F310E003BC289 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB80202C7F310E003BC289 /* ViewModifiers.swift */; };
 		18E3786918486D4C9726BC84 /* FormButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FBFC09F9DAFF1E4BA97849 /* FormButtonStyles.swift */; };
@@ -2295,6 +2299,7 @@
 		16D09C79746BDCD9173EB3A7 /* RoomDetailsEditScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsEditScreenModels.swift; sourceTree = "<group>"; };
 		1715E3D7F53C0748AA50C91C /* PostHogAnalyticsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHogAnalyticsClient.swift; sourceTree = "<group>"; };
 		1734A445A58ED855B977A0A8 /* TracingConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracingConfigurationTests.swift; sourceTree = "<group>"; };
+		18326FD72CA53E6D00389CB2 /* ZeroColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroColors.swift; sourceTree = "<group>"; };
 		18486B87745B1811E7FBD3D2 /* AnalyticsPromptScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsPromptScreenModels.swift; sourceTree = "<group>"; };
 		184CF8C196BE143AE226628D /* DecorationTimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecorationTimelineItemProtocol.swift; sourceTree = "<group>"; };
 		184D6FC72C7D86D6006266D8 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
@@ -2326,6 +2331,7 @@
 		1882EB902C90F0F5001DA2A9 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		1882EB922C90FE9C001DA2A9 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		1882EB992C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMatrixUsersService.swift; sourceTree = "<group>"; };
+		18BF59CE2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ZeroLaunchScreen.storyboard; sourceTree = "<group>"; };
 		18CB801D2C7F2CE2003BC289 /* ZeroLoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroLoginScreen.swift; sourceTree = "<group>"; };
 		18CB80202C7F310E003BC289 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		18E99FEC2C9446EB0082DDA4 /* MessageContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContentHandler.swift; sourceTree = "<group>"; };
@@ -3815,6 +3821,7 @@
 		1868A86B2CA2175A00DC382D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				18326FD72CA53E6D00389CB2 /* ZeroColors.swift */,
 				1868A86C2CA2176100DC382D /* Fonts */,
 			);
 			path = Resources;
@@ -3872,6 +3879,14 @@
 				18E99FF12C944F350082DDA4 /* ZeroAttachmentService.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		18BF59CD2CA4A4DA006D7BAB /* Launch */ = {
+			isa = PBXGroup;
+			children = (
+				18BF59CE2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard */,
+			);
+			path = Launch;
 			sourceTree = "<group>";
 		};
 		18CB801A2C7F1CEB003BC289 /* Authentication */ = {
@@ -6305,6 +6320,7 @@
 		CC8F34922C7DE37A002D92F9 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				18BF59CD2CA4A4DA006D7BAB /* Launch */,
 				1882EB8F2C90F0E0001DA2A9 /* CommonViews */,
 				18CB801F2C7F3094003BC289 /* Utilities */,
 				18CB801A2C7F1CEB003BC289 /* Authentication */,
@@ -7220,6 +7236,7 @@
 				18E9A7682C9829970082DDA4 /* Untranslated.stringsdict in Resources */,
 				1868A8B52CA21A2200DC382D /* Inter-SemiBold.ttf in Resources */,
 				18E9A7692C9829970082DDA4 /* message.caf in Resources */,
+				18BF59D02CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard in Resources */,
 				18E9A76A2C9829970082DDA4 /* target.yml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7249,6 +7266,7 @@
 				2797C9D9BA642370F1C85D78 /* Untranslated.stringsdict in Resources */,
 				1868A8B42CA21A2200DC382D /* Inter-SemiBold.ttf in Resources */,
 				E67418DACEDBC29E988E6ACD /* message.caf in Resources */,
+				18BF59CF2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard in Resources */,
 				DFF7D6A6C26DDD40D00AE579 /* target.yml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -8131,6 +8149,7 @@
 				18E9A5AB2C9829970082DDA4 /* NotificationManager.swift in Sources */,
 				18E9A5AC2C9829970082DDA4 /* AvatarView.swift in Sources */,
 				18E9A5AD2C9829970082DDA4 /* NotificationManagerProtocol.swift in Sources */,
+				18326FD82CA53E7400389CB2 /* ZeroColors.swift in Sources */,
 				18E9A5AE2C9829970082DDA4 /* NotificationPermissionsScreen.swift in Sources */,
 				18E9A5AF2C9829970082DDA4 /* NotificationPermissionsScreenCoordinator.swift in Sources */,
 				18E9A5B02C9829970082DDA4 /* NotificationPermissionsScreenModels.swift in Sources */,
@@ -9044,6 +9063,7 @@
 				1882EB8C2C90C8EC001DA2A9 /* Sequence+Extensions.swift in Sources */,
 				EE4E2C1922BBF5169E213555 /* PillAttachmentViewProvider.swift in Sources */,
 				899359A4D1147601F6C4E364 /* PillConstants.swift in Sources */,
+				18326FD92CA53E7400389CB2 /* ZeroColors.swift in Sources */,
 				767D366C40F1311CFA333763 /* PillContext.swift in Sources */,
 				7708976CEE6AFB5CFAEFBA68 /* PillTextAttachment.swift in Sources */,
 				8C050A8012E6078BEAEF5BC8 /* PillTextAttachmentData.swift in Sources */,
@@ -9682,6 +9702,7 @@
 				INFOPLIST_FILE = "Zero/Zero-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Zero;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -9716,6 +9737,7 @@
 				INFOPLIST_FILE = "Zero/Zero-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = Zero;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

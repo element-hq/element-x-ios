@@ -27,7 +27,7 @@ private struct WaveformInteractionModifier: ViewModifier {
         GeometryReader { geometry in
             content
                 .progressCursor(progress: progress) {
-                    WaveformCursorView(color: .compound.iconAccentTertiary)
+                    WaveformCursorView(color: .zero.iconAccentTertiary)
                         .frame(width: cursorVisibleWidth, height: cursorVisibleHeight)
                         .opacity(showCursor ? 1 : 0)
                         .frame(width: cursorInteractiveSize)

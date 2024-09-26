@@ -175,7 +175,7 @@ private struct PollFormOptionRow: View {
                     Text(placeholder)
                         .compoundTextFieldPlaceholder()
                 }
-                .tint(.compound.iconAccentTertiary)
+                .tint(.zero.iconAccentTertiary)
                 .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
             }
             .padding(.horizontal, ListRowPadding.horizontal)

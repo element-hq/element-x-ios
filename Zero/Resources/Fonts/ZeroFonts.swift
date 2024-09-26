@@ -11,6 +11,7 @@ public struct ZeroFonts {
     public let bodyXSSemibold = Font.inter(size: 12, weight: .semibold)
     public let bodySM = Font.inter(size: 13) // footnote
     public let bodySMSemibold = Font.inter(size: 13, weight: .semibold)
+    public let bodySMBold = Font.inter(size: 13, weight: .bold)
     public let bodyMD = Font.inter(size: 15) // subHeadline
     public let bodyMDSemibold = Font.inter(size: 15, weight: .semibold)
     public let bodyLG = Font.inter(size: 17) // body

@@ -31,7 +31,7 @@ struct PinnedItemsIndicatorView: View {
         VStack(spacing: 2) {
             ForEach(0..<3, id: \.self) { index in
                 Rectangle()
-                    .fill(index == activeIndex ? Color.compound.iconAccentPrimary : Color.compound._borderInteractiveSecondaryAlpha)
+                    .fill(index == activeIndex ? Color.zero.iconAccentPrimary : Color.compound._borderInteractiveSecondaryAlpha)
                     .scaledFrame(width: 2, height: 11)
                     .opacity(index < shownIndicators ? 1 : 0)
             }

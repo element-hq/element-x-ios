@@ -14,7 +14,7 @@ struct PillView: View {
     let didChangeText: () -> Void
     
     var textColor: Color {
-        context.viewState.isOwnMention ? .compound._textOwnPill : .compound.textPrimary
+        context.viewState.isOwnMention ? .zero._textOwnPill : .compound.textPrimary
     }
     
     var backgroundColor: Color {

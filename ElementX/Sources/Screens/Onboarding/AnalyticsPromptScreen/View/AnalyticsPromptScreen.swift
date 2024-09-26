@@ -67,7 +67,7 @@ struct AnalyticsPromptScreen: View {
     private func checkMarkItem(title: String, position: ListPosition) -> some View {
         RoundedLabelItem(title: title, listPosition: position) {
             CompoundIcon(\.checkCircle, size: .small, relativeTo: .body)
-                .foregroundColor(.compound.iconAccentPrimary)
+                .foregroundColor(.zero.iconAccentPrimary)
         }
     }
     

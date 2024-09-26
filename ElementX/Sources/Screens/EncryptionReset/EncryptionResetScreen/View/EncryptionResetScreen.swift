@@ -73,7 +73,7 @@ struct EncryptionResetScreen: View {
         RoundedLabelItem(title: title, listPosition: position) {
             if positive {
                 CompoundIcon(\.check)
-                    .foregroundColor(.compound.iconAccentPrimary)
+                    .foregroundColor(.zero.iconAccentPrimary)
             } else {
                 CompoundIcon(\.close)
                     .foregroundColor(.compound.iconCriticalPrimary)

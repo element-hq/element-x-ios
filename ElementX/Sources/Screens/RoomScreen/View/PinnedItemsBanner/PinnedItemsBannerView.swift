@@ -67,7 +67,7 @@ struct PinnedItemsBannerView: View {
             if state.count > 1 {
                 Text(state.bannerIndicatorDescription)
                     .font(.zero.bodySM)
-                    .foregroundColor(.compound.textActionAccent)
+                    .foregroundColor(.zero.textActionAccent)
                     .lineLimit(1)
             }
             Text(state.displayedMessage)

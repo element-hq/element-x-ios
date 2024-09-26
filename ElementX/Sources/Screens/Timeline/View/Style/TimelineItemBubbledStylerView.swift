@@ -40,20 +40,24 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     var body: some View {
         ZStack(alignment: .trailingFirstTextBaseline) {
             VStack(alignment: alignment, spacing: -12) {
-                if !timelineItem.isOutgoing, !isEncryptedOneToOneRoom {
-                    header
-                        .zIndex(1)
-                }
+//                if !timelineItem.isOutgoing, !isEncryptedOneToOneRoom {
+//                    header
+//                        .zIndex(1)
+//                }
 
                 VStack(alignment: alignment, spacing: 0) {
-                    HStack(spacing: 0) {
+                    HStack(alignment: .top, spacing: 0) {
                         if timelineItem.isOutgoing {
                             Spacer()
+                        }
+                        
+                        if !timelineItem.isOutgoing, !isEncryptedOneToOneRoom {
+                            header
                         }
 
                         messageBubbleWithReactions
                     }
-                    .padding(timelineItem.isOutgoing ? .leading : .trailing, 48) // Additional padding to differentiate alignment.
+                    .padding(timelineItem.isOutgoing ? .leading : .trailing, 24) // Additional padding to differentiate alignment.
 
                     HStack(spacing: 0) {
                         if !timelineItem.isOutgoing {
@@ -73,31 +77,48 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         .highlightedTimelineItem(isFocussed)
     }
     
+//    @ViewBuilder
+//    private var header: some View {
+//        if shouldShowSenderDetails {
+//            HStack(alignment: .top, spacing: 4) {
+//                TimelineSenderAvatarView(timelineItem: timelineItem)
+//                HStack(alignment: .center, spacing: 4) {
+//                    Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
+//                        .font(.zero.bodySMSemibold)
+//                        .foregroundColor(.compound.decorativeColor(for: timelineItem.sender.id).text)
+//                    
+//                    if timelineItem.sender.displayName != nil, timelineItem.sender.isDisplayNameAmbiguous {
+//                        Text(timelineItem.sender.id)
+//                            .font(.zero.bodyXS)
+//                            .foregroundColor(.compound.textSecondary)
+//                    }
+//                }
+//                .lineLimit(1)
+//                .scaledPadding(.vertical, 3)
+//            }
+//            // sender info are read inside the `TimelineAccessibilityModifier`
+//            .accessibilityHidden(true)
+//            .onTapGesture {
+//                context.send(viewAction: .tappedOnSenderDetails(userID: timelineItem.sender.id))
+//            }
+//            .padding(.top, 8)
+//        }
+//    }
+    
     @ViewBuilder
     private var header: some View {
         if shouldShowSenderDetails {
-            HStack(alignment: .top, spacing: 4) {
+            HStack {
                 TimelineSenderAvatarView(timelineItem: timelineItem)
-                HStack(alignment: .center, spacing: 4) {
-                    Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
-                        .font(.zero.bodySMSemibold)
-                        .foregroundColor(.compound.decorativeColor(for: timelineItem.sender.id).text)
-                    
-                    if timelineItem.sender.displayName != nil, timelineItem.sender.isDisplayNameAmbiguous {
-                        Text(timelineItem.sender.id)
-                            .font(.zero.bodyXS)
-                            .foregroundColor(.compound.textSecondary)
-                    }
-                }
-                .lineLimit(1)
-                .scaledPadding(.vertical, 3)
             }
             // sender info are read inside the `TimelineAccessibilityModifier`
             .accessibilityHidden(true)
             .onTapGesture {
                 context.send(viewAction: .tappedOnSenderDetails(userID: timelineItem.sender.id))
             }
-            .padding(.top, 8)
+            .padding(.trailing, 6)
+        } else {
+            HStack{}.frame(width: 38)
         }
     }
     
@@ -197,6 +218,18 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
                         .hidden()
                 }
+            }
+            
+            if !timelineItem.isOutgoing, !isEncryptedOneToOneRoom, shouldShowSenderDetails {
+                Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
+                    .padding(.horizontal, 6)
+                    .layoutPriority(TimelineBubbleLayout.Priority.regularText)
+                    .font(.zero.bodySMBold)
+                    .foregroundColor(.compound.decorativeColor(for: timelineItem.sender.id).text)
+                    .accessibilityHidden(true)
+                    .onTapGesture {
+                        context.send(viewAction: .tappedOnSenderDetails(userID: timelineItem.sender.id))
+                    }
             }
             
             content()

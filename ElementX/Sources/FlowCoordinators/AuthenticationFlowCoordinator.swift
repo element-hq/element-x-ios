@@ -86,7 +86,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .loginManually:
-                    showServerConfirmationScreen(authenticationFlow: .login)
+                    startAuthentication(flow: .login)
                 case .loginWithQR:
                     startQRCodeLogin()
                 case .register:
@@ -162,6 +162,20 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationCoordinator.setRootCoordinator(coordinator)
         navigationStackCoordinator.setSheetCoordinator(navigationCoordinator)
+    }
+    
+    private func startAuthentication(flow: AuthenticationFlow) {
+        Task {
+            startLoading()
+            switch await authenticationService.configure(for: appSettings.defaultHomeserverAddress, flow: .login) {
+            case .success:
+                stopLoading()
+                showLoginScreen()
+            case .failure:
+                stopLoading()
+                showServerSelectionScreen(authenticationFlow: flow)
+            }
+        }
     }
     
     private func showServerConfirmationScreen(authenticationFlow: AuthenticationFlow) {

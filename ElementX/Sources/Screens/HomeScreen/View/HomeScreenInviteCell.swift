@@ -124,7 +124,7 @@ struct HomeScreenInviteCell: View {
     private var badge: some View {
         Circle()
             .scaledFrame(size: 12)
-            .foregroundColor(.compound.iconAccentTertiary)
+            .foregroundColor(.zero.iconAccentTertiary)
     }
 }
 

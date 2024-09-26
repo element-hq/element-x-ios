@@ -132,7 +132,7 @@ struct PollView: View {
 
     private func progressBarColor(for option: Poll.Option) -> Color {
         if poll.hasEnded {
-            return option.isWinning ? .compound.textActionAccent : .compound.textDisabled
+            return option.isWinning ? .zero.textActionAccent : .compound.textDisabled
         } else {
             return .compound.textPrimary
         }

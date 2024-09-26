@@ -53,7 +53,7 @@ public struct AuthenticationTextFieldStyle: TextFieldStyle {
     }
     
     private var accentColor: Color {
-        isError ? .compound.textCriticalPrimary : .compound.iconAccentTertiary
+        isError ? .compound.textCriticalPrimary : .zero.iconAccentTertiary
     }
     
     /// The color of the text inside the text field.

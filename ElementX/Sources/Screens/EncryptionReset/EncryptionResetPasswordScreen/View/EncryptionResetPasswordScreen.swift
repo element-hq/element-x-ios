@@ -50,7 +50,7 @@ struct EncryptionResetPasswordScreen: View {
                 .font(.zero.bodySMSemibold)
             
             SecureField(L10n.screenResetEncryptionPasswordPlaceholder, text: $context.password)
-                .tint(.compound.iconAccentTertiary)
+                .tint(.zero.iconAccentTertiary)
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(Color.compound.bgSubtleSecondaryLevel0)
