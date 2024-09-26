@@ -11,30 +11,22 @@ enum MockServerSelectionScreenState: CaseIterable {
     case matrix
     case emptyAddress
     case invalidAddress
-    case nonModal
     
     /// Generate the view struct for the screen state.
     @MainActor var viewModel: ServerSelectionScreenViewModel {
         switch self {
         case .matrix:
             return ServerSelectionScreenViewModel(homeserverAddress: "https://matrix.org",
-                                                  slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
-                                                  isModallyPresented: true)
+                                                  slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL)
                                                   
         case .emptyAddress:
             return ServerSelectionScreenViewModel(homeserverAddress: "",
-                                                  slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
-                                                  isModallyPresented: true)
+                                                  slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL)
         case .invalidAddress:
             let viewModel = ServerSelectionScreenViewModel(homeserverAddress: "thisisbad",
-                                                           slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
-                                                           isModallyPresented: true)
+                                                           slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL)
             viewModel.displayError(.footerMessage(L10n.errorUnknown))
             return viewModel
-        case .nonModal:
-            return ServerSelectionScreenViewModel(homeserverAddress: "https://matrix.org",
-                                                  slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
-                                                  isModallyPresented: false)
         }
     }
 }

@@ -64,7 +64,7 @@ struct ServerSelectionScreen: View {
                 .onSubmit(submit)
             
             Button(action: submit) {
-                Text(context.viewState.buttonTitle)
+                Text(L10n.actionContinue)
             }
             .buttonStyle(.compound(.primary))
             .disabled(context.viewState.hasValidationError)
@@ -72,15 +72,12 @@ struct ServerSelectionScreen: View {
         }
     }
     
-    @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            if context.viewState.isModallyPresented {
-                Button { context.send(viewAction: .dismiss) } label: {
-                    Text(L10n.actionCancel)
-                }
-                .accessibilityIdentifier(A11yIdentifiers.changeServerScreen.dismiss)
+            Button { context.send(viewAction: .dismiss) } label: {
+                Text(L10n.actionCancel)
             }
+            .accessibilityIdentifier(A11yIdentifiers.changeServerScreen.dismiss)
         }
     }
     

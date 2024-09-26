@@ -11,7 +11,7 @@ import SwiftUI
 // Common settings between app and NSE
 protocol CommonSettingsProtocol {
     var logLevel: TracingConfiguration.LogLevel { get }
-    var invisibleCryptoEnabled: Bool { get }
+    var enableOnlySignedDeviceIsolationMode: Bool { get }
 }
 
 /// Store Element specific app settings.
@@ -43,7 +43,7 @@ final class AppSettings {
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
         case pinningEnabled
-        case invisibleCryptoEnabled
+        case enableOnlySignedDeviceIsolationMode
         
         case zeroAccessToken
         case zeroMatrixUsers
@@ -291,9 +291,9 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
     var logLevel
     
-    /// Configuration to enable invisible crypto. In this mode only devices signed by their owner will be considered in e2ee rooms.
-    @UserPreference(key: UserDefaultsKeys.invisibleCryptoEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var invisibleCryptoEnabled
+    /// Configuration to enable only signed device isolation mode for  crypto. In this mode only devices signed by their owner will be considered in e2ee rooms.
+    @UserPreference(key: UserDefaultsKeys.enableOnlySignedDeviceIsolationMode, defaultValue: false, storageType: .userDefaults(store))
+    var enableOnlySignedDeviceIsolationMode
     
     // MARK: - ZERO Access Token
     

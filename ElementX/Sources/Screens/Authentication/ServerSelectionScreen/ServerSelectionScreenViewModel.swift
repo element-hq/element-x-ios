@@ -19,13 +19,12 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(homeserverAddress: String, slidingSyncLearnMoreURL: URL, isModallyPresented: Bool) {
+    init(homeserverAddress: String, slidingSyncLearnMoreURL: URL) {
         self.slidingSyncLearnMoreURL = slidingSyncLearnMoreURL
         let bindings = ServerSelectionScreenBindings(homeserverAddress: homeserverAddress)
         
         super.init(initialViewState: ServerSelectionScreenViewState(slidingSyncLearnMoreURL: slidingSyncLearnMoreURL,
-                                                                    bindings: bindings,
-                                                                    isModallyPresented: isModallyPresented))
+                                                                    bindings: bindings))
     }
     
     override func process(viewAction: ServerSelectionScreenViewAction) {
@@ -46,7 +45,7 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
                 state.footerErrorMessage = message
             }
         case .invalidWellKnownAlert(let error):
-            state.bindings.alertInfo = AlertInfo(id: .slidingSyncAlert,
+            state.bindings.alertInfo = AlertInfo(id: .invalidWellKnownAlert(error),
                                                  title: L10n.commonServerNotSupported,
                                                  message: L10n.screenChangeServerErrorInvalidWellKnown(error))
         case .slidingSyncAlert:
@@ -56,6 +55,10 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
                                                  message: L10n.screenChangeServerErrorNoSlidingSyncMessage,
                                                  primaryButton: .init(title: L10n.actionLearnMore, role: .cancel, action: openURL),
                                                  secondaryButton: .init(title: L10n.actionCancel, action: nil))
+        case .registrationAlert:
+            state.bindings.alertInfo = AlertInfo(id: .registrationAlert,
+                                                 title: L10n.errorUnknown,
+                                                 message: L10n.errorAccountCreationNotPossible)
         }
     }
     

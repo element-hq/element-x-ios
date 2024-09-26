@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/devicekit/DeviceKit",
       "state" : {
-        "revision" : "97acf830fd0e0b719126e9450a51c95a91f66858",
-        "version" : "5.2.3"
+        "revision" : "7ff5331960151aec74fb422e1d45f54ef6cc086d",
+        "version" : "5.5.0"
       }
     },
     {
@@ -104,8 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher",
       "state" : {
-        "revision" : "af4be924ad984cf4d16f4ae4df424e79a443d435",
-        "version" : "7.6.2"
+        "revision" : "33696a71dd4d71f1b0f781ade11a48ba5549581a",
+        "version" : "8.0.3"
       }
     },
     {
@@ -113,8 +113,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/krzysztofzablocki/KZFileWatchers",
       "state" : {
-        "branch" : "master",
-        "revision" : "d27a9557427d261adccdf4b566acc9d9c0fec6f4"
+        "revision" : "d27a9557427d261adccdf4b566acc9d9c0fec6f4",
+        "version" : "1.2.0"
       }
     },
     {
@@ -311,8 +311,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mxcl/Version",
       "state" : {
-        "revision" : "1fe824b80d89201652e7eca7c9252269a1d85e25",
-        "version" : "2.0.1"
+        "revision" : "303a0f916772545e1e8667d3104f83be708a723c",
+        "version" : "2.1.0"
       }
     }
   ],

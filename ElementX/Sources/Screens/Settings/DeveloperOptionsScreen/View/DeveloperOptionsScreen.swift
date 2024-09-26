@@ -53,14 +53,14 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section {
-                Toggle(isOn: $context.invisibleCryptoEnabled) {
-                    Text("Enabled Invisible Crypto")
+                Toggle(isOn: $context.enableOnlySignedDeviceIsolationMode) {
+                    Text("Exclude not secure devices when sending/receiving messages")
                     Text("Requires app reboot")
                 }
             } header: {
                 Text("Trust and Decoration")
             } footer: {
-                Text("This setting controls how end-to-end encryption (E2EE) keys are shared. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
+                Text("This setting controls how end-to-end encryption (E2EE) keys are exchanged. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
             }
 
             Section {

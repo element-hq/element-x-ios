@@ -8,6 +8,9 @@
 import XCTest
 
 class UserFlowTests: XCTestCase {
+    private static let integrationTestsRoomName = "Element X iOS Integration Tests"
+    private static let integrationTestsMessage = "Go down in flames!"
+    
     private var app: XCUIApplication!
     
     override func setUp() {
@@ -16,14 +19,27 @@ class UserFlowTests: XCTestCase {
     }
     
     func testUserFlow() {
+        checkRoomFlows()
+        
         checkSettings()
         
         checkRoomCreation()
         
-        // Open the first room in the list.
-        let firstRoom = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", A11yIdentifiers.homeScreen.roomNamePrefix)).firstMatch
+        app.logout()
+    }
+    
+    // Assumes app is on the home screen
+    private func checkRoomFlows() {
+        // Search for the special test room
+        let searchField = app.searchFields.firstMatch
+        searchField.clearAndTypeText(Self.integrationTestsRoomName)
+        
+        // And open it
+        let firstRoom = app.buttons.matching(NSPredicate(format: "identifier CONTAINS %@", Self.integrationTestsRoomName)).firstMatch
         XCTAssertTrue(firstRoom.waitForExistence(timeout: 10.0))
         firstRoom.tap()
+        
+        sendMessages()
         
         checkPhotoSharing()
         
@@ -35,20 +51,57 @@ class UserFlowTests: XCTestCase {
         
         checkRoomDetails()
         
-        app.logout()
+        // Go back to the room list
+        tapOnBackButton("Chats")
+        
+        // Cancel initial the room search
+        let searchCancelButton = app.buttons["Cancel"].firstMatch
+        XCTAssertTrue(searchCancelButton.waitForExistence(timeout: 10.0))
+        searchCancelButton.forceTap()
+    }
+    
+    private func sendMessages() {
+        var composerTextField = app.textViews[A11yIdentifiers.roomScreen.messageComposer].firstMatch
+        XCTAssertTrue(composerTextField.waitForExistence(timeout: 10.0))
+        composerTextField.clearAndTypeText(Self.integrationTestsMessage)
+        
+        var sendButton = app.buttons[A11yIdentifiers.roomScreen.sendButton].firstMatch
+        XCTAssertTrue(sendButton.waitForExistence(timeout: 10.0))
+        sendButton.tap()
+        
+        sleep(10) // Wait for the message to be sent
+        
+        // Switch to the rich text editor
+        tapOnMenu(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
+        tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)
+        
+        composerTextField = app.textViews[A11yIdentifiers.roomScreen.messageComposer].firstMatch
+        XCTAssertTrue(composerTextField.waitForExistence(timeout: 10.0))
+        composerTextField.clearAndTypeText(Self.integrationTestsMessage)
+        
+        sendButton = app.buttons[A11yIdentifiers.roomScreen.sendButton].firstMatch
+        XCTAssertTrue(sendButton.waitForExistence(timeout: 10.0))
+        sendButton.tap()
+        
+        sleep(5) // Wait for the message to be sent
+        
+        // Close the formatting options
+        app.buttons[A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions].tap()
     }
         
     private func checkPhotoSharing() {
-        // Open attachments picker
         tapOnMenu(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
-
-        // Open photo library picker
         tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary)
+        
+        sleep(10) // Wait for the picker to load
         
         // Tap on the second image. First one is always broken on simulators.
         let secondImage = app.scrollViews.images.element(boundBy: 1)
-        XCTAssertTrue(secondImage.waitForExistence(timeout: 10.0)) // Photo library takes a bit to load
+        XCTAssertTrue(secondImage.waitForExistence(timeout: 20.0)) // Photo library takes a bit to load
         secondImage.tap()
+        
+        // Wait for the image to be processed and the new screen to appear
+        sleep(10)
         
         // Cancel the upload flow
         tapOnButton("Cancel", waitForDisappearance: true)
@@ -58,12 +111,16 @@ class UserFlowTests: XCTestCase {
         tapOnMenu(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
         tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerDocuments)
         
+        sleep(10) // Wait for the picker to load
+        
         tapOnButton("Cancel", waitForDisappearance: true)
     }
     
     private func checkLocationSharing() {
         tapOnMenu(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
         tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerLocation)
+        
+        sleep(10) // Wait for the picker to load
         
         // The order of the alerts is a bit of a mistery so try twice
         
@@ -139,9 +196,6 @@ class UserFlowTests: XCTestCase {
         
         // Go back to the room
         tapOnBackButton("Chat")
-        
-        // Go back to the room list
-        tapOnBackButton("Chats")
     }
     
     private func checkSettings() {

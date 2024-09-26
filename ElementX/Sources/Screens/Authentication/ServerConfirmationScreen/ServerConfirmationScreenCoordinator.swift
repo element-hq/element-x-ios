@@ -11,6 +11,8 @@ import SwiftUI
 struct ServerConfirmationScreenCoordinatorParameters {
     let authenticationService: AuthenticationServiceProtocol
     let authenticationFlow: AuthenticationFlow
+    let slidingSyncLearnMoreURL: URL
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum ServerConfirmationScreenCoordinatorAction {
@@ -29,7 +31,9 @@ final class ServerConfirmationScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: ServerConfirmationScreenCoordinatorParameters) {
         viewModel = ServerConfirmationScreenViewModel(authenticationService: parameters.authenticationService,
-                                                      authenticationFlow: parameters.authenticationFlow)
+                                                      authenticationFlow: parameters.authenticationFlow,
+                                                      slidingSyncLearnMoreURL: parameters.slidingSyncLearnMoreURL,
+                                                      userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {
