@@ -135,10 +135,6 @@ struct DeveloperOptionsScreen: View {
 private struct LogLevelConfigurationView: View {
     @Binding var logLevel: TracingConfiguration.LogLevel
     
-    init(logLevel: Binding<TracingConfiguration.LogLevel>) {
-        _logLevel = logLevel
-    }
-    
     var body: some View {
         Picker(selection: $logLevel) {
             ForEach(logLevels, id: \.self) { logLevel in

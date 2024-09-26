@@ -41,7 +41,7 @@ struct TracingConfiguration {
                 false
             case (.info, _):
                 true
-            case (.debug, .info), (.debug, .warn), (.debug, .error):
+            case (.debug, .error), (.debug, .warn), (.debug, .info):
                 false
             case (.debug, _):
                 true
@@ -65,6 +65,7 @@ struct TracingConfiguration {
         case matrix_sdk_ui_timeline = "matrix_sdk_ui::timeline"
     }
     
+    // The `common` target is excluded because 3rd-party crates might end up logging user data.
     static let targets: OrderedDictionary<Target, LogLevel> = [
         .elementx: .info,
         .hyper: .warn,
