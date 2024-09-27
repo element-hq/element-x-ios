@@ -33,7 +33,7 @@ struct UserProfileScreenViewStateBindings {
 }
 
 enum UserProfileScreenViewAction {
-    case displayAvatar
+    case displayAvatar(URL)
     case openDirectChat
     case startCall(roomID: String)
     case dismiss

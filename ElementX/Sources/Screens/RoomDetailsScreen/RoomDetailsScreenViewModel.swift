@@ -150,8 +150,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
         case .processToggleMuteNotifications:
             Task { await toggleMuteNotifications() }
-        case .displayAvatar:
-            displayFullScreenAvatar()
+        case .displayAvatar(let url):
+            displayFullScreenAvatar(url)
         case .processTapPolls:
             actionsSubject.send(.requestPollsHistoryPresentation)
         case .toggleFavourite(let isFavourite):
@@ -346,11 +346,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         }
     }
     
-    private func displayFullScreenAvatar() {
-        guard let avatarURL = roomProxy.avatarURL else {
-            return
-        }
-        
+    private func displayFullScreenAvatar(_ url: URL) {
         let loadingIndicatorIdentifier = "roomAvatarLoadingIndicator"
         userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
         
@@ -360,7 +356,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
             
             // We don't actually know the mime type here, assume it's an image.
-            if case let .success(file) = await mediaProvider.loadFileFromSource(.init(url: avatarURL, mimeType: "image/jpeg")) {
+            if case let .success(file) = await mediaProvider.loadFileFromSource(.init(url: url, mimeType: "image/jpeg")) {
                 state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: roomProxy.roomTitle)
             }
         }
