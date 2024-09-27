@@ -7,23 +7,16 @@
 
 import Foundation
 
-enum LoginScreenViewModelAction: CustomStringConvertible {
-    /// Parse the username and update the homeserver if included.
-    case parseUsername(String)
-    /// The user would like to reset their password.
-    case forgotPassword
-    /// Login using the supplied credentials.
-    case login(username: String, password: String)
+enum LoginScreenViewModelAction {
+    /// The homeserver was updated to one that supports OIDC.
+    case configuredForOIDC
+    /// Login was successful.
+    case signedIn(UserSessionProtocol)
     
-    /// A string representation of the action, ignoring any associated values that could leak PII.
-    var description: String {
+    var isConfiguredForOIDC: Bool {
         switch self {
-        case .parseUsername:
-            return "parseUsername"
-        case .forgotPassword:
-            return "forgotPassword"
-        case .login:
-            return "login"
+        case .configuredForOIDC: true
+        default: false
         }
     }
 }
@@ -34,7 +27,7 @@ struct LoginScreenViewState: BindableState {
     /// Whether a new homeserver is currently being loaded.
     var isLoading = false
     /// View state that can be bound to from SwiftUI.
-    var bindings: LoginScreenBindings
+    var bindings = LoginScreenBindings()
     
     /// The types of login supported by the homeserver.
     var loginMode: LoginMode { homeserver.loginMode }
@@ -62,8 +55,6 @@ struct LoginScreenBindings {
 enum LoginScreenViewAction {
     /// Parse the username to detect if a homeserver is included.
     case parseUsername
-    /// The user would like to reset their password.
-    case forgotPassword
     /// Continue using the input username and password.
     case next
 }
@@ -71,8 +62,10 @@ enum LoginScreenViewAction {
 enum LoginScreenErrorType: Hashable {
     /// A specific error message shown in an alert.
     case alert(String)
-    /// Looking up the homeserver from the username failed.
-    case invalidHomeserver
+    /// An alert that informs the user to check their username/password.
+    case credentialsAlert
+    /// An alert that informs the user that their account has been deactivated.
+    case deactivatedAlert
     /// An alert that informs the user about a bad well-known file.
     case invalidWellKnownAlert(String)
     /// An alert that allows the user to learn about sliding sync.
