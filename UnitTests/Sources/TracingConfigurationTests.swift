@@ -11,23 +11,23 @@ import XCTest
 
 class TracingConfigurationTests: XCTestCase {
     func testConfiguration() { // swiftlint:disable line_length
-        var filter = TracingConfiguration(logLevel: .error, target: nil).filter
+        var filter = TracingConfiguration(logLevel: .error, target: "tests").filter
         
         XCTAssertEqual(filter, "elementx=info,hyper=warn,matrix_sdk_ffi=info,matrix_sdk::client=trace,matrix_sdk_crypto=debug,matrix_sdk_crypto::olm::account=trace,matrix_sdk::oidc=trace,matrix_sdk::http_client=debug,matrix_sdk::sliding_sync=info,matrix_sdk_base::sliding_sync=info,matrix_sdk_ui::timeline=info")
         
-        filter = TracingConfiguration(logLevel: .warn, target: nil).filter
+        filter = TracingConfiguration(logLevel: .warn, target: "tests").filter
         
         XCTAssertEqual(filter, "elementx=info,hyper=warn,matrix_sdk_ffi=info,matrix_sdk::client=trace,matrix_sdk_crypto=debug,matrix_sdk_crypto::olm::account=trace,matrix_sdk::oidc=trace,matrix_sdk::http_client=debug,matrix_sdk::sliding_sync=info,matrix_sdk_base::sliding_sync=info,matrix_sdk_ui::timeline=info")
         
-        filter = TracingConfiguration(logLevel: .info, target: nil).filter
+        filter = TracingConfiguration(logLevel: .info, target: "tests").filter
         
         XCTAssertEqual(filter, "elementx=info,hyper=warn,matrix_sdk_ffi=info,matrix_sdk::client=trace,matrix_sdk_crypto=debug,matrix_sdk_crypto::olm::account=trace,matrix_sdk::oidc=trace,matrix_sdk::http_client=debug,matrix_sdk::sliding_sync=info,matrix_sdk_base::sliding_sync=info,matrix_sdk_ui::timeline=info")
         
-        filter = TracingConfiguration(logLevel: .debug, target: nil).filter
+        filter = TracingConfiguration(logLevel: .debug, target: "tests").filter
         
         XCTAssertEqual(filter, "elementx=debug,hyper=warn,matrix_sdk_ffi=debug,matrix_sdk::client=trace,matrix_sdk_crypto=debug,matrix_sdk_crypto::olm::account=trace,matrix_sdk::oidc=trace,matrix_sdk::http_client=debug,matrix_sdk::sliding_sync=debug,matrix_sdk_base::sliding_sync=debug,matrix_sdk_ui::timeline=debug")
         
-        filter = TracingConfiguration(logLevel: .trace, target: nil).filter
+        filter = TracingConfiguration(logLevel: .trace, target: "tests").filter
         
         XCTAssertEqual(filter, "elementx=trace,hyper=warn,matrix_sdk_ffi=trace,matrix_sdk::client=trace,matrix_sdk_crypto=trace,matrix_sdk_crypto::olm::account=trace,matrix_sdk::oidc=trace,matrix_sdk::http_client=trace,matrix_sdk::sliding_sync=trace,matrix_sdk_base::sliding_sync=trace,matrix_sdk_ui::timeline=trace")
     } // swiftlint:enable line_length

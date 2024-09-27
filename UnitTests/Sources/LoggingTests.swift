@@ -168,7 +168,7 @@ class LoggingTests: XCTestCase {
                                                content: .init(body: "FileString", source: nil, thumbnailSource: nil, contentType: nil))
         
         // When logging that value
-        MXLog.configure(logLevel: .info)
+        MXLog.configure(target: "tests", logLevel: .info)
         
         MXLog.info(textMessage)
         MXLog.info(noticeMessage)

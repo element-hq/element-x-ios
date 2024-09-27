@@ -32,7 +32,7 @@ enum RustTracing {
         // Log everything on integration tests to check whether
         // the logs contain any sensitive data. See `UserFlowTests.swift`
         let filter = if ProcessInfo.isRunningIntegrationTests {
-            TracingConfiguration(logLevel: .trace, target: nil).filter
+            TracingConfiguration(logLevel: .trace, target: "integrationtests").filter
         } else {
             configuration.filter
         }

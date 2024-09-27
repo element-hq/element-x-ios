@@ -24,17 +24,13 @@ enum MXLog {
     private static var rootSpan: Span!
     private static var target: String!
     
-    static func configure(target: String? = nil,
+    static func configure(target: String,
                           logLevel: TracingConfiguration.LogLevel) {
         guard !didConfigureOnce else { return }
         
         RustTracing.setup(configuration: .init(logLevel: logLevel, target: target))
         
-        if let target {
-            self.target = target
-        } else {
-            self.target = Constants.target
-        }
+        self.target = target
         
         rootSpan = Span(file: #file, line: #line, level: .info, target: self.target, name: "root")
         rootSpan.enter()

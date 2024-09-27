@@ -52,8 +52,6 @@ struct TracingConfiguration {
     }
     
     enum Target: String {
-        case elementx
-        
         case hyper, matrix_sdk_ffi, matrix_sdk_crypto
         
         case matrix_sdk_client = "matrix_sdk::client"
@@ -67,7 +65,6 @@ struct TracingConfiguration {
     
     // The `common` target is excluded because 3rd-party crates might end up logging user data.
     static let targets: OrderedDictionary<Target, LogLevel> = [
-        .elementx: .info,
         .hyper: .warn,
         .matrix_sdk_ffi: .info,
         .matrix_sdk_client: .trace,
@@ -91,13 +88,9 @@ struct TracingConfiguration {
     /// - Parameter logLevel: the desired log level
     /// - Parameter target: the name of the target being configured
     /// - Returns: a custom tracing configuration
-    init(logLevel: LogLevel, target: String?) {
-        fileName = if let target {
-            "\(RustTracing.filePrefix)-\(target)"
-        } else {
-            RustTracing.filePrefix
-        }
-        
+    init(logLevel: LogLevel, target: String) {
+        fileName = "\(RustTracing.filePrefix)-\(target)"
+
         let overrides = Self.targets.keys.reduce(into: [Target: LogLevel]()) { partialResult, target in
             // Keep the defaults here
             let ignoredTargets: [Target] = [.hyper]
@@ -122,13 +115,17 @@ struct TracingConfiguration {
             newTargets.updateValue(logLevel, forKey: target)
         }
         
-        let components = newTargets.map { (target: Target, logLevel: LogLevel) in
+        var components = newTargets.map { (target: Target, logLevel: LogLevel) in
             guard !target.rawValue.isEmpty else {
                 return logLevel.rawValue
             }
             
             return "\(target.rawValue)=\(logLevel.rawValue)"
         }
+        
+        // With `common` not being used we manually need to specify the log
+        // level for passed in targets
+        components.append("\(target)=\(logLevel.rawValue)")
         
         filter = components.joined(separator: ",")
     }
