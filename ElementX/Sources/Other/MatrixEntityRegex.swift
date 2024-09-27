@@ -65,9 +65,8 @@ enum MatrixEntityRegex: String {
            let endIndex = match.firstIndex(of: "]") {
             let range = match.index(after: startIndex) ..< endIndex
             let username = match[range]
-            return username.description
+            return username.description.trimmingCharacters(in: .whitespaces)
         }
-        
         return nil
     }
     
