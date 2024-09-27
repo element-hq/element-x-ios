@@ -25,10 +25,11 @@ enum MXLog {
     private static var target: String!
     
     static func configure(target: String,
+                          filePrefix: String?,
                           logLevel: TracingConfiguration.LogLevel) {
         guard !didConfigureOnce else { return }
         
-        RustTracing.setup(configuration: .init(logLevel: logLevel, target: target))
+        RustTracing.setup(configuration: .init(logLevel: logLevel, target: target, filePrefix: filePrefix))
         
         self.target = target
         

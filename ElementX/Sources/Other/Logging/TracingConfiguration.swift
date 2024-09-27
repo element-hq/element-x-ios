@@ -88,8 +88,12 @@ struct TracingConfiguration {
     /// - Parameter logLevel: the desired log level
     /// - Parameter target: the name of the target being configured
     /// - Returns: a custom tracing configuration
-    init(logLevel: LogLevel, target: String) {
-        fileName = "\(RustTracing.filePrefix)-\(target)"
+    init(logLevel: LogLevel, target: String, filePrefix: String?) {
+        fileName = if let filePrefix {
+            "\(RustTracing.filePrefix)-\(filePrefix)"
+        } else {
+            RustTracing.filePrefix
+        }
 
         let overrides = Self.targets.keys.reduce(into: [Target: LogLevel]()) { partialResult, target in
             // Keep the defaults here
