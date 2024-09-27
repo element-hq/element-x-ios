@@ -88,7 +88,7 @@ struct TracingConfiguration {
     /// - Parameter logLevel: the desired log level
     /// - Parameter target: the name of the target being configured
     /// - Returns: a custom tracing configuration
-    init(logLevel: LogLevel, target: String, filePrefix: String?) {
+    init(logLevel: LogLevel, currentTarget: String, filePrefix: String?) {
         fileName = if let filePrefix {
             "\(RustTracing.filePrefix)-\(filePrefix)"
         } else {
@@ -129,7 +129,7 @@ struct TracingConfiguration {
         
         // With `common` not being used we manually need to specify the log
         // level for passed in targets
-        components.append("\(target)=\(logLevel.rawValue)")
+        components.append("\(currentTarget)=\(logLevel.rawValue)")
         
         filter = components.joined(separator: ",")
     }
