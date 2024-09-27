@@ -66,8 +66,8 @@ struct RoomMemberDetailsScreen: View {
         if let memberDetails = context.viewState.memberDetails {
             AvatarHeaderView(member: memberDetails,
                              avatarSize: .user(on: .memberDetails),
-                             mediaProvider: context.mediaProvider) {
-                context.send(viewAction: .displayAvatar)
+                             mediaProvider: context.mediaProvider) { url in
+                context.send(viewAction: .displayAvatar(url))
             } footer: {
                 otherUserFooter
             }

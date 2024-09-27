@@ -74,8 +74,8 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
     
     override func process(viewAction: UserProfileScreenViewAction) {
         switch viewAction {
-        case .displayAvatar:
-            Task { await displayFullScreenAvatar() }
+        case .displayAvatar(let url):
+            Task { await displayFullScreenAvatar(url) }
         case .openDirectChat:
             Task { await openDirectChat() }
         case .startCall(let roomID):
@@ -87,15 +87,14 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
 
     // MARK: - Private
     
-    private func displayFullScreenAvatar() async {
+    private func displayFullScreenAvatar(_ url: URL) async {
         guard let userProfile = state.userProfile else { fatalError() }
-        guard let avatarURL = userProfile.avatarURL else { return }
         
         showLoadingIndicator(allowsInteraction: false)
         defer { hideLoadingIndicator() }
         
         // We don't actually know the mime type here, assume it's an image.
-        if case let .success(file) = await mediaProvider.loadFileFromSource(.init(url: avatarURL, mimeType: "image/jpeg")) {
+        if case let .success(file) = await mediaProvider.loadFileFromSource(.init(url: url, mimeType: "image/jpeg")) {
             state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: userProfile.displayName)
         }
     }
