@@ -71,28 +71,36 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
         
         let useEncryption = (try? room.isEncrypted()) ?? false
         
-        guard let widgetSettings = try? newVirtualElementCallWidget(props: .init(elementCallUrl: baseURL.absoluteString,
-                                                                                 widgetId: widgetID,
-                                                                                 parentUrl: nil,
-                                                                                 hideHeader: nil,
-                                                                                 preload: nil,
-                                                                                 fontScale: nil,
-                                                                                 appPrompt: false,
-                                                                                 skipLobby: true,
-                                                                                 confineToRoom: true,
-                                                                                 font: nil,
-                                                                                 analyticsId: nil,
-                                                                                 encryption: useEncryption ? .perParticipantKeys : .unencrypted)) else {
+        let widgetSettings: WidgetSettings
+        do {
+            widgetSettings = try newVirtualElementCallWidget(props: .init(elementCallUrl: baseURL.absoluteString,
+                                                                          widgetId: widgetID,
+                                                                          parentUrl: nil,
+                                                                          hideHeader: nil,
+                                                                          preload: nil,
+                                                                          fontScale: nil,
+                                                                          appPrompt: false,
+                                                                          skipLobby: true,
+                                                                          confineToRoom: true,
+                                                                          font: nil,
+                                                                          analyticsId: nil,
+                                                                          encryption: useEncryption ? .perParticipantKeys : .unencrypted))
+        } catch {
+            MXLog.error("Failed to build widget settings: \(error)")
             return .failure(.failedBuildingWidgetSettings)
         }
         
         let languageTag = "\(Locale.current.language.languageCode ?? "en")-\(Locale.current.language.region ?? "US")"
         let theme = colorScheme == .light ? "light" : "dark"
         
-        guard let urlString = try? await generateWebviewUrl(widgetSettings: widgetSettings, room: room,
-                                                            props: .init(clientId: clientID,
-                                                                         languageTag: languageTag,
-                                                                         theme: theme)) else {
+        let urlString: String
+        do {
+            urlString = try await generateWebviewUrl(widgetSettings: widgetSettings, room: room,
+                                                     props: .init(clientId: clientID,
+                                                                  languageTag: languageTag,
+                                                                  theme: theme))
+        } catch {
+            MXLog.error("Failed to generate web view URL: \(error)")
             return .failure(.failedBuildingCallURL)
         }
         
@@ -100,7 +108,11 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
             return .failure(.failedParsingCallURL)
         }
         
-        guard let widgetDriver = try? makeWidgetDriver(settings: widgetSettings) else {
+        let widgetDriver: WidgetDriverAndHandle
+        do {
+            widgetDriver = try makeWidgetDriver(settings: widgetSettings)
+        } catch {
+            MXLog.error("Failed to build widget driver: \(error)")
             return .failure(.failedBuildingWidgetDriver)
         }
         
