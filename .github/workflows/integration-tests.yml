@@ -30,8 +30,8 @@ jobs:
         run:
           source ci_scripts/ci_common.sh && setup_github_actions_environment
 
-      - name: Reset simulators
-        run: SNAPSHOT_FORCE_DELETE=1 bundle exec fastlane snapshot reset_simulators
+      - name: Delete old log files
+        run: find '/Users/Shared' -name 'console*' -delete
 
       - name: Run tests
         run: bundle exec fastlane integration_tests
@@ -44,7 +44,7 @@ jobs:
         run: (grep ' TRACE ' /Users/Shared -qR)
 
       - name: Check logs don't contain private messages
-        run: (! grep 'Go down in flames' /Users/Shared -qR)
+        run: "! grep 'Go down in flames' /Users/Shared -R"
 
       - name: Zip results # for faster upload
         if: failure()
