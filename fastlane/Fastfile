@@ -80,7 +80,7 @@ lane :alpha do
 end
 
 lane :unit_tests do |options|
-  reset_simulator = ENV["CI"].is_set?
+  reset_simulator = ENV.key?('CI')
   
   run_tests(
     scheme: "UnitTests",
@@ -106,10 +106,6 @@ lane :unit_tests do |options|
 end
 
 lane :ui_tests do |options|
-  # Use a fresh simulator state to ensure hardware keyboard isn't attached.
-  # Not necessary when running on GitHub.
-  # reset_simulator_contents()
-  
   create_simulator_if_necessary(
     name: "iPhone 16",
     type: "com.apple.CoreSimulator.SimDeviceType.iPhone-16",
@@ -128,7 +124,7 @@ lane :ui_tests do |options|
     test_to_run = nil
   end
 
-  reset_simulator = ENV["CI"].is_set?
+  reset_simulator = ENV.key?('CI')
 
   run_tests(
     scheme: "UITests",
@@ -152,7 +148,7 @@ lane :integration_tests do
     runtime: "com.apple.CoreSimulator.SimRuntime.iOS-18-0"
   )
 
-  reset_simulator = ENV["CI"].is_set?
+  reset_simulator = ENV.key?('CI')
 
   run_tests(
     scheme: "IntegrationTests",
