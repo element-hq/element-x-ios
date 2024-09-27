@@ -67,6 +67,7 @@ jobs:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: uitests
+          version: v0.7.3
 
       - name: Collect test results
         if: ${{ !cancelled() }}

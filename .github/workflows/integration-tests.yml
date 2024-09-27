@@ -78,6 +78,7 @@ jobs:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: integrationtests
+          version: v0.7.3
 
       - name: Collect test results
         if: ${{ !cancelled() }}
