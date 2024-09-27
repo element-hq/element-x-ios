@@ -80,12 +80,15 @@ lane :alpha do
 end
 
 lane :unit_tests do |options|
+  reset_simulator = ENV["CI"].is_set?
+  
   run_tests(
     scheme: "UnitTests",
     destination: "platform=iOS Simulator,name=iPhone 16,OS=18.0",
     ensure_devices_found: true,
     result_bundle: true,
     number_of_retries: 3,
+    reset_simulator: reset_simulator
   )
   
   if !options[:skip_previews]
@@ -95,6 +98,7 @@ lane :unit_tests do |options|
       ensure_devices_found: true,
       result_bundle: true,
       number_of_retries: 3,
+      reset_simulator: reset_simulator
     )
   end
   
@@ -124,6 +128,8 @@ lane :ui_tests do |options|
     test_to_run = nil
   end
 
+  reset_simulator = ENV["CI"].is_set?
+
   run_tests(
     scheme: "UITests",
     devices: ["iPhone 16", "iPad (10th generation)"],
@@ -132,6 +138,7 @@ lane :ui_tests do |options|
     result_bundle: true,
     only_testing: test_to_run,
     number_of_retries: 3,
+    reset_simulator: reset_simulator
   )
 end
 
@@ -145,12 +152,14 @@ lane :integration_tests do
     runtime: "com.apple.CoreSimulator.SimRuntime.iOS-18-0"
   )
 
+  reset_simulator = ENV["CI"].is_set?
+
   run_tests(
     scheme: "IntegrationTests",
     destination: "platform=iOS Simulator,name=iPhone 16 Pro,OS=18.0",
     ensure_devices_found: true,
     result_bundle: true,
-    reset_simulator: true
+    reset_simulator: reset_simulator
   )
 end
 

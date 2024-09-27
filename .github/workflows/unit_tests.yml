@@ -35,9 +35,6 @@ jobs:
       - name: SwiftFormat
         run:
           swiftformat --lint .
-
-      - name: Reset simulators
-        run: SNAPSHOT_FORCE_DELETE=1 bundle exec fastlane snapshot reset_simulators
       
       - name: Run tests
         run: bundle exec fastlane unit_tests
