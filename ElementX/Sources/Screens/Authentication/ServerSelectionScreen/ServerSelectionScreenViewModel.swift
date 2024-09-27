@@ -11,7 +11,10 @@ import SwiftUI
 typealias ServerSelectionScreenViewModelType = StateStoreViewModel<ServerSelectionScreenViewState, ServerSelectionScreenViewAction>
 
 class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, ServerSelectionScreenViewModelProtocol {
+    private let authenticationService: AuthenticationServiceProtocol
+    private let authenticationFlow: AuthenticationFlow
     private let slidingSyncLearnMoreURL: URL
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var actionsSubject: PassthroughSubject<ServerSelectionScreenViewModelAction, Never> = .init()
     
@@ -19,18 +22,23 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(homeserverAddress: String, slidingSyncLearnMoreURL: URL) {
+    init(authenticationService: AuthenticationServiceProtocol,
+         authenticationFlow: AuthenticationFlow,
+         slidingSyncLearnMoreURL: URL,
+         userIndicatorController: UserIndicatorControllerProtocol) {
+        self.authenticationService = authenticationService
+        self.authenticationFlow = authenticationFlow
         self.slidingSyncLearnMoreURL = slidingSyncLearnMoreURL
-        let bindings = ServerSelectionScreenBindings(homeserverAddress: homeserverAddress)
+        self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: ServerSelectionScreenViewState(slidingSyncLearnMoreURL: slidingSyncLearnMoreURL,
-                                                                    bindings: bindings))
+        let bindings = ServerSelectionScreenBindings(homeserverAddress: authenticationService.homeserver.value.address)
+        super.init(initialViewState: ServerSelectionScreenViewState(slidingSyncLearnMoreURL: slidingSyncLearnMoreURL, bindings: bindings))
     }
     
     override func process(viewAction: ServerSelectionScreenViewAction) {
         switch viewAction {
         case .confirm:
-            actionsSubject.send(.confirm(homeserverAddress: state.bindings.homeserverAddress))
+            configureHomeserver()
         case .dismiss:
             actionsSubject.send(.dismiss)
         case .clearFooterError:
@@ -38,31 +46,72 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
         }
     }
     
-    func displayError(_ type: ServerSelectionScreenErrorType) {
-        switch type {
-        case .footerMessage(let message):
-            withElementAnimation {
-                state.footerErrorMessage = message
+    // MARK: - Private
+    
+    /// Updates the login flow using the supplied homeserver address, or shows an error when this isn't possible.
+    private func configureHomeserver() {
+        let homeserverAddress = state.bindings.homeserverAddress
+        startLoading()
+        
+        Task {
+            switch await authenticationService.configure(for: homeserverAddress, flow: authenticationFlow) {
+            case .success:
+                MXLog.info("Selected homeserver: \(homeserverAddress)")
+                actionsSubject.send(.updated)
+                stopLoading()
+            case .failure(let error):
+                MXLog.info("Invalid homeserver: \(homeserverAddress)")
+                stopLoading()
+                handleError(error)
             }
-        case .invalidWellKnownAlert(let error):
+        }
+    }
+    
+    private func startLoading(label: String = L10n.commonLoading) {
+        userIndicatorController.submitIndicator(UserIndicator(type: .modal,
+                                                              title: label,
+                                                              persistent: true))
+    }
+    
+    private func stopLoading() {
+        userIndicatorController.retractAllIndicators()
+    }
+    
+    /// Processes an error to either update the flow or display it to the user.
+    private func handleError(_ error: AuthenticationServiceError) {
+        switch error {
+        case .invalidServer, .invalidHomeserverAddress:
+            showFooterMessage(L10n.screenChangeServerErrorInvalidHomeserver)
+        case .invalidWellKnown(let error):
             state.bindings.alertInfo = AlertInfo(id: .invalidWellKnownAlert(error),
                                                  title: L10n.commonServerNotSupported,
                                                  message: L10n.screenChangeServerErrorInvalidWellKnown(error))
-        case .slidingSyncAlert:
+        case .slidingSyncNotAvailable:
             let openURL = { UIApplication.shared.open(self.slidingSyncLearnMoreURL) }
             state.bindings.alertInfo = AlertInfo(id: .slidingSyncAlert,
                                                  title: L10n.commonServerNotSupported,
                                                  message: L10n.screenChangeServerErrorNoSlidingSyncMessage,
                                                  primaryButton: .init(title: L10n.actionLearnMore, role: .cancel, action: openURL),
                                                  secondaryButton: .init(title: L10n.actionCancel, action: nil))
-        case .registrationAlert:
+        case .loginNotSupported:
+            state.bindings.alertInfo = AlertInfo(id: .loginAlert,
+                                                 title: L10n.commonServerNotSupported,
+                                                 message: L10n.screenLoginErrorUnsupportedAuthentication)
+        case .registrationNotSupported:
             state.bindings.alertInfo = AlertInfo(id: .registrationAlert,
-                                                 title: L10n.errorUnknown,
+                                                 title: L10n.commonServerNotSupported,
                                                  message: L10n.errorAccountCreationNotPossible)
+        default:
+            showFooterMessage(L10n.errorUnknown)
         }
     }
     
-    // MARK: - Private
+    /// Set a new error message to be shown in the text field footer.
+    private func showFooterMessage(_ message: String) {
+        withElementAnimation {
+            state.footerErrorMessage = message
+        }
+    }
     
     /// Clear any errors shown in the text field footer.
     private func clearFooterError() {

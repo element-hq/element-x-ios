@@ -65,6 +65,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
             case .failure: nil
             }
             
+            if flow == .login, homeserver.loginMode == .unsupported {
+                return .failure(.loginNotSupported)
+            }
             if flow == .register, !homeserver.supportsRegistration {
                 return .failure(.registrationNotSupported)
             }

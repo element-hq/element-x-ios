@@ -89,7 +89,7 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
     
     func testRegistrationNotSupportedAlert() async throws {
         // Given a view model for registration using a service that hasn't been configured and the default server doesn't support registration.
-        setupViewModel(authenticationFlow: .register, elementWellKnown: false)
+        setupViewModel(authenticationFlow: .register, supportsRegistrationHelper: false)
         XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
         XCTAssertFalse(service.homeserver.value.supportsRegistration)
         XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
@@ -105,10 +105,34 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.alertInfo?.id, .registration)
     }
     
+    func testLoginNotSupportedAlert() async throws {
+        // Given a view model for login using a service that hasn't been configured and the default server doesn't support login.
+        setupViewModel(authenticationFlow: .login, supportsRegistrationHelper: false, supportsPasswordLogin: false)
+        XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
+        XCTAssertFalse(service.homeserver.value.supportsRegistration)
+        XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
+        XCTAssertNil(context.alertInfo)
+        
+        // When continuing from the confirmation screen.
+        let deferred = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
+        context.send(viewAction: .confirm)
+        try await deferred.fulfill()
+        
+        // Then the configuration should fail with an alert about not supporting login.
+        XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
+        XCTAssertEqual(context.alertInfo?.id, .login)
+    }
+    
     // MARK: - Helpers
     
-    private func setupViewModel(authenticationFlow: AuthenticationFlow, elementWellKnown: Bool = true) {
-        let client = ClientSDKMock(configuration: elementWellKnown ? .init() : .init(elementWellKnown: ""))
+    private func setupViewModel(authenticationFlow: AuthenticationFlow, supportsRegistrationHelper: Bool = true, supportsPasswordLogin: Bool = true) {
+        // Manually create a configuration as the default homeserver address setting is immutable.
+        let clientConfiguration: ClientSDKMock.Configuration = if supportsRegistrationHelper {
+            .init(supportsPasswordLogin: supportsPasswordLogin)
+        } else {
+            .init(supportsPasswordLogin: supportsPasswordLogin, elementWellKnown: "")
+        }
+        let client = ClientSDKMock(configuration: clientConfiguration)
         let configuration = AuthenticationClientBuilderMock.Configuration(homeserverClients: ["matrix.org": client],
                                                                           qrCodeClient: client)
         

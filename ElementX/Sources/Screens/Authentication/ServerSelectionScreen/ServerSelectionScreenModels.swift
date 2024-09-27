@@ -8,8 +8,8 @@
 import Foundation
 
 enum ServerSelectionScreenViewModelAction {
-    /// The user would like to use the homeserver at the given address.
-    case confirm(homeserverAddress: String)
+    /// The homeserver selection has been updated.
+    case updated
     /// Dismiss the view without using the entered address.
     case dismiss
 }
@@ -74,6 +74,8 @@ enum ServerSelectionScreenErrorType: Hashable {
     case invalidWellKnownAlert(String)
     /// An alert that allows the user to learn about sliding sync.
     case slidingSyncAlert
+    /// An alert that informs the user that login isn't supported.
+    case loginAlert
     /// An alert that informs the user that registration isn't supported.
     case registrationAlert
 }
