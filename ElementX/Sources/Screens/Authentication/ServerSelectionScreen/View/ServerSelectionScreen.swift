@@ -91,11 +91,38 @@ struct ServerSelectionScreen: View {
 // MARK: - Previews
 
 struct ServerSelection_Previews: PreviewProvider, TestablePreview {
+    static let matrixViewModel = makeViewModel(for: "https://matrix.org")
+    static let emptyViewModel = makeViewModel(for: "")
+    static let invalidViewModel = makeViewModel(for: "thisisbad")
+    
     static var previews: some View {
-        ForEach(MockServerSelectionScreenState.allCases, id: \.self) { state in
-            NavigationStack {
-                ServerSelectionScreen(context: state.viewModel.context)
-            }
+        NavigationStack {
+            ServerSelectionScreen(context: matrixViewModel.context)
         }
+        
+        NavigationStack {
+            ServerSelectionScreen(context: emptyViewModel.context)
+        }
+        
+        NavigationStack {
+            ServerSelectionScreen(context: invalidViewModel.context)
+        }
+        .snapshotPreferences(delay: 0.25)
+    }
+    
+    static func makeViewModel(for homeserverAddress: String) -> ServerSelectionScreenViewModel {
+        let authenticationService = AuthenticationService.mock
+        
+        let slidingSyncLearnMoreURL = ServiceLocator.shared.settings.slidingSyncLearnMoreURL
+        
+        let viewModel = ServerSelectionScreenViewModel(authenticationService: authenticationService,
+                                                       authenticationFlow: .login,
+                                                       slidingSyncLearnMoreURL: slidingSyncLearnMoreURL,
+                                                       userIndicatorController: UserIndicatorControllerMock())
+        viewModel.context.homeserverAddress = homeserverAddress
+        if homeserverAddress == "thisisbad" {
+            viewModel.context.send(viewAction: .confirm)
+        }
+        return viewModel
     }
 }
