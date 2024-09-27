@@ -72,6 +72,8 @@ enum ServerConfirmationScreenAlert: Hashable {
     case invalidWellKnown(String)
     /// An alert that allows the user to learn about sliding sync.
     case slidingSync
+    /// An alert that informs the user that login isn't supported.
+    case login
     /// An alert that informs the user that registration isn't supported.
     case registration
     /// An unknown error has occurred.
