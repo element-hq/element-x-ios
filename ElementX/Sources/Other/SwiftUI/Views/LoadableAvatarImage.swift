@@ -37,22 +37,23 @@ struct LoadableAvatarImage: View {
             Button {
                 onTap(url)
             } label: {
-                avatar
-                    .frame(width: frameSize, height: frameSize)
-                    .background(Color.compound.bgCanvasDefault)
-                    .clipShape(Circle())
+                clippedAvatar
             }
             .buttonStyle(.borderless) // Add a button style to stop the whole row being tappable.
         } else {
-            avatar
-                .frame(width: frameSize, height: frameSize)
-                .background(Color.compound.bgCanvasDefault)
-                .clipShape(Circle())
+            clippedAvatar
         }
     }
     
+    private var clippedAvatar: some View {
+        avatar
+            .frame(width: frameSize, height: frameSize)
+            .background(Color.compound.bgCanvasDefault)
+            .clipShape(Circle())
+    }
+    
     @ViewBuilder
-    var avatar: some View {
+    private var avatar: some View {
         if let url {
             LoadableImage(url: url,
                           mediaType: .avatar,
