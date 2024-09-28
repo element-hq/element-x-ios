@@ -14,16 +14,18 @@ struct PillView: View {
     let didChangeText: () -> Void
     
     var textColor: Color {
-        context.viewState.isOwnMention ? .zero._textOwnPill : .compound.textPrimary
+//        context.viewState.isOwnMention ? .zero._textOwnPill : .compound.textPrimary
+        .zero._textOwnPill
     }
     
     var backgroundColor: Color {
-        context.viewState.isOwnMention ? .compound._bgOwnPill : .compound._bgPill
+//        context.viewState.isOwnMention ? .compound._bgOwnPill : .compound._bgPill
+        .zero._bgOwnPill
     }
         
     var body: some View {
         Text(context.viewState.displayText)
-            .font(.zero.bodyLGSemibold)
+            .font(.zero.bodyLGBold)
             .foregroundColor(textColor)
             .lineLimit(1)
             .padding(.leading, 4)
