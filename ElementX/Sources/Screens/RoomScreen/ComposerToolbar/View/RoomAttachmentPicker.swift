@@ -45,7 +45,7 @@ struct RoomAttachmentPicker: View {
 //                    .labelStyle(.menuSheet)
 //            }
 //            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)
-//            
+//
 //            Button {
 //                context.send(viewAction: .attach(.location))
 //            } label: {
@@ -53,7 +53,7 @@ struct RoomAttachmentPicker: View {
 //                    .labelStyle(.menuSheet)
 //            }
 //            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerLocation)
-//            
+//
 //            Button {
 //                context.send(viewAction: .attach(.file))
 //            } label: {

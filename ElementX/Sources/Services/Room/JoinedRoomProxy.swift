@@ -110,12 +110,12 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     var avatar: RoomAvatar {
 //        if isDirect, avatarURL == nil {
 //            let heroes = room.heroes()
-//            
+//
 //            if heroes.count == 1 {
 //                return .heroes(heroes.map(UserProfileProxy.init))
 //            }
 //        }
-//        
+//
 //        return .room(id: id, name: name, avatarURL: avatarURL)
         .room(id: id, name: name, avatarURL: avatarURL)
     }
@@ -283,7 +283,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             if let members = membersNoSyncIterator.nextChunk(chunkSize: membersNoSyncIterator.len()) {
                 membersSubject.value = members.map { member in
                     let zeroMember = zeroMatrixUsersService.getMatrixUser(userId: member.userId)
-                    return RoomMemberProxy.init(member: member, zeroMember: zeroMember)
+                    return RoomMemberProxy(member: member, zeroMember: zeroMember)
                 }
             }
         } catch {
@@ -296,7 +296,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             if let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) {
                 membersSubject.value = members.map { member in
                     let zeroMember = zeroMatrixUsersService.getMatrixUser(userId: member.userId)
-                    return RoomMemberProxy.init(member: member, zeroMember: zeroMember)
+                    return RoomMemberProxy(member: member, zeroMember: zeroMember)
                 }
             }
         } catch {
@@ -308,9 +308,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         do {
             let membersIterator = try await room.members()
             if let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) {
-                try await zeroMatrixUsersService.fetchZeroUsers(userIds: members.map({ $0.userId }))
+                try await zeroMatrixUsersService.fetchZeroUsers(userIds: members.map(\.userId))
             }
-        } catch {}
+        } catch { }
     }
 
     func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError> {
@@ -753,7 +753,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     private func getZeroRoomName() -> String? {
-        if let roomInfo = self.roomInfo {
+        if let roomInfo = roomInfo {
             var displayName: String? = roomInfo.displayName ?? roomInfo.rawName
             if displayName?.stringMatchesUserIdFormatRegex() == true {
                 let user = zeroMatrixUsersService.getMatrixUserCleaned(userId: displayName!)
@@ -766,7 +766,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     private func getZeroRoomAvatarUrl() -> String? {
-        if let roomInfo = self.roomInfo {
+        if let roomInfo = roomInfo {
             var displayName: String? = roomInfo.displayName ?? roomInfo.rawName
             var roomAvatar: String? = roomInfo.avatarUrl
             if displayName?.stringMatchesUserIdFormatRegex() == true {

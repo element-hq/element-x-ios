@@ -62,19 +62,17 @@ class ZeroMatrixUsersService {
     }
     
     func getRoomMembersMapped(roomInfo: RoomInfo, lastEventSender: String?) -> [ZMatrixUser] {
-        getRoomMemberIds(
-            roomInfo: roomInfo,
-            lastEventSender: lastEventSender
-        ).compactMap { memberId -> ZMatrixUser? in
+        getRoomMemberIds(roomInfo: roomInfo,
+                         lastEventSender: lastEventSender).compactMap { memberId -> ZMatrixUser? in
             allZeroUsers.first { $0.matrixId == memberId }
         }
     }
     
     func getRoomMemberIds(roomInfo: RoomInfo, lastEventSender: String?) -> [String] {
         var roomMemberIds: Set<String> = []
-        let roomHeroIds = roomInfo.heroes.map { $0.userId }
+        let roomHeroIds = roomInfo.heroes.map(\.userId)
         roomMemberIds.formUnion(roomHeroIds)
-        let roomUserIdsFromPL = roomInfo.userPowerLevels.map { $0.key }
+        let roomUserIdsFromPL = roomInfo.userPowerLevels.map(\.key)
         roomMemberIds.formUnion(roomUserIdsFromPL)
         if let matrixFormattedRoomName = roomInfo.matrixFormattedRoomName(homeServerPostFix: appSettings.zeroHomeServerPostfix) {
             roomMemberIds.insert(matrixFormattedRoomName)
@@ -94,7 +92,7 @@ class ZeroMatrixUsersService {
     func getAllRoomUsers() -> [ZMatrixUser] { allZeroUsers }
     
     private func getZeroUsersToFetch(_ userIds: [String]) -> [String] {
-        let existingUserIds = allZeroUsers.map { $0.matrixId }
+        let existingUserIds = allZeroUsers.map(\.matrixId)
         return userIds.filter { !existingUserIds.contains($0) }.uniqued { $0 }
     }
     

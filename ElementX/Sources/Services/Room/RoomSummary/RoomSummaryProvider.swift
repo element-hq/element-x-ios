@@ -390,8 +390,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                         let roomLastEvent = await room.roomListItem.latestEvent()
                         return self.zeroMatrixUsersService.getRoomMemberIds(roomInfo: roomInfo, lastEventSender: roomLastEvent?.sender())
                     }
-                        .flatMap { $0 }
-                        .uniqued { $0 }
+                    .flatMap { $0 }
+                    .uniqued { $0 }
                     let _ = try await zeroMatrixUsersService.fetchZeroUsers(userIds: members)
                 } catch {
                     MXLog.verbose("Error while fetching all room members userIds")

@@ -12,12 +12,11 @@ extension XCUIApplication {
         let getStartedButton = buttons[A11yIdentifiers.authenticationStartScreen.signIn]
         
         XCTAssertTrue(getStartedButton.waitForExistence(timeout: 10.0))
-        getStartedButton.tap()
+        getStartedButton.tapCenter()
         
-        // Get started is network bound, wait for the change homeserver button for longer
         let changeHomeserverButton = buttons[A11yIdentifiers.serverConfirmationScreen.changeServer]
-        XCTAssertTrue(changeHomeserverButton.waitForExistence(timeout: 30.0))
-        changeHomeserverButton.tap()
+        XCTAssertTrue(changeHomeserverButton.waitForExistence(timeout: 10.0))
+        changeHomeserverButton.tapCenter()
         
         let homeserverTextField = textFields[A11yIdentifiers.changeServerScreen.server]
         XCTAssertTrue(homeserverTextField.waitForExistence(timeout: 10.0))
@@ -26,7 +25,7 @@ extension XCUIApplication {
         
         let confirmButton = buttons[A11yIdentifiers.changeServerScreen.continue]
         XCTAssertTrue(confirmButton.waitForExistence(timeout: 10.0))
-        confirmButton.tap()
+        confirmButton.tapCenter()
         
         // Wait for server confirmation to finish
         let doesNotExistPredicate = NSPredicate(format: "exists == 0")
@@ -35,7 +34,7 @@ extension XCUIApplication {
         
         let continueButton = buttons[A11yIdentifiers.serverConfirmationScreen.continue]
         XCTAssertTrue(continueButton.waitForExistence(timeout: 30.0))
-        continueButton.tap()
+        continueButton.tapCenter()
         
         let usernameTextField = textFields[A11yIdentifiers.loginScreen.emailUsername]
         XCTAssertTrue(usernameTextField.waitForExistence(timeout: 10.0))
@@ -51,7 +50,7 @@ extension XCUIApplication {
         XCTAssertTrue(nextButton.waitForExistence(timeout: 10.0))
         XCTAssertTrue(nextButton.isEnabled)
         
-        nextButton.tap()
+        nextButton.tapCenter()
         
         // Wait for login to finish
         currentTestCase.expectation(for: doesNotExistPredicate, evaluatedWith: usernameTextField)
@@ -63,7 +62,7 @@ extension XCUIApplication {
             // Tapping the sheet button while animating upwards fails. Wait for it to settle
             sleep(1)
             
-            savePasswordButton.tap()
+            savePasswordButton.tapCenter()
         }
                 
         // Wait for the home screen to become visible.
@@ -80,17 +79,17 @@ extension XCUIApplication {
         let profileButton = buttons[A11yIdentifiers.homeScreen.userAvatar]
                 
         // `Failed to scroll to visible (by AX action) Button` https://stackoverflow.com/a/33534187/730924
-        profileButton.forceTap()
+        profileButton.tapCenter()
         
         // Logout
         let logoutButton = buttons[A11yIdentifiers.settingsScreen.logout]
         XCTAssertTrue(logoutButton.waitForExistence(timeout: 10.0))
-        logoutButton.tap()
+        logoutButton.tapCenter()
         
         // Confirm logout
         let alertLogoutButton = alerts.firstMatch.buttons["Sign out"]
         XCTAssertTrue(alertLogoutButton.waitForExistence(timeout: 10.0))
-        alertLogoutButton.tap()
+        alertLogoutButton.tapCenter()
         
         // Check that we're back on the login screen
         let getStartedButton = buttons[A11yIdentifiers.authenticationStartScreen.signIn]

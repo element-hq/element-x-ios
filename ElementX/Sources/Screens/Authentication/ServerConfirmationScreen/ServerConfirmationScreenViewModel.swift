@@ -82,6 +82,8 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
                 displayError(.invalidWellKnown(error))
             case .slidingSyncNotAvailable:
                 displayError(.slidingSync)
+            case .loginNotSupported:
+                displayError(.login)
             case .registrationNotSupported:
                 displayError(.registration)
             default:
@@ -117,9 +119,13 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
                                                  message: L10n.screenChangeServerErrorNoSlidingSyncMessage,
                                                  primaryButton: .init(title: L10n.actionLearnMore, role: .cancel, action: openURL),
                                                  secondaryButton: .init(title: L10n.actionCancel, action: nil))
+        case .login:
+            state.bindings.alertInfo = AlertInfo(id: .login,
+                                                 title: L10n.commonServerNotSupported,
+                                                 message: L10n.screenLoginErrorUnsupportedAuthentication)
         case .registration:
             state.bindings.alertInfo = AlertInfo(id: .registration,
-                                                 title: L10n.errorUnknown,
+                                                 title: L10n.commonServerNotSupported,
                                                  message: L10n.errorAccountCreationNotPossible)
         case .unknownError:
             state.bindings.alertInfo = AlertInfo(id: .unknownError)

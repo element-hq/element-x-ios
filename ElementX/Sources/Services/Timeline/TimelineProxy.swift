@@ -49,11 +49,11 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     private func fetchAllRoomUsers() async {
         do {
-            let membersIterator = try await self.room.members()
+            let membersIterator = try await room.members()
             if let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) {
-                try await zeroMatrixUsersService.fetchZeroUsers(userIds: members.map({ $0.userId }))
+                try await zeroMatrixUsersService.fetchZeroUsers(userIds: members.map(\.userId))
             }
-        } catch {}
+        } catch { }
     }
     
     func subscribeForUpdates() async {
@@ -69,10 +69,9 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         await subscribeToPagination()
         
-        let provider = await RoomTimelineProvider(
-            timeline: timeline, kind: kind,
-            paginationStatePublisher: paginationStatePublisher,
-            zeroMatrixUsersService: zeroMatrixUsersService)
+        let provider = await RoomTimelineProvider(timeline: timeline, kind: kind,
+                                                  paginationStatePublisher: paginationStatePublisher,
+                                                  zeroMatrixUsersService: zeroMatrixUsersService)
         // Make sure the existing items are built so that we have content in the timeline before
         // determining whether or not the timeline should paginate to load more items.
         await provider.waitForInitialItems()

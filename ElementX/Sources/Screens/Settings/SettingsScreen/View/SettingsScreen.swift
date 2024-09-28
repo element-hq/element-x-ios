@@ -27,14 +27,14 @@ struct SettingsScreen: View {
 //            if !shouldHideManageAccountSection {
 //                manageAccountSection
 //            }
-//            
+//
 //            generalSection
             
             signOutSection
         }
         .compoundList()
-        //.navigationTitle(L10n.commonSettings)
-        //.navigationBarTitleDisplayMode(.inline)
+        // .navigationTitle(L10n.commonSettings)
+        // .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
     }
     
@@ -42,7 +42,7 @@ struct SettingsScreen: View {
         Section {
             ListRow(kind: .custom {
                 Button {
-                    //context.send(viewAction: .userDetails)
+                    // context.send(viewAction: .userDetails)
                 } label: {
                     HStack(spacing: 12) {
 //                        LoadableAvatarImage(url: context.viewState.userAvatarURL,
@@ -65,7 +65,7 @@ struct SettingsScreen: View {
                         }
                         
 //                        Spacer()
-//                        
+//
 //                        ListRowAccessory.navigationLink
                     }
                     .padding(.horizontal, ListRowPadding.horizontal)

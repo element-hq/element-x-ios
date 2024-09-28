@@ -21,12 +21,10 @@ class ZeroUsersApi: ZeroUsersApiProtocol {
         
         let result: Result<[ZMatrixUser], Error> = try await APIManager
             .shared
-            .authorisedRequest(
-                UserEndPoints.matrixUsersEndPoint,
-                method: .post,
-                appSettings: appSettings,
-                parameters: parameters
-            )
+            .authorisedRequest(UserEndPoints.matrixUsersEndPoint,
+                               method: .post,
+                               appSettings: appSettings,
+                               parameters: parameters)
         
         switch result {
         case .success(let matrixUsers):
@@ -38,7 +36,7 @@ class ZeroUsersApi: ZeroUsersApiProtocol {
     
     // MARK: - Constants
     
-    private struct UserEndPoints {
+    private enum UserEndPoints {
         static let matrixUsersEndPoint = "\(APIConfigs.zeroURLRoot)matrix/users/zero"
     }
 }

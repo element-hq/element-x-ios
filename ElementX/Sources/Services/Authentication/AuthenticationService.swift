@@ -35,7 +35,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         self.userSessionStore = userSessionStore
         self.appSettings = appSettings
         self.appHooks = appHooks
-        self.zeroAuthApi = ZeroAuthApi(appSettings: appSettings)
+        zeroAuthApi = ZeroAuthApi(appSettings: appSettings)
         
         // When updating these, don't forget to update the reset method too.
         homeserverSubject = .init(LoginHomeserver(address: appSettings.defaultHomeserverAddress, loginMode: .unknown))
@@ -67,6 +67,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
             case .failure: nil
             }
             
+            if flow == .login, homeserver.loginMode == .unsupported {
+                return .failure(.loginNotSupported)
+            }
             if flow == .register, !homeserver.supportsRegistration {
                 return .failure(.registrationNotSupported)
             }
@@ -121,7 +124,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         guard let client else { return .failure(.failedLoggingIn) }
         do {
 //            try await client.login(username: username, password: password, initialDeviceName: initialDeviceName, deviceId: deviceID)
-//            
+//
 //            let refreshToken = try? client.session().refreshToken
 //            if refreshToken != nil {
 //                MXLog.warning("Refresh token found for a non oidc session, can't restore session, logging out")

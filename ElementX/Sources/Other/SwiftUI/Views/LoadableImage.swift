@@ -126,8 +126,8 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
             case .none:
                 if
                     let blurhash,
-                   // Build a small blurhash image so that it's fast
-                   let image = UIImage(blurHash: blurhash, size: .init(width: 10.0, height: 10.0)) {
+                    // Build a small blurhash image so that it's fast
+                    let image = UIImage(blurHash: blurhash, size: .init(width: 10.0, height: 10.0)) {
                     transformer(AnyView(Image(uiImage: image).resizable()))
                 } else {
                     placeholder()

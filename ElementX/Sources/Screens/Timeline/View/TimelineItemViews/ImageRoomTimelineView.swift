@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import SwiftUI
 import Kingfisher
+import SwiftUI
 
 struct ImageRoomTimelineView: View {
     @EnvironmentObject private var context: TimelineViewModel.Context
@@ -20,11 +20,11 @@ struct ImageRoomTimelineView: View {
                     if let remoteURL = timelineItem.content.imageURL {
                         KFAnimatedImage(URL(string: remoteURL))
                             .placeholder { _ in
-                               placeholder
+                                placeholder
                             }
                             .startLoadingBeforeViewAppear(false)
                     } else if let imageData =
-                                timelineItem.content.imageData {
+                        timelineItem.content.imageData {
                         Image(uiImage: UIImage(data: imageData)!)
                             .resizable()
                     } else {

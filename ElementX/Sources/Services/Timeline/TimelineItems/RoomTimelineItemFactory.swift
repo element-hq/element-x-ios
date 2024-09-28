@@ -242,8 +242,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
     
     private func buildCustomImageTimelineItem(for eventItemProxy: EventTimelineItemProxy,
-                                        _ messageContent: MessageContent,
-                                        _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+                                              _ messageContent: MessageContent,
+                                              _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
         ImageRoomTimelineItem(id: eventItemProxy.id,
                               timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                               isOutgoing: isOutgoing,
@@ -252,7 +252,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               isThreaded: false,
                               sender: eventItemProxy.sender,
                               content: buildCustomImageTimelineItemContent(messageContent),
-                              //TODO: we need to handle reply details if image is in reply to an existing message
+                              // TODO: we need to handle reply details if image is in reply to an existing message
                               replyDetails: nil,
                               properties: RoomTimelineItemProperties(isEdited: false,
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
@@ -283,8 +283,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
     
     private func buildCustomVideoTimelineItem(for eventItemProxy: EventTimelineItemProxy,
-                                        _ messageContent: MessageContent,
-                                        _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+                                              _ messageContent: MessageContent,
+                                              _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
         VideoRoomTimelineItem(id: eventItemProxy.id,
                               timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                               isOutgoing: isOutgoing,
@@ -293,7 +293,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               isThreaded: false,
                               sender: eventItemProxy.sender,
                               content: buildCustomVideoTimelineItemContent(messageContent),
-                              //TODO: we need to handle reply details if image is in reply to an existing message
+                              // TODO: we need to handle reply details if image is in reply to an existing message
                               replyDetails: nil,
                               properties: RoomTimelineItemProperties(isEdited: false,
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),

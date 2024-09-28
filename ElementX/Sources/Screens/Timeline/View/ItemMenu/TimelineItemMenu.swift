@@ -20,7 +20,7 @@ struct TimelineItemMenu: View {
     
     var body: some View {
         VStack(spacing: 8) {
-            //Hiding it
+            // Hiding it
 //            messagePreview
 //                .padding(.horizontal, 16)
 //                .padding(.top, 32.0)

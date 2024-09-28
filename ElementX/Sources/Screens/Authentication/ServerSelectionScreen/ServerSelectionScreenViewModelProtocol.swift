@@ -11,7 +11,4 @@ import Combine
 protocol ServerSelectionScreenViewModelProtocol {
     var actions: AnyPublisher<ServerSelectionScreenViewModelAction, Never> { get }
     var context: ServerSelectionScreenViewModelType.Context { get }
-    
-    /// Displays an error to the user.
-    func displayError(_ type: ServerSelectionScreenErrorType)
 }

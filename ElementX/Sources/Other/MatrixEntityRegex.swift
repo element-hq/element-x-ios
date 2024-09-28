@@ -63,7 +63,7 @@ enum MatrixEntityRegex: String {
     static func extractUsername(from match: String) -> String? {
         if let startIndex = match.firstIndex(of: "["),
            let endIndex = match.firstIndex(of: "]") {
-            let range = match.index(after: startIndex) ..< endIndex
+            let range = match.index(after: startIndex)..<endIndex
             let username = match[range]
             return username.description
         }

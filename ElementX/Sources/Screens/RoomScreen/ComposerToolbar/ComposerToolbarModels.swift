@@ -81,7 +81,7 @@ struct ComposerToolbarViewState: BindableState {
     }
 
     var showSendButton: Bool {
-        return true
+        true
         
 //        switch composerMode {
 //        case .recordVoiceMessage:

@@ -1,7 +1,7 @@
 import SwiftUI
 
-extension Font {
-    public static func inter(size: CGFloat, weight: Weight = .regular) -> Font {
+public extension Font {
+    static func inter(size: CGFloat, weight: Weight = .regular) -> Font {
         switch weight {
         case .ultraLight:
             return .custom("Inter-ExtraLight", size: size)
@@ -24,7 +24,7 @@ extension Font {
         }
     }
     
-    public static func robotoMonoRegular(size: CGFloat) -> Font {
+    static func robotoMonoRegular(size: CGFloat) -> Font {
         .custom("RobotoMono", size: size)
     }
 }

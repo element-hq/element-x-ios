@@ -14,11 +14,10 @@
 // limitations under the License.
 //
 
-import SwiftUI
 import Combine
+import SwiftUI
 
 struct VerifyBackupKeyScreen: View {
-    
     @ObservedObject var context: SecureBackupRecoveryKeyScreenViewModel.Context
     
     @FocusState var isFocused: Bool
@@ -73,7 +72,6 @@ struct VerifyBackupKeyScreen: View {
             Spacer()
             
             VStack(alignment: .leading, spacing: 8) {
-                
                 Text("Account backup phrase")
                     .foregroundStyle(Asset.Colors.textPrimary.swiftUIColor)
                     .font(.zero.bodySM)
@@ -88,38 +86,36 @@ struct VerifyBackupKeyScreen: View {
     }
     
     var backupkeyField: some View {
-        TextField(
-            "",
-            text: $context.confirmationRecoveryKey,
-            prompt: Text("Backup phrase")
-                .foregroundColor(Asset.Colors.greyScale150.swiftUIColor)
-        )
-        .foregroundColor(Asset.Colors.textPrimary.swiftUIColor)
-        .padding()
-        .textFieldStyle(PlainTextFieldStyle())
-        .frame(height: 40)
-        .background(Asset.Colors.greyScale150.swiftUIColor.opacity(0.1))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-        .focused($isFocused)
-        .keyboardType(.asciiCapable)
-        .textInputAutocapitalization(.never)
-        .autocorrectionDisabled()
-        .submitLabel(.done)
-        .onSubmit {
-            isFocused = false
-            context.send(viewAction: .confirmKey)
-        }
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(context.alertInfo == nil ? Color.clear : Asset.Colors.textWarning.swiftUIColor)
-        )
-        .onAppear {
-            UITextField.appearance().clearButtonMode = .whileEditing
-        }
+        TextField("",
+                  text: $context.confirmationRecoveryKey,
+                  prompt: Text("Backup phrase")
+                      .foregroundColor(Asset.Colors.greyScale150.swiftUIColor))
+            .foregroundColor(Asset.Colors.textPrimary.swiftUIColor)
+            .padding()
+            .textFieldStyle(PlainTextFieldStyle())
+            .frame(height: 40)
+            .background(Asset.Colors.greyScale150.swiftUIColor.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .focused($isFocused)
+            .keyboardType(.asciiCapable)
+            .textInputAutocapitalization(.never)
+            .autocorrectionDisabled()
+            .submitLabel(.done)
+            .onSubmit {
+                isFocused = false
+                context.send(viewAction: .confirmKey)
+            }
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(context.alertInfo == nil ? Color.clear : Asset.Colors.textWarning.swiftUIColor)
+            )
+            .onAppear {
+                UITextField.appearance().clearButtonMode = .whileEditing
+            }
     }
     
     var errorContent: some View {
-        VStack{
+        VStack {
             if let alert = context.alertInfo {
                 HStack {
                     Image(asset: Asset.Images.alertFillCircleIcon)

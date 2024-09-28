@@ -63,8 +63,8 @@ struct UserProfileScreen: View {
         if let userProfile = context.viewState.userProfile {
             AvatarHeaderView(user: userProfile,
                              avatarSize: .user(on: .memberDetails),
-                             mediaProvider: context.mediaProvider) {
-                context.send(viewAction: .displayAvatar)
+                             mediaProvider: context.mediaProvider) { url in
+                context.send(viewAction: .displayAvatar(url))
             } footer: {
                 otherUserFooter
             }

@@ -17,7 +17,7 @@ struct ImageRoomTimelineItemContent: Hashable {
     var aspectRatio: CGFloat?
     var blurhash: String?
     var contentType: UTType?
-    var isZeroImage: Bool = false
+    var isZeroImage = false
     var imageData: Data?
     var imageURL: String?
 }

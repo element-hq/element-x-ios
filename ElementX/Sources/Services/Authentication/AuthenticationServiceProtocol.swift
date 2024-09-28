@@ -24,6 +24,7 @@ enum AuthenticationServiceError: Error, Equatable {
     case invalidHomeserverAddress
     case invalidWellKnown(String)
     case slidingSyncNotAvailable
+    case loginNotSupported
     case registrationNotSupported
     case accountDeactivated
     case failedLoggingIn

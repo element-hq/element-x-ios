@@ -183,7 +183,7 @@ enum RoomDetailsScreenViewAction {
     case unignoreConfirmed
     case processTapNotifications
     case processToggleMuteNotifications
-    case displayAvatar
+    case displayAvatar(URL)
     case processTapPolls
     case toggleFavourite(isFavourite: Bool)
     case processTapRolesAndPermissions

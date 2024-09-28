@@ -2,7 +2,7 @@ import Foundation
 
 extension String {
     public func toMatrixUserIdFormat(_ homeServerPostFix: String) -> String? {
-        if self.stringMatchesUserIdFormatRegex() {
+        if stringMatchesUserIdFormatRegex() {
             return "@\(self):\(homeServerPostFix)"
         } else {
             // print("Not a proper matrix user-id format")
@@ -12,7 +12,7 @@ extension String {
     
     func stringMatchesUserIdFormatRegex() -> Bool {
         let regex = #"^[0-9a-fA-F]+-[0-9a-fA-F]+-[0-9a-fA-F]+-[0-9a-fA-F]+-[0-9a-fA-F]+$"#
-        let isMatch = self.range(of: regex, options: .regularExpression) != nil
+        let isMatch = range(of: regex, options: .regularExpression) != nil
         return isMatch
     }
 }

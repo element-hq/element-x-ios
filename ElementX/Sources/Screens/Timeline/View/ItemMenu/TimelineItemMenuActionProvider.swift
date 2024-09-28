@@ -37,7 +37,7 @@ struct TimelineItemMenuActionProvider {
         if let encryptedItem = timelineItem as? EncryptedRoomTimelineItem {
             switch encryptedItem.encryptionType {
 //            case .megolmV1AesSha2(let sessionID, _):
-//                debugActions.append(.retryDecryption(sessionID: sessionID))                
+//                debugActions.append(.retryDecryption(sessionID: sessionID))
             default:
                 break
             }

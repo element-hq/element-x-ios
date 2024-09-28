@@ -37,11 +37,9 @@ public struct AvatarView: View {
     let placeholder: ImageAsset?
     public let style: AvatarView.Style
     
-    init(
-        url: URL?,
-        placeholder: ImageAsset?,
-        style: AvatarView.Style
-    ) {
+    init(url: URL?,
+         placeholder: ImageAsset?,
+         style: AvatarView.Style) {
         self.url = url
         self.placeholder = placeholder
         self.style = style
@@ -62,10 +60,8 @@ public struct AvatarView: View {
             }
             .startLoadingBeforeViewAppear(false)
             .aspectRatio(contentMode: .fill)
-            .frame(
-                width: style.dimension,
-                height: style.dimension
-            )
+            .frame(width: style.dimension,
+                   height: style.dimension)
             .background(.black)
             .clipShape(Circle())
     }
@@ -73,10 +69,8 @@ public struct AvatarView: View {
 
 public struct AvatarViewPreview: PreviewProvider {
     public static var previews: some View {
-        AvatarView(
-            url: URL(string: "https://gravatar.com/avatar/8b01c662419106d1bb45b6fc4ad669b3?s=400&d=robohash&r=x"),
-            placeholder: nil,
-            style: .large
-        )
+        AvatarView(url: URL(string: "https://gravatar.com/avatar/8b01c662419106d1bb45b6fc4ad669b3?s=400&d=robohash&r=x"),
+                   placeholder: nil,
+                   style: .large)
     }
 }

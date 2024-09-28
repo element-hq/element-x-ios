@@ -39,7 +39,7 @@ struct RoomHeaderView: View {
             RoomAvatarImage(avatar: roomAvatar,
                             avatarSize: .room(on: .timeline),
                             mediaProvider: mediaProvider)
-            .accessibilityIdentifier(A11yIdentifiers.roomScreen.avatar)
+                .accessibilityIdentifier(A11yIdentifiers.roomScreen.avatar)
         }
     }
 }

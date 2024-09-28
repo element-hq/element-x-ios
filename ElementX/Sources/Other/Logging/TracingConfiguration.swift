@@ -11,9 +11,8 @@ import Collections
 // We can filter by level, crate and even file. See more details here:
 // https://docs.rs/tracing-subscriber/0.2.7/tracing_subscriber/filter/struct.EnvFilter.html#examples
 struct TracingConfiguration {
-    enum LogLevel: Codable, Hashable {
+    enum LogLevel: String, Codable, Hashable, Comparable {
         case error, warn, info, debug, trace
-        case custom(String)
         
         var title: String {
             switch self {
@@ -27,34 +26,32 @@ struct TracingConfiguration {
                 return "Debug"
             case .trace:
                 return "Trace"
-            case .custom:
-                return "Custom"
             }
         }
         
-        fileprivate var rawValue: String {
-            switch self {
-            case .error:
-                return "error"
-            case .warn:
-                return "warn"
-            case .info:
-                return "info"
-            case .debug:
-                return "debug"
-            case .trace:
-                return "trace"
-            case .custom(let filter):
-                return filter
+        static func < (lhs: TracingConfiguration.LogLevel, rhs: TracingConfiguration.LogLevel) -> Bool {
+            switch (lhs, rhs) {
+            case (.error, _):
+                true
+            case (.warn, .error):
+                false
+            case (.warn, _):
+                true
+            case (.info, .error), (.info, .warn):
+                false
+            case (.info, _):
+                true
+            case (.debug, .error), (.debug, .warn), (.debug, .info):
+                false
+            case (.debug, _):
+                true
+            case (.trace, _):
+                false
             }
         }
     }
     
     enum Target: String {
-        case common = ""
-        
-        case elementx
-        
         case hyper, matrix_sdk_ffi, matrix_sdk_crypto
         
         case matrix_sdk_client = "matrix_sdk::client"
@@ -66,9 +63,8 @@ struct TracingConfiguration {
         case matrix_sdk_ui_timeline = "matrix_sdk_ui::timeline"
     }
     
+    // The `common` target is excluded because 3rd-party crates might end up logging user data.
     static let targets: OrderedDictionary<Target, LogLevel> = [
-        .common: .info, // Never set this lower than info - 3rd-party crates may start logging user data.
-        .elementx: .info,
         .hyper: .warn,
         .matrix_sdk_ffi: .info,
         .matrix_sdk_client: .trace,
@@ -92,33 +88,30 @@ struct TracingConfiguration {
     /// - Parameter logLevel: the desired log level
     /// - Parameter target: the name of the target being configured
     /// - Returns: a custom tracing configuration
-    init(logLevel: LogLevel, target: String?) {
-        fileName = if let target {
-            "\(RustTracing.filePrefix)-\(target)"
+    init(logLevel: LogLevel, currentTarget: String, filePrefix: String?) {
+        fileName = if let filePrefix {
+            "\(RustTracing.filePrefix)-\(filePrefix)"
         } else {
             RustTracing.filePrefix
         }
-        
-        if case let .custom(filter) = logLevel {
-            self.filter = filter
-            return
-        }
-        
+
         let overrides = Self.targets.keys.reduce(into: [Target: LogLevel]()) { partialResult, target in
             // Keep the defaults here
-            let ignoredTargets: [Target] = [.common, // Never remove common from the ignored targets (see above for more info).
-                                            .hyper,
-                                            .matrix_sdk_ffi,
-                                            .matrix_sdk_oidc,
-                                            .matrix_sdk_client,
-                                            .matrix_sdk_crypto,
-                                            .matrix_sdk_crypto_account,
-                                            .matrix_sdk_http_client]
+            let ignoredTargets: [Target] = [.hyper]
+            
             if ignoredTargets.contains(target) {
                 return
             }
             
-            partialResult[target] = logLevel
+            guard let defaultTargetLogLevel = Self.targets[target] else {
+                return
+            }
+            
+            // Only change the targets that have default values
+            // smaller than the desired log level
+            if defaultTargetLogLevel < logLevel {
+                partialResult[target] = logLevel
+            }
         }
         
         var newTargets = Self.targets
@@ -126,13 +119,17 @@ struct TracingConfiguration {
             newTargets.updateValue(logLevel, forKey: target)
         }
         
-        let components = newTargets.map { (target: Target, logLevel: LogLevel) in
+        var components = newTargets.map { (target: Target, logLevel: LogLevel) in
             guard !target.rawValue.isEmpty else {
                 return logLevel.rawValue
             }
             
             return "\(target.rawValue)=\(logLevel.rawValue)"
         }
+        
+        // With `common` not being used we manually need to specify the log
+        // level for passed in targets
+        components.append("\(currentTarget)=\(logLevel.rawValue)")
         
         filter = components.joined(separator: ",")
     }

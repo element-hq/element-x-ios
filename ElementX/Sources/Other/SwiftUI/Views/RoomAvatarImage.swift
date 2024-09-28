@@ -25,6 +25,8 @@ struct RoomAvatarImage: View {
     let avatarSize: AvatarSize
     let mediaProvider: MediaProviderProtocol?
     
+    private(set) var onAvatarTap: ((URL) -> Void)?
+    
     var body: some View {
         switch avatar {
         case .room(let id, let name, let avatarURL):
@@ -32,7 +34,8 @@ struct RoomAvatarImage: View {
                                 name: name,
                                 contentID: id,
                                 avatarSize: avatarSize,
-                                mediaProvider: mediaProvider)
+                                mediaProvider: mediaProvider,
+                                onTap: onAvatarTap)
         case .heroes(let users):
             // We will expand upon this with more stack sizes in the future.
             if users.count == 0 {
@@ -45,14 +48,16 @@ struct RoomAvatarImage: View {
                                         name: users[0].displayName,
                                         contentID: users[0].userID,
                                         avatarSize: avatarSize,
-                                        mediaProvider: mediaProvider)
+                                        mediaProvider: mediaProvider,
+                                        onTap: onAvatarTap)
                         .scaledFrame(size: clusterSize, alignment: .topTrailing)
                     
                     LoadableAvatarImage(url: users[1].avatarURL,
                                         name: users[1].displayName,
                                         contentID: users[1].userID,
                                         avatarSize: avatarSize,
-                                        mediaProvider: mediaProvider)
+                                        mediaProvider: mediaProvider,
+                                        onTap: onAvatarTap)
                         .mask {
                             Rectangle()
                                 .fill(Color.white)
@@ -74,7 +79,8 @@ struct RoomAvatarImage: View {
                                     name: users[0].displayName,
                                     contentID: users[0].userID,
                                     avatarSize: avatarSize,
-                                    mediaProvider: mediaProvider)
+                                    mediaProvider: mediaProvider,
+                                    onTap: onAvatarTap)
             }
         }
     }

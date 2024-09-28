@@ -14,7 +14,7 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
     
     init(member: RoomMember) {
         self.member = member
-        self.zeroMember = nil
+        zeroMember = nil
     }
     
     init(member: RoomMember, zeroMember: ZMatrixUser? = nil) {

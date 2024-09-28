@@ -2,8 +2,8 @@ import Foundation
 
 // MARK: - Async/Await
 
-extension Sequence {
-    public func asyncMap<T>(
+public extension Sequence {
+    func asyncMap<T>(
         _ transform: (Element) async throws -> T
     ) async rethrows -> [T] {
         var values = [T]()
@@ -15,7 +15,7 @@ extension Sequence {
         return values
     }
 
-    public func concurrentMap<T>(
+    func concurrentMap<T>(
         _ transform: @escaping (Element) async throws -> T
     ) async throws -> [T] {
         let tasks = map { element in

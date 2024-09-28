@@ -17,7 +17,6 @@
 import SwiftUI
 
 struct VerifyLoginScreen: View {
-    
     @ObservedObject var context: IdentityConfirmationScreenViewModel.Context
     
     @State var isShowingDismissAlert = false
@@ -34,7 +33,7 @@ struct VerifyLoginScreen: View {
         .backgroundStyle(Asset.Colors.zeroDarkGrey.swiftUIColor)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
-        .interactiveDismissDisabled()     
+        .interactiveDismissDisabled()
         .alert("Are you sure?", isPresented: $isShowingDismissAlert, actions: {
             Button("Return", role: .cancel) { }
             Button("Verify later", role: .destructive) {
@@ -53,7 +52,7 @@ struct VerifyLoginScreen: View {
             .frame(height: 192)
             .overlay(alignment: .topTrailing) {
                 Button {
-                    self.isShowingDismissAlert = true
+                    isShowingDismissAlert = true
                 } label: {
                     Image(asset: Asset.Images.crossIcon)
                         .foregroundStyle(Color.white)
@@ -75,8 +74,7 @@ struct VerifyLoginScreen: View {
                 .font(.zero.bodySM)
                 .foregroundStyle(Asset.Colors.textPrimary.swiftUIColor)
             
-            Button {
-            } label: {
+            Button { } label: {
                 HStack {
                     Text("Learn more")
                         .foregroundStyle(Asset.Colors.blue11.swiftUIColor)

@@ -74,7 +74,7 @@ enum RoomMemberDetailsScreenViewAction {
     case showIgnoreAlert
     case ignoreConfirmed
     case unignoreConfirmed
-    case displayAvatar
+    case displayAvatar(URL)
     case openDirectChat
     case startCall(roomID: String)
 }

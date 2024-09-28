@@ -47,9 +47,7 @@ struct ZeroLoginScreen: View {
     }
     
     var web3LoginView: some View {
-        Button {
-            
-        } label: {
+        Button { } label: {
             Image(asset: Asset.Images.defaultWalletConnectButton)
         }
         .padding(.top, 40)
@@ -67,7 +65,6 @@ struct ZeroLoginScreen: View {
     
     var loginForm: some View {
         VStack(alignment: .center, spacing: 0) {
-            
             TextField(text: $context.username) {
                 Text("Email").foregroundColor(.compound.textPlaceholder)
             }

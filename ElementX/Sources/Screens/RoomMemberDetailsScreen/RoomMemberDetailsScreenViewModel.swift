@@ -84,8 +84,8 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             Task { await ignoreUser() }
         case .unignoreConfirmed:
             Task { await unignoreUser() }
-        case .displayAvatar:
-            Task { await displayFullScreenAvatar() }
+        case .displayAvatar(let url):
+            Task { await displayFullScreenAvatar(url) }
         case .openDirectChat:
             Task { await openDirectChat() }
         case .startCall(let roomID):
@@ -143,13 +143,9 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         }
     }
     
-    private func displayFullScreenAvatar() async {
+    private func displayFullScreenAvatar(_ url: URL) async {
         guard let roomMemberProxy else {
             fatalError()
-        }
-        
-        guard let avatarURL = roomMemberProxy.avatarURL else {
-            return
         }
         
         let loadingIndicatorIdentifier = "roomMemberAvatarLoadingIndicator"
@@ -157,7 +153,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier) }
             
         // We don't actually know the mime type here, assume it's an image.
-        if case let .success(file) = await mediaProvider.loadFileFromSource(.init(url: avatarURL, mimeType: "image/jpeg")) {
+        if case let .success(file) = await mediaProvider.loadFileFromSource(.init(url: url, mimeType: "image/jpeg")) {
             state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: roomMemberProxy.displayName)
         }
     }

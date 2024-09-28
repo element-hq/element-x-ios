@@ -17,13 +17,11 @@
 import SwiftUI
 
 struct LandingScreen: View {
-    
     @ObservedObject var context: AuthenticationStartScreenViewModel.Context
     
     var body: some View {
         LandingBackgroundView {
             VStack(alignment: .center) {
-                
                 content
                 
                 actionButton
@@ -42,14 +40,12 @@ struct LandingScreen: View {
     }
     
     var actionButton: some View {
-        Button(
-            action: {
-                context.send(viewAction: .loginManually)
-            }, label: {
-                Image(asset: Asset.Images.conversationsListHeader)
-                    .frame(width: 358, height: 65)
-            }
-        )
+        Button(action: {
+            context.send(viewAction: .loginManually)
+        }, label: {
+            Image(asset: Asset.Images.conversationsListHeader)
+                .frame(width: 358, height: 65)
+        })
     }
 }
 

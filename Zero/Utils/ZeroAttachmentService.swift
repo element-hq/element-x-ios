@@ -1,5 +1,5 @@
-import Foundation
 import CryptoSwift
+import Foundation
 
 class ZeroAttachmentService {
     private let zeroAttachmentApi: ZeroAttachmentApi
@@ -25,10 +25,9 @@ class ZeroAttachmentService {
             switch attachmentDownloadInfoResponse {
             case .success(let downloadInfo):
                 if let downloadURL = downloadInfo.downloadURL {
-                    
                     let attachmentData = try Data(contentsOf: downloadURL)
                     if isRoomEncrypted {
-                        //decrypt the attachment
+                        // decrypt the attachment
                         let decryptedData = try decryptAttachment(attachment: content, data: attachmentData)
                         return decryptedData
                     } else {
@@ -68,7 +67,7 @@ class ZeroAttachmentService {
     }
     
     public func setRoomEncrypted(_ encrypted: Bool) {
-        self.isRoomEncrypted = encrypted
+        isRoomEncrypted = encrypted
     }
 }
 

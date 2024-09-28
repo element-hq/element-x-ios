@@ -26,13 +26,13 @@ struct AvatarHeaderView<Footer: View>: View {
     
     private let avatarSize: AvatarSize
     private let mediaProvider: MediaProviderProtocol?
-    private var onAvatarTap: (() -> Void)?
+    private var onAvatarTap: ((URL) -> Void)?
     @ViewBuilder private var footer: () -> Footer
     
     init(room: RoomDetails,
          avatarSize: AvatarSize,
          mediaProvider: MediaProviderProtocol? = nil,
-         onAvatarTap: (() -> Void)? = nil,
+         onAvatarTap: ((URL) -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
         avatarInfo = .room(room.avatar)
         title = room.name ?? room.id
@@ -54,7 +54,7 @@ struct AvatarHeaderView<Footer: View>: View {
     init(accountOwner: RoomMemberDetails,
          dmRecipient: RoomMemberDetails,
          mediaProvider: MediaProviderProtocol? = nil,
-         onAvatarTap: (() -> Void)? = nil,
+         onAvatarTap: ((URL) -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
         let dmRecipientProfile = UserProfileProxy(member: dmRecipient)
         avatarInfo = .room(.heroes([dmRecipientProfile, UserProfileProxy(member: accountOwner)]))
@@ -72,7 +72,7 @@ struct AvatarHeaderView<Footer: View>: View {
     init(member: RoomMemberDetails,
          avatarSize: AvatarSize,
          mediaProvider: MediaProviderProtocol? = nil,
-         onAvatarTap: (() -> Void)? = nil,
+         onAvatarTap: ((URL) -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
         let profile = UserProfileProxy(member: member)
         
@@ -86,7 +86,7 @@ struct AvatarHeaderView<Footer: View>: View {
     init(user: UserProfileProxy,
          avatarSize: AvatarSize,
          mediaProvider: MediaProviderProtocol? = nil,
-         onAvatarTap: (() -> Void)? = nil,
+         onAvatarTap: ((URL) -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
         avatarInfo = .user(user)
         title = user.displayName ?? user.userID
@@ -134,7 +134,8 @@ struct AvatarHeaderView<Footer: View>: View {
             default:
                 RoomAvatarImage(avatar: roomAvatar,
                                 avatarSize: avatarSize,
-                                mediaProvider: mediaProvider)
+                                mediaProvider: mediaProvider,
+                                onAvatarTap: onAvatarTap)
             }
         case .user(let userProfile):
 //            LoadableAvatarImage(url: userProfile.avatarURL,
@@ -150,12 +151,7 @@ struct AvatarHeaderView<Footer: View>: View {
     
     var body: some View {
         VStack(spacing: 8.0) {
-            Button {
-                onAvatarTap?()
-            } label: {
-                avatar
-            }
-            .buttonStyle(.borderless) // Add a button style to stop the whole row being tappable.
+            avatar
             
             Spacer()
                 .frame(height: 9)

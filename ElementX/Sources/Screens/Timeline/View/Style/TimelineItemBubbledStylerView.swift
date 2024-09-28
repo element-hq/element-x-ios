@@ -86,7 +86,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 //                    Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
 //                        .font(.zero.bodySMSemibold)
 //                        .foregroundColor(.compound.decorativeColor(for: timelineItem.sender.id).text)
-//                    
+//
 //                    if timelineItem.sender.displayName != nil, timelineItem.sender.isDisplayNameAmbiguous {
 //                        Text(timelineItem.sender.id)
 //                            .font(.zero.bodyXS)
@@ -118,7 +118,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             }
             .padding(.trailing, 6)
         } else {
-            HStack{}.frame(width: 38)
+            HStack { }.frame(width: 38)
         }
     }
     

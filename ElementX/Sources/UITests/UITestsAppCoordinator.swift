@@ -30,7 +30,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
         
         windowManager.delegate = self
         
-        MXLog.configure(logLevel: .debug)
+        MXLog.configure(currentTarget: "uitests", filePrefix: nil, logLevel: .debug)
         
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         
@@ -637,7 +637,7 @@ class MockScreen: Identifiable {
                                                                                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: "@alice:matrix.org"),
                                                                                                          zeroAttachmentService: zeroAttachmentService,
-                                                                                                        zeroUsers: []),
+                                                                                                         zeroUsers: []),
                                                             appSettings: ServiceLocator.shared.settings)
             
             let flowCoordinator = UserSessionFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),

@@ -39,7 +39,6 @@ struct RoomScreen: View {
                         }
                     }
                     .padding(.top, 8)
-                    
                     .environmentObject(timelineContext)
                     .environment(\.timelineContext, timelineContext)
             }

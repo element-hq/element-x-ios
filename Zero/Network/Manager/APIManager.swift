@@ -11,8 +11,7 @@ class APIManager {
                                parameters: Parameters? = nil,
                                headers: HTTPHeaders? = nil,
                                encoding: ParameterEncoding = JSONEncoding.default) async throws -> Result<T, Error> {
-        
-        return try await withCheckedThrowingContinuation({ continuation in
+        try await withCheckedThrowingContinuation { continuation in
             AF.request(url, method: method, parameters: parameters, encoding: encoding, headers: headers)
                 .validate()
                 .responseDecodable(of: T.self) { response in
@@ -23,7 +22,7 @@ class APIManager {
                         continuation.resume(returning: .failure(error))
                     }
                 }
-        })
+        }
     }
     
     func authorisedRequest<T: Decodable>(_ url: String,
@@ -36,7 +35,7 @@ class APIManager {
         if let accessToken = appSettings.zeroAccessToken {
             authHeaders = getAuthHeaders(headers: headers, accessToken: accessToken)
         }
-        return try await withCheckedThrowingContinuation({ continuation in
+        return try await withCheckedThrowingContinuation { continuation in
             AF.request(url, method: method, parameters: parameters, encoding: encoding, headers: authHeaders)
                 .validate()
                 .responseDecodable(of: T.self) { response in
@@ -47,20 +46,20 @@ class APIManager {
                         continuation.resume(returning: .failure(error))
                     }
                 }
-        })
+        }
     }
     
     func authorisedRequest(_ url: String,
-                                         method: HTTPMethod,
-                                         appSettings: AppSettings,
-                                         parameters: Parameters? = nil,
-                                         headers: HTTPHeaders? = nil,
-                                         encoding: ParameterEncoding = JSONEncoding.default) async throws -> Result<Void, Error> {
+                           method: HTTPMethod,
+                           appSettings: AppSettings,
+                           parameters: Parameters? = nil,
+                           headers: HTTPHeaders? = nil,
+                           encoding: ParameterEncoding = JSONEncoding.default) async throws -> Result<Void, Error> {
         var authHeaders = headers
         if let accessToken = appSettings.zeroAccessToken {
             authHeaders = getAuthHeaders(headers: headers, accessToken: accessToken)
         }
-        return try await withCheckedThrowingContinuation({ continuation in
+        return try await withCheckedThrowingContinuation { continuation in
             AF.request(url, method: method, parameters: parameters, encoding: encoding, headers: authHeaders)
                 .validate()
                 .response { response in
@@ -71,7 +70,7 @@ class APIManager {
                         continuation.resume(returning: .failure(error))
                     }
                 }
-        })
+        }
     }
     
     private func getAuthHeaders(headers: HTTPHeaders?, accessToken: String) -> HTTPHeaders {

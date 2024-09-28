@@ -1,7 +1,6 @@
 import Foundation
 
 class MessageContentHandler {
-    
     func parseMessageContent(contentJsonString: String?) -> EventMessageContent? {
         if let contentData = contentJsonString?.data(using: .utf8) {
             do {

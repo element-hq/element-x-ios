@@ -70,7 +70,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         let appSettings = appHooks.appSettingsHook.configure(AppSettings())
         
-        MXLog.configure(logLevel: appSettings.logLevel)
+        MXLog.configure(currentTarget: "elementx", filePrefix: nil, logLevel: appSettings.logLevel)
         
         let appName = InfoPlistReader.main.bundleDisplayName
         let appVersion = InfoPlistReader.main.bundleShortVersionString
@@ -179,7 +179,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         AnyView(
             navigationRootCoordinator.toPresentable()
                 .environment(\.analyticsService, ServiceLocator.shared.analytics)
-                .onReceive(appSettings.$appAppearance) { [weak self] appAppearance in
+                .onReceive(appSettings.$appAppearance) { [weak self] _ in
                     guard let self else { return }
                     
                     windowManager.windows.forEach { window in

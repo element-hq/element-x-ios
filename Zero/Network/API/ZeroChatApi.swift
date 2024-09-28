@@ -23,12 +23,10 @@ class ZeroChatApi: ZeroChatApiProtocol {
         
         let result: Result<Void, Error> = try await APIManager
             .shared
-            .authorisedRequest(
-                ChatEndPoints.matrixMessageEndPoint,
-                method: .post,
-                appSettings: appSettings,
-                parameters: parameters
-            )
+            .authorisedRequest(ChatEndPoints.matrixMessageEndPoint,
+                               method: .post,
+                               appSettings: appSettings,
+                               parameters: parameters)
         
         switch result {
         case .success:
@@ -42,7 +40,7 @@ class ZeroChatApi: ZeroChatApiProtocol {
     
     // MARK: - Constants
     
-    private struct ChatEndPoints {
+    private enum ChatEndPoints {
         static let matrixMessageEndPoint = "\(APIConfigs.zeroURLRoot)matrix/message"
     }
 }

@@ -49,7 +49,7 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
     // MARK: - Private
     
     private func fetchSSOToken() async throws -> (Result<ZSSOToken, Error>) {
-        return try await APIManager.shared.authorisedRequest(AuthEndPoints.ssoTokenEndPoint, method: .get, appSettings: self.appSettings)
+        try await APIManager.shared.authorisedRequest(AuthEndPoints.ssoTokenEndPoint, method: .get, appSettings: appSettings)
     }
     
     private func fetchMatrixSession(ssoToken: String) async throws -> (Result<ZMatrixSession, Error>) {
@@ -74,7 +74,7 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
     
     // MARK: - Constants
     
-    private struct AuthEndPoints {
+    private enum AuthEndPoints {
         static let hostURL = APIConfigs.zeroURLRoot
         
         static let loginEndPoint = "\(hostURL)api/v2/accounts/login"
@@ -82,7 +82,7 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
         static let matrixSessionEndPoint = "_matrix/client/r0/login"
     }
     
-    private struct AuthConstants {
+    private enum AuthConstants {
         static let ssoTokenType = "org.matrix.login.jwt"
         static let origin = "https://zos.zero.tech"
     }

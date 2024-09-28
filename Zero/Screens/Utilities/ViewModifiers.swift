@@ -30,5 +30,4 @@ struct ZeroAuthBackgroundModifier: ViewModifier {
                 .ignoresSafeArea(.all)
         )
     }
-    
 }

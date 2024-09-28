@@ -82,7 +82,7 @@ class TimelineInteractionHandler {
         Task {
             guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
                   let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol,
-                    !eventTimelineItem.isRedacted && !eventTimelineItem.hasFailedDecryption else {
+                  !eventTimelineItem.isRedacted, !eventTimelineItem.hasFailedDecryption else {
                 // Don't show a menu for non-event based items.
                 return
             }
