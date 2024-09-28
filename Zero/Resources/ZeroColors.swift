@@ -25,4 +25,5 @@ public struct ZeroColors {
     public let _bgAccentSelected = Asset.Colors.blue11.swiftUIColor.opacity(0.3) // coreTokens.green300
     public let _bgBubbleHighlighted = Asset.Colors.blue11.swiftUIColor.opacity(0.3) // coreTokens.green300
     public let _bgBadgeSuccess = Asset.Colors.blue11.swiftUIColor.opacity(0.3) // coreTokens.alphaGreen300
+    public let _bgOwnPill = Asset.Colors.blue11.swiftUIColor.opacity(0.05)
 }

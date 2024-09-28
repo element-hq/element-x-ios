@@ -84,6 +84,13 @@ struct MessageText: UIViewRepresentable {
         textView.textContainer.lineFragmentPadding = 0
         textView.layoutManager.usesFontLeading = false
         textView.backgroundColor = .clear
+        
+        textView.dataDetectorTypes = .link
+        textView.linkTextAttributes = [
+            .foregroundColor: UIColor(Asset.Colors.brandColor.swiftUIColor),
+            .underlineStyle: NSUnderlineStyle.single.rawValue // Underline
+        ]
+        
         if let attributedText = try? NSAttributedString(attributedString, including: \.elementX) {
             textView.attributedText = attributedText
         }

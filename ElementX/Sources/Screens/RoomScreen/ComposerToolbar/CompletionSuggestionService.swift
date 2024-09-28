@@ -66,7 +66,9 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
         Task {
             switch await roomProxy.canUserTriggerRoomNotification(userID: roomProxy.ownUserID) {
             case .success(let value):
-                canMentionAllUsers = value
+                // canMentionAllUsers = value
+                /// Disabling all users combined mention (@Everyone)
+                canMentionAllUsers = false
             case .failure:
                 canMentionAllUsers = false
             }
@@ -74,7 +76,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     }
     
     func processTextMessage(_ textMessage: String?) {
-//        setSuggestionTrigger(detectTriggerInText(textMessage))
+        // setSuggestionTrigger(detectTriggerInText(textMessage))
     }
     
     func setSuggestionTrigger(_ suggestionTrigger: SuggestionTrigger?) {

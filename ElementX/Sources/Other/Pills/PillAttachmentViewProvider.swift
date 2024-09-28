@@ -34,6 +34,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider, NSSecureCo
     @MainActor
     override func loadView() {
         super.loadView()
+        guard delegate != nil else { return }
 
         guard let textAttachment = textAttachment as? PillTextAttachment,
               let pillData = textAttachment.pillData else {
