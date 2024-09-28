@@ -152,18 +152,15 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             return TextParsingMatch(type: .userID(identifier: identifier), range: match.range)
         }
         
-        matches.append(contentsOf: MatrixEntityRegex.zeroUsersRegex.matches(in: string).compactMap { match in
+        matches.append(contentsOf: MatrixEntityRegex.zeroMentionRegex.matches(in: string).compactMap { match in
             guard let matchRange = Range(match.range, in: string) else {
                 return nil
             }
             
-            let identifier = String(string[matchRange])
+            let mention = String(string[matchRange])
+            let zeroIdentifier = MatrixEntityRegex.createIdentifierFromZeroMention(inputString: mention)
             
-            guard let username = MatrixEntityRegex.extractUsername(from: identifier.description) else {
-                return nil
-            }
-            
-            return TextParsingMatch(type: .zeroUser(name: username), range: match.range)
+            return TextParsingMatch(type: .userID(identifier: zeroIdentifier), range: match.range)
         })
         
         matches.append(contentsOf: MatrixEntityRegex.roomAliasRegex.matches(in: string).compactMap { match in
@@ -253,13 +250,6 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             case .userID, .link:
                 if let url = match.link {
                     attributedString.addAttribute(.link, value: url, range: match.range)
-                }
-            case .zeroUser(name: let name):
-                attributedString.replaceCharacters(in: match.range, with: "@\(name)")
-                let string = attributedString.string
-                if let range = string.range(of: "@\(name)") {
-                    let color = UIColor(cgColor: Asset.Colors.blue11.color.cgColor)
-                    attributedString.addAttribute(.foregroundColor, value: color, range: NSRange(range, in: string))
                 }
             }
         }
@@ -399,7 +389,6 @@ private struct TextParsingMatch {
         case roomAlias(alias: String)
         case matrixURI(uri: String)
         case link(urlString: String)
-        case zeroUser(name: String)
         case atRoom
     }
     

@@ -509,6 +509,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 // Call your handleUserMention function here
                 attributedString.addAttribute(.link, value: url, range: range)
             }
+            parseZeroMentionsMarkdown(text) { range, url in
+                // Call your handleUserMention function here
+                attributedString.addAttribute(.link, value: url, range: range)
+            }
             
             let matches = MatrixEntityRegex.allUsersRegex.matches(in: attributedString.string)
             for match in matches {
@@ -547,6 +551,34 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             
             if let url = URL(string: fullURLString) {
                 callback(fullRange, url)
+            }
+        }
+    }
+    
+    private func parseZeroMentionsMarkdown(_ text: String, callback: (NSRange, URL) -> Void) {
+        // Define the regex pattern
+        let pattern = "@\\[[^\\]]+\\]\\(user:[^\\)]+\\)"
+        
+        // Create the regex
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
+            return
+        }
+        
+        // Find matches in the input text
+        let nsText = text as NSString
+        let matches = regex.matches(in: text, options: [], range: NSRange(location: 0, length: nsText.length))
+        
+        // Process each match
+        for match in matches.sorted(by: { $0.range.length > $1.range.length }) {
+            guard let matchRange = Range(match.range, in: text) else { return }
+            
+            let mention = String(text[matchRange])
+            
+            let userID = MatrixEntityRegex.createIdentifierFromZeroMention(inputString: mention)
+            let fullURLString = "https://matrix.to/#/\(userID)"
+            
+            if let url = URL(string: fullURLString) {
+                callback(match.range, url)
             }
         }
     }

@@ -15,7 +15,7 @@ enum MatrixEntityRegex: String {
     case roomAlias
     case uri
     case allUsers
-    case zeroUsers
+    case zeroMention
     
     var rawValue: String {
         switch self {
@@ -29,7 +29,7 @@ enum MatrixEntityRegex: String {
             return "matrix:(r|u|roomid)\\/[A-Z0-9\\-._~:/?#\\[\\]@!$&'()*+,;=%]*(?:\\?[A-Z0-9\\-._~:/?#\\[\\]@!$&'()*+,;=%]*)?"
         case .allUsers:
             return PillConstants.atRoom
-        case .zeroUsers:
+        case .zeroMention:
             return "@\\[[^\\]]+\\]\\(user:[^\\)]+\\)"
         }
     }
@@ -40,7 +40,7 @@ enum MatrixEntityRegex: String {
     static var roomAliasRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.roomAlias.rawValue, options: .caseInsensitive)
     static var uriRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.uri.rawValue, options: .caseInsensitive)
     static var allUsersRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.allUsers.rawValue)
-    static var zeroUsersRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.zeroUsers.rawValue)
+    static var zeroMentionRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.zeroMention.rawValue, options: .caseInsensitive)
     static var linkRegex = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
     // swiftlint:enable force_try
     
@@ -60,14 +60,29 @@ enum MatrixEntityRegex: String {
         return match.range.length == identifier.count
     }
     
-    static func extractUsername(from match: String) -> String? {
-        if let startIndex = match.firstIndex(of: "["),
-           let endIndex = match.firstIndex(of: "]") {
-            let range = match.index(after: startIndex) ..< endIndex
-            let username = match[range]
-            return username.description.trimmingCharacters(in: .whitespaces)
+    static func createIdentifierFromZeroMention(inputString: String) -> String {
+        //TODO: need to check from where we can get this value instead of hardcoding it
+        let zeroHomeServerPostfix: String = "zos-home-2.zero.tech"
+        
+        let pattern = #"user:([^\)]+)"#
+        do {
+            // Create the regular expression object
+            let regex = try NSRegularExpression(pattern: pattern)
+            // Search for matches in the string
+            if let match = regex.firstMatch(in: inputString, range: NSRange(inputString.startIndex..., in: inputString)) {
+                // Extract the matched range for the capture group (substring after "user:")
+                if let range = Range(match.range(at: 1), in: inputString) {
+                    let extractedSubstring = String(inputString[range])
+                    return "@\(extractedSubstring):\(zeroHomeServerPostfix)"
+                } else {
+                    return inputString
+                }
+            } else {
+                return inputString
+            }
+        } catch {
+            return inputString
         }
-        return nil
     }
     
     static func isMatrixRoomAlias(_ alias: String) -> Bool {
