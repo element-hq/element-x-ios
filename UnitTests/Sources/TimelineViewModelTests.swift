@@ -346,9 +346,6 @@ class TimelineViewModelTests: XCTestCase {
     // MARK: - Pins
     
     func testPinnedEvents() async throws {
-        ServiceLocator.shared.settings.pinningEnabled = true
-        
-        // Note: We need to start the test with a non-default value so we know the view model has finished the Task.
         let roomProxyMock = JoinedRoomProxyMock(.init(name: "",
                                                       pinnedEventIDs: .init(["test1"])))
         let actionsSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
@@ -378,9 +375,6 @@ class TimelineViewModelTests: XCTestCase {
     }
     
     func testCanUserPinEvents() async throws {
-        ServiceLocator.shared.settings.pinningEnabled = true
-        
-        // Note: We need to start the test with the non-default value so we know the view model has finished the Task.
         let roomProxyMock = JoinedRoomProxyMock(.init(name: "", canUserPin: true))
         let actionsSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
         roomProxyMock.underlyingActionsPublisher = actionsSubject.eraseToAnyPublisher()

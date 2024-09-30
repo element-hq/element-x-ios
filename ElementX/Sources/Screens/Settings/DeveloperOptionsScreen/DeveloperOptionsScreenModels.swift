@@ -46,7 +46,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var hideUnreadMessagesBadge: Bool { get set }
     var elementCallBaseURLOverride: URL? { get set }
     var fuzzyRoomListSearchEnabled: Bool { get set }
-    var pinningEnabled: Bool { get set }
     var enableOnlySignedDeviceIsolationMode: Bool { get set }
 }
 

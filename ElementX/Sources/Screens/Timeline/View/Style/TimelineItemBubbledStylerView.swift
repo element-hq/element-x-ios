@@ -355,8 +355,6 @@ private extension View {
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
     static let viewModelWithPins: TimelineViewModel = {
-        var settings = AppSettings()
-        settings.pinningEnabled = true
         let roomProxy = JoinedRoomProxyMock(.init(name: "Preview Room", pinnedEventIDs: [""]))
         return TimelineViewModel(roomProxy: roomProxy,
                                  focussedEventID: nil,
@@ -366,7 +364,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                  voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                  appMediator: AppMediatorMock.default,
-                                 appSettings: settings,
+                                 appSettings: ServiceLocator.shared.settings,
                                  analyticsService: ServiceLocator.shared.analytics)
     }()
 
@@ -384,7 +382,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             .previewDisplayName("Encryption Indicators")
         pinned
             .previewDisplayName("Pinned messages")
-            .snapshotPreferences(delay: 1.0)
+            .snapshotPreferences(delay: 2.0)
     }
     
     // These always include a reply
