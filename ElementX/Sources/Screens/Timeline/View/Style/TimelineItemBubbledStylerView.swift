@@ -382,7 +382,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             .previewDisplayName("Encryption Indicators")
         pinned
             .previewDisplayName("Pinned messages")
-            .snapshotPreferences(delay: 1.0)
+            .snapshotPreferences(delay: 2.0)
     }
     
     // These always include a reply
