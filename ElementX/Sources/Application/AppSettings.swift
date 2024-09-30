@@ -101,17 +101,9 @@ final class AppSettings {
         
     /// The default homeserver address used. This is intentionally a string without a scheme
     /// so that it can be passed to Rust as a ServerName for well-known discovery.
-<<<<<<< HEAD
     // Tchap: define Tchap DEV default HomeServer
     // private(set) var defaultHomeserverAddress = "matrix.org"
     private(set) var defaultHomeserverAddress = "matrix.dev01.tchap.incubateur.net"
-
-    /// An override of the homeserver's Sliding Sync proxy URL. This allows development against servers
-    /// that don't yet have an officially trusted proxy configured in their well-known.
-    let slidingSyncProxyURL: URL? = nil
-=======
-    private(set) var defaultHomeserverAddress = "matrix.org"
->>>>>>> 1.8.4
     
     /// The task identifier used for background app refresh. Also used in main target's the Info.plist
     let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"
