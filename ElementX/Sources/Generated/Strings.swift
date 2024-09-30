@@ -2419,6 +2419,8 @@ internal enum L10n {
     internal static var pinned: String { return L10n.tr("Localizable", "common.pinned") }
     /// Send to
     internal static var sendTo: String { return L10n.tr("Localizable", "common.send_to") }
+    /// You
+    internal static var you: String { return L10n.tr("Localizable", "common.you") }
   }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length

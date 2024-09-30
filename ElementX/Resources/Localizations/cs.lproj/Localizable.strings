@@ -229,6 +229,7 @@
 "common.open_source_licenses" = "Licence s otevřeným zdrojovým kódem";
 "common.pinned" = "Připnuto";
 "common.send_to" = "Odeslat do";
+"common.you" = "Vy";
 "common_no_room_name" = "Žádný název místnosti";
 "common_poll_end_confirmation" = "Opravdu chcete ukončit toto hlasování?";
 "common_poll_summary" = "Hlasování: %1$@";
@@ -292,12 +293,12 @@
 "notification_inline_reply_failed" = "** Nepodařilo se odeslat - otevřete prosím místnost";
 "notification_invitation_action_reject" = "Odmítnout";
 "notification_invite_body" = "Vás pozval(a) do chatu";
-"notification_invite_body_with_sender" = "%1$@ invited you to chat";
+"notification_invite_body_with_sender" = "%1$@ vás pozval(a) do chatu";
 "notification_mentioned_you_body" = "Zmínili vás: %1$@";
 "notification_new_messages" = "Nové zprávy";
 "notification_reaction_body" = "Reagoval(a) s %1$@";
 "notification_room_invite_body" = "Vás pozval(a) do místnosti";
-"notification_room_invite_body_with_sender" = "%1$@ invited you to join the room";
+"notification_room_invite_body_with_sender" = "%1$@ vás pozval(a) do místnosti";
 "notification_sender_me" = "Já";
 "notification_sender_mention_reply" = "%1$@ zmínil(a) nebo odpověděl(a)";
 "notification_test_push_notification_content" = "Prohlížíte si oznámení! Klikněte na mě!";

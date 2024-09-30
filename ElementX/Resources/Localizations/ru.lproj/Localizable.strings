@@ -229,6 +229,7 @@
 "common.open_source_licenses" = "Лицензии с открытым исходным кодом";
 "common.pinned" = "Закрепленный";
 "common.send_to" = "Отправить";
+"common.you" = "You";
 "common_no_room_name" = "Нету названия комнаты";
 "common_poll_end_confirmation" = "Вы действительно хотите завершить данный опрос?";
 "common_poll_summary" = "Опрос: %1$@";
@@ -292,12 +293,12 @@
 "notification_inline_reply_failed" = "** Не удалось отправить - пожалуйста, откройте комнату";
 "notification_invitation_action_reject" = "Отклонить";
 "notification_invite_body" = "Пригласил вас в чат";
-"notification_invite_body_with_sender" = "%1$@ invited you to chat";
+"notification_invite_body_with_sender" = "%1$@ пригласил вас в чат";
 "notification_mentioned_you_body" = "Упомянул вас: %1$@";
 "notification_new_messages" = "Новые сообщения";
 "notification_reaction_body" = "Отреагировал на %1$@";
 "notification_room_invite_body" = "Пригласил вас в комнату";
-"notification_room_invite_body_with_sender" = "%1$@ invited you to join the room";
+"notification_room_invite_body_with_sender" = "%1$@ пригласил вас присоединиться к комнате";
 "notification_sender_me" = "Я";
 "notification_sender_mention_reply" = "%1$@ упомянул или ответил";
 "notification_test_push_notification_content" = "Вы просматриваете уведомление! Нажмите на меня!";

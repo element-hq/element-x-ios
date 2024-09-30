@@ -229,6 +229,7 @@
 "common.open_source_licenses" = "Ліцензії відкритого коду";
 "common.pinned" = "Pinned";
 "common.send_to" = "Надіслати до";
+"common.you" = "You";
 "common_no_room_name" = "Немає назви кімнати";
 "common_poll_end_confirmation" = "Ви впевнені, що хочете закінчити це опитування?";
 "common_poll_summary" = "Опитування: %1$@";

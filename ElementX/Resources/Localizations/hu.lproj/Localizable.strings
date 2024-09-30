@@ -229,6 +229,7 @@
 "common.open_source_licenses" = "Nyílt forráskódú licencek";
 "common.pinned" = "Kitűzve";
 "common.send_to" = "Címzett";
+"common.you" = "You";
 "common_no_room_name" = "Nincs szobanév";
 "common_poll_end_confirmation" = "Biztos, hogy befejezi ezt a szavazást?";
 "common_poll_summary" = "Szavazás: %1$@";

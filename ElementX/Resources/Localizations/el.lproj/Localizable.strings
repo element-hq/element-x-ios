@@ -229,6 +229,7 @@
 "common.open_source_licenses" = "Άδειες ανοιχτού κώδικα";
 "common.pinned" = "Καρφιτσωμένο";
 "common.send_to" = "Αποστολή σε";
+"common.you" = "You";
 "common_no_room_name" = "Χωρίς όνομα δωματίου";
 "common_poll_end_confirmation" = "Θες σίγουρα να τερματίσεις αυτή τη δημοσκόπηση;";
 "common_poll_summary" = "Δημοσκόπηση: %1$@";
