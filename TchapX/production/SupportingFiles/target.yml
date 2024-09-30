@@ -1,0 +1,226 @@
+name: TchapX-Production
+
+schemes:
+  TchapX-Production:
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+    build:
+      targets:
+        TchapX-Production:
+          - running
+          - testing
+          - profiling
+          - analyzing
+          - archiving
+    profile:
+      config: Release
+    run:
+      config: Debug
+      environmentVariables:
+        - variable: HTTPS_PROXY
+          value: localhost:9090
+          isEnabled: false
+        - variable: UI_TESTS_SCREEN
+          value: ""
+          isEnabled: false
+        - variable: RESET_APP_SETTINGS
+          value: "true"
+          isEnabled: false
+    test:
+      config: Debug
+      gatherCoverageData: true
+      coverageTargets:
+        - TchapX-Production
+      testPlans:
+        - path: ../../../UnitTests/SupportingFiles/UnitTests.xctestplan
+          defaultPlan: true
+
+targets:
+  TchapX-Production:
+    type: application
+    platform: iOS
+
+    configFiles:
+      Debug: ../SupportingFiles/secrets.xcconfig
+      Release: ../SupportingFiles/secrets.xcconfig
+
+    info:
+      path: ../SupportingFiles/Info.plist
+      properties:
+        UILaunchScreen:
+          UIColorName: colors/background-color
+        CFBundleDisplayName: $(APP_DISPLAY_NAME)
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleURLTypes: [
+          {
+            CFBundleTypeRole: Editor,
+            CFBundleURLName: "Element Call",
+            CFBundleURLSchemes: [
+              io.element.call
+            ]
+          },
+          {
+            CFBundleTypeRole: Editor,
+            CFBundleURLName: "Application",
+            CFBundleURLSchemes: [
+              io.element
+            ]
+          }
+        ]
+        UISupportedInterfaceOrientations: [
+          UIInterfaceOrientationPortrait,
+          UIInterfaceOrientationPortraitUpsideDown,
+          UIInterfaceOrientationLandscapeLeft,
+          UIInterfaceOrientationLandscapeRight
+        ]
+        appGroupIdentifier: $(APP_GROUP_IDENTIFIER)
+        baseBundleIdentifier: $(BASE_BUNDLE_IDENTIFIER)
+        keychainAccessGroupIdentifier: $(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)
+        productionAppName: $(PRODUCTION_APP_NAME)
+        ITSAppUsesNonExemptEncryption: false
+        NSUserActivityTypes: [
+          INSendMessageIntent,
+          INStartCallIntent,
+        ]
+        NSCameraUsageDescription: To take pictures or videos and send them as a message $(APP_DISPLAY_NAME) needs access to the camera.
+        NSMicrophoneUsageDescription: To record and send messages with audio, $(APP_DISPLAY_NAME) needs to access the microphone.
+        NSPhotoLibraryAddUsageDescription: Allows saving photos and videos to your library.
+        NSLocationWhenInUseUsageDescription: Grant location access so that $(APP_DISPLAY_NAME) can share your location.
+        NSFaceIDUsageDescription: Face ID is used to access your app.
+        UIBackgroundModes: [
+          audio,
+          fetch,
+          processing,
+          voip
+        ]
+        BGTaskSchedulerPermittedIdentifiers: [
+          io.element.elementx.background.refresh
+        ]
+        UTExportedTypeDeclarations:
+        - UTTypeConformsTo: [public.text]
+          UTTypeDescription: Mention Pills
+          UTTypeIdentifier: $(PILLS_UT_TYPE_IDENTIFIER)
+        CFBundleDocumentTypes:
+        - CFBundleTypeName: Mention Pills
+          CFBundleTypeRole: Viewer
+          LSHandlerRank: Owner
+          LSItemContentTypes: $(PILLS_UT_TYPE_IDENTIFIER)
+        LSSupportsOpeningDocumentsInPlace: false
+        mapLibreAPIKey: $(MAPLIBRE_API_KEY)
+
+    settings:
+      base:
+        PRODUCTION_APP_NAME: Tchap PRODUCTION
+        BASE_APP_GROUP_IDENTIFIER: fr.gouv.tchapx
+        BASE_BUNDLE_IDENTIFIER: fr.gouv.tchapx
+        APP_NAME: TchapX-production
+        APP_DISPLAY_NAME: TchapX-PRODUCTION
+
+        PRODUCT_NAME: $(APP_NAME)
+        PRODUCT_BUNDLE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER)
+        ASSETCATALOG_COMPILER_APPICON_NAME: TchapX-icon
+        CODE_SIGN_ENTITLEMENTS: TchapX/production/SupportingFiles/tchapx.entitlements
+        SWIFT_OBJC_BRIDGING_HEADER: ElementX/SupportingFiles/ElementX-Bridging-Header.h
+        SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
+        PILLS_UT_TYPE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER).pills
+        OTHER_SWIFT_FLAGS:
+        - "-DIS_MAIN_APP -DIS_ENVIRONMENT_PRODUCTION"
+  
+    preBuildScripts:
+    - name: 🛠 SwiftGen
+      runOnlyWhenInstalling: false
+      basedOnDependencyAnalysis: false
+      shell: /bin/sh
+      script: |
+        export PATH="$PATH:/opt/homebrew/bin"
+        if which swiftgen >/dev/null; then
+            swiftgen config run --config Tools/SwiftGen/swiftgen-config.yml
+        else
+            echo "warning: SwiftGen not installed, download from https://github.com/SwiftGen/SwiftGen"
+        fi
+    - name: 🧙 Sourcery
+      runOnlyWhenInstalling: false
+      basedOnDependencyAnalysis: false
+      shell: /bin/sh
+      script: |
+        export PATH="$PATH:/opt/homebrew/bin"
+        if which sourcery >/dev/null; then
+            sourcery --config Tools/Sourcery/sourcery_automockable_config.yml
+        else
+            echo "warning: Sourcery not installed, run swift run tools setup-project"
+        fi
+
+    postBuildScripts:
+    - name: ⚠️ SwiftLint
+      runOnlyWhenInstalling: false
+      basedOnDependencyAnalysis: false
+      shell: /bin/sh
+      script: |
+        export PATH="$PATH:/opt/homebrew/bin"
+        if which swiftlint >/dev/null; then
+            swiftlint
+        else
+            echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
+        fi
+    - name: 🧹 SwiftFormat
+      runOnlyWhenInstalling: false
+      basedOnDependencyAnalysis: false
+      shell: /bin/sh
+      script: |
+        export PATH="$PATH:/opt/homebrew/bin"
+        if which swiftformat >/dev/null; then
+            swiftformat --lint --lenient "$PROJECT_DIR"
+        else
+            echo "warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat"
+        fi
+
+    dependencies:
+    - target: NSE-Production
+    # not used yet
+    # - target: NCE
+    - package: MatrixRustSDK
+    - package: Compound
+    - package: Algorithms
+    - package: AnalyticsEvents
+    - package: Collections
+    - package: DeviceKit
+    - package: DTCoreText
+    - package: KeychainAccess
+    - package: Kingfisher
+    - package: KZFileWatchers
+    - package: LoremSwiftum
+    - package: LRUCache
+    - package: Mapbox
+    - package: PostHog
+    - package: SwiftState
+    - package: GZIP
+    - package: Sentry
+      products: 
+        - Sentry
+        - SentrySwiftUI
+    - package: Version
+    - package: Emojibase
+    - package: WysiwygComposer
+    - package: Prefire
+    - package: SwiftOGG
+    - package: DSWaveformImage
+      product: DSWaveformImageViews
+
+    sources:
+    - path: ../../../ElementX/Sources
+      excludes:
+        - Other/Extensions/XCUIElement.swift
+    - path: ../../main/Sources
+      excludes:
+        - Other/Extensions/XCUIElement.swift
+    - path: ../../../ElementX/Resources
+    - path: ../../../ElementX/SupportingFiles/Settings.bundle
+    - path: ../Resources
+    - path: ../SupportingFiles
+      excludes:
+        - target.yml
+        - NSE
+    - path: ../../../Tools/Scripts/Templates/SimpleScreenExample/ElementX

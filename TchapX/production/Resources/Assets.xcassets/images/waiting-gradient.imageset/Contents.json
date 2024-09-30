@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "medium-light-dark.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
