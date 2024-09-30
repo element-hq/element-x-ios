@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import SwiftUI
@@ -56,6 +47,25 @@ class NavigationRootCoordinator: ObservableObject, CoordinatorProtocol, CustomSt
         sheetModule?.coordinator
     }
     
+    @Published fileprivate var overlayModule: NavigationModule? {
+        didSet {
+            if let oldValue {
+                logPresentationChange("Remove overlay", oldValue)
+                oldValue.tearDown()
+            }
+            
+            if let overlayModule {
+                logPresentationChange("Set overlay", overlayModule)
+                overlayModule.coordinator?.start()
+            }
+        }
+    }
+    
+    /// The currently displayed overlay coordinator
+    var overlayCoordinator: (any CoordinatorProtocol)? {
+        overlayModule?.coordinator
+    }
+    
     /// Sets or replaces the presented coordinator
     /// - Parameter coordinator: the coordinator to display
     func setRootCoordinator(_ coordinator: (any CoordinatorProtocol)?, animated: Bool = true, dismissalCallback: (() -> Void)? = nil) {
@@ -88,6 +98,31 @@ class NavigationRootCoordinator: ObservableObject, CoordinatorProtocol, CustomSt
 
         withTransaction(transaction) {
             sheetModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+        }
+    }
+    
+    /// Present an overlay on top of the split view
+    /// - Parameters:
+    ///   - coordinator: the coordinator to display
+    ///   - animated: whether the transition should be animated
+    ///   - dismissalCallback: called when the overlay has been dismissed, programatically or otherwise
+    func setOverlayCoordinator(_ coordinator: (any CoordinatorProtocol)?,
+                               animated: Bool = true,
+                               dismissalCallback: (() -> Void)? = nil) {
+        guard let coordinator else {
+            overlayModule = nil
+            return
+        }
+        
+        if overlayModule?.coordinator === coordinator {
+            fatalError("Cannot use the same coordinator more than once")
+        }
+
+        var transaction = Transaction()
+        transaction.disablesAnimations = !animated
+
+        withTransaction(transaction) {
+            overlayModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
         }
     }
         
@@ -126,6 +161,15 @@ private struct NavigationRootCoordinatorView: View {
         .animation(.elementDefault, value: rootCoordinator.rootModule)
         .sheet(item: $rootCoordinator.sheetModule) { module in
             module.coordinator?.toPresentable()
+        }
+        .overlay {
+            Group {
+                if let coordinator = rootCoordinator.overlayModule?.coordinator {
+                    coordinator.toPresentable()
+                        .transition(.opacity)
+                }
+            }
+            .animation(.elementDefault, value: rootCoordinator.overlayModule)
         }
     }
 }

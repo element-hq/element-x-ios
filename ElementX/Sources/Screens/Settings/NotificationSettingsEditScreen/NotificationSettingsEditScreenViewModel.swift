@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Combine
@@ -44,7 +35,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
         
         super.init(initialViewState: NotificationSettingsEditScreenViewState(bindings: bindings,
                                                                              strings: NotificationSettingsEditScreenStrings(chatType: chatType)),
-                   imageProvider: userSession.mediaProvider)
+                   mediaProvider: userSession.mediaProvider)
         
         setupNotificationSettingsSubscription()
         setupRoomSummaryProviderSubscription()
@@ -138,7 +129,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
             var roomsWithUserDefinedMode: [NotificationSettingsEditScreenRoom] = []
             
             for roomSummary in filteredRoomsSummary {
-                guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomSummary.id) else { continue }
+                guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomSummary.id) else { continue }
                 // `isOneToOneRoom` here is not the same as `isDirect` on the room. From the point of view of the push rule, a one-to-one room is a room with exactly two active members.
                 let isOneToOneRoom = roomProxy.activeMembersCount == 2
                 // display only the rooms we're interested in

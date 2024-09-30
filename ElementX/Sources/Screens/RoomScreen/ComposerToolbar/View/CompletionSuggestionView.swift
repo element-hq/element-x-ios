@@ -1,23 +1,14 @@
 //
-// Copyright 2021 New Vector Ltd
+// Copyright 2021-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import SwiftUI
 
 struct CompletionSuggestionView: View {
-    let imageProvider: ImageProviderProtocol?
+    let mediaProvider: MediaProviderProtocol?
     let items: [SuggestionItem]
     var showBackgroundShadow = true
     let onTap: (SuggestionItem) -> Void
@@ -41,7 +32,7 @@ struct CompletionSuggestionView: View {
             EmptyView()
         } else {
             ZStack {
-                MentionSuggestionItemView(imageProvider: nil, item: .init(id: "", displayName: nil, avatarURL: nil, range: .init()))
+                MentionSuggestionItemView(mediaProvider: nil, item: .init(id: "", displayName: nil, avatarURL: nil, range: .init()))
                     .readFrame($prototypeListItemFrame)
                     .hidden()
                 if showBackgroundShadow {
@@ -63,7 +54,7 @@ struct CompletionSuggestionView: View {
             } label: {
                 switch item {
                 case .user(let mention), .allUsers(let mention):
-                    MentionSuggestionItemView(imageProvider: imageProvider, item: mention)
+                    MentionSuggestionItemView(mediaProvider: mediaProvider, item: mention)
                 }
             }
             .modifier(ListItemPaddingModifier(isFirst: items.first?.id == item.id))
@@ -125,12 +116,12 @@ struct CompletionSuggestion_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         // Putting them is VStack allows the preview to work properly in tests
         VStack(spacing: 8) {
-            CompletionSuggestionView(imageProvider: MockMediaProvider(),
+            CompletionSuggestionView(mediaProvider: MockMediaProvider(),
                                      items: [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil, range: .init())),
                                              .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: URL.documentsDirectory, range: .init()))]) { _ in }
         }
         VStack(spacing: 8) {
-            CompletionSuggestionView(imageProvider: MockMediaProvider(),
+            CompletionSuggestionView(mediaProvider: MockMediaProvider(),
                                      items: multipleItems) { _ in }
         }
     }

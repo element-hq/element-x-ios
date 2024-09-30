@@ -13,9 +13,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d digit entered</string>
+			<string>%1$d dígito inserido</string>
 			<key>other</key>
-			<string>%1$d digits entered</string>
+			<string>%1$d dígitos inseridos</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -29,9 +29,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Read by %1$@ and %2$d other</string>
+			<string>Lido por %1$@ e %2$d outro</string>
 			<key>other</key>
-			<string>Read by %1$@ and %2$d others</string>
+			<string>Lido por %1$@ e %2$d outros</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -194,6 +194,22 @@
 			<string>PIN incorreto. Você tem mais %1$d chances</string>
 		</dict>
 	</dict>
+	<key>screen_pinned_timeline_screen_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d Pinned message</string>
+			<key>other</key>
+			<string>%1$d Pinned messages</string>
+		</dict>
+	</dict>
 	<key>screen_room_member_list_header_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -221,9 +237,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d mudança de sala</string>
+			<string>%1$d alteração na sala</string>
 			<key>other</key>
-			<string>%1$d mudanças de salas</string>
+			<string>%1$d alterações na sala</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>
@@ -237,9 +253,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@, %2$@ and %3$d other</string>
+			<string>%1$@, %2$@ e %3$d outro</string>
 			<key>other</key>
-			<string>%1$@, %2$@ and %3$d others</string>
+			<string>%1$@, %2$@ e %3$d outros</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members_second_component_ios</key>
@@ -253,9 +269,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d other</string>
+			<string>%d outro</string>
 			<key>other</key>
-			<string>%d others</string>
+			<string>%d outros</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>
@@ -269,9 +285,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ is typing</string>
+			<string>%1$@ está digitando</string>
 			<key>other</key>
-			<string>%1$@ are typing</string>
+			<string>%1$@ estão digitando</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>

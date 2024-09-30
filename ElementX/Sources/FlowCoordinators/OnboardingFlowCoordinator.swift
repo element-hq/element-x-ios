@@ -1,22 +1,17 @@
 //
-// Copyright 2024 New Vector Ltd
+// Copyright 2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Combine
 import Foundation
 import SwiftState
+
+enum OnboardingFlowCoordinatorAction {
+    case logout
+}
 
 class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
@@ -52,6 +47,13 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     // periphery: ignore - used to store the coordinator to avoid deallocation
     private var appLockFlowCoordinator: AppLockSetupFlowCoordinator?
     
+    private let actionsSubject: PassthroughSubject<OnboardingFlowCoordinatorAction, Never> = .init()
+    var actions: AnyPublisher<OnboardingFlowCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
+    
+    private var verificationStateCancellable: AnyCancellable?
+    
     init(userSession: UserSessionProtocol,
          appLockService: AppLockServiceProtocol,
          analyticsService: AnalyticsService,
@@ -74,6 +76,24 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         self.navigationStackCoordinator = NavigationStackCoordinator()
         
         stateMachine = .init(state: .initial)
+        
+        // Verification can change as part of the onboarding flow by verifying with
+        // another device, using a recovery key or by resetting one's crypto identity.
+        // It can also happen that onboarding started before it had a chance to update,
+        // usually seen when registering a new account.
+        // Handle all those cases here instead of spreading them throughout the code.
+        verificationStateCancellable = userSession.sessionSecurityStatePublisher
+            .map(\.verificationState)
+            .removeDuplicates()
+            .sink { [weak self] value in
+                guard let self,
+                      value == .verified,
+                      stateMachine.state == .identityConfirmation else { return }
+                
+                appSettings.hasRunIdentityConfirmationOnboarding = true
+                stateMachine.tryEvent(.nextSkippingIdentityConfimed)
+                self.verificationStateCancellable = nil
+            }
     }
     
     var shouldStart: Bool {
@@ -234,33 +254,13 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.nextSkippingIdentityConfimed)
             case .reset:
                 presentEncryptionResetScreen()
+            case .logout:
+                actionsSubject.send(.logout)
             }
         }
         .store(in: &cancellables)
         
-        // If the verification state is still unknown wait for it to resolve
-        // and just move on to the next steps if verified
-        var verificationStateCancellable: AnyCancellable?
-        if userSession.sessionSecurityStatePublisher.value.verificationState == .unknown {
-            verificationStateCancellable = userSession.sessionSecurityStatePublisher
-                .map(\.verificationState)
-                .removeDuplicates()
-                .sink { [weak self] value in
-                    guard let self else { return }
-                    
-                    if value == .verified {
-                        appSettings.hasRunIdentityConfirmationOnboarding = true
-                        stateMachine.tryEvent(.nextSkippingIdentityConfimed)
-                    } else {
-                        // Captured by the block below, nil-ing it wouldn't work
-                        verificationStateCancellable?.cancel()
-                    }
-                }
-        }
-        
-        presentCoordinator(coordinator) { [verificationStateCancellable] in
-            verificationStateCancellable?.cancel()
-        }
+        presentCoordinator(coordinator)
     }
     
     private func presentSessionVerificationScreen() async {
@@ -273,13 +273,10 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = SessionVerificationScreenCoordinator(parameters: parameters)
         
         coordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                
+            .sink { action in
                 switch action {
                 case .done:
-                    appSettings.hasRunIdentityConfirmationOnboarding = true
-                    stateMachine.tryEvent(.next)
+                    break // Moving to next state is handled by the global session verification listener
                 }
             }
             .store(in: &cancellables)
@@ -300,8 +297,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .recoveryFixed:
-                    appSettings.hasRunIdentityConfirmationOnboarding = true
-                    stateMachine.tryEvent(.next)
+                    break // Moving to next state is Handled by the global session verification listener
                 case .resetEncryption:
                     presentEncryptionResetScreen()
                 default:
@@ -329,8 +325,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             case .requestOIDCAuthorisation(let url):
                 presentOIDCAuthorisationScreen(url: url)
             case .resetFinished:
-                appSettings.hasRunIdentityConfirmationOnboarding = true
-                stateMachine.tryEvent(.next)
+                // Moving to next state is handled by the global session verification listener
                 navigationStackCoordinator.setSheetCoordinator(nil)
             }
         }

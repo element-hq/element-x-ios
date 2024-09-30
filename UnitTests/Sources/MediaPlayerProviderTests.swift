@@ -1,17 +1,8 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2023, 2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Combine
@@ -73,7 +64,7 @@ class MediaPlayerProviderTests: XCTestCase {
         // By default, there should be no player state
         XCTAssertNil(mediaPlayerProvider.playerState(for: audioPlayerStateId))
         
-        let audioPlayerState = AudioPlayerState(id: audioPlayerStateId, duration: 10.0)
+        let audioPlayerState = AudioPlayerState(id: audioPlayerStateId, title: "", duration: 10.0)
         mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
         XCTAssertEqual(audioPlayerState, mediaPlayerProvider.playerState(for: audioPlayerStateId))
         
@@ -85,7 +76,7 @@ class MediaPlayerProviderTests: XCTestCase {
         let audioPlayer = AudioPlayerMock()
         audioPlayer.actions = PassthroughSubject<AudioPlayerAction, Never>().eraseToAnyPublisher()
         
-        let audioPlayerStates = Array(repeating: AudioPlayerState(id: .timelineItemIdentifier(.random), duration: 0), count: 10)
+        let audioPlayerStates = Array(repeating: AudioPlayerState(id: .timelineItemIdentifier(.random), title: "", duration: 0), count: 10)
         for audioPlayerState in audioPlayerStates {
             mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
             audioPlayerState.attachAudioPlayer(audioPlayer)
@@ -104,7 +95,7 @@ class MediaPlayerProviderTests: XCTestCase {
         let audioPlayer = AudioPlayerMock()
         audioPlayer.actions = PassthroughSubject<AudioPlayerAction, Never>().eraseToAnyPublisher()
         
-        let audioPlayerStates = Array(repeating: AudioPlayerState(id: .timelineItemIdentifier(.random), duration: 0), count: 10)
+        let audioPlayerStates = Array(repeating: AudioPlayerState(id: .timelineItemIdentifier(.random), title: "", duration: 0), count: 10)
         for audioPlayerState in audioPlayerStates {
             mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
             audioPlayerState.attachAudioPlayer(audioPlayer)

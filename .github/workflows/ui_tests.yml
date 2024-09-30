@@ -30,6 +30,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gems-
 
+      - name: Free disk space
+        run: ci_scripts/free_space.sh
+
       - name: Setup environment
         run: source ci_scripts/ci_common.sh && setup_github_actions_environment
 
@@ -64,4 +67,16 @@ jobs:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: uitests
-    
+
+      - name: Collect test results
+        if: ${{ !cancelled() }}
+        run: xcresultparser -q -o junit -p $(pwd) fastlane/test_output/UITests.xcresult > fastlane/test_output/ui-junit.xml
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        continue-on-error: true
+        with:
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: uitests

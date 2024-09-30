@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Combine
@@ -41,7 +32,7 @@ enum ClientProxyError: Error {
     case sdkError(Error)
     
     case invalidMedia
-    case invalidUserIDServerName
+    case invalidServerName
     case failedUploadingMedia(Error, MatrixErrorCode)
     case roomPreviewIsPrivate
 }
@@ -54,7 +45,8 @@ enum SlidingSyncConstants {
         RequiredState(key: "m.room.topic", value: ""),
         RequiredState(key: "m.room.avatar", value: ""),
         RequiredState(key: "m.room.canonical_alias", value: ""),
-        RequiredState(key: "m.room.join_rules", value: "")
+        RequiredState(key: "m.room.join_rules", value: ""),
+        RequiredState(key: "m.room.pinned_events", value: "")
     ]
 }
 
@@ -104,8 +96,13 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     var homeserver: String { get }
     
+    var slidingSyncVersion: SlidingSyncVersion { get }
+    var availableSlidingSyncVersions: [SlidingSyncVersion] { get async }
+    
+    var canDeactivateAccount: Bool { get }
+    
     var userIDServerName: String? { get }
-        
+    
     var userDisplayNamePublisher: CurrentValuePublisher<String?, Never> { get }
 
     var userAvatarURLPublisher: CurrentValuePublisher<URL?, Never> { get }
@@ -116,6 +113,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var pusherNotificationClientIdentifier: String? { get }
     
     var roomSummaryProvider: RoomSummaryProviderProtocol? { get }
+    
+    var roomsToAwait: Set<String> { get set }
     
     /// Used for listing rooms that shouldn't be affected by the main `roomSummaryProvider` filtering
     var alternateRoomSummaryProvider: RoomSummaryProviderProtocol? { get }
@@ -146,7 +145,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError>
     
-    func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol?
+    func roomForIdentifier(_ identifier: String) async -> RoomProxyType?
     
     func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewDetails, ClientProxyError>
     
@@ -162,6 +161,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
         
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError>
 
+    func deactivateAccount(password: String?, eraseData: Bool) async -> Result<Void, ClientProxyError>
+    
     func logout() async -> URL?
 
     func setPusher(with configuration: PusherConfiguration) async throws

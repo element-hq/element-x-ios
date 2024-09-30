@@ -1,17 +1,8 @@
 //
-// Copyright 2024 New Vector Ltd
+// Copyright 2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Compound
@@ -38,7 +29,7 @@ struct PinnedItemsBannerView: View {
         Button { onMainButtonTap() } label: {
             HStack(spacing: 0) {
                 HStack(spacing: 10) {
-                    PinnedItemsIndicatorView(pinIndex: state.selectedPinIndex, pinsCount: state.count)
+                    PinnedItemsIndicatorView(pinIndex: state.selectedPinnedIndex, pinsCount: state.count)
                         .accessibilityHidden(true)
                     CompoundIcon(\.pinSolid, size: .small, relativeTo: .compound.bodyMD)
                         .foregroundColor(Color.compound.iconSecondaryAlpha)
@@ -54,27 +45,31 @@ struct PinnedItemsBannerView: View {
     
     @ViewBuilder
     private var viewAllButton: some View {
-        switch state {
-        case .loaded:
-            Button { onViewAllButtonTap() } label: {
-                Text(L10n.screenRoomPinnedBannerViewAllButtonTitle)
-                    .font(.compound.bodyMDSemibold)
-                    .foregroundStyle(Color.compound.textPrimary)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 5)
-            }
-        case .loading:
-            ProgressView()
+        Button { onViewAllButtonTap() } label: {
+            Text(state.isLoading ? "" : L10n.screenRoomPinnedBannerViewAllButtonTitle)
+                .font(.compound.bodyMDSemibold)
+                .foregroundStyle(Color.compound.textPrimary)
+                .opacity(state.isLoading ? 0 : 1)
+                // Use overlay instead otherwise the sliding animation would not work
+                .overlay(alignment: .trailing) {
+                    ProgressView()
+                        .opacity(state.isLoading ? 1 : 0)
+                }
                 .padding(.horizontal, 16)
+                .padding(.vertical, 5)
         }
+        .disabled(state.isLoading)
     }
     
     private var content: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(state.bannerIndicatorDescription)
-                .font(.compound.bodySM)
-                .foregroundColor(.compound.textActionAccent)
-                .lineLimit(1)
+            // Only the display the indicator description for more than 1 pinned item
+            if state.count > 1 {
+                Text(state.bannerIndicatorDescription)
+                    .font(.compound.bodySM)
+                    .foregroundColor(.compound.textActionAccent)
+                    .lineLimit(1)
+            }
             Text(state.displayedMessage)
                 .font(.compound.bodyMD)
                 .foregroundColor(.compound.textPrimary)
@@ -98,16 +93,16 @@ struct PinnedItemsBannerView_Previews: PreviewProvider, TestablePreview {
             PinnedItemsBannerView(state: .loaded(state: .init(pinnedEventContents: ["1": "Content",
                                                                                     "2": "2",
                                                                                     "3": "3"],
-                selectedPinEventID: "1")),
+                selectedPinnedEventID: "1")),
                                   onMainButtonTap: { },
                                   onViewAllButtonTap: { })
             PinnedItemsBannerView(state: .loaded(state: .init(pinnedEventContents: ["1": "Very very very very long content here",
                                                                                     "2": "2"],
-                selectedPinEventID: "1")),
+                selectedPinnedEventID: "1")),
                                   onMainButtonTap: { },
                                   onViewAllButtonTap: { })
             PinnedItemsBannerView(state: .loaded(state: .init(pinnedEventContents: ["1": attributedContent],
-                                                              selectedPinEventID: "1")),
+                                                              selectedPinnedEventID: "1")),
                                   onMainButtonTap: { },
                                   onViewAllButtonTap: { })
             PinnedItemsBannerView(state: .loading(numbersOfEvents: 5),

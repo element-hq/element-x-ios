@@ -1,19 +1,11 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
+import AVKit
 import Combine
 import SwiftUI
 
@@ -184,6 +176,17 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 }
             }
             .store(in: &cancellables)
+        
+        onboardingFlowCoordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .logout:
+                    logout()
+                }
+            }
+            .store(in: &cancellables)
     }
     
     func start() {
@@ -267,11 +270,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         case .userProfile(let userID):
             stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
         case .call(let roomID):
-            Task {
-                await presentCallScreen(roomID: roomID)
-            }
+            Task { await presentCallScreen(roomID: roomID) }
         case .genericCallLink(let url):
-            navigationSplitCoordinator.setSheetCoordinator(GenericCallLinkCoordinator(parameters: .init(url: url)), animated: animated)
+            presentCallScreen(genericCallLink: url)
         case .settings, .chatBackupSettings:
             settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
         case .oidcCallback:
@@ -318,6 +319,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 } else {
                     Task { await self.startRoomFlow(roomID: roomID, via: via, entryPoint: entryPoint, animated: animated) }
                 }
+                hideCallScreenOverlay() // Turn any active call into a PiP so that navigation from a notification is visible to the user.
             case(.roomList, .deselectRoom, .roomList):
                 dismissRoomFlow(animated: animated)
                                 
@@ -406,12 +408,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
                 case .presentStartChatScreen:
                     stateMachine.processEvent(.showStartChatScreen)
-                case .logout:
-                    Task { await self.runLogoutFlow() }
                 case .presentGlobalSearch:
                     presentGlobalSearch()
                 case .presentRoomDirectorySearch:
                     stateMachine.processEvent(.showRoomDirectorySearchScreen)
+                case .logoutWithoutConfirmation:
+                    self.actionsSubject.send(.logout)
+                case .logout:
+                    Task { await self.runLogoutFlow() }
                 }
             }
             .store(in: &cancellables)
@@ -430,12 +434,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         guard isLastDevice else {
-            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
-                                                                            title: L10n.screenSignoutConfirmationDialogTitle,
-                                                                            message: L10n.screenSignoutConfirmationDialogContent,
-                                                                            primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
-                                                                                self?.actionsSubject.send(.logout)
-                                                                            })
+            logout()
             return
         }
         
@@ -466,6 +465,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         presentSecureBackupLogoutConfirmationScreen()
     }
     
+    private func logout() {
+        ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                        title: L10n.screenSignoutConfirmationDialogTitle,
+                                                                        message: L10n.screenSignoutConfirmationDialogContent,
+                                                                        primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
+                                                                            self?.actionsSubject.send(.logout)
+                                                                        })
+    }
+    
     // MARK: Room Flow
     
     private func startRoomFlow(roomID: String,
@@ -478,6 +486,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                     roomTimelineControllerFactory: roomTimelineControllerFactory,
                                                     navigationStackCoordinator: detailNavigationStackCoordinator,
                                                     emojiProvider: EmojiProvider(),
+                                                    ongoingCallRoomIDPublisher: elementCallService.ongoingCallRoomIDPublisher,
                                                     appMediator: appMediator,
                                                     appSettings: appSettings,
                                                     analytics: analytics,
@@ -557,45 +566,83 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
     // MARK: Calls
     
-    private func presentCallScreen(roomProxy: RoomProxyProtocol) {
-        let colorScheme: ColorScheme = appMediator.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
-        let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: elementCallService,
-                                                                            clientProxy: userSession.clientProxy,
-                                                                            roomProxy: roomProxy,
-                                                                            clientID: InfoPlistReader.main.bundleIdentifier,
-                                                                            elementCallBaseURL: appSettings.elementCallBaseURL,
-                                                                            elementCallBaseURLOverride: appSettings.elementCallBaseURLOverride,
-                                                                            colorScheme: colorScheme,
-                                                                            appHooks: appHooks))
-        
-        callScreenCoordinator.actions
-            .sink { [weak self] action in
-                switch action {
-                case .dismiss:
-                    self?.navigationSplitCoordinator.setSheetCoordinator(nil)
-                }
-            }
-            .store(in: &cancellables)
-        
-        navigationSplitCoordinator.setSheetCoordinator(callScreenCoordinator, animated: true)
-        
-        analytics.track(screen: .RoomCall)
+    private func presentCallScreen(genericCallLink url: URL) {
+        presentCallScreen(configuration: .init(genericCallLink: url))
     }
     
     private func presentCallScreen(roomID: String) async {
-        guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomID) else {
+        guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             return
         }
         
         presentCallScreen(roomProxy: roomProxy)
     }
     
-    private func dismissCallScreenIfNeeded() {
-        guard navigationSplitCoordinator.sheetCoordinator is CallScreenCoordinator else {
+    private func presentCallScreen(roomProxy: JoinedRoomProxyProtocol) {
+        let colorScheme: ColorScheme = appMediator.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
+        presentCallScreen(configuration: .init(roomProxy: roomProxy,
+                                               clientProxy: userSession.clientProxy,
+                                               clientID: InfoPlistReader.main.bundleIdentifier,
+                                               elementCallBaseURL: appSettings.elementCallBaseURL,
+                                               elementCallBaseURLOverride: appSettings.elementCallBaseURLOverride,
+                                               colorScheme: colorScheme))
+    }
+    
+    private var callScreenPictureInPictureController: AVPictureInPictureController?
+    private func presentCallScreen(configuration: ElementCallConfiguration) {
+        guard elementCallService.ongoingCallRoomIDPublisher.value != configuration.callRoomID else {
+            MXLog.info("Returning to existing call.")
+            callScreenPictureInPictureController?.stopPictureInPicture()
             return
         }
         
-        navigationSplitCoordinator.setSheetCoordinator(nil)
+        let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: elementCallService,
+                                                                            configuration: configuration,
+                                                                            allowPictureInPicture: true,
+                                                                            appHooks: appHooks))
+        
+        callScreenCoordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .pictureInPictureIsAvailable(let controller):
+                    callScreenPictureInPictureController = controller
+                case .pictureInPictureStarted:
+                    MXLog.info("Hiding call for PiP presentation.")
+                    navigationSplitCoordinator.setOverlayPresentationMode(.minimized)
+                case .pictureInPictureStopped:
+                    MXLog.info("Restoring call after PiP presentation.")
+                    navigationSplitCoordinator.setOverlayPresentationMode(.fullScreen)
+                case .dismiss:
+                    callScreenPictureInPictureController = nil
+                    navigationSplitCoordinator.setOverlayCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationSplitCoordinator.setOverlayCoordinator(callScreenCoordinator, animated: true)
+        
+        analytics.track(screen: .RoomCall)
+    }
+    
+    private func hideCallScreenOverlay() {
+        guard let callScreenPictureInPictureController else {
+            MXLog.warning("Picture in picture isn't available, dismissing the call screen.")
+            dismissCallScreenIfNeeded()
+            return
+        }
+        
+        MXLog.info("Starting picture in picture to hide the call screen overlay.")
+        callScreenPictureInPictureController.startPictureInPicture()
+        navigationSplitCoordinator.setOverlayPresentationMode(.minimized)
+    }
+    
+    private func dismissCallScreenIfNeeded() {
+        guard navigationSplitCoordinator.overlayCoordinator is CallScreenCoordinator else {
+            return
+        }
+        
+        navigationSplitCoordinator.setOverlayCoordinator(nil)
     }
     
     // MARK: Secure backup confirmation
@@ -666,7 +713,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentRoomDirectorySearch() {
         let coordinator = RoomDirectorySearchScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
-                                                                                 imageProvider: userSession.mediaProvider,
+                                                                                 mediaProvider: userSession.mediaProvider,
                                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController))
         
         coordinator.actionsPublisher.sink { [weak self] action in

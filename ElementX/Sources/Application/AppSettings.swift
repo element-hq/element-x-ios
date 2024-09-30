@@ -1,21 +1,18 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Foundation
 import SwiftUI
+
+// Common settings between app and NSE
+protocol CommonSettingsProtocol {
+    var logLevel: TracingConfiguration.LogLevel { get }
+    var invisibleCryptoEnabled: Bool { get }
+}
 
 /// Store Element specific app settings.
 final class AppSettings {
@@ -23,7 +20,6 @@ final class AppSettings {
         case lastVersionLaunched
         case appLockNumberOfPINAttempts
         case appLockNumberOfBiometricAttempts
-        case migratedAccounts
         case timelineStyle
         
         case analyticsConsentState
@@ -43,11 +39,11 @@ final class AppSettings {
         case elementCallEncryptionEnabled
         
         // Feature flags
-        case simplifiedSlidingSyncEnabled
+        case slidingSyncDiscovery
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
         case pinningEnabled
-        case timelineItemAuthenticityEnabled
+        case invisibleCryptoEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -105,6 +101,7 @@ final class AppSettings {
         
     /// The default homeserver address used. This is intentionally a string without a scheme
     /// so that it can be passed to Rust as a ServerName for well-known discovery.
+<<<<<<< HEAD
     // Tchap: define Tchap DEV default HomeServer
     // private(set) var defaultHomeserverAddress = "matrix.org"
     private(set) var defaultHomeserverAddress = "matrix.dev01.tchap.incubateur.net"
@@ -112,6 +109,9 @@ final class AppSettings {
     /// An override of the homeserver's Sliding Sync proxy URL. This allows development against servers
     /// that don't yet have an officially trusted proxy configured in their well-known.
     let slidingSyncProxyURL: URL? = nil
+=======
+    private(set) var defaultHomeserverAddress = "matrix.org"
+>>>>>>> 1.8.4
     
     /// The task identifier used for background app refresh. Also used in main target's the Info.plist
     let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"
@@ -175,14 +175,10 @@ final class AppSettings {
                                                                      contacts: [supportEmailAddress],
                                                                      staticRegistrations: oidcStaticRegistrations.mapKeys { $0.absoluteString },
                                                                      dynamicRegistrationsFile: .sessionsBaseDirectory.appending(path: "oidc/registrations.json"))
-
-    /// A dictionary of accounts that have performed an initial sync through their proxy.
-    ///
-    /// This is a temporary workaround. In the future we should be able to receive a signal from the
-    /// proxy that it is the first sync (or that an upgrade on the backend will involve a slower sync).
-    @UserPreference(key: UserDefaultsKeys.migratedAccounts, defaultValue: [:], storageType: .userDefaults(store))
-    var migratedAccounts: [String: Bool]
-
+    
+    /// A temporary hack to allow registration on matrix.org until MAS is deployed.
+    let webRegistrationEnabled = true
+    
     // MARK: - Notifications
     
     var pusherAppId: String {
@@ -285,12 +281,13 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.fuzzyRoomListSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
     var fuzzyRoomListSearchEnabled
     
-    @UserPreference(key: UserDefaultsKeys.pinningEnabled, defaultValue: false, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.pinningEnabled, defaultValue: true, storageType: .userDefaults(store))
     var pinningEnabled
     
-    @UserPreference(key: UserDefaultsKeys.timelineItemAuthenticityEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var timelineItemAuthenticityEnabled
-        
+    enum SlidingSyncDiscovery: Codable { case proxy, native, forceNative }
+    @UserPreference(key: UserDefaultsKeys.slidingSyncDiscovery, defaultValue: .native, storageType: .userDefaults(store))
+    var slidingSyncDiscovery: SlidingSyncDiscovery
+
     #endif
     
     // MARK: - Shared
@@ -298,8 +295,9 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
     var logLevel
     
-    // MARK: Shared Feature Flags
-    
-    @UserPreference(key: UserDefaultsKeys.simplifiedSlidingSyncEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var simplifiedSlidingSyncEnabled
+    /// Configuration to enable invisible crypto. In this mode only devices signed by their owner will be considered in e2ee rooms.
+    @UserPreference(key: UserDefaultsKeys.invisibleCryptoEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var invisibleCryptoEnabled
 }
+
+extension AppSettings: CommonSettingsProtocol { }

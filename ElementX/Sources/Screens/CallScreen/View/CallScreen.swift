@@ -1,20 +1,13 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
+import AVKit
 import Combine
+import SFSafeSymbols
 import SwiftUI
 import WebKit
 
@@ -22,57 +15,83 @@ struct CallScreen: View {
     @ObservedObject var context: CallScreenViewModel.Context
     
     var body: some View {
+        NavigationStack {
+            content
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button { context.send(viewAction: .navigateBack) } label: {
+                            Image(systemSymbol: .chevronBackward)
+                                .fontWeight(.semibold)
+                        }
+                        // .padding(.leading, -8) // Fixes the button alignment, but harder to tap.
+                    }
+                }
+        }
+        .alert(item: $context.alertInfo)
+    }
+    
+    @ViewBuilder
+    var content: some View {
         if context.viewState.url == nil {
             ProgressView()
         } else {
-            WebView(url: context.viewState.url, viewModelContext: context)
+            CallView(url: context.viewState.url, viewModelContext: context)
                 // This URL is stable, forces view reloads if this representable is ever reused for another url
                 .id(context.viewState.url)
                 .ignoresSafeArea(edges: .bottom)
-                .presentationDragIndicator(.visible)
-                .alert(item: $context.alertInfo)
         }
     }
 }
 
-private struct WebView: UIViewRepresentable {
+private struct CallView: UIViewRepresentable {
+    /// The top-level view this representable displays. It wraps the web view when picture in picture isn't running.
+    typealias WebViewWrapper = UIView
+    
     let url: URL?
     let viewModelContext: CallScreenViewModel.Context
     
-    func makeUIView(context: Context) -> WKWebView {
-        context.coordinator.webView
+    func makeUIView(context: Context) -> WebViewWrapper {
+        context.coordinator.webViewWrapper
     }
     
     func makeCoordinator() -> Coordinator {
         Coordinator(viewModelContext: viewModelContext)
     }
     
-    func updateUIView(_ webView: WKWebView, context: Context) {
+    func updateUIView(_ callWebView: WebViewWrapper, context: Context) {
         if let url {
-            context.coordinator.url = url
-            let request = URLRequest(url: url)
-            webView.load(request)
+            context.coordinator.load(url)
         }
     }
     
     @MainActor
-    class Coordinator: NSObject, WKUIDelegate, WKNavigationDelegate {
+    class Coordinator: NSObject, WKUIDelegate, WKNavigationDelegate, AVPictureInPictureControllerDelegate {
         private weak var viewModelContext: CallScreenViewModel.Context?
         private let certificateValidator: CertificateValidatorHookProtocol
         
-        private(set) var webView: WKWebView!
+        private var webView: WKWebView!
+        private var pictureInPictureController: AVPictureInPictureController?
+        private let pictureInPictureViewController: AVPictureInPictureVideoCallViewController
         
-        var url: URL!
+        /// The view to be shown in the app. This will contain the web view when picture in picture isn't running.
+        let webViewWrapper = WebViewWrapper(frame: .zero)
+        
+        private var url: URL!
         
         init(viewModelContext: CallScreenViewModel.Context) {
             self.viewModelContext = viewModelContext
             certificateValidator = viewModelContext.viewState.certificateValidator
+            pictureInPictureViewController = AVPictureInPictureVideoCallViewController()
+            pictureInPictureViewController.preferredContentSize = CGSize(width: 1920, height: 1080)
             
             super.init()
             
-            DispatchQueue.main.async {
-                // Avoid `Publishing changes from within view update warnings`
-                viewModelContext.javaScriptEvaluator = self.evaluateJavaScript(_:)
+            DispatchQueue.main.async { // Avoid `Publishing changes from within view update` warnings
+                viewModelContext.javaScriptEvaluator = self.evaluateJavaScript
+                viewModelContext.requestPictureInPictureHandler = self.requestPictureInPicture
             }
             
             let configuration = WKWebViewConfiguration()
@@ -101,6 +120,22 @@ private struct WebView: UIViewRepresentable {
             webView.isOpaque = false
             webView.backgroundColor = .compound.bgCanvasDefault
             webView.scrollView.backgroundColor = .compound.bgCanvasDefault
+            
+            webViewWrapper.addMatchedSubview(webView)
+            
+            if AVPictureInPictureController.isPictureInPictureSupported() {
+                let pictureInPictureController = AVPictureInPictureController(contentSource: .init(activeVideoCallSourceView: webViewWrapper,
+                                                                                                   contentViewController: pictureInPictureViewController))
+                pictureInPictureController.delegate = self
+                self.pictureInPictureController = pictureInPictureController
+                viewModelContext.send(viewAction: .pictureInPictureIsAvailable(pictureInPictureController))
+            }
+        }
+        
+        func load(_ url: URL) {
+            self.url = url
+            let request = URLRequest(url: url)
+            webView.load(request)
         }
         
         func evaluateJavaScript(_ script: String) async throws -> Any? {
@@ -162,6 +197,69 @@ private struct WebView: UIViewRepresentable {
                 viewModelContext?.send(viewAction: .urlChanged(webView.url))
             }
         }
+        
+        // MARK: - Picture in Picture
+        
+        func requestPictureInPicture() async -> Result<Void, CallScreenError> {
+            guard let pictureInPictureController,
+                  pictureInPictureController.isPictureInPicturePossible,
+                  case .success(true) = await webViewCanEnterPictureInPicture() else {
+                return .failure(.pictureInPictureNotAvailable)
+            }
+            
+            pictureInPictureController.startPictureInPicture()
+            return .success(())
+        }
+        
+        func stopPictureInPicture() {
+            pictureInPictureController?.stopPictureInPicture()
+        }
+        
+        nonisolated func pictureInPictureControllerWillStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+            Task { @MainActor in
+                // We move the view via the delegate so it works when you background the app without calling requestPictureInPicture
+                pictureInPictureViewController.view.addMatchedSubview(webView)
+                _ = try? await evaluateJavaScript("controls.enablePip()")
+            }
+        }
+        
+        nonisolated func pictureInPictureControllerDidStartPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+            Task { @MainActor in
+                // Double check that the controller is definitely showing a page that supports picture in picture.
+                // This is necessary as it doesn't get checked when backgrounding the app or tapping a notification.
+                guard case .success(true) = await webViewCanEnterPictureInPicture() else {
+                    MXLog.error("Picture in picture started on a webpage that doesn't support it. Ending the call.")
+                    viewModelContext?.send(viewAction: .endCall)
+                    return
+                }
+            }
+        }
+        
+        nonisolated func pictureInPictureControllerWillStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+            Task { await viewModelContext?.send(viewAction: .pictureInPictureWillStop) }
+        }
+        
+        nonisolated func pictureInPictureControllerDidStopPictureInPicture(_ pictureInPictureController: AVPictureInPictureController) {
+            Task { @MainActor in
+                webViewWrapper.addMatchedSubview(webView)
+                _ = try? await evaluateJavaScript("controls.disablePip()")
+            }
+        }
+        
+        /// Whether the web view can do picture in picture or not (e.g. it is showing an error or the page didn't load).
+        private func webViewCanEnterPictureInPicture() async -> Result<Bool, CallScreenError> {
+            do {
+                guard let canEnterPictureInPicture = try await evaluateJavaScript("controls.canEnterPip()") as? Bool else {
+                    MXLog.error("canEnterPip returned an unexpected value, skipping picture in picture.")
+                    return .failure(.pictureInPictureNotAvailable)
+                }
+                MXLog.info("canEnterPip returned \(canEnterPictureInPicture)")
+                return .success(canEnterPictureInPicture)
+            } catch {
+                MXLog.error("Error checking canEnterPip: \(error)")
+                return .failure(.pictureInPictureNotAvailable)
+            }
+        }
     }
     
     /// Avoids retain loops between the configuration and webView coordinator
@@ -187,9 +285,10 @@ struct CallScreen_Previews: PreviewProvider {
     static let viewModel = {
         let clientProxy = ClientProxyMock()
         clientProxy.getElementWellKnownReturnValue = .success(nil)
+        clientProxy.deviceID = "call-device-id"
         
-        let roomProxy = RoomProxyMock()
-        roomProxy.sendCallNotificationIfNeeededReturnValue = .success(())
+        let roomProxy = JoinedRoomProxyMock()
+        roomProxy.sendCallNotificationIfNeededReturnValue = .success(())
         
         let widgetDriver = ElementCallWidgetDriverMock()
         widgetDriver.underlyingMessagePublisher = .init()
@@ -199,12 +298,13 @@ struct CallScreen_Previews: PreviewProvider {
         roomProxy.elementCallWidgetDriverDeviceIDReturnValue = widgetDriver
         
         return CallScreenViewModel(elementCallService: ElementCallServiceMock(.init()),
-                                   clientProxy: clientProxy,
-                                   roomProxy: roomProxy,
-                                   clientID: "io.element.elementx",
-                                   elementCallBaseURL: "https://call.element.io",
-                                   elementCallBaseURLOverride: nil,
-                                   colorScheme: .light,
+                                   configuration: .init(roomProxy: roomProxy,
+                                                        clientProxy: clientProxy,
+                                                        clientID: "io.element.elementx",
+                                                        elementCallBaseURL: "https://call.element.io",
+                                                        elementCallBaseURLOverride: nil,
+                                                        colorScheme: .light),
+                                   allowPictureInPicture: false,
                                    appHooks: AppHooks())
     }()
     

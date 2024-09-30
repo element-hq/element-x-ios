@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 @testable import ElementX
@@ -39,8 +30,8 @@ class KeychainControllerTests: XCTestCase {
                                                                deviceId: "deviceId",
                                                                homeserverUrl: "homeserverUrl",
                                                                oidcData: "oidcData",
-                                                               slidingSyncProxy: "https://my.sync.proxy"),
-                                                sessionDirectory: .homeDirectory.appending(component: UUID().uuidString),
+                                                               slidingSyncVersion: .proxy(url: "https://my.sync.proxy")),
+                                                sessionDirectories: .init(),
                                                 passphrase: "passphrase",
                                                 pusherNotificationClientIdentifier: "pusherClientID")
         keychain.setRestorationToken(restorationToken, forUsername: username)
@@ -58,8 +49,8 @@ class KeychainControllerTests: XCTestCase {
                                                                deviceId: "deviceId",
                                                                homeserverUrl: "homeserverUrl",
                                                                oidcData: "oidcData",
-                                                               slidingSyncProxy: "https://my.sync.proxy"),
-                                                sessionDirectory: .homeDirectory.appending(component: UUID().uuidString),
+                                                               slidingSyncVersion: .proxy(url: "https://my.sync.proxy")),
+                                                sessionDirectories: .init(),
                                                 passphrase: "passphrase",
                                                 pusherNotificationClientIdentifier: "pusherClientID")
         keychain.setRestorationToken(restorationToken, forUsername: username)
@@ -83,8 +74,8 @@ class KeychainControllerTests: XCTestCase {
                                                                    deviceId: "deviceId",
                                                                    homeserverUrl: "homeserverUrl",
                                                                    oidcData: "oidcData",
-                                                                   slidingSyncProxy: "https://my.sync.proxy"),
-                                                    sessionDirectory: .homeDirectory.appending(component: UUID().uuidString),
+                                                                   slidingSyncVersion: .proxy(url: "https://my.sync.proxy")),
+                                                    sessionDirectories: .init(),
                                                     passphrase: "passphrase",
                                                     pusherNotificationClientIdentifier: "pusherClientID")
             keychain.setRestorationToken(restorationToken, forUsername: "@test\(index):example.com")
@@ -107,8 +98,8 @@ class KeychainControllerTests: XCTestCase {
                                                                    deviceId: "deviceId",
                                                                    homeserverUrl: "homeserverUrl",
                                                                    oidcData: "oidcData",
-                                                                   slidingSyncProxy: "https://my.sync.proxy"),
-                                                    sessionDirectory: .homeDirectory.appending(component: UUID().uuidString),
+                                                                   slidingSyncVersion: .proxy(url: "https://my.sync.proxy")),
+                                                    sessionDirectories: .init(),
                                                     passphrase: "passphrase",
                                                     pusherNotificationClientIdentifier: "pusherClientID")
             keychain.setRestorationToken(restorationToken, forUsername: "@test\(index):example.com")
@@ -139,8 +130,8 @@ class KeychainControllerTests: XCTestCase {
                                                                deviceId: "deviceId",
                                                                homeserverUrl: "homeserverUrl",
                                                                oidcData: "oidcData",
-                                                               slidingSyncProxy: nil),
-                                                sessionDirectory: .homeDirectory.appending(component: UUID().uuidString),
+                                                               slidingSyncVersion: .native),
+                                                sessionDirectories: .init(),
                                                 passphrase: "passphrase",
                                                 pusherNotificationClientIdentifier: "pusherClientID")
         keychain.setRestorationToken(restorationToken, forUsername: username)

@@ -1,17 +1,8 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2023, 2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Combine
@@ -28,11 +19,11 @@ final class PillContext: ObservableObject {
     
     private var cancellable: AnyCancellable?
     
-    init(roomContext: RoomScreenViewModel.Context, data: PillTextAttachmentData) {
+    init(timelineContext: TimelineViewModel.Context, data: PillTextAttachmentData) {
         switch data.type {
         case let .user(id):
-            let isOwnMention = id == roomContext.viewState.ownUserID
-            if let profile = roomContext.viewState.members[id] {
+            let isOwnMention = id == timelineContext.viewState.ownUserID
+            if let profile = timelineContext.viewState.members[id] {
                 var name = id
                 if let displayName = profile.displayName {
                     name = "@\(displayName)"
@@ -40,7 +31,7 @@ final class PillContext: ObservableObject {
                 viewState = PillViewState(isOwnMention: isOwnMention, displayText: name)
             } else {
                 viewState = PillViewState(isOwnMention: isOwnMention, displayText: id)
-                cancellable = roomContext.$viewState.sink { [weak self] viewState in
+                cancellable = timelineContext.$viewState.sink { [weak self] viewState in
                     guard let self else {
                         return
                     }
@@ -73,7 +64,7 @@ extension PillContext {
         switch type {
         case .loadUser(let isOwn):
             pillType = .user(userID: testID)
-            let viewModel = PillContext(roomContext: RoomScreenViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
+            let viewModel = PillContext(timelineContext: TimelineViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
             viewModel.viewState = PillViewState(isOwnMention: isOwn, displayText: testID)
             Task {
                 try? await Task.sleep(for: .seconds(2))
@@ -82,12 +73,12 @@ extension PillContext {
             return viewModel
         case .loadedUser(let isOwn):
             pillType = .user(userID: "@test:test.com")
-            let viewModel = PillContext(roomContext: RoomScreenViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
+            let viewModel = PillContext(timelineContext: TimelineViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
             viewModel.viewState = PillViewState(isOwnMention: isOwn, displayText: "@Very Very Long Test Display Text")
             return viewModel
         case .allUsers:
             pillType = .allUsers
-            return PillContext(roomContext: RoomScreenViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
+            return PillContext(timelineContext: TimelineViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
         }
     }
 }

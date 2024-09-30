@@ -1,21 +1,13 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2023, 2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Combine
 import Foundation
+import MediaPlayer
 import UIKit
 
 enum AudioPlayerPlaybackState {
@@ -34,16 +26,15 @@ enum AudioPlayerStateIdentifier {
 @MainActor
 class AudioPlayerState: ObservableObject, Identifiable {
     let id: AudioPlayerStateIdentifier
+    let title: String
     private(set) var duration: Double
     let waveform: EstimatedWaveform
+    @Published private(set) var progress: Double
+    
     @Published private(set) var playbackState: AudioPlayerPlaybackState
     /// It's similar to `playbackState`, with the a difference: `.loading`
     /// updates are delayed by a fixed amount of time
     @Published private(set) var playerButtonPlaybackState: AudioPlayerPlaybackState
-    @Published private(set) var progress: Double
-    var showProgressIndicator: Bool {
-        progress > 0
-    }
 
     private weak var audioPlayer: AudioPlayerProtocol?
     private var audioPlayerSubscription: AnyCancellable?
@@ -53,6 +44,10 @@ class AudioPlayerState: ObservableObject, Identifiable {
     /// The file url that the last player attached to this object has loaded.
     /// The file url persists even if the AudioPlayer will be detached later.
     private(set) var fileURL: URL?
+    
+    var showProgressIndicator: Bool {
+        progress > 0
+    }
 
     var isAttached: Bool {
         audioPlayer != nil
@@ -62,8 +57,9 @@ class AudioPlayerState: ObservableObject, Identifiable {
         displayLink != nil
     }
 
-    init(id: AudioPlayerStateIdentifier, duration: Double, waveform: EstimatedWaveform? = nil, progress: Double = 0.0) {
+    init(id: AudioPlayerStateIdentifier, title: String, duration: Double, waveform: EstimatedWaveform? = nil, progress: Double = 0.0) {
         self.id = id
+        self.title = title
         self.duration = duration
         self.waveform = waveform ?? EstimatedWaveform(data: [])
         self.progress = progress
@@ -146,12 +142,19 @@ class AudioPlayerState: ObservableObject, Identifiable {
             }
             startPublishProgress()
             playbackState = .playing
-        case .didPausePlaying, .didStopPlaying, .didFinishPlaying:
+            setUpRemoteCommandCenter()
+        case .didPausePlaying:
             stopPublishProgress()
             playbackState = .stopped
-            if case .didFinishPlaying = action {
-                progress = 0.0
-            }
+        case .didStopPlaying:
+            playbackState = .stopped
+            stopPublishProgress()
+            tearDownRemoteCommandCenter()
+        case .didFinishPlaying:
+            playbackState = .stopped
+            progress = 0.0
+            stopPublishProgress()
+            tearDownRemoteCommandCenter()
         case .didFailWithError:
             stopPublishProgress()
             playbackState = .error
@@ -172,6 +175,8 @@ class AudioPlayerState: ObservableObject, Identifiable {
         if let currentTime = audioPlayer?.currentTime, duration > 0 {
             progress = currentTime / duration
         }
+        
+        updateNowPlayingInfoCenter()
     }
     
     private func stopPublishProgress() {
@@ -199,6 +204,93 @@ class AudioPlayerState: ObservableObject, Identifiable {
             .switchToLatest()
             .removeDuplicates()
             .weakAssign(to: \.playerButtonPlaybackState, on: self)
+    }
+    
+    private func setUpRemoteCommandCenter() {
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        
+        let commandCenter = MPRemoteCommandCenter.shared()
+        
+        commandCenter.playCommand.isEnabled = true
+        commandCenter.playCommand.removeTarget(nil)
+        commandCenter.playCommand.addTarget { [weak self] _ in
+            guard let audioPlayer = self?.audioPlayer else {
+                return MPRemoteCommandHandlerStatus.commandFailed
+            }
+            
+            audioPlayer.play()
+            
+            return MPRemoteCommandHandlerStatus.success
+        }
+        
+        commandCenter.pauseCommand.isEnabled = true
+        commandCenter.pauseCommand.removeTarget(nil)
+        commandCenter.pauseCommand.addTarget { [weak self] _ in
+            guard let audioPlayer = self?.audioPlayer else {
+                return MPRemoteCommandHandlerStatus.commandFailed
+            }
+            
+            audioPlayer.pause()
+
+            return MPRemoteCommandHandlerStatus.success
+        }
+        
+        commandCenter.skipForwardCommand.isEnabled = true
+        commandCenter.skipForwardCommand.removeTarget(nil)
+        commandCenter.skipForwardCommand.addTarget { [weak self] event in
+            guard let audioPlayer = self?.audioPlayer, let skipEvent = event as? MPSkipIntervalCommandEvent else {
+                return MPRemoteCommandHandlerStatus.commandFailed
+            }
+            
+            Task {
+                await audioPlayer.seek(to: audioPlayer.currentTime + skipEvent.interval)
+            }
+            
+            return MPRemoteCommandHandlerStatus.success
+        }
+        
+        commandCenter.skipBackwardCommand.isEnabled = true
+        commandCenter.skipBackwardCommand.removeTarget(nil)
+        commandCenter.skipBackwardCommand.addTarget { [weak self] event in
+            guard let audioPlayer = self?.audioPlayer, let skipEvent = event as? MPSkipIntervalCommandEvent else {
+                return MPRemoteCommandHandlerStatus.commandFailed
+            }
+            
+            Task {
+                await audioPlayer.seek(to: audioPlayer.currentTime - skipEvent.interval)
+            }
+            
+            return MPRemoteCommandHandlerStatus.success
+        }
+    }
+    
+    private func tearDownRemoteCommandCenter() {
+        UIApplication.shared.endReceivingRemoteControlEvents()
+        
+        let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
+        nowPlayingInfoCenter.nowPlayingInfo = nil
+        nowPlayingInfoCenter.playbackState = .stopped
+        
+        let commandCenter = MPRemoteCommandCenter.shared()
+        commandCenter.playCommand.isEnabled = false
+        commandCenter.playCommand.removeTarget(nil)
+        commandCenter.pauseCommand.isEnabled = false
+        commandCenter.pauseCommand.removeTarget(nil)
+        commandCenter.skipForwardCommand.isEnabled = false
+        commandCenter.skipForwardCommand.removeTarget(nil)
+        commandCenter.skipBackwardCommand.isEnabled = false
+        commandCenter.skipBackwardCommand.removeTarget(nil)
+    }
+    
+    private func updateNowPlayingInfoCenter() {
+        guard let audioPlayer else {
+            return
+        }
+        
+        let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
+        nowPlayingInfoCenter.nowPlayingInfo = [MPMediaItemPropertyTitle: title,
+                                               MPMediaItemPropertyPlaybackDuration: audioPlayer.duration as Any,
+                                               MPNowPlayingInfoPropertyElapsedPlaybackTime: audioPlayer.currentTime as Any]
     }
 }
 

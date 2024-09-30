@@ -1,4 +1,4 @@
 UITests/Sources/__Snapshots__/** filter=lfs diff=lfs merge=lfs -text
 UnitTests/Resources/** filter=lfs diff=lfs merge=lfs -text
 UnitTests/__Snapshots__/** filter=lfs diff=lfs merge=lfs -text
-PreviewTests/__Snapshots__/** filter=lfs diff=lfs merge=lfs -text
+PreviewTests/Sources/__Snapshots__/** filter=lfs diff=lfs merge=lfs -text

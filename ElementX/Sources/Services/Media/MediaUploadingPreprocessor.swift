@@ -1,17 +1,8 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2023, 2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import AVFoundation
@@ -86,7 +77,7 @@ private struct VideoProcessingInfo {
     let url: URL
     let height: Double
     let width: Double
-    let duration: Double
+    let duration: Double // seconds
     let mimeType: String
 }
 
@@ -222,7 +213,7 @@ struct MediaUploadingPreprocessor {
             return .failure(.failedProcessingAudio)
         }
         
-        let audioInfo = AudioInfo(duration: durationInSeconds * 1000, size: fileSize, mimetype: mimeType)
+        let audioInfo = AudioInfo(duration: durationInSeconds, size: fileSize, mimetype: mimeType)
         return .success(.audio(audioURL: url, audioInfo: audioInfo))
     }
     
@@ -422,7 +413,7 @@ struct MediaUploadingPreprocessor {
                 return .success(.init(url: newOutputURL,
                                       height: adjustedNaturalSize.height,
                                       width: adjustedNaturalSize.width,
-                                      duration: durationInSeconds * 1000,
+                                      duration: durationInSeconds,
                                       mimeType: "video/mp4"))
             } catch {
                 return .failure(.failedConvertingVideo)

@@ -1,17 +1,8 @@
 //
-// Copyright 2024 New Vector Ltd
+// Copyright 2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Compound
@@ -28,6 +19,7 @@ enum EncryptionAuthenticity: Hashable {
     case unknownDevice(color: Color)
     case unsignedDevice(color: Color)
     case unverifiedIdentity(color: Color)
+    case previouslyVerified(color: Color)
     case sentInClear(color: Color)
     
     var message: String {
@@ -40,6 +32,8 @@ enum EncryptionAuthenticity: Hashable {
             L10n.eventShieldReasonUnsignedDevice
         case .unverifiedIdentity:
             L10n.eventShieldReasonUnverifiedIdentity
+        case .previouslyVerified:
+            L10n.eventShieldReasonPreviouslyVerified
         case .sentInClear:
             L10n.eventShieldReasonSentInClear
         }
@@ -51,6 +45,7 @@ enum EncryptionAuthenticity: Hashable {
              .unknownDevice(let color),
              .unsignedDevice(let color),
              .unverifiedIdentity(let color),
+             .previouslyVerified(let color),
              .sentInClear(let color):
             color
         }
@@ -59,7 +54,7 @@ enum EncryptionAuthenticity: Hashable {
     var icon: KeyPath<CompoundIcons, Image> {
         switch self {
         case .notGuaranteed: \.info
-        case .unknownDevice, .unsignedDevice, .unverifiedIdentity: \.helpSolid
+        case .unknownDevice, .unsignedDevice, .unverifiedIdentity, .previouslyVerified: \.helpSolid
         case .sentInClear: \.lockOff
         }
     }
@@ -87,6 +82,8 @@ extension EncryptionAuthenticity {
             self = .unsignedDevice(color: color)
         case .unverifiedIdentity:
             self = .unverifiedIdentity(color: color)
+        case .previouslyVerified:
+            self = .previouslyVerified(color: color)
         case .sentInClear:
             self = .sentInClear(color: color)
         }

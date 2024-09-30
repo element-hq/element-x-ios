@@ -1,17 +1,8 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2023, 2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Combine
@@ -64,10 +55,12 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         mentionBuilder = MentionBuilder()
         attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", mentionBuilder: mentionBuilder)
         
-        super.init(initialViewState: ComposerToolbarViewState(audioPlayerState: .init(id: .recorderPreview, duration: 0),
+        super.init(initialViewState: ComposerToolbarViewState(audioPlayerState: .init(id: .recorderPreview,
+                                                                                      title: L10n.commonVoiceMessage,
+                                                                                      duration: 0),
                                                               audioRecorderState: .init(),
                                                               bindings: .init()),
-                   imageProvider: mediaProvider)
+                   mediaProvider: mediaProvider)
 
         context.$viewState
             .map(\.composerMode)
@@ -200,8 +193,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         }
     }
 
-    func process(roomAction: RoomScreenComposerAction) {
-        switch roomAction {
+    func process(timelineAction: TimelineComposerAction) {
+        switch timelineAction {
         case .setMode(mode: let mode):
             if state.composerMode.isComposingNewMessage, mode.isEdit {
                 handleSaveDraft(isVolatile: true)
@@ -223,17 +216,21 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 set(mode: .default)
                 set(text: "")
             }
-        case .saveDraft:
-            handleSaveDraft(isVolatile: false)
-        case .loadDraft:
-            Task {
-                guard case let .success(draft) = await draftService.loadDraft(),
-                      let draft else {
-                    return
-                }
-                handleLoadDraft(draft)
-            }
         }
+    }
+    
+    func loadDraft() {
+        Task {
+            guard case let .success(draft) = await draftService.loadDraft(),
+                  let draft else {
+                return
+            }
+            handleLoadDraft(draft)
+        }
+    }
+    
+    func saveDraft() {
+        handleSaveDraft(isVolatile: false)
     }
     
     var keyCommands: [WysiwygKeyCommand] {
@@ -480,7 +477,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         }
     }
 
-    private func set(mode: RoomScreenComposerMode) {
+    private func set(mode: ComposerMode) {
         if state.composerMode.isLoadingReply, state.composerMode.replyEventID != mode.replyEventID {
             replyLoadingTask?.cancel()
         }

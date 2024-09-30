@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Combine
@@ -30,10 +21,9 @@ enum LoginScreenCoordinatorAction {
     case configuredForOIDC
     /// Login was successful.
     case signedIn(UserSessionProtocol)
-    /// The user's request to login failed due to being on the proxy waitlist.
-    case isOnWaitlist(WaitlistScreenCredentials)
 }
 
+// Note: This code was brought over from Riot, we should move the authentication service logic into the view model.
 final class LoginScreenCoordinator: CoordinatorProtocol {
     private let parameters: LoginScreenCoordinatorParameters
     private var viewModel: LoginScreenViewModelProtocol
@@ -141,16 +131,7 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
             case .failure(let error):
                 stopLoading()
                 parameters.analytics.signpost.endLogin()
-                switch error {
-                case .isOnWaitlist:
-                    actionsSubject.send(.isOnWaitlist(.init(username: username,
-                                                            password: password,
-                                                            initialDeviceName: UIDevice.current.initialDeviceName,
-                                                            deviceID: nil,
-                                                            homeserver: authenticationService.homeserver.value)))
-                default:
-                    handleError(error)
-                }
+                handleError(error)
             }
         }
     }

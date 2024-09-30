@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Combine
@@ -24,48 +15,65 @@ enum RoomProxyError: Error {
     case invalidURL
     case invalidMedia
     case eventNotFound
+    case missingTransactionID
 }
 
-enum RoomProxyAction {
-    case roomInfoUpdate
+enum RoomProxyType {
+    case joined(JoinedRoomProxyProtocol)
+    case invited(InvitedRoomProxyProtocol)
+    case left
 }
 
 // sourcery: AutoMockable
 protocol RoomProxyProtocol {
     var id: String { get }
-    var isDirect: Bool { get }
-    var isPublic: Bool { get }
-    var isSpace: Bool { get }
-    var isEncrypted: Bool { get }
-    var isFavourite: Bool { get async }
-    var pinnedEventIDs: Set<String> { get async }
-    var membership: Membership { get }
-    var inviter: RoomMemberProxyProtocol? { get async }
-    
-    var hasOngoingCall: Bool { get }
-    var activeRoomCallParticipants: [String] { get }
-    
     var canonicalAlias: String? { get }
+    
     var ownUserID: String { get }
     
     var name: String? { get }
-    
     var topic: String? { get }
     
     /// The room's avatar info for use in a ``RoomAvatarImage``.
     var avatar: RoomAvatar { get }
     /// The room's avatar URL. Use this for editing and favour ``avatar`` for display.
     var avatarURL: URL? { get }
+    
+    var isPublic: Bool { get }
+    var isDirect: Bool { get }
+    var isSpace: Bool { get }
+    
+    var joinedMembersCount: Int { get }
+    
+    var activeMembersCount: Int { get }
+}
+
+// sourcery: AutoMockable
+protocol InvitedRoomProxyProtocol: RoomProxyProtocol {
+    var inviter: RoomMemberProxyProtocol? { get async }
+    
+    func rejectInvitation() async -> Result<Void, RoomProxyError>
+    func acceptInvitation() async -> Result<Void, RoomProxyError>
+}
+
+enum JoinedRoomProxyAction {
+    case roomInfoUpdate
+}
+
+// sourcery: AutoMockable
+protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
+    var isEncrypted: Bool { get }
+    var isFavourite: Bool { get async }
+    var pinnedEventIDs: Set<String> { get async }
+    
+    var hasOngoingCall: Bool { get }
+    var activeRoomCallParticipants: [String] { get }
 
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> { get }
     
     var typingMembersPublisher: CurrentValuePublisher<[String], Never> { get }
     
-    var joinedMembersCount: Int { get }
-    
-    var activeMembersCount: Int { get }
-    
-    var actionsPublisher: AnyPublisher<RoomProxyAction, Never> { get }
+    var actionsPublisher: AnyPublisher<JoinedRoomProxyAction, Never> { get }
     
     var timeline: TimelineProxyProtocol { get }
     
@@ -87,10 +95,6 @@ protocol RoomProxyProtocol {
 
     func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError>
     
-    func rejectInvitation() async -> Result<Void, RoomProxyError>
-    
-    func acceptInvitation() async -> Result<Void, RoomProxyError>
-    
     func invite(userID: String) async -> Result<Void, RoomProxyError>
     
     func setName(_ name: String) async -> Result<Void, RoomProxyError>
@@ -107,6 +111,12 @@ protocol RoomProxyProtocol {
     
     /// https://spec.matrix.org/v1.9/client-server-api/#typing-notifications
     @discardableResult func sendTypingNotification(isTyping: Bool) async -> Result<Void, RoomProxyError>
+    
+    func resend(itemID: TimelineItemIdentifier) async -> Result<Void, RoomProxyError>
+    
+    func ignoreDeviceTrustAndResend(devices: [String: [String]], itemID: TimelineItemIdentifier) async -> Result<Void, RoomProxyError>
+    
+    func withdrawVerificationAndResend(userIDs: [String], itemID: TimelineItemIdentifier) async -> Result<Void, RoomProxyError>
     
     // MARK: - Room Flags
     
@@ -141,7 +151,7 @@ protocol RoomProxyProtocol {
     func canUserJoinCall(userID: String) async -> Result<Bool, RoomProxyError>
     func elementCallWidgetDriver(deviceID: String) -> ElementCallWidgetDriverProtocol
     
-    func sendCallNotificationIfNeeeded() async -> Result<Void, RoomProxyError>
+    func sendCallNotificationIfNeeded() async -> Result<Void, RoomProxyError>
     
     // MARK: - Permalinks
     
@@ -155,7 +165,7 @@ protocol RoomProxyProtocol {
     func clearDraft() async -> Result<Void, RoomProxyError>
 }
 
-extension RoomProxyProtocol {
+extension JoinedRoomProxyProtocol {
     var details: RoomDetails {
         RoomDetails(id: id,
                     name: name,

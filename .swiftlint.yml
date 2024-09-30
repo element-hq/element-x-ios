@@ -60,6 +60,12 @@ custom_rules:
     message: "Please use explicit spacing in HStacks."
     severity: warning
 
+  compound_color_conversion:
+    regex: "UIColor\\(\\.compound"
+    match_kinds: identifier
+    message: "Please use the UIColor token directly to ensure the colour scheme is honoured."
+    severity: warning
+
   print_deprecation:
     regex: "\\b(print)\\b"
     match_kinds: identifier

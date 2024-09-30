@@ -207,6 +207,71 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
     }
 
+    //MARK: - availableSlidingSyncVersions
+
+    var availableSlidingSyncVersionsUnderlyingCallsCount = 0
+    open var availableSlidingSyncVersionsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return availableSlidingSyncVersionsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = availableSlidingSyncVersionsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                availableSlidingSyncVersionsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    availableSlidingSyncVersionsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var availableSlidingSyncVersionsCalled: Bool {
+        return availableSlidingSyncVersionsCallsCount > 0
+    }
+
+    var availableSlidingSyncVersionsUnderlyingReturnValue: [SlidingSyncVersion]!
+    open var availableSlidingSyncVersionsReturnValue: [SlidingSyncVersion]! {
+        get {
+            if Thread.isMainThread {
+                return availableSlidingSyncVersionsUnderlyingReturnValue
+            } else {
+                var returnValue: [SlidingSyncVersion]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = availableSlidingSyncVersionsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                availableSlidingSyncVersionsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    availableSlidingSyncVersionsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var availableSlidingSyncVersionsClosure: (() async -> [SlidingSyncVersion])?
+
+    open override func availableSlidingSyncVersions() async -> [SlidingSyncVersion] {
+        availableSlidingSyncVersionsCallsCount += 1
+        if let availableSlidingSyncVersionsClosure = availableSlidingSyncVersionsClosure {
+            return await availableSlidingSyncVersionsClosure()
+        } else {
+            return availableSlidingSyncVersionsReturnValue
+        }
+    }
+
     //MARK: - avatarUrl
 
     open var avatarUrlThrowableError: Error?
@@ -276,6 +341,81 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
     }
 
+    //MARK: - awaitRoomRemoteEcho
+
+    open var awaitRoomRemoteEchoRoomIdThrowableError: Error?
+    var awaitRoomRemoteEchoRoomIdUnderlyingCallsCount = 0
+    open var awaitRoomRemoteEchoRoomIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return awaitRoomRemoteEchoRoomIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = awaitRoomRemoteEchoRoomIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                awaitRoomRemoteEchoRoomIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    awaitRoomRemoteEchoRoomIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var awaitRoomRemoteEchoRoomIdCalled: Bool {
+        return awaitRoomRemoteEchoRoomIdCallsCount > 0
+    }
+    open var awaitRoomRemoteEchoRoomIdReceivedRoomId: String?
+    open var awaitRoomRemoteEchoRoomIdReceivedInvocations: [String] = []
+
+    var awaitRoomRemoteEchoRoomIdUnderlyingReturnValue: Room!
+    open var awaitRoomRemoteEchoRoomIdReturnValue: Room! {
+        get {
+            if Thread.isMainThread {
+                return awaitRoomRemoteEchoRoomIdUnderlyingReturnValue
+            } else {
+                var returnValue: Room? = nil
+                DispatchQueue.main.sync {
+                    returnValue = awaitRoomRemoteEchoRoomIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                awaitRoomRemoteEchoRoomIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    awaitRoomRemoteEchoRoomIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var awaitRoomRemoteEchoRoomIdClosure: ((String) async throws -> Room)?
+
+    open override func awaitRoomRemoteEcho(roomId: String) async throws -> Room {
+        if let error = awaitRoomRemoteEchoRoomIdThrowableError {
+            throw error
+        }
+        awaitRoomRemoteEchoRoomIdCallsCount += 1
+        awaitRoomRemoteEchoRoomIdReceivedRoomId = roomId
+        DispatchQueue.main.async {
+            self.awaitRoomRemoteEchoRoomIdReceivedInvocations.append(roomId)
+        }
+        if let awaitRoomRemoteEchoRoomIdClosure = awaitRoomRemoteEchoRoomIdClosure {
+            return try await awaitRoomRemoteEchoRoomIdClosure(roomId)
+        } else {
+            return awaitRoomRemoteEchoRoomIdReturnValue
+        }
+    }
+
     //MARK: - cachedAvatarUrl
 
     open var cachedAvatarUrlThrowableError: Error?
@@ -342,6 +482,71 @@ open class ClientSDKMock: MatrixRustSDK.Client {
             return try cachedAvatarUrlClosure()
         } else {
             return cachedAvatarUrlReturnValue
+        }
+    }
+
+    //MARK: - canDeactivateAccount
+
+    var canDeactivateAccountUnderlyingCallsCount = 0
+    open var canDeactivateAccountCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return canDeactivateAccountUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canDeactivateAccountUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canDeactivateAccountUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canDeactivateAccountUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var canDeactivateAccountCalled: Bool {
+        return canDeactivateAccountCallsCount > 0
+    }
+
+    var canDeactivateAccountUnderlyingReturnValue: Bool!
+    open var canDeactivateAccountReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return canDeactivateAccountUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canDeactivateAccountUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canDeactivateAccountUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canDeactivateAccountUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var canDeactivateAccountClosure: (() -> Bool)?
+
+    open override func canDeactivateAccount() -> Bool {
+        canDeactivateAccountCallsCount += 1
+        if let canDeactivateAccountClosure = canDeactivateAccountClosure {
+            return canDeactivateAccountClosure()
+        } else {
+            return canDeactivateAccountReturnValue
         }
     }
 
@@ -418,6 +623,52 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         } else {
             return createRoomRequestReturnValue
         }
+    }
+
+    //MARK: - deactivateAccount
+
+    open var deactivateAccountAuthDataEraseDataThrowableError: Error?
+    var deactivateAccountAuthDataEraseDataUnderlyingCallsCount = 0
+    open var deactivateAccountAuthDataEraseDataCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return deactivateAccountAuthDataEraseDataUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = deactivateAccountAuthDataEraseDataUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                deactivateAccountAuthDataEraseDataUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    deactivateAccountAuthDataEraseDataUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var deactivateAccountAuthDataEraseDataCalled: Bool {
+        return deactivateAccountAuthDataEraseDataCallsCount > 0
+    }
+    open var deactivateAccountAuthDataEraseDataReceivedArguments: (authData: AuthData?, eraseData: Bool)?
+    open var deactivateAccountAuthDataEraseDataReceivedInvocations: [(authData: AuthData?, eraseData: Bool)] = []
+    open var deactivateAccountAuthDataEraseDataClosure: ((AuthData?, Bool) async throws -> Void)?
+
+    open override func deactivateAccount(authData: AuthData?, eraseData: Bool) async throws {
+        if let error = deactivateAccountAuthDataEraseDataThrowableError {
+            throw error
+        }
+        deactivateAccountAuthDataEraseDataCallsCount += 1
+        deactivateAccountAuthDataEraseDataReceivedArguments = (authData: authData, eraseData: eraseData)
+        DispatchQueue.main.async {
+            self.deactivateAccountAuthDataEraseDataReceivedInvocations.append((authData: authData, eraseData: eraseData))
+        }
+        try await deactivateAccountAuthDataEraseDataClosure?(authData, eraseData)
     }
 
     //MARK: - deletePusher
@@ -1955,6 +2206,52 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         try await loginUsernamePasswordInitialDeviceNameDeviceIdClosure?(username, password, initialDeviceName, deviceId)
     }
 
+    //MARK: - loginWithEmail
+
+    open var loginWithEmailEmailPasswordInitialDeviceNameDeviceIdThrowableError: Error?
+    var loginWithEmailEmailPasswordInitialDeviceNameDeviceIdUnderlyingCallsCount = 0
+    open var loginWithEmailEmailPasswordInitialDeviceNameDeviceIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loginWithEmailEmailPasswordInitialDeviceNameDeviceIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loginWithEmailEmailPasswordInitialDeviceNameDeviceIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loginWithEmailEmailPasswordInitialDeviceNameDeviceIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loginWithEmailEmailPasswordInitialDeviceNameDeviceIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var loginWithEmailEmailPasswordInitialDeviceNameDeviceIdCalled: Bool {
+        return loginWithEmailEmailPasswordInitialDeviceNameDeviceIdCallsCount > 0
+    }
+    open var loginWithEmailEmailPasswordInitialDeviceNameDeviceIdReceivedArguments: (email: String, password: String, initialDeviceName: String?, deviceId: String?)?
+    open var loginWithEmailEmailPasswordInitialDeviceNameDeviceIdReceivedInvocations: [(email: String, password: String, initialDeviceName: String?, deviceId: String?)] = []
+    open var loginWithEmailEmailPasswordInitialDeviceNameDeviceIdClosure: ((String, String, String?, String?) async throws -> Void)?
+
+    open override func loginWithEmail(email: String, password: String, initialDeviceName: String?, deviceId: String?) async throws {
+        if let error = loginWithEmailEmailPasswordInitialDeviceNameDeviceIdThrowableError {
+            throw error
+        }
+        loginWithEmailEmailPasswordInitialDeviceNameDeviceIdCallsCount += 1
+        loginWithEmailEmailPasswordInitialDeviceNameDeviceIdReceivedArguments = (email: email, password: password, initialDeviceName: initialDeviceName, deviceId: deviceId)
+        DispatchQueue.main.async {
+            self.loginWithEmailEmailPasswordInitialDeviceNameDeviceIdReceivedInvocations.append((email: email, password: password, initialDeviceName: initialDeviceName, deviceId: deviceId))
+        }
+        try await loginWithEmailEmailPasswordInitialDeviceNameDeviceIdClosure?(email, password, initialDeviceName, deviceId)
+    }
+
     //MARK: - loginWithOidcCallback
 
     open var loginWithOidcCallbackAuthorizationDataCallbackUrlThrowableError: Error?
@@ -2551,6 +2848,71 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
     }
 
+    //MARK: - server
+
+    var serverUnderlyingCallsCount = 0
+    open var serverCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return serverUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = serverUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                serverUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    serverUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var serverCalled: Bool {
+        return serverCallsCount > 0
+    }
+
+    var serverUnderlyingReturnValue: String?
+    open var serverReturnValue: String? {
+        get {
+            if Thread.isMainThread {
+                return serverUnderlyingReturnValue
+            } else {
+                var returnValue: String?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = serverUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                serverUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    serverUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var serverClosure: (() -> String?)?
+
+    open override func server() -> String? {
+        serverCallsCount += 1
+        if let serverClosure = serverClosure {
+            return serverClosure()
+        } else {
+            return serverReturnValue
+        }
+    }
+
     //MARK: - session
 
     open var sessionThrowableError: Error?
@@ -2827,6 +3189,71 @@ open class ClientSDKMock: MatrixRustSDK.Client {
             self.setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangReceivedInvocations.append((identifiers: identifiers, kind: kind, appDisplayName: appDisplayName, deviceDisplayName: deviceDisplayName, profileTag: profileTag, lang: lang))
         }
         try await setPusherIdentifiersKindAppDisplayNameDeviceDisplayNameProfileTagLangClosure?(identifiers, kind, appDisplayName, deviceDisplayName, profileTag, lang)
+    }
+
+    //MARK: - slidingSyncVersion
+
+    var slidingSyncVersionUnderlyingCallsCount = 0
+    open var slidingSyncVersionCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return slidingSyncVersionUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = slidingSyncVersionUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                slidingSyncVersionUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    slidingSyncVersionUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var slidingSyncVersionCalled: Bool {
+        return slidingSyncVersionCallsCount > 0
+    }
+
+    var slidingSyncVersionUnderlyingReturnValue: SlidingSyncVersion!
+    open var slidingSyncVersionReturnValue: SlidingSyncVersion! {
+        get {
+            if Thread.isMainThread {
+                return slidingSyncVersionUnderlyingReturnValue
+            } else {
+                var returnValue: SlidingSyncVersion? = nil
+                DispatchQueue.main.sync {
+                    returnValue = slidingSyncVersionUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                slidingSyncVersionUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    slidingSyncVersionUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var slidingSyncVersionClosure: (() -> SlidingSyncVersion)?
+
+    open override func slidingSyncVersion() -> SlidingSyncVersion {
+        slidingSyncVersionCallsCount += 1
+        if let slidingSyncVersionClosure = slidingSyncVersionClosure {
+            return slidingSyncVersionClosure()
+        } else {
+            return slidingSyncVersionReturnValue
+        }
     }
 
     //MARK: - startSsoLogin
@@ -4526,17 +4953,17 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
     }
 
-    //MARK: - requiresSlidingSync
+    //MARK: - roomKeyRecipientStrategy
 
-    var requiresSlidingSyncUnderlyingCallsCount = 0
-    open var requiresSlidingSyncCallsCount: Int {
+    var roomKeyRecipientStrategyStrategyUnderlyingCallsCount = 0
+    open var roomKeyRecipientStrategyStrategyCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return requiresSlidingSyncUnderlyingCallsCount
+                return roomKeyRecipientStrategyStrategyUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = requiresSlidingSyncUnderlyingCallsCount
+                    returnValue = roomKeyRecipientStrategyStrategyUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -4544,27 +4971,29 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
         set {
             if Thread.isMainThread {
-                requiresSlidingSyncUnderlyingCallsCount = newValue
+                roomKeyRecipientStrategyStrategyUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    requiresSlidingSyncUnderlyingCallsCount = newValue
+                    roomKeyRecipientStrategyStrategyUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var requiresSlidingSyncCalled: Bool {
-        return requiresSlidingSyncCallsCount > 0
+    open var roomKeyRecipientStrategyStrategyCalled: Bool {
+        return roomKeyRecipientStrategyStrategyCallsCount > 0
     }
+    open var roomKeyRecipientStrategyStrategyReceivedStrategy: CollectStrategy?
+    open var roomKeyRecipientStrategyStrategyReceivedInvocations: [CollectStrategy] = []
 
-    var requiresSlidingSyncUnderlyingReturnValue: ClientBuilder!
-    open var requiresSlidingSyncReturnValue: ClientBuilder! {
+    var roomKeyRecipientStrategyStrategyUnderlyingReturnValue: ClientBuilder!
+    open var roomKeyRecipientStrategyStrategyReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
-                return requiresSlidingSyncUnderlyingReturnValue
+                return roomKeyRecipientStrategyStrategyUnderlyingReturnValue
             } else {
                 var returnValue: ClientBuilder? = nil
                 DispatchQueue.main.sync {
-                    returnValue = requiresSlidingSyncUnderlyingReturnValue
+                    returnValue = roomKeyRecipientStrategyStrategyUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -4572,22 +5001,26 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
         set {
             if Thread.isMainThread {
-                requiresSlidingSyncUnderlyingReturnValue = newValue
+                roomKeyRecipientStrategyStrategyUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    requiresSlidingSyncUnderlyingReturnValue = newValue
+                    roomKeyRecipientStrategyStrategyUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var requiresSlidingSyncClosure: (() -> ClientBuilder)?
+    open var roomKeyRecipientStrategyStrategyClosure: ((CollectStrategy) -> ClientBuilder)?
 
-    open override func requiresSlidingSync() -> ClientBuilder {
-        requiresSlidingSyncCallsCount += 1
-        if let requiresSlidingSyncClosure = requiresSlidingSyncClosure {
-            return requiresSlidingSyncClosure()
+    open override func roomKeyRecipientStrategy(strategy: CollectStrategy) -> ClientBuilder {
+        roomKeyRecipientStrategyStrategyCallsCount += 1
+        roomKeyRecipientStrategyStrategyReceivedStrategy = strategy
+        DispatchQueue.main.async {
+            self.roomKeyRecipientStrategyStrategyReceivedInvocations.append(strategy)
+        }
+        if let roomKeyRecipientStrategyStrategyClosure = roomKeyRecipientStrategyStrategyClosure {
+            return roomKeyRecipientStrategyStrategyClosure(strategy)
         } else {
-            return requiresSlidingSyncReturnValue
+            return roomKeyRecipientStrategyStrategyReturnValue
         }
     }
 
@@ -4733,17 +5166,17 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
     }
 
-    //MARK: - sessionPath
+    //MARK: - sessionPaths
 
-    var sessionPathPathUnderlyingCallsCount = 0
-    open var sessionPathPathCallsCount: Int {
+    var sessionPathsDataPathCachePathUnderlyingCallsCount = 0
+    open var sessionPathsDataPathCachePathCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sessionPathPathUnderlyingCallsCount
+                return sessionPathsDataPathCachePathUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sessionPathPathUnderlyingCallsCount
+                    returnValue = sessionPathsDataPathCachePathUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -4751,29 +5184,29 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
         set {
             if Thread.isMainThread {
-                sessionPathPathUnderlyingCallsCount = newValue
+                sessionPathsDataPathCachePathUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sessionPathPathUnderlyingCallsCount = newValue
+                    sessionPathsDataPathCachePathUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var sessionPathPathCalled: Bool {
-        return sessionPathPathCallsCount > 0
+    open var sessionPathsDataPathCachePathCalled: Bool {
+        return sessionPathsDataPathCachePathCallsCount > 0
     }
-    open var sessionPathPathReceivedPath: String?
-    open var sessionPathPathReceivedInvocations: [String] = []
+    open var sessionPathsDataPathCachePathReceivedArguments: (dataPath: String, cachePath: String)?
+    open var sessionPathsDataPathCachePathReceivedInvocations: [(dataPath: String, cachePath: String)] = []
 
-    var sessionPathPathUnderlyingReturnValue: ClientBuilder!
-    open var sessionPathPathReturnValue: ClientBuilder! {
+    var sessionPathsDataPathCachePathUnderlyingReturnValue: ClientBuilder!
+    open var sessionPathsDataPathCachePathReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
-                return sessionPathPathUnderlyingReturnValue
+                return sessionPathsDataPathCachePathUnderlyingReturnValue
             } else {
                 var returnValue: ClientBuilder? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sessionPathPathUnderlyingReturnValue
+                    returnValue = sessionPathsDataPathCachePathUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -4781,26 +5214,26 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
         set {
             if Thread.isMainThread {
-                sessionPathPathUnderlyingReturnValue = newValue
+                sessionPathsDataPathCachePathUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sessionPathPathUnderlyingReturnValue = newValue
+                    sessionPathsDataPathCachePathUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var sessionPathPathClosure: ((String) -> ClientBuilder)?
+    open var sessionPathsDataPathCachePathClosure: ((String, String) -> ClientBuilder)?
 
-    open override func sessionPath(path: String) -> ClientBuilder {
-        sessionPathPathCallsCount += 1
-        sessionPathPathReceivedPath = path
+    open override func sessionPaths(dataPath: String, cachePath: String) -> ClientBuilder {
+        sessionPathsDataPathCachePathCallsCount += 1
+        sessionPathsDataPathCachePathReceivedArguments = (dataPath: dataPath, cachePath: cachePath)
         DispatchQueue.main.async {
-            self.sessionPathPathReceivedInvocations.append(path)
+            self.sessionPathsDataPathCachePathReceivedInvocations.append((dataPath: dataPath, cachePath: cachePath))
         }
-        if let sessionPathPathClosure = sessionPathPathClosure {
-            return sessionPathPathClosure(path)
+        if let sessionPathsDataPathCachePathClosure = sessionPathsDataPathCachePathClosure {
+            return sessionPathsDataPathCachePathClosure(dataPath, cachePath)
         } else {
-            return sessionPathPathReturnValue
+            return sessionPathsDataPathCachePathReturnValue
         }
     }
 
@@ -4875,17 +5308,17 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
     }
 
-    //MARK: - simplifiedSlidingSync
+    //MARK: - slidingSyncVersionBuilder
 
-    var simplifiedSlidingSyncEnableUnderlyingCallsCount = 0
-    open var simplifiedSlidingSyncEnableCallsCount: Int {
+    var slidingSyncVersionBuilderVersionBuilderUnderlyingCallsCount = 0
+    open var slidingSyncVersionBuilderVersionBuilderCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return simplifiedSlidingSyncEnableUnderlyingCallsCount
+                return slidingSyncVersionBuilderVersionBuilderUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = simplifiedSlidingSyncEnableUnderlyingCallsCount
+                    returnValue = slidingSyncVersionBuilderVersionBuilderUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -4893,29 +5326,29 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
         set {
             if Thread.isMainThread {
-                simplifiedSlidingSyncEnableUnderlyingCallsCount = newValue
+                slidingSyncVersionBuilderVersionBuilderUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    simplifiedSlidingSyncEnableUnderlyingCallsCount = newValue
+                    slidingSyncVersionBuilderVersionBuilderUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var simplifiedSlidingSyncEnableCalled: Bool {
-        return simplifiedSlidingSyncEnableCallsCount > 0
+    open var slidingSyncVersionBuilderVersionBuilderCalled: Bool {
+        return slidingSyncVersionBuilderVersionBuilderCallsCount > 0
     }
-    open var simplifiedSlidingSyncEnableReceivedEnable: Bool?
-    open var simplifiedSlidingSyncEnableReceivedInvocations: [Bool] = []
+    open var slidingSyncVersionBuilderVersionBuilderReceivedVersionBuilder: SlidingSyncVersionBuilder?
+    open var slidingSyncVersionBuilderVersionBuilderReceivedInvocations: [SlidingSyncVersionBuilder] = []
 
-    var simplifiedSlidingSyncEnableUnderlyingReturnValue: ClientBuilder!
-    open var simplifiedSlidingSyncEnableReturnValue: ClientBuilder! {
+    var slidingSyncVersionBuilderVersionBuilderUnderlyingReturnValue: ClientBuilder!
+    open var slidingSyncVersionBuilderVersionBuilderReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
-                return simplifiedSlidingSyncEnableUnderlyingReturnValue
+                return slidingSyncVersionBuilderVersionBuilderUnderlyingReturnValue
             } else {
                 var returnValue: ClientBuilder? = nil
                 DispatchQueue.main.sync {
-                    returnValue = simplifiedSlidingSyncEnableUnderlyingReturnValue
+                    returnValue = slidingSyncVersionBuilderVersionBuilderUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -4923,97 +5356,26 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
         set {
             if Thread.isMainThread {
-                simplifiedSlidingSyncEnableUnderlyingReturnValue = newValue
+                slidingSyncVersionBuilderVersionBuilderUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    simplifiedSlidingSyncEnableUnderlyingReturnValue = newValue
+                    slidingSyncVersionBuilderVersionBuilderUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var simplifiedSlidingSyncEnableClosure: ((Bool) -> ClientBuilder)?
+    open var slidingSyncVersionBuilderVersionBuilderClosure: ((SlidingSyncVersionBuilder) -> ClientBuilder)?
 
-    open override func simplifiedSlidingSync(enable: Bool) -> ClientBuilder {
-        simplifiedSlidingSyncEnableCallsCount += 1
-        simplifiedSlidingSyncEnableReceivedEnable = enable
+    open override func slidingSyncVersionBuilder(versionBuilder: SlidingSyncVersionBuilder) -> ClientBuilder {
+        slidingSyncVersionBuilderVersionBuilderCallsCount += 1
+        slidingSyncVersionBuilderVersionBuilderReceivedVersionBuilder = versionBuilder
         DispatchQueue.main.async {
-            self.simplifiedSlidingSyncEnableReceivedInvocations.append(enable)
+            self.slidingSyncVersionBuilderVersionBuilderReceivedInvocations.append(versionBuilder)
         }
-        if let simplifiedSlidingSyncEnableClosure = simplifiedSlidingSyncEnableClosure {
-            return simplifiedSlidingSyncEnableClosure(enable)
+        if let slidingSyncVersionBuilderVersionBuilderClosure = slidingSyncVersionBuilderVersionBuilderClosure {
+            return slidingSyncVersionBuilderVersionBuilderClosure(versionBuilder)
         } else {
-            return simplifiedSlidingSyncEnableReturnValue
-        }
-    }
-
-    //MARK: - slidingSyncProxy
-
-    var slidingSyncProxySlidingSyncProxyUnderlyingCallsCount = 0
-    open var slidingSyncProxySlidingSyncProxyCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return slidingSyncProxySlidingSyncProxyUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = slidingSyncProxySlidingSyncProxyUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                slidingSyncProxySlidingSyncProxyUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    slidingSyncProxySlidingSyncProxyUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var slidingSyncProxySlidingSyncProxyCalled: Bool {
-        return slidingSyncProxySlidingSyncProxyCallsCount > 0
-    }
-    open var slidingSyncProxySlidingSyncProxyReceivedSlidingSyncProxy: String?
-    open var slidingSyncProxySlidingSyncProxyReceivedInvocations: [String?] = []
-
-    var slidingSyncProxySlidingSyncProxyUnderlyingReturnValue: ClientBuilder!
-    open var slidingSyncProxySlidingSyncProxyReturnValue: ClientBuilder! {
-        get {
-            if Thread.isMainThread {
-                return slidingSyncProxySlidingSyncProxyUnderlyingReturnValue
-            } else {
-                var returnValue: ClientBuilder? = nil
-                DispatchQueue.main.sync {
-                    returnValue = slidingSyncProxySlidingSyncProxyUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                slidingSyncProxySlidingSyncProxyUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    slidingSyncProxySlidingSyncProxyUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var slidingSyncProxySlidingSyncProxyClosure: ((String?) -> ClientBuilder)?
-
-    open override func slidingSyncProxy(slidingSyncProxy: String?) -> ClientBuilder {
-        slidingSyncProxySlidingSyncProxyCallsCount += 1
-        slidingSyncProxySlidingSyncProxyReceivedSlidingSyncProxy = slidingSyncProxy
-        DispatchQueue.main.async {
-            self.slidingSyncProxySlidingSyncProxyReceivedInvocations.append(slidingSyncProxy)
-        }
-        if let slidingSyncProxySlidingSyncProxyClosure = slidingSyncProxySlidingSyncProxyClosure {
-            return slidingSyncProxySlidingSyncProxyClosure(slidingSyncProxy)
-        } else {
-            return slidingSyncProxySlidingSyncProxyReturnValue
+            return slidingSyncVersionBuilderVersionBuilderReturnValue
         }
     }
 
@@ -7475,17 +7837,17 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails {
 
     fileprivate var pointer: UnsafeMutableRawPointer!
 
-    //MARK: - slidingSyncProxy
+    //MARK: - slidingSyncVersion
 
-    var slidingSyncProxyUnderlyingCallsCount = 0
-    open var slidingSyncProxyCallsCount: Int {
+    var slidingSyncVersionUnderlyingCallsCount = 0
+    open var slidingSyncVersionCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return slidingSyncProxyUnderlyingCallsCount
+                return slidingSyncVersionUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = slidingSyncProxyUnderlyingCallsCount
+                    returnValue = slidingSyncVersionUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -7493,27 +7855,27 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails {
         }
         set {
             if Thread.isMainThread {
-                slidingSyncProxyUnderlyingCallsCount = newValue
+                slidingSyncVersionUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    slidingSyncProxyUnderlyingCallsCount = newValue
+                    slidingSyncVersionUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var slidingSyncProxyCalled: Bool {
-        return slidingSyncProxyCallsCount > 0
+    open var slidingSyncVersionCalled: Bool {
+        return slidingSyncVersionCallsCount > 0
     }
 
-    var slidingSyncProxyUnderlyingReturnValue: String?
-    open var slidingSyncProxyReturnValue: String? {
+    var slidingSyncVersionUnderlyingReturnValue: SlidingSyncVersion!
+    open var slidingSyncVersionReturnValue: SlidingSyncVersion! {
         get {
             if Thread.isMainThread {
-                return slidingSyncProxyUnderlyingReturnValue
+                return slidingSyncVersionUnderlyingReturnValue
             } else {
-                var returnValue: String?? = nil
+                var returnValue: SlidingSyncVersion? = nil
                 DispatchQueue.main.sync {
-                    returnValue = slidingSyncProxyUnderlyingReturnValue
+                    returnValue = slidingSyncVersionUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -7521,22 +7883,22 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails {
         }
         set {
             if Thread.isMainThread {
-                slidingSyncProxyUnderlyingReturnValue = newValue
+                slidingSyncVersionUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    slidingSyncProxyUnderlyingReturnValue = newValue
+                    slidingSyncVersionUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var slidingSyncProxyClosure: (() -> String?)?
+    open var slidingSyncVersionClosure: (() -> SlidingSyncVersion)?
 
-    open override func slidingSyncProxy() -> String? {
-        slidingSyncProxyCallsCount += 1
-        if let slidingSyncProxyClosure = slidingSyncProxyClosure {
-            return slidingSyncProxyClosure()
+    open override func slidingSyncVersion() -> SlidingSyncVersion {
+        slidingSyncVersionCallsCount += 1
+        if let slidingSyncVersionClosure = slidingSyncVersionClosure {
+            return slidingSyncVersionClosure()
         } else {
-            return slidingSyncProxyReturnValue
+            return slidingSyncVersionReturnValue
         }
     }
 
@@ -7809,6 +8171,42 @@ open class IdentityResetHandleSDKMock: MatrixRustSDK.IdentityResetHandle {
         } else {
             return authTypeReturnValue
         }
+    }
+
+    //MARK: - cancel
+
+    var cancelUnderlyingCallsCount = 0
+    open var cancelCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return cancelUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = cancelUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                cancelUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    cancelUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var cancelCalled: Bool {
+        return cancelCallsCount > 0
+    }
+    open var cancelClosure: (() async -> Void)?
+
+    open override func cancel() async {
+        cancelCallsCount += 1
+        await cancelClosure?()
     }
 
     //MARK: - reset
@@ -11060,42 +11458,6 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         try await clearComposerDraftClosure?()
     }
 
-    //MARK: - clearPinnedEventsCache
-
-    var clearPinnedEventsCacheUnderlyingCallsCount = 0
-    open var clearPinnedEventsCacheCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return clearPinnedEventsCacheUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = clearPinnedEventsCacheUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                clearPinnedEventsCacheUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    clearPinnedEventsCacheUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var clearPinnedEventsCacheCalled: Bool {
-        return clearPinnedEventsCacheCallsCount > 0
-    }
-    open var clearPinnedEventsCacheClosure: (() async -> Void)?
-
-    open override func clearPinnedEventsCache() async {
-        clearPinnedEventsCacheCallsCount += 1
-        await clearPinnedEventsCacheClosure?()
-    }
-
     //MARK: - discardRoomKey
 
     open var discardRoomKeyThrowableError: Error?
@@ -11551,6 +11913,52 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         } else {
             return idReturnValue
         }
+    }
+
+    //MARK: - ignoreDeviceTrustAndResend
+
+    open var ignoreDeviceTrustAndResendDevicesTransactionIdThrowableError: Error?
+    var ignoreDeviceTrustAndResendDevicesTransactionIdUnderlyingCallsCount = 0
+    open var ignoreDeviceTrustAndResendDevicesTransactionIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return ignoreDeviceTrustAndResendDevicesTransactionIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = ignoreDeviceTrustAndResendDevicesTransactionIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                ignoreDeviceTrustAndResendDevicesTransactionIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    ignoreDeviceTrustAndResendDevicesTransactionIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var ignoreDeviceTrustAndResendDevicesTransactionIdCalled: Bool {
+        return ignoreDeviceTrustAndResendDevicesTransactionIdCallsCount > 0
+    }
+    open var ignoreDeviceTrustAndResendDevicesTransactionIdReceivedArguments: (devices: [String: [String]], transactionId: String)?
+    open var ignoreDeviceTrustAndResendDevicesTransactionIdReceivedInvocations: [(devices: [String: [String]], transactionId: String)] = []
+    open var ignoreDeviceTrustAndResendDevicesTransactionIdClosure: (([String: [String]], String) async throws -> Void)?
+
+    open override func ignoreDeviceTrustAndResend(devices: [String: [String]], transactionId: String) async throws {
+        if let error = ignoreDeviceTrustAndResendDevicesTransactionIdThrowableError {
+            throw error
+        }
+        ignoreDeviceTrustAndResendDevicesTransactionIdCallsCount += 1
+        ignoreDeviceTrustAndResendDevicesTransactionIdReceivedArguments = (devices: devices, transactionId: transactionId)
+        DispatchQueue.main.async {
+            self.ignoreDeviceTrustAndResendDevicesTransactionIdReceivedInvocations.append((devices: devices, transactionId: transactionId))
+        }
+        try await ignoreDeviceTrustAndResendDevicesTransactionIdClosure?(devices, transactionId)
     }
 
     //MARK: - ignoreUser
@@ -13114,16 +13522,16 @@ open class RoomSDKMock: MatrixRustSDK.Room {
 
     //MARK: - pinnedEventsTimeline
 
-    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadThrowableError: Error?
-    var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingCallsCount = 0
-    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadCallsCount: Int {
+    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsThrowableError: Error?
+    var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingCallsCount = 0
+    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingCallsCount
+                return pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingCallsCount
+                    returnValue = pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -13131,29 +13539,29 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         set {
             if Thread.isMainThread {
-                pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingCallsCount = newValue
+                pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingCallsCount = newValue
+                    pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadCalled: Bool {
-        return pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadCallsCount > 0
+    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsCalled: Bool {
+        return pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsCallsCount > 0
     }
-    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadReceivedArguments: (internalIdPrefix: String?, maxEventsToLoad: UInt16)?
-    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadReceivedInvocations: [(internalIdPrefix: String?, maxEventsToLoad: UInt16)] = []
+    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsReceivedArguments: (internalIdPrefix: String?, maxEventsToLoad: UInt16, maxConcurrentRequests: UInt16)?
+    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsReceivedInvocations: [(internalIdPrefix: String?, maxEventsToLoad: UInt16, maxConcurrentRequests: UInt16)] = []
 
-    var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingReturnValue: Timeline!
-    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadReturnValue: Timeline! {
+    var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingReturnValue: Timeline!
+    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsReturnValue: Timeline! {
         get {
             if Thread.isMainThread {
-                return pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingReturnValue
+                return pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingReturnValue
             } else {
                 var returnValue: Timeline? = nil
                 DispatchQueue.main.sync {
-                    returnValue = pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingReturnValue
+                    returnValue = pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -13161,29 +13569,29 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         set {
             if Thread.isMainThread {
-                pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingReturnValue = newValue
+                pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadUnderlyingReturnValue = newValue
+                    pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadClosure: ((String?, UInt16) async throws -> Timeline)?
+    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsClosure: ((String?, UInt16, UInt16) async throws -> Timeline)?
 
-    open override func pinnedEventsTimeline(internalIdPrefix: String?, maxEventsToLoad: UInt16) async throws -> Timeline {
-        if let error = pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadThrowableError {
+    open override func pinnedEventsTimeline(internalIdPrefix: String?, maxEventsToLoad: UInt16, maxConcurrentRequests: UInt16) async throws -> Timeline {
+        if let error = pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsThrowableError {
             throw error
         }
-        pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadCallsCount += 1
-        pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadReceivedArguments = (internalIdPrefix: internalIdPrefix, maxEventsToLoad: maxEventsToLoad)
+        pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsCallsCount += 1
+        pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsReceivedArguments = (internalIdPrefix: internalIdPrefix, maxEventsToLoad: maxEventsToLoad, maxConcurrentRequests: maxConcurrentRequests)
         DispatchQueue.main.async {
-            self.pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadReceivedInvocations.append((internalIdPrefix: internalIdPrefix, maxEventsToLoad: maxEventsToLoad))
+            self.pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsReceivedInvocations.append((internalIdPrefix: internalIdPrefix, maxEventsToLoad: maxEventsToLoad, maxConcurrentRequests: maxConcurrentRequests))
         }
-        if let pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadClosure = pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadClosure {
-            return try await pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadClosure(internalIdPrefix, maxEventsToLoad)
+        if let pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsClosure = pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsClosure {
+            return try await pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsClosure(internalIdPrefix, maxEventsToLoad, maxConcurrentRequests)
         } else {
-            return pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadReturnValue
+            return pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsReturnValue
         }
     }
 
@@ -14310,6 +14718,52 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
     }
 
+    //MARK: - tryResend
+
+    open var tryResendTransactionIdThrowableError: Error?
+    var tryResendTransactionIdUnderlyingCallsCount = 0
+    open var tryResendTransactionIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return tryResendTransactionIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = tryResendTransactionIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                tryResendTransactionIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    tryResendTransactionIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var tryResendTransactionIdCalled: Bool {
+        return tryResendTransactionIdCallsCount > 0
+    }
+    open var tryResendTransactionIdReceivedTransactionId: String?
+    open var tryResendTransactionIdReceivedInvocations: [String] = []
+    open var tryResendTransactionIdClosure: ((String) async throws -> Void)?
+
+    open override func tryResend(transactionId: String) async throws {
+        if let error = tryResendTransactionIdThrowableError {
+            throw error
+        }
+        tryResendTransactionIdCallsCount += 1
+        tryResendTransactionIdReceivedTransactionId = transactionId
+        DispatchQueue.main.async {
+            self.tryResendTransactionIdReceivedInvocations.append(transactionId)
+        }
+        try await tryResendTransactionIdClosure?(transactionId)
+    }
+
     //MARK: - typingNotice
 
     open var typingNoticeIsTypingThrowableError: Error?
@@ -14492,6 +14946,52 @@ open class RoomSDKMock: MatrixRustSDK.Room {
             self.uploadAvatarMimeTypeDataMediaInfoReceivedInvocations.append((mimeType: mimeType, data: data, mediaInfo: mediaInfo))
         }
         try await uploadAvatarMimeTypeDataMediaInfoClosure?(mimeType, data, mediaInfo)
+    }
+
+    //MARK: - withdrawVerificationAndResend
+
+    open var withdrawVerificationAndResendUserIdsTransactionIdThrowableError: Error?
+    var withdrawVerificationAndResendUserIdsTransactionIdUnderlyingCallsCount = 0
+    open var withdrawVerificationAndResendUserIdsTransactionIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return withdrawVerificationAndResendUserIdsTransactionIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = withdrawVerificationAndResendUserIdsTransactionIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                withdrawVerificationAndResendUserIdsTransactionIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    withdrawVerificationAndResendUserIdsTransactionIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var withdrawVerificationAndResendUserIdsTransactionIdCalled: Bool {
+        return withdrawVerificationAndResendUserIdsTransactionIdCallsCount > 0
+    }
+    open var withdrawVerificationAndResendUserIdsTransactionIdReceivedArguments: (userIds: [String], transactionId: String)?
+    open var withdrawVerificationAndResendUserIdsTransactionIdReceivedInvocations: [(userIds: [String], transactionId: String)] = []
+    open var withdrawVerificationAndResendUserIdsTransactionIdClosure: (([String], String) async throws -> Void)?
+
+    open override func withdrawVerificationAndResend(userIds: [String], transactionId: String) async throws {
+        if let error = withdrawVerificationAndResendUserIdsTransactionIdThrowableError {
+            throw error
+        }
+        withdrawVerificationAndResendUserIdsTransactionIdCallsCount += 1
+        withdrawVerificationAndResendUserIdsTransactionIdReceivedArguments = (userIds: userIds, transactionId: transactionId)
+        DispatchQueue.main.async {
+            self.withdrawVerificationAndResendUserIdsTransactionIdReceivedInvocations.append((userIds: userIds, transactionId: transactionId))
+        }
+        try await withdrawVerificationAndResendUserIdsTransactionIdClosure?(userIds, transactionId)
     }
 }
 open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch {
@@ -15784,6 +16284,75 @@ open class RoomListItemSDKMock: MatrixRustSDK.RoomListItem {
         try await initTimelineEventTypeFilterInternalIdPrefixClosure?(eventTypeFilter, internalIdPrefix)
     }
 
+    //MARK: - invitedRoom
+
+    open var invitedRoomThrowableError: Error?
+    var invitedRoomUnderlyingCallsCount = 0
+    open var invitedRoomCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return invitedRoomUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = invitedRoomUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                invitedRoomUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    invitedRoomUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var invitedRoomCalled: Bool {
+        return invitedRoomCallsCount > 0
+    }
+
+    var invitedRoomUnderlyingReturnValue: Room!
+    open var invitedRoomReturnValue: Room! {
+        get {
+            if Thread.isMainThread {
+                return invitedRoomUnderlyingReturnValue
+            } else {
+                var returnValue: Room? = nil
+                DispatchQueue.main.sync {
+                    returnValue = invitedRoomUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                invitedRoomUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    invitedRoomUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var invitedRoomClosure: (() throws -> Room)?
+
+    open override func invitedRoom() throws -> Room {
+        if let error = invitedRoomThrowableError {
+            throw error
+        }
+        invitedRoomCallsCount += 1
+        if let invitedRoomClosure = invitedRoomClosure {
+            return try invitedRoomClosure()
+        } else {
+            return invitedRoomReturnValue
+        }
+    }
+
     //MARK: - isDirect
 
     var isDirectUnderlyingCallsCount = 0
@@ -16041,6 +16610,71 @@ open class RoomListItemSDKMock: MatrixRustSDK.RoomListItem {
             return await latestEventClosure()
         } else {
             return latestEventReturnValue
+        }
+    }
+
+    //MARK: - membership
+
+    var membershipUnderlyingCallsCount = 0
+    open var membershipCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return membershipUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = membershipUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                membershipUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    membershipUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var membershipCalled: Bool {
+        return membershipCallsCount > 0
+    }
+
+    var membershipUnderlyingReturnValue: Membership!
+    open var membershipReturnValue: Membership! {
+        get {
+            if Thread.isMainThread {
+                return membershipUnderlyingReturnValue
+            } else {
+                var returnValue: Membership? = nil
+                DispatchQueue.main.sync {
+                    returnValue = membershipUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                membershipUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    membershipUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var membershipClosure: (() -> Membership)?
+
+    open override func membership() -> Membership {
+        membershipCallsCount += 1
+        if let membershipClosure = membershipClosure {
+            return membershipClosure()
+        } else {
+            return membershipReturnValue
         }
     }
 
@@ -16366,6 +17000,25 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService {
             }
         }
     }
+    open var subscribeToRoomsRoomIdsSettingsCalled: Bool {
+        return subscribeToRoomsRoomIdsSettingsCallsCount > 0
+    }
+    open var subscribeToRoomsRoomIdsSettingsReceivedArguments: (roomIds: [String], settings: RoomSubscription?)?
+    open var subscribeToRoomsRoomIdsSettingsReceivedInvocations: [(roomIds: [String], settings: RoomSubscription?)] = []
+    open var subscribeToRoomsRoomIdsSettingsClosure: (([String], RoomSubscription?) throws -> Void)?
+
+    open override func subscribeToRooms(roomIds: [String], settings: RoomSubscription?) throws {
+        if let error = subscribeToRoomsRoomIdsSettingsThrowableError {
+            throw error
+        }
+        subscribeToRoomsRoomIdsSettingsCallsCount += 1
+        subscribeToRoomsRoomIdsSettingsReceivedArguments = (roomIds: roomIds, settings: settings)
+        DispatchQueue.main.async {
+            self.subscribeToRoomsRoomIdsSettingsReceivedInvocations.append((roomIds: roomIds, settings: settings))
+        }
+        try subscribeToRoomsRoomIdsSettingsClosure?(roomIds, settings)
+    }
+
     //MARK: - syncIndicator
 
     var syncIndicatorDelayBeforeShowingInMsDelayBeforeHidingInMsListenerUnderlyingCallsCount = 0
@@ -18284,8 +18937,8 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
     open var editItemNewContentCalled: Bool {
         return editItemNewContentCallsCount > 0
     }
-    open var editItemNewContentReceivedArguments: (item: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation)?
-    open var editItemNewContentReceivedInvocations: [(item: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation)] = []
+    open var editItemNewContentReceivedArguments: (item: EventTimelineItem, newContent: EditedContent)?
+    open var editItemNewContentReceivedInvocations: [(item: EventTimelineItem, newContent: EditedContent)] = []
 
     var editItemNewContentUnderlyingReturnValue: Bool!
     open var editItemNewContentReturnValue: Bool! {
@@ -18311,9 +18964,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
             }
         }
     }
-    open var editItemNewContentClosure: ((EventTimelineItem, RoomMessageEventContentWithoutRelation) async throws -> Bool)?
+    open var editItemNewContentClosure: ((EventTimelineItem, EditedContent) async throws -> Bool)?
 
-    open override func edit(item: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation) async throws -> Bool {
+    open override func edit(item: EventTimelineItem, newContent: EditedContent) async throws -> Bool {
         if let error = editItemNewContentThrowableError {
             throw error
         }
@@ -18327,52 +18980,6 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         } else {
             return editItemNewContentReturnValue
         }
-    }
-
-    //MARK: - editPoll
-
-    open var editPollQuestionAnswersMaxSelectionsPollKindEditItemThrowableError: Error?
-    var editPollQuestionAnswersMaxSelectionsPollKindEditItemUnderlyingCallsCount = 0
-    open var editPollQuestionAnswersMaxSelectionsPollKindEditItemCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return editPollQuestionAnswersMaxSelectionsPollKindEditItemUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = editPollQuestionAnswersMaxSelectionsPollKindEditItemUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                editPollQuestionAnswersMaxSelectionsPollKindEditItemUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    editPollQuestionAnswersMaxSelectionsPollKindEditItemUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var editPollQuestionAnswersMaxSelectionsPollKindEditItemCalled: Bool {
-        return editPollQuestionAnswersMaxSelectionsPollKindEditItemCallsCount > 0
-    }
-    open var editPollQuestionAnswersMaxSelectionsPollKindEditItemReceivedArguments: (question: String, answers: [String], maxSelections: UInt8, pollKind: PollKind, editItem: EventTimelineItem)?
-    open var editPollQuestionAnswersMaxSelectionsPollKindEditItemReceivedInvocations: [(question: String, answers: [String], maxSelections: UInt8, pollKind: PollKind, editItem: EventTimelineItem)] = []
-    open var editPollQuestionAnswersMaxSelectionsPollKindEditItemClosure: ((String, [String], UInt8, PollKind, EventTimelineItem) async throws -> Void)?
-
-    open override func editPoll(question: String, answers: [String], maxSelections: UInt8, pollKind: PollKind, editItem: EventTimelineItem) async throws {
-        if let error = editPollQuestionAnswersMaxSelectionsPollKindEditItemThrowableError {
-            throw error
-        }
-        editPollQuestionAnswersMaxSelectionsPollKindEditItemCallsCount += 1
-        editPollQuestionAnswersMaxSelectionsPollKindEditItemReceivedArguments = (question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind, editItem: editItem)
-        DispatchQueue.main.async {
-            self.editPollQuestionAnswersMaxSelectionsPollKindEditItemReceivedInvocations.append((question: question, answers: answers, maxSelections: maxSelections, pollKind: pollKind, editItem: editItem))
-        }
-        try await editPollQuestionAnswersMaxSelectionsPollKindEditItemClosure?(question, answers, maxSelections, pollKind, editItem)
     }
 
     //MARK: - endPoll
@@ -19803,16 +20410,16 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
 
     //MARK: - toggleReaction
 
-    open var toggleReactionEventIdKeyThrowableError: Error?
-    var toggleReactionEventIdKeyUnderlyingCallsCount = 0
-    open var toggleReactionEventIdKeyCallsCount: Int {
+    open var toggleReactionUniqueIdKeyThrowableError: Error?
+    var toggleReactionUniqueIdKeyUnderlyingCallsCount = 0
+    open var toggleReactionUniqueIdKeyCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return toggleReactionEventIdKeyUnderlyingCallsCount
+                return toggleReactionUniqueIdKeyUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = toggleReactionEventIdKeyUnderlyingCallsCount
+                    returnValue = toggleReactionUniqueIdKeyUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -19820,31 +20427,31 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         set {
             if Thread.isMainThread {
-                toggleReactionEventIdKeyUnderlyingCallsCount = newValue
+                toggleReactionUniqueIdKeyUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    toggleReactionEventIdKeyUnderlyingCallsCount = newValue
+                    toggleReactionUniqueIdKeyUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var toggleReactionEventIdKeyCalled: Bool {
-        return toggleReactionEventIdKeyCallsCount > 0
+    open var toggleReactionUniqueIdKeyCalled: Bool {
+        return toggleReactionUniqueIdKeyCallsCount > 0
     }
-    open var toggleReactionEventIdKeyReceivedArguments: (eventId: String, key: String)?
-    open var toggleReactionEventIdKeyReceivedInvocations: [(eventId: String, key: String)] = []
-    open var toggleReactionEventIdKeyClosure: ((String, String) async throws -> Void)?
+    open var toggleReactionUniqueIdKeyReceivedArguments: (uniqueId: String, key: String)?
+    open var toggleReactionUniqueIdKeyReceivedInvocations: [(uniqueId: String, key: String)] = []
+    open var toggleReactionUniqueIdKeyClosure: ((String, String) async throws -> Void)?
 
-    open override func toggleReaction(eventId: String, key: String) async throws {
-        if let error = toggleReactionEventIdKeyThrowableError {
+    open override func toggleReaction(uniqueId: String, key: String) async throws {
+        if let error = toggleReactionUniqueIdKeyThrowableError {
             throw error
         }
-        toggleReactionEventIdKeyCallsCount += 1
-        toggleReactionEventIdKeyReceivedArguments = (eventId: eventId, key: key)
+        toggleReactionUniqueIdKeyCallsCount += 1
+        toggleReactionUniqueIdKeyReceivedArguments = (uniqueId: uniqueId, key: key)
         DispatchQueue.main.async {
-            self.toggleReactionEventIdKeyReceivedInvocations.append((eventId: eventId, key: key))
+            self.toggleReactionUniqueIdKeyReceivedInvocations.append((uniqueId: uniqueId, key: key))
         }
-        try await toggleReactionEventIdKeyClosure?(eventId, key)
+        try await toggleReactionUniqueIdKeyClosure?(uniqueId, key)
     }
 
     //MARK: - unpinEvent
@@ -20450,6 +21057,71 @@ open class TimelineDiffSDKMock: MatrixRustSDK.TimelineDiff {
             return setClosure()
         } else {
             return setReturnValue
+        }
+    }
+
+    //MARK: - truncate
+
+    var truncateUnderlyingCallsCount = 0
+    open var truncateCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return truncateUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = truncateUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                truncateUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    truncateUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var truncateCalled: Bool {
+        return truncateCallsCount > 0
+    }
+
+    var truncateUnderlyingReturnValue: UInt32?
+    open var truncateReturnValue: UInt32? {
+        get {
+            if Thread.isMainThread {
+                return truncateUnderlyingReturnValue
+            } else {
+                var returnValue: UInt32?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = truncateUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                truncateUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    truncateUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var truncateClosure: (() -> UInt32?)?
+
+    open override func truncate() -> UInt32? {
+        truncateCallsCount += 1
+        if let truncateClosure = truncateClosure {
+            return truncateClosure()
+        } else {
+            return truncateReturnValue
         }
     }
 }

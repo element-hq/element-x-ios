@@ -1,17 +1,8 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2023, 2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import AVFoundation
@@ -142,7 +133,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     private func setupAudioSession() {
         releaseAudioSessionTask = nil
         do {
-            try audioSession.setCategory(AVAudioSession.Category.playback)
+            try audioSession.setCategory(.playback)
             try audioSession.setActive(true)
         } catch {
             MXLog.error("Could not redirect audio playback to speakers.")
@@ -157,8 +148,8 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         releaseAudioSessionTask = Task { [weak self] in
             try? await Task.sleep(for: .seconds(timeInterval))
             guard !Task.isCancelled else { return }
-            guard let self else { return }
-            self.releaseAudioSession()
+            
+            self?.releaseAudioSession()
         }
     }
     
@@ -166,7 +157,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         releaseAudioSessionTask = nil
         if audioSession.category == .playback, !audioSession.isOtherAudioPlaying {
             MXLog.info("releasing audio session")
-            try? audioSession.setActive(false)
+            try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
         }
     }
     
@@ -189,10 +180,10 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
             
             switch playerItem.status {
             case .failed:
-                self.setInternalState(.error(playerItem.error ?? AudioPlayerError.genericError))
+                setInternalState(.error(playerItem.error ?? AudioPlayerError.genericError))
             case .readyToPlay:
                 guard state == .loading else { return }
-                self.setInternalState(.readyToPlay)
+                setInternalState(.readyToPlay)
             default:
                 break
             }
@@ -202,30 +193,20 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
             guard let self else { return }
             
             if internalAudioPlayer.rate == 0 {
-                if self.isStopped {
-                    self.setInternalState(.stopped)
+                if isStopped {
+                    setInternalState(.stopped)
                 } else {
-                    self.setInternalState(.paused)
+                    setInternalState(.paused)
                 }
             } else {
-                self.setInternalState(.playing)
+                setInternalState(.playing)
             }
         }
                 
         NotificationCenter.default.publisher(for: Notification.Name.AVPlayerItemDidPlayToEndTime)
             .sink { [weak self] _ in
                 guard let self else { return }
-                self.setInternalState(.finishedPlaying)
-            }
-            .store(in: &cancellables)
-        
-        // Pause playback uppon UIApplication.didBecomeActiveNotification notification
-        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                self.pause()
-                // Release the audio session right away, as we don't play audio in the background
-                self.releaseAudioSession()
+                setInternalState(.finishedPlaying)
             }
             .store(in: &cancellables)
     }

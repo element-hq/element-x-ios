@@ -1,24 +1,15 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2023, 2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import MatrixRustSDK
 import SwiftUI
 
 final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate {
-    var roomContext: RoomScreenViewModel.Context?
+    var timelineContext: TimelineViewModel.Context?
     var updateClosure: (() -> Void)?
     private var pillViews = NSHashTable<UIView>.weakObjects()
     
@@ -54,7 +45,7 @@ final class MessageTextView: UITextView, PillAttachmentViewProviderDelegate {
 
 struct MessageText: UIViewRepresentable {
     @Environment(\.openURL) private var openURLAction
-    @Environment(\.roomContext) private var viewModel
+    @Environment(\.timelineContext) private var viewModel
     @State private var computedSizes = [Double: CGSize]()
     
     @State var attributedString: AttributedString {
@@ -66,7 +57,7 @@ struct MessageText: UIViewRepresentable {
     func makeUIView(context: Context) -> MessageTextView {
         // Need to use TextKit 1 for mentions
         let textView = MessageTextView(usingTextLayoutManager: false)
-        textView.roomContext = viewModel
+        textView.timelineContext = viewModel
         textView.updateClosure = { [weak textView] in
             guard let textView else { return }
             do {
@@ -197,7 +188,7 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
     static var attachmentPreview: some View {
         MessageText(attributedString: attributedStringWithAttachment)
             .border(Color.purple)
-            .environmentObject(RoomScreenViewModel.mock.context)
+            .environmentObject(TimelineViewModel.mock.context)
     }
 
     static var previews: some View {
