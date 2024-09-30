@@ -89,7 +89,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                                          mediaProvider: parameters.mediaProvider,
                                                          mentionDisplayHelper: ComposerMentionDisplayHelper(timelineContext: timelineViewModel.context),
                                                          analyticsService: ServiceLocator.shared.analytics,
-                                                         composerDraftService: parameters.composerDraftService)
+                                                         composerDraftService: parameters.composerDraftService,
+                                                         zeroUsers: parameters.appSettings.zeroMatrixUsers ?? [])
         self.composerViewModel = composerViewModel
         
         NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification).sink { _ in

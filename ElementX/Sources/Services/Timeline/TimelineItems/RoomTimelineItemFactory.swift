@@ -225,7 +225,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                              isThreaded: isThreaded,
                              sender: eventItemProxy.sender,
-                             content: buildTextTimelineItemContent(messageContent),
+                             content: buildTextTimelineItemContent(messageContent, eventItemProxy.sender.id),
                              replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageTimelineItem.inReplyTo()),
                              properties: RoomTimelineItemProperties(isEdited: messageTimelineItem.isEdited(),
                                                                     reactions: aggregateReactions(eventItemProxy.reactions),
@@ -541,6 +541,49 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         return .init(body: messageContent.body, formattedBody: formattedBody, formattedBodyHTMLString: htmlBody)
     }
     
+    private func buildTextTimelineItemContent(_ messageContent: TextMessageContent, _ senderId: String) -> TextRoomTimelineItemContent {
+        var htmlBody = messageContent.formatted?.format == .html ? messageContent.formatted?.body : nil
+        if messageContent.formatted?.format == .html, senderId == userID {
+            htmlBody = convertTextToHTML(text: messageContent.body, htmlBody: htmlBody)
+        }
+        let formattedBody = (htmlBody != nil ? attributedStringBuilder.fromHTML(htmlBody) : attributedStringBuilder.fromPlain(messageContent.body))
+        
+        return .init(body: messageContent.body, formattedBody: formattedBody, formattedBodyHTMLString: htmlBody)
+    }
+    
+    func convertTextToHTML(text: String, htmlBody: String?) -> String {
+        let baseUrl = "https://matrix.to/#/@"
+        let domain = ":zos-home-2.zero.tech"
+        
+        // Use a regular expression to find user mentions in the format @[Name](user:UUID)
+        let regexPattern = #"@\[(.+?)\]\(user:(.+?)\)"#
+        guard let regex = try? NSRegularExpression(pattern: regexPattern, options: []) else {
+            return text
+        }
+        
+        if let htmlBody = htmlBody, !htmlBody.isEmpty {
+            // check if mentions are there in actual text
+            let actualMentionRegex = #"\[@([a-f0-9\-]+:[a-zA-Z0-9\.\-]+)\]\(https:\/\/matrix\.to\/#\/@\1\)"#
+            let mentionRegex = try? NSRegularExpression(pattern: actualMentionRegex, options: [])
+            let matchRange = NSRange(text.startIndex..<text.endIndex, in: text)
+            let matches = mentionRegex?.matches(in: text, options: [], range: matchRange) ?? []
+            // there are mentions and htmlBody is properly formatted
+            if !matches.isEmpty, htmlBody.contains("<a href=") {
+                return htmlBody
+            }
+        }
+        
+        // Replace matches with the appropriate HTML anchor tags
+        let modifiedText = regex.stringByReplacingMatches(
+            in: text,
+            options: [],
+            range: NSRange(text.startIndex..<text.endIndex, in: text),
+            withTemplate: "<a href=\"\(baseUrl)$2\(domain)\">@$2\(domain)</a>"
+        )
+        
+        return "<p>\(modifiedText)</p>\n"
+    }
+    
     private func buildAudioTimelineItemContent(_ messageContent: AudioMessageContent) -> AudioRoomTimelineItemContent {
         var waveform: EstimatedWaveform?
         if let audioWaveform = messageContent.audio?.waveform {
@@ -789,7 +832,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .notice(let content):
             replyContent = .notice(buildNoticeTimelineItemContent(content))
         case .text(let content):
-            replyContent = .text(buildTextTimelineItemContent(content))
+            replyContent = .text(buildTextTimelineItemContent(content, sender.id))
         case .video(let content):
             replyContent = .video(buildVideoTimelineItemContent(content))
         case .location(let content):

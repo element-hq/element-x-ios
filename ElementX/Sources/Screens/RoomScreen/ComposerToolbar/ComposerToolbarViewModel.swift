@@ -40,17 +40,21 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private var currentLinkData: WysiwygLinkData?
     
     private var replyLoadingTask: Task<Void, Never>?
+    
+    private var zeroUsers: [ZMatrixUser] = []
 
     init(wysiwygViewModel: WysiwygComposerViewModel,
          completionSuggestionService: CompletionSuggestionServiceProtocol,
          mediaProvider: MediaProviderProtocol,
          mentionDisplayHelper: MentionDisplayHelper,
          analyticsService: AnalyticsService,
-         composerDraftService: ComposerDraftServiceProtocol) {
+         composerDraftService: ComposerDraftServiceProtocol,
+         zeroUsers: [ZMatrixUser] = []) {
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
         self.analyticsService = analyticsService
         draftService = composerDraftService
+        self.zeroUsers = zeroUsers
         
         mentionBuilder = MentionBuilder()
         attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", mentionBuilder: mentionBuilder)
@@ -367,9 +371,14 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                     return
                 }
                 
-                let displayName = attributedString.attribute(.MatrixUserDisplayName, at: range.location, effectiveRange: nil)
+                let zeroUser = zeroUsers.first(where: { $0.matrixId == userID })
+                let displayName = zeroUser?.displayName ?? userID
+                let cleanedUserId = zeroUser?.id.rawValue.description ?? userID
+                let replacementMentionString = "@[\(displayName)](user:\(cleanedUserId))"
+                // let displayName = attributedString.attribute(.MatrixUserDisplayName, at: range.location, effectiveRange: nil)
                 
-                attributedString.replaceCharacters(in: range, with: "[\(displayName ?? userID)](\(value))")
+                //attributedString.replaceCharacters(in: range, with: "[\(displayName ?? userID)](\(value))")
+                attributedString.replaceCharacters(in: range, with: replacementMentionString)
                 userIDs.insert(userID)
                 
                 stop.pointee = true

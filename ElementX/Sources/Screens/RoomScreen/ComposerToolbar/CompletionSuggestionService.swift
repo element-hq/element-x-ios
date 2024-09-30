@@ -76,7 +76,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     }
     
     func processTextMessage(_ textMessage: String?) {
-        // setSuggestionTrigger(detectTriggerInText(textMessage))
+        setSuggestionTrigger(detectTriggerInText(textMessage))
     }
     
     func setSuggestionTrigger(_ suggestionTrigger: SuggestionTrigger?) {
