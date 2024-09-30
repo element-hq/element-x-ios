@@ -103,17 +103,6 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         } catch {
             MXLog.error("Failed requesting start call action with error: \(error)")
         }
-        
-        do {
-            // Have ElementCall default to the speaker so that the lock button doesn't end the call.
-            // Could also use `overrideOutputAudioPort` but the documentation is clear about it:
-            // `Sessions using PlayAndRecord category that always want to prefer the built-in
-            // speaker output over the receiver, should use AVAudioSessionCategoryOptionDefaultToSpeaker instead.`.
-            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoChat, options: [.defaultToSpeaker])
-            try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
-        } catch {
-            MXLog.error("Failed setting up audio session with error: \(error)")
-        }
     }
     
     func tearDownCallSession() {
@@ -198,6 +187,24 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     func providerDidReset(_ provider: CXProvider) {
         MXLog.info("Call provider did reset: \(provider)")
+    }
+    
+    func provider(_ provider: CXProvider, perform action: CXStartCallAction) {
+        action.fulfill()
+        
+        do {
+            // Setup the AudioSession after starting the call so that we can actually
+            // override what CallKit does. `CXProvider.didActivateAudioSession` is not invoked when
+            // starting the call locally
+            // We want ElementCall to default to the speaker so that the lock button doesn't end the call.
+            // Could also use `overrideOutputAudioPort` but the documentation is clear about it:
+            // `Sessions using PlayAndRecord category that always want to prefer the built-in
+            // speaker output over the receiver, should use AVAudioSessionCategoryOptionDefaultToSpeaker instead.`.
+            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoChat, options: [.defaultToSpeaker])
+            try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
+        } catch {
+            MXLog.error("Failed setting up audio session with error: \(error)")
+        }
     }
     
     func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
