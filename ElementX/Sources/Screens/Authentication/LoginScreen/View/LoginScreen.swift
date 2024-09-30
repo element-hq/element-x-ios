@@ -128,7 +128,7 @@ struct LoginScreen: View {
 struct LoginScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
     static let credentialsViewModel = makeViewModel(withCredentials: true)
-    static let unconfiguredViewModel = makeViewModel(homeserverAddress: "server.net")
+    static let unconfiguredViewModel = makeViewModel(homeserverAddress: "somethingtofailconfiguration")
     
     static var previews: some View {
         NavigationStack {
