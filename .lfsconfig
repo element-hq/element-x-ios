@@ -1,0 +1,2 @@
+[lfs]
+	fetchexclude = PreviewTests/Sources/__Snapshots__/,UITests/Sources/__Snapshots__
