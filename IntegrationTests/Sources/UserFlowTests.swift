@@ -41,9 +41,9 @@ class UserFlowTests: XCTestCase {
         
         sendMessages()
         
-        // Intentionally disabled as they're super flakey on iOS 18 simulators
-        // checkPhotoSharing()
-        // checkDocumentSharing()
+        checkPhotoSharing()
+        
+        checkDocumentSharing()
         
         checkLocationSharing()
         

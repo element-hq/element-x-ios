@@ -229,6 +229,7 @@
 "common.open_source_licenses" = "Licencie s otvoreným zdrojom";
 "common.pinned" = "Pripnuté";
 "common.send_to" = "Odoslať";
+"common.you" = "Vy";
 "common_no_room_name" = "Žiadny názov miestnosti";
 "common_poll_end_confirmation" = "Ste si istí, že chcete ukončiť túto anketu?";
 "common_poll_summary" = "Anketa: %1$@";
@@ -292,12 +293,12 @@
 "notification_inline_reply_failed" = "** Nepodarilo sa odoslať - prosím otvorte miestnosť";
 "notification_invitation_action_reject" = "Zamietnuť";
 "notification_invite_body" = "Vás pozval/a na konverzáciu";
-"notification_invite_body_with_sender" = "%1$@ invited you to chat";
+"notification_invite_body_with_sender" = "%1$@ vás pozval/a na rozhovor";
 "notification_mentioned_you_body" = "Spomenul/a vás: %1$@";
 "notification_new_messages" = "Nové správy";
 "notification_reaction_body" = "Reagoval/a s %1$@";
 "notification_room_invite_body" = "Vás pozval do miestnosti";
-"notification_room_invite_body_with_sender" = "%1$@ invited you to join the room";
+"notification_room_invite_body_with_sender" = "%1$@ vás pozval/a, aby ste sa pripojili k miestnosti";
 "notification_sender_me" = "Ja";
 "notification_sender_mention_reply" = "%1$@ spomenul/a alebo odpovedal/a";
 "notification_test_push_notification_content" = "Prezeráte si oznámenie! Kliknite na mňa!";
@@ -464,10 +465,10 @@
 "screen_deactivate_account_delete_all_messages_notice" = "Upozornenie: Budúcim používateľom sa môžu zobraziť neúplné konverzácie.";
 "screen_deactivate_account_description" = "Deaktivácia vášho účtu znamená %1$@, že:";
 "screen_deactivate_account_description_bold_part" = "nezvratný";
-"screen_deactivate_account_list_item_1" = "%1$@ your account (you can't log back in, and your ID can't be reused).";
+"screen_deactivate_account_list_item_1" = "%1$@ váš účet (nebudete sa môcť znova prihlásiť a vaše ID nebude možné znova použiť).";
 "screen_deactivate_account_list_item_1_bold_part" = "Natrvalo zakázať";
-"screen_deactivate_account_list_item_2" = "Remove you from all chat rooms.";
-"screen_deactivate_account_list_item_3" = "Delete your account information from our identity server.";
+"screen_deactivate_account_list_item_2" = "Odstrániť vás zo všetkých miestností.";
+"screen_deactivate_account_list_item_3" = "Odstrániť informácie o vašom účte z nášho servera totožností.";
 "screen_deactivate_account_list_item_4" = "Vaše správy budú stále viditeľné pre registrovaných používateľov, ale nebudú dostupné pre nových alebo neregistrovaných používateľov, ak sa ich rozhodnete odstrániť.";
 "screen_deactivate_account_title" = "Deaktivovať účet";
 "screen_edit_poll_delete_confirmation" = "Ste si istý, že chcete odstrániť túto anketu?";

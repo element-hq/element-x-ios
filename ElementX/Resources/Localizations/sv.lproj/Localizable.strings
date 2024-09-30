@@ -229,6 +229,7 @@
 "common.open_source_licenses" = "Licenser för öppen källkod";
 "common.pinned" = "Fäst";
 "common.send_to" = "Skicka till";
+"common.you" = "You";
 "common_no_room_name" = "Inget rumsnamn";
 "common_poll_end_confirmation" = "Är du säker på att du vill avsluta den här omröstningen?";
 "common_poll_summary" = "Omröstning: %1$@";

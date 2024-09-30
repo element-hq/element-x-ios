@@ -229,6 +229,7 @@
 "common.open_source_licenses" = "Open source licenses";
 "common.pinned" = "Pinned";
 "common.send_to" = "Send to";
+"common.you" = "You";
 "common_no_room_name" = "No room name";
 "common_poll_end_confirmation" = "Are you sure you want to end this poll?";
 "common_poll_summary" = "Poll: %1$@";

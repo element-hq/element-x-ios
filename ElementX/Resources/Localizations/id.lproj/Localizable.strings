@@ -229,6 +229,7 @@
 "common.open_source_licenses" = "Open source licenses";
 "common.pinned" = "Pinned";
 "common.send_to" = "Kirim ke";
+"common.you" = "You";
 "common_no_room_name" = "Tidak ada nama ruangan";
 "common_poll_end_confirmation" = "Apakah Anda yakin ingin mengakhiri pemungutan suara ini?";
 "common_poll_summary" = "Pemungutan suara: %1$@";

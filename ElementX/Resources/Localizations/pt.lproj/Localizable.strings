@@ -229,6 +229,7 @@
 "common.open_source_licenses" = "Licenças de código aberto";
 "common.pinned" = "Pinned";
 "common.send_to" = "Enviar para";
+"common.you" = "You";
 "common_no_room_name" = "Sala sem nome";
 "common_poll_end_confirmation" = "Tens a certeza que queres concluir esta sondagem?";
 "common_poll_summary" = "Sondagem: %1$@";

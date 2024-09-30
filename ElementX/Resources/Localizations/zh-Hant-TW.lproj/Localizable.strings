@@ -229,6 +229,7 @@
 "common.open_source_licenses" = "Open source licenses";
 "common.pinned" = "Pinned";
 "common.send_to" = "傳送給";
+"common.you" = "You";
 "common_no_room_name" = "無聊天室名稱";
 "common_poll_end_confirmation" = "您確定要結束這項投票嗎？";
 "common_poll_summary" = "投票：%1$@";
