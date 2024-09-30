@@ -229,6 +229,7 @@
 "common.open_source_licenses" = "Open source licenses";
 "common.pinned" = "Pinned";
 "common.send_to" = "Trimiteți către";
+"common.you" = "You";
 "common_no_room_name" = "Fără nume de cameră";
 "common_poll_end_confirmation" = "Sunteți sigur că doriți să încheiați acest sondaj?";
 "common_poll_summary" = "Sondajul %1$@";
