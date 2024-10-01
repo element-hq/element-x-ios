@@ -401,8 +401,8 @@ class TimelineTableViewController: UIViewController {
         
         // These are already in reverse order because the table view is flipped
         for indexPath in visibleIndexPaths {
-            if let visibleItemTimelineID = dataSource?.itemIdentifier(for: indexPath),
-               let visibleItemID = timelineItemsDictionary[visibleItemTimelineID]?.identifier {
+            if let visibleItemUniqueID = dataSource?.itemIdentifier(for: indexPath),
+               let visibleItemID = timelineItemsDictionary[visibleItemUniqueID]?.identifier {
                 coordinator.send(viewAction: .sendReadReceiptIfNeeded(visibleItemID))
                 return
             }
@@ -488,7 +488,7 @@ extension TimelineTableViewController {
     /// The current layout of the table, based on the newest timeline item.
     private func snapshotLayout() -> Layout? {
         guard let newestItemID = newestVisibleItemID(),
-              let newestCellFrame = cellFrame(for: newestItemID.timelineID) else {
+              let newestCellFrame = cellFrame(for: newestItemID.uniqueID) else {
             return nil
         }
         return Layout(id: newestItemID, frame: newestCellFrame)
@@ -496,12 +496,12 @@ extension TimelineTableViewController {
     
     /// Restores the timeline's layout from an old snapshot.
     private func restoreLayout(_ layout: Layout) {
-        if let indexPath = dataSource?.indexPath(for: layout.id.timelineID) {
+        if let indexPath = dataSource?.indexPath(for: layout.id.uniqueID) {
             // Scroll the item into view.
             tableView.scrollToRow(at: indexPath, at: .top, animated: false)
             
             // Remove any unwanted offset that was added by scrollToRow.
-            if let frame = cellFrame(for: layout.id.timelineID) {
+            if let frame = cellFrame(for: layout.id.uniqueID) {
                 let deltaY = frame.maxY - layout.frame.maxY
                 if deltaY != 0 {
                     tableView.contentOffset.y -= deltaY
@@ -511,8 +511,8 @@ extension TimelineTableViewController {
     }
     
     /// Returns the frame of the cell for a particular timeline item.
-    private func cellFrame(for id: String) -> CGRect? {
-        guard let timelineCell = tableView.visibleCells.first(where: { ($0 as? TimelineItemCell)?.item?.id == id }) else {
+    private func cellFrame(for uniqueID: String) -> CGRect? {
+        guard let timelineCell = tableView.visibleCells.first(where: { ($0 as? TimelineItemCell)?.item?.identifier.uniqueID == uniqueID }) else {
             return nil
         }
         

@@ -79,7 +79,7 @@ struct OIDCAuthorizationDataProxy: Equatable {
     }
 }
 
-extension OidcAuthorizationData: Equatable {
+extension OidcAuthorizationData: @retroactive Equatable {
     public static func == (lhs: MatrixRustSDK.OidcAuthorizationData, rhs: MatrixRustSDK.OidcAuthorizationData) -> Bool {
         lhs.loginUrl() == rhs.loginUrl()
     }

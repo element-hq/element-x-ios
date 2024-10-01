@@ -203,7 +203,7 @@ struct TimelineState {
     
     var itemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()
     
-    var timelineIDs: [String] {
+    var uniqueIDs: [String] {
         itemsDictionary.keys.elements
     }
     

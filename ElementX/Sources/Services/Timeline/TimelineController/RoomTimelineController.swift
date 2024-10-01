@@ -186,7 +186,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         MXLog.info("Editing timeline item: \(timelineItemID)")
         
         let editMode: EditMode
-        if !timelineItemID.timelineID.isEmpty,
+        if !timelineItemID.uniqueID.isEmpty,
            let timelineItem = liveTimelineProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID) {
             editMode = .byEvent(timelineItem)
         } else if let eventID = timelineItemID.eventID {
@@ -392,15 +392,15 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             }
             
             return timelineItem
-        case .virtual(let virtualItem, let timelineID):
+        case .virtual(let virtualItem, let uniqueID):
             switch virtualItem {
             case .dayDivider(let timestamp):
                 let date = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
                 let dateString = date.formatted(date: .complete, time: .omitted)
                 
-                return SeparatorRoomTimelineItem(id: .init(timelineID: dateString), text: dateString)
+                return SeparatorRoomTimelineItem(id: .init(uniqueID: dateString), text: dateString)
             case .readMarker:
-                return ReadMarkerRoomTimelineItem(id: .init(timelineID: timelineID))
+                return ReadMarkerRoomTimelineItem(id: .init(uniqueID: uniqueID))
             }
         case .unknown:
             return nil
@@ -409,7 +409,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         
     private func isItemCollapsible(_ item: TimelineItemProxy) -> Bool {
         if case let .event(eventItem) = item {
-            switch eventItem.content.kind() {
+            switch eventItem.content {
             case .profileChange, .roomMembership, .state:
                 return true
             default:

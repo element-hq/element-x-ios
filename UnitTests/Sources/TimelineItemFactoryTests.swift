@@ -6,6 +6,8 @@
 //
 
 @testable import ElementX
+import MatrixRustSDK
+
 import XCTest
 
 @MainActor
@@ -18,19 +20,9 @@ class TimelineItemFactoryTests: XCTestCase {
                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                               stateEventStringBuilder: RoomStateEventStringBuilder(userID: ownUserID))
         
-        let eventTimelineItem = EventTimelineItemSDKMock()
-        eventTimelineItem.isOwnReturnValue = true
-        eventTimelineItem.timestampReturnValue = 0
-        eventTimelineItem.isEditableReturnValue = false
-        eventTimelineItem.canBeRepliedToReturnValue = false
-        eventTimelineItem.senderReturnValue = senderUserID
-        eventTimelineItem.senderProfileReturnValue = .pending
+        let eventTimelineItem = EventTimelineItem.mockCallInvite(sender: senderUserID)
         
-        let timelineItemContent = TimelineItemContentSDKMock()
-        timelineItemContent.kindReturnValue = .callInvite
-        eventTimelineItem.contentReturnValue = timelineItemContent
-        
-        let eventTimelineItemProxy = EventTimelineItemProxy(item: eventTimelineItem, id: "0")
+        let eventTimelineItemProxy = EventTimelineItemProxy(item: eventTimelineItem, uniqueID: "0")
         
         let item = factory.buildTimelineItem(for: eventTimelineItemProxy, isDM: false)
         
