@@ -80,6 +80,7 @@ extension JoinedRoomProxyMock {
         
         membersPublisher = CurrentValueSubject(configuration.members).asCurrentValuePublisher()
         typingMembersPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
+        identityStatusChangesPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
         
         joinedMembersCount = configuration.members.filter { $0.membership == .join }.count
         activeMembersCount = configuration.members.filter { $0.membership == .join || $0.membership == .invite }.count

@@ -4426,6 +4426,76 @@ class ClientProxyMock: ClientProxyProtocol {
             return curve25519Base64ReturnValue
         }
     }
+    //MARK: - pinUserIdentity
+
+    var pinUserIdentityUnderlyingCallsCount = 0
+    var pinUserIdentityCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return pinUserIdentityUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = pinUserIdentityUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                pinUserIdentityUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    pinUserIdentityUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var pinUserIdentityCalled: Bool {
+        return pinUserIdentityCallsCount > 0
+    }
+    var pinUserIdentityReceivedUserID: String?
+    var pinUserIdentityReceivedInvocations: [String] = []
+
+    var pinUserIdentityUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var pinUserIdentityReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return pinUserIdentityUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = pinUserIdentityUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                pinUserIdentityUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    pinUserIdentityUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var pinUserIdentityClosure: ((String) async -> Result<Void, ClientProxyError>)?
+
+    func pinUserIdentity(_ userID: String) async -> Result<Void, ClientProxyError> {
+        pinUserIdentityCallsCount += 1
+        pinUserIdentityReceivedUserID = userID
+        DispatchQueue.main.async {
+            self.pinUserIdentityReceivedInvocations.append(userID)
+        }
+        if let pinUserIdentityClosure = pinUserIdentityClosure {
+            return await pinUserIdentityClosure(userID)
+        } else {
+            return pinUserIdentityReturnValue
+        }
+    }
     //MARK: - resetIdentity
 
     var resetIdentityUnderlyingCallsCount = 0
@@ -5791,6 +5861,11 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
         set(value) { underlyingTypingMembersPublisher = value }
     }
     var underlyingTypingMembersPublisher: CurrentValuePublisher<[String], Never>!
+    var identityStatusChangesPublisher: CurrentValuePublisher<[IdentityStatusChange], Never> {
+        get { return underlyingIdentityStatusChangesPublisher }
+        set(value) { underlyingIdentityStatusChangesPublisher = value }
+    }
+    var underlyingIdentityStatusChangesPublisher: CurrentValuePublisher<[IdentityStatusChange], Never>!
     var actionsPublisher: AnyPublisher<JoinedRoomProxyAction, Never> {
         get { return underlyingActionsPublisher }
         set(value) { underlyingActionsPublisher = value }
@@ -12495,6 +12570,7 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
     }
     var underlyingUserID: String!
     var displayName: String?
+    var disambiguatedDisplayName: String?
     var avatarURL: URL?
     var membership: MembershipState {
         get { return underlyingMembership }
