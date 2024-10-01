@@ -21,6 +21,7 @@ enum RoomScreenViewAction {
     case viewAllPins
     case displayRoomDetails
     case displayCall
+    case footerViewAction(RoomScreenFooterViewAction)
 }
 
 struct RoomScreenViewState: BindableState {
@@ -38,10 +39,20 @@ struct RoomScreenViewState: BindableState {
     var hasOngoingCall: Bool
     var shouldShowCallButton = true
     
+    var footerDetails: RoomScreenFooterViewDetails?
+    
     var bindings: RoomScreenViewStateBindings
 }
 
 struct RoomScreenViewStateBindings { }
+
+enum RoomScreenFooterViewAction {
+    case resolvePinViolation(userID: String)
+}
+
+enum RoomScreenFooterViewDetails {
+    case pinViolation(member: RoomMemberProxyProtocol, learnMoreURL: URL)
+}
 
 enum PinnedEventsBannerState: Equatable {
     case loading(numbersOfEvents: Int)

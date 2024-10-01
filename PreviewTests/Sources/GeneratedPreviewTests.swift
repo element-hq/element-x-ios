@@ -689,6 +689,12 @@ extension PreviewTests {
         }
     }
 
+    func test_roomScreenFooterView() {
+        for preview in RoomScreenFooterView_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_roomScreen() {
         for preview in RoomScreen_Previews._allPreviews {
             assertSnapshots(matching: preview)

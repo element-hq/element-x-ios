@@ -226,6 +226,7 @@
 "common_voice_message" = "Voice message";
 "common_waiting" = "Waiting…";
 "common_waiting_for_decryption_key" = "Waiting for this message";
+"common.copied_to_clipboard" = "Copied to clipboard";
 "common.do_not_show_this_again" = "Do not show this again";
 "common.open_source_licenses" = "Open source licenses";
 "common.pinned" = "Pinned";
@@ -240,6 +241,7 @@
 "confirm_recovery_key_banner_message" = "Your chat backup is currently out of sync. You need to enter your recovery key to maintain access to your chat backup.";
 "confirm_recovery_key_banner_title" = "Enter your recovery key";
 "crash_detection_dialog_content" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
+"crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
 "dialog_permission_camera" = "In order to let the application use the camera, please grant the permission in the system settings.";
 "dialog_permission_generic" = "Please grant the permission in the system settings.";
 "dialog_permission_location_description_ios" = "Grant access in Settings -> Location.";
@@ -481,7 +483,7 @@
 "screen_edit_profile_updating_details" = "Updating profile…";
 "screen_encryption_reset_action_continue_reset" = "Continue reset";
 "screen_encryption_reset_bullet_1" = "Your account details, contacts, preferences, and chat list will be kept";
-"screen_encryption_reset_bullet_2" = "You will lose your existing message history";
+"screen_encryption_reset_bullet_2" = "You will lose your existing message history unless it is stored on another device";
 "screen_encryption_reset_bullet_3" = "You will need to verify all your existing devices and contacts again";
 "screen_encryption_reset_footer" = "Only reset your identity if you don’t have access to another signed-in device and you’ve lost your recovery key.";
 "screen_encryption_reset_title" = "Can't confirm? You’ll need to reset your identity.";

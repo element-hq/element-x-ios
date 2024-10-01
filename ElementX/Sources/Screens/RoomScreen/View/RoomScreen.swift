@@ -29,21 +29,28 @@ struct RoomScreen: View {
         timeline
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                composerToolbar
-                    .padding(.bottom, composerToolbarContext.composerFormattingEnabled ? 8 : 12)
-                    .background {
-                        if composerToolbarContext.composerFormattingEnabled {
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
-                                .ignoresSafeArea()
-                        }
+                VStack(spacing: 0) {
+                    RoomScreenFooterView(details: roomContext.viewState.footerDetails,
+                                         mediaProvider: roomContext.mediaProvider) { action in
+                        roomContext.send(viewAction: .footerViewAction(action))
                     }
-                    .padding(.top, 8)
-                    .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-                    .environmentObject(timelineContext)
-                    .environment(\.timelineContext, timelineContext)
-                    // Make sure the reply header honours the hideTimelineMedia setting too.
-                    .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
+                    
+                    composerToolbar
+                        .padding(.bottom, composerToolbarContext.composerFormattingEnabled ? 8 : 12)
+                        .background {
+                            if composerToolbarContext.composerFormattingEnabled {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
+                                    .ignoresSafeArea()
+                            }
+                        }
+                        .padding(.top, 8)
+                        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+                        .environmentObject(timelineContext)
+                        .environment(\.timelineContext, timelineContext)
+                        // Make sure the reply header honours the hideTimelineMedia setting too.
+                        .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
+                }
             }
             .overlay(alignment: .top) {
                 Group {

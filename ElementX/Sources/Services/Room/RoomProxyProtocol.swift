@@ -56,7 +56,7 @@ protocol InvitedRoomProxyProtocol: RoomProxyProtocol {
     func acceptInvitation() async -> Result<Void, RoomProxyError>
 }
 
-enum JoinedRoomProxyAction {
+enum JoinedRoomProxyAction: Equatable {
     case roomInfoUpdate
 }
 
@@ -72,6 +72,8 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> { get }
     
     var typingMembersPublisher: CurrentValuePublisher<[String], Never> { get }
+    
+    var identityStatusChangesPublisher: CurrentValuePublisher<[IdentityStatusChange], Never> { get }
     
     var actionsPublisher: AnyPublisher<JoinedRoomProxyAction, Never> { get }
     

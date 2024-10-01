@@ -16,12 +16,24 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
     }
     
     var userID: String { member.userId }
+    
     var displayName: String? { member.displayName }
+    
+    var disambiguatedDisplayName: String? {
+        guard let displayName else {
+            return nil
+        }
+        
+        return member.isNameAmbiguous ? "\(displayName) (\(userID))" : displayName
+    }
+    
     var avatarURL: URL? { member.avatarUrl.flatMap(URL.init(string:)) }
     
     var membership: MembershipState { member.membership }
+    
     var isIgnored: Bool { member.isIgnored }
     
     var powerLevel: Int { Int(member.powerLevel) }
+    
     var role: RoomMemberRole { member.suggestedRoleForPowerLevel }
 }
