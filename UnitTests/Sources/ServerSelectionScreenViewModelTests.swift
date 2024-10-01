@@ -10,7 +10,7 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class ServerSelectionViewModelTests: XCTestCase {
+class ServerSelectionScreenViewModelTests: XCTestCase {
     var clientBuilderFactory: AuthenticationClientBuilderFactoryMock!
     var service: AuthenticationServiceProtocol!
     
