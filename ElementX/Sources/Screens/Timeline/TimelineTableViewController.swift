@@ -125,6 +125,13 @@ class TimelineTableViewController: UIViewController {
         }
     }
     
+    var hideTimelineMedia = false {
+        didSet {
+            guard let snapshot = dataSource?.snapshot() else { return }
+            dataSource?.applySnapshotUsingReloadData(snapshot)
+        }
+    }
+    
     /// Used to hold an observable object that the typing indicator can use
     let typingMembers = TypingMembersObservableObject(members: [])
     
@@ -260,21 +267,19 @@ class TimelineTableViewController: UIViewController {
                 let cell = tableView.dequeueReusableCell(withIdentifier: TimelineItemCell.reuseIdentifier, for: indexPath)
                 guard let self, let cell = cell as? TimelineItemCell else { return cell }
                 
-                // A local reference to avoid capturing self in the cell configuration.
-                let coordinator = self.coordinator
-                
                 let viewState = timelineItemsDictionary[id]
                 cell.item = viewState
                 guard let viewState else {
                     return cell
                 }
                 
-                cell.contentConfiguration = UIHostingConfiguration {
+                cell.contentConfiguration = UIHostingConfiguration { [coordinator, hideTimelineMedia] in
                     RoomTimelineItemView(viewState: viewState)
                         .id(id)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .environmentObject(coordinator.context) // Attempted fix at a crash in TimelineItemContextMenu
                         .environment(\.timelineContext, coordinator.context)
+                        .environment(\.shouldAutomaticallyLoadImages, !hideTimelineMedia)
                 }
                 .margins(.all, 0) // Margins are handled in the stylers
                 .minSize(height: 1)

@@ -12,6 +12,7 @@ import SwiftUI
 protocol CommonSettingsProtocol {
     var logLevel: TracingConfiguration.LogLevel { get }
     var enableOnlySignedDeviceIsolationMode: Bool { get }
+    var hideTimelineMedia: Bool { get }
 }
 
 /// Store Element specific app settings.
@@ -34,6 +35,7 @@ final class AppSettings {
         case appAppearance
         case sharePresence
         case hideUnreadMessagesBadge
+        case hideTimelineMedia
         
         case elementCallBaseURLOverride
         case elementCallEncryptionEnabled
@@ -285,6 +287,9 @@ final class AppSettings {
     /// Configuration to enable only signed device isolation mode for  crypto. In this mode only devices signed by their owner will be considered in e2ee rooms.
     @UserPreference(key: UserDefaultsKeys.enableOnlySignedDeviceIsolationMode, defaultValue: false, storageType: .userDefaults(store))
     var enableOnlySignedDeviceIsolationMode
+    
+    @UserPreference(key: UserDefaultsKeys.hideTimelineMedia, defaultValue: false, storageType: .userDefaults(store))
+    var hideTimelineMedia
 }
 
 extension AppSettings: CommonSettingsProtocol { }

@@ -42,6 +42,8 @@ struct RoomScreen: View {
                     .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
                     .environmentObject(timelineContext)
                     .environment(\.timelineContext, timelineContext)
+                    // Make sure the reply header honours the hideTimelineMedia setting too.
+                    .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
             }
             .overlay(alignment: .top) {
                 Group {

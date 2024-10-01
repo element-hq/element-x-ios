@@ -45,6 +45,12 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
+            Section("Timeline") {
+                Toggle(isOn: $context.hideTimelineMedia) {
+                    Text("Hide image & video previews")
+                }
+            }
+            
             Section {
                 Toggle(isOn: $context.enableOnlySignedDeviceIsolationMode) {
                     Text("Exclude not secure devices when sending/receiving messages")
