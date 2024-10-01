@@ -36,10 +36,7 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
         
         authenticationService.homeserver
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] homeserver in
-                guard let self else { return }
-                state.homeserver = homeserver
-            }
+            .weakAssign(to: \.state.homeserver, on: self)
             .store(in: &cancellables)
     }
 
