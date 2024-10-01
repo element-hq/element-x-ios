@@ -865,26 +865,11 @@ extension TimelineViewModel {
                                                             analyticsService: ServiceLocator.shared.analytics)
 }
 
-private struct TimelineContextKey: EnvironmentKey {
-    @MainActor static let defaultValue: TimelineViewModel.Context? = nil
-}
-
-private struct FocussedEventID: EnvironmentKey {
-    static let defaultValue: String? = nil
-}
-
 extension EnvironmentValues {
     /// Used to access and inject the room context without observing it
-    var timelineContext: TimelineViewModel.Context? {
-        get { self[TimelineContextKey.self] }
-        set { self[TimelineContextKey.self] = newValue }
-    }
-
+    @Entry var timelineContext: TimelineViewModel.Context?
     /// An event ID which will be non-nil when a timeline item should show as focussed.
-    var focussedEventID: String? {
-        get { self[FocussedEventID.self] }
-        set { self[FocussedEventID.self] = newValue }
-    }
+    @Entry var focussedEventID: String?
 }
 
 private enum SlashCommand: String, CaseIterable {

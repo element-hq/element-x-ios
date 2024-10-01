@@ -26,13 +26,6 @@ enum TimelineGroupStyle: Hashable {
 
 // MARK: - Environment
 
-private struct TimelineGroupStyleKey: EnvironmentKey {
-    static let defaultValue = TimelineGroupStyle.single
-}
-
 extension EnvironmentValues {
-    var timelineGroupStyle: TimelineGroupStyle {
-        get { self[TimelineGroupStyleKey.self] }
-        set { self[TimelineGroupStyleKey.self] = newValue }
-    }
+    @Entry var timelineGroupStyle: TimelineGroupStyle = .single
 }
