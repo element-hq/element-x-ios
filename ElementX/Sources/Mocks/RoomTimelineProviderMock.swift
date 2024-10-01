@@ -35,7 +35,12 @@ class AutoUpdatingRoomTimelineProviderMock: RoomTimelineProvider {
                 
                 let diff = TimelineDiffSDKMock()
                 diff.changeReturnValue = .append
-                diff.appendReturnValue = [TimelineItemFixtures.messageTimelineItem]
+                
+                let timelineItem = TimelineItemSDKMock()
+                timelineItem.asEventReturnValue = EventTimelineItem.message
+                timelineItem.uniqueIdReturnValue = UUID().uuidString
+                
+                diff.appendReturnValue = [timelineItem]
                 
                 await Self.timelineListener?.onUpdate(diff: [diff])
             }

@@ -659,19 +659,19 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             if itemGroup.count == 1 {
                 if let firstItem = itemGroup.first {
                     timelineItemsDictionary.updateValue(updateViewState(item: firstItem, groupStyle: .single),
-                                                        forKey: firstItem.id.timelineID)
+                                                        forKey: firstItem.id.uniqueID)
                 }
             } else {
                 for (index, item) in itemGroup.enumerated() {
                     if index == 0 {
                         timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: state.isPinnedEventsTimeline ? .single : .first),
-                                                            forKey: item.id.timelineID)
+                                                            forKey: item.id.uniqueID)
                     } else if index == itemGroup.count - 1 {
                         timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: state.isPinnedEventsTimeline ? .single : .last),
-                                                            forKey: item.id.timelineID)
+                                                            forKey: item.id.uniqueID)
                     } else {
                         timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: state.isPinnedEventsTimeline ? .single : .middle),
-                                                            forKey: item.id.timelineID)
+                                                            forKey: item.id.uniqueID)
                     }
                 }
             }
@@ -685,7 +685,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
 
     private func updateViewState(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) -> RoomTimelineItemViewState {
-        if let timelineItemViewState = state.timelineViewState.itemsDictionary[item.id.timelineID] {
+        if let timelineItemViewState = state.timelineViewState.itemsDictionary[item.id.uniqueID] {
             timelineItemViewState.groupStyle = groupStyle
             timelineItemViewState.type = .init(item: item)
             return timelineItemViewState

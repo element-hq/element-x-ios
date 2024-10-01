@@ -415,10 +415,10 @@ extension ComposerToolbar {
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                  analyticsService: ServiceLocator.shared.analytics,
                                                  composerDraftService: ComposerDraftServiceMock())
-            model.state.composerMode = isLoading ? .reply(itemID: .init(timelineID: ""),
+            model.state.composerMode = isLoading ? .reply(itemID: .init(uniqueID: ""),
                                                           replyDetails: .loading(eventID: ""),
                                                           isThread: false) :
-                .reply(itemID: .init(timelineID: ""),
+                .reply(itemID: .init(uniqueID: ""),
                        replyDetails: .loaded(sender: .init(id: "",
                                                            displayName: "Test"),
                                              eventID: "", eventContent: .message(.text(.init(body: "Hello World!")))), isThread: false)

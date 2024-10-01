@@ -29,7 +29,7 @@ protocol AppMediatorProtocol {
     func requestAuthorizationIfNeeded() async -> Bool
 }
 
-extension UIApplication.State: CustomStringConvertible {
+extension UIApplication.State: @retroactive CustomStringConvertible {
     public var description: String {
         switch self {
         case .active:
@@ -44,7 +44,7 @@ extension UIApplication.State: CustomStringConvertible {
     }
 }
 
-extension UIUserInterfaceActiveAppearance: CustomStringConvertible {
+extension UIUserInterfaceActiveAppearance: @retroactive CustomStringConvertible {
     public var description: String {
         switch self {
         case .active:

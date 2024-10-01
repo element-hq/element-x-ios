@@ -258,9 +258,9 @@ class TimelineViewModelTests: XCTestCase {
     
     func testSendReadReceiptWithoutEvents() async throws {
         // Given a room with only virtual items.
-        let items = [SeparatorRoomTimelineItem(timelineID: "v1"),
-                     SeparatorRoomTimelineItem(timelineID: "v2"),
-                     SeparatorRoomTimelineItem(timelineID: "v3")]
+        let items = [SeparatorRoomTimelineItem(uniqueID: "v1"),
+                     SeparatorRoomTimelineItem(uniqueID: "v2"),
+                     SeparatorRoomTimelineItem(uniqueID: "v3")]
         let (viewModel, _, timelineProxy, _) = readReceiptsConfiguration(with: items)
         
         // When sending a read receipt for the last item.
@@ -275,7 +275,7 @@ class TimelineViewModelTests: XCTestCase {
         // Given a room where the last event is a virtual item.
         let items: [RoomTimelineItemProtocol] = [TextRoomTimelineItem(eventID: "t1"),
                                                  TextRoomTimelineItem(eventID: "t2"),
-                                                 SeparatorRoomTimelineItem(timelineID: "v3")]
+                                                 SeparatorRoomTimelineItem(uniqueID: "v3")]
         let (viewModel, _, _, _) = readReceiptsConfiguration(with: items)
         
         // When sending a read receipt for the last item.
@@ -436,14 +436,14 @@ private extension TextRoomTimelineItem {
 }
 
 private extension SeparatorRoomTimelineItem {
-    init(timelineID: String) {
-        self.init(id: .init(timelineID: timelineID), text: "")
+    init(uniqueID: String) {
+        self.init(id: .init(uniqueID: uniqueID), text: "")
     }
 }
 
 private extension TextRoomTimelineItem {
     init(eventID: String) {
-        self.init(id: .init(timelineID: UUID().uuidString, eventID: eventID),
+        self.init(id: .init(uniqueID: UUID().uuidString, eventOrTransactionID: .eventId(eventId: eventID)),
                   timestamp: "",
                   isOutgoing: false,
                   isEditable: false,
