@@ -28,9 +28,9 @@ settings:
 
 include:
 - path: project.yml
-- path: TchapX/production/SupportingFiles/target.yml
+- path: TchapX/SupportingFiles/target-production.yml
 - path: TchapX/production/SupportingFiles/NSE/target.yml
-- path: TchapX/staging/SupportingFiles/target.yml
+- path: TchapX/SupportingFiles/target-staging.yml
 - path: TchapX/staging/SupportingFiles/NSE/target.yml
-- path: TchapX/development/SupportingFiles/target.yml
+- path: TchapX/SupportingFiles/target-development.yml
 - path: TchapX/development/SupportingFiles/NSE/target.yml

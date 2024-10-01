@@ -1,14 +1,14 @@
-name: TchapX-Staging
+name: TchapX-Development
 
 schemes:
-  TchapX-Staging:
+  TchapX-Development:
     analyze:
       config: Debug
     archive:
       config: Release
     build:
       targets:
-        TchapX-Staging:
+        TchapX-Development:
           - running
           - testing
           - profiling
@@ -32,22 +32,22 @@ schemes:
       config: Debug
       gatherCoverageData: true
       coverageTargets:
-        - TchapX-Staging
+        - TchapX-Development
       testPlans:
-        - path: ../../../UnitTests/SupportingFiles/UnitTests.xctestplan
+        - path: ../../UnitTests/SupportingFiles/UnitTests.xctestplan
           defaultPlan: true
 
 targets:
-  TchapX-Staging:
+  TchapX-Development:
     type: application
     platform: iOS
 
     configFiles:
-      Debug: ../SupportingFiles/secrets.xcconfig
-      Release: ../SupportingFiles/secrets.xcconfig
+      Debug: ../development/SupportingFiles/secrets.xcconfig
+      Release: ../development/SupportingFiles/secrets.xcconfig
 
     info:
-      path: ../SupportingFiles/Info.plist
+      path: ../development/SupportingFiles/Info.plist
       properties:
         UILaunchScreen:
           UIColorName: colors/background-color
@@ -113,22 +113,23 @@ targets:
 
     settings:
       base:
-        PRODUCTION_APP_NAME: Tchap STAGING
-        BASE_APP_GROUP_IDENTIFIER: fr.gouv.tchapx.staging
-        BASE_BUNDLE_IDENTIFIER: fr.gouv.tchapx.staging
-        APP_NAME: TchapX-staging
-        APP_DISPLAY_NAME: TchapX-STAGING
+        PRODUCTION_APP_NAME: Tchap DEVELOPMENT
+        BASE_APP_GROUP_IDENTIFIER: fr.gouv.tchapx.dev
+        BASE_BUNDLE_IDENTIFIER: fr.gouv.tchapx.dev
+        APP_NAME: TchapX-development
+        APP_DISPLAY_NAME: TchapX-DEVELOPMENT
+        ASSETCATALOG_COMPILER_APPICON_NAME: TchapX-icon
 
         PRODUCT_NAME: $(APP_NAME)
         PRODUCT_BUNDLE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER)
-        ASSETCATALOG_COMPILER_APPICON_NAME: TchapX-icon
-        CODE_SIGN_ENTITLEMENTS: TchapX/staging/SupportingFiles/tchapx.entitlements
+        CODE_SIGN_ENTITLEMENTS: TchapX/development/SupportingFiles/tchapx.entitlements
         SWIFT_OBJC_BRIDGING_HEADER: ElementX/SupportingFiles/ElementX-Bridging-Header.h
         SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
         PILLS_UT_TYPE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER).pills
         OTHER_SWIFT_FLAGS:
-        - "-DIS_MAIN_APP -DIS_ENVIRONMENT_STAGING"
-  
+        - "-DIS_MAIN_APP -DIS_ENVIRONMENT_DEVELOPMENT"
+
+
     preBuildScripts:
     - name: 🛠 SwiftGen
       runOnlyWhenInstalling: false
@@ -141,14 +142,14 @@ targets:
         else
             echo "warning: SwiftGen not installed, download from https://github.com/SwiftGen/SwiftGen"
         fi
-    - name: 🧙 Sourcery
+    - name: 🧙 Sourcery - Generate mocks
       runOnlyWhenInstalling: false
       basedOnDependencyAnalysis: false
       shell: /bin/sh
       script: |
         export PATH="$PATH:/opt/homebrew/bin"
         if which sourcery >/dev/null; then
-            sourcery --config Tools/Sourcery/sourcery_automockable_config.yml
+            sourcery --config Tools/Sourcery/AutoMockableConfig.yml
         else
             echo "warning: Sourcery not installed, run swift run tools setup-project"
         fi
@@ -178,7 +179,7 @@ targets:
         fi
 
     dependencies:
-    - target: NSE-Staging
+    - target: NSE-Development
     # not used yet
     # - target: NCE
     - package: MatrixRustSDK
@@ -204,23 +205,22 @@ targets:
     - package: Version
     - package: Emojibase
     - package: WysiwygComposer
-    - package: Prefire
     - package: SwiftOGG
     - package: DSWaveformImage
       product: DSWaveformImageViews
 
     sources:
-    - path: ../../../ElementX/Sources
+    - path: ../../ElementX/Sources
       excludes:
         - Other/Extensions/XCUIElement.swift
-    - path: ../../main/Sources
+    - path: ../main/Sources
       excludes:
         - Other/Extensions/XCUIElement.swift
-    - path: ../../../ElementX/Resources
-    - path: ../../../ElementX/SupportingFiles/Settings.bundle
-    - path: ../Resources
-    - path: ../SupportingFiles
+    - path: ../../ElementX/Resources
+    - path: ../../ElementX/SupportingFiles/Settings.bundle
+    - path: ../development/Resources
+    - path: ../development/SupportingFiles
       excludes:
         - target.yml
         - NSE
-    - path: ../../../Tools/Scripts/Templates/SimpleScreenExample/ElementX
+    - path: ../../Tools/Scripts/Templates/SimpleScreenExample/ElementX
