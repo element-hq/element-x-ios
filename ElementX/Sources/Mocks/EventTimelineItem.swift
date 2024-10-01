@@ -36,7 +36,7 @@ extension EventTimelineItem {
                   shieldsProvider: EventShieldsProviderSDKMock())
     }
     
-    static var message: EventTimelineItem {
+    static var mockMessage: EventTimelineItem {
         let body = Lorem.sentences(Int.random(in: 1...5))
         let messageType = MessageType.text(content: .init(body: body, formatted: nil))
         
@@ -50,7 +50,7 @@ extension EventTimelineItem {
         return .init(configuration: .init(content: content))
     }
     
-    static func callInvite(sender: String) -> EventTimelineItem {
+    static func mockCallInvite(sender: String) -> EventTimelineItem {
         .init(configuration: .init(sender: sender, content: .callInvite))
     }
 }

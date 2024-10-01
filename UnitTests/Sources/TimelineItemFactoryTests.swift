@@ -20,7 +20,7 @@ class TimelineItemFactoryTests: XCTestCase {
                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                               stateEventStringBuilder: RoomStateEventStringBuilder(userID: ownUserID))
         
-        let eventTimelineItem = EventTimelineItem.callInvite(sender: senderUserID)
+        let eventTimelineItem = EventTimelineItem.mockCallInvite(sender: senderUserID)
         
         let eventTimelineItemProxy = EventTimelineItemProxy(item: eventTimelineItem, uniqueID: "0")
         
