@@ -116,14 +116,15 @@ extension View {
     
     @ViewBuilder
     fileprivate func timelineGesture(_ gesture: some Gesture) -> some View {
-        if #available(iOS 18.0, *) {
-            // iOS 18 has a bug https://forums.developer.apple.com/forums/thread/760035 and you
-            // can't scroll the timeline when `gesture` is used.
-            simultaneousGesture(gesture)
-        } else {
+// Tchap: don't check for iOS 18 while not using Xcode 16
+//        if #available(iOS 18.0, *) {
+//            // iOS 18 has a bug https://forums.developer.apple.com/forums/thread/760035 and you
+//            // can't scroll the timeline when `gesture` is used.
+//            simultaneousGesture(gesture)
+//        } else {
             // Equally on iOS 17 you can't scroll the timeline when `simultaneousGesture` is used.
             self.gesture(gesture)
-        }
+//        }
     }
 }
 
