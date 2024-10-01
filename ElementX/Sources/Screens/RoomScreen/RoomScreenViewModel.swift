@@ -203,15 +203,3 @@ extension RoomScreenViewModel {
                             analyticsService: ServiceLocator.shared.analytics)
     }
 }
-
-private struct RoomContextKey: EnvironmentKey {
-    @MainActor static let defaultValue: RoomScreenViewModel.Context? = nil
-}
-
-extension EnvironmentValues {
-    /// Used to access and inject the room context without observing it
-    var roomContext: RoomScreenViewModel.Context? {
-        get { self[RoomContextKey.self] }
-        set { self[RoomContextKey.self] = newValue }
-    }
-}
