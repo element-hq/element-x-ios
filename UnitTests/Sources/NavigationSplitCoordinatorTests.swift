@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import XCTest
@@ -99,6 +90,52 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         assertCoordinatorsEqual(someOtherSheetCoordinator, navigationSplitCoordinator.sheetCoordinator)
     }
     
+    func testFullScreenCover() {
+        let sidebarCoordinator = SomeTestCoordinator()
+        navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator)
+        let detailCoordinator = SomeTestCoordinator()
+        navigationSplitCoordinator.setDetailCoordinator(detailCoordinator)
+        
+        let fullScreenCoordinator = SomeTestCoordinator()
+        navigationSplitCoordinator.setFullScreenCoverCoordinator(fullScreenCoordinator)
+        
+        assertCoordinatorsEqual(sidebarCoordinator, navigationSplitCoordinator.sidebarCoordinator)
+        assertCoordinatorsEqual(detailCoordinator, navigationSplitCoordinator.detailCoordinator)
+        assertCoordinatorsEqual(fullScreenCoordinator, navigationSplitCoordinator.fullScreenCoverCoordinator)
+        
+        navigationSplitCoordinator.setFullScreenCoverCoordinator(nil)
+        
+        assertCoordinatorsEqual(sidebarCoordinator, navigationSplitCoordinator.sidebarCoordinator)
+        assertCoordinatorsEqual(detailCoordinator, navigationSplitCoordinator.detailCoordinator)
+        XCTAssertNil(navigationSplitCoordinator.fullScreenCoverCoordinator)
+    }
+    
+    func testOverlay() {
+        let sidebarCoordinator = SomeTestCoordinator()
+        navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator)
+        let detailCoordinator = SomeTestCoordinator()
+        navigationSplitCoordinator.setDetailCoordinator(detailCoordinator)
+        
+        let overlayCoordinator = SomeTestCoordinator()
+        navigationSplitCoordinator.setOverlayCoordinator(overlayCoordinator)
+        
+        assertCoordinatorsEqual(sidebarCoordinator, navigationSplitCoordinator.sidebarCoordinator)
+        assertCoordinatorsEqual(detailCoordinator, navigationSplitCoordinator.detailCoordinator)
+        assertCoordinatorsEqual(overlayCoordinator, navigationSplitCoordinator.overlayCoordinator)
+        
+        // The coordinator should still be retained when changing the presentation mode.
+        navigationSplitCoordinator.setOverlayPresentationMode(.minimized)
+        assertCoordinatorsEqual(overlayCoordinator, navigationSplitCoordinator.overlayCoordinator)
+        navigationSplitCoordinator.setOverlayPresentationMode(.fullScreen)
+        assertCoordinatorsEqual(overlayCoordinator, navigationSplitCoordinator.overlayCoordinator)
+        
+        navigationSplitCoordinator.setOverlayCoordinator(nil)
+        
+        assertCoordinatorsEqual(sidebarCoordinator, navigationSplitCoordinator.sidebarCoordinator)
+        assertCoordinatorsEqual(detailCoordinator, navigationSplitCoordinator.detailCoordinator)
+        XCTAssertNil(navigationSplitCoordinator.overlayCoordinator)
+    }
+    
     func testSidebarReplacementCallbacks() {
         let sidebarCoordinator = SomeTestCoordinator()
         
@@ -132,6 +169,43 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         }
         
         navigationSplitCoordinator.setSheetCoordinator(nil)
+        waitForExpectations(timeout: 1.0)
+    }
+    
+    func testFullScreenCoverDismissalCallback() {
+        let fullScreenCoordinator = SomeTestCoordinator()
+        
+        let expectation = expectation(description: "Wait for callback")
+        navigationSplitCoordinator.setFullScreenCoverCoordinator(fullScreenCoordinator) {
+            expectation.fulfill()
+        }
+        
+        navigationSplitCoordinator.setFullScreenCoverCoordinator(nil)
+        waitForExpectations(timeout: 1.0)
+    }
+    
+    func testOverlayDismissalCallback() {
+        let overlayCoordinator = SomeTestCoordinator()
+        
+        let expectation = expectation(description: "Wait for callback")
+        navigationSplitCoordinator.setOverlayCoordinator(overlayCoordinator) {
+            expectation.fulfill()
+        }
+        
+        navigationSplitCoordinator.setOverlayCoordinator(nil)
+        waitForExpectations(timeout: 1.0)
+    }
+    
+    func testOverlayDismissalCallbackWhenChangingMode() {
+        let overlayCoordinator = SomeTestCoordinator()
+        
+        let expectation = expectation(description: "Wait for callback")
+        expectation.isInverted = true
+        navigationSplitCoordinator.setOverlayCoordinator(overlayCoordinator) {
+            expectation.fulfill()
+        }
+        
+        navigationSplitCoordinator.setOverlayPresentationMode(.minimized)
         waitForExpectations(timeout: 1.0)
     }
     

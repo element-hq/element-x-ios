@@ -1,17 +1,8 @@
 //
-// Copyright 2024 New Vector Ltd
+// Copyright 2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import SwiftUI
@@ -48,7 +39,7 @@ struct RoomInviterDetails: Equatable {
 struct RoomInviterLabel: View {
     let inviter: RoomInviterDetails
     
-    let imageProvider: ImageProviderProtocol?
+    let mediaProvider: MediaProviderProtocol?
     
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 8) {
@@ -56,7 +47,7 @@ struct RoomInviterLabel: View {
                                 name: inviter.displayName,
                                 contentID: inviter.id,
                                 avatarSize: .custom(16),
-                                imageProvider: imageProvider)
+                                mediaProvider: mediaProvider)
                 .alignmentGuide(.firstTextBaseline) { $0[.bottom] * 0.8 }
                 .accessibilityHidden(true)
             
@@ -71,13 +62,13 @@ struct RoomInviterLabel_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 10) {
             RoomInviterLabel(inviter: .init(member: RoomMemberProxyMock.mockAlice),
-                             imageProvider: MockMediaProvider())
+                             mediaProvider: MockMediaProvider())
             RoomInviterLabel(inviter: .init(member: RoomMemberProxyMock.mockDan),
-                             imageProvider: MockMediaProvider())
+                             mediaProvider: MockMediaProvider())
             RoomInviterLabel(inviter: .init(member: RoomMemberProxyMock.mockNoName),
-                             imageProvider: MockMediaProvider())
+                             mediaProvider: MockMediaProvider())
             RoomInviterLabel(inviter: .init(member: RoomMemberProxyMock.mockCharlie),
-                             imageProvider: MockMediaProvider())
+                             mediaProvider: MockMediaProvider())
                 .foregroundStyle(.compound.textPrimary)
         }
         .font(.compound.bodyMD)

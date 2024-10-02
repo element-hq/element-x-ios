@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Foundation
@@ -19,9 +10,17 @@ import MatrixRustSDK
 
 struct RestorationToken: Equatable {
     let session: MatrixRustSDK.Session
-    let sessionDirectory: URL
+    let sessionDirectories: SessionDirectories
     let passphrase: String?
     let pusherNotificationClientIdentifier: String?
+    
+    enum CodingKeys: CodingKey {
+        case session
+        case sessionDirectory
+        case cacheDirectory
+        case passphrase
+        case pusherNotificationClientIdentifier
+    }
 }
 
 extension RestorationToken: Codable {
@@ -29,26 +28,46 @@ extension RestorationToken: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         let session = try container.decode(MatrixRustSDK.Session.self, forKey: .session)
-        let sessionDirectory = try container.decodeIfPresent(URL.self, forKey: .sessionDirectory)
+        let dataDirectory = try container.decodeIfPresent(URL.self, forKey: .sessionDirectory)
+        let cacheDirectory = try container.decodeIfPresent(URL.self, forKey: .cacheDirectory)
+        
+        let sessionDirectories = if let dataDirectory {
+            if let cacheDirectory {
+                SessionDirectories(dataDirectory: dataDirectory, cacheDirectory: cacheDirectory)
+            } else {
+                SessionDirectories(dataDirectory: dataDirectory)
+            }
+        } else {
+            SessionDirectories(userID: session.userId)
+        }
         
         self = try .init(session: session,
-                         sessionDirectory: sessionDirectory ?? .legacySessionDirectory(for: session.userId),
+                         sessionDirectories: sessionDirectories,
                          passphrase: container.decodeIfPresent(String.self, forKey: .passphrase),
                          pusherNotificationClientIdentifier: container.decodeIfPresent(String.self, forKey: .pusherNotificationClientIdentifier))
+    }
+    
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(session, forKey: .session)
+        try container.encode(sessionDirectories.dataDirectory, forKey: .sessionDirectory)
+        try container.encode(sessionDirectories.cacheDirectory, forKey: .cacheDirectory)
+        try container.encode(passphrase, forKey: .passphrase)
+        try container.encode(pusherNotificationClientIdentifier, forKey: .pusherNotificationClientIdentifier)
     }
 }
 
 extension MatrixRustSDK.Session: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        let slidingSyncProxy = try container.decodeIfPresent(String.self, forKey: .slidingSyncProxy)
         self = try .init(accessToken: container.decode(String.self, forKey: .accessToken),
                          refreshToken: container.decodeIfPresent(String.self, forKey: .refreshToken),
                          userId: container.decode(String.self, forKey: .userId),
                          deviceId: container.decode(String.self, forKey: .deviceId),
                          homeserverUrl: container.decode(String.self, forKey: .homeserverUrl),
                          oidcData: container.decodeIfPresent(String.self, forKey: .oidcData),
-                         // Note: the proxy is optional now that we support Simplified Sliding Sync.
-                         slidingSyncProxy: container.decodeIfPresent(String.self, forKey: .slidingSyncProxy))
+                         slidingSyncVersion: slidingSyncProxy.map { .proxy(url: $0) } ?? .native)
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -59,7 +78,7 @@ extension MatrixRustSDK.Session: Codable {
         try container.encode(deviceId, forKey: .deviceId)
         try container.encode(homeserverUrl, forKey: .homeserverUrl)
         try container.encode(oidcData, forKey: .oidcData)
-        try container.encode(slidingSyncProxy, forKey: .slidingSyncProxy)
+        try container.encode(slidingSyncVersion.proxyURL, forKey: .slidingSyncProxy)
     }
     
     enum CodingKeys: String, CodingKey {
@@ -67,17 +86,9 @@ extension MatrixRustSDK.Session: Codable {
     }
 }
 
-// MARK: Migrations
-
-private extension URL {
-    /// Gets the store directory of a legacy session that hasn't been migrated to the new token format.
-    ///
-    /// This should only be used to fill in the missing value when restoring a token as older versions of
-    /// the SDK set the session directory for us, based on the user's ID. Newer sessions now use a UUID,
-    /// which is generated app side during authentication.
-    static func legacySessionDirectory(for userID: String) -> URL {
-        // Rust sanitises the user ID replacing invalid characters with an _
-        let sanitisedUserID = userID.replacingOccurrences(of: ":", with: "_")
-        return .sessionsBaseDirectory.appendingPathComponent(sanitisedUserID)
+private extension SlidingSyncVersion {
+    var proxyURL: String? {
+        guard case let .proxy(url) = self else { return nil }
+        return url
     }
 }

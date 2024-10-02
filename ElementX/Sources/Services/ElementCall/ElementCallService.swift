@@ -1,17 +1,8 @@
 //
-// Copyright 2024 New Vector Ltd
+// Copyright 2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import AVFoundation
@@ -57,7 +48,14 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     private var endUnansweredCallTask: Task<Void, Never>?
     
-    private var ongoingCallID: CallID?
+    private var ongoingCallID: CallID? {
+        didSet { ongoingCallRoomIDSubject.send(ongoingCallID?.roomID) }
+    }
+    
+    let ongoingCallRoomIDSubject = CurrentValueSubject<String?, Never>(nil)
+    var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> {
+        ongoingCallRoomIDSubject.asCurrentValuePublisher()
+    }
     
     private let actionsSubject: PassthroughSubject<ElementCallServiceAction, Never> = .init()
     var actions: AnyPublisher<ElementCallServiceAction, Never> {
@@ -253,8 +251,6 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     // MARK: - Private
     
     func tearDownCallSession(sendEndCallAction: Bool = true) {
-        try? AVAudioSession.sharedInstance().setActive(false)
-        
         if sendEndCallAction, let ongoingCallID {
             let transaction = CXTransaction(action: CXEndCallAction(call: ongoingCallID.callKitID))
             callController.request(transaction) { error in
@@ -274,7 +270,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             return
         }
         
-        guard let roomProxy = await clientProxy.roomForIdentifier(incomingCallID.roomID) else {
+        guard case let .joined(roomProxy) = await clientProxy.roomForIdentifier(incomingCallID.roomID) else {
             return
         }
         

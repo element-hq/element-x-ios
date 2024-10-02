@@ -1,17 +1,8 @@
 //
-// Copyright 2024 New Vector Ltd
+// Copyright 2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Compound
@@ -25,13 +16,8 @@ struct HomeScreenContent: View {
     let scrollViewAdapter: ScrollViewAdapter
     
     var body: some View {
-        switch context.viewState.roomListMode {
-        case .migration:
-            migrationView
-        default:
-            roomList
-                .sentryTrace("\(Self.self)")
-        }
+        roomList
+            .sentryTrace("\(Self.self)")
     }
     
     private var roomList: some View {
@@ -68,8 +54,6 @@ struct HomeScreenContent: View {
                     .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
                     .compoundSearchField()
                     .disableAutocorrection(true)
-                case .migration:
-                    EmptyView()
                 }
             }
             .introspect(.scrollView, on: .supportedVersions) { scrollView in
@@ -136,59 +120,21 @@ struct HomeScreenContent: View {
     private var topSection: some View {
         // An empty VStack causes glitches within the room list
         if context.viewState.shouldShowFilters ||
-            context.viewState.shouldShowRecoveryKeyConfirmationBanner {
+            context.viewState.securityBannerMode == .show ||
+            context.viewState.slidingSyncMigrationBannerMode == .show {
             VStack(spacing: 0) {
                 if context.viewState.shouldShowFilters {
                     RoomListFiltersView(state: $context.filtersState)
                 }
-                
-                if context.viewState.shouldShowRecoveryKeyConfirmationBanner {
+            
+                if context.viewState.slidingSyncMigrationBannerMode == .show {
+                    HomeScreenSlidingSyncMigrationBanner(context: context)
+                } else if context.viewState.securityBannerMode == .show {
                     HomeScreenRecoveryKeyConfirmationBanner(context: context)
                 }
             }
             .background(Color.compound.bgCanvasDefault)
         }
-    }
-    
-    @ViewBuilder
-    private var migrationView: some View {
-        if UIDevice.current.isPhone {
-            if verticalSizeClass == .compact {
-                migrationViewContent
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                WaitingDialog {
-                    migrationViewContent
-                } bottomContent: {
-                    EmptyView()
-                }
-            }
-        } else {
-            migrationViewContent
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-        }
-    }
-    
-    private var migrationViewContent: some View {
-        VStack(spacing: 16) {
-            ProgressView()
-                .tint(.compound.iconPrimary)
-                .padding(.bottom, 4)
-            
-            Text(L10n.screenMigrationTitle.tinting(".", color: Asset.Colors.brandColor.swiftUIColor))
-                .minimumScaleFactor(0.01)
-                .font(.compound.headingXLBold)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.compound.textPrimary)
-            
-            Text(L10n.screenMigrationMessage)
-                .minimumScaleFactor(0.01)
-                .font(.compound.bodyLG)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.compound.textPrimary)
-                .accessibilityIdentifier(A11yIdentifiers.migrationScreen.message)
-        }
-        .padding(.horizontal)
     }
     
     /// Often times the scroll view's content size isn't correct yet when this method is called e.g. when cancelling a search
@@ -200,6 +146,8 @@ struct HomeScreenContent: View {
     
     private func delayedUpdateVisibleRange() {
         guard let scrollView = scrollViewAdapter.scrollView,
+              scrollViewAdapter.isScrolling.value == false, // Ignore while scrolling
+              context.searchQuery.isEmpty == true, // Ignore while filtering
               context.viewState.visibleRooms.count > 0 else {
             return
         }
@@ -215,6 +163,6 @@ struct HomeScreenContent: View {
         let lastIndex = Int(max(0.0, scrollView.contentOffset.y + scrollView.bounds.height) / cellHeight)
         
         // This will be deduped and throttled on the view model layer
-        context.send(viewAction: .updateVisibleItemRange(range: firstIndex..<lastIndex, isScrolling: scrollViewAdapter.isScrolling.value))
+        context.send(viewAction: .updateVisibleItemRange(firstIndex..<lastIndex))
     }
 }

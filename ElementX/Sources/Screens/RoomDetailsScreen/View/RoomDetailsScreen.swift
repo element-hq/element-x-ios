@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Compound
@@ -66,7 +57,7 @@ struct RoomDetailsScreen: View {
         .navigationTitle(L10n.screenRoomDetailsTitle)
         .navigationBarTitleDisplayMode(.inline)
         .track(screen: .RoomDetails)
-        .interactiveQuickLook(item: $context.mediaPreviewItem, shouldHideControls: true)
+        .interactiveQuickLook(item: $context.mediaPreviewItem, allowEditing: false)
     }
     
     // MARK: - Private
@@ -74,7 +65,7 @@ struct RoomDetailsScreen: View {
     private var normalRoomHeaderSection: some View {
         AvatarHeaderView(room: context.viewState.details,
                          avatarSize: .room(on: .details),
-                         imageProvider: context.imageProvider) {
+                         mediaProvider: context.mediaProvider) {
             context.send(viewAction: .displayAvatar)
         } footer: {
             if !context.viewState.shortcuts.isEmpty {
@@ -87,7 +78,7 @@ struct RoomDetailsScreen: View {
     private func dmHeaderSection(accountOwner: RoomMemberDetails, recipient: RoomMemberDetails) -> some View {
         AvatarHeaderView(accountOwner: accountOwner,
                          dmRecipient: recipient,
-                         imageProvider: context.imageProvider) {
+                         mediaProvider: context.mediaProvider) {
             context.send(viewAction: .displayAvatar)
         } footer: {
             if !context.viewState.shortcuts.isEmpty {
@@ -311,20 +302,20 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
             .mockBob,
             .mockCharlie
         ]
-        let roomProxy = RoomProxyMock(.init(id: "room_a_id",
-                                            name: "Room A",
-                                            topic: """
-                                            Discussions about Element X iOS | https://github.com/vector-im/element-x-ios
-                                            
-                                            Feature Status: https://github.com/vector-im/element-x-ios/issues/1225
-                                            
-                                            App Store: https://apple.co/3r6LJHZ
-                                            TestFlight: https://testflight.apple.com/join/uZbeZCOi
-                                            """,
-                                            isDirect: false,
-                                            isEncrypted: true,
-                                            canonicalAlias: "#alias:domain.com",
-                                            members: members))
+        let roomProxy = JoinedRoomProxyMock(.init(id: "room_a_id",
+                                                  name: "Room A",
+                                                  topic: """
+                                                  Discussions about Element X iOS | https://github.com/vector-im/element-x-ios
+                                                  
+                                                  Feature Status: https://github.com/vector-im/element-x-ios/issues/1225
+                                                  
+                                                  App Store: https://apple.co/3r6LJHZ
+                                                  TestFlight: https://testflight.apple.com/join/uZbeZCOi
+                                                  """,
+                                                  isDirect: false,
+                                                  isEncrypted: true,
+                                                  canonicalAlias: "#alias:domain.com",
+                                                  members: members))
         
         var notificationSettingsProxyMockConfiguration = NotificationSettingsProxyMockConfiguration()
         notificationSettingsProxyMockConfiguration.roomMode.isDefault = false
@@ -349,13 +340,13 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
             .mockDan
         ]
         
-        let roomProxy = RoomProxyMock(.init(id: "dm_room_id",
-                                            name: "DM Room",
-                                            topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                                            isDirect: true,
-                                            isEncrypted: true,
-                                            canonicalAlias: "#alias:domain.com",
-                                            members: members))
+        let roomProxy = JoinedRoomProxyMock(.init(id: "dm_room_id",
+                                                  name: "DM Room",
+                                                  topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                                                  isDirect: true,
+                                                  isEncrypted: true,
+                                                  canonicalAlias: "#alias:domain.com",
+                                                  members: members))
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         let appSettings = AppSettings()
         appSettings.pinningEnabled = true
@@ -378,11 +369,11 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
             .mockBob,
             .mockCharlie
         ]
-        let roomProxy = RoomProxyMock(.init(id: "simple_room_id",
-                                            name: "Room A",
-                                            isDirect: false,
-                                            isEncrypted: false,
-                                            members: members))
+        let roomProxy = JoinedRoomProxyMock(.init(id: "simple_room_id",
+                                                  name: "Room A",
+                                                  isDirect: false,
+                                                  isEncrypted: false,
+                                                  members: members))
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         let appSettings = AppSettings()
         appSettings.pinningEnabled = true
@@ -401,12 +392,12 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         RoomDetailsScreen(context: simpleRoomViewModel.context)
             .previewDisplayName("Simple Room")
-            .snapshot(delay: 2)
+            .snapshotPreferences(delay: 2)
         RoomDetailsScreen(context: dmRoomViewModel.context)
             .previewDisplayName("DM Room")
-            .snapshot(delay: 0.25)
+            .snapshotPreferences(delay: 0.25)
         RoomDetailsScreen(context: genericRoomViewModel.context)
             .previewDisplayName("Generic Room")
-            .snapshot(delay: 0.25)
+            .snapshotPreferences(delay: 0.25)
     }
 }

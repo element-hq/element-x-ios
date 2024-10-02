@@ -47,7 +47,7 @@ struct BuildSDK: ParsableCommand {
                 Run the following command to install them:
                 
                 rustup target add \(missingTargets.joined(separator: " ")) --toolchain nightly
-                
+
                 """
             default:
                 return nil

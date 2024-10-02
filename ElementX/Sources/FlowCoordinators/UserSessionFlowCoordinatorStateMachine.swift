@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Combine
@@ -132,36 +123,43 @@ class UserSessionFlowCoordinatorStateMachine {
             switch (fromState, event) {
             case (.roomList, .selectRoom(let roomID, _, _)):
                 return .roomList(selectedRoomID: roomID)
+
             case (.roomList, .deselectRoom):
                 return .roomList(selectedRoomID: nil)
 
             case (.roomList(let selectedRoomID), .showSettingsScreen):
                 return .settingsScreen(selectedRoomID: selectedRoomID)
+
             case (.settingsScreen(let selectedRoomID), .dismissedSettingsScreen):
                 return .roomList(selectedRoomID: selectedRoomID)
                 
             case (.roomList(let selectedRoomID), .feedbackScreen):
                 return .feedbackScreen(selectedRoomID: selectedRoomID)
+
             case (.feedbackScreen(let selectedRoomID), .dismissedFeedbackScreen):
                 return .roomList(selectedRoomID: selectedRoomID)
                 
             case (.roomList(let selectedRoomID), .showStartChatScreen):
                 return .startChatScreen(selectedRoomID: selectedRoomID)
+
             case (.startChatScreen(let selectedRoomID), .dismissedStartChatScreen):
                 return .roomList(selectedRoomID: selectedRoomID)
                             
             case (.roomList(let selectedRoomID), .showLogoutConfirmationScreen):
                 return .logoutConfirmationScreen(selectedRoomID: selectedRoomID)
+
             case (.logoutConfirmationScreen(let selectedRoomID), .dismissedLogoutConfirmationScreen):
                 return .roomList(selectedRoomID: selectedRoomID)
                 
             case (.roomList(let selectedRoomID), .showRoomDirectorySearchScreen):
                 return .roomDirectorySearchScreen(selectedRoomID: selectedRoomID)
+
             case (.roomDirectorySearchScreen(let selectedRoomID), .dismissedRoomDirectorySearchScreen):
                 return .roomList(selectedRoomID: selectedRoomID)
             
             case (_, .showUserProfileScreen):
                 return .userProfileScreen
+
             case (.userProfileScreen, .dismissedUserProfileScreen):
                 return .roomList(selectedRoomID: nil)
                 

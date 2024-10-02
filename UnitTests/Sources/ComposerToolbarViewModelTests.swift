@@ -1,17 +1,8 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2023, 2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Combine
@@ -50,22 +41,22 @@ class ComposerToolbarViewModelTests: XCTestCase {
     }
 
     func testComposerFocus() {
-        viewModel.process(roomAction: .setMode(mode: .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))))
+        viewModel.process(timelineAction: .setMode(mode: .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))))
         XCTAssertTrue(viewModel.state.bindings.composerFocused)
-        viewModel.process(roomAction: .removeFocus)
+        viewModel.process(timelineAction: .removeFocus)
         XCTAssertFalse(viewModel.state.bindings.composerFocused)
     }
 
     func testComposerMode() {
-        let mode: RoomScreenComposerMode = .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))
-        viewModel.process(roomAction: .setMode(mode: mode))
+        let mode: ComposerMode = .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))
+        viewModel.process(timelineAction: .setMode(mode: mode))
         XCTAssertEqual(viewModel.state.composerMode, mode)
-        viewModel.process(roomAction: .clear)
+        viewModel.process(timelineAction: .clear)
         XCTAssertEqual(viewModel.state.composerMode, .default)
     }
 
     func testComposerModeIsPublished() {
-        let mode: RoomScreenComposerMode = .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))
+        let mode: ComposerMode = .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))
         let expectation = expectation(description: "Composer mode is published")
         let cancellable = viewModel
             .context
@@ -78,7 +69,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
                 expectation.fulfill()
             })
 
-        viewModel.process(roomAction: .setMode(mode: mode))
+        viewModel.process(timelineAction: .setMode(mode: mode))
 
         wait(for: [expectation], timeout: 2.0)
         cancellable.cancel()
@@ -206,7 +197,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         
         viewModel.context.composerFormattingEnabled = false
         viewModel.context.plainComposerText = .init(string: "Hello world!")
-        viewModel.process(roomAction: .saveDraft)
+        viewModel.saveDraft()
         
         await fulfillment(of: [expectation], timeout: 10)
         XCTAssertEqual(draftServiceMock.saveDraftCallsCount, 1)
@@ -226,7 +217,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         
         viewModel.context.composerFormattingEnabled = true
         wysiwygViewModel.setHtmlContent("<strong>Hello</strong> world!")
-        viewModel.process(roomAction: .saveDraft)
+        viewModel.saveDraft()
         
         await fulfillment(of: [expectation], timeout: 10)
         XCTAssertEqual(draftServiceMock.saveDraftCallsCount, 1)
@@ -245,9 +236,9 @@ class ComposerToolbarViewModelTests: XCTestCase {
         }
         
         viewModel.context.composerFormattingEnabled = false
-        viewModel.process(roomAction: .setMode(mode: .edit(originalItemId: .init(timelineID: "", eventID: "testID"))))
+        viewModel.process(timelineAction: .setMode(mode: .edit(originalItemId: .init(timelineID: "", eventID: "testID"))))
         viewModel.context.plainComposerText = .init(string: "Hello world!")
-        viewModel.process(roomAction: .saveDraft)
+        viewModel.saveDraft()
         
         await fulfillment(of: [expectation], timeout: 10)
         XCTAssertEqual(draftServiceMock.saveDraftCallsCount, 1)
@@ -266,14 +257,14 @@ class ComposerToolbarViewModelTests: XCTestCase {
         }
         
         viewModel.context.composerFormattingEnabled = false
-        viewModel.process(roomAction: .setMode(mode: .reply(itemID: .init(timelineID: "",
-                                                                          eventID: "testID"),
+        viewModel.process(timelineAction: .setMode(mode: .reply(itemID: .init(timelineID: "",
+                                                                              eventID: "testID"),
             replyDetails: .loaded(sender: .init(id: ""),
                                   eventID: "testID",
                                   eventContent: .message(.text(.init(body: "reply text")))),
             isThread: false)))
         viewModel.context.plainComposerText = .init(string: "Hello world!")
-        viewModel.process(roomAction: .saveDraft)
+        viewModel.saveDraft()
         
         await fulfillment(of: [expectation], timeout: 10)
         XCTAssertEqual(draftServiceMock.saveDraftCallsCount, 1)
@@ -292,13 +283,13 @@ class ComposerToolbarViewModelTests: XCTestCase {
         }
         
         viewModel.context.composerFormattingEnabled = false
-        viewModel.process(roomAction: .setMode(mode: .reply(itemID: .init(timelineID: "",
-                                                                          eventID: "testID"),
+        viewModel.process(timelineAction: .setMode(mode: .reply(itemID: .init(timelineID: "",
+                                                                              eventID: "testID"),
             replyDetails: .loaded(sender: .init(id: ""),
                                   eventID: "testID",
                                   eventContent: .message(.text(.init(body: "reply text")))),
             isThread: false)))
-        viewModel.process(roomAction: .saveDraft)
+        viewModel.saveDraft()
         
         await fulfillment(of: [expectation], timeout: 10)
         XCTAssertEqual(draftServiceMock.saveDraftCallsCount, 1)
@@ -314,7 +305,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         }
         
         viewModel.context.composerFormattingEnabled = false
-        viewModel.process(roomAction: .saveDraft)
+        viewModel.saveDraft()
         
         await fulfillment(of: [expectation], timeout: 10)
         XCTAssertFalse(draftServiceMock.saveDraftCalled)
@@ -332,8 +323,10 @@ class ComposerToolbarViewModelTests: XCTestCase {
         viewModel.context.composerFormattingEnabled = false
         let waveformData: [Float] = Array(repeating: 1.0, count: 1000)
         viewModel.context.plainComposerText = .init(string: "Hello world!")
-        viewModel.process(roomAction: .setMode(mode: .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, duration: 10.0), waveform: .data(waveformData), isUploading: false)))
-        viewModel.process(roomAction: .saveDraft)
+        viewModel.process(timelineAction: .setMode(mode: .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview, title: "", duration: 10.0),
+                                                                              waveform: .data(waveformData),
+                                                                              isUploading: false)))
+        viewModel.saveDraft()
 
         await fulfillment(of: [expectation], timeout: 10)
         XCTAssertFalse(draftServiceMock.saveDraftCalled)
@@ -349,7 +342,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
             return .success(nil)
         }
         
-        viewModel.process(roomAction: .loadDraft)
+        viewModel.loadDraft()
         await fulfillment(of: [expectation], timeout: 10)
         XCTAssertFalse(viewModel.context.composerFormattingEnabled)
         XCTAssertTrue(viewModel.state.composerEmpty)
@@ -365,7 +358,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                   htmlText: nil,
                                   draftType: .newMessage))
         }
-        viewModel.process(roomAction: .loadDraft)
+        viewModel.loadDraft()
         
         await fulfillment(of: [expectation], timeout: 10)
         XCTAssertFalse(viewModel.context.composerFormattingEnabled)
@@ -382,7 +375,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                   htmlText: "<strong>Hello</strong> world!",
                                   draftType: .newMessage))
         }
-        viewModel.process(roomAction: .loadDraft)
+        viewModel.loadDraft()
         
         await fulfillment(of: [expectation], timeout: 10)
         XCTAssertTrue(viewModel.context.composerFormattingEnabled)
@@ -400,7 +393,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                   htmlText: nil,
                                   draftType: .edit(eventID: "testID")))
         }
-        viewModel.process(roomAction: .loadDraft)
+        viewModel.loadDraft()
         
         await fulfillment(of: [expectation], timeout: 10)
         XCTAssertFalse(viewModel.context.composerFormattingEnabled)
@@ -433,7 +426,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
             return .success(.init(details: loadedReply,
                                   isThreaded: true))
         }
-        viewModel.process(roomAction: .loadDraft)
+        viewModel.loadDraft()
         
         await fulfillment(of: [draftExpectation], timeout: 10)
         XCTAssertFalse(viewModel.context.composerFormattingEnabled)
@@ -474,7 +467,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
             return .success(.init(details: loadedReply,
                                   isThreaded: true))
         }
-        viewModel.process(roomAction: .loadDraft)
+        viewModel.loadDraft()
         
         await fulfillment(of: [draftExpectation], timeout: 10)
         XCTAssertFalse(viewModel.context.composerFormattingEnabled)
@@ -493,7 +486,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
     func testSaveVolatileDraftWhenEditing() {
         viewModel.context.composerFormattingEnabled = false
         viewModel.context.plainComposerText = .init(string: "Hello world!")
-        viewModel.process(roomAction: .setMode(mode: .edit(originalItemId: .random)))
+        viewModel.process(timelineAction: .setMode(mode: .edit(originalItemId: .random)))
         
         let draft = draftServiceMock.saveVolatileDraftReceivedDraft
         XCTAssertNotNil(draft)
@@ -530,7 +523,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
             expectation2.fulfill()
         }
         
-        viewModel.process(roomAction: .clear)
+        viewModel.process(timelineAction: .clear)
         await fulfillment(of: [expectation1, expectation2])
         XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: "Hello world"))
     }
@@ -549,7 +542,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
             expectation2.fulfill()
         }
         
-        viewModel.process(roomAction: .clear)
+        viewModel.process(timelineAction: .clear)
         await fulfillment(of: [expectation1, expectation2])
         XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: "Hello world"))
     }
@@ -557,7 +550,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
     func testRestoreUserMentionInPlainText() async throws {
         viewModel.context.composerFormattingEnabled = false
         let text = "Hello [TestName](https://matrix.to/#/@test:matrix.org)!"
-        viewModel.process(roomAction: .setText(plainText: text, htmlText: nil))
+        viewModel.process(timelineAction: .setText(plainText: text, htmlText: nil))
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {
@@ -577,7 +570,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
     func testRestoreAllUsersMentionInPlainText() async throws {
         viewModel.context.composerFormattingEnabled = false
         let text = "Hello @room"
-        viewModel.process(roomAction: .setText(plainText: text, htmlText: nil))
+        viewModel.process(timelineAction: .setText(plainText: text, htmlText: nil))
 
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {
@@ -596,7 +589,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
     func testRestoreMixedMentionsInPlainText() async throws {
         viewModel.context.composerFormattingEnabled = false
         let text = "Hello [User1](https://matrix.to/#/@user1:matrix.org), [User2](https://matrix.to/#/@user2:matrix.org) and @room"
-        viewModel.process(roomAction: .setText(plainText: text, htmlText: nil))
+        viewModel.process(timelineAction: .setText(plainText: text, htmlText: nil))
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {
@@ -616,7 +609,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
     func testRestoreAmbiguousMention() async throws {
         viewModel.context.composerFormattingEnabled = false
         let text = "Hello [User1](https://matrix.to/#/@roomuser:matrix.org)"
-        viewModel.process(roomAction: .setText(plainText: text, htmlText: nil))
+        viewModel.process(timelineAction: .setText(plainText: text, htmlText: nil))
         
         let deferred = deferFulfillment(viewModel.actions) { action in
             switch action {

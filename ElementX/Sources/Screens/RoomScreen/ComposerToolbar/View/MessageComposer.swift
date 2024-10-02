@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Compound
@@ -23,8 +14,9 @@ typealias PasteHandler = (NSItemProvider) -> Void
 
 struct MessageComposer: View {
     @Binding var plainComposerText: NSAttributedString
+    @Binding var presendCallback: (() -> Void)?
     let composerView: WysiwygComposerView
-    let mode: RoomScreenComposerMode
+    let mode: ComposerMode
     let composerFormattingEnabled: Bool
     let showResizeGrabber: Bool
     @Binding var isExpanded: Bool
@@ -86,7 +78,8 @@ struct MessageComposer: View {
             } else {
                 MessageComposerTextField(placeholder: L10n.richTextEditorComposerPlaceholder,
                                          text: $plainComposerText,
-                                         maxHeight: 300,
+                                         presendCallback: $presendCallback,
+                                         maxHeight: ComposerConstant.maxHeight,
                                          keyHandler: { handleKeyPress($0) },
                                          pasteHandler: pasteAction)
                     .tint(.compound.iconAccentTertiary)
@@ -208,7 +201,7 @@ private struct MessageComposerHeaderLabelStyle: LabelStyle {
 }
 
 struct MessageComposer_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel.mock
+    static let viewModel = TimelineViewModel.mock
     
     static let replyTypes: [TimelineItemReplyDetails] = [
         .loaded(sender: .init(id: "Dave"),
@@ -241,7 +234,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
     ]
     
     static func messageComposer(_ content: NSAttributedString = .init(string: ""),
-                                mode: RoomScreenComposerMode = .default) -> MessageComposer {
+                                mode: ComposerMode = .default) -> MessageComposer {
         let viewModel = WysiwygComposerViewModel(minHeight: 22,
                                                  maxExpandedHeight: 250)
         viewModel.setMarkdownContent(content.string)
@@ -253,6 +246,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                                                pasteHandler: nil)
         
         return MessageComposer(plainComposerText: .constant(content),
+                               presendCallback: .constant(nil),
                                composerView: composerView,
                                mode: mode,
                                composerFormattingEnabled: false,

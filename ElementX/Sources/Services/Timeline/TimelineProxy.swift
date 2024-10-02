@@ -1,17 +1,8 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2023, 2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Combine
@@ -27,7 +18,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     private let backPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
     private let forwardPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
     
-    let isLive: Bool
+    private let kind: TimelineKind
    
     private var innerTimelineProvider: RoomTimelineProviderProtocol!
     var timelineProvider: RoomTimelineProviderProtocol {
@@ -38,9 +29,9 @@ final class TimelineProxy: TimelineProxyProtocol {
         backPaginationStatusObservationToken?.cancel()
     }
     
-    init(timeline: Timeline, isLive: Bool) {
+    init(timeline: Timeline, kind: TimelineKind) {
         self.timeline = timeline
-        self.isLive = isLive
+        self.kind = kind
     }
     
     func subscribeForUpdates() async {
@@ -56,12 +47,16 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         await subscribeToPagination()
         
-        let provider = await RoomTimelineProvider(timeline: timeline, isLive: isLive, paginationStatePublisher: paginationStatePublisher)
+        let provider = await RoomTimelineProvider(timeline: timeline, kind: kind, paginationStatePublisher: paginationStatePublisher)
         // Make sure the existing items are built so that we have content in the timeline before
         // determining whether or not the timeline should paginate to load more items.
         await provider.waitForInitialItems()
         
         innerTimelineProvider = provider
+        
+        Task {
+            await timeline.fetchMembers()
+        }
     }
     
     func fetchDetails(for eventID: String) {
@@ -84,15 +79,21 @@ final class TimelineProxy: TimelineProxyProtocol {
         // We can't subscribe to back pagination on detached timelines and as live timelines
         // can be shared between multiple instances of the same room on the stack, it is
         // safer to still use the subscription logic for back pagination when live.
-        await if isLive {
-            paginateBackwardsOnLive(requestSize: requestSize)
-        } else {
-            focussedPaginate(.backwards, requestSize: requestSize)
+        switch kind {
+        case .live:
+            return await paginateBackwardsOnLive(requestSize: requestSize)
+        case .detached:
+            return await focussedPaginate(.backwards, requestSize: requestSize)
+        case .pinned:
+            return .success(())
         }
     }
     
     func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
-        await focussedPaginate(.forwards, requestSize: requestSize)
+        guard kind != .pinned else {
+            return .success(())
+        }
+        return await focussedPaginate(.forwards, requestSize: requestSize)
     }
     
     /// Paginate backwards using the subscription from Rust to drive the pagination state.
@@ -129,9 +130,9 @@ final class TimelineProxy: TimelineProxyProtocol {
         subject.send(.paginating)
         
         do {
-            let timelineEndReached = try await switch direction {
-            case .backwards: timeline.paginateBackwards(numEvents: requestSize)
-            case .forwards: timeline.focusedPaginateForwards(numEvents: requestSize)
+            let timelineEndReached = switch direction {
+            case .backwards: try await timeline.paginateBackwards(numEvents: requestSize)
+            case .forwards: try await timeline.focusedPaginateForwards(numEvents: requestSize)
             }
             MXLog.info("Finished paginating \(direction.rawValue)")
 
@@ -155,7 +156,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func edit(_ timelineItem: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
         do {
-            guard try await timeline.edit(item: timelineItem, newContent: newContent) == true else {
+            guard try await timeline.edit(item: timelineItem, newContent: .roomMessage(content: newContent)) == true else {
                 return .failure(.failedEditing)
             }
             
@@ -420,15 +421,15 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func toggleReaction(_ reaction: String, to eventID: String) async -> Result<Void, TimelineProxyError> {
-        MXLog.info("Toggling reaction for eventID: \(eventID)")
+    func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async -> Result<Void, TimelineProxyError> {
+        MXLog.info("Toggling reaction for event: \(itemID)")
         
         do {
-            try await timeline.toggleReaction(eventId: eventID, key: reaction)
-            MXLog.info("Finished toggling reaction for eventID: \(eventID)")
+            try await timeline.toggleReaction(uniqueId: itemID.timelineID, key: reaction)
+            MXLog.info("Finished toggling reaction for event: \(itemID)")
             return .success(())
         } catch {
-            MXLog.error("Failed toggling reaction for eventID: \(eventID)")
+            MXLog.error("Failed toggling reaction for event: \(itemID)")
             return .failure(.sdkError(error))
         }
     }
@@ -459,7 +460,13 @@ final class TimelineProxy: TimelineProxyProtocol {
         do {
             let originalEvent = try await timeline.getEventTimelineItemByEventId(eventId: eventID)
             
-            try await timeline.editPoll(question: question, answers: answers, maxSelections: 1, pollKind: .init(pollKind: pollKind), editItem: originalEvent)
+            guard try await timeline.edit(item: originalEvent,
+                                          newContent: .pollStart(pollData: .init(question: question,
+                                                                                 answers: answers,
+                                                                                 maxSelections: 1,
+                                                                                 pollKind: .init(pollKind: pollKind)))) else {
+                return .failure(.failedEditing)
+            }
             
             MXLog.info("Finished editing poll with eventID: \(eventID)")
             
@@ -538,7 +545,8 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     private func subscribeToPagination() async {
-        if isLive {
+        switch kind {
+        case .live:
             let backPaginationListener = RoomPaginationStatusListener { [weak self] status in
                 guard let self else {
                     return
@@ -557,13 +565,15 @@ final class TimelineProxy: TimelineProxyProtocol {
             } catch {
                 MXLog.error("Failed to subscribe to back pagination status with error: \(error)")
             }
-        } else {
+            forwardPaginationStatusSubject.send(.timelineEndReached)
+        case .detached:
             // Detached timelines don't support observation, set the initial state ourself.
             backPaginationStatusSubject.send(.idle)
+            forwardPaginationStatusSubject.send(.idle)
+        case .pinned:
+            backPaginationStatusSubject.send(.timelineEndReached)
+            forwardPaginationStatusSubject.send(.timelineEndReached)
         }
-        
-        // Detached timelines don't support observation, set the initial state ourself.
-        forwardPaginationStatusSubject.send(isLive ? .timelineEndReached : .idle)
     }
 }
 

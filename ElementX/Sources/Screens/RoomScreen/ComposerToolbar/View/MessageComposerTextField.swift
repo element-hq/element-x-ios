@@ -1,23 +1,17 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
+
+import Compound
 import SwiftUI
 
 struct MessageComposerTextField: View {
     let placeholder: String
     @Binding var text: NSAttributedString
+    @Binding var presendCallback: (() -> Void)?
 
     let maxHeight: CGFloat
     let keyHandler: GenericKeyHandler
@@ -25,6 +19,7 @@ struct MessageComposerTextField: View {
 
     var body: some View {
         UITextViewWrapper(text: $text,
+                          presendCallback: $presendCallback,
                           maxHeight: maxHeight,
                           keyHandler: keyHandler,
                           pasteHandler: pasteHandler)
@@ -55,9 +50,10 @@ struct MessageComposerTextField: View {
 }
 
 private struct UITextViewWrapper: UIViewRepresentable {
-    @Environment(\.roomContext) private var roomContext
+    @Environment(\.timelineContext) private var timelineContext
 
     @Binding var text: NSAttributedString
+    @Binding var presendCallback: (() -> Void)?
 
     let maxHeight: CGFloat
 
@@ -68,8 +64,8 @@ private struct UITextViewWrapper: UIViewRepresentable {
 
     func makeUIView(context: UIViewRepresentableContext<UITextViewWrapper>) -> UITextView {
         // Need to use TextKit 1 for mentions
-        let textView = ElementTextView(usingTextLayoutManager: false)
-        textView.roomContext = roomContext
+        let textView = ElementTextView(timelineContext: timelineContext,
+                                       presendCallback: $presendCallback)
         
         textView.delegate = context.coordinator
         textView.elementDelegate = context.coordinator
@@ -102,7 +98,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
     func updateUIView(_ textView: UITextView, context: UIViewRepresentableContext<UITextViewWrapper>) {
         // Prevent the textView from inheriting attributes from mention pills
         textView.typingAttributes = [.font: font,
-                                     .foregroundColor: UIColor(.compound.textPrimary)]
+                                     .foregroundColor: UIColor.compound.textPrimary]
         
         if textView.attributedText != text {
             // Remember the selection if only the attributes have changed.
@@ -182,12 +178,32 @@ private protocol ElementTextViewDelegate: AnyObject {
 }
 
 private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
-    var roomContext: RoomScreenViewModel.Context?
+    private(set) var timelineContext: TimelineViewModel.Context?
+    private var presendCallback: Binding<(() -> Void)?>
+    private var pillViews = NSHashTable<UIView>.weakObjects()
     
     weak var elementDelegate: ElementTextViewDelegate?
     
-    private var pillViews = NSHashTable<UIView>.weakObjects()
-
+    init(timelineContext: TimelineViewModel.Context?,
+         presendCallback: Binding<(() -> Void)?>) {
+        self.timelineContext = timelineContext
+        self.presendCallback = presendCallback
+        
+        super.init(frame: .zero, textContainer: nil)
+        
+        // Avoid `Publishing changes from within view update` warnings
+        DispatchQueue.main.async {
+            presendCallback.wrappedValue = { [weak self] in
+                self?.acceptCurrentSuggestion()
+            }
+        }
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+    
     override var keyCommands: [UIKeyCommand]? {
         [UIKeyCommand(input: "\r", modifierFlags: .shift, action: #selector(shiftEnterKeyPressed)),
          UIKeyCommand(input: "\r", modifierFlags: [], action: #selector(enterKeyPressed))]
@@ -270,6 +286,17 @@ private class ElementTextView: UITextView, PillAttachmentViewProviderDelegate {
         }
         pillViews.removeAllObjects()
     }
+    
+    // MARK: - Private
+    
+    private func acceptCurrentSuggestion() {
+        guard isFirstResponder else {
+            return
+        }
+        
+        inputDelegate?.selectionWillChange(self)
+        inputDelegate?.selectionDidChange(self)
+    }
 }
 
 struct MessageComposerTextField_Previews: PreviewProvider, TestablePreview {
@@ -286,12 +313,13 @@ struct MessageComposerTextField_Previews: PreviewProvider, TestablePreview {
 
         init(text: String) {
             _text = .init(initialValue: .init(string: text, attributes: [.font: UIFont.preferredFont(forTextStyle: .body),
-                                                                         .foregroundColor: UIColor(.compound.textPrimary)]))
+                                                                         .foregroundColor: UIColor.compound.textPrimary]))
         }
 
         var body: some View {
             MessageComposerTextField(placeholder: "Placeholder",
                                      text: $text,
+                                     presendCallback: .constant(nil),
                                      maxHeight: 300,
                                      keyHandler: { _ in },
                                      pasteHandler: { _ in })

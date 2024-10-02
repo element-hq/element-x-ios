@@ -7,7 +7,7 @@ if File.exist?(enterprise)
 end
 
 before_all do
-  xcversion(version: "15.4")
+  xcversion(version: "16.0")
 
   ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "180"
   ENV["FASTLANE_XCODE_LIST_TIMEOUT"] = "180"
@@ -82,7 +82,7 @@ end
 lane :unit_tests do |options|
   run_tests(
     scheme: "UnitTests",
-    device: 'iPhone 15',
+    device: 'iPhone 16',
     ensure_devices_found: true,
     result_bundle: true,
     number_of_retries: 3,
@@ -95,7 +95,6 @@ lane :unit_tests do |options|
       ensure_devices_found: true,
       result_bundle: true,
       number_of_retries: 3,
-      xcargs: '-skipPackagePluginValidation',
     )
   end
   
@@ -104,18 +103,19 @@ end
 
 lane :ui_tests do |options|
   # Use a fresh simulator state to ensure hardware keyboard isn't attached.
-  reset_simulator_contents()
+  # Not necessary when running on GitHub.
+  # reset_simulator_contents()
   
   create_simulator_if_necessary(
-    name: "iPhone 15",
-    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-15",
-    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-17-5"
+    name: "iPhone 16",
+    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-16",
+    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-18-0"
   )
   
   create_simulator_if_necessary(
     name: "iPad (10th generation)",
     type: "com.apple.CoreSimulator.SimDeviceType.iPad-10th-generation",
-    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-17-5"
+    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-18-0"
   )
 
   if options[:test_name]
@@ -126,7 +126,7 @@ lane :ui_tests do |options|
 
   run_tests(
     scheme: "UITests",
-    devices: ["iPhone 15", "iPad (10th generation)"],
+    devices: ["iPhone 16", "iPad (10th generation)"],
     ensure_devices_found: true,
     prelaunch_simulator: true,
     result_bundle: true,
@@ -140,14 +140,14 @@ lane :integration_tests do
   clear_derived_data()
   
   create_simulator_if_necessary(
-    name: "iPhone 15 Pro",
-    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro",
-    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-17-5"
+    name: "iPhone 16 Pro",
+    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro",
+    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-18-0"
   )
 
   run_tests(
     scheme: "IntegrationTests",
-    devices: ["iPhone 15 Pro"],
+    devices: ["iPhone 16 Pro"],
     ensure_devices_found: true,
     result_bundle: true,
     reset_simulator: true

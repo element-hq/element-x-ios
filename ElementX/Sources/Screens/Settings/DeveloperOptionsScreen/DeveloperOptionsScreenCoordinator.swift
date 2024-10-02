@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Combine
@@ -19,8 +10,6 @@ import SwiftUI
 
 enum DeveloperOptionsScreenCoordinatorAction {
     case clearCache
-    /// Logout without a confirmation to avoid losing keys when trying SSS.
-    case forceLogout
 }
 
 final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
@@ -33,9 +22,10 @@ final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init() {
+    init(isUsingNativeSlidingSync: Bool) {
         viewModel = DeveloperOptionsScreenViewModel(developerOptions: ServiceLocator.shared.settings,
-                                                    elementCallBaseURL: ServiceLocator.shared.settings.elementCallBaseURL)
+                                                    elementCallBaseURL: ServiceLocator.shared.settings.elementCallBaseURL,
+                                                    isUsingNativeSlidingSync: isUsingNativeSlidingSync)
         
         viewModel.actions
             .sink { [weak self] action in
@@ -44,8 +34,6 @@ final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
                 switch action {
                 case .clearCache:
                     actionsSubject.send(.clearCache)
-                case .forceLogout:
-                    actionsSubject.send(.forceLogout)
                 }
             }
             .store(in: &cancellables)

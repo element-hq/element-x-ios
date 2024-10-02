@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Compound
@@ -19,13 +10,17 @@ import SwiftUI
 import WysiwygComposer
 
 struct RoomScreen: View {
-    @ObservedObject var context: RoomScreenViewModel.Context
+    @ObservedObject var roomContext: RoomScreenViewModel.Context
+    @ObservedObject var timelineContext: TimelineViewModel.Context
     @ObservedObject private var composerToolbarContext: ComposerToolbarViewModel.Context
     @State private var dragOver = false
     let composerToolbar: ComposerToolbar
 
-    init(context: RoomScreenViewModel.Context, composerToolbar: ComposerToolbar) {
-        self.context = context
+    init(roomViewModel: RoomScreenViewModelProtocol,
+         timelineViewModel: TimelineViewModelProtocol,
+         composerToolbar: ComposerToolbar) {
+        roomContext = roomViewModel.context
+        timelineContext = timelineViewModel.context
         self.composerToolbar = composerToolbar
         composerToolbarContext = composerToolbar.context
     }
@@ -45,16 +40,16 @@ struct RoomScreen: View {
                     }
                     .padding(.top, 8)
                     .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-                    .environmentObject(context)
-                    .environment(\.roomContext, context)
+                    .environmentObject(timelineContext)
+                    .environment(\.timelineContext, timelineContext)
             }
             .overlay(alignment: .top) {
                 Group {
-                    if context.viewState.shouldShowPinnedEventsBanner {
+                    if roomContext.viewState.shouldShowPinnedEventsBanner {
                         pinnedItemsBanner
                     }
                 }
-                .animation(.elementDefault, value: context.viewState.shouldShowPinnedEventsBanner)
+                .animation(.elementDefault, value: roomContext.viewState.shouldShowPinnedEventsBanner)
             }
             .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
             .navigationBarTitleDisplayMode(.inline)
@@ -62,30 +57,35 @@ struct RoomScreen: View {
             .toolbar { toolbar }
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .overlay { loadingIndicator }
-            .alert(item: $context.alertInfo)
-            .sheet(item: $context.debugInfo) { TimelineItemDebugView(info: $0) }
-            .sheet(item: $context.actionMenuInfo) { info in
+            .alert(item: $timelineContext.alertInfo)
+            .sheet(item: $timelineContext.debugInfo) { TimelineItemDebugView(info: $0) }
+            .sheet(item: $timelineContext.actionMenuInfo) { info in
                 let actions = TimelineItemMenuActionProvider(timelineItem: info.item,
-                                                             canCurrentUserRedactSelf: context.viewState.canCurrentUserRedactSelf,
-                                                             canCurrentUserRedactOthers: context.viewState.canCurrentUserRedactOthers,
-                                                             canCurrentUserPin: context.viewState.canCurrentUserPin,
-                                                             pinnedEventIDs: context.viewState.pinnedEventIDs,
-                                                             isDM: context.viewState.isEncryptedOneToOneRoom,
-                                                             isViewSourceEnabled: context.viewState.isViewSourceEnabled).makeActions()
+                                                             canCurrentUserRedactSelf: timelineContext.viewState.canCurrentUserRedactSelf,
+                                                             canCurrentUserRedactOthers: timelineContext.viewState.canCurrentUserRedactOthers,
+                                                             canCurrentUserPin: timelineContext.viewState.canCurrentUserPin,
+                                                             pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
+                                                             isDM: timelineContext.viewState.isEncryptedOneToOneRoom,
+                                                             isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
+                                                             isPinnedEventsTimeline: timelineContext.viewState.isPinnedEventsTimeline)
+                    .makeActions()
                 if let actions {
                     TimelineItemMenu(item: info.item, actions: actions)
-                        .environmentObject(context)
+                        .environmentObject(timelineContext)
                 }
             }
-            .sheet(item: $context.reactionSummaryInfo) {
-                ReactionsSummaryView(reactions: $0.reactions, members: context.viewState.members, imageProvider: context.imageProvider, selectedReactionKey: $0.selectedKey)
+            .sheet(item: $timelineContext.reactionSummaryInfo) {
+                ReactionsSummaryView(reactions: $0.reactions,
+                                     members: timelineContext.viewState.members,
+                                     mediaProvider: timelineContext.mediaProvider,
+                                     selectedReactionKey: $0.selectedKey)
                     .edgesIgnoringSafeArea([.bottom])
             }
-            .sheet(item: $context.readReceiptsSummaryInfo) {
+            .sheet(item: $timelineContext.readReceiptsSummaryInfo) {
                 ReadReceiptsSummaryView(orderedReadReceipts: $0.orderedReceipts)
-                    .environmentObject(context)
+                    .environmentObject(timelineContext)
             }
-            .interactiveQuickLook(item: $context.mediaPreviewItem)
+            .interactiveQuickLook(item: $timelineContext.mediaPreviewItem)
             .track(screen: .Room)
             .onDrop(of: ["public.item", "public.file-url"], isTargeted: $dragOver) { providers -> Bool in
                 guard let provider = providers.first,
@@ -93,7 +93,7 @@ struct RoomScreen: View {
                     return false
                 }
                 
-                context.send(viewAction: .handlePasteOrDrop(provider: provider))
+                timelineContext.send(viewAction: .handlePasteOrDrop(provider: provider))
                 return true
             }
             .sentryTrace("\(Self.self)")
@@ -101,23 +101,23 @@ struct RoomScreen: View {
 
     private var timeline: some View {
         TimelineView()
-            .id(context.viewState.roomID)
-            .environmentObject(context)
-            .environment(\.focussedEventID, context.viewState.timelineViewState.focussedEvent?.eventID)
+            .id(timelineContext.viewState.roomID)
+            .environmentObject(timelineContext)
+            .environment(\.focussedEventID, timelineContext.viewState.timelineViewState.focussedEvent?.eventID)
             .overlay(alignment: .bottomTrailing) {
                 scrollToBottomButton
             }
     }
     
     private var pinnedItemsBanner: some View {
-        PinnedItemsBannerView(state: context.viewState.pinnedEventsBannerState,
-                              onMainButtonTap: { context.send(viewAction: .tappedPinnedEventsBanner) },
-                              onViewAllButtonTap: { context.send(viewAction: .viewAllPins) })
+        PinnedItemsBannerView(state: roomContext.viewState.pinnedEventsBannerState,
+                              onMainButtonTap: { roomContext.send(viewAction: .tappedPinnedEventsBanner) },
+                              onViewAllButtonTap: { roomContext.send(viewAction: .viewAllPins) })
             .transition(.move(edge: .top))
     }
     
     private var scrollToBottomButton: some View {
-        Button { context.send(viewAction: .scrollToBottom) } label: {
+        Button { timelineContext.send(viewAction: .scrollToBottom) } label: {
             Image(systemName: "chevron.down")
                 .font(.compound.bodyLG)
                 .fontWeight(.semibold)
@@ -139,12 +139,12 @@ struct RoomScreen: View {
     }
     
     private var isAtBottomAndLive: Bool {
-        context.isScrolledToBottom && context.viewState.timelineViewState.isLive
+        timelineContext.isScrolledToBottom && timelineContext.viewState.timelineViewState.isLive
     }
     
     @ViewBuilder
     private var loadingIndicator: some View {
-        if context.viewState.showLoading {
+        if timelineContext.viewState.showLoading {
             ProgressView()
                 .progressViewStyle(.circular)
                 .tint(.compound.textPrimary)
@@ -159,29 +159,31 @@ struct RoomScreen: View {
         // .principal + .primaryAction works better than .navigation leading + trailing
         // as the latter disables interaction in the action button for rooms with long names
         ToolbarItem(placement: .principal) {
-            RoomHeaderView(roomName: context.viewState.roomTitle,
-                           roomAvatar: context.viewState.roomAvatar,
-                           imageProvider: context.imageProvider)
+            RoomHeaderView(roomName: roomContext.viewState.roomTitle,
+                           roomAvatar: roomContext.viewState.roomAvatar,
+                           mediaProvider: roomContext.mediaProvider)
                 // Using a button stops it from getting truncated in the navigation bar
                 .contentShape(.rect)
                 .onTapGesture {
-                    context.send(viewAction: .displayRoomDetails)
+                    roomContext.send(viewAction: .displayRoomDetails)
                 }
         }
         
         if !ProcessInfo.processInfo.isiOSAppOnMac {
             ToolbarItem(placement: .primaryAction) {
-                callButton
-                    .disabled(context.viewState.canJoinCall == false)
+                if roomContext.viewState.shouldShowCallButton {
+                    callButton
+                        .disabled(!roomContext.viewState.canJoinCall)
+                }
             }
         }
     }
     
     @ViewBuilder
     private var callButton: some View {
-        if context.viewState.hasOngoingCall {
+        if roomContext.viewState.hasOngoingCall {
             Button {
-                context.send(viewAction: .displayCall)
+                roomContext.send(viewAction: .displayCall)
             } label: {
                 Label(L10n.actionJoin, icon: \.videoCallSolid)
                     .labelStyle(.titleAndIcon)
@@ -190,7 +192,7 @@ struct RoomScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
         } else {
             Button {
-                context.send(viewAction: .displayCall)
+                roomContext.send(viewAction: .displayCall)
             } label: {
                 CompoundIcon(\.videoCallSolid)
             }
@@ -206,21 +208,25 @@ struct RoomScreen: View {
 // MARK: - Previews
 
 struct RoomScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = RoomScreenViewModel(roomProxy: RoomProxyMock(.init(id: "stable_id",
-                                                                              name: "Preview room",
-                                                                              hasOngoingCall: true)),
-                                               timelineController: MockRoomTimelineController(),
-                                               mediaProvider: MockMediaProvider(),
-                                               mediaPlayerProvider: MediaPlayerProviderMock(),
-                                               voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                               appMediator: AppMediatorMock.default,
-                                               appSettings: ServiceLocator.shared.settings,
-                                               analyticsService: ServiceLocator.shared.analytics)
+    static let roomProxyMock = JoinedRoomProxyMock(.init(id: "stable_id",
+                                                         name: "Preview room",
+                                                         hasOngoingCall: true))
+    static let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
+    static let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
+                                                     timelineController: MockRoomTimelineController(),
+                                                     mediaProvider: MockMediaProvider(),
+                                                     mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                     voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                     appMediator: AppMediatorMock.default,
+                                                     appSettings: ServiceLocator.shared.settings,
+                                                     analyticsService: ServiceLocator.shared.analytics)
 
     static var previews: some View {
         NavigationStack {
-            RoomScreen(context: viewModel.context, composerToolbar: ComposerToolbar.mock())
+            RoomScreen(roomViewModel: roomViewModel,
+                       timelineViewModel: timelineViewModel,
+                       composerToolbar: ComposerToolbar.mock())
         }
     }
 }

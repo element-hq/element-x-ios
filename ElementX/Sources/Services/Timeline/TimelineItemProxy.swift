@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Foundation
@@ -68,7 +59,32 @@ enum TimelineItemProxy {
 enum TimelineItemDeliveryStatus: Hashable {
     case sending
     case sent
-    case sendingFailed
+    case sendingFailed(TimelineItemSendFailure)
+    
+    var isSendingFailed: Bool {
+        switch self {
+        case .sending, .sent: false
+        case .sendingFailed: true
+        }
+    }
+}
+
+/// The reason a timeline item failed to send.
+enum TimelineItemSendFailure: Hashable {
+    enum VerifiedUser: Hashable {
+        case hasUnsignedDevice(devices: [String: [String]])
+        case changedIdentity(users: [String])
+        
+        var affectedUserIDs: [String] {
+            switch self {
+            case .hasUnsignedDevice(let devices): Array(devices.keys)
+            case .changedIdentity(let users): users
+            }
+        }
+    }
+    
+    case verifiedUser(VerifiedUser)
+    case unknown
 }
 
 /// A light wrapper around event timeline items returned from Rust.
@@ -88,11 +104,17 @@ class EventTimelineItemProxy {
         
         switch localSendState {
         case .sendingFailed(_, let isRecoverable):
-            return isRecoverable ? .sending : .sendingFailed
+            return isRecoverable ? .sending : .sendingFailed(.unknown)
         case .notSentYet:
             return .sending
         case .sent:
             return .sent
+        case .verifiedUserHasUnsignedDevice(devices: let devices):
+            return .sendingFailed(.verifiedUser(.hasUnsignedDevice(devices: devices)))
+        case .verifiedUserChangedIdentity(users: let users):
+            return .sendingFailed(.verifiedUser(.changedIdentity(users: users)))
+        case .crossSigningNotSetup, .sendingFromUnverifiedDevice:
+            return .sendingFailed(.unknown)
         }
     }()
     

@@ -1,19 +1,11 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
+import AVKit
 import CallKit
 import Combine
 import SwiftUI
@@ -22,7 +14,8 @@ typealias CallScreenViewModelType = StateStoreViewModel<CallScreenViewState, Cal
 
 class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol {
     private let elementCallService: ElementCallServiceProtocol
-    private let roomProxy: RoomProxyProtocol
+    private let configuration: ElementCallConfiguration
+    private let isPictureInPictureAllowed: Bool
     
     private let widgetDriver: ElementCallWidgetDriverProtocol
     
@@ -40,33 +33,28 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     ///   - callBaseURL: Which Element Call instance should be used
     ///   - clientID: Something to identify the current client on the Element Call side
     init(elementCallService: ElementCallServiceProtocol,
-         clientProxy: ClientProxyProtocol,
-         roomProxy: RoomProxyProtocol,
-         clientID: String,
-         elementCallBaseURL: URL,
-         elementCallBaseURLOverride: URL?,
-         colorScheme: ColorScheme,
+         configuration: ElementCallConfiguration,
+         allowPictureInPicture: Bool,
          appHooks: AppHooks) {
-        guard let deviceID = clientProxy.deviceID else { fatalError("Missing device ID for the call.") }
-        
         self.elementCallService = elementCallService
-        self.roomProxy = roomProxy
+        self.configuration = configuration
+        isPictureInPictureAllowed = allowPictureInPicture
         
-        widgetDriver = roomProxy.elementCallWidgetDriver(deviceID: deviceID)
+        switch configuration.kind {
+        case .genericCallLink(let url):
+            widgetDriver = GenericCallLinkWidgetDriver(url: url)
+        case .roomCall(let roomProxy, let clientProxy, _, _, _, _):
+            guard let deviceID = clientProxy.deviceID else { fatalError("Missing device ID for the call.") }
+            widgetDriver = roomProxy.elementCallWidgetDriver(deviceID: deviceID)
+        }
         
         super.init(initialViewState: CallScreenViewState(messageHandler: Self.eventHandlerName,
                                                          script: Self.eventHandlerInjectionScript,
                                                          certificateValidator: appHooks.certificateValidatorHook))
         
         state.bindings.javaScriptMessageHandler = { [weak self] message in
-            guard let self,
-                  let message = message as? String else {
-                return
-            }
-            
-            Task {
-                await self.widgetDriver.sendMessage(message)
-            }
+            guard let self, let message = message as? String else { return }
+            Task { await self.widgetDriver.handleMessage(message) }
         }
         
         elementCallService.actions
@@ -76,8 +64,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 
                 switch action {
                 case let .setAudioEnabled(enabled, roomID):
-                    guard roomID == roomProxy.id else {
-                        MXLog.error("Received mute request for a different room: \(roomID) != \(roomProxy.id)")
+                    guard roomID == configuration.callRoomID else {
+                        MXLog.error("Received mute request for a different room: \(roomID) != \(configuration.callRoomID)")
                         return
                     }
                     
@@ -110,47 +98,12 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 case .callEnded:
                     actionsSubject.send(.dismiss)
                 case .mediaStateChanged(let audioEnabled, _):
-                    elementCallService.setAudioEnabled(audioEnabled, roomID: roomProxy.id)
+                    elementCallService.setAudioEnabled(audioEnabled, roomID: configuration.callRoomID)
                 }
             }
             .store(in: &cancellables)
         
-        // Wait for room states to be up to date before starting the call and notifying others
-        syncUpdateCancellable = clientProxy.actionsPublisher
-            .filter(\.isSyncUpdate)
-            .timeout(.seconds(5), scheduler: DispatchQueue.main)
-            .first() // Timeout will make the publisher complete, use first to handle both branches in the same place
-            .sink(receiveCompletion: { [weak self] _ in
-                Task { [weak self] in
-                    guard let self else { return }
-                    
-                    let baseURL = if let elementCallBaseURLOverride {
-                        elementCallBaseURLOverride
-                    } else if case .success(let wellKnown) = await clientProxy.getElementWellKnown(), let wellKnownCall = wellKnown?.call {
-                        wellKnownCall.widgetURL
-                    } else {
-                        elementCallBaseURL
-                    }
-                    
-                    switch await widgetDriver.start(baseURL: baseURL, clientID: clientID, colorScheme: colorScheme) {
-                    case .success(let url):
-                        state.url = url
-                    case .failure(let error):
-                        MXLog.error("Failed starting ElementCall Widget Driver with error: \(error)")
-                        state.bindings.alertInfo = .init(id: UUID(), title: L10n.errorUnknown, primaryButton: .init(title: L10n.actionOk, action: { [weak self] in
-                            self?.actionsSubject.send(.dismiss)
-                        }))
-                        
-                        return
-                    }
-                    
-                    await elementCallService.setupCallSession(roomID: roomProxy.id, roomDisplayName: roomProxy.roomTitle)
-                    
-                    _ = await roomProxy.sendCallNotificationIfNeeeded()
-                    
-                    syncUpdateCancellable = nil
-                }
-            }, receiveValue: { _ in })
+        setupCall()
     }
     
     override func process(viewAction: CallScreenViewAction) {
@@ -158,6 +111,14 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         case .urlChanged(let url):
             guard let url else { return }
             MXLog.info("URL changed to: \(url)")
+        case .pictureInPictureIsAvailable(let controller):
+            actionsSubject.send(.pictureInPictureIsAvailable(controller))
+        case .navigateBack:
+            Task { await handleBackwardsNavigation() }
+        case .pictureInPictureWillStop:
+            actionsSubject.send(.pictureInPictureStopped)
+        case .endCall:
+            actionsSubject.send(.dismiss)
         }
     }
     
@@ -170,6 +131,70 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     }
     
     // MARK: - Private
+    
+    private func setupCall() {
+        switch configuration.kind {
+        case .genericCallLink(let url):
+            state.url = url
+            // We need widget messaging to work before enabling CallKit, otherwise mute, hangup etc do nothing.
+        
+        case .roomCall(let roomProxy, let clientProxy, let clientID, let elementCallBaseURL, let elementCallBaseURLOverride, let colorScheme):
+            // Wait for room states to be up to date before starting the call and notifying others
+            syncUpdateCancellable = clientProxy.actionsPublisher
+                .filter(\.isSyncUpdate)
+                .timeout(.seconds(5), scheduler: DispatchQueue.main)
+                .first() // Timeout will make the publisher complete, use first to handle both branches in the same place
+                .sink(receiveCompletion: { [weak self] _ in
+                    Task { [weak self] in
+                        guard let self else { return }
+                        
+                        let baseURL = if let elementCallBaseURLOverride {
+                            elementCallBaseURLOverride
+                        } else if case .success(let wellKnown) = await clientProxy.getElementWellKnown(), let wellKnownCall = wellKnown?.call {
+                            wellKnownCall.widgetURL
+                        } else {
+                            elementCallBaseURL
+                        }
+                        
+                        switch await widgetDriver.start(baseURL: baseURL, clientID: clientID, colorScheme: colorScheme) {
+                        case .success(let url):
+                            state.url = url
+                        case .failure(let error):
+                            MXLog.error("Failed starting ElementCall Widget Driver with error: \(error)")
+                            state.bindings.alertInfo = .init(id: UUID(),
+                                                             title: L10n.errorUnknown,
+                                                             primaryButton: .init(title: L10n.actionOk) {
+                                                                 self.actionsSubject.send(.dismiss)
+                                                             })
+                            
+                            return
+                        }
+                        
+                        await elementCallService.setupCallSession(roomID: roomProxy.id, roomDisplayName: roomProxy.roomTitle)
+                        
+                        _ = await roomProxy.sendCallNotificationIfNeeded()
+                        
+                        syncUpdateCancellable = nil
+                    }
+                }, receiveValue: { _ in })
+        }
+    }
+    
+    private func handleBackwardsNavigation() async {
+        guard state.url != nil,
+              isPictureInPictureAllowed,
+              let requestPictureInPictureHandler = state.bindings.requestPictureInPictureHandler else {
+            actionsSubject.send(.dismiss)
+            return
+        }
+        
+        switch await requestPictureInPictureHandler() {
+        case .success:
+            actionsSubject.send(.pictureInPictureStarted)
+        case .failure:
+            actionsSubject.send(.dismiss)
+        }
+    }
     
     private func setAudioEnabled(_ enabled: Bool) async {
         let message = ElementCallWidgetMessage(direction: .toWidget,
@@ -191,7 +216,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         do {
             let data = try JSONEncoder().encode(message)
             let json = String(decoding: data, as: UTF8.self)
-            _ = await widgetDriver.sendMessage(json)
             
             await postJSONToWidget(json)
         } catch {

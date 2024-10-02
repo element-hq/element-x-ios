@@ -1,17 +1,8 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2023, 2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Foundation
@@ -63,6 +54,10 @@ struct NotificationContentBuilder {
         let notification = UNMutableNotificationContent()
         notification.receiverID = notificationItem.receiverID
         notification.roomID = notificationItem.roomID
+        notification.eventID = switch notificationItem.event {
+        case .timeline(let event): event.eventId()
+        case .invite, .none: nil
+        }
         notification.sound = notificationItem.isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
         // So that the UI groups notification that are received for the same room but also for the same user
         // Removing the @ fixes an iOS bug where the notification crashes if the mute button is tapped
@@ -103,9 +98,7 @@ struct NotificationContentBuilder {
         var notification = try await processCommonRoomMessage(notificationItem: notificationItem, mediaProvider: mediaProvider)
         
         let displayName = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
-        let message = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName).characters)
-        
-        notification.body = notificationItem.hasMention ? L10n.notificationMentionedYouBody(message) : message
+        notification.body = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName).characters)
         
         switch messageType {
         case .image(content: let content):
@@ -153,9 +146,14 @@ struct NotificationContentBuilder {
         }
         notification.categoryIdentifier = NotificationConstants.Category.message
 
+        let senderName = if let displayName = notificationItem.senderDisplayName {
+            notificationItem.hasMention ? L10n.notificationSenderMentionReply(displayName) : displayName
+        } else {
+            notificationItem.roomDisplayName
+        }
         notification = try await notification.addSenderIcon(using: mediaProvider,
                                                             senderID: notificationItem.senderID,
-                                                            senderName: notificationItem.senderDisplayName ?? notificationItem.roomDisplayName,
+                                                            senderName: senderName,
                                                             icon: icon(for: notificationItem))
         return notification
     }

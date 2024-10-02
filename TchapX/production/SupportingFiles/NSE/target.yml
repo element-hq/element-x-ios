@@ -40,7 +40,6 @@ targets:
       - package: DeviceKit
       - package: DTCoreText
       - package: LRUCache
-      - package: Prefire
       - package: Version
 
     info:
@@ -77,7 +76,8 @@ targets:
         
     sources:
     - path: ../../../../NSE/Sources
-    - path: ../../../../ElementX/Sources/Generated
+    - path: ../../../../ElementX/Sources/Generated/Assets.swift
+    - path: ../../../../ElementX/Sources/Generated/Strings.swift
     - path: ../../../../ElementX/Sources/Other/AvatarSize.swift
     - path: ../../../../ElementX/Sources/Other/Extensions/AttributedString.swift
     - path: ../../../../ElementX/Sources/Other/Extensions/Bundle.swift
@@ -102,6 +102,8 @@ targets:
     - path: ../../../../ElementX/Sources/Other/TestablePreview.swift
     - path: ../../../../ElementX/Sources/Other/Pills/PlainMentionBuilder.swift
     - path: ../../../../ElementX/Sources/Other/Pills/PillConstants.swift
+    - path: ../../../../ElementX/Sources/Other/CurrentValuePublisher.swift
+    - path: ../../../../ElementX/Sources/Other/NetworkMonitor
     - path: ../../../../ElementX/Sources/Services/Keychain/KeychainController.swift
     - path: ../../../../ElementX/Sources/Services/Keychain/KeychainControllerProtocol.swift
     - path: ../../../../ElementX/Sources/Services/Media/Provider
@@ -109,8 +111,9 @@ targets:
     - path: ../../../../ElementX/Sources/Services/Notification/Proxy
     - path: ../../../../ElementX/Sources/Services/Room/RoomSummary/RoomMessageEventStringBuilder.swift
     - path: ../../../../ElementX/Sources/Services/UserSession/RestorationToken.swift
+    - path: ../../../../ElementX/Sources/Services/UserSession/SessionDirectories.swift
     - path: ../../../../ElementX/Sources/Services/ElementCall/ElementCallServiceConstants.swift
     - path: ../../../../ElementX/Sources/Application/AppSettings.swift
     - path: ../../../../ElementX/Sources/AppHooks/AppHooks.swift
     - path: ../../../../ElementX/Sources/AppHooks/Hooks/ClientBuilderHook.swift
-    - path: ../PrivacyInfo.xcprivacy
+    - path: ../PrivacyInfo.xcprivacy    

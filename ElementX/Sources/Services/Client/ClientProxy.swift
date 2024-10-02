@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Combine
@@ -121,6 +112,8 @@ class ClientProxy: ClientProxyProtocol {
         verificationStateSubject.asCurrentValuePublisher()
     }
     
+    var roomsToAwait: Set<String> = []
+    
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
     
     init(client: ClientProtocol,
@@ -208,6 +201,20 @@ class ClientProxy: ClientProxyProtocol {
 
     var homeserver: String {
         client.homeserver()
+    }
+    
+    var slidingSyncVersion: SlidingSyncVersion {
+        client.slidingSyncVersion()
+    }
+    
+    var availableSlidingSyncVersions: [SlidingSyncVersion] {
+        get async {
+            await client.availableSlidingSyncVersions()
+        }
+    }
+    
+    var canDeactivateAccount: Bool {
+        client.canDeactivateAccount()
     }
     
     var userIDServerName: String? {
@@ -347,8 +354,11 @@ class ClientProxy: ClientProxyProtocol {
                                                   invite: [userID],
                                                   avatar: nil,
                                                   powerLevelContentOverride: Self.roomCreationPowerLevelOverrides)
-            let result = try await client.createRoom(request: parameters)
-            return await waitForRoomSummary(with: .success(result), name: expectedRoomName)
+            let roomID = try await client.createRoom(request: parameters)
+            
+            await waitForRoomToSync(roomID: roomID)
+            
+            return .success(roomID)
         } catch {
             MXLog.error("Failed creating direct room for userID: \(userID) with error: \(error)")
             return .failure(.sdkError(error))
@@ -367,7 +377,10 @@ class ClientProxy: ClientProxyProtocol {
                                                   avatar: avatarURL?.absoluteString,
                                                   powerLevelContentOverride: Self.roomCreationPowerLevelOverrides)
             let roomID = try await client.createRoom(request: parameters)
-            return await waitForRoomSummary(with: .success(roomID), name: name)
+            
+            await waitForRoomToSync(roomID: roomID)
+            
+            return .success(roomID)
         } catch {
             MXLog.error("Failed creating room with error: \(error)")
             return .failure(.sdkError(error))
@@ -377,9 +390,8 @@ class ClientProxy: ClientProxyProtocol {
     func joinRoom(_ roomID: String, via: [String]) async -> Result<Void, ClientProxyError> {
         do {
             let _ = try await client.joinRoomByIdOrAlias(roomIdOrAlias: roomID, serverNames: via)
-            
-            // Wait for the room to appear in the room lists to avoid issues downstream
-            let _ = await waitForRoomSummary(with: .success(roomID), name: nil, timeout: 30)
+                        
+            await waitForRoomToSync(roomID: roomID, timeout: .seconds(30))
             
             return .success(())
         } catch {
@@ -392,8 +404,7 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let room = try await client.joinRoomByIdOrAlias(roomIdOrAlias: roomAlias, serverNames: [])
             
-            // Wait for the room to appear in the room lists to avoid issues downstream
-            let _ = await waitForRoomSummary(with: .success(room.id()), name: nil, timeout: 30)
+            await waitForRoomToSync(roomID: room.id(), timeout: .seconds(30))
             
             return .success(())
         } catch {
@@ -420,46 +431,16 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(ClientProxyError.sdkError(error))
         }
     }
-    
-    /// Await the room to be available in the room summary list
-    private func waitForRoomSummary(with result: Result<String, ClientProxyError>, name: String?, timeout: Int = 10) async -> Result<String, ClientProxyError> {
-        guard case .success(let roomID) = result else { return result }
-        let runner = ExpiringTaskRunner { [weak self] in
-            guard let roomLists = self?.roomSummaryProvider?.roomListPublisher.values else {
-                return
-            }
-            // for every list of summaries, we check if we have a room summary with matching ID and name (if present)
-            for await roomList in roomLists {
-                guard let summary = roomList.first(where: { $0.id == roomID }) else { continue }
-                guard let name else { break }
-                if summary.name == name {
-                    break
-                }
-            }
-        }
         
-        // we want to ignore the timeout error, and return the .success case because the room was properly created/joined already, we are only waiting for it to appear
-        try? await runner.run(timeout: .seconds(timeout))
-        return result
-    }
-    
-    func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
-        guard let roomListService else {
-            MXLog.error("Failed retrieving room, room list service not set up")
-            return nil
-        }
+    func roomForIdentifier(_ identifier: String) async -> RoomProxyType? {
+        let shouldAwait = roomsToAwait.remove(identifier) != nil
         
         // Try fetching the room from the cold cache (if available) first
-        var (roomListItem, room) = await roomTupleForIdentifier(identifier)
-        
-        if let roomListItem, let room {
-            return await RoomProxy(roomListService: roomListService,
-                                   roomListItem: roomListItem,
-                                   room: room)
+        if let room = await buildRoomForIdentifier(identifier) {
+            return room
         }
         
         // Else wait for the visible rooms list to go into fully loaded
-        
         guard let roomSummaryProvider else {
             MXLog.error("Rooms summary provider not setup yet")
             return nil
@@ -469,21 +450,11 @@ class ClientProxy: ClientProxyProtocol {
             _ = await roomSummaryProvider.statePublisher.values.first(where: { $0.isLoaded })
         }
         
-        (roomListItem, room) = await roomTupleForIdentifier(identifier)
-        
-        guard let roomListItem else {
-            MXLog.error("Invalid roomListItem for identifier \(identifier)")
-            return nil
+        if shouldAwait {
+            await waitForRoomToSync(roomID: identifier)
         }
         
-        guard let room else {
-            MXLog.error("Invalid roomListItem fullRoom for identifier \(identifier)")
-            return nil
-        }
-        
-        return await RoomProxy(roomListService: roomListService,
-                               roomListItem: roomListItem,
-                               room: room)
+        return await buildRoomForIdentifier(identifier)
     }
     
     func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewDetails, ClientProxyError> {
@@ -585,6 +556,16 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func deactivateAccount(password: String?, eraseData: Bool) async -> Result<Void, ClientProxyError> {
+        do {
+            try await client.deactivateAccount(authData: password.map { .password(passwordDetails: .init(identifier: userID, password: $0)) },
+                                               eraseData: eraseData)
+            return .success(())
+        } catch {
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func setPusher(with configuration: PusherConfiguration) async throws {
         try await client.setPusher(identifiers: configuration.identifiers,
                                    kind: configuration.kind,
@@ -633,20 +614,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func getElementWellKnown() async -> Result<ElementWellKnown?, ClientProxyError> {
-        guard let userIDServerName,
-              var url = URL(string: "https://\(userIDServerName)") else {
-            return .failure(.invalidUserIDServerName)
-        }
-        
-        url.append(path: "/.well-known/element/element.json")
-        
-        do {
-            let response = try await client.getUrl(url: url.absoluteString)
-            let sdkWellKnown = try makeElementWellKnown(string: response)
-            return .success(ElementWellKnown(sdkWellKnown))
-        } catch {
-            return .failure(.sdkError(error))
-        }
+        await client.getElementWellKnown().map(ElementWellKnown.init)
     }
         
     // MARK: Ignored users
@@ -703,9 +671,9 @@ class ClientProxy: ClientProxyProtocol {
         var users: OrderedSet<UserProfileProxy> = []
         
         for roomID in roomIdentifiers {
-            guard let room = await roomForIdentifier(roomID),
-                  room.isDirect,
-                  let members = await room.members() else {
+            guard case let .joined(roomProxy) = await roomForIdentifier(roomID),
+                  roomProxy.isDirect,
+                  let members = await roomProxy.members() else {
                 continue
             }
             
@@ -816,9 +784,11 @@ class ClientProxy: ClientProxyProtocol {
 
     private func createRoomListServiceObserver(_ roomListService: RoomListService) -> TaskHandle {
         roomListService.state(listener: RoomListStateListenerProxy { [weak self] state in
+            guard let self else { return }
+            
             MXLog.info("Received room list update: \(state)")
-            guard let self,
-                  state != .error,
+            
+            guard state != .error,
                   state != .terminated else {
                 // The sync service is responsible of handling error and termination
                 return
@@ -868,22 +838,47 @@ class ClientProxy: ClientProxyProtocol {
         
         return .exclude(eventTypes: stateEventFilters.map { FilterTimelineEventType.state(eventType: $0) })
     }()
-
-    private func roomTupleForIdentifier(_ identifier: String) async -> (RoomListItem?, Room?) {
+    
+    private func buildRoomForIdentifier(_ roomID: String) async -> RoomProxyType? {
+        guard let roomListService else {
+            MXLog.error("Failed retrieving room: \(roomID), room list service not set up")
+            return nil
+        }
+                
         do {
-            let roomListItem = try roomListService?.room(roomId: identifier)
-            if roomListItem?.isTimelineInitialized() == false {
-                try await roomListItem?.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
-            }
-            let fullRoom = try roomListItem?.fullRoom()
+            let roomListItem = try roomListService.room(roomId: roomID)
             
-            return (roomListItem, fullRoom)
+            switch roomListItem.membership() {
+            case .invited:
+                return try .invited(InvitedRoomProxy(roomListItem: roomListItem,
+                                                     room: roomListItem.invitedRoom()))
+            case .joined:
+                if roomListItem.isTimelineInitialized() == false {
+                    try await roomListItem.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
+                }
+                
+                let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,
+                                                          roomListItem: roomListItem,
+                                                          room: roomListItem.fullRoom())
+                
+                return .joined(roomProxy)
+            case .left:
+                return .left
+            }
         } catch {
-            MXLog.error("Failed retrieving/initialising room with identifier: \(identifier)")
-            return (nil, nil)
+            MXLog.error("Failed retrieving room: \(roomID), with error: \(error)")
+            return nil
         }
     }
     
+    private func waitForRoomToSync(roomID: String, timeout: Duration = .seconds(10)) async {
+        let runner = ExpiringTaskRunner { [weak self] in
+            try await self?.client.awaitRoomRemoteEcho(roomId: roomID)
+        }
+        
+        _ = try? await runner.run(timeout: timeout)
+    }
+
     private func updateIgnoredUsers() {
         Task {
             do {

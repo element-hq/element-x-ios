@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import SwiftUI
@@ -19,7 +10,12 @@ import SwiftUI
 struct DeveloperOptionsScreen: View {
     @ObservedObject var context: DeveloperOptionsScreenViewModel.Context
     @State private var showConfetti = false
-    @State private var elementCallBaseURLString = ""
+    @State private var elementCallURLOverrideString: String
+    
+    init(context: DeveloperOptionsScreenViewModel.Context) {
+        self.context = context
+        elementCallURLOverrideString = context.elementCallBaseURLOverride?.absoluteString ?? ""
+    }
     
     var body: some View {
         Form {
@@ -27,11 +23,16 @@ struct DeveloperOptionsScreen: View {
                 LogLevelConfigurationView(logLevel: $context.logLevel)
             }
             
-            Section("Sliding Sync") {
-                Toggle(isOn: $context.simplifiedSlidingSyncEnabled) {
-                    Text("Simplified Sliding Sync")
-                    Text("When toggled you'll be logged out of the app and will need to log in again.")
+            Section {
+                Picker("Discovery", selection: $context.slidingSyncDiscovery) {
+                    Text("Proxy only").tag(AppSettings.SlidingSyncDiscovery.proxy)
+                    Text("Automatic").tag(AppSettings.SlidingSyncDiscovery.native)
+                    Text("Force Native ⚠️").tag(AppSettings.SlidingSyncDiscovery.forceNative)
                 }
+            } header: {
+                Text("Sliding Sync")
+            } footer: {
+                Text(context.viewState.slidingSyncFooter)
             }
             
             Section("Message Pinning") {
@@ -51,23 +52,36 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
-            Section("Encryption") {
-                Toggle(isOn: $context.timelineItemAuthenticityEnabled) {
-                    Text("Message authenticity warnings")
+            Section {
+                Toggle(isOn: $context.invisibleCryptoEnabled) {
+                    Text("Enabled Invisible Crypto")
                     Text("Requires app reboot")
                 }
+            } header: {
+                Text("Trust and Decoration")
+            } footer: {
+                Text("This setting controls how end-to-end encryption (E2EE) keys are shared. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
             }
-                                    
-            Section("Element Call") {
-                TextField(context.viewState.elementCallBaseURL.absoluteString, text: $elementCallBaseURLString)
-                    .submitLabel(.done)
-                    .onSubmit {
-                        guard let url = URL(string: elementCallBaseURLString) else { return }
-                        context.elementCallBaseURLOverride = url
-                    }
+
+            Section {
+                TextField(context.viewState.elementCallBaseURL.absoluteString, text: $elementCallURLOverrideString)
                     .autocorrectionDisabled(true)
                     .autocapitalization(.none)
-                    .foregroundColor(URL(string: elementCallBaseURLString) == nil ? .red : .primary)
+                    .foregroundColor(URL(string: elementCallURLOverrideString) == nil ? .red : .primary)
+                    .submitLabel(.done)
+                    .onSubmit {
+                        if elementCallURLOverrideString.isEmpty {
+                            context.elementCallBaseURLOverride = nil
+                        } else if let url = URL(string: elementCallURLOverrideString) {
+                            context.elementCallBaseURLOverride = url
+                        }
+                    }
+            } header: {
+                Text("Element Call")
+            } footer: {
+                if context.elementCallBaseURLOverride == nil {
+                    Text("The call URL may be overridden by your homeserver.")
+                }
             }
             
             Section {
@@ -167,7 +181,8 @@ private struct LogLevelConfigurationView: View {
 
 struct DeveloperOptionsScreen_Previews: PreviewProvider {
     static let viewModel = DeveloperOptionsScreenViewModel(developerOptions: ServiceLocator.shared.settings,
-                                                           elementCallBaseURL: ServiceLocator.shared.settings.elementCallBaseURL)
+                                                           elementCallBaseURL: ServiceLocator.shared.settings.elementCallBaseURL,
+                                                           isUsingNativeSlidingSync: true)
     static var previews: some View {
         NavigationStack {
             DeveloperOptionsScreen(context: viewModel.context)

@@ -1,23 +1,14 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2023, 2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import SwiftUI
 
 struct MentionSuggestionItemView: View {
-    let imageProvider: ImageProviderProtocol?
+    let mediaProvider: MediaProviderProtocol?
     let item: MentionSuggestionItem
     
     var body: some View {
@@ -26,7 +17,7 @@ struct MentionSuggestionItemView: View {
                                 name: item.displayName,
                                 contentID: item.id,
                                 avatarSize: .user(on: .suggestions),
-                                imageProvider: imageProvider)
+                                mediaProvider: mediaProvider)
             VStack(alignment: .leading, spacing: 0) {
                 Text(item.displayName ?? item.id)
                     .font(.compound.bodyLG)
@@ -47,7 +38,7 @@ struct MentionSuggestionItemView_Previews: PreviewProvider, TestablePreview {
     static let mockMediaProvider = MockMediaProvider()
     
     static var previews: some View {
-        MentionSuggestionItemView(imageProvider: mockMediaProvider, item: .init(id: "test", displayName: "Test", avatarURL: URL.documentsDirectory, range: .init()))
-        MentionSuggestionItemView(imageProvider: mockMediaProvider, item: .init(id: "test2", displayName: nil, avatarURL: nil, range: .init()))
+        MentionSuggestionItemView(mediaProvider: mockMediaProvider, item: .init(id: "test", displayName: "Test", avatarURL: URL.documentsDirectory, range: .init()))
+        MentionSuggestionItemView(mediaProvider: mockMediaProvider, item: .init(id: "test2", displayName: nil, avatarURL: nil, range: .init()))
     }
 }

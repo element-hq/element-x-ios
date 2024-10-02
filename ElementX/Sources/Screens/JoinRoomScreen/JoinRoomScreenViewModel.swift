@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Combine
@@ -27,7 +18,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var roomPreviewDetails: RoomPreviewDetails?
-    private var roomProxy: RoomProxyProtocol?
+    private var room: RoomProxyType?
     
     private let actionsSubject: PassthroughSubject<JoinRoomScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<JoinRoomScreenViewModelAction, Never> {
@@ -46,7 +37,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: JoinRoomScreenViewState(roomID: roomID), imageProvider: mediaProvider)
+        super.init(initialViewState: JoinRoomScreenViewState(roomID: roomID), mediaProvider: mediaProvider)
         
         Task {
             await loadRoomDetails()
@@ -89,8 +80,8 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         // See if we known about the room locally and, if so, have that
         // take priority over the preview one.
         
-        if let roomProxy = await clientProxy.roomForIdentifier(roomID) {
-            self.roomProxy = roomProxy
+        if let room = await clientProxy.roomForIdentifier(roomID) {
+            self.room = room
             await updateRoomDetails()
         }
         
@@ -106,8 +97,20 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     }
     
     private func updateRoomDetails() async {
+        var roomProxy: RoomProxyProtocol?
+        var inviter: RoomInviterDetails?
+        
+        switch room {
+        case .joined(let joinedRoomProxy):
+            roomProxy = joinedRoomProxy
+        case .invited(let invitedRoomProxy):
+            inviter = await invitedRoomProxy.inviter.flatMap(RoomInviterDetails.init)
+            roomProxy = invitedRoomProxy
+        default:
+            break
+        }
+        
         let name = roomProxy?.name ?? roomPreviewDetails?.name
-        let inviter = await roomProxy?.inviter.flatMap(RoomInviterDetails.init)
         state.roomDetails = JoinRoomScreenRoomDetails(name: name,
                                                       topic: roomProxy?.topic ?? roomPreviewDetails?.topic,
                                                       canonicalAlias: roomProxy?.canonicalAlias ?? roomPreviewDetails?.canonicalAlias,
@@ -119,9 +122,18 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     }
     
     private func updateMode() {
-        if roomProxy?.membership == .invited || roomPreviewDetails?.isInvited ?? false { // Check invites first to show Accept/Decline buttons on public rooms.
+        // Check invites first to show Accept/Decline buttons on public rooms.
+        if case .invited = room {
             state.mode = .invited
-        } else if roomProxy?.isPublic ?? false || roomPreviewDetails?.isPublic ?? false {
+            return
+        }
+        
+        if roomPreviewDetails?.isInvited ?? false {
+            state.mode = .invited
+            return
+        }
+        
+        if roomPreviewDetails?.isPublic ?? false {
             state.mode = .join
         } else if roomPreviewDetails?.canKnock ?? false, allowKnocking { // Knocking is not supported yet, the flag is purely for preview tests.
             state.mode = .knock
@@ -180,7 +192,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         
         userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
         
-        guard let roomProxy = await clientProxy.roomForIdentifier(roomID) else {
+        guard case let .invited(roomProxy) = room else {
             userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
             return
         }

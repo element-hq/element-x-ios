@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Combine
@@ -28,6 +19,7 @@ enum HomeScreenViewModelAction {
     case presentStartChatScreen
     case presentGlobalSearch
     case presentRoomDirectorySearch
+    case logoutWithoutConfirmation
     case logout
 }
 
@@ -40,7 +32,9 @@ enum HomeScreenViewAction {
     case startChat
     case confirmRecoveryKey
     case skipRecoveryKeyConfirmation
-    case updateVisibleItemRange(range: Range<Int>, isScrolling: Bool)
+    case confirmSlidingSyncUpgrade
+    case skipSlidingSyncUpgrade
+    case updateVisibleItemRange(Range<Int>)
     case globalSearch
     case markRoomAsUnread(roomIdentifier: String)
     case markRoomAsRead(roomIdentifier: String)
@@ -52,15 +46,12 @@ enum HomeScreenViewAction {
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
-    case migration
     case skeletons
     case empty
     case rooms
     
     var description: String {
         switch self {
-        case .migration:
-            return "Showing account migration"
         case .skeletons:
             return "Showing placeholders"
         case .empty:
@@ -71,10 +62,10 @@ enum HomeScreenRoomListMode: CustomStringConvertible {
     }
 }
 
-enum SecurityBannerMode {
+enum HomeScreenBannerMode {
     case none
     case dismissed
-    case recoveryKeyConfirmation
+    case show
 }
 
 struct HomeScreenViewState: BindableState {
@@ -82,7 +73,9 @@ struct HomeScreenViewState: BindableState {
     var userDisplayName: String?
     var userAvatarURL: URL?
     
-    var securityBannerMode = SecurityBannerMode.none
+    var securityBannerMode = HomeScreenBannerMode.none
+    var slidingSyncMigrationBannerMode = HomeScreenBannerMode.none
+    
     var requiresExtraAccountSetup = false
         
     var rooms: [HomeScreenRoom] = []
@@ -120,11 +113,7 @@ struct HomeScreenViewState: BindableState {
     }
     
     var shouldShowFilters: Bool {
-        !bindings.isSearchFieldFocused
-    }
-    
-    var shouldShowRecoveryKeyConfirmationBanner: Bool {
-        securityBannerMode == .recoveryKeyConfirmation
+        !bindings.isSearchFieldFocused && roomListMode == .rooms
     }
 }
 

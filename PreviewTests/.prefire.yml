@@ -1,7 +1,0 @@
-test_configuration:
-  - template_file_path: PreviewTests.stencil
-  - simulator_device: "iPhone14,6" # iPhone SE 3rd Generation
-  - required_os: 17
-  - snapshot_devices:
-      - iPhone 15
-      - iPad

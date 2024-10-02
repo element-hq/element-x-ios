@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Foundation
@@ -22,13 +13,16 @@ struct LoginHomeserver: Equatable {
     let address: String
     /// The types login supported by the homeserver.
     var loginMode: LoginMode
+    /// A temporary helper URL that can be used for registration.
+    var registrationHelperURL: URL?
     
     /// Creates a new homeserver value.
-    init(address: String, loginMode: LoginMode) {
+    init(address: String, loginMode: LoginMode, registrationHelperURL: URL? = nil) {
         let address = Self.sanitized(address).components(separatedBy: "://").last ?? address
         
         self.address = address
         self.loginMode = loginMode
+        self.registrationHelperURL = registrationHelperURL
     }
     
     /// Sanitizes a user entered homeserver address with the following rules
@@ -54,7 +48,7 @@ struct LoginHomeserver: Equatable {
 extension LoginHomeserver {
     /// A mock homeserver that is configured just like matrix.org.
     static var mockMatrixDotOrg: LoginHomeserver {
-        LoginHomeserver(address: "matrix.org", loginMode: .password)
+        LoginHomeserver(address: "matrix.org", loginMode: .password, registrationHelperURL: "https://develop.element.io/#/mobile_register")
     }
     
     /// A mock homeserver that supports login and registration via a password but has no SSO providers.

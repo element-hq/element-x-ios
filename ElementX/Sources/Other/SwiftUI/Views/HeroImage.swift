@@ -1,17 +1,8 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import Compound
@@ -23,33 +14,36 @@ import SwiftUI
 struct HeroImage: View {
     enum Style {
         case normal
-        case positive
         case subtle
+        case success
         case critical
+        case criticalOnSecondary
         
         var foregroundColor: Color {
             switch self {
             case .normal:
-                return .compound.iconPrimary
-            case .positive:
-                return .compound.iconSuccessPrimary
+                .compound.iconPrimary
             case .subtle:
-                return .compound.iconSecondary
-            case .critical:
-                return .compound.iconCriticalPrimary
+                .compound.iconSecondary
+            case .success:
+                .compound.iconSuccessPrimary
+            case .critical, .criticalOnSecondary:
+                .compound.iconCriticalPrimary
             }
         }
         
         var backgroundFillColor: Color {
             switch self {
             case .normal:
-                return .compound.bgSubtleSecondary
-            case .positive:
-                return .compound.bgSuccessSubtle
+                .compound.bgSubtleSecondary
             case .subtle:
-                return .compound.bgSubtlePrimary
+                .compound.bgSubtlePrimary
+            case .success:
+                .compound.bgSuccessSubtle
             case .critical:
-                return .compound.bgCanvasDefault
+                .compound.bgCriticalSubtle
+            case .criticalOnSecondary:
+                .compound.bgCanvasDefault
             }
         }
     }
@@ -95,12 +89,21 @@ private struct HeroImageModifier: ViewModifier {
 
 struct HeroImage_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        HStack(spacing: 20) {
-            HeroImage(icon: \.lockSolid)
-            Image(systemName: "hourglass")
-                .heroImage()
-            Image(asset: Asset.Images.serverSelectionIcon)
-                .heroImage(insets: 19)
+        VStack(spacing: 20) {
+            HStack(spacing: 20) {
+                HeroImage(icon: \.lockSolid)
+                Image(systemName: "hourglass")
+                    .heroImage()
+                Image(asset: Asset.Images.serverSelectionIcon)
+                    .heroImage(insets: 19)
+            }
+            
+            HStack(spacing: 20) {
+                HeroImage(icon: \.helpSolid, style: .subtle)
+                HeroImage(icon: \.checkCircleSolid, style: .success)
+                HeroImage(icon: \.error, style: .critical)
+                HeroImage(icon: \.error, style: .criticalOnSecondary)
+            }
         }
     }
 }

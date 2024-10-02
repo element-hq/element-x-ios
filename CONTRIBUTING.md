@@ -45,10 +45,10 @@ swift run tools build-sdk --help
 
 ### Tools
 
-The project depends on some tools for the build process. These are all included in the `Brewfile` and can be easily installed by running
+The project depends on some tools for the build process which are normally installed through `swift run tools setup-project`. Installing them manually though is as easy as copying what the [script does](https://github.com/element-hq/element-x-ios/blob/develop/Tools/Sources/SetupProject.swift)
 
 ```
-brew bundle
+brew install [...]
 ```
 
 Git LFS is used to store UI test snapshots. `swift run tools setup-project` will already install it, however it can also be installed after a checkout by running:

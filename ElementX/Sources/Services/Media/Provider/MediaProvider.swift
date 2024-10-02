@@ -1,30 +1,25 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2022-2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
+import Combine
 import Kingfisher
 import UIKit
 
 struct MediaProvider: MediaProviderProtocol {
     private let mediaLoader: MediaLoaderProtocol
     private let imageCache: Kingfisher.ImageCache
+    private let networkMonitor: NetworkMonitorProtocol?
     
     init(mediaLoader: MediaLoaderProtocol,
-         imageCache: Kingfisher.ImageCache) {
+         imageCache: Kingfisher.ImageCache,
+         networkMonitor: NetworkMonitorProtocol?) {
         self.mediaLoader = mediaLoader
         self.imageCache = imageCache
+        self.networkMonitor = networkMonitor
     }
     
     // MARK: Images
@@ -68,6 +63,45 @@ struct MediaProvider: MediaProviderProtocol {
         } catch {
             MXLog.error("Failed retrieving image with error: \(error)")
             return .failure(.failedRetrievingImage)
+        }
+    }
+    
+    func loadImageRetryingOnReconnection(_ source: MediaSourceProxy, size: CGSize?) -> Task<UIImage, any Error> {
+        guard let networkMonitor else {
+            fatalError("This method shouldn't be invoked without a NetworkMonitor set.")
+        }
+        
+        return Task {
+            if case let .success(image) = await loadImageFromSource(source, size: size) {
+                return image
+            }
+            
+            guard !Task.isCancelled else {
+                throw MediaProviderError.cancelled
+            }
+            
+            for await reachability in networkMonitor.reachabilityPublisher.values {
+                guard !Task.isCancelled else {
+                    throw MediaProviderError.cancelled
+                }
+                
+                guard reachability == .reachable else {
+                    continue
+                }
+                
+                switch await loadImageFromSource(source, size: size) {
+                case .success(let image):
+                    return image
+                case .failure:
+                    // If it fails after a retry with the network available
+                    // then something else must be wrong. Bail out.
+                    if reachability == .reachable {
+                        throw MediaProviderError.cancelled
+                    }
+                }
+            }
+            
+            throw MediaProviderError.cancelled
         }
     }
     

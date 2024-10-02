@@ -1,17 +1,8 @@
 //
-// Copyright 2023 New Vector Ltd
+// Copyright 2023, 2024 New Vector Ltd.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
 //
 
 import SwiftUI
@@ -21,7 +12,7 @@ import UIKit
 import WysiwygComposer
 
 protocol PillAttachmentViewProviderDelegate: AnyObject {
-    var roomContext: RoomScreenViewModel.Context? { get }
+    var timelineContext: TimelineViewModel.Context? { get }
     
     func registerPillView(_ pillView: UIView)
     func invalidateTextAttachmentsDisplay()
@@ -51,20 +42,20 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider, NSSecureCo
         }
         
         let context: PillContext
-        let imageProvider: ImageProviderProtocol?
+        let mediaProvider: MediaProviderProtocol?
         if ProcessInfo.isXcodePreview || ProcessInfo.isRunningTests {
             // The mock viewModel simulates the loading logic for testing purposes
             context = PillContext.mock(type: .loadUser(isOwn: false))
-            imageProvider = MockMediaProvider()
-        } else if let roomContext = delegate?.roomContext {
-            context = PillContext(roomContext: roomContext, data: pillData)
-            imageProvider = roomContext.imageProvider
+            mediaProvider = MockMediaProvider()
+        } else if let timelineContext = delegate?.timelineContext {
+            context = PillContext(timelineContext: timelineContext, data: pillData)
+            mediaProvider = timelineContext.mediaProvider
         } else {
             MXLog.failure("[PillAttachmentViewProvider]: missing room context")
             return
         }
         
-        let view = PillView(imageProvider: imageProvider, context: context) { [weak self] in
+        let view = PillView(mediaProvider: mediaProvider, context: context) { [weak self] in
             self?.delegate?.invalidateTextAttachmentsDisplay()
         }
         let controller = UIHostingController(rootView: view)
@@ -93,21 +84,21 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider, NSSecureCo
 }
 
 final class ComposerMentionDisplayHelper: MentionDisplayHelper {
-    weak var roomContext: RoomScreenViewModel.Context?
+    weak var timelineContext: TimelineViewModel.Context?
 
-    init(roomContext: RoomScreenViewModel.Context) {
-        self.roomContext = roomContext
+    init(timelineContext: TimelineViewModel.Context) {
+        self.timelineContext = timelineContext
     }
     
     @MainActor
     static var mock: Self {
-        Self(roomContext: RoomScreenViewModel.mock.context)
+        Self(timelineContext: TimelineViewModel.mock.context)
     }
 }
 
 extension WysiwygTextView: PillAttachmentViewProviderDelegate {
-    var roomContext: RoomScreenViewModel.Context? {
-        (mentionDisplayHelper as? ComposerMentionDisplayHelper)?.roomContext
+    var timelineContext: TimelineViewModel.Context? {
+        (mentionDisplayHelper as? ComposerMentionDisplayHelper)?.timelineContext
     }
     
     func invalidateTextAttachmentsDisplay() { }
