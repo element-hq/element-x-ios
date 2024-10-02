@@ -93,7 +93,7 @@ struct RoomDirectorySearchScreen_Previews: PreviewProvider, TestablePreview {
         
         return RoomDirectorySearchScreenViewModel(clientProxy: clientProxy,
                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                  mediaProvider: MockMediaProvider())
+                                                  mediaProvider: MediaProviderMock(configuration: .init()))
     }()
     
     static var previews: some View {

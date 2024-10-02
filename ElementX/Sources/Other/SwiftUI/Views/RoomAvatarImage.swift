@@ -93,30 +93,30 @@ struct RoomAvatarImage_Previews: PreviewProvider, TestablePreview {
                                           name: "Room",
                                           avatarURL: nil),
                             avatarSize: .room(on: .home),
-                            mediaProvider: MockMediaProvider())
+                            mediaProvider: MediaProviderMock(configuration: .init()))
             
             RoomAvatarImage(avatar: .room(id: "!2:server.com",
                                           name: "Room",
                                           avatarURL: .picturesDirectory),
                             avatarSize: .room(on: .home),
-                            mediaProvider: MockMediaProvider())
+                            mediaProvider: MediaProviderMock(configuration: .init()))
             
             RoomAvatarImage(avatar: .heroes([.init(userID: "@user:server.com",
                                                    displayName: "User",
                                                    avatarURL: nil)]),
             avatarSize: .room(on: .home),
-            mediaProvider: MockMediaProvider())
+            mediaProvider: MediaProviderMock(configuration: .init()))
             
             RoomAvatarImage(avatar: .heroes([.init(userID: "@user:server.com",
                                                    displayName: "User",
                                                    avatarURL: .picturesDirectory)]),
             avatarSize: .room(on: .home),
-            mediaProvider: MockMediaProvider())
+            mediaProvider: MediaProviderMock(configuration: .init()))
             
             RoomAvatarImage(avatar: .heroes([.init(userID: "@alice:server.com", displayName: "Alice", avatarURL: nil),
                                              .init(userID: "@bob:server.net", displayName: "Bob", avatarURL: nil)]),
                             avatarSize: .room(on: .home),
-                            mediaProvider: MockMediaProvider())
+                            mediaProvider: MediaProviderMock(configuration: .init()))
         }
     }
 }

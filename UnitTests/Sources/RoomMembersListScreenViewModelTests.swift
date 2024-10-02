@@ -279,7 +279,7 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
     private func setup(with members: [RoomMemberProxyMock]) {
         roomProxy = JoinedRoomProxyMock(.init(name: "test", members: members))
         viewModel = .init(roomProxy: roomProxy,
-                          mediaProvider: MockMediaProvider(),
+                          mediaProvider: MediaProviderMock(configuration: .init()),
                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                           analytics: ServiceLocator.shared.analytics)
     }

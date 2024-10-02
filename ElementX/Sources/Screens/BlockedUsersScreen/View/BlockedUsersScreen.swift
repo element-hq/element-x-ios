@@ -55,7 +55,7 @@ struct BlockedUsersScreen: View {
 struct BlockedUsersScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = BlockedUsersScreenViewModel(hideProfiles: true,
                                                        clientProxy: ClientProxyMock(.init(userID: RoomMemberProxyMock.mockMe.userID)),
-                                                       mediaProvider: MockMediaProvider(),
+                                                       mediaProvider: MediaProviderMock(configuration: .init()),
                                                        userIndicatorController: UserIndicatorControllerMock())
     
     static var previews: some View {

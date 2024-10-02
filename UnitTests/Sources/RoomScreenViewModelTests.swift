@@ -35,7 +35,7 @@ class RoomScreenViewModelTests: XCTestCase {
         roomProxyMock.underlyingActionsPublisher = updateSubject.eraseToAnyPublisher()
         let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            mediaProvider: MockMediaProvider(),
+                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
@@ -113,7 +113,7 @@ class RoomScreenViewModelTests: XCTestCase {
         roomProxyMock.underlyingPinnedEventsTimeline = pinnedTimelineMock
         let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: "test1",
-                                            mediaProvider: MockMediaProvider(),
+                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
@@ -160,7 +160,7 @@ class RoomScreenViewModelTests: XCTestCase {
         roomProxyMock.underlyingActionsPublisher = updateSubject.eraseToAnyPublisher()
         let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            mediaProvider: MockMediaProvider(),
+                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
@@ -197,7 +197,7 @@ class RoomScreenViewModelTests: XCTestCase {
         let roomProxyMock = JoinedRoomProxyMock(.init(id: "MyRoomID"))
         let viewModel = RoomScreenViewModel(roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            mediaProvider: MockMediaProvider(),
+                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                             ongoingCallRoomIDPublisher: ongoingCallRoomIDSubject.asCurrentValuePublisher(),
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,

@@ -92,7 +92,7 @@ class InviteUsersScreenViewModelTests: XCTestCase {
         let viewModel = InviteUsersScreenViewModel(clientProxy: ClientProxyMock(.init()),
                                                    selectedUsers: usersSubject.asCurrentValuePublisher(),
                                                    roomType: roomType,
-                                                   mediaProvider: MockMediaProvider(),
+                                                   mediaProvider: MediaProviderMock(configuration: .init()),
                                                    userDiscoveryService: userDiscoveryService,
                                                    userIndicatorController: UserIndicatorControllerMock())
         viewModel.state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])

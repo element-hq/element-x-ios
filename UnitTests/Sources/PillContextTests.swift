@@ -19,7 +19,7 @@ class PillContextTests: XCTestCase {
         proxyMock.membersPublisher = subject.asCurrentValuePublisher()
         let mock = TimelineViewModel(roomProxy: proxyMock,
                                      timelineController: MockRoomTimelineController(),
-                                     mediaProvider: MockMediaProvider(),
+                                     mediaProvider: MediaProviderMock(configuration: .init()),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
@@ -47,7 +47,7 @@ class PillContextTests: XCTestCase {
         proxyMock.membersPublisher = subject.asCurrentValuePublisher()
         let mock = TimelineViewModel(roomProxy: proxyMock,
                                      timelineController: MockRoomTimelineController(),
-                                     mediaProvider: MockMediaProvider(),
+                                     mediaProvider: MediaProviderMock(configuration: .init()),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
@@ -68,7 +68,7 @@ class PillContextTests: XCTestCase {
         mockController.roomProxy = proxyMock
         let mock = TimelineViewModel(roomProxy: proxyMock,
                                      timelineController: mockController,
-                                     mediaProvider: MockMediaProvider(),
+                                     mediaProvider: MediaProviderMock(configuration: .init()),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,

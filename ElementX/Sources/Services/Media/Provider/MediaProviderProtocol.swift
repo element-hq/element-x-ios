@@ -16,6 +16,7 @@ enum MediaProviderError: Error {
     case cancelled
 }
 
+// sourcery: AutoMockable
 protocol MediaProviderProtocol {
     func imageFromSource(_ source: MediaSourceProxy?, size: CGSize?) -> UIImage?
     func loadImageFromSource(_ source: MediaSourceProxy, size: CGSize?) async -> Result<UIImage, MediaProviderError>

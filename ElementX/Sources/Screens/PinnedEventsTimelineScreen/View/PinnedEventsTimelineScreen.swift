@@ -90,7 +90,7 @@ struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
         timelineController.timelineItems = []
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                  timelineController: timelineController,
-                                 mediaProvider: MockMediaProvider(),
+                                 mediaProvider: MediaProviderMock(configuration: .init()),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                  userIndicatorController: UserIndicatorControllerMock(),

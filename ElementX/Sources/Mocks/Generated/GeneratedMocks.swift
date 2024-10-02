@@ -10199,6 +10199,429 @@ class MediaPlayerProviderMock: MediaPlayerProviderProtocol {
         await detachAllStatesExceptClosure?(exception)
     }
 }
+class MediaProviderMock: MediaProviderProtocol {
+
+    //MARK: - imageFromSource
+
+    var imageFromSourceSizeUnderlyingCallsCount = 0
+    var imageFromSourceSizeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return imageFromSourceSizeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = imageFromSourceSizeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                imageFromSourceSizeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    imageFromSourceSizeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var imageFromSourceSizeCalled: Bool {
+        return imageFromSourceSizeCallsCount > 0
+    }
+    var imageFromSourceSizeReceivedArguments: (source: MediaSourceProxy?, size: CGSize?)?
+    var imageFromSourceSizeReceivedInvocations: [(source: MediaSourceProxy?, size: CGSize?)] = []
+
+    var imageFromSourceSizeUnderlyingReturnValue: UIImage?
+    var imageFromSourceSizeReturnValue: UIImage? {
+        get {
+            if Thread.isMainThread {
+                return imageFromSourceSizeUnderlyingReturnValue
+            } else {
+                var returnValue: UIImage?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = imageFromSourceSizeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                imageFromSourceSizeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    imageFromSourceSizeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var imageFromSourceSizeClosure: ((MediaSourceProxy?, CGSize?) -> UIImage?)?
+
+    func imageFromSource(_ source: MediaSourceProxy?, size: CGSize?) -> UIImage? {
+        imageFromSourceSizeCallsCount += 1
+        imageFromSourceSizeReceivedArguments = (source: source, size: size)
+        DispatchQueue.main.async {
+            self.imageFromSourceSizeReceivedInvocations.append((source: source, size: size))
+        }
+        if let imageFromSourceSizeClosure = imageFromSourceSizeClosure {
+            return imageFromSourceSizeClosure(source, size)
+        } else {
+            return imageFromSourceSizeReturnValue
+        }
+    }
+    //MARK: - loadImageFromSource
+
+    var loadImageFromSourceSizeUnderlyingCallsCount = 0
+    var loadImageFromSourceSizeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadImageFromSourceSizeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadImageFromSourceSizeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadImageFromSourceSizeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadImageFromSourceSizeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadImageFromSourceSizeCalled: Bool {
+        return loadImageFromSourceSizeCallsCount > 0
+    }
+    var loadImageFromSourceSizeReceivedArguments: (source: MediaSourceProxy, size: CGSize?)?
+    var loadImageFromSourceSizeReceivedInvocations: [(source: MediaSourceProxy, size: CGSize?)] = []
+
+    var loadImageFromSourceSizeUnderlyingReturnValue: Result<UIImage, MediaProviderError>!
+    var loadImageFromSourceSizeReturnValue: Result<UIImage, MediaProviderError>! {
+        get {
+            if Thread.isMainThread {
+                return loadImageFromSourceSizeUnderlyingReturnValue
+            } else {
+                var returnValue: Result<UIImage, MediaProviderError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadImageFromSourceSizeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadImageFromSourceSizeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadImageFromSourceSizeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadImageFromSourceSizeClosure: ((MediaSourceProxy, CGSize?) async -> Result<UIImage, MediaProviderError>)?
+
+    func loadImageFromSource(_ source: MediaSourceProxy, size: CGSize?) async -> Result<UIImage, MediaProviderError> {
+        loadImageFromSourceSizeCallsCount += 1
+        loadImageFromSourceSizeReceivedArguments = (source: source, size: size)
+        DispatchQueue.main.async {
+            self.loadImageFromSourceSizeReceivedInvocations.append((source: source, size: size))
+        }
+        if let loadImageFromSourceSizeClosure = loadImageFromSourceSizeClosure {
+            return await loadImageFromSourceSizeClosure(source, size)
+        } else {
+            return loadImageFromSourceSizeReturnValue
+        }
+    }
+    //MARK: - loadImageDataFromSource
+
+    var loadImageDataFromSourceUnderlyingCallsCount = 0
+    var loadImageDataFromSourceCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadImageDataFromSourceUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadImageDataFromSourceUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadImageDataFromSourceUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadImageDataFromSourceUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadImageDataFromSourceCalled: Bool {
+        return loadImageDataFromSourceCallsCount > 0
+    }
+    var loadImageDataFromSourceReceivedSource: MediaSourceProxy?
+    var loadImageDataFromSourceReceivedInvocations: [MediaSourceProxy] = []
+
+    var loadImageDataFromSourceUnderlyingReturnValue: Result<Data, MediaProviderError>!
+    var loadImageDataFromSourceReturnValue: Result<Data, MediaProviderError>! {
+        get {
+            if Thread.isMainThread {
+                return loadImageDataFromSourceUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Data, MediaProviderError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadImageDataFromSourceUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadImageDataFromSourceUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadImageDataFromSourceUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadImageDataFromSourceClosure: ((MediaSourceProxy) async -> Result<Data, MediaProviderError>)?
+
+    func loadImageDataFromSource(_ source: MediaSourceProxy) async -> Result<Data, MediaProviderError> {
+        loadImageDataFromSourceCallsCount += 1
+        loadImageDataFromSourceReceivedSource = source
+        DispatchQueue.main.async {
+            self.loadImageDataFromSourceReceivedInvocations.append(source)
+        }
+        if let loadImageDataFromSourceClosure = loadImageDataFromSourceClosure {
+            return await loadImageDataFromSourceClosure(source)
+        } else {
+            return loadImageDataFromSourceReturnValue
+        }
+    }
+    //MARK: - loadImageRetryingOnReconnection
+
+    var loadImageRetryingOnReconnectionSizeUnderlyingCallsCount = 0
+    var loadImageRetryingOnReconnectionSizeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadImageRetryingOnReconnectionSizeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadImageRetryingOnReconnectionSizeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadImageRetryingOnReconnectionSizeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadImageRetryingOnReconnectionSizeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadImageRetryingOnReconnectionSizeCalled: Bool {
+        return loadImageRetryingOnReconnectionSizeCallsCount > 0
+    }
+    var loadImageRetryingOnReconnectionSizeReceivedArguments: (source: MediaSourceProxy, size: CGSize?)?
+    var loadImageRetryingOnReconnectionSizeReceivedInvocations: [(source: MediaSourceProxy, size: CGSize?)] = []
+
+    var loadImageRetryingOnReconnectionSizeUnderlyingReturnValue: Task<UIImage, Error>!
+    var loadImageRetryingOnReconnectionSizeReturnValue: Task<UIImage, Error>! {
+        get {
+            if Thread.isMainThread {
+                return loadImageRetryingOnReconnectionSizeUnderlyingReturnValue
+            } else {
+                var returnValue: Task<UIImage, Error>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadImageRetryingOnReconnectionSizeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadImageRetryingOnReconnectionSizeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadImageRetryingOnReconnectionSizeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadImageRetryingOnReconnectionSizeClosure: ((MediaSourceProxy, CGSize?) -> Task<UIImage, Error>)?
+
+    func loadImageRetryingOnReconnection(_ source: MediaSourceProxy, size: CGSize?) -> Task<UIImage, Error> {
+        loadImageRetryingOnReconnectionSizeCallsCount += 1
+        loadImageRetryingOnReconnectionSizeReceivedArguments = (source: source, size: size)
+        DispatchQueue.main.async {
+            self.loadImageRetryingOnReconnectionSizeReceivedInvocations.append((source: source, size: size))
+        }
+        if let loadImageRetryingOnReconnectionSizeClosure = loadImageRetryingOnReconnectionSizeClosure {
+            return loadImageRetryingOnReconnectionSizeClosure(source, size)
+        } else {
+            return loadImageRetryingOnReconnectionSizeReturnValue
+        }
+    }
+    //MARK: - loadThumbnailForSource
+
+    var loadThumbnailForSourceSourceSizeUnderlyingCallsCount = 0
+    var loadThumbnailForSourceSourceSizeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadThumbnailForSourceSourceSizeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadThumbnailForSourceSourceSizeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadThumbnailForSourceSourceSizeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadThumbnailForSourceSourceSizeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadThumbnailForSourceSourceSizeCalled: Bool {
+        return loadThumbnailForSourceSourceSizeCallsCount > 0
+    }
+    var loadThumbnailForSourceSourceSizeReceivedArguments: (source: MediaSourceProxy, size: CGSize)?
+    var loadThumbnailForSourceSourceSizeReceivedInvocations: [(source: MediaSourceProxy, size: CGSize)] = []
+
+    var loadThumbnailForSourceSourceSizeUnderlyingReturnValue: Result<Data, MediaProviderError>!
+    var loadThumbnailForSourceSourceSizeReturnValue: Result<Data, MediaProviderError>! {
+        get {
+            if Thread.isMainThread {
+                return loadThumbnailForSourceSourceSizeUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Data, MediaProviderError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadThumbnailForSourceSourceSizeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadThumbnailForSourceSourceSizeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadThumbnailForSourceSourceSizeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadThumbnailForSourceSourceSizeClosure: ((MediaSourceProxy, CGSize) async -> Result<Data, MediaProviderError>)?
+
+    func loadThumbnailForSource(source: MediaSourceProxy, size: CGSize) async -> Result<Data, MediaProviderError> {
+        loadThumbnailForSourceSourceSizeCallsCount += 1
+        loadThumbnailForSourceSourceSizeReceivedArguments = (source: source, size: size)
+        DispatchQueue.main.async {
+            self.loadThumbnailForSourceSourceSizeReceivedInvocations.append((source: source, size: size))
+        }
+        if let loadThumbnailForSourceSourceSizeClosure = loadThumbnailForSourceSourceSizeClosure {
+            return await loadThumbnailForSourceSourceSizeClosure(source, size)
+        } else {
+            return loadThumbnailForSourceSourceSizeReturnValue
+        }
+    }
+    //MARK: - loadFileFromSource
+
+    var loadFileFromSourceBodyUnderlyingCallsCount = 0
+    var loadFileFromSourceBodyCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadFileFromSourceBodyUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadFileFromSourceBodyUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadFileFromSourceBodyUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadFileFromSourceBodyUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadFileFromSourceBodyCalled: Bool {
+        return loadFileFromSourceBodyCallsCount > 0
+    }
+    var loadFileFromSourceBodyReceivedArguments: (source: MediaSourceProxy, body: String?)?
+    var loadFileFromSourceBodyReceivedInvocations: [(source: MediaSourceProxy, body: String?)] = []
+
+    var loadFileFromSourceBodyUnderlyingReturnValue: Result<MediaFileHandleProxy, MediaProviderError>!
+    var loadFileFromSourceBodyReturnValue: Result<MediaFileHandleProxy, MediaProviderError>! {
+        get {
+            if Thread.isMainThread {
+                return loadFileFromSourceBodyUnderlyingReturnValue
+            } else {
+                var returnValue: Result<MediaFileHandleProxy, MediaProviderError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadFileFromSourceBodyUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadFileFromSourceBodyUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadFileFromSourceBodyUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadFileFromSourceBodyClosure: ((MediaSourceProxy, String?) async -> Result<MediaFileHandleProxy, MediaProviderError>)?
+
+    func loadFileFromSource(_ source: MediaSourceProxy, body: String?) async -> Result<MediaFileHandleProxy, MediaProviderError> {
+        loadFileFromSourceBodyCallsCount += 1
+        loadFileFromSourceBodyReceivedArguments = (source: source, body: body)
+        DispatchQueue.main.async {
+            self.loadFileFromSourceBodyReceivedInvocations.append((source: source, body: body))
+        }
+        if let loadFileFromSourceBodyClosure = loadFileFromSourceBodyClosure {
+            return await loadFileFromSourceBodyClosure(source, body)
+        } else {
+            return loadFileFromSourceBodyReturnValue
+        }
+    }
+}
 class NetworkMonitorMock: NetworkMonitorProtocol {
     var reachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> {
         get { return underlyingReachabilityPublisher }

@@ -99,7 +99,7 @@ struct MessageForwardingScreen_Previews: PreviewProvider, TestablePreview {
                                                          clientProxy: ClientProxyMock(.init()),
                                                          roomSummaryProvider: summaryProvider,
                                                          userIndicatorController: UserIndicatorControllerMock(),
-                                                         mediaProvider: MockMediaProvider())
+                                                         mediaProvider: MediaProviderMock(configuration: .init()))
         
         NavigationStack {
             MessageForwardingScreen(context: viewModel.context)

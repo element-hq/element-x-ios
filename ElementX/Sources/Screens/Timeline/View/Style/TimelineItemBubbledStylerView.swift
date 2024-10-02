@@ -359,7 +359,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
         return TimelineViewModel(roomProxy: roomProxy,
                                  focussedEventID: nil,
                                  timelineController: MockRoomTimelineController(),
-                                 mediaProvider: MockMediaProvider(),
+                                 mediaProvider: MediaProviderMock(configuration: .init()),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
