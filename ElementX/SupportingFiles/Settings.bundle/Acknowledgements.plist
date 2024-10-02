@@ -124,9 +124,9 @@
 		</dict>
 		<dict>
 			<key>File</key>
-			<string>Packages/WysiwygComposer</string>
+			<string>Packages/matrix-rich-text-editor-swift</string>
 			<key>Title</key>
-			<string>WysiwygComposer</string>
+			<string>matrix-rich-text-editor-swift</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
