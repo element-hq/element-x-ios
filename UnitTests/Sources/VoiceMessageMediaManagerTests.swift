@@ -14,14 +14,14 @@ import XCTest
 class VoiceMessageMediaManagerTests: XCTestCase {
     private var voiceMessageMediaManager: VoiceMessageMediaManager!
     private var voiceMessageCache: VoiceMessageCacheMock!
-    private var mediaProvider: MockMediaProvider!
+    private var mediaProvider: MediaProviderMock!
     
     private let someURL = URL("/some/url")
     private let audioOGGMimeType = "audio/ogg"
     
     override func setUp() async throws {
         voiceMessageCache = VoiceMessageCacheMock()
-        mediaProvider = MockMediaProvider()
+        mediaProvider = MediaProviderMock(configuration: .init())
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
                                                             voiceMessageCache: voiceMessageCache)
     }
@@ -50,7 +50,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
         
         voiceMessageCache.fileURLForReturnValue = nil
         let mediaSource = MediaSourceProxy(url: someURL, mimeType: "audio/ogg; codecs=opus")
-        mediaProvider.loadFileFromSourceReturnValue = MediaFileHandleProxy.unmanaged(url: loadedFile)
+        mediaProvider.loadFileFromSourceBodyReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
         voiceMessageCache.cacheMediaSourceUsingMoveReturnValue = .success(cachedConvertedFileURL)
         
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
@@ -103,7 +103,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
         // Check if the file is not already present in cache
         voiceMessageCache.fileURLForReturnValue = nil
         let mediaSource = MediaSourceProxy(url: someURL, mimeType: audioOGGMimeType)
-        mediaProvider.loadFileFromSourceReturnValue = MediaFileHandleProxy.unmanaged(url: loadedFile)
+        mediaProvider.loadFileFromSourceBodyReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
         let audioConverter = AudioConverterMock()
         voiceMessageCache.cacheMediaSourceUsingMoveReturnValue = .success(cachedConvertedFileURL)
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
@@ -139,7 +139,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
         }
         
         let audioConverter = AudioConverterMock()
-        mediaProvider.loadFileFromSourceReturnValue = MediaFileHandleProxy.unmanaged(url: loadedFile)
+        mediaProvider.loadFileFromSourceBodyReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
 
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
                                                             voiceMessageCache: voiceMessageCache,

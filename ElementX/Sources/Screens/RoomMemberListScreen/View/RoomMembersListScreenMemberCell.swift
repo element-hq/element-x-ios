@@ -99,7 +99,7 @@ struct RoomMembersListMemberCell_Previews: PreviewProvider, TestablePreview {
     
     static let viewModel = RoomMembersListScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Some room",
                                                                                                members: members)),
-                                                          mediaProvider: MockMediaProvider(),
+                                                          mediaProvider: MediaProviderMock(configuration: .init()),
                                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                           analytics: ServiceLocator.shared.analytics)
     static var previews: some View {

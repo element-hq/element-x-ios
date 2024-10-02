@@ -100,7 +100,7 @@ private extension RoomMembersListScreenViewModel {
     static var mock: RoomMembersListScreenViewModel {
         RoomMembersListScreenViewModel(initialMode: .members,
                                        roomProxy: JoinedRoomProxyMock(.init(members: .allMembersAsAdmin)),
-                                       mediaProvider: MockMediaProvider(),
+                                       mediaProvider: MediaProviderMock(configuration: .init()),
                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                        analytics: ServiceLocator.shared.analytics)
     }

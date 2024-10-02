@@ -22,7 +22,7 @@ class UserProfileScreenViewModelTests: XCTestCase {
         viewModel = UserProfileScreenViewModel(userID: profile.userID,
                                                isPresentedModally: false,
                                                clientProxy: clientProxy,
-                                               mediaProvider: MockMediaProvider(),
+                                               mediaProvider: MediaProviderMock(configuration: .init()),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                analytics: ServiceLocator.shared.analytics)
         
@@ -42,7 +42,7 @@ class UserProfileScreenViewModelTests: XCTestCase {
         viewModel = UserProfileScreenViewModel(userID: profile.userID,
                                                isPresentedModally: false,
                                                clientProxy: clientProxy,
-                                               mediaProvider: MockMediaProvider(),
+                                               mediaProvider: MediaProviderMock(configuration: .init()),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                analytics: ServiceLocator.shared.analytics)
         

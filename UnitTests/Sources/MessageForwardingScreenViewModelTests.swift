@@ -29,7 +29,7 @@ class MessageForwardingScreenViewModelTests: XCTestCase {
                                                      clientProxy: clientProxy,
                                                      roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                                      userIndicatorController: UserIndicatorControllerMock(),
-                                                     mediaProvider: MockMediaProvider())
+                                                     mediaProvider: MediaProviderMock(configuration: .init()))
         context = viewModel.context
     }
     

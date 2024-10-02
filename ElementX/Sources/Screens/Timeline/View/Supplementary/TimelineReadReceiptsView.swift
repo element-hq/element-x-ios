@@ -83,7 +83,7 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
 
     static let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Test", members: members)),
                                              timelineController: MockRoomTimelineController(),
-                                             mediaProvider: MockMediaProvider(),
+                                             mediaProvider: MediaProviderMock(configuration: .init()),
                                              mediaPlayerProvider: MediaPlayerProviderMock(),
                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
