@@ -35,9 +35,13 @@ extension ClientBuilder {
                 .autoEnableBackups(autoEnableBackups: true)
                 
             if enableOnlySignedDeviceIsolationMode {
-                builder = builder.roomKeyRecipientStrategy(strategy: CollectStrategy.identityBasedStrategy)
+                builder = builder
+                    .roomKeyRecipientStrategy(strategy: CollectStrategy.identityBasedStrategy)
+                    .roomDecryptionTrustRequirement(trustRequirement: TrustRequirement.crossSignedOrLegacy)
             } else {
-                builder = builder.roomKeyRecipientStrategy(strategy: .deviceBasedStrategy(onlyAllowTrustedDevices: false, errorOnVerifiedUserProblem: true))
+                builder = builder
+                    .roomKeyRecipientStrategy(strategy: .deviceBasedStrategy(onlyAllowTrustedDevices: false, errorOnVerifiedUserProblem: true))
+                    .roomDecryptionTrustRequirement(trustRequirement: TrustRequirement.untrusted)
             }
         }
         
