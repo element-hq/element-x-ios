@@ -240,7 +240,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case .success(let resolved): await asyncHandleAppRoute(.childRoom(roomID: resolved.roomId, via: resolved.servers), animated: animated)
             case .failure: showFailureIndicator()
             }
-            
         case .roomDetails(let roomID):
             if stateMachine.state.selectedRoomID == roomID {
                 roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
@@ -258,7 +257,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case .success(let resolved): await asyncHandleAppRoute(.event(eventID: eventID, roomID: resolved.roomId, via: resolved.servers), animated: animated)
             case .failure: showFailureIndicator()
             }
-            
         case .childEvent:
             roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
         case .childEventOnRoomAlias(let eventID, let alias):
@@ -266,7 +264,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case .success(let resolved): await asyncHandleAppRoute(.childEvent(eventID: eventID, roomID: resolved.roomId, via: resolved.servers), animated: animated)
             case .failure: showFailureIndicator()
             }
-            
         case .userProfile(let userID):
             stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
         case .call(let roomID):
@@ -322,12 +319,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 hideCallScreenOverlay() // Turn any active call into a PiP so that navigation from a notification is visible to the user.
             case(.roomList, .deselectRoom, .roomList):
                 dismissRoomFlow(animated: animated)
-                                
             case (.roomList, .showSettingsScreen, .settingsScreen):
                 break
             case (.settingsScreen, .dismissedSettingsScreen, .roomList):
                 break
-                
             case (.roomList, .feedbackScreen, .feedbackScreen):
                 bugReportFlowCoordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .sheet(sidebarNavigationStackCoordinator),
                                                                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
@@ -336,27 +331,22 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 bugReportFlowCoordinator?.start()
             case (.feedbackScreen, .dismissedFeedbackScreen, .roomList):
                 break
-                
             case (.roomList, .showStartChatScreen, .startChatScreen):
                 presentStartChat(animated: animated)
             case (.startChatScreen, .dismissedStartChatScreen, .roomList):
                 break
-                
             case (.roomList, .showLogoutConfirmationScreen, .logoutConfirmationScreen):
                 presentSecureBackupLogoutConfirmationScreen()
             case (.logoutConfirmationScreen, .dismissedLogoutConfirmationScreen, .roomList):
                 break
-                
             case (.roomList, .showRoomDirectorySearchScreen, .roomDirectorySearchScreen):
                 presentRoomDirectorySearch()
             case (.roomDirectorySearchScreen, .dismissedRoomDirectorySearchScreen, .roomList):
                 dismissRoomDirectorySearch()
-            
             case (_, .showUserProfileScreen(let userID), .userProfileScreen):
                 presentUserProfileScreen(userID: userID, animated: animated)
             case (.userProfileScreen, .dismissedUserProfileScreen, .roomList):
                 break
-                
             default:
                 fatalError("Unknown transition: \(context)")
             }

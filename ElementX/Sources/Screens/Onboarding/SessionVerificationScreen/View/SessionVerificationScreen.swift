@@ -126,6 +126,7 @@ struct SessionVerificationScreen: View {
                 .buttonStyle(.compound(.primary))
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.requestVerification)
             }
+
         case .cancelled:
             Button(L10n.actionRetry) {
                 context.send(viewAction: .restart)

@@ -363,6 +363,7 @@ class AudioRecorder: AudioRecorderProtocol {
         case .began:
             MXLog.info("Interruption started: \(notification)")
             setInternalState(.suspended)
+
         case .ended:
             MXLog.info("Interruption ended: \(notification)")
 

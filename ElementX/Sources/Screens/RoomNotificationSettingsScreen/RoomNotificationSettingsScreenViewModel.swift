@@ -140,6 +140,7 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
             state.bindings.alertInfo = AlertInfo(id: type,
                                                  title: L10n.commonError,
                                                  message: L10n.screenRoomNotificationSettingsErrorLoadingSettings)
+
         case .setModeFailed:
             state.bindings.alertInfo = AlertInfo(id: type,
                                                  title: L10n.commonError,

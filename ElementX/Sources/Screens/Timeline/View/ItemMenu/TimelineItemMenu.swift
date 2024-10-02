@@ -237,11 +237,11 @@ private extension EncryptionAuthenticity {
 private extension View {
     /// Uses the old page style modal so that on iPadOS 18 the presentation detents have no effect.
     @ViewBuilder func presentationPage() -> some View {
-// Tchap: don't check for iOS 18 while not using Xcode 16
+        // Tchap: don't check for iOS 18 while not using Xcode 16
 //        if #available(iOS 18.0, *) {
 //            presentationSizing(.page)
 //        } else {
-            self
+        self
 //        }
     }
 }

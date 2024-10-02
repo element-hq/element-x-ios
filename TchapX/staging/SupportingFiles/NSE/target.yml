@@ -116,4 +116,4 @@ targets:
     - path: ../../../../ElementX/Sources/Application/AppSettings.swift
     - path: ../../../../ElementX/Sources/AppHooks/AppHooks.swift
     - path: ../../../../ElementX/Sources/AppHooks/Hooks/ClientBuilderHook.swift
-    - path: ../PrivacyInfo.xcprivacy    
+    - path: ../PrivacyInfo.xcprivacy

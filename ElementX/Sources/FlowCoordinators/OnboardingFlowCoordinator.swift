@@ -160,7 +160,6 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 return .notificationPermissions
             case (.initial, false, false, false, false):
                 return .finished
-                
             case (.identityConfirmation, _, _, _, _):
                 if event == .nextSkippingIdentityConfimed {
                     // Used when the verification state has updated to verified
@@ -186,22 +185,18 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 return .notificationPermissions
             case (.identityConfirmed, _, false, false, false):
                 return .finished
-                
             case (.appLockSetup, _, _, true, _):
                 return .analyticsPrompt
             case (.appLockSetup, _, _, false, true):
                 return .notificationPermissions
             case (.appLockSetup, _, _, false, false):
                 return .finished
-                
             case (.analyticsPrompt, _, _, _, true):
                 return .notificationPermissions
             case (.analyticsPrompt, _, _, _, false):
                 return .finished
-                
             case (.notificationPermissions, _, _, _, _):
                 return .finished
-            
             default:
                 return nil
             }

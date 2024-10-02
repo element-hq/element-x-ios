@@ -89,8 +89,10 @@ class SessionVerificationScreenStateMachine {
                 
             case (.sasVerificationStarted, .didReceiveChallenge(let emojis)):
                 return .showingChallenge(emojis: emojis)
+
             case (.showingChallenge(let emojis), .acceptChallenge):
                 return .acceptingChallenge(emojis: emojis)
+
             case (.acceptingChallenge(let emojis), .didFail):
                 return .showingChallenge(emojis: emojis)
                 
@@ -99,11 +101,13 @@ class SessionVerificationScreenStateMachine {
                 
             case (.showingChallenge(let emojis), .declineChallenge):
                 return .decliningChallenge(emojis: emojis)
+
             case (.decliningChallenge(let emojis), .didFail):
                 return .showingChallenge(emojis: emojis)
                 
             case (_, .cancel):
                 return .cancelling
+
             case (_, .didCancel):
                 return .cancelled
                 

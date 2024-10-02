@@ -20,7 +20,6 @@ enum MockServerSelectionScreenState: CaseIterable {
             return ServerSelectionScreenViewModel(homeserverAddress: "https://matrix.org",
                                                   slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
                                                   isModallyPresented: true)
-                                                  
         case .emptyAddress:
             return ServerSelectionScreenViewModel(homeserverAddress: "",
                                                   slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
