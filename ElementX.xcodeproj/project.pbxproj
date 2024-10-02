@@ -5795,7 +5795,7 @@
 				E2F3DA35D462724CCC61DE2C /* XCRemoteSwiftPackageReference "swift-ogg" */,
 				6582B5AF3F104B0F7E031E7D /* XCRemoteSwiftPackageReference "SwiftState" */,
 				EC6D0C817B1C21D9D096505A /* XCRemoteSwiftPackageReference "Version" */,
-				44FA555384AD79668D886043 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */,
+				EE40B0E16A55BD23ECBFFD22 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */,
 			);
 			projectDirPath = "";
 			projectRoot = "";
@@ -7750,14 +7750,6 @@
 				minimumVersion = 1.2.0;
 			};
 		};
-		44FA555384AD79668D886043 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/matrix-org/matrix-rich-text-editor-swift";
-			requirement = {
-				kind = exactVersion;
-				version = 2.37.7;
-			};
-		};
 		4BDA7F6042968E8422470F3F /* XCRemoteSwiftPackageReference "LoremSwiftum" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/lukaskubanek/LoremSwiftum";
@@ -7900,6 +7892,14 @@
 			requirement = {
 				kind = upToNextMinorVersion;
 				minimumVersion = 2.1.0;
+			};
+		};
+		EE40B0E16A55BD23ECBFFD22 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/element-hq/matrix-rich-text-editor-swift";
+			requirement = {
+				kind = exactVersion;
+				version = 2.37.12;
 			};
 		};
 		F71C70A4404CC6D9C4AF35F2 /* XCRemoteSwiftPackageReference "compound-ios" */ = {
@@ -8178,7 +8178,7 @@
 		};
 		CA07D57389DACE18AEB6A5E2 /* WysiwygComposer */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 44FA555384AD79668D886043 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */;
+			package = EE40B0E16A55BD23ECBFFD22 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */;
 			productName = WysiwygComposer;
 		};
 		CCE5BF78B125320CBF3BB834 /* PostHog */ = {
