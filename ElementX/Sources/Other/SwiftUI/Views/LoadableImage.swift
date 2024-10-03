@@ -126,10 +126,12 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
             case (.gifData, true):
                 transformer(AnyView(KFAnimatedImage(source: .provider(self))))
             case (.none, _), (_, false):
-                if let blurhash,
-                   // Build a small blurhash image so that it's fast
-                   let image = UIImage(blurHash: blurhash, size: .init(width: 10.0, height: 10.0)) {
-                    transformer(AnyView(Image(uiImage: image).resizable().overlay { blurHashOverlay }))
+                if let blurHashView {
+                    if shouldRender {
+                        transformer(blurHashView)
+                    } else {
+                        blurHashView
+                    }
                 } else {
                     placeholder().overlay { placeholderOverlay }
                 }
@@ -150,6 +152,17 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
             }
             
             contentLoader.cancel()
+        }
+    }
+    
+    // Note: Returns `AnyView` as this is what `transformer` expects.
+    var blurHashView: AnyView? {
+        if let blurhash,
+           // Build a small blurhash image so that it's fast
+           let image = UIImage(blurHash: blurhash, size: .init(width: 10.0, height: 10.0)) {
+            return AnyView(Image(uiImage: image).resizable().overlay { blurHashOverlay })
+        } else {
+            return nil
         }
     }
     
@@ -285,4 +298,116 @@ private class ContentLoader: ObservableObject {
 extension EnvironmentValues {
     /// Whether or not images should be loaded inside `LoadableImage` without a user interaction.
     @Entry var shouldAutomaticallyLoadImages = true
+}
+
+// MARK: - Previews
+
+struct LoadableImage_Previews: PreviewProvider, TestablePreview {
+    static let mediaProvider = makeMediaProvider()
+    static let loadingMediaProvider = makeMediaProvider(isLoading: true)
+    
+    static var previews: some View {
+        LazyVGrid(columns: [.init(.adaptive(minimum: 110, maximum: 110))], spacing: 24) {
+            LoadableImage(url: "mxc://wherever/1234",
+                          mediaType: .timelineItem,
+                          mediaProvider: mediaProvider,
+                          placeholder: placeholder)
+                .layout(title: "Loaded")
+            
+            LoadableImage(url: "mxc://wherever/2345",
+                          mediaType: .timelineItem,
+                          blurhash: "KpE4oyayR5|GbHb];3j@of",
+                          mediaProvider: mediaProvider,
+                          placeholder: placeholder)
+                .layout(title: "Hidden (blurhash)", hideTimelineMedia: true)
+            
+            LoadableImage(url: "mxc://wherever/3456",
+                          mediaType: .timelineItem,
+                          mediaProvider: mediaProvider,
+                          placeholder: placeholder)
+                .layout(title: "Hidden (placeholder)", hideTimelineMedia: true)
+            
+            LoadableImage(url: "mxc://wherever/4567",
+                          mediaType: .timelineItem,
+                          blurhash: "KbLM^j]q$jT|EfR-3rtjXk",
+                          mediaProvider: loadingMediaProvider,
+                          placeholder: placeholder)
+                .layout(title: "Loading (blurhash)")
+            
+            LoadableImage(url: "mxc://wherever/5678",
+                          mediaType: .timelineItem,
+                          mediaProvider: loadingMediaProvider,
+                          placeholder: placeholder)
+                .layout(title: "Loading (placeholder)")
+            
+            LoadableImage(url: "mxc://wherever/6789",
+                          mediaType: .avatar,
+                          mediaProvider: loadingMediaProvider,
+                          placeholder: placeholder)
+                .layout(title: "Loading (avatar)")
+
+            LoadableImage(url: "mxc://wherever/345",
+                          mediaType: .timelineItem,
+                          blurhash: "KbLM^j]q$jT|EfR-3rtjXk",
+                          mediaProvider: mediaProvider,
+                          transformer: transformer,
+                          placeholder: placeholder)
+                .layout(title: "Loaded (transformer)")
+            
+            LoadableImage(url: "mxc://wherever/345",
+                          mediaType: .timelineItem,
+                          blurhash: "KbLM^j]q$jT|EfR-3rtjXk",
+                          mediaProvider: loadingMediaProvider,
+                          transformer: transformer,
+                          placeholder: placeholder)
+                .layout(title: "Loading (transformer)")
+            
+            LoadableImage(url: "mxc://wherever/234",
+                          mediaType: .timelineItem,
+                          blurhash: "KbLM^j]q$jT|EfR-3rtjXk",
+                          mediaProvider: mediaProvider,
+                          transformer: transformer,
+                          placeholder: placeholder)
+                .layout(title: "Hidden (transformer)", hideTimelineMedia: true)
+        }
+    }
+    
+    static func placeholder() -> some View { Color.compound._bgBubbleIncoming }
+    static func transformer(_ view: AnyView) -> some View {
+        view.overlay {
+            Image(systemSymbol: .playCircleFill)
+                .font(.largeTitle)
+                .foregroundStyle(.compound.iconAccentPrimary)
+        }
+    }
+    
+    static func makeMediaProvider(isLoading: Bool = false) -> MediaProviderProtocol {
+        let mediaProvider = MediaProviderMock(configuration: .init())
+        
+        if isLoading {
+            mediaProvider.imageFromSourceSizeClosure = { _, _ in nil }
+            mediaProvider.loadFileFromSourceBodyClosure = { _, _ in .failure(.failedRetrievingFile) }
+            mediaProvider.loadImageDataFromSourceClosure = { _ in .failure(.failedRetrievingImage) }
+            mediaProvider.loadImageFromSourceSizeClosure = { _, _ in .failure(.failedRetrievingImage) }
+            mediaProvider.loadThumbnailForSourceSourceSizeClosure = { _, _ in .failure(.failedRetrievingThumbnail) }
+            mediaProvider.loadImageRetryingOnReconnectionSizeClosure = { _, _ in
+                Task { throw MediaProviderError.failedRetrievingImage }
+            }
+        }
+        return mediaProvider
+    }
+}
+
+private extension View {
+    func layout(title: String, hideTimelineMedia: Bool = false) -> some View {
+        aspectRatio(contentMode: .fit)
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .overlay(alignment: .bottom) {
+                Text(title)
+                    .font(.caption2)
+                    .offset(y: 16)
+                    .padding(.horizontal, -5)
+            }
+            .environment(\.shouldAutomaticallyLoadImages, !hideTimelineMedia)
+    }
 }
