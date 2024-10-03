@@ -164,6 +164,8 @@ internal enum L10n {
   internal static var actionLeaveConversation: String { return L10n.tr("Localizable", "action_leave_conversation") }
   /// Leave room
   internal static var actionLeaveRoom: String { return L10n.tr("Localizable", "action_leave_room") }
+  /// Load more
+  internal static var actionLoadMore: String { return L10n.tr("Localizable", "action_load_more") }
   /// Manage account
   internal static var actionManageAccount: String { return L10n.tr("Localizable", "action_manage_account") }
   /// Manage devices
@@ -222,6 +224,8 @@ internal enum L10n {
   internal static var actionShare: String { return L10n.tr("Localizable", "action_share") }
   /// Share link
   internal static var actionShareLink: String { return L10n.tr("Localizable", "action_share_link") }
+  /// Show
+  internal static var actionShow: String { return L10n.tr("Localizable", "action_show") }
   /// Sign in again
   internal static var actionSignInAgain: String { return L10n.tr("Localizable", "action_sign_in_again") }
   /// Sign out
@@ -2395,11 +2399,6 @@ internal enum L10n {
   }
   /// Check UnifiedPush
   internal static var troubleshootNotificationsTestUnifiedPushTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_unified_push_title") }
-
-  internal enum Action {
-    /// Load more
-    internal static var loadMore: String { return L10n.tr("Localizable", "action.load_more") }
-  }
 
   internal enum Banner {
     internal enum SetUpRecovery {

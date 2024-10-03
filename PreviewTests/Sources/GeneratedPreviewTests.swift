@@ -311,6 +311,12 @@ extension PreviewTests {
         }
     }
 
+    func test_loadableImage() {
+        for preview in LoadableImage_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_locationMarkerView() {
         for preview in LocationMarkerView_Previews._allPreviews {
             assertSnapshots(matching: preview)

@@ -60,6 +60,9 @@ struct TimelineView: UIViewControllerRepresentable {
             if tableViewController.focussedEvent != context.viewState.timelineViewState.focussedEvent {
                 tableViewController.focussedEvent = context.viewState.timelineViewState.focussedEvent
             }
+            if tableViewController.hideTimelineMedia != context.viewState.hideTimelineMedia {
+                tableViewController.hideTimelineMedia = context.viewState.hideTimelineMedia
+            }
             
             if tableViewController.typingMembers.members != context.viewState.typingMembers {
                 tableViewController.setTypingMembers(context.viewState.typingMembers)

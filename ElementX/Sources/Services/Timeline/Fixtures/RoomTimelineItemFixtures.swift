@@ -247,6 +247,40 @@ enum RoomTimelineItemFixtures {
                                  senderDisplayName: index > 10 ? "Alice" : "Bob")
         }
     }
+    
+    static var mediaChunk: [RoomTimelineItemProtocol] {
+        [
+            VideoRoomTimelineItem(id: .random,
+                                  timestamp: "10:47 am",
+                                  isOutgoing: false,
+                                  isEditable: false,
+                                  canBeRepliedTo: true,
+                                  isThreaded: false,
+                                  sender: .init(id: ""),
+                                  content: .init(body: "video",
+                                                 duration: 100,
+                                                 source: .init(url: .picturesDirectory, mimeType: nil),
+                                                 thumbnailSource: .init(url: .picturesDirectory, mimeType: nil),
+                                                 width: 1920,
+                                                 height: 1080,
+                                                 aspectRatio: 1.78,
+                                                 blurhash: "KtI~70X5V?yss9oyrYs:t6")),
+            ImageRoomTimelineItem(id: .random,
+                                  timestamp: "10:47 am",
+                                  isOutgoing: false,
+                                  isEditable: false,
+                                  canBeRepliedTo: true,
+                                  isThreaded: false,
+                                  sender: .init(id: ""),
+                                  content: .init(body: "image",
+                                                 source: .init(url: .picturesDirectory, mimeType: nil),
+                                                 thumbnailSource: nil,
+                                                 width: 5120,
+                                                 height: 3412,
+                                                 aspectRatio: 1.5,
+                                                 blurhash: "KpE4oyayR5|GbHb];3j@of"))
+        ]
+    }
 }
 
 private extension TextRoomTimelineItem {
@@ -260,9 +294,7 @@ private extension TextRoomTimelineItem {
                   sender: .init(id: "", displayName: senderDisplayName),
                   content: .init(body: text))
     }
-}
-
-private extension TextRoomTimelineItem {
+    
     func withReadReceipts(_ receipts: [ReadReceipt]) -> TextRoomTimelineItem {
         var newSelf = self
         newSelf.properties.orderedReadReceipts = receipts
