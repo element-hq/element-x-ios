@@ -38,6 +38,6 @@ class ZeroAttachmentApi: ZeroAttacmentApiProtocol {
     // MARK: - Constants
     
     private enum AttachmentEndPoints {
-        static let attachmentInfoEndPoint = "\(APIConfigs.zeroURLRoot)api/feedItems/getAttachmentDownloadInfo"
+        static let attachmentInfoEndPoint = "\(ZeroContants.appServer.zeroRootUrl)api/feedItems/getAttachmentDownloadInfo"
     }
 }

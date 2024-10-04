@@ -42,18 +42,15 @@ struct SettingsScreen: View {
         Section {
             ListRow(kind: .custom {
                 Button {
-                    // context.send(viewAction: .userDetails)
+                    context.send(viewAction: .userDetails)
                 } label: {
                     HStack(spacing: 12) {
-//                        LoadableAvatarImage(url: context.viewState.userAvatarURL,
-//                                            name: context.viewState.userDisplayName,
-//                                            contentID: context.viewState.userID,
-//                                            avatarSize: .user(on: .settings),
-//                                            mediaProvider: context.mediaProvider)
-//                            .accessibilityHidden(true)
-                        AvatarView(url: context.viewState.userAvatarURL,
-                                   placeholder: Asset.Images.defaultAvatarIcon,
-                                   style: .large)
+                        LoadableAvatarImage(url: context.viewState.userAvatarURL,
+                                            name: context.viewState.userDisplayName,
+                                            contentID: context.viewState.userID,
+                                            avatarSize: .user(on: .settings),
+                                            mediaProvider: context.mediaProvider)
+                            .accessibilityHidden(true)
                         
                         VStack(alignment: .leading, spacing: 2) {
                             Text(context.viewState.userDisplayName ?? "")

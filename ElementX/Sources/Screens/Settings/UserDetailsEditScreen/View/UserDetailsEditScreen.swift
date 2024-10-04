@@ -17,11 +17,11 @@ struct UserDetailsEditScreen: View {
             Section {
                 avatar
             } footer: {
-                Text(context.viewState.userID)
-                    .frame(maxWidth: .infinity)
-                    .font(.zero.bodyLG)
-                    .foregroundColor(.compound.textPrimary)
-                    .padding(.bottom, 16)
+//                Text(context.viewState.userID)
+//                    .frame(maxWidth: .infinity)
+//                    .font(.zero.bodyLG)
+//                    .foregroundColor(.compound.textPrimary)
+//                    .padding(.bottom, 16)
             }
             
             nameSection
@@ -73,6 +73,8 @@ struct UserDetailsEditScreen: View {
             ListRow(label: .plain(title: L10n.screenEditProfileDisplayNamePlaceholder),
                     kind: .textField(text: $context.name, axis: .horizontal))
                 .focused($focus)
+                .disabled(true)
+                .allowsHitTesting(false)
         } header: {
             Text(L10n.screenEditProfileDisplayName)
                 .compoundListSectionHeader()
@@ -102,13 +104,13 @@ struct UserDetailsEditScreen: View {
             Text(L10n.actionChoosePhoto)
         }
         
-        if context.viewState.showDeleteImageAction {
-            Button(role: .destructive) {
-                context.send(viewAction: .removeImage)
-            } label: {
-                Text(L10n.actionRemove)
-            }
-        }
+//        if context.viewState.showDeleteImageAction {
+//            Button(role: .destructive) {
+//                context.send(viewAction: .removeImage)
+//            } label: {
+//                Text(L10n.actionRemove)
+//            }
+//        }
     }
 }
 

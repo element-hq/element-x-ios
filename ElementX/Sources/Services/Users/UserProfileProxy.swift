@@ -37,6 +37,12 @@ struct UserProfileProxy: Equatable, Hashable {
         avatarURL = sdkRoomHero.avatarUrl.flatMap(URL.init(string:))
     }
     
+    init(zeroSearchedUser: ZMatrixSearchedUser, avatarUrl: String?) {
+        userID = zeroSearchedUser.matrixId
+        displayName = zeroSearchedUser.name
+        avatarURL = avatarUrl.flatMap(URL.init(string:))
+    }
+    
     /// A user is meant to be "verified" when the GET profile returns back either the display name or the avatar
     /// If isn't we aren't sure that the related matrix id really exists.
     var isVerified: Bool {
@@ -53,5 +59,13 @@ extension SearchUsersResultsProxy {
     init(sdkResults: MatrixRustSDK.SearchUsersResults) {
         results = sdkResults.results.map(UserProfileProxy.init)
         limited = sdkResults.limited
+    }
+    
+    init(zeroSearchResults: [ZMatrixSearchedUser], mappedMatrixUsers: [UserProfile]) {
+        results = zeroSearchResults.map({ user in
+            let avatarUrl = mappedMatrixUsers.first(where: { $0.userId == user.matrixId })?.avatarUrl
+            return UserProfileProxy.init(zeroSearchedUser: user, avatarUrl: avatarUrl)
+        })
+        limited = true
     }
 }

@@ -32,10 +32,11 @@ struct UserProfileListRow: View {
     
     var body: some View {
         ListRow(label: .avatar(title: user.displayName ?? user.userID,
-                               description: subtitle,
+                               description: nil,
                                icon: avatar,
                                role: isUnknownProfile ? .error : nil),
                 kind: kind)
+        .padding(.vertical, 6)
     }
     
     var avatar: LoadableAvatarImage {

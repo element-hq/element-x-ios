@@ -268,11 +268,13 @@ private class ContentLoader: ObservableObject {
     
     @MainActor
     func load() async {
-        if isGIF {
+        /// Bypassed `isGIF` check to load gifs by-default in avatars as `mediaSource.mimeType` is `nil` in all cases
+        // if isGIF {
             if case let .success(data) = await mediaProvider?.loadImageDataFromSource(mediaSource) {
                 cachedContent = .gifData(data)
             }
-        } else {
+        // }
+        else {
             guard let task = mediaProvider?.loadImageRetryingOnReconnection(mediaSource, size: size) else {
                 MXLog.error("Failed loading image, invalid reconnection retry task.")
                 return

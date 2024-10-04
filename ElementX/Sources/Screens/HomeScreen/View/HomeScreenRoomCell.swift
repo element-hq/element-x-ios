@@ -48,18 +48,11 @@ struct HomeScreenRoomCell: View {
     @ViewBuilder @MainActor
     private var avatar: some View {
         if dynamicTypeSize < .accessibility3 {
-            switch room.avatar {
-            case .room(let id, let name, let avatarURL):
-                AvatarView(url: avatarURL,
-                           placeholder: Asset.Images.defaultAvatarIcon,
-                           style: .large)
-            default:
-                RoomAvatarImage(avatar: room.avatar,
-                                avatarSize: .room(on: .home),
-                                mediaProvider: context.mediaProvider)
-                    .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
-                    .accessibilityHidden(true)
-            }
+            RoomAvatarImage(avatar: room.avatar,
+                            avatarSize: .room(on: .home),
+                            mediaProvider: context.mediaProvider)
+                .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
+                .accessibilityHidden(true)
         }
     }
     

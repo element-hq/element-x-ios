@@ -106,8 +106,7 @@ final class AppSettings {
         
     /// The default homeserver address used. This is intentionally a string without a scheme
     /// so that it can be passed to Rust as a ServerName for well-known discovery.
-    private(set) var defaultHomeserverAddress = "https://zos-home-2-e24b9412096f.herokuapp.com"
-    // DEV: private(set) var defaultHomeserverAddress = "https://zero-staging-new-9476d8d7e22a.herokuapp.com"
+    private(set) var defaultHomeserverAddress = ZeroContants.appServer.matrixHomeServerUrl
     
     /// The task identifier used for background app refresh. Also used in main target's the Info.plist
     let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"
@@ -130,9 +129,7 @@ final class AppSettings {
     let chatBackupDetailsURL: URL = "https://element.io/help#encryption5"
     /// Any domains that Element web may be hosted on - used for handling links.
     let elementWebHosts = ["app.element.io", "staging.element.io", "develop.element.io"]
-    
-    let zeroHomeServerPostfix = "zos-home-2.zero.tech"
-    
+        
     @UserPreference(key: UserDefaultsKeys.appAppearance, defaultValue: .system, storageType: .userDefaults(store))
     var appAppearance: AppAppearance
     

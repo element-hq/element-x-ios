@@ -16,17 +16,25 @@ struct PlaceholderAvatarImage: View {
     
     var body: some View {
         GeometryReader { geometry in
+//            ZStack(alignment: .center) {
+//                backgroundColor
+//                
+//                // This text's frame doesn't look right when redacted
+//                if redactionReasons != .placeholder {
+//                    Text(textForImage)
+//                        .foregroundColor(avatarColor?.text ?? .white)
+//                        .font(.system(size: geometry.size.width * 0.5625, weight: .semibold))
+//                        .minimumScaleFactor(0.001)
+//                        .frame(alignment: .center)
+//                }
+//            }
             ZStack(alignment: .center) {
                 backgroundColor
                 
-                // This text's frame doesn't look right when redacted
-                if redactionReasons != .placeholder {
-                    Text(textForImage)
-                        .foregroundColor(avatarColor?.text ?? .white)
-                        .font(.system(size: geometry.size.width * 0.5625, weight: .semibold))
-                        .minimumScaleFactor(0.001)
-                        .frame(alignment: .center)
-                }
+                Image(asset: Asset.Images.defaultAvatarIcon)
+                    .foregroundStyle(Asset.Colors.brandColor.swiftUIColor)
+                    .frame(alignment: .center)
+                    .scaledToFit()
             }
         }
         .aspectRatio(1, contentMode: .fill)
@@ -39,11 +47,12 @@ struct PlaceholderAvatarImage: View {
     }
 
     private var backgroundColor: Color {
-        if redactionReasons.contains(.placeholder) {
-            return Color(.systemGray4) // matches the default text redaction
-        }
-
-        return avatarColor?.background ?? .compound.iconPrimary
+//        if redactionReasons.contains(.placeholder) {
+//            return Color(.systemGray4) // matches the default text redaction
+//        }
+//
+//        return avatarColor?.background ?? .compound.iconPrimary
+        return Asset.Colors.zeroContentBackgroundColor.swiftUIColor
     }
     
     private var avatarColor: DecorativeColor? {

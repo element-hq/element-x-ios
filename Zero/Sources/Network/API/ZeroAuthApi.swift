@@ -75,7 +75,7 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
     // MARK: - Constants
     
     private enum AuthEndPoints {
-        static let hostURL = APIConfigs.zeroURLRoot
+        static let hostURL = ZeroContants.appServer.zeroRootUrl
         
         static let loginEndPoint = "\(hostURL)api/v2/accounts/login"
         static let ssoTokenEndPoint = "\(hostURL)accounts/ssoToken"

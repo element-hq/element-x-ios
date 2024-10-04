@@ -41,6 +41,6 @@ class ZeroChatApi: ZeroChatApiProtocol {
     // MARK: - Constants
     
     private enum ChatEndPoints {
-        static let matrixMessageEndPoint = "\(APIConfigs.zeroURLRoot)matrix/message"
+        static let matrixMessageEndPoint = "\(ZeroContants.appServer.zeroRootUrl)matrix/message"
     }
 }

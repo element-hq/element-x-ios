@@ -125,14 +125,15 @@ private struct TimelineItemSendInfo {
     let layoutType: LayoutType
     
     var foregroundStyle: Color {
-        switch status {
-        case .sendingFailed:
-            .compound.textCriticalPrimary
-        case .encryptionAuthenticity(let authenticity):
-            authenticity.foregroundStyle
-        case .none:
-            .compound.textSecondary
-        }
+//        switch status {
+//        case .sendingFailed:
+//            .compound.textCriticalPrimary
+//        case .encryptionAuthenticity(let authenticity):
+//            authenticity.foregroundStyle
+//        case .none:
+//            .compound.textSecondary
+//        }
+        .compound.textSecondary
     }
 }
 

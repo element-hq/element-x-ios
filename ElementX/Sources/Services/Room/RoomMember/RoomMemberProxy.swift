@@ -24,7 +24,7 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
     
     var userID: String { member.userId }
     var displayName: String? { zeroMember?.displayName ?? member.displayName }
-    var avatarURL: URL? { URL(string: zeroMember?.profileSummary?.profileImage ?? member.avatarUrl ?? "") }
+    var avatarURL: URL? { member.avatarUrl.flatMap(URL.init(string:)) }
     
     var membership: MembershipState { member.membership }
     var isIgnored: Bool { member.isIgnored }

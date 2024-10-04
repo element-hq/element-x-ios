@@ -264,12 +264,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         let notificationMode = roomInfo.cachedUserDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
         
         var displayName: String? = roomInfo.displayName ?? roomInfo.rawName
-        var roomAvatar: String? = roomInfo.avatarUrl
+        let roomAvatar: String? = roomInfo.avatarUrl ?? roomInfo.heroes.first?.avatarUrl
         
         if displayName?.stringMatchesUserIdFormatRegex() == true {
             let user = zeroMatrixUsersService.getMatrixUserCleaned(userId: displayName!)
             displayName = user?.displayName
-            roomAvatar = user?.profileSummary?.profileImage
         }
         
         return RoomSummary(roomListItem: roomListItem,
@@ -278,7 +277,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            inviter: inviterProxy,
                            name: displayName ?? "",
                            isDirect: roomInfo.isDirect,
-                           avatarURL: URL(string: roomAvatar ?? ""),
+                           avatarURL: roomAvatar.flatMap(URL.init(string:)),
                            heroes: roomInfo.heroes.map(UserProfileProxy.init),
                            lastMessage: attributedLastMessage,
                            lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,

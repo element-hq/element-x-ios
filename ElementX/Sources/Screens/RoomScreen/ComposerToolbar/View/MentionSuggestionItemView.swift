@@ -13,14 +13,11 @@ struct MentionSuggestionItemView: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: 16) {
-            AvatarView(url: item.avatarURL,
-                       placeholder: Asset.Images.defaultAvatarIcon,
-                       style: .small)
-//            LoadableAvatarImage(url: item.avatarURL,
-//                                name: item.displayName,
-//                                contentID: item.id,
-//                                avatarSize: .user(on: .suggestions),
-//                                mediaProvider: mediaProvider)
+            LoadableAvatarImage(url: item.avatarURL,
+                                name: item.displayName,
+                                contentID: item.id,
+                                avatarSize: .user(on: .suggestions),
+                                mediaProvider: mediaProvider)
             VStack(alignment: .leading, spacing: 0) {
                 Text(item.displayName ?? item.id)
                     .font(.zero.bodyLG)

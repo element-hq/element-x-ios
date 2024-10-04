@@ -27,7 +27,7 @@ class ZeroMatrixUsersService {
                 storeUsers(zeroUsers: zeroUsers)
                 return zeroUsers.first
             case .failure(let error):
-                print(error)
+                MXLog.error(error)
                 return nil
             }
         }
@@ -41,10 +41,21 @@ class ZeroMatrixUsersService {
             case .success(let zeroUsers):
                 storeUsers(zeroUsers: zeroUsers)
             case .failure(let error):
-                print(error)
+                MXLog.error(error)
             }
         }
         return allZeroUsers
+    }
+    
+    func searchZeroUsers(query: String) async throws -> [ZMatrixSearchedUser] {
+        let response = try await zeroUsersApi.searchUsers(query)
+        switch response {
+        case .success(let zeroUsers):
+            return zeroUsers
+        case .failure(let error):
+            MXLog.error(error)
+            return []
+        }
     }
     
     func getMatrixUser(userId: String) -> ZMatrixUser? {
@@ -74,7 +85,7 @@ class ZeroMatrixUsersService {
         roomMemberIds.formUnion(roomHeroIds)
         let roomUserIdsFromPL = roomInfo.userPowerLevels.map(\.key)
         roomMemberIds.formUnion(roomUserIdsFromPL)
-        if let matrixFormattedRoomName = roomInfo.matrixFormattedRoomName(homeServerPostFix: appSettings.zeroHomeServerPostfix) {
+        if let matrixFormattedRoomName = roomInfo.matrixFormattedRoomName(homeServerPostFix: ZeroContants.appServer.matrixHomeServerPostfix) {
             roomMemberIds.insert(matrixFormattedRoomName)
         }
         if let lastMessageSender = lastEventSender {
@@ -84,7 +95,7 @@ class ZeroMatrixUsersService {
     }
     
     func matrixFormattedUserId(userId: String) -> String {
-        userId.toMatrixUserIdFormat(appSettings.zeroHomeServerPostfix) ?? userId
+        userId.toMatrixUserIdFormat(ZeroContants.appServer.matrixHomeServerPostfix) ?? userId
     }
     
     func areUsersFetched() -> Bool { !allZeroUsers.isEmpty }

@@ -151,7 +151,7 @@ class EventTimelineItemProxy {
             return .init(id: item.sender,
                          displayName: eventSender?.displayName ?? displayName,
                          isDisplayNameAmbiguous: isDisplayNameAmbiguous,
-                         avatarURL: URL(string: (eventSender?.profileSummary?.profileImage ?? "")))
+                         avatarURL: avatarUrl.flatMap(URL.init(string:)))
         default:
             return .init(id: item.sender,
                          displayName: nil,

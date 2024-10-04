@@ -503,10 +503,9 @@ class ClientProxy: ClientProxyProtocol {
 
     func loadUserAvatarURL() async -> Result<Void, ClientProxyError> {
         do {
-            let userId = try client.userId()
-            let avatarURL = try await zeroMatrixUsersService.fetchZeroUser(userId: userId)?.profileImageURL
+            let urlString = try await client.avatarUrl()
             loadCachedAvatarURLTask?.cancel()
-            userAvatarURLSubject.send(avatarURL)
+            userAvatarURLSubject.send(urlString.flatMap(URL.init))
             return .success(())
         } catch {
             MXLog.error("Failed loading user avatar URL with error: \(error)")
@@ -586,7 +585,13 @@ class ClientProxy: ClientProxyProtocol {
     
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError> {
         do {
-            return try await .success(.init(sdkResults: client.searchUsers(searchTerm: searchTerm, limit: UInt64(limit))))
+            // return try await .success(.init(sdkResults: client.searchUsers(searchTerm: searchTerm, limit: UInt64(limit))))
+            
+            let zeroSearchUsers = try await zeroMatrixUsersService.searchZeroUsers(query: searchTerm)
+            let mappedMatrixUsers = try await zeroSearchUsers.concurrentMap({ zeroUser in
+                try await self.client.getProfile(userId: zeroUser.matrixId)
+            })
+            return .success(.init(zeroSearchResults: zeroSearchUsers, mappedMatrixUsers: mappedMatrixUsers))
         } catch {
             MXLog.error("Failed searching users with error: \(error)")
             return .failure(.sdkError(error))

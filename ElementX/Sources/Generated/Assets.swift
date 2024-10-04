@@ -34,6 +34,7 @@ internal enum Asset {
     internal static let textPrimary = ColorAsset(name: "colors/text-primary")
     internal static let textSecondary = ColorAsset(name: "colors/text-secondary")
     internal static let textWarning = ColorAsset(name: "colors/text-warning")
+    internal static let zeroContentBackgroundColor = ColorAsset(name: "colors/zero-content-background-color")
     internal static let zeroDarkGrey = ColorAsset(name: "colors/zero-dark-grey")
   }
   internal enum Images {

@@ -121,6 +121,11 @@
 		180EE5DB2CB01F5A00891BBC /* WysiwygComposer in Frameworks */ = {isa = PBXBuildFile; productRef = 180EE5DA2CB01F5A00891BBC /* WysiwygComposer */; };
 		180EE5DD2CB01F7000891BBC /* WysiwygComposer in Frameworks */ = {isa = PBXBuildFile; productRef = 180EE5DC2CB01F7000891BBC /* WysiwygComposer */; };
 		180EE5DE2CB022CF00891BBC /* EventTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B10423B9102086A2D9BFCBA /* EventTimelineItem.swift */; };
+		180EE5D62CAFF09100891BBC /* ZMatrixSearchedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */; };
+		180EE5D72CAFF09100891BBC /* ZMatrixSearchedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */; };
+		18115E522CAEA4D9001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
+		18115E532CAEA4D9001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
+		18115E542CAEB318001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
 		1827256F2C9994A000B513B5 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0724EBDFE8BB4C9E5547C57D /* Client.swift */; };
 		182725702C99952900B513B5 /* WebRegistrationScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C161B06F417CA5D1F1E088 /* WebRegistrationScreenModels.swift */; };
 		182725712C9995AB00B513B5 /* WebRegistrationScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7D851A10FDA55579960DC61 /* WebRegistrationScreenCoordinator.swift */; };
@@ -132,7 +137,6 @@
 		18326FD92CA53E7400389CB2 /* ZeroColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18326FD72CA53E6D00389CB2 /* ZeroColors.swift */; };
 		184D6FC22C7D83B1006266D8 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 184D6FC12C7D83B1006266D8 /* Alamofire */; };
 		184D6FC82C7D86D6006266D8 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FC72C7D86D6006266D8 /* APIManager.swift */; };
-		184D6FCA2C7D88D2006266D8 /* APIConfigs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FC92C7D88D2006266D8 /* APIConfigs.swift */; };
 		184D6FCD2C7D8AC2006266D8 /* ZeroAuthApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FCC2C7D8AC2006266D8 /* ZeroAuthApi.swift */; };
 		184D6FD22C7D8C8D006266D8 /* ZMatrixSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FD12C7D8C8D006266D8 /* ZMatrixSession.swift */; };
 		184D6FD42C7D8F45006266D8 /* ZSessionDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FD32C7D8F45006266D8 /* ZSessionDataResponse.swift */; };
@@ -198,6 +202,8 @@
 		18BF59D02CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18BF59CE2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard */; };
 		18CB801E2C7F2CE2003BC289 /* ZeroLoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB801D2C7F2CE2003BC289 /* ZeroLoginScreen.swift */; };
 		18CB80212C7F310E003BC289 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB80202C7F310E003BC289 /* ViewModifiers.swift */; };
+		18D1EE272CAE99B9007BEB15 /* ZeroInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18D1EE262CAE99B9007BEB15 /* ZeroInfo.plist */; };
+		18D1EE282CAE99B9007BEB15 /* ZeroInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18D1EE262CAE99B9007BEB15 /* ZeroInfo.plist */; };
 		18E3786918486D4C9726BC84 /* FormButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FBFC09F9DAFF1E4BA97849 /* FormButtonStyles.swift */; };
 		18E99FED2C9446EB0082DDA4 /* MessageContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E99FEC2C9446EB0082DDA4 /* MessageContentHandler.swift */; };
 		18E99FF02C9447740082DDA4 /* MessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E99FEF2C9447740082DDA4 /* MessageContent.swift */; };
@@ -673,7 +679,6 @@
 		18E9A5EE2C9829970082DDA4 /* PollOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B19D10B102956066AF117B /* PollOptionView.swift */; };
 		18E9A5EF2C9829970082DDA4 /* PollRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5281C5CDC4A712265A0B5FBF /* PollRoomTimelineItem.swift */; };
 		18E9A5F02C9829970082DDA4 /* PollRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF8548D48512127CCC17C520 /* PollRoomTimelineView.swift */; };
-		18E9A5F12C9829970082DDA4 /* APIConfigs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FC92C7D88D2006266D8 /* APIConfigs.swift */; };
 		18E9A5F22C9829970082DDA4 /* PollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638790D3F915F0909315C47A /* PollView.swift */; };
 		18E9A5F32C9829970082DDA4 /* PostHogAnalyticsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1715E3D7F53C0748AA50C91C /* PostHogAnalyticsClient.swift */; };
 		18E9A5F42C9829970082DDA4 /* (null) in Sources */ = {isa = PBXBuildFile; };
@@ -2298,11 +2303,12 @@
 		16D09C79746BDCD9173EB3A7 /* RoomDetailsEditScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsEditScreenModels.swift; sourceTree = "<group>"; };
 		1715E3D7F53C0748AA50C91C /* PostHogAnalyticsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHogAnalyticsClient.swift; sourceTree = "<group>"; };
 		1734A445A58ED855B977A0A8 /* TracingConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracingConfigurationTests.swift; sourceTree = "<group>"; };
+		180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixSearchedUser.swift; sourceTree = "<group>"; };
+		18115E512CAEA4D4001A8F4A /* ZeroContants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroContants.swift; sourceTree = "<group>"; };
 		18326FD72CA53E6D00389CB2 /* ZeroColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroColors.swift; sourceTree = "<group>"; };
 		18486B87745B1811E7FBD3D2 /* AnalyticsPromptScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsPromptScreenModels.swift; sourceTree = "<group>"; };
 		184CF8C196BE143AE226628D /* DecorationTimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecorationTimelineItemProtocol.swift; sourceTree = "<group>"; };
 		184D6FC72C7D86D6006266D8 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
-		184D6FC92C7D88D2006266D8 /* APIConfigs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIConfigs.swift; sourceTree = "<group>"; };
 		184D6FCC2C7D8AC2006266D8 /* ZeroAuthApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroAuthApi.swift; sourceTree = "<group>"; };
 		184D6FD12C7D8C8D006266D8 /* ZMatrixSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixSession.swift; sourceTree = "<group>"; };
 		184D6FD32C7D8F45006266D8 /* ZSessionDataResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZSessionDataResponse.swift; sourceTree = "<group>"; };
@@ -2319,7 +2325,7 @@
 		1868A8A02CA21A2100DC382D /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		1868A8A12CA21A2100DC382D /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Bold.ttf"; sourceTree = "<group>"; };
 		1868A8B82CA2D18600DC382D /* ZeroChatApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroChatApi.swift; sourceTree = "<group>"; };
-		1868A8BE2CA2D91000DC382D /* ZSentMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZSentMessage.swift; path = Zero/Network/Models/Response/ZSentMessage.swift; sourceTree = SOURCE_ROOT; };
+		1868A8BE2CA2D91000DC382D /* ZSentMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZSentMessage.swift; path = Zero/Sources/Network/Models/Response/ZSentMessage.swift; sourceTree = SOURCE_ROOT; };
 		1868A8C12CA338DF00DC382D /* Encodable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Extensions.swift"; sourceTree = "<group>"; };
 		1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyResponse.swift; sourceTree = "<group>"; };
 		1882EB782C8F84BD001DA2A9 /* ZeroUsersApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroUsersApi.swift; sourceTree = "<group>"; };
@@ -2333,13 +2339,14 @@
 		18BF59CE2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ZeroLaunchScreen.storyboard; sourceTree = "<group>"; };
 		18CB801D2C7F2CE2003BC289 /* ZeroLoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroLoginScreen.swift; sourceTree = "<group>"; };
 		18CB80202C7F310E003BC289 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
+		18D1EE252CAE99AC007BEB15 /* Zero.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Zero.entitlements; sourceTree = "<group>"; };
+		18D1EE262CAE99B9007BEB15 /* ZeroInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ZeroInfo.plist; sourceTree = "<group>"; };
 		18E99FEC2C9446EB0082DDA4 /* MessageContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContentHandler.swift; sourceTree = "<group>"; };
 		18E99FEF2C9447740082DDA4 /* MessageContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContent.swift; sourceTree = "<group>"; };
 		18E99FF12C944F350082DDA4 /* ZeroAttachmentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroAttachmentService.swift; sourceTree = "<group>"; };
 		18E99FF32C944F670082DDA4 /* ZeroAttachmentApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroAttachmentApi.swift; sourceTree = "<group>"; };
 		18E99FF52C9450F00082DDA4 /* ZAttachmentUploadInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZAttachmentUploadInfo.swift; sourceTree = "<group>"; };
 		18E9A7922C9829970082DDA4 /* Zero.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zero.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		18E9A7932C9829980082DDA4 /* Zero-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Zero-Info.plist"; path = "/Users/apple/Git/Zero App/ZeroX/zero-ios-x/Zero-Info.plist"; sourceTree = "<absolute>"; };
 		18F2958E6D247AE2516BEEE8 /* ClientProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientProxy.swift; sourceTree = "<group>"; };
 		18FE0CDF1FFA92EA7EE17B0B /* RoomTimelineControllerFactoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineControllerFactoryProtocol.swift; sourceTree = "<group>"; };
 		190EC7285D3CFEF0D3011BCF /* GeoURI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoURI.swift; sourceTree = "<group>"; };
@@ -3608,7 +3615,6 @@
 		0B7746360C4753B5A014838F /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
-				18E9A7932C9829980082DDA4 /* Zero-Info.plist */,
 				3D4DD336905C72F95EAF34B7 /* ElementX-Bridging-Header.h */,
 				9C5E81214D27A6B898FC397D /* ElementX.entitlements */,
 				81B17DB1BC3B0C62AF84D230 /* Info.plist */,
@@ -3741,15 +3747,33 @@
 			path = PreviewTests;
 			sourceTree = "<group>";
 		};
-		184D6FBF2C7D8036006266D8 /* Zero */ = {
+		18115E4F2CAE9D47001A8F4A /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				1868A86B2CA2175A00DC382D /* Resources */,
+				18115E502CAEA4C0001A8F4A /* Constants */,
 				18E99FEE2C9447620082DDA4 /* Models */,
 				1882EB982C91B9F6001DA2A9 /* Utils */,
 				1882EB8A2C90C8DC001DA2A9 /* Extensions */,
 				CC8F34922C7DE37A002D92F9 /* Screens */,
 				184D6FC52C7D8563006266D8 /* Network */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		18115E502CAEA4C0001A8F4A /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				18115E512CAEA4D4001A8F4A /* ZeroContants.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		184D6FBF2C7D8036006266D8 /* Zero */ = {
+			isa = PBXGroup;
+			children = (
+				18115E4F2CAE9D47001A8F4A /* Sources */,
+				18D1EE242CAE998A007BEB15 /* SupportingFiles */,
+				1868A86B2CA2175A00DC382D /* Resources */,
 			);
 			path = Zero;
 			sourceTree = "<group>";
@@ -3768,7 +3792,6 @@
 			isa = PBXGroup;
 			children = (
 				184D6FC72C7D86D6006266D8 /* APIManager.swift */,
-				184D6FC92C7D88D2006266D8 /* APIConfigs.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -3804,6 +3827,7 @@
 		184D6FD02C7D8B91006266D8 /* Response */ = {
 			isa = PBXGroup;
 			children = (
+				180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */,
 				184D6FD12C7D8C8D006266D8 /* ZMatrixSession.swift */,
 				184D6FD32C7D8F45006266D8 /* ZSessionDataResponse.swift */,
 				184D6FD52C7D9261006266D8 /* ZSSOToken.swift */,
@@ -3916,6 +3940,15 @@
 				18CB80202C7F310E003BC289 /* ViewModifiers.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		18D1EE242CAE998A007BEB15 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				18D1EE262CAE99B9007BEB15 /* ZeroInfo.plist */,
+				18D1EE252CAE99AC007BEB15 /* Zero.entitlements */,
+			);
+			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
 		18E99FEE2C9447620082DDA4 /* Models */ = {
@@ -7218,6 +7251,7 @@
 				18E9A7602C9829970082DDA4 /* InfoPlist.strings in Resources */,
 				18E9A7612C9829970082DDA4 /* Localizable.strings in Resources */,
 				18E9A7622C9829970082DDA4 /* Localizable.stringsdict in Resources */,
+				18D1EE272CAE99B9007BEB15 /* ZeroInfo.plist in Resources */,
 				1868A8AF2CA21A2200DC382D /* Inter-Medium.ttf in Resources */,
 				18E9A7632C9829970082DDA4 /* MapAssets.xcassets in Resources */,
 				18E9A7642C9829970082DDA4 /* PrivacyInfo.xcprivacy in Resources */,
@@ -7248,6 +7282,7 @@
 				B6DA66EFC13A90846B625836 /* InfoPlist.strings in Resources */,
 				5F5488FBC9CFEB6F433D74A4 /* Localizable.strings in Resources */,
 				0EA6537A07E2DC882AEA5962 /* Localizable.stringsdict in Resources */,
+				18D1EE282CAE99B9007BEB15 /* ZeroInfo.plist in Resources */,
 				1868A8AE2CA21A2200DC382D /* Inter-Medium.ttf in Resources */,
 				6860721DB3091BE08164C132 /* MapAssets.xcassets in Resources */,
 				8B408C574E35E1C9B43A50CE /* PrivacyInfo.xcprivacy in Resources */,
@@ -7536,6 +7571,7 @@
 			files = (
 				A2172B5A26976F9174228B8A /* AppHooks.swift in Sources */,
 				43F06DF42EC00B3CE2B020A4 /* AppSettings.swift in Sources */,
+				18115E542CAEB318001A8F4A /* ZeroContants.swift in Sources */,
 				F253AAB4C8F06208173C9C4A /* Assets.swift in Sources */,
 				484202C5D50983442D24D061 /* AttributedString.swift in Sources */,
 				CDCA8A559E098503DDE29477 /* AttributedStringBuilder.swift in Sources */,
@@ -8166,6 +8202,7 @@
 				18E9A5BF2C9829970082DDA4 /* NotificationSettingsScreenModels.swift in Sources */,
 				18E9A5C02C9829970082DDA4 /* NotificationSettingsScreenViewModel.swift in Sources */,
 				18E9A5C12C9829970082DDA4 /* NotificationSettingsScreenViewModelProtocol.swift in Sources */,
+				180EE5D62CAFF09100891BBC /* ZMatrixSearchedUser.swift in Sources */,
 				18E9A5C22C9829970082DDA4 /* OIDCAccountSettingsPresenter.swift in Sources */,
 				18E9A5C32C9829970082DDA4 /* OIDCAuthenticationPresenter.swift in Sources */,
 				18E9A5C42C9829970082DDA4 /* OIDCConfigurationProxy.swift in Sources */,
@@ -8213,7 +8250,6 @@
 				18E9A5EE2C9829970082DDA4 /* PollOptionView.swift in Sources */,
 				18E9A5EF2C9829970082DDA4 /* PollRoomTimelineItem.swift in Sources */,
 				18E9A5F02C9829970082DDA4 /* PollRoomTimelineView.swift in Sources */,
-				18E9A5F12C9829970082DDA4 /* APIConfigs.swift in Sources */,
 				18E9A5F22C9829970082DDA4 /* PollView.swift in Sources */,
 				18E9A5F32C9829970082DDA4 /* PostHogAnalyticsClient.swift in Sources */,
 				18E9A5F42C9829970082DDA4 /* (null) in Sources */,
@@ -8225,6 +8261,7 @@
 				18E9A5FA2C9829970082DDA4 /* QRCodeLoginScreenCoordinator.swift in Sources */,
 				18E9A5FB2C9829970082DDA4 /* QRCodeLoginScreenModels.swift in Sources */,
 				18E9A5FC2C9829970082DDA4 /* QRCodeLoginScreenViewModel.swift in Sources */,
+				18115E522CAEA4D9001A8F4A /* ZeroContants.swift in Sources */,
 				18E9A5FD2C9829970082DDA4 /* QRCodeLoginScreenViewModelProtocol.swift in Sources */,
 				18E9A5FE2C9829970082DDA4 /* QRCodeLoginService.swift in Sources */,
 				18E9A5FF2C9829970082DDA4 /* QRCodeLoginServiceProtocol.swift in Sources */,
@@ -8786,6 +8823,7 @@
 				565868808A1DA565707394ED /* CurrentValuePublisher.swift in Sources */,
 				A722F426FD81FC67706BB1E0 /* CustomLayoutLabelStyle.swift in Sources */,
 				12C867E85E6D12EEDFD0B127 /* CustomStringConvertible.swift in Sources */,
+				180EE5D72CAFF09100891BBC /* ZMatrixSearchedUser.swift in Sources */,
 				C4F69156C31A447FEFF2A47C /* DTHTMLElement+AttributedStringBuilder.swift in Sources */,
 				9905C1B1C6EFE38F3A6533F3 /* Data.swift in Sources */,
 				C6C06DDA8881260303FBA3A0 /* Date.swift in Sources */,
@@ -8942,6 +8980,7 @@
 				B5479997ECC516C121E6625E /* LocationMarkerView.swift in Sources */,
 				D46C33F8B61B55F0C8C2D15F /* LocationRoomTimelineItem.swift in Sources */,
 				854E82E064BA53CD0BC45600 /* LocationRoomTimelineItemContent.swift in Sources */,
+				18115E532CAEA4D9001A8F4A /* ZeroContants.swift in Sources */,
 				973C48F9E4EFB808F61BE401 /* LocationRoomTimelineView.swift in Sources */,
 				29491EE7AE37E239E839C5A3 /* LocationSharingScreenModels.swift in Sources */,
 				36DE961B784087D5E18EF9BA /* LogViewerScreen.swift in Sources */,
@@ -9089,7 +9128,6 @@
 				4716587A9BA69ED8FD1B986B /* PollOptionView.swift in Sources */,
 				864C0D3A4077BF433DBC691F /* PollRoomTimelineItem.swift in Sources */,
 				128FFD8A3D85845F9A927F47 /* PollRoomTimelineView.swift in Sources */,
-				184D6FCA2C7D88D2006266D8 /* APIConfigs.swift in Sources */,
 				1307268DC41730E5BCF7D9A0 /* PollView.swift in Sources */,
 				DF504B10A4918F971A57BEF2 /* PostHogAnalyticsClient.swift in Sources */,
 				6793E75E3EBE48EBB8F857AF /* ProcessInfo.swift in Sources */,
@@ -9689,11 +9727,11 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				BASE_APP_GROUP_IDENTIFIER = com.zero.ios.messenger;
 				BASE_BUNDLE_IDENTIFIER = com.zero.ios.messenger;
-				CODE_SIGN_ENTITLEMENTS = ElementX/SupportingFiles/ElementX.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Zero/SupportingFiles/Zero.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEVELOPMENT_TEAM = UDZQVRDAAC;
-				INFOPLIST_FILE = "Zero/Zero-Info.plist";
+				INFOPLIST_FILE = Zero/SupportingFiles/ZeroInfo.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Zero;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
@@ -9724,11 +9762,11 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				BASE_APP_GROUP_IDENTIFIER = com.zero.ios.messenger;
 				BASE_BUNDLE_IDENTIFIER = com.zero.ios.messenger;
-				CODE_SIGN_ENTITLEMENTS = ElementX/SupportingFiles/ElementX.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Zero/SupportingFiles/Zero.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEVELOPMENT_TEAM = UDZQVRDAAC;
-				INFOPLIST_FILE = "Zero/Zero-Info.plist";
+				INFOPLIST_FILE = Zero/SupportingFiles/ZeroInfo.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Zero;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UILaunchScreen_Generation = NO;

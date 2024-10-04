@@ -20,13 +20,13 @@ struct CreateRoomScreen: View {
     var body: some View {
         Form {
             roomSection
-            topicSection
+            // topicSection
             securitySection
         }
         .compoundList()
         .track(screen: .CreateRoom)
         .scrollDismissesKeyboard(.immediately)
-        .navigationTitle(L10n.screenCreateRoomTitle)
+        .navigationTitle("Group Details")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .readFrame($frame)
@@ -35,17 +35,17 @@ struct CreateRoomScreen: View {
     
     private var roomSection: some View {
         Section {
-            HStack(alignment: .center, spacing: 16) {
+            VStack(alignment: .center, spacing: 16) {
                 roomAvatarButton
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
-                        .padding(.leading, ListRowPadding.horizontal)
-                        .compoundListSectionHeader()
+//                    Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
+//                        .padding(.leading, ListRowPadding.horizontal)
+//                        .compoundListSectionHeader()
                     
                     TextField(L10n.screenCreateRoomRoomNameLabel,
                               text: $context.roomName,
-                              prompt: Text(L10n.commonRoomNamePlaceholder).foregroundColor(.compound.textPlaceholder),
+                              prompt: Text("Group Name").foregroundColor(.compound.textPlaceholder),
                               axis: .horizontal)
                         .focused($focus, equals: .name)
                         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)
@@ -72,12 +72,12 @@ struct CreateRoomScreen: View {
                 } placeholder: {
                     ProgressView()
                 }
-                .scaledFrame(size: 70)
+                .scaledFrame(size: 120)
                 .clipShape(Circle())
             } else {
                 CompoundIcon(\.takePhoto, size: .custom(36), relativeTo: .title)
                     .foregroundColor(.compound.iconSecondary)
-                    .scaledFrame(size: 70, relativeTo: .title)
+                    .scaledFrame(size: 120, relativeTo: .title)
                     .background(.compound.bgSubtlePrimary, in: Circle())
             }
         }
@@ -135,18 +135,18 @@ struct CreateRoomScreen: View {
     
     private var securitySection: some View {
         Section {
-            ListRow(label: .default(title: L10n.screenCreateRoomPrivateOptionTitle,
-                                    description: L10n.screenCreateRoomPrivateOptionDescription,
+            ListRow(label: .default(title: "Encrypted Group",
+                                    description: "Encrypted Groups are ideal for more focused, intimate conversations and are encrypted by default. Check this box if you are creating a room intended for smaller groups.",
                                     icon: \.lock,
                                     iconAlignment: .top),
                     kind: .selection(isSelected: context.isRoomPrivate) { context.isRoomPrivate = true })
-            ListRow(label: .default(title: L10n.screenCreateRoomPublicOptionTitle,
-                                    description: L10n.screenCreateRoomPublicOptionDescription,
+            ListRow(label: .default(title: "Super Group",
+                                    description: "Super Groups are designed to accommodate larger communities and are not encrypted by default. Check this box if you are creating a room intended for larger groups (10+ people).",
                                     icon: \.public,
                                     iconAlignment: .top),
                     kind: .selection(isSelected: !context.isRoomPrivate) { context.isRoomPrivate = false })
         } header: {
-            Text(L10n.commonSecurity.uppercased())
+            Text("Group Type")
                 .compoundListSectionHeader()
         }
     }

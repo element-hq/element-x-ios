@@ -22,7 +22,7 @@ struct StartChatScreen: View {
         .compoundList()
         .track(screen: .StartChat)
         .scrollDismissesKeyboard(.immediately)
-        .navigationTitle(L10n.actionStartChat)
+        .navigationTitle("New Conversation")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .searchController(query: $context.searchQuery,
@@ -39,7 +39,7 @@ struct StartChatScreen: View {
     @ViewBuilder
     private var mainContent: some View {
         createRoomSection
-        inviteFriendsSection
+        // inviteFriendsSection
         usersSection
     }
     
@@ -55,7 +55,7 @@ struct StartChatScreen: View {
     
     private var createRoomSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.screenCreateRoomActionCreateRoom,
+            ListRow(label: .default(title: "Create a Group",
                                     icon: \.plus),
                     kind: .navigationLink { context.send(viewAction: .createRoom) })
                 .accessibilityIdentifier(A11yIdentifiers.startChatScreen.createRoom)

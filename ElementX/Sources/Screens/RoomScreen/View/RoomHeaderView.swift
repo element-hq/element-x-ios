@@ -30,17 +30,10 @@ struct RoomHeaderView: View {
     
     @ViewBuilder
     private var avatarImage: some View {
-        switch roomAvatar {
-        case .room(let id, let name, let avatarURL):
-            AvatarView(url: avatarURL,
-                       placeholder: Asset.Images.defaultAvatarIcon,
-                       style: .small)
-        default:
-            RoomAvatarImage(avatar: roomAvatar,
-                            avatarSize: .room(on: .timeline),
-                            mediaProvider: mediaProvider)
-                .accessibilityIdentifier(A11yIdentifiers.roomScreen.avatar)
-        }
+        RoomAvatarImage(avatar: roomAvatar,
+                        avatarSize: .room(on: .timeline),
+                        mediaProvider: mediaProvider)
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.avatar)
     }
 }
 

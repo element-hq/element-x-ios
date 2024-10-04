@@ -60,10 +60,7 @@ enum MatrixEntityRegex: String {
         return match.range.length == identifier.count
     }
     
-    static func createIdentifierFromZeroMention(inputString: String) -> String {
-        // TODO: need to check from where we can get this value instead of hardcoding it
-        let zeroHomeServerPostfix = "zos-home-2.zero.tech"
-        
+    static func createIdentifierFromZeroMention(inputString: String) -> String {        
         let pattern = #"user:([^\)]+)"#
         do {
             // Create the regular expression object
@@ -73,7 +70,7 @@ enum MatrixEntityRegex: String {
                 // Extract the matched range for the capture group (substring after "user:")
                 if let range = Range(match.range(at: 1), in: inputString) {
                     let extractedSubstring = String(inputString[range])
-                    return "@\(extractedSubstring):\(zeroHomeServerPostfix)"
+                    return "@\(extractedSubstring):\(ZeroContants.appServer.matrixHomeServerPostfix)"
                 } else {
                     return inputString
                 }

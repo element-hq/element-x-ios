@@ -128,7 +128,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     }
     
     private func fetchUsers() {
-        guard searchQuery.count >= 3 else {
+        guard searchQuery.count >= 2 else {
             state.usersSection = .init(type: .suggestions, users: suggestedUsers)
             return
         }

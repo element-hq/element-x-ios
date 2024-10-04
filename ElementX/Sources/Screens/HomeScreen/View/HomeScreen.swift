@@ -135,24 +135,28 @@ struct HomeScreen: View {
             Button {
                 context.send(viewAction: .showSettings)
             } label: {
-//                LoadableAvatarImage(url: context.viewState.userAvatarURL,
-//                                    name: context.viewState.userDisplayName,
-//                                    contentID: context.viewState.userID,
-//                                    avatarSize: .user(on: .home),
-//                                    mediaProvider: context.mediaProvider)
-//                    .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
-//                    .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
-//                    .compositingGroup()
-                AvatarView(url: context.viewState.userAvatarURL,
-                           placeholder: Asset.Images.defaultAvatarIcon,
-                           style: .small)
+                HStack {
+                    LoadableAvatarImage(url: context.viewState.userAvatarURL,
+                                        name: context.viewState.userDisplayName,
+                                        contentID: context.viewState.userID,
+                                        avatarSize: .user(on: .home),
+                                        mediaProvider: context.mediaProvider)
+                        .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
+                        .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
+                        .compositingGroup()
+                    
+                    
+                    Text(context.viewState.userDisplayName ?? "")
+                        .font(.zero.bodyMD)
+                        .foregroundColor(.compound.textPrimary)
+                }
             }
             .accessibilityLabel(L10n.commonSettings)
         }
         
-//        ToolbarItem(placement: .primaryAction) {
-//            newRoomButton
-//        }
+        ToolbarItem(placement: .primaryAction) {
+            newRoomButton
+        }
     }
     
     private var bloom: some View {
@@ -166,7 +170,7 @@ struct HomeScreen: View {
             Button {
                 context.send(viewAction: .startChat)
             } label: {
-                CompoundIcon(\.compose)
+                CompoundIcon(\.plus)
             }
             .accessibilityLabel(L10n.actionStartChat)
             .accessibilityIdentifier(A11yIdentifiers.homeScreen.startChat)

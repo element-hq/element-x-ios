@@ -19,7 +19,7 @@ struct InviteUsersScreen: View {
         mainContent
             .compoundList()
             .scrollDismissesKeyboard(.immediately)
-            .navigationTitle(L10n.screenCreateRoomAddPeopleTitle)
+            .navigationTitle("Select Members")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .searchController(query: $context.searchQuery,
@@ -131,12 +131,14 @@ struct InviteUsersScreen: View {
             }
         }
         
-        ToolbarItem(placement: .confirmationAction) {
-            Button(context.viewState.actionText) {
-                context.send(viewAction: .proceed)
+        if !context.viewState.selectedUsers.isEmpty {
+            ToolbarItem(placement: .confirmationAction) {
+                Button(context.viewState.actionText) {
+                    context.send(viewAction: .proceed)
+                }
+                .accessibilityIdentifier(A11yIdentifiers.inviteUsersScreen.proceed)
+                .disabled(context.viewState.isActionDisabled)
             }
-            .accessibilityIdentifier(A11yIdentifiers.inviteUsersScreen.proceed)
-            .disabled(context.viewState.isActionDisabled)
         }
     }
     
