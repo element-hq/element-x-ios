@@ -10,5 +10,6 @@ struct Tools: ParsableCommand {
                                                                   DownloadStrings.self,
                                                                   Locheck.self,
                                                                   GenerateSDKMocks.self,
-                                                                  GenerateSAS.self])
+                                                                  GenerateSAS.self,
+                                                                  SimulatorKeyboard.self])
 }
