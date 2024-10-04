@@ -117,12 +117,12 @@
 		172E6E9A612ADCF10A62CF13 /* BugReportServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A68BCE6438873D2661D93D0 /* BugReportServiceProtocol.swift */; };
 		1795EA6A6C4942CAE0459DF0 /* SecureBackupKeyBackupScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B612853BFB68373249777B /* SecureBackupKeyBackupScreenViewModel.swift */; };
 		17BC15DA08A52587466698C5 /* RoomMessageEventStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80E815FF3CC5E5A355E3A25E /* RoomMessageEventStringBuilder.swift */; };
+		180EE5D62CAFF09100891BBC /* ZMatrixSearchedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */; };
+		180EE5D72CAFF09100891BBC /* ZMatrixSearchedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */; };
 		180EE5D82CB01D5800891BBC /* MediaProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F65E4BB9E82EB8373207CF8 /* MediaProviderMock.swift */; };
 		180EE5DB2CB01F5A00891BBC /* WysiwygComposer in Frameworks */ = {isa = PBXBuildFile; productRef = 180EE5DA2CB01F5A00891BBC /* WysiwygComposer */; };
 		180EE5DD2CB01F7000891BBC /* WysiwygComposer in Frameworks */ = {isa = PBXBuildFile; productRef = 180EE5DC2CB01F7000891BBC /* WysiwygComposer */; };
 		180EE5DE2CB022CF00891BBC /* EventTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B10423B9102086A2D9BFCBA /* EventTimelineItem.swift */; };
-		180EE5D62CAFF09100891BBC /* ZMatrixSearchedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */; };
-		180EE5D72CAFF09100891BBC /* ZMatrixSearchedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */; };
 		18115E522CAEA4D9001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
 		18115E532CAEA4D9001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
 		18115E542CAEB318001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
@@ -9727,7 +9727,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				BASE_APP_GROUP_IDENTIFIER = com.zero.ios.messenger;
 				BASE_BUNDLE_IDENTIFIER = com.zero.ios.messenger;
-				CODE_SIGN_ENTITLEMENTS = Zero/SupportingFiles/Zero.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ElementX/SupportingFiles/ElementX.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEVELOPMENT_TEAM = UDZQVRDAAC;
@@ -9762,7 +9762,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				BASE_APP_GROUP_IDENTIFIER = com.zero.ios.messenger;
 				BASE_BUNDLE_IDENTIFIER = com.zero.ios.messenger;
-				CODE_SIGN_ENTITLEMENTS = Zero/SupportingFiles/Zero.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ElementX/SupportingFiles/ElementX.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEVELOPMENT_TEAM = UDZQVRDAAC;

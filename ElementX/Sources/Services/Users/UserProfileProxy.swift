@@ -62,10 +62,10 @@ extension SearchUsersResultsProxy {
     }
     
     init(zeroSearchResults: [ZMatrixSearchedUser], mappedMatrixUsers: [UserProfile]) {
-        results = zeroSearchResults.map({ user in
+        results = zeroSearchResults.map { user in
             let avatarUrl = mappedMatrixUsers.first(where: { $0.userId == user.matrixId })?.avatarUrl
-            return UserProfileProxy.init(zeroSearchedUser: user, avatarUrl: avatarUrl)
-        })
+            return UserProfileProxy(zeroSearchedUser: user, avatarUrl: avatarUrl)
+        }
         limited = true
     }
 }

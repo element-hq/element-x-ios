@@ -145,7 +145,6 @@ struct HomeScreen: View {
                         .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
                         .compositingGroup()
                     
-                    
                     Text(context.viewState.userDisplayName ?? "")
                         .font(.zero.bodyMD)
                         .foregroundColor(.compound.textPrimary)

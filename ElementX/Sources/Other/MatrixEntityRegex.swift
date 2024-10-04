@@ -60,7 +60,7 @@ enum MatrixEntityRegex: String {
         return match.range.length == identifier.count
     }
     
-    static func createIdentifierFromZeroMention(inputString: String) -> String {        
+    static func createIdentifierFromZeroMention(inputString: String) -> String {
         let pattern = #"user:([^\)]+)"#
         do {
             // Create the regular expression object

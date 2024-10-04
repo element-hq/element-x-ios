@@ -16,8 +16,8 @@ extension ZMatrixSearchedUser: Equatable {
     }
 }
 
-//extension ZMatrixSearchedUser {
+// extension ZMatrixSearchedUser {
 //    public var primaryZIdOrWalletAddress: String? {
 //        return primaryZID ?? Helper.formattedPrimaryWalletAddress(address: primaryWalletAddress)
 //    }
-//}
+// }

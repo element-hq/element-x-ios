@@ -36,7 +36,7 @@ struct UserProfileListRow: View {
                                icon: avatar,
                                role: isUnknownProfile ? .error : nil),
                 kind: kind)
-        .padding(.vertical, 6)
+            .padding(.vertical, 6)
     }
     
     var avatar: LoadableAvatarImage {

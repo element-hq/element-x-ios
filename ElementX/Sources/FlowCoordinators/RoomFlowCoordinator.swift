@@ -1389,14 +1389,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
 //                                                                                            userIndicatorController: userIndicatorController))
 //        coordinator.actionsPublisher.sink { [weak self] action in
 //            guard let self else { return }
-//            
+//
 //            switch action {
 //            case .dismiss:
 //                navigationStackCoordinator.setSheetCoordinator(nil)
 //            }
 //        }
 //        .store(in: &cancellables)
-//        
+//
 //        navigationStackCoordinator.setSheetCoordinator(coordinator) { [weak self] in
 //            self?.stateMachine.tryEvent(.dismissResolveSendFailure)
 //        }

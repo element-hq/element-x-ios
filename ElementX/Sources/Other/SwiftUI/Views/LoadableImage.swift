@@ -270,9 +270,9 @@ private class ContentLoader: ObservableObject {
     func load() async {
         /// Bypassed `isGIF` check to load gifs by-default in avatars as `mediaSource.mimeType` is `nil` in all cases
         // if isGIF {
-            if case let .success(data) = await mediaProvider?.loadImageDataFromSource(mediaSource) {
-                cachedContent = .gifData(data)
-            }
+        if case let .success(data) = await mediaProvider?.loadImageDataFromSource(mediaSource) {
+            cachedContent = .gifData(data)
+        }
         // }
         else {
             guard let task = mediaProvider?.loadImageRetryingOnReconnection(mediaSource, size: size) else {

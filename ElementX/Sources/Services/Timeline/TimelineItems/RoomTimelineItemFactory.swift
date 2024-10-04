@@ -560,12 +560,10 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         }
         
         // Replace matches with the appropriate HTML anchor tags
-        let modifiedText = regex.stringByReplacingMatches(
-            in: text,
-            options: [],
-            range: NSRange(text.startIndex..<text.endIndex, in: text),
-            withTemplate: "<a href=\"\(baseUrl)$2\(domain)\">@$2\(domain)</a>"
-        )
+        let modifiedText = regex.stringByReplacingMatches(in: text,
+                                                          options: [],
+                                                          range: NSRange(text.startIndex..<text.endIndex, in: text),
+                                                          withTemplate: "<a href=\"\(baseUrl)$2\(domain)\">@$2\(domain)</a>")
         
         return "<p>\(modifiedText)</p>\n"
     }

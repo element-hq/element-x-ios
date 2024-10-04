@@ -15,10 +15,10 @@ struct PlaceholderAvatarImage: View {
     private let contentID: String?
     
     var body: some View {
-        GeometryReader { geometry in
+        GeometryReader { _ in
 //            ZStack(alignment: .center) {
 //                backgroundColor
-//                
+//
 //                // This text's frame doesn't look right when redacted
 //                if redactionReasons != .placeholder {
 //                    Text(textForImage)
@@ -52,7 +52,7 @@ struct PlaceholderAvatarImage: View {
 //        }
 //
 //        return avatarColor?.background ?? .compound.iconPrimary
-        return Asset.Colors.zeroContentBackgroundColor.swiftUIColor
+        Asset.Colors.zeroContentBackgroundColor.swiftUIColor
     }
     
     private var avatarColor: DecorativeColor? {

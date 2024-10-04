@@ -377,7 +377,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 let replacementMentionString = "@[\(displayName)](user:\(cleanedUserId))"
                 // let displayName = attributedString.attribute(.MatrixUserDisplayName, at: range.location, effectiveRange: nil)
                 
-                //attributedString.replaceCharacters(in: range, with: "[\(displayName ?? userID)](\(value))")
+                // attributedString.replaceCharacters(in: range, with: "[\(displayName ?? userID)](\(value))")
                 attributedString.replaceCharacters(in: range, with: replacementMentionString)
                 userIDs.insert(userID)
                 

@@ -102,7 +102,7 @@ enum RoomAvatarSizeOnScreen {
         case .globalSearch:
             return 36
         case .home:
-            //return 52
+            // return 52
             return 48
         case .details:
             return 96
