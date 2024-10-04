@@ -78,6 +78,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        timelineViewState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                        ownUserID: roomProxy.ownUserID,
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,
+                                                       hideTimelineMedia: appSettings.hideTimelineMedia,
                                                        bindings: .init(reactionsCollapsed: [:])),
                    mediaProvider: mediaProvider)
         
@@ -336,8 +337,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             state.canCurrentUserRedactSelf = false
         }
         
-        if appSettings.pinningEnabled,
-           case let .success(value) = await roomProxy.canUserPinOrUnpin(userID: roomProxy.ownUserID) {
+        if case let .success(value) = await roomProxy.canUserPinOrUnpin(userID: roomProxy.ownUserID) {
             state.canCurrentUserPin = value
         } else {
             state.canCurrentUserPin = false
@@ -441,12 +441,14 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         appSettings.$viewSourceEnabled
             .weakAssign(to: \.state.isViewSourceEnabled, on: self)
             .store(in: &cancellables)
+        
+        appSettings.$hideTimelineMedia
+            .weakAssign(to: \.state.hideTimelineMedia, on: self)
+            .store(in: &cancellables)
     }
     
     private func updatePinnedEventIDs() async {
-        if appSettings.pinningEnabled {
-            state.pinnedEventIDs = await roomProxy.pinnedEventIDs
-        }
+        state.pinnedEventIDs = await roomProxy.pinnedEventIDs
     }
 
     private func setupDirectRoomSubscriptionsIfNeeded() {
@@ -662,19 +664,19 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             if itemGroup.count == 1 {
                 if let firstItem = itemGroup.first {
                     timelineItemsDictionary.updateValue(updateViewState(item: firstItem, groupStyle: .single),
-                                                        forKey: firstItem.id.timelineID)
+                                                        forKey: firstItem.id.uniqueID)
                 }
             } else {
                 for (index, item) in itemGroup.enumerated() {
                     if index == 0 {
                         timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: state.isPinnedEventsTimeline ? .single : .first),
-                                                            forKey: item.id.timelineID)
+                                                            forKey: item.id.uniqueID)
                     } else if index == itemGroup.count - 1 {
                         timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: state.isPinnedEventsTimeline ? .single : .last),
-                                                            forKey: item.id.timelineID)
+                                                            forKey: item.id.uniqueID)
                     } else {
                         timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: state.isPinnedEventsTimeline ? .single : .middle),
-                                                            forKey: item.id.timelineID)
+                                                            forKey: item.id.uniqueID)
                     }
                 }
             }
@@ -688,7 +690,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
 
     private func updateViewState(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) -> RoomTimelineItemViewState {
-        if let timelineItemViewState = state.timelineViewState.itemsDictionary[item.id.timelineID] {
+        if let timelineItemViewState = state.timelineViewState.itemsDictionary[item.id.uniqueID] {
             timelineItemViewState.groupStyle = groupStyle
             timelineItemViewState.type = .init(item: item)
             return timelineItemViewState
@@ -848,7 +850,7 @@ extension TimelineViewModel {
     static let mock = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                         focussedEventID: nil,
                                         timelineController: MockRoomTimelineController(),
-                                        mediaProvider: MockMediaProvider(),
+                                        mediaProvider: MediaProviderMock(configuration: .init()),
                                         mediaPlayerProvider: MediaPlayerProviderMock(),
                                         voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController,
@@ -859,7 +861,7 @@ extension TimelineViewModel {
     static let pinnedEventsTimelineMock = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                                             focussedEventID: nil,
                                                             timelineController: MockRoomTimelineController(timelineKind: .pinned),
-                                                            mediaProvider: MockMediaProvider(),
+                                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                                             mediaPlayerProvider: MediaPlayerProviderMock(),
                                                             voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
@@ -868,26 +870,11 @@ extension TimelineViewModel {
                                                             analyticsService: ServiceLocator.shared.analytics)
 }
 
-private struct TimelineContextKey: EnvironmentKey {
-    @MainActor static let defaultValue: TimelineViewModel.Context? = nil
-}
-
-private struct FocussedEventID: EnvironmentKey {
-    static let defaultValue: String? = nil
-}
-
 extension EnvironmentValues {
     /// Used to access and inject the room context without observing it
-    var timelineContext: TimelineViewModel.Context? {
-        get { self[TimelineContextKey.self] }
-        set { self[TimelineContextKey.self] = newValue }
-    }
-
+    @Entry var timelineContext: TimelineViewModel.Context?
     /// An event ID which will be non-nil when a timeline item should show as focussed.
-    var focussedEventID: String? {
-        get { self[FocussedEventID.self] }
-        set { self[FocussedEventID.self] = newValue }
-    }
+    @Entry var focussedEventID: String?
 }
 
 private enum SlashCommand: String, CaseIterable {

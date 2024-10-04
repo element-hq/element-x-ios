@@ -147,7 +147,7 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
         return RoomMemberDetailsScreenViewModel(userID: member.userID,
                                                 roomProxy: roomProxyMock,
                                                 clientProxy: clientProxyMock,
-                                                mediaProvider: MockMediaProvider(),
+                                                mediaProvider: MediaProviderMock(configuration: .init()),
                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                 analytics: ServiceLocator.shared.analytics)
     }

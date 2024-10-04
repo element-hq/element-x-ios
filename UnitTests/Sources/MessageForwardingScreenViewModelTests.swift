@@ -12,7 +12,7 @@ import XCTest
 
 @MainActor
 class MessageForwardingScreenViewModelTests: XCTestCase {
-    let forwardingItem = MessageForwardingItem(id: .init(timelineID: "t1", eventID: "t1"),
+    let forwardingItem = MessageForwardingItem(id: .init(uniqueID: "t1", eventOrTransactionID: .eventId(eventId: "t1")),
                                                roomID: "1",
                                                content: .init(noPointer: .init()))
     var viewModel: MessageForwardingScreenViewModelProtocol!
@@ -29,7 +29,7 @@ class MessageForwardingScreenViewModelTests: XCTestCase {
                                                      clientProxy: clientProxy,
                                                      roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
                                                      userIndicatorController: UserIndicatorControllerMock(),
-                                                     mediaProvider: MockMediaProvider())
+                                                     mediaProvider: MediaProviderMock(configuration: .init()))
         context = viewModel.context
     }
     

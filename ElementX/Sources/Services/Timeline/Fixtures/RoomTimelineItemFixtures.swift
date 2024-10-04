@@ -10,9 +10,9 @@ import Foundation
 enum RoomTimelineItemFixtures {
     /// The default timeline items used in Xcode previews etc.
     static var `default`: [RoomTimelineItemProtocol] = [
-        SeparatorRoomTimelineItem(id: .init(timelineID: "Yesterday"), text: "Yesterday"),
-        TextRoomTimelineItem(id: .init(timelineID: ".RoomTimelineItemFixtures.default.0",
-                                       eventID: "RoomTimelineItemFixtures.default.0"),
+        SeparatorRoomTimelineItem(id: .init(uniqueID: "Yesterday"), text: "Yesterday"),
+        TextRoomTimelineItem(id: .init(uniqueID: ".RoomTimelineItemFixtures.default.0",
+                                       eventOrTransactionID: .eventId(eventId: "RoomTimelineItemFixtures.default.0")),
                              timestamp: "10:10 AM",
                              isOutgoing: false,
                              isEditable: false,
@@ -21,8 +21,8 @@ enum RoomTimelineItemFixtures {
                              sender: .init(id: "", displayName: "Jacob"),
                              content: .init(body: "That looks so good!"),
                              properties: RoomTimelineItemProperties(isEdited: true)),
-        TextRoomTimelineItem(id: .init(timelineID: "RoomTimelineItemFixtures.default.1",
-                                       eventID: "RoomTimelineItemFixtures.default.1"),
+        TextRoomTimelineItem(id: .init(uniqueID: "RoomTimelineItemFixtures.default.1",
+                                       eventOrTransactionID: .eventId(eventId: "RoomTimelineItemFixtures.default.1")),
                              timestamp: "10:11 AM",
                              isOutgoing: false,
                              isEditable: false,
@@ -33,8 +33,8 @@ enum RoomTimelineItemFixtures {
                              properties: RoomTimelineItemProperties(reactions: [
                                  AggregatedReaction(accountOwnerID: "me", key: "🙌", senders: [ReactionSender(id: "me", timestamp: Date())])
                              ])),
-        TextRoomTimelineItem(id: .init(timelineID: "RoomTimelineItemFixtures.default.2",
-                                       eventID: "RoomTimelineItemFixtures.default.2"),
+        TextRoomTimelineItem(id: .init(uniqueID: "RoomTimelineItemFixtures.default.2",
+                                       eventOrTransactionID: .eventId(eventId: "RoomTimelineItemFixtures.default.2")),
                              timestamp: "10:11 AM",
                              isOutgoing: false,
                              isEditable: false,
@@ -52,9 +52,9 @@ enum RoomTimelineItemFixtures {
                                                         ReactionSender(id: "jacob", timestamp: Date())
                                                     ])
                              ])),
-        SeparatorRoomTimelineItem(id: .init(timelineID: "Today"), text: "Today"),
-        TextRoomTimelineItem(id: .init(timelineID: "RoomTimelineItemFixtures.default.3",
-                                       eventID: "RoomTimelineItemFixtures.default.3"),
+        SeparatorRoomTimelineItem(id: .init(uniqueID: "Today"), text: "Today"),
+        TextRoomTimelineItem(id: .init(uniqueID: "RoomTimelineItemFixtures.default.3",
+                                       eventOrTransactionID: .eventId(eventId: "RoomTimelineItemFixtures.default.3")),
                              timestamp: "5 PM",
                              isOutgoing: false,
                              isEditable: false,
@@ -63,8 +63,8 @@ enum RoomTimelineItemFixtures {
                              sender: .init(id: "", displayName: "Helena"),
                              content: .init(body: "Wow, cool. Ok, lets go the usual place tomorrow?! Is that too soon?  Here’s the menu, let me know what you want it’s on me!"),
                              properties: RoomTimelineItemProperties(orderedReadReceipts: [ReadReceipt(userID: "alice", formattedTimestamp: nil)])),
-        TextRoomTimelineItem(id: .init(timelineID: "RoomTimelineItemFixtures.default.4",
-                                       eventID: "RoomTimelineItemFixtures.default.4"),
+        TextRoomTimelineItem(id: .init(uniqueID: "RoomTimelineItemFixtures.default.4",
+                                       eventOrTransactionID: .eventId(eventId: "RoomTimelineItemFixtures.default.4")),
                              timestamp: "5 PM",
                              isOutgoing: true,
                              isEditable: true,
@@ -72,8 +72,8 @@ enum RoomTimelineItemFixtures {
                              isThreaded: false,
                              sender: .init(id: "", displayName: "Bob"),
                              content: .init(body: "And John's speech was amazing!")),
-        TextRoomTimelineItem(id: .init(timelineID: "RoomTimelineItemFixtures.default.5",
-                                       eventID: "RoomTimelineItemFixtures.default.5"),
+        TextRoomTimelineItem(id: .init(uniqueID: "RoomTimelineItemFixtures.default.5",
+                                       eventOrTransactionID: .eventId(eventId: "RoomTimelineItemFixtures.default.5")),
                              timestamp: "5 PM",
                              isOutgoing: true,
                              isEditable: true,
@@ -86,8 +86,8 @@ enum RoomTimelineItemFixtures {
                                                                                           ReadReceipt(userID: "bob", formattedTimestamp: nil),
                                                                                           ReadReceipt(userID: "charlie", formattedTimestamp: nil),
                                                                                           ReadReceipt(userID: "dan", formattedTimestamp: nil)])),
-        TextRoomTimelineItem(id: .init(timelineID: "RoomTimelineItemFixtures.default.6",
-                                       eventID: "RoomTimelineItemFixtures.default.6"),
+        TextRoomTimelineItem(id: .init(uniqueID: "RoomTimelineItemFixtures.default.6",
+                                       eventOrTransactionID: .eventId(eventId: "RoomTimelineItemFixtures.default.6")),
                              timestamp: "5 PM",
                              isOutgoing: false,
                              isEditable: false,
@@ -242,10 +242,44 @@ enum RoomTimelineItemFixtures {
     
     static var permalinkChunk: [RoomTimelineItemProtocol] {
         (1...20).map { index in
-            TextRoomTimelineItem(id: .init(timelineID: "\(index)", eventID: "$\(index)"),
+            TextRoomTimelineItem(id: .init(uniqueID: "\(index)", eventOrTransactionID: .eventId(eventId: "$\(index)")),
                                  text: "Message ID \(index)",
                                  senderDisplayName: index > 10 ? "Alice" : "Bob")
         }
+    }
+    
+    static var mediaChunk: [RoomTimelineItemProtocol] {
+        [
+            VideoRoomTimelineItem(id: .random,
+                                  timestamp: "10:47 am",
+                                  isOutgoing: false,
+                                  isEditable: false,
+                                  canBeRepliedTo: true,
+                                  isThreaded: false,
+                                  sender: .init(id: ""),
+                                  content: .init(body: "video",
+                                                 duration: 100,
+                                                 source: .init(url: .picturesDirectory, mimeType: nil),
+                                                 thumbnailSource: .init(url: .picturesDirectory, mimeType: nil),
+                                                 width: 1920,
+                                                 height: 1080,
+                                                 aspectRatio: 1.78,
+                                                 blurhash: "KtI~70X5V?yss9oyrYs:t6")),
+            ImageRoomTimelineItem(id: .random,
+                                  timestamp: "10:47 am",
+                                  isOutgoing: false,
+                                  isEditable: false,
+                                  canBeRepliedTo: true,
+                                  isThreaded: false,
+                                  sender: .init(id: ""),
+                                  content: .init(body: "image",
+                                                 source: .init(url: .picturesDirectory, mimeType: nil),
+                                                 thumbnailSource: nil,
+                                                 width: 5120,
+                                                 height: 3412,
+                                                 aspectRatio: 1.5,
+                                                 blurhash: "KpE4oyayR5|GbHb];3j@of"))
+        ]
     }
 }
 
@@ -260,9 +294,7 @@ private extension TextRoomTimelineItem {
                   sender: .init(id: "", displayName: senderDisplayName),
                   content: .init(body: text))
     }
-}
-
-private extension TextRoomTimelineItem {
+    
     func withReadReceipts(_ receipts: [ReadReceipt]) -> TextRoomTimelineItem {
         var newSelf = self
         newSelf.properties.orderedReadReceipts = receipts

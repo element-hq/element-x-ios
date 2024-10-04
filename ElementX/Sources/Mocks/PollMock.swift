@@ -82,7 +82,7 @@ extension Poll.Option {
 
 extension PollRoomTimelineItem {
     static func mock(poll: Poll, isOutgoing: Bool = true, isEditable: Bool = false) -> Self {
-        .init(id: .init(timelineID: UUID().uuidString, eventID: UUID().uuidString),
+        .init(id: .random,
               poll: poll,
               body: "poll",
               timestamp: "Now",

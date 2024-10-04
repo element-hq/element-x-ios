@@ -262,9 +262,9 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .newMessage:
             set(mode: .default)
         case .edit(let eventID):
-            set(mode: .edit(originalItemId: .init(timelineID: "", eventID: eventID)))
+            set(mode: .edit(originalItemId: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: eventID))))
         case .reply(let eventID):
-            set(mode: .reply(itemID: .init(timelineID: "", eventID: eventID), replyDetails: .loading(eventID: eventID), isThread: false))
+            set(mode: .reply(itemID: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: eventID)), replyDetails: .loading(eventID: eventID), isThread: false))
             replyLoadingTask = Task {
                 let reply = switch await draftService.getReply(eventID: eventID) {
                 case .success(let reply):
@@ -277,7 +277,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                     return
                 }
                 
-                set(mode: .reply(itemID: .init(timelineID: "", eventID: eventID), replyDetails: reply.details, isThread: reply.isThreaded))
+                set(mode: .reply(itemID: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: eventID)), replyDetails: reply.details, isThread: reply.isThreaded))
             }
         }
     }

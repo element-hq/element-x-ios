@@ -11,37 +11,50 @@ import MatrixRustSDK
 struct TimelineItemIdentifier: Hashable {
     /// Stable id across state changes of the timeline item, it uniquely identifies an item in a timeline.
     /// It's value is consistent only per timeline instance, it should **not** be used to identify an item across timeline instances.
-    let timelineID: String
-
-    /// Uniquely identifies the timeline item from the server side.
-    /// Only available for EventTimelineItem and only when the item is returned by the server.
-    var eventID: String?
-
-    /// Uniquely identifies the local echo of the timeline item.
-    /// Only available for sent EventTimelineItem that have not been returned by the server yet.
-    var transactionID: String?
+    let uniqueID: String
+    
+    /// Contains the 2 possible identifiers of an event, either it has a remote event id or a local transaction id, never both or none.
+    var eventOrTransactionID: EventOrTransactionId?
+    
+    var eventID: String? {
+        switch eventOrTransactionID {
+        case .eventId(let eventId):
+            return eventId
+        default:
+            return nil
+        }
+    }
+    
+    var transactionID: String? {
+        switch eventOrTransactionID {
+        case .transactionId(let transactionId):
+            return transactionId
+        default:
+            return nil
+        }
+    }
 }
 
 extension TimelineItemIdentifier {
     /// Use only for mocks/tests
     static var random: Self {
-        .init(timelineID: UUID().uuidString, eventID: UUID().uuidString)
+        .init(uniqueID: UUID().uuidString, eventOrTransactionID: .eventId(eventId: UUID().uuidString))
     }
 }
 
 /// A light wrapper around timeline items returned from Rust.
 enum TimelineItemProxy {
     case event(EventTimelineItemProxy)
-    case virtual(MatrixRustSDK.VirtualTimelineItem, timelineID: String)
+    case virtual(MatrixRustSDK.VirtualTimelineItem, uniqueID: String)
     case unknown(MatrixRustSDK.TimelineItem)
     
     init(item: MatrixRustSDK.TimelineItem, allRoomUsers: [ZMatrixUser]) {
         if let eventItem = item.asEvent() {
-            let eventSenderId = eventItem.sender()
+            let eventSenderId = eventItem.sender
             let eventSender = allRoomUsers.first(where: { $0.matrixId == eventSenderId })
             self = .event(EventTimelineItemProxy(item: eventItem, id: String(item.uniqueId()), eventSender: eventSender))
         } else if let virtualItem = item.asVirtual() {
-            self = .virtual(virtualItem, timelineID: String(item.uniqueId()))
+            self = .virtual(virtualItem, uniqueID: String(item.uniqueId()))
         } else {
             self = .unknown(item)
         }
@@ -97,12 +110,12 @@ class EventTimelineItemProxy {
     
     init(item: MatrixRustSDK.EventTimelineItem, id: String, eventSender: ZMatrixUser? = nil) {
         self.item = item
-        self.id = TimelineItemIdentifier(timelineID: id, eventID: item.eventId(), transactionID: item.transactionId())
+        self.id = TimelineItemIdentifier(uniqueID: id, eventOrTransactionID: item.eventOrTransactionId)
         self.eventSender = eventSender
     }
     
     lazy var deliveryStatus: TimelineItemDeliveryStatus? = {
-        guard let localSendState = item.localSendState() else {
+        guard let localSendState = item.localSendState else {
             return nil
         }
         
@@ -122,43 +135,43 @@ class EventTimelineItemProxy {
         }
     }()
     
-    lazy var canBeRepliedTo = item.canBeRepliedTo()
+    lazy var canBeRepliedTo = item.canBeRepliedTo
             
-    lazy var content = item.content()
+    lazy var content = item.content
 
-    lazy var isOwn = item.isOwn()
+    lazy var isOwn = item.isOwn
 
-    lazy var isEditable = item.isEditable()
+    lazy var isEditable = item.isEditable
     
     lazy var sender: TimelineItemSender = {
-        let profile = item.senderProfile()
+        let profile = item.senderProfile
         
         switch profile {
         case let .ready(displayName, isDisplayNameAmbiguous, avatarUrl):
-            return .init(id: item.sender(),
+            return .init(id: item.sender,
                          displayName: eventSender?.displayName ?? displayName,
                          isDisplayNameAmbiguous: isDisplayNameAmbiguous,
                          avatarURL: URL(string: (eventSender?.profileSummary?.profileImage ?? "")))
         default:
-            return .init(id: item.sender(),
+            return .init(id: item.sender,
                          displayName: nil,
                          isDisplayNameAmbiguous: false,
                          avatarURL: nil)
         }
     }()
 
-    lazy var reactions = item.reactions()
+    lazy var reactions = item.reactions
     
-    lazy var timestamp = Date(timeIntervalSince1970: TimeInterval(item.timestamp() / 1000))
+    lazy var timestamp = Date(timeIntervalSince1970: TimeInterval(item.timestamp / 1000))
     
     lazy var debugInfo: TimelineItemDebugInfo = {
-        let debugInfo = item.debugInfo()
+        let debugInfo = item.debugInfoProvider.get()
         return TimelineItemDebugInfo(model: debugInfo.model, originalJSON: debugInfo.originalJson, latestEditJSON: debugInfo.latestEditJson)
     }()
     
-    lazy var shieldState = item.getShield(strict: false)
+    lazy var shieldState = item.shieldsProvider.getShields(strict: false)
     
-    lazy var readReceipts = item.readReceipts()
+    lazy var readReceipts = item.readReceipts
 }
 
 struct TimelineItemDebugInfo: Identifiable, CustomStringConvertible {

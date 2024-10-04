@@ -37,10 +37,8 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
         
         authenticationService.homeserver
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] homeserver in
-                guard let self else { return }
-                state.homeserverAddress = homeserver.address
-            }
+            .map(\.address)
+            .weakAssign(to: \.state.homeserverAddress, on: self)
             .store(in: &cancellables)
     }
     

@@ -35,13 +35,6 @@ struct DeveloperOptionsScreen: View {
                 Text(context.viewState.slidingSyncFooter)
             }
             
-            Section("Message Pinning") {
-                Toggle(isOn: $context.pinningEnabled) {
-                    Text("Enable message pinning")
-                    Text("Requires app reboot")
-                }
-            }
-            
             Section("Room List") {
                 Toggle(isOn: $context.hideUnreadMessagesBadge) {
                     Text("Hide grey dots")
@@ -49,6 +42,12 @@ struct DeveloperOptionsScreen: View {
                 
                 Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
                     Text("Fuzzy searching")
+                }
+            }
+            
+            Section("Timeline") {
+                Toggle(isOn: $context.hideTimelineMedia) {
+                    Text("Hide image & video previews")
                 }
             }
             

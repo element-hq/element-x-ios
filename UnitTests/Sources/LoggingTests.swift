@@ -142,7 +142,7 @@ class LoggingTests: XCTestCase {
                                                  isThreaded: false,
                                                  sender: .init(id: "sender"),
                                                  content: .init(body: "EmoteString", formattedBody: AttributedString(emoteAttributedString)))
-        let imageMessage = ImageRoomTimelineItem(id: .init(timelineID: "myimagemessage"),
+        let imageMessage = ImageRoomTimelineItem(id: .init(uniqueID: "myimagemessage"),
                                                  timestamp: "",
                                                  isOutgoing: false,
                                                  isEditable: false,
@@ -184,25 +184,25 @@ class LoggingTests: XCTestCase {
         }
         
         let content = try String(contentsOf: logFile)
-        XCTAssertTrue(content.contains(textMessage.id.timelineID))
+        XCTAssertTrue(content.contains(textMessage.id.uniqueID))
         XCTAssertFalse(content.contains(textMessage.body))
         XCTAssertFalse(content.contains(textAttributedString))
         
-        XCTAssertTrue(content.contains(noticeMessage.id.timelineID))
+        XCTAssertTrue(content.contains(noticeMessage.id.uniqueID))
         XCTAssertFalse(content.contains(noticeMessage.body))
         XCTAssertFalse(content.contains(noticeAttributedString))
         
-        XCTAssertTrue(content.contains(emoteMessage.id.timelineID))
+        XCTAssertTrue(content.contains(emoteMessage.id.uniqueID))
         XCTAssertFalse(content.contains(emoteMessage.body))
         XCTAssertFalse(content.contains(emoteAttributedString))
         
-        XCTAssertTrue(content.contains(imageMessage.id.timelineID))
+        XCTAssertTrue(content.contains(imageMessage.id.uniqueID))
         XCTAssertFalse(content.contains(imageMessage.body))
         
-        XCTAssertTrue(content.contains(videoMessage.id.timelineID))
+        XCTAssertTrue(content.contains(videoMessage.id.uniqueID))
         XCTAssertFalse(content.contains(videoMessage.body))
         
-        XCTAssertTrue(content.contains(fileMessage.id.timelineID))
+        XCTAssertTrue(content.contains(fileMessage.id.uniqueID))
         XCTAssertFalse(content.contains(fileMessage.body))
     }
         

@@ -41,6 +41,8 @@ struct RoomScreen: View {
                     .padding(.top, 8)
                     .environmentObject(timelineContext)
                     .environment(\.timelineContext, timelineContext)
+                    // Make sure the reply header honours the hideTimelineMedia setting too.
+                    .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
             }
 //            .overlay(alignment: .top) {
 //                Group {
@@ -215,7 +217,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
     static let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
     static let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                                      timelineController: MockRoomTimelineController(),
-                                                     mediaProvider: MockMediaProvider(),
+                                                     mediaProvider: MediaProviderMock(configuration: .init()),
                                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,

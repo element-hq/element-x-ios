@@ -62,13 +62,13 @@ struct RoomInviterLabel_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 10) {
             RoomInviterLabel(inviter: .init(member: RoomMemberProxyMock.mockAlice),
-                             mediaProvider: MockMediaProvider())
+                             mediaProvider: MediaProviderMock(configuration: .init()))
             RoomInviterLabel(inviter: .init(member: RoomMemberProxyMock.mockDan),
-                             mediaProvider: MockMediaProvider())
+                             mediaProvider: MediaProviderMock(configuration: .init()))
             RoomInviterLabel(inviter: .init(member: RoomMemberProxyMock.mockNoName),
-                             mediaProvider: MockMediaProvider())
+                             mediaProvider: MediaProviderMock(configuration: .init()))
             RoomInviterLabel(inviter: .init(member: RoomMemberProxyMock.mockCharlie),
-                             mediaProvider: MockMediaProvider())
+                             mediaProvider: MediaProviderMock(configuration: .init()))
                 .foregroundStyle(.compound.textPrimary)
         }
         .font(.zero.bodyMD)

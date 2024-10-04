@@ -60,6 +60,9 @@ struct TimelineView: UIViewControllerRepresentable {
             if tableViewController.focussedEvent != context.viewState.timelineViewState.focussedEvent {
                 tableViewController.focussedEvent = context.viewState.timelineViewState.focussedEvent
             }
+            if tableViewController.hideTimelineMedia != context.viewState.hideTimelineMedia {
+                tableViewController.hideTimelineMedia = context.viewState.hideTimelineMedia
+            }
             
             if tableViewController.typingMembers.members != context.viewState.typingMembers {
                 tableViewController.setTypingMembers(context.viewState.typingMembers)
@@ -80,7 +83,7 @@ struct TimelineView_Previews: PreviewProvider, TestablePreview {
     static let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
     static let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                                      timelineController: MockRoomTimelineController(),
-                                                     mediaProvider: MockMediaProvider(),
+                                                     mediaProvider: MediaProviderMock(configuration: .init()),
                                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,

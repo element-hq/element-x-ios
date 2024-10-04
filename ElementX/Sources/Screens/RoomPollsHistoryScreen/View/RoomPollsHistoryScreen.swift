@@ -91,7 +91,7 @@ struct RoomPollsHistoryScreen: View {
         Button {
             context.send(viewAction: .loadMore)
         } label: {
-            Text(L10n.Action.loadMore)
+            Text(L10n.actionLoadMore)
                 .font(.zero.bodyLGSemibold)
                 .padding(.horizontal, 12)
         }

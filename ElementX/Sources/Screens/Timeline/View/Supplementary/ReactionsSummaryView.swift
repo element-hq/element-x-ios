@@ -139,7 +139,7 @@ struct ReactionsSummaryView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         ReactionsSummaryView(reactions: AggregatedReaction.mockReactions,
                              members: [:],
-                             mediaProvider: MockMediaProvider(),
+                             mediaProvider: MediaProviderMock(configuration: .init()),
                              selectedReactionKey: AggregatedReaction.mockReactions[0].key)
     }
 }

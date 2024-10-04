@@ -388,7 +388,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                     let members = try await rooms.concurrentMap { room -> [String] in
                         let roomInfo = try await room.roomListItem.roomInfo()
                         let roomLastEvent = await room.roomListItem.latestEvent()
-                        return self.zeroMatrixUsersService.getRoomMemberIds(roomInfo: roomInfo, lastEventSender: roomLastEvent?.sender())
+                        return self.zeroMatrixUsersService.getRoomMemberIds(roomInfo: roomInfo, lastEventSender: roomLastEvent?.sender)
                     }
                     .flatMap { $0 }
                     .uniqued { $0 }

@@ -90,7 +90,7 @@ struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
     static let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                                      focussedEventID: focussedEventID,
                                                      timelineController: MockRoomTimelineController(),
-                                                     mediaProvider: MockMediaProvider(),
+                                                     mediaProvider: MediaProviderMock(configuration: .init()),
                                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,

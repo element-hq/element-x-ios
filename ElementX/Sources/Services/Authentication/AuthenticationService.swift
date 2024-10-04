@@ -219,9 +219,11 @@ class AuthenticationService: AuthenticationServiceProtocol {
 // MARK: - Mocks
 
 extension AuthenticationService {
-    static var mock = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
-                                            encryptionKeyProvider: EncryptionKeyProvider(),
-                                            clientBuilderFactory: AuthenticationClientBuilderFactoryMock(configuration: .init()),
-                                            appSettings: ServiceLocator.shared.settings,
-                                            appHooks: AppHooks())
+    static var mock: AuthenticationService {
+        AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
+                              encryptionKeyProvider: EncryptionKeyProvider(),
+                              clientBuilderFactory: AuthenticationClientBuilderFactoryMock(configuration: .init()),
+                              appSettings: ServiceLocator.shared.settings,
+                              appHooks: AppHooks())
+    }
 }

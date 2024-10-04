@@ -97,6 +97,7 @@ struct TimelineViewState: BindableState {
     var canCurrentUserRedactSelf = false
     var canCurrentUserPin = false
     var isViewSourceEnabled: Bool
+    var hideTimelineMedia: Bool
         
     // The `pinnedEventIDs` are used only to determine if an item is already pinned or not.
     // It's updated from the room info, so it's faster than using the timeline
@@ -203,7 +204,7 @@ struct TimelineState {
     
     var itemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()
     
-    var timelineIDs: [String] {
+    var uniqueIDs: [String] {
         itemsDictionary.keys.elements
     }
     

@@ -124,15 +124,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         .store(in: &cancellables)
         
-        let pinningEnabledPublisher = appSettings.$pinningEnabled
-        
-        pinningEnabledPublisher
-            .weakAssign(to: \.state.isPinningEnabled, on: self)
-            .store(in: &cancellables)
-        
-        pinningEnabledPublisher
-            .combineLatest(appMediator.networkMonitor.reachabilityPublisher)
-            .filter { $0.0 && $0.1 == .reachable }
+        appMediator.networkMonitor.reachabilityPublisher
+            .filter { $0 == .reachable }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.setupPinnedEventsTimelineProviderIfNeeded()
@@ -203,22 +196,10 @@ extension RoomScreenViewModel {
     static func mock(roomProxyMock: JoinedRoomProxyMock) -> RoomScreenViewModel {
         RoomScreenViewModel(roomProxy: roomProxyMock,
                             initialSelectedPinnedEventID: nil,
-                            mediaProvider: MockMediaProvider(),
+                            mediaProvider: MediaProviderMock(configuration: .init()),
                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                             appMediator: AppMediatorMock.default,
                             appSettings: ServiceLocator.shared.settings,
                             analyticsService: ServiceLocator.shared.analytics)
-    }
-}
-
-private struct RoomContextKey: EnvironmentKey {
-    @MainActor static let defaultValue: RoomScreenViewModel.Context? = nil
-}
-
-extension EnvironmentValues {
-    /// Used to access and inject the room context without observing it
-    var roomContext: RoomScreenViewModel.Context? {
-        get { self[RoomContextKey.self] }
-        set { self[RoomContextKey.self] = newValue }
     }
 }

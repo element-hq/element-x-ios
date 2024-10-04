@@ -410,8 +410,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     func sendTypingNotification(isTyping: Bool) async -> Result<Void, RoomProxyError> {
-        MXLog.info("Sending typing notification isTyping: \(isTyping)")
-        
         do {
             try await room.typingNotice(isTyping: isTyping)
             return .success(())

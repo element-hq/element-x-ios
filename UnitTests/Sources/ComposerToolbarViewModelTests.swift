@@ -28,7 +28,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         draftServiceMock = ComposerDraftServiceMock()
         viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: completionSuggestionServiceMock,
-                                             mediaProvider: MockMediaProvider(),
+                                             mediaProvider: MediaProviderMock(configuration: .init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                              analyticsService: ServiceLocator.shared.analytics,
                                              composerDraftService: draftServiceMock)
@@ -41,14 +41,14 @@ class ComposerToolbarViewModelTests: XCTestCase {
     }
 
     func testComposerFocus() {
-        viewModel.process(timelineAction: .setMode(mode: .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))))
+        viewModel.process(timelineAction: .setMode(mode: .edit(originalItemId: TimelineItemIdentifier(uniqueID: "mock"))))
         XCTAssertTrue(viewModel.state.bindings.composerFocused)
         viewModel.process(timelineAction: .removeFocus)
         XCTAssertFalse(viewModel.state.bindings.composerFocused)
     }
 
     func testComposerMode() {
-        let mode: ComposerMode = .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))
+        let mode: ComposerMode = .edit(originalItemId: TimelineItemIdentifier(uniqueID: "mock"))
         viewModel.process(timelineAction: .setMode(mode: mode))
         XCTAssertEqual(viewModel.state.composerMode, mode)
         viewModel.process(timelineAction: .clear)
@@ -56,7 +56,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
     }
 
     func testComposerModeIsPublished() {
-        let mode: ComposerMode = .edit(originalItemId: TimelineItemIdentifier(timelineID: "mock"))
+        let mode: ComposerMode = .edit(originalItemId: TimelineItemIdentifier(uniqueID: "mock"))
         let expectation = expectation(description: "Composer mode is published")
         let cancellable = viewModel
             .context
@@ -105,7 +105,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         let mockCompletionSuggestionService = CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions))
         viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: mockCompletionSuggestionService,
-                                             mediaProvider: MockMediaProvider(),
+                                             mediaProvider: MediaProviderMock(configuration: .init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                              analyticsService: ServiceLocator.shared.analytics,
                                              composerDraftService: draftServiceMock)
@@ -236,7 +236,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         }
         
         viewModel.context.composerFormattingEnabled = false
-        viewModel.process(timelineAction: .setMode(mode: .edit(originalItemId: .init(timelineID: "", eventID: "testID"))))
+        viewModel.process(timelineAction: .setMode(mode: .edit(originalItemId: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: "testID")))))
         viewModel.context.plainComposerText = .init(string: "Hello world!")
         viewModel.saveDraft()
         
@@ -257,12 +257,11 @@ class ComposerToolbarViewModelTests: XCTestCase {
         }
         
         viewModel.context.composerFormattingEnabled = false
-        viewModel.process(timelineAction: .setMode(mode: .reply(itemID: .init(timelineID: "",
-                                                                              eventID: "testID"),
-            replyDetails: .loaded(sender: .init(id: ""),
-                                  eventID: "testID",
-                                  eventContent: .message(.text(.init(body: "reply text")))),
-            isThread: false)))
+        viewModel.process(timelineAction: .setMode(mode: .reply(itemID: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: "testID")),
+                                                                replyDetails: .loaded(sender: .init(id: ""),
+                                                                                      eventID: "testID",
+                                                                                      eventContent: .message(.text(.init(body: "reply text")))),
+                                                                isThread: false)))
         viewModel.context.plainComposerText = .init(string: "Hello world!")
         viewModel.saveDraft()
         
@@ -283,12 +282,11 @@ class ComposerToolbarViewModelTests: XCTestCase {
         }
         
         viewModel.context.composerFormattingEnabled = false
-        viewModel.process(timelineAction: .setMode(mode: .reply(itemID: .init(timelineID: "",
-                                                                              eventID: "testID"),
-            replyDetails: .loaded(sender: .init(id: ""),
-                                  eventID: "testID",
-                                  eventContent: .message(.text(.init(body: "reply text")))),
-            isThread: false)))
+        viewModel.process(timelineAction: .setMode(mode: .reply(itemID: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: "testID")),
+                                                                replyDetails: .loaded(sender: .init(id: ""),
+                                                                                      eventID: "testID",
+                                                                                      eventContent: .message(.text(.init(body: "reply text")))),
+                                                                isThread: false)))
         viewModel.saveDraft()
         
         await fulfillment(of: [expectation], timeout: 10)
@@ -397,7 +395,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         
         await fulfillment(of: [expectation], timeout: 10)
         XCTAssertFalse(viewModel.context.composerFormattingEnabled)
-        XCTAssertEqual(viewModel.state.composerMode, .edit(originalItemId: .init(timelineID: "", eventID: "testID")))
+        XCTAssertEqual(viewModel.state.composerMode, .edit(originalItemId: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: "testID"))))
         XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: "Hello world!"))
     }
     
@@ -431,13 +429,13 @@ class ComposerToolbarViewModelTests: XCTestCase {
         await fulfillment(of: [draftExpectation], timeout: 10)
         XCTAssertFalse(viewModel.context.composerFormattingEnabled)
         // Testing the loading state first
-        XCTAssertEqual(viewModel.state.composerMode, .reply(itemID: .init(timelineID: "", eventID: testEventID),
+        XCTAssertEqual(viewModel.state.composerMode, .reply(itemID: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: testEventID)),
                                                             replyDetails: .loading(eventID: testEventID),
                                                             isThread: false))
         XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: text))
         
         await fulfillment(of: [loadReplyExpectation], timeout: 10)
-        XCTAssertEqual(viewModel.state.composerMode, .reply(itemID: .init(timelineID: "", eventID: testEventID),
+        XCTAssertEqual(viewModel.state.composerMode, .reply(itemID: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: testEventID)),
                                                             replyDetails: loadedReply,
                                                             isThread: true))
     }
@@ -445,8 +443,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
     func testRestoreReplyAndCancelReplyMode() async {
         let testEventID = "testID"
         let text = "Hello world!"
-        let loadedReply = TimelineItemReplyDetails.loaded(sender: .init(id: "userID",
-                                                                        displayName: "Username"),
+        let loadedReply = TimelineItemReplyDetails.loaded(sender: .init(id: "userID", displayName: "Username"),
                                                           eventID: testEventID,
                                                           eventContent: .message(.text(.init(body: "Reply text"))))
         
@@ -472,7 +469,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         await fulfillment(of: [draftExpectation], timeout: 10)
         XCTAssertFalse(viewModel.context.composerFormattingEnabled)
         // Testing the loading state first
-        XCTAssertEqual(viewModel.state.composerMode, .reply(itemID: .init(timelineID: "", eventID: testEventID),
+        XCTAssertEqual(viewModel.state.composerMode, .reply(itemID: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: testEventID)),
                                                             replyDetails: .loading(eventID: testEventID),
                                                             isThread: false))
         XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: text))

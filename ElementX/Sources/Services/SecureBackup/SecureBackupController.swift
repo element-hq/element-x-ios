@@ -121,7 +121,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
             MXLog.info("Enabling recovery")
             
             var keyUploadErrored = false
-            let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, progressListener: SecureBackupEnableRecoveryProgressListener { [weak self] state in
+            let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, passphrase: nil, progressListener: SecureBackupEnableRecoveryProgressListener { [weak self] state in
                 guard let self else { return }
                 
                 switch state {

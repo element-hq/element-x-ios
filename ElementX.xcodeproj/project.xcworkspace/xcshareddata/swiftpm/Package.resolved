@@ -1,5 +1,5 @@
 {
-  "originHash" : "e18f1e05d6fb8720357bf4cb12c23d797592c9e486f59bde4d710ef11ea14be6",
+  "originHash" : "b4016b85025c2542527f16dc237b102dbdcc5c31942a4e784d8c9470cb040701",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -156,10 +156,10 @@
     {
       "identity" : "matrix-rich-text-editor-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/matrix-org/matrix-rich-text-editor-swift",
+      "location" : "https://github.com/element-hq/matrix-rich-text-editor-swift",
       "state" : {
-        "revision" : "30909decc48be8e06c93eacffa4ec71b539888a9",
-        "version" : "2.37.7"
+        "revision" : "f424ee4ee80315a5c79fb3d21ebe657f42fc10f4",
+        "version" : "2.37.13"
       }
     },
     {
@@ -167,8 +167,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "11c6d99d62035b02f4c448daebff4d63c962da20",
-        "version" : "1.0.52"
+        "revision" : "83abbdc8485340c20f27148153ff62f690ca210b",
+        "version" : "1.0.53"
       }
     },
     {

@@ -111,7 +111,7 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
     private func setupViewModel(roomProxyConfiguration: JoinedRoomProxyMockConfiguration) {
         userIndicatorController = UserIndicatorControllerMock.default
         viewModel = .init(roomProxy: JoinedRoomProxyMock(roomProxyConfiguration),
-                          mediaProvider: MockMediaProvider(),
+                          mediaProvider: MediaProviderMock(configuration: .init()),
                           userIndicatorController: userIndicatorController)
     }
 }

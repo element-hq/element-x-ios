@@ -15,6 +15,7 @@ struct StickerRoomTimelineView: View {
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             LoadableImage(url: timelineItem.imageURL,
+                          mediaType: .timelineItem,
                           blurhash: timelineItem.blurhash,
                           mediaProvider: context.mediaProvider) {
                 placeholder
@@ -27,14 +28,9 @@ struct StickerRoomTimelineView: View {
     }
     
     private var placeholder: some View {
-        ZStack {
-            Rectangle()
-                .foregroundColor(timelineItem.isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming)
-                .opacity(0.3)
-            
-            ProgressView(L10n.commonLoading)
-                .frame(maxWidth: .infinity)
-        }
+        Rectangle()
+            .foregroundColor(timelineItem.isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming)
+            .opacity(0.3)
     }
 }
 

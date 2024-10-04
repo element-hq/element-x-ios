@@ -192,15 +192,13 @@ struct RoomDetailsScreen: View {
 //                    context.send(viewAction: .toggleFavourite(isFavourite: newValue))
 //                }
             
-//            if context.viewState.isPinningEnabled {
-//                ListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
-//                                        icon: \.pin),
-//                        details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
-//                        kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink(action: {
-//                            context.send(viewAction: .processTapPinnedEvents)
-//                        }))
-//                        .disabled(context.viewState.pinnedEventsActionState.isLoading)
-//            }
+//            ListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
+//                                    icon: \.pin),
+//                    details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
+//                    kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink(action: {
+//                        context.send(viewAction: .processTapPinnedEvents)
+//                    }))
+//                    .disabled(context.viewState.pinnedEventsActionState.isLoading)
             
 //            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
 //                ListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
@@ -323,18 +321,16 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         var notificationSettingsProxyMockConfiguration = NotificationSettingsProxyMockConfiguration()
         notificationSettingsProxyMockConfiguration.roomMode.isDefault = false
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: notificationSettingsProxyMockConfiguration)
-        let appSettings = AppSettings()
-        appSettings.pinningEnabled = true
         
         return RoomDetailsScreenViewModel(roomProxy: roomProxy,
                                           clientProxy: ClientProxyMock(.init()),
-                                          mediaProvider: MockMediaProvider(),
+                                          mediaProvider: MediaProviderMock(configuration: .init()),
                                           analyticsService: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                           appMediator: AppMediatorMock.default,
-                                          appSettings: appSettings)
+                                          appSettings: ServiceLocator.shared.settings)
     }()
     
     static let dmRoomViewModel = {
@@ -351,18 +347,16 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                                   canonicalAlias: "#alias:domain.com",
                                                   members: members))
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
-        let appSettings = AppSettings()
-        appSettings.pinningEnabled = true
         
         return RoomDetailsScreenViewModel(roomProxy: roomProxy,
                                           clientProxy: ClientProxyMock(.init()),
-                                          mediaProvider: MockMediaProvider(),
+                                          mediaProvider: MediaProviderMock(configuration: .init()),
                                           analyticsService: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                           appMediator: AppMediatorMock.default,
-                                          appSettings: appSettings)
+                                          appSettings: ServiceLocator.shared.settings)
     }()
     
     static let simpleRoomViewModel = {
@@ -378,18 +372,16 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                                   isEncrypted: false,
                                                   members: members))
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
-        let appSettings = AppSettings()
-        appSettings.pinningEnabled = true
         
         return RoomDetailsScreenViewModel(roomProxy: roomProxy,
                                           clientProxy: ClientProxyMock(.init()),
-                                          mediaProvider: MockMediaProvider(),
+                                          mediaProvider: MediaProviderMock(configuration: .init()),
                                           analyticsService: ServiceLocator.shared.analytics,
                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                           notificationSettingsProxy: notificationSettingsProxy,
                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                           appMediator: AppMediatorMock.default,
-                                          appSettings: appSettings)
+                                          appSettings: ServiceLocator.shared.settings)
     }()
     
     static var previews: some View {

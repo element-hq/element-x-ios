@@ -44,7 +44,6 @@ struct RoomDetailsScreenViewState: BindableState {
     var canEditRolesOrPermissions = false
     var notificationSettingsState: RoomDetailsNotificationSettingsState = .loading
     var canJoinCall = false
-    var isPinningEnabled = false
     var pinnedEventsActionState = RoomDetailsScreenPinnedEventsActionState.loading
     
     var canEdit: Bool {

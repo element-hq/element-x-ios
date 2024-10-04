@@ -258,8 +258,9 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     private func showLoginScreen() {
         let parameters = LoginScreenCoordinatorParameters(authenticationService: authenticationService,
-                                                          analytics: analytics,
-                                                          userIndicatorController: userIndicatorController)
+                                                          slidingSyncLearnMoreURL: appSettings.slidingSyncLearnMoreURL,
+                                                          userIndicatorController: userIndicatorController,
+                                                          analytics: analytics)
         let coordinator = LoginScreenCoordinator(parameters: parameters)
         
         coordinator.actions

@@ -19,7 +19,7 @@ struct SwipeToReplyView: View {
 }
 
 struct SwipeToReplyView_Previews: PreviewProvider, TestablePreview {
-    static let timelineItem = TextRoomTimelineItem(id: .init(timelineID: ""),
+    static let timelineItem = TextRoomTimelineItem(id: .init(uniqueID: ""),
                                                    timestamp: "",
                                                    isOutgoing: true,
                                                    isEditable: true,

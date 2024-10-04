@@ -389,18 +389,16 @@ private extension View {
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
     static let viewModelWithPins: TimelineViewModel = {
-        var settings = AppSettings()
-        settings.pinningEnabled = true
         let roomProxy = JoinedRoomProxyMock(.init(name: "Preview Room", pinnedEventIDs: [""]))
         return TimelineViewModel(roomProxy: roomProxy,
                                  focussedEventID: nil,
                                  timelineController: MockRoomTimelineController(),
-                                 mediaProvider: MockMediaProvider(),
+                                 mediaProvider: MediaProviderMock(configuration: .init()),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                  appMediator: AppMediatorMock.default,
-                                 appSettings: settings,
+                                 appSettings: ServiceLocator.shared.settings,
                                  analyticsService: ServiceLocator.shared.analytics)
     }()
 
@@ -418,13 +416,13 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             .previewDisplayName("Encryption Indicators")
         pinned
             .previewDisplayName("Pinned messages")
-            .snapshotPreferences(delay: 1.0)
+            .snapshotPreferences(delay: 2.0)
     }
     
     // These always include a reply
     static var threads: some View {
         ScrollView {
-            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(uniqueID: ""),
                                                                              timestamp: "10:42",
                                                                              isOutgoing: true,
                                                                              isEditable: false,
@@ -437,7 +435,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                                                    eventContent: .message(.text(.init(body: "Short"))))),
                                                   groupStyle: .single))
 
-            AudioRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
+            AudioRoomTimelineView(timelineItem: .init(id: .init(uniqueID: ""),
                                                       timestamp: "10:42",
                                                       isOutgoing: true,
                                                       isEditable: false,
@@ -453,7 +451,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                             eventID: "123",
                                                                             eventContent: .message(.text(.init(body: "Short"))))))
             
-            FileRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
+            FileRoomTimelineView(timelineItem: .init(id: .init(uniqueID: ""),
                                                      timestamp: "10:42",
                                                      isOutgoing: false,
                                                      isEditable: false,
@@ -467,7 +465,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                      replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                            eventID: "123",
                                                                            eventContent: .message(.text(.init(body: "Short"))))))
-            ImageRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
+            ImageRoomTimelineView(timelineItem: .init(id: .init(uniqueID: ""),
                                                       timestamp: "10:42",
                                                       isOutgoing: true,
                                                       isEditable: true,
@@ -505,7 +503,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                                eventID: "123",
                                                                                eventContent: .message(.text(.init(body: "Short"))))))
             
-            VoiceMessageRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
+            VoiceMessageRoomTimelineView(timelineItem: .init(id: .init(uniqueID: ""),
                                                              timestamp: "10:42",
                                                              isOutgoing: true,
                                                              isEditable: false,
@@ -541,7 +539,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
 
     static var replies: some View {
         VStack(spacing: 0) {
-            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(uniqueID: ""),
                                                                              timestamp: "10:42",
                                                                              isOutgoing: true,
                                                                              isEditable: false,
@@ -554,7 +552,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                                                    eventContent: .message(.text(.init(body: "Short"))))),
                                                   groupStyle: .single))
 
-            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(uniqueID: ""),
                                                                              timestamp: "10:42",
                                                                              isOutgoing: true,
                                                                              isEditable: false,
@@ -572,7 +570,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
 
     static var encryptionAuthenticity: some View {
         VStack(spacing: 0) {
-            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(uniqueID: ""),
                                                                              timestamp: "10:42",
                                                                              isOutgoing: true,
                                                                              isEditable: false,
@@ -583,7 +581,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              properties: RoomTimelineItemProperties(encryptionAuthenticity: .unsignedDevice(color: .red))),
                                                   groupStyle: .single))
             
-            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(uniqueID: ""),
                                                                              timestamp: "10:42",
                                                                              isOutgoing: true,
                                                                              isEditable: false,
@@ -595,7 +593,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                                                                     encryptionAuthenticity: .unsignedDevice(color: .red))),
                                                   groupStyle: .single))
             
-            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(uniqueID: ""),
                                                                              timestamp: "10:42",
                                                                              isOutgoing: false,
                                                                              isEditable: false,
@@ -606,7 +604,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              properties: RoomTimelineItemProperties(encryptionAuthenticity: .unknownDevice(color: .red))),
                                                   groupStyle: .first))
             
-            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: ""),
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(uniqueID: ""),
                                                                              timestamp: "10:42",
                                                                              isOutgoing: false,
                                                                              isEditable: false,
@@ -628,7 +626,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                       
                                                                       properties: RoomTimelineItemProperties(encryptionAuthenticity: .notGuaranteed(color: .gray))))
             
-            VoiceMessageRoomTimelineView(timelineItem: .init(id: .init(timelineID: ""),
+            VoiceMessageRoomTimelineView(timelineItem: .init(id: .init(uniqueID: ""),
                                                              timestamp: "10:42",
                                                              isOutgoing: true,
                                                              isEditable: false,
@@ -651,7 +649,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
         
     static var pinned: some View {
         ScrollView {
-            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(timelineID: "", eventID: ""),
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: "")),
                                                                              timestamp: "10:42",
                                                                              isOutgoing: true,
                                                                              isEditable: false,
@@ -662,7 +660,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              replyDetails: nil),
                                                   groupStyle: .single))
 
-            AudioRoomTimelineView(timelineItem: .init(id: .init(timelineID: "", eventID: ""),
+            AudioRoomTimelineView(timelineItem: .init(id: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: "")),
                                                       timestamp: "10:42",
                                                       isOutgoing: true,
                                                       isEditable: false,
@@ -676,7 +674,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                      contentType: nil),
                                                       replyDetails: nil))
             
-            FileRoomTimelineView(timelineItem: .init(id: .init(timelineID: "", eventID: ""),
+            FileRoomTimelineView(timelineItem: .init(id: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: "")),
                                                      timestamp: "10:42",
                                                      isOutgoing: false,
                                                      isEditable: false,
@@ -688,7 +686,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                     thumbnailSource: nil,
                                                                     contentType: nil),
                                                      replyDetails: nil))
-            ImageRoomTimelineView(timelineItem: .init(id: .init(timelineID: "", eventID: ""),
+            ImageRoomTimelineView(timelineItem: .init(id: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: "")),
                                                       timestamp: "10:42",
                                                       isOutgoing: true,
                                                       isEditable: true,
@@ -697,7 +695,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                       sender: .init(id: ""),
                                                       content: .init(body: "Some image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil),
                                                       replyDetails: nil))
-            LocationRoomTimelineView(timelineItem: .init(id: .init(timelineID: "", eventID: ""),
+            LocationRoomTimelineView(timelineItem: .init(id: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: "")),
                                                          timestamp: "Now",
                                                          isOutgoing: false,
                                                          isEditable: false,
@@ -709,7 +707,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                                       longitude: 12.496366),
                                                                         description: "Location description description description description description description description description"),
                                                          replyDetails: nil))
-            LocationRoomTimelineView(timelineItem: .init(id: .init(timelineID: "", eventID: ""),
+            LocationRoomTimelineView(timelineItem: .init(id: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: "")),
                                                          timestamp: "Now",
                                                          isOutgoing: false,
                                                          isEditable: false,
@@ -720,7 +718,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                         geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: nil),
                                                          replyDetails: nil))
             
-            VoiceMessageRoomTimelineView(timelineItem: .init(id: .init(timelineID: "", eventID: ""),
+            VoiceMessageRoomTimelineView(timelineItem: .init(id: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: "")),
                                                              timestamp: "10:42",
                                                              isOutgoing: true,
                                                              isEditable: false,

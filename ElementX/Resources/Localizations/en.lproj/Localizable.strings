@@ -41,6 +41,7 @@
 "action_create" = "Create";
 "action_create_a_room" = "Create a room";
 "action_deactivate" = "Deactivate";
+"action_deactivate_account" = "Deactivate account";
 "action_decline" = "Decline";
 "action_delete_poll" = "Delete Poll";
 "action_disable" = "Disable";
@@ -64,6 +65,7 @@
 "action_leave" = "Leave";
 "action_leave_conversation" = "Leave conversation";
 "action_leave_room" = "Leave room";
+"action_load_more" = "Load more";
 "action_manage_account" = "Manage account";
 "action_manage_devices" = "Manage devices";
 "action_message" = "Message";
@@ -93,6 +95,7 @@
 "action_send_message" = "Send message";
 "action_share" = "Share";
 "action_share_link" = "Share link";
+"action_show" = "Show";
 "action_sign_in_again" = "Sign in again";
 "action_signout" = "Sign out";
 "action_signout_anyway" = "Sign out anyway";
@@ -108,8 +111,6 @@
 "action_view_in_timeline" = "View in timeline";
 "action_view_source" = "View source";
 "action_yes" = "Yes";
-"action.load_more" = "Load more";
-"action_deactivate_account" = "Deactivate account";
 "banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
 "banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.";

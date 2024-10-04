@@ -39,7 +39,7 @@ struct PillView: View {
 }
 
 struct PillView_Previews: PreviewProvider, TestablePreview {
-    static let mockMediaProvider = MockMediaProvider()
+    static let mockMediaProvider = MediaProviderMock(configuration: .init())
     
     static var previews: some View {
         PillView(mediaProvider: mockMediaProvider,

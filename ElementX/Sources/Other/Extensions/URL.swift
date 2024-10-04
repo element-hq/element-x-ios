@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension URL: ExpressibleByStringLiteral {
+extension URL: @retroactive ExpressibleByStringLiteral {
     public init(stringLiteral value: StaticString) {
         guard let url = URL(string: "\(value)") else {
             fatalError("The static string used to create this URL is invalid")

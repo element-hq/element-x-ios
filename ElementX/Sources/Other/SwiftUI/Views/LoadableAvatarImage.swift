@@ -50,6 +50,7 @@ struct LoadableAvatarImage: View {
             .frame(width: frameSize, height: frameSize)
             .background(Color.compound.bgCanvasDefault)
             .clipShape(Circle())
+            .environment(\.shouldAutomaticallyLoadImages, true) // We always load avatars.
     }
     
     @ViewBuilder

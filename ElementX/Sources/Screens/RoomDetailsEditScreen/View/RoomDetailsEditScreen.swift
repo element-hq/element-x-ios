@@ -153,7 +153,7 @@ struct RoomDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
                                                   members: [.mockMeAdmin]))
         
         return RoomDetailsEditScreenViewModel(roomProxy: roomProxy,
-                                              mediaProvider: MockMediaProvider(),
+                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                               userIndicatorController: UserIndicatorControllerMock.default)
     }()
     
@@ -163,7 +163,7 @@ struct RoomDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
                                                   members: [.mockAlice]))
         
         return RoomDetailsEditScreenViewModel(roomProxy: roomProxy,
-                                              mediaProvider: MockMediaProvider(),
+                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                               userIndicatorController: UserIndicatorControllerMock.default)
     }()
     

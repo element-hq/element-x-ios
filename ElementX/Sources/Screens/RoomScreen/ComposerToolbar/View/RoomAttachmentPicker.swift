@@ -91,7 +91,7 @@ private struct RoomAttachmentPickerButtonStyle: ButtonStyle {
 struct RoomAttachmentPicker_Previews: PreviewProvider, TestablePreview {
     static let viewModel = ComposerToolbarViewModel(wysiwygViewModel: WysiwygComposerViewModel(),
                                                     completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
-                                                    mediaProvider: MockMediaProvider(),
+                                                    mediaProvider: MediaProviderMock(configuration: .init()),
                                                     mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                     analyticsService: ServiceLocator.shared.analytics,
                                                     composerDraftService: ComposerDraftServiceMock())

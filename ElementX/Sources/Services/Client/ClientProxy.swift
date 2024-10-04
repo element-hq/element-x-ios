@@ -827,12 +827,13 @@ class ClientProxy: ClientProxyProtocol {
         })
     }
     
-    private lazy var eventFilters: TimelineEventTypeFilter = {
+    private let eventFilters: TimelineEventTypeFilter = {
         var stateEventFilters: [StateEventType] = [.roomAliases,
                                                    .roomCanonicalAlias,
                                                    .roomGuestAccess,
                                                    .roomHistoryVisibility,
                                                    .roomJoinRules,
+                                                   .roomPinnedEvents,
                                                    .roomPowerLevels,
                                                    .roomServerAcl,
                                                    .roomTombstone,
@@ -841,12 +842,6 @@ class ClientProxy: ClientProxyProtocol {
                                                    .policyRuleRoom,
                                                    .policyRuleServer,
                                                    .policyRuleUser]
-        
-        // Reminder: once the feature flag is not required anymore, change the lazy var back to a let
-        if !appSettings.pinningEnabled {
-            stateEventFilters.append(.roomPinnedEvents)
-        }
-        
         return .exclude(eventTypes: stateEventFilters.map { FilterTimelineEventType.state(eventType: $0) })
     }()
     

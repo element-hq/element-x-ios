@@ -168,7 +168,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
                                        via: [],
                                        allowKnocking: true,
                                        clientProxy: clientProxy,
-                                       mediaProvider: MockMediaProvider(),
+                                       mediaProvider: MediaProviderMock(configuration: .init()),
                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }

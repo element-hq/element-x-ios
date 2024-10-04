@@ -124,29 +124,45 @@ public enum LoginMethod: String, Equatable, CaseIterable {
 // MARK: - Previews
 
 struct ZeroLoginScreen_Previews: PreviewProvider, TestablePreview {
-    static let credentialsViewModel: LoginScreenViewModel = {
-        let viewModel = LoginScreenViewModel(homeserver: .mockMatrixDotOrg, slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL)
-        viewModel.context.username = "alice"
-        viewModel.context.password = "password"
-        return viewModel
-    }()
+    static let viewModel = makeViewModel()
+    static let credentialsViewModel = makeViewModel(withCredentials: true)
+    static let unconfiguredViewModel = makeViewModel(homeserverAddress: "somethingtofailconfiguration")
     
     static var previews: some View {
-        screen(for: LoginScreenViewModel(homeserver: .mockMatrixDotOrg, slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL))
-            .previewDisplayName("matrix.org")
-    }
-    
-    static func screen(for viewModel: LoginScreenViewModel) -> some View {
         NavigationStack {
             ZeroLoginScreen(context: viewModel.context)
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button { } label: {
-                            Text("\(Image(systemName: "chevron.backward")) Back")
-                        }
-                    }
-                }
         }
+        .previewDisplayName("matrix.org")
+        .snapshotPreferences(delay: 0.1)
+        
+        NavigationStack {
+            ZeroLoginScreen(context: credentialsViewModel.context)
+        }
+        .previewDisplayName("Credentials Entered")
+        .snapshotPreferences(delay: 0.1)
+        
+        NavigationStack {
+            ZeroLoginScreen(context: unconfiguredViewModel.context)
+        }
+        .previewDisplayName("Unsupported")
+        .snapshotPreferences(delay: 0.1)
+    }
+    
+    static func makeViewModel(homeserverAddress: String = "matrix.org", withCredentials: Bool = false) -> LoginScreenViewModel {
+        let authenticationService = AuthenticationService.mock
+        
+        Task { await authenticationService.configure(for: homeserverAddress, flow: .login) }
+        
+        let viewModel = LoginScreenViewModel(authenticationService: authenticationService,
+                                             slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
+                                             userIndicatorController: UserIndicatorControllerMock(),
+                                             analytics: ServiceLocator.shared.analytics)
+        
+        if withCredentials {
+            viewModel.context.username = "alice"
+            viewModel.context.password = "password"
+        }
+        
+        return viewModel
     }
 }

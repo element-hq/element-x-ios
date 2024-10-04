@@ -96,7 +96,17 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     func messageEventContent(for timelineItemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation? {
-        await timelineProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID)?.content().asMessage()?.content()
+        guard let content = await timelineProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID)?.content,
+              case let .message(messageContent) = content else {
+            return nil
+        }
+        
+        do {
+            return try contentWithoutRelationFromMessage(message: messageContent)
+        } catch {
+            MXLog.error("Failed retrieving message event content for timelineItemID=\(timelineItemID)")
+            return nil
+        }
     }
     
     func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError> {
@@ -180,15 +190,15 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func edit(_ timelineItem: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
         do {
-            guard try await timeline.edit(item: timelineItem, newContent: .roomMessage(content: newContent)) == true else {
+            guard try await timeline.edit(eventOrTransactionId: timelineItem.eventOrTransactionId, newContent: .roomMessage(content: newContent)) == true else {
                 return .failure(.failedEditing)
             }
             
-            MXLog.info("Finished editing timeline item: \(timelineItem.eventId() ?? timelineItem.transactionId() ?? "unknown")")
+            MXLog.info("Finished editing timeline item: \(timelineItem.eventOrTransactionId)")
             
             return .success(())
         } catch {
-            MXLog.error("Failed editing timeline item: \(timelineItem.eventId() ?? timelineItem.transactionId() ?? "unknown") with error: \(error)")
+            MXLog.error("Failed editing timeline item: \(timelineItem.eventOrTransactionId) with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
@@ -196,18 +206,13 @@ final class TimelineProxy: TimelineProxyProtocol {
     func redact(_ timelineItemID: TimelineItemIdentifier, reason: String?) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Redacting timeline item: \(timelineItemID)")
         
-        guard let eventTimelineItem = await timelineProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID) else {
+        guard let eventOrTransactionID = await timelineProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID)?.eventOrTransactionId else {
             MXLog.error("Unknown timeline item: \(timelineItemID)")
             return .failure(.failedRedacting)
         }
         
         do {
-            let success = try await timeline.redactEvent(item: eventTimelineItem, reason: reason)
-            
-            guard success else {
-                MXLog.error("Failed redacting timeline item: \(timelineItemID)")
-                return .failure(.failedRedacting)
-            }
+            try await timeline.redactEvent(eventOrTransactionId: eventOrTransactionID, reason: reason)
             
             MXLog.info("Redacted timeline item: \(timelineItemID)")
             
@@ -460,7 +465,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         MXLog.info("Toggling reaction for event: \(itemID)")
         
         do {
-            try await timeline.toggleReaction(uniqueId: itemID.timelineID, key: reaction)
+            try await timeline.toggleReaction(uniqueId: itemID.uniqueID, key: reaction)
             MXLog.info("Finished toggling reaction for event: \(itemID)")
             return .success(())
         } catch {
@@ -495,7 +500,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         do {
             let originalEvent = try await timeline.getEventTimelineItemByEventId(eventId: eventID)
             
-            guard try await timeline.edit(item: originalEvent,
+            guard try await timeline.edit(eventOrTransactionId: originalEvent.eventOrTransactionId,
                                           newContent: .pollStart(pollData: .init(question: question,
                                                                                  answers: answers,
                                                                                  maxSelections: 1,
@@ -517,7 +522,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         return await Task.dispatch(on: .global()) {
             do {
-                try self.timeline.endPoll(pollStartId: pollStartID, text: text)
+                try self.timeline.endPoll(pollStartEventId: pollStartID, text: text)
                 
                 MXLog.info("Finished ending poll with eventID: \(pollStartID)")
                 
@@ -533,7 +538,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         MXLog.info("Sending response for poll with eventID: \(pollStartID)")
         
         do {
-            try await timeline.sendPollResponse(pollStartId: pollStartID, answers: answers)
+            try await timeline.sendPollResponse(pollStartEventId: pollStartID, answers: answers)
             
             MXLog.info("Finished sending response for poll with eventID: \(pollStartID)")
             
@@ -653,7 +658,7 @@ extension Array where Element == TimelineItemProxy {
     func firstEventTimelineItemUsingStableID(_ id: TimelineItemIdentifier) -> EventTimelineItem? {
         for item in self {
             if case let .event(eventTimelineItem) = item {
-                if eventTimelineItem.id.timelineID == id.timelineID {
+                if eventTimelineItem.id.uniqueID == id.uniqueID {
                     return eventTimelineItem.item
                 }
             }
