@@ -57,9 +57,10 @@ struct RoomMessageEventStringBuilder {
                 message = AttributedString(content.body)
             }
         case .text(content: let content):
+            let simplifiedPlainText = simplifyPlainText(plainText: content.body)
             if let attributedMessage = attributedMessageFrom(formattedBody: content.formatted) {
                 message = attributedMessage
-            } else if let attributedMessage = attributedStringBuilder.fromPlain(content.body) {
+            } else if let attributedMessage = attributedStringBuilder.fromPlain(simplifiedPlainText) {
                 message = attributedMessage
             } else {
                 message = AttributedString(content.body)
@@ -72,6 +73,19 @@ struct RoomMessageEventStringBuilder {
             return prefix(message, with: senderDisplayName)
         } else {
             return message
+        }
+    }
+    
+    private func simplifyPlainText(plainText: String) -> String {
+        let pattern = #"@\[(.+?)\]\(user:[0-9a-fA-F\-]+\)"#
+        do {
+            let regex = try NSRegularExpression(pattern: pattern)
+            let newText = regex.stringByReplacingMatches(in: plainText,
+                                                         range: NSRange(plainText.startIndex..., in: plainText),
+                                                         withTemplate: "@$1")
+            return newText
+        } catch {
+            return plainText
         }
     }
     

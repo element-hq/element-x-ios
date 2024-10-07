@@ -219,7 +219,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                              isThreaded: messageContent.threadRoot != nil,
                              sender: eventItemProxy.sender,
-                             content: buildTextTimelineItemContent(textMessageContent),
+                             content: buildTextTimelineItemContent(textMessageContent, eventItemProxy.sender.id),
                              replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageContent.inReplyTo),
                              properties: RoomTimelineItemProperties(isEdited: messageContent.isEdited,
                                                                     reactions: aggregateReactions(eventItemProxy.reactions),
