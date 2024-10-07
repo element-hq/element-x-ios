@@ -8,7 +8,6 @@
 "a11y_pause" = "Pozastavit";
 "a11y_pin_field" = "Pole pro PIN";
 "a11y_play" = "Přehrát";
-"a11y_poll" = "Hlasování";
 "a11y_poll_end" = "Hlasování ukončeno";
 "a11y_react_with" = "Reagovat s %1$@";
 "a11y_react_with_other_emojis" = "Reagovat s dalšími emoji";
@@ -41,6 +40,7 @@
 "action_create" = "Vytvořit";
 "action_create_a_room" = "Vytvořit místnost";
 "action_deactivate" = "Deaktivovat";
+"action_deactivate_account" = "Deaktivovat účet";
 "action_decline" = "Odmítnout";
 "action_delete_poll" = "Odstranit hlasování";
 "action_disable" = "Zakázat";
@@ -64,6 +64,7 @@
 "action_leave" = "Odejít";
 "action_leave_conversation" = "Opustit konverzaci";
 "action_leave_room" = "Opustit místnost";
+"action_load_more" = "Načíst více";
 "action_manage_account" = "Spravovat účet";
 "action_manage_devices" = "Spravovat zařízení";
 "action_message" = "Zpráva";
@@ -93,6 +94,7 @@
 "action_send_message" = "Odeslat zprávu";
 "action_share" = "Sdílet";
 "action_share_link" = "Sdílet odkaz";
+"action_show" = "Show";
 "action_sign_in_again" = "Přihlásit se znovu";
 "action_signout" = "Odhlásit se";
 "action_signout_anyway" = "Přesto se odhlásit";
@@ -108,8 +110,6 @@
 "action_view_in_timeline" = "Zobrazit na časové ose";
 "action_view_source" = "Zobrazit zdroj";
 "action_yes" = "Ano";
-"action.load_more" = "Načíst více";
-"action_deactivate_account" = "Deaktivovat účet";
 "banner_migrate_to_native_sliding_sync_action" = "Odhlásit se a upgradovat";
 "banner_migrate_to_native_sliding_sync_description" = "Váš server nyní podporuje nový, rychlejší protokol. Chcete-li upgradovat, odhlaste se a znovu se přihlaste. Pokud to uděláte nyní, pomůže vám vyhnout se nucenému odhlášení, když bude starý protokol později odstraněn.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Váš domovský server již nepodporuje starý protokol. Chcete-li pokračovat v používání aplikace, odhlaste se a znovu se přihlaste.";
@@ -162,6 +162,7 @@
 "common_modern" = "Moderní";
 "common_mute" = "Ztlumit";
 "common_no_results" = "Žádné výsledky";
+"common_no_room_name" = "Žádný název místnosti";
 "common_offline" = "Offline";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "nebo";
@@ -170,6 +171,8 @@
 "common_permalink" = "Trvalý odkaz";
 "common_permission" = "Oprávnění";
 "common_please_wait" = "Počkejte prosím...";
+"common_poll_end_confirmation" = "Opravdu chcete ukončit toto hlasování?";
+"common_poll_summary" = "Hlasování: %1$@";
 "common_poll_total_votes" = "Celkový počet hlasů: %1$@";
 "common_poll_undisclosed_text" = "Výsledky se zobrazí po skončení hlasování";
 "common_privacy_policy" = "Zásady ochrany osobních údajů";
@@ -200,6 +203,7 @@
 "common_settings" = "Nastavení";
 "common_shared_location" = "Sdílená poloha";
 "common_signing_out" = "Odhlašování";
+"common_something_went_wrong" = "Něco se pokazilo";
 "common_starting_chat" = "Zahajování chatu…";
 "common_sticker" = "Nálepka";
 "common_success" = "Úspěch";
@@ -213,6 +217,7 @@
 "common_topic_placeholder" = "O čem je tato místnost?";
 "common_touch_id_ios" = "Touch ID";
 "common_unable_to_decrypt" = "Nelze dešifrovat";
+"common_unable_to_decrypt_no_access" = "Nemáte přístup k této zprávě";
 "common_unable_to_invite_message" = "Pozvánky nebylo možné odeslat jednomu nebo více uživatelům.";
 "common_unable_to_invite_title" = "Nelze odeslat pozvánky";
 "common_unlock" = "Odemknout";
@@ -221,24 +226,21 @@
 "common_username" = "Uživatelské jméno";
 "common_verification_cancelled" = "Ověření zrušeno";
 "common_verification_complete" = "Ověření dokončeno";
+"common_verify_device" = "Ověřit zařízení";
 "common_video" = "Video";
 "common_voice_message" = "Hlasová zpráva";
 "common_waiting" = "Čekání...";
 "common_waiting_for_decryption_key" = "Čekání na dešifrovací klíč";
+"common.copied_to_clipboard" = "Copied to clipboard";
 "common.do_not_show_this_again" = "Znovu nezobrazovat";
 "common.open_source_licenses" = "Licence s otevřeným zdrojovým kódem";
 "common.pinned" = "Připnuto";
 "common.send_to" = "Odeslat do";
 "common.you" = "Vy";
-"common_no_room_name" = "Žádný název místnosti";
-"common_poll_end_confirmation" = "Opravdu chcete ukončit toto hlasování?";
-"common_poll_summary" = "Hlasování: %1$@";
-"common_something_went_wrong" = "Něco se pokazilo";
-"common_unable_to_decrypt_no_access" = "Nemáte přístup k této zprávě";
-"common_verify_device" = "Ověřit zařízení";
 "confirm_recovery_key_banner_message" = "Vaše záloha chatu není aktuálně synchronizována. Abyste si zachovali přístup k záloze chatu, musíte potvrdit klíč pro obnovení.";
 "confirm_recovery_key_banner_title" = "Potvrďte klíč pro obnovení";
 "crash_detection_dialog_content" = "%1$@ havaroval při posledním použití. Chcete se s námi podělit o zprávu o selhání?";
+"crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
 "dialog_permission_camera" = "Aby mohla aplikace používat fotoaparát, udělte prosím oprávnění v nastavení systému.";
 "dialog_permission_generic" = "Udělte prosím oprávnění v nastavení systému.";
 "dialog_permission_location_description_ios" = "Udělte přístup v Nastavení -> Poloha.";
@@ -291,7 +293,6 @@
 "notification_channel_silent" = "Tichá oznámení";
 "notification_incoming_call" = "Příchozí hovor";
 "notification_inline_reply_failed" = "** Nepodařilo se odeslat - otevřete prosím místnost";
-"notification_invitation_action_reject" = "Odmítnout";
 "notification_invite_body" = "Vás pozval(a) do chatu";
 "notification_invite_body_with_sender" = "%1$@ vás pozval(a) do chatu";
 "notification_mentioned_you_body" = "Zmínili vás: %1$@";
@@ -335,7 +336,6 @@
 "screen_advanced_settings_element_call_base_url_validation_error" = "Neplatné URL, ujistěte se, že jste uvedli protokol (http/https) a správnou adresu.";
 "screen_pinned_timeline_empty_state_description" = "Přidržte zprávu a vyberte „%1$@“, kterou chcete zahrnout sem.";
 "screen_pinned_timeline_empty_state_headline" = "Připněte důležité zprávy, aby je bylo možné snadno najít";
-"screen_pinned_timeline_screen_title_empty" = "Připnuté zprávy";
 "screen_reset_encryption_password_error" = "Došlo k neznámé chybě. Zkontrolujte, zda je heslo k účtu správné a zkuste to znovu.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Zrušit ověření a odeslat";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Ověření můžete zrušit a přesto odeslat tuto zprávu, nebo můžete prozatím zrušit a zkusit to znovu později po opětovném ověření %1$@.";
@@ -354,7 +354,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Zpráva nebyla odeslána, protože ověřená identita uživatele %1$@ se změnila.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Zpráva nebyla odeslána, protože%1$@ neověřil(a) všechna zařízení.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení.";
-"screen_account_provider_change" = "Změna poskytovatele účtu";
 "screen_account_provider_form_hint" = "Adresa domovského serveru";
 "screen_account_provider_form_notice" = "Zadejte hledaný výraz nebo adresu domény.";
 "screen_account_provider_form_subtitle" = "Vyhledejte společnost, komunitu nebo soukromý server.";
@@ -432,7 +431,6 @@
 "screen_chat_backup_key_backup_description" = "Zálohování zajistí, že neztratíte historii zpráv. %1$@.";
 "screen_chat_backup_key_backup_title" = "Záloha";
 "screen_chat_backup_recovery_action_change" = "Změnit klíč pro obnovení";
-"screen_chat_backup_recovery_action_confirm" = "Potvrďte klíč pro obnovení";
 "screen_chat_backup_recovery_action_confirm_description" = "Vaše záloha chatu není aktuálně synchronizována.";
 "screen_chat_backup_recovery_action_setup" = "Nastavení obnovy";
 "screen_chat_backup_recovery_action_setup_description" = "Získejte přístup ke svým zašifrovaným zprávám, pokud ztratíte všechna zařízení nebo jste všude odhlášeni z %1$@.";
@@ -448,7 +446,6 @@
 "screen_create_poll_anonymous_desc" = "Zobrazit výsledky až po skončení hlasování";
 "screen_create_poll_anonymous_headline" = "Anonymní hlasování";
 "screen_create_poll_answer_hint" = "Volba %1$d";
-"screen_create_poll_cancel_confirmation_content_ios" = "Vaše změny nebudou uloženy";
 "screen_create_poll_cancel_confirmation_title_ios" = "Zrušit hlasování";
 "screen_create_poll_question_desc" = "Otázka nebo téma";
 "screen_create_poll_question_hint" = "Čeho se hlasování týká?";
@@ -545,7 +542,6 @@
 "screen_notification_settings_group_chats" = "Skupinové chaty";
 "screen_notification_settings_invite_for_me_label" = "Pozvánky";
 "screen_notification_settings_mentions_only_disclaimer" = "Váš domovský server tuto možnost v zašifrovaných místnostech nepodporuje, v některých místnostech nemusíte být upozorněni.";
-"screen_notification_settings_mentions_section_title" = "Zmínky";
 "screen_notification_settings_mode_all" = "Vše";
 "screen_notification_settings_mode_mentions" = "Zmínky";
 "screen_notification_settings_notification_section_title" = "Upozornit mě na";
@@ -617,7 +613,6 @@
 "screen_recovery_key_confirm_key_placeholder" = "Zadejte...";
 "screen_recovery_key_confirm_lost_recovery_key" = "Ztratili jste klíč pro obnovení?";
 "screen_recovery_key_confirm_success" = "Klíč pro obnovení potvrzen";
-"screen_recovery_key_confirm_title" = "Zadejte klíč pro obnovení";
 "screen_recovery_key_copied_to_clipboard" = "Klíč pro obnovení zkopírován";
 "screen_recovery_key_generating_key" = "Generování...";
 "screen_recovery_key_save_action" = "Uložit klíč pro obnovení";
@@ -637,7 +632,6 @@
 "screen_reset_encryption_confirmation_alert_action" = "Ano, resetovat nyní";
 "screen_reset_encryption_confirmation_alert_subtitle" = "Tento proces je nevratný.";
 "screen_reset_encryption_confirmation_alert_title" = "Opravdu chcete obnovit šifrování?";
-"screen_reset_encryption_password_placeholder" = "Zadat...";
 "screen_reset_encryption_password_subtitle" = "Potvrďte, že chcete obnovit šifrování.";
 "screen_reset_encryption_password_title" = "Pro pokračování zadejte heslo k účtu";
 "screen_reset_identity_confirmation_subtitle" = "Chystáte se přejít na svůj %1$@ účet a obnovit svou identitu. Poté budete přesměrováni zpět do aplikace.";
@@ -670,7 +664,6 @@
 "screen_room_change_role_moderators_admin_section_footer" = "Správci mají automaticky oprávnění moderátora";
 "screen_room_change_role_moderators_title" = "Upravit moderátory";
 "screen_room_change_role_unsaved_changes_description" = "Máte neuložené změny.";
-"screen_room_change_role_unsaved_changes_title" = "Uložit změny?";
 "screen_room_details_add_topic_title" = "Přidat téma";
 "screen_room_details_already_a_member" = "Již členem";
 "screen_room_details_already_invited" = "Již pozván(a)";
@@ -687,7 +680,6 @@
 "screen_room_details_error_unmuting" = "Nepodařilo se zrušit ztišení této místnosti, zkuste to prosím znovu.";
 "screen_room_details_notification_mode_custom" = "Vlastní";
 "screen_room_details_notification_mode_default" = "Výchozí";
-"screen_room_details_notification_title" = "Oznámení";
 "screen_room_details_share_room_title" = "Sdílet místnost";
 "screen_room_details_title" = "Informace o místnosti";
 "screen_room_details_updating_room" = "Aktualizace místnosti...";
@@ -712,7 +704,6 @@
 "screen_room_member_list_banning_user" = "Vykazování %1$@";
 "screen_room_member_list_manage_member_ban" = "Odebrat a vykázat člena";
 "screen_room_member_list_manage_member_remove" = "Odebrat z místnosti";
-"screen_room_member_list_manage_member_remove_confirmation_ban" = "Odebrat a vykázat člena";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Pouze odebrat člena";
 "screen_room_member_list_manage_member_remove_confirmation_title" = "Odebrat člena a zakázat mu připojení v budoucnu?";
 "screen_room_member_list_manage_member_unban_action" = "Zrušit vykázání";
@@ -791,7 +782,6 @@
 "screen_roomlist_mark_as_read" = "Označit jako přečtené";
 "screen_roomlist_mark_as_unread" = "Označit jako nepřečtené";
 "screen_roomlist_room_directory_button_title" = "Procházet všechny místnosti";
-"screen_server_confirmation_change_server" = "Změnit poskytovatele účtu";
 "screen_server_confirmation_message_login_element_dot_io" = "Soukromý server pro zaměstnance Elementu.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix je otevřená síť pro bezpečnou a decentralizovanou komunikaci.";
 "screen_server_confirmation_message_register" = "Zde budou uloženy vaše konverzace - podobně jako u poskytovatele e-mailových služeb uchováváte své e-maily.";
@@ -831,13 +821,11 @@
 "screen_signout_key_backup_disabled_subtitle" = "Chystáte se odhlásit z poslední relace. Pokud se nyní odhlásíte, ztratíte přístup ke svým šifrovaným zprávám.";
 "screen_signout_key_backup_disabled_title" = "Vypnuli jste zálohování";
 "screen_signout_key_backup_offline_subtitle" = "Když jste přešli do režimu offline, vaše klíče se ještě stále zálohovaly. Znovu se připojte, aby bylo možné před odhlášením zálohovat vaše klíče.";
-"screen_signout_key_backup_offline_title" = "Vaše klíče jsou stále zálohovány";
 "screen_signout_key_backup_ongoing_subtitle" = "Před odhlášením prosím počkejte na dokončení.";
 "screen_signout_key_backup_ongoing_title" = "Vaše klíče jsou stále zálohovány";
 "screen_signout_recovery_disabled_subtitle" = "Chystáte se odhlásit z poslední relace. Pokud se nyní odhlásíte, ztratíte přístup ke svým šifrovaným zprávám.";
 "screen_signout_recovery_disabled_title" = "Obnovení není nastaveno";
 "screen_signout_save_recovery_key_subtitle" = "Chystáte se odhlásit z poslední relace. Pokud se nyní odhlásíte, můžete ztratit přístup k šifrovaným zprávám.";
-"screen_signout_save_recovery_key_title" = "Uložili jste si klíč pro obnovení?";
 "screen_start_chat_error_starting_chat" = "Při pokusu o zahájení chatu došlo k chybě";
 "screen_view_location_title" = "Poloha";
 "screen_welcome_bullet_1" = "Hovory, hlasování, vyhledávání a další budou přidány koncem tohoto roku.";
@@ -920,7 +908,6 @@
 "test_language_identifier" = "en";
 "test_untranslated_default_language_identifier" = "en";
 "troubleshoot_notifications_entry_point_section" = "Odstraňování problémů";
-"troubleshoot_notifications_entry_point_title" = "Odstraňování problémů s upozorněními";
 "troubleshoot_notifications_screen_action" = "Spustit testy";
 "troubleshoot_notifications_screen_action_again" = "Spustit testy znovu";
 "troubleshoot_notifications_screen_failure" = "Některé testy selhaly. Zkontrolujte prosím podrobnosti.";
@@ -962,13 +949,17 @@
 "troubleshoot_notifications_test_unified_push_description" = "Ujistěte se, že jsou k dispozici distributoři UnifiedPush.";
 "troubleshoot_notifications_test_unified_push_failure" = "Nebyli nalezeni žádní push distributoři.";
 "troubleshoot_notifications_test_unified_push_title" = "Zkontrolovat UnifiedPush";
+"a11y_poll" = "Hlasování";
 "dialog_title_error" = "Chyba";
 "dialog_title_success" = "Úspěch";
 "notification_fallback_content" = "Oznámení";
 "notification_invitation_action_join" = "Vstoupit";
+"notification_invitation_action_reject" = "Odmítnout";
 "notification_room_action_mark_as_read" = "Označit jako přečtené";
 "notification_room_action_quick_reply" = "Rychlá odpověď";
+"screen_pinned_timeline_screen_title_empty" = "Připnuté zprávy";
 "screen_room_mentions_at_room_title" = "Všichni";
+"screen_account_provider_change" = "Změnit poskytovatele účtu";
 "screen_account_provider_signin_subtitle" = "Zde budou uloženy vaše konverzace - podobně jako u poskytovatele e-mailových služeb uchováváte své e-maily.";
 "screen_account_provider_signup_subtitle" = "Zde budou uloženy vaše konverzace - podobně jako u poskytovatele e-mailových služeb uchováváte své e-maily.";
 "screen_analytics_settings_help_us_improve" = "Sdílejte anonymní údaje o používání, které nám pomohou identifikovat problémy.";
@@ -978,6 +969,8 @@
 "screen_blocked_users_unblock_alert_description" = "Znovu uvidíte všechny zprávy od nich.";
 "screen_blocked_users_unblock_alert_title" = "Odblokovat uživatele";
 "screen_bug_report_rash_logs_alert_title" = "%1$@ havaroval při posledním použití. Chcete se s námi podělit o zprávu o selhání?";
+"screen_chat_backup_recovery_action_confirm" = "Zadejte klíč pro obnovení";
+"screen_create_poll_cancel_confirmation_content_ios" = "Vaše změny nebudou uloženy";
 "screen_create_room_add_people_title" = "Pozvat přátele";
 "screen_create_room_room_name_label" = "Název místnosti";
 "screen_create_room_title" = "Vytvořit místnost";
@@ -991,8 +984,11 @@
 "screen_edit_poll_title" = "Upravit hlasování";
 "screen_identity_use_another_device" = "Použít jiné zařízení";
 "screen_login_subtitle" = "Matrix je otevřená síť pro bezpečnou a decentralizovanou komunikaci.";
+"screen_notification_settings_mentions_section_title" = "Zmínky";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "Zkusit znovu";
+"screen_recovery_key_confirm_title" = "Potvrďte klíč pro obnovení";
 "screen_report_content_block_user" = "Zablokovat uživatele";
+"screen_reset_encryption_password_placeholder" = "Zadejte...";
 "screen_room_attachment_source_camera_photo" = "Vyfotit";
 "screen_room_change_permissions_everyone" = "Všichni";
 "screen_room_change_permissions_member_moderation" = "Moderování členů";
@@ -1001,16 +997,23 @@
 "screen_room_change_role_section_administrators" = "Správci";
 "screen_room_change_role_section_moderators" = "Moderátoři";
 "screen_room_change_role_section_users" = "Členové";
+"screen_room_change_role_unsaved_changes_title" = "Uložit změny?";
 "screen_room_details_invite_people_title" = "Pozvat přátele";
 "screen_room_details_leave_conversation_title" = "Opustit konverzaci";
 "screen_room_details_leave_room_title" = "Opustit místnost";
+"screen_room_details_notification_title" = "Oznámení";
 "screen_room_details_roles_and_permissions" = "Role a oprávnění";
 "screen_room_details_room_name_label" = "Název místnosti";
 "screen_room_details_security_title" = "Zabezpečení";
 "screen_room_details_topic_title" = "Téma";
 "screen_room_error_failed_processing_media" = "Nahrání média se nezdařilo, zkuste to prosím znovu.";
+"screen_room_member_list_manage_member_remove_confirmation_ban" = "Odebrat a vykázat člena";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Pouze zmínky a klíčová slova";
 "screen_roomlist_filter_people" = "Lidé";
+"screen_server_confirmation_change_server" = "Změnit poskytovatele účtu";
 "screen_signout_confirmation_dialog_submit" = "Odhlásit se";
 "screen_signout_confirmation_dialog_title" = "Odhlásit se";
+"screen_signout_key_backup_offline_title" = "Vaše klíče jsou stále zálohovány";
 "screen_signout_preference_item" = "Odhlásit se";
+"screen_signout_save_recovery_key_title" = "Uložili jste si klíč pro obnovení?";
+"troubleshoot_notifications_entry_point_title" = "Odstraňování problémů s upozorněními";

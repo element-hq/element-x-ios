@@ -8,7 +8,6 @@
 "a11y_pause" = "Паўза";
 "a11y_pin_field" = "Поле PIN-кода";
 "a11y_play" = "Прайграць";
-"a11y_poll" = "Апытанне";
 "a11y_poll_end" = "Апытанне скончана";
 "a11y_react_with" = "Рэагаваць з %1$@";
 "a11y_react_with_other_emojis" = "Рэагаваць з іншымі эмодзі";
@@ -41,6 +40,7 @@
 "action_create" = "Стварыць";
 "action_create_a_room" = "Стварыце пакой";
 "action_deactivate" = "Дэактываваць";
+"action_deactivate_account" = "Дэактываваць уліковы запіс";
 "action_decline" = "Адхіліць";
 "action_delete_poll" = "Выдаліць апытанне";
 "action_disable" = "Адключыць";
@@ -64,6 +64,7 @@
 "action_leave" = "Пакінуць";
 "action_leave_conversation" = "Пакінуць размову";
 "action_leave_room" = "Пакінуць пакой";
+"action_load_more" = "Загрузіць больш";
 "action_manage_account" = "Кіраванне ўліковым запісам";
 "action_manage_devices" = "Кіраванне прыладамі";
 "action_message" = "Паведамленне";
@@ -93,6 +94,7 @@
 "action_send_message" = "Адправіць паведамленне";
 "action_share" = "Падзяліцца";
 "action_share_link" = "Абагуліць спасылку";
+"action_show" = "Show";
 "action_sign_in_again" = "Увайдзіце яшчэ раз";
 "action_signout" = "Выйсці";
 "action_signout_anyway" = "Усё роўна выйсці";
@@ -108,8 +110,6 @@
 "action_view_in_timeline" = "Прагляд у хроніцы";
 "action_view_source" = "Прагляд зыходнага кода";
 "action_yes" = "Так";
-"action.load_more" = "Загрузіць больш";
-"action_deactivate_account" = "Дэактываваць уліковы запіс";
 "banner_migrate_to_native_sliding_sync_action" = "Выйсці і абнавіць";
 "banner_migrate_to_native_sliding_sync_description" = "Ваш сервер зараз падтрымлівае новы, хутчэйшы пратакол. Выйдзіце з сістэмы і зноў увайдзіце, каб абнавіць яе. Гэта дапаможа вам пазбегнуць прымусовага выхаду з сістэмы, калі стары пратакол будзе пазней выдалены.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Ваш хатні сервер больш не падтрымлівае стары пратакол. Калі ласка, выйдзіце і ўвайдзіце зноў, каб працягнуць выкарыстанне праграмы.";
@@ -162,6 +162,7 @@
 "common_modern" = "Сучасны";
 "common_mute" = "Адкл. гук";
 "common_no_results" = "Вынікаў няма";
+"common_no_room_name" = "Няма назвы пакоя";
 "common_offline" = "Па-за сеткай";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "або";
@@ -170,6 +171,8 @@
 "common_permalink" = "Пастаянная спасылка";
 "common_permission" = "Дазвол";
 "common_please_wait" = "Калі ласка, пачакайце…";
+"common_poll_end_confirmation" = "Вы ўпэўнены, што хочаце скончыць гэтае апытанне?";
+"common_poll_summary" = "Апытанне: %1$@";
 "common_poll_total_votes" = "Усяго галасоў: %1$@";
 "common_poll_undisclosed_text" = "Вынікі будуць паказаны пасля завяршэння апытання";
 "common_privacy_policy" = "Палітыка прыватнасці";
@@ -200,6 +203,7 @@
 "common_settings" = "Налады";
 "common_shared_location" = "Абагулена месцазнаходжанне";
 "common_signing_out" = "Выхад";
+"common_something_went_wrong" = "Нешта пайшло не так";
 "common_starting_chat" = "Пачатак чата…";
 "common_sticker" = "Стыкер";
 "common_success" = "Поспех";
@@ -213,6 +217,7 @@
 "common_topic_placeholder" = "Пра што гэты пакой?";
 "common_touch_id_ios" = "Touch ID";
 "common_unable_to_decrypt" = "Немагчыма расшыфраваць";
+"common_unable_to_decrypt_no_access" = "У вас няма доступу да гэтага паведамлення";
 "common_unable_to_invite_message" = "Не ўдалося адправіць запрашэнні аднаму або некалькім карыстальнікам.";
 "common_unable_to_invite_title" = "Немагчыма адправіць запрашэнне(я)";
 "common_unlock" = "Разблакіраваць";
@@ -221,24 +226,21 @@
 "common_username" = "Імя карыстальніка";
 "common_verification_cancelled" = "Праверка адменена";
 "common_verification_complete" = "Праверка завершана";
+"common_verify_device" = "Праверце прыладу";
 "common_video" = "Відэа";
 "common_voice_message" = "Галасавое паведамленне";
 "common_waiting" = "Чакаем…";
 "common_waiting_for_decryption_key" = "Чакаю гэта паведамленне";
+"common.copied_to_clipboard" = "Copied to clipboard";
 "common.do_not_show_this_again" = "Не паказваць гэта зноў";
 "common.open_source_licenses" = "Ліцэнзіі з адкрытым зыходным кодам";
 "common.pinned" = "Замацаваны";
 "common.send_to" = "Адправіць";
 "common.you" = "Вы";
-"common_no_room_name" = "Няма назвы пакоя";
-"common_poll_end_confirmation" = "Вы ўпэўнены, што хочаце скончыць гэтае апытанне?";
-"common_poll_summary" = "Апытанне: %1$@";
-"common_something_went_wrong" = "Нешта пайшло не так";
-"common_unable_to_decrypt_no_access" = "У вас няма доступу да гэтага паведамлення";
-"common_verify_device" = "Праверце прыладу";
 "confirm_recovery_key_banner_message" = "Ваша рэзервовая копія чата зараз не сінхранізавана. Вам трэба пацвердзіць ключ аднаўлення, каб захаваць доступ да рэзервовай копіі чата.";
 "confirm_recovery_key_banner_title" = "Увядзіце ключ аднаўлення";
 "crash_detection_dialog_content" = "Пры апошнім выкарыстанні %1$@ адбыўся збой. Хочаце падзяліцца справаздачай аб збоі?";
+"crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
 "dialog_permission_camera" = "Каб дазволіць праграме выкарыстоўваць камеру, дайце дазвол у наладах сістэмы.";
 "dialog_permission_generic" = "Калі ласка, дайце дазвол у наладах сістэмы.";
 "dialog_permission_location_description_ios" = "Дайце доступ у Наладах -> Месца знаходжання.";
@@ -291,7 +293,6 @@
 "notification_channel_silent" = "Ціхія апавяшчэнні";
 "notification_incoming_call" = "Уваходны званок";
 "notification_inline_reply_failed" = "** Не атрымалася даслаць - калі ласка, адкрыйце пакой";
-"notification_invitation_action_reject" = "Адхіліць";
 "notification_invite_body" = "Запрасіў(-ла) вас у чат";
 "notification_invite_body_with_sender" = "%1$@ запрасіў(-ла) вас у чат";
 "notification_mentioned_you_body" = "Згадаў(-ла) вас: %1$@";
@@ -335,7 +336,6 @@
 "screen_advanced_settings_element_call_base_url_validation_error" = "Адрас пазначаны няправільна, пераканайцеся, што вы ўказалі пратакол (http/https) і правільны адрас.";
 "screen_pinned_timeline_empty_state_description" = "Націсніце на паведамленне і абярыце «%1$@ », каб уключыць сюды.";
 "screen_pinned_timeline_empty_state_headline" = "Замацуеце важныя паведамленні, каб іх можна было лёгка знайсці";
-"screen_pinned_timeline_screen_title_empty" = "Замацаваныя паведамленні";
 "screen_reset_encryption_password_error" = "Адбылася невядомая памылка. Калі ласка, праверце правільнасць пароля вашага ўліковага запісу і паўтарыце спробу.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Адклікаць праверку і адправіць";
 "screen_resolve_send_failure_changed_identity_subtitle" = "You can withdraw your verification and send this message anyway, or you can cancel for now and try again later after reverifying %1$@.";
@@ -354,7 +354,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
-"screen_account_provider_change" = "Змяніць правайдара ўліковага запісу";
 "screen_account_provider_form_hint" = "Адрас хатняга сервера";
 "screen_account_provider_form_notice" = "Увядзіце пошукавы запыт або адрас дамена.";
 "screen_account_provider_form_subtitle" = "Пошук кампаніі, супольнасці або прыватнага сервера.";
@@ -432,7 +431,6 @@
 "screen_chat_backup_key_backup_description" = "Рэзервовае капіраванне гарантуе, што вы не страціце сваю гісторыю паведамленняў. %1$@.";
 "screen_chat_backup_key_backup_title" = "Рэзервовая копія";
 "screen_chat_backup_recovery_action_change" = "Змяніць ключ аднаўлення";
-"screen_chat_backup_recovery_action_confirm" = "Увядзіце ключ аднаўлення";
 "screen_chat_backup_recovery_action_confirm_description" = "Ваша рэзервовая копія чата зараз не сінхранізавана.";
 "screen_chat_backup_recovery_action_setup" = "Наладзьце аднаўленне";
 "screen_chat_backup_recovery_action_setup_description" = "Атрымайце доступ да зашыфраваных паведамленняў, калі вы страціце ўсе свае прылады або выйдзеце з сістэмы %1$@ усюды.";
@@ -448,7 +446,6 @@
 "screen_create_poll_anonymous_desc" = "Паказаць вынікі толькі пасля заканчэння апытання";
 "screen_create_poll_anonymous_headline" = "Схаваць галасы";
 "screen_create_poll_answer_hint" = "Варыянт %1$d";
-"screen_create_poll_cancel_confirmation_content_ios" = "Вашы змены не будуць захаваны";
 "screen_create_poll_cancel_confirmation_title_ios" = "Адмяніць апытанне";
 "screen_create_poll_question_desc" = "Пытанне або тэма";
 "screen_create_poll_question_hint" = "Пра што апытанне?";
@@ -545,7 +542,6 @@
 "screen_notification_settings_group_chats" = "Групавыя чаты";
 "screen_notification_settings_invite_for_me_label" = "Запрашэнні";
 "screen_notification_settings_mentions_only_disclaimer" = "Ваш хатні сервер не падтрымлівае гэтую опцыю ў зашыфраваных пакоях, вы можаце не атрымаць апавяшчэнне ў некаторых пакоях.";
-"screen_notification_settings_mentions_section_title" = "Згадванні";
 "screen_notification_settings_mode_all" = "Усе";
 "screen_notification_settings_mode_mentions" = "Згадванні";
 "screen_notification_settings_notification_section_title" = "Апавясціць мяне";
@@ -617,7 +613,6 @@
 "screen_recovery_key_confirm_key_placeholder" = "Увесці...";
 "screen_recovery_key_confirm_lost_recovery_key" = "Страцілі ключ аднаўлення?";
 "screen_recovery_key_confirm_success" = "Ключ аднаўлення пацверджаны";
-"screen_recovery_key_confirm_title" = "Увядзіце ключ аднаўлення";
 "screen_recovery_key_copied_to_clipboard" = "Ключ аднаўлення скапіраваны";
 "screen_recovery_key_generating_key" = "Стварэнне…";
 "screen_recovery_key_save_action" = "Захаваць ключ аднаўлення";
@@ -637,7 +632,6 @@
 "screen_reset_encryption_confirmation_alert_action" = "Так, скінуць зараз";
 "screen_reset_encryption_confirmation_alert_subtitle" = "Гэты працэс незваротны.";
 "screen_reset_encryption_confirmation_alert_title" = "Вы ўпэўнены, што хочаце скінуць шыфраванне?";
-"screen_reset_encryption_password_placeholder" = "Увод...";
 "screen_reset_encryption_password_subtitle" = "Пацвердзіце, што вы хочаце скінуць шыфраванне";
 "screen_reset_encryption_password_title" = "Каб працягнуць, увядзіце пароль уліковага запісу";
 "screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.";
@@ -670,7 +664,6 @@
 "screen_room_change_role_moderators_admin_section_footer" = "Адміністратары аўтаматычна маюць права мадэратара";
 "screen_room_change_role_moderators_title" = "Рэдагаваць мадэратараў";
 "screen_room_change_role_unsaved_changes_description" = "У вас ёсць незахаваныя змены.";
-"screen_room_change_role_unsaved_changes_title" = "Захаваць змены?";
 "screen_room_details_add_topic_title" = "Дадаць тэму";
 "screen_room_details_already_a_member" = "Ужо ўдзельнік";
 "screen_room_details_already_invited" = "Ужо запрасілі";
@@ -687,7 +680,6 @@
 "screen_room_details_error_unmuting" = "Не ўдалося ўключыць гук у гэтым пакоі. Паўтарыце спробу.";
 "screen_room_details_notification_mode_custom" = "Уласныя";
 "screen_room_details_notification_mode_default" = "Стандартныя";
-"screen_room_details_notification_title" = "Апавяшчэнні";
 "screen_room_details_share_room_title" = "Падзяліцца пакоем";
 "screen_room_details_title" = "Інфармацыя аб пакоі";
 "screen_room_details_updating_room" = "Ідзе абнаўленне пакоя…";
@@ -712,7 +704,6 @@
 "screen_room_member_list_banning_user" = "Блакіроўка %1$@";
 "screen_room_member_list_manage_member_ban" = "Выдаліць і заблакіраваць удзельніка";
 "screen_room_member_list_manage_member_remove" = "Выдаліць удзельніка з пакоя";
-"screen_room_member_list_manage_member_remove_confirmation_ban" = "Выдаліць і заблакіраваць удзельніка";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Толькі выдаліць удзельніка";
 "screen_room_member_list_manage_member_remove_confirmation_title" = "Выдаліць удзельніка і забараніць далучацца ў будучыні?";
 "screen_room_member_list_manage_member_unban_action" = "Разблакіраваць";
@@ -791,7 +782,6 @@
 "screen_roomlist_mark_as_read" = "Пазначыць як прачытанае";
 "screen_roomlist_mark_as_unread" = "Пазначыць як непрачытанае";
 "screen_roomlist_room_directory_button_title" = "Праглядзець усе пакоі";
-"screen_server_confirmation_change_server" = "Змяніць правайдара ўліковага запісу";
 "screen_server_confirmation_message_login_element_dot_io" = "Прыватны сервер для супрацоўнікаў Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix - гэта адкрытая сетка для бяспечнай, дэцэнтралізаванай сувязі.";
 "screen_server_confirmation_message_register" = "Тут будуць захоўвацца вашыя размовы - сапраўды гэтак жа, як вы выкарыстоўваеце паштовага правайдара для захоўвання сваіх лістоў.";
@@ -831,13 +821,11 @@
 "screen_signout_key_backup_disabled_subtitle" = "Вы збіраецеся выйсці з апошняга сеанса. Калі вы выйдзеце з сістэмы зараз, вы страціце доступ да зашыфраваных паведамленняў.";
 "screen_signout_key_backup_disabled_title" = "Вы адключылі рэзервовае капіраванне";
 "screen_signout_key_backup_offline_subtitle" = "Вашы ключы ўсё яшчэ захоўваліся, калі вы выйшлі з сеткі. Паўторна падключыцеся, каб можна было стварыць рэзервовую копію вашых ключоў перад выхадам.";
-"screen_signout_key_backup_offline_title" = "Рэзервовае капіраванне ключоў усё яшчэ працягваецца";
 "screen_signout_key_backup_ongoing_subtitle" = "Калі ласка, дачакайцеся завяршэння працэсу, перш чым выходзіць з сістэмы.";
 "screen_signout_key_backup_ongoing_title" = "Вашы ключы ўсё яшчэ ствараюцца";
 "screen_signout_recovery_disabled_subtitle" = "Вы збіраецеся выйсці з апошняга сеанса. Калі вы выйдзеце з сістэмы зараз, вы страціце доступ да зашыфраваных паведамленняў.";
 "screen_signout_recovery_disabled_title" = "Аднаўленне не наладжана";
 "screen_signout_save_recovery_key_subtitle" = "Вы збіраецеся выйсці з апошняга сеанса. Калі вы выйдзеце з сістэмы зараз, вы страціце доступ да зашыфраваных паведамленняў.";
-"screen_signout_save_recovery_key_title" = "Вы захавалі свой ключ аднаўлення?";
 "screen_start_chat_error_starting_chat" = "Пры спробе пачаць чат адбылася памылка";
 "screen_view_location_title" = "Месцазнаходжанне";
 "screen_welcome_bullet_1" = "Званкі, апытанні, пошук і многае іншае будзе дададзена пазней у гэтым годзе.";
@@ -920,7 +908,6 @@
 "test_language_identifier" = "be";
 "test_untranslated_default_language_identifier" = "en";
 "troubleshoot_notifications_entry_point_section" = "Выпраўленне непаладак";
-"troubleshoot_notifications_entry_point_title" = "Выпраўленне непаладак з апавяшчэннямі";
 "troubleshoot_notifications_screen_action" = "Запусціць тэсты";
 "troubleshoot_notifications_screen_action_again" = "Запусціце тэсты яшчэ раз";
 "troubleshoot_notifications_screen_failure" = "Некаторыя тэсты не ўдаліся. Калі ласка, праглядзіце дэталі.";
@@ -962,13 +949,17 @@
 "troubleshoot_notifications_test_unified_push_description" = "Пераканайцеся, што размеркавальнікі UnifiedPush даступныя.";
 "troubleshoot_notifications_test_unified_push_failure" = "Размеркавальнікі не знойдзены.";
 "troubleshoot_notifications_test_unified_push_title" = "Праверыць UnifiedPush";
+"a11y_poll" = "Апытанне";
 "dialog_title_error" = "Памылка";
 "dialog_title_success" = "Поспех";
 "notification_fallback_content" = "Апавяшчэнне";
 "notification_invitation_action_join" = "Далучыцца";
+"notification_invitation_action_reject" = "Адхіліць";
 "notification_room_action_mark_as_read" = "Пазначыць як прачытанае";
 "notification_room_action_quick_reply" = "Хуткі адказ";
+"screen_pinned_timeline_screen_title_empty" = "Замацаваныя паведамленні";
 "screen_room_mentions_at_room_title" = "Усе";
+"screen_account_provider_change" = "Змяніць правайдара ўліковага запісу";
 "screen_account_provider_signin_subtitle" = "Тут будуць захоўвацца вашыя размовы - сапраўды гэтак жа, як вы выкарыстоўваеце паштовага правайдара для захоўвання сваіх лістоў.";
 "screen_account_provider_signup_subtitle" = "Тут будуць захоўвацца вашыя размовы - сапраўды гэтак жа, як вы выкарыстоўваеце паштовага правайдара для захоўвання сваіх лістоў.";
 "screen_analytics_settings_help_us_improve" = "Даваць ананімныя дадзеныя аб выкарыстанні, каб дапамагчы нам выявіць праблемы.";
@@ -978,6 +969,8 @@
 "screen_blocked_users_unblock_alert_description" = "Вы зноў зможаце ўбачыць усе паведамленні.";
 "screen_blocked_users_unblock_alert_title" = "Разблакіраваць карыстальніка";
 "screen_bug_report_rash_logs_alert_title" = "Пры апошнім выкарыстанні %1$@ адбыўся збой. Хочаце падзяліцца справаздачай аб збоі?";
+"screen_chat_backup_recovery_action_confirm" = "Увядзіце ключ аднаўлення";
+"screen_create_poll_cancel_confirmation_content_ios" = "Вашы змены не будуць захаваны";
 "screen_create_room_add_people_title" = "Запрасіць карыстальнікаў";
 "screen_create_room_room_name_label" = "Назва пакоя";
 "screen_create_room_title" = "Стварыце пакой";
@@ -991,8 +984,11 @@
 "screen_edit_poll_title" = "Рэдагаваць апытанне";
 "screen_identity_use_another_device" = "Выкарыстоўвайце іншую прыладу";
 "screen_login_subtitle" = "Matrix - гэта адкрытая сетка для бяспечнай, дэцэнтралізаванай сувязі.";
+"screen_notification_settings_mentions_section_title" = "Згадванні";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "Паўтарыць спробу";
+"screen_recovery_key_confirm_title" = "Увядзіце ключ аднаўлення";
 "screen_report_content_block_user" = "Заблакіраваць карыстальніка";
+"screen_reset_encryption_password_placeholder" = "Увесці...";
 "screen_room_attachment_source_camera_photo" = "Зрабіць фота";
 "screen_room_change_permissions_everyone" = "Усе";
 "screen_room_change_permissions_member_moderation" = "Мадэрацыя ўдзельнікаў";
@@ -1001,16 +997,23 @@
 "screen_room_change_role_section_administrators" = "Адміністратары";
 "screen_room_change_role_section_moderators" = "Мадэратары";
 "screen_room_change_role_section_users" = "Удзельнікі";
+"screen_room_change_role_unsaved_changes_title" = "Захаваць змены?";
 "screen_room_details_invite_people_title" = "Запрасіць карыстальнікаў";
 "screen_room_details_leave_conversation_title" = "Пакінуць размову";
 "screen_room_details_leave_room_title" = "Пакінуць пакой";
+"screen_room_details_notification_title" = "Апавяшчэнні";
 "screen_room_details_roles_and_permissions" = "Ролі і дазволы";
 "screen_room_details_room_name_label" = "Назва пакоя";
 "screen_room_details_security_title" = "Бяспека";
 "screen_room_details_topic_title" = "Тэма";
 "screen_room_error_failed_processing_media" = "Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз.";
+"screen_room_member_list_manage_member_remove_confirmation_ban" = "Выдаліць і заблакіраваць удзельніка";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Толькі згадванні і ключавыя словы";
 "screen_roomlist_filter_people" = "Людзі";
+"screen_server_confirmation_change_server" = "Змяніць правайдара ўліковага запісу";
 "screen_signout_confirmation_dialog_submit" = "Выйсці";
 "screen_signout_confirmation_dialog_title" = "Выйсці";
+"screen_signout_key_backup_offline_title" = "Вашы ключы ўсё яшчэ ствараюцца";
 "screen_signout_preference_item" = "Выйсці";
+"screen_signout_save_recovery_key_title" = "Вы захавалі свой ключ аднаўлення?";
+"troubleshoot_notifications_entry_point_title" = "Выпраўленне непаладак з апавяшчэннямі";
