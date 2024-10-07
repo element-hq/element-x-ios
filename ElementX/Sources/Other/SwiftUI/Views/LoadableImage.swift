@@ -386,7 +386,7 @@ struct LoadableImage_Previews: PreviewProvider, TestablePreview {
         
         if isLoading {
             mediaProvider.imageFromSourceSizeClosure = { _, _ in nil }
-            mediaProvider.loadFileFromSourceBodyClosure = { _, _ in .failure(.failedRetrievingFile) }
+            mediaProvider.loadFileFromSourceFilenameClosure = { _, _ in .failure(.failedRetrievingFile) }
             mediaProvider.loadImageDataFromSourceClosure = { _ in .failure(.failedRetrievingImage) }
             mediaProvider.loadImageFromSourceSizeClosure = { _, _ in .failure(.failedRetrievingImage) }
             mediaProvider.loadThumbnailForSourceSourceSizeClosure = { _, _ in .failure(.failedRetrievingThumbnail) }

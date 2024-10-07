@@ -50,7 +50,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
         
         voiceMessageCache.fileURLForReturnValue = nil
         let mediaSource = MediaSourceProxy(url: someURL, mimeType: "audio/ogg; codecs=opus")
-        mediaProvider.loadFileFromSourceBodyReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
+        mediaProvider.loadFileFromSourceFilenameReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
         voiceMessageCache.cacheMediaSourceUsingMoveReturnValue = .success(cachedConvertedFileURL)
         
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
@@ -103,7 +103,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
         // Check if the file is not already present in cache
         voiceMessageCache.fileURLForReturnValue = nil
         let mediaSource = MediaSourceProxy(url: someURL, mimeType: audioOGGMimeType)
-        mediaProvider.loadFileFromSourceBodyReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
+        mediaProvider.loadFileFromSourceFilenameReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
         let audioConverter = AudioConverterMock()
         voiceMessageCache.cacheMediaSourceUsingMoveReturnValue = .success(cachedConvertedFileURL)
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
@@ -139,7 +139,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
         }
         
         let audioConverter = AudioConverterMock()
-        mediaProvider.loadFileFromSourceBodyReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
+        mediaProvider.loadFileFromSourceFilenameReturnValue = .success(MediaFileHandleProxy.unmanaged(url: loadedFile))
 
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,
                                                             voiceMessageCache: voiceMessageCache,

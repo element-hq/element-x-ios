@@ -149,7 +149,10 @@ class LoggingTests: XCTestCase {
                                                  canBeRepliedTo: true,
                                                  isThreaded: false,
                                                  sender: .init(id: "sender"),
-                                                 content: .init(body: "ImageString", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"), thumbnailSource: nil))
+                                                 content: .init(filename: "ImageString",
+                                                                caption: "ImageString",
+                                                                source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"),
+                                                                thumbnailSource: nil))
         let videoMessage = VideoRoomTimelineItem(id: .random,
                                                  timestamp: "",
                                                  isOutgoing: false,
@@ -157,7 +160,11 @@ class LoggingTests: XCTestCase {
                                                  canBeRepliedTo: true,
                                                  isThreaded: false,
                                                  sender: .init(id: "sender"),
-                                                 content: .init(body: "VideoString", duration: 0, source: nil, thumbnailSource: nil))
+                                                 content: .init(filename: "VideoString",
+                                                                caption: "VideoString",
+                                                                duration: 0,
+                                                                source: nil,
+                                                                thumbnailSource: nil))
         let fileMessage = FileRoomTimelineItem(id: .random,
                                                timestamp: "",
                                                isOutgoing: false,
@@ -165,7 +172,11 @@ class LoggingTests: XCTestCase {
                                                canBeRepliedTo: true,
                                                isThreaded: false,
                                                sender: .init(id: "sender"),
-                                               content: .init(body: "FileString", source: nil, thumbnailSource: nil, contentType: nil))
+                                               content: .init(filename: "FileString",
+                                                              caption: "FileString",
+                                                              source: nil,
+                                                              thumbnailSource: nil,
+                                                              contentType: nil))
         
         // When logging that value
         MXLog.configure(currentTarget: "tests", filePrefix: nil, logLevel: .info)
