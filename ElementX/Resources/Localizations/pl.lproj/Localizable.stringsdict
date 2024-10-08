@@ -229,9 +229,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Pinned message</string>
-			<key>other</key>
-			<string>%1$d Pinned messages</string>
+			<string>%1$d przypięta wiadomość</string>
+			<key>few</key>
+			<string>%1$d przypięte wiadomości</string>
+			<key>many</key>
+			<string>%1$d przypiętych wiadomości</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>

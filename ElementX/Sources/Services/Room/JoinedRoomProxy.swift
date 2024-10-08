@@ -63,6 +63,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private var roomInfoObservationToken: TaskHandle?
     // periphery:ignore - required for instance retention in the rust codebase
     private var typingNotificationObservationToken: TaskHandle?
+    // periphery:ignore - required for instance retention in the rust codebase
+    private var identityStatusChangesObservationToken: TaskHandle?
     
     private var subscribedForUpdates = false
 
@@ -74,6 +76,11 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private let typingMembersSubject = CurrentValueSubject<[String], Never>([])
     var typingMembersPublisher: CurrentValuePublisher<[String], Never> {
         typingMembersSubject.asCurrentValuePublisher()
+    }
+    
+    private let identityStatusChangesSubject = CurrentValueSubject<[IdentityStatusChange], Never>([])
+    var identityStatusChangesPublisher: CurrentValuePublisher<[IdentityStatusChange], Never> {
+        identityStatusChangesSubject.asCurrentValuePublisher()
     }
         
     private let actionsSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
@@ -213,6 +220,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         await timeline.subscribeForUpdates()
         
         subscribeToRoomInfoUpdates()
+        
+        subscribeToIdentityStatusChanges()
         
         subscribeToTypingNotifications()
     }
@@ -749,6 +758,16 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         })
     }
     
+    private func subscribeToIdentityStatusChanges() {
+        identityStatusChangesObservationToken = room.subscribeToIdentityStatusChanges(listener: RoomIdentityStatusChangeListener { [weak self] changes in
+            guard let self else { return }
+            
+            MXLog.info("Received identity status changes: \(changes)")
+            
+            identityStatusChangesSubject.send(changes)
+        })
+    }
+    
     private func getZeroRoomName() -> String? {
         if let roomInfo = roomInfo {
             var displayName: String? = roomInfo.displayName ?? roomInfo.rawName
@@ -798,5 +817,17 @@ private final class RoomTypingNotificationUpdateListener: TypingNotificationsLis
     
     func call(typingUserIds: [String]) {
         onUpdateClosure(typingUserIds)
+    }
+}
+
+private final class RoomIdentityStatusChangeListener: IdentityStatusChangeListener {
+    private let onUpdateClosure: ([IdentityStatusChange]) -> Void
+    
+    init(_ onUpdateClosure: @escaping ([IdentityStatusChange]) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func call(identityStatusChange: [IdentityStatusChange]) {
+        onUpdateClosure(identityStatusChange)
     }
 }

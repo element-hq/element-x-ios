@@ -8,7 +8,6 @@
 "a11y_pause" = "暂停";
 "a11y_pin_field" = "PIN 字段";
 "a11y_play" = "播放";
-"a11y_poll" = "投票";
 "a11y_poll_end" = "投票已结束";
 "a11y_react_with" = "使用 %1$@ 回应";
 "a11y_react_with_other_emojis" = "使用其他表情符号回应";
@@ -41,6 +40,7 @@
 "action_create" = "创建";
 "action_create_a_room" = "创建房间";
 "action_deactivate" = "Deactivate";
+"action_deactivate_account" = "Deactivate account";
 "action_decline" = "拒绝";
 "action_delete_poll" = "删除投票";
 "action_disable" = "停用";
@@ -64,6 +64,7 @@
 "action_leave" = "离开";
 "action_leave_conversation" = "离开聊天";
 "action_leave_room" = "离开房间";
+"action_load_more" = "载入更多";
 "action_manage_account" = "管理账户";
 "action_manage_devices" = "管理设备";
 "action_message" = "发送消息给";
@@ -93,6 +94,7 @@
 "action_send_message" = "发送消息";
 "action_share" = "分享";
 "action_share_link" = "分享链接";
+"action_show" = "Show";
 "action_sign_in_again" = "再次登录";
 "action_signout" = "登出";
 "action_signout_anyway" = "仍然登出";
@@ -108,8 +110,6 @@
 "action_view_in_timeline" = "在时间轴中查看";
 "action_view_source" = "查看源码";
 "action_yes" = "是";
-"action.load_more" = "载入更多";
-"action_deactivate_account" = "Deactivate account";
 "banner_migrate_to_native_sliding_sync_action" = "登出并升级";
 "banner_migrate_to_native_sliding_sync_description" = "您的服务器现在支持更快的新协议。现在登出并重新登录以进行升级。现在这样做可以帮助您避免在以后删除旧协议时被强制登出。";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "您的服务器不再支持旧协议。请登出并重新登录以继续使用此应用。";
@@ -162,6 +162,7 @@
 "common_modern" = "现代";
 "common_mute" = "静音";
 "common_no_results" = "没有结果";
+"common_no_room_name" = "无房间名";
 "common_offline" = "离线";
 "common_optic_id_ios" = "光学 ID";
 "common_or" = "或";
@@ -170,6 +171,8 @@
 "common_permalink" = "固定链接";
 "common_permission" = "权限";
 "common_please_wait" = "请稍候……";
+"common_poll_end_confirmation" = "确定要结束这个投票吗？";
+"common_poll_summary" = "投票：%1$@";
 "common_poll_total_votes" = "总票数: %1$@";
 "common_poll_undisclosed_text" = "结果将在投票结束后显示";
 "common_privacy_policy" = "隐私政策";
@@ -200,6 +203,7 @@
 "common_settings" = "设置";
 "common_shared_location" = "共享位置";
 "common_signing_out" = "正在登出";
+"common_something_went_wrong" = "发生了一些错误";
 "common_starting_chat" = "开始聊天...";
 "common_sticker" = "贴纸";
 "common_success" = "成功";
@@ -213,6 +217,7 @@
 "common_topic_placeholder" = "这个房间是关于什么的？";
 "common_touch_id_ios" = "触控 ID";
 "common_unable_to_decrypt" = "无法解密";
+"common_unable_to_decrypt_no_access" = "无权访问此消息";
 "common_unable_to_invite_message" = "无法向一个或多个用户发送邀请。";
 "common_unable_to_invite_title" = "无法发送邀请";
 "common_unlock" = "解锁";
@@ -221,24 +226,21 @@
 "common_username" = "用户名";
 "common_verification_cancelled" = "验证已取消";
 "common_verification_complete" = "验证完成";
+"common_verify_device" = "验证设备";
 "common_video" = "视频";
 "common_voice_message" = "语音消息";
 "common_waiting" = "等待...";
 "common_waiting_for_decryption_key" = "正在等待解密密钥";
+"common.copied_to_clipboard" = "Copied to clipboard";
 "common.do_not_show_this_again" = "不再显示此内容";
 "common.open_source_licenses" = "开源许可证";
 "common.pinned" = "Pinned";
 "common.send_to" = "发送至";
 "common.you" = "You";
-"common_no_room_name" = "无房间名";
-"common_poll_end_confirmation" = "确定要结束这个投票吗？";
-"common_poll_summary" = "投票：%1$@";
-"common_something_went_wrong" = "发生了一些错误";
-"common_unable_to_decrypt_no_access" = "无权访问此消息";
-"common_verify_device" = "验证设备";
 "confirm_recovery_key_banner_message" = "聊天备份目前不同步，需要输入恢复密钥才能访问聊天备份。";
 "confirm_recovery_key_banner_title" = "输入恢复密钥";
 "crash_detection_dialog_content" = "%1$@ 上次使用时崩溃了。想和我们分享崩溃报告吗？";
+"crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
 "dialog_permission_camera" = "为了让应用程序使用相机，请在系统设置中授予权限。";
 "dialog_permission_generic" = "请在系统设置中授予权限。";
 "dialog_permission_location_description_ios" = "在设置->位置中授予访问权限。";
@@ -291,7 +293,6 @@
 "notification_channel_silent" = "静默通知";
 "notification_incoming_call" = "来电";
 "notification_inline_reply_failed" = "** 无法发送——请打开房间";
-"notification_invitation_action_reject" = "拒绝";
 "notification_invite_body" = "邀请您聊天";
 "notification_invite_body_with_sender" = "%1$@ invited you to chat";
 "notification_mentioned_you_body" = "提到了你：%1$@";
@@ -335,7 +336,6 @@
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL 无效，请确保包含协议（http/https）和正确的地址。";
 "screen_pinned_timeline_empty_state_description" = "按下消息并选择 “%1$@” 将其包含在此处。";
 "screen_pinned_timeline_empty_state_headline" = "固定重要消息，以便轻松发现它们";
-"screen_pinned_timeline_screen_title_empty" = "置顶消息";
 "screen_reset_encryption_password_error" = "发生未知错误。请检查您的帐户密码是否正确，然后重试。";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Withdraw verification and send";
 "screen_resolve_send_failure_changed_identity_subtitle" = "You can withdraw your verification and send this message anyway, or you can cancel for now and try again later after reverifying %1$@.";
@@ -354,7 +354,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "消息未发送，因为%1$@尚未验证所有设备。";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
-"screen_account_provider_change" = "更改账户提供者";
 "screen_account_provider_form_hint" = "服务器地址";
 "screen_account_provider_form_notice" = "输入搜索词或域名地址。";
 "screen_account_provider_form_subtitle" = "搜索公司、社区或私人服务器。";
@@ -432,7 +431,6 @@
 "screen_chat_backup_key_backup_description" = "备份可确保你不会丢失消息历史记录。%1$@。";
 "screen_chat_backup_key_backup_title" = "备份";
 "screen_chat_backup_recovery_action_change" = "更改恢复密钥";
-"screen_chat_backup_recovery_action_confirm" = "输入恢复密钥";
 "screen_chat_backup_recovery_action_confirm_description" = "您的聊天备份当前不同步。";
 "screen_chat_backup_recovery_action_setup" = "设置恢复密钥";
 "screen_chat_backup_recovery_action_setup_description" = "在丢失或从 %1$@ 登出所有设备的情况下访问加密消息。";
@@ -448,7 +446,6 @@
 "screen_create_poll_anonymous_desc" = "仅在投票结束后显示结果";
 "screen_create_poll_anonymous_headline" = "隐藏投票";
 "screen_create_poll_answer_hint" = "选项 %1$d";
-"screen_create_poll_cancel_confirmation_content_ios" = "您的更改不会保存";
 "screen_create_poll_cancel_confirmation_title_ios" = "取消投票";
 "screen_create_poll_question_desc" = "问题或话题";
 "screen_create_poll_question_hint" = "投票的内容是什么？";
@@ -545,7 +542,6 @@
 "screen_notification_settings_group_chats" = "群聊";
 "screen_notification_settings_invite_for_me_label" = "邀请";
 "screen_notification_settings_mentions_only_disclaimer" = "您的服务器在加密房间中不支持此选项，因此在某些房间您可能无法收到通知。";
-"screen_notification_settings_mentions_section_title" = "提及";
 "screen_notification_settings_mode_all" = "全部";
 "screen_notification_settings_mode_mentions" = "提及";
 "screen_notification_settings_notification_section_title" = "请通知我：";
@@ -617,7 +613,6 @@
 "screen_recovery_key_confirm_key_placeholder" = "输入……";
 "screen_recovery_key_confirm_lost_recovery_key" = "丢失了恢复密钥？";
 "screen_recovery_key_confirm_success" = "恢复密钥已确认";
-"screen_recovery_key_confirm_title" = "输入您的恢复密钥";
 "screen_recovery_key_copied_to_clipboard" = "恢复密钥已复制";
 "screen_recovery_key_generating_key" = "正在生成……";
 "screen_recovery_key_save_action" = "保存恢复密钥";
@@ -637,7 +632,6 @@
 "screen_reset_encryption_confirmation_alert_action" = "是的，立即重置";
 "screen_reset_encryption_confirmation_alert_subtitle" = "此过程不可逆。";
 "screen_reset_encryption_confirmation_alert_title" = "您确定要重置加密吗？";
-"screen_reset_encryption_password_placeholder" = "输入...";
 "screen_reset_encryption_password_subtitle" = "确认您要重置加密。";
 "screen_reset_encryption_password_title" = "输入您的账户密码以继续";
 "screen_reset_identity_confirmation_subtitle" = "您将要转到您的%1$@帐户来重置您的身份信息。之后，您将被带回该应用。";
@@ -670,7 +664,6 @@
 "screen_room_change_role_moderators_admin_section_footer" = "管理员自动拥有协管员权限";
 "screen_room_change_role_moderators_title" = "编辑协管员";
 "screen_room_change_role_unsaved_changes_description" = "您有未保存的更改。";
-"screen_room_change_role_unsaved_changes_title" = "保存更改？";
 "screen_room_details_add_topic_title" = "添加主题";
 "screen_room_details_already_a_member" = "已经是成员";
 "screen_room_details_already_invited" = "已邀请";
@@ -687,7 +680,6 @@
 "screen_room_details_error_unmuting" = "无法取消此房间的静音，请重试。";
 "screen_room_details_notification_mode_custom" = "自定义";
 "screen_room_details_notification_mode_default" = "默认";
-"screen_room_details_notification_title" = "通知";
 "screen_room_details_share_room_title" = "分享房间";
 "screen_room_details_title" = "聊天室信息";
 "screen_room_details_updating_room" = "正在更新房间……";
@@ -712,7 +704,6 @@
 "screen_room_member_list_banning_user" = "封禁 %1$@";
 "screen_room_member_list_manage_member_ban" = "移除并封禁成员";
 "screen_room_member_list_manage_member_remove" = "从房间移除";
-"screen_room_member_list_manage_member_remove_confirmation_ban" = "移除并封禁成员";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "仅移除成员";
 "screen_room_member_list_manage_member_remove_confirmation_title" = "删除成员并禁止重新加入？";
 "screen_room_member_list_manage_member_unban_action" = "取消封禁";
@@ -791,7 +782,6 @@
 "screen_roomlist_mark_as_read" = "标记为已读";
 "screen_roomlist_mark_as_unread" = "标记为未读";
 "screen_roomlist_room_directory_button_title" = "浏览所有房间";
-"screen_server_confirmation_change_server" = "更改账户提供者";
 "screen_server_confirmation_message_login_element_dot_io" = "专为 Element 员工提供的私人服务器。";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix 是一个用于安全、去中心化通信的开放网络。";
 "screen_server_confirmation_message_register" = "这是您的对话将进行的地方，就像您使用电子邮件提供商来保存电子邮件一样。";
@@ -831,13 +821,11 @@
 "screen_signout_key_backup_disabled_subtitle" = "即将登出最后一个会话。如果现在登出，将无法访问加密的消息。";
 "screen_signout_key_backup_disabled_title" = "您已关闭备份";
 "screen_signout_key_backup_offline_subtitle" = "当你离线时，密钥仍在备份中。重新连接以便在登出之前备份密钥。";
-"screen_signout_key_backup_offline_title" = "您的密钥仍在备份中";
 "screen_signout_key_backup_ongoing_subtitle" = "请等待此操作完成后再登出。";
 "screen_signout_key_backup_ongoing_title" = "您的密钥仍在备份中";
 "screen_signout_recovery_disabled_subtitle" = "即将登出最后一个会话。如果现在登出，将无法访问加密的消息。";
 "screen_signout_recovery_disabled_title" = "未设置恢复";
 "screen_signout_save_recovery_key_subtitle" = "即将登出最后一个会话。如果现在登出，将无法访问加密的消息。";
-"screen_signout_save_recovery_key_title" = "您保存了恢复密钥吗？";
 "screen_start_chat_error_starting_chat" = "在开始聊天时发生了错误";
 "screen_view_location_title" = "位置";
 "screen_welcome_bullet_1" = "今年晚些时候将增加通话、投票、搜索等功能。";
@@ -920,7 +908,6 @@
 "test_language_identifier" = "zh-Hans";
 "test_untranslated_default_language_identifier" = "en";
 "troubleshoot_notifications_entry_point_section" = "排查问题";
-"troubleshoot_notifications_entry_point_title" = "排查通知问题";
 "troubleshoot_notifications_screen_action" = "运行测试";
 "troubleshoot_notifications_screen_action_again" = "再次运行测试";
 "troubleshoot_notifications_screen_failure" = "一些测试失败了。请查看详情。";
@@ -962,13 +949,17 @@
 "troubleshoot_notifications_test_unified_push_description" = "确保 UnifiedPush distributor 可用。";
 "troubleshoot_notifications_test_unified_push_failure" = "未找到推送 distributor。";
 "troubleshoot_notifications_test_unified_push_title" = "检查 UnifiedPush";
+"a11y_poll" = "投票";
 "dialog_title_error" = "错误";
 "dialog_title_success" = "成功";
 "notification_fallback_content" = "通知";
 "notification_invitation_action_join" = "加入";
+"notification_invitation_action_reject" = "拒绝";
 "notification_room_action_mark_as_read" = "标记为已读";
 "notification_room_action_quick_reply" = "快速回复";
+"screen_pinned_timeline_screen_title_empty" = "置顶消息";
 "screen_room_mentions_at_room_title" = "所有人";
+"screen_account_provider_change" = "更改账户提供者";
 "screen_account_provider_signin_subtitle" = "这是您的对话将进行的地方，就像您使用电子邮件提供商来保存电子邮件一样。";
 "screen_account_provider_signup_subtitle" = "这是您的对话将进行的地方，就像您使用电子邮件提供商来保存电子邮件一样。";
 "screen_analytics_settings_help_us_improve" = "共享匿名使用数据以帮助我们排查问题。";
@@ -978,6 +969,8 @@
 "screen_blocked_users_unblock_alert_description" = "可以重新接收他们的消息。";
 "screen_blocked_users_unblock_alert_title" = "解封用户";
 "screen_bug_report_rash_logs_alert_title" = "%1$@ 上次使用时崩溃了。想和我们分享崩溃报告吗？";
+"screen_chat_backup_recovery_action_confirm" = "输入恢复密钥";
+"screen_create_poll_cancel_confirmation_content_ios" = "更改不会保存";
 "screen_create_room_add_people_title" = "邀请朋友";
 "screen_create_room_room_name_label" = "房间名称";
 "screen_create_room_title" = "创建房间";
@@ -991,8 +984,11 @@
 "screen_edit_poll_title" = "编辑投票";
 "screen_identity_use_another_device" = "使用其他设备";
 "screen_login_subtitle" = "Matrix 是一个用于安全、去中心化通信的开放网络。";
+"screen_notification_settings_mentions_section_title" = "提及";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "再试一次";
+"screen_recovery_key_confirm_title" = "输入恢复密钥";
 "screen_report_content_block_user" = "封禁用户";
+"screen_reset_encryption_password_placeholder" = "输入……";
 "screen_room_attachment_source_camera_photo" = "拍摄照片";
 "screen_room_change_permissions_everyone" = "所有人";
 "screen_room_change_permissions_member_moderation" = "成员权限";
@@ -1001,16 +997,23 @@
 "screen_room_change_role_section_administrators" = "管理员";
 "screen_room_change_role_section_moderators" = "协管员";
 "screen_room_change_role_section_users" = "成员";
+"screen_room_change_role_unsaved_changes_title" = "保存更改？";
 "screen_room_details_invite_people_title" = "邀请朋友";
 "screen_room_details_leave_conversation_title" = "离开聊天";
 "screen_room_details_leave_room_title" = "离开房间";
+"screen_room_details_notification_title" = "通知";
 "screen_room_details_roles_and_permissions" = "角色与权限";
 "screen_room_details_room_name_label" = "房间名称";
 "screen_room_details_security_title" = "安全";
 "screen_room_details_topic_title" = "话题";
 "screen_room_error_failed_processing_media" = "处理要上传的媒体失败，请重试。";
+"screen_room_member_list_manage_member_remove_confirmation_ban" = "移除并封禁成员";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "仅限提及和关键词";
 "screen_roomlist_filter_people" = "用户";
+"screen_server_confirmation_change_server" = "更改账户提供者";
 "screen_signout_confirmation_dialog_submit" = "登出";
 "screen_signout_confirmation_dialog_title" = "登出";
+"screen_signout_key_backup_offline_title" = "您的密钥仍在备份中";
 "screen_signout_preference_item" = "登出";
+"screen_signout_save_recovery_key_title" = "您保存了恢复密钥吗？";
+"troubleshoot_notifications_entry_point_title" = "排查通知问题";

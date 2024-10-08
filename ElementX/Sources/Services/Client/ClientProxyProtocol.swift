@@ -35,6 +35,7 @@ enum ClientProxyError: Error {
     case invalidServerName
     case failedUploadingMedia(Error, MatrixErrorCode)
     case roomPreviewIsPrivate
+    case failedRetrievingUserIdentity
 }
 
 enum SlidingSyncConstants {
@@ -196,5 +197,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func ed25519Base64() async -> String?
     func curve25519Base64() async -> String?
     
+    func pinUserIdentity(_ userID: String) async -> Result<Void, ClientProxyError>
     func resetIdentity() async -> Result<IdentityResetHandle?, ClientProxyError>
 }

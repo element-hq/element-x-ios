@@ -8,7 +8,6 @@
 "a11y_pause" = "Pause";
 "a11y_pin_field" = "Code PIN";
 "a11y_play" = "Lecture";
-"a11y_poll" = "Sondage";
 "a11y_poll_end" = "Sondage terminé";
 "a11y_react_with" = "Réagir avec %1$@";
 "a11y_react_with_other_emojis" = "Réagir avec d’autres emojis";
@@ -41,6 +40,7 @@
 "action_create" = "Créer";
 "action_create_a_room" = "Créer un salon";
 "action_deactivate" = "Désactiver";
+"action_deactivate_account" = "Désactiver le compte";
 "action_decline" = "Refuser";
 "action_delete_poll" = "Supprimer le sondage";
 "action_disable" = "Désactiver";
@@ -64,6 +64,7 @@
 "action_leave" = "Quitter";
 "action_leave_conversation" = "Quitter la discussion";
 "action_leave_room" = "Quitter le salon";
+"action_load_more" = "Voir plus";
 "action_manage_account" = "Gérer le compte";
 "action_manage_devices" = "Gérez les sessions";
 "action_message" = "Message";
@@ -84,7 +85,7 @@
 "action_report_bug" = "Signaler un problème";
 "action_report_content" = "Signaler le contenu";
 "action_reset" = "Réinitialiser";
-"action_reset_identity" = "Reset identity";
+"action_reset_identity" = "Réinitialiser l'identité";
 "action_retry" = "Réessayer";
 "action_retry_decryption" = "Réessayer le déchiffrement";
 "action_save" = "Enregistrer";
@@ -93,6 +94,7 @@
 "action_send_message" = "Envoyer un message";
 "action_share" = "Partager";
 "action_share_link" = "Partager le lien";
+"action_show" = "Show";
 "action_sign_in_again" = "Se connecter à nouveau";
 "action_signout" = "Se déconnecter";
 "action_signout_anyway" = "Se déconnecter quand même";
@@ -108,8 +110,6 @@
 "action_view_in_timeline" = "Voir dans la discussion";
 "action_view_source" = "Afficher la source";
 "action_yes" = "Oui";
-"action.load_more" = "Voir plus";
-"action_deactivate_account" = "Désactiver le compte";
 "banner_migrate_to_native_sliding_sync_action" = "Déconnecter et mettre à niveau";
 "banner_migrate_to_native_sliding_sync_description" = "Votre serveur prend désormais en charge un nouveau protocole plus rapide. Déconnectez-vous, puis reconnectez-vous pour effectuer la mise à niveau dès maintenant. En le faisant tout de suite, vous éviterez une déconnexion forcée lorsque l'ancien protocole sera supprimé.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Votre serveur d’accueil ne prend plus en charge l'ancien protocole. Veuillez vous déconnecter puis vous reconnecter pour continuer à utiliser l'application.";
@@ -162,6 +162,7 @@
 "common_modern" = "Moderne";
 "common_mute" = "Mettre en sourdine";
 "common_no_results" = "Aucun résultat";
+"common_no_room_name" = "Salon sans nom";
 "common_offline" = "Hors ligne";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "ou";
@@ -170,6 +171,8 @@
 "common_permalink" = "Permalien";
 "common_permission" = "Autorisation";
 "common_please_wait" = "Veuillez patienter…";
+"common_poll_end_confirmation" = "Êtes-vous sûr de vouloir mettre fin à ce sondage ?";
+"common_poll_summary" = "Sondage : %1$@";
 "common_poll_total_votes" = "Nombre total de votes : %1$@";
 "common_poll_undisclosed_text" = "Les résultats s’afficheront une fois le sondage terminé";
 "common_privacy_policy" = "Politique de confidentialité";
@@ -200,6 +203,7 @@
 "common_settings" = "Paramètres";
 "common_shared_location" = "Position partagée";
 "common_signing_out" = "Déconnexion";
+"common_something_went_wrong" = "Une erreur s'est produite";
 "common_starting_chat" = "Création de la discussion...";
 "common_sticker" = "Autocollant";
 "common_success" = "Succès";
@@ -213,6 +217,7 @@
 "common_topic_placeholder" = "De quoi s’agit-il dans ce salon ?";
 "common_touch_id_ios" = "Touch ID";
 "common_unable_to_decrypt" = "Échec de déchiffrement";
+"common_unable_to_decrypt_no_access" = "Vous ne pouvez pas voir ce message";
 "common_unable_to_invite_message" = "Les invitations n’ont pas pu être envoyées à un ou plusieurs utilisateurs.";
 "common_unable_to_invite_title" = "Impossible d’envoyer une ou plusieurs invitations";
 "common_unlock" = "Déverrouillage";
@@ -221,24 +226,21 @@
 "common_username" = "Nom d’utilisateur";
 "common_verification_cancelled" = "Vérification annulée";
 "common_verification_complete" = "Vérification terminée";
+"common_verify_device" = "Vérifier la session";
 "common_video" = "Vidéo";
 "common_voice_message" = "Message vocal";
 "common_waiting" = "En attente...";
 "common_waiting_for_decryption_key" = "En attente de la clé de déchiffrement";
+"common.copied_to_clipboard" = "Copied to clipboard";
 "common.do_not_show_this_again" = "Ne plus afficher";
 "common.open_source_licenses" = "Licences open source";
 "common.pinned" = "Épinglé";
 "common.send_to" = "Envoyer vers";
 "common.you" = "Vous";
-"common_no_room_name" = "Salon sans nom";
-"common_poll_end_confirmation" = "Êtes-vous sûr de vouloir mettre fin à ce sondage ?";
-"common_poll_summary" = "Sondage : %1$@";
-"common_something_went_wrong" = "Une erreur s'est produite";
-"common_unable_to_decrypt_no_access" = "Vous ne pouvez pas voir ce message";
-"common_verify_device" = "Vérifier la session";
 "confirm_recovery_key_banner_message" = "La sauvegarde des conversations est désynchronisée. Vous devez confirmer la clé de récupération pour accéder à votre historique.";
 "confirm_recovery_key_banner_title" = "Confirmer votre clé de récupération";
 "crash_detection_dialog_content" = "%1$@ s’est arrêté la dernière fois qu’il a été utilisé. Souhaitez-vous partager un rapport d’incident avec nous ?";
+"crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
 "dialog_permission_camera" = "Pour permettre à l’application d’utiliser l’appareil photo, veuillez accorder l’autorisation dans les paramètres du système.";
 "dialog_permission_generic" = "Veuillez accorder l’autorisation dans les paramètres du système.";
 "dialog_permission_location_description_ios" = "Autorisez l’accès dans Paramètres / Localisation.";
@@ -291,7 +293,6 @@
 "notification_channel_silent" = "Notifications silencieuses";
 "notification_incoming_call" = "Appel entrant";
 "notification_inline_reply_failed" = "** Échec de l’envoi - veuillez ouvrir le salon";
-"notification_invitation_action_reject" = "Rejeter";
 "notification_invite_body" = "Vous a invité(e) à discuter";
 "notification_invite_body_with_sender" = "%1$@ vous a invité à discuter";
 "notification_mentioned_you_body" = "Mentionné(e): %1$@";
@@ -335,7 +336,6 @@
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL invalide, assurez-vous d’inclure le protocol (http/https) et l’adresse correcte.";
 "screen_pinned_timeline_empty_state_description" = "Cliquez (clic long) sur un message et choisissez « %1$@ » pour qu‘il apparaisse ici.";
 "screen_pinned_timeline_empty_state_headline" = "Épinglez les messages importants pour leur donner plus de visibilité";
-"screen_pinned_timeline_screen_title_empty" = "Messages épinglés";
 "screen_reset_encryption_password_error" = "Une erreur s'est produite. Vérifiez que le mot de passe de votre compte est correct et réessayez.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Révoquer la verification et envoyer";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Vous pouvez révoquer la verification et envoyer ce message, ou vous pouvez annuler pour l'instant et réessayer plus tard après avoir vérifié à nouveau %1$@.";
@@ -354,7 +354,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Le message n'a pas été envoyé car l'identité vérifiée de %1$@ a changé.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Le message n'a pas été envoyé car %1$@ n'a pas vérifié tous ses appareils.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message non envoyé car vous n'avez pas vérifié tous vos appareils.";
-"screen_account_provider_change" = "Changer de fournisseur de compte";
 "screen_account_provider_form_hint" = "Adresse du serveur d’accueil";
 "screen_account_provider_form_notice" = "Entrez un terme de recherche ou une adresse de domaine.";
 "screen_account_provider_form_subtitle" = "Recherchez une entreprise, une communauté ou un serveur privé.";
@@ -432,7 +431,6 @@
 "screen_chat_backup_key_backup_description" = "La sauvegarde assure que vous ne perdiez pas l’historique des discussions. %1$@.";
 "screen_chat_backup_key_backup_title" = "Sauvegarde";
 "screen_chat_backup_recovery_action_change" = "Changer la clé de récupération";
-"screen_chat_backup_recovery_action_confirm" = "Confirmer la clé de récupération";
 "screen_chat_backup_recovery_action_confirm_description" = "La sauvegarde des discussions est désynchronisée.";
 "screen_chat_backup_recovery_action_setup" = "Configurer la récupération";
 "screen_chat_backup_recovery_action_setup_description" = "Accédez à vos messages chiffrés si vous perdez tous vos appareils ou que vous êtes déconnectés de %1$@ partout.";
@@ -448,7 +446,6 @@
 "screen_create_poll_anonymous_desc" = "Afficher les résultats uniquement après la fin du sondage";
 "screen_create_poll_anonymous_headline" = "Masquer les votes";
 "screen_create_poll_answer_hint" = "Option %1$d";
-"screen_create_poll_cancel_confirmation_content_ios" = "Vos modifications ne seront pas enregistrées";
 "screen_create_poll_cancel_confirmation_title_ios" = "Annuler le sondage";
 "screen_create_poll_question_desc" = "Question ou sujet";
 "screen_create_poll_question_hint" = "Quel est le sujet du sondage ?";
@@ -483,7 +480,7 @@
 "screen_encryption_reset_bullet_2" = "Vous perdrez l’historique de vos messages";
 "screen_encryption_reset_bullet_3" = "Vous devrez vérifier à nouveau tous vos appareils et tous vos contacts";
 "screen_encryption_reset_footer" = "Ne réinitialisez votre identité que si vous n'avez plus accès à aucune autre session et que vous avez perdu votre clé de récupération.";
-"screen_encryption_reset_title" = "Can't confirm? You’ll need to reset your identity.";
+"screen_encryption_reset_title" = "Vous ne pouvez pas confirmer ? Vous devez réinitialiser votre identité.";
 "screen_identity_confirmation_cannot_confirm" = "Confirmation impossible ?";
 "screen_identity_confirmation_create_new_recovery_key" = "Créer une nouvelle clé de récupération";
 "screen_identity_confirmation_subtitle" = "Vérifier cette session pour configurer votre messagerie sécurisée.";
@@ -545,7 +542,6 @@
 "screen_notification_settings_group_chats" = "Discussions de groupe";
 "screen_notification_settings_invite_for_me_label" = "Invitations";
 "screen_notification_settings_mentions_only_disclaimer" = "Votre serveur d’accueil ne supporte pas cette option pour les salons chiffrés, vous pourriez ne pas être notifié(e) dans certains salons.";
-"screen_notification_settings_mentions_section_title" = "Mentions";
 "screen_notification_settings_mode_all" = "Tous";
 "screen_notification_settings_mode_mentions" = "Mentions";
 "screen_notification_settings_notification_section_title" = "Prévenez-moi pour";
@@ -617,7 +613,6 @@
 "screen_recovery_key_confirm_key_placeholder" = "Saisissez la clé ici…";
 "screen_recovery_key_confirm_lost_recovery_key" = "Clé de récupération perdue?";
 "screen_recovery_key_confirm_success" = "Clé de récupération confirmée";
-"screen_recovery_key_confirm_title" = "Saisissez votre clé de récupération";
 "screen_recovery_key_copied_to_clipboard" = "Clé de récupération copiée";
 "screen_recovery_key_generating_key" = "Génération…";
 "screen_recovery_key_save_action" = "Enregistrer la clé";
@@ -636,8 +631,7 @@
 "screen_report_content_hint" = "Raison du signalement de ce contenu";
 "screen_reset_encryption_confirmation_alert_action" = "Oui, réinitialisez maintenant";
 "screen_reset_encryption_confirmation_alert_subtitle" = "Cette opération ne peut pas être annulée.";
-"screen_reset_encryption_confirmation_alert_title" = "Are you sure you want to reset your identity?";
-"screen_reset_encryption_password_placeholder" = "Saisissez...";
+"screen_reset_encryption_confirmation_alert_title" = "Êtes-vous sûr de vouloir réinitialiser votre identité ?";
 "screen_reset_encryption_password_subtitle" = "Veuillez confirmer que vous souhaitez réinitialiser votre identité.";
 "screen_reset_encryption_password_title" = "Saisissez le mot de passe de votre compte pour continuer";
 "screen_reset_identity_confirmation_subtitle" = "Vous êtes sur le point d'accéder à votre compte %1$@ pour réinitialiser votre identité. Vous serez ensuite redirigé vers l'application.";
@@ -670,7 +664,6 @@
 "screen_room_change_role_moderators_admin_section_footer" = "Les administrateurs ont automatiquement les privilèges des modérateurs";
 "screen_room_change_role_moderators_title" = "Modifier les modérateurs";
 "screen_room_change_role_unsaved_changes_description" = "Vous avez des modifications non-enregistrées.";
-"screen_room_change_role_unsaved_changes_title" = "Enregistrer les modifications?";
 "screen_room_details_add_topic_title" = "Ajouter un sujet";
 "screen_room_details_already_a_member" = "Déjà membre";
 "screen_room_details_already_invited" = "Déjà invité(e)";
@@ -687,7 +680,6 @@
 "screen_room_details_error_unmuting" = "Échec de la désactivation de la mise en sourdine de ce salon, veuillez réessayer.";
 "screen_room_details_notification_mode_custom" = "Personnalisé";
 "screen_room_details_notification_mode_default" = "Défaut";
-"screen_room_details_notification_title" = "Notifications";
 "screen_room_details_share_room_title" = "Partager le salon";
 "screen_room_details_title" = "Informations du salon";
 "screen_room_details_updating_room" = "Mise à jour du salon…";
@@ -712,7 +704,6 @@
 "screen_room_member_list_banning_user" = "Bannissement de %1$@";
 "screen_room_member_list_manage_member_ban" = "Retirer et bannir ce membre";
 "screen_room_member_list_manage_member_remove" = "Retirer le membre du salon";
-"screen_room_member_list_manage_member_remove_confirmation_ban" = "Retirer et bannir le membre";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Retirer le membre uniquement";
 "screen_room_member_list_manage_member_remove_confirmation_title" = "Retirer le membre et interdire l'adhésion à l'avenir ?";
 "screen_room_member_list_manage_member_unban_action" = "Débannir";
@@ -791,7 +782,6 @@
 "screen_roomlist_mark_as_read" = "Marquer comme lu";
 "screen_roomlist_mark_as_unread" = "Marquer comme non lu";
 "screen_roomlist_room_directory_button_title" = "Parcourir tous les salons";
-"screen_server_confirmation_change_server" = "Changer de fournisseur de compte";
 "screen_server_confirmation_message_login_element_dot_io" = "Un serveur privé pour les employés d’Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix est un réseau ouvert pour une communication sécurisée et décentralisée.";
 "screen_server_confirmation_message_register" = "C’est ici que vos conversations seront enregistrées, comme vous le feriez avec un fournisseur de messagerie pour conserver vos e-mails.";
@@ -831,13 +821,11 @@
 "screen_signout_key_backup_disabled_subtitle" = "Vous êtes en train de vous déconnecter de votre dernière session. Si vous vous déconnectez maintenant, vous perdrez l’accès à l’historique de vos discussions chiffrées.";
 "screen_signout_key_backup_disabled_title" = "Vous avez désactivé la sauvegarde";
 "screen_signout_key_backup_offline_subtitle" = "Vos clés étaient en cours de sauvegarde lorsque vous avez perdu la connexion au réseau. Il faudrait rétablir cette connexion afin de pouvoir terminer la sauvegarde avant de vous déconnecter.";
-"screen_signout_key_backup_offline_title" = "Vos clés sont en cours de sauvegarde";
 "screen_signout_key_backup_ongoing_subtitle" = "Veuillez attendre que cela se termine avant de vous déconnecter.";
 "screen_signout_key_backup_ongoing_title" = "Vos clés sont en cours de sauvegarde";
 "screen_signout_recovery_disabled_subtitle" = "Vous êtes sur le point de vous déconnecter de votre dernier appareil. Si vous le faites maintenant, vous perdrez l’accès à l’historique de vos messages.";
 "screen_signout_recovery_disabled_title" = "La récupération n’est pas configurée.";
 "screen_signout_save_recovery_key_subtitle" = "Vous êtes sur le point de vous déconnecter de votre dernière session. Si vous le faites maintenant, vous perdrez l’accès à l’historique de vos discussions chiffrées.";
-"screen_signout_save_recovery_key_title" = "Avez-vous sauvegardé votre clé de récupération?";
 "screen_start_chat_error_starting_chat" = "Une erreur s’est produite lors de la tentative de création de la discussion";
 "screen_view_location_title" = "Position";
 "screen_welcome_bullet_1" = "Les appels, les sondages, les recherches et plus encore seront ajoutés plus tard cette année.";
@@ -920,7 +908,6 @@
 "test_language_identifier" = "fr";
 "test_untranslated_default_language_identifier" = "en";
 "troubleshoot_notifications_entry_point_section" = "Dépannage";
-"troubleshoot_notifications_entry_point_title" = "Résoudre les problèmes liés aux notifications";
 "troubleshoot_notifications_screen_action" = "Exécuter les tests";
 "troubleshoot_notifications_screen_action_again" = "Relancer les tests";
 "troubleshoot_notifications_screen_failure" = "Certains tests ont échoué. Veuillez vérifier les détails.";
@@ -962,13 +949,17 @@
 "troubleshoot_notifications_test_unified_push_description" = "Vérifier qu’au moins un distributeur UnifiedPush est disponible.";
 "troubleshoot_notifications_test_unified_push_failure" = "Aucun distributeur UnifiedPush n'a été trouvé.";
 "troubleshoot_notifications_test_unified_push_title" = "Vérifier UnifiedPush";
+"a11y_poll" = "Sondage";
 "dialog_title_error" = "Erreur";
 "dialog_title_success" = "Succès";
 "notification_fallback_content" = "Notification";
 "notification_invitation_action_join" = "Rejoindre";
+"notification_invitation_action_reject" = "Rejeter";
 "notification_room_action_mark_as_read" = "Marquer comme lu";
 "notification_room_action_quick_reply" = "Réponse rapide";
+"screen_pinned_timeline_screen_title_empty" = "Messages épinglés";
 "screen_room_mentions_at_room_title" = "Tout le monde";
+"screen_account_provider_change" = "Changer de fournisseur de compte";
 "screen_account_provider_signin_subtitle" = "C’est ici que vos conversations seront enregistrées, comme vous le feriez avec un fournisseur de messagerie pour conserver vos e-mails.";
 "screen_account_provider_signup_subtitle" = "C’est ici que vos conversations seront enregistrées, comme vous le feriez avec un fournisseur de messagerie pour conserver vos e-mails.";
 "screen_analytics_settings_help_us_improve" = "Partagez des données d’utilisation anonymes pour nous aider à identifier les problèmes.";
@@ -978,6 +969,8 @@
 "screen_blocked_users_unblock_alert_description" = "Vous pourrez à nouveau voir tous ses messages.";
 "screen_blocked_users_unblock_alert_title" = "Débloquer l’utilisateur";
 "screen_bug_report_rash_logs_alert_title" = "%1$@ s’est arrêté la dernière fois qu’il a été utilisé. Souhaitez-vous partager un rapport d’incident avec nous ?";
+"screen_chat_backup_recovery_action_confirm" = "Utiliser la clé de récupération";
+"screen_create_poll_cancel_confirmation_content_ios" = "Vos modifications ne seront pas enregistrées";
 "screen_create_room_add_people_title" = "Inviter des amis";
 "screen_create_room_room_name_label" = "Nom du salon";
 "screen_create_room_title" = "Créer un salon";
@@ -991,8 +984,11 @@
 "screen_edit_poll_title" = "Modifier le sondage";
 "screen_identity_use_another_device" = "Utiliser une autre session";
 "screen_login_subtitle" = "Matrix est un réseau ouvert pour une communication sécurisée et décentralisée.";
+"screen_notification_settings_mentions_section_title" = "Mentions";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "Essayer à nouveau";
+"screen_recovery_key_confirm_title" = "Confirmer votre clé de récupération";
 "screen_report_content_block_user" = "Bloquer l’utilisateur";
+"screen_reset_encryption_password_placeholder" = "Saisissez la clé ici…";
 "screen_room_attachment_source_camera_photo" = "Prendre une photo";
 "screen_room_change_permissions_everyone" = "Tout le monde";
 "screen_room_change_permissions_member_moderation" = "Administration des membres";
@@ -1001,16 +997,23 @@
 "screen_room_change_role_section_administrators" = "Administrateurs";
 "screen_room_change_role_section_moderators" = "Modérateurs";
 "screen_room_change_role_section_users" = "Membres";
+"screen_room_change_role_unsaved_changes_title" = "Enregistrer les changements?";
 "screen_room_details_invite_people_title" = "Inviter des amis";
 "screen_room_details_leave_conversation_title" = "Quitter la discussion";
 "screen_room_details_leave_room_title" = "Quitter le salon";
+"screen_room_details_notification_title" = "Notifications";
 "screen_room_details_roles_and_permissions" = "Rôles et autorisations";
 "screen_room_details_room_name_label" = "Nom du salon";
 "screen_room_details_security_title" = "Sécurité";
 "screen_room_details_topic_title" = "Sujet";
 "screen_room_error_failed_processing_media" = "Échec du traitement des médias à télécharger, veuillez réessayer.";
+"screen_room_member_list_manage_member_remove_confirmation_ban" = "Retirer et bannir ce membre";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions et mots clés uniquement";
 "screen_roomlist_filter_people" = "Personnes";
+"screen_server_confirmation_change_server" = "Changer de fournisseur de compte";
 "screen_signout_confirmation_dialog_submit" = "Se déconnecter";
 "screen_signout_confirmation_dialog_title" = "Se déconnecter";
+"screen_signout_key_backup_offline_title" = "Vos clés sont en cours de sauvegarde";
 "screen_signout_preference_item" = "Se déconnecter";
+"screen_signout_save_recovery_key_title" = "Avez-vous sauvegardé votre clé de récupération?";
+"troubleshoot_notifications_entry_point_title" = "Dépanner les notifications";

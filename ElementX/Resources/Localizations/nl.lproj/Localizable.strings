@@ -8,7 +8,6 @@
 "a11y_pause" = "Pauzeren";
 "a11y_pin_field" = "PIN-veld";
 "a11y_play" = "Afspelen";
-"a11y_poll" = "Peiling";
 "a11y_poll_end" = "Beeïndigde peiling";
 "a11y_react_with" = "Reageer met %1$@";
 "a11y_react_with_other_emojis" = "Reageer met andere emoji's";
@@ -41,6 +40,7 @@
 "action_create" = "Aanmaken";
 "action_create_a_room" = "Creëer een kamer";
 "action_deactivate" = "Deactivate";
+"action_deactivate_account" = "Deactivate account";
 "action_decline" = "Weigeren";
 "action_delete_poll" = "Peiling verwijderen";
 "action_disable" = "Uitschakelen";
@@ -64,6 +64,7 @@
 "action_leave" = "Verlaten";
 "action_leave_conversation" = "Gesprek verlaten";
 "action_leave_room" = "Ruimte verlaten";
+"action_load_more" = "Meer laden";
 "action_manage_account" = "Account beheren";
 "action_manage_devices" = "Apparaten beheren";
 "action_message" = "Bericht";
@@ -93,6 +94,7 @@
 "action_send_message" = "Bericht verzenden";
 "action_share" = "Delen";
 "action_share_link" = "Link delen";
+"action_show" = "Show";
 "action_sign_in_again" = "Log opnieuw in";
 "action_signout" = "Uitloggen";
 "action_signout_anyway" = "Toch uitloggen";
@@ -108,8 +110,6 @@
 "action_view_in_timeline" = "View in timeline";
 "action_view_source" = "Bron weergeven";
 "action_yes" = "Ja";
-"action.load_more" = "Meer laden";
-"action_deactivate_account" = "Deactivate account";
 "banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
 "banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.";
@@ -162,6 +162,7 @@
 "common_modern" = "Modern";
 "common_mute" = "Dempen";
 "common_no_results" = "Geen resultaten";
+"common_no_room_name" = "Geen kamernaam";
 "common_offline" = "Offline";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "of";
@@ -170,6 +171,8 @@
 "common_permalink" = "Permalink";
 "common_permission" = "Toestemming";
 "common_please_wait" = "Even geduld...";
+"common_poll_end_confirmation" = "Weet je zeker dat je deze peiling wilt beëindigen?";
+"common_poll_summary" = "Peiling: %1$@";
 "common_poll_total_votes" = "Totaal aantal stemmen: %1$@";
 "common_poll_undisclosed_text" = "Resultaten worden getoond nadat de peiling is afgelopen";
 "common_privacy_policy" = "Privacybeleid";
@@ -200,6 +203,7 @@
 "common_settings" = "Instellingen";
 "common_shared_location" = "Gedeelde locatie";
 "common_signing_out" = "Uitloggen";
+"common_something_went_wrong" = "Er is iets misgegaan";
 "common_starting_chat" = "Chat starten…";
 "common_sticker" = "Sticker";
 "common_success" = "Geslaagd";
@@ -213,6 +217,7 @@
 "common_topic_placeholder" = "Waar gaat deze kamer over?";
 "common_touch_id_ios" = "Touch ID";
 "common_unable_to_decrypt" = "Kan niet ontsleutelen";
+"common_unable_to_decrypt_no_access" = "Je hebt geen toegang tot dit bericht";
 "common_unable_to_invite_message" = "Uitnodigingen konden niet naar een of meerdere gebruikers worden verzonden.";
 "common_unable_to_invite_title" = "Kan uitnodiging(en) niet verzenden";
 "common_unlock" = "Ontgrendelen";
@@ -221,24 +226,21 @@
 "common_username" = "Gebruikersnaam";
 "common_verification_cancelled" = "Verificatie geannuleerd";
 "common_verification_complete" = "Verificatie voltooid";
+"common_verify_device" = "Apparaat verifiëren";
 "common_video" = "Video";
 "common_voice_message" = "Spraakbericht";
 "common_waiting" = "Wachten…";
 "common_waiting_for_decryption_key" = "Wachten op dit bericht";
+"common.copied_to_clipboard" = "Copied to clipboard";
 "common.do_not_show_this_again" = "Do not show this again";
 "common.open_source_licenses" = "Open source licenses";
 "common.pinned" = "Pinned";
 "common.send_to" = "Send to";
 "common.you" = "You";
-"common_no_room_name" = "Geen kamernaam";
-"common_poll_end_confirmation" = "Weet je zeker dat je deze peiling wilt beëindigen?";
-"common_poll_summary" = "Peiling: %1$@";
-"common_something_went_wrong" = "Er is iets misgegaan";
-"common_unable_to_decrypt_no_access" = "Je hebt geen toegang tot dit bericht";
-"common_verify_device" = "Apparaat verifiëren";
 "confirm_recovery_key_banner_message" = "Je chatback-up is momenteel niet gesynchroniseerd. Je moet je herstelsleutel invoeren om toegang te behouden tot je chatback-up.";
 "confirm_recovery_key_banner_title" = "Voer je herstelsleutel in";
 "crash_detection_dialog_content" = "%1$@ crashte de laatste keer dat het werd gebruikt. Wil je een crashrapport met ons delen?";
+"crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
 "dialog_permission_camera" = "Geef toestemming in de systeeminstellingen om de applicatie de camera te laten gebruiken.";
 "dialog_permission_generic" = "Geef hiervoor toestemming in de systeeminstellingen.";
 "dialog_permission_location_description_ios" = "Verleen toegang via Instellingen -> Locatie.";
@@ -291,7 +293,6 @@
 "notification_channel_silent" = "Stille meldingen";
 "notification_incoming_call" = "Incoming call";
 "notification_inline_reply_failed" = "** Verzenden is mislukt - open de kamer";
-"notification_invitation_action_reject" = "Afwijzen";
 "notification_invite_body" = "Nodigde je uit om te chatten";
 "notification_invite_body_with_sender" = "%1$@ invited you to chat";
 "notification_mentioned_you_body" = "Heeft je genoemd: %1$@";
@@ -335,7 +336,6 @@
 "screen_advanced_settings_element_call_base_url_validation_error" = "Ongeldige URL, zorg ervoor dat je het protocol (http/https) en het juiste adres invult.";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
-"screen_pinned_timeline_screen_title_empty" = "Pinned messages";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Withdraw verification and send";
 "screen_resolve_send_failure_changed_identity_subtitle" = "You can withdraw your verification and send this message anyway, or you can cancel for now and try again later after reverifying %1$@.";
@@ -354,7 +354,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
-"screen_account_provider_change" = "Wijzig accountprovider";
 "screen_account_provider_form_hint" = "Homeserver-adres";
 "screen_account_provider_form_notice" = "Voer een zoekterm of een domeinnaam in.";
 "screen_account_provider_form_subtitle" = "Zoek naar een bedrijf, community of privéserver.";
@@ -432,7 +431,6 @@
 "screen_chat_backup_key_backup_description" = "Een back-up maken zorgt ervoor dat je je berichtgeschiedenis niet verliest. %1$@.";
 "screen_chat_backup_key_backup_title" = "Back-up";
 "screen_chat_backup_recovery_action_change" = "Herstelsleutel wijzigen";
-"screen_chat_backup_recovery_action_confirm" = "Voer herstelsleutel in";
 "screen_chat_backup_recovery_action_confirm_description" = "Je chatback-up is momenteel niet gesynchroniseerd.";
 "screen_chat_backup_recovery_action_setup" = "Herstelmogelijkheid instellen";
 "screen_chat_backup_recovery_action_setup_description" = "Krijg toegang tot je versleutelde berichten als je al je apparaten kwijtraakt of overal uit %1$@ bent uitgelogd.";
@@ -448,7 +446,6 @@
 "screen_create_poll_anonymous_desc" = "Resultaten pas weergeven nadat de peiling is afgelopen";
 "screen_create_poll_anonymous_headline" = "Stemmen verbergen";
 "screen_create_poll_answer_hint" = "Optie %1$d";
-"screen_create_poll_cancel_confirmation_content_ios" = "Je wijzigingen worden niet opgeslagen";
 "screen_create_poll_cancel_confirmation_title_ios" = "Peiling annuleren";
 "screen_create_poll_question_desc" = "Vraag of onderwerp";
 "screen_create_poll_question_hint" = "Waar gaat de peiling over?";
@@ -480,7 +477,7 @@
 "screen_edit_profile_updating_details" = "Profiel bijwerken…";
 "screen_encryption_reset_action_continue_reset" = "Continue reset";
 "screen_encryption_reset_bullet_1" = "Your account details, contacts, preferences, and chat list will be kept";
-"screen_encryption_reset_bullet_2" = "You will lose your existing message history";
+"screen_encryption_reset_bullet_2" = "You will lose your existing message history unless it is stored on another device";
 "screen_encryption_reset_bullet_3" = "You will need to verify all your existing devices and contacts again";
 "screen_encryption_reset_footer" = "Only reset your identity if you don’t have access to another signed-in device and you’ve lost your recovery key.";
 "screen_encryption_reset_title" = "Can't confirm? You’ll need to reset your identity.";
@@ -545,7 +542,6 @@
 "screen_notification_settings_group_chats" = "Groep chats";
 "screen_notification_settings_invite_for_me_label" = "Uitnodigingen";
 "screen_notification_settings_mentions_only_disclaimer" = "Je homeserver ondersteunt deze optie niet in versleutelde kamers; in sommige kamers krijg je mogelijk geen meldingen.";
-"screen_notification_settings_mentions_section_title" = "Vermeldingen";
 "screen_notification_settings_mode_all" = "Alles";
 "screen_notification_settings_mode_mentions" = "Vermeldingen";
 "screen_notification_settings_notification_section_title" = "Stuur me een melding voor";
@@ -617,7 +613,6 @@
 "screen_recovery_key_confirm_key_placeholder" = "Voer in...";
 "screen_recovery_key_confirm_lost_recovery_key" = "Herstelsleutel kwijt?";
 "screen_recovery_key_confirm_success" = "Herstelsleutel bevestigd";
-"screen_recovery_key_confirm_title" = "Voer je herstelsleutel in";
 "screen_recovery_key_copied_to_clipboard" = "Herstelsleutel gekopieerd";
 "screen_recovery_key_generating_key" = "Genereren...";
 "screen_recovery_key_save_action" = "Herstelsleutel opslaan";
@@ -637,7 +632,6 @@
 "screen_reset_encryption_confirmation_alert_action" = "Yes, reset now";
 "screen_reset_encryption_confirmation_alert_subtitle" = "This process is irreversible.";
 "screen_reset_encryption_confirmation_alert_title" = "Are you sure you want to reset your identity?";
-"screen_reset_encryption_password_placeholder" = "Enter…";
 "screen_reset_encryption_password_subtitle" = "Confirm that you want to reset your identity.";
 "screen_reset_encryption_password_title" = "Enter your account password to continue";
 "screen_reset_identity_confirmation_subtitle" = "You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.";
@@ -670,7 +664,6 @@
 "screen_room_change_role_moderators_admin_section_footer" = "Beheerders hebben automatisch moderatorrechten";
 "screen_room_change_role_moderators_title" = "Moderators bewerken";
 "screen_room_change_role_unsaved_changes_description" = "Je hebt niet-opgeslagen wijzigingen";
-"screen_room_change_role_unsaved_changes_title" = "Wijzigingen opslaan?";
 "screen_room_details_add_topic_title" = "Onderwerp toevoegen";
 "screen_room_details_already_a_member" = "Reeds lid";
 "screen_room_details_already_invited" = "Reeds uitgenodigd";
@@ -687,7 +680,6 @@
 "screen_room_details_error_unmuting" = "Het dempen opheffen voor deze kamer is mislukt. Probeer het opnieuw.";
 "screen_room_details_notification_mode_custom" = "Aangepast";
 "screen_room_details_notification_mode_default" = "Standaard";
-"screen_room_details_notification_title" = "Meldingen";
 "screen_room_details_share_room_title" = "Kamer delen";
 "screen_room_details_title" = "Kamer info";
 "screen_room_details_updating_room" = "Kamer bijwerken…";
@@ -712,7 +704,6 @@
 "screen_room_member_list_banning_user" = "%1$@ verbannen";
 "screen_room_member_list_manage_member_ban" = "Lid verwijderen en verbannen";
 "screen_room_member_list_manage_member_remove" = "Verwijderen uit kamer";
-"screen_room_member_list_manage_member_remove_confirmation_ban" = "Lid verwijderen en verbannen";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Alleen lid verwijderen";
 "screen_room_member_list_manage_member_remove_confirmation_title" = "Lid verwijderen en toekomstige deelname verbieden?";
 "screen_room_member_list_manage_member_unban_action" = "Ontbannen";
@@ -791,7 +782,6 @@
 "screen_roomlist_mark_as_read" = "Markeren als gelezen";
 "screen_roomlist_mark_as_unread" = "Markeren als ongelezen";
 "screen_roomlist_room_directory_button_title" = "Blader door alle kamers";
-"screen_server_confirmation_change_server" = "Accountprovider wijzigen";
 "screen_server_confirmation_message_login_element_dot_io" = "Een privéserver voor medewerkers van Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix is een open netwerk voor veilige, gedecentraliseerde communicatie.";
 "screen_server_confirmation_message_register" = "Dit is waar je gesprekken zullen worden bewaard — net zoals je een e-mailprovider zou gebruiken om je e-mails te bewaren.";
@@ -831,13 +821,11 @@
 "screen_signout_key_backup_disabled_subtitle" = "Je staat op het punt uit te loggen bij je laatste sessie. Als je je nu uitlogt, verlies je de toegang tot je versleutelde berichten.";
 "screen_signout_key_backup_disabled_title" = "Je hebt de back-up uitgeschakeld";
 "screen_signout_key_backup_offline_subtitle" = "De backup van je sleutels was nog bezig toen je offline ging. Maak opnieuw verbinding zodat er een back-up van je sleutels kan worden gemaakt voordat je uitlogt.";
-"screen_signout_key_backup_offline_title" = "De backup van je sleutels is nog bezig";
 "screen_signout_key_backup_ongoing_subtitle" = "Wacht tot dit voltooid is voordat je uitlogt.";
 "screen_signout_key_backup_ongoing_title" = "De backup van je sleutels is nog bezig";
 "screen_signout_recovery_disabled_subtitle" = "Je staat op het punt uit te loggen bij je laatste sessie. Als je je nu uitlogt, verlies je de toegang tot je versleutelde berichten.";
 "screen_signout_recovery_disabled_title" = "Herstelmogelijkheid niet ingesteld";
 "screen_signout_save_recovery_key_subtitle" = "Je staat op het punt uit te loggen bij je laatste sessie. Als je je nu uitlogt, kan het dat je de toegang tot je versleutelde berichten verliest.";
-"screen_signout_save_recovery_key_title" = "Heb je je herstelsleutel opgeslagen?";
 "screen_start_chat_error_starting_chat" = "Er is een fout opgetreden bij het starten van een chat";
 "screen_view_location_title" = "Locatie";
 "screen_welcome_bullet_1" = "Oproepen, peilingen, zoekopdrachten en meer zullen later dit jaar worden toegevoegd.";
@@ -920,7 +908,6 @@
 "test_language_identifier" = "en";
 "test_untranslated_default_language_identifier" = "en";
 "troubleshoot_notifications_entry_point_section" = "Problemen oplossen";
-"troubleshoot_notifications_entry_point_title" = "Problemen met meldingen oplossen";
 "troubleshoot_notifications_screen_action" = "Tests uitvoeren";
 "troubleshoot_notifications_screen_action_again" = "Tests opnieuw uitvoeren";
 "troubleshoot_notifications_screen_failure" = "Sommige tests zijn mislukt. Controleer de details.";
@@ -962,13 +949,17 @@
 "troubleshoot_notifications_test_unified_push_description" = "Ervoor zorgen dat UnifiedPush verdelers beschikbaar zijn.";
 "troubleshoot_notifications_test_unified_push_failure" = "Geen push-verdelers gevonden.";
 "troubleshoot_notifications_test_unified_push_title" = "UnifiedPush controleren";
+"a11y_poll" = "Peiling";
 "dialog_title_error" = "Fout";
 "dialog_title_success" = "Geslaagd";
 "notification_fallback_content" = "Melding";
 "notification_invitation_action_join" = "Deelnemen";
+"notification_invitation_action_reject" = "Reject";
 "notification_room_action_mark_as_read" = "Markeren als gelezen";
 "notification_room_action_quick_reply" = "Snel antwoord";
+"screen_pinned_timeline_screen_title_empty" = "Pinned messages";
 "screen_room_mentions_at_room_title" = "Iedereen";
+"screen_account_provider_change" = "Wijzig accountprovider";
 "screen_account_provider_signin_subtitle" = "Dit is waar je gesprekken zullen worden bewaard — net zoals je een e-mailprovider zou gebruiken om je e-mails te bewaren.";
 "screen_account_provider_signup_subtitle" = "Dit is waar je gesprekken zullen worden bewaard — net zoals je een e-mailprovider zou gebruiken om je e-mails te bewaren.";
 "screen_analytics_settings_help_us_improve" = "Deel anonieme gebruiksgegevens om ons te helpen problemen te identificeren.";
@@ -978,6 +969,8 @@
 "screen_blocked_users_unblock_alert_description" = "Je zult alle berichten van hen weer kunnen zien.";
 "screen_blocked_users_unblock_alert_title" = "Gebruiker deblokkeren";
 "screen_bug_report_rash_logs_alert_title" = "%1$@ crashte de laatste keer dat het werd gebruikt. Wil je een crashrapport met ons delen?";
+"screen_chat_backup_recovery_action_confirm" = "Voer herstelsleutel in";
+"screen_create_poll_cancel_confirmation_content_ios" = "Je wijzigingen worden niet opgeslagen";
 "screen_create_room_add_people_title" = "Mensen uitnodigen";
 "screen_create_room_room_name_label" = "Naam van de kamer";
 "screen_create_room_title" = "Creëer een kamer";
@@ -991,8 +984,11 @@
 "screen_edit_poll_title" = "Peiling wijzigen";
 "screen_identity_use_another_device" = "Use another device";
 "screen_login_subtitle" = "Matrix is een open netwerk voor veilige, gedecentraliseerde communicatie.";
+"screen_notification_settings_mentions_section_title" = "Vermeldingen";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "Probeer het opnieuw";
+"screen_recovery_key_confirm_title" = "Voer je herstelsleutel in";
 "screen_report_content_block_user" = "Gebruiker blokkeren";
+"screen_reset_encryption_password_placeholder" = "Voer in...";
 "screen_room_attachment_source_camera_photo" = "Foto maken";
 "screen_room_change_permissions_everyone" = "Iedereen";
 "screen_room_change_permissions_member_moderation" = "Moderatie van leden";
@@ -1001,16 +997,23 @@
 "screen_room_change_role_section_administrators" = "Beheerders";
 "screen_room_change_role_section_moderators" = "Moderators";
 "screen_room_change_role_section_users" = "Leden";
+"screen_room_change_role_unsaved_changes_title" = "Wijzigingen opslaan?";
 "screen_room_details_invite_people_title" = "Mensen uitnodigen";
 "screen_room_details_leave_conversation_title" = "Gesprek verlaten";
 "screen_room_details_leave_room_title" = "Ruimte verlaten";
+"screen_room_details_notification_title" = "Meldingen";
 "screen_room_details_roles_and_permissions" = "Rollen en rechten";
 "screen_room_details_room_name_label" = "Naam van de kamer";
 "screen_room_details_security_title" = "Beveiliging";
 "screen_room_details_topic_title" = "Onderwerp";
 "screen_room_error_failed_processing_media" = "Het verwerken van media voor uploaden is mislukt. Probeer het opnieuw.";
+"screen_room_member_list_manage_member_remove_confirmation_ban" = "Lid verwijderen en verbannen";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Alleen vermeldingen en trefwoorden";
 "screen_roomlist_filter_people" = "Personen";
+"screen_server_confirmation_change_server" = "Wijzig accountprovider";
 "screen_signout_confirmation_dialog_submit" = "Uitloggen";
 "screen_signout_confirmation_dialog_title" = "Uitloggen";
+"screen_signout_key_backup_offline_title" = "De backup van je sleutels is nog bezig";
 "screen_signout_preference_item" = "Uitloggen";
+"screen_signout_save_recovery_key_title" = "Heb je je herstelsleutel opgeslagen?";
+"troubleshoot_notifications_entry_point_title" = "Problemen met meldingen oplossen";

@@ -295,10 +295,12 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         
         roomProxy
             .actionsPublisher
-            .map { action -> (Bool, [String]) in
+            .compactMap { action -> (Bool, [String])? in
                 switch action {
                 case .roomInfoUpdate:
                     return (roomProxy.hasOngoingCall, roomProxy.activeRoomCallParticipants)
+                default:
+                    return nil
                 }
             }
             .removeDuplicates { $0 == $1 }
