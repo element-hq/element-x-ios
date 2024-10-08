@@ -53,7 +53,7 @@ struct DeveloperOptionsScreen: View {
             
             Section {
                 Toggle(isOn: $context.enableOnlySignedDeviceIsolationMode) {
-                    Text("Exclude not secure devices when sending/receiving messages")
+                    Text("Exclude insecure devices when sending/receiving messages")
                     Text("Requires app reboot")
                 }
             } header: {

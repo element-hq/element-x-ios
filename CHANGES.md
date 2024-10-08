@@ -1,3 +1,56 @@
+## Changes in 1.8.5 (2024-10-08)
+
+### What's Changed
+
+✨ Features
+* Display a warning when a user's pinned identity changes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3368
+
+🙌 Improvements
+* Add detection for latest devices. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3327
+* Configure the AuthenticationService later now that we have 2 flows on the start screen. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3316
+* Selecting a server that doesn't support login now fails instead of letting you continue to a failure later. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3342
+* Add new emoji from iOS 17.4 to the reaction picker. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3376
+
+🐛 Bugfixes
+* Use a plain view for reactions instead of a TabView. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3328
+* Upgrade Kingfisher to fix a bug that prevented GIFs from being tapped. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3326
+* Make sure the room header takes up as much space as possible (to hide the back button). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3335
+* Have ElementCall always default to the speaker; prevent the lock button from ending the call by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3338
+* Allow focusing the different avatars making up a DM details cluster separately. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3341
+* Disable auto correction when running on the Mac by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3364
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3347
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3371
+
+🧱 Build
+* Start fixing flakey tests ❄️ by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3329
+* Integration test runner switch by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3343
+* Switch UI tests back to the perf-only runner. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3349
+
+🚧 In development 🚧
+* Add developer option to hide media in the timeline. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3366
+
+Others
+* Integration test improvements by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3330
+* crypto: rename invisible crypto flag to deviceIsolationMode by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/3331
+* chore(deps): update dependency fastlane to v2.223.0 by @renovate in https://github.com/element-hq/element-x-ios/pull/3337
+* Log any failures when creating a call widget. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3339
+* chore(deps): update dependency fastlane to v2.223.1 by @renovate in https://github.com/element-hq/element-x-ios/pull/3340
+* Tracing and integration test tweaks by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3336
+* Remove message pinning FF by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3318
+* Move the core logic in LoginScreenCoordinator into the ViewModel. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3348
+* Bump the RustSDK to v1.0.53: adopt latest record based timeline item APIs by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3356
+* use element-hq RTE version by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3360
+* Hide timeline media preparation by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3361
+* chore(deps): update dependency fastlane to v2.224.0 by @renovate in https://github.com/element-hq/element-x-ios/pull/3370
+* Record a missing snapshot. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3374
+* Update the SDK and use media `filename` and `caption` internally. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3375
+* update sdk by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3377
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.8.4...1.8.5
+
 ## Changes in 1.8.4 (2024-09-24)
 
 ### What's Changed

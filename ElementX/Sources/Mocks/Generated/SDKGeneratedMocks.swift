@@ -6139,6 +6139,81 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption {
         }
     }
 
+    //MARK: - getUserIdentity
+
+    open var getUserIdentityUserIdThrowableError: Error?
+    var getUserIdentityUserIdUnderlyingCallsCount = 0
+    open var getUserIdentityUserIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getUserIdentityUserIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getUserIdentityUserIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getUserIdentityUserIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getUserIdentityUserIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var getUserIdentityUserIdCalled: Bool {
+        return getUserIdentityUserIdCallsCount > 0
+    }
+    open var getUserIdentityUserIdReceivedUserId: String?
+    open var getUserIdentityUserIdReceivedInvocations: [String] = []
+
+    var getUserIdentityUserIdUnderlyingReturnValue: UserIdentity?
+    open var getUserIdentityUserIdReturnValue: UserIdentity? {
+        get {
+            if Thread.isMainThread {
+                return getUserIdentityUserIdUnderlyingReturnValue
+            } else {
+                var returnValue: UserIdentity?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getUserIdentityUserIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getUserIdentityUserIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getUserIdentityUserIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var getUserIdentityUserIdClosure: ((String) async throws -> UserIdentity?)?
+
+    open override func getUserIdentity(userId: String) async throws -> UserIdentity? {
+        if let error = getUserIdentityUserIdThrowableError {
+            throw error
+        }
+        getUserIdentityUserIdCallsCount += 1
+        getUserIdentityUserIdReceivedUserId = userId
+        DispatchQueue.main.async {
+            self.getUserIdentityUserIdReceivedInvocations.append(userId)
+        }
+        if let getUserIdentityUserIdClosure = getUserIdentityUserIdClosure {
+            return try await getUserIdentityUserIdClosure(userId)
+        } else {
+            return getUserIdentityUserIdReturnValue
+        }
+    }
+
     //MARK: - isLastDevice
 
     open var isLastDeviceThrowableError: Error?
@@ -20852,6 +20927,122 @@ open class UnreadNotificationsCountSDKMock: MatrixRustSDK.UnreadNotificationsCou
         } else {
             return notificationCountReturnValue
         }
+    }
+}
+open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity {
+    init() {
+        super.init(noPointer: .init())
+    }
+
+    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    }
+
+    fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - masterKey
+
+    var masterKeyUnderlyingCallsCount = 0
+    open var masterKeyCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return masterKeyUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = masterKeyUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                masterKeyUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    masterKeyUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var masterKeyCalled: Bool {
+        return masterKeyCallsCount > 0
+    }
+
+    var masterKeyUnderlyingReturnValue: String?
+    open var masterKeyReturnValue: String? {
+        get {
+            if Thread.isMainThread {
+                return masterKeyUnderlyingReturnValue
+            } else {
+                var returnValue: String?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = masterKeyUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                masterKeyUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    masterKeyUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var masterKeyClosure: (() -> String?)?
+
+    open override func masterKey() -> String? {
+        masterKeyCallsCount += 1
+        if let masterKeyClosure = masterKeyClosure {
+            return masterKeyClosure()
+        } else {
+            return masterKeyReturnValue
+        }
+    }
+
+    //MARK: - pin
+
+    open var pinThrowableError: Error?
+    var pinUnderlyingCallsCount = 0
+    open var pinCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return pinUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = pinUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                pinUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    pinUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var pinCalled: Bool {
+        return pinCallsCount > 0
+    }
+    open var pinClosure: (() async throws -> Void)?
+
+    open override func pin() async throws {
+        if let error = pinThrowableError {
+            throw error
+        }
+        pinCallsCount += 1
+        try await pinClosure?()
     }
 }
 open class WidgetDriverSDKMock: MatrixRustSDK.WidgetDriver {

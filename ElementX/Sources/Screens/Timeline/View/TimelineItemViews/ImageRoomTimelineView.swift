@@ -81,7 +81,9 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       canBeRepliedTo: true,
                                                                       isThreaded: false,
                                                                       sender: .init(id: "Bob"),
-                                                                      content: .init(body: "Some image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil)))
+                                                                      content: .init(filename: "image.jpg",
+                                                                                     source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/jpg"),
+                                                                                     thumbnailSource: nil)))
             
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .random,
                                                                       timestamp: "Now",
@@ -90,7 +92,9 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       canBeRepliedTo: true,
                                                                       isThreaded: false,
                                                                       sender: .init(id: "Bob"),
-                                                                      content: .init(body: "Some other image", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"), thumbnailSource: nil)))
+                                                                      content: .init(filename: "other.png",
+                                                                                     source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"),
+                                                                                     thumbnailSource: nil)))
             
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .random,
                                                                       timestamp: "Now",
@@ -99,7 +103,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       canBeRepliedTo: true,
                                                                       isThreaded: false,
                                                                       sender: .init(id: "Bob"),
-                                                                      content: .init(body: "Blurhashed image",
+                                                                      content: .init(filename: "Blurhashed.jpg",
                                                                                      source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"),
                                                                                      thumbnailSource: nil,
                                                                                      aspectRatio: 0.7,

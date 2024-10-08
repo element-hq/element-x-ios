@@ -63,7 +63,7 @@ struct VoiceMessageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                     canBeRepliedTo: true,
                                                                     isThreaded: false,
                                                                     sender: .init(id: "Bob"),
-                                                                    content: .init(body: "audio.ogg",
+                                                                    content: .init(filename: "audio.ogg",
                                                                                    duration: 300,
                                                                                    waveform: EstimatedWaveform.mockWaveform,
                                                                                    source: nil,

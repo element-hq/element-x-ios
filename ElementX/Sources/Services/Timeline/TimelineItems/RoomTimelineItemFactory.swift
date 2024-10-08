@@ -569,12 +569,18 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
     
     private func buildAudioTimelineItemContent(_ messageContent: AudioMessageContent) -> AudioRoomTimelineItemContent {
+        let htmlCaption = messageContent.formattedCaption?.format == .html ? messageContent.formattedCaption?.body : nil
+        let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : attributedStringBuilder.fromPlain(messageContent.caption)
+        
         var waveform: EstimatedWaveform?
         if let audioWaveform = messageContent.audio?.waveform {
             waveform = EstimatedWaveform(data: audioWaveform)
         }
 
-        return AudioRoomTimelineItemContent(body: messageContent.body,
+        return AudioRoomTimelineItemContent(filename: messageContent.filename,
+                                            caption: messageContent.caption,
+                                            formattedCaption: formattedCaption,
+                                            formattedCaptionHTMLString: htmlCaption,
                                             duration: messageContent.audio?.duration ?? 0,
                                             waveform: waveform,
                                             source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
@@ -606,6 +612,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
 
     private func buildImageTimelineItemContent(_ messageContent: ImageMessageContent) -> ImageRoomTimelineItemContent {
+        let htmlCaption = messageContent.formattedCaption?.format == .html ? messageContent.formattedCaption?.body : nil
+        let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : attributedStringBuilder.fromPlain(messageContent.caption)
+        
         let thumbnailSource = messageContent.info?.thumbnailSource.map { MediaSourceProxy(source: $0, mimeType: messageContent.info?.thumbnailInfo?.mimetype) }
         let width = messageContent.info?.width.map(CGFloat.init)
         let height = messageContent.info?.height.map(CGFloat.init)
@@ -615,7 +624,10 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             aspectRatio = width / height
         }
         
-        return .init(body: messageContent.body,
+        return .init(filename: messageContent.filename,
+                     caption: messageContent.caption,
+                     formattedCaption: formattedCaption,
+                     formattedCaptionHTMLString: htmlCaption,
                      source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
                      thumbnailSource: thumbnailSource,
                      width: width,
@@ -626,6 +638,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
 
     private func buildVideoTimelineItemContent(_ messageContent: VideoMessageContent) -> VideoRoomTimelineItemContent {
+        let htmlCaption = messageContent.formattedCaption?.format == .html ? messageContent.formattedCaption?.body : nil
+        let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : attributedStringBuilder.fromPlain(messageContent.caption)
+        
         let thumbnailSource = messageContent.info?.thumbnailSource.map { MediaSourceProxy(source: $0, mimeType: messageContent.info?.thumbnailInfo?.mimetype) }
         let width = messageContent.info?.width.map(CGFloat.init)
         let height = messageContent.info?.height.map(CGFloat.init)
@@ -635,7 +650,10 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             aspectRatio = width / height
         }
         
-        return .init(body: messageContent.body,
+        return .init(filename: messageContent.filename,
+                     caption: messageContent.caption,
+                     formattedCaption: formattedCaption,
+                     formattedCaptionHTMLString: htmlCaption,
                      duration: messageContent.info?.duration ?? 0,
                      source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
                      thumbnailSource: thumbnailSource,
@@ -653,9 +671,15 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
 
     private func buildFileTimelineItemContent(_ messageContent: FileMessageContent) -> FileRoomTimelineItemContent {
+        let htmlCaption = messageContent.formattedCaption?.format == .html ? messageContent.formattedCaption?.body : nil
+        let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : attributedStringBuilder.fromPlain(messageContent.caption)
+        
         let thumbnailSource = messageContent.info?.thumbnailSource.map { MediaSourceProxy(source: $0, mimeType: messageContent.info?.thumbnailInfo?.mimetype) }
         
-        return .init(body: messageContent.body,
+        return .init(filename: messageContent.filename,
+                     caption: messageContent.caption,
+                     formattedCaption: formattedCaption,
+                     formattedCaptionHTMLString: htmlCaption,
                      source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
                      thumbnailSource: thumbnailSource,
                      contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))

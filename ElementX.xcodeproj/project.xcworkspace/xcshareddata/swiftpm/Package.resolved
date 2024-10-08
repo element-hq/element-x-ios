@@ -77,8 +77,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/emojibase-bindings",
       "state" : {
-        "revision" : "6ca06fefac9329fece851a2a4df7979b1699970a",
-        "version" : "1.0.5"
+        "revision" : "d4682a2ad5e68cfd2f41544c3c6c970b4d524bd1",
+        "version" : "1.3.3"
       }
     },
     {
@@ -167,8 +167,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "8ee63edc76bccd12c17a22eaf4eddae69e5f1303",
-        "version" : "1.0.55"
+        "revision" : "1366154c2e601179514be93e2fca48969c4f2ed8",
+        "version" : "1.0.56"
       }
     },
     {

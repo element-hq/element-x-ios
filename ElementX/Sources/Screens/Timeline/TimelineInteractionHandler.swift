@@ -533,30 +533,35 @@ class TimelineInteractionHandler {
     
     private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> RoomTimelineControllerAction {
         var source: MediaSourceProxy?
-        var body: String
+        var filename: String
+        var caption: String?
         
         switch timelineItem {
         case let item as ImageRoomTimelineItem:
             source = item.content.source
-            body = item.content.body
+            filename = item.content.filename
+            caption = item.content.caption
         case let item as VideoRoomTimelineItem:
             source = item.content.source
-            body = item.content.body
+            filename = item.content.filename
+            caption = item.content.caption
         case let item as FileRoomTimelineItem:
             source = item.content.source
-            body = item.content.body
+            filename = item.content.filename
+            caption = item.content.caption
         case let item as AudioRoomTimelineItem:
             // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
             source = item.content.source
-            body = item.content.body
+            filename = item.content.filename
+            caption = item.content.caption
         default:
             return .none
         }
 
         guard let source else { return .none }
-        switch await mediaProvider.loadFileFromSource(source, body: body) {
+        switch await mediaProvider.loadFileFromSource(source, filename: filename) {
         case .success(let file):
-            return .displayMediaFile(file: file, title: body)
+            return .displayMediaFile(file: file, title: caption ?? filename)
         case .failure:
             return .none
         }
