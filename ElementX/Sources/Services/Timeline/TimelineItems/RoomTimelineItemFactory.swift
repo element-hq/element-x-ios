@@ -597,7 +597,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             aspectRatio = width / height
         }
         
-        return .init(body: messageContent.body ?? "",
+        return .init(filename: messageContent.info?.name ?? "",
                      source: MediaSourceProxy(url: URL(string: messageContent.url ?? "") ?? URL("about:blank"),
                                               mimeType: messageContent.info?.mimeType),
                      thumbnailSource: nil,

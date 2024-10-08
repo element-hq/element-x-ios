@@ -133,10 +133,10 @@ struct ComposerToolbar: View {
             CompoundIcon(context.viewState.composerMode.isEdit ? \.check : \.sendSolid)
                 .scaledPadding(6, relativeTo: .title)
                 .accessibilityLabel(context.viewState.composerMode.isEdit ? L10n.actionConfirm : L10n.actionSend)
-                .foregroundColor(context.viewState.sendButtonDisabled ? .compound.iconDisabled : .white)
+                .foregroundColor(context.viewState.sendButtonDisabled ? .compound.iconDisabled : .zero.iconAccentTertiary)
                 .background {
                     Circle()
-                        .foregroundColor(context.viewState.sendButtonDisabled ? .clear : .zero.iconAccentTertiary)
+                        .foregroundColor(context.viewState.sendButtonDisabled ? .clear : Asset.Colors.zeroDarkGrey.swiftUIColor)
                 }
                 .scaledPadding(4, relativeTo: .title)
         }

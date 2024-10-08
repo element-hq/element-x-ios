@@ -32,9 +32,11 @@ struct PlaceholderAvatarImage: View {
                 backgroundColor
                 
                 Image(asset: Asset.Images.defaultAvatarIcon)
-                    .foregroundStyle(Asset.Colors.brandColor.swiftUIColor)
+                    .resizable()
                     .frame(alignment: .center)
+                    .foregroundStyle(Asset.Colors.brandColor.swiftUIColor)
                     .scaledToFit()
+                    .padding(4)
             }
         }
         .aspectRatio(1, contentMode: .fill)

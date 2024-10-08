@@ -255,7 +255,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             }
         } else {
             context.composerFormattingEnabled = false
-            set(text: draft.plainText)
+            set(text: "\(draft.plainText.trimmingCharacters(in: .whitespaces)) ")
         }
         
         switch draft.draftType {
@@ -473,6 +473,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             } else {
                 let attributedString = NSMutableAttributedString(attributedString: state.bindings.plainComposerText)
                 mentionBuilder.handleUserMention(for: attributedString, in: suggestion.range, url: url, userID: item.id, userDisplayName: item.displayName)
+                /// Appending space after each mention to maintain text formatting
+                attributedString.appendString(" ")
                 state.bindings.plainComposerText = attributedString
             }
         case .allUsers:
@@ -481,6 +483,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             } else {
                 let attributedString = NSMutableAttributedString(attributedString: state.bindings.plainComposerText)
                 mentionBuilder.handleAllUsersMention(for: attributedString, in: suggestion.range)
+                /// Appending space after each mention to maintain text formatting
+                attributedString.appendString(" ")
                 state.bindings.plainComposerText = attributedString
             }
         }
