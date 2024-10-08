@@ -72,7 +72,8 @@ packages:
     # path: ../matrix-analytics-events
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
-    minorVersion: 1.0.0
+    minorVersion: 1.3.3
+    # path: ../emojibase-bindings
   SwiftOGG:
     url: https://github.com/element-hq/swift-ogg
     minorVersion: 0.0.3
