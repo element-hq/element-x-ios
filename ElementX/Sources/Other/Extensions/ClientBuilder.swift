@@ -36,12 +36,12 @@ extension ClientBuilder {
                 
             if enableOnlySignedDeviceIsolationMode {
                 builder = builder
-                    .roomKeyRecipientStrategy(strategy: CollectStrategy.identityBasedStrategy)
-                    .roomDecryptionTrustRequirement(trustRequirement: TrustRequirement.crossSignedOrLegacy)
+                    .roomKeyRecipientStrategy(strategy: .identityBasedStrategy)
+                    .roomDecryptionTrustRequirement(trustRequirement: .crossSignedOrLegacy)
             } else {
                 builder = builder
                     .roomKeyRecipientStrategy(strategy: .deviceBasedStrategy(onlyAllowTrustedDevices: false, errorOnVerifiedUserProblem: true))
-                    .roomDecryptionTrustRequirement(trustRequirement: TrustRequirement.untrusted)
+                    .roomDecryptionTrustRequirement(trustRequirement: .untrusted)
             }
         }
         
