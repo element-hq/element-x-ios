@@ -42,7 +42,10 @@ struct FileRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                     canBeRepliedTo: true,
                                                                     isThreaded: false,
                                                                     sender: .init(id: "Bob"),
-                                                                    content: .init(body: "document.pdf", source: nil, thumbnailSource: nil, contentType: nil)))
+                                                                    content: .init(filename: "document.pdf",
+                                                                                   source: nil,
+                                                                                   thumbnailSource: nil,
+                                                                                   contentType: nil)))
 
             FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: .random,
                                                                     timestamp: "Now",
@@ -51,7 +54,10 @@ struct FileRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                     canBeRepliedTo: true,
                                                                     isThreaded: false,
                                                                     sender: .init(id: "Bob"),
-                                                                    content: .init(body: "document.docx", source: nil, thumbnailSource: nil, contentType: nil)))
+                                                                    content: .init(filename: "document.docx",
+                                                                                   source: nil,
+                                                                                   thumbnailSource: nil,
+                                                                                   contentType: nil)))
             
             FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: .random,
                                                                     timestamp: "Now",
@@ -60,7 +66,10 @@ struct FileRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                     canBeRepliedTo: true,
                                                                     isThreaded: false,
                                                                     sender: .init(id: "Bob"),
-                                                                    content: .init(body: "document.txt", source: nil, thumbnailSource: nil, contentType: nil)))
+                                                                    content: .init(filename: "document.txt",
+                                                                                   source: nil,
+                                                                                   thumbnailSource: nil,
+                                                                                   contentType: nil)))
         }
     }
 }

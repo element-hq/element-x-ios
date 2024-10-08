@@ -117,9 +117,9 @@ struct MediaProvider: MediaProviderProtocol {
     
     // MARK: Files
     
-    func loadFileFromSource(_ source: MediaSourceProxy, body: String?) async -> Result<MediaFileHandleProxy, MediaProviderError> {
+    func loadFileFromSource(_ source: MediaSourceProxy, filename: String?) async -> Result<MediaFileHandleProxy, MediaProviderError> {
         do {
-            let file = try await mediaLoader.loadMediaFileForSource(source, body: body)
+            let file = try await mediaLoader.loadMediaFileForSource(source, filename: filename)
             return .success(file)
         } catch {
             MXLog.error("Failed retrieving file with error: \(error)")

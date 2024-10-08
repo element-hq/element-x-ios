@@ -9,7 +9,11 @@ import Foundation
 import UniformTypeIdentifiers
 
 struct VideoRoomTimelineItemContent: Hashable {
-    let body: String
+    let filename: String
+    var caption: String?
+    var formattedCaption: AttributedString?
+    /// The original textual representation of the formatted caption directly from the event (usually HTML code)
+    var formattedCaptionHTMLString: String?
     let duration: TimeInterval
     let source: MediaSourceProxy?
     let thumbnailSource: MediaSourceProxy?

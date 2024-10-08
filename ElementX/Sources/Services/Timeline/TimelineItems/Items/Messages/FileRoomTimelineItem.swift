@@ -26,7 +26,7 @@ struct FileRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
     var properties = RoomTimelineItemProperties()
     
     var body: String {
-        content.body
+        content.caption ?? content.filename
     }
     
     var contentType: EventBasedMessageTimelineItemContentType {

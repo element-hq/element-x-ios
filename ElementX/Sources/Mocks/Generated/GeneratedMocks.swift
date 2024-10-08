@@ -4710,16 +4710,16 @@ class ClientProxyMock: ClientProxyProtocol {
     }
     //MARK: - loadMediaFileForSource
 
-    var loadMediaFileForSourceBodyThrowableError: Error?
-    var loadMediaFileForSourceBodyUnderlyingCallsCount = 0
-    var loadMediaFileForSourceBodyCallsCount: Int {
+    var loadMediaFileForSourceFilenameThrowableError: Error?
+    var loadMediaFileForSourceFilenameUnderlyingCallsCount = 0
+    var loadMediaFileForSourceFilenameCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return loadMediaFileForSourceBodyUnderlyingCallsCount
+                return loadMediaFileForSourceFilenameUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = loadMediaFileForSourceBodyUnderlyingCallsCount
+                    returnValue = loadMediaFileForSourceFilenameUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -4727,29 +4727,29 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                loadMediaFileForSourceBodyUnderlyingCallsCount = newValue
+                loadMediaFileForSourceFilenameUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    loadMediaFileForSourceBodyUnderlyingCallsCount = newValue
+                    loadMediaFileForSourceFilenameUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var loadMediaFileForSourceBodyCalled: Bool {
-        return loadMediaFileForSourceBodyCallsCount > 0
+    var loadMediaFileForSourceFilenameCalled: Bool {
+        return loadMediaFileForSourceFilenameCallsCount > 0
     }
-    var loadMediaFileForSourceBodyReceivedArguments: (source: MediaSourceProxy, body: String?)?
-    var loadMediaFileForSourceBodyReceivedInvocations: [(source: MediaSourceProxy, body: String?)] = []
+    var loadMediaFileForSourceFilenameReceivedArguments: (source: MediaSourceProxy, filename: String?)?
+    var loadMediaFileForSourceFilenameReceivedInvocations: [(source: MediaSourceProxy, filename: String?)] = []
 
-    var loadMediaFileForSourceBodyUnderlyingReturnValue: MediaFileHandleProxy!
-    var loadMediaFileForSourceBodyReturnValue: MediaFileHandleProxy! {
+    var loadMediaFileForSourceFilenameUnderlyingReturnValue: MediaFileHandleProxy!
+    var loadMediaFileForSourceFilenameReturnValue: MediaFileHandleProxy! {
         get {
             if Thread.isMainThread {
-                return loadMediaFileForSourceBodyUnderlyingReturnValue
+                return loadMediaFileForSourceFilenameUnderlyingReturnValue
             } else {
                 var returnValue: MediaFileHandleProxy? = nil
                 DispatchQueue.main.sync {
-                    returnValue = loadMediaFileForSourceBodyUnderlyingReturnValue
+                    returnValue = loadMediaFileForSourceFilenameUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -4757,29 +4757,29 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                loadMediaFileForSourceBodyUnderlyingReturnValue = newValue
+                loadMediaFileForSourceFilenameUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    loadMediaFileForSourceBodyUnderlyingReturnValue = newValue
+                    loadMediaFileForSourceFilenameUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var loadMediaFileForSourceBodyClosure: ((MediaSourceProxy, String?) async throws -> MediaFileHandleProxy)?
+    var loadMediaFileForSourceFilenameClosure: ((MediaSourceProxy, String?) async throws -> MediaFileHandleProxy)?
 
-    func loadMediaFileForSource(_ source: MediaSourceProxy, body: String?) async throws -> MediaFileHandleProxy {
-        if let error = loadMediaFileForSourceBodyThrowableError {
+    func loadMediaFileForSource(_ source: MediaSourceProxy, filename: String?) async throws -> MediaFileHandleProxy {
+        if let error = loadMediaFileForSourceFilenameThrowableError {
             throw error
         }
-        loadMediaFileForSourceBodyCallsCount += 1
-        loadMediaFileForSourceBodyReceivedArguments = (source: source, body: body)
+        loadMediaFileForSourceFilenameCallsCount += 1
+        loadMediaFileForSourceFilenameReceivedArguments = (source: source, filename: filename)
         DispatchQueue.main.async {
-            self.loadMediaFileForSourceBodyReceivedInvocations.append((source: source, body: body))
+            self.loadMediaFileForSourceFilenameReceivedInvocations.append((source: source, filename: filename))
         }
-        if let loadMediaFileForSourceBodyClosure = loadMediaFileForSourceBodyClosure {
-            return try await loadMediaFileForSourceBodyClosure(source, body)
+        if let loadMediaFileForSourceFilenameClosure = loadMediaFileForSourceFilenameClosure {
+            return try await loadMediaFileForSourceFilenameClosure(source, filename)
         } else {
-            return loadMediaFileForSourceBodyReturnValue
+            return loadMediaFileForSourceFilenameReturnValue
         }
     }
 }
@@ -9693,16 +9693,16 @@ class MediaLoaderMock: MediaLoaderProtocol {
     }
     //MARK: - loadMediaFileForSource
 
-    var loadMediaFileForSourceBodyThrowableError: Error?
-    var loadMediaFileForSourceBodyUnderlyingCallsCount = 0
-    var loadMediaFileForSourceBodyCallsCount: Int {
+    var loadMediaFileForSourceFilenameThrowableError: Error?
+    var loadMediaFileForSourceFilenameUnderlyingCallsCount = 0
+    var loadMediaFileForSourceFilenameCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return loadMediaFileForSourceBodyUnderlyingCallsCount
+                return loadMediaFileForSourceFilenameUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = loadMediaFileForSourceBodyUnderlyingCallsCount
+                    returnValue = loadMediaFileForSourceFilenameUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -9710,29 +9710,29 @@ class MediaLoaderMock: MediaLoaderProtocol {
         }
         set {
             if Thread.isMainThread {
-                loadMediaFileForSourceBodyUnderlyingCallsCount = newValue
+                loadMediaFileForSourceFilenameUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    loadMediaFileForSourceBodyUnderlyingCallsCount = newValue
+                    loadMediaFileForSourceFilenameUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var loadMediaFileForSourceBodyCalled: Bool {
-        return loadMediaFileForSourceBodyCallsCount > 0
+    var loadMediaFileForSourceFilenameCalled: Bool {
+        return loadMediaFileForSourceFilenameCallsCount > 0
     }
-    var loadMediaFileForSourceBodyReceivedArguments: (source: MediaSourceProxy, body: String?)?
-    var loadMediaFileForSourceBodyReceivedInvocations: [(source: MediaSourceProxy, body: String?)] = []
+    var loadMediaFileForSourceFilenameReceivedArguments: (source: MediaSourceProxy, filename: String?)?
+    var loadMediaFileForSourceFilenameReceivedInvocations: [(source: MediaSourceProxy, filename: String?)] = []
 
-    var loadMediaFileForSourceBodyUnderlyingReturnValue: MediaFileHandleProxy!
-    var loadMediaFileForSourceBodyReturnValue: MediaFileHandleProxy! {
+    var loadMediaFileForSourceFilenameUnderlyingReturnValue: MediaFileHandleProxy!
+    var loadMediaFileForSourceFilenameReturnValue: MediaFileHandleProxy! {
         get {
             if Thread.isMainThread {
-                return loadMediaFileForSourceBodyUnderlyingReturnValue
+                return loadMediaFileForSourceFilenameUnderlyingReturnValue
             } else {
                 var returnValue: MediaFileHandleProxy? = nil
                 DispatchQueue.main.sync {
-                    returnValue = loadMediaFileForSourceBodyUnderlyingReturnValue
+                    returnValue = loadMediaFileForSourceFilenameUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -9740,29 +9740,29 @@ class MediaLoaderMock: MediaLoaderProtocol {
         }
         set {
             if Thread.isMainThread {
-                loadMediaFileForSourceBodyUnderlyingReturnValue = newValue
+                loadMediaFileForSourceFilenameUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    loadMediaFileForSourceBodyUnderlyingReturnValue = newValue
+                    loadMediaFileForSourceFilenameUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var loadMediaFileForSourceBodyClosure: ((MediaSourceProxy, String?) async throws -> MediaFileHandleProxy)?
+    var loadMediaFileForSourceFilenameClosure: ((MediaSourceProxy, String?) async throws -> MediaFileHandleProxy)?
 
-    func loadMediaFileForSource(_ source: MediaSourceProxy, body: String?) async throws -> MediaFileHandleProxy {
-        if let error = loadMediaFileForSourceBodyThrowableError {
+    func loadMediaFileForSource(_ source: MediaSourceProxy, filename: String?) async throws -> MediaFileHandleProxy {
+        if let error = loadMediaFileForSourceFilenameThrowableError {
             throw error
         }
-        loadMediaFileForSourceBodyCallsCount += 1
-        loadMediaFileForSourceBodyReceivedArguments = (source: source, body: body)
+        loadMediaFileForSourceFilenameCallsCount += 1
+        loadMediaFileForSourceFilenameReceivedArguments = (source: source, filename: filename)
         DispatchQueue.main.async {
-            self.loadMediaFileForSourceBodyReceivedInvocations.append((source: source, body: body))
+            self.loadMediaFileForSourceFilenameReceivedInvocations.append((source: source, filename: filename))
         }
-        if let loadMediaFileForSourceBodyClosure = loadMediaFileForSourceBodyClosure {
-            return try await loadMediaFileForSourceBodyClosure(source, body)
+        if let loadMediaFileForSourceFilenameClosure = loadMediaFileForSourceFilenameClosure {
+            return try await loadMediaFileForSourceFilenameClosure(source, filename)
         } else {
-            return loadMediaFileForSourceBodyReturnValue
+            return loadMediaFileForSourceFilenameReturnValue
         }
     }
 }
@@ -10628,15 +10628,15 @@ class MediaProviderMock: MediaProviderProtocol {
     }
     //MARK: - loadFileFromSource
 
-    var loadFileFromSourceBodyUnderlyingCallsCount = 0
-    var loadFileFromSourceBodyCallsCount: Int {
+    var loadFileFromSourceFilenameUnderlyingCallsCount = 0
+    var loadFileFromSourceFilenameCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return loadFileFromSourceBodyUnderlyingCallsCount
+                return loadFileFromSourceFilenameUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = loadFileFromSourceBodyUnderlyingCallsCount
+                    returnValue = loadFileFromSourceFilenameUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -10644,29 +10644,29 @@ class MediaProviderMock: MediaProviderProtocol {
         }
         set {
             if Thread.isMainThread {
-                loadFileFromSourceBodyUnderlyingCallsCount = newValue
+                loadFileFromSourceFilenameUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    loadFileFromSourceBodyUnderlyingCallsCount = newValue
+                    loadFileFromSourceFilenameUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var loadFileFromSourceBodyCalled: Bool {
-        return loadFileFromSourceBodyCallsCount > 0
+    var loadFileFromSourceFilenameCalled: Bool {
+        return loadFileFromSourceFilenameCallsCount > 0
     }
-    var loadFileFromSourceBodyReceivedArguments: (source: MediaSourceProxy, body: String?)?
-    var loadFileFromSourceBodyReceivedInvocations: [(source: MediaSourceProxy, body: String?)] = []
+    var loadFileFromSourceFilenameReceivedArguments: (source: MediaSourceProxy, filename: String?)?
+    var loadFileFromSourceFilenameReceivedInvocations: [(source: MediaSourceProxy, filename: String?)] = []
 
-    var loadFileFromSourceBodyUnderlyingReturnValue: Result<MediaFileHandleProxy, MediaProviderError>!
-    var loadFileFromSourceBodyReturnValue: Result<MediaFileHandleProxy, MediaProviderError>! {
+    var loadFileFromSourceFilenameUnderlyingReturnValue: Result<MediaFileHandleProxy, MediaProviderError>!
+    var loadFileFromSourceFilenameReturnValue: Result<MediaFileHandleProxy, MediaProviderError>! {
         get {
             if Thread.isMainThread {
-                return loadFileFromSourceBodyUnderlyingReturnValue
+                return loadFileFromSourceFilenameUnderlyingReturnValue
             } else {
                 var returnValue: Result<MediaFileHandleProxy, MediaProviderError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = loadFileFromSourceBodyUnderlyingReturnValue
+                    returnValue = loadFileFromSourceFilenameUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -10674,26 +10674,26 @@ class MediaProviderMock: MediaProviderProtocol {
         }
         set {
             if Thread.isMainThread {
-                loadFileFromSourceBodyUnderlyingReturnValue = newValue
+                loadFileFromSourceFilenameUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    loadFileFromSourceBodyUnderlyingReturnValue = newValue
+                    loadFileFromSourceFilenameUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var loadFileFromSourceBodyClosure: ((MediaSourceProxy, String?) async -> Result<MediaFileHandleProxy, MediaProviderError>)?
+    var loadFileFromSourceFilenameClosure: ((MediaSourceProxy, String?) async -> Result<MediaFileHandleProxy, MediaProviderError>)?
 
-    func loadFileFromSource(_ source: MediaSourceProxy, body: String?) async -> Result<MediaFileHandleProxy, MediaProviderError> {
-        loadFileFromSourceBodyCallsCount += 1
-        loadFileFromSourceBodyReceivedArguments = (source: source, body: body)
+    func loadFileFromSource(_ source: MediaSourceProxy, filename: String?) async -> Result<MediaFileHandleProxy, MediaProviderError> {
+        loadFileFromSourceFilenameCallsCount += 1
+        loadFileFromSourceFilenameReceivedArguments = (source: source, filename: filename)
         DispatchQueue.main.async {
-            self.loadFileFromSourceBodyReceivedInvocations.append((source: source, body: body))
+            self.loadFileFromSourceFilenameReceivedInvocations.append((source: source, filename: filename))
         }
-        if let loadFileFromSourceBodyClosure = loadFileFromSourceBodyClosure {
-            return await loadFileFromSourceBodyClosure(source, body)
+        if let loadFileFromSourceFilenameClosure = loadFileFromSourceFilenameClosure {
+            return await loadFileFromSourceFilenameClosure(source, filename)
         } else {
-            return loadFileFromSourceBodyReturnValue
+            return loadFileFromSourceFilenameReturnValue
         }
     }
 }

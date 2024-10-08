@@ -42,7 +42,7 @@ extension MediaProviderMock {
             return .success(data)
         }
         
-        loadFileFromSourceBodyReturnValue = .failure(.failedRetrievingFile)
+        loadFileFromSourceFilenameReturnValue = .failure(.failedRetrievingFile)
         
         loadImageRetryingOnReconnectionSizeClosure = { _, _ in
             Task {

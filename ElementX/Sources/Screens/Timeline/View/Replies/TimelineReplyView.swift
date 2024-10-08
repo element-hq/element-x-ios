@@ -26,8 +26,8 @@ struct TimelineReplyView: View {
                     switch content {
                     case .audio(let content):
                         ReplyView(sender: sender,
-                                  plainBody: content.body,
-                                  formattedBody: nil,
+                                  plainBody: content.caption ?? content.filename,
+                                  formattedBody: content.formattedCaption,
                                   icon: .init(kind: .systemIcon("waveform"), cornerRadii: iconCornerRadii))
                     case .emote(let content):
                         ReplyView(sender: sender,
@@ -35,13 +35,13 @@ struct TimelineReplyView: View {
                                   formattedBody: content.formattedBody)
                     case .file(let content):
                         ReplyView(sender: sender,
-                                  plainBody: content.body,
-                                  formattedBody: nil,
+                                  plainBody: content.caption ?? content.filename,
+                                  formattedBody: content.formattedCaption,
                                   icon: .init(kind: .icon(\.document), cornerRadii: iconCornerRadii))
                     case .image(let content):
                         ReplyView(sender: sender,
-                                  plainBody: content.body,
-                                  formattedBody: nil,
+                                  plainBody: content.caption ?? content.filename,
+                                  formattedBody: content.formattedCaption,
                                   icon: .init(kind: .mediaSource(content.thumbnailSource ?? content.source), cornerRadii: iconCornerRadii))
                     case .notice(let content):
                         ReplyView(sender: sender,
@@ -53,8 +53,8 @@ struct TimelineReplyView: View {
                                   formattedBody: content.formattedBody)
                     case .video(let content):
                         ReplyView(sender: sender,
-                                  plainBody: content.body,
-                                  formattedBody: nil,
+                                  plainBody: content.caption ?? content.filename,
+                                  formattedBody: content.formattedCaption,
                                   icon: content.thumbnailSource.map { .init(kind: .mediaSource($0), cornerRadii: iconCornerRadii) })
                     case .voice:
                         ReplyView(sender: sender,
@@ -247,7 +247,8 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                 eventID: "123",
-                                                                eventContent: .message(.audio(.init(body: "Some audio",
+                                                                eventContent: .message(.audio(.init(filename: "audio.m4a",
+                                                                                                    caption: "Some audio",
                                                                                                     duration: 0,
                                                                                                     waveform: nil,
                                                                                                     source: nil,
@@ -256,7 +257,8 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                 eventID: "123",
-                                                                eventContent: .message(.file(.init(body: "Some file",
+                                                                eventContent: .message(.file(.init(filename: "file.txt",
+                                                                                                   caption: "Some file",
                                                                                                    source: nil,
                                                                                                    thumbnailSource: nil,
                                                                                                    contentType: nil))))),
@@ -264,14 +266,16 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                 eventID: "123",
-                                                                eventContent: .message(.image(.init(body: "Some image",
+                                                                eventContent: .message(.image(.init(filename: "image.jpg",
+                                                                                                    caption: "Some image",
                                                                                                     source: imageSource,
                                                                                                     thumbnailSource: imageSource))))),
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                 eventID: "123",
-                                                                eventContent: .message(.video(.init(body: "Some video",
+                                                                eventContent: .message(.video(.init(filename: "video.mp4",
+                                                                                                    caption: "Some video",
                                                                                                     duration: 0,
                                                                                                     source: nil,
                                                                                                     thumbnailSource: imageSource))))),
@@ -283,7 +287,8 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                 eventID: "123",
-                                                                eventContent: .message(.voice(.init(body: "Some voice message",
+                                                                eventContent: .message(.voice(.init(filename: "voice-message.ogg",
+                                                                                                    caption: "Some voice message",
                                                                                                     duration: 0,
                                                                                                     waveform: nil,
                                                                                                     source: nil,
