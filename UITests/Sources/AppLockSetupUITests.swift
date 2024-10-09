@@ -119,6 +119,8 @@ class AppLockSetupUITests: XCTestCase {
     func testCancel() async throws {
         app = Application.launch(.appLockSetupFlowUnlock)
         
+        app.showKeyboardIfNeeded() // The secure text field is focussed automatically
+        
         // Create PIN screen.
         try await app.assertScreenshot(.appLockSetupFlowUnlock)
         
@@ -134,13 +136,13 @@ class AppLockSetupUITests: XCTestCase {
         let textField = app.secureTextFields[A11yIdentifiers.appLockSetupPINScreen.textField]
         XCTAssert(textField.waitForExistence(timeout: 10))
         
-        textField.clearAndTypeText("2023")
+        textField.clearAndTypeText("2023", app: app)
     }
     
     private func enterDifferentPIN() {
         let textField = app.secureTextFields[A11yIdentifiers.appLockSetupPINScreen.textField]
         XCTAssert(textField.waitForExistence(timeout: 10))
         
-        textField.clearAndTypeText("2233")
+        textField.clearAndTypeText("2233", app: app)
     }
 }
