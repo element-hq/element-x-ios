@@ -48,6 +48,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var hideTimelineMedia: Bool { get set }
     var enableOnlySignedDeviceIsolationMode: Bool { get set }
     var elementCallBaseURLOverride: URL? { get set }
+    var identityPinningViolationNotificationsEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }
