@@ -62,7 +62,16 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .failedToParseState(let eventType, _, let error):
             return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
         case .message(let messageContent):
-            return buildMessageTimelineItem(eventItemProxy, messageContent, isOutgoing)
+            /// Need to handle GIPHY case in un-encrypted chats
+            if let customMessageContent = messageContentHandler.parseMessageContent(contentJsonString: eventItemProxy.debugInfo.originalJSON) {
+                if customMessageContent.content.isImage, customMessageContent.content.isRemoteImage {
+                    return buildCustomImageTimelineItem(for: eventItemProxy, customMessageContent.content, isOutgoing)
+                } else {
+                    return buildMessageTimelineItem(eventItemProxy, messageContent, isOutgoing)
+                }
+            } else {
+                return buildMessageTimelineItem(eventItemProxy, messageContent, isOutgoing)
+            }
         case .state(_, let content):
             if isDM, content == .roomCreate {
                 return nil

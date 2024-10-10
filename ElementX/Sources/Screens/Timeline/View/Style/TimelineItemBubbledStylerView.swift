@@ -57,7 +57,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
                         messageBubbleWithReactions
                     }
-                    .padding(timelineItem.isOutgoing ? .leading : .trailing, 24) // Additional padding to differentiate alignment.
+                    .padding(timelineItem.isOutgoing ? .leading : .trailing, 48) // Additional padding to differentiate alignment.
 
                     HStack(spacing: 0) {
                         if !timelineItem.isOutgoing {
@@ -69,7 +69,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                             .padding(.bottom, 3)
                     }
                 }
-                .padding(.horizontal, bubbleHorizontalPadding)
+                .padding(.top, shouldShowSenderDetails ? 8 : 0)
+                .padding(.horizontal, isEncryptedOneToOneRoom ? bubbleHorizontalPadding : 0)
                 .padding(.leading, bubbleAvatarPadding)
             }
         }
@@ -283,8 +284,7 @@ private extension View {
 
 private extension EventBasedTimelineItemProtocol {
     var bubbleBackgroundColor: Color? {
-//        let defaultColor: Color = isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming
-        let defaultColor: Color = Asset.Colors.zeroDarkGrey.swiftUIColor
+        let defaultColor: Color = isOutgoing ? .zero.bgSuccessSubtle : .compound._bgBubbleIncoming
 
         switch self {
         case let self as EventBasedMessageTimelineItemProtocol:

@@ -3,7 +3,7 @@ import Foundation
 public struct EventMessageContent: Codable {
     public var sender: String
     public var content: MessageContent
-    public var roomId: String
+    public var roomId: String?
     public var originServerTs: UInt64
     
     enum CodingKeys: String, CodingKey {
