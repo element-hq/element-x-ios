@@ -22,7 +22,7 @@ struct CreateRoomScreen: View {
             roomSection
             topicSection
             securitySection
-            if context.viewState.isKnockingEnabled,
+            if context.viewState.isKnockingFeatureEnabled,
                !context.isRoomPrivate {
                 roomAccessSection
             }

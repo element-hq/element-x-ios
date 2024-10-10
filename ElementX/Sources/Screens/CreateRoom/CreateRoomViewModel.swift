@@ -37,7 +37,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         
         let bindings = CreateRoomViewStateBindings(roomName: parameters.name, roomTopic: parameters.topic, isRoomPrivate: parameters.isRoomPrivate)
 
-        super.init(initialViewState: CreateRoomViewState(isKnockingEnabled: appSettings.knockingEnabled, selectedUsers: selectedUsers.value, bindings: bindings), mediaProvider: userSession.mediaProvider)
+        super.init(initialViewState: CreateRoomViewState(isKnockingFeatureEnabled: appSettings.knockingEnabled, selectedUsers: selectedUsers.value, bindings: bindings), mediaProvider: userSession.mediaProvider)
         
         createRoomParameters
             .map(\.avatarImageMedia)

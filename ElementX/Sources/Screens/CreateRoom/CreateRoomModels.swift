@@ -25,7 +25,7 @@ enum CreateRoomViewModelAction {
 }
 
 struct CreateRoomViewState: BindableState {
-    let isKnockingEnabled: Bool
+    let isKnockingFeatureEnabled: Bool
     var selectedUsers: [UserProfileProxy]
     var bindings: CreateRoomViewStateBindings
     var avatarURL: URL?
