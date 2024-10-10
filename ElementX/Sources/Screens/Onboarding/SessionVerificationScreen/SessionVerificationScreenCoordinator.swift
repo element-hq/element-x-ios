@@ -6,14 +6,21 @@
 //
 
 import Combine
+import MatrixRustSDK
 import SwiftUI
 
 enum SessionVerificationScreenCoordinatorAction {
     case done
 }
 
+enum SessionVerificationScreenFlow {
+    case initiator
+    case responder(details: SessionVerificationRequestDetails)
+}
+
 struct SessionVerificationScreenCoordinatorParameters {
     let sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol
+    let flow: SessionVerificationScreenFlow
 }
 
 final class SessionVerificationScreenCoordinator: CoordinatorProtocol {
@@ -27,7 +34,8 @@ final class SessionVerificationScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: SessionVerificationScreenCoordinatorParameters) {
-        viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: parameters.sessionVerificationControllerProxy)
+        viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: parameters.sessionVerificationControllerProxy,
+                                                       flow: parameters.flow)
     }
     
     // MARK: - Public

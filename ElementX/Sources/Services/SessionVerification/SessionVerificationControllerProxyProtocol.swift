@@ -7,8 +7,11 @@
 
 import Combine
 import Foundation
+import MatrixRustSDK
 
 enum SessionVerificationControllerProxyError: Error {
+    case failedAcknowledgingVerificationRequest
+    case failedAcceptingVerificationRequest
     case failedRequestingVerification
     case failedStartingSasVerification
     case failedApprovingVerification
@@ -16,7 +19,8 @@ enum SessionVerificationControllerProxyError: Error {
     case failedCancellingVerification
 }
 
-enum SessionVerificationControllerProxyCallback {
+enum SessionVerificationControllerProxyAction {
+    case receivedVerificationRequest(details: SessionVerificationRequestDetails)
     case acceptedVerificationRequest
     case startedSasVerification
     case receivedVerificationData([SessionVerificationEmoji])
@@ -36,7 +40,11 @@ struct SessionVerificationEmoji: Hashable {
 
 // sourcery: AutoMockable
 protocol SessionVerificationControllerProxyProtocol {
-    var callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never> { get }
+    var actions: PassthroughSubject<SessionVerificationControllerProxyAction, Never> { get }
+    
+    func acknowledgeVerificationRequest(senderID: String, flowID: String) async -> Result<Void, SessionVerificationControllerProxyError>
+    
+    func acceptVerificationRequest(senderID: String, flowID: String) async -> Result<Void, SessionVerificationControllerProxyError>
         
     func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError>
     
