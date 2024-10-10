@@ -2627,15 +2627,15 @@ class ClientProxyMock: ClientProxyProtocol {
     }
     //MARK: - createRoom
 
-    var createRoomNameTopicIsRoomPrivateUserIDsAvatarURLUnderlyingCallsCount = 0
-    var createRoomNameTopicIsRoomPrivateUserIDsAvatarURLCallsCount: Int {
+    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingCallsCount = 0
+    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return createRoomNameTopicIsRoomPrivateUserIDsAvatarURLUnderlyingCallsCount
+                return createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = createRoomNameTopicIsRoomPrivateUserIDsAvatarURLUnderlyingCallsCount
+                    returnValue = createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -2643,29 +2643,29 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                createRoomNameTopicIsRoomPrivateUserIDsAvatarURLUnderlyingCallsCount = newValue
+                createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    createRoomNameTopicIsRoomPrivateUserIDsAvatarURLUnderlyingCallsCount = newValue
+                    createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var createRoomNameTopicIsRoomPrivateUserIDsAvatarURLCalled: Bool {
-        return createRoomNameTopicIsRoomPrivateUserIDsAvatarURLCallsCount > 0
+    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCalled: Bool {
+        return createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCallsCount > 0
     }
-    var createRoomNameTopicIsRoomPrivateUserIDsAvatarURLReceivedArguments: (name: String, topic: String?, isRoomPrivate: Bool, userIDs: [String], avatarURL: URL?)?
-    var createRoomNameTopicIsRoomPrivateUserIDsAvatarURLReceivedInvocations: [(name: String, topic: String?, isRoomPrivate: Bool, userIDs: [String], avatarURL: URL?)] = []
+    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLReceivedArguments: (name: String, topic: String?, isRoomPrivate: Bool, isKnockingOnly: Bool, userIDs: [String], avatarURL: URL?)?
+    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLReceivedInvocations: [(name: String, topic: String?, isRoomPrivate: Bool, isKnockingOnly: Bool, userIDs: [String], avatarURL: URL?)] = []
 
-    var createRoomNameTopicIsRoomPrivateUserIDsAvatarURLUnderlyingReturnValue: Result<String, ClientProxyError>!
-    var createRoomNameTopicIsRoomPrivateUserIDsAvatarURLReturnValue: Result<String, ClientProxyError>! {
+    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingReturnValue: Result<String, ClientProxyError>!
+    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLReturnValue: Result<String, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return createRoomNameTopicIsRoomPrivateUserIDsAvatarURLUnderlyingReturnValue
+                return createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingReturnValue
             } else {
                 var returnValue: Result<String, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = createRoomNameTopicIsRoomPrivateUserIDsAvatarURLUnderlyingReturnValue
+                    returnValue = createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -2673,26 +2673,26 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                createRoomNameTopicIsRoomPrivateUserIDsAvatarURLUnderlyingReturnValue = newValue
+                createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    createRoomNameTopicIsRoomPrivateUserIDsAvatarURLUnderlyingReturnValue = newValue
+                    createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var createRoomNameTopicIsRoomPrivateUserIDsAvatarURLClosure: ((String, String?, Bool, [String], URL?) async -> Result<String, ClientProxyError>)?
+    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLClosure: ((String, String?, Bool, Bool, [String], URL?) async -> Result<String, ClientProxyError>)?
 
-    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, userIDs: [String], avatarURL: URL?) async -> Result<String, ClientProxyError> {
-        createRoomNameTopicIsRoomPrivateUserIDsAvatarURLCallsCount += 1
-        createRoomNameTopicIsRoomPrivateUserIDsAvatarURLReceivedArguments = (name: name, topic: topic, isRoomPrivate: isRoomPrivate, userIDs: userIDs, avatarURL: avatarURL)
+    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, isKnockingOnly: Bool, userIDs: [String], avatarURL: URL?) async -> Result<String, ClientProxyError> {
+        createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCallsCount += 1
+        createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLReceivedArguments = (name: name, topic: topic, isRoomPrivate: isRoomPrivate, isKnockingOnly: isKnockingOnly, userIDs: userIDs, avatarURL: avatarURL)
         DispatchQueue.main.async {
-            self.createRoomNameTopicIsRoomPrivateUserIDsAvatarURLReceivedInvocations.append((name: name, topic: topic, isRoomPrivate: isRoomPrivate, userIDs: userIDs, avatarURL: avatarURL))
+            self.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLReceivedInvocations.append((name: name, topic: topic, isRoomPrivate: isRoomPrivate, isKnockingOnly: isKnockingOnly, userIDs: userIDs, avatarURL: avatarURL))
         }
-        if let createRoomNameTopicIsRoomPrivateUserIDsAvatarURLClosure = createRoomNameTopicIsRoomPrivateUserIDsAvatarURLClosure {
-            return await createRoomNameTopicIsRoomPrivateUserIDsAvatarURLClosure(name, topic, isRoomPrivate, userIDs, avatarURL)
+        if let createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLClosure = createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLClosure {
+            return await createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLClosure(name, topic, isRoomPrivate, isKnockingOnly, userIDs, avatarURL)
         } else {
-            return createRoomNameTopicIsRoomPrivateUserIDsAvatarURLReturnValue
+            return createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLReturnValue
         }
     }
     //MARK: - joinRoom
