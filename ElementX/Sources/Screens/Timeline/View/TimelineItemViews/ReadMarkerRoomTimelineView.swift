@@ -29,11 +29,11 @@ struct ReadMarkerRoomTimelineView: View {
 struct ReadMarkerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
 
-    static let item = ReadMarkerRoomTimelineItem(id: .init(uniqueID: .init(UUID().uuidString)))
+    static let item = ReadMarkerRoomTimelineItem(id: .random)
 
     static var previews: some View {
         VStack(alignment: .leading, spacing: 0) {
-            RoomTimelineItemView(viewState: .init(type: .separator(.init(id: .init(uniqueID: "Separator"), text: "Today")), groupStyle: .single))
+            RoomTimelineItemView(viewState: .init(type: .separator(.init(id: .init(uniqueID: .init(id: "Separator")), text: "Today")), groupStyle: .single))
             RoomTimelineItemView(viewState: .init(type: .text(.init(id: .random,
                                                                     timestamp: "",
                                                                     isOutgoing: true,
@@ -45,7 +45,7 @@ struct ReadMarkerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
 
             ReadMarkerRoomTimelineView(timelineItem: item)
 
-            RoomTimelineItemView(viewState: .init(type: .separator(.init(id: .init(uniqueID: "Separator"), text: "Today")), groupStyle: .single))
+            RoomTimelineItemView(viewState: .init(type: .separator(.init(id: .init(uniqueID: .init(id: "Separator")), text: "Today")), groupStyle: .single))
             RoomTimelineItemView(viewState: .init(type: .text(.init(id: .random,
                                                                     timestamp: "",
                                                                     isOutgoing: false,

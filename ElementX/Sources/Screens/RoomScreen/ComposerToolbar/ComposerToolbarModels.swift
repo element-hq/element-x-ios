@@ -322,12 +322,13 @@ enum ComposerMode: Equatable {
     }
     
     var replyEventID: String? {
-        switch self {
-        case .reply(let itemID, _, _):
-            return itemID.eventID
-        default:
-            return nil
-        }
+        nil
+//        switch self {
+//        case .reply(let itemID, _, _):
+//            return itemID.eventID
+//        default:
+//            return nil
+//        }
     }
     
     var isComposingNewMessage: Bool {

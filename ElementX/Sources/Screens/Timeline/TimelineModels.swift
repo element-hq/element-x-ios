@@ -213,7 +213,8 @@ struct TimelineState {
     }
     
     func hasLoadedItem(with eventID: String) -> Bool {
-        itemViewStates.contains { $0.identifier.eventID == eventID }
+        false
+//        itemViewStates.contains { $0.identifier.eventID == eventID }
     }
 }
 

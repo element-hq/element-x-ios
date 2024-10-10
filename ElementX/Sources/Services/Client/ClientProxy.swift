@@ -859,6 +859,8 @@ class ClientProxy: ClientProxyProtocol {
                 return .joined(roomProxy)
             case .left:
                 return .left
+            case .knocked:
+                return .knocked
             }
         } catch {
             MXLog.error("Failed retrieving room: \(roomID), with error: \(error)")

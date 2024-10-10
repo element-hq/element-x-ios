@@ -258,9 +258,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .newMessage:
             set(mode: .default)
         case .edit(let eventID):
-            set(mode: .edit(originalItemId: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: eventID))))
+            break
+//            set(mode: .edit(originalItemId: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: eventID))))
         case .reply(let eventID):
-            set(mode: .reply(itemID: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: eventID)), replyDetails: .loading(eventID: eventID), isThread: false))
+//            set(mode: .reply(itemID: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: eventID)), replyDetails: .loading(eventID: eventID), isThread: false))
             replyLoadingTask = Task {
                 let reply = switch await draftService.getReply(eventID: eventID) {
                 case .success(let reply):
@@ -273,77 +274,79 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                     return
                 }
                 
-                set(mode: .reply(itemID: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: eventID)), replyDetails: reply.details, isThread: reply.isThreaded))
+//                set(mode: .reply(itemID: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: eventID)), replyDetails: reply.details, isThread: reply.isThreaded))
             }
         }
     }
     
     private func handleSaveDraft(isVolatile: Bool) {
-        let plainText: String
-        let htmlText: String?
-        let type: ComposerDraftProxy.ComposerDraftType
-        
-        if context.composerFormattingEnabled {
-            if wysiwygViewModel.isContentEmpty, state.composerMode == .default {
-                if isVolatile {
-                    draftService.clearVolatileDraft()
-                } else {
-                    Task {
-                        await draftService.clearDraft()
-                    }
-                }
-                return
-            }
-            plainText = wysiwygViewModel.content.markdown
-            htmlText = wysiwygViewModel.content.html
-        } else {
-            if context.plainComposerText.string.isEmpty, state.composerMode == .default {
-                if isVolatile {
-                    draftService.clearVolatileDraft()
-                } else {
-                    Task {
-                        await draftService.clearDraft()
-                    }
-                }
-                return
-            }
-            plainText = plainComposerContent.text
-            htmlText = nil
-        }
-        
-        switch state.composerMode {
-        case .default:
-            type = .newMessage
-        case .edit(let itemID):
-            guard let eventID = itemID.eventID else {
-                MXLog.error("The event id for this message is missing")
-                return
-            }
-            type = .edit(eventID: eventID)
-        case .reply(let itemID, _, _):
-            guard let eventID = itemID.eventID else {
-                MXLog.error("The event id for this message is missing")
-                return
-            }
-            type = .reply(eventID: eventID)
-        default:
-            if isVolatile {
-                draftService.clearVolatileDraft()
-            } else {
-                Task {
-                    await draftService.clearDraft()
-                }
-            }
-            return
-        }
-        
-        if isVolatile {
-            draftService.saveVolatileDraft(.init(plainText: plainText, htmlText: htmlText, draftType: type))
-        } else {
-            Task {
-                await draftService.saveDraft(.init(plainText: plainText, htmlText: htmlText, draftType: type))
-            }
-        }
+//        let plainText: String
+//        let htmlText: String?
+//        let type: ComposerDraftProxy.ComposerDraftType
+//
+//        if context.composerFormattingEnabled {
+//            if wysiwygViewModel.isContentEmpty, state.composerMode == .default {
+//                if isVolatile {
+//                    draftService.clearVolatileDraft()
+//                } else {
+//                    Task {
+//                        await draftService.clearDraft()
+//                    }
+//                }
+//                return
+//            }
+//            plainText = wysiwygViewModel.content.markdown
+//            htmlText = wysiwygViewModel.content.html
+//        } else {
+//            if context.plainComposerText.string.isEmpty, state.composerMode == .default {
+//                if isVolatile {
+//                    draftService.clearVolatileDraft()
+//                } else {
+//                    Task {
+//                        await draftService.clearDraft()
+//                    }
+//                }
+//                return
+//            }
+//            plainText = plainComposerContent.text
+//            htmlText = nil
+//        }
+//
+//        switch state.composerMode {
+//        case .default:
+//            type = .newMessage
+//        case .edit(let itemID):
+//            guard let eventID = itemID.eventID else {
+//                MXLog.error("The event id for this message is missing")
+//                return
+//            }
+//            type = .edit(eventID: eventID)
+//            break
+//        case .reply(let itemID, _, _):
+//            guard let eventID = itemID.eventID else {
+//                MXLog.error("The event id for this message is missing")
+//                return
+//            }
+//            type = .reply(eventID: eventID)
+//            break
+//        default:
+//            if isVolatile {
+//                draftService.clearVolatileDraft()
+//            } else {
+//                Task {
+//                    await draftService.clearDraft()
+//                }
+//            }
+//            return
+//        }
+//
+//        if isVolatile {
+//            draftService.saveVolatileDraft(.init(plainText: plainText, htmlText: htmlText, draftType: type))
+//        } else {
+//            Task {
+//                await draftService.saveDraft(.init(plainText: plainText, htmlText: htmlText, draftType: type))
+//            }
+//        }
     }
     
     private var plainComposerContent: PlainComposerContent {

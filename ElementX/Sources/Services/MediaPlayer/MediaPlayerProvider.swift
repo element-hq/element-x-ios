@@ -69,7 +69,7 @@ class MediaPlayerProvider: MediaPlayerProviderProtocol {
     private func audioPlayerStateID(for identifier: AudioPlayerStateIdentifier) -> String? {
         switch identifier {
         case .timelineItemIdentifier(let timelineItemIdentifier):
-            return timelineItemIdentifier.eventID
+            return timelineItemIdentifier.uniqueID.id
         case .recorderPreview:
             return "recorderPreviewAudioPlayerState"
         }

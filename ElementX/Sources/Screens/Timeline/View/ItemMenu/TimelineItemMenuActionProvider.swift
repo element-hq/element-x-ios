@@ -63,9 +63,9 @@ struct TimelineItemMenuActionProvider {
             actions.append(.edit)
         }
         
-        if canCurrentUserPin, let eventID = item.id.eventID {
-            actions.append(pinnedEventIDs.contains(eventID) ? .unpin : .pin)
-        }
+//        if canCurrentUserPin, let eventID = item.id.eventID {
+//            actions.append(pinnedEventIDs.contains(eventID) ? .unpin : .pin)
+//        }
 
         if item.isCopyable {
             actions.append(.copy)
@@ -75,9 +75,9 @@ struct TimelineItemMenuActionProvider {
             actions.append(.copyPermalink)
         }
 
-        if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded, let eventID = item.id.eventID {
-            actions.append(.endPoll(pollStartID: eventID))
-        }
+//        if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded, let eventID = item.id.eventID {
+//            actions.append(.endPoll(pollStartID: eventID))
+//        }
         
         if canRedactItem(item) {
             actions.append(.redact)

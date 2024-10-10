@@ -371,14 +371,14 @@ class TimelineTableViewController: UIViewController {
     
     /// Scrolls to the item with the corresponding event ID if loaded in the timeline.
     private func scrollToItem(eventID: String, animated: Bool) {
-        DispatchQueue.main.async { [weak self] in // Fixes #2805
-            guard let self else { return }
-            if let kvPair = timelineItemsDictionary.first(where: { $0.value.identifier.eventID == eventID }),
-               let indexPath = dataSource?.indexPath(for: kvPair.key) {
-                tableView.scrollToRow(at: indexPath, at: .middle, animated: animated)
-                coordinator.send(viewAction: .scrolledToFocussedItem)
-            }
-        }
+//        DispatchQueue.main.async { [weak self] in // Fixes #2805
+//            guard let self else { return }
+//            if let kvPair = timelineItemsDictionary.first(where: { $0.value.identifier.uniqueID.id == id }),
+//               let indexPath = dataSource?.indexPath(for: kvPair.key) {
+//                tableView.scrollToRow(at: indexPath, at: .middle, animated: animated)
+//                coordinator.send(viewAction: .scrolledToFocussedItem)
+//            }
+//        }
     }
     
     /// Checks whether or not pagination is needed in either direction and requests one if so.
@@ -493,7 +493,7 @@ extension TimelineTableViewController {
     /// The current layout of the table, based on the newest timeline item.
     private func snapshotLayout() -> Layout? {
         guard let newestItemID = newestVisibleItemID(),
-              let newestCellFrame = cellFrame(for: newestItemID.uniqueID) else {
+              let newestCellFrame = cellFrame(for: newestItemID.uniqueID.id) else {
             return nil
         }
         return Layout(id: newestItemID, frame: newestCellFrame)
@@ -501,12 +501,12 @@ extension TimelineTableViewController {
     
     /// Restores the timeline's layout from an old snapshot.
     private func restoreLayout(_ layout: Layout) {
-        if let indexPath = dataSource?.indexPath(for: layout.id.uniqueID) {
+        if let indexPath = dataSource?.indexPath(for: layout.id.uniqueID.id) {
             // Scroll the item into view.
             tableView.scrollToRow(at: indexPath, at: .top, animated: false)
             
             // Remove any unwanted offset that was added by scrollToRow.
-            if let frame = cellFrame(for: layout.id.uniqueID) {
+            if let frame = cellFrame(for: layout.id.uniqueID.id) {
                 let deltaY = frame.maxY - layout.frame.maxY
                 if deltaY != 0 {
                     tableView.contentOffset.y -= deltaY
@@ -517,7 +517,7 @@ extension TimelineTableViewController {
     
     /// Returns the frame of the cell for a particular timeline item.
     private func cellFrame(for uniqueID: String) -> CGRect? {
-        guard let timelineCell = tableView.visibleCells.first(where: { ($0 as? TimelineItemCell)?.item?.identifier.uniqueID == uniqueID }) else {
+        guard let timelineCell = tableView.visibleCells.first(where: { ($0 as? TimelineItemCell)?.item?.identifier.uniqueID.id == uniqueID }) else {
             return nil
         }
         

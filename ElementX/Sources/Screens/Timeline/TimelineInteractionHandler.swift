@@ -105,45 +105,48 @@ class TimelineInteractionHandler {
             
             UIPasteboard.general.string = messageTimelineItem.body
         case .edit:
-            switch timelineItem {
-            case let messageTimelineItem as EventBasedMessageTimelineItemProtocol:
-                processEditMessageEvent(messageTimelineItem)
-            case let pollTimelineItem as PollRoomTimelineItem:
-                guard let eventID = pollTimelineItem.id.eventID else {
-                    MXLog.error("Cannot edit poll with id: \(timelineItem.id)")
-                    return
-                }
-                actionsSubject.send(.displayPollForm(mode: .edit(eventID: eventID, poll: pollTimelineItem.poll)))
-            default:
-                MXLog.error("Cannot edit item with id: \(timelineItem.id)")
-            }
+            break
+//            switch timelineItem {
+//            case let messageTimelineItem as EventBasedMessageTimelineItemProtocol:
+//                processEditMessageEvent(messageTimelineItem)
+//            case let pollTimelineItem as PollRoomTimelineItem:
+//                guard let eventID = pollTimelineItem.id.eventID else {
+//                    MXLog.error("Cannot edit poll with id: \(timelineItem.id)")
+//                    return
+//                }
+//                actionsSubject.send(.displayPollForm(mode: .edit(eventID: eventID, poll: pollTimelineItem.poll)))
+//            default:
+//                MXLog.error("Cannot edit item with id: \(timelineItem.id)")
+//            }
         case .copyPermalink:
-            guard let eventID = eventTimelineItem.id.eventID else {
-                actionsSubject.send(.displayErrorToast(L10n.errorFailedCreatingThePermalink))
-                return
-            }
-            
-            Task {
-                guard case let .success(permalinkURL) = await roomProxy.matrixToEventPermalink(eventID) else {
-                    actionsSubject.send(.displayErrorToast(L10n.errorFailedCreatingThePermalink))
-                    return
-                }
-                
-                UIPasteboard.general.url = permalinkURL
-            }
+            break
+//            guard let eventID = eventTimelineItem.id.eventID else {
+//                actionsSubject.send(.displayErrorToast(L10n.errorFailedCreatingThePermalink))
+//                return
+//            }
+//
+//            Task {
+//                guard case let .success(permalinkURL) = await roomProxy.matrixToEventPermalink(eventID) else {
+//                    actionsSubject.send(.displayErrorToast(L10n.errorFailedCreatingThePermalink))
+//                    return
+//                }
+//
+//                UIPasteboard.general.url = permalinkURL
+//            }
         case .redact:
             Task {
                 await timelineController.redact(itemID)
             }
         case .reply:
-            guard let eventID = eventTimelineItem.id.eventID else {
-                return
-            }
-            
-            let replyInfo = buildReplyInfo(for: eventTimelineItem)
-            let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, eventID: eventID, eventContent: replyInfo.type)
-            
-            actionsSubject.send(.composer(action: .setMode(mode: .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails, isThread: replyInfo.isThread))))
+            break
+//            guard let eventID = eventTimelineItem.id.eventID else {
+//                return
+//            }
+//
+//            let replyInfo = buildReplyInfo(for: eventTimelineItem)
+//            let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, eventID: eventID, eventContent: replyInfo.type)
+//
+//            actionsSubject.send(.composer(action: .setMode(mode: .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails, isThread: replyInfo.isThread))))
         case .forward(let itemID):
             actionsSubject.send(.displayMessageForwarding(itemID: itemID))
         case .viewSource:
@@ -163,19 +166,22 @@ class TimelineInteractionHandler {
         case .endPoll(let pollStartID):
             endPoll(pollStartID: pollStartID)
         case .pin:
-            analyticsService.trackPinUnpinEvent(.init(from: timelineController.timelineKind == .pinned ? .MessagePinningList : .Timeline,
-                                                      kind: .Pin))
-            guard let eventID = itemID.eventID else { return }
-            Task { await timelineController.pin(eventID: eventID) }
+            break
+//            analyticsService.trackPinUnpinEvent(.init(from: timelineController.timelineKind == .pinned ? .MessagePinningList : .Timeline,
+//                                                      kind: .Pin))
+//            guard let eventID = itemID.eventID else { return }
+//            Task { await timelineController.pin(eventID: eventID) }
         case .unpin:
-            analyticsService.trackPinUnpinEvent(.init(from: timelineController.timelineKind == .pinned ? .MessagePinningList : .Timeline,
-                                                      kind: .Unpin))
-            guard let eventID = itemID.eventID else { return }
-            Task { await timelineController.unpin(eventID: eventID) }
+            break
+//            analyticsService.trackPinUnpinEvent(.init(from: timelineController.timelineKind == .pinned ? .MessagePinningList : .Timeline,
+//                                                      kind: .Unpin))
+//            guard let eventID = itemID.eventID else { return }
+//            Task { await timelineController.unpin(eventID: eventID) }
         case .viewInRoomTimeline:
-            analyticsService.trackInteraction(name: .PinnedMessageListViewTimeline)
-            guard let eventID = itemID.eventID else { return }
-            actionsSubject.send(.viewInRoomTimeline(eventID: eventID))
+            break
+//            analyticsService.trackInteraction(name: .PinnedMessageListViewTimeline)
+//            guard let eventID = itemID.eventID else { return }
+//            actionsSubject.send(.viewInRoomTimeline(eventID: eventID))
         }
         
         if action.switchToDefaultComposer {

@@ -53,30 +53,31 @@ struct RoomPollsHistoryScreen: View {
     }
     
     private var polls: some View {
-        ForEach(context.viewState.pollTimelineItems, id: \.item.id.eventID) { pollTimelineItem in
-            VStack(alignment: .leading, spacing: 8) {
-                Text(DateFormatter.pollTimestamp.string(from: pollTimelineItem.timestamp))
-                    .font(.compound.bodySM)
-                    .foregroundColor(.compound.textSecondary)
-                PollView(poll: pollTimelineItem.item.poll,
-                         state: .full(isEditable: pollTimelineItem.item.isEditable)) { action in
-                    switch action {
-                    case .selectOption(let optionID):
-                        guard let pollStartID = pollTimelineItem.item.id.eventID else { return }
-                        context.send(viewAction: .sendPollResponse(pollStartID: pollStartID, optionID: optionID))
-                    case .edit:
-                        guard let pollStartID = pollTimelineItem.item.id.eventID else { return }
-                        context.send(viewAction: .edit(pollStartID: pollStartID, poll: pollTimelineItem.item.poll))
-                    case .end:
-                        guard let pollStartID = pollTimelineItem.item.id.eventID else { return }
-                        context.send(viewAction: .end(pollStartID: pollStartID))
-                    }
-                }
-            }
-            .padding(.init(top: 12, leading: 12, bottom: 12, trailing: 12))
-            .background(.compound.bgCanvasDefaultLevel1)
-            .cornerRadius(12, corners: .allCorners)
-        }
+        EmptyView()
+//        ForEach(context.viewState.pollTimelineItems) { pollTimelineItem in
+//            VStack(alignment: .leading, spacing: 8) {
+//                Text(DateFormatter.pollTimestamp.string(from: pollTimelineItem.timestamp))
+//                    .font(.compound.bodySM)
+//                    .foregroundColor(.compound.textSecondary)
+//                PollView(poll: pollTimelineItem.item.poll,
+//                         state: .full(isEditable: pollTimelineItem.item.isEditable)) { action in
+//                    switch action {
+//                    case .selectOption(let optionID):
+//                        guard let pollStartID = pollTimelineItem.item.id.eventID else { return }
+//                        context.send(viewAction: .sendPollResponse(pollStartID: pollStartID, optionID: optionID))
+//                    case .edit:
+//                        guard let pollStartID = pollTimelineItem.item.id.eventID else { return }
+//                        context.send(viewAction: .edit(pollStartID: pollStartID, poll: pollTimelineItem.item.poll))
+//                    case .end:
+//                        guard let pollStartID = pollTimelineItem.item.id.eventID else { return }
+//                        context.send(viewAction: .end(pollStartID: pollStartID))
+//                    }
+//                }
+//            }
+//            .padding(.init(top: 12, leading: 12, bottom: 12, trailing: 12))
+//            .background(.compound.bgCanvasDefaultLevel1)
+//            .cornerRadius(12, corners: .allCorners)
+//        }
     }
     
     private var emptyStateMessage: some View {

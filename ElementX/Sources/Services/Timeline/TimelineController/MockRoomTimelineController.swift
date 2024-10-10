@@ -71,8 +71,8 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func sendReadReceipt(for itemID: TimelineItemIdentifier) async {
-        guard let roomProxy, let eventID = itemID.eventID else { return }
-        _ = await roomProxy.timeline.sendReadReceipt(for: eventID, type: .read)
+//        guard let roomProxy, let eventID = itemID.eventID else { return }
+//        _ = await roomProxy.timeline.sendReadReceipt(for: eventID, type: .read)
     }
     
     func processItemAppearance(_ itemID: TimelineItemIdentifier) async { }

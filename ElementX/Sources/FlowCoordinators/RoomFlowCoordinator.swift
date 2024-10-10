@@ -831,37 +831,37 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentReportContent(for itemID: TimelineItemIdentifier, from senderID: String) {
-        guard let eventID = itemID.eventID else {
-            fatalError()
-        }
-        
-        let stackCoordinator = NavigationStackCoordinator()
-        let parameters = ReportContentScreenCoordinatorParameters(eventID: eventID,
-                                                                  senderID: senderID,
-                                                                  roomProxy: roomProxy,
-                                                                  clientProxy: userSession.clientProxy,
-                                                                  userIndicatorController: userIndicatorController)
-        let coordinator = ReportContentScreenCoordinator(parameters: parameters)
-        
-        coordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                navigationStackCoordinator.setSheetCoordinator(nil)
-                
-                switch action {
-                case .cancel:
-                    break
-                case .finish:
-                    userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonReportSubmitted, iconName: "checkmark"))
-                }
-            }
-            .store(in: &cancellables)
-        
-        stackCoordinator.setRootCoordinator(coordinator)
-        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissReportContent)
-        }
+//        guard let eventID = itemID.eventID else {
+//            fatalError()
+//        }
+//
+//        let stackCoordinator = NavigationStackCoordinator()
+//        let parameters = ReportContentScreenCoordinatorParameters(eventID: eventID,
+//                                                                  senderID: senderID,
+//                                                                  roomProxy: roomProxy,
+//                                                                  clientProxy: userSession.clientProxy,
+//                                                                  userIndicatorController: userIndicatorController)
+//        let coordinator = ReportContentScreenCoordinator(parameters: parameters)
+//
+//        coordinator.actions
+//            .sink { [weak self] action in
+//                guard let self else { return }
+//
+//                navigationStackCoordinator.setSheetCoordinator(nil)
+//
+//                switch action {
+//                case .cancel:
+//                    break
+//                case .finish:
+//                    userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonReportSubmitted, iconName: "checkmark"))
+//                }
+//            }
+//            .store(in: &cancellables)
+//
+//        stackCoordinator.setRootCoordinator(coordinator)
+//        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+//            self?.stateMachine.tryEvent(.dismissReportContent)
+//        }
     }
     
     private func presentMediaUploadPickerWithSource(_ source: MediaPickerScreenSource) {

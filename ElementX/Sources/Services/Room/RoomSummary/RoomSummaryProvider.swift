@@ -246,7 +246,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         var lastMessageFormattedTimestamp: String?
         
         if let latestRoomMessage = roomDetails.latestEvent {
-            let lastMessage = EventTimelineItemProxy(item: latestRoomMessage, uniqueID: "0")
+            let lastMessage = EventTimelineItemProxy(item: latestRoomMessage, uniqueID: .init(id: "0"))
             lastMessageFormattedTimestamp = lastMessage.timestamp.formattedMinimal()
             attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage)
         }

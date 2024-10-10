@@ -210,24 +210,24 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func buildPinnedEventContents(timelineItems: [TimelineItemProxy]) {
-        var pinnedEventContents = OrderedDictionary<String, AttributedString>()
-        
-        for item in timelineItems {
-            // Only remote events are pinned
-            if case let .event(event) = item,
-               let eventID = event.id.eventID {
-                pinnedEventContents.updateValue(pinnedEventStringBuilder.buildAttributedString(for: event) ?? AttributedString(L10n.commonUnsupportedEvent),
-                                                forKey: eventID)
-            }
-        }
-        
-        state.pinnedEventsBannerState.setPinnedEventContents(pinnedEventContents)
-        
-        // If it's the first time we are setting the pinned events, we should select the initial event if available.
-        if let initialSelectedPinnedEventID {
-            state.pinnedEventsBannerState.setSelectedPinnedEventID(initialSelectedPinnedEventID)
-            self.initialSelectedPinnedEventID = nil
-        }
+//        var pinnedEventContents = OrderedDictionary<String, AttributedString>()
+//
+//        for item in timelineItems {
+//            // Only remote events are pinned
+//            if case let .event(event) = item,
+//               let eventID = event.id.eventID {
+//                pinnedEventContents.updateValue(pinnedEventStringBuilder.buildAttributedString(for: event) ?? AttributedString(L10n.commonUnsupportedEvent),
+//                                                forKey: eventID)
+//            }
+//        }
+//
+//        state.pinnedEventsBannerState.setPinnedEventContents(pinnedEventContents)
+//
+//        // If it's the first time we are setting the pinned events, we should select the initial event if available.
+//        if let initialSelectedPinnedEventID {
+//            state.pinnedEventsBannerState.setSelectedPinnedEventID(initialSelectedPinnedEventID)
+//            self.initialSelectedPinnedEventID = nil
+//        }
     }
     
     private func handleRoomInfoUpdate() async {

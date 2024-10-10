@@ -23,7 +23,9 @@ struct SeparatorRoomTimelineView: View {
 
 struct SeparatorRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        let item = SeparatorRoomTimelineItem(id: .init(uniqueID: "Separator"), text: "This is a separator")
+        let item = SeparatorRoomTimelineItem(id: .init(uniqueID: .init(id: "Separator")),
+                                             text: "This is a separator")
+        
         SeparatorRoomTimelineView(timelineItem: item)
     }
 }

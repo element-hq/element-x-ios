@@ -31,7 +31,7 @@ extension EventBasedTimelineItemProtocol {
     }
 
     var isRemoteMessage: Bool {
-        id.eventID != nil
+        false
     }
     
     var isRedacted: Bool {

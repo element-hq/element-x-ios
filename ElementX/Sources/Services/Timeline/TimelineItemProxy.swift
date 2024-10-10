@@ -11,48 +11,48 @@ import MatrixRustSDK
 struct TimelineItemIdentifier: Hashable {
     /// Stable id across state changes of the timeline item, it uniquely identifies an item in a timeline.
     /// It's value is consistent only per timeline instance, it should **not** be used to identify an item across timeline instances.
-    let uniqueID: String
+    let uniqueID: TimelineUniqueId
     
     /// Contains the 2 possible identifiers of an event, either it has a remote event id or a local transaction id, never both or none.
-    var eventOrTransactionID: EventOrTransactionId?
+//    var eventOrTransactionID: EventOrTransactionId?
     
-    var eventID: String? {
-        switch eventOrTransactionID {
-        case .eventId(let eventId):
-            return eventId
-        default:
-            return nil
-        }
-    }
-    
-    var transactionID: String? {
-        switch eventOrTransactionID {
-        case .transactionId(let transactionId):
-            return transactionId
-        default:
-            return nil
-        }
-    }
+//    var eventID: String? {
+//        switch eventOrTransactionID {
+//        case .eventId(let eventId):
+//            return eventId
+//        default:
+//            return nil
+//        }
+//    }
+//
+//    var transactionID: String? {
+//        switch eventOrTransactionID {
+//        case .transactionId(let transactionId):
+//            return transactionId
+//        default:
+//            return nil
+//        }
+//    }
 }
 
 extension TimelineItemIdentifier {
     /// Use only for mocks/tests
     static var random: Self {
-        .init(uniqueID: UUID().uuidString, eventOrTransactionID: .eventId(eventId: UUID().uuidString))
+        .init(uniqueID: .init(id: UUID().uuidString))
     }
 }
 
 /// A light wrapper around timeline items returned from Rust.
 enum TimelineItemProxy {
     case event(EventTimelineItemProxy)
-    case virtual(MatrixRustSDK.VirtualTimelineItem, uniqueID: String)
+    case virtual(MatrixRustSDK.VirtualTimelineItem, uniqueID: TimelineUniqueId)
     case unknown(MatrixRustSDK.TimelineItem)
     
     init(item: MatrixRustSDK.TimelineItem) {
         if let eventItem = item.asEvent() {
-            self = .event(EventTimelineItemProxy(item: eventItem, uniqueID: String(item.uniqueId())))
+            self = .event(EventTimelineItemProxy(item: eventItem, uniqueID: item.uniqueId()))
         } else if let virtualItem = item.asVirtual() {
-            self = .virtual(virtualItem, uniqueID: String(item.uniqueId()))
+            self = .virtual(virtualItem, uniqueID: item.uniqueId())
         } else {
             self = .unknown(item)
         }
@@ -105,10 +105,10 @@ class EventTimelineItemProxy {
     let item: MatrixRustSDK.EventTimelineItem
     let id: TimelineItemIdentifier
     
-    init(item: MatrixRustSDK.EventTimelineItem, uniqueID: String) {
+    init(item: MatrixRustSDK.EventTimelineItem, uniqueID: TimelineUniqueId) {
         self.item = item
         
-        id = TimelineItemIdentifier(uniqueID: uniqueID, eventOrTransactionID: item.eventOrTransactionId)
+        id = TimelineItemIdentifier(uniqueID: uniqueID)
     }
     
     lazy var deliveryStatus: TimelineItemDeliveryStatus? = {
@@ -162,11 +162,11 @@ class EventTimelineItemProxy {
     lazy var timestamp = Date(timeIntervalSince1970: TimeInterval(item.timestamp / 1000))
     
     lazy var debugInfo: TimelineItemDebugInfo = {
-        let debugInfo = item.debugInfoProvider.get()
+        let debugInfo = item.lazyProvider.debugInfo()
         return TimelineItemDebugInfo(model: debugInfo.model, originalJSON: debugInfo.originalJson, latestEditJSON: debugInfo.latestEditJson)
     }()
     
-    lazy var shieldState = item.shieldsProvider.getShields(strict: false)
+    lazy var shieldState = item.lazyProvider.getShields(strict: false)
     
     lazy var readReceipts = item.readReceipts
 }

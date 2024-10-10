@@ -2103,6 +2103,7 @@
 		CDE3F3911FF7CC639BDE5844 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CEE20623EB4A9B88FB29F2BA /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/SAS.strings; sourceTree = "<group>"; };
 		CEE41494C837AA403A06A5D9 /* UnitTests.xctestplan */ = {isa = PBXFileReference; path = UnitTests.xctestplan; sourceTree = "<group>"; };
+		CF05437C99730E5B3357FC51 /* matrix-rust-sdk */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "matrix-rust-sdk"; path = "../matrix-rust-sdk"; sourceTree = SOURCE_ROOT; };
 		D071F86CD47582B9196C9D16 /* UserDiscoverySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDiscoverySection.swift; sourceTree = "<group>"; };
 		D086854995173E897F993C26 /* AdvancedSettingsScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedSettingsScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		D09A267106B9585D3D0CFC0D /* ClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientError.swift; sourceTree = "<group>"; };
@@ -3181,6 +3182,7 @@
 				8A9C09B6A392465E03B8D1B1 /* IntegrationTests */,
 				823ED0EC3F1B6CF47D284011 /* Tools */,
 				B04B538A859CD012755DC19C /* NSE */,
+				9413F680ECDFB2B0DDB0DEF2 /* Packages */,
 				1803CD2B96BF06009334BB61 /* PreviewTests */,
 				681566846AF307E9BA4C72C6 /* Products */,
 			);
@@ -4387,6 +4389,14 @@
 				832EB453B3A5D04C18D86117 /* View */,
 			);
 			path = UserProfileScreen;
+			sourceTree = "<group>";
+		};
+		9413F680ECDFB2B0DDB0DEF2 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				CF05437C99730E5B3357FC51 /* matrix-rust-sdk */,
+			);
+			name = Packages;
 			sourceTree = "<group>";
 		};
 		948DD12A5533BE1BC260E437 /* LocationSharing */ = {
@@ -5793,7 +5803,6 @@
 				CCD235515AFCEE6D2005B705 /* XCRemoteSwiftPackageReference "LRUCache" */,
 				4BDA7F6042968E8422470F3F /* XCRemoteSwiftPackageReference "LoremSwiftum" */,
 				0CBF57301AA172C21F76CE86 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */,
-				6FC4820D8D4559CEECA064D7 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */,
 				96495DD8554E2F39D3954354 /* XCRemoteSwiftPackageReference "posthog-ios" */,
 				A08925A9D5E3770DEB9D8509 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				E9C4F3A12AA1F65C13A8C8EB /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
@@ -5801,6 +5810,7 @@
 				6582B5AF3F104B0F7E031E7D /* XCRemoteSwiftPackageReference "SwiftState" */,
 				EC6D0C817B1C21D9D096505A /* XCRemoteSwiftPackageReference "Version" */,
 				EE40B0E16A55BD23ECBFFD22 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */,
+				8FB6F8BBB0A235E3C8DCF8F7 /* XCLocalSwiftPackageReference "../matrix-rust-sdk" */,
 			);
 			projectDirPath = "";
 			projectRoot = "";
@@ -7789,14 +7799,6 @@
 				minimumVersion = 6.0.0;
 			};
 		};
-		6FC4820D8D4559CEECA064D7 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
-			requirement = {
-				kind = exactVersion;
-				version = 1.0.56;
-			};
-		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nicklockwood/GZIP";
@@ -7927,6 +7929,13 @@
 		};
 /* End XCRemoteSwiftPackageReference section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		8FB6F8BBB0A235E3C8DCF8F7 /* XCLocalSwiftPackageReference "../matrix-rust-sdk" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../matrix-rust-sdk";
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		020597E28A4BC8E1BE8EDF6E /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -8055,7 +8064,6 @@
 		};
 		6647C55D93508C7CE9D954A5 /* MatrixRustSDK */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6FC4820D8D4559CEECA064D7 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
 			productName = MatrixRustSDK;
 		};
 		67E7A6F388D3BF85767609D9 /* Sentry */ = {
@@ -8140,7 +8148,6 @@
 		};
 		A678E40E917620059695F067 /* MatrixRustSDK */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6FC4820D8D4559CEECA064D7 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
 			productName = MatrixRustSDK;
 		};
 		A7CA6F33C553805035C3B114 /* DeviceKit */ = {
@@ -8155,7 +8162,6 @@
 		};
 		B1E8B697DF78FE7F61FC6CA4 /* MatrixRustSDK */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6FC4820D8D4559CEECA064D7 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
 			productName = MatrixRustSDK;
 		};
 		BA93CD75CCE486660C9040BD /* Collections */ = {
@@ -8180,7 +8186,6 @@
 		};
 		C2C69B8BA5A9702E7A8BC08F /* MatrixRustSDK */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6FC4820D8D4559CEECA064D7 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
 			productName = MatrixRustSDK;
 		};
 		CA07D57389DACE18AEB6A5E2 /* WysiwygComposer */ = {

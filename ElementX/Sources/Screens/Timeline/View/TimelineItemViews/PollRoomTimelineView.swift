@@ -22,18 +22,18 @@ struct PollRoomTimelineView: View {
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             PollView(poll: poll,
-                     state: state) { action in
-                switch action {
-                case .selectOption(let optionID):
-                    guard let eventID, let option = poll.options.first(where: { $0.id == optionID }), !option.isSelected else { return }
-                    context.send(viewAction: .handlePollAction(.selectOption(pollStartID: eventID, optionID: option.id)))
-                case .edit:
-                    guard let eventID else { return }
-                    context.send(viewAction: .handlePollAction(.edit(pollStartID: eventID, poll: poll)))
-                case .end:
-                    guard let eventID else { return }
-                    context.send(viewAction: .handlePollAction(.end(pollStartID: eventID)))
-                }
+                     state: state) { _ in
+//                switch action {
+//                case .selectOption(let optionID):
+//                    guard let eventID, let option = poll.options.first(where: { $0.id == optionID }), !option.isSelected else { return }
+//                    context.send(viewAction: .handlePollAction(.selectOption(pollStartID: eventID, optionID: option.id)))
+//                case .edit:
+//                    guard let eventID else { return }
+//                    context.send(viewAction: .handlePollAction(.edit(pollStartID: eventID, poll: poll)))
+//                case .end:
+//                    guard let eventID else { return }
+//                    context.send(viewAction: .handlePollAction(.end(pollStartID: eventID)))
+//                }
             }
         }
     }
@@ -44,9 +44,9 @@ struct PollRoomTimelineView: View {
         timelineItem.poll
     }
     
-    private var eventID: String? {
-        timelineItem.id.eventID
-    }
+//    private var eventID: String? {
+//        timelineItem.id.eventID
+//    }
 }
 
 struct PollRoomTimelineView_Previews: PreviewProvider, TestablePreview {

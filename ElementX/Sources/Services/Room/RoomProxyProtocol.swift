@@ -22,6 +22,7 @@ enum RoomProxyType {
     case joined(JoinedRoomProxyProtocol)
     case invited(InvitedRoomProxyProtocol)
     case left
+    case knocked
 }
 
 // sourcery: AutoMockable

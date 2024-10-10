@@ -115,18 +115,18 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func sendReadReceipt(for itemID: TimelineItemIdentifier) async {
-        let receiptType: MatrixRustSDK.ReceiptType = appSettings.sharePresence ? .read : .readPrivate
-        
-        // Mark the whole room as read if it's the last timeline item
-        if timelineItems.last?.id == itemID {
-            _ = await roomProxy.markAsRead(receiptType: receiptType)
-        } else {
-            guard let eventID = itemID.eventID else {
-                return
-            }
-            
-            _ = await activeTimeline.sendReadReceipt(for: eventID, type: receiptType)
-        }
+//        let receiptType: MatrixRustSDK.ReceiptType = appSettings.sharePresence ? .read : .readPrivate
+//
+//        // Mark the whole room as read if it's the last timeline item
+//        if timelineItems.last?.id == itemID {
+//            _ = await roomProxy.markAsRead(receiptType: receiptType)
+//        } else {
+//            guard let eventID = itemID.eventID else {
+//                return
+//            }
+//
+//            _ = await activeTimeline.sendReadReceipt(for: eventID, type: receiptType)
+//        }
     }
     
     func processItemAppearance(_ itemID: TimelineItemIdentifier) async {
@@ -145,26 +145,26 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                      html: String?,
                      inReplyTo itemID: TimelineItemIdentifier?,
                      intentionalMentions: IntentionalMentions) async {
-        var inReplyTo: String?
-        if itemID == nil {
-            MXLog.info("Send message in \(roomID)")
-        } else if let eventID = itemID?.eventID {
-            inReplyTo = eventID
-            MXLog.info("Send reply in \(roomID)")
-        } else {
-            MXLog.error("Send reply in \(roomID) failed: missing event ID")
-            return
-        }
-        
-        switch await activeTimeline.sendMessage(message,
-                                                html: html,
-                                                inReplyTo: inReplyTo,
-                                                intentionalMentions: intentionalMentions) {
-        case .success:
-            MXLog.info("Finished sending message")
-        case .failure(let error):
-            MXLog.error("Failed sending message with error: \(error)")
-        }
+//        var inReplyTo: String?
+//        if itemID == nil {
+//            MXLog.info("Send message in \(roomID)")
+//        } else if let eventID = itemID?.eventID {
+//            inReplyTo = eventID
+//            MXLog.info("Send reply in \(roomID)")
+//        } else {
+//            MXLog.error("Send reply in \(roomID) failed: missing event ID")
+//            return
+//        }
+//
+//        switch await activeTimeline.sendMessage(message,
+//                                                html: html,
+//                                                inReplyTo: inReplyTo,
+//                                                intentionalMentions: intentionalMentions) {
+//        case .success:
+//            MXLog.info("Finished sending message")
+//        case .failure(let error):
+//            MXLog.error("Failed sending message with error: \(error)")
+//        }
     }
     
     func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async {
@@ -182,40 +182,40 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
               message: String,
               html: String?,
               intentionalMentions: IntentionalMentions) async {
-        MXLog.info("Edit message in \(roomID)")
-        MXLog.info("Editing timeline item: \(timelineItemID)")
-        
-        let editMode: EditMode
-        if !timelineItemID.uniqueID.isEmpty,
-           let timelineItem = liveTimelineProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID) {
-            editMode = .byEvent(timelineItem)
-        } else if let eventID = timelineItemID.eventID {
-            editMode = .byID(eventID)
-        } else {
-            MXLog.error("Unknown timeline item: \(timelineItemID)")
-            return
-        }
-        
-        let messageContent = activeTimeline.buildMessageContentFor(message,
-                                                                   html: html,
-                                                                   intentionalMentions: intentionalMentions.toRustMentions())
-        
-        switch editMode {
-        case let .byEvent(item):
-            switch await activeTimeline.edit(item, newContent: messageContent) {
-            case .success:
-                MXLog.info("Finished editing message by event")
-            case let .failure(error):
-                MXLog.error("Failed editing message by event with error: \(error)")
-            }
-        case let .byID(eventID):
-            switch await roomProxy.edit(eventID: eventID, newContent: messageContent) {
-            case .success:
-                MXLog.info("Finished editing message by event ID")
-            case let .failure(error):
-                MXLog.error("Failed editing message by event ID with error: \(error)")
-            }
-        }
+//        MXLog.info("Edit message in \(roomID)")
+//        MXLog.info("Editing timeline item: \(timelineItemID)")
+//
+//        let editMode: EditMode
+//        if !timelineItemID.uniqueID.isEmpty,
+//           let timelineItem = liveTimelineProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID) {
+//            editMode = .byEvent(timelineItem)
+//        } else if let eventID = timelineItemID.eventID {
+//            editMode = .byID(eventID)
+//        } else {
+//            MXLog.error("Unknown timeline item: \(timelineItemID)")
+//            return
+//        }
+//
+//        let messageContent = activeTimeline.buildMessageContentFor(message,
+//                                                                   html: html,
+//                                                                   intentionalMentions: intentionalMentions.toRustMentions())
+//
+//        switch editMode {
+//        case let .byEvent(item):
+//            switch await activeTimeline.edit(item, newContent: messageContent) {
+//            case .success:
+//                MXLog.info("Finished editing message by event")
+//            case let .failure(error):
+//                MXLog.error("Failed editing message by event with error: \(error)")
+//            }
+//        case let .byID(eventID):
+//            switch await roomProxy.edit(eventID: eventID, newContent: messageContent) {
+//            case .success:
+//                MXLog.info("Finished editing message by event ID")
+//            case let .failure(error):
+//                MXLog.error("Failed editing message by event ID with error: \(error)")
+//            }
+//        }
     }
     
     func redact(_ timelineItemID: TimelineItemIdentifier) async {
@@ -398,7 +398,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 let date = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
                 let dateString = date.formatted(date: .complete, time: .omitted)
                 
-                return SeparatorRoomTimelineItem(id: .init(uniqueID: dateString), text: dateString)
+                return SeparatorRoomTimelineItem(id: .init(uniqueID: .init(id: dateString)), text: dateString)
             case .readMarker:
                 return ReadMarkerRoomTimelineItem(id: .init(uniqueID: uniqueID))
             }
@@ -421,20 +421,20 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     private func fetchEventDetails(for timelineItem: EventBasedMessageTimelineItemProtocol, refetchOnError: Bool) {
-        guard let eventID = timelineItem.id.eventID else {
-            return
-        }
-
-        switch timelineItem.replyDetails {
-        case .notLoaded:
-            activeTimeline.fetchDetails(for: eventID)
-        case .error:
-            if refetchOnError {
-                activeTimeline.fetchDetails(for: eventID)
-            }
-        default:
-            break
-        }
+//        guard let eventID = timelineItem.id.eventID else {
+//            return
+//        }
+//
+//        switch timelineItem.replyDetails {
+//        case .notLoaded:
+//            activeTimeline.fetchDetails(for: eventID)
+//        case .error:
+//            if refetchOnError {
+//                activeTimeline.fetchDetails(for: eventID)
+//            }
+//        default:
+//            break
+//        }
     }
     
     func eventTimestamp(for itemID: TimelineItemIdentifier) -> Date? {
