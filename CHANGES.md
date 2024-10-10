@@ -1,3 +1,24 @@
+## Changes in 1.8.6 (2024-10-10)
+
+### What's Changed
+
+✨ Features
+* crypto: Configure decryption trustRequirement based on config flag by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/3358
+* Introduce a feature flag for the new identity pinning violation notifications feature by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3394
+* Show the Login with QR Code button. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3392
+
+🙌 Improvements
+* Add a subtitle to the QR Code login instructions. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3386
+* Tweak the UI in the EncryptionReset, IdentityConfirmation and SecureBackupRecovery screens. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3391
+* Update the secondary button stroke colour. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3393
+
+Others
+* Fix an authentication UI test snapshot. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3387
+* Ask the iPad to reveal the keyboard in UI Tests when it's hidden. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3389
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.8.5...1.8.6
+
 ## Changes in 1.8.5 (2024-10-08)
 
 ### What's Changed
