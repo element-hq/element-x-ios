@@ -67,32 +67,27 @@ struct IdentityConfirmationScreen: View {
                     context.send(viewAction: .otherDevice)
                 }
                 .buttonStyle(.compound(.primary))
-                
-                if context.viewState.availableActions.contains(.recovery) {
-                    Button(L10n.screenIdentityConfirmationUseRecoveryKey) {
-                        context.send(viewAction: .recoveryKey)
-                    }
-                    .buttonStyle(.compound(.secondary))
-                }
-            } else if context.viewState.availableActions.contains(.recovery) {
+            }
+            
+            if context.viewState.availableActions.contains(.recovery) {
                 Button(L10n.screenIdentityConfirmationUseRecoveryKey) {
                     context.send(viewAction: .recoveryKey)
                 }
                 .buttonStyle(.compound(.primary))
             }
             
-            if shouldShowSkipButton {
-                Button(L10n.actionSkip) {
-                    context.send(viewAction: .skip)
-                }
-                .buttonStyle(.compound(.plain))
-            }
-            
             Button(L10n.screenIdentityConfirmationCannotConfirm) {
                 context.send(viewAction: .reset)
             }
-            .buttonStyle(.compound(.plain))
-            .padding(.vertical, 14)
+            .buttonStyle(.compound(.secondary))
+            
+            if shouldShowSkipButton {
+                Button("\(L10n.actionSkip) 🙉") {
+                    context.send(viewAction: .skip)
+                }
+                .buttonStyle(.compound(.plain))
+                .padding(.vertical, 14)
+            }
         }
     }
     
