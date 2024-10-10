@@ -1,0 +1,32 @@
+{
+  "configurations" : [
+    {
+      "id" : "991CB720-B4D2-4F1F-BB8A-A2C1A717F529",
+      "name" : "TchapX",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "defaultTestExecutionTimeAllowance" : 60,
+    "environmentVariableEntries" : [
+      {
+        "key" : "IS_RUNNING_UNIT_TESTS",
+        "value" : "1"
+      }
+    ],
+    "testExecutionOrdering" : "random",
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:TchapX.xcodeproj",
+        "identifier" : "E156D99C308BC583D03697F6",
+        "name" : "Tchap-Production"
+      }
+    }
+  ],
+  "version" : 1
+}

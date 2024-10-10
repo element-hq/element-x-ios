@@ -58,11 +58,11 @@ targets:
 
     settings:
       base:
-        PRODUCTION_APP_NAME: TchapX-NSE STAGING
+        PRODUCTION_APP_NAME: TchapX-NSE Staging
         BASE_APP_GROUP_IDENTIFIER: fr.gouv.tchapx.staging
         BASE_BUNDLE_IDENTIFIER: fr.gouv.tchapx.staging
-        APP_NAME: TchapX-NSE-staging
-        APP_DISPLAY_NAME: TchapX-NSE-STAGING
+        APP_NAME: TchapX-NSE-Staging
+        APP_DISPLAY_NAME: TchapX-NSE Staging
 
         PRODUCT_NAME: TchapX-NSE-Staging
         PRODUCT_DISPLAY_NAME: $(APP_DISPLAY_NAME)
@@ -117,3 +117,4 @@ targets:
     - path: ../../../../ElementX/Sources/AppHooks/AppHooks.swift
     - path: ../../../../ElementX/Sources/AppHooks/Hooks/ClientBuilderHook.swift
     - path: ../PrivacyInfo.xcprivacy
+#    - path: ../../../main/Sources/Other/Helpers/TchapX-String.swift
