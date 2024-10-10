@@ -43,10 +43,17 @@ struct QRCodeLoginScreen: View {
                 VStack(spacing: 16) {
                     HeroImage(icon: \.computer, style: .subtle)
                     
-                    Text(L10n.screenQrCodeLoginInitialStateTitle(InfoPlistReader.main.productionAppName))
-                        .foregroundColor(.compound.textPrimary)
-                        .font(.zero.headingMDBold)
-                        .multilineTextAlignment(.center)
+                    VStack(spacing: 8) {
+                        Text(L10n.screenQrCodeLoginInitialStateTitle(InfoPlistReader.main.productionAppName))
+                            .foregroundColor(.compound.textPrimary)
+                            .font(.zero.headingMDBold)
+                            .multilineTextAlignment(.center)
+                        
+                        Text(L10n.screenQrCodeLoginInitialStateSubtitle)
+                            .font(.zero.bodyMD)
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(.compound.textSecondary)
+                    }
                 }
                 .padding(.horizontal, 24)
                 

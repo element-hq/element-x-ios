@@ -142,7 +142,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         .store(in: &cancellables)
         
-        let identityStatusChangesPublisher = roomProxy.identityStatusChangesPublisher.receive(on: DispatchQueue.main)
+        let identityStatusChangesPublisher = roomProxy.identityStatusChangesPublisher
+            .receive(on: DispatchQueue.main)
+            .filter { [weak self] _ in self?.appSettings.identityPinningViolationNotificationsEnabled ?? false }
         
         Task { [weak self] in
             for await changes in identityStatusChangesPublisher.values {

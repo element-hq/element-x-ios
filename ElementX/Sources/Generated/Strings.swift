@@ -1123,7 +1123,7 @@ internal enum L10n {
   internal static var screenEncryptionResetActionContinueReset: String { return L10n.tr("Localizable", "screen_encryption_reset_action_continue_reset") }
   /// Your account details, contacts, preferences, and chat list will be kept
   internal static var screenEncryptionResetBullet1: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_1") }
-  /// You will lose your existing message history unless it is stored on another device
+  /// You will lose any message history that’s stored only on the server
   internal static var screenEncryptionResetBullet2: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_2") }
   /// You will need to verify all your existing devices and contacts again
   internal static var screenEncryptionResetBullet3: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_3") }
@@ -1395,6 +1395,8 @@ internal enum L10n {
   internal static var screenQrCodeLoginInitialStateItem3Action: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_3_action") }
   /// Scan the QR code with this device
   internal static var screenQrCodeLoginInitialStateItem4: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_4") }
+  /// Only available if your account provider supports it.
+  internal static var screenQrCodeLoginInitialStateSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_subtitle") }
   /// Open %1$@ on another device to get the QR code
   internal static func screenQrCodeLoginInitialStateTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_qr_code_login_initial_state_title", String(describing: p1))

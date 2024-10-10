@@ -90,14 +90,6 @@ struct SecureBackupRecoveryKeyScreen: View {
             }
             .buttonStyle(.compound(.primary))
             .disabled(context.confirmationRecoveryKey.isEmpty)
-            
-            Button {
-                context.send(viewAction: .resetEncryption)
-            } label: {
-                Text(L10n.screenIdentityConfirmationCreateNewRecoveryKey)
-                    .padding(.vertical, 14)
-            }
-            .buttonStyle(.compound(.plain))
         }
     }
     

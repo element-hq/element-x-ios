@@ -46,6 +46,7 @@ final class AppSettings {
         case fuzzyRoomListSearchEnabled
         case pinningEnabled
         case enableOnlySignedDeviceIsolationMode
+        case identityPinningViolationNotificationsEnabled
         
         case zeroAccessToken
         case zeroMatrixUsers
@@ -128,7 +129,7 @@ final class AppSettings {
     /// A URL where users can go read more about the chat backup.
     let chatBackupDetailsURL: URL = "https://element.io/help#encryption5"
     /// A URL where users can go read more about identity pinning violations
-    let identityPinningViolationDetailsURL: URL = "https://element.io/help#18"
+    let identityPinningViolationDetailsURL: URL = "https://element.io/help#encryption18"
     /// Any domains that Element web may be hosted on - used for handling links.
     let elementWebHosts = ["app.element.io", "staging.element.io", "develop.element.io"]
         
@@ -281,6 +282,9 @@ final class AppSettings {
     enum SlidingSyncDiscovery: Codable { case proxy, native, forceNative }
     @UserPreference(key: UserDefaultsKeys.slidingSyncDiscovery, defaultValue: .forceNative, storageType: .userDefaults(store))
     var slidingSyncDiscovery: SlidingSyncDiscovery
+    
+    @UserPreference(key: UserDefaultsKeys.identityPinningViolationNotificationsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
+    var identityPinningViolationNotificationsEnabled
 
     #endif
     

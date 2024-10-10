@@ -49,6 +49,10 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.hideTimelineMedia) {
                     Text("Hide image & video previews")
                 }
+                
+                Toggle(isOn: $context.identityPinningViolationNotificationsEnabled) {
+                    Text("Identity pinning violation notifications")
+                }
             }
             
             Section {
