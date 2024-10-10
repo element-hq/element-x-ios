@@ -24,8 +24,8 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         XCTAssertTrue(continueButton.waitForExistence(timeout: 2.0))
         
         // Login Screen: Enter valid credentials
-        app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("alice\n")
-        app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("12345678")
+        app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("alice\n", app: app)
+        app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("12345678", app: app)
 
         try await app.assertScreenshot(.authenticationFlow)
         
@@ -48,8 +48,8 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         XCTAssertTrue(continueButton.waitForExistence(timeout: 2.0))
         
         // Login Screen: Enter invalid credentials
-        app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("alice")
-        app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("87654321")
+        app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("alice", app: app)
+        app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("87654321", app: app)
 
         // Login Screen: Tap continue
         XCTAssertTrue(continueButton.isEnabled)
@@ -74,7 +74,7 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         XCTAssertTrue(continueButton.waitForExistence(timeout: 2.0))
         
         // When entering a username on a homeserver with an unsupported flow.
-        app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("@test:server.net\n")
+        app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("@test:server.net\n", app: app)
         
         // Then the screen should not allow login to continue.
         try await app.assertScreenshot(.authenticationFlow, step: 1)
@@ -91,7 +91,7 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         app.buttons[A11yIdentifiers.serverConfirmationScreen.changeServer].tap()
         
         // Server Selection: Clear the default, enter OIDC server and continue.
-        app.textFields[A11yIdentifiers.changeServerScreen.server].clearAndTypeText("company.com\n")
+        app.textFields[A11yIdentifiers.changeServerScreen.server].clearAndTypeText("company.com\n", app: app)
         
         // Server Confirmation: Tap continue button
         app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
