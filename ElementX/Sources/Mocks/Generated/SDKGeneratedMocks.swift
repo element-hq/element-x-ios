@@ -16529,6 +16529,92 @@ open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificati
 
     fileprivate var pointer: UnsafeMutableRawPointer!
 
+    //MARK: - acceptVerificationRequest
+
+    open var acceptVerificationRequestThrowableError: Error?
+    var acceptVerificationRequestUnderlyingCallsCount = 0
+    open var acceptVerificationRequestCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return acceptVerificationRequestUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = acceptVerificationRequestUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                acceptVerificationRequestUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    acceptVerificationRequestUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var acceptVerificationRequestCalled: Bool {
+        return acceptVerificationRequestCallsCount > 0
+    }
+    open var acceptVerificationRequestClosure: (() async throws -> Void)?
+
+    open override func acceptVerificationRequest() async throws {
+        if let error = acceptVerificationRequestThrowableError {
+            throw error
+        }
+        acceptVerificationRequestCallsCount += 1
+        try await acceptVerificationRequestClosure?()
+    }
+
+    //MARK: - acknowledgeVerificationRequest
+
+    open var acknowledgeVerificationRequestSenderIdFlowIdThrowableError: Error?
+    var acknowledgeVerificationRequestSenderIdFlowIdUnderlyingCallsCount = 0
+    open var acknowledgeVerificationRequestSenderIdFlowIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return acknowledgeVerificationRequestSenderIdFlowIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = acknowledgeVerificationRequestSenderIdFlowIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                acknowledgeVerificationRequestSenderIdFlowIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    acknowledgeVerificationRequestSenderIdFlowIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var acknowledgeVerificationRequestSenderIdFlowIdCalled: Bool {
+        return acknowledgeVerificationRequestSenderIdFlowIdCallsCount > 0
+    }
+    open var acknowledgeVerificationRequestSenderIdFlowIdReceivedArguments: (senderId: String, flowId: String)?
+    open var acknowledgeVerificationRequestSenderIdFlowIdReceivedInvocations: [(senderId: String, flowId: String)] = []
+    open var acknowledgeVerificationRequestSenderIdFlowIdClosure: ((String, String) async throws -> Void)?
+
+    open override func acknowledgeVerificationRequest(senderId: String, flowId: String) async throws {
+        if let error = acknowledgeVerificationRequestSenderIdFlowIdThrowableError {
+            throw error
+        }
+        acknowledgeVerificationRequestSenderIdFlowIdCallsCount += 1
+        acknowledgeVerificationRequestSenderIdFlowIdReceivedArguments = (senderId: senderId, flowId: flowId)
+        DispatchQueue.main.async {
+            self.acknowledgeVerificationRequestSenderIdFlowIdReceivedInvocations.append((senderId: senderId, flowId: flowId))
+        }
+        try await acknowledgeVerificationRequestSenderIdFlowIdClosure?(senderId, flowId)
+    }
+
     //MARK: - approveVerification
 
     open var approveVerificationThrowableError: Error?
@@ -16647,75 +16733,6 @@ open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificati
         }
         declineVerificationCallsCount += 1
         try await declineVerificationClosure?()
-    }
-
-    //MARK: - isVerified
-
-    open var isVerifiedThrowableError: Error?
-    var isVerifiedUnderlyingCallsCount = 0
-    open var isVerifiedCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return isVerifiedUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = isVerifiedUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                isVerifiedUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    isVerifiedUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var isVerifiedCalled: Bool {
-        return isVerifiedCallsCount > 0
-    }
-
-    var isVerifiedUnderlyingReturnValue: Bool!
-    open var isVerifiedReturnValue: Bool! {
-        get {
-            if Thread.isMainThread {
-                return isVerifiedUnderlyingReturnValue
-            } else {
-                var returnValue: Bool? = nil
-                DispatchQueue.main.sync {
-                    returnValue = isVerifiedUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                isVerifiedUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    isVerifiedUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var isVerifiedClosure: (() async throws -> Bool)?
-
-    open override func isVerified() async throws -> Bool {
-        if let error = isVerifiedThrowableError {
-            throw error
-        }
-        isVerifiedCallsCount += 1
-        if let isVerifiedClosure = isVerifiedClosure {
-            return try await isVerifiedClosure()
-        } else {
-            return isVerifiedReturnValue
-        }
     }
 
     //MARK: - requestVerification

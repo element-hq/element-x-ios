@@ -31,8 +31,8 @@ struct SessionVerificationScreen: View {
         switch context.viewState.verificationState {
         case .initial:
             return "lock"
-        case .cancelled:
-            return "exclamationmark.shield"
+        case .acceptingRequest:
+            return "hourglass"
         case .requestingVerification:
             return "hourglass"
         case .verificationRequestAccepted:
@@ -51,21 +51,24 @@ struct SessionVerificationScreen: View {
             return "face.smiling"
         case .verified:
             return "checkmark.shield"
+        case .cancelled:
+            return "exclamationmark.shield"
         }
     }
     
     @ViewBuilder
     private var screenHeader: some View {
         VStack(spacing: 0) {
-            if context.viewState.verificationState == .initial {
+            switch context.viewState.verificationState {
+            case .initial:
                 HeroImage(icon: \.lockSolid)
                     .padding(.bottom, 16)
-            } else {
+            default:
                 Image(systemName: headerImageName)
                     .heroImage()
                     .padding(.bottom, 16)
             }
-            
+
             Text(context.viewState.title ?? "")
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
@@ -119,18 +122,34 @@ struct SessionVerificationScreen: View {
     private var actionButtons: some View {
         switch context.viewState.verificationState {
         case .initial:
-            VStack(spacing: 32) {
+            switch context.viewState.flow {
+            case .initiator:
                 Button(L10n.actionStartVerification) {
                     context.send(viewAction: .requestVerification)
                 }
                 .buttonStyle(.compound(.primary))
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.requestVerification)
+            case .responder(let senderID):
+                Button("\(senderID) wants to verify") {
+                    context.send(viewAction: .acceptVerification)
+                }
+                .buttonStyle(.compound(.primary))
+                .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.acceptVerification)
             }
+            
         case .cancelled:
-            Button(L10n.actionRetry) {
-                context.send(viewAction: .restart)
+            switch context.viewState.flow {
+            case .initiator:
+                Button(L10n.actionRetry) {
+                    context.send(viewAction: .restart)
+                }
+                .buttonStyle(.compound(.primary))
+            case .responder:
+                Button(L10n.actionDone) {
+                    context.send(viewAction: .done)
+                }
+                .buttonStyle(.compound(.primary))
             }
-            .buttonStyle(.compound(.primary))
             
         case .verificationRequestAccepted:
             Button(L10n.actionStart) {
@@ -201,7 +220,9 @@ struct SessionVerificationScreen: View {
 struct SessionVerification_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         sessionVerificationScreen(state: .initial)
-            .previewDisplayName("Initial")
+            .previewDisplayName("Initial - Initiator")
+        sessionVerificationScreen(state: .initial, flow: .responder(details: .init(senderID: "bob", flowID: "even")))
+            .previewDisplayName("Initial - Responder")
         sessionVerificationScreen(state: .requestingVerification)
             .previewDisplayName("Requesting Verification")
         sessionVerificationScreen(state: .verificationRequestAccepted)
@@ -215,9 +236,10 @@ struct SessionVerification_Previews: PreviewProvider, TestablePreview {
             .previewDisplayName("Verified")
     }
     
-    static func sessionVerificationScreen(state: SessionVerificationScreenStateMachine.State) -> some View {
+    static func sessionVerificationScreen(state: SessionVerificationScreenStateMachine.State,
+                                          flow: SessionVerificationScreenFlow = .initiator) -> some View {
         let viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: SessionVerificationControllerProxyMock.configureMock(),
-                                                           verificationState: state)
+                                                           flow: flow)
         
         return SessionVerificationScreen(context: viewModel.context)
     }
