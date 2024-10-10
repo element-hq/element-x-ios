@@ -2210,6 +2210,7 @@ class ClientProxyMock: ClientProxyProtocol {
         set(value) { underlyingSecureBackupController = value }
     }
     var underlyingSecureBackupController: SecureBackupControllerProtocol!
+    var sessionVerificationController: SessionVerificationControllerProxyProtocol?
 
     //MARK: - isOnlyDeviceLeft
 
@@ -3517,70 +3518,6 @@ class ClientProxyMock: ClientProxyProtocol {
             return await removeUserAvatarClosure()
         } else {
             return removeUserAvatarReturnValue
-        }
-    }
-    //MARK: - sessionVerificationControllerProxy
-
-    var sessionVerificationControllerProxyUnderlyingCallsCount = 0
-    var sessionVerificationControllerProxyCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return sessionVerificationControllerProxyUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = sessionVerificationControllerProxyUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                sessionVerificationControllerProxyUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    sessionVerificationControllerProxyUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var sessionVerificationControllerProxyCalled: Bool {
-        return sessionVerificationControllerProxyCallsCount > 0
-    }
-
-    var sessionVerificationControllerProxyUnderlyingReturnValue: Result<SessionVerificationControllerProxyProtocol, ClientProxyError>!
-    var sessionVerificationControllerProxyReturnValue: Result<SessionVerificationControllerProxyProtocol, ClientProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return sessionVerificationControllerProxyUnderlyingReturnValue
-            } else {
-                var returnValue: Result<SessionVerificationControllerProxyProtocol, ClientProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = sessionVerificationControllerProxyUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                sessionVerificationControllerProxyUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    sessionVerificationControllerProxyUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var sessionVerificationControllerProxyClosure: (() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError>)?
-
-    func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
-        sessionVerificationControllerProxyCallsCount += 1
-        if let sessionVerificationControllerProxyClosure = sessionVerificationControllerProxyClosure {
-            return await sessionVerificationControllerProxyClosure()
-        } else {
-            return sessionVerificationControllerProxyReturnValue
         }
     }
     //MARK: - deactivateAccount
@@ -13435,12 +13372,152 @@ class SecureBackupControllerMock: SecureBackupControllerProtocol {
     }
 }
 class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {
-    var callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never> {
-        get { return underlyingCallbacks }
-        set(value) { underlyingCallbacks = value }
+    var actions: PassthroughSubject<SessionVerificationControllerProxyAction, Never> {
+        get { return underlyingActions }
+        set(value) { underlyingActions = value }
     }
-    var underlyingCallbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never>!
+    var underlyingActions: PassthroughSubject<SessionVerificationControllerProxyAction, Never>!
 
+    //MARK: - acknowledgeVerificationRequest
+
+    var acknowledgeVerificationRequestSenderIDFlowIDUnderlyingCallsCount = 0
+    var acknowledgeVerificationRequestSenderIDFlowIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return acknowledgeVerificationRequestSenderIDFlowIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = acknowledgeVerificationRequestSenderIDFlowIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                acknowledgeVerificationRequestSenderIDFlowIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    acknowledgeVerificationRequestSenderIDFlowIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var acknowledgeVerificationRequestSenderIDFlowIDCalled: Bool {
+        return acknowledgeVerificationRequestSenderIDFlowIDCallsCount > 0
+    }
+    var acknowledgeVerificationRequestSenderIDFlowIDReceivedArguments: (senderID: String, flowID: String)?
+    var acknowledgeVerificationRequestSenderIDFlowIDReceivedInvocations: [(senderID: String, flowID: String)] = []
+
+    var acknowledgeVerificationRequestSenderIDFlowIDUnderlyingReturnValue: Result<Void, SessionVerificationControllerProxyError>!
+    var acknowledgeVerificationRequestSenderIDFlowIDReturnValue: Result<Void, SessionVerificationControllerProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return acknowledgeVerificationRequestSenderIDFlowIDUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, SessionVerificationControllerProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = acknowledgeVerificationRequestSenderIDFlowIDUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                acknowledgeVerificationRequestSenderIDFlowIDUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    acknowledgeVerificationRequestSenderIDFlowIDUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var acknowledgeVerificationRequestSenderIDFlowIDClosure: ((String, String) async -> Result<Void, SessionVerificationControllerProxyError>)?
+
+    func acknowledgeVerificationRequest(senderID: String, flowID: String) async -> Result<Void, SessionVerificationControllerProxyError> {
+        acknowledgeVerificationRequestSenderIDFlowIDCallsCount += 1
+        acknowledgeVerificationRequestSenderIDFlowIDReceivedArguments = (senderID: senderID, flowID: flowID)
+        DispatchQueue.main.async {
+            self.acknowledgeVerificationRequestSenderIDFlowIDReceivedInvocations.append((senderID: senderID, flowID: flowID))
+        }
+        if let acknowledgeVerificationRequestSenderIDFlowIDClosure = acknowledgeVerificationRequestSenderIDFlowIDClosure {
+            return await acknowledgeVerificationRequestSenderIDFlowIDClosure(senderID, flowID)
+        } else {
+            return acknowledgeVerificationRequestSenderIDFlowIDReturnValue
+        }
+    }
+    //MARK: - acceptVerificationRequest
+
+    var acceptVerificationRequestSenderIDFlowIDUnderlyingCallsCount = 0
+    var acceptVerificationRequestSenderIDFlowIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return acceptVerificationRequestSenderIDFlowIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = acceptVerificationRequestSenderIDFlowIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                acceptVerificationRequestSenderIDFlowIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    acceptVerificationRequestSenderIDFlowIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var acceptVerificationRequestSenderIDFlowIDCalled: Bool {
+        return acceptVerificationRequestSenderIDFlowIDCallsCount > 0
+    }
+    var acceptVerificationRequestSenderIDFlowIDReceivedArguments: (senderID: String, flowID: String)?
+    var acceptVerificationRequestSenderIDFlowIDReceivedInvocations: [(senderID: String, flowID: String)] = []
+
+    var acceptVerificationRequestSenderIDFlowIDUnderlyingReturnValue: Result<Void, SessionVerificationControllerProxyError>!
+    var acceptVerificationRequestSenderIDFlowIDReturnValue: Result<Void, SessionVerificationControllerProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return acceptVerificationRequestSenderIDFlowIDUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, SessionVerificationControllerProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = acceptVerificationRequestSenderIDFlowIDUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                acceptVerificationRequestSenderIDFlowIDUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    acceptVerificationRequestSenderIDFlowIDUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var acceptVerificationRequestSenderIDFlowIDClosure: ((String, String) async -> Result<Void, SessionVerificationControllerProxyError>)?
+
+    func acceptVerificationRequest(senderID: String, flowID: String) async -> Result<Void, SessionVerificationControllerProxyError> {
+        acceptVerificationRequestSenderIDFlowIDCallsCount += 1
+        acceptVerificationRequestSenderIDFlowIDReceivedArguments = (senderID: senderID, flowID: flowID)
+        DispatchQueue.main.async {
+            self.acceptVerificationRequestSenderIDFlowIDReceivedInvocations.append((senderID: senderID, flowID: flowID))
+        }
+        if let acceptVerificationRequestSenderIDFlowIDClosure = acceptVerificationRequestSenderIDFlowIDClosure {
+            return await acceptVerificationRequestSenderIDFlowIDClosure(senderID, flowID)
+        } else {
+            return acceptVerificationRequestSenderIDFlowIDReturnValue
+        }
+    }
     //MARK: - requestVerification
 
     var requestVerificationUnderlyingCallsCount = 0

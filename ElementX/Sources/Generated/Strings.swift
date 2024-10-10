@@ -266,6 +266,8 @@ internal enum L10n {
   internal static var bannerMigrateToNativeSlidingSyncForceLogoutTitle: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_force_logout_title") }
   /// Upgrade available
   internal static var bannerMigrateToNativeSlidingSyncTitle: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_title") }
+  /// Set up recovery
+  internal static var bannerSetUpRecoverySubmit: String { return L10n.tr("Localizable", "banner_set_up_recovery_submit") }
   /// About
   internal static var commonAbout: String { return L10n.tr("Localizable", "common_about") }
   /// Acceptable use policy
@@ -1009,7 +1011,7 @@ internal enum L10n {
   internal static var screenChangeServerSubtitle: String { return L10n.tr("Localizable", "screen_change_server_subtitle") }
   /// Select your server
   internal static var screenChangeServerTitle: String { return L10n.tr("Localizable", "screen_change_server_title") }
-  /// Turn off backup
+  /// Delete key storage
   internal static var screenChatBackupKeyBackupActionDisable: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_action_disable") }
   /// Turn on backup
   internal static var screenChatBackupKeyBackupActionEnable: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_action_enable") }
@@ -1258,15 +1260,15 @@ internal enum L10n {
   internal static var screenKeyBackupDisableConfirmationDescription: String { return L10n.tr("Localizable", "screen_key_backup_disable_confirmation_description") }
   /// Are you sure you want to turn off backup?
   internal static var screenKeyBackupDisableConfirmationTitle: String { return L10n.tr("Localizable", "screen_key_backup_disable_confirmation_title") }
-  /// Turning off backup will remove your current encryption key backup and turn off other security features. In this case, you will:
+  /// Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:
   internal static var screenKeyBackupDisableDescription: String { return L10n.tr("Localizable", "screen_key_backup_disable_description") }
-  /// Not have encrypted message history on new devices
+  /// You will not have encrypted message history on new devices
   internal static var screenKeyBackupDisableDescriptionPoint1: String { return L10n.tr("Localizable", "screen_key_backup_disable_description_point_1") }
-  /// Lose access to your encrypted messages if you are signed out of %1$@ everywhere
+  /// You will lose access to your encrypted messages if you are signed out of %1$@ everywhere
   internal static func screenKeyBackupDisableDescriptionPoint2(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_key_backup_disable_description_point_2", String(describing: p1))
   }
-  /// Are you sure you want to turn off backup?
+  /// Are you sure you want to turn off key storage and delete it?
   internal static var screenKeyBackupDisableTitle: String { return L10n.tr("Localizable", "screen_key_backup_disable_title") }
   /// This account has been deactivated.
   internal static var screenLoginErrorDeactivatedAccount: String { return L10n.tr("Localizable", "screen_login_error_deactivated_account") }
@@ -1536,7 +1538,7 @@ internal enum L10n {
   internal static var screenRecoveryKeySetupConfirmationDescription: String { return L10n.tr("Localizable", "screen_recovery_key_setup_confirmation_description") }
   /// Have you saved your recovery key?
   internal static var screenRecoveryKeySetupConfirmationTitle: String { return L10n.tr("Localizable", "screen_recovery_key_setup_confirmation_title") }
-  /// Your chat backup is protected by a recovery key. If you need a new recovery key after setup you can recreate by selecting ‘Change recovery key’.
+  /// Your key storage is protected by a recovery key. If you need a new recovery key after setup, you can recreate it by selecting ‘Change recovery key’.
   internal static var screenRecoveryKeySetupDescription: String { return L10n.tr("Localizable", "screen_recovery_key_setup_description") }
   /// Generate your recovery key
   internal static var screenRecoveryKeySetupGenerateKey: String { return L10n.tr("Localizable", "screen_recovery_key_setup_generate_key") }
@@ -2499,9 +2501,9 @@ internal enum L10n {
 
   internal enum Banner {
     internal enum SetUpRecovery {
-      /// Generate a new recovery key that can be used to restore your encrypted message history in case you lose access to your devices.
+      /// Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.
       internal static var content: String { return L10n.tr("Localizable", "banner.set_up_recovery.content") }
-      /// Set up recovery
+      /// Set up recovery to protect your account
       internal static var title: String { return L10n.tr("Localizable", "banner.set_up_recovery.title") }
     }
   }

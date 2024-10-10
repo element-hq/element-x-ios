@@ -18,6 +18,10 @@ private class WeakSessionVerificationControllerProxy: SessionVerificationControl
     
     // MARK: - SessionVerificationControllerDelegate
     
+    func didReceiveVerificationRequest(details: SessionVerificationRequestDetails) {
+        proxy?.didReceiveVerificationRequest(details: details)
+    }
+    
     func didReceiveVerificationData(data: MatrixRustSDK.SessionVerificationData) {
         switch data {
         // We can handle only emojis for now
@@ -54,86 +58,136 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     
     init(sessionVerificationController: SessionVerificationController) {
         self.sessionVerificationController = sessionVerificationController
+        sessionVerificationController.setDelegate(delegate: WeakSessionVerificationControllerProxy(proxy: self))
     }
     
     deinit {
         sessionVerificationController.setDelegate(delegate: nil)
     }
     
-    let callbacks = PassthroughSubject<SessionVerificationControllerProxyCallback, Never>()
+    let actions = PassthroughSubject<SessionVerificationControllerProxyAction, Never>()
+    
+    func acknowledgeVerificationRequest(senderID: String, flowID: String) async -> Result<Void, SessionVerificationControllerProxyError> {
+        MXLog.info("Acknowledging verification request")
+        
+        do {
+            try await sessionVerificationController.acknowledgeVerificationRequest(senderId: senderID, flowId: flowID)
+            return .success(())
+        } catch {
+            MXLog.error("Failed requesting session verification with error: \(error)")
+            return .failure(.failedAcknowledgingVerificationRequest)
+        }
+    }
+    
+    func acceptVerificationRequest(senderID: String, flowID: String) async -> Result<Void, SessionVerificationControllerProxyError> {
+        MXLog.info("Accepting verification request")
+        
+        do {
+            try await sessionVerificationController.acceptVerificationRequest()
+            return .success(())
+        } catch {
+            MXLog.error("Failed requesting session verification with error: \(error)")
+            return .failure(.failedAcceptingVerificationRequest)
+        }
+    }
         
     func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        sessionVerificationController.setDelegate(delegate: WeakSessionVerificationControllerProxy(proxy: self))
+        MXLog.info("Requesting session verification")
         
         do {
             try await sessionVerificationController.requestVerification()
             return .success(())
         } catch {
+            MXLog.error("Failed requesting session verification with error: \(error)")
             return .failure(.failedRequestingVerification)
         }
     }
     
     func startSasVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
+        MXLog.info("Starting SAS verification")
+        
         do {
             try await sessionVerificationController.startSasVerification()
             return .success(())
         } catch {
+            MXLog.error("Failed starting SAS verification with error: \(error)")
             return .failure(.failedStartingSasVerification)
         }
     }
     
     func approveVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
+        MXLog.info("Approving verification")
+        
         do {
             try await sessionVerificationController.approveVerification()
             return .success(())
         } catch {
+            MXLog.error("Failed approving verification with error: \(error)")
             return .failure(.failedApprovingVerification)
         }
     }
     
     func declineVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
+        MXLog.info("Declining verification")
+        
         do {
             try await sessionVerificationController.declineVerification()
             return .success(())
         } catch {
+            MXLog.error("Failed declining verification with error: \(error)")
             return .failure(.failedDecliningVerification)
         }
     }
     
     func cancelVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
+        MXLog.info("Cancelling verification")
+        
         do {
             try await sessionVerificationController.cancelVerification()
             return .success(())
         } catch {
+            MXLog.error("Failed cancelling verification with error: \(error)")
             return .failure(.failedCancellingVerification)
         }
     }
     
     // MARK: - Private
     
+    fileprivate func didReceiveVerificationRequest(details: SessionVerificationRequestDetails) {
+        MXLog.info("Received verification request \(details)")
+        
+        actions.send(.receivedVerificationRequest(details: details))
+    }
+    
     fileprivate func didAcceptVerificationRequest() {
-        callbacks.send(.acceptedVerificationRequest)
+        MXLog.info("Accepted verification request")
+        
+        actions.send(.acceptedVerificationRequest)
     }
     
     fileprivate func didStartSasVerification() {
-        callbacks.send(.startedSasVerification)
+        MXLog.info("Started SAS verification")
+        
+        actions.send(.startedSasVerification)
     }
     
     fileprivate func didReceiveData(_ data: [MatrixRustSDK.SessionVerificationEmoji]) {
-        callbacks.send(.receivedVerificationData(data.map { emoji in
+        MXLog.info("Received verification data")
+        
+        actions.send(.receivedVerificationData(data.map { emoji in
             SessionVerificationEmoji(symbol: emoji.symbol(), description: emoji.description())
         }))
     }
     
     fileprivate func didFail() {
-        callbacks.send(.failed)
+        actions.send(.failed)
     }
     
     fileprivate func didFinish() {
-        callbacks.send(.finished)
+        actions.send(.finished)
     }
     
     fileprivate func didCancel() {
-        callbacks.send(.cancelled)
+        actions.send(.cancelled)
     }
 }

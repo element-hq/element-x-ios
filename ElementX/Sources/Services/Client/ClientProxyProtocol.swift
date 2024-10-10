@@ -115,6 +115,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     var secureBackupController: SecureBackupControllerProtocol { get }
     
+    var sessionVerificationController: SessionVerificationControllerProxyProtocol? { get }
+    
     func isOnlyDeviceLeft() async -> Result<Bool, ClientProxyError>
     
     func startSync()
@@ -155,8 +157,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func setUserAvatar(media: MediaInfo) async -> Result<Void, ClientProxyError>
     
     func removeUserAvatar() async -> Result<Void, ClientProxyError>
-        
-    func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError>
 
     func deactivateAccount(password: String?, eraseData: Bool) async -> Result<Void, ClientProxyError>
     

@@ -50,6 +50,8 @@ class ClientProxy: ClientProxyProtocol {
 
     let secureBackupController: SecureBackupControllerProtocol
     
+    private(set) var sessionVerificationController: SessionVerificationControllerProxyProtocol?
+    
     private static var roomCreationPowerLevelOverrides: PowerLevels {
         .init(usersDefault: nil,
               eventsDefault: nil,
@@ -157,7 +159,16 @@ class ClientProxy: ClientProxyProtocol {
         updateVerificationState(client.encryption().verificationState())
         
         verificationStateListenerTaskHandle = client.encryption().verificationStateListener(listener: VerificationStateListenerProxy { [weak self] verificationState in
-            self?.updateVerificationState(verificationState)
+            guard let self else { return }
+            
+            updateVerificationState(verificationState)
+            
+            // The session verification controller requires the user's identity which
+            // isn't available before a keys query response. Use the verification
+            // state updates as an aproximation for when that happens.
+            Task {
+                await self.buildSessionVerificationControllerProxyIfPossible(verificationState: verificationState)
+            }
         })
         
         sendQueueListenerTaskHandle = client.subscribeToSendQueueStatus(listener: SendQueueRoomErrorListenerProxy { [weak self] roomID, error in
@@ -561,16 +572,6 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
-        do {
-            let sessionVerificationController = try await client.getSessionVerificationController()
-            return .success(SessionVerificationControllerProxy(sessionVerificationController: sessionVerificationController))
-        } catch {
-            MXLog.error("Failed retrieving session verification controller proxy with error: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
-
     func logout() async -> URL? {
         do {
             return try await client.logout().flatMap(URL.init(string:))
@@ -727,6 +728,19 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         verificationStateSubject.send(verificationState)
+    }
+    
+    private func buildSessionVerificationControllerProxyIfPossible(verificationState: VerificationState) async {
+        guard sessionVerificationController == nil, verificationState != .unknown else {
+            return
+        }
+        
+        do {
+            let sessionVerificationController = try await client.getSessionVerificationController()
+            self.sessionVerificationController = SessionVerificationControllerProxy(sessionVerificationController: sessionVerificationController)
+        } catch {
+            MXLog.error("Failed retrieving session verification controller proxy with error: \(error)")
+        }
     }
 
     private func loadUserAvatarURLFromCache() {
