@@ -55,6 +55,13 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
+            Section("Join rules") {
+                Toggle(isOn: $context.knockingEnabled) {
+                    Text("Knocking")
+                    Text("Experimental, still using mocked data")
+                }
+            }
+            
             Section {
                 Toggle(isOn: $context.enableOnlySignedDeviceIsolationMode) {
                     Text("Exclude insecure devices when sending/receiving messages")

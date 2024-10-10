@@ -26,7 +26,8 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
          createRoomParameters: CurrentValuePublisher<CreateRoomFlowParameters, Never>,
          selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>,
          analytics: AnalyticsService,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         appSettings: AppSettings) {
         let parameters = createRoomParameters.value
         
         self.userSession = userSession
@@ -36,7 +37,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         
         let bindings = CreateRoomViewStateBindings(roomName: parameters.name, roomTopic: parameters.topic, isRoomPrivate: parameters.isRoomPrivate)
 
-        super.init(initialViewState: CreateRoomViewState(selectedUsers: selectedUsers.value, bindings: bindings), mediaProvider: userSession.mediaProvider)
+        super.init(initialViewState: CreateRoomViewState(isKnockingFeatureEnabled: appSettings.knockingEnabled, selectedUsers: selectedUsers.value, bindings: bindings), mediaProvider: userSession.mediaProvider)
         
         createRoomParameters
             .map(\.avatarImageMedia)
@@ -92,13 +93,18 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                 old.roomName == new.roomName && old.roomTopic == new.roomTopic && old.isRoomPrivate == new.isRoomPrivate
             }
             .sink { [weak self] bindings in
-                guard let self else { return }
-                createRoomParameters.name = bindings.roomName
-                createRoomParameters.topic = bindings.roomTopic
-                createRoomParameters.isRoomPrivate = bindings.isRoomPrivate
+                guard let self = self else { return }
+                updateParameters(bindings: bindings)
                 actionsSubject.send(.updateDetails(createRoomParameters))
             }
             .store(in: &cancellables)
+    }
+    
+    private func updateParameters(bindings: CreateRoomViewStateBindings) {
+        createRoomParameters.name = bindings.roomName
+        createRoomParameters.topic = bindings.roomTopic
+        createRoomParameters.isRoomPrivate = bindings.isRoomPrivate
+        createRoomParameters.isKnockingOnly = bindings.isKnockingOnly
     }
     
     private func createRoom() async {
@@ -107,6 +113,8 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         }
         showLoadingIndicator()
         
+        // Since the parameters are throttled, we need to make sure that the latest values are used
+        updateParameters(bindings: state.bindings)
         let avatarURL: URL?
         if let media = createRoomParameters.avatarImageMedia {
             switch await userSession.clientProxy.uploadMedia(media) {
@@ -136,6 +144,8 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         switch await userSession.clientProxy.createRoom(name: createRoomParameters.name,
                                                         topic: createRoomParameters.topic,
                                                         isRoomPrivate: createRoomParameters.isRoomPrivate,
+                                                        // As of right now we don't want to make private rooms with the knock rule
+                                                        isKnockingOnly: createRoomParameters.isRoomPrivate ? false : createRoomParameters.isKnockingOnly,
                                                         userIDs: state.selectedUsers.map(\.userID),
                                                         avatarURL: avatarURL) {
         case .success(let roomId):
