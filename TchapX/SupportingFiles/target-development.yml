@@ -113,11 +113,11 @@ targets:
 
     settings:
       base:
-        PRODUCTION_APP_NAME: Tchap DEVELOPMENT
+        PRODUCTION_APP_NAME: TchapX DEVELOPMENT
         BASE_APP_GROUP_IDENTIFIER: fr.gouv.tchapx.dev
         BASE_BUNDLE_IDENTIFIER: fr.gouv.tchapx.dev
-        APP_NAME: TchapX-development
-        APP_DISPLAY_NAME: TchapX-DEVELOPMENT
+        APP_NAME: TchapX-Development
+        APP_DISPLAY_NAME: TchapX Development
         ASSETCATALOG_COMPILER_APPICON_NAME: TchapX-icon
 
         PRODUCT_NAME: $(APP_NAME)

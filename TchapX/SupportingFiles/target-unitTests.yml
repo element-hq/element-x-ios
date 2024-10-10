@@ -1,0 +1,49 @@
+name: TchapX-UnitTests
+
+schemes:
+  UnitTests:
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+    build:
+      targets:
+        TchapX-UnitTests: all
+    profile:
+      config: Release
+    run:
+      config: Debug
+      disableMainThreadChecker: false
+    test:
+      config: Debug
+      disableMainThreadChecker: false
+      gatherCoverageData: true
+      coverageTargets:
+        - TchapX-Development
+      testPlans:
+        - path: UnitTests.xctestplan
+        # Don't set it as defaultPlan to avoid conflict with ElementX defaultPlan.
+          defaultPlan: false
+
+targets:
+  TchapX-UnitTests:
+    type: bundle.unit-test
+    platform: iOS
+
+    dependencies:
+    - target: TchapX-Development
+
+    info:
+      path: ../development/SupportingFiles/Info.plist
+
+    settings:
+      base:
+        PRODUCT_NAME: TchapX-UnitTests
+        PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.unit.tests
+      debug:
+      release:
+
+    sources:
+#    - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
+#    - path: ../../Tools/Scripts/Templates/SimpleScreenExample/Tests/Unit
+    - path: ../main/UnitTests/Sources

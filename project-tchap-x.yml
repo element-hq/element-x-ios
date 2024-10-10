@@ -18,6 +18,7 @@ options:
   - pattern: TchapX
     order:
     - Sources
+    - UnitTests
     - Resources
     - SupportingFiles
 
@@ -34,3 +35,4 @@ include:
 - path: TchapX/staging/SupportingFiles/NSE/target.yml
 - path: TchapX/SupportingFiles/target-development.yml
 - path: TchapX/development/SupportingFiles/NSE/target.yml
+- path: TchapX/SupportingFiles/target-unitTests.yml
