@@ -55,9 +55,9 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
-            Section("Knocking") {
+            Section("Join rules") {
                 Toggle(isOn: $context.knockingEnabled) {
-                    Text("Allow the usage of the knock join rule")
+                    Text("Knocking")
                     Text("Experimental, still using mocked data")
                 }
             }
