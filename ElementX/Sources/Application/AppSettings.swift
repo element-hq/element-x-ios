@@ -46,6 +46,7 @@ final class AppSettings {
         case fuzzyRoomListSearchEnabled
         case pinningEnabled
         case enableOnlySignedDeviceIsolationMode
+        case identityPinningViolationNotificationsEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -278,6 +279,9 @@ final class AppSettings {
     enum SlidingSyncDiscovery: Codable { case proxy, native, forceNative }
     @UserPreference(key: UserDefaultsKeys.slidingSyncDiscovery, defaultValue: .native, storageType: .userDefaults(store))
     var slidingSyncDiscovery: SlidingSyncDiscovery
+    
+    @UserPreference(key: UserDefaultsKeys.identityPinningViolationNotificationsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
+    var identityPinningViolationNotificationsEnabled
 
     #endif
     
