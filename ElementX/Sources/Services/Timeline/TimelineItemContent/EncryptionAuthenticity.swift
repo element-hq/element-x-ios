@@ -82,7 +82,7 @@ extension EncryptionAuthenticity {
             self = .unsignedDevice(color: color)
         case .unverifiedIdentity:
             self = .unverifiedIdentity(color: color)
-        case .previouslyVerified:
+        case .verificationViolation:
             self = .previouslyVerified(color: color)
         case .sentInClear:
             self = .sentInClear(color: color)

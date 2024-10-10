@@ -12,8 +12,19 @@ enum SessionVerificationScreenCoordinatorAction {
     case done
 }
 
+struct SessionVerificationScreenVerificationRequestDetails {
+    let senderID: String
+    let flowID: String
+}
+
+enum SessionVerificationScreenFlow {
+    case initiator
+    case responder(details: SessionVerificationScreenVerificationRequestDetails)
+}
+
 struct SessionVerificationScreenCoordinatorParameters {
     let sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol
+    let flow: SessionVerificationScreenFlow
 }
 
 final class SessionVerificationScreenCoordinator: CoordinatorProtocol {
@@ -27,7 +38,8 @@ final class SessionVerificationScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: SessionVerificationScreenCoordinatorParameters) {
-        viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: parameters.sessionVerificationControllerProxy)
+        viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: parameters.sessionVerificationControllerProxy,
+                                                       flow: parameters.flow)
     }
     
     // MARK: - Public

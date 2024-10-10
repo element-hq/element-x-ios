@@ -12,12 +12,22 @@ enum SessionVerificationScreenViewModelAction {
 }
 
 struct SessionVerificationScreenViewState: BindableState {
-    var verificationState: SessionVerificationScreenStateMachine.State = .initial
+    let flow: SessionVerificationScreenFlow
+    var verificationState: SessionVerificationScreenStateMachine.State
     
     var title: String? {
         switch verificationState {
         case .initial:
-            return L10n.screenSessionVerificationOpenExistingSessionTitle
+            switch flow {
+            case .initiator:
+                return L10n.screenSessionVerificationOpenExistingSessionTitle
+            case .responder(let senderID):
+                #warning("FIXME")
+                return "\(senderID) wants to verify"
+            }
+        case .acceptingRequest:
+            #warning("FIXME")
+            return "Accepting request 😎"
         case .requestingVerification:
             return L10n.screenSessionVerificationWaitingToAcceptTitle
         case .verificationRequestAccepted:
@@ -48,7 +58,16 @@ struct SessionVerificationScreenViewState: BindableState {
     var message: String {
         switch verificationState {
         case .initial:
-            return L10n.screenSessionVerificationOpenExistingSessionSubtitle
+            switch flow {
+            case .initiator:
+                return L10n.screenSessionVerificationOpenExistingSessionSubtitle
+            case .responder(let senderID):
+                #warning("FIXME")
+                return "\(senderID) still wants to verify"
+            }
+        case .acceptingRequest:
+            #warning("FIXME")
+            return "We're seriously accepting it!"
         case .requestingVerification:
             return L10n.screenSessionVerificationWaitingToAcceptSubtitle
         case .verificationRequestAccepted:
@@ -74,9 +93,11 @@ struct SessionVerificationScreenViewState: BindableState {
 }
 
 enum SessionVerificationScreenViewAction {
+    case acceptVerification
     case requestVerification
     case startSasVerification
     case restart
     case accept
     case decline
+    case done
 }

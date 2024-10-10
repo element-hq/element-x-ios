@@ -12,6 +12,7 @@ typealias SessionVerificationViewModelType = StateStoreViewModel<SessionVerifica
 
 class SessionVerificationScreenViewModel: SessionVerificationViewModelType, SessionVerificationScreenViewModelProtocol {
     private let sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol
+    private let flow: SessionVerificationScreenFlow
     
     private var stateMachine: SessionVerificationScreenStateMachine
 
@@ -22,21 +23,24 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
     }
 
     init(sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol,
-         verificationState: SessionVerificationScreenStateMachine.State = .initial) {
+         flow: SessionVerificationScreenFlow) {
         self.sessionVerificationControllerProxy = sessionVerificationControllerProxy
+        self.flow = flow
         
-        stateMachine = SessionVerificationScreenStateMachine()
+        stateMachine = SessionVerificationScreenStateMachine(state: .initial)
         
-        super.init(initialViewState: .init(verificationState: verificationState))
+        super.init(initialViewState: .init(flow: flow, verificationState: .initial))
         
         setupStateMachine()
         
-        sessionVerificationControllerProxy.callbacks
+        sessionVerificationControllerProxy.actions
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
                 guard let self else { return }
                 
                 switch callback {
+                case .receivedVerificationRequest:
+                    break
                 case .acceptedVerificationRequest:
                     self.stateMachine.processEvent(.didAcceptVerificationRequest)
                 case .startedSasVerification:
@@ -57,10 +61,18 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
                 }
             }
             .store(in: &cancellables)
+        
+        if case .responder(let details) = flow {
+            Task {
+                await self.sessionVerificationControllerProxy.acknowledgeVerificationRequest(senderID: details.senderID, flowID: details.flowID)
+            }
+        }
     }
     
     override func process(viewAction: SessionVerificationScreenViewAction) {
         switch viewAction {
+        case .acceptVerification:
+            stateMachine.processEvent(.acceptVerification)
         case .requestVerification:
             stateMachine.processEvent(.requestVerification)
         case .startSasVerification:
@@ -71,13 +83,16 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
             stateMachine.processEvent(.acceptChallenge)
         case .decline:
             stateMachine.processEvent(.declineChallenge)
+        case .done:
+            actionsSubject.send(.finished)
         }
     }
     
     func stop() {
-        let uncancellableStates: [SessionVerificationScreenStateMachine.State] = [.initial, .verified, .cancelled]
-        
-        if !uncancellableStates.contains(stateMachine.state) {
+        switch stateMachine.state {
+        case .initial, .verified, .cancelled: // non-cancellable states
+            return
+        default:
             stateMachine.processEvent(.cancel)
         }
     }
@@ -91,6 +106,8 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
             state.verificationState = context.toState
             
             switch (context.fromState, context.event, context.toState) {
+            case (.initial, .acceptVerification, .acceptingRequest):
+                acceptVerification()
             case (.initial, .requestVerification, .requestingVerification):
                 requestVerification()
             case (.verificationRequestAccepted, .startSasVerification, .startingSasVerification):
@@ -110,6 +127,22 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
         
         stateMachine.addErrorHandler { context in
             MXLog.error("Failed transition with context: \(context)")
+        }
+    }
+    
+    private func acceptVerification() {
+        Task {
+            guard case .responder(let details) = flow else {
+                return
+            }
+            
+            switch await sessionVerificationControllerProxy.acceptVerificationRequest(senderID: details.senderID,
+                                                                                      flowID: details.flowID) {
+            case .success:
+                stateMachine.processEvent(.didAcceptVerificationRequest)
+            case .failure:
+                stateMachine.processEvent(.didFail)
+            }
         }
     }
     

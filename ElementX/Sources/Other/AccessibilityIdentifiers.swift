@@ -184,6 +184,7 @@ enum A11yIdentifiers {
     }
     
     struct SessionVerificationScreen {
+        let acceptVerification = "session_verification-accept_verification"
         let requestVerification = "session_verification-request_verification"
         let startSasVerification = "session_verification-start_sas_verification"
         let acceptChallenge = "session_verification-accept_challenge"

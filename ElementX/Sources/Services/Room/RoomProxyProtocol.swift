@@ -21,6 +21,7 @@ enum RoomProxyError: Error {
 enum RoomProxyType {
     case joined(JoinedRoomProxyProtocol)
     case invited(InvitedRoomProxyProtocol)
+    case knocked
     case left
 }
 
