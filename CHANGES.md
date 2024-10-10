@@ -1,3 +1,16 @@
+## Changes in 1.9.0 (2024-10-10)
+
+### What's Changed
+
+🐛 Bugfixes
+* Fix identity pinning link. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3395
+
+🧱 Build
+* Update the version to 1.9.0. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3396
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.8.6...1.9.0
+
 ## Changes in 1.8.6 (2024-10-10)
 
 ### What's Changed
