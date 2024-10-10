@@ -192,7 +192,8 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                    createRoomParameters: .init(parameters),
                                    selectedUsers: .init(selectedUsers),
                                    analytics: ServiceLocator.shared.analytics,
-                                   userIndicatorController: UserIndicatorControllerMock(), appSettings: ServiceLocator.shared.settings)
+                                   userIndicatorController: UserIndicatorControllerMock(),
+                                   appSettings: ServiceLocator.shared.settings)
     }()
     
     static let emtpyViewModel = {
