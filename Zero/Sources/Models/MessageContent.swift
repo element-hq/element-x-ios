@@ -112,6 +112,6 @@ extension MessageContent {
     }
     
     var isRemoteImage: Bool {
-        url?.isEmpty == false && file == nil
+        url?.isEmpty == false && file == nil && (url?.hasPrefix("mxc://") == false)
     }
 }
