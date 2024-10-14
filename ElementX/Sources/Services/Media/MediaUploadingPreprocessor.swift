@@ -109,17 +109,17 @@ struct MediaUploadingPreprocessor {
         // Process unknown types as plain files
         guard let type = UTType(filenameExtension: newURL.pathExtension),
               let mimeType = type.preferredMIMEType else {
-            return await processFile(at: newURL, mimeType: "application/octet-stream")
+            return processFile(at: newURL, mimeType: "application/octet-stream")
         }
         
         if type.conforms(to: .image) {
-            return await processImage(at: newURL, type: type, mimeType: mimeType)
+            return processImage(at: newURL, type: type, mimeType: mimeType)
         } else if type.conforms(to: .movie) || type.conforms(to: .video) {
             return await processVideo(at: newURL)
         } else if type.conforms(to: .audio) {
             return await processAudio(at: newURL, mimeType: mimeType)
         } else {
-            return await processFile(at: newURL, mimeType: mimeType)
+            return processFile(at: newURL, mimeType: mimeType)
         }
     }
     
@@ -131,10 +131,10 @@ struct MediaUploadingPreprocessor {
     ///   - type: its UTType
     ///   - mimeType: the mimeType extracted from the UTType
     /// - Returns: Returns a `MediaInfo.image` containing the URLs for the modified image and its thumbnail plus the corresponding `ImageInfo`
-    private func processImage(at url: URL, type: UTType, mimeType: String) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
+    private func processImage(at url: URL, type: UTType, mimeType: String) -> Result<MediaInfo, MediaUploadingPreprocessorError> {
         do {
-            let result = try await stripLocationFromImage(at: url, type: type, mimeType: mimeType)
-            let thumbnailResult = try await generateThumbnailForImage(at: url)
+            let result = try stripLocationFromImage(at: url, type: type, mimeType: mimeType)
+            let thumbnailResult = try generateThumbnailForImage(at: url)
             
             let imageSize = (try? UInt64(FileManager.default.sizeForItem(at: result.url))) ?? 0
             let thumbnailSize = (try? UInt64(FileManager.default.sizeForItem(at: thumbnailResult.url))) ?? 0
@@ -219,7 +219,7 @@ struct MediaUploadingPreprocessor {
     ///   - type: its UTType
     ///   - mimeType: the mimeType extracted from the UTType
     /// - Returns: Returns a `MediaInfo.file` containing the file URL plus the corresponding `FileInfo`
-    private func processFile(at url: URL, mimeType: String?) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
+    private func processFile(at url: URL, mimeType: String?) -> Result<MediaInfo, MediaUploadingPreprocessorError> {
         let fileSize = (try? UInt64(FileManager.default.sizeForItem(at: url))) ?? 0
         
         let fileInfo = FileInfo(mimetype: mimeType, size: fileSize, thumbnailInfo: nil, thumbnailSource: nil)
@@ -233,7 +233,7 @@ struct MediaUploadingPreprocessor {
     ///   - url: the URL for the original image
     ///   - type: its UTType
     /// - Returns: the URL for the modified image and its size as an `ImageProcessingResult`
-    private func stripLocationFromImage(at url: URL, type: UTType, mimeType: String) async throws(MediaUploadingPreprocessorError) -> ImageProcessingInfo {
+    private func stripLocationFromImage(at url: URL, type: UTType, mimeType: String) throws(MediaUploadingPreprocessorError) -> ImageProcessingInfo {
         guard let originalData = NSData(contentsOf: url),
               let originalImage = UIImage(data: originalData as Data),
               let imageSource = CGImageSourceCreateWithData(originalData, nil) else {
@@ -267,10 +267,10 @@ struct MediaUploadingPreprocessor {
     /// Generates a thumbnail for an image
     /// - Parameter url: the original image URL
     /// - Returns: the URL for the resulting thumbnail and its sizing info as an `ImageProcessingResult`
-    private func generateThumbnailForImage(at url: URL) async throws(MediaUploadingPreprocessorError) -> ImageProcessingInfo {
+    private func generateThumbnailForImage(at url: URL) throws(MediaUploadingPreprocessorError) -> ImageProcessingInfo {
         let thumbnail: UIImage
         do {
-            thumbnail = try await resizeImage(at: url, targetSize: Constants.maximumThumbnailSize)
+            thumbnail = try resizeImage(at: url, targetSize: Constants.maximumThumbnailSize)
         } catch {
             throw .failedGeneratingImageThumbnail(error)
         }
@@ -291,12 +291,12 @@ struct MediaUploadingPreprocessor {
         }
     }
         
-    private func resizeImage(at url: URL, targetSize: CGSize) async throws(MediaUploadingPreprocessorError) -> UIImage {
+    private func resizeImage(at url: URL, targetSize: CGSize) throws(MediaUploadingPreprocessorError) -> UIImage {
         guard let imageSource = CGImageSourceCreateWithURL(url as NSURL, nil) else {
             throw .failedResizingImage
         }
         
-        return try await resizeImage(withSource: imageSource, targetSize: targetSize)
+        return try resizeImage(withSource: imageSource, targetSize: targetSize)
     }
     
     /// Aspect ratio resizes an image so it fits in the given size. This is useful for resizing images without loading them directly into memory
@@ -304,7 +304,7 @@ struct MediaUploadingPreprocessor {
     ///   - imageSource: the original image `CGImageSource`
     ///   - targetSize: maximum resulting size
     /// - Returns: the resized image
-    private func resizeImage(withSource imageSource: CGImageSource, targetSize: CGSize) async throws(MediaUploadingPreprocessorError) -> UIImage {
+    private func resizeImage(withSource imageSource: CGImageSource, targetSize: CGSize) throws(MediaUploadingPreprocessorError) -> UIImage {
         let maximumSize = max(targetSize.height, targetSize.width)
         
         let options: [NSString: Any] = [
