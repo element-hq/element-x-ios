@@ -17,7 +17,9 @@ struct TimelineItemSender: Identifiable, Hashable {
     
     init(id: String, displayName: String? = nil, isDisplayNameAmbiguous: Bool = false, avatarURL: URL? = nil) {
         self.id = id
-        self.displayName = displayName
+        // Tchap : if `displayName` is nil, calculate it from userId.
+//        self.displayName = displayName
+        self.displayName = displayName ?? MatrixIdFromString(id).userDisplayName?.displayName
         self.isDisplayNameAmbiguous = isDisplayNameAmbiguous
         self.avatarURL = avatarURL
     }
