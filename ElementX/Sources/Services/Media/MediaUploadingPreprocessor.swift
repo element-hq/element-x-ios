@@ -136,8 +136,11 @@ struct MediaUploadingPreprocessor {
         do {
             try stripLocationFromImage(at: url, type: type)
             
+            var mimeType = mimeType
             if appSettings.optimizeMediaUploads {
-                try resizeImage(at: url, maxPixelSize: Constants.optimizedMaxPixelSize, destination: url)
+                let outputType = type.conforms(to: .png) ? UTType.png : .jpeg
+                mimeType = outputType.preferredMIMEType ?? "application/octet-stream"
+                try resizeImage(at: url, maxPixelSize: Constants.optimizedMaxPixelSize, destination: url, type: outputType)
             }
             
             let thumbnailResult = try generateThumbnailForImage(at: url)
@@ -282,7 +285,7 @@ struct MediaUploadingPreprocessor {
         let thumbnailMaxPixelSize = max(Constants.maximumThumbnailSize.height, Constants.maximumThumbnailSize.width)
         
         do {
-            try resizeImage(at: url, maxPixelSize: thumbnailMaxPixelSize, destination: thumbnailURL)
+            try resizeImage(at: url, maxPixelSize: thumbnailMaxPixelSize, destination: thumbnailURL, type: .jpeg)
         } catch {
             throw .failedGeneratingImageThumbnail(error)
         }
@@ -295,12 +298,12 @@ struct MediaUploadingPreprocessor {
         return .init(url: thumbnailURL, height: thumbnail.size.height, width: thumbnail.size.width, mimeType: "image/jpeg", blurhash: blurhash)
     }
         
-    private func resizeImage(at url: URL, maxPixelSize: CGFloat, destination: URL) throws(MediaUploadingPreprocessorError) {
+    private func resizeImage(at url: URL, maxPixelSize: CGFloat, destination: URL, type: UTType) throws(MediaUploadingPreprocessorError) {
         guard let imageSource = CGImageSourceCreateWithURL(url as NSURL, nil) else {
             throw .failedResizingImage
         }
         
-        try resizeImage(withSource: imageSource, maxPixelSize: maxPixelSize, destination: destination)
+        try resizeImage(withSource: imageSource, maxPixelSize: maxPixelSize, destination: destination, type: type)
     }
     
     /// Aspect ratio resizes an image so it fits in the given size. This is useful for resizing images without loading them directly into memory
@@ -308,7 +311,7 @@ struct MediaUploadingPreprocessor {
     ///   - imageSource: the original image `CGImageSource`
     ///   - maxPixelSize: maximum resulting size for the largest dimension of the image.
     /// - Returns: the resized image
-    private func resizeImage(withSource imageSource: CGImageSource, maxPixelSize: CGFloat, destination destinationURL: URL) throws(MediaUploadingPreprocessorError) {
+    private func resizeImage(withSource imageSource: CGImageSource, maxPixelSize: CGFloat, destination destinationURL: URL, type: UTType) throws(MediaUploadingPreprocessorError) {
         let options: [NSString: Any] = [
             // The maximum width and height in pixels of a thumbnail.
             kCGImageSourceThumbnailMaxPixelSize: maxPixelSize,
@@ -318,7 +321,7 @@ struct MediaUploadingPreprocessor {
         ]
         
         guard let scaledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options as NSDictionary),
-              let destination = CGImageDestinationCreateWithURL(destinationURL as CFURL, UTType.jpeg.identifier as CFString, 1, nil) else {
+              let destination = CGImageDestinationCreateWithURL(destinationURL as CFURL, type.identifier as CFString, 1, nil) else {
             throw .failedResizingImage
         }
         let properties = [kCGImageDestinationLossyCompressionQuality: Constants.jpegCompressionQuality]

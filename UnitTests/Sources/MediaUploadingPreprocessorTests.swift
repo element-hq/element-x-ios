@@ -250,6 +250,99 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         XCTAssertEqual(optimizedImageInfo.height, 2048)
     }
     
+    func testPNGImageProcessing() async {
+        guard let url = Bundle(for: Self.self).url(forResource: "test_image.png", withExtension: nil) else {
+            XCTFail("Failed retrieving test asset")
+            return
+        }
+        
+        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url),
+              case let .image(_, _, imageInfo) = result else {
+            XCTFail("Failed processing asset")
+            return
+        }
+        
+        // Check resulting image info
+        XCTAssertEqual(imageInfo.mimetype, "image/png")
+        XCTAssertEqual(imageInfo.blurhash, "K0TSUA~qfQ~qj[fQfQfQfQ")
+        XCTAssertEqual(imageInfo.size ?? 0, 4868, accuracy: 100)
+        XCTAssertEqual(imageInfo.width, 240)
+        XCTAssertEqual(imageInfo.height, 240)
+        
+        XCTAssertNotNil(imageInfo.thumbnailInfo)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.mimetype, "image/jpeg")
+        XCTAssertEqual(imageInfo.thumbnailInfo?.size ?? 0, 1725, accuracy: 100)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.width, 240)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.height, 240)
+        
+        // Repeat with optimised media setting
+        appSettings.optimizeMediaUploads = true
+        
+        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
+              case let .image(_, _, optimizedImageInfo) = optimizedResult else {
+            XCTFail("Failed processing asset")
+            return
+        }
+        
+        // Check resulting image info
+        XCTAssertEqual(optimizedImageInfo.mimetype, "image/png")
+        XCTAssertEqual(optimizedImageInfo.blurhash, "K0TSUA~qfQ~qj[fQfQfQfQ")
+        XCTAssertEqual(optimizedImageInfo.size ?? 0, 8199, accuracy: 100)
+        // Assert that resizing didn't upscale to the maxPixelSize.
+        XCTAssertEqual(optimizedImageInfo.width, 240)
+        XCTAssertEqual(optimizedImageInfo.height, 240)
+    }
+    
+    func testHEICImageProcessing() async {
+        guard let url = Bundle(for: Self.self).url(forResource: "apple_test_image.heic", withExtension: nil) else {
+            XCTFail("Failed retrieving test asset")
+            return
+        }
+        
+        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url),
+              case let .image(convertedImageURL, thumbnailURL, imageInfo) = result else {
+            XCTFail("Failed processing asset")
+            return
+        }
+        
+        compare(originalImageAt: url, toConvertedImageAt: convertedImageURL, withThumbnailAt: thumbnailURL)
+        
+        // Check resulting image info
+        XCTAssertEqual(imageInfo.mimetype, "image/heic")
+        XCTAssertEqual(imageInfo.blurhash, "KGD]3ns:T00$kWxFXmt6xv")
+        XCTAssertEqual(imageInfo.size ?? 0, 1_857_833, accuracy: 100)
+        XCTAssertEqual(imageInfo.width, 3024)
+        XCTAssertEqual(imageInfo.height, 4032)
+        
+        XCTAssertNotNil(imageInfo.thumbnailInfo)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.mimetype, "image/jpeg")
+        XCTAssertEqual(imageInfo.thumbnailInfo?.size ?? 0, 218_108, accuracy: 100)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.width, 600)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.height, 800)
+        
+        // Repeat with optimised media setting
+        appSettings.optimizeMediaUploads = true
+        
+        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
+              case let .image(optimizedImageURL, thumbnailURL, optimizedImageInfo) = optimizedResult else {
+            XCTFail("Failed processing asset")
+            return
+        }
+        
+        compare(originalImageAt: url, toConvertedImageAt: optimizedImageURL, withThumbnailAt: thumbnailURL)
+        
+        // Check resulting image info
+        XCTAssertEqual(optimizedImageInfo.mimetype, "image/jpeg")
+        XCTAssertEqual(optimizedImageInfo.blurhash, "KGD]3ns:T00#kWxFb^s:xv")
+        XCTAssertEqual(optimizedImageInfo.size ?? 0, 1_049_393, accuracy: 100)
+        XCTAssertEqual(optimizedImageInfo.width, 1536)
+        XCTAssertEqual(optimizedImageInfo.height, 2048)
+    }
+    
+    func testGIFImageProcessing() async {
+        // Make sure we don't convert them to JPEG when optimised is enabled!
+    }
+    
     // MARK: - Private
     
     private func compare(originalImageAt originalImageURL: URL, toConvertedImageAt convertedImageURL: URL, withThumbnailAt thumbnailURL: URL) {

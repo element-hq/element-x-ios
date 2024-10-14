@@ -861,6 +861,7 @@
 		BEA646DF302711A753F0D420 /* MapTilerStyleBuilderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225EFCA26877E75CDFE7F48D /* MapTilerStyleBuilderProtocol.swift */; };
 		BFEB24336DFD5F196E6F3456 /* IntentionalMentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF5CBAF69BDF5DF31C661E1 /* IntentionalMentions.swift */; };
 		C0090506A52A1991BAF4BA68 /* NotificationSettingsChatType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07579F9C29001E40715F3014 /* NotificationSettingsChatType.swift */; };
+		C05128B41EB8409331BBB957 /* apple_test_image.heic in Resources */ = {isa = PBXBuildFile; fileRef = A47388A8B54676CDF0D06C67 /* apple_test_image.heic */; };
 		C051475DFF4C8EBDDF4DC8E4 /* StartChatScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99E13633862847D8B7E2815 /* StartChatScreenModels.swift */; };
 		C08AAE7563E0722C9383F51C /* RoomMembersListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8E176484A89BAC389D4076 /* RoomMembersListScreen.swift */; };
 		C0B97FFEC0083F3A36609E61 /* TimelineItemMacContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A243A6E6207297123E60DE48 /* TimelineItemMacContextMenu.swift */; };
@@ -1905,6 +1906,7 @@
 		A433BE28B40D418237BE37B5 /* ReportContentScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportContentScreen.swift; sourceTree = "<group>"; };
 		A436057DBEA1A23CA8CB1FD7 /* UIFont+AttributedStringBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIFont+AttributedStringBuilder.h"; sourceTree = "<group>"; };
 		A443FAE2EE820A5790C35C8D /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A47388A8B54676CDF0D06C67 /* apple_test_image.heic */ = {isa = PBXFileReference; path = apple_test_image.heic; sourceTree = "<group>"; };
 		A54AAF72E821B4084B7E4298 /* PinnedEventsTimelineFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedEventsTimelineFlowCoordinator.swift; sourceTree = "<group>"; };
 		A58E93D91DE3288010390DEE /* EmojiDetectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiDetectionTests.swift; sourceTree = "<group>"; };
 		A6702BC84D3CC2421D78CD4E /* WebRegistrationScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRegistrationScreenViewModel.swift; sourceTree = "<group>"; };
@@ -4693,6 +4695,7 @@
 		ACF39CFC617601C942702CDC /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				A47388A8B54676CDF0D06C67 /* apple_test_image.heic */,
 				7A5D2323D7B6BF4913EB7EED /* landscape_test_image.jpg */,
 				9A2AC7BE17C05CF7D2A22338 /* landscape_test_video.mov */,
 				AF042B0FB2EE88977C91E330 /* portrait_test_image.jpg */,
@@ -5866,6 +5869,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C05128B41EB8409331BBB957 /* apple_test_image.heic in Resources */,
 				3471204F2CC05D4821C35F23 /* landscape_test_image.jpg in Resources */,
 				D1EEF0CB0F5D9C15E224E670 /* landscape_test_video.mov in Resources */,
 				858276B19C7C0AD4CA98EA78 /* portrait_test_image.jpg in Resources */,
