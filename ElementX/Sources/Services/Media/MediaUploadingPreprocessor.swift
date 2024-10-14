@@ -82,6 +82,8 @@ private struct VideoProcessingInfo {
 }
 
 struct MediaUploadingPreprocessor {
+    let appSettings: AppSettings
+    
     enum Constants {
         static let maximumThumbnailSize = CGSize(width: 800, height: 600)
         static let thumbnailCompressionQuality = 0.8
@@ -368,8 +370,9 @@ struct MediaUploadingPreprocessor {
     /// - Returns: the URL for the resulting video and its media info as a `VideoProcessingResult`
     private func convertVideoToMP4(_ url: URL, targetFileSize: UInt = 0) async -> Result<VideoProcessingInfo, MediaUploadingPreprocessorError> {
         let asset = AVURLAsset(url: url)
+        let presetName = appSettings.optimizeMediaUploads ? AVAssetExportPreset640x480 : AVAssetExportPreset1920x1080
 
-        guard let exportSession = AVAssetExportSession(asset: asset, presetName: AVAssetExportPreset1920x1080) else {
+        guard let exportSession = AVAssetExportSession(asset: asset, presetName: presetName) else {
             return .failure(.failedConvertingVideo)
         }
         
