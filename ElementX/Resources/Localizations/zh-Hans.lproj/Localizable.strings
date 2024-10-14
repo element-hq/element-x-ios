@@ -334,6 +334,11 @@
 "screen_advanced_settings_element_call_base_url" = "自定义 Element Call URL";
 "screen_advanced_settings_element_call_base_url_description" = "为 Element 通话设置根 URL。";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL 无效，请确保包含协议（http/https）和正确的地址。";
+"screen_create_room_access_section_anyone_option_description" = "Anyone can join this room";
+"screen_create_room_access_section_anyone_option_title" = "Anyone";
+"screen_create_room_access_section_header" = "Room Access";
+"screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
+"screen_create_room_access_section_knocking_option_title" = "Ask to join";
 "screen_pinned_timeline_empty_state_description" = "按下消息并选择 “%1$@” 将其包含在此处。";
 "screen_pinned_timeline_empty_state_headline" = "固定重要消息，以便轻松发现它们";
 "screen_reset_encryption_password_error" = "发生未知错误。请检查您的帐户密码是否正确，然后重试。";
@@ -588,6 +593,7 @@
 "screen_qr_code_login_initial_state_item_3" = "选择 %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "「连接新设备」";
 "screen_qr_code_login_initial_state_item_4" = "使用此设备扫描二维码";
+"screen_qr_code_login_initial_state_subtitle" = "Only available if your account provider supports it.";
 "screen_qr_code_login_initial_state_title" = "在另一台设备上打开 %1$@ 以获取二维码";
 "screen_qr_code_login_invalid_scan_state_description" = "使用其他设备上显示的二维码。";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "二维码错误";

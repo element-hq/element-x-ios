@@ -334,6 +334,11 @@
 "screen_advanced_settings_element_call_base_url" = "Vlastná Element Call základná URL adresa";
 "screen_advanced_settings_element_call_base_url_description" = "Nastaviť vlastnú základnú URL adresu pre Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Neplatná adresa URL, uistite sa, že ste uviedli protokol (http/https) a správnu adresu.";
+"screen_create_room_access_section_anyone_option_description" = "Anyone can join this room";
+"screen_create_room_access_section_anyone_option_title" = "Anyone";
+"screen_create_room_access_section_header" = "Room Access";
+"screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
+"screen_create_room_access_section_knocking_option_title" = "Ask to join";
 "screen_pinned_timeline_empty_state_description" = "Stlačte správu a vyberte možnosť „%1$@“, ktorú chcete zahrnúť sem.";
 "screen_pinned_timeline_empty_state_headline" = "Pripnite dôležité správy, aby sa dali ľahko nájsť";
 "screen_reset_encryption_password_error" = "Nastala neznáma chyba. Skontrolujte, či je heslo vášho účtu správne a skúste to znova.";
@@ -588,6 +593,7 @@
 "screen_qr_code_login_initial_state_item_3" = "Vyberte %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "„Prepojiť nové zariadenie“";
 "screen_qr_code_login_initial_state_item_4" = "Naskenujte QR kód pomocou tohto zariadenia";
+"screen_qr_code_login_initial_state_subtitle" = "Dostupné iba v prípade, že to podporuje váš poskytovateľ účtu.";
 "screen_qr_code_login_initial_state_title" = "Ak chcete získať QR kód, otvorte %1$@ na inom zariadení";
 "screen_qr_code_login_invalid_scan_state_description" = "Použite QR kód zobrazený na druhom zariadení.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Nesprávny QR kód";

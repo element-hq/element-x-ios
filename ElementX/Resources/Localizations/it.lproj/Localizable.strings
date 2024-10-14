@@ -334,6 +334,11 @@
 "screen_advanced_settings_element_call_base_url" = "URL base di Element Call personalizzato";
 "screen_advanced_settings_element_call_base_url_description" = "Imposta un URL di base personalizzato per Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL non valido, assicurati di includere il protocollo (http/https) e l'indirizzo corretto.";
+"screen_create_room_access_section_anyone_option_description" = "Anyone can join this room";
+"screen_create_room_access_section_anyone_option_title" = "Anyone";
+"screen_create_room_access_section_header" = "Room Access";
+"screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
+"screen_create_room_access_section_knocking_option_title" = "Ask to join";
 "screen_pinned_timeline_empty_state_description" = "Premi su un messaggio e scegli “%1$@” per includerlo qui.";
 "screen_pinned_timeline_empty_state_headline" = "Fissa i messaggi importanti così che possano essere trovati facilmente";
 "screen_reset_encryption_password_error" = "Si è verificato un errore sconosciuto. Controlla che la password del tuo account sia corretta e riprova.";
@@ -588,6 +593,7 @@
 "screen_qr_code_login_initial_state_item_3" = "Seleziona %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "\"Collega un nuovo dispositivo\"";
 "screen_qr_code_login_initial_state_item_4" = "Scansiona il codice QR con questo dispositivo";
+"screen_qr_code_login_initial_state_subtitle" = "Only available if your account provider supports it.";
 "screen_qr_code_login_initial_state_title" = "Apri %1$@ su un altro dispositivo per ottenere il codice QR";
 "screen_qr_code_login_invalid_scan_state_description" = "Usa il codice QR mostrato sull'altro dispositivo.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Codice QR sbagliato";

@@ -94,7 +94,7 @@
 "action_send_message" = "Envoyer un message";
 "action_share" = "Partager";
 "action_share_link" = "Partager le lien";
-"action_show" = "Show";
+"action_show" = "Afficher";
 "action_sign_in_again" = "Se connecter à nouveau";
 "action_signout" = "Se déconnecter";
 "action_signout_anyway" = "Se déconnecter quand même";
@@ -231,7 +231,7 @@
 "common_voice_message" = "Message vocal";
 "common_waiting" = "En attente...";
 "common_waiting_for_decryption_key" = "En attente de la clé de déchiffrement";
-"common.copied_to_clipboard" = "Copied to clipboard";
+"common.copied_to_clipboard" = "Copié dans le presse-papiers";
 "common.do_not_show_this_again" = "Ne plus afficher";
 "common.open_source_licenses" = "Licences open source";
 "common.pinned" = "Épinglé";
@@ -240,7 +240,7 @@
 "confirm_recovery_key_banner_message" = "La sauvegarde des conversations est désynchronisée. Vous devez confirmer la clé de récupération pour accéder à votre historique.";
 "confirm_recovery_key_banner_title" = "Confirmer votre clé de récupération";
 "crash_detection_dialog_content" = "%1$@ s’est arrêté la dernière fois qu’il a été utilisé. Souhaitez-vous partager un rapport d’incident avec nous ?";
-"crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
+"crypto_identity_change_pin_violation" = "L'identité de %1$@ semble avoir changé. %2$@";
 "dialog_permission_camera" = "Pour permettre à l’application d’utiliser l’appareil photo, veuillez accorder l’autorisation dans les paramètres du système.";
 "dialog_permission_generic" = "Veuillez accorder l’autorisation dans les paramètres du système.";
 "dialog_permission_location_description_ios" = "Autorisez l’accès dans Paramètres / Localisation.";
@@ -334,6 +334,11 @@
 "screen_advanced_settings_element_call_base_url" = "URL de base pour Element Call personnalisée";
 "screen_advanced_settings_element_call_base_url_description" = "Configurer une URL de base pour Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL invalide, assurez-vous d’inclure le protocol (http/https) et l’adresse correcte.";
+"screen_create_room_access_section_anyone_option_description" = "Tout le monde peut rejoindre ce salon";
+"screen_create_room_access_section_anyone_option_title" = "Tout le monde";
+"screen_create_room_access_section_header" = "Accès au salon";
+"screen_create_room_access_section_knocking_option_description" = "Tout le monde peut demander à rejoindre le salon, mais un administrateur ou un modérateur devra accepter la demande";
+"screen_create_room_access_section_knocking_option_title" = "Demander à rejoindre";
 "screen_pinned_timeline_empty_state_description" = "Cliquez (clic long) sur un message et choisissez « %1$@ » pour qu‘il apparaisse ici.";
 "screen_pinned_timeline_empty_state_headline" = "Épinglez les messages importants pour leur donner plus de visibilité";
 "screen_reset_encryption_password_error" = "Une erreur s'est produite. Vérifiez que le mot de passe de votre compte est correct et réessayez.";
@@ -588,6 +593,7 @@
 "screen_qr_code_login_initial_state_item_3" = "Choisissez %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "“Associer une nouvelle session”";
 "screen_qr_code_login_initial_state_item_4" = "Scanner le code QR avec cet appareil";
+"screen_qr_code_login_initial_state_subtitle" = "Disponible uniquement si votre fournisseur de compte le supporte.";
 "screen_qr_code_login_initial_state_title" = "Ouvrez %1$@ sur un autre appareil pour obtenir le QR code";
 "screen_qr_code_login_invalid_scan_state_description" = "Scannez le QR code affiché sur l'autre appareil.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "QR code erroné";
