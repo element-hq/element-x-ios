@@ -18,8 +18,7 @@ struct EventTimelineItemSDKMockConfiguration {
 
 extension EventTimelineItem {
     init(configuration: EventTimelineItemSDKMockConfiguration) {
-        self.init(isLocal: false,
-                  isRemote: true,
+        self.init(isRemote: true,
                   eventOrTransactionId: .eventId(eventId: configuration.eventID),
                   sender: configuration.sender,
                   senderProfile: .pending,
@@ -28,12 +27,11 @@ extension EventTimelineItem {
                   content: configuration.content,
                   timestamp: 0,
                   reactions: [],
-                  debugInfoProvider: EventTimelineItemDebugInfoProviderSDKMock(),
                   localSendState: nil,
                   readReceipts: [:],
                   origin: nil,
                   canBeRepliedTo: false,
-                  shieldsProvider: EventShieldsProviderSDKMock())
+                  lazyProvider: LazyTimelineItemProviderSDKMock())
     }
     
     static var mockMessage: EventTimelineItem {
