@@ -132,33 +132,30 @@ struct MediaUploadingPreprocessor {
     ///   - mimeType: the mimeType extracted from the UTType
     /// - Returns: Returns a `MediaInfo.image` containing the URLs for the modified image and its thumbnail plus the corresponding `ImageInfo`
     private func processImage(at url: URL, type: UTType, mimeType: String) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
-        switch await stripLocationFromImage(at: url, type: type, mimeType: mimeType) {
-        case .success(let result):
-            switch await generateThumbnailForImage(at: url) {
-            case .success(let thumbnailResult):
-                let imageSize = (try? UInt64(FileManager.default.sizeForItem(at: result.url))) ?? 0
-                let thumbnailSize = (try? UInt64(FileManager.default.sizeForItem(at: thumbnailResult.url))) ?? 0
-                
-                let thumbnailInfo = ThumbnailInfo(height: UInt64(thumbnailResult.height),
-                                                  width: UInt64(thumbnailResult.width),
-                                                  mimetype: thumbnailResult.mimeType,
-                                                  size: thumbnailSize)
-                
-                let imageInfo = ImageInfo(height: UInt64(result.height),
-                                          width: UInt64(result.width),
-                                          mimetype: result.mimeType,
-                                          size: imageSize,
-                                          thumbnailInfo: thumbnailInfo,
-                                          thumbnailSource: nil,
-                                          blurhash: thumbnailResult.blurhash)
-                
-                let mediaInfo = MediaInfo.image(imageURL: result.url, thumbnailURL: thumbnailResult.url, imageInfo: imageInfo)
-                
-                return .success(mediaInfo)
-            case .failure(let error):
-                return .failure(.failedProcessingImage(error))
-            }
-        case .failure(let error):
+        do {
+            let result = try await stripLocationFromImage(at: url, type: type, mimeType: mimeType)
+            let thumbnailResult = try await generateThumbnailForImage(at: url)
+            
+            let imageSize = (try? UInt64(FileManager.default.sizeForItem(at: result.url))) ?? 0
+            let thumbnailSize = (try? UInt64(FileManager.default.sizeForItem(at: thumbnailResult.url))) ?? 0
+            
+            let thumbnailInfo = ThumbnailInfo(height: UInt64(thumbnailResult.height),
+                                              width: UInt64(thumbnailResult.width),
+                                              mimetype: thumbnailResult.mimeType,
+                                              size: thumbnailSize)
+            
+            let imageInfo = ImageInfo(height: UInt64(result.height),
+                                      width: UInt64(result.width),
+                                      mimetype: result.mimeType,
+                                      size: imageSize,
+                                      thumbnailInfo: thumbnailInfo,
+                                      thumbnailSource: nil,
+                                      blurhash: thumbnailResult.blurhash)
+            
+            let mediaInfo = MediaInfo.image(imageURL: result.url, thumbnailURL: thumbnailResult.url, imageInfo: imageInfo)
+            
+            return .success(mediaInfo)
+        } catch {
             return .failure(.failedProcessingImage(error))
         }
     }
@@ -170,34 +167,31 @@ struct MediaUploadingPreprocessor {
     ///   - mimeType: the mimeType extracted from the UTType
     /// - Returns: Returns a `MediaInfo.video` containing the URLs for the modified video and its thumbnail plus the corresponding `VideoInfo`
     private func processVideo(at url: URL) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
-        switch await convertVideoToMP4(url) {
-        case .success(let result):
-            switch await generateThumbnailForVideoAt(result.url) {
-            case .success(let thumbnailResult):
-                let videoSize = (try? UInt64(FileManager.default.sizeForItem(at: result.url))) ?? 0
-                let thumbnailSize = (try? UInt64(FileManager.default.sizeForItem(at: thumbnailResult.url))) ?? 0
-                
-                let thumbnailInfo = ThumbnailInfo(height: UInt64(thumbnailResult.height),
-                                                  width: UInt64(thumbnailResult.width),
-                                                  mimetype: thumbnailResult.mimeType,
-                                                  size: thumbnailSize)
-                
-                let videoInfo = VideoInfo(duration: result.duration,
-                                          height: UInt64(result.height),
-                                          width: UInt64(result.width),
-                                          mimetype: result.mimeType,
-                                          size: videoSize,
-                                          thumbnailInfo: thumbnailInfo,
-                                          thumbnailSource: nil,
-                                          blurhash: thumbnailResult.blurhash)
-                
-                let mediaInfo = MediaInfo.video(videoURL: result.url, thumbnailURL: thumbnailResult.url, videoInfo: videoInfo)
-                
-                return .success(mediaInfo)
-            case .failure(let error):
-                return .failure(.failedProcessingVideo(error))
-            }
-        case .failure(let error):
+        do {
+            let result = try await convertVideoToMP4(url)
+            let thumbnailResult = try await generateThumbnailForVideoAt(result.url)
+            
+            let videoSize = (try? UInt64(FileManager.default.sizeForItem(at: result.url))) ?? 0
+            let thumbnailSize = (try? UInt64(FileManager.default.sizeForItem(at: thumbnailResult.url))) ?? 0
+            
+            let thumbnailInfo = ThumbnailInfo(height: UInt64(thumbnailResult.height),
+                                              width: UInt64(thumbnailResult.width),
+                                              mimetype: thumbnailResult.mimeType,
+                                              size: thumbnailSize)
+            
+            let videoInfo = VideoInfo(duration: result.duration,
+                                      height: UInt64(result.height),
+                                      width: UInt64(result.width),
+                                      mimetype: result.mimeType,
+                                      size: videoSize,
+                                      thumbnailInfo: thumbnailInfo,
+                                      thumbnailSource: nil,
+                                      blurhash: thumbnailResult.blurhash)
+            
+            let mediaInfo = MediaInfo.video(videoURL: result.url, thumbnailURL: thumbnailResult.url, videoInfo: videoInfo)
+            
+            return .success(mediaInfo)
+        } catch {
             return .failure(.failedProcessingVideo(error))
         }
     }
@@ -232,24 +226,24 @@ struct MediaUploadingPreprocessor {
         return .success(.file(fileURL: url, fileInfo: fileInfo))
     }
     
-    // MARK: Images
+    // MARK: Image Helpers
     
     /// Removes the GPS dictionary from an image's metadata
     /// - Parameters:
     ///   - url: the URL for the original image
     ///   - type: its UTType
     /// - Returns: the URL for the modified image and its size as an `ImageProcessingResult`
-    private func stripLocationFromImage(at url: URL, type: UTType, mimeType: String) async -> Result<ImageProcessingInfo, MediaUploadingPreprocessorError> {
+    private func stripLocationFromImage(at url: URL, type: UTType, mimeType: String) async throws(MediaUploadingPreprocessorError) -> ImageProcessingInfo {
         guard let originalData = NSData(contentsOf: url),
               let originalImage = UIImage(data: originalData as Data),
               let imageSource = CGImageSourceCreateWithData(originalData, nil) else {
-            return .failure(.failedStrippingLocationData)
+            throw .failedStrippingLocationData
         }
         
         guard let originalMetadata = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil),
               (originalMetadata as NSDictionary).value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") != nil else {
             MXLog.info("No GPS metadata found. Returning original image")
-            return .success(.init(url: url, height: Double(originalImage.size.height), width: Double(originalImage.size.width), mimeType: mimeType, blurhash: nil))
+            return .init(url: url, height: Double(originalImage.size.height), width: Double(originalImage.size.width), mimeType: mimeType, blurhash: nil)
         }
         
         let count = CGImageSourceGetCount(imageSource)
@@ -257,52 +251,52 @@ struct MediaUploadingPreprocessor {
         
         let data = NSMutableData()
         guard let destination = CGImageDestinationCreateWithData(data as CFMutableData, type.identifier as CFString, count, nil) else {
-            return .failure(.failedStrippingLocationData)
+            throw .failedStrippingLocationData
         }
         CGImageDestinationAddImageFromSource(destination, imageSource, 0, metadataKeysToRemove as NSDictionary)
         CGImageDestinationFinalize(destination)
         
         do {
             try data.write(to: url)
-            return .success(.init(url: url, height: Double(originalImage.size.height), width: Double(originalImage.size.width), mimeType: mimeType, blurhash: nil))
+            return .init(url: url, height: Double(originalImage.size.height), width: Double(originalImage.size.width), mimeType: mimeType, blurhash: nil)
         } catch {
-            return .failure(.failedStrippingLocationData)
+            throw .failedStrippingLocationData
         }
     }
     
     /// Generates a thumbnail for an image
     /// - Parameter url: the original image URL
     /// - Returns: the URL for the resulting thumbnail and its sizing info as an `ImageProcessingResult`
-    private func generateThumbnailForImage(at url: URL) async -> Result<ImageProcessingInfo, MediaUploadingPreprocessorError> {
-        switch await resizeImage(at: url, targetSize: Constants.maximumThumbnailSize) {
-        case .success(let thumbnail):
-            guard let data = thumbnail.jpegData(compressionQuality: Constants.thumbnailCompressionQuality) else {
-                return .failure(.failedGeneratingImageThumbnail(nil))
-            }
-            
-            let blurhash = thumbnail.blurHash(numberOfComponents: (3, 3))
-            
-            do {
-                let fileName = "thumbnail-\((url.lastPathComponent as NSString).deletingPathExtension).jpeg"
-                let thumbnailURL = url.deletingLastPathComponent().appendingPathComponent(fileName)
-                try data.write(to: thumbnailURL)
-                return .success(.init(url: thumbnailURL, height: thumbnail.size.height, width: thumbnail.size.width, mimeType: "image/jpeg", blurhash: blurhash))
-            } catch {
-                return .failure(.failedGeneratingImageThumbnail(error))
-            }
-            
-        case .failure(let error):
-            return .failure(.failedGeneratingImageThumbnail(error))
+    private func generateThumbnailForImage(at url: URL) async throws(MediaUploadingPreprocessorError) -> ImageProcessingInfo {
+        let thumbnail: UIImage
+        do {
+            thumbnail = try await resizeImage(at: url, targetSize: Constants.maximumThumbnailSize)
+        } catch {
+            throw .failedGeneratingImageThumbnail(error)
+        }
+        
+        guard let data = thumbnail.jpegData(compressionQuality: Constants.thumbnailCompressionQuality) else {
+            throw .failedGeneratingImageThumbnail(nil)
+        }
+        
+        let blurhash = thumbnail.blurHash(numberOfComponents: (3, 3))
+        
+        do {
+            let fileName = "thumbnail-\((url.lastPathComponent as NSString).deletingPathExtension).jpeg"
+            let thumbnailURL = url.deletingLastPathComponent().appendingPathComponent(fileName)
+            try data.write(to: thumbnailURL)
+            return .init(url: thumbnailURL, height: thumbnail.size.height, width: thumbnail.size.width, mimeType: "image/jpeg", blurhash: blurhash)
+        } catch {
+            throw .failedGeneratingImageThumbnail(error)
         }
     }
         
-    private func resizeImage(at url: URL, targetSize: CGSize) async -> Result<UIImage, MediaUploadingPreprocessorError> {
-        let imageSource = CGImageSourceCreateWithURL(url as NSURL, nil)
-        guard let imageSource else {
-            return .failure(.failedResizingImage)
+    private func resizeImage(at url: URL, targetSize: CGSize) async throws(MediaUploadingPreprocessorError) -> UIImage {
+        guard let imageSource = CGImageSourceCreateWithURL(url as NSURL, nil) else {
+            throw .failedResizingImage
         }
         
-        return await resizeImage(withSource: imageSource, targetSize: targetSize)
+        return try await resizeImage(withSource: imageSource, targetSize: targetSize)
     }
     
     /// Aspect ratio resizes an image so it fits in the given size. This is useful for resizing images without loading them directly into memory
@@ -310,7 +304,7 @@ struct MediaUploadingPreprocessor {
     ///   - imageSource: the original image `CGImageSource`
     ///   - targetSize: maximum resulting size
     /// - Returns: the resized image
-    private func resizeImage(withSource imageSource: CGImageSource, targetSize: CGSize) async -> Result<UIImage, MediaUploadingPreprocessorError> {
+    private func resizeImage(withSource imageSource: CGImageSource, targetSize: CGSize) async throws(MediaUploadingPreprocessorError) -> UIImage {
         let maximumSize = max(targetSize.height, targetSize.width)
         
         let options: [NSString: Any] = [
@@ -322,45 +316,51 @@ struct MediaUploadingPreprocessor {
         ]
         
         guard let scaledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options as CFDictionary) else {
-            return .failure(.failedResizingImage)
+            throw .failedResizingImage
         }
 
-        return .success(UIImage(cgImage: scaledImage))
+        return UIImage(cgImage: scaledImage)
     }
     
-    // MARK: Videos
+    // MARK: Video Helpers
     
     /// Generates a thumbnail for the video at the given URL
     /// - Parameter url: the video URL
     /// - Returns: the URL for the resulting thumbnail and its sizing info as an `ImageProcessingResult`
-    private func generateThumbnailForVideoAt(_ url: URL) async -> Result<ImageProcessingInfo, MediaUploadingPreprocessorError> {
+    private func generateThumbnailForVideoAt(_ url: URL) async throws(MediaUploadingPreprocessorError) -> ImageProcessingInfo {
         let assetImageGenerator = AVAssetImageGenerator(asset: AVAsset(url: url))
         assetImageGenerator.appliesPreferredTrackTransform = true
         assetImageGenerator.maximumSize = Constants.maximumThumbnailSize
         
+        // Avoid the first frames as on a lot of videos they're black.
+        // If the specified seconds are longer than the actual video a frame close to the end of the video will be used, at AVFoundation's discretion
+        let location = CMTime(seconds: Constants.videoThumbnailTime, preferredTimescale: 1)
+        
+        let cgImage: CGImage
         do {
-            // Avoid the first frames as on a lot of videos they're black.
-            // If the specified seconds are longer than the actual video a frame close to the end of the video will be used, at AVFoundation's discretion
-            let location = CMTime(seconds: Constants.videoThumbnailTime, preferredTimescale: 1)
-            let cgImage = try await assetImageGenerator.image(at: location).image
-            
-            let thumbnail = UIImage(cgImage: cgImage)
-            
-            guard let data = thumbnail.jpegData(compressionQuality: Constants.thumbnailCompressionQuality) else {
-                return .failure(.failedGeneratingVideoThumbnail(nil))
-            }
-            
-            let blurhash = thumbnail.blurHash(numberOfComponents: (3, 3))
-            
-            let fileName = "\((url.lastPathComponent as NSString).deletingPathExtension).jpeg"
-            let thumbnailURL = url.deletingLastPathComponent().appendingPathComponent(fileName)
-            try data.write(to: thumbnailURL)
-            
-            return .success(.init(url: thumbnailURL, height: thumbnail.size.height, width: thumbnail.size.width, mimeType: "image/jpeg", blurhash: blurhash))
-            
+            cgImage = try await assetImageGenerator.image(at: location).image
         } catch {
-            return .failure(.failedGeneratingVideoThumbnail(error))
+            throw .failedGeneratingVideoThumbnail(error)
         }
+        
+        let thumbnail = UIImage(cgImage: cgImage)
+        
+        guard let data = thumbnail.jpegData(compressionQuality: Constants.thumbnailCompressionQuality) else {
+            throw .failedGeneratingVideoThumbnail(nil)
+        }
+        
+        let blurhash = thumbnail.blurHash(numberOfComponents: (3, 3))
+        
+        let fileName = "\((url.lastPathComponent as NSString).deletingPathExtension).jpeg"
+        let thumbnailURL = url.deletingLastPathComponent().appendingPathComponent(fileName)
+        
+        do {
+            try data.write(to: thumbnailURL)
+        } catch {
+            throw .failedGeneratingVideoThumbnail(error)
+        }
+        
+        return .init(url: thumbnailURL, height: thumbnail.size.height, width: thumbnail.size.width, mimeType: "image/jpeg", blurhash: blurhash)
     }
     
     /// Converts the given video to an 1080p mp4
@@ -368,12 +368,12 @@ struct MediaUploadingPreprocessor {
     ///   - url: the original video URL
     ///   - targetFileSize: the maximum resulting file size. 90% of this will be used
     /// - Returns: the URL for the resulting video and its media info as a `VideoProcessingResult`
-    private func convertVideoToMP4(_ url: URL, targetFileSize: UInt = 0) async -> Result<VideoProcessingInfo, MediaUploadingPreprocessorError> {
+    private func convertVideoToMP4(_ url: URL, targetFileSize: UInt = 0) async throws(MediaUploadingPreprocessorError) -> VideoProcessingInfo {
         let asset = AVURLAsset(url: url)
         let presetName = appSettings.optimizeMediaUploads ? AVAssetExportPreset640x480 : AVAssetExportPreset1920x1080
 
         guard let exportSession = AVAssetExportSession(asset: asset, presetName: presetName) else {
-            return .failure(.failedConvertingVideo)
+            throw .failedConvertingVideo
         }
         
         // AVAssetExportSession will fail if the output URL already exists
@@ -387,7 +387,7 @@ struct MediaUploadingPreprocessor {
         exportSession.outputFileType = AVFileType.mp4
         
         guard exportSession.supportedFileTypes.contains(AVFileType.mp4) else {
-            return .failure(.failedConvertingVideo)
+            throw .failedConvertingVideo
         }
         
         if targetFileSize > 0 {
@@ -397,35 +397,35 @@ struct MediaUploadingPreprocessor {
         
         await exportSession.export()
         
-        switch exportSession.status {
-        case .completed:
-            do {
-                // Delete the original
-                try? FileManager.default.removeItem(at: url)
-                // Strip the UUID from the new version
-                let newOutputURL = url.deletingLastPathComponent().appendingPathComponent("\(originalFilenameWithoutExtension).mp4")
-                try FileManager.default.moveItem(at: outputURL, to: newOutputURL)
-                
-                let newAsset = AVURLAsset(url: newOutputURL)
-                guard let track = try? await newAsset.loadTracks(withMediaType: .video).first,
-                      let durationInSeconds = try? await newAsset.load(.duration).seconds,
-                      let adjustedNaturalSize = try? await track.size else {
-                    return .failure(.failedConvertingVideo)
-                }
-                
-                return .success(.init(url: newOutputURL,
-                                      height: adjustedNaturalSize.height,
-                                      width: adjustedNaturalSize.width,
-                                      duration: durationInSeconds,
-                                      mimeType: "video/mp4"))
-            } catch {
-                return .failure(.failedConvertingVideo)
-            }
-        default:
-            return .failure(.failedConvertingVideo)
+        guard exportSession.status == .completed else {
+            throw .failedConvertingVideo
         }
+        
+        // Delete the original
+        try? FileManager.default.removeItem(at: url)
+        // Strip the UUID from the new version
+        let newOutputURL = url.deletingLastPathComponent().appendingPathComponent("\(originalFilenameWithoutExtension).mp4")
+        
+        do { try FileManager.default.moveItem(at: outputURL, to: newOutputURL) } catch {
+            throw .failedConvertingVideo
+        }
+        
+        let newAsset = AVURLAsset(url: newOutputURL)
+        guard let track = try? await newAsset.loadTracks(withMediaType: .video).first,
+              let durationInSeconds = try? await newAsset.load(.duration).seconds,
+              let adjustedNaturalSize = try? await track.size else {
+            throw .failedConvertingVideo
+        }
+        
+        return .init(url: newOutputURL,
+                     height: adjustedNaturalSize.height,
+                     width: adjustedNaturalSize.width,
+                     duration: durationInSeconds,
+                     mimeType: "video/mp4")
     }
 }
+
+// MARK: - Extensions
 
 private extension AVAssetTrack {
     var size: CGSize {
