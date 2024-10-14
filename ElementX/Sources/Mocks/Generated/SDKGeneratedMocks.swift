@@ -1160,16 +1160,16 @@ open class ClientSDKMock: MatrixRustSDK.Client {
 
     //MARK: - getMediaFile
 
-    open var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirThrowableError: Error?
-    var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingCallsCount = 0
-    open var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirCallsCount: Int {
+    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirThrowableError: Error?
+    var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingCallsCount = 0
+    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingCallsCount
+                return getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingCallsCount
+                    returnValue = getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -1177,29 +1177,29 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         set {
             if Thread.isMainThread {
-                getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingCallsCount = newValue
+                getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingCallsCount = newValue
+                    getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirCalled: Bool {
-        return getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirCallsCount > 0
+    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirCalled: Bool {
+        return getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirCallsCount > 0
     }
-    open var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReceivedArguments: (mediaSource: MediaSource, body: String?, mimeType: String, useCache: Bool, tempDir: String?)?
-    open var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReceivedInvocations: [(mediaSource: MediaSource, body: String?, mimeType: String, useCache: Bool, tempDir: String?)] = []
+    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReceivedArguments: (mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?)?
+    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReceivedInvocations: [(mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?)] = []
 
-    var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingReturnValue: MediaFileHandle!
-    open var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReturnValue: MediaFileHandle! {
+    var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingReturnValue: MediaFileHandle!
+    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReturnValue: MediaFileHandle! {
         get {
             if Thread.isMainThread {
-                return getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingReturnValue
+                return getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingReturnValue
             } else {
                 var returnValue: MediaFileHandle? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingReturnValue
+                    returnValue = getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -1207,29 +1207,29 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         set {
             if Thread.isMainThread {
-                getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingReturnValue = newValue
+                getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirUnderlyingReturnValue = newValue
+                    getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirClosure: ((MediaSource, String?, String, Bool, String?) async throws -> MediaFileHandle)?
+    open var getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirClosure: ((MediaSource, String?, String, Bool, String?) async throws -> MediaFileHandle)?
 
-    open override func getMediaFile(mediaSource: MediaSource, body: String?, mimeType: String, useCache: Bool, tempDir: String?) async throws -> MediaFileHandle {
-        if let error = getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirThrowableError {
+    open override func getMediaFile(mediaSource: MediaSource, filename: String?, mimeType: String, useCache: Bool, tempDir: String?) async throws -> MediaFileHandle {
+        if let error = getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirThrowableError {
             throw error
         }
-        getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirCallsCount += 1
-        getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReceivedArguments = (mediaSource: mediaSource, body: body, mimeType: mimeType, useCache: useCache, tempDir: tempDir)
+        getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirCallsCount += 1
+        getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReceivedArguments = (mediaSource: mediaSource, filename: filename, mimeType: mimeType, useCache: useCache, tempDir: tempDir)
         DispatchQueue.main.async {
-            self.getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReceivedInvocations.append((mediaSource: mediaSource, body: body, mimeType: mimeType, useCache: useCache, tempDir: tempDir))
+            self.getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReceivedInvocations.append((mediaSource: mediaSource, filename: filename, mimeType: mimeType, useCache: useCache, tempDir: tempDir))
         }
-        if let getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirClosure = getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirClosure {
-            return try await getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirClosure(mediaSource, body, mimeType, useCache, tempDir)
+        if let getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirClosure = getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirClosure {
+            return try await getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirClosure(mediaSource, filename, mimeType, useCache, tempDir)
         } else {
-            return getMediaFileMediaSourceBodyMimeTypeUseCacheTempDirReturnValue
+            return getMediaFileMediaSourceFilenameMimeTypeUseCacheTempDirReturnValue
         }
     }
 
@@ -2203,6 +2203,81 @@ open class ClientSDKMock: MatrixRustSDK.Client {
             return try await joinRoomByIdOrAliasRoomIdOrAliasServerNamesClosure(roomIdOrAlias, serverNames)
         } else {
             return joinRoomByIdOrAliasRoomIdOrAliasServerNamesReturnValue
+        }
+    }
+
+    //MARK: - knock
+
+    open var knockRoomIdOrAliasThrowableError: Error?
+    var knockRoomIdOrAliasUnderlyingCallsCount = 0
+    open var knockRoomIdOrAliasCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return knockRoomIdOrAliasUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = knockRoomIdOrAliasUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                knockRoomIdOrAliasUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    knockRoomIdOrAliasUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var knockRoomIdOrAliasCalled: Bool {
+        return knockRoomIdOrAliasCallsCount > 0
+    }
+    open var knockRoomIdOrAliasReceivedRoomIdOrAlias: String?
+    open var knockRoomIdOrAliasReceivedInvocations: [String] = []
+
+    var knockRoomIdOrAliasUnderlyingReturnValue: Room!
+    open var knockRoomIdOrAliasReturnValue: Room! {
+        get {
+            if Thread.isMainThread {
+                return knockRoomIdOrAliasUnderlyingReturnValue
+            } else {
+                var returnValue: Room? = nil
+                DispatchQueue.main.sync {
+                    returnValue = knockRoomIdOrAliasUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                knockRoomIdOrAliasUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    knockRoomIdOrAliasUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var knockRoomIdOrAliasClosure: ((String) async throws -> Room)?
+
+    open override func knock(roomIdOrAlias: String) async throws -> Room {
+        if let error = knockRoomIdOrAliasThrowableError {
+            throw error
+        }
+        knockRoomIdOrAliasCallsCount += 1
+        knockRoomIdOrAliasReceivedRoomIdOrAlias = roomIdOrAlias
+        DispatchQueue.main.async {
+            self.knockRoomIdOrAliasReceivedInvocations.append(roomIdOrAlias)
+        }
+        if let knockRoomIdOrAliasClosure = knockRoomIdOrAliasClosure {
+            return try await knockRoomIdOrAliasClosure(roomIdOrAlias)
+        } else {
+            return knockRoomIdOrAliasReturnValue
         }
     }
 
@@ -6896,164 +6971,6 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption {
         await waitForE2eeInitializationTasksClosure?()
     }
 }
-open class EventShieldsProviderSDKMock: MatrixRustSDK.EventShieldsProvider {
-    init() {
-        super.init(noPointer: .init())
-    }
-
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
-    }
-
-    fileprivate var pointer: UnsafeMutableRawPointer!
-
-    //MARK: - getShields
-
-    var getShieldsStrictUnderlyingCallsCount = 0
-    open var getShieldsStrictCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getShieldsStrictUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getShieldsStrictUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getShieldsStrictUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getShieldsStrictUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var getShieldsStrictCalled: Bool {
-        return getShieldsStrictCallsCount > 0
-    }
-    open var getShieldsStrictReceivedStrict: Bool?
-    open var getShieldsStrictReceivedInvocations: [Bool] = []
-
-    var getShieldsStrictUnderlyingReturnValue: ShieldState?
-    open var getShieldsStrictReturnValue: ShieldState? {
-        get {
-            if Thread.isMainThread {
-                return getShieldsStrictUnderlyingReturnValue
-            } else {
-                var returnValue: ShieldState?? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getShieldsStrictUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getShieldsStrictUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getShieldsStrictUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var getShieldsStrictClosure: ((Bool) -> ShieldState?)?
-
-    open override func getShields(strict: Bool) -> ShieldState? {
-        getShieldsStrictCallsCount += 1
-        getShieldsStrictReceivedStrict = strict
-        DispatchQueue.main.async {
-            self.getShieldsStrictReceivedInvocations.append(strict)
-        }
-        if let getShieldsStrictClosure = getShieldsStrictClosure {
-            return getShieldsStrictClosure(strict)
-        } else {
-            return getShieldsStrictReturnValue
-        }
-    }
-}
-open class EventTimelineItemDebugInfoProviderSDKMock: MatrixRustSDK.EventTimelineItemDebugInfoProvider {
-    init() {
-        super.init(noPointer: .init())
-    }
-
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
-    }
-
-    fileprivate var pointer: UnsafeMutableRawPointer!
-
-    //MARK: - get
-
-    var getUnderlyingCallsCount = 0
-    open var getCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var getCalled: Bool {
-        return getCallsCount > 0
-    }
-
-    var getUnderlyingReturnValue: EventTimelineItemDebugInfo!
-    open var getReturnValue: EventTimelineItemDebugInfo! {
-        get {
-            if Thread.isMainThread {
-                return getUnderlyingReturnValue
-            } else {
-                var returnValue: EventTimelineItemDebugInfo? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var getClosure: (() -> EventTimelineItemDebugInfo)?
-
-    open override func get() -> EventTimelineItemDebugInfo {
-        getCallsCount += 1
-        if let getClosure = getClosure {
-            return getClosure()
-        } else {
-            return getReturnValue
-        }
-    }
-}
 open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails {
     init() {
         super.init(noPointer: .init())
@@ -7621,6 +7538,153 @@ open class InReplyToDetailsSDKMock: MatrixRustSDK.InReplyToDetails {
             return eventIdClosure()
         } else {
             return eventIdReturnValue
+        }
+    }
+}
+open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvider {
+    init() {
+        super.init(noPointer: .init())
+    }
+
+    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    }
+
+    fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - debugInfo
+
+    var debugInfoUnderlyingCallsCount = 0
+    open var debugInfoCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return debugInfoUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = debugInfoUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                debugInfoUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    debugInfoUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var debugInfoCalled: Bool {
+        return debugInfoCallsCount > 0
+    }
+
+    var debugInfoUnderlyingReturnValue: EventTimelineItemDebugInfo!
+    open var debugInfoReturnValue: EventTimelineItemDebugInfo! {
+        get {
+            if Thread.isMainThread {
+                return debugInfoUnderlyingReturnValue
+            } else {
+                var returnValue: EventTimelineItemDebugInfo? = nil
+                DispatchQueue.main.sync {
+                    returnValue = debugInfoUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                debugInfoUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    debugInfoUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var debugInfoClosure: (() -> EventTimelineItemDebugInfo)?
+
+    open override func debugInfo() -> EventTimelineItemDebugInfo {
+        debugInfoCallsCount += 1
+        if let debugInfoClosure = debugInfoClosure {
+            return debugInfoClosure()
+        } else {
+            return debugInfoReturnValue
+        }
+    }
+
+    //MARK: - getShields
+
+    var getShieldsStrictUnderlyingCallsCount = 0
+    open var getShieldsStrictCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getShieldsStrictUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getShieldsStrictUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getShieldsStrictUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getShieldsStrictUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var getShieldsStrictCalled: Bool {
+        return getShieldsStrictCallsCount > 0
+    }
+    open var getShieldsStrictReceivedStrict: Bool?
+    open var getShieldsStrictReceivedInvocations: [Bool] = []
+
+    var getShieldsStrictUnderlyingReturnValue: ShieldState?
+    open var getShieldsStrictReturnValue: ShieldState? {
+        get {
+            if Thread.isMainThread {
+                return getShieldsStrictUnderlyingReturnValue
+            } else {
+                var returnValue: ShieldState?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getShieldsStrictUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getShieldsStrictUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getShieldsStrictUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var getShieldsStrictClosure: ((Bool) -> ShieldState?)?
+
+    open override func getShields(strict: Bool) -> ShieldState? {
+        getShieldsStrictCallsCount += 1
+        getShieldsStrictReceivedStrict = strict
+        DispatchQueue.main.async {
+            self.getShieldsStrictReceivedInvocations.append(strict)
+        }
+        if let getShieldsStrictClosure = getShieldsStrictClosure {
+            return getShieldsStrictClosure(strict)
+        } else {
+            return getShieldsStrictReturnValue
         }
     }
 }
@@ -12485,34 +12549,6 @@ open class RoomSDKMock: MatrixRustSDK.Room {
             return ownUserIdClosure()
         } else {
             return ownUserIdReturnValue
-        }
-    }
-
-    //MARK: - pinUserIdentity
-
-    open var pinUserIdentityUserIdThrowableError: Error?
-    var pinUserIdentityUserIdUnderlyingCallsCount = 0
-    open var pinUserIdentityUserIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return pinUserIdentityUserIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = pinUserIdentityUserIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                pinUserIdentityUserIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    pinUserIdentityUserIdUnderlyingCallsCount = newValue
-                }
-            }
         }
     }
 

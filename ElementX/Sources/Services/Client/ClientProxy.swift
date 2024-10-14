@@ -845,7 +845,7 @@ class ClientProxy: ClientProxyProtocol {
             let roomListItem = try roomListService.room(roomId: roomID)
             
             switch roomListItem.membership() {
-            case .invited:
+            case .invited, .knocked:
                 return try .invited(InvitedRoomProxy(roomListItem: roomListItem,
                                                      room: roomListItem.invitedRoom()))
             case .joined:
