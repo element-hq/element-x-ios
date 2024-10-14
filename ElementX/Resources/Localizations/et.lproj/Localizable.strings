@@ -334,6 +334,11 @@
 "screen_advanced_settings_element_call_base_url" = "Element Calli kohandatud teenuseaadress";
 "screen_advanced_settings_element_call_base_url_description" = "Seadista kohandatud teenuseaadress Element Calli jaoks.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Vigane url. Palun vaata, et url algaks protokolliga (http/https) ning aadress ise oleks ka õige.";
+"screen_create_room_access_section_anyone_option_description" = "Kõik võivad selle jututoaga liituda";
+"screen_create_room_access_section_anyone_option_title" = "Kõik";
+"screen_create_room_access_section_header" = "Ligipääs jututoale";
+"screen_create_room_access_section_knocking_option_description" = "Kõik võivad paluda selle jututoaga liitumist, kuid peakasutaja või moderaator peavad selle kinnitama";
+"screen_create_room_access_section_knocking_option_title" = "Küsi võimalust liitumiseks";
 "screen_pinned_timeline_empty_state_description" = "Siia lisamiseks vajuta sõnumil ja vali „%1$@“.";
 "screen_pinned_timeline_empty_state_headline" = "Et olulisi sõnumeid oleks lihtsam leida, tõsta nad esile";
 "screen_reset_encryption_password_error" = "Tekkis teadmata viga. Palun kontrolli, kas sinu kasutajakonto salasõna on õige ja proovi uuesti.";
@@ -588,6 +593,7 @@
 "screen_qr_code_login_initial_state_item_3" = "Vali %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "„Seo uus seade“";
 "screen_qr_code_login_initial_state_item_4" = "Skaneeri QR-koodi selle seadmega";
+"screen_qr_code_login_initial_state_subtitle" = "See funktsionaalsus on sadaval vaid siis, kui sinu teenusepakkuja seda toetab.";
 "screen_qr_code_login_initial_state_title" = "QR-koodi saamiseks ava %1$@ oma teises seadmes";
 "screen_qr_code_login_invalid_scan_state_description" = "Kasuta teises seadmes näidatavat QR-koodi";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Vale QR-kood";

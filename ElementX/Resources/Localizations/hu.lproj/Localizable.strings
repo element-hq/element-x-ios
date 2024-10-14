@@ -334,6 +334,11 @@
 "screen_advanced_settings_element_call_base_url" = "Egyéni Element Call alapwebcím";
 "screen_advanced_settings_element_call_base_url_description" = "Egyéni alapwebcím beállítása az Element Callhoz.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Érvénytelen webcím, győződjön meg arról, hogy szerepel-e benne a protokoll (http/https), és hogy helyes-e a cím.";
+"screen_create_room_access_section_anyone_option_description" = "Bárki csatlakozhat ehhez a szobához";
+"screen_create_room_access_section_anyone_option_title" = "Bárki";
+"screen_create_room_access_section_header" = "Szobahozzáférés";
+"screen_create_room_access_section_knocking_option_description" = "Bárki kérheti, hogy csatlakozzon a szobához, de egy adminisztrátornak vagy moderátornak el kell fogadnia a kérést";
+"screen_create_room_access_section_knocking_option_title" = "Csatlakozás kérése";
 "screen_pinned_timeline_empty_state_description" = "Nyomjon hosszan az üzenetre, és válassza a „%1$@” lehetőséget, hogy itt szerepeljen.";
 "screen_pinned_timeline_empty_state_headline" = "Tűzze ki a fontos üzeneteket, hogy könnyen felfedezhetők legyenek";
 "screen_reset_encryption_password_error" = "Ismeretlen hiba történt. Ellenőrizze, hogy a fiókja jelszava helyes-e, és próbálja meg újra.";
@@ -588,6 +593,7 @@
 "screen_qr_code_login_initial_state_item_3" = "Válassza ezt: %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "„Új eszköz összekapcsolása”";
 "screen_qr_code_login_initial_state_item_4" = "Olvassa be a QR-kódot ezzel az eszközzel";
+"screen_qr_code_login_initial_state_subtitle" = "Csak akkor érhető el, ha a fiókszolgáltató támogatja.";
 "screen_qr_code_login_initial_state_title" = "Nyissa meg az %1$@et egy másik eszközön a QR-kód lekéréséhez.";
 "screen_qr_code_login_invalid_scan_state_description" = "Használja a másik eszközön látható QR-kódot.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Hibás QR-kód";

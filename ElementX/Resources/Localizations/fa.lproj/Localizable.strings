@@ -334,6 +334,11 @@
 "screen_advanced_settings_element_call_base_url" = "نشانی پایهٔ تماس المنتی سفارشی";
 "screen_advanced_settings_element_call_base_url_description" = "تنظمی نشانی پایه‌‌ای سفارشی برای تماس المنتی.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Invalid URL, please make sure you include the protocol (http/https) and the correct address.";
+"screen_create_room_access_section_anyone_option_description" = "Anyone can join this room";
+"screen_create_room_access_section_anyone_option_title" = "Anyone";
+"screen_create_room_access_section_header" = "Room Access";
+"screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
+"screen_create_room_access_section_knocking_option_title" = "Ask to join";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
@@ -588,6 +593,7 @@
 "screen_qr_code_login_initial_state_item_3" = "گزینش %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "«پیوند افزارهٔ جدید»";
 "screen_qr_code_login_initial_state_item_4" = "پویش کد پاس با این افزاره";
+"screen_qr_code_login_initial_state_subtitle" = "Only available if your account provider supports it.";
 "screen_qr_code_login_initial_state_title" = "گشودن %1$@ روی افزاره‌ای دیگر برای گرفتن کد پاس";
 "screen_qr_code_login_invalid_scan_state_description" = "استفاده از کد پاس نشان داده روی افزارهٔ دیگر.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "کد پاس اشتباه";

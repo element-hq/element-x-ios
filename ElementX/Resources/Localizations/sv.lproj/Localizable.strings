@@ -334,6 +334,11 @@
 "screen_advanced_settings_element_call_base_url" = "Anpassad bas-URL för Element Call";
 "screen_advanced_settings_element_call_base_url_description" = "Ange en anpassad bas-URL för Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Ogiltig URL, se till att du inkluderar protokollet (http/https) och rätt adress.";
+"screen_create_room_access_section_anyone_option_description" = "Anyone can join this room";
+"screen_create_room_access_section_anyone_option_title" = "Anyone";
+"screen_create_room_access_section_header" = "Room Access";
+"screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
+"screen_create_room_access_section_knocking_option_title" = "Ask to join";
 "screen_pinned_timeline_empty_state_description" = "Tryck på ett meddelande och välj ”%1$@” för att inkludera det här.";
 "screen_pinned_timeline_empty_state_headline" = "Fäst viktiga meddelanden så att de lätt kan upptäckas";
 "screen_reset_encryption_password_error" = "Ett okänt fel inträffade. Kontrollera att ditt kontolösenord är korrekt och försök igen.";
@@ -588,6 +593,7 @@
 "screen_qr_code_login_initial_state_item_3" = "Välj %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "”Länka ny enhet”";
 "screen_qr_code_login_initial_state_item_4" = "Skanna QR-koden med den här enheten";
+"screen_qr_code_login_initial_state_subtitle" = "Only available if your account provider supports it.";
 "screen_qr_code_login_initial_state_title" = "Öppna %1$@ på en annan enhet för att få QR-koden";
 "screen_qr_code_login_invalid_scan_state_description" = "Använd QR-koden som visas på den andra enheten.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Fel QR-kod";

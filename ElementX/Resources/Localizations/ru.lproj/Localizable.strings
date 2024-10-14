@@ -334,6 +334,11 @@
 "screen_advanced_settings_element_call_base_url" = "Базовый URL сервера звонков Element";
 "screen_advanced_settings_element_call_base_url_description" = "Задайте свой сервер Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Адрес указан неверно, удостоверьтесь, что вы указали протокол (http/https) и правильный адрес.";
+"screen_create_room_access_section_anyone_option_description" = "Anyone can join this room";
+"screen_create_room_access_section_anyone_option_title" = "Anyone";
+"screen_create_room_access_section_header" = "Room Access";
+"screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
+"screen_create_room_access_section_knocking_option_title" = "Ask to join";
 "screen_pinned_timeline_empty_state_description" = "Нажмите на сообщение и выберите “%1$@”, чтобы добавить его сюда.";
 "screen_pinned_timeline_empty_state_headline" = "Закрепите важные сообщения, чтобы их можно было легко найти";
 "screen_reset_encryption_password_error" = "Произошла неизвестная ошибка. Проверьте правильность пароля учетной записи и повторите попытку.";
@@ -588,6 +593,7 @@
 "screen_qr_code_login_initial_state_item_3" = "Выбрать %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "\"Привязать новое устройство\"";
 "screen_qr_code_login_initial_state_item_4" = "Отсканируйте QR-код с помощью этого устройства";
+"screen_qr_code_login_initial_state_subtitle" = "Only available if your account provider supports it.";
 "screen_qr_code_login_initial_state_title" = "Откройте %1$@ на другом устройстве, чтобы получить QR-код";
 "screen_qr_code_login_invalid_scan_state_description" = "Используйте QR-код, показанный на другом устройстве.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Неверный QR-код";

@@ -94,7 +94,7 @@
 "action_send_message" = "Odeslat zprávu";
 "action_share" = "Sdílet";
 "action_share_link" = "Sdílet odkaz";
-"action_show" = "Show";
+"action_show" = "Zobrazit";
 "action_sign_in_again" = "Přihlásit se znovu";
 "action_signout" = "Odhlásit se";
 "action_signout_anyway" = "Přesto se odhlásit";
@@ -231,7 +231,7 @@
 "common_voice_message" = "Hlasová zpráva";
 "common_waiting" = "Čekání...";
 "common_waiting_for_decryption_key" = "Čekání na dešifrovací klíč";
-"common.copied_to_clipboard" = "Copied to clipboard";
+"common.copied_to_clipboard" = "Zkopírováno do schránky";
 "common.do_not_show_this_again" = "Znovu nezobrazovat";
 "common.open_source_licenses" = "Licence s otevřeným zdrojovým kódem";
 "common.pinned" = "Připnuto";
@@ -240,7 +240,7 @@
 "confirm_recovery_key_banner_message" = "Vaše záloha chatu není aktuálně synchronizována. Abyste si zachovali přístup k záloze chatu, musíte potvrdit klíč pro obnovení.";
 "confirm_recovery_key_banner_title" = "Potvrďte klíč pro obnovení";
 "crash_detection_dialog_content" = "%1$@ havaroval při posledním použití. Chcete se s námi podělit o zprávu o selhání?";
-"crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
+"crypto_identity_change_pin_violation" = "Zdá se, že se identita %1$@ změnila. %2$@";
 "dialog_permission_camera" = "Aby mohla aplikace používat fotoaparát, udělte prosím oprávnění v nastavení systému.";
 "dialog_permission_generic" = "Udělte prosím oprávnění v nastavení systému.";
 "dialog_permission_location_description_ios" = "Udělte přístup v Nastavení -> Poloha.";
@@ -334,6 +334,11 @@
 "screen_advanced_settings_element_call_base_url" = "Vlastní URL pro Element Call";
 "screen_advanced_settings_element_call_base_url_description" = "Nastavte vlastní URL pro Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Neplatné URL, ujistěte se, že jste uvedli protokol (http/https) a správnou adresu.";
+"screen_create_room_access_section_anyone_option_description" = "Do této místnosti může vstoupit kdokoli";
+"screen_create_room_access_section_anyone_option_title" = "Kdokoliv";
+"screen_create_room_access_section_header" = "Přístup do místnosti";
+"screen_create_room_access_section_knocking_option_description" = "Kdokoli může požádat o vstup do místnosti, ale správce nebo moderátor bude muset žádost přijmout";
+"screen_create_room_access_section_knocking_option_title" = "Požádat o připojení";
 "screen_pinned_timeline_empty_state_description" = "Přidržte zprávu a vyberte „%1$@“, kterou chcete zahrnout sem.";
 "screen_pinned_timeline_empty_state_headline" = "Připněte důležité zprávy, aby je bylo možné snadno najít";
 "screen_reset_encryption_password_error" = "Došlo k neznámé chybě. Zkontrolujte, zda je heslo k účtu správné a zkuste to znovu.";
@@ -588,6 +593,7 @@
 "screen_qr_code_login_initial_state_item_3" = "Vybrat %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "\"Připojit nové zařízení\"";
 "screen_qr_code_login_initial_state_item_4" = "Naskenujte QR kód pomocí tohoto zařízení";
+"screen_qr_code_login_initial_state_subtitle" = "Dostupné pouze v případě, že to váš poskytovatel účtu podporuje.";
 "screen_qr_code_login_initial_state_title" = "Otevřete %1$@ na jiném zařízení pro získání QR kódu";
 "screen_qr_code_login_invalid_scan_state_description" = "Použijte QR kód zobrazený na druhém zařízení.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Špatný QR kód";
