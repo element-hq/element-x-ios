@@ -58,6 +58,7 @@ struct JoinRoomScreenViewState: BindableState {
 
 struct JoinRoomScreenViewStateBindings {
     var alertInfo: AlertInfo<JoinRoomScreenAlertType>?
+    var knockMessage = ""
 }
 
 enum JoinRoomScreenAlertType {
