@@ -581,7 +581,8 @@ class MockScreen: Identifiable {
                                                                          userSession: userSession,
                                                                          userIndicatorController: UserIndicatorControllerMock(),
                                                                          navigationStackCoordinator: navigationStackCoordinator,
-                                                                         userDiscoveryService: userDiscoveryMock)
+                                                                         userDiscoveryService: userDiscoveryMock,
+                                                                         mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings))
             let coordinator = StartChatScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -595,7 +596,8 @@ class MockScreen: Identifiable {
                                                                            userSession: userSession,
                                                                            userIndicatorController: UserIndicatorControllerMock(),
                                                                            navigationStackCoordinator: navigationStackCoordinator,
-                                                                           userDiscoveryService: userDiscoveryMock))
+                                                                           userDiscoveryService: userDiscoveryMock,
+                                                                           mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings)))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .createRoom:

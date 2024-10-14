@@ -112,6 +112,7 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
         userIndicatorController = UserIndicatorControllerMock.default
         viewModel = .init(roomProxy: JoinedRoomProxyMock(roomProxyConfiguration),
                           mediaProvider: MediaProviderMock(configuration: .init()),
+                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
                           userIndicatorController: userIndicatorController)
     }
 }

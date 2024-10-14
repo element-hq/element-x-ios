@@ -14,7 +14,7 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
     private let actionsSubject: PassthroughSubject<RoomDetailsEditScreenViewModelAction, Never> = .init()
     private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let mediaPreprocessor: MediaUploadingPreprocessor = .init()
+    private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     
     var actions: AnyPublisher<RoomDetailsEditScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -22,8 +22,10 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
     
     init(roomProxy: JoinedRoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
+         mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
+        self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.userIndicatorController = userIndicatorController
         
         let roomAvatar = roomProxy.avatarURL
@@ -76,7 +78,7 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                                                                   title: L10n.commonLoading,
                                                                   persistent: true))
             
-            let mediaResult = await mediaPreprocessor.processMedia(at: url)
+            let mediaResult = await mediaUploadingPreprocessor.processMedia(at: url)
             
             switch mediaResult {
             case .success(.image):

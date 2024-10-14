@@ -10,7 +10,19 @@ import XCTest
 @testable import ElementX
 
 final class MediaUploadingPreprocessorTests: XCTestCase {
-    let mediaUploadingPreprocessor = MediaUploadingPreprocessor()
+    var appSettings: AppSettings!
+    var mediaUploadingPreprocessor: MediaUploadingPreprocessor!
+    
+    override func setUp() {
+        AppSettings.resetAllSettings()
+        appSettings = AppSettings()
+        ServiceLocator.shared.register(appSettings: appSettings)
+        mediaUploadingPreprocessor = MediaUploadingPreprocessor(appSettings: appSettings)
+    }
+    
+    override func tearDown() {
+        AppSettings.resetAllSettings()
+    }
     
     func testAudioFileProcessing() async {
         guard let url = Bundle(for: Self.self).url(forResource: "test_audio.mp3", withExtension: nil) else {
@@ -70,6 +82,23 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         XCTAssertEqual(videoInfo.thumbnailInfo?.size ?? 0, 34206, accuracy: 100)
         XCTAssertEqual(videoInfo.thumbnailInfo?.width, 800)
         XCTAssertEqual(videoInfo.thumbnailInfo?.height, 450)
+        
+        // Repeat with optimised media setting
+        appSettings.optimizeMediaUploads = true
+        
+        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
+              case let .video(_, _, optimizedVideoInfo) = optimizedResult else {
+            XCTFail("Failed processing asset")
+            return
+        }
+        
+        // Check optimised video info
+        XCTAssertEqual(optimizedVideoInfo.mimetype, "video/mp4")
+        XCTAssertEqual(optimizedVideoInfo.blurhash, "K32PJbx^I7jYaebHMvV?o$")
+        XCTAssertEqual(optimizedVideoInfo.size ?? 0, 4_090_898, accuracy: 100) // Note: This is slightly stupid because it is larger now 🤦‍♂️
+        XCTAssertEqual(optimizedVideoInfo.width, 640)
+        XCTAssertEqual(optimizedVideoInfo.height, 360)
+        XCTAssertEqual(optimizedVideoInfo.duration ?? 0, 30, accuracy: 100)
     }
 
     func testPortraitMp4VideoProcessing() async {
@@ -110,6 +139,23 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         XCTAssertEqual(videoInfo.thumbnailInfo?.size ?? 0, 83220, accuracy: 100)
         XCTAssertEqual(videoInfo.thumbnailInfo?.width, 337)
         XCTAssertEqual(videoInfo.thumbnailInfo?.height, 600)
+        
+        // Repeat with optimised media setting
+        appSettings.optimizeMediaUploads = true
+        
+        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
+              case let .video(_, _, optimizedVideoInfo) = optimizedResult else {
+            XCTFail("Failed processing asset")
+            return
+        }
+        
+        // Check optimised video info
+        XCTAssertEqual(optimizedVideoInfo.mimetype, "video/mp4")
+        XCTAssertEqual(optimizedVideoInfo.blurhash, "K7BDNJD*0L%#sl_2~C9ZE1")
+        XCTAssertEqual(optimizedVideoInfo.size ?? 0, 6_520_897, accuracy: 100)
+        XCTAssertEqual(optimizedVideoInfo.width, 360)
+        XCTAssertEqual(optimizedVideoInfo.height, 640)
+        XCTAssertEqual(optimizedVideoInfo.duration ?? 0, 30, accuracy: 100)
     }
     
     func testLandscapeImageProcessing() async {
@@ -185,28 +231,10 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         XCTAssertEqual(originalImage.size, convertedImage.size)
         
         // Check that the GPS data has been stripped
-        guard let imageSource = CGImageSourceCreateWithData(originalImageData as NSData, nil) else {
-            XCTFail("Invalid test asset")
-            return
-        }
-        
-        guard let originalMetadata: NSDictionary = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) else {
-            XCTFail("Test asset is expected to contain metadata")
-            return
-        }
-        
+        let originalMetadata = metadata(from: originalImageData)
         XCTAssertNotNil(originalMetadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)"))
         
-        guard let convertedImageSource = CGImageSourceCreateWithData(convertedImageData as NSData, nil) else {
-            XCTFail("Invalid converted asset")
-            return
-        }
-        
-        guard let convertedMetadata: NSDictionary = CGImageSourceCopyPropertiesAtIndex(convertedImageSource, 0, nil) else {
-            XCTFail("Test asset is expected to contain metadata")
-            return
-        }
-        
+        let convertedMetadata = metadata(from: convertedImageData)
         XCTAssertNil(convertedMetadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)"))
         
         // Check that the thumbnail is generated correctly
@@ -223,5 +251,22 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
             XCTAssert(thumbnail.size.width <= MediaUploadingPreprocessor.Constants.maximumThumbnailSize.height)
             XCTAssert(thumbnail.size.height <= MediaUploadingPreprocessor.Constants.maximumThumbnailSize.width)
         }
+        
+        let thumbnailMetadata = metadata(from: thumbnailData)
+        XCTAssertNil(thumbnailMetadata.value(forKeyPath: "\(kCGImagePropertyGPSDictionary)"))
+    }
+    
+    private func metadata(from imageData: Data) -> NSDictionary {
+        guard let imageSource = CGImageSourceCreateWithData(imageData as NSData, nil) else {
+            XCTFail("Invalid asset")
+            return [:]
+        }
+        
+        guard let convertedMetadata: NSDictionary = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) else {
+            XCTFail("Test asset is expected to contain metadata")
+            return [:]
+        }
+        
+        return convertedMetadata
     }
 }

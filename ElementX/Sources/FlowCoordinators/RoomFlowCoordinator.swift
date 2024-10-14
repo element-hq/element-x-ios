@@ -810,6 +810,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(roomProxy: roomProxy,
                                                                                    mediaProvider: userSession.mediaProvider,
+                                                                                   mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
                                                                                    navigationStackCoordinator: stackCoordinator,
                                                                                    userIndicatorController: userIndicatorController,
                                                                                    orientationManager: appMediator.windowManager)
@@ -895,7 +896,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
 
         let parameters = MediaUploadPreviewScreenCoordinatorParameters(userIndicatorController: userIndicatorController,
                                                                        roomProxy: roomProxy,
-                                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(),
+                                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
                                                                        title: url.lastPathComponent,
                                                                        url: url)
 
