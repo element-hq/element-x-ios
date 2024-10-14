@@ -70,29 +70,34 @@ struct JoinRoomScreen: View {
                 if context.viewState.mode == .knock {
                     Spacer()
                         .frame(height: 19)
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack(spacing: 0) {
-                            TextField("", text: $context.knockMessage, axis: .vertical)
-                                .onChange(of: context.knockMessage) { newValue in
-                                    context.knockMessage = String(newValue.prefix(1000))
-                                }
-                                .lineLimit(4, reservesSpace: true)
-                                .font(.compound.bodyMD)
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 12)
-                        }
-                        .background(.compound.bgCanvasDefault)
-                        .cornerRadius(8)
-                        .overlay(RoundedRectangle(cornerRadius: 8)
-                            .inset(by: 0.5)
-                            .stroke(.compound.borderInteractivePrimary))
-                        
-                        Text(L10n.screenJoinRoomKnockMessageDescription)
-                            .font(.compound.bodyMD)
-                            .foregroundStyle(.compound.textSecondary)
-                    }
+                    knockMessage
                 }
             }
+        }
+    }
+    
+    @ViewBuilder
+    private var knockMessage: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 0) {
+                TextField("", text: $context.knockMessage, axis: .vertical)
+                    .onChange(of: context.knockMessage) { newValue in
+                        context.knockMessage = String(newValue.prefix(1000))
+                    }
+                    .lineLimit(4, reservesSpace: true)
+                    .font(.compound.bodyMD)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+            }
+            .background(.compound.bgCanvasDefault)
+            .cornerRadius(8)
+            .overlay(RoundedRectangle(cornerRadius: 8)
+                .inset(by: 0.5)
+                .stroke(.compound.borderInteractivePrimary))
+            
+            Text(L10n.screenJoinRoomKnockMessageDescription)
+                .font(.compound.bodyMD)
+                .foregroundStyle(.compound.textSecondary)
         }
     }
     
