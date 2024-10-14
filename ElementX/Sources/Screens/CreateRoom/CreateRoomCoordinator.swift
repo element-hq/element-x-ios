@@ -37,7 +37,8 @@ final class CreateRoomCoordinator: CoordinatorProtocol {
                                         createRoomParameters: parameters.createRoomParameters,
                                         selectedUsers: parameters.selectedUsers,
                                         analytics: ServiceLocator.shared.analytics,
-                                        userIndicatorController: parameters.userIndicatorController)
+                                        userIndicatorController: parameters.userIndicatorController,
+                                        appSettings: ServiceLocator.shared.settings)
     }
     
     func start() {
