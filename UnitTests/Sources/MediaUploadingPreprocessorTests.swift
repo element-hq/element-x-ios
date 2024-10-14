@@ -79,7 +79,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         XCTAssertNotNil(videoInfo.thumbnailInfo)
         XCTAssertEqual(videoInfo.thumbnailInfo?.mimetype, "image/jpeg")
-        XCTAssertEqual(videoInfo.thumbnailInfo?.size ?? 0, 34206, accuracy: 100)
+        XCTAssertEqual(videoInfo.thumbnailInfo?.size ?? 0, 33611, accuracy: 100)
         XCTAssertEqual(videoInfo.thumbnailInfo?.width, 800)
         XCTAssertEqual(videoInfo.thumbnailInfo?.height, 450)
         
@@ -136,7 +136,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         XCTAssertNotNil(videoInfo.thumbnailInfo)
         XCTAssertEqual(videoInfo.thumbnailInfo?.mimetype, "image/jpeg")
-        XCTAssertEqual(videoInfo.thumbnailInfo?.size ?? 0, 83220, accuracy: 100)
+        XCTAssertEqual(videoInfo.thumbnailInfo?.size ?? 0, 81515, accuracy: 100)
         XCTAssertEqual(videoInfo.thumbnailInfo?.width, 337)
         XCTAssertEqual(videoInfo.thumbnailInfo?.height, 600)
         
@@ -181,7 +181,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         XCTAssertNotNil(imageInfo.thumbnailInfo)
         XCTAssertEqual(imageInfo.thumbnailInfo?.mimetype, "image/jpeg")
-        XCTAssertEqual(imageInfo.thumbnailInfo?.size ?? 0, 89553, accuracy: 100)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.size ?? 0, 87733, accuracy: 100)
         XCTAssertEqual(imageInfo.thumbnailInfo?.width, 800)
         XCTAssertEqual(imageInfo.thumbnailInfo?.height, 344)
         
@@ -199,7 +199,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         // Check optimised image info
         XCTAssertEqual(optimizedImageInfo.mimetype, "image/jpeg")
         XCTAssertEqual(optimizedImageInfo.blurhash, "K%I#.NofkC_4ayaxxujsWB")
-        XCTAssertEqual(optimizedImageInfo.size ?? 0, 534_410, accuracy: 100)
+        XCTAssertEqual(optimizedImageInfo.size ?? 0, 524_226, accuracy: 100)
         XCTAssertEqual(optimizedImageInfo.width, 2048)
         XCTAssertEqual(optimizedImageInfo.height, 879)
     }
@@ -227,7 +227,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         XCTAssertNotNil(imageInfo.thumbnailInfo)
         XCTAssertEqual(imageInfo.thumbnailInfo?.mimetype, "image/jpeg")
-        XCTAssertEqual(imageInfo.thumbnailInfo?.size ?? 0, 264_500, accuracy: 100)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.size ?? 0, 258_914, accuracy: 100)
         XCTAssertEqual(imageInfo.thumbnailInfo?.width, 600)
         XCTAssertEqual(imageInfo.thumbnailInfo?.height, 800)
         
@@ -245,7 +245,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         // Check resulting image info
         XCTAssertEqual(optimizedImageInfo.mimetype, "image/jpeg")
         XCTAssertEqual(optimizedImageInfo.blurhash, "KdE|0Ls+RP^-n*RP%OWAV@")
-        XCTAssertEqual(optimizedImageInfo.size ?? 0, 1_492_915, accuracy: 100)
+        XCTAssertEqual(optimizedImageInfo.size ?? 0, 1_462_937, accuracy: 100)
         XCTAssertEqual(optimizedImageInfo.width, 1536)
         XCTAssertEqual(optimizedImageInfo.height, 2048)
     }

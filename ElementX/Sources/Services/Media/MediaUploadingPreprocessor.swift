@@ -87,7 +87,7 @@ struct MediaUploadingPreprocessor {
     enum Constants {
         static let maximumThumbnailSize = CGSize(width: 800, height: 600)
         static let optimizedMaxPixelSize = 2048.0
-        static let thumbnailCompressionQuality = 0.8
+        static let jpegCompressionQuality = 0.78
         static let videoThumbnailTime = 5.0 // seconds
     }
     
@@ -321,7 +321,7 @@ struct MediaUploadingPreprocessor {
               let destination = CGImageDestinationCreateWithURL(destinationURL as CFURL, UTType.jpeg.identifier as CFString, 1, nil) else {
             throw .failedResizingImage
         }
-        let properties = [kCGImageDestinationLossyCompressionQuality: Constants.thumbnailCompressionQuality]
+        let properties = [kCGImageDestinationLossyCompressionQuality: Constants.jpegCompressionQuality]
         
         CGImageDestinationAddImage(destination, scaledImage, properties as NSDictionary)
         CGImageDestinationFinalize(destination)
@@ -350,7 +350,7 @@ struct MediaUploadingPreprocessor {
         
         let thumbnail = UIImage(cgImage: cgImage)
         
-        guard let data = thumbnail.jpegData(compressionQuality: Constants.thumbnailCompressionQuality) else {
+        guard let data = thumbnail.jpegData(compressionQuality: Constants.jpegCompressionQuality) else {
             throw .failedGeneratingVideoThumbnail(nil)
         }
         
