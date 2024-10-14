@@ -86,6 +86,7 @@ struct MediaUploadingPreprocessor {
     
     enum Constants {
         static let maximumThumbnailSize = CGSize(width: 800, height: 600)
+        static let optimizedMaxPixelSize = 2048.0
         static let thumbnailCompressionQuality = 0.8
         static let videoThumbnailTime = 5.0 // seconds
     }
@@ -133,26 +134,36 @@ struct MediaUploadingPreprocessor {
     /// - Returns: Returns a `MediaInfo.image` containing the URLs for the modified image and its thumbnail plus the corresponding `ImageInfo`
     private func processImage(at url: URL, type: UTType, mimeType: String) -> Result<MediaInfo, MediaUploadingPreprocessorError> {
         do {
-            let result = try stripLocationFromImage(at: url, type: type, mimeType: mimeType)
+            try stripLocationFromImage(at: url, type: type)
+            
+            if appSettings.optimizeMediaUploads {
+                try resizeImage(at: url, maxPixelSize: Constants.optimizedMaxPixelSize, destination: url)
+            }
+            
             let thumbnailResult = try generateThumbnailForImage(at: url)
             
-            let imageSize = (try? UInt64(FileManager.default.sizeForItem(at: result.url))) ?? 0
-            let thumbnailSize = (try? UInt64(FileManager.default.sizeForItem(at: thumbnailResult.url))) ?? 0
+            guard let imageSource = CGImageSourceCreateWithURL(url as NSURL, nil),
+                  let imageSize = imageSource.size else {
+                return .failure(.failedProcessingImage(.failedStrippingLocationData))
+            }
+            
+            let fileSize = (try? UInt64(FileManager.default.sizeForItem(at: url))) ?? 0
+            let thumbnailFileSize = (try? UInt64(FileManager.default.sizeForItem(at: thumbnailResult.url))) ?? 0
             
             let thumbnailInfo = ThumbnailInfo(height: UInt64(thumbnailResult.height),
                                               width: UInt64(thumbnailResult.width),
                                               mimetype: thumbnailResult.mimeType,
-                                              size: thumbnailSize)
+                                              size: thumbnailFileSize)
             
-            let imageInfo = ImageInfo(height: UInt64(result.height),
-                                      width: UInt64(result.width),
-                                      mimetype: result.mimeType,
-                                      size: imageSize,
+            let imageInfo = ImageInfo(height: UInt64(imageSize.height),
+                                      width: UInt64(imageSize.width),
+                                      mimetype: mimeType,
+                                      size: fileSize,
                                       thumbnailInfo: thumbnailInfo,
                                       thumbnailSource: nil,
                                       blurhash: thumbnailResult.blurhash)
             
-            let mediaInfo = MediaInfo.image(imageURL: result.url, thumbnailURL: thumbnailResult.url, imageInfo: imageInfo)
+            let mediaInfo = MediaInfo.image(imageURL: url, thumbnailURL: thumbnailResult.url, imageInfo: imageInfo)
             
             return .success(mediaInfo)
         } catch {
@@ -233,17 +244,16 @@ struct MediaUploadingPreprocessor {
     ///   - url: the URL for the original image
     ///   - type: its UTType
     /// - Returns: the URL for the modified image and its size as an `ImageProcessingResult`
-    private func stripLocationFromImage(at url: URL, type: UTType, mimeType: String) throws(MediaUploadingPreprocessorError) -> ImageProcessingInfo {
+    private func stripLocationFromImage(at url: URL, type: UTType) throws(MediaUploadingPreprocessorError) {
         guard let originalData = NSData(contentsOf: url),
-              let originalImage = UIImage(data: originalData as Data),
               let imageSource = CGImageSourceCreateWithData(originalData, nil) else {
             throw .failedStrippingLocationData
         }
         
         guard let originalMetadata = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil),
               (originalMetadata as NSDictionary).value(forKeyPath: "\(kCGImagePropertyGPSDictionary)") != nil else {
-            MXLog.info("No GPS metadata found. Returning original image")
-            return .init(url: url, height: Double(originalImage.size.height), width: Double(originalImage.size.width), mimeType: mimeType, blurhash: nil)
+            MXLog.info("No GPS metadata found. Nothing to do.")
+            return
         }
         
         let count = CGImageSourceGetCount(imageSource)
@@ -258,7 +268,6 @@ struct MediaUploadingPreprocessor {
         
         do {
             try data.write(to: url)
-            return .init(url: url, height: Double(originalImage.size.height), width: Double(originalImage.size.width), mimeType: mimeType, blurhash: nil)
         } catch {
             throw .failedStrippingLocationData
         }
@@ -268,58 +277,54 @@ struct MediaUploadingPreprocessor {
     /// - Parameter url: the original image URL
     /// - Returns: the URL for the resulting thumbnail and its sizing info as an `ImageProcessingResult`
     private func generateThumbnailForImage(at url: URL) throws(MediaUploadingPreprocessorError) -> ImageProcessingInfo {
-        let thumbnail: UIImage
+        let thumbnailFileName = "thumbnail-\((url.lastPathComponent as NSString).deletingPathExtension).jpeg"
+        let thumbnailURL = url.deletingLastPathComponent().appendingPathComponent(thumbnailFileName)
+        let thumbnailMaxPixelSize = max(Constants.maximumThumbnailSize.height, Constants.maximumThumbnailSize.width)
+        
         do {
-            thumbnail = try resizeImage(at: url, targetSize: Constants.maximumThumbnailSize)
+            try resizeImage(at: url, maxPixelSize: thumbnailMaxPixelSize, destination: thumbnailURL)
         } catch {
             throw .failedGeneratingImageThumbnail(error)
         }
         
-        guard let data = thumbnail.jpegData(compressionQuality: Constants.thumbnailCompressionQuality) else {
+        guard let thumbnail = try? UIImage(contentsOf: thumbnailURL, cachePolicy: .useProtocolCachePolicy) else {
             throw .failedGeneratingImageThumbnail(nil)
         }
-        
         let blurhash = thumbnail.blurHash(numberOfComponents: (3, 3))
         
-        do {
-            let fileName = "thumbnail-\((url.lastPathComponent as NSString).deletingPathExtension).jpeg"
-            let thumbnailURL = url.deletingLastPathComponent().appendingPathComponent(fileName)
-            try data.write(to: thumbnailURL)
-            return .init(url: thumbnailURL, height: thumbnail.size.height, width: thumbnail.size.width, mimeType: "image/jpeg", blurhash: blurhash)
-        } catch {
-            throw .failedGeneratingImageThumbnail(error)
-        }
+        return .init(url: thumbnailURL, height: thumbnail.size.height, width: thumbnail.size.width, mimeType: "image/jpeg", blurhash: blurhash)
     }
         
-    private func resizeImage(at url: URL, targetSize: CGSize) throws(MediaUploadingPreprocessorError) -> UIImage {
+    private func resizeImage(at url: URL, maxPixelSize: CGFloat, destination: URL) throws(MediaUploadingPreprocessorError) {
         guard let imageSource = CGImageSourceCreateWithURL(url as NSURL, nil) else {
             throw .failedResizingImage
         }
         
-        return try resizeImage(withSource: imageSource, targetSize: targetSize)
+        try resizeImage(withSource: imageSource, maxPixelSize: maxPixelSize, destination: destination)
     }
     
     /// Aspect ratio resizes an image so it fits in the given size. This is useful for resizing images without loading them directly into memory
     /// - Parameters:
     ///   - imageSource: the original image `CGImageSource`
-    ///   - targetSize: maximum resulting size
+    ///   - maxPixelSize: maximum resulting size for the largest dimension of the image.
     /// - Returns: the resized image
-    private func resizeImage(withSource imageSource: CGImageSource, targetSize: CGSize) throws(MediaUploadingPreprocessorError) -> UIImage {
-        let maximumSize = max(targetSize.height, targetSize.width)
-        
+    private func resizeImage(withSource imageSource: CGImageSource, maxPixelSize: CGFloat, destination destinationURL: URL) throws(MediaUploadingPreprocessorError) {
         let options: [NSString: Any] = [
             // The maximum width and height in pixels of a thumbnail.
-            kCGImageSourceThumbnailMaxPixelSize: maximumSize,
+            kCGImageSourceThumbnailMaxPixelSize: maxPixelSize,
             kCGImageSourceCreateThumbnailFromImageAlways: true,
             // Should include kCGImageSourceCreateThumbnailWithTransform: true in the options dictionary. Otherwise, the image result will appear rotated when an image is taken from camera in the portrait orientation.
             kCGImageSourceCreateThumbnailWithTransform: true
         ]
         
-        guard let scaledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options as CFDictionary) else {
+        guard let scaledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options as NSDictionary),
+              let destination = CGImageDestinationCreateWithURL(destinationURL as CFURL, UTType.jpeg.identifier as CFString, 1, nil) else {
             throw .failedResizingImage
         }
-
-        return UIImage(cgImage: scaledImage)
+        let properties = [kCGImageDestinationLossyCompressionQuality: Constants.thumbnailCompressionQuality]
+        
+        CGImageDestinationAddImage(destination, scaledImage, properties as NSDictionary)
+        CGImageDestinationFinalize(destination)
     }
     
     // MARK: Video Helpers
@@ -426,6 +431,17 @@ struct MediaUploadingPreprocessor {
 }
 
 // MARK: - Extensions
+
+private extension CGImageSource {
+    var size: CGSize? {
+        guard let properties = CGImageSourceCopyPropertiesAtIndex(self, 0, nil) as? [NSString: Any],
+              let width = properties[kCGImagePropertyPixelWidth] as? Int,
+              let height = properties[kCGImagePropertyPixelHeight] as? Int else {
+            return nil
+        }
+        return CGSize(width: width, height: height)
+    }
+}
 
 private extension AVAssetTrack {
     var size: CGSize {

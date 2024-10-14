@@ -184,6 +184,24 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         XCTAssertEqual(imageInfo.thumbnailInfo?.size ?? 0, 89553, accuracy: 100)
         XCTAssertEqual(imageInfo.thumbnailInfo?.width, 800)
         XCTAssertEqual(imageInfo.thumbnailInfo?.height, 344)
+        
+        // Repeat with optimised media setting
+        appSettings.optimizeMediaUploads = true
+        
+        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
+              case let .image(optimizedImageURL, thumbnailURL, optimizedImageInfo) = optimizedResult else {
+            XCTFail("Failed processing asset")
+            return
+        }
+        
+        compare(originalImageAt: url, toConvertedImageAt: optimizedImageURL, withThumbnailAt: thumbnailURL)
+        
+        // Check optimised image info
+        XCTAssertEqual(optimizedImageInfo.mimetype, "image/jpeg")
+        XCTAssertEqual(optimizedImageInfo.blurhash, "K%I#.NofkC_4ayaxxujsWB")
+        XCTAssertEqual(optimizedImageInfo.size ?? 0, 534_410, accuracy: 100)
+        XCTAssertEqual(optimizedImageInfo.width, 2048)
+        XCTAssertEqual(optimizedImageInfo.height, 879)
     }
     
     func testPortraitImageProcessing() async {
@@ -202,7 +220,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         // Check resulting image info
         XCTAssertEqual(imageInfo.mimetype, "image/jpeg")
-        XCTAssertEqual(imageInfo.blurhash, "KdE:ets+RP^-n*RP%OWAV@")
+        XCTAssertEqual(imageInfo.blurhash, "KdE|0Ls+RP^-n*RP%OWAV@")
         XCTAssertEqual(imageInfo.size ?? 0, 4_414_666, accuracy: 100)
         XCTAssertEqual(imageInfo.width, 3024)
         XCTAssertEqual(imageInfo.height, 4032)
@@ -212,6 +230,24 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         XCTAssertEqual(imageInfo.thumbnailInfo?.size ?? 0, 264_500, accuracy: 100)
         XCTAssertEqual(imageInfo.thumbnailInfo?.width, 600)
         XCTAssertEqual(imageInfo.thumbnailInfo?.height, 800)
+        
+        // Repeat with optimised media setting
+        appSettings.optimizeMediaUploads = true
+        
+        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
+              case let .image(optimizedImageURL, thumbnailURL, optimizedImageInfo) = optimizedResult else {
+            XCTFail("Failed processing asset")
+            return
+        }
+        
+        compare(originalImageAt: url, toConvertedImageAt: optimizedImageURL, withThumbnailAt: thumbnailURL)
+        
+        // Check resulting image info
+        XCTAssertEqual(optimizedImageInfo.mimetype, "image/jpeg")
+        XCTAssertEqual(optimizedImageInfo.blurhash, "KdE|0Ls+RP^-n*RP%OWAV@")
+        XCTAssertEqual(optimizedImageInfo.size ?? 0, 1_492_915, accuracy: 100)
+        XCTAssertEqual(optimizedImageInfo.width, 1536)
+        XCTAssertEqual(optimizedImageInfo.height, 2048)
     }
     
     // MARK: - Private
@@ -227,8 +263,14 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         // Check that the file name is preserved
         XCTAssertEqual(originalImageURL.lastPathComponent, convertedImageURL.lastPathComponent)
         
-        // Check that new image is the same size as the original one
-        XCTAssertEqual(originalImage.size, convertedImage.size)
+        if appSettings.optimizeMediaUploads {
+            // Check that new image has been scaled within the requirements for an optimised image
+            XCTAssert(convertedImage.size.width <= MediaUploadingPreprocessor.Constants.optimizedMaxPixelSize)
+            XCTAssert(convertedImage.size.height <= MediaUploadingPreprocessor.Constants.optimizedMaxPixelSize)
+        } else {
+            // Check that new image is the same size as the original one
+            XCTAssertEqual(originalImage.size, convertedImage.size)
+        }
         
         // Check that the GPS data has been stripped
         let originalMetadata = metadata(from: originalImageData)
