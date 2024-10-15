@@ -5,6 +5,7 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import UniformTypeIdentifiers
 import XCTest
 
 @testable import ElementX
@@ -257,10 +258,13 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         }
         
         guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url),
-              case let .image(_, _, imageInfo) = result else {
+              case let .image(convertedImageURL, _, imageInfo) = result else {
             XCTFail("Failed processing asset")
             return
         }
+        
+        // Make sure the output file matches the image info.
+        XCTAssertEqual(mimeType(from: convertedImageURL), "image/png")
         
         // Check resulting image info
         XCTAssertEqual(imageInfo.mimetype, "image/png")
@@ -279,10 +283,13 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         appSettings.optimizeMediaUploads = true
         
         guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
-              case let .image(_, _, optimizedImageInfo) = optimizedResult else {
+              case let .image(optimizedImageURL, _, optimizedImageInfo) = optimizedResult else {
             XCTFail("Failed processing asset")
             return
         }
+        
+        // Make sure the output file matches the image info.
+        XCTAssertEqual(mimeType(from: optimizedImageURL), "image/png")
         
         // Check optimised image info
         XCTAssertEqual(optimizedImageInfo.mimetype, "image/png")
@@ -306,6 +313,9 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         }
         
         compare(originalImageAt: url, toConvertedImageAt: convertedImageURL, withThumbnailAt: thumbnailURL)
+        
+        // Make sure the output file matches the image info.
+        XCTAssertEqual(mimeType(from: convertedImageURL), "image/heic")
         
         // Check resulting image info
         XCTAssertEqual(imageInfo.mimetype, "image/heic")
@@ -331,6 +341,9 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         compare(originalImageAt: url, toConvertedImageAt: optimizedImageURL, withThumbnailAt: thumbnailURL)
         
+        // Make sure the output file matches the image info.
+        XCTAssertEqual(mimeType(from: optimizedImageURL), "image/jpeg")
+        
         // Check optimised image info
         XCTAssertEqual(optimizedImageInfo.mimetype, "image/jpeg")
         XCTAssertEqual(optimizedImageInfo.blurhash, "KGD]3ns:T00#kWxFb^s:xv")
@@ -350,10 +363,13 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         }
         
         guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url),
-              case let .image(_, _, imageInfo) = result else {
+              case let .image(convertedImageURL, _, imageInfo) = result else {
             XCTFail("Failed processing asset")
             return
         }
+        
+        // Make sure the output file matches the image info.
+        XCTAssertEqual(mimeType(from: convertedImageURL), "image/gif")
         
         // Check resulting image info
         XCTAssertEqual(imageInfo.mimetype, "image/gif")
@@ -372,10 +388,13 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         appSettings.optimizeMediaUploads = true
         
         guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
-              case let .image(_, _, optimizedImageInfo) = optimizedResult else {
+              case let .image(optimizedImageURL, _, optimizedImageInfo) = optimizedResult else {
             XCTFail("Failed processing asset")
             return
         }
+        
+        // Make sure the output file matches the image info.
+        XCTAssertEqual(mimeType(from: optimizedImageURL), "image/gif")
         
         // Ensure optimised image is still the same as the original image.
         XCTAssertEqual(optimizedImageInfo.mimetype, "image/gif")
@@ -445,5 +464,16 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         }
         
         return convertedMetadata
+    }
+    
+    private func mimeType(from url: URL) -> String? {
+        guard let imageSource = CGImageSourceCreateWithURL(url as NSURL, nil),
+              let typeIdentifier = CGImageSourceGetType(imageSource),
+              let type = UTType(typeIdentifier as String),
+              let mimeType = type.preferredMIMEType else {
+            XCTFail("Failed to get mimetype from URL.")
+            return nil
+        }
+        return mimeType
     }
 }
