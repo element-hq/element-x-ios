@@ -46,6 +46,9 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
     }
     
     func testLandscapeMovVideoProcessing() async {
+        // Allow double the default execution time as we encode the video twice now.
+        executionTimeAllowance = 120
+        
         guard let url = Bundle(for: Self.self).url(forResource: "landscape_test_video.mov", withExtension: nil) else {
             XCTFail("Failed retrieving test asset")
             return
@@ -106,6 +109,9 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
     }
 
     func testPortraitMp4VideoProcessing() async {
+        // Allow double the default execution time as we encode the video twice now.
+        executionTimeAllowance = 120
+        
         guard let url = Bundle(for: Self.self).url(forResource: "portrait_test_video.mp4", withExtension: nil) else {
             XCTFail("Failed retrieving test asset")
             return
