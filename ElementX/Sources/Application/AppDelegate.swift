@@ -30,6 +30,8 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+//        print("\n\nDeviceToken *****:")
+//        print(deviceToken.reduce("", { $0 + String(format: "%02X", $1) }))
         callbacks.send(.registeredNotifications(deviceToken: deviceToken))
     }
 

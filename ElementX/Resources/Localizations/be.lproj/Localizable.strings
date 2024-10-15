@@ -334,6 +334,11 @@
 "screen_advanced_settings_element_call_base_url" = "Карыстальніцкі URL сервера Element Call";
 "screen_advanced_settings_element_call_base_url_description" = "Усталюйце карыстальніцкі асноўны URL для Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Адрас пазначаны няправільна, пераканайцеся, што вы ўказалі пратакол (http/https) і правільны адрас.";
+"screen_create_room_access_section_anyone_option_description" = "Anyone can join this room";
+"screen_create_room_access_section_anyone_option_title" = "Anyone";
+"screen_create_room_access_section_header" = "Room Access";
+"screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
+"screen_create_room_access_section_knocking_option_title" = "Ask to join";
 "screen_pinned_timeline_empty_state_description" = "Націсніце на паведамленне і абярыце «%1$@ », каб уключыць сюды.";
 "screen_pinned_timeline_empty_state_headline" = "Замацуеце важныя паведамленні, каб іх можна было лёгка знайсці";
 "screen_reset_encryption_password_error" = "Адбылася невядомая памылка. Калі ласка, праверце правільнасць пароля вашага ўліковага запісу і паўтарыце спробу.";
@@ -588,6 +593,7 @@
 "screen_qr_code_login_initial_state_item_3" = "Выберыце %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "“Звязаць новую прыладу”";
 "screen_qr_code_login_initial_state_item_4" = "Адсканіруйце QR-код з дапамогай гэтай прылады";
+"screen_qr_code_login_initial_state_subtitle" = "Only available if your account provider supports it.";
 "screen_qr_code_login_initial_state_title" = "Адкрыйце %1$@ на іншай прыладзе, каб атрымаць QR-код";
 "screen_qr_code_login_invalid_scan_state_description" = "Выкарыстоўвайце QR-код, паказаны на іншай прыладзе.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Няправільны QR-код";

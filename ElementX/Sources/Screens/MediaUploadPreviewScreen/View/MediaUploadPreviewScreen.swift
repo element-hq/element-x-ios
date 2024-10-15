@@ -116,7 +116,7 @@ private class PreviewItem: NSObject, QLPreviewItem {
 struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = MediaUploadPreviewScreenViewModel(userIndicatorController: UserIndicatorControllerMock.default,
                                                              roomProxy: JoinedRoomProxyMock(),
-                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(),
+                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
                                                              title: "some random file name",
                                                              url: URL.picturesDirectory)
     static var previews: some View {

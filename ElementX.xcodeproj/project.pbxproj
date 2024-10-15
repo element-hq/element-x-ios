@@ -2159,14 +2159,14 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		18E9A78A2C9829970082DDA4 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 12;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
 				18E9A78B2C9829970082DDA4 /* NSE.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		18E9A78E2C9829970082DDA4 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -10571,7 +10571,7 @@
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 1.0.56;
+				version = 1.0.57;
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {

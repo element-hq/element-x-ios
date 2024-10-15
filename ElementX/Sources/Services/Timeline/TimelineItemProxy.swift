@@ -165,11 +165,11 @@ class EventTimelineItemProxy {
     lazy var timestamp = Date(timeIntervalSince1970: TimeInterval(item.timestamp / 1000))
     
     lazy var debugInfo: TimelineItemDebugInfo = {
-        let debugInfo = item.debugInfoProvider.get()
+        let debugInfo = item.lazyProvider.debugInfo()
         return TimelineItemDebugInfo(model: debugInfo.model, originalJSON: debugInfo.originalJson, latestEditJSON: debugInfo.latestEditJson)
     }()
     
-    lazy var shieldState = item.shieldsProvider.getShields(strict: false)
+    lazy var shieldState = item.lazyProvider.getShields(strict: false)
     
     lazy var readReceipts = item.readReceipts
 }

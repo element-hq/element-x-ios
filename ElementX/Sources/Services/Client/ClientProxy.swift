@@ -375,8 +375,9 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, userIDs: [String], avatarURL: URL?) async -> Result<String, ClientProxyError> {
+    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, isKnockingOnly: Bool, userIDs: [String], avatarURL: URL?) async -> Result<String, ClientProxyError> {
         do {
+            // TODO: Revisit once the SDK supports the knocking API
             let parameters = CreateRoomParameters(name: name,
                                                   topic: topic,
                                                   isEncrypted: isRoomPrivate,
@@ -863,7 +864,7 @@ class ClientProxy: ClientProxyProtocol {
             let roomListItem = try roomListService.room(roomId: roomID)
             
             switch roomListItem.membership() {
-            case .invited:
+            case .invited, .knocked:
                 return try .invited(InvitedRoomProxy(roomListItem: roomListItem,
                                                      room: roomListItem.invitedRoom()))
             case .joined:

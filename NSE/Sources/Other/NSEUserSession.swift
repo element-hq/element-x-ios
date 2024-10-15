@@ -18,6 +18,7 @@ final class NSEUserSession {
                                                                                imageCache: .onlyOnDisk,
                                                                                networkMonitor: nil)
     private let delegateHandle: TaskHandle?
+    private let zeroUsers: [ZMatrixUser]
 
     init(credentials: KeychainCredentials, clientSessionDelegate: ClientSessionDelegate, appHooks: AppHooks, appSettings: CommonSettingsProtocol) async throws {
         sessionDirectories = credentials.restorationToken.sessionDirectories
@@ -46,6 +47,8 @@ final class NSEUserSession {
         try await baseClient.restoreSession(session: credentials.restorationToken.session)
         
         notificationClient = try await baseClient.notificationClient(processSetup: .multipleProcesses)
+        
+        zeroUsers = appSettings.zeroMatrixUsers ?? []
     }
     
     func notificationItemProxy(roomID: String, eventID: String) async -> NotificationItemProxyProtocol? {
@@ -55,14 +58,36 @@ final class NSEUserSession {
             guard let notification else {
                 return nil
             }
+            
+            // Custom data required to set data as per zero
+            let senderDisplayInfo = getNotificationSenderDisplayInfo(notification: notification)
+            
             return NotificationItemProxy(notificationItem: notification,
                                          eventID: eventID,
                                          receiverID: userID,
-                                         roomID: roomID)
+                                         roomID: roomID,
+                                         notificationSenderDisplayInfo: senderDisplayInfo)
         } catch {
             MXLog.error("NSE: Could not get notification's content creating an empty notification instead, error: \(error)")
             return EmptyNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: userID)
         }
+    }
+    
+    private func getNotificationSenderDisplayInfo(notification: NotificationItem) -> NotificationSenderDisplayInfo? {
+        var senderID: String {
+            switch notification.event {
+            case .timeline(let event):
+                return event.senderId()
+            case .invite(let senderID):
+                return senderID
+            }
+        }
+        let zeroUser = zeroUsers.first(where: { $0.matrixId == senderID })
+        let senderDisplayInfo = (zeroUser != nil) ? NotificationSenderDisplayInfo(
+            name: zeroUser?.displayName ?? senderID,
+            avatarUrl: notification.senderInfo.avatarUrl
+        ) : nil
+        return senderDisplayInfo
     }
     
     deinit {

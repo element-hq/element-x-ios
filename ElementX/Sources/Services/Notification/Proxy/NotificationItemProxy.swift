@@ -14,13 +14,15 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
     let eventID: String
     let receiverID: String
     let roomID: String
+    
+    let notificationSenderDisplayInfo: NotificationSenderDisplayInfo?
 
     var event: NotificationEvent? {
         notificationItem.event
     }
 
     var senderDisplayName: String? {
-        notificationItem.senderInfo.displayName
+        notificationSenderDisplayInfo?.name ?? notificationItem.senderInfo.displayName
     }
 
     var senderID: String {
@@ -33,7 +35,11 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
     }
 
     var roomDisplayName: String {
-        notificationItem.roomInfo.displayName
+        isRoomOneToOne ? (notificationSenderDisplayInfo?.name ?? notificationItem.roomInfo.displayName) : notificationItem.roomInfo.displayName
+    }
+    
+    var isRoomOneToOne: Bool {
+        isRoomDirect || roomJoinedMembers <= 2
     }
 
     var isRoomDirect: Bool {
@@ -53,7 +59,7 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
     }
 
     var senderAvatarMediaSource: MediaSourceProxy? {
-        if let senderAvatarURLString = notificationItem.senderInfo.avatarUrl,
+        if let senderAvatarURLString = notificationSenderDisplayInfo?.avatarUrl ?? notificationItem.senderInfo.avatarUrl,
            let senderAvatarURL = URL(string: senderAvatarURLString) {
             return MediaSourceProxy(url: senderAvatarURL, mimeType: nil)
         }
@@ -61,12 +67,17 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
     }
 
     var roomAvatarMediaSource: MediaSourceProxy? {
-        if let roomAvatarURLString = notificationItem.roomInfo.avatarUrl,
+        if let roomAvatarURLString = isRoomOneToOne ? (notificationSenderDisplayInfo?.avatarUrl ?? notificationItem.roomInfo.avatarUrl) : notificationItem.roomInfo.avatarUrl,
            let roomAvatarURL = URL(string: roomAvatarURLString) {
             return MediaSourceProxy(url: roomAvatarURL, mimeType: nil)
         }
         return nil
     }
+}
+
+struct NotificationSenderDisplayInfo {
+    let name: String
+    let avatarUrl: String?
 }
 
 struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {

@@ -143,9 +143,12 @@ struct NotificationContentBuilder {
 
     private func processCommonRoomMessage(notificationItem: NotificationItemProxyProtocol, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
         var notification = baseMutableContent(for: notificationItem)
-        notification.title = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
-        if notification.title != notificationItem.roomDisplayName {
-            notification.subtitle = notificationItem.roomDisplayName
+        notification.title = notificationItem.roomDisplayName
+//        if notification.title != notificationItem.roomDisplayName {
+//            notification.subtitle = notificationItem.roomDisplayName
+//        }
+        if !notificationItem.isDM {
+            notification.subtitle = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
         }
         notification.categoryIdentifier = NotificationConstants.Category.message
 

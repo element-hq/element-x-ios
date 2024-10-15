@@ -273,7 +273,7 @@
 "error_unknown" = "Ocorreu um erro, desculpa";
 "event_shield_reason_authenticity_not_guaranteed" = "A autenticidade desta mensagem cifrada não pode ser garantida neste dispositivo.";
 "event_shield_reason_previously_verified" = "Criptografado por um usuário verificado anteriormente.";
-"event_shield_reason_sent_in_clear" = "Não encriptado.";
+"event_shield_reason_sent_in_clear" = "Não cifrado.";
 "event_shield_reason_unknown_device" = "Cifragem com origem num dispositivo eliminado ou desconhecido.";
 "event_shield_reason_unsigned_device" = "Cifragem com origem num dispositivo não verificado pelo seu dono.";
 "event_shield_reason_unverified_identity" = "Cifragem com origem num utilizador não verificado.";
@@ -334,6 +334,11 @@
 "screen_advanced_settings_element_call_base_url" = "URL base para Element Call personalizado";
 "screen_advanced_settings_element_call_base_url_description" = "Define um URL base para a Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL inválido, certifica-te de que incluis o protocolo (http/https) e o endereço correto.";
+"screen_create_room_access_section_anyone_option_description" = "Anyone can join this room";
+"screen_create_room_access_section_anyone_option_title" = "Anyone";
+"screen_create_room_access_section_header" = "Room Access";
+"screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
+"screen_create_room_access_section_knocking_option_title" = "Ask to join";
 "screen_pinned_timeline_empty_state_description" = "Pressione uma mensagem e escolha \"%1$@\" para incluir aqui.";
 "screen_pinned_timeline_empty_state_headline" = "Fixa mensagens importantes para que possam ser facilmente descobertas";
 "screen_reset_encryption_password_error" = "Um erro desconhecido aconteceu. Verifique se a senha da sua conta está correta e tente novamente.";
@@ -588,6 +593,7 @@
 "screen_qr_code_login_initial_state_item_3" = "Seleciona %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "“Ligar novo dispositivo”";
 "screen_qr_code_login_initial_state_item_4" = "Lê o código QR com este dispositivo";
+"screen_qr_code_login_initial_state_subtitle" = "Only available if your account provider supports it.";
 "screen_qr_code_login_initial_state_title" = "Abre a %1$@ noutro dispositivo para obteres o código QR";
 "screen_qr_code_login_invalid_scan_state_description" = "Lê o código QR apresentado no outro dispositivo.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Código QR inválido";

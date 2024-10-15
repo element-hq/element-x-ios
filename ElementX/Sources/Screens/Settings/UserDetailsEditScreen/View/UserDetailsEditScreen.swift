@@ -119,6 +119,7 @@ struct UserDetailsEditScreen: View {
 struct UserDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = UserDetailsEditScreenViewModel(clientProxy: ClientProxyMock(.init(userID: "@stefan:matrix.org")),
                                                           mediaProvider: MediaProviderMock(configuration: .init()),
+                                                          mediaUploadingPreprocessor: .init(appSettings: ServiceLocator.shared.settings),
                                                           userIndicatorController: UserIndicatorControllerMock.default)
     
     static var previews: some View {

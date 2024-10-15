@@ -14,7 +14,7 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
     private let actionsSubject: PassthroughSubject<UserDetailsEditScreenViewModelAction, Never> = .init()
     private let clientProxy: ClientProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let mediaPreprocessor: MediaUploadingPreprocessor = .init()
+    private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     
     var actions: AnyPublisher<UserDetailsEditScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -22,8 +22,10 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
     
     init(clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
+         mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.clientProxy = clientProxy
+        self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: UserDetailsEditScreenViewState(userID: clientProxy.userID,
@@ -88,7 +90,7 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
                                                                   title: L10n.commonLoading,
                                                                   persistent: true))
             
-            let mediaResult = await mediaPreprocessor.processMedia(at: url)
+            let mediaResult = await mediaUploadingPreprocessor.processMedia(at: url)
             
             switch mediaResult {
             case .success(.image):

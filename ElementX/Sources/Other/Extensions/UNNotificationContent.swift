@@ -186,16 +186,18 @@ extension UNMutableNotificationContent {
         let shouldFlipAvatar = shouldFlipAvatar()
         let prefix = "notification_placeholder\(shouldFlipAvatar ? "V8F" : "V8")"
         let fileName = "\(prefix)_\(name)_\(id).png"
-        if let data = try? Data(contentsOf: URL.temporaryDirectory.appendingPathComponent(fileName)) {
-            MXLog.info("Found existing notification icon placeholder")
-            return data
-        }
+//        if let data = try? Data(contentsOf: URL.temporaryDirectory.appendingPathComponent(fileName)) {
+//            MXLog.info("Found existing notification icon placeholder")
+//            return data
+//        }
 
         MXLog.info("Generating notification icon placeholder")
         let image = PlaceholderAvatarImage(name: name,
                                            contentID: id)
             .clipShape(Circle())
             .frame(width: 50, height: 50)
+            .background(Color.black)
+            .foregroundStyle(Asset.Colors.brandColor.swiftUIColor)
         let renderer = ImageRenderer(content: image)
         
         // Specify the scale so the image is rendered correctly. We don't have access to the screen

@@ -1043,6 +1043,16 @@ internal enum L10n {
   internal static var screenCreatePollQuestionHint: String { return L10n.tr("Localizable", "screen_create_poll_question_hint") }
   /// Create Poll
   internal static var screenCreatePollTitle: String { return L10n.tr("Localizable", "screen_create_poll_title") }
+  /// Anyone can join this room
+  internal static var screenCreateRoomAccessSectionAnyoneOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_access_section_anyone_option_description") }
+  /// Anyone
+  internal static var screenCreateRoomAccessSectionAnyoneOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_access_section_anyone_option_title") }
+  /// Room Access
+  internal static var screenCreateRoomAccessSectionHeader: String { return L10n.tr("Localizable", "screen_create_room_access_section_header") }
+  /// Anyone can ask to join the room but an administrator or a moderator will have to accept the request
+  internal static var screenCreateRoomAccessSectionKnockingOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_access_section_knocking_option_description") }
+  /// Ask to join
+  internal static var screenCreateRoomAccessSectionKnockingOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_access_section_knocking_option_title") }
   /// New room
   internal static var screenCreateRoomActionCreateRoom: String { return L10n.tr("Localizable", "screen_create_room_action_create_room") }
   /// Invite people

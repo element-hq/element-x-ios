@@ -21,7 +21,7 @@ extension XCUIApplication {
         let homeserverTextField = textFields[A11yIdentifiers.changeServerScreen.server]
         XCTAssertTrue(homeserverTextField.waitForExistence(timeout: 10.0))
         
-        homeserverTextField.clearAndTypeText(homeserver)
+        homeserverTextField.clearAndTypeText(homeserver, app: self)
         
         let confirmButton = buttons[A11yIdentifiers.changeServerScreen.continue]
         XCTAssertTrue(confirmButton.waitForExistence(timeout: 10.0))
@@ -39,12 +39,12 @@ extension XCUIApplication {
         let usernameTextField = textFields[A11yIdentifiers.loginScreen.emailUsername]
         XCTAssertTrue(usernameTextField.waitForExistence(timeout: 10.0))
         
-        usernameTextField.clearAndTypeText(username)
+        usernameTextField.clearAndTypeText(username, app: self)
         
         let passwordTextField = secureTextFields[A11yIdentifiers.loginScreen.password]
         XCTAssertTrue(passwordTextField.waitForExistence(timeout: 10.0))
         
-        passwordTextField.clearAndTypeText(password)
+        passwordTextField.clearAndTypeText(password, app: self)
         
         let nextButton = buttons[A11yIdentifiers.loginScreen.continue]
         XCTAssertTrue(nextButton.waitForExistence(timeout: 10.0))

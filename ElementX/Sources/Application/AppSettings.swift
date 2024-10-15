@@ -13,6 +13,8 @@ protocol CommonSettingsProtocol {
     var logLevel: TracingConfiguration.LogLevel { get }
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var hideTimelineMedia: Bool { get }
+    
+    var zeroMatrixUsers: [ZMatrixUser]? { get }
 }
 
 /// Store Element specific app settings.
@@ -42,11 +44,12 @@ final class AppSettings {
         
         // Feature flags
         case slidingSyncDiscovery
+        case optimizeMediaUploads
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
-        case pinningEnabled
         case enableOnlySignedDeviceIsolationMode
         case identityPinningViolationNotificationsEnabled
+        case knockingEnabled
         
         case zeroAccessToken
         case zeroMatrixUsers
@@ -283,8 +286,14 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.slidingSyncDiscovery, defaultValue: .forceNative, storageType: .userDefaults(store))
     var slidingSyncDiscovery: SlidingSyncDiscovery
     
+    @UserPreference(key: UserDefaultsKeys.optimizeMediaUploads, defaultValue: false, storageType: .userDefaults(store))
+    var optimizeMediaUploads
+	
     @UserPreference(key: UserDefaultsKeys.identityPinningViolationNotificationsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var identityPinningViolationNotificationsEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var knockingEnabled
 
     #endif
     

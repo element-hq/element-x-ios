@@ -4,7 +4,7 @@
 <dict>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
-		<string>io.element.elementx.background.refresh</string>
+		<string>com.zero.ios.messenger.background.refresh</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
@@ -44,7 +44,7 @@
 			<string>Element Call</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>io.element.call</string>
+				<string>com.zero.ios.messenger</string>
 			</array>
 		</dict>
 		<dict>
@@ -54,7 +54,7 @@
 			<string>Application</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>io.element</string>
+				<string>com.zero.ios.messenger</string>
 			</array>
 		</dict>
 	</array>

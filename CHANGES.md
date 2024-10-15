@@ -1,3 +1,20 @@
+## Changes in 1.9.1 (2024-10-15)
+
+### What's Changed
+
+🐛 Bugfixes
+* Fix a bug opening images with a valid filename but a mimetype of `image/*` (sent by EXA). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3407
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3406
+
+🚧 In development 🚧
+* Create Room with knock rule by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3397
+* Allow video uploads to be optimised to reduce bandwidth. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3408
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.9.0...1.9.1
+
 ## Changes in 1.9.0 (2024-10-10)
 
 ### What's Changed

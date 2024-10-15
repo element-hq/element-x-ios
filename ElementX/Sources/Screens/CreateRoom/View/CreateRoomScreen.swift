@@ -22,6 +22,10 @@ struct CreateRoomScreen: View {
             roomSection
             // topicSection
             securitySection
+            if context.viewState.isKnockingFeatureEnabled,
+               !context.isRoomPrivate {
+                roomAccessSection
+            }
         }
         .compoundList()
         .track(screen: .CreateRoom)
@@ -151,6 +155,20 @@ struct CreateRoomScreen: View {
         }
     }
     
+    private var roomAccessSection: some View {
+        Section {
+            ListRow(label: .plain(title: L10n.screenCreateRoomAccessSectionAnyoneOptionTitle,
+                                  description: L10n.screenCreateRoomAccessSectionAnyoneOptionDescription),
+                    kind: .selection(isSelected: !context.isKnockingOnly) { context.isKnockingOnly = false })
+            ListRow(label: .plain(title: L10n.screenCreateRoomAccessSectionKnockingOptionTitle,
+                                  description: L10n.screenCreateRoomAccessSectionKnockingOptionDescription),
+                    kind: .selection(isSelected: context.isKnockingOnly) { context.isKnockingOnly = true })
+        } header: {
+            Text(L10n.screenCreateRoomAccessSectionHeader.uppercased())
+                .compoundListSectionHeader()
+        }
+    }
+    
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .confirmationAction) {
             Button(L10n.actionCreate) {
@@ -174,7 +192,8 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                    createRoomParameters: .init(parameters),
                                    selectedUsers: .init(selectedUsers),
                                    analytics: ServiceLocator.shared.analytics,
-                                   userIndicatorController: UserIndicatorControllerMock())
+                                   userIndicatorController: UserIndicatorControllerMock(),
+                                   appSettings: ServiceLocator.shared.settings)
     }()
     
     static let emtpyViewModel = {
@@ -184,7 +203,21 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                    createRoomParameters: .init(parameters),
                                    selectedUsers: .init([]),
                                    analytics: ServiceLocator.shared.analytics,
-                                   userIndicatorController: UserIndicatorControllerMock())
+                                   userIndicatorController: UserIndicatorControllerMock(),
+                                   appSettings: ServiceLocator.shared.settings)
+    }()
+    
+    static let publicRoomViewModel = {
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
+        let parameters = CreateRoomFlowParameters(isRoomPrivate: false)
+        let selectedUsers: [UserProfileProxy] = [.mockAlice, .mockBob, .mockCharlie]
+        ServiceLocator.shared.settings.knockingEnabled = true
+        return CreateRoomViewModel(userSession: userSession,
+                                   createRoomParameters: .init(parameters),
+                                   selectedUsers: .init([]),
+                                   analytics: ServiceLocator.shared.analytics,
+                                   userIndicatorController: UserIndicatorControllerMock(),
+                                   appSettings: ServiceLocator.shared.settings)
     }()
     
     static var previews: some View {
@@ -196,5 +229,9 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
             CreateRoomScreen(context: emtpyViewModel.context)
         }
         .previewDisplayName("Create Room without users")
+        NavigationStack {
+            CreateRoomScreen(context: publicRoomViewModel.context)
+        }
+        .previewDisplayName("Create Public Room")
     }
 }

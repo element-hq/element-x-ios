@@ -37,7 +37,7 @@ protocol NotificationItemProxyProtocol {
 
 extension NotificationItemProxyProtocol {
     var isDM: Bool {
-        isRoomDirect && roomJoinedMembers <= 2
+        isRoomDirect || roomJoinedMembers <= 2
     }
     
     var hasMedia: Bool {

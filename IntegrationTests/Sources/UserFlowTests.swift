@@ -32,7 +32,7 @@ class UserFlowTests: XCTestCase {
     private func checkRoomFlows() {
         // Search for the special test room
         let searchField = app.searchFields.firstMatch
-        searchField.clearAndTypeText(Self.integrationTestsRoomName)
+        searchField.clearAndTypeText(Self.integrationTestsRoomName, app: app)
         
         // And open it
         let firstRoom = app.buttons.matching(NSPredicate(format: "identifier CONTAINS %@", Self.integrationTestsRoomName)).firstMatch
@@ -63,7 +63,7 @@ class UserFlowTests: XCTestCase {
     private func sendMessages() {
         var composerTextField = app.textViews[A11yIdentifiers.roomScreen.messageComposer].firstMatch
         XCTAssertTrue(composerTextField.waitForExistence(timeout: 10.0))
-        composerTextField.clearAndTypeText(Self.integrationTestsMessage)
+        composerTextField.clearAndTypeText(Self.integrationTestsMessage, app: app)
         
         var sendButton = app.buttons[A11yIdentifiers.roomScreen.sendButton].firstMatch
         XCTAssertTrue(sendButton.waitForExistence(timeout: 10.0))
@@ -77,7 +77,7 @@ class UserFlowTests: XCTestCase {
         
         composerTextField = app.textViews[A11yIdentifiers.roomScreen.messageComposer].firstMatch
         XCTAssertTrue(composerTextField.waitForExistence(timeout: 10.0))
-        composerTextField.clearAndTypeText(Self.integrationTestsMessage)
+        composerTextField.clearAndTypeText(Self.integrationTestsMessage, app: app)
         
         sendButton = app.buttons[A11yIdentifiers.roomScreen.sendButton].firstMatch
         XCTAssertTrue(sendButton.waitForExistence(timeout: 10.0))
