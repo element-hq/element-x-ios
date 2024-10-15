@@ -524,6 +524,14 @@ internal enum L10n {
   internal static func cryptoIdentityChangePinViolation(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_pin_violation", String(describing: p1), String(describing: p2))
   }
+  /// %1$@’s %2$@ identity appears to have changed. %3$@
+  internal static func cryptoIdentityChangePinViolationNew(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
+    return L10n.tr("Localizable", "crypto_identity_change_pin_violation_new", String(describing: p1), String(describing: p2), String(describing: p3))
+  }
+  /// (%1$@)
+  internal static func cryptoIdentityChangePinViolationNewUserId(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "crypto_identity_change_pin_violation_new_user_id", String(describing: p1))
+  }
   /// In order to let the application use the camera, please grant the permission in the system settings.
   internal static var dialogPermissionCamera: String { return L10n.tr("Localizable", "dialog_permission_camera") }
   /// Please grant the permission in the system settings.

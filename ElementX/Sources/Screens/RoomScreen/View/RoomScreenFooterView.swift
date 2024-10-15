@@ -43,7 +43,8 @@ struct RoomScreenFooterView: View {
                                     avatarSize: .user(on: .timeline),
                                     mediaProvider: mediaProvider)
                 
-                Text(pinViolationDescriptionWithLearnMoreLink(displayName: member.disambiguatedDisplayName ?? member.userID,
+                Text(pinViolationDescriptionWithLearnMoreLink(displayName: member.displayName,
+                                                              userID: member.userID,
                                                               url: learnMoreURL))
                     .font(.compound.bodyMD)
                     .foregroundColor(.compound.textPrimary)
@@ -59,9 +60,16 @@ struct RoomScreenFooterView: View {
         .padding(.bottom, 8)
     }
     
-    private func pinViolationDescriptionWithLearnMoreLink(displayName: String, url: URL) -> AttributedString {
+    private func pinViolationDescriptionWithLearnMoreLink(displayName: String?, userID: String, url: URL) -> AttributedString {
+        let userIDPlaceholder = "{mxid}"
         let linkPlaceholder = "{link}"
-        var description = AttributedString(L10n.cryptoIdentityChangePinViolation(displayName, linkPlaceholder))
+        let displayName = displayName ?? userID.components(separatedBy: ":").first ?? userID
+        var description = AttributedString(L10n.cryptoIdentityChangePinViolationNew(displayName, userIDPlaceholder, linkPlaceholder))
+        
+        var userIDString = AttributedString(L10n.cryptoIdentityChangePinViolationNewUserId(userID))
+        userIDString.bold()
+        description.replace(userIDPlaceholder, with: userIDString)
+        
         var linkString = AttributedString(L10n.actionLearnMore)
         linkString.link = url
         linkString.bold()
