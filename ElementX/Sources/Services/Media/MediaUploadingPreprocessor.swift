@@ -137,7 +137,7 @@ struct MediaUploadingPreprocessor {
             try stripLocationFromImage(at: url, type: type)
             
             var mimeType = mimeType
-            if appSettings.optimizeMediaUploads {
+            if appSettings.optimizeMediaUploads, !type.conforms(to: .gif) {
                 let outputType = type.conforms(to: .png) ? UTType.png : .jpeg
                 mimeType = outputType.preferredMIMEType ?? "application/octet-stream"
                 try resizeImage(at: url, maxPixelSize: Constants.optimizedMaxPixelSize, destination: url, type: outputType)
