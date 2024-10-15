@@ -59,6 +59,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         // Check that the file name is preserved
         XCTAssertEqual(videoURL.lastPathComponent, "landscape_test_video.mp4")
+        XCTAssertEqual(videoURL.pathExtension, "mp4", "The file extension should match the container we use.")
         
         // Check that the thumbnail is generated correctly
         guard let thumbnailData = try? Data(contentsOf: thumbnailURL),
@@ -88,10 +89,12 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         appSettings.optimizeMediaUploads = true
         
         guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
-              case let .video(_, _, optimizedVideoInfo) = optimizedResult else {
+              case let .video(optimizedVideoURL, _, optimizedVideoInfo) = optimizedResult else {
             XCTFail("Failed processing asset")
             return
         }
+        
+        XCTAssertEqual(optimizedVideoURL.pathExtension, "mp4", "The file extension should match the container we use.")
         
         // Check optimised video info
         XCTAssertEqual(optimizedVideoInfo.mimetype, "video/mp4")
@@ -116,6 +119,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         // Check that the file name is preserved
         XCTAssertEqual(videoURL.lastPathComponent, "portrait_test_video.mp4")
+        XCTAssertEqual(videoURL.pathExtension, "mp4", "The file extension should match the container we use.")
         
         // Check that the thumbnail is generated correctly
         guard let thumbnailData = try? Data(contentsOf: thumbnailURL),
@@ -145,10 +149,12 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         appSettings.optimizeMediaUploads = true
         
         guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
-              case let .video(_, _, optimizedVideoInfo) = optimizedResult else {
+              case let .video(optimizedVideoURL, _, optimizedVideoInfo) = optimizedResult else {
             XCTFail("Failed processing asset")
             return
         }
+        
+        XCTAssertEqual(optimizedVideoURL.pathExtension, "mp4", "The file extension should match the container we use.")
         
         // Check optimised video info
         XCTAssertEqual(optimizedVideoInfo.mimetype, "video/mp4")
@@ -264,7 +270,8 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         }
         
         // Make sure the output file matches the image info.
-        XCTAssertEqual(mimeType(from: convertedImageURL), "image/png")
+        XCTAssertEqual(mimeType(from: convertedImageURL), "image/png", "PNGs should always be sent as PNG to preserve the alpha channel.")
+        XCTAssertEqual(convertedImageURL.pathExtension, "png", "The file extension should match the MIME type.")
         
         // Check resulting image info
         XCTAssertEqual(imageInfo.mimetype, "image/png")
@@ -289,7 +296,8 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         }
         
         // Make sure the output file matches the image info.
-        XCTAssertEqual(mimeType(from: optimizedImageURL), "image/png")
+        XCTAssertEqual(mimeType(from: optimizedImageURL), "image/png", "PNGs should always be sent as PNG to preserve the alpha channel.")
+        XCTAssertEqual(optimizedImageURL.pathExtension, "png", "The file extension should match the MIME type.")
         
         // Check optimised image info
         XCTAssertEqual(optimizedImageInfo.mimetype, "image/png")
@@ -315,7 +323,8 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         compare(originalImageAt: url, toConvertedImageAt: convertedImageURL, withThumbnailAt: thumbnailURL)
         
         // Make sure the output file matches the image info.
-        XCTAssertEqual(mimeType(from: convertedImageURL), "image/heic")
+        XCTAssertEqual(mimeType(from: convertedImageURL), "image/heic", "Unoptimised HEICs should always be sent as is.")
+        XCTAssertEqual(convertedImageURL.pathExtension, "heic", "The file extension should match the MIME type.")
         
         // Check resulting image info
         XCTAssertEqual(imageInfo.mimetype, "image/heic")
@@ -342,7 +351,8 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         compare(originalImageAt: url, toConvertedImageAt: optimizedImageURL, withThumbnailAt: thumbnailURL)
         
         // Make sure the output file matches the image info.
-        XCTAssertEqual(mimeType(from: optimizedImageURL), "image/jpeg")
+        XCTAssertEqual(mimeType(from: optimizedImageURL), "image/jpeg", "Optimised HEICs should always be converted to JPEG for compatibility.")
+        XCTAssertEqual(optimizedImageURL.pathExtension, "jpeg", "The file extension should match the MIME type.")
         
         // Check optimised image info
         XCTAssertEqual(optimizedImageInfo.mimetype, "image/jpeg")
@@ -369,7 +379,8 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         }
         
         // Make sure the output file matches the image info.
-        XCTAssertEqual(mimeType(from: convertedImageURL), "image/gif")
+        XCTAssertEqual(mimeType(from: convertedImageURL), "image/gif", "GIFs should always be sent as GIF to preserve the animation.")
+        XCTAssertEqual(convertedImageURL.pathExtension, "gif", "The file extension should match the MIME type.")
         
         // Check resulting image info
         XCTAssertEqual(imageInfo.mimetype, "image/gif")
@@ -394,7 +405,8 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         }
         
         // Make sure the output file matches the image info.
-        XCTAssertEqual(mimeType(from: optimizedImageURL), "image/gif")
+        XCTAssertEqual(mimeType(from: optimizedImageURL), "image/gif", "GIFs should always be sent as GIF to preserve the animation.")
+        XCTAssertEqual(optimizedImageURL.pathExtension, "gif", "The file extension should match the MIME type.")
         
         // Ensure optimised image is still the same as the original image.
         XCTAssertEqual(optimizedImageInfo.mimetype, "image/gif")
@@ -414,14 +426,13 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
             fatalError()
         }
         
-        // Check that the file name is preserved
-        XCTAssertEqual(originalImageURL.lastPathComponent, convertedImageURL.lastPathComponent)
-        
         if appSettings.optimizeMediaUploads {
             // Check that new image has been scaled within the requirements for an optimised image
             XCTAssert(convertedImage.size.width <= MediaUploadingPreprocessor.Constants.optimizedMaxPixelSize)
             XCTAssert(convertedImage.size.height <= MediaUploadingPreprocessor.Constants.optimizedMaxPixelSize)
         } else {
+            // Check that the file name is preserved
+            XCTAssertEqual(originalImageURL.lastPathComponent, convertedImageURL.lastPathComponent)
             // Check that new image is the same size as the original one
             XCTAssertEqual(originalImage.size, convertedImage.size)
         }

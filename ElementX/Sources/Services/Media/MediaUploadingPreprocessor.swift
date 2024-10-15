@@ -99,7 +99,7 @@ struct MediaUploadingPreprocessor {
         // Start by copying the file to a unique temporary location in order to avoid conflicts if processing it multiple times
         // All the other operations will be made relative to it
         let uniqueFolder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
-        let newURL = uniqueFolder.appendingPathComponent(url.lastPathComponent)
+        var newURL = uniqueFolder.appendingPathComponent(url.lastPathComponent)
         do {
             try FileManager.default.createDirectory(at: uniqueFolder, withIntermediateDirectories: true)
             try FileManager.default.copyItem(at: url, to: newURL)
@@ -114,7 +114,7 @@ struct MediaUploadingPreprocessor {
         }
         
         if type.conforms(to: .image) {
-            return processImage(at: newURL, type: type, mimeType: mimeType)
+            return processImage(at: &newURL, type: type, mimeType: mimeType)
         } else if type.conforms(to: .movie) || type.conforms(to: .video) {
             return await processVideo(at: newURL)
         } else if type.conforms(to: .audio) {
@@ -132,7 +132,7 @@ struct MediaUploadingPreprocessor {
     ///   - type: its UTType
     ///   - mimeType: the mimeType extracted from the UTType
     /// - Returns: Returns a `MediaInfo.image` containing the URLs for the modified image and its thumbnail plus the corresponding `ImageInfo`
-    private func processImage(at url: URL, type: UTType, mimeType: String) -> Result<MediaInfo, MediaUploadingPreprocessorError> {
+    private func processImage(at url: inout URL, type: UTType, mimeType: String) -> Result<MediaInfo, MediaUploadingPreprocessorError> {
         do {
             try stripLocationFromImage(at: url, type: type)
             
@@ -141,6 +141,17 @@ struct MediaUploadingPreprocessor {
                 let outputType = type.conforms(to: .png) ? UTType.png : .jpeg
                 mimeType = outputType.preferredMIMEType ?? "application/octet-stream"
                 try resizeImage(at: url, maxPixelSize: Constants.optimizedMaxPixelSize, destination: url, type: outputType)
+                
+                if let preferredFilenameExtension = outputType.preferredFilenameExtension,
+                   url.pathExtension != preferredFilenameExtension {
+                    let convertedURL = url.deletingPathExtension().appendingPathExtension(preferredFilenameExtension)
+                    do {
+                        try FileManager.default.moveItem(at: url, to: convertedURL)
+                    } catch {
+                        return .failure(.failedResizingImage)
+                    }
+                    url = convertedURL
+                }
             }
             
             let thumbnailResult = try generateThumbnailForImage(at: url)
