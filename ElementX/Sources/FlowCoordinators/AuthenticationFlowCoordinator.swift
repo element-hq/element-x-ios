@@ -137,33 +137,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         bugReportFlowCoordinator?.start()
     }
     
-    // TODO: Move this method after showServerConfirmationScreen
-    private func showServerSelectionScreen(authenticationFlow: AuthenticationFlow) {
-        let navigationCoordinator = NavigationStackCoordinator()
-        
-        let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
-                                                                    authenticationFlow: authenticationFlow,
-                                                                    slidingSyncLearnMoreURL: appSettings.slidingSyncLearnMoreURL,
-                                                                    userIndicatorController: userIndicatorController)
-        let coordinator = ServerSelectionScreenCoordinator(parameters: parameters)
-        
-        coordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .updated:
-                    navigationStackCoordinator.setSheetCoordinator(nil)
-                case .dismiss:
-                    navigationStackCoordinator.setSheetCoordinator(nil)
-                }
-            }
-            .store(in: &cancellables)
-        
-        navigationCoordinator.setRootCoordinator(coordinator)
-        navigationStackCoordinator.setSheetCoordinator(navigationCoordinator)
-    }
-    
     private func showServerConfirmationScreen(authenticationFlow: AuthenticationFlow) {
         // Reset the service back to the default homeserver before continuing. This ensures
         // we check that registration is supported if it was previously configured for login.
@@ -194,6 +167,32 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func showServerSelectionScreen(authenticationFlow: AuthenticationFlow) {
+        let navigationCoordinator = NavigationStackCoordinator()
+        
+        let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
+                                                                    authenticationFlow: authenticationFlow,
+                                                                    slidingSyncLearnMoreURL: appSettings.slidingSyncLearnMoreURL,
+                                                                    userIndicatorController: userIndicatorController)
+        let coordinator = ServerSelectionScreenCoordinator(parameters: parameters)
+        
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .updated:
+                    navigationStackCoordinator.setSheetCoordinator(nil)
+                case .dismiss:
+                    navigationStackCoordinator.setSheetCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(navigationCoordinator)
     }
     
     private func showWebRegistration() {

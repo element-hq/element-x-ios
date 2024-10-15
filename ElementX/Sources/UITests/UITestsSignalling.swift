@@ -137,10 +137,11 @@ enum UITestsSignalling {
                 let encoder = JSONEncoder()
                 encoder.outputFormatting = .sortedKeys
                 
-                guard let data = try? encoder.encode(self) else {
+                guard let data = try? encoder.encode(self),
+                      let rawMessage = String(data: data, encoding: .utf8) else {
                     return "unknown"
                 }
-                return String(decoding: data, as: UTF8.self)
+                return rawMessage
             }
             
             init?(rawValue: String) {
@@ -165,9 +166,8 @@ enum UITestsSignalling {
         
         /// Processes string data from the file and publishes its signal.
         private func processFileData(_ data: Data) {
-            let rawMessage = String(decoding: data, as: UTF8.self)
-            
-            guard let message = Message(rawValue: rawMessage),
+            guard let rawMessage = String(data: data, encoding: .utf8),
+                  let message = Message(rawValue: rawMessage),
                   message.mode != mode // Filter out messages sent by this client.
             else { return }
             
