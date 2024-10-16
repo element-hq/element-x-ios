@@ -84,7 +84,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                      inReplyToEventID: String?,
                      intentionalMentions: IntentionalMentions) async { }
         
-    func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async { }
+    func toggleReaction(_ reaction: String, to eventID: EventOrTransactionId) async { }
     
     func edit(_ eventOrTransactionID: EventOrTransactionId,
               useTimeline: Bool,

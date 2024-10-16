@@ -426,15 +426,15 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async -> Result<Void, TimelineProxyError> {
-        MXLog.info("Toggling reaction for event: \(itemID)")
+    func toggleReaction(_ reaction: String, to eventOrTransactionID: EventOrTransactionId) async -> Result<Void, TimelineProxyError> {
+        MXLog.info("Toggling reaction \(reaction) for event: \(eventOrTransactionID)")
         
         do {
-            try await timeline.toggleReaction(uniqueId: itemID.uniqueID, key: reaction)
-            MXLog.info("Finished toggling reaction for event: \(itemID)")
+            try await timeline.toggleReaction(itemId: eventOrTransactionID, key: reaction)
+            MXLog.info("Finished toggling reaction for event: \(eventOrTransactionID)")
             return .success(())
         } catch {
-            MXLog.error("Failed toggling reaction for event: \(itemID)")
+            MXLog.error("Failed toggling reaction for event: \(eventOrTransactionID)")
             return .failure(.sdkError(error))
         }
     }

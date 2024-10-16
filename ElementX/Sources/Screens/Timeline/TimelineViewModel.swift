@@ -131,8 +131,12 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             Task { await handleItemTapped(with: id) }
         case .itemSendInfoTapped(let itemID):
             handleItemSendInfoTapped(itemID: itemID)
-        case .toggleReaction(let emoji, let itemId):
-            Task { await timelineController.toggleReaction(emoji, to: itemId) }
+        case .toggleReaction(let emoji, let itemID):
+            guard let eventID = itemID.eventOrTransactionID else {
+                fatalError()
+            }
+            
+            Task { await timelineController.toggleReaction(emoji, to: eventID) }
         case .sendReadReceiptIfNeeded(let lastVisibleItemID):
             Task { await sendReadReceiptIfNeeded(for: lastVisibleItemID) }
         case .paginateBackwards:

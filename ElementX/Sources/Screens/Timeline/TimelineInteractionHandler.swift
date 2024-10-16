@@ -159,7 +159,13 @@ class TimelineInteractionHandler {
         case .react:
             displayEmojiPicker(for: itemID)
         case .toggleReaction(let key):
-            Task { await timelineController.toggleReaction(key, to: itemID) }
+            Task {
+                guard let eventID = itemID.eventOrTransactionID else {
+                    fatalError()
+                }
+                
+                await timelineController.toggleReaction(key, to: eventID)
+            }
         case .endPoll(let pollStartID):
             endPoll(pollStartID: pollStartID)
         case .pin:

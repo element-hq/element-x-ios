@@ -19484,16 +19484,16 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
 
     //MARK: - toggleReaction
 
-    open var toggleReactionUniqueIdKeyThrowableError: Error?
-    var toggleReactionUniqueIdKeyUnderlyingCallsCount = 0
-    open var toggleReactionUniqueIdKeyCallsCount: Int {
+    open var toggleReactionItemIdKeyThrowableError: Error?
+    var toggleReactionItemIdKeyUnderlyingCallsCount = 0
+    open var toggleReactionItemIdKeyCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return toggleReactionUniqueIdKeyUnderlyingCallsCount
+                return toggleReactionItemIdKeyUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = toggleReactionUniqueIdKeyUnderlyingCallsCount
+                    returnValue = toggleReactionItemIdKeyUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -19501,31 +19501,31 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         set {
             if Thread.isMainThread {
-                toggleReactionUniqueIdKeyUnderlyingCallsCount = newValue
+                toggleReactionItemIdKeyUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    toggleReactionUniqueIdKeyUnderlyingCallsCount = newValue
+                    toggleReactionItemIdKeyUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var toggleReactionUniqueIdKeyCalled: Bool {
-        return toggleReactionUniqueIdKeyCallsCount > 0
+    open var toggleReactionItemIdKeyCalled: Bool {
+        return toggleReactionItemIdKeyCallsCount > 0
     }
-    open var toggleReactionUniqueIdKeyReceivedArguments: (uniqueId: String, key: String)?
-    open var toggleReactionUniqueIdKeyReceivedInvocations: [(uniqueId: String, key: String)] = []
-    open var toggleReactionUniqueIdKeyClosure: ((String, String) async throws -> Void)?
+    open var toggleReactionItemIdKeyReceivedArguments: (itemId: EventOrTransactionId, key: String)?
+    open var toggleReactionItemIdKeyReceivedInvocations: [(itemId: EventOrTransactionId, key: String)] = []
+    open var toggleReactionItemIdKeyClosure: ((EventOrTransactionId, String) async throws -> Void)?
 
-    open override func toggleReaction(uniqueId: String, key: String) async throws {
-        if let error = toggleReactionUniqueIdKeyThrowableError {
+    open override func toggleReaction(itemId: EventOrTransactionId, key: String) async throws {
+        if let error = toggleReactionItemIdKeyThrowableError {
             throw error
         }
-        toggleReactionUniqueIdKeyCallsCount += 1
-        toggleReactionUniqueIdKeyReceivedArguments = (uniqueId: uniqueId, key: key)
+        toggleReactionItemIdKeyCallsCount += 1
+        toggleReactionItemIdKeyReceivedArguments = (itemId: itemId, key: key)
         DispatchQueue.main.async {
-            self.toggleReactionUniqueIdKeyReceivedInvocations.append((uniqueId: uniqueId, key: key))
+            self.toggleReactionItemIdKeyReceivedInvocations.append((itemId: itemId, key: key))
         }
-        try await toggleReactionUniqueIdKeyClosure?(uniqueId, key)
+        try await toggleReactionItemIdKeyClosure?(itemId, key)
     }
 
     //MARK: - unpinEvent
