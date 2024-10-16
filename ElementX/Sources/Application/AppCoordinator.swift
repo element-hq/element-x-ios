@@ -334,6 +334,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         switch await roomProxy.timeline.sendMessage(replyText,
                                                     html: nil,
+                                                    inReplyToEventID: nil,
                                                     intentionalMentions: .empty) {
         case .success:
             break

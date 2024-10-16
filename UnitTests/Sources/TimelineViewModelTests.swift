@@ -423,7 +423,7 @@ class TimelineViewModelTests: XCTestCase {
 private extension TextRoomTimelineItem {
     init(text: String, sender: String, addReactions: Bool = false, addReadReceipts: [ReadReceipt] = []) {
         let reactions = addReactions ? [AggregatedReaction(accountOwnerID: "bob", key: "🦄", senders: [ReactionSender(id: sender, timestamp: Date())])] : []
-        self.init(id: .random,
+        self.init(id: .randomEvent,
                   timestamp: "10:47 am",
                   isOutgoing: sender == "bob",
                   isEditable: sender == "bob",
@@ -437,13 +437,13 @@ private extension TextRoomTimelineItem {
 
 private extension SeparatorRoomTimelineItem {
     init(uniqueID: String) {
-        self.init(id: .init(uniqueID: uniqueID), text: "")
+        self.init(id: .virtual(uniqueID: uniqueID), text: "")
     }
 }
 
 private extension TextRoomTimelineItem {
     init(eventID: String) {
-        self.init(id: .init(uniqueID: UUID().uuidString, eventOrTransactionID: .eventId(eventId: eventID)),
+        self.init(id: .event(uniqueID: UUID().uuidString, eventOrTransactionID: .eventId(eventId: eventID)),
                   timestamp: "",
                   isOutgoing: false,
                   isEditable: false,

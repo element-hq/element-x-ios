@@ -196,20 +196,20 @@ struct TimelineReactionViewPreviewsContainer: View {
     var body: some View {
         VStack(spacing: 8) {
             TimelineReactionsView(context: TimelineViewModel.mock.context,
-                                  itemID: .init(uniqueID: "1"),
+                                  itemID: .randomEvent,
                                   reactions: [AggregatedReaction.mockReactionWithLongText,
                                               AggregatedReaction.mockReactionWithLongTextRTL])
             Divider()
             TimelineReactionsView(context: TimelineViewModel.mock.context,
-                                  itemID: .init(uniqueID: "2"),
+                                  itemID: .randomEvent,
                                   reactions: Array(AggregatedReaction.mockReactions.prefix(3)))
             Divider()
             TimelineReactionsView(context: TimelineViewModel.mock.context,
-                                  itemID: .init(uniqueID: "3"),
+                                  itemID: .randomEvent,
                                   reactions: AggregatedReaction.mockReactions)
             Divider()
             TimelineReactionsView(context: TimelineViewModel.mock.context,
-                                  itemID: .init(uniqueID: "4"),
+                                  itemID: .randomEvent,
                                   reactions: AggregatedReaction.mockReactions,
                                   isLayoutRTL: true)
         }

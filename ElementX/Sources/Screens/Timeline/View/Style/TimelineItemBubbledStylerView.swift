@@ -398,7 +398,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
     
     static var replies: some View {
         VStack(spacing: 0) {
-            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(uniqueID: ""),
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
                                                                              timestamp: "10:42",
                                                                              isOutgoing: true,
                                                                              isEditable: false,
@@ -411,7 +411,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                                                    eventContent: .message(.text(.init(body: "Short"))))),
                                                   groupStyle: .single))
 
-            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(uniqueID: ""),
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
                                                                              timestamp: "10:42",
                                                                              isOutgoing: true,
                                                                              isEditable: false,
@@ -443,7 +443,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
     
     static var encryptionAuthenticity: some View {
         VStack(spacing: 0) {
-            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(uniqueID: ""),
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
                                                                              timestamp: "10:42",
                                                                              isOutgoing: true,
                                                                              isEditable: false,
@@ -454,7 +454,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              properties: RoomTimelineItemProperties(encryptionAuthenticity: .unsignedDevice(color: .red))),
                                                   groupStyle: .single))
             
-            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(uniqueID: ""),
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
                                                                              timestamp: "10:42",
                                                                              isOutgoing: true,
                                                                              isEditable: false,
@@ -466,7 +466,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                                                                     encryptionAuthenticity: .unsignedDevice(color: .red))),
                                                   groupStyle: .single))
             
-            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(uniqueID: ""),
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
                                                                              timestamp: "10:42",
                                                                              isOutgoing: false,
                                                                              isEditable: false,
@@ -477,7 +477,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              properties: RoomTimelineItemProperties(encryptionAuthenticity: .unknownDevice(color: .red))),
                                                   groupStyle: .first))
             
-            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .init(uniqueID: ""),
+            RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
                                                                              timestamp: "10:42",
                                                                              isOutgoing: false,
                                                                              isEditable: false,
@@ -488,7 +488,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              properties: RoomTimelineItemProperties(encryptionAuthenticity: .notGuaranteed(color: .gray))),
                                                   groupStyle: .last))
             
-            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .random,
+            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .randomEvent,
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
@@ -501,7 +501,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                       
                                                                       properties: RoomTimelineItemProperties(encryptionAuthenticity: .notGuaranteed(color: .gray))))
             
-            VoiceMessageRoomTimelineView(timelineItem: .init(id: .init(uniqueID: ""),
+            VoiceMessageRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                              timestamp: "10:42",
                                                              isOutgoing: true,
                                                              isEditable: false,
@@ -514,7 +514,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                             source: nil,
                                                                             contentType: nil),
                                                              properties: RoomTimelineItemProperties(encryptionAuthenticity: .notGuaranteed(color: .gray))),
-                                         playerState: AudioPlayerState(id: .timelineItemIdentifier(.random),
+                                         playerState: AudioPlayerState(id: .timelineItemIdentifier(.randomEvent),
                                                                        title: L10n.commonVoiceMessage,
                                                                        duration: 10,
                                                                        waveform: EstimatedWaveform.mockWaveform))
@@ -616,14 +616,14 @@ private struct MockTimelineContent: View {
                                                                         source: nil,
                                                                         contentType: nil),
                                                          replyDetails: replyDetails),
-                                     playerState: AudioPlayerState(id: .timelineItemIdentifier(.random),
+                                     playerState: AudioPlayerState(id: .timelineItemIdentifier(.randomEvent),
                                                                    title: L10n.commonVoiceMessage,
                                                                    duration: 10,
                                                                    waveform: EstimatedWaveform.mockWaveform))
     }
     
     func makeItemIdentifier() -> TimelineItemIdentifier {
-        isPinned ? .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: "pinned")) : .random
+        isPinned ? .event(uniqueID: "", eventOrTransactionID: .eventId(eventId: "pinned")) : .randomEvent
     }
     
     var replyDetails: TimelineItemReplyDetails? {

@@ -77,7 +77,7 @@ struct EncryptedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     }
     
     private static func itemWith(text: String, timestamp: String, isOutgoing: Bool, senderId: String) -> EncryptedRoomTimelineItem {
-        EncryptedRoomTimelineItem(id: .random,
+        EncryptedRoomTimelineItem(id: .randomEvent,
                                   body: text,
                                   encryptionType: .unknown,
                                   timestamp: timestamp,
@@ -88,7 +88,7 @@ struct EncryptedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     }
     
     private static func expectedItemWith(timestamp: String, isOutgoing: Bool, senderId: String) -> EncryptedRoomTimelineItem {
-        EncryptedRoomTimelineItem(id: .random,
+        EncryptedRoomTimelineItem(id: .randomEvent,
                                   body: L10n.commonUnableToDecryptNoAccess,
                                   encryptionType: .megolmV1AesSha2(sessionID: "foo", cause: .membership),
                                   timestamp: timestamp,

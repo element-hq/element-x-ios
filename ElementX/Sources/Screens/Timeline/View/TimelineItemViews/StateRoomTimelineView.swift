@@ -30,7 +30,7 @@ struct StateRoomTimelineView_Previews: PreviewProvider, TestablePreview {
         StateRoomTimelineView(timelineItem: item)
     }
     
-    static let item = StateRoomTimelineItem(id: .random,
+    static let item = StateRoomTimelineItem(id: .randomVirtual,
                                             body: "Alice joined",
                                             timestamp: "Now",
                                             isOutgoing: false,

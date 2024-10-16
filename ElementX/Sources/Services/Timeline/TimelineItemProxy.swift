@@ -8,40 +8,6 @@
 import Foundation
 import MatrixRustSDK
 
-struct TimelineItemIdentifier: Hashable {
-    /// Stable id across state changes of the timeline item, it uniquely identifies an item in a timeline.
-    /// It's value is consistent only per timeline instance, it should **not** be used to identify an item across timeline instances.
-    let uniqueID: String
-    
-    /// Contains the 2 possible identifiers of an event, either it has a remote event id or a local transaction id, never both or none.
-    var eventOrTransactionID: EventOrTransactionId?
-    
-    var eventID: String? {
-        switch eventOrTransactionID {
-        case .eventId(let eventId):
-            return eventId
-        default:
-            return nil
-        }
-    }
-    
-    var transactionID: String? {
-        switch eventOrTransactionID {
-        case .transactionId(let transactionId):
-            return transactionId
-        default:
-            return nil
-        }
-    }
-}
-
-extension TimelineItemIdentifier {
-    /// Use only for mocks/tests
-    static var random: Self {
-        .init(uniqueID: UUID().uuidString, eventOrTransactionID: .eventId(eventId: UUID().uuidString))
-    }
-}
-
 /// A light wrapper around timeline items returned from Rust.
 enum TimelineItemProxy {
     case event(EventTimelineItemProxy)
@@ -108,7 +74,7 @@ class EventTimelineItemProxy {
     init(item: MatrixRustSDK.EventTimelineItem, uniqueID: String) {
         self.item = item
         
-        id = TimelineItemIdentifier(uniqueID: uniqueID, eventOrTransactionID: item.eventOrTransactionId)
+        id = .event(uniqueID: uniqueID, eventOrTransactionID: item.eventOrTransactionId)
     }
     
     lazy var deliveryStatus: TimelineItemDeliveryStatus? = {

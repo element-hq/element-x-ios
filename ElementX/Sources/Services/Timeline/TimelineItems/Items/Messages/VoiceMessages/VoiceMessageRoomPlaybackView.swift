@@ -97,7 +97,7 @@ struct VoiceMessageRoomPlaybackView_Previews: PreviewProvider, TestablePreview {
                                                    294, 131, 19, 2, 3, 3, 1, 2, 0, 0,
                                                    0, 0, 0, 0, 0, 3])
     
-    static var playerState = AudioPlayerState(id: .timelineItemIdentifier(.random),
+    static var playerState = AudioPlayerState(id: .timelineItemIdentifier(.randomEvent),
                                               title: L10n.commonVoiceMessage,
                                               duration: 10.0,
                                               waveform: waveform,

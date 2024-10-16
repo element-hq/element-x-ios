@@ -52,7 +52,7 @@ struct UnsupportedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     }
     
     private static func itemWith(text: String, timestamp: String, isOutgoing: Bool, senderId: String) -> UnsupportedRoomTimelineItem {
-        UnsupportedRoomTimelineItem(id: .random,
+        UnsupportedRoomTimelineItem(id: .randomEvent,
                                     body: text,
                                     eventType: "Some Event Type",
                                     error: "Something went wrong",

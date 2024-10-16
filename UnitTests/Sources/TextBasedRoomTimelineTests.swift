@@ -11,7 +11,7 @@ import XCTest
 final class TextBasedRoomTimelineTests: XCTestCase {
     func testTextRoomTimelineItemWhitespaceEnd() {
         let timestamp = "Now"
-        let timelineItem = TextRoomTimelineItem(id: .random,
+        let timelineItem = TextRoomTimelineItem(id: .randomEvent,
                                                 timestamp: timestamp,
                                                 isOutgoing: true,
                                                 isEditable: true,
@@ -24,7 +24,7 @@ final class TextBasedRoomTimelineTests: XCTestCase {
 
     func testTextRoomTimelineItemWhitespaceEndLonger() {
         let timestamp = "10:00 AM"
-        let timelineItem = TextRoomTimelineItem(id: .random,
+        let timelineItem = TextRoomTimelineItem(id: .randomEvent,
                                                 timestamp: timestamp,
                                                 isOutgoing: true,
                                                 isEditable: true,
@@ -37,7 +37,7 @@ final class TextBasedRoomTimelineTests: XCTestCase {
 
     func testTextRoomTimelineItemWhitespaceEndWithEdit() {
         let timestamp = "Now"
-        var timelineItem = TextRoomTimelineItem(id: .random,
+        var timelineItem = TextRoomTimelineItem(id: .randomEvent,
                                                 timestamp: timestamp,
                                                 isOutgoing: true,
                                                 isEditable: true,
@@ -52,7 +52,7 @@ final class TextBasedRoomTimelineTests: XCTestCase {
 
     func testTextRoomTimelineItemWhitespaceEndWithEditAndAlert() {
         let timestamp = "Now"
-        var timelineItem = TextRoomTimelineItem(id: .random,
+        var timelineItem = TextRoomTimelineItem(id: .randomEvent,
                                                 timestamp: timestamp,
                                                 isOutgoing: true,
                                                 isEditable: true,

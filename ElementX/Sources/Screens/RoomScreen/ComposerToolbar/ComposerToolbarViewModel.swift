@@ -258,9 +258,9 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .newMessage:
             set(mode: .default)
         case .edit(let eventID):
-            set(mode: .edit(originalItemId: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: eventID))))
+            set(mode: .edit(originalEventOrTransactionID: .eventId(eventId: eventID), source: .draftService))
         case .reply(let eventID):
-            set(mode: .reply(itemID: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: eventID)), replyDetails: .loading(eventID: eventID), isThread: false))
+            set(mode: .reply(eventID: eventID, replyDetails: .loading(eventID: eventID), isThread: false))
             replyLoadingTask = Task {
                 let reply = switch await draftService.getReply(eventID: eventID) {
                 case .success(let reply):
@@ -273,7 +273,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                     return
                 }
                 
-                set(mode: .reply(itemID: .init(uniqueID: "", eventOrTransactionID: .eventId(eventId: eventID)), replyDetails: reply.details, isThread: reply.isThreaded))
+                set(mode: .reply(eventID: eventID, replyDetails: reply.details, isThread: reply.isThreaded))
             }
         }
     }
@@ -314,17 +314,9 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         switch state.composerMode {
         case .default:
             type = .newMessage
-        case .edit(let itemID):
-            guard let eventID = itemID.eventID else {
-                MXLog.error("The event id for this message is missing")
-                return
-            }
-            type = .edit(eventID: eventID)
-        case .reply(let itemID, _, _):
-            guard let eventID = itemID.eventID else {
-                MXLog.error("The event id for this message is missing")
-                return
-            }
+        case .edit(.eventId(let originalEventID), _):
+            type = .edit(eventID: originalEventID)
+        case .reply(let eventID, _, _):
             type = .reply(eventID: eventID)
         default:
             if isVolatile {
