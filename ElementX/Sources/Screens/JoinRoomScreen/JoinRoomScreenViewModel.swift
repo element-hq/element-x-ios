@@ -51,7 +51,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         
         switch viewAction {
         case .knock:
-            break
+            Task { await knockRoom() }
         case .join:
             Task { await joinRoom() }
         case .acceptInvite:
