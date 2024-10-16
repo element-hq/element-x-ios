@@ -29,7 +29,17 @@ struct JoinRoomScreen: View {
         .navigationBarTitleDisplayMode(.inline)
     }
     
+    @ViewBuilder
     var mainContent: some View {
+        if context.viewState.mode == .knocked {
+            knockedView
+        } else {
+            defaultView
+        }
+    }
+    
+    @ViewBuilder
+    private var defaultView: some View {
         VStack(spacing: 16) {
             RoomAvatarImage(avatar: context.viewState.avatar,
                             avatarSize: .room(on: .joinRoom),
@@ -77,6 +87,23 @@ struct JoinRoomScreen: View {
     }
     
     @ViewBuilder
+    private var knockedView: some View {
+        VStack(spacing: 16) {
+            HeroImage(icon: \.checkCircleSolid, style: .success)
+            VStack(spacing: 8) {
+                Text(L10n.screenJoinRoomKnockSentTitle)
+                    .font(.compound.headingMDBold)
+                    .foregroundStyle(.compound.textPrimary)
+                    .multilineTextAlignment(.center)
+                Text(L10n.screenJoinRoomKnockSentDescription)
+                    .font(.compound.bodyMD)
+                    .foregroundStyle(.compound.textSecondary)
+                    .multilineTextAlignment(.center)
+            }
+        }
+    }
+    
+    @ViewBuilder
     private var knockMessage: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 0) {
@@ -109,6 +136,9 @@ struct JoinRoomScreen: View {
         case .knock:
             Button(L10n.screenJoinRoomKnockAction) { context.send(viewAction: .knock) }
                 .buttonStyle(.compound(.super))
+        case .knocked:
+            Button(L10n.screenJoinRoomCancelKnockAction) { context.send(viewAction: .cancelKnock) }
+                .buttonStyle(.compound(.secondary))
         case .join:
             Button(L10n.screenJoinRoomJoinAction) { context.send(viewAction: .join) }
                 .buttonStyle(.compound(.super))
@@ -136,6 +166,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
     static let knockViewModel = makeViewModel(mode: .knock)
     static let joinViewModel = makeViewModel(mode: .join)
     static let inviteViewModel = makeViewModel(mode: .invited)
+    static let knockedViewModel = makeViewModel(mode: .knocked)
     
     static var previews: some View {
         NavigationStack {
@@ -161,6 +192,12 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         }
         .previewDisplayName("Invite")
         .snapshotPreferences(delay: 0.25)
+        
+        NavigationStack {
+            JoinRoomScreen(context: knockedViewModel.context)
+        }
+        .previewDisplayName("Knocked")
+        .snapshotPreferences(delay: 0.25)
     }
     
     static func makeViewModel(mode: JoinRoomScreenInteractionMode) -> JoinRoomScreenViewModel {
@@ -176,11 +213,18 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
             (false, false, true, false)
         case .knock:
             (false, false, false, true)
+        case .knocked:
+            (false, false, false, false)
         }
         
         if mode == .unknown {
             clientProxy.roomPreviewForIdentifierViaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         } else {
+            if mode == .knocked {
+                clientProxy.roomForIdentifierClosure = { _ in
+                    .knocked(KnockedRoomProxyMock(.init()))
+                }
+            }
             clientProxy.roomPreviewForIdentifierViaReturnValue = .success(.init(roomID: "1",
                                                                                 name: "The Three-Body Problem - 三体",
                                                                                 canonicalAlias: "#3🌞problem:matrix.org",
@@ -195,9 +239,11 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
                                                                                 canKnock: membership.canKnock))
         }
         
+        ServiceLocator.shared.settings.knockingEnabled = true
+        
         return JoinRoomScreenViewModel(roomID: "1",
                                        via: [],
-                                       allowKnocking: true,
+                                       appSettings: ServiceLocator.shared.settings,
                                        clientProxy: clientProxy,
                                        mediaProvider: MediaProviderMock(configuration: .init()),
                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)

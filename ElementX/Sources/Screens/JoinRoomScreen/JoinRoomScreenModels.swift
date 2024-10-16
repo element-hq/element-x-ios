@@ -18,6 +18,7 @@ enum JoinRoomScreenInteractionMode {
     case invited
     case join
     case knock
+    case knocked
 }
 
 struct JoinRoomScreenRoomDetails {
@@ -48,11 +49,16 @@ struct JoinRoomScreenViewState: BindableState {
         case .loading: nil
         case .unknown: L10n.screenJoinRoomSubtitleNoPreview
         case .invited, .join, .knock: roomDetails?.canonicalAlias
+        case .knocked: nil
         }
     }
     
     var avatar: RoomAvatar {
         roomDetails?.avatar ?? .room(id: roomID, name: title, avatarURL: nil)
+    }
+    
+    var isEmptyKnockMessage: Bool {
+        bindings.knockMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 }
 
@@ -66,6 +72,7 @@ enum JoinRoomScreenAlertType {
 }
 
 enum JoinRoomScreenViewAction {
+    case cancelKnock
     case knock
     case join
     case acceptInvite

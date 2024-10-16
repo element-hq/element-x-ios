@@ -2835,6 +2835,146 @@ class ClientProxyMock: ClientProxyProtocol {
             return joinRoomAliasReturnValue
         }
     }
+    //MARK: - knockRoom
+
+    var knockRoomMessageUnderlyingCallsCount = 0
+    var knockRoomMessageCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return knockRoomMessageUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = knockRoomMessageUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                knockRoomMessageUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    knockRoomMessageUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var knockRoomMessageCalled: Bool {
+        return knockRoomMessageCallsCount > 0
+    }
+    var knockRoomMessageReceivedArguments: (roomID: String, message: String?)?
+    var knockRoomMessageReceivedInvocations: [(roomID: String, message: String?)] = []
+
+    var knockRoomMessageUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var knockRoomMessageReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return knockRoomMessageUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = knockRoomMessageUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                knockRoomMessageUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    knockRoomMessageUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var knockRoomMessageClosure: ((String, String?) async -> Result<Void, ClientProxyError>)?
+
+    func knockRoom(_ roomID: String, message: String?) async -> Result<Void, ClientProxyError> {
+        knockRoomMessageCallsCount += 1
+        knockRoomMessageReceivedArguments = (roomID: roomID, message: message)
+        DispatchQueue.main.async {
+            self.knockRoomMessageReceivedInvocations.append((roomID: roomID, message: message))
+        }
+        if let knockRoomMessageClosure = knockRoomMessageClosure {
+            return await knockRoomMessageClosure(roomID, message)
+        } else {
+            return knockRoomMessageReturnValue
+        }
+    }
+    //MARK: - knockRoomAlias
+
+    var knockRoomAliasMessageUnderlyingCallsCount = 0
+    var knockRoomAliasMessageCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return knockRoomAliasMessageUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = knockRoomAliasMessageUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                knockRoomAliasMessageUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    knockRoomAliasMessageUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var knockRoomAliasMessageCalled: Bool {
+        return knockRoomAliasMessageCallsCount > 0
+    }
+    var knockRoomAliasMessageReceivedArguments: (roomAlias: String, message: String?)?
+    var knockRoomAliasMessageReceivedInvocations: [(roomAlias: String, message: String?)] = []
+
+    var knockRoomAliasMessageUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var knockRoomAliasMessageReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return knockRoomAliasMessageUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = knockRoomAliasMessageUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                knockRoomAliasMessageUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    knockRoomAliasMessageUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var knockRoomAliasMessageClosure: ((String, String?) async -> Result<Void, ClientProxyError>)?
+
+    func knockRoomAlias(_ roomAlias: String, message: String?) async -> Result<Void, ClientProxyError> {
+        knockRoomAliasMessageCallsCount += 1
+        knockRoomAliasMessageReceivedArguments = (roomAlias: roomAlias, message: message)
+        DispatchQueue.main.async {
+            self.knockRoomAliasMessageReceivedInvocations.append((roomAlias: roomAlias, message: message))
+        }
+        if let knockRoomAliasMessageClosure = knockRoomAliasMessageClosure {
+            return await knockRoomAliasMessageClosure(roomAlias, message)
+        } else {
+            return knockRoomAliasMessageReturnValue
+        }
+    }
     //MARK: - uploadMedia
 
     var uploadMediaUnderlyingCallsCount = 0
@@ -9539,6 +9679,117 @@ class KeychainControllerMock: KeychainControllerProtocol {
     func removePINCodeBiometricState() {
         removePINCodeBiometricStateCallsCount += 1
         removePINCodeBiometricStateClosure?()
+    }
+}
+class KnockedRoomProxyMock: KnockedRoomProxyProtocol {
+    var id: String {
+        get { return underlyingId }
+        set(value) { underlyingId = value }
+    }
+    var underlyingId: String!
+    var canonicalAlias: String?
+    var ownUserID: String {
+        get { return underlyingOwnUserID }
+        set(value) { underlyingOwnUserID = value }
+    }
+    var underlyingOwnUserID: String!
+    var name: String?
+    var topic: String?
+    var avatar: RoomAvatar {
+        get { return underlyingAvatar }
+        set(value) { underlyingAvatar = value }
+    }
+    var underlyingAvatar: RoomAvatar!
+    var avatarURL: URL?
+    var isPublic: Bool {
+        get { return underlyingIsPublic }
+        set(value) { underlyingIsPublic = value }
+    }
+    var underlyingIsPublic: Bool!
+    var isDirect: Bool {
+        get { return underlyingIsDirect }
+        set(value) { underlyingIsDirect = value }
+    }
+    var underlyingIsDirect: Bool!
+    var isSpace: Bool {
+        get { return underlyingIsSpace }
+        set(value) { underlyingIsSpace = value }
+    }
+    var underlyingIsSpace: Bool!
+    var joinedMembersCount: Int {
+        get { return underlyingJoinedMembersCount }
+        set(value) { underlyingJoinedMembersCount = value }
+    }
+    var underlyingJoinedMembersCount: Int!
+    var activeMembersCount: Int {
+        get { return underlyingActiveMembersCount }
+        set(value) { underlyingActiveMembersCount = value }
+    }
+    var underlyingActiveMembersCount: Int!
+
+    //MARK: - cancelKnock
+
+    var cancelKnockUnderlyingCallsCount = 0
+    var cancelKnockCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return cancelKnockUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = cancelKnockUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                cancelKnockUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    cancelKnockUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var cancelKnockCalled: Bool {
+        return cancelKnockCallsCount > 0
+    }
+
+    var cancelKnockUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var cancelKnockReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return cancelKnockUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = cancelKnockUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                cancelKnockUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    cancelKnockUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var cancelKnockClosure: (() async -> Result<Void, RoomProxyError>)?
+
+    func cancelKnock() async -> Result<Void, RoomProxyError> {
+        cancelKnockCallsCount += 1
+        if let cancelKnockClosure = cancelKnockClosure {
+            return await cancelKnockClosure()
+        } else {
+            return cancelKnockReturnValue
+        }
     }
 }
 class MediaLoaderMock: MediaLoaderProtocol {
