@@ -365,6 +365,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    // swiftlint:disable:next function_parameter_count
     func createRoom(name: String, topic: String?, isRoomPrivate: Bool, isKnockingOnly: Bool, userIDs: [String], avatarURL: URL?) async -> Result<String, ClientProxyError> {
         do {
             // TODO: Revisit once the SDK supports the knocking API
