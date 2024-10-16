@@ -117,17 +117,17 @@ targets:
         BASE_APP_GROUP_IDENTIFIER: fr.gouv.tchapx.dev
         BASE_BUNDLE_IDENTIFIER: fr.gouv.tchapx.dev
         APP_NAME: TchapX-Development
-        APP_DISPLAY_NAME: TchapX Development
-        ASSETCATALOG_COMPILER_APPICON_NAME: TchapX-icon
-
+        APP_DISPLAY_NAME: TchapX Development # The name used in the application.
+        
         PRODUCT_NAME: $(APP_NAME)
         PRODUCT_BUNDLE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER)
+        ASSETCATALOG_COMPILER_APPICON_NAME: TchapX-icon
         CODE_SIGN_ENTITLEMENTS: TchapX/development/SupportingFiles/tchapx.entitlements
         SWIFT_OBJC_BRIDGING_HEADER: ElementX/SupportingFiles/ElementX-Bridging-Header.h
         SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
         PILLS_UT_TYPE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER).pills
         OTHER_SWIFT_FLAGS:
-        - "-DIS_MAIN_APP -DIS_ENVIRONMENT_DEVELOPMENT"
+        - "-DIS_MAIN_APP -DIS_TCHAP_DEVELOPMENT"
 
 
     preBuildScripts:

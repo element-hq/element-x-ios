@@ -117,7 +117,7 @@ targets:
         BASE_APP_GROUP_IDENTIFIER: fr.gouv.tchapx.staging
         BASE_BUNDLE_IDENTIFIER: fr.gouv.tchapx.staging
         APP_NAME: TchapX-Staging
-        APP_DISPLAY_NAME: TchapX Staging
+        APP_DISPLAY_NAME: TchapX Staging # The name used in the application.
 
         PRODUCT_NAME: $(APP_NAME)
         PRODUCT_BUNDLE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER)
@@ -127,7 +127,7 @@ targets:
         SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
         PILLS_UT_TYPE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER).pills
         OTHER_SWIFT_FLAGS:
-        - "-DIS_MAIN_APP -DIS_ENVIRONMENT_STAGING"
+        - "-DIS_MAIN_APP -DIS_TCHAP_STAGING"
   
     preBuildScripts:
     - name: 🛠 SwiftGen

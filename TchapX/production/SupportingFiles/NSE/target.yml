@@ -62,7 +62,7 @@ targets:
         BASE_APP_GROUP_IDENTIFIER: fr.gouv.tchapx
         BASE_BUNDLE_IDENTIFIER: fr.gouv.tchapx
         APP_NAME: TchapX-NSE-Production
-        APP_DISPLAY_NAME: TchapX-NSE Production
+        APP_DISPLAY_NAME: TchapX-NSE
 
         PRODUCT_NAME: TchapX-NSE-Production
         PRODUCT_DISPLAY_NAME: $(APP_DISPLAY_NAME)
