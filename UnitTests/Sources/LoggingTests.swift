@@ -195,25 +195,25 @@ class LoggingTests: XCTestCase {
         }
         
         let content = try String(contentsOf: logFile)
-        XCTAssertTrue(content.contains(textMessage.id.uniqueID))
+        XCTAssertTrue(content.contains(textMessage.id.uniqueID.id))
         XCTAssertFalse(content.contains(textMessage.body))
         XCTAssertFalse(content.contains(textAttributedString))
         
-        XCTAssertTrue(content.contains(noticeMessage.id.uniqueID))
+        XCTAssertTrue(content.contains(noticeMessage.id.uniqueID.id))
         XCTAssertFalse(content.contains(noticeMessage.body))
         XCTAssertFalse(content.contains(noticeAttributedString))
         
-        XCTAssertTrue(content.contains(emoteMessage.id.uniqueID))
+        XCTAssertTrue(content.contains(emoteMessage.id.uniqueID.id))
         XCTAssertFalse(content.contains(emoteMessage.body))
         XCTAssertFalse(content.contains(emoteAttributedString))
         
-        XCTAssertTrue(content.contains(imageMessage.id.uniqueID))
+        XCTAssertTrue(content.contains(imageMessage.id.uniqueID.id))
         XCTAssertFalse(content.contains(imageMessage.body))
         
-        XCTAssertTrue(content.contains(videoMessage.id.uniqueID))
+        XCTAssertTrue(content.contains(videoMessage.id.uniqueID.id))
         XCTAssertFalse(content.contains(videoMessage.body))
         
-        XCTAssertTrue(content.contains(fileMessage.id.uniqueID))
+        XCTAssertTrue(content.contains(fileMessage.id.uniqueID.id))
         XCTAssertFalse(content.contains(fileMessage.body))
     }
         
