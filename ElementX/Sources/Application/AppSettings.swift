@@ -99,11 +99,18 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.lastVersionLaunched, storageType: .userDefaults(store))
     var lastVersionLaunched: String?
         
+    // Tchap: define Tchap default HomeServer by environment.
     /// The default homeserver address used. This is intentionally a string without a scheme
     /// so that it can be passed to Rust as a ServerName for well-known discovery.
-    // Tchap: define Tchap DEV default HomeServer
-    // private(set) var defaultHomeserverAddress = "matrix.org"
+    #if IS_TCHAP_DEVELOPMENT
     private(set) var defaultHomeserverAddress = "matrix.dev01.tchap.incubateur.net"
+    #elseif IS_TCHAP_STAGING
+    private(set) var defaultHomeserverAddress = "matrix.i.tchap.gouv.fr"
+    #elseif IS_TCHAP_PRODUCTION
+    private(set) var defaultHomeserverAddress = "matrix.agent.dinum.tchap.gouv.fr"
+    #else
+    private(set) var defaultHomeserverAddress = "matrix.org"
+    #endif
     
     /// The task identifier used for background app refresh. Also used in main target's the Info.plist
     let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"

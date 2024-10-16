@@ -518,7 +518,7 @@
 "screen_login_error_invalid_user_id" = "Il ne s’agit pas d’un identifiant utilisateur valide. Format attendu : « @user:homeserver.org »";
 "screen_login_error_refresh_tokens" = "Ce serveur est configuré pour utiliser des tokens d'actualisation. Ils ne sont pas pris en charge lors de l'utilisation d'une connexion basée sur un mot de passe.";
 "screen_login_error_unsupported_authentication" = "Le serveur d’accueil sélectionné ne prend pas en charge le mot de passe ou la connexion OIDC. Contactez votre administrateur ou choisissez un autre serveur d’accueil.";
-"screen_login_form_header" = "Saisissez vos identifiants";
+"screen_login_form_header" = "Saisissez vos identifiants\n(sous la forme paul.lagent-beta.gouv.fr)"; // Tchap
 "screen_login_title" = "Content de vous revoir !";
 "screen_login_title_with_homeserver" = "Connectez-vous à %1$@";
 "screen_media_picker_error_failed_selection" = "Échec de la sélection du média, veuillez réessayer.";
