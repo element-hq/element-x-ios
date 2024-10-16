@@ -30,7 +30,7 @@ struct CallInviteRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     }
     
     static var body: some View {
-        CallInviteRoomTimelineView(timelineItem: .init(id: .random,
+        CallInviteRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                        timestamp: "Now",
                                                        isEditable: false,
                                                        canBeRepliedTo: false,

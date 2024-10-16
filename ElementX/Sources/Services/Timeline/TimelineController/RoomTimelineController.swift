@@ -143,22 +143,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     func sendMessage(_ message: String,
                      html: String?,
-                     inReplyTo itemID: TimelineItemIdentifier?,
+                     inReplyToEventID: String?,
                      intentionalMentions: IntentionalMentions) async {
-        var inReplyTo: String?
-        if itemID == nil {
-            MXLog.info("Send message in \(roomID)")
-        } else if let eventID = itemID?.eventID {
-            inReplyTo = eventID
-            MXLog.info("Send reply in \(roomID)")
-        } else {
-            MXLog.error("Send reply in \(roomID) failed: missing event ID")
-            return
-        }
+        MXLog.info("Send message in \(roomID)")
         
         switch await activeTimeline.sendMessage(message,
                                                 html: html,
-                                                inReplyTo: inReplyTo,
+                                                inReplyToEventID: inReplyToEventID,
                                                 intentionalMentions: intentionalMentions) {
         case .success:
             MXLog.info("Finished sending message")
@@ -178,37 +169,31 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func edit(_ timelineItemID: TimelineItemIdentifier,
+    func edit(_ eventOrTransactionID: EventOrTransactionId,
+              useTimeline: Bool,
               message: String,
               html: String?,
               intentionalMentions: IntentionalMentions) async {
         MXLog.info("Edit message in \(roomID)")
-        MXLog.info("Editing timeline item: \(timelineItemID)")
-        
-        let editMode: EditMode
-        if !timelineItemID.uniqueID.isEmpty,
-           let timelineItem = liveTimelineProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID) {
-            editMode = .byEvent(timelineItem)
-        } else if let eventID = timelineItemID.eventID {
-            editMode = .byID(eventID)
-        } else {
-            MXLog.error("Unknown timeline item: \(timelineItemID)")
-            return
-        }
+        MXLog.info("Editing timeline item: \(eventOrTransactionID)")
         
         let messageContent = activeTimeline.buildMessageContentFor(message,
                                                                    html: html,
                                                                    intentionalMentions: intentionalMentions.toRustMentions())
         
-        switch editMode {
-        case let .byEvent(item):
-            switch await activeTimeline.edit(item, newContent: messageContent) {
+        if useTimeline {
+            switch await activeTimeline.edit(eventOrTransactionID, newContent: messageContent) {
             case .success:
                 MXLog.info("Finished editing message by event")
             case let .failure(error):
                 MXLog.error("Failed editing message by event with error: \(error)")
             }
-        case let .byID(eventID):
+        } else {
+            guard case let .eventId(eventID) = eventOrTransactionID else {
+                MXLog.error("Failed editing message, missing eventID.")
+                return
+            }
+            
             switch await roomProxy.edit(eventID: eventID, newContent: messageContent) {
             case .success:
                 MXLog.info("Finished editing message by event ID")
@@ -398,9 +383,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 let date = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
                 let dateString = date.formatted(date: .complete, time: .omitted)
                 
-                return SeparatorRoomTimelineItem(id: .init(uniqueID: dateString), text: dateString)
+                return SeparatorRoomTimelineItem(id: .virtual(uniqueID: uniqueID), text: dateString)
             case .readMarker:
-                return ReadMarkerRoomTimelineItem(id: .init(uniqueID: uniqueID))
+                return ReadMarkerRoomTimelineItem(id: .virtual(uniqueID: uniqueID))
             }
         case .unknown:
             return nil
@@ -452,9 +437,4 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         return nil
     }
-}
-
-private enum EditMode {
-    case byEvent(EventTimelineItem)
-    case byID(String)
 }

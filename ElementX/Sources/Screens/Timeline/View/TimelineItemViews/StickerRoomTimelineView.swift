@@ -43,7 +43,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     static var body: some View {
         VStack(spacing: 20.0) {
-            StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .random,
+            StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .randomEvent,
                                                                           body: "Some image",
                                                                           timestamp: "Now",
                                                                           isOutgoing: false,
@@ -52,7 +52,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                           sender: .init(id: "Bob"),
                                                                           imageURL: URL.picturesDirectory))
             
-            StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .random,
+            StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .randomEvent,
                                                                           body: "Some other image",
                                                                           timestamp: "Now",
                                                                           isOutgoing: false,
@@ -61,7 +61,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                           sender: .init(id: "Bob"),
                                                                           imageURL: URL.picturesDirectory))
             
-            StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .random,
+            StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .randomEvent,
                                                                           body: "Blurhashed image",
                                                                           timestamp: "Now",
                                                                           isOutgoing: false,

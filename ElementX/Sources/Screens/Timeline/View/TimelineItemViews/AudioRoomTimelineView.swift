@@ -34,7 +34,7 @@ struct AudioRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     }
     
     static var body: some View {
-        AudioRoomTimelineView(timelineItem: AudioRoomTimelineItem(id: .random,
+        AudioRoomTimelineView(timelineItem: AudioRoomTimelineItem(id: .randomEvent,
                                                                   timestamp: "Now",
                                                                   isOutgoing: false,
                                                                   isEditable: false,

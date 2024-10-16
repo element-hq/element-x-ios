@@ -57,7 +57,7 @@ struct TimelineStyler<Content: View>: View {
 struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
 
-    static let base = TextRoomTimelineItem(id: .random,
+    static let base = TextRoomTimelineItem(id: .randomEvent,
                                            timestamp: "Now",
                                            isOutgoing: true,
                                            isEditable: false,
@@ -80,7 +80,7 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
 
     static let sendingLast: TextRoomTimelineItem = {
         let id = viewModel.state.timelineViewState.uniqueIDs.last ?? UUID().uuidString
-        var result = TextRoomTimelineItem(id: .init(uniqueID: id),
+        var result = TextRoomTimelineItem(id: .event(uniqueID: id, eventOrTransactionID: .eventId(eventId: UUID().uuidString)),
                                           timestamp: "Now",
                                           isOutgoing: true,
                                           isEditable: false,
@@ -100,7 +100,7 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
 
     static let sentLast: TextRoomTimelineItem = {
         let id = viewModel.state.timelineViewState.uniqueIDs.last ?? UUID().uuidString
-        let result = TextRoomTimelineItem(id: .init(uniqueID: id),
+        let result = TextRoomTimelineItem(id: .event(uniqueID: id, eventOrTransactionID: .eventId(eventId: UUID().uuidString)),
                                           timestamp: "Now",
                                           isOutgoing: true,
                                           isEditable: false,
@@ -111,7 +111,7 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
         return result
     }()
 
-    static let ltrString = TextRoomTimelineItem(id: .random,
+    static let ltrString = TextRoomTimelineItem(id: .randomEvent,
                                                 timestamp: "Now",
                                                 isOutgoing: true,
                                                 isEditable: false,
@@ -119,7 +119,7 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
                                                 isThreaded: false,
                                                 sender: .test, content: .init(body: "house!"))
 
-    static let rtlString = TextRoomTimelineItem(id: .random,
+    static let rtlString = TextRoomTimelineItem(id: .randomEvent,
                                                 timestamp: "Now",
                                                 isOutgoing: true,
                                                 isEditable: false,
@@ -127,7 +127,7 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
                                                 isThreaded: false,
                                                 sender: .test, content: .init(body: "באמת!"))
 
-    static let ltrStringThatContainsRtl = TextRoomTimelineItem(id: .random,
+    static let ltrStringThatContainsRtl = TextRoomTimelineItem(id: .randomEvent,
                                                                timestamp: "Now",
                                                                isOutgoing: true,
                                                                isEditable: false,
@@ -136,7 +136,7 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
                                                                sender: .test,
                                                                content: .init(body: "house! -- באמת‏! -- house!"))
 
-    static let rtlStringThatContainsLtr = TextRoomTimelineItem(id: .random,
+    static let rtlStringThatContainsLtr = TextRoomTimelineItem(id: .randomEvent,
                                                                timestamp: "Now",
                                                                isOutgoing: true,
                                                                isEditable: false,
@@ -145,7 +145,7 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
                                                                sender: .test,
                                                                content: .init(body: "באמת‏! -- house! -- באמת!"))
 
-    static let ltrStringThatFinishesInRtl = TextRoomTimelineItem(id: .random,
+    static let ltrStringThatFinishesInRtl = TextRoomTimelineItem(id: .randomEvent,
                                                                  timestamp: "Now",
                                                                  isOutgoing: true,
                                                                  isEditable: false,
@@ -154,7 +154,7 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
                                                                  sender: .test,
                                                                  content: .init(body: "house! -- באמת!"))
 
-    static let rtlStringThatFinishesInLtr = TextRoomTimelineItem(id: .random,
+    static let rtlStringThatFinishesInLtr = TextRoomTimelineItem(id: .randomEvent,
                                                                  timestamp: "Now",
                                                                  isOutgoing: true,
                                                                  isEditable: false,

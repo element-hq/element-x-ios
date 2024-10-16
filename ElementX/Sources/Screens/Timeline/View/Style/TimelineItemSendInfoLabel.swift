@@ -180,22 +180,22 @@ private extension EncryptionAuthenticity {
 struct TimelineItemSendInfoLabel_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 16) {
-            TimelineItemSendInfoLabel(sendInfo: .init(itemID: .random,
+            TimelineItemSendInfoLabel(sendInfo: .init(itemID: .randomEvent,
                                                       localizedString: "09:47 AM",
                                                       layoutType: .horizontal()))
-            TimelineItemSendInfoLabel(sendInfo: .init(itemID: .random,
+            TimelineItemSendInfoLabel(sendInfo: .init(itemID: .randomEvent,
                                                       localizedString: "09:47 AM",
                                                       status: .sendingFailed,
                                                       layoutType: .horizontal()))
-            TimelineItemSendInfoLabel(sendInfo: .init(itemID: .random,
+            TimelineItemSendInfoLabel(sendInfo: .init(itemID: .randomEvent,
                                                       localizedString: "09:47 AM",
                                                       status: .encryptionAuthenticity(.unsignedDevice(color: .red)),
                                                       layoutType: .horizontal()))
-            TimelineItemSendInfoLabel(sendInfo: .init(itemID: .random,
+            TimelineItemSendInfoLabel(sendInfo: .init(itemID: .randomEvent,
                                                       localizedString: "09:47 AM",
                                                       status: .encryptionAuthenticity(.notGuaranteed(color: .gray)),
                                                       layoutType: .horizontal()))
-            TimelineItemSendInfoLabel(sendInfo: .init(itemID: .random,
+            TimelineItemSendInfoLabel(sendInfo: .init(itemID: .randomEvent,
                                                       localizedString: "09:47 AM",
                                                       status: .encryptionAuthenticity(.sentInClear(color: .red)),
                                                       layoutType: .horizontal()))

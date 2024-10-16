@@ -275,9 +275,9 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
             messageComposer()
             
             messageComposer(.init(string: "Some message"),
-                            mode: .edit(originalItemId: .random))
+                            mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString), source: .timeline))
             
-            messageComposer(mode: .reply(itemID: .random,
+            messageComposer(mode: .reply(eventID: UUID().uuidString,
                                          replyDetails: .loaded(sender: .init(id: "Kirk"),
                                                                eventID: "123",
                                                                eventContent: .message(.text(.init(body: "Text: Where the wild things are")))),
@@ -288,7 +288,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
         ScrollView {
             VStack(spacing: 8) {
                 ForEach(replyTypes, id: \.self) { replyDetails in
-                    messageComposer(mode: .reply(itemID: .random,
+                    messageComposer(mode: .reply(eventID: UUID().uuidString,
                                                  replyDetails: replyDetails, isThread: false))
                 }
             }
@@ -300,7 +300,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
         ScrollView {
             VStack(spacing: 8) {
                 ForEach(replyTypes, id: \.self) { replyDetails in
-                    messageComposer(mode: .reply(itemID: .random,
+                    messageComposer(mode: .reply(eventID: UUID().uuidString,
                                                  replyDetails: replyDetails, isThread: true))
                 }
             }

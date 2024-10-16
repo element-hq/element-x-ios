@@ -164,17 +164,17 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func edit(_ timelineItem: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
+    func edit(_ eventOrTransactionID: EventOrTransactionId, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
         do {
-            guard try await timeline.edit(eventOrTransactionId: timelineItem.eventOrTransactionId, newContent: .roomMessage(content: newContent)) == true else {
+            guard try await timeline.edit(eventOrTransactionId: eventOrTransactionID, newContent: .roomMessage(content: newContent)) == true else {
                 return .failure(.failedEditing)
             }
             
-            MXLog.info("Finished editing timeline item: \(timelineItem.eventOrTransactionId)")
+            MXLog.info("Finished editing timeline item: \(eventOrTransactionID)")
             
             return .success(())
         } catch {
-            MXLog.error("Failed editing timeline item: \(timelineItem.eventOrTransactionId) with error: \(error)")
+            MXLog.error("Failed editing timeline item: \(eventOrTransactionID) with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
@@ -366,10 +366,10 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func sendMessage(_ message: String,
                      html: String?,
-                     inReplyTo eventID: String? = nil,
+                     inReplyToEventID: String? = nil,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
-        if let eventID {
-            MXLog.info("Sending reply to eventID: \(eventID)")
+        if let inReplyToEventID {
+            MXLog.info("Sending reply to eventID: \(inReplyToEventID)")
         } else {
             MXLog.info("Sending message")
         }
@@ -379,16 +379,16 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                     intentionalMentions: intentionalMentions.toRustMentions())
         
         do {
-            if let eventID {
-                try await timeline.sendReply(msg: messageContent, eventId: eventID)
-                MXLog.info("Finished sending reply to eventID: \(eventID)")
+            if let inReplyToEventID {
+                try await timeline.sendReply(msg: messageContent, eventId: inReplyToEventID)
+                MXLog.info("Finished sending reply to eventID: \(inReplyToEventID)")
             } else {
                 _ = try await timeline.send(msg: messageContent)
                 MXLog.info("Finished sending message")
             }
         } catch {
-            if let eventID {
-                MXLog.error("Failed sending reply to eventID: \(eventID) with error: \(error)")
+            if let inReplyToEventID {
+                MXLog.error("Failed sending reply to eventID: \(inReplyToEventID) with error: \(error)")
             } else {
                 MXLog.error("Failed sending message with error: \(error)")
             }
@@ -626,6 +626,18 @@ extension Array where Element == TimelineItemProxy {
                 if eventTimelineItem.id.uniqueID == id.uniqueID {
                     return eventTimelineItem.item
                 }
+            }
+        }
+        
+        return nil
+    }
+    
+    func firstEventTimelineItemUsingEventOrTransactionID(_ eventOrTransactionID: EventOrTransactionId) -> EventTimelineItem? {
+        for item in self {
+            if case let .event(eventTimelineItem) = item,
+               case let .event(_, identifier) = eventTimelineItem.id,
+               identifier == eventOrTransactionID {
+                return eventTimelineItem.item
             }
         }
         
