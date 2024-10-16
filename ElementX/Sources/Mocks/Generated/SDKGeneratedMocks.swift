@@ -20724,13 +20724,13 @@ open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem {
         return uniqueIdCallsCount > 0
     }
 
-    var uniqueIdUnderlyingReturnValue: String!
-    open var uniqueIdReturnValue: String! {
+    var uniqueIdUnderlyingReturnValue: TimelineUniqueId!
+    open var uniqueIdReturnValue: TimelineUniqueId! {
         get {
             if Thread.isMainThread {
                 return uniqueIdUnderlyingReturnValue
             } else {
-                var returnValue: String? = nil
+                var returnValue: TimelineUniqueId? = nil
                 DispatchQueue.main.sync {
                     returnValue = uniqueIdUnderlyingReturnValue
                 }
@@ -20748,9 +20748,9 @@ open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem {
             }
         }
     }
-    open var uniqueIdClosure: (() -> String)?
+    open var uniqueIdClosure: (() -> TimelineUniqueId)?
 
-    open override func uniqueId() -> String {
+    open override func uniqueId() -> TimelineUniqueId {
         uniqueIdCallsCount += 1
         if let uniqueIdClosure = uniqueIdClosure {
             return uniqueIdClosure()

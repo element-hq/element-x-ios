@@ -14057,8 +14057,8 @@ class TimelineProxyMock: TimelineProxyProtocol {
     var redactReasonCalled: Bool {
         return redactReasonCallsCount > 0
     }
-    var redactReasonReceivedArguments: (timelineItemID: TimelineItemIdentifier, reason: String?)?
-    var redactReasonReceivedInvocations: [(timelineItemID: TimelineItemIdentifier, reason: String?)] = []
+    var redactReasonReceivedArguments: (eventOrTransactionID: EventOrTransactionId, reason: String?)?
+    var redactReasonReceivedInvocations: [(eventOrTransactionID: EventOrTransactionId, reason: String?)] = []
 
     var redactReasonUnderlyingReturnValue: Result<Void, TimelineProxyError>!
     var redactReasonReturnValue: Result<Void, TimelineProxyError>! {
@@ -14084,16 +14084,16 @@ class TimelineProxyMock: TimelineProxyProtocol {
             }
         }
     }
-    var redactReasonClosure: ((TimelineItemIdentifier, String?) async -> Result<Void, TimelineProxyError>)?
+    var redactReasonClosure: ((EventOrTransactionId, String?) async -> Result<Void, TimelineProxyError>)?
 
-    func redact(_ timelineItemID: TimelineItemIdentifier, reason: String?) async -> Result<Void, TimelineProxyError> {
+    func redact(_ eventOrTransactionID: EventOrTransactionId, reason: String?) async -> Result<Void, TimelineProxyError> {
         redactReasonCallsCount += 1
-        redactReasonReceivedArguments = (timelineItemID: timelineItemID, reason: reason)
+        redactReasonReceivedArguments = (eventOrTransactionID: eventOrTransactionID, reason: reason)
         DispatchQueue.main.async {
-            self.redactReasonReceivedInvocations.append((timelineItemID: timelineItemID, reason: reason))
+            self.redactReasonReceivedInvocations.append((eventOrTransactionID: eventOrTransactionID, reason: reason))
         }
         if let redactReasonClosure = redactReasonClosure {
-            return await redactReasonClosure(timelineItemID, reason)
+            return await redactReasonClosure(eventOrTransactionID, reason)
         } else {
             return redactReasonReturnValue
         }

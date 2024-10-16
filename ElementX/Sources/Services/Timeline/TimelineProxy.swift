@@ -179,22 +179,17 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func redact(_ timelineItemID: TimelineItemIdentifier, reason: String?) async -> Result<Void, TimelineProxyError> {
-        MXLog.info("Redacting timeline item: \(timelineItemID)")
-        
-        guard let eventOrTransactionID = await timelineProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID)?.eventOrTransactionId else {
-            MXLog.error("Unknown timeline item: \(timelineItemID)")
-            return .failure(.failedRedacting)
-        }
+    func redact(_ eventOrTransactionID: EventOrTransactionId, reason: String?) async -> Result<Void, TimelineProxyError> {
+        MXLog.info("Redacting timeline item: \(eventOrTransactionID)")
         
         do {
             try await timeline.redactEvent(eventOrTransactionId: eventOrTransactionID, reason: reason)
             
-            MXLog.info("Redacted timeline item: \(timelineItemID)")
+            MXLog.info("Redacted timeline item: \(eventOrTransactionID)")
             
             return .success(())
         } catch {
-            MXLog.error("Failed redacting timeline item: \(timelineItemID) with error: \(error)")
+            MXLog.error("Failed redacting timeline item: \(eventOrTransactionID) with error: \(error)")
             return .failure(.sdkError(error))
         }
     }

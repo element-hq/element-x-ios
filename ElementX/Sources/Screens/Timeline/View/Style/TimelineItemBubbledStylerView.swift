@@ -623,7 +623,7 @@ private struct MockTimelineContent: View {
     }
     
     func makeItemIdentifier() -> TimelineItemIdentifier {
-        isPinned ? .event(uniqueID: "", eventOrTransactionID: .eventId(eventId: "pinned")) : .randomEvent
+        isPinned ? .event(uniqueID: .init(id: ""), eventOrTransactionID: .eventId(eventId: "pinned")) : .randomEvent
     }
     
     var replyDetails: TimelineItemReplyDetails? {

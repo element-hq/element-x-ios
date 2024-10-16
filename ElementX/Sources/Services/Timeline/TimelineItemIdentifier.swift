@@ -14,10 +14,10 @@ import MatrixRustSDK
 /// - eventOrTransactionID: Contains the 2 possible identifiers of an event, either it has a remote event id or
 /// a local transaction id, never both or none.
 enum TimelineItemIdentifier: Hashable {
-    case event(uniqueID: String, eventOrTransactionID: EventOrTransactionId)
-    case virtual(uniqueID: String)
+    case event(uniqueID: TimelineUniqueId, eventOrTransactionID: EventOrTransactionId)
+    case virtual(uniqueID: TimelineUniqueId)
     
-    var uniqueID: String {
+    var uniqueID: TimelineUniqueId {
         switch self {
         case .event(let uniqueID, _):
             return uniqueID
@@ -57,10 +57,10 @@ enum TimelineItemIdentifier: Hashable {
 
 extension TimelineItemIdentifier {
     static var randomEvent: Self {
-        .event(uniqueID: UUID().uuidString, eventOrTransactionID: .eventId(eventId: UUID().uuidString))
+        .event(uniqueID: .init(id: UUID().uuidString), eventOrTransactionID: .eventId(eventId: UUID().uuidString))
     }
     
     static var randomVirtual: Self {
-        .virtual(uniqueID: UUID().uuidString)
+        .virtual(uniqueID: .init(id: UUID().uuidString))
     }
 }

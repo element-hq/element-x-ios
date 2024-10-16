@@ -258,9 +258,9 @@ class TimelineViewModelTests: XCTestCase {
     
     func testSendReadReceiptWithoutEvents() async throws {
         // Given a room with only virtual items.
-        let items = [SeparatorRoomTimelineItem(uniqueID: "v1"),
-                     SeparatorRoomTimelineItem(uniqueID: "v2"),
-                     SeparatorRoomTimelineItem(uniqueID: "v3")]
+        let items = [SeparatorRoomTimelineItem(uniqueID: .init(id: "v1")),
+                     SeparatorRoomTimelineItem(uniqueID: .init(id: "v2")),
+                     SeparatorRoomTimelineItem(uniqueID: .init(id: "v3"))]
         let (viewModel, _, timelineProxy, _) = readReceiptsConfiguration(with: items)
         
         // When sending a read receipt for the last item.

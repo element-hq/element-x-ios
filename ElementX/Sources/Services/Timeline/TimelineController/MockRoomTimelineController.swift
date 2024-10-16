@@ -92,7 +92,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
               html: String?,
               intentionalMentions: IntentionalMentions) async { }
     
-    func redact(_ itemID: TimelineItemIdentifier) async { }
+    func redact(_ eventOrTransactionID: EventOrTransactionId) async { }
     
     func pin(eventID: String) async { }
     

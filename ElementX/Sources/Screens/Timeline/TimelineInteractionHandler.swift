@@ -132,8 +132,12 @@ class TimelineInteractionHandler {
                 UIPasteboard.general.url = permalinkURL
             }
         case .redact:
+            guard case let .event(_, eventOrTransactionID) = itemID else {
+                fatalError()
+            }
+            
             Task {
-                await timelineController.redact(itemID)
+                await timelineController.redact(eventOrTransactionID)
             }
         case .reply:
             guard let eventID = eventTimelineItem.id.eventID else {
@@ -160,11 +164,11 @@ class TimelineInteractionHandler {
             displayEmojiPicker(for: itemID)
         case .toggleReaction(let key):
             Task {
-                guard let eventID = itemID.eventOrTransactionID else {
+                guard case let .event(_, eventOrTransactionID) = itemID else {
                     fatalError()
                 }
                 
-                await timelineController.toggleReaction(key, to: eventID)
+                await timelineController.toggleReaction(key, to: eventOrTransactionID)
             }
         case .endPoll(let pollStartID):
             endPoll(pollStartID: pollStartID)

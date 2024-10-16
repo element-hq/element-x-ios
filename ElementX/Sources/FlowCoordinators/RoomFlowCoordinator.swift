@@ -933,7 +933,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 MXLog.debug("Selected \(emoji) for \(itemID)")
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 Task {
-                    guard let eventOrTransactionID = itemID.eventOrTransactionID else {
+                    guard case let .event(_, eventOrTransactionID) = itemID else {
                         fatalError()
                     }
                     

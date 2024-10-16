@@ -41,7 +41,7 @@ protocol TimelineProxyProtocol {
     func edit(_ eventOrTransactionID: EventOrTransactionId,
               newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError>
     
-    func redact(_ timelineItemID: TimelineItemIdentifier,
+    func redact(_ eventOrTransactionID: EventOrTransactionId,
                 reason: String?) async -> Result<Void, TimelineProxyError>
     
     func pin(eventID: String) async -> Result<Bool, TimelineProxyError>

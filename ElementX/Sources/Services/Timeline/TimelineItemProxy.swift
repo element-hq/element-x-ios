@@ -11,14 +11,14 @@ import MatrixRustSDK
 /// A light wrapper around timeline items returned from Rust.
 enum TimelineItemProxy {
     case event(EventTimelineItemProxy)
-    case virtual(MatrixRustSDK.VirtualTimelineItem, uniqueID: String)
+    case virtual(MatrixRustSDK.VirtualTimelineItem, uniqueID: TimelineUniqueId)
     case unknown(MatrixRustSDK.TimelineItem)
     
     init(item: MatrixRustSDK.TimelineItem) {
         if let eventItem = item.asEvent() {
-            self = .event(EventTimelineItemProxy(item: eventItem, uniqueID: String(item.uniqueId())))
+            self = .event(EventTimelineItemProxy(item: eventItem, uniqueID: item.uniqueId()))
         } else if let virtualItem = item.asVirtual() {
-            self = .virtual(virtualItem, uniqueID: String(item.uniqueId()))
+            self = .virtual(virtualItem, uniqueID: item.uniqueId())
         } else {
             self = .unknown(item)
         }
@@ -71,7 +71,7 @@ class EventTimelineItemProxy {
     let item: MatrixRustSDK.EventTimelineItem
     let id: TimelineItemIdentifier
     
-    init(item: MatrixRustSDK.EventTimelineItem, uniqueID: String) {
+    init(item: MatrixRustSDK.EventTimelineItem, uniqueID: TimelineUniqueId) {
         self.item = item
         
         id = .event(uniqueID: uniqueID, eventOrTransactionID: item.eventOrTransactionId)
