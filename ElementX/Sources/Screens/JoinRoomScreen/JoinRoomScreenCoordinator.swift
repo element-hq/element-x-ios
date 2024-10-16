@@ -34,6 +34,7 @@ final class JoinRoomScreenCoordinator: CoordinatorProtocol {
     init(parameters: JoinRoomScreenCoordinatorParameters) {
         viewModel = JoinRoomScreenViewModel(roomID: parameters.roomID,
                                             via: parameters.via,
+                                            appSettings: ServiceLocator.shared.settings,
                                             clientProxy: parameters.clientProxy,
                                             mediaProvider: parameters.mediaProvider,
                                             userIndicatorController: parameters.userIndicatorController)

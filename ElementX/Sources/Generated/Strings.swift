@@ -502,6 +502,8 @@ internal enum L10n {
   internal static var commonVerificationCancelled: String { return L10n.tr("Localizable", "common_verification_cancelled") }
   /// Verification complete
   internal static var commonVerificationComplete: String { return L10n.tr("Localizable", "common_verification_complete") }
+  /// Verified
+  internal static var commonVerified: String { return L10n.tr("Localizable", "common_verified") }
   /// Verify device
   internal static var commonVerifyDevice: String { return L10n.tr("Localizable", "common_verify_device") }
   /// Video
@@ -1187,12 +1189,18 @@ internal enum L10n {
   internal static func screenInvitesInvitedYou(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_invites_invited_you", String(describing: p1), String(describing: p2))
   }
+  /// Cancel request
+  internal static var screenJoinRoomCancelKnockAction: String { return L10n.tr("Localizable", "screen_join_room_cancel_knock_action") }
   /// Join room
   internal static var screenJoinRoomJoinAction: String { return L10n.tr("Localizable", "screen_join_room_join_action") }
   /// Send request to join
   internal static var screenJoinRoomKnockAction: String { return L10n.tr("Localizable", "screen_join_room_knock_action") }
   /// Message (optional)
   internal static var screenJoinRoomKnockMessageDescription: String { return L10n.tr("Localizable", "screen_join_room_knock_message_description") }
+  /// You will receive an invite to join the room if your request is accepted.
+  internal static var screenJoinRoomKnockSentDescription: String { return L10n.tr("Localizable", "screen_join_room_knock_sent_description") }
+  /// Request to join sent
+  internal static var screenJoinRoomKnockSentTitle: String { return L10n.tr("Localizable", "screen_join_room_knock_sent_title") }
   /// %1$@ does not support spaces yet. You can access spaces on web.
   internal static func screenJoinRoomSpaceNotSupportedDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_join_room_space_not_supported_description", String(describing: p1))

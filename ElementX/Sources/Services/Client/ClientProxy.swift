@@ -415,6 +415,30 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func knockRoom(_ roomID: String, message: String?) async -> Result<Void, ClientProxyError> {
+        do {
+            // TODO: It should also include a message but the API for is not available yet
+            let _ = try await client.knock(roomIdOrAlias: roomID)
+            await waitForRoomToSync(roomID: roomID, timeout: .seconds(30))
+            return .success(())
+        } catch {
+            MXLog.error("Failed knocking roomID: \(roomID) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func knockRoomAlias(_ roomAlias: String, message: String?) async -> Result<Void, ClientProxyError> {
+        do {
+            // TODO: It should also include a message but the API for is not available yet
+            let room = try await client.knock(roomIdOrAlias: roomAlias)
+            await waitForRoomToSync(roomID: room.id(), timeout: .seconds(30))
+            return .success(())
+        } catch {
+            MXLog.error("Failed knocking roomAlias: \(roomAlias) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError> {
         guard let mimeType = media.mimeType else {
             MXLog.error("Failed uploading media, invalid mime type: \(media)")
@@ -846,9 +870,17 @@ class ClientProxy: ClientProxyProtocol {
             let roomListItem = try roomListService.room(roomId: roomID)
             
             switch roomListItem.membership() {
-            case .invited, .knocked:
+            case .invited:
                 return try .invited(InvitedRoomProxy(roomListItem: roomListItem,
                                                      room: roomListItem.invitedRoom()))
+            case .knocked:
+                if appSettings.knockingEnabled {
+                    return try .knocked(KnockedRoomProxy(roomListItem: roomListItem,
+                                                         room: roomListItem.invitedRoom()))
+                } else {
+                    return try .invited(InvitedRoomProxy(roomListItem: roomListItem,
+                                                         room: roomListItem.invitedRoom()))
+                }
             case .joined:
                 if roomListItem.isTimelineInitialized() == false {
                     try await roomListItem.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
