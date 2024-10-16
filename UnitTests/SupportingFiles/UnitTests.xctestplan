@@ -22,9 +22,9 @@
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:ElementX.xcodeproj",
-        "identifier" : "32C23C8D224D46EFE62AFAD0",
-        "name" : "UnitTests"
+        "containerPath" : "container:TchapX.xcodeproj",
+        "identifier" : "1DD96BBB3C4E4AEAA7084993",
+        "name" : "TchapX-UnitTests"
       }
     }
   ],
