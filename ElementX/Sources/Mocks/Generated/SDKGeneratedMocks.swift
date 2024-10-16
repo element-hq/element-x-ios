@@ -15,17 +15,17 @@ open class ClientSDKMock: MatrixRustSDK.Client {
 
     fileprivate var pointer: UnsafeMutableRawPointer!
 
-    //MARK: - abortOidcLogin
+    //MARK: - abortOidcAuth
 
-    var abortOidcLoginAuthorizationDataUnderlyingCallsCount = 0
-    open var abortOidcLoginAuthorizationDataCallsCount: Int {
+    var abortOidcAuthAuthorizationDataUnderlyingCallsCount = 0
+    open var abortOidcAuthAuthorizationDataCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return abortOidcLoginAuthorizationDataUnderlyingCallsCount
+                return abortOidcAuthAuthorizationDataUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = abortOidcLoginAuthorizationDataUnderlyingCallsCount
+                    returnValue = abortOidcAuthAuthorizationDataUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -33,28 +33,28 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         set {
             if Thread.isMainThread {
-                abortOidcLoginAuthorizationDataUnderlyingCallsCount = newValue
+                abortOidcAuthAuthorizationDataUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    abortOidcLoginAuthorizationDataUnderlyingCallsCount = newValue
+                    abortOidcAuthAuthorizationDataUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var abortOidcLoginAuthorizationDataCalled: Bool {
-        return abortOidcLoginAuthorizationDataCallsCount > 0
+    open var abortOidcAuthAuthorizationDataCalled: Bool {
+        return abortOidcAuthAuthorizationDataCallsCount > 0
     }
-    open var abortOidcLoginAuthorizationDataReceivedAuthorizationData: OidcAuthorizationData?
-    open var abortOidcLoginAuthorizationDataReceivedInvocations: [OidcAuthorizationData] = []
-    open var abortOidcLoginAuthorizationDataClosure: ((OidcAuthorizationData) async -> Void)?
+    open var abortOidcAuthAuthorizationDataReceivedAuthorizationData: OidcAuthorizationData?
+    open var abortOidcAuthAuthorizationDataReceivedInvocations: [OidcAuthorizationData] = []
+    open var abortOidcAuthAuthorizationDataClosure: ((OidcAuthorizationData) async -> Void)?
 
-    open override func abortOidcLogin(authorizationData: OidcAuthorizationData) async {
-        abortOidcLoginAuthorizationDataCallsCount += 1
-        abortOidcLoginAuthorizationDataReceivedAuthorizationData = authorizationData
+    open override func abortOidcAuth(authorizationData: OidcAuthorizationData) async {
+        abortOidcAuthAuthorizationDataCallsCount += 1
+        abortOidcAuthAuthorizationDataReceivedAuthorizationData = authorizationData
         DispatchQueue.main.async {
-            self.abortOidcLoginAuthorizationDataReceivedInvocations.append(authorizationData)
+            self.abortOidcAuthAuthorizationDataReceivedInvocations.append(authorizationData)
         }
-        await abortOidcLoginAuthorizationDataClosure?(authorizationData)
+        await abortOidcAuthAuthorizationDataClosure?(authorizationData)
     }
 
     //MARK: - accountData
@@ -3872,18 +3872,18 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
     }
 
-    //MARK: - urlForOidcLogin
+    //MARK: - urlForOidc
 
-    open var urlForOidcLoginOidcConfigurationThrowableError: Error?
-    var urlForOidcLoginOidcConfigurationUnderlyingCallsCount = 0
-    open var urlForOidcLoginOidcConfigurationCallsCount: Int {
+    open var urlForOidcOidcConfigurationPromptThrowableError: Error?
+    var urlForOidcOidcConfigurationPromptUnderlyingCallsCount = 0
+    open var urlForOidcOidcConfigurationPromptCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return urlForOidcLoginOidcConfigurationUnderlyingCallsCount
+                return urlForOidcOidcConfigurationPromptUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = urlForOidcLoginOidcConfigurationUnderlyingCallsCount
+                    returnValue = urlForOidcOidcConfigurationPromptUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -3891,29 +3891,29 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         set {
             if Thread.isMainThread {
-                urlForOidcLoginOidcConfigurationUnderlyingCallsCount = newValue
+                urlForOidcOidcConfigurationPromptUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    urlForOidcLoginOidcConfigurationUnderlyingCallsCount = newValue
+                    urlForOidcOidcConfigurationPromptUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var urlForOidcLoginOidcConfigurationCalled: Bool {
-        return urlForOidcLoginOidcConfigurationCallsCount > 0
+    open var urlForOidcOidcConfigurationPromptCalled: Bool {
+        return urlForOidcOidcConfigurationPromptCallsCount > 0
     }
-    open var urlForOidcLoginOidcConfigurationReceivedOidcConfiguration: OidcConfiguration?
-    open var urlForOidcLoginOidcConfigurationReceivedInvocations: [OidcConfiguration] = []
+    open var urlForOidcOidcConfigurationPromptReceivedArguments: (oidcConfiguration: OidcConfiguration, prompt: OidcPrompt)?
+    open var urlForOidcOidcConfigurationPromptReceivedInvocations: [(oidcConfiguration: OidcConfiguration, prompt: OidcPrompt)] = []
 
-    var urlForOidcLoginOidcConfigurationUnderlyingReturnValue: OidcAuthorizationData!
-    open var urlForOidcLoginOidcConfigurationReturnValue: OidcAuthorizationData! {
+    var urlForOidcOidcConfigurationPromptUnderlyingReturnValue: OidcAuthorizationData!
+    open var urlForOidcOidcConfigurationPromptReturnValue: OidcAuthorizationData! {
         get {
             if Thread.isMainThread {
-                return urlForOidcLoginOidcConfigurationUnderlyingReturnValue
+                return urlForOidcOidcConfigurationPromptUnderlyingReturnValue
             } else {
                 var returnValue: OidcAuthorizationData? = nil
                 DispatchQueue.main.sync {
-                    returnValue = urlForOidcLoginOidcConfigurationUnderlyingReturnValue
+                    returnValue = urlForOidcOidcConfigurationPromptUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -3921,29 +3921,29 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         set {
             if Thread.isMainThread {
-                urlForOidcLoginOidcConfigurationUnderlyingReturnValue = newValue
+                urlForOidcOidcConfigurationPromptUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    urlForOidcLoginOidcConfigurationUnderlyingReturnValue = newValue
+                    urlForOidcOidcConfigurationPromptUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var urlForOidcLoginOidcConfigurationClosure: ((OidcConfiguration) async throws -> OidcAuthorizationData)?
+    open var urlForOidcOidcConfigurationPromptClosure: ((OidcConfiguration, OidcPrompt) async throws -> OidcAuthorizationData)?
 
-    open override func urlForOidcLogin(oidcConfiguration: OidcConfiguration) async throws -> OidcAuthorizationData {
-        if let error = urlForOidcLoginOidcConfigurationThrowableError {
+    open override func urlForOidc(oidcConfiguration: OidcConfiguration, prompt: OidcPrompt) async throws -> OidcAuthorizationData {
+        if let error = urlForOidcOidcConfigurationPromptThrowableError {
             throw error
         }
-        urlForOidcLoginOidcConfigurationCallsCount += 1
-        urlForOidcLoginOidcConfigurationReceivedOidcConfiguration = oidcConfiguration
+        urlForOidcOidcConfigurationPromptCallsCount += 1
+        urlForOidcOidcConfigurationPromptReceivedArguments = (oidcConfiguration: oidcConfiguration, prompt: prompt)
         DispatchQueue.main.async {
-            self.urlForOidcLoginOidcConfigurationReceivedInvocations.append(oidcConfiguration)
+            self.urlForOidcOidcConfigurationPromptReceivedInvocations.append((oidcConfiguration: oidcConfiguration, prompt: prompt))
         }
-        if let urlForOidcLoginOidcConfigurationClosure = urlForOidcLoginOidcConfigurationClosure {
-            return try await urlForOidcLoginOidcConfigurationClosure(oidcConfiguration)
+        if let urlForOidcOidcConfigurationPromptClosure = urlForOidcOidcConfigurationPromptClosure {
+            return try await urlForOidcOidcConfigurationPromptClosure(oidcConfiguration, prompt)
         } else {
-            return urlForOidcLoginOidcConfigurationReturnValue
+            return urlForOidcOidcConfigurationPromptReturnValue
         }
     }
 
