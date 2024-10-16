@@ -43,7 +43,8 @@ struct RoomScreenFooterView: View {
                                     avatarSize: .user(on: .timeline),
                                     mediaProvider: mediaProvider)
                 
-                Text(pinViolationDescriptionWithLearnMoreLink(displayName: member.disambiguatedDisplayName ?? member.userID,
+                Text(pinViolationDescriptionWithLearnMoreLink(displayName: member.displayName,
+                                                              userID: member.userID,
                                                               url: learnMoreURL))
                     .font(.compound.bodyMD)
                     .foregroundColor(.compound.textPrimary)
@@ -59,20 +60,39 @@ struct RoomScreenFooterView: View {
         .padding(.bottom, 8)
     }
     
-    private func pinViolationDescriptionWithLearnMoreLink(displayName: String, url: URL) -> AttributedString {
+    private func pinViolationDescriptionWithLearnMoreLink(displayName: String?, userID: String, url: URL) -> AttributedString {
+        let userIDPlaceholder = "{mxid}"
         let linkPlaceholder = "{link}"
-        var description = AttributedString(L10n.cryptoIdentityChangePinViolation(displayName, linkPlaceholder))
+        let displayName = displayName ?? fallbackDisplayName(userID)
+        var description = AttributedString(L10n.cryptoIdentityChangePinViolationNew(displayName, userIDPlaceholder, linkPlaceholder))
+        
+        var userIDString = AttributedString(L10n.cryptoIdentityChangePinViolationNewUserId(userID))
+        userIDString.bold()
+        description.replace(userIDPlaceholder, with: userIDString)
+        
         var linkString = AttributedString(L10n.actionLearnMore)
         linkString.link = url
         linkString.bold()
         description.replace(linkPlaceholder, with: linkString)
         return description
     }
+    
+    private func fallbackDisplayName(_ userID: String) -> String {
+        guard let localpart = userID.components(separatedBy: ":").first else { return userID }
+        return String(localpart.trimmingPrefix("@"))
+    }
 }
 
 struct RoomScreenFooterView_Previews: PreviewProvider, TestablePreview {
+    static let bobDetails: RoomScreenFooterViewDetails = .pinViolation(member: RoomMemberProxyMock.mockBob,
+                                                                       learnMoreURL: "https://element.io/")
+    static let noNameDetails: RoomScreenFooterViewDetails = .pinViolation(member: RoomMemberProxyMock.mockNoName,
+                                                                          learnMoreURL: "https://element.io/")
+    
     static var previews: some View {
-        RoomScreenFooterView(details: .pinViolation(member: RoomMemberProxyMock.mockBob, learnMoreURL: "https://element.io/"),
-                             mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
+        RoomScreenFooterView(details: bobDetails, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
+            .previewDisplayName("With displayname")
+        RoomScreenFooterView(details: noNameDetails, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
+            .previewDisplayName("Without displayname")
     }
 }
