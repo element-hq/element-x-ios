@@ -131,8 +131,12 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             Task { await handleItemTapped(with: id) }
         case .itemSendInfoTapped(let itemID):
             handleItemSendInfoTapped(itemID: itemID)
-        case .toggleReaction(let emoji, let itemId):
-            Task { await timelineController.toggleReaction(emoji, to: itemId) }
+        case .toggleReaction(let emoji, let itemID):
+            guard case let .event(_, eventOrTransactionID) = itemID else {
+                fatalError()
+            }
+            
+            Task { await timelineController.toggleReaction(emoji, to: eventOrTransactionID) }
         case .sendReadReceiptIfNeeded(let lastVisibleItemID):
             Task { await sendReadReceiptIfNeeded(for: lastVisibleItemID) }
         case .paginateBackwards:
@@ -639,7 +643,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     // MARK: - Timeline Item Building
     
     private func buildTimelineViews(timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool = false) {
-        var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()
+        var timelineItemsDictionary = OrderedDictionary<TimelineUniqueId, RoomTimelineItemViewState>()
         
         timelineItems.filter { $0 is RedactedRoomTimelineItem }.forEach { timelineItem in
             // Stops the audio player when a voice message is redacted.

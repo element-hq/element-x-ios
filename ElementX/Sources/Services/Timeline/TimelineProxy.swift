@@ -179,22 +179,17 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func redact(_ timelineItemID: TimelineItemIdentifier, reason: String?) async -> Result<Void, TimelineProxyError> {
-        MXLog.info("Redacting timeline item: \(timelineItemID)")
-        
-        guard let eventOrTransactionID = await timelineProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID)?.eventOrTransactionId else {
-            MXLog.error("Unknown timeline item: \(timelineItemID)")
-            return .failure(.failedRedacting)
-        }
+    func redact(_ eventOrTransactionID: EventOrTransactionId, reason: String?) async -> Result<Void, TimelineProxyError> {
+        MXLog.info("Redacting timeline item: \(eventOrTransactionID)")
         
         do {
             try await timeline.redactEvent(eventOrTransactionId: eventOrTransactionID, reason: reason)
             
-            MXLog.info("Redacted timeline item: \(timelineItemID)")
+            MXLog.info("Redacted timeline item: \(eventOrTransactionID)")
             
             return .success(())
         } catch {
-            MXLog.error("Failed redacting timeline item: \(timelineItemID) with error: \(error)")
+            MXLog.error("Failed redacting timeline item: \(eventOrTransactionID) with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
@@ -426,15 +421,15 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async -> Result<Void, TimelineProxyError> {
-        MXLog.info("Toggling reaction for event: \(itemID)")
+    func toggleReaction(_ reaction: String, to eventOrTransactionID: EventOrTransactionId) async -> Result<Void, TimelineProxyError> {
+        MXLog.info("Toggling reaction \(reaction) for event: \(eventOrTransactionID)")
         
         do {
-            try await timeline.toggleReaction(uniqueId: itemID.uniqueID, key: reaction)
-            MXLog.info("Finished toggling reaction for event: \(itemID)")
+            try await timeline.toggleReaction(itemId: eventOrTransactionID, key: reaction)
+            MXLog.info("Finished toggling reaction for event: \(eventOrTransactionID)")
             return .success(())
         } catch {
-            MXLog.error("Failed toggling reaction for event: \(itemID)")
+            MXLog.error("Failed toggling reaction for event: \(eventOrTransactionID)")
             return .failure(.sdkError(error))
         }
     }

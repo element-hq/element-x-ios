@@ -158,10 +158,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async {
-        MXLog.info("Toggle reaction in \(roomID)")
+    func toggleReaction(_ reaction: String, to eventOrTransactionID: EventOrTransactionId) async {
+        MXLog.info("Toggle reaction \(reaction) to \(eventOrTransactionID)")
         
-        switch await activeTimeline.toggleReaction(reaction, to: itemID) {
+        switch await activeTimeline.toggleReaction(reaction, to: eventOrTransactionID) {
         case .success:
             MXLog.info("Finished toggling reaction")
         case .failure(let error):
@@ -203,10 +203,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func redact(_ timelineItemID: TimelineItemIdentifier) async {
+    func redact(_ eventOrTransactionID: EventOrTransactionId) async {
         MXLog.info("Send redaction in \(roomID)")
         
-        switch await activeTimeline.redact(timelineItemID, reason: nil) {
+        switch await activeTimeline.redact(eventOrTransactionID, reason: nil) {
         case .success:
             MXLog.info("Finished redacting message")
         case .failure(let error):

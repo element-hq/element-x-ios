@@ -41,7 +41,7 @@ protocol TimelineProxyProtocol {
     func edit(_ eventOrTransactionID: EventOrTransactionId,
               newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError>
     
-    func redact(_ timelineItemID: TimelineItemIdentifier,
+    func redact(_ eventOrTransactionID: EventOrTransactionId,
                 reason: String?) async -> Result<Void, TimelineProxyError>
     
     func pin(eventID: String) async -> Result<Bool, TimelineProxyError>
@@ -93,7 +93,7 @@ protocol TimelineProxyProtocol {
                      inReplyToEventID: String?,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError>
     
-    func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async -> Result<Void, TimelineProxyError>
+    func toggleReaction(_ reaction: String, to eventID: EventOrTransactionId) async -> Result<Void, TimelineProxyError>
     
     func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError>
     

@@ -7,6 +7,7 @@
 
 import Combine
 import Compound
+import MatrixRustSDK
 import SwiftUI
 
 import OrderedCollections
@@ -47,7 +48,7 @@ class TimelineTableViewController: UIViewController {
     private let coordinator: TimelineView.Coordinator
     private let tableView = UITableView(frame: .zero, style: .plain)
     
-    var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>() {
+    var timelineItemsDictionary = OrderedDictionary<TimelineUniqueId, RoomTimelineItemViewState>() {
         didSet {
             guard canApplySnapshot else {
                 hasPendingItems = true
@@ -145,12 +146,12 @@ class TimelineTableViewController: UIViewController {
     
     @Binding private var isScrolledToBottom: Bool
 
-    private var timelineItemsIDs: [String] {
+    private var timelineItemsIDs: [TimelineUniqueId] {
         timelineItemsDictionary.keys.elements.reversed()
     }
     
     /// The table's diffable data source.
-    private var dataSource: UITableViewDiffableDataSource<TimelineSection, String>?
+    private var dataSource: UITableViewDiffableDataSource<TimelineSection, TimelineUniqueId>?
     private var cancellables = Set<AnyCancellable>()
 
     /// A publisher used to throttle back pagination requests.
@@ -246,7 +247,7 @@ class TimelineTableViewController: UIViewController {
     private func configureDataSource() {
         dataSource = .init(tableView: tableView) { [weak self] tableView, indexPath, id in
             switch id {
-            case TimelineTypingIndicatorCell.reuseIdentifier:
+            case TimelineUniqueId(id: TimelineTypingIndicatorCell.reuseIdentifier):
                 let cell = tableView.dequeueReusableCell(withIdentifier: TimelineTypingIndicatorCell.reuseIdentifier, for: indexPath)
                 guard let self else {
                     return cell
@@ -312,12 +313,12 @@ class TimelineTableViewController: UIViewController {
     private func applySnapshot() {
         guard let dataSource else { return }
 
-        var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, String>()
+        var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, TimelineUniqueId>()
         
         // We don't want to display the typing notification in this timeline
         if !coordinator.context.viewState.isPinnedEventsTimeline {
             snapshot.appendSections([.typingIndicator])
-            snapshot.appendItems([TimelineTypingIndicatorCell.reuseIdentifier])
+            snapshot.appendItems([TimelineUniqueId(id: TimelineTypingIndicatorCell.reuseIdentifier)])
         }
         snapshot.appendSections([.main])
         snapshot.appendItems(timelineItemsIDs)
@@ -516,7 +517,7 @@ extension TimelineTableViewController {
     }
     
     /// Returns the frame of the cell for a particular timeline item.
-    private func cellFrame(for uniqueID: String) -> CGRect? {
+    private func cellFrame(for uniqueID: TimelineUniqueId) -> CGRect? {
         guard let timelineCell = tableView.visibleCells.first(where: { ($0 as? TimelineItemCell)?.item?.identifier.uniqueID == uniqueID }) else {
             return nil
         }
@@ -536,13 +537,13 @@ extension TimelineTableViewController {
     }
 }
 
-private extension NSDiffableDataSourceSnapshot<TimelineTableViewController.TimelineSection, String> {
+private extension NSDiffableDataSourceSnapshot<TimelineTableViewController.TimelineSection, TimelineUniqueId> {
     var numberOfMainItems: Int {
         guard sectionIdentifiers.contains(.main) else { return 0 }
         return numberOfItems(inSection: .main)
     }
     
-    var mainItemIdentifiers: [String] {
+    var mainItemIdentifiers: [TimelineUniqueId] {
         guard sectionIdentifiers.contains(.main) else { return [] }
         return itemIdentifiers(inSection: .main)
     }

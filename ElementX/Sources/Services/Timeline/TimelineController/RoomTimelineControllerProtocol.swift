@@ -57,9 +57,9 @@ protocol RoomTimelineControllerProtocol {
               html: String?,
               intentionalMentions: IntentionalMentions) async
     
-    func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async
+    func toggleReaction(_ reaction: String, to eventOrTransactionID: EventOrTransactionId) async
 
-    func redact(_ itemID: TimelineItemIdentifier) async
+    func redact(_ eventOrTransactionID: EventOrTransactionId) async
     
     func pin(eventID: String) async
     

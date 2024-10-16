@@ -22,6 +22,6 @@ struct PaginationIndicatorRoomTimelineItem: DecorationTimelineItemProtocol, Equa
     }
     
     init(position: Position) {
-        id = .virtual(uniqueID: position.id)
+        id = .virtual(uniqueID: .init(id: position.id))
     }
 }

@@ -22,7 +22,7 @@ class TimelineItemFactoryTests: XCTestCase {
         
         let eventTimelineItem = EventTimelineItem.mockCallInvite(sender: senderUserID)
         
-        let eventTimelineItemProxy = EventTimelineItemProxy(item: eventTimelineItem, uniqueID: "0")
+        let eventTimelineItemProxy = EventTimelineItemProxy(item: eventTimelineItem, uniqueID: .init(id: "0"))
         
         let item = factory.buildTimelineItem(for: eventTimelineItemProxy, isDM: false)
         
