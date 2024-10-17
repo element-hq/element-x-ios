@@ -143,13 +143,9 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             return
         }
         
-        if roomPreviewDetails?.isPublic ?? false {
-            state.mode = .join
-        } else if roomPreviewDetails?.canKnock ?? false, appSettings.knockingEnabled {
+        if roomPreviewDetails?.canKnock ?? false, appSettings.knockingEnabled {
             state.mode = .knock
         } else {
-            // If everything else fails fallback to showing the join button and
-            // letting the server figure it out.
             state.mode = .join
         }
     }
@@ -190,7 +186,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         
         if let alias = state.roomDetails?.canonicalAlias {
             switch await clientProxy.knockRoomAlias(alias,
-                                                    message: state.isEmptyKnockMessage ? nil : state.bindings.knockMessage) {
+                                                    message: state.bindings.knockMessage.isBlank ? nil : state.bindings.knockMessage) {
             case .success:
                 state.mode = .knocked
             case .failure(let error):
@@ -199,7 +195,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             }
         } else {
             switch await clientProxy.knockRoom(roomID,
-                                               message: state.isEmptyKnockMessage ? nil : state.bindings.knockMessage) {
+                                               message: state.bindings.knockMessage.isBlank ? nil : state.bindings.knockMessage) {
             case .success:
                 state.mode = .knocked
             case .failure(let error):

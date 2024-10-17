@@ -662,7 +662,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                       via: via,
                                                                       clientProxy: userSession.clientProxy,
                                                                       mediaProvider: userSession.mediaProvider,
-                                                                      userIndicatorController: userIndicatorController))
+                                                                      userIndicatorController: userIndicatorController,
+                                                                      appSettings: appSettings))
         
         joinRoomScreenCoordinator = coordinator
         
