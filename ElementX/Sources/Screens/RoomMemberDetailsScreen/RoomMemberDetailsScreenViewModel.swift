@@ -43,25 +43,8 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         
         showMemberLoadingIndicator()
         Task {
-            defer {
-                hideMemberLoadingIndicator()
-            }
-            
-            switch await roomProxy.getMember(userID: userID) {
-            case .success(let member):
-                roomMemberProxy = member
-                state.memberDetails = RoomMemberDetails(withProxy: member)
-                state.isOwnMemberDetails = member.userID == roomProxy.ownUserID
-                switch await clientProxy.directRoomForUserID(member.userID) {
-                case .success(let roomID):
-                    state.dmRoomID = roomID
-                case .failure:
-                    break
-                }
-            case .failure(let error):
-                MXLog.warning("Failed to find member: \(error)")
-                actionsSubject.send(.openUserProfile)
-            }
+            await loadMember()
+            hideMemberLoadingIndicator()
         }
     }
     
@@ -94,8 +77,34 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
     }
 
     // MARK: - Private
-
-    @MainActor
+    
+    private func loadMember() async {
+        async let memberResult = roomProxy.getMember(userID: state.userID)
+        async let identityResult = clientProxy.userIdentity(state.userID)
+        
+        switch await memberResult {
+        case .success(let member):
+            roomMemberProxy = member
+            state.memberDetails = RoomMemberDetails(withProxy: member)
+            state.isOwnMemberDetails = member.userID == roomProxy.ownUserID
+            switch await clientProxy.directRoomForUserID(member.userID) {
+            case .success(let roomID):
+                state.dmRoomID = roomID
+            case .failure:
+                break
+            }
+        case .failure(let error):
+            MXLog.warning("Failed to find member: \(error)")
+            actionsSubject.send(.openUserProfile)
+        }
+        
+        if case let .success(.some(identity)) = await identityResult {
+            state.isVerified = identity.isVerified()
+        } else {
+            MXLog.error("Failed to find the member's identity.")
+        }
+    }
+    
     private func ignoreUser() async {
         guard let roomMemberProxy else {
             fatalError()

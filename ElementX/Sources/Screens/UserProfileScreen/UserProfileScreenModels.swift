@@ -19,6 +19,7 @@ struct UserProfileScreenViewState: BindableState {
     let isPresentedModally: Bool
     
     var userProfile: UserProfileProxy?
+    var isVerified = false
     var permalink: URL?
     var dmRoomID: String?
 

@@ -6615,6 +6615,81 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption {
         }
     }
 
+    //MARK: - requestUserIdentity
+
+    open var requestUserIdentityUserIdThrowableError: Error?
+    var requestUserIdentityUserIdUnderlyingCallsCount = 0
+    open var requestUserIdentityUserIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return requestUserIdentityUserIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = requestUserIdentityUserIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                requestUserIdentityUserIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    requestUserIdentityUserIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var requestUserIdentityUserIdCalled: Bool {
+        return requestUserIdentityUserIdCallsCount > 0
+    }
+    open var requestUserIdentityUserIdReceivedUserId: String?
+    open var requestUserIdentityUserIdReceivedInvocations: [String] = []
+
+    var requestUserIdentityUserIdUnderlyingReturnValue: UserIdentity?
+    open var requestUserIdentityUserIdReturnValue: UserIdentity? {
+        get {
+            if Thread.isMainThread {
+                return requestUserIdentityUserIdUnderlyingReturnValue
+            } else {
+                var returnValue: UserIdentity?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = requestUserIdentityUserIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                requestUserIdentityUserIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    requestUserIdentityUserIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var requestUserIdentityUserIdClosure: ((String) async throws -> UserIdentity?)?
+
+    open override func requestUserIdentity(userId: String) async throws -> UserIdentity? {
+        if let error = requestUserIdentityUserIdThrowableError {
+            throw error
+        }
+        requestUserIdentityUserIdCallsCount += 1
+        requestUserIdentityUserIdReceivedUserId = userId
+        DispatchQueue.main.async {
+            self.requestUserIdentityUserIdReceivedInvocations.append(userId)
+        }
+        if let requestUserIdentityUserIdClosure = requestUserIdentityUserIdClosure {
+            return try await requestUserIdentityUserIdClosure(userId)
+        } else {
+            return requestUserIdentityUserIdReturnValue
+        }
+    }
+
     //MARK: - resetIdentity
 
     open var resetIdentityThrowableError: Error?
@@ -20975,6 +21050,71 @@ open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity {
     }
 
     fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - isVerified
+
+    var isVerifiedUnderlyingCallsCount = 0
+    open var isVerifiedCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return isVerifiedUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isVerifiedUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isVerifiedUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isVerifiedUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var isVerifiedCalled: Bool {
+        return isVerifiedCallsCount > 0
+    }
+
+    var isVerifiedUnderlyingReturnValue: Bool!
+    open var isVerifiedReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return isVerifiedUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isVerifiedUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isVerifiedUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isVerifiedUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var isVerifiedClosure: (() -> Bool)?
+
+    open override func isVerified() -> Bool {
+        isVerifiedCallsCount += 1
+        if let isVerifiedClosure = isVerifiedClosure {
+            return isVerifiedClosure()
+        } else {
+            return isVerifiedReturnValue
+        }
+    }
 
     //MARK: - masterKey
 

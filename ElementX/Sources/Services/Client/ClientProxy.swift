@@ -952,6 +952,25 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
+    
+    func userIdentity(_ userID: String) async -> Result<UserIdentity?, ClientProxyError> {
+        do {
+            if let identity = try await client.encryption().getUserIdentity(userId: userID) {
+                return .success(identity)
+            }
+        } catch {
+            MXLog.error("Failed getting user identity from the database: \(error)")
+        }
+        
+        MXLog.warning("Identity not found in the crypto store, requesting from the server.")
+        
+        do {
+            return try await .success(client.encryption().requestUserIdentity(userId: userID))
+        } catch {
+            MXLog.error("Failed requesting user identity from the server: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
 }
 
 extension ClientProxy: MediaLoaderProtocol {
