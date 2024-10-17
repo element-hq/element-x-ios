@@ -22,7 +22,7 @@ extension KnockedRoomProxyMock {
         self.init()
         id = configuration.id
         name = configuration.name
-        avatarURL = avatarURL
+        avatarURL = configuration.avatarURL
         avatar = .room(id: configuration.id, name: configuration.name, avatarURL: configuration.avatarURL) // Note: This doesn't replicate the real proxy logic.
         activeMembersCount = configuration.members.filter { $0.membership == .join || $0.membership == .invite }.count
     }
