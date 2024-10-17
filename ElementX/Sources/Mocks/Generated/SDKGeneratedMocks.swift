@@ -18042,34 +18042,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
     }
     open var editEventOrTransactionIdNewContentReceivedArguments: (eventOrTransactionId: EventOrTransactionId, newContent: EditedContent)?
     open var editEventOrTransactionIdNewContentReceivedInvocations: [(eventOrTransactionId: EventOrTransactionId, newContent: EditedContent)] = []
+    open var editEventOrTransactionIdNewContentClosure: ((EventOrTransactionId, EditedContent) async throws -> Void)?
 
-    var editEventOrTransactionIdNewContentUnderlyingReturnValue: Bool!
-    open var editEventOrTransactionIdNewContentReturnValue: Bool! {
-        get {
-            if Thread.isMainThread {
-                return editEventOrTransactionIdNewContentUnderlyingReturnValue
-            } else {
-                var returnValue: Bool? = nil
-                DispatchQueue.main.sync {
-                    returnValue = editEventOrTransactionIdNewContentUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                editEventOrTransactionIdNewContentUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    editEventOrTransactionIdNewContentUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var editEventOrTransactionIdNewContentClosure: ((EventOrTransactionId, EditedContent) async throws -> Bool)?
-
-    open override func edit(eventOrTransactionId: EventOrTransactionId, newContent: EditedContent) async throws -> Bool {
+    open override func edit(eventOrTransactionId: EventOrTransactionId, newContent: EditedContent) async throws {
         if let error = editEventOrTransactionIdNewContentThrowableError {
             throw error
         }
@@ -18078,11 +18053,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         DispatchQueue.main.async {
             self.editEventOrTransactionIdNewContentReceivedInvocations.append((eventOrTransactionId: eventOrTransactionId, newContent: newContent))
         }
-        if let editEventOrTransactionIdNewContentClosure = editEventOrTransactionIdNewContentClosure {
-            return try await editEventOrTransactionIdNewContentClosure(eventOrTransactionId, newContent)
-        } else {
-            return editEventOrTransactionIdNewContentReturnValue
-        }
+        try await editEventOrTransactionIdNewContentClosure?(eventOrTransactionId, newContent)
     }
 
     //MARK: - endPoll

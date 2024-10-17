@@ -52,7 +52,6 @@ protocol RoomTimelineControllerProtocol {
                      intentionalMentions: IntentionalMentions) async
     
     func edit(_ eventOrTransactionID: EventOrTransactionId,
-              useTimeline: Bool,
               message: String,
               html: String?,
               intentionalMentions: IntentionalMentions) async

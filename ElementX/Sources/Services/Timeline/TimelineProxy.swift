@@ -166,12 +166,10 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func edit(_ eventOrTransactionID: EventOrTransactionId, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
         do {
-            guard try await timeline.edit(eventOrTransactionId: eventOrTransactionID, newContent: .roomMessage(content: newContent)) == true else {
-                return .failure(.failedEditing)
-            }
+            try await timeline.edit(eventOrTransactionId: eventOrTransactionID, newContent: .roomMessage(content: newContent))
             
             MXLog.info("Finished editing timeline item: \(eventOrTransactionID)")
-            
+
             return .success(())
         } catch {
             MXLog.error("Failed editing timeline item: \(eventOrTransactionID) with error: \(error)")
@@ -460,13 +458,11 @@ final class TimelineProxy: TimelineProxyProtocol {
         do {
             let originalEvent = try await timeline.getEventTimelineItemByEventId(eventId: eventID)
             
-            guard try await timeline.edit(eventOrTransactionId: originalEvent.eventOrTransactionId,
-                                          newContent: .pollStart(pollData: .init(question: question,
-                                                                                 answers: answers,
-                                                                                 maxSelections: 1,
-                                                                                 pollKind: .init(pollKind: pollKind)))) else {
-                return .failure(.failedEditing)
-            }
+            try await timeline.edit(eventOrTransactionId: originalEvent.eventOrTransactionId,
+                                    newContent: .pollStart(pollData: .init(question: question,
+                                                                           answers: answers,
+                                                                           maxSelections: 1,
+                                                                           pollKind: .init(pollKind: pollKind))))
             
             MXLog.info("Finished editing poll with eventID: \(eventID)")
             

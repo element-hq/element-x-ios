@@ -41,14 +41,14 @@ class ComposerToolbarViewModelTests: XCTestCase {
     }
 
     func testComposerFocus() {
-        viewModel.process(timelineAction: .setMode(mode: .edit(originalEventOrTransactionID: .eventId(eventId: "mock"), source: .timeline)))
+        viewModel.process(timelineAction: .setMode(mode: .edit(originalEventOrTransactionID: .eventId(eventId: "mock"))))
         XCTAssertTrue(viewModel.state.bindings.composerFocused)
         viewModel.process(timelineAction: .removeFocus)
         XCTAssertFalse(viewModel.state.bindings.composerFocused)
     }
 
     func testComposerMode() {
-        let mode: ComposerMode = .edit(originalEventOrTransactionID: .eventId(eventId: "mock"), source: .timeline)
+        let mode: ComposerMode = .edit(originalEventOrTransactionID: .eventId(eventId: "mock"))
         viewModel.process(timelineAction: .setMode(mode: mode))
         XCTAssertEqual(viewModel.state.composerMode, mode)
         viewModel.process(timelineAction: .clear)
@@ -56,7 +56,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
     }
 
     func testComposerModeIsPublished() {
-        let mode: ComposerMode = .edit(originalEventOrTransactionID: .eventId(eventId: "mock"), source: .timeline)
+        let mode: ComposerMode = .edit(originalEventOrTransactionID: .eventId(eventId: "mock"))
         let expectation = expectation(description: "Composer mode is published")
         let cancellable = viewModel
             .context
@@ -236,7 +236,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         }
         
         viewModel.context.composerFormattingEnabled = false
-        viewModel.process(timelineAction: .setMode(mode: .edit(originalEventOrTransactionID: .eventId(eventId: "testID"), source: .timeline)))
+        viewModel.process(timelineAction: .setMode(mode: .edit(originalEventOrTransactionID: .eventId(eventId: "testID"))))
         viewModel.context.plainComposerText = .init(string: "Hello world!")
         viewModel.saveDraft()
         
@@ -395,7 +395,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         
         await fulfillment(of: [expectation], timeout: 10)
         XCTAssertFalse(viewModel.context.composerFormattingEnabled)
-        XCTAssertEqual(viewModel.state.composerMode, .edit(originalEventOrTransactionID: .eventId(eventId: "testID"), source: .draftService))
+        XCTAssertEqual(viewModel.state.composerMode, .edit(originalEventOrTransactionID: .eventId(eventId: "testID")))
         XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: "Hello world!"))
     }
     
@@ -483,7 +483,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
     func testSaveVolatileDraftWhenEditing() {
         viewModel.context.composerFormattingEnabled = false
         viewModel.context.plainComposerText = .init(string: "Hello world!")
-        viewModel.process(timelineAction: .setMode(mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString), source: .timeline)))
+        viewModel.process(timelineAction: .setMode(mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString))))
         
         let draft = draftServiceMock.saveVolatileDraftReceivedDraft
         XCTAssertNotNil(draft)

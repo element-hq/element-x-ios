@@ -170,7 +170,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func edit(_ eventOrTransactionID: EventOrTransactionId,
-              useTimeline: Bool,
               message: String,
               html: String?,
               intentionalMentions: IntentionalMentions) async {
@@ -181,25 +180,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                                                                    html: html,
                                                                    intentionalMentions: intentionalMentions.toRustMentions())
         
-        if useTimeline {
-            switch await activeTimeline.edit(eventOrTransactionID, newContent: messageContent) {
-            case .success:
-                MXLog.info("Finished editing message by event")
-            case let .failure(error):
-                MXLog.error("Failed editing message by event with error: \(error)")
-            }
-        } else {
-            guard case let .eventId(eventID) = eventOrTransactionID else {
-                MXLog.error("Failed editing message, missing eventID.")
-                return
-            }
-            
-            switch await roomProxy.edit(eventID: eventID, newContent: messageContent) {
-            case .success:
-                MXLog.info("Finished editing message by event ID")
-            case let .failure(error):
-                MXLog.error("Failed editing message by event ID with error: \(error)")
-            }
+        switch await activeTimeline.edit(eventOrTransactionID, newContent: messageContent) {
+        case .success:
+            MXLog.info("Finished editing message by event")
+        case let .failure(error):
+            MXLog.error("Failed editing message by event with error: \(error)")
         }
     }
     
