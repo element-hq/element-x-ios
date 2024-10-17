@@ -27,6 +27,26 @@ struct UserProfileScreen: View {
     // MARK: - Private
     
     @ViewBuilder
+    private var headerSection: some View {
+        if let userProfile = context.viewState.userProfile {
+            AvatarHeaderView(user: userProfile,
+                             isVerified: context.viewState.isVerified,
+                             avatarSize: .user(on: .memberDetails),
+                             mediaProvider: context.mediaProvider) { url in
+                context.send(viewAction: .displayAvatar(url))
+            } footer: {
+                otherUserFooter
+            }
+        } else {
+            AvatarHeaderView(user: UserProfileProxy(userID: context.viewState.userID),
+                             isVerified: context.viewState.isVerified,
+                             avatarSize: .user(on: .memberDetails),
+                             mediaProvider: context.mediaProvider,
+                             footer: { })
+        }
+    }
+    
+    @ViewBuilder
     private var otherUserFooter: some View {
         HStack(spacing: 8) {
             if context.viewState.userProfile != nil, !context.viewState.isOwnUser {
@@ -56,26 +76,6 @@ struct UserProfileScreen: View {
             }
         }
         .padding(.top, 32)
-    }
-    
-    @ViewBuilder
-    private var headerSection: some View {
-        if let userProfile = context.viewState.userProfile {
-            AvatarHeaderView(user: userProfile,
-                             isVerified: context.viewState.isVerified,
-                             avatarSize: .user(on: .memberDetails),
-                             mediaProvider: context.mediaProvider) { url in
-                context.send(viewAction: .displayAvatar(url))
-            } footer: {
-                otherUserFooter
-            }
-        } else {
-            AvatarHeaderView(user: UserProfileProxy(userID: context.viewState.userID),
-                             isVerified: context.viewState.isVerified,
-                             avatarSize: .user(on: .memberDetails),
-                             mediaProvider: context.mediaProvider,
-                             footer: { })
-        }
     }
     
     @ToolbarContentBuilder
