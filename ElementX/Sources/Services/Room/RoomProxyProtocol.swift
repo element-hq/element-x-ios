@@ -21,6 +21,7 @@ enum RoomProxyError: Error {
 enum RoomProxyType {
     case joined(JoinedRoomProxyProtocol)
     case invited(InvitedRoomProxyProtocol)
+    case knocked(KnockedRoomProxyProtocol)
     case left
 }
 
@@ -54,6 +55,11 @@ protocol InvitedRoomProxyProtocol: RoomProxyProtocol {
     
     func rejectInvitation() async -> Result<Void, RoomProxyError>
     func acceptInvitation() async -> Result<Void, RoomProxyError>
+}
+
+// sourcery: AutoMockable
+protocol KnockedRoomProxyProtocol: RoomProxyProtocol {
+    func cancelKnock() async -> Result<Void, RoomProxyError>
 }
 
 enum JoinedRoomProxyAction: Equatable {
