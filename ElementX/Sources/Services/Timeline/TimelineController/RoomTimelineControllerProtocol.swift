@@ -48,17 +48,18 @@ protocol RoomTimelineControllerProtocol {
     
     func sendMessage(_ message: String,
                      html: String?,
-                     inReplyTo itemID: TimelineItemIdentifier?,
+                     inReplyToEventID: String?,
                      intentionalMentions: IntentionalMentions) async
     
-    func edit(_ timelineItemID: TimelineItemIdentifier,
+    func edit(_ eventOrTransactionID: EventOrTransactionId,
+              useTimeline: Bool,
               message: String,
               html: String?,
               intentionalMentions: IntentionalMentions) async
     
-    func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async
+    func toggleReaction(_ reaction: String, to eventOrTransactionID: EventOrTransactionId) async
 
-    func redact(_ itemID: TimelineItemIdentifier) async
+    func redact(_ eventOrTransactionID: EventOrTransactionId) async
     
     func pin(eventID: String) async
     
@@ -71,15 +72,4 @@ protocol RoomTimelineControllerProtocol {
     func retryDecryption(for sessionID: String) async
     
     func eventTimestamp(for itemID: TimelineItemIdentifier) -> Date?
-}
-
-extension RoomTimelineControllerProtocol {
-    func sendMessage(_ message: String,
-                     html: String?,
-                     intentionalMentions: IntentionalMentions) async {
-        await sendMessage(message,
-                          html: html,
-                          inReplyTo: nil,
-                          intentionalMentions: intentionalMentions)
-    }
 }

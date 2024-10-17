@@ -116,7 +116,7 @@ class LoggingTests: XCTestCase {
     func validateTimelineContentIsRedacted() throws {
         // Given timeline items that contain text
         let textAttributedString = "TextAttributed"
-        let textMessage = TextRoomTimelineItem(id: .random,
+        let textMessage = TextRoomTimelineItem(id: .randomEvent,
                                                timestamp: "",
                                                isOutgoing: false,
                                                isEditable: false,
@@ -125,7 +125,7 @@ class LoggingTests: XCTestCase {
                                                sender: .init(id: "sender"),
                                                content: .init(body: "TextString", formattedBody: AttributedString(textAttributedString)))
         let noticeAttributedString = "NoticeAttributed"
-        let noticeMessage = NoticeRoomTimelineItem(id: .random,
+        let noticeMessage = NoticeRoomTimelineItem(id: .randomEvent,
                                                    timestamp: "",
                                                    isOutgoing: false,
                                                    isEditable: false,
@@ -134,7 +134,7 @@ class LoggingTests: XCTestCase {
                                                    sender: .init(id: "sender"),
                                                    content: .init(body: "NoticeString", formattedBody: AttributedString(noticeAttributedString)))
         let emoteAttributedString = "EmoteAttributed"
-        let emoteMessage = EmoteRoomTimelineItem(id: .random,
+        let emoteMessage = EmoteRoomTimelineItem(id: .randomEvent,
                                                  timestamp: "",
                                                  isOutgoing: false,
                                                  isEditable: false,
@@ -142,7 +142,7 @@ class LoggingTests: XCTestCase {
                                                  isThreaded: false,
                                                  sender: .init(id: "sender"),
                                                  content: .init(body: "EmoteString", formattedBody: AttributedString(emoteAttributedString)))
-        let imageMessage = ImageRoomTimelineItem(id: .init(uniqueID: "myimagemessage"),
+        let imageMessage = ImageRoomTimelineItem(id: .randomEvent,
                                                  timestamp: "",
                                                  isOutgoing: false,
                                                  isEditable: false,
@@ -153,7 +153,7 @@ class LoggingTests: XCTestCase {
                                                                 caption: "ImageString",
                                                                 source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"),
                                                                 thumbnailSource: nil))
-        let videoMessage = VideoRoomTimelineItem(id: .random,
+        let videoMessage = VideoRoomTimelineItem(id: .randomEvent,
                                                  timestamp: "",
                                                  isOutgoing: false,
                                                  isEditable: false,
@@ -165,7 +165,7 @@ class LoggingTests: XCTestCase {
                                                                 duration: 0,
                                                                 source: nil,
                                                                 thumbnailSource: nil))
-        let fileMessage = FileRoomTimelineItem(id: .random,
+        let fileMessage = FileRoomTimelineItem(id: .randomEvent,
                                                timestamp: "",
                                                isOutgoing: false,
                                                isEditable: false,
@@ -195,25 +195,25 @@ class LoggingTests: XCTestCase {
         }
         
         let content = try String(contentsOf: logFile)
-        XCTAssertTrue(content.contains(textMessage.id.uniqueID))
+        XCTAssertTrue(content.contains(textMessage.id.uniqueID.id))
         XCTAssertFalse(content.contains(textMessage.body))
         XCTAssertFalse(content.contains(textAttributedString))
         
-        XCTAssertTrue(content.contains(noticeMessage.id.uniqueID))
+        XCTAssertTrue(content.contains(noticeMessage.id.uniqueID.id))
         XCTAssertFalse(content.contains(noticeMessage.body))
         XCTAssertFalse(content.contains(noticeAttributedString))
         
-        XCTAssertTrue(content.contains(emoteMessage.id.uniqueID))
+        XCTAssertTrue(content.contains(emoteMessage.id.uniqueID.id))
         XCTAssertFalse(content.contains(emoteMessage.body))
         XCTAssertFalse(content.contains(emoteAttributedString))
         
-        XCTAssertTrue(content.contains(imageMessage.id.uniqueID))
+        XCTAssertTrue(content.contains(imageMessage.id.uniqueID.id))
         XCTAssertFalse(content.contains(imageMessage.body))
         
-        XCTAssertTrue(content.contains(videoMessage.id.uniqueID))
+        XCTAssertTrue(content.contains(videoMessage.id.uniqueID.id))
         XCTAssertFalse(content.contains(videoMessage.body))
         
-        XCTAssertTrue(content.contains(fileMessage.id.uniqueID))
+        XCTAssertTrue(content.contains(fileMessage.id.uniqueID.id))
         XCTAssertFalse(content.contains(fileMessage.body))
     }
         

@@ -188,37 +188,32 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func edit(_ timelineItem: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
+    func edit(_ eventOrTransactionID: EventOrTransactionId, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
         do {
-            guard try await timeline.edit(eventOrTransactionId: timelineItem.eventOrTransactionId, newContent: .roomMessage(content: newContent)) == true else {
+            guard try await timeline.edit(eventOrTransactionId: eventOrTransactionID, newContent: .roomMessage(content: newContent)) == true else {
                 return .failure(.failedEditing)
             }
             
-            MXLog.info("Finished editing timeline item: \(timelineItem.eventOrTransactionId)")
+            MXLog.info("Finished editing timeline item: \(eventOrTransactionID)")
             
             return .success(())
         } catch {
-            MXLog.error("Failed editing timeline item: \(timelineItem.eventOrTransactionId) with error: \(error)")
+            MXLog.error("Failed editing timeline item: \(eventOrTransactionID) with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
     
-    func redact(_ timelineItemID: TimelineItemIdentifier, reason: String?) async -> Result<Void, TimelineProxyError> {
-        MXLog.info("Redacting timeline item: \(timelineItemID)")
-        
-        guard let eventOrTransactionID = await timelineProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID)?.eventOrTransactionId else {
-            MXLog.error("Unknown timeline item: \(timelineItemID)")
-            return .failure(.failedRedacting)
-        }
+    func redact(_ eventOrTransactionID: EventOrTransactionId, reason: String?) async -> Result<Void, TimelineProxyError> {
+        MXLog.info("Redacting timeline item: \(eventOrTransactionID)")
         
         do {
             try await timeline.redactEvent(eventOrTransactionId: eventOrTransactionID, reason: reason)
             
-            MXLog.info("Redacted timeline item: \(timelineItemID)")
+            MXLog.info("Redacted timeline item: \(eventOrTransactionID)")
             
             return .success(())
         } catch {
-            MXLog.error("Failed redacting timeline item: \(timelineItemID) with error: \(error)")
+            MXLog.error("Failed redacting timeline item: \(eventOrTransactionID) with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
@@ -399,10 +394,10 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func sendMessage(_ message: String,
                      html: String?,
-                     inReplyTo eventID: String? = nil,
+                     inReplyToEventID: String? = nil,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
-        if let eventID {
-            MXLog.info("Sending reply to eventID: \(eventID)")
+        if let inReplyToEventID {
+            MXLog.info("Sending reply to eventID: \(inReplyToEventID)")
         } else {
             MXLog.info("Sending message")
         }
@@ -412,17 +407,17 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                     intentionalMentions: intentionalMentions.toRustMentions())
         
         do {
-            if let eventID {
-                try await timeline.sendReply(msg: messageContent, eventId: eventID)
-                MXLog.info("Finished sending reply to eventID: \(eventID)")
+            if let inReplyToEventID {
+                try await timeline.sendReply(msg: messageContent, eventId: inReplyToEventID)
+                MXLog.info("Finished sending reply to eventID: \(inReplyToEventID)")
             } else {
                 _ = try await timeline.send(msg: messageContent)
                 MXLog.info("Finished sending message")
             }
             _ = try await zeroChatApi.notifyAboutMessage(roomId: room.id())
         } catch {
-            if let eventID {
-                MXLog.error("Failed sending reply to eventID: \(eventID) with error: \(error)")
+            if let inReplyToEventID {
+                MXLog.error("Failed sending reply to eventID: \(inReplyToEventID) with error: \(error)")
             } else {
                 MXLog.error("Failed sending message with error: \(error)")
             }
@@ -461,15 +456,15 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async -> Result<Void, TimelineProxyError> {
-        MXLog.info("Toggling reaction for event: \(itemID)")
+    func toggleReaction(_ reaction: String, to eventOrTransactionID: EventOrTransactionId) async -> Result<Void, TimelineProxyError> {
+        MXLog.info("Toggling reaction \(reaction) for event: \(eventOrTransactionID)")
         
         do {
-            try await timeline.toggleReaction(uniqueId: itemID.uniqueID, key: reaction)
-            MXLog.info("Finished toggling reaction for event: \(itemID)")
+            try await timeline.toggleReaction(itemId: eventOrTransactionID, key: reaction)
+            MXLog.info("Finished toggling reaction for event: \(eventOrTransactionID)")
             return .success(())
         } catch {
-            MXLog.error("Failed toggling reaction for event: \(itemID)")
+            MXLog.error("Failed toggling reaction for event: \(eventOrTransactionID)")
             return .failure(.sdkError(error))
         }
     }
@@ -661,6 +656,18 @@ extension Array where Element == TimelineItemProxy {
                 if eventTimelineItem.id.uniqueID == id.uniqueID {
                     return eventTimelineItem.item
                 }
+            }
+        }
+        
+        return nil
+    }
+    
+    func firstEventTimelineItemUsingEventOrTransactionID(_ eventOrTransactionID: EventOrTransactionId) -> EventTimelineItem? {
+        for item in self {
+            if case let .event(eventTimelineItem) = item,
+               case let .event(_, identifier) = eventTimelineItem.id,
+               identifier == eventOrTransactionID {
+                return eventTimelineItem.item
             }
         }
         

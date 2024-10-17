@@ -74,7 +74,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     static var body: some View {
         VStack(spacing: 20.0) {
-            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .random,
+            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .randomEvent,
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
@@ -85,7 +85,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                                      source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/jpg"),
                                                                                      thumbnailSource: nil)))
             
-            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .random,
+            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .randomEvent,
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,
@@ -96,7 +96,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                                      source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"),
                                                                                      thumbnailSource: nil)))
             
-            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .random,
+            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .randomEvent,
                                                                       timestamp: "Now",
                                                                       isOutgoing: false,
                                                                       isEditable: false,

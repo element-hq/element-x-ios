@@ -64,6 +64,7 @@ final class SecureBackupRecoveryKeyScreenCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        AnyView(VerifyBackupKeyScreen(context: viewModel.context))
+        AnyView(SecureBackupRecoveryKeyScreen(context: viewModel.context))
+        // AnyView(VerifyBackupKeyScreen(context: viewModel.context))
     }
 }

@@ -221,7 +221,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         
         subscribeToRoomInfoUpdates()
         
-        subscribeToIdentityStatusChanges()
+        if isEncrypted {
+            subscribeToIdentityStatusChanges()
+        }
         
         subscribeToTypingNotifications()
     }

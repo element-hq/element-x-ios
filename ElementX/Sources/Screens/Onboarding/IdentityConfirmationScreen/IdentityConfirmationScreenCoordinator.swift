@@ -64,6 +64,7 @@ final class IdentityConfirmationScreenCoordinator: CoordinatorProtocol {
     }
         
     func toPresentable() -> AnyView {
+        // AnyView(IdentityConfirmationScreen(context: viewModel.context))
         AnyView(VerifyLoginScreen(context: viewModel.context))
     }
 }

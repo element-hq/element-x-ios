@@ -69,8 +69,8 @@ class RoomScreenViewModelTests: XCTestCase {
         let providerUpdateSubject = PassthroughSubject<([TimelineItemProxy], PaginationState), Never>()
         pinnedTimelineProviderMock.underlyingUpdatePublisher = providerUpdateSubject.eraseToAnyPublisher()
         pinnedTimelineMock.timelineProvider = pinnedTimelineProviderMock
-        pinnedTimelineProviderMock.itemProxies = [.event(.init(item: EventTimelineItem(configuration: .init(eventID: "test1")), uniqueID: "1")),
-                                                  .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test2")), uniqueID: "2"))]
+        pinnedTimelineProviderMock.itemProxies = [.event(.init(item: EventTimelineItem(configuration: .init(eventID: "test1")), uniqueID: .init(id: "1"))),
+                                                  .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test2")), uniqueID: .init(id: "2")))]
         
         // check if the banner is now in a loaded state and is showing the counter
         deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
@@ -86,9 +86,9 @@ class RoomScreenViewModelTests: XCTestCase {
         deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
             viewState.pinnedEventsBannerState.count == 3
         }
-        providerUpdateSubject.send(([.event(.init(item: EventTimelineItem(configuration: .init(eventID: "test1")), uniqueID: "1")),
-                                     .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test2")), uniqueID: "2")),
-                                     .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test3")), uniqueID: "3"))], .initial))
+        providerUpdateSubject.send(([.event(.init(item: EventTimelineItem(configuration: .init(eventID: "test1")), uniqueID: .init(id: "1"))),
+                                     .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test2")), uniqueID: .init(id: "2"))),
+                                     .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test3")), uniqueID: .init(id: "3")))], .initial))
         try await deferred.fulfill()
         XCTAssertFalse(viewModel.context.viewState.pinnedEventsBannerState.isLoading)
         XCTAssertTrue(viewModel.context.viewState.shouldShowPinnedEventsBanner)
@@ -109,9 +109,9 @@ class RoomScreenViewModelTests: XCTestCase {
         let pinnedTimelineProviderMock = RoomTimelineProviderMock()
         pinnedTimelineMock.timelineProvider = pinnedTimelineProviderMock
         pinnedTimelineProviderMock.underlyingUpdatePublisher = Empty<([TimelineItemProxy], PaginationState), Never>().eraseToAnyPublisher()
-        pinnedTimelineProviderMock.itemProxies = [.event(.init(item: EventTimelineItem(configuration: .init(eventID: "test1")), uniqueID: "1")),
-                                                  .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test2")), uniqueID: "2")),
-                                                  .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test3")), uniqueID: "3"))]
+        pinnedTimelineProviderMock.itemProxies = [.event(.init(item: EventTimelineItem(configuration: .init(eventID: "test1")), uniqueID: .init(id: "1"))),
+                                                  .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test2")), uniqueID: .init(id: "2"))),
+                                                  .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test3")), uniqueID: .init(id: "3")))]
         roomProxyMock.underlyingPinnedEventsTimeline = pinnedTimelineMock
         let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
                                             roomProxy: roomProxyMock,

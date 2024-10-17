@@ -667,7 +667,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                       via: via,
                                                                       clientProxy: userSession.clientProxy,
                                                                       mediaProvider: userSession.mediaProvider,
-                                                                      userIndicatorController: userIndicatorController))
+                                                                      userIndicatorController: userIndicatorController,
+                                                                      appSettings: appSettings))
         
         joinRoomScreenCoordinator = coordinator
         
@@ -938,7 +939,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 MXLog.debug("Selected \(emoji) for \(itemID)")
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 Task {
-                    await self.timelineController?.toggleReaction(emoji, to: itemID)
+                    guard case let .event(_, eventOrTransactionID) = itemID else {
+                        fatalError()
+                    }
+                    
+                    await self.timelineController?.toggleReaction(emoji, to: eventOrTransactionID)
                 }
             case .dismiss:
                 navigationStackCoordinator.setSheetCoordinator(nil)

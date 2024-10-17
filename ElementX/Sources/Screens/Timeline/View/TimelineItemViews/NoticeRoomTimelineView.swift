@@ -54,7 +54,7 @@ struct NoticeRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     }
     
     private static func itemWith(text: String, timestamp: String, senderId: String) -> NoticeRoomTimelineItem {
-        NoticeRoomTimelineItem(id: .random,
+        NoticeRoomTimelineItem(id: .randomEvent,
                                timestamp: timestamp,
                                isOutgoing: false,
                                isEditable: false,

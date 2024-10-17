@@ -210,6 +210,32 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.push(coordinator)
     }
     
+//    private func showServerSelectionScreen(authenticationFlow: AuthenticationFlow) {
+//        let navigationCoordinator = NavigationStackCoordinator()
+//        
+//        let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
+//                                                                    authenticationFlow: authenticationFlow,
+//                                                                    slidingSyncLearnMoreURL: appSettings.slidingSyncLearnMoreURL,
+//                                                                    userIndicatorController: userIndicatorController)
+//        let coordinator = ServerSelectionScreenCoordinator(parameters: parameters)
+//        
+//        coordinator.actions
+//            .sink { [weak self] action in
+//                guard let self else { return }
+//                
+//                switch action {
+//                case .updated:
+//                    navigationStackCoordinator.setSheetCoordinator(nil)
+//                case .dismiss:
+//                    navigationStackCoordinator.setSheetCoordinator(nil)
+//                }
+//            }
+//            .store(in: &cancellables)
+//        
+//        navigationCoordinator.setRootCoordinator(coordinator)
+//        navigationStackCoordinator.setSheetCoordinator(navigationCoordinator)
+//    }
+    
     private func showWebRegistration() {
         let parameters = WebRegistrationScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                     userIndicatorController: userIndicatorController)

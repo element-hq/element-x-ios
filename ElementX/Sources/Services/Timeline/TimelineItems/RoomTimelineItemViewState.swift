@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
 final class RoomTimelineItemViewState: Identifiable, Equatable, ObservableObject {
     @Published var type: RoomTimelineItemType
@@ -34,7 +35,7 @@ final class RoomTimelineItemViewState: Identifiable, Equatable, ObservableObject
     // MARK: Identifiable
     
     /// The `timelineID` of the item, used for the timeline view level identification, do not use for any business logic use `identifier` instead
-    var id: String {
+    var id: TimelineUniqueId {
         identifier.uniqueID
     }
 }

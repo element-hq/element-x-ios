@@ -42,7 +42,7 @@ extension ClientSDKMock {
         userIdServerNameThrowableError = MockError.generic
         serverReturnValue = "https://\(configuration.serverAddress)"
         getUrlUrlReturnValue = configuration.elementWellKnown
-        urlForOidcLoginOidcConfigurationReturnValue = OidcAuthorizationDataSDKMock(configuration: configuration)
+        urlForOidcOidcConfigurationPromptReturnValue = OidcAuthorizationDataSDKMock(configuration: configuration)
         loginUsernamePasswordInitialDeviceNameDeviceIdClosure = { username, password, _, _ in
             guard username == configuration.validCredentials.username,
                   password == configuration.validCredentials.password else {

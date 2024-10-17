@@ -13,7 +13,7 @@ typealias JoinRoomScreenViewModelType = StateStoreViewModel<JoinRoomScreenViewSt
 class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewModelProtocol {
     private let roomID: String
     private let via: [String]
-    private let allowKnocking: Bool // For preview tests only, actions aren't sent.
+    private let appSettings: AppSettings
     private let clientProxy: ClientProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -27,13 +27,13 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
 
     init(roomID: String,
          via: [String],
-         allowKnocking: Bool = false,
+         appSettings: AppSettings,
          clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomID = roomID
         self.via = via
-        self.allowKnocking = allowKnocking
+        self.appSettings = appSettings
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
         
@@ -51,13 +51,16 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         
         switch viewAction {
         case .knock:
-            break
+            Task { await knockRoom() }
         case .join:
             Task { await joinRoom() }
         case .acceptInvite:
             Task { await joinRoom() }
         case .declineInvite:
             showDeclineInviteConfirmationAlert()
+        case .cancelKnock:
+            // TODO: implement once available
+            break
         }
     }
     
@@ -106,6 +109,8 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         case .invited(let invitedRoomProxy):
             inviter = await invitedRoomProxy.inviter.flatMap(RoomInviterDetails.init)
             roomProxy = invitedRoomProxy
+        case .knocked(let knockedRoomProxy):
+            roomProxy = knockedRoomProxy
         default:
             break
         }
@@ -122,6 +127,11 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     }
     
     private func updateMode() {
+        if case .knocked = room {
+            state.mode = .knocked
+            return
+        }
+        
         // Check invites first to show Accept/Decline buttons on public rooms.
         if case .invited = room {
             state.mode = .invited
@@ -133,13 +143,9 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             return
         }
         
-        if roomPreviewDetails?.isPublic ?? false {
-            state.mode = .join
-        } else if roomPreviewDetails?.canKnock ?? false, allowKnocking { // Knocking is not supported yet, the flag is purely for preview tests.
+        if roomPreviewDetails?.canKnock ?? false, appSettings.knockingEnabled {
             state.mode = .knock
         } else {
-            // If everything else fails fallback to showing the join button and
-            // letting the server figure it out.
             state.mode = .join
         }
     }
@@ -166,6 +172,34 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                 actionsSubject.send(.joined)
             case .failure(let error):
                 MXLog.error("Failed joining room id: \(roomID) with error: \(error)")
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            }
+        }
+    }
+    
+    private func knockRoom() async {
+        showLoadingIndicator()
+        
+        defer {
+            hideLoadingIndicator()
+        }
+        
+        if let alias = state.roomDetails?.canonicalAlias {
+            switch await clientProxy.knockRoomAlias(alias,
+                                                    message: state.bindings.knockMessage.isBlank ? nil : state.bindings.knockMessage) {
+            case .success:
+                state.mode = .knocked
+            case .failure(let error):
+                MXLog.error("Failed knocking room alias: \(alias) with error: \(error)")
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            }
+        } else {
+            switch await clientProxy.knockRoom(roomID,
+                                               message: state.bindings.knockMessage.isBlank ? nil : state.bindings.knockMessage) {
+            case .success:
+                state.mode = .knocked
+            case .failure(let error):
+                MXLog.error("Failed knocking room id: \(roomID) with error: \(error)")
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
             }
         }

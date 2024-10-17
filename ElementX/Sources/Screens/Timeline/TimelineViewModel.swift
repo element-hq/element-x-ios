@@ -131,8 +131,12 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             Task { await handleItemTapped(with: id) }
         case .itemSendInfoTapped(let itemID):
             handleItemSendInfoTapped(itemID: itemID)
-        case .toggleReaction(let emoji, let itemId):
-            Task { await timelineController.toggleReaction(emoji, to: itemId) }
+        case .toggleReaction(let emoji, let itemID):
+            guard case let .event(_, eventOrTransactionID) = itemID else {
+                fatalError()
+            }
+            
+            Task { await timelineController.toggleReaction(emoji, to: eventOrTransactionID) }
         case .sendReadReceiptIfNeeded(let lastVisibleItemID):
             Task { await sendReadReceiptIfNeeded(for: lastVisibleItemID) }
         case .paginateBackwards:
@@ -593,13 +597,14 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         actionsSubject.send(.composer(action: .clear))
 
         switch mode {
-        case .reply(let itemId, _, _):
+        case .reply(let eventID, _, _):
             await timelineController.sendMessage(message,
                                                  html: html,
-                                                 inReplyTo: itemId,
+                                                 inReplyToEventID: eventID,
                                                  intentionalMentions: intentionalMentions)
-        case .edit(let originalItemId):
-            await timelineController.edit(originalItemId,
+        case .edit(let originalEventOrTransactionID, let source):
+            await timelineController.edit(originalEventOrTransactionID,
+                                          useTimeline: source == .timeline,
                                           message: message,
                                           html: html,
                                           intentionalMentions: intentionalMentions)
@@ -610,6 +615,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             case .none:
                 await timelineController.sendMessage(message,
                                                      html: html,
+                                                     inReplyToEventID: nil,
                                                      intentionalMentions: intentionalMentions)
             }
         case .recordVoiceMessage, .previewVoiceMessage:
@@ -637,7 +643,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     // MARK: - Timeline Item Building
     
     private func buildTimelineViews(timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool = false) {
-        var timelineItemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()
+        var timelineItemsDictionary = OrderedDictionary<TimelineUniqueId, RoomTimelineItemViewState>()
         
         timelineItems.filter { $0 is RedactedRoomTimelineItem }.forEach { timelineItem in
             // Stops the audio player when a voice message is redacted.

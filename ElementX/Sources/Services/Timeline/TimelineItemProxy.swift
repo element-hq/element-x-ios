@@ -8,53 +8,19 @@
 import Foundation
 import MatrixRustSDK
 
-struct TimelineItemIdentifier: Hashable {
-    /// Stable id across state changes of the timeline item, it uniquely identifies an item in a timeline.
-    /// It's value is consistent only per timeline instance, it should **not** be used to identify an item across timeline instances.
-    let uniqueID: String
-    
-    /// Contains the 2 possible identifiers of an event, either it has a remote event id or a local transaction id, never both or none.
-    var eventOrTransactionID: EventOrTransactionId?
-    
-    var eventID: String? {
-        switch eventOrTransactionID {
-        case .eventId(let eventId):
-            return eventId
-        default:
-            return nil
-        }
-    }
-    
-    var transactionID: String? {
-        switch eventOrTransactionID {
-        case .transactionId(let transactionId):
-            return transactionId
-        default:
-            return nil
-        }
-    }
-}
-
-extension TimelineItemIdentifier {
-    /// Use only for mocks/tests
-    static var random: Self {
-        .init(uniqueID: UUID().uuidString, eventOrTransactionID: .eventId(eventId: UUID().uuidString))
-    }
-}
-
 /// A light wrapper around timeline items returned from Rust.
 enum TimelineItemProxy {
     case event(EventTimelineItemProxy)
-    case virtual(MatrixRustSDK.VirtualTimelineItem, uniqueID: String)
+    case virtual(MatrixRustSDK.VirtualTimelineItem, uniqueID: TimelineUniqueId)
     case unknown(MatrixRustSDK.TimelineItem)
     
     init(item: MatrixRustSDK.TimelineItem, allRoomUsers: [ZMatrixUser]) {
         if let eventItem = item.asEvent() {
             let eventSenderId = eventItem.sender
             let eventSender = allRoomUsers.first(where: { $0.matrixId == eventSenderId })
-            self = .event(EventTimelineItemProxy(item: eventItem, id: String(item.uniqueId()), eventSender: eventSender))
+            self = .event(EventTimelineItemProxy(item: eventItem, uniqueID: item.uniqueId()))
         } else if let virtualItem = item.asVirtual() {
-            self = .virtual(virtualItem, uniqueID: String(item.uniqueId()))
+            self = .virtual(virtualItem, uniqueID: item.uniqueId())
         } else {
             self = .unknown(item)
         }
@@ -108,9 +74,9 @@ class EventTimelineItemProxy {
     let id: TimelineItemIdentifier
     let eventSender: ZMatrixUser?
     
-    init(item: MatrixRustSDK.EventTimelineItem, id: String, eventSender: ZMatrixUser? = nil) {
+    init(item: MatrixRustSDK.EventTimelineItem, uniqueID: TimelineUniqueId, eventSender: ZMatrixUser? = nil) {
         self.item = item
-        self.id = TimelineItemIdentifier(uniqueID: id, eventOrTransactionID: item.eventOrTransactionId)
+        id = .event(uniqueID: uniqueID, eventOrTransactionID: item.eventOrTransactionId)
         self.eventSender = eventSender
     }
     
@@ -211,7 +177,7 @@ struct TimelineItemDebugInfo: Identifiable, CustomStringConvertible {
             return nil
         }
         
-        return String(decoding: jsonData, as: UTF8.self)
+        return String(data: jsonData, encoding: .utf8)
     }
 }
 

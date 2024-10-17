@@ -55,7 +55,7 @@ struct VoiceMessageRoomTimelineView: View {
 
 struct VoiceMessageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
-    static let timelineItemIdentifier = TimelineItemIdentifier.random
+    static let timelineItemIdentifier = TimelineItemIdentifier.randomEvent
     static let voiceRoomTimelineItem = VoiceMessageRoomTimelineItem(id: timelineItemIdentifier,
                                                                     timestamp: "Now",
                                                                     isOutgoing: false,

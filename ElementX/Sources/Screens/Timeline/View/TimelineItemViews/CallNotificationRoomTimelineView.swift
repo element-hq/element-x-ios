@@ -60,7 +60,7 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
     }
     
     static var body: some View {
-        CallNotificationRoomTimelineView(timelineItem: .init(id: .random,
+        CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
                                                              timestamp: "Now",
                                                              isEditable: false,
                                                              canBeRepliedTo: false,

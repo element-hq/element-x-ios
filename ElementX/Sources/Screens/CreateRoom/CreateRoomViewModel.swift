@@ -93,7 +93,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                 old.roomName == new.roomName && old.roomTopic == new.roomTopic && old.isRoomPrivate == new.isRoomPrivate
             }
             .sink { [weak self] bindings in
-                guard let self = self else { return }
+                guard let self else { return }
                 updateParameters(bindings: bindings)
                 actionsSubject.send(.updateDetails(createRoomParameters))
             }

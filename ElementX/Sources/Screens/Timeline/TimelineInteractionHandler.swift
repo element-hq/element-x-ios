@@ -133,8 +133,12 @@ class TimelineInteractionHandler {
                 UIPasteboard.general.url = permalinkURL
             }
         case .redact:
+            guard case let .event(_, eventOrTransactionID) = itemID else {
+                fatalError()
+            }
+            
             Task {
-                await timelineController.redact(itemID)
+                await timelineController.redact(eventOrTransactionID)
             }
         case .reply:
             guard let eventID = eventTimelineItem.id.eventID else {
@@ -144,7 +148,7 @@ class TimelineInteractionHandler {
             let replyInfo = buildReplyInfo(for: eventTimelineItem)
             let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, eventID: eventID, eventContent: replyInfo.type)
             
-            actionsSubject.send(.composer(action: .setMode(mode: .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails, isThread: replyInfo.isThread))))
+            actionsSubject.send(.composer(action: .setMode(mode: .reply(eventID: eventID, replyDetails: replyDetails, isThread: replyInfo.isThread))))
         case .forward(let itemID):
             actionsSubject.send(.displayMessageForwarding(itemID: itemID))
         case .viewSource:
@@ -160,7 +164,13 @@ class TimelineInteractionHandler {
         case .react:
             displayEmojiPicker(for: itemID)
         case .toggleReaction(let key):
-            Task { await timelineController.toggleReaction(key, to: itemID) }
+            Task {
+                guard case let .event(_, eventOrTransactionID) = itemID else {
+                    fatalError()
+                }
+                
+                await timelineController.toggleReaction(key, to: eventOrTransactionID)
+            }
         case .endPoll(let pollStartID):
             endPoll(pollStartID: pollStartID)
         case .pin:
@@ -185,6 +195,11 @@ class TimelineInteractionHandler {
     }
     
     private func processEditMessageEvent(_ messageTimelineItem: EventBasedMessageTimelineItemProtocol) {
+        guard case let .event(_, eventOrTransactionID) = messageTimelineItem.id else {
+            MXLog.error("Failed editing message, missing event id")
+            return
+        }
+        
         let text: String
         var htmlText: String?
         switch messageTimelineItem.contentType {
@@ -198,7 +213,7 @@ class TimelineInteractionHandler {
         }
         
         // Always update the mode first and then the text so that the composer has time to save the text draft
-        actionsSubject.send(.composer(action: .setMode(mode: .edit(originalItemId: messageTimelineItem.id))))
+        actionsSubject.send(.composer(action: .setMode(mode: .edit(originalEventOrTransactionID: eventOrTransactionID, source: .timeline))))
         actionsSubject.send(.composer(action: .setText(plainText: text, htmlText: htmlText)))
     }
     
