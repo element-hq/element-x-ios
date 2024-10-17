@@ -595,16 +595,15 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
 
         actionsSubject.send(.composer(action: .clear))
-
+        
         switch mode {
         case .reply(let eventID, _, _):
             await timelineController.sendMessage(message,
                                                  html: html,
                                                  inReplyToEventID: eventID,
                                                  intentionalMentions: intentionalMentions)
-        case .edit(let originalEventOrTransactionID, let source):
+        case .edit(let originalEventOrTransactionID):
             await timelineController.edit(originalEventOrTransactionID,
-                                          useTimeline: source == .timeline,
                                           message: message,
                                           html: html,
                                           intentionalMentions: intentionalMentions)

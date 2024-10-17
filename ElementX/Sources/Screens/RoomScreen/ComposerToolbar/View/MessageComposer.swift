@@ -275,7 +275,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
             messageComposer()
             
             messageComposer(.init(string: "Some message"),
-                            mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString), source: .timeline))
+                            mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString)))
             
             messageComposer(mode: .reply(eventID: UUID().uuidString,
                                          replyDetails: .loaded(sender: .init(id: "Kirk"),
