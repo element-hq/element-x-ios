@@ -90,3 +90,10 @@ extension String {
         return result
     }
 }
+
+extension String {
+    /// detects if the string is empty or contains only whitespaces and newlines
+    var isBlank: Bool {
+        trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+}
