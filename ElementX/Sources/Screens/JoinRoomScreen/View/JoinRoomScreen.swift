@@ -78,9 +78,8 @@ struct JoinRoomScreen: View {
                 }
                 
                 if context.viewState.mode == .knock {
-                    Spacer()
-                        .frame(height: 19)
                     knockMessage
+                        .padding(.top, 19)
                 }
             }
         }
@@ -118,9 +117,11 @@ struct JoinRoomScreen: View {
             }
             .background(.compound.bgCanvasDefault)
             .cornerRadius(8)
-            .overlay(RoundedRectangle(cornerRadius: 8)
-                .inset(by: 0.5)
-                .stroke(.compound.borderInteractivePrimary))
+            .overlay {
+                RoundedRectangle(cornerRadius: 8)
+                    .inset(by: 0.5)
+                    .stroke(.compound.borderInteractivePrimary)
+            }
             
             Text(L10n.screenJoinRoomKnockMessageDescription)
                 .font(.compound.bodyMD)
