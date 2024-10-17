@@ -62,6 +62,7 @@ struct UserProfileScreen: View {
     private var headerSection: some View {
         if let userProfile = context.viewState.userProfile {
             AvatarHeaderView(user: userProfile,
+                             isVerified: context.viewState.isVerified,
                              avatarSize: .user(on: .memberDetails),
                              mediaProvider: context.mediaProvider) { url in
                 context.send(viewAction: .displayAvatar(url))
@@ -70,6 +71,7 @@ struct UserProfileScreen: View {
             }
         } else {
             AvatarHeaderView(user: UserProfileProxy(userID: context.viewState.userID),
+                             isVerified: context.viewState.isVerified,
                              avatarSize: .user(on: .memberDetails),
                              mediaProvider: context.mediaProvider,
                              footer: { })
@@ -105,6 +107,10 @@ struct UserProfileScreen_Previews: PreviewProvider, TestablePreview {
     
     static func makeViewModel(userID: String) -> UserProfileScreenViewModel {
         let clientProxyMock = ClientProxyMock(.init())
+        clientProxyMock.userIdentityClosure = { userID in
+            let isVerified = userID == RoomMemberProxyMock.mockDan.userID
+            return .success(UserIdentitySDKMock(configuration: .init(isVerified: isVerified)))
+        }
         if userID != RoomMemberProxyMock.mockMe.userID {
             clientProxyMock.directRoomForUserIDReturnValue = .success("roomID")
         }

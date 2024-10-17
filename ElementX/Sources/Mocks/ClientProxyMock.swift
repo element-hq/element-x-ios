@@ -93,5 +93,7 @@ extension ClientProxyMock {
             
             return await .joined(JoinedRoomProxyMock(.init(id: room.id, name: room.name)))
         }
+        
+        userIdentityReturnValue = .success(UserIdentitySDKMock(configuration: .init()))
     }
 }
