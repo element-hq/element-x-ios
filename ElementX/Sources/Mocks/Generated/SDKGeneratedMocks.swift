@@ -2208,16 +2208,16 @@ open class ClientSDKMock: MatrixRustSDK.Client {
 
     //MARK: - knock
 
-    open var knockRoomIdOrAliasThrowableError: Error?
-    var knockRoomIdOrAliasUnderlyingCallsCount = 0
-    open var knockRoomIdOrAliasCallsCount: Int {
+    open var knockRoomIdOrAliasReasonServerNamesThrowableError: Error?
+    var knockRoomIdOrAliasReasonServerNamesUnderlyingCallsCount = 0
+    open var knockRoomIdOrAliasReasonServerNamesCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return knockRoomIdOrAliasUnderlyingCallsCount
+                return knockRoomIdOrAliasReasonServerNamesUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = knockRoomIdOrAliasUnderlyingCallsCount
+                    returnValue = knockRoomIdOrAliasReasonServerNamesUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -2225,29 +2225,29 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         set {
             if Thread.isMainThread {
-                knockRoomIdOrAliasUnderlyingCallsCount = newValue
+                knockRoomIdOrAliasReasonServerNamesUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    knockRoomIdOrAliasUnderlyingCallsCount = newValue
+                    knockRoomIdOrAliasReasonServerNamesUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var knockRoomIdOrAliasCalled: Bool {
-        return knockRoomIdOrAliasCallsCount > 0
+    open var knockRoomIdOrAliasReasonServerNamesCalled: Bool {
+        return knockRoomIdOrAliasReasonServerNamesCallsCount > 0
     }
-    open var knockRoomIdOrAliasReceivedRoomIdOrAlias: String?
-    open var knockRoomIdOrAliasReceivedInvocations: [String] = []
+    open var knockRoomIdOrAliasReasonServerNamesReceivedArguments: (roomIdOrAlias: String, reason: String?, serverNames: [String])?
+    open var knockRoomIdOrAliasReasonServerNamesReceivedInvocations: [(roomIdOrAlias: String, reason: String?, serverNames: [String])] = []
 
-    var knockRoomIdOrAliasUnderlyingReturnValue: Room!
-    open var knockRoomIdOrAliasReturnValue: Room! {
+    var knockRoomIdOrAliasReasonServerNamesUnderlyingReturnValue: Room!
+    open var knockRoomIdOrAliasReasonServerNamesReturnValue: Room! {
         get {
             if Thread.isMainThread {
-                return knockRoomIdOrAliasUnderlyingReturnValue
+                return knockRoomIdOrAliasReasonServerNamesUnderlyingReturnValue
             } else {
                 var returnValue: Room? = nil
                 DispatchQueue.main.sync {
-                    returnValue = knockRoomIdOrAliasUnderlyingReturnValue
+                    returnValue = knockRoomIdOrAliasReasonServerNamesUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -2255,29 +2255,29 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
         set {
             if Thread.isMainThread {
-                knockRoomIdOrAliasUnderlyingReturnValue = newValue
+                knockRoomIdOrAliasReasonServerNamesUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    knockRoomIdOrAliasUnderlyingReturnValue = newValue
+                    knockRoomIdOrAliasReasonServerNamesUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var knockRoomIdOrAliasClosure: ((String) async throws -> Room)?
+    open var knockRoomIdOrAliasReasonServerNamesClosure: ((String, String?, [String]) async throws -> Room)?
 
-    open override func knock(roomIdOrAlias: String) async throws -> Room {
-        if let error = knockRoomIdOrAliasThrowableError {
+    open override func knock(roomIdOrAlias: String, reason: String?, serverNames: [String]) async throws -> Room {
+        if let error = knockRoomIdOrAliasReasonServerNamesThrowableError {
             throw error
         }
-        knockRoomIdOrAliasCallsCount += 1
-        knockRoomIdOrAliasReceivedRoomIdOrAlias = roomIdOrAlias
+        knockRoomIdOrAliasReasonServerNamesCallsCount += 1
+        knockRoomIdOrAliasReasonServerNamesReceivedArguments = (roomIdOrAlias: roomIdOrAlias, reason: reason, serverNames: serverNames)
         DispatchQueue.main.async {
-            self.knockRoomIdOrAliasReceivedInvocations.append(roomIdOrAlias)
+            self.knockRoomIdOrAliasReasonServerNamesReceivedInvocations.append((roomIdOrAlias: roomIdOrAlias, reason: reason, serverNames: serverNames))
         }
-        if let knockRoomIdOrAliasClosure = knockRoomIdOrAliasClosure {
-            return try await knockRoomIdOrAliasClosure(roomIdOrAlias)
+        if let knockRoomIdOrAliasReasonServerNamesClosure = knockRoomIdOrAliasReasonServerNamesClosure {
+            return try await knockRoomIdOrAliasReasonServerNamesClosure(roomIdOrAlias, reason, serverNames)
         } else {
-            return knockRoomIdOrAliasReturnValue
+            return knockRoomIdOrAliasReasonServerNamesReturnValue
         }
     }
 
@@ -18042,34 +18042,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
     }
     open var editEventOrTransactionIdNewContentReceivedArguments: (eventOrTransactionId: EventOrTransactionId, newContent: EditedContent)?
     open var editEventOrTransactionIdNewContentReceivedInvocations: [(eventOrTransactionId: EventOrTransactionId, newContent: EditedContent)] = []
+    open var editEventOrTransactionIdNewContentClosure: ((EventOrTransactionId, EditedContent) async throws -> Void)?
 
-    var editEventOrTransactionIdNewContentUnderlyingReturnValue: Bool!
-    open var editEventOrTransactionIdNewContentReturnValue: Bool! {
-        get {
-            if Thread.isMainThread {
-                return editEventOrTransactionIdNewContentUnderlyingReturnValue
-            } else {
-                var returnValue: Bool? = nil
-                DispatchQueue.main.sync {
-                    returnValue = editEventOrTransactionIdNewContentUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                editEventOrTransactionIdNewContentUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    editEventOrTransactionIdNewContentUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var editEventOrTransactionIdNewContentClosure: ((EventOrTransactionId, EditedContent) async throws -> Bool)?
-
-    open override func edit(eventOrTransactionId: EventOrTransactionId, newContent: EditedContent) async throws -> Bool {
+    open override func edit(eventOrTransactionId: EventOrTransactionId, newContent: EditedContent) async throws {
         if let error = editEventOrTransactionIdNewContentThrowableError {
             throw error
         }
@@ -18078,11 +18053,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         DispatchQueue.main.async {
             self.editEventOrTransactionIdNewContentReceivedInvocations.append((eventOrTransactionId: eventOrTransactionId, newContent: newContent))
         }
-        if let editEventOrTransactionIdNewContentClosure = editEventOrTransactionIdNewContentClosure {
-            return try await editEventOrTransactionIdNewContentClosure(eventOrTransactionId, newContent)
-        } else {
-            return editEventOrTransactionIdNewContentReturnValue
-        }
+        try await editEventOrTransactionIdNewContentClosure?(eventOrTransactionId, newContent)
     }
 
     //MARK: - endPoll

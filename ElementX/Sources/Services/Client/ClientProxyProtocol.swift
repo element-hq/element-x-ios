@@ -145,7 +145,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func joinRoomAlias(_ roomAlias: String) async -> Result<Void, ClientProxyError>
     
-    func knockRoom(_ roomID: String, message: String?) async -> Result<Void, ClientProxyError>
+    func knockRoom(_ roomID: String, message: String?, via: [String]) async -> Result<Void, ClientProxyError>
     
     func knockRoomAlias(_ roomAlias: String, message: String?) async -> Result<Void, ClientProxyError>
     
