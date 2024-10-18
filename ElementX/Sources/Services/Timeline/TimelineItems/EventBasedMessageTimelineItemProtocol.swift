@@ -24,3 +24,20 @@ protocol EventBasedMessageTimelineItemProtocol: EventBasedTimelineItemProtocol {
     var contentType: EventBasedMessageTimelineItemContentType { get }
     var isThreaded: Bool { get }
 }
+
+extension EventBasedMessageTimelineItemProtocol {
+    var hasMediaCaption: Bool {
+        switch contentType {
+        case .audio(let content):
+            content.caption != nil
+        case .file(let content):
+            content.caption != nil
+        case .image(let content):
+            content.caption != nil
+        case .video(let content):
+            content.caption != nil
+        case .emote, .notice, .text, .location, .voice:
+            false
+        }
+    }
+}
