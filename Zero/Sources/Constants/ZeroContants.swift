@@ -2,7 +2,7 @@ import Foundation
 
 enum ZeroContants {
     /// Change app environment here and respective values will be applied everywhere .i.e. `DevServer()` or `ProdServer()`
-    static let appServer: AppServer = DevServer()
+    static let appServer: AppServer = ProdServer()
 }
 
 protocol AppServer {
