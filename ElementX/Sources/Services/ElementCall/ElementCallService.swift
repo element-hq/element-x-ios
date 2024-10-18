@@ -246,10 +246,8 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
         #if targetEnvironment(simulator)
         // This gets called for no reason on simulators, where CallKit
-        // isn't even supported. Ignore
-        return
-        #endif
-        
+        // isn't even supported, ignore it.
+        #else
         if let ongoingCallID {
             actionsSubject.send(.endCall(roomID: ongoingCallID.roomID))
         }
@@ -257,6 +255,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         tearDownCallSession(sendEndCallAction: false)
         
         action.fulfill()
+        #endif
     }
     
     // MARK: - Private
