@@ -1723,6 +1723,12 @@ internal enum L10n {
   internal static var screenRoomMemberDetailsUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_room_member_details_unblock_alert_description") }
   /// Unblock user
   internal static var screenRoomMemberDetailsUnblockUser: String { return L10n.tr("Localizable", "screen_room_member_details_unblock_user") }
+  /// Use the web app to verify this user.
+  internal static var screenRoomMemberDetailsVerifyButtonSubtitle: String { return L10n.tr("Localizable", "screen_room_member_details_verify_button_subtitle") }
+  /// Verify %1$@
+  internal static func screenRoomMemberDetailsVerifyButtonTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_room_member_details_verify_button_title", String(describing: p1))
+  }
   /// Ban
   internal static var screenRoomMemberListBanMemberConfirmationAction: String { return L10n.tr("Localizable", "screen_room_member_list_ban_member_confirmation_action") }
   /// They won’t be able to join this room again if invited.

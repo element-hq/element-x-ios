@@ -710,6 +710,8 @@
 "screen_room_member_details_unblock_alert_action" = "Unblock";
 "screen_room_member_details_unblock_alert_description" = "You'll be able to see all messages from them again.";
 "screen_room_member_details_unblock_user" = "Unblock user";
+"screen_room_member_details_verify_button_subtitle" = "Use the web app to verify this user.";
+"screen_room_member_details_verify_button_title" = "Verify %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "Ban";
 "screen_room_member_list_ban_member_confirmation_description" = "They won’t be able to join this room again if invited.";
 "screen_room_member_list_ban_member_confirmation_title" = "Are you sure you want to ban this member?";
