@@ -65,6 +65,7 @@ struct JoinRoomScreenViewStateBindings {
 
 enum JoinRoomScreenAlertType {
     case declineInvite
+    case cancelKnock
 }
 
 enum JoinRoomScreenViewAction {

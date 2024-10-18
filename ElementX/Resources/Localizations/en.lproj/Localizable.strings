@@ -54,6 +54,7 @@
 "action_forgot_password" = "Forgot password?";
 "action_forward" = "Forward";
 "action_go_back" = "Go back";
+"action_ignore" = "Ignore";
 "action_invite" = "Invite";
 "action_invite_friends" = "Invite people";
 "action_invite_friends_to_app" = "Invite people to %1$@";
@@ -133,6 +134,7 @@
 "common_dark" = "Dark";
 "common_decryption_error" = "Decryption error";
 "common_developer_options" = "Developer options";
+"common_device_id" = "Device ID";
 "common_direct_chat" = "Direct chat";
 "common_edited_suffix" = "(edited)";
 "common_editing" = "Editing";
@@ -226,6 +228,7 @@
 "common_username" = "Username";
 "common_verification_cancelled" = "Verification cancelled";
 "common_verification_complete" = "Verification complete";
+"common_verification_failed" = "Verification failed";
 "common_verified" = "Verified";
 "common_verify_device" = "Verify device";
 "common_video" = "Video";
@@ -343,6 +346,9 @@
 "screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
 "screen_create_room_access_section_knocking_option_title" = "Ask to join";
 "screen_join_room_cancel_knock_action" = "Cancel request";
+"screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
+"screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
+"screen_join_room_cancel_knock_alert_title" = "Cancel request to join";
 "screen_join_room_knock_message_description" = "Message (optional)";
 "screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
 "screen_join_room_knock_sent_title" = "Request to join sent";
@@ -710,6 +716,8 @@
 "screen_room_member_details_unblock_alert_action" = "Unblock";
 "screen_room_member_details_unblock_alert_description" = "You'll be able to see all messages from them again.";
 "screen_room_member_details_unblock_user" = "Unblock user";
+"screen_room_member_details_verify_button_subtitle" = "Use the web app to verify this user.";
+"screen_room_member_details_verify_button_title" = "Verify %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "Ban";
 "screen_room_member_list_ban_member_confirmation_description" = "They won’t be able to join this room again if invited.";
 "screen_room_member_list_ban_member_confirmation_title" = "Are you sure you want to ban this member?";
@@ -807,6 +815,7 @@
 "screen_session_verification_compare_numbers_title" = "Compare numbers";
 "screen_session_verification_complete_subtitle" = "Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.";
 "screen_session_verification_enter_recovery_key" = "Enter recovery key";
+"screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Prove it’s you in order to access your encrypted message history.";
 "screen_session_verification_open_existing_session_title" = "Open an existing session";
 "screen_session_verification_positive_button_canceled" = "Retry verification";
@@ -814,6 +823,10 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "Waiting to match";
 "screen_session_verification_ready_subtitle" = "Compare a unique set of emojis.";
 "screen_session_verification_request_accepted_subtitle" = "Compare the unique emoji, ensuring they appear in the same order.";
+"screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
+"screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "They don’t match";
 "screen_session_verification_they_match" = "They match";
 "screen_session_verification_waiting_to_accept_subtitle" = "Accept the request to start the verification process in your other session to continue.";
