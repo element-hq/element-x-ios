@@ -31,9 +31,10 @@ struct JoinRoomScreen: View {
     
     @ViewBuilder
     var mainContent: some View {
-        if context.viewState.mode == .knocked {
+        switch context.viewState.mode {
+        case .knocked:
             knockedView
-        } else {
+        default:
             defaultView
         }
     }
@@ -101,7 +102,7 @@ struct JoinRoomScreen: View {
             }
         }
     }
-    
+        
     @ViewBuilder
     private var knockMessage: some View {
         VStack(alignment: .leading, spacing: 12) {

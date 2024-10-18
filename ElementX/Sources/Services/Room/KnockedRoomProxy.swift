@@ -76,7 +76,11 @@ class KnockedRoomProxy: KnockedRoomProxyProtocol {
     }
     
     func cancelKnock() async -> Result<Void, RoomProxyError> {
-        // TODO: Implement this once the API is available
-        .failure(.invalidURL)
+        do {
+            return try await .success(room.leave())
+        } catch {
+            MXLog.error("Failed cancelling the knock with error: \(error)")
+            return .failure(.sdkError(error))
+        }
     }
 }
