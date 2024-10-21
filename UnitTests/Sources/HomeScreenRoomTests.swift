@@ -23,7 +23,7 @@ class HomeScreenRoomTests: XCTestCase {
                           hasOngoingCall: Bool) {
         roomSummary = RoomSummary(roomListItem: .init(noPointer: .init()),
                                   id: "Test room",
-                                  isInvite: false,
+                                  joinRequestType: nil,
                                   inviter: nil,
                                   name: "Test room",
                                   isDirect: false,

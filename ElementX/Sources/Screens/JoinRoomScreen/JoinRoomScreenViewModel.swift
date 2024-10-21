@@ -210,27 +210,6 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         }
     }
     
-    private func cancelKnock() async {
-        defer {
-            userIndicatorController.retractIndicatorWithId(roomID)
-        }
-        
-        userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
-        
-        guard case let .knocked(roomProxy) = room else {
-            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
-            return
-        }
-        
-        let result = await roomProxy.cancelKnock()
-        
-        if case .failure = result {
-            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
-        } else {
-            await updateRoom()
-        }
-    }
-    
     private func showDeclineInviteConfirmationAlert() {
         guard let roomDetails = state.roomDetails else {
             userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
@@ -266,6 +245,27 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         }
         
         let result = await roomProxy.rejectInvitation()
+        
+        if case .failure = result {
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+        } else {
+            await updateRoom()
+        }
+    }
+    
+    private func cancelKnock() async {
+        defer {
+            userIndicatorController.retractIndicatorWithId(roomID)
+        }
+        
+        userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
+        
+        guard case let .knocked(roomProxy) = room else {
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            return
+        }
+        
+        let result = await roomProxy.cancelKnock()
         
         if case .failure = result {
             userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))

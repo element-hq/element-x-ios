@@ -1243,6 +1243,8 @@ internal enum L10n {
   }
   /// Are you sure you want to turn off backup?
   internal static var screenKeyBackupDisableTitle: String { return L10n.tr("Localizable", "screen_key_backup_disable_title") }
+  /// Request to join sent
+  internal static var screenKnockedKnockSent: String { return L10n.tr("Localizable", "screen_knocked_knock_sent") }
   /// This account has been deactivated.
   internal static var screenLoginErrorDeactivatedAccount: String { return L10n.tr("Localizable", "screen_login_error_deactivated_account") }
   /// Incorrect username and/or password

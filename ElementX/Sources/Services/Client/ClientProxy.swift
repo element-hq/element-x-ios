@@ -417,7 +417,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func knockRoom(_ roomID: String, message: String?, via: [String]) async -> Result<Void, ClientProxyError> {
         do {
-            let _ = try await client.knock(roomIdOrAlias: roomID, reason: message, serverNames: via)
+            let _ = try await client.knock(roomIdOrAlias: roomID)
             await waitForRoomToSync(roomID: roomID, timeout: .seconds(30))
             return .success(())
         } catch {
@@ -428,7 +428,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func knockRoomAlias(_ roomAlias: String, message: String?) async -> Result<Void, ClientProxyError> {
         do {
-            let room = try await client.knock(roomIdOrAlias: roomAlias, reason: message, serverNames: [])
+            let room = try await client.knock(roomIdOrAlias: roomAlias)
             await waitForRoomToSync(roomID: room.id(), timeout: .seconds(30))
             return .success(())
         } catch {

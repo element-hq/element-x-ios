@@ -56,6 +56,17 @@ class JoinRoomScreenViewModelTests: XCTestCase {
         }.fulfill()
     }
     
+    func testCancelKnockAlert() async throws {
+        setupViewModel(knocked: true)
+        
+        try await deferFulfillment(viewModel.context.$viewState) { state in
+            state.mode == .knocked
+        }.fulfill()
+        
+        context.send(viewAction: .cancelKnock)
+        XCTAssertEqual(viewModel.context.alertInfo?.id, .cancelKnock)
+    }
+    
     private func setupViewModel(throwing: Bool = false, knocked: Bool = false) {
         let clientProxy = ClientProxyMock(.init())
         
@@ -75,7 +86,10 @@ class JoinRoomScreenViewModelTests: XCTestCase {
         
         if knocked {
             clientProxy.roomForIdentifierClosure = { _ in
-                .knocked(KnockedRoomProxyMock(.init()))
+                let roomProxy = KnockedRoomProxyMock(.init())
+                // to test the cancel knock function
+                roomProxy.cancelKnockUnderlyingReturnValue = .success(())
+                return .knocked(roomProxy)
             }
         }
         

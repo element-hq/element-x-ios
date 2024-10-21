@@ -9,11 +9,16 @@ import Foundation
 import MatrixRustSDK
 
 struct RoomSummary {
+    enum JoinRequestType {
+        case invite
+        case knocked
+    }
+
     let roomListItem: RoomListItem
     
     let id: String
     
-    let isInvite: Bool
+    let joinRequestType: JoinRequestType?
     let inviter: RoomMemberProxyProtocol?
     
     let name: String
@@ -70,7 +75,7 @@ extension RoomSummary {
         inviter = nil
         hasOngoingCall = false
         
-        isInvite = false
+        joinRequestType = nil
         isMarkedUnread = false
         isFavourite = false
     }

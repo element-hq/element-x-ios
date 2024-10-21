@@ -131,6 +131,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
         case placeholder
         case room
         case invite
+        case knocked
     }
     
     static let placeholderLastMessage = AttributedString("Hidden last message")
@@ -192,17 +193,23 @@ extension HomeScreenRoom {
         
         let hasUnreadMessages = hideUnreadMessagesBadge ? false : summary.hasUnreadMessages
         
-        let isDotShown = hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread
+        let isDotShown = hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || summary.joinRequestType == .knocked
         let isMentionShown = summary.hasUnreadMentions && !summary.isMuted
         let isMuteShown = summary.isMuted
         let isCallShown = summary.hasOngoingCall
-        let isHighlighted = summary.isMarkedUnread || (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions))
+        let isHighlighted = summary.isMarkedUnread || (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || summary.joinRequestType == .knocked
         
         let inviter = summary.inviter.map(RoomInviterDetails.init)
         
+        let type: HomeScreenRoom.RoomType = switch summary.joinRequestType {
+        case .invite: .invite
+        case .knocked: .knocked
+        case .none: .room
+        }
+        
         self.init(id: identifier,
                   roomID: summary.id,
-                  type: summary.isInvite ? .invite : .room,
+                  type: type,
                   badges: .init(isDotShown: isDotShown,
                                 isMentionShown: isMentionShown,
                                 isMuteShown: isMuteShown,
