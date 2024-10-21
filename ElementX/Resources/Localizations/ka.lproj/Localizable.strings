@@ -54,6 +54,7 @@
 "action_forgot_password" = "დაგავიწყდათ პაროლი?";
 "action_forward" = "გადაგზავნა";
 "action_go_back" = "Go back";
+"action_ignore" = "Ignore";
 "action_invite" = "მოწვევა";
 "action_invite_friends" = "ხალხის მოწვევა";
 "action_invite_friends_to_app" = "ადამიანების დამატება %1$@";
@@ -133,6 +134,7 @@
 "common_dark" = "მუქი";
 "common_decryption_error" = "გაშიფვრის შეცდომა";
 "common_developer_options" = "დეველოპერის პარამეტრები";
+"common_device_id" = "Device ID";
 "common_direct_chat" = "პირდაპირი ჩატი";
 "common_edited_suffix" = "(რედაქტირებულია)";
 "common_editing" = "რედაქტირება";
@@ -226,6 +228,8 @@
 "common_username" = "მომხმარებლის სახელი";
 "common_verification_cancelled" = "დადასტურება გაუქმდა";
 "common_verification_complete" = "დადასტურება დასრულებულია";
+"common_verification_failed" = "Verification failed";
+"common_verified" = "Verified";
 "common_verify_device" = "დაადასტურეთ მოწყობილობა";
 "common_video" = "ვიდეო";
 "common_voice_message" = "ხმოვანი შეტყობინება";
@@ -241,6 +245,8 @@
 "confirm_recovery_key_banner_title" = "შეიყვანეთ აღდგენის გასაღები";
 "crash_detection_dialog_content" = "%1$@ ავარიულად გაითიშა ბოლოს გამოიყენებისას. გსურთ, გამოგვიგზავნოთ ავარიული გათიშვის ჟურნალი?";
 "crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
+"crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity appears to have changed. %3$@";
+"crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
 "dialog_permission_camera" = "იმისათვის, რომ აპლიკაციამ გამოიყენოს კამერა, გთხოვთ, მიანიჭოთ ნებართვა სისტემის პარამეტრებში.";
 "dialog_permission_generic" = "გთხოვთ, მიანიჭოთ ნებართვა სისტემის პარამეტრებში.";
 "dialog_permission_location_description_ios" = "მიანიჭეთ წვდომა პარამეტრებში -> ლოკაციაში.";
@@ -339,6 +345,13 @@
 "screen_create_room_access_section_header" = "Room Access";
 "screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
 "screen_create_room_access_section_knocking_option_title" = "Ask to join";
+"screen_join_room_cancel_knock_action" = "Cancel request";
+"screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
+"screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
+"screen_join_room_cancel_knock_alert_title" = "Cancel request to join";
+"screen_join_room_knock_message_description" = "Message (optional)";
+"screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
+"screen_join_room_knock_sent_title" = "Request to join sent";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
@@ -502,7 +515,7 @@
 "screen_invites_empty_list" = "მოწვევები არ არის";
 "screen_invites_invited_you" = "%1$@ (%2$@) მოგიწვიათ";
 "screen_join_room_join_action" = "Join room";
-"screen_join_room_knock_action" = "Knock to join";
+"screen_join_room_knock_action" = "Send request to join";
 "screen_join_room_space_not_supported_description" = "%1$@ does not support spaces yet. You can access spaces on web.";
 "screen_join_room_space_not_supported_title" = "Spaces are not supported yet";
 "screen_join_room_subtitle_knock" = "Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved.";
@@ -703,6 +716,8 @@
 "screen_room_member_details_unblock_alert_action" = "განბლოკვა";
 "screen_room_member_details_unblock_alert_description" = "თქვენ კვლავ შეძლებთ მათგან ყველა შეტყობინების ნახვას.";
 "screen_room_member_details_unblock_user" = "Მომხმარებლის განბლოკვა";
+"screen_room_member_details_verify_button_subtitle" = "Use the web app to verify this user.";
+"screen_room_member_details_verify_button_title" = "Verify %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "Ban";
 "screen_room_member_list_ban_member_confirmation_description" = "They won’t be able to join this room again if invited.";
 "screen_room_member_list_ban_member_confirmation_title" = "Are you sure you want to ban this member?";
@@ -800,6 +815,7 @@
 "screen_session_verification_compare_numbers_title" = "შეადარეთ რიცხვები";
 "screen_session_verification_complete_subtitle" = "თქვენი ახალი სესია დადასტურებულია. მას აქვს წვდომა დაშიფრულ შეტყობინებებზე და სხვა მომხმარებლები მას სანდოდ ხედავენ.";
 "screen_session_verification_enter_recovery_key" = "Enter recovery key";
+"screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "დაამტკიცეთ, რომ ეს თქვენ ხართ, რათა მიიღოთ წვდომა თქვენი დაშიფრული შეტყობინებების ისტორიასთან.";
 "screen_session_verification_open_existing_session_title" = "არსებული სესიის გახსნა";
 "screen_session_verification_positive_button_canceled" = "დადასტურების ხელახლა ცდა";
@@ -807,6 +823,10 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "ველოდებით დამთხვევას";
 "screen_session_verification_ready_subtitle" = "შეადარეთ ემოციების უნიკალური ნაკრები.";
 "screen_session_verification_request_accepted_subtitle" = "შეადარეთ უნიკალური ემოჯი, დარწმუნდით, რომ ისინი ერთი დ იმავე თანმიმდევრობით გამოჩნდნენ.";
+"screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
+"screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "ისინი არ ემთხვევიან ერთმანეთს";
 "screen_session_verification_they_match" = "ისინი ემთხვევიან ერთმანეთს";
 "screen_session_verification_waiting_to_accept_subtitle" = "მიიღეთ დადასტურების მოთხოვნა თქვენს სხვა სესიაში ამ პროცესის გასაგრძელებლად.";

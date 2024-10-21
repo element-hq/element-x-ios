@@ -54,6 +54,7 @@
 "action_forgot_password" = "Zapomněli jste heslo?";
 "action_forward" = "Přeposlat";
 "action_go_back" = "Přejít zpět";
+"action_ignore" = "Ignorovat";
 "action_invite" = "Pozvat";
 "action_invite_friends" = "Pozvat přátele";
 "action_invite_friends_to_app" = "Pozvat přátele do %1$@";
@@ -133,6 +134,7 @@
 "common_dark" = "Tmavé";
 "common_decryption_error" = "Chyba dešifrování";
 "common_developer_options" = "Možnosti pro vývojáře";
+"common_device_id" = "ID zařízení";
 "common_direct_chat" = "Přímý chat";
 "common_edited_suffix" = "(upraveno)";
 "common_editing" = "Úpravy";
@@ -226,6 +228,8 @@
 "common_username" = "Uživatelské jméno";
 "common_verification_cancelled" = "Ověření zrušeno";
 "common_verification_complete" = "Ověření dokončeno";
+"common_verification_failed" = "Ověření se nezdařilo";
+"common_verified" = "Ověřeno";
 "common_verify_device" = "Ověřit zařízení";
 "common_video" = "Video";
 "common_voice_message" = "Hlasová zpráva";
@@ -241,6 +245,8 @@
 "confirm_recovery_key_banner_title" = "Potvrďte klíč pro obnovení";
 "crash_detection_dialog_content" = "%1$@ havaroval při posledním použití. Chcete se s námi podělit o zprávu o selhání?";
 "crypto_identity_change_pin_violation" = "Zdá se, že se identita %1$@ změnila. %2$@";
+"crypto_identity_change_pin_violation_new" = "Zdá se, že identita %1$@ %2$@ se změnila. %3$@";
+"crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
 "dialog_permission_camera" = "Aby mohla aplikace používat fotoaparát, udělte prosím oprávnění v nastavení systému.";
 "dialog_permission_generic" = "Udělte prosím oprávnění v nastavení systému.";
 "dialog_permission_location_description_ios" = "Udělte přístup v Nastavení -> Poloha.";
@@ -339,6 +345,13 @@
 "screen_create_room_access_section_header" = "Přístup do místnosti";
 "screen_create_room_access_section_knocking_option_description" = "Kdokoli může požádat o vstup do místnosti, ale správce nebo moderátor bude muset žádost přijmout";
 "screen_create_room_access_section_knocking_option_title" = "Požádat o připojení";
+"screen_join_room_cancel_knock_action" = "Zrušit žádost";
+"screen_join_room_cancel_knock_alert_confirmation" = "Ano, zrušit";
+"screen_join_room_cancel_knock_alert_description" = "Opravdu chcete zrušit svou žádost o vstup do této místnosti?";
+"screen_join_room_cancel_knock_alert_title" = "Zrušit žádost o vstup";
+"screen_join_room_knock_message_description" = "Zpráva (nepovinné)";
+"screen_join_room_knock_sent_description" = "Pokud bude váš požadavek přijat, obdržíte pozvánku na vstup do místnosti.";
+"screen_join_room_knock_sent_title" = "Žádost o vstup odeslána";
 "screen_pinned_timeline_empty_state_description" = "Přidržte zprávu a vyberte „%1$@“, kterou chcete zahrnout sem.";
 "screen_pinned_timeline_empty_state_headline" = "Připněte důležité zprávy, aby je bylo možné snadno najít";
 "screen_reset_encryption_password_error" = "Došlo k neznámé chybě. Zkontrolujte, zda je heslo k účtu správné a zkuste to znovu.";
@@ -703,6 +716,8 @@
 "screen_room_member_details_unblock_alert_action" = "Odblokovat";
 "screen_room_member_details_unblock_alert_description" = "Znovu uvidíte všechny zprávy od nich.";
 "screen_room_member_details_unblock_user" = "Odblokovat uživatele";
+"screen_room_member_details_verify_button_subtitle" = "K ověření tohoto uživatele použijte webovou aplikaci.";
+"screen_room_member_details_verify_button_title" = "Ověřit %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "Vykázat";
 "screen_room_member_list_ban_member_confirmation_description" = "Nebudou se moci znovu připojit k této místnosti, pokud budou pozváni.";
 "screen_room_member_list_ban_member_confirmation_title" = "Jste si jisti, že chcete vykázat tohoto člena?";
@@ -800,6 +815,7 @@
 "screen_session_verification_compare_numbers_title" = "Porovnejte čísla";
 "screen_session_verification_complete_subtitle" = "Vaše nová relace je nyní ověřena. Má přístup k vašim zašifrovaným zprávám a ostatní uživatelé ji uvidí jako důvěryhodnou.";
 "screen_session_verification_enter_recovery_key" = "Zadejte klíč pro obnovení";
+"screen_session_verification_failed_subtitle" = "Buď vypršel časový limit požadavku, požadavek byl zamítnut, nebo došlo k nesouladu ověření.";
 "screen_session_verification_open_existing_session_subtitle" = "Pro přístup k historii zašifrovaných zpráv prokažte, že jste to vy.";
 "screen_session_verification_open_existing_session_title" = "Otevřete existující relaci";
 "screen_session_verification_positive_button_canceled" = "Opakovat ověření";
@@ -807,6 +823,10 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "Čekání na shodu";
 "screen_session_verification_ready_subtitle" = "Porovnejte jedinečnou sadu emotikonů.";
 "screen_session_verification_request_accepted_subtitle" = "Porovnejte jedinečné emotikony a ujistěte se, že jsou zobrazeny ve stejném pořadí.";
+"screen_session_verification_request_details_timestamp" = "Přihlášen";
+"screen_session_verification_request_footer" = "Pokračujte, pouze pokud jste toto ověření zahájili.";
+"screen_session_verification_request_subtitle" = "Ověřte druhé zařízení, aby byla vaše historie zpráv zabezpečená.";
+"screen_session_verification_request_title" = "Požadováno ověření";
 "screen_session_verification_they_dont_match" = "Neshodují se";
 "screen_session_verification_they_match" = "Shodují se";
 "screen_session_verification_waiting_to_accept_subtitle" = "Pro pokračování přijměte požadavek na zahájení ověření v jiné relaci.";

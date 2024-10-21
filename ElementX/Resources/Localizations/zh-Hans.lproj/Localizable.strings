@@ -54,6 +54,7 @@
 "action_forgot_password" = "忘记密码？";
 "action_forward" = "转发";
 "action_go_back" = "返回";
+"action_ignore" = "Ignore";
 "action_invite" = "邀请";
 "action_invite_friends" = "邀请朋友";
 "action_invite_friends_to_app" = "邀请朋友加入 %1$@";
@@ -133,6 +134,7 @@
 "common_dark" = "暗色";
 "common_decryption_error" = "解密错误";
 "common_developer_options" = "开发者选项";
+"common_device_id" = "Device ID";
 "common_direct_chat" = "私聊";
 "common_edited_suffix" = "（已编辑）";
 "common_editing" = "编辑中";
@@ -226,6 +228,8 @@
 "common_username" = "用户名";
 "common_verification_cancelled" = "验证已取消";
 "common_verification_complete" = "验证完成";
+"common_verification_failed" = "Verification failed";
+"common_verified" = "Verified";
 "common_verify_device" = "验证设备";
 "common_video" = "视频";
 "common_voice_message" = "语音消息";
@@ -241,6 +245,8 @@
 "confirm_recovery_key_banner_title" = "输入恢复密钥";
 "crash_detection_dialog_content" = "%1$@ 上次使用时崩溃了。想和我们分享崩溃报告吗？";
 "crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
+"crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity appears to have changed. %3$@";
+"crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
 "dialog_permission_camera" = "为了让应用程序使用相机，请在系统设置中授予权限。";
 "dialog_permission_generic" = "请在系统设置中授予权限。";
 "dialog_permission_location_description_ios" = "在设置->位置中授予访问权限。";
@@ -339,6 +345,13 @@
 "screen_create_room_access_section_header" = "Room Access";
 "screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
 "screen_create_room_access_section_knocking_option_title" = "Ask to join";
+"screen_join_room_cancel_knock_action" = "Cancel request";
+"screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
+"screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
+"screen_join_room_cancel_knock_alert_title" = "Cancel request to join";
+"screen_join_room_knock_message_description" = "Message (optional)";
+"screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
+"screen_join_room_knock_sent_title" = "Request to join sent";
 "screen_pinned_timeline_empty_state_description" = "按下消息并选择 “%1$@” 将其包含在此处。";
 "screen_pinned_timeline_empty_state_headline" = "固定重要消息，以便轻松发现它们";
 "screen_reset_encryption_password_error" = "发生未知错误。请检查您的帐户密码是否正确，然后重试。";
@@ -703,6 +716,8 @@
 "screen_room_member_details_unblock_alert_action" = "解封";
 "screen_room_member_details_unblock_alert_description" = "可以重新接收他们的消息。";
 "screen_room_member_details_unblock_user" = "解封用户";
+"screen_room_member_details_verify_button_subtitle" = "Use the web app to verify this user.";
+"screen_room_member_details_verify_button_title" = "Verify %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "封禁";
 "screen_room_member_list_ban_member_confirmation_description" = "即使受到邀请，他们也无法再次加入房间。";
 "screen_room_member_list_ban_member_confirmation_title" = "您确定要封禁该成员吗？";
@@ -800,6 +815,7 @@
 "screen_session_verification_compare_numbers_title" = "比较数字";
 "screen_session_verification_complete_subtitle" = "新设备已经成功验证。现在新设备可以访问加密信息，其他用户也会信任这个设备。";
 "screen_session_verification_enter_recovery_key" = "输入恢复密钥";
+"screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "证明自己的身份以访问加密历史消息。";
 "screen_session_verification_open_existing_session_title" = "打开已有会话";
 "screen_session_verification_positive_button_canceled" = "重试验证";
@@ -807,6 +823,10 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "等待比对";
 "screen_session_verification_ready_subtitle" = "比较一组表情符号。";
 "screen_session_verification_request_accepted_subtitle" = "比较表情符号，确保它们以相同顺序排列。";
+"screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
+"screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "不匹配";
 "screen_session_verification_they_match" = "匹配";
 "screen_session_verification_waiting_to_accept_subtitle" = "请在其他会话中接受验证请求。";
