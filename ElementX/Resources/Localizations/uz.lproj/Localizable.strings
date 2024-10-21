@@ -54,6 +54,7 @@
 "action_forgot_password" = "Parolni unutdingizmi?";
 "action_forward" = "Oldinga";
 "action_go_back" = "Go back";
+"action_ignore" = "Ignore";
 "action_invite" = "Taklif qilish";
 "action_invite_friends" = "Odamlarni taklif qiling";
 "action_invite_friends_to_app" = "Odamlarni taklif qilish%1$@";
@@ -133,6 +134,7 @@
 "common_dark" = "Dark";
 "common_decryption_error" = "Shifrni ochish xatosi";
 "common_developer_options" = "Dasturchi variantlari";
+"common_device_id" = "Device ID";
 "common_direct_chat" = "Direct chat";
 "common_edited_suffix" = "(tahrirlangan)";
 "common_editing" = "Tahrirlash";
@@ -226,6 +228,8 @@
 "common_username" = "Foydalanuvchi nomi";
 "common_verification_cancelled" = "Tasdiqlash bekor qilindi";
 "common_verification_complete" = "Tasdiqlash yakunlandi";
+"common_verification_failed" = "Verification failed";
+"common_verified" = "Verified";
 "common_verify_device" = "Verify device";
 "common_video" = "Video";
 "common_voice_message" = "Ovozli xabar";
@@ -241,6 +245,8 @@
 "confirm_recovery_key_banner_title" = "Enter your recovery key";
 "crash_detection_dialog_content" = "%1$@oxirgi marta ishlatilganda qulab tushdi. Biz bilan nosozlik hisobotini baham ko'rmoqchimisiz?";
 "crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
+"crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity appears to have changed. %3$@";
+"crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
 "dialog_permission_camera" = "Ilovaga kameradan foydalanishiga ruxsat berish uchun tizim sozlamalarida ruxsat bering.";
 "dialog_permission_generic" = "Iltimos, tizim sozlamalarida ruxsat bering.";
 "dialog_permission_location_description_ios" = "Grant access in Settings -> Location.";
@@ -339,6 +345,13 @@
 "screen_create_room_access_section_header" = "Room Access";
 "screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
 "screen_create_room_access_section_knocking_option_title" = "Ask to join";
+"screen_join_room_cancel_knock_action" = "Cancel request";
+"screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
+"screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
+"screen_join_room_cancel_knock_alert_title" = "Cancel request to join";
+"screen_join_room_knock_message_description" = "Message (optional)";
+"screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
+"screen_join_room_knock_sent_title" = "Request to join sent";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
@@ -502,7 +515,7 @@
 "screen_invites_empty_list" = "Takliflar yo'q";
 "screen_invites_invited_you" = "%1$@(%2$@ ) sizni taklif qildi";
 "screen_join_room_join_action" = "Join room";
-"screen_join_room_knock_action" = "Knock to join";
+"screen_join_room_knock_action" = "Send request to join";
 "screen_join_room_space_not_supported_description" = "%1$@ does not support spaces yet. You can access spaces on web.";
 "screen_join_room_space_not_supported_title" = "Spaces are not supported yet";
 "screen_join_room_subtitle_knock" = "Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved.";
@@ -703,6 +716,8 @@
 "screen_room_member_details_unblock_alert_action" = "Blokdan chiqarish";
 "screen_room_member_details_unblock_alert_description" = "Ulardan kelgan barcha xabarlarni yana koʻrishingiz mumkin boʻladi.";
 "screen_room_member_details_unblock_user" = "Foydalanuvchini blokdan chiqarish";
+"screen_room_member_details_verify_button_subtitle" = "Use the web app to verify this user.";
+"screen_room_member_details_verify_button_title" = "Verify %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "Ban";
 "screen_room_member_list_ban_member_confirmation_description" = "They won’t be able to join this room again if invited.";
 "screen_room_member_list_ban_member_confirmation_title" = "Are you sure you want to ban this member?";
@@ -800,6 +815,7 @@
 "screen_session_verification_compare_numbers_title" = "Compare numbers";
 "screen_session_verification_complete_subtitle" = "Yangi seansingiz tasdiqlandi. U sizning shifrlangan xabarlaringizga kirish huquqiga ega va boshqa foydalanuvchilar uni ishonchli deb bilishadi.";
 "screen_session_verification_enter_recovery_key" = "Enter recovery key";
+"screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Shifrlangan xabarlar tarixiga kirish uchun shaxsingizni tasdiqlang.";
 "screen_session_verification_open_existing_session_title" = "Mavjud seansni oching";
 "screen_session_verification_positive_button_canceled" = "Tasdiqlashni qaytadan urining";
@@ -807,6 +823,10 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "Mos kelishi kutilmoqda";
 "screen_session_verification_ready_subtitle" = "Compare a unique set of emojis.";
 "screen_session_verification_request_accepted_subtitle" = "Noyob emojilarni solishtiring, ular bir xil tartibda paydo bo'lishiga ishonch hosil qiling.";
+"screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
+"screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "Ular mos kelmaydi";
 "screen_session_verification_they_match" = "Ular mos keladi";
 "screen_session_verification_waiting_to_accept_subtitle" = "Davom etish uchun boshqa seansda tekshirish jarayonini boshlash soʻrovini qabul qiling.";

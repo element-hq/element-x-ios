@@ -54,6 +54,7 @@
 "action_forgot_password" = "Passwort vergessen?";
 "action_forward" = "Weiterleiten";
 "action_go_back" = "Zurück";
+"action_ignore" = "Ignore";
 "action_invite" = "Einladen";
 "action_invite_friends" = "Personen einladen";
 "action_invite_friends_to_app" = "Zu %1$@ einladen";
@@ -133,6 +134,7 @@
 "common_dark" = "Dunkel";
 "common_decryption_error" = "Dekodierungsfehler";
 "common_developer_options" = "Entwickleroptionen";
+"common_device_id" = "Device ID";
 "common_direct_chat" = "Direktnachricht";
 "common_edited_suffix" = "(bearbeitet)";
 "common_editing" = "Bearbeitung";
@@ -226,6 +228,8 @@
 "common_username" = "Benutzername";
 "common_verification_cancelled" = "Verifizierung abgebrochen";
 "common_verification_complete" = "Verifizierung abgeschlossen";
+"common_verification_failed" = "Verification failed";
+"common_verified" = "Verified";
 "common_verify_device" = "Gerät verifizieren";
 "common_video" = "Video";
 "common_voice_message" = "Sprachnachricht";
@@ -241,6 +245,8 @@
 "confirm_recovery_key_banner_title" = "Wiederherstellungsschlüssel bestätigen.";
 "crash_detection_dialog_content" = "%1$@ ist bei der letzten Nutzung abgestürzt. Möchtest du einen Absturzbericht mit uns teilen?";
 "crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
+"crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity appears to have changed. %3$@";
+"crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
 "dialog_permission_camera" = "Damit die Anwendung die Kamera verwenden kann, erteile bitte die Erlaubnis in den Systemeinstellungen.";
 "dialog_permission_generic" = "Bitte erteile die Erlaubnis in den Systemeinstellungen.";
 "dialog_permission_location_description_ios" = "Erlaube den Zugriff unter Einstellungen -> Standort.";
@@ -339,6 +345,13 @@
 "screen_create_room_access_section_header" = "Room Access";
 "screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
 "screen_create_room_access_section_knocking_option_title" = "Ask to join";
+"screen_join_room_cancel_knock_action" = "Cancel request";
+"screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
+"screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
+"screen_join_room_cancel_knock_alert_title" = "Cancel request to join";
+"screen_join_room_knock_message_description" = "Message (optional)";
+"screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
+"screen_join_room_knock_sent_title" = "Request to join sent";
 "screen_pinned_timeline_empty_state_description" = "Drücke auf eine Nachricht und wähle “%1$@”, um sie hier einzufügen.";
 "screen_pinned_timeline_empty_state_headline" = "Fixiere wichtige Nachrichten, so dass sie leicht gefunden werden können";
 "screen_reset_encryption_password_error" = "Es ist ein unbekannter Fehler aufgetreten. Bitte überprüfe das Passwort deines Kontos und versuche es erneut.";
@@ -703,6 +716,8 @@
 "screen_room_member_details_unblock_alert_action" = "Blockierung aufheben";
 "screen_room_member_details_unblock_alert_description" = "Der Nutzer kann dir wieder Nachrichten senden & alle Nachrichten des Nutzers werden wieder angezeigt.";
 "screen_room_member_details_unblock_user" = "Blockierung aufheben";
+"screen_room_member_details_verify_button_subtitle" = "Use the web app to verify this user.";
+"screen_room_member_details_verify_button_title" = "Verify %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "Sperren";
 "screen_room_member_list_ban_member_confirmation_description" = "Sie können dem Raum nicht mehr beitreten, selbst wenn sie eingeladen werden.";
 "screen_room_member_list_ban_member_confirmation_title" = "Bist du sicher, dass du dieses Mitglied sperren möchtest?";
@@ -800,6 +815,7 @@
 "screen_session_verification_compare_numbers_title" = "Vergleiche die Zahlen";
 "screen_session_verification_complete_subtitle" = "Deine neue Session ist nun verifiziert. Sie hat Zugriff auf deine verschlüsselten Nachrichten und wird von anderen Benutzern als vertrauenswürdig eingestuft.";
 "screen_session_verification_enter_recovery_key" = "Wiederherstellungsschlüssel eingeben";
+"screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Beweise deine Identität, um auf deinen verschlüsselten Nachrichtenverlauf zuzugreifen.";
 "screen_session_verification_open_existing_session_title" = "Öffne eine bestehende Session";
 "screen_session_verification_positive_button_canceled" = "Verifizierung wiederholen";
@@ -807,6 +823,10 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "Warten auf eine Übereinstimmung";
 "screen_session_verification_ready_subtitle" = "Vergleiche eine spezielle Reihe von Emojis.";
 "screen_session_verification_request_accepted_subtitle" = "Vergleiche die einzelnen Emojis und stelle sicher, dass sie in der gleichen Reihenfolge erscheinen.";
+"screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
+"screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "Sie stimmen nicht überein";
 "screen_session_verification_they_match" = "Sie stimmen überein";
 "screen_session_verification_waiting_to_accept_subtitle" = "Akzeptiere die Anfrage, um den Verifizierungsprozess in deiner anderen Session zu starten, um fortzufahren.";

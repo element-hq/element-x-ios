@@ -54,6 +54,7 @@
 "action_forgot_password" = "گذرواژه را فراموش کردید؟";
 "action_forward" = "پیشروی";
 "action_go_back" = "پس‌روی";
+"action_ignore" = "Ignore";
 "action_invite" = "دعوت";
 "action_invite_friends" = "دعوت افراد";
 "action_invite_friends_to_app" = "دعوت به %1$@";
@@ -133,6 +134,7 @@
 "common_dark" = "تیره";
 "common_decryption_error" = "خطای رمزگشایی";
 "common_developer_options" = "گزینه‌های توسعه دهنده";
+"common_device_id" = "Device ID";
 "common_direct_chat" = "گپ مستقیم";
 "common_edited_suffix" = "(ویراسته)";
 "common_editing" = "ویرایش";
@@ -226,6 +228,8 @@
 "common_username" = "نام کاربری";
 "common_verification_cancelled" = "تأیید لغو شد";
 "common_verification_complete" = "تأیید کامل شد";
+"common_verification_failed" = "Verification failed";
+"common_verified" = "Verified";
 "common_verify_device" = "تأیید افزاره";
 "common_video" = "ویدیو";
 "common_voice_message" = "پیام صوتی";
@@ -241,6 +245,8 @@
 "confirm_recovery_key_banner_title" = "ورود کلید بازیابیتان";
 "crash_detection_dialog_content" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
 "crypto_identity_change_pin_violation" = "به نظر می‌رسد هویت %1$@ تغییر کرده. %2$@";
+"crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity appears to have changed. %3$@";
+"crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
 "dialog_permission_camera" = "In order to let the application use the camera, please grant the permission in the system settings.";
 "dialog_permission_generic" = "لطفاً در تنظیمات سامانه اجازه بدهید.";
 "dialog_permission_location_description_ios" = "اعطای دسترسی در تنظیمات -> مکان.";
@@ -339,6 +345,13 @@
 "screen_create_room_access_section_header" = "Room Access";
 "screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
 "screen_create_room_access_section_knocking_option_title" = "Ask to join";
+"screen_join_room_cancel_knock_action" = "Cancel request";
+"screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
+"screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
+"screen_join_room_cancel_knock_alert_title" = "Cancel request to join";
+"screen_join_room_knock_message_description" = "Message (optional)";
+"screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
+"screen_join_room_knock_sent_title" = "Request to join sent";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
@@ -703,6 +716,8 @@
 "screen_room_member_details_unblock_alert_action" = "رفع انسداد";
 "screen_room_member_details_unblock_alert_description" = "قادر خواهید بود دوباره همهٔ پیام‌هایش را ببینید.";
 "screen_room_member_details_unblock_user" = "رفع انسداد کاربر";
+"screen_room_member_details_verify_button_subtitle" = "Use the web app to verify this user.";
+"screen_room_member_details_verify_button_title" = "Verify %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "تحریم";
 "screen_room_member_list_ban_member_confirmation_description" = "They won’t be able to join this room again if invited.";
 "screen_room_member_list_ban_member_confirmation_title" = "Are you sure you want to ban this member?";
@@ -800,6 +815,7 @@
 "screen_session_verification_compare_numbers_title" = "مقایسهٔ اعداد";
 "screen_session_verification_complete_subtitle" = "نشست جدید شما اکنون تأیید شده‌است. این نشست به پیام‌های رمزگذاری شده‌ی شما دسترسی داشته و سایر کاربران نیز این نشست را قابل اعتماد می دانند.";
 "screen_session_verification_enter_recovery_key" = "ورود کلید بازیابی";
+"screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Prove it’s you in order to access your encrypted message history.";
 "screen_session_verification_open_existing_session_title" = "گشودن نشستی موجود";
 "screen_session_verification_positive_button_canceled" = "تلاش برای تأیید دوباره";
@@ -807,6 +823,10 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "منتظر تطابق";
 "screen_session_verification_ready_subtitle" = "مقایسهٔ مجموعه‌ای یکتا از شکلک‌ها.";
 "screen_session_verification_request_accepted_subtitle" = "شکلک‌ها را مقایسه کنید، از ترتیب نمایش آنان نیز مطمئن شوید.";
+"screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
+"screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "مطابق نیستند";
 "screen_session_verification_they_match" = "مطابقند";
 "screen_session_verification_waiting_to_accept_subtitle" = "Accept the request to start the verification process in your other session to continue.";

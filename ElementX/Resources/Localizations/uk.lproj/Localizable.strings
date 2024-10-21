@@ -54,6 +54,7 @@
 "action_forgot_password" = "Забули пароль?";
 "action_forward" = "Переслати";
 "action_go_back" = "Повернутися";
+"action_ignore" = "Ignore";
 "action_invite" = "Запросити";
 "action_invite_friends" = "Запросити людей";
 "action_invite_friends_to_app" = "Запросити людей до %1$@";
@@ -133,6 +134,7 @@
 "common_dark" = "Темна";
 "common_decryption_error" = "Помилка розшифровки";
 "common_developer_options" = "Налаштування розробника";
+"common_device_id" = "Device ID";
 "common_direct_chat" = "Особистий чат";
 "common_edited_suffix" = "(відредаговано)";
 "common_editing" = "Редагування";
@@ -226,6 +228,8 @@
 "common_username" = "Ім'я користувача";
 "common_verification_cancelled" = "Верифікацію скасовано";
 "common_verification_complete" = "Верифікацію завершено";
+"common_verification_failed" = "Verification failed";
+"common_verified" = "Verified";
 "common_verify_device" = "Перевірте пристрій";
 "common_video" = "Відео";
 "common_voice_message" = "Голосове повідомлення";
@@ -241,6 +245,8 @@
 "confirm_recovery_key_banner_title" = "Підтвердіть ключ відновлення";
 "crash_detection_dialog_content" = "%1$@ аварійно завершив роботу під час останнього використання. Бажаєте поділитися з нами звітом про збій?";
 "crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
+"crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity appears to have changed. %3$@";
+"crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
 "dialog_permission_camera" = "Для того, щоб дозволити програмі використовувати камеру, надайте дозвіл у системних налаштуваннях.";
 "dialog_permission_generic" = "Будь ласка, надайте дозвіл в системних налаштуваннях.";
 "dialog_permission_location_description_ios" = "Надайте доступ в Налаштуваннях -> Місцезнаходження.";
@@ -339,6 +345,13 @@
 "screen_create_room_access_section_header" = "Room Access";
 "screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
 "screen_create_room_access_section_knocking_option_title" = "Ask to join";
+"screen_join_room_cancel_knock_action" = "Cancel request";
+"screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
+"screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
+"screen_join_room_cancel_knock_alert_title" = "Cancel request to join";
+"screen_join_room_knock_message_description" = "Message (optional)";
+"screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
+"screen_join_room_knock_sent_title" = "Request to join sent";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
@@ -703,6 +716,8 @@
 "screen_room_member_details_unblock_alert_action" = "Розблокувати";
 "screen_room_member_details_unblock_alert_description" = "Ви знову зможете бачити всі повідомлення від них.";
 "screen_room_member_details_unblock_user" = "Розблокувати користувача";
+"screen_room_member_details_verify_button_subtitle" = "Use the web app to verify this user.";
+"screen_room_member_details_verify_button_title" = "Verify %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "Заблокувати";
 "screen_room_member_list_ban_member_confirmation_description" = "Він не зможе приєднатися до цієї кімнати знову, якщо його запросять.";
 "screen_room_member_list_ban_member_confirmation_title" = "Ви точно хочете заблокувати цього користувача?";
@@ -800,6 +815,7 @@
 "screen_session_verification_compare_numbers_title" = "Порівняйте цифри";
 "screen_session_verification_complete_subtitle" = "Ваш новий сеанс підтверджено. Він матиме доступ до ваших зашифрованих повідомлень, й інші користувачі вважатимуть його надійним.";
 "screen_session_verification_enter_recovery_key" = "Введіть ключ відновлення";
+"screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Доведіть, що це Ви, щоб отримати доступ до історії зашифрованих повідомлень.";
 "screen_session_verification_open_existing_session_title" = "Відкрийте існуючий сеанс";
 "screen_session_verification_positive_button_canceled" = "Повторити перевірку";
@@ -807,6 +823,10 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "Очікування збігу";
 "screen_session_verification_ready_subtitle" = "Порівняйте унікальний набір емоджи.";
 "screen_session_verification_request_accepted_subtitle" = "Порівняйте унікальні емодзі, переконавшись, що вони відображаються в однаковому порядку.";
+"screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
+"screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "Вони не збігаються";
 "screen_session_verification_they_match" = "Вони збігаються";
 "screen_session_verification_waiting_to_accept_subtitle" = "Щоб продовжити, прийміть запит на початок процесу перевірки в іншому сеансі.";

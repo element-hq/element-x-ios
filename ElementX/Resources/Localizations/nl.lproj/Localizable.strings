@@ -54,6 +54,7 @@
 "action_forgot_password" = "Wachtwoord vergeten?";
 "action_forward" = "Doorsturen";
 "action_go_back" = "Terug";
+"action_ignore" = "Ignore";
 "action_invite" = "Uitnodigen";
 "action_invite_friends" = "Mensen uitnodigen";
 "action_invite_friends_to_app" = "Nodig mensen uit voor %1$@";
@@ -133,6 +134,7 @@
 "common_dark" = "Donker";
 "common_decryption_error" = "Decryptie fout";
 "common_developer_options" = "Ontwikkelaarsopties";
+"common_device_id" = "Device ID";
 "common_direct_chat" = "Directe chat";
 "common_edited_suffix" = "(bewerkt)";
 "common_editing" = "Bewerken";
@@ -226,6 +228,8 @@
 "common_username" = "Gebruikersnaam";
 "common_verification_cancelled" = "Verificatie geannuleerd";
 "common_verification_complete" = "Verificatie voltooid";
+"common_verification_failed" = "Verification failed";
+"common_verified" = "Verified";
 "common_verify_device" = "Apparaat verifiëren";
 "common_video" = "Video";
 "common_voice_message" = "Spraakbericht";
@@ -241,6 +245,8 @@
 "confirm_recovery_key_banner_title" = "Voer je herstelsleutel in";
 "crash_detection_dialog_content" = "%1$@ crashte de laatste keer dat het werd gebruikt. Wil je een crashrapport met ons delen?";
 "crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
+"crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity appears to have changed. %3$@";
+"crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
 "dialog_permission_camera" = "Geef toestemming in de systeeminstellingen om de applicatie de camera te laten gebruiken.";
 "dialog_permission_generic" = "Geef hiervoor toestemming in de systeeminstellingen.";
 "dialog_permission_location_description_ios" = "Verleen toegang via Instellingen -> Locatie.";
@@ -339,6 +345,13 @@
 "screen_create_room_access_section_header" = "Room Access";
 "screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
 "screen_create_room_access_section_knocking_option_title" = "Ask to join";
+"screen_join_room_cancel_knock_action" = "Cancel request";
+"screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
+"screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
+"screen_join_room_cancel_knock_alert_title" = "Cancel request to join";
+"screen_join_room_knock_message_description" = "Message (optional)";
+"screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
+"screen_join_room_knock_sent_title" = "Request to join sent";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
@@ -703,6 +716,8 @@
 "screen_room_member_details_unblock_alert_action" = "Deblokkeren";
 "screen_room_member_details_unblock_alert_description" = "Je zult alle berichten van hen weer kunnen zien.";
 "screen_room_member_details_unblock_user" = "Gebruiker deblokkeren";
+"screen_room_member_details_verify_button_subtitle" = "Use the web app to verify this user.";
+"screen_room_member_details_verify_button_title" = "Verify %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "Verbannen";
 "screen_room_member_list_ban_member_confirmation_description" = "Ze kunnen niet meer toetreden tot deze kamer als ze worden uitgenodigd.";
 "screen_room_member_list_ban_member_confirmation_title" = "Weet je zeker dat je dit lid wilt verbannen?";
@@ -800,6 +815,7 @@
 "screen_session_verification_compare_numbers_title" = "Vergelijk getallen";
 "screen_session_verification_complete_subtitle" = "Je nieuwe sessie is nu geverifieerd. Het heeft toegang tot je versleutelde berichten en andere gebruikers zullen het als vertrouwd beschouwen.";
 "screen_session_verification_enter_recovery_key" = "Voer herstelsleutel in";
+"screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Bewijs dat jij het bent om toegang te krijgen tot je versleutelde berichtgeschiedenis.";
 "screen_session_verification_open_existing_session_title" = "Open een bestaande sessie";
 "screen_session_verification_positive_button_canceled" = "Verificatie opnieuw proberen";
@@ -807,6 +823,10 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "Wachten om te vergelijken";
 "screen_session_verification_ready_subtitle" = "Vergelijk een unieke combinatie van emoji's.";
 "screen_session_verification_request_accepted_subtitle" = "Vergelijk de unieke emoji's, ze dienen in dezelfde volgorde te worden weergegeven.";
+"screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
+"screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "Ze komen niet overeen";
 "screen_session_verification_they_match" = "Ze komen overeen";
 "screen_session_verification_waiting_to_accept_subtitle" = "Accepteer het verzoek tot verificatie in je andere sessie om door te gaan.";
