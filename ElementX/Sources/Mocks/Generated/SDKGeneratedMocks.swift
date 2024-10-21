@@ -6214,81 +6214,6 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption {
         }
     }
 
-    //MARK: - getUserIdentity
-
-    open var getUserIdentityUserIdThrowableError: Error?
-    var getUserIdentityUserIdUnderlyingCallsCount = 0
-    open var getUserIdentityUserIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return getUserIdentityUserIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getUserIdentityUserIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getUserIdentityUserIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getUserIdentityUserIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var getUserIdentityUserIdCalled: Bool {
-        return getUserIdentityUserIdCallsCount > 0
-    }
-    open var getUserIdentityUserIdReceivedUserId: String?
-    open var getUserIdentityUserIdReceivedInvocations: [String] = []
-
-    var getUserIdentityUserIdUnderlyingReturnValue: UserIdentity?
-    open var getUserIdentityUserIdReturnValue: UserIdentity? {
-        get {
-            if Thread.isMainThread {
-                return getUserIdentityUserIdUnderlyingReturnValue
-            } else {
-                var returnValue: UserIdentity?? = nil
-                DispatchQueue.main.sync {
-                    returnValue = getUserIdentityUserIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                getUserIdentityUserIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    getUserIdentityUserIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var getUserIdentityUserIdClosure: ((String) async throws -> UserIdentity?)?
-
-    open override func getUserIdentity(userId: String) async throws -> UserIdentity? {
-        if let error = getUserIdentityUserIdThrowableError {
-            throw error
-        }
-        getUserIdentityUserIdCallsCount += 1
-        getUserIdentityUserIdReceivedUserId = userId
-        DispatchQueue.main.async {
-            self.getUserIdentityUserIdReceivedInvocations.append(userId)
-        }
-        if let getUserIdentityUserIdClosure = getUserIdentityUserIdClosure {
-            return try await getUserIdentityUserIdClosure(userId)
-        } else {
-            return getUserIdentityUserIdReturnValue
-        }
-    }
-
     //MARK: - isLastDevice
 
     open var isLastDeviceThrowableError: Error?
@@ -6615,81 +6540,6 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption {
         }
     }
 
-    //MARK: - requestUserIdentity
-
-    open var requestUserIdentityUserIdThrowableError: Error?
-    var requestUserIdentityUserIdUnderlyingCallsCount = 0
-    open var requestUserIdentityUserIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return requestUserIdentityUserIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = requestUserIdentityUserIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                requestUserIdentityUserIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    requestUserIdentityUserIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var requestUserIdentityUserIdCalled: Bool {
-        return requestUserIdentityUserIdCallsCount > 0
-    }
-    open var requestUserIdentityUserIdReceivedUserId: String?
-    open var requestUserIdentityUserIdReceivedInvocations: [String] = []
-
-    var requestUserIdentityUserIdUnderlyingReturnValue: UserIdentity?
-    open var requestUserIdentityUserIdReturnValue: UserIdentity? {
-        get {
-            if Thread.isMainThread {
-                return requestUserIdentityUserIdUnderlyingReturnValue
-            } else {
-                var returnValue: UserIdentity?? = nil
-                DispatchQueue.main.sync {
-                    returnValue = requestUserIdentityUserIdUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                requestUserIdentityUserIdUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    requestUserIdentityUserIdUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var requestUserIdentityUserIdClosure: ((String) async throws -> UserIdentity?)?
-
-    open override func requestUserIdentity(userId: String) async throws -> UserIdentity? {
-        if let error = requestUserIdentityUserIdThrowableError {
-            throw error
-        }
-        requestUserIdentityUserIdCallsCount += 1
-        requestUserIdentityUserIdReceivedUserId = userId
-        DispatchQueue.main.async {
-            self.requestUserIdentityUserIdReceivedInvocations.append(userId)
-        }
-        if let requestUserIdentityUserIdClosure = requestUserIdentityUserIdClosure {
-            return try await requestUserIdentityUserIdClosure(userId)
-        } else {
-            return requestUserIdentityUserIdReturnValue
-        }
-    }
-
     //MARK: - resetIdentity
 
     open var resetIdentityThrowableError: Error?
@@ -6825,6 +6675,81 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption {
             return try await resetRecoveryKeyClosure()
         } else {
             return resetRecoveryKeyReturnValue
+        }
+    }
+
+    //MARK: - userIdentity
+
+    open var userIdentityUserIdThrowableError: Error?
+    var userIdentityUserIdUnderlyingCallsCount = 0
+    open var userIdentityUserIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return userIdentityUserIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = userIdentityUserIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                userIdentityUserIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    userIdentityUserIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var userIdentityUserIdCalled: Bool {
+        return userIdentityUserIdCallsCount > 0
+    }
+    open var userIdentityUserIdReceivedUserId: String?
+    open var userIdentityUserIdReceivedInvocations: [String] = []
+
+    var userIdentityUserIdUnderlyingReturnValue: UserIdentity?
+    open var userIdentityUserIdReturnValue: UserIdentity? {
+        get {
+            if Thread.isMainThread {
+                return userIdentityUserIdUnderlyingReturnValue
+            } else {
+                var returnValue: UserIdentity?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = userIdentityUserIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                userIdentityUserIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    userIdentityUserIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var userIdentityUserIdClosure: ((String) async throws -> UserIdentity?)?
+
+    open override func userIdentity(userId: String) async throws -> UserIdentity? {
+        if let error = userIdentityUserIdThrowableError {
+            throw error
+        }
+        userIdentityUserIdCallsCount += 1
+        userIdentityUserIdReceivedUserId = userId
+        DispatchQueue.main.async {
+            self.userIdentityUserIdReceivedInvocations.append(userId)
+        }
+        if let userIdentityUserIdClosure = userIdentityUserIdClosure {
+            return try await userIdentityUserIdClosure(userId)
+        } else {
+            return userIdentityUserIdReturnValue
         }
     }
 
@@ -18117,34 +18042,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
     }
     open var editEventOrTransactionIdNewContentReceivedArguments: (eventOrTransactionId: EventOrTransactionId, newContent: EditedContent)?
     open var editEventOrTransactionIdNewContentReceivedInvocations: [(eventOrTransactionId: EventOrTransactionId, newContent: EditedContent)] = []
+    open var editEventOrTransactionIdNewContentClosure: ((EventOrTransactionId, EditedContent) async throws -> Void)?
 
-    var editEventOrTransactionIdNewContentUnderlyingReturnValue: Bool!
-    open var editEventOrTransactionIdNewContentReturnValue: Bool! {
-        get {
-            if Thread.isMainThread {
-                return editEventOrTransactionIdNewContentUnderlyingReturnValue
-            } else {
-                var returnValue: Bool? = nil
-                DispatchQueue.main.sync {
-                    returnValue = editEventOrTransactionIdNewContentUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                editEventOrTransactionIdNewContentUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    editEventOrTransactionIdNewContentUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var editEventOrTransactionIdNewContentClosure: ((EventOrTransactionId, EditedContent) async throws -> Bool)?
-
-    open override func edit(eventOrTransactionId: EventOrTransactionId, newContent: EditedContent) async throws -> Bool {
+    open override func edit(eventOrTransactionId: EventOrTransactionId, newContent: EditedContent) async throws {
         if let error = editEventOrTransactionIdNewContentThrowableError {
             throw error
         }
@@ -18153,11 +18053,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         DispatchQueue.main.async {
             self.editEventOrTransactionIdNewContentReceivedInvocations.append((eventOrTransactionId: eventOrTransactionId, newContent: newContent))
         }
-        if let editEventOrTransactionIdNewContentClosure = editEventOrTransactionIdNewContentClosure {
-            return try await editEventOrTransactionIdNewContentClosure(eventOrTransactionId, newContent)
-        } else {
-            return editEventOrTransactionIdNewContentReturnValue
-        }
+        try await editEventOrTransactionIdNewContentClosure?(eventOrTransactionId, newContent)
     }
 
     //MARK: - endPoll
