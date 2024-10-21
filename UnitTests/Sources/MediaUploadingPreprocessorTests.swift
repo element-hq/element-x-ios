@@ -422,6 +422,46 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         XCTAssertEqual(optimizedImageInfo.height, 498)
     }
     
+    func testRotatedImageProcessing() async {
+        guard let url = Bundle(for: Self.self).url(forResource: "test_rotated_image.jpg", withExtension: nil) else {
+            XCTFail("Failed retrieving test asset")
+            return
+        }
+        
+        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url),
+              case let .image(convertedImageURL, thumbnailURL, imageInfo) = result else {
+            XCTFail("Failed processing asset")
+            return
+        }
+        
+        compare(originalImageAt: url, toConvertedImageAt: convertedImageURL, withThumbnailAt: thumbnailURL)
+        
+        // Check resulting image info
+        XCTAssertEqual(imageInfo.mimetype, "image/jpeg")
+        XCTAssertEqual(imageInfo.width, 2848)
+        XCTAssertEqual(imageInfo.height, 4272)
+        
+        XCTAssertNotNil(imageInfo.thumbnailInfo)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.width, 533)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.height, 800)
+        
+        // Repeat with optimised media setting
+        appSettings.optimizeMediaUploads = true
+        
+        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
+              case let .image(optimizedImageURL, thumbnailURL, optimizedImageInfo) = optimizedResult else {
+            XCTFail("Failed processing asset")
+            return
+        }
+        
+        compare(originalImageAt: url, toConvertedImageAt: optimizedImageURL, withThumbnailAt: thumbnailURL)
+        
+        // Check optimised image info
+        XCTAssertEqual(optimizedImageInfo.mimetype, "image/jpeg")
+        XCTAssertEqual(optimizedImageInfo.width, 1365)
+        XCTAssertEqual(optimizedImageInfo.height, 2048)
+    }
+    
     // MARK: - Private
     
     private func compare(originalImageAt originalImageURL: URL, toConvertedImageAt convertedImageURL: URL, withThumbnailAt thumbnailURL: URL) {
