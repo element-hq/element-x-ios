@@ -4702,15 +4702,15 @@ class ClientProxyMock: ClientProxyProtocol {
     }
     //MARK: - userIdentity
 
-    var userIdentityUnderlyingCallsCount = 0
-    var userIdentityCallsCount: Int {
+    var userIdentityForUnderlyingCallsCount = 0
+    var userIdentityForCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return userIdentityUnderlyingCallsCount
+                return userIdentityForUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = userIdentityUnderlyingCallsCount
+                    returnValue = userIdentityForUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -4718,29 +4718,29 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                userIdentityUnderlyingCallsCount = newValue
+                userIdentityForUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    userIdentityUnderlyingCallsCount = newValue
+                    userIdentityForUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var userIdentityCalled: Bool {
-        return userIdentityCallsCount > 0
+    var userIdentityForCalled: Bool {
+        return userIdentityForCallsCount > 0
     }
-    var userIdentityReceivedUserID: String?
-    var userIdentityReceivedInvocations: [String] = []
+    var userIdentityForReceivedUserID: String?
+    var userIdentityForReceivedInvocations: [String] = []
 
-    var userIdentityUnderlyingReturnValue: Result<UserIdentity?, ClientProxyError>!
-    var userIdentityReturnValue: Result<UserIdentity?, ClientProxyError>! {
+    var userIdentityForUnderlyingReturnValue: Result<UserIdentity?, ClientProxyError>!
+    var userIdentityForReturnValue: Result<UserIdentity?, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return userIdentityUnderlyingReturnValue
+                return userIdentityForUnderlyingReturnValue
             } else {
                 var returnValue: Result<UserIdentity?, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = userIdentityUnderlyingReturnValue
+                    returnValue = userIdentityForUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -4748,26 +4748,26 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                userIdentityUnderlyingReturnValue = newValue
+                userIdentityForUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    userIdentityUnderlyingReturnValue = newValue
+                    userIdentityForUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var userIdentityClosure: ((String) async -> Result<UserIdentity?, ClientProxyError>)?
+    var userIdentityForClosure: ((String) async -> Result<UserIdentity?, ClientProxyError>)?
 
-    func userIdentity(_ userID: String) async -> Result<UserIdentity?, ClientProxyError> {
-        userIdentityCallsCount += 1
-        userIdentityReceivedUserID = userID
+    func userIdentity(for userID: String) async -> Result<UserIdentity?, ClientProxyError> {
+        userIdentityForCallsCount += 1
+        userIdentityForReceivedUserID = userID
         DispatchQueue.main.async {
-            self.userIdentityReceivedInvocations.append(userID)
+            self.userIdentityForReceivedInvocations.append(userID)
         }
-        if let userIdentityClosure = userIdentityClosure {
-            return await userIdentityClosure(userID)
+        if let userIdentityForClosure = userIdentityForClosure {
+            return await userIdentityForClosure(userID)
         } else {
-            return userIdentityReturnValue
+            return userIdentityForReturnValue
         }
     }
     //MARK: - loadMediaContentForSource

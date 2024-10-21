@@ -80,7 +80,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
     
     private func loadMember() async {
         async let memberResult = roomProxy.getMember(userID: state.userID)
-        async let identityResult = clientProxy.userIdentity(state.userID)
+        async let identityResult = clientProxy.userIdentity(for: state.userID)
         
         switch await memberResult {
         case .success(let member):
@@ -95,6 +95,9 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             }
         case .failure(let error):
             MXLog.warning("Failed to find member: \(error)")
+            // As we didn't find a member with the specified user ID in this room we instead
+            // fall back to showing a generic user profile screen as the source is likely
+            // a message containing a permalink to someone who's not in this room.
             actionsSubject.send(.openUserProfile)
         }
         

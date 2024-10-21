@@ -953,7 +953,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func userIdentity(_ userID: String) async -> Result<UserIdentity?, ClientProxyError> {
+    func userIdentity(for userID: String) async -> Result<UserIdentity?, ClientProxyError> {
         do {
             if let identity = try await client.encryption().getUserIdentity(userId: userID) {
                 return .success(identity)

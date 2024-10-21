@@ -125,7 +125,7 @@ struct UserProfileScreen_Previews: PreviewProvider, TestablePreview {
     
     static func makeViewModel(userID: String) -> UserProfileScreenViewModel {
         let clientProxyMock = ClientProxyMock(.init())
-        clientProxyMock.userIdentityClosure = { userID in
+        clientProxyMock.userIdentityForClosure = { userID in
             let isVerified = userID == RoomMemberProxyMock.mockDan.userID
             return .success(UserIdentitySDKMock(configuration: .init(isVerified: isVerified)))
         }

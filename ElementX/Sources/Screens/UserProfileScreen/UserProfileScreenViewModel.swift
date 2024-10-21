@@ -73,7 +73,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
     
     private func loadProfile() async {
         async let profileResult = clientProxy.profile(for: state.userID)
-        async let identityResult = clientProxy.userIdentity(state.userID)
+        async let identityResult = clientProxy.userIdentity(for: state.userID)
         
         switch await profileResult {
         case .success(let userProfile):

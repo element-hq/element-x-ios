@@ -158,7 +158,7 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
         roomProxyMock.getMemberUserIDReturnValue = .success(member)
         let clientProxyMock = ClientProxyMock(.init())
         
-        clientProxyMock.userIdentityClosure = { userID in
+        clientProxyMock.userIdentityForClosure = { userID in
             let isVerified = userID == RoomMemberProxyMock.mockDan.userID
             return .success(UserIdentitySDKMock(configuration: .init(isVerified: isVerified)))
         }
