@@ -16,11 +16,24 @@ enum RoomMemberDetailsScreenViewModelAction {
 struct RoomMemberDetailsScreenViewState: BindableState {
     let userID: String
     var memberDetails: RoomMemberDetails?
+    var isVerified: Bool?
     var isOwnMemberDetails = false
     var isProcessingIgnoreRequest = false
     var dmRoomID: String?
 
     var bindings: RoomMemberDetailsScreenViewStateBindings
+    
+    var showVerifiedBadge: Bool {
+        isVerified == true // We purposely show the badge on your own account for consistency with Web.
+    }
+    
+    var showVerificationSection: Bool {
+        isVerified == false && !isOwnMemberDetails
+    }
+    
+    var verifyButtonTitle: String {
+        L10n.screenRoomMemberDetailsVerifyButtonTitle(memberDetails?.name ?? "")
+    }
 }
 
 struct RoomMemberDetailsScreenViewStateBindings {

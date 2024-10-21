@@ -204,4 +204,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func pinUserIdentity(_ userID: String) async -> Result<Void, ClientProxyError>
     func resetIdentity() async -> Result<IdentityResetHandle?, ClientProxyError>
+    
+    func userIdentity(for userID: String) async -> Result<UserIdentity?, ClientProxyError>
 }

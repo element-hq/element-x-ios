@@ -933,7 +933,7 @@ class ClientProxy: ClientProxyProtocol {
         MXLog.info("Pinning current identity for user: \(userID)")
         
         do {
-            guard let userIdentity = try await client.encryption().getUserIdentity(userId: userID) else {
+            guard let userIdentity = try await client.encryption().userIdentity(userId: userID) else {
                 MXLog.error("Failed retrieving identity for user: \(userID)")
                 return .failure(.failedRetrievingUserIdentity)
             }
@@ -949,6 +949,15 @@ class ClientProxy: ClientProxyProtocol {
         do {
             return try await .success(client.encryption().resetIdentity())
         } catch {
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func userIdentity(for userID: String) async -> Result<UserIdentity?, ClientProxyError> {
+        do {
+            return try await .success(client.encryption().userIdentity(userId: userID))
+        } catch {
+            MXLog.error("Failed retrieving user identity: \(error)")
             return .failure(.sdkError(error))
         }
     }
