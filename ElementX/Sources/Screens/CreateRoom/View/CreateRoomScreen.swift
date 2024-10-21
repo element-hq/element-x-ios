@@ -25,6 +25,7 @@ struct CreateRoomScreen: View {
             if context.viewState.isKnockingFeatureEnabled,
                !context.isRoomPrivate {
                 roomAccessSection
+                roomAddressSection
             }
         }
         .compoundList()
@@ -169,6 +170,28 @@ struct CreateRoomScreen: View {
         }
     }
     
+    private var roomAddressSection: some View {
+        Section {
+            HStack(spacing: 0) {
+                Text("#")
+                    .font(.compound.bodyLG)
+                    .foregroundStyle(.compound.textSecondary)
+                TextField("", text: $context.address)
+                    .font(.compound.bodyLG)
+                    .foregroundStyle(.compound.textPrimary)
+                Text(context.viewState.homeserver)
+                    .font(.compound.bodyLG)
+                    .foregroundStyle(.compound.textSecondary)
+            }
+        } header: {
+            Text("Room address".uppercased())
+                .compoundListSectionHeader()
+        } footer: {
+            Text("In order for this room to be visible in the public room directory, you will need a room address. ")
+                .compoundListSectionFooter()
+        }
+    }
+    
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .confirmationAction) {
             Button(L10n.actionCreate) {
@@ -208,7 +231,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let publicRoomViewModel = {
-        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(homeserver: "example.org", userID: "@userid:example.com"))))
         let parameters = CreateRoomFlowParameters(isRoomPrivate: false)
         let selectedUsers: [UserProfileProxy] = [.mockAlice, .mockBob, .mockCharlie]
         ServiceLocator.shared.settings.knockingEnabled = true
