@@ -18,7 +18,7 @@ private class WeakSessionVerificationControllerProxy: SessionVerificationControl
     
     // MARK: - SessionVerificationControllerDelegate
     
-    func didReceiveVerificationRequest(details: SessionVerificationRequestDetails) {
+    func didReceiveVerificationRequest(details: MatrixRustSDK.SessionVerificationRequestDetails) {
         proxy?.didReceiveVerificationRequest(details: details)
     }
     
@@ -71,7 +71,7 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
         MXLog.info("Acknowledging verification request")
         
         do {
-            try await sessionVerificationController.acknowledgeVerificationRequest(senderId: details.senderId, flowId: details.flowId)
+            try await sessionVerificationController.acknowledgeVerificationRequest(senderId: details.senderID, flowId: details.flowID)
             return .success(())
         } catch {
             MXLog.error("Failed requesting session verification with error: \(error)")
@@ -153,8 +153,14 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     
     // MARK: - Private
     
-    fileprivate func didReceiveVerificationRequest(details: SessionVerificationRequestDetails) {
+    fileprivate func didReceiveVerificationRequest(details: MatrixRustSDK.SessionVerificationRequestDetails) {
         MXLog.info("Received verification request \(details)")
+        
+        let details = SessionVerificationRequestDetails(senderID: details.senderId,
+                                                        flowID: details.flowId,
+                                                        deviceID: details.deviceId,
+                                                        displayName: details.displayName,
+                                                        firstSeenDate: Date(timeIntervalSince1970: TimeInterval(details.firstSeenTimestamp / 1000)))
         
         actions.send(.receivedVerificationRequest(details: details))
     }

@@ -29,6 +29,14 @@ enum SessionVerificationControllerProxyAction {
     case failed
 }
 
+struct SessionVerificationRequestDetails {
+    let senderID: String
+    let flowID: String
+    let deviceID: String
+    let displayName: String?
+    let firstSeenDate: Date
+}
+
 struct SessionVerificationEmoji: Hashable {
     let symbol: String
     let description: String
