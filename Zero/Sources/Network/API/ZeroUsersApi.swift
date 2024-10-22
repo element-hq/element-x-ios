@@ -3,6 +3,8 @@ import Foundation
 
 protocol ZeroUsersApiProtocol {
     func fetchUsers(fromMatrixIds ids: [String]) async throws -> Result<[ZMatrixUser], any Error>
+    
+    func updateUserProfile(displayName: String?, profileImage: String?, primaryZID: String?) async throws -> Result<Void, Error>
 }
 
 class ZeroUsersApi: ZeroUsersApiProtocol {
@@ -62,6 +64,31 @@ class ZeroUsersApi: ZeroUsersApiProtocol {
         }
     }
     
+    func updateUserProfile(displayName: String?, profileImage: String?, primaryZID: String?) async throws -> Result<Void, any Error> {
+        var profileParams: [String: String] = [:]
+        if let displayName { profileParams["firstName"] = displayName }
+        if let profileImage { profileParams["profileImage"] = profileImage }
+        if let primaryZID { profileParams["primaryZID"] = primaryZID }
+        
+        let parameters: Parameters = [
+            "profileData": profileParams
+        ]
+        
+        let result: Result<Void, Error> = try await APIManager
+            .shared
+            .authorisedRequest(UserEndPoints.matrixUpdateUserProfileEndPoint,
+                               method: .put,
+                               appSettings: appSettings,
+                               parameters: parameters)
+        
+        switch result {
+        case .success:
+            return .success(())
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     // MARK: - Constants
     
     private enum UserEndPoints {
@@ -69,5 +96,6 @@ class ZeroUsersApi: ZeroUsersApiProtocol {
         
         static let matrixUsersEndPoint = "\(hostURL)matrix/users/zero"
         static let matrixSearchUsersEndPoint = "\(hostURL)api/v2/users/searchInNetworksByName"
+        static let matrixUpdateUserProfileEndPoint = "\(hostURL)api/v2/users/profile"
     }
 }

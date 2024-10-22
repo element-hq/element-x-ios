@@ -134,9 +134,14 @@ class ClientProxy: ClientProxyProtocol {
         secureBackupController = SecureBackupController(encryption: client.encryption())
         
         /// Configure ZeroMatrixUserUtil
-        var loggedInUser: String = (try? client.userId()) ?? ""
+        let loggedInUser: String = (try? client.userId()) ?? ""
         let zeroUsersApi = ZeroUsersApi(appSettings: appSettings)
-        zeroMatrixUsersService = ZeroMatrixUsersService(zeroUsersApi: zeroUsersApi, appSettings: appSettings, loggedInUserId: loggedInUser)
+        zeroMatrixUsersService = ZeroMatrixUsersService(
+            zeroUsersApi: zeroUsersApi,
+            appSettings: appSettings,
+            loggedInUserId: loggedInUser,
+            client: client
+        )
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
@@ -508,7 +513,7 @@ class ClientProxy: ClientProxyProtocol {
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
         do {
             let userId = try client.userId()
-            let displayName = try await zeroMatrixUsersService.fetchZeroUser(userId: userId)?.displayName
+            let displayName = try await client.displayName()
             userDisplayNameSubject.send(displayName)
             return .success(())
         } catch {
@@ -520,6 +525,7 @@ class ClientProxy: ClientProxyProtocol {
     func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError> {
         do {
             try await client.setDisplayName(name: name)
+            try await zeroMatrixUsersService.updateUserName(displayName: name)
             Task {
                 await self.loadUserDisplayName()
             }
@@ -553,6 +559,11 @@ class ClientProxy: ClientProxyProtocol {
             try await client.uploadAvatar(mimeType: mimeType, data: data)
             Task {
                 await self.loadUserAvatarURL()
+            }
+            Task {
+                if let urlString = try await client.avatarUrl() {
+                    try await zeroMatrixUsersService.updateUserAvatar(avatarUrl: urlString)
+                }
             }
             return .success(())
         } catch {
@@ -614,13 +625,12 @@ class ClientProxy: ClientProxyProtocol {
     
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError> {
         do {
-            // return try await .success(.init(sdkResults: client.searchUsers(searchTerm: searchTerm, limit: UInt64(limit))))
-            
-            let zeroSearchUsers = try await zeroMatrixUsersService.searchZeroUsers(query: searchTerm)
-            let mappedMatrixUsers = try await zeroSearchUsers.concurrentMap { zeroUser in
-                try await self.client.getProfile(userId: zeroUser.matrixId)
+            let zeroUsers = try await zeroMatrixUsersService.searchZeroUsers(query: searchTerm)
+            let matrixUsers = try await zeroUsers.concurrentMap { zeroUser in
+                let userProfile = try await self.client.getProfile(userId: zeroUser.matrixId)
+                return UserProfileProxy(sdkUserProfile: userProfile)
             }
-            return .success(.init(zeroSearchResults: zeroSearchUsers, mappedMatrixUsers: mappedMatrixUsers))
+            return .success(.init(results: matrixUsers, limited: false))
         } catch {
             MXLog.error("Failed searching users with error: \(error)")
             return .failure(.sdkError(error))
@@ -789,7 +799,7 @@ class ClientProxy: ClientProxyProtocol {
                                                       shouldUpdateVisibleRange: true,
                                                       notificationSettings: notificationSettings,
                                                       appSettings: appSettings,
-                                                      zeroMatrixUsersService: zeroMatrixUsersService)
+                                                      zeroUsersService: zeroMatrixUsersService)
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
             
             alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
@@ -797,7 +807,7 @@ class ClientProxy: ClientProxyProtocol {
                                                                name: "MessageForwarding",
                                                                notificationSettings: notificationSettings,
                                                                appSettings: appSettings,
-                                                               zeroMatrixUsersService: zeroMatrixUsersService)
+                                                               zeroUsersService: zeroMatrixUsersService)
             try await alternateRoomSummaryProvider?.setRoomList(roomListService.allRooms())
                         
             self.syncService = syncService
@@ -806,7 +816,6 @@ class ClientProxy: ClientProxyProtocol {
             syncServiceStateUpdateTaskHandle = createSyncServiceStateObserver(syncService)
             roomListStateUpdateTaskHandle = createRoomListServiceObserver(roomListService)
             roomListStateLoadingStateUpdateTaskHandle = createRoomListLoadingStateUpdateObserver(roomListService)
-
         } catch {
             MXLog.error("Failed building room list service with error: \(error)")
         }
@@ -909,7 +918,6 @@ class ClientProxy: ClientProxyProtocol {
                 let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,
                                                           roomListItem: roomListItem,
                                                           room: roomListItem.fullRoom(),
-                                                          zeroMatrixUsersService: zeroMatrixUsersService,
                                                           zeroChatApi: zeroChatApi)
                 
                 return .joined(roomProxy)
@@ -955,7 +963,7 @@ class ClientProxy: ClientProxyProtocol {
         MXLog.info("Pinning current identity for user: \(userID)")
         
         do {
-            guard let userIdentity = try await client.encryption().getUserIdentity(userId: userID) else {
+            guard let userIdentity = try await client.encryption().userIdentity(userId: userID) else {
                 MXLog.error("Failed retrieving identity for user: \(userID)")
                 return .failure(.failedRetrievingUserIdentity)
             }
@@ -971,6 +979,15 @@ class ClientProxy: ClientProxyProtocol {
         do {
             return try await .success(client.encryption().resetIdentity())
         } catch {
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func userIdentity(for userID: String) async -> Result<UserIdentity?, ClientProxyError> {
+        do {
+            return try await .success(client.encryption().userIdentity(userId: userID))
+        } catch {
+            MXLog.error("Failed retrieving user identity: \(error)")
             return .failure(.sdkError(error))
         }
     }

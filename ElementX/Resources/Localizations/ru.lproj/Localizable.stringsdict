@@ -193,11 +193,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Вы попытались разблокировать %1$d раз</string>
+			<string>У вас осталась %1$d попытка на разблокировку</string>
 			<key>few</key>
-			<string>Вы попытались разблокировать %1$d раз</string>
+			<string>У вас остались %1$d попытки на разблокировку</string>
 			<key>many</key>
-			<string>Вы попытались разблокировать много раз</string>
+			<string>У вас осталось %1$d попыток на разблокировку</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -211,11 +211,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Неверный PIN-код. У вас остался %1$d шанс</string>
+			<string>Неверный PIN-код. У вас осталась %1$d попытка</string>
 			<key>few</key>
-			<string>Неверный PIN-код. У вас остался %1$d шансов</string>
+			<string>Неверный PIN-код. У вас остались %1$d попытки</string>
 			<key>many</key>
-			<string>Неверный PIN-код. У вас остался %1$d шанса</string>
+			<string>Неверный PIN-код. У вас осталось %1$d попыток</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -229,11 +229,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Закрепленное сообщение</string>
+			<string>%1$d закреплённое сообщение</string>
 			<key>few</key>
-			<string>%1$d Закрепленных сообщений</string>
+			<string>%1$d закреплённых сообщения</string>
 			<key>many</key>
-			<string>%1$d Закрепленных сообщений</string>
+			<string>%1$d закреплённых сообщений</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>

@@ -581,8 +581,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
-                                                          zeroAttachmentService: zeroAttachmentService,
-                                                          zeroUsers: appSettings.zeroMatrixUsers ?? [])
+                                                          zeroAttachmentService: zeroAttachmentService)
                 
         let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
                                                                                            initialFocussedEventID: focussedEvent?.eventID,
@@ -1091,8 +1090,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
-                                                          zeroAttachmentService: zeroAttachmentService,
-                                                          zeroUsers: appSettings.zeroMatrixUsers ?? [])
+                                                          zeroAttachmentService: zeroAttachmentService)
                 
         let roomTimelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
                                                                                                initialFocussedEventID: nil,

@@ -18,7 +18,6 @@ final class NSEUserSession {
                                                                                imageCache: .onlyOnDisk,
                                                                                networkMonitor: nil)
     private let delegateHandle: TaskHandle?
-    private let zeroUsers: [ZMatrixUser]
 
     init(credentials: KeychainCredentials, clientSessionDelegate: ClientSessionDelegate, appHooks: AppHooks, appSettings: CommonSettingsProtocol) async throws {
         sessionDirectories = credentials.restorationToken.sessionDirectories
@@ -47,8 +46,6 @@ final class NSEUserSession {
         try await baseClient.restoreSession(session: credentials.restorationToken.session)
         
         notificationClient = try await baseClient.notificationClient(processSetup: .multipleProcesses)
-        
-        zeroUsers = appSettings.zeroMatrixUsers ?? []
     }
     
     func notificationItemProxy(roomID: String, eventID: String) async -> NotificationItemProxyProtocol? {
@@ -82,11 +79,10 @@ final class NSEUserSession {
                 return senderID
             }
         }
-        let zeroUser = zeroUsers.first(where: { $0.matrixId == senderID })
-        let senderDisplayInfo = (zeroUser != nil) ? NotificationSenderDisplayInfo(
-            name: zeroUser?.displayName ?? senderID,
+        let senderDisplayInfo = NotificationSenderDisplayInfo(
+            name: notification.senderInfo.displayName ?? senderID,
             avatarUrl: notification.senderInfo.avatarUrl
-        ) : nil
+        )
         return senderDisplayInfo
     }
     

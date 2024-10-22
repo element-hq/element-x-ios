@@ -24,6 +24,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     
     private var hasAppeard = false
+    private var mentionedUsersMap: [String: String?] = [:]
 
     private let actionsSubject: PassthroughSubject<ComposerToolbarViewModelAction, Never> = .init()
     var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> {
@@ -41,20 +42,16 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     
     private var replyLoadingTask: Task<Void, Never>?
     
-    private var zeroUsers: [ZMatrixUser] = []
-
     init(wysiwygViewModel: WysiwygComposerViewModel,
          completionSuggestionService: CompletionSuggestionServiceProtocol,
          mediaProvider: MediaProviderProtocol,
          mentionDisplayHelper: MentionDisplayHelper,
          analyticsService: AnalyticsService,
-         composerDraftService: ComposerDraftServiceProtocol,
-         zeroUsers: [ZMatrixUser] = []) {
+         composerDraftService: ComposerDraftServiceProtocol) {
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
         self.analyticsService = analyticsService
         draftService = composerDraftService
-        self.zeroUsers = zeroUsers
         
         mentionBuilder = MentionBuilder()
         attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", mentionBuilder: mentionBuilder)
@@ -262,7 +259,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .newMessage:
             set(mode: .default)
         case .edit(let eventID):
-            set(mode: .edit(originalEventOrTransactionID: .eventId(eventId: eventID), source: .draftService))
+            set(mode: .edit(originalEventOrTransactionID: .eventId(eventId: eventID)))
         case .reply(let eventID):
             set(mode: .reply(eventID: eventID, replyDetails: .loading(eventID: eventID), isThread: false))
             replyLoadingTask = Task {
@@ -318,7 +315,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         switch state.composerMode {
         case .default:
             type = .newMessage
-        case .edit(.eventId(let originalEventID), _):
+        case .edit(.eventId(let originalEventID)):
             type = .edit(eventID: originalEventID)
         case .reply(let eventID, _, _):
             type = .reply(eventID: eventID)
@@ -362,12 +359,11 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 guard let userID = attributedString.attribute(.MatrixUserID, at: range.location, effectiveRange: nil) as? String else {
                     return
                 }
-                
-                let zeroUser = zeroUsers.first(where: { $0.matrixId == userID })
-                let displayName = zeroUser?.displayName ?? userID
-                let cleanedUserId = zeroUser?.id.rawValue.description ?? userID
-                let replacementMentionString = "@[\(displayName)](user:\(cleanedUserId))"
-                // let displayName = attributedString.attribute(.MatrixUserDisplayName, at: range.location, effectiveRange: nil)
+                guard let displayName = mentionedUsersMap[userID] as? String else {
+                    return
+                }
+                let cleanedMatrixId = userID.matrixIdToCleanHex()
+                let replacementMentionString = "@[\(displayName)](user:\(cleanedMatrixId))"
                 
                 // attributedString.replaceCharacters(in: range, with: "[\(displayName ?? userID)](\(value))")
                 attributedString.replaceCharacters(in: range, with: replacementMentionString)
@@ -402,6 +398,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         actionsSubject.send(.sendMessage(plain: plainComposerContent.text, html: nil,
                                          mode: state.composerMode,
                                          intentionalMentions: .init(userIDs: plainComposerContent.mentionedUserIDs, atRoom: plainComposerContent.containsAtRoomMention)))
+        mentionedUsersMap.removeAll()
     }
     
     private func processVoiceMessageAction(_ action: ComposerToolbarVoiceMessageAction) {
@@ -463,6 +460,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             if context.composerFormattingEnabled {
                 wysiwygViewModel.setMention(url: url.absoluteString, name: item.id, mentionType: .user)
             } else {
+                mentionedUsersMap[suggestion.id] = suggestion.displayName
                 let attributedString = NSMutableAttributedString(attributedString: state.bindings.plainComposerText)
                 mentionBuilder.handleUserMention(for: attributedString, in: suggestion.range, url: url, userID: item.id, userDisplayName: item.displayName)
                 /// Appending space after each mention to maintain text formatting

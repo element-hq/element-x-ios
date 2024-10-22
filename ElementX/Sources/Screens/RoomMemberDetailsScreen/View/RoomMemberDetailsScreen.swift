@@ -15,6 +15,8 @@ struct RoomMemberDetailsScreen: View {
         Form {
             headerSection
             
+//            verificationSection
+//            
 //            if context.viewState.memberDetails != nil, !context.viewState.isOwnMemberDetails {
 //                blockUserSection
 //            }
@@ -30,6 +32,25 @@ struct RoomMemberDetailsScreen: View {
     // MARK: - Private
     
     @ViewBuilder
+    private var headerSection: some View {
+        if let memberDetails = context.viewState.memberDetails {
+            AvatarHeaderView(member: memberDetails,
+                             isVerified: context.viewState.showVerifiedBadge,
+                             avatarSize: .user(on: .memberDetails),
+                             mediaProvider: context.mediaProvider) { url in
+                context.send(viewAction: .displayAvatar(url))
+            } footer: {
+                otherUserFooter
+            }
+        } else {
+            AvatarHeaderView(user: UserProfileProxy(userID: context.viewState.userID),
+                             isVerified: context.viewState.showVerifiedBadge,
+                             avatarSize: .user(on: .memberDetails),
+                             mediaProvider: context.mediaProvider,
+                             footer: { })
+        }
+    }
+    
     private var otherUserFooter: some View {
         HStack(spacing: 8) {
             if context.viewState.memberDetails != nil, !context.viewState.isOwnMemberDetails {
@@ -62,20 +83,15 @@ struct RoomMemberDetailsScreen: View {
     }
     
     @ViewBuilder
-    private var headerSection: some View {
-        if let memberDetails = context.viewState.memberDetails {
-            AvatarHeaderView(member: memberDetails,
-                             avatarSize: .user(on: .memberDetails),
-                             mediaProvider: context.mediaProvider) { url in
-                context.send(viewAction: .displayAvatar(url))
-            } footer: {
-                otherUserFooter
+    var verificationSection: some View {
+        if context.viewState.showVerificationSection {
+            Section {
+                ListRow(label: .default(title: context.viewState.verifyButtonTitle,
+                                        description: L10n.screenRoomMemberDetailsVerifyButtonSubtitle,
+                                        icon: \.lock),
+                        kind: .button { })
+                    .disabled(true)
             }
-        } else {
-            AvatarHeaderView(user: UserProfileProxy(userID: context.viewState.userID),
-                             avatarSize: .user(on: .memberDetails),
-                             mediaProvider: context.mediaProvider,
-                             footer: { })
         }
     }
     
@@ -117,11 +133,15 @@ struct RoomMemberDetailsScreen: View {
 // MARK: - Previews
 
 struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
-    static let otherUserViewModel = makeViewModel(member: .mockDan)
+    static let verifiedUserViewModel = makeViewModel(member: .mockDan)
+    static let otherUserViewModel = makeViewModel(member: .mockAlice)
     static let accountOwnerViewModel = makeViewModel(member: .mockMe)
     static let ignoredUserViewModel = makeViewModel(member: .mockIgnored)
     
     static var previews: some View {
+        RoomMemberDetailsScreen(context: verifiedUserViewModel.context)
+            .previewDisplayName("Verified User")
+            .snapshotPreferences(delay: 0.25)
         RoomMemberDetailsScreen(context: otherUserViewModel.context)
             .previewDisplayName("Other User")
             .snapshotPreferences(delay: 0.25)
@@ -136,9 +156,12 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel(member: RoomMemberProxyMock) -> RoomMemberDetailsScreenViewModel {
         let roomProxyMock = JoinedRoomProxyMock(.init(name: ""))
         roomProxyMock.getMemberUserIDReturnValue = .success(member)
-        
         let clientProxyMock = ClientProxyMock(.init())
         
+        clientProxyMock.userIdentityForClosure = { userID in
+            let isVerified = userID == RoomMemberProxyMock.mockDan.userID
+            return .success(UserIdentitySDKMock(configuration: .init(isVerified: isVerified)))
+        }
         // to avoid mock the call state for the account owner test case
         if member.userID != RoomMemberProxyMock.mockMe.userID {
             clientProxyMock.directRoomForUserIDReturnValue = .success("roomID")

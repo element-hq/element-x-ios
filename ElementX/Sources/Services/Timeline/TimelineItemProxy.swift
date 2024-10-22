@@ -14,10 +14,9 @@ enum TimelineItemProxy {
     case virtual(MatrixRustSDK.VirtualTimelineItem, uniqueID: TimelineUniqueId)
     case unknown(MatrixRustSDK.TimelineItem)
     
-    init(item: MatrixRustSDK.TimelineItem, allRoomUsers: [ZMatrixUser]) {
+    init(item: MatrixRustSDK.TimelineItem) {
         if let eventItem = item.asEvent() {
             let eventSenderId = eventItem.sender
-            let eventSender = allRoomUsers.first(where: { $0.matrixId == eventSenderId })
             self = .event(EventTimelineItemProxy(item: eventItem, uniqueID: item.uniqueId()))
         } else if let virtualItem = item.asVirtual() {
             self = .virtual(virtualItem, uniqueID: item.uniqueId())
@@ -72,12 +71,10 @@ enum TimelineItemSendFailure: Hashable {
 class EventTimelineItemProxy {
     let item: MatrixRustSDK.EventTimelineItem
     let id: TimelineItemIdentifier
-    let eventSender: ZMatrixUser?
     
-    init(item: MatrixRustSDK.EventTimelineItem, uniqueID: TimelineUniqueId, eventSender: ZMatrixUser? = nil) {
+    init(item: MatrixRustSDK.EventTimelineItem, uniqueID: TimelineUniqueId) {
         self.item = item
         id = .event(uniqueID: uniqueID, eventOrTransactionID: item.eventOrTransactionId)
-        self.eventSender = eventSender
     }
     
     lazy var deliveryStatus: TimelineItemDeliveryStatus? = {
@@ -115,7 +112,7 @@ class EventTimelineItemProxy {
         switch profile {
         case let .ready(displayName, isDisplayNameAmbiguous, avatarUrl):
             return .init(id: item.sender,
-                         displayName: eventSender?.displayName ?? displayName,
+                         displayName: displayName,
                          isDisplayNameAmbiguous: isDisplayNameAmbiguous,
                          avatarURL: avatarUrl.flatMap(URL.init(string:)))
         default:

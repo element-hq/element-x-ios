@@ -17,6 +17,7 @@ struct AvatarHeaderView<Footer: View>: View {
     private enum Badge: Hashable {
         case encrypted(Bool)
         case `public`
+        case verified
     }
     
     private let avatarInfo: AvatarInfo
@@ -70,6 +71,7 @@ struct AvatarHeaderView<Footer: View>: View {
     }
     
     init(member: RoomMemberDetails,
+         isVerified: Bool = false,
          avatarSize: AvatarSize,
          mediaProvider: MediaProviderProtocol? = nil,
          onAvatarTap: ((URL) -> Void)? = nil,
@@ -77,6 +79,7 @@ struct AvatarHeaderView<Footer: View>: View {
         let profile = UserProfileProxy(member: member)
         
         self.init(user: profile,
+                  isVerified: isVerified,
                   avatarSize: avatarSize,
                   mediaProvider: mediaProvider,
                   onAvatarTap: onAvatarTap,
@@ -84,6 +87,7 @@ struct AvatarHeaderView<Footer: View>: View {
     }
     
     init(user: UserProfileProxy,
+         isVerified: Bool,
          avatarSize: AvatarSize,
          mediaProvider: MediaProviderProtocol? = nil,
          onAvatarTap: ((URL) -> Void)? = nil,
@@ -96,27 +100,29 @@ struct AvatarHeaderView<Footer: View>: View {
         self.mediaProvider = mediaProvider
         self.onAvatarTap = onAvatarTap
         self.footer = footer
-        badges = []
+        badges = isVerified ? [.verified] : []
     }
     
     private var badgesStack: some View {
         HStack(spacing: 8) {
             ForEach(badges, id: \.self) { badge in
                 switch badge {
-                case .encrypted(let isEncrypted):
-                    if isEncrypted {
-                        BadgeLabel(title: L10n.screenRoomDetailsBadgeEncrypted,
-                                   icon: \.lockSolid,
-                                   isHighlighted: true)
-                    } else {
-                        BadgeLabel(title: L10n.screenRoomDetailsBadgeNotEncrypted,
-                                   icon: \.lockOff,
-                                   isHighlighted: false)
-                    }
+                case .encrypted(true):
+                    BadgeLabel(title: L10n.screenRoomDetailsBadgeEncrypted,
+                               icon: \.lockSolid,
+                               isHighlighted: true)
+                case .encrypted(false):
+                    BadgeLabel(title: L10n.screenRoomDetailsBadgeNotEncrypted,
+                               icon: \.lockOff,
+                               isHighlighted: false)
                 case .public:
                     BadgeLabel(title: L10n.screenRoomDetailsBadgePublic,
                                icon: \.public,
                                isHighlighted: false)
+                case .verified:
+                    BadgeLabel(title: L10n.commonVerified,
+                               icon: \.verified,
+                               isHighlighted: true)
                 }
             }
         }
@@ -215,6 +221,11 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
         
         VStack(spacing: 16) {
             AvatarHeaderView(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockAlice),
+                             avatarSize: .room(on: .details),
+                             mediaProvider: MediaProviderMock(configuration: .init())) { Text("") }
+            
+            AvatarHeaderView(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockBob),
+                             isVerified: true,
                              avatarSize: .room(on: .details),
                              mediaProvider: MediaProviderMock(configuration: .init())) { Text("") }
             

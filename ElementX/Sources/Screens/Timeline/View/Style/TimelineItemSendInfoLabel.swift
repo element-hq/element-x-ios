@@ -153,9 +153,9 @@ private extension TimelineItemSendInfo {
         layoutType = switch timelineItem {
         case is TextBasedRoomTimelineItem:
             .overlay(capsuleStyle: false)
-        case is ImageRoomTimelineItem,
-             is VideoRoomTimelineItem,
-             is StickerRoomTimelineItem:
+        case let message as EventBasedMessageTimelineItemProtocol where message is ImageRoomTimelineItem || message is VideoRoomTimelineItem:
+            .overlay(capsuleStyle: !message.hasMediaCaption)
+        case is StickerRoomTimelineItem:
             .overlay(capsuleStyle: true)
         case let locationTimelineItem as LocationRoomTimelineItem:
             .overlay(capsuleStyle: locationTimelineItem.content.geoURI != nil)

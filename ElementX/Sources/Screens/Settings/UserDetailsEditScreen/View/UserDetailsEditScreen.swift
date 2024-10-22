@@ -73,8 +73,6 @@ struct UserDetailsEditScreen: View {
             ListRow(label: .plain(title: L10n.screenEditProfileDisplayNamePlaceholder),
                     kind: .textField(text: $context.name, axis: .horizontal))
                 .focused($focus)
-                .disabled(true)
-                .allowsHitTesting(false)
         } header: {
             Text(L10n.screenEditProfileDisplayName)
                 .compoundListSectionHeader()

@@ -15,4 +15,16 @@ extension String {
         let isMatch = range(of: regex, options: .regularExpression) != nil
         return isMatch
     }
+    
+    public func matrixIdToCleanHex() -> String {
+        if self.contains("@"), self.contains(":") {
+            let startIndex = self.firstIndex(of: "@")!
+            let endIndex = self.firstIndex(of: ":")!
+            return self
+                .substring(to: endIndex)
+                .substring(from: self.index(after: startIndex))
+        } else {
+            return self
+        }
+    }
 }

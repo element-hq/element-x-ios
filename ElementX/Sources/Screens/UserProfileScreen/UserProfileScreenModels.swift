@@ -19,10 +19,23 @@ struct UserProfileScreenViewState: BindableState {
     let isPresentedModally: Bool
     
     var userProfile: UserProfileProxy?
+    var isVerified: Bool?
     var permalink: URL?
     var dmRoomID: String?
 
     var bindings: UserProfileScreenViewStateBindings
+    
+    var showVerifiedBadge: Bool {
+        isVerified == true // We purposely show the badge on your own account for consistency with Web.
+    }
+    
+    var showVerificationSection: Bool {
+        isVerified == false && !isOwnUser
+    }
+    
+    var verifyButtonTitle: String {
+        L10n.screenRoomMemberDetailsVerifyButtonTitle(userProfile?.displayName ?? "")
+    }
 }
 
 struct UserProfileScreenViewStateBindings {

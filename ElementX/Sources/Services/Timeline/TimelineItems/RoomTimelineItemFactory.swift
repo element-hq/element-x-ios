@@ -12,7 +12,6 @@ import UniformTypeIdentifiers
 struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     private let stateEventStringBuilder: RoomStateEventStringBuilder
-    private let matrixUsers: [ZMatrixUser]
     private let messageContentHandler: MessageContentHandler
     private let zeroAttachmentService: ZeroAttachmentService
     
@@ -22,13 +21,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     init(userID: String,
          attributedStringBuilder: AttributedStringBuilderProtocol,
          stateEventStringBuilder: RoomStateEventStringBuilder,
-         zeroAttachmentService: ZeroAttachmentService,
-         zeroUsers: [ZMatrixUser]) {
+         zeroAttachmentService: ZeroAttachmentService) {
         self.userID = userID
         self.attributedStringBuilder = attributedStringBuilder
         self.stateEventStringBuilder = stateEventStringBuilder
         
-        matrixUsers = zeroUsers
         messageContentHandler = MessageContentHandler()
         self.zeroAttachmentService = zeroAttachmentService
     }
@@ -76,12 +73,12 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             if isDM, content == .roomCreate {
                 return nil
             }
-            return buildStateTimelineItem(for: eventItemProxy, state: content, isOutgoing: isOutgoing, matrixUsers: matrixUsers)
+            return buildStateTimelineItem(for: eventItemProxy, state: content, isOutgoing: isOutgoing)
         case .roomMembership(userId: let userID, let displayName, change: let change):
             if isDM, change == .joined, userID == self.userID {
                 return nil
             }
-            return buildStateMembershipChangeTimelineItem(for: eventItemProxy, memberUserID: userID, memberDisplayName: displayName, membershipChange: change, isOutgoing: isOutgoing, matrixUsers: matrixUsers)
+            return buildStateMembershipChangeTimelineItem(for: eventItemProxy, memberUserID: userID, memberDisplayName: displayName, membershipChange: change, isOutgoing: isOutgoing)
         case .profileChange(let displayName, let prevDisplayName, let avatarUrl, let prevAvatarUrl):
             return buildStateProfileChangeTimelineItem(for: eventItemProxy,
                                                        displayName: displayName,
@@ -731,10 +728,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     private func buildStateTimelineItem(for eventItemProxy: EventTimelineItemProxy,
                                         state: OtherState,
-                                        isOutgoing: Bool,
-                                        matrixUsers: [ZMatrixUser]) -> RoomTimelineItemProtocol? {
-        let sender = matrixUsers.first(where: { $0.matrixId == eventItemProxy.sender.id })
-        guard let text = stateEventStringBuilder.buildString(for: state, sender: sender, isOutgoing: isOutgoing) else { return nil }
+                                        isOutgoing: Bool) -> RoomTimelineItemProtocol? {
+        guard let text = stateEventStringBuilder.buildString(for: state, sender: eventItemProxy.sender, isOutgoing: isOutgoing) else { return nil }
         return buildStateTimelineItem(for: eventItemProxy, text: text, isOutgoing: isOutgoing)
     }
     
@@ -742,11 +737,10 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                         memberUserID: String,
                                                         memberDisplayName: String?,
                                                         membershipChange: MembershipChange?,
-                                                        isOutgoing: Bool,
-                                                        matrixUsers: [ZMatrixUser]) -> RoomTimelineItemProtocol? {
-        let sender = matrixUsers.first(where: { $0.matrixId == eventItemProxy.sender.id })
-        let member = matrixUsers.first(where: { $0.matrixId == memberUserID })
-        guard let text = stateEventStringBuilder.buildString(for: membershipChange, member: member, sender: sender, isOutgoing: isOutgoing) else { return nil }
+                                                        isOutgoing: Bool) -> RoomTimelineItemProtocol? {
+        guard let text = stateEventStringBuilder
+            .buildString(for: membershipChange, memberUserID: memberUserID, memberDisplayName: memberDisplayName, sender: eventItemProxy.sender, isOutgoing: isOutgoing)
+        else { return nil }
         return buildStateTimelineItem(for: eventItemProxy, text: text, isOutgoing: isOutgoing)
     }
     
@@ -789,10 +783,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             let sender: TimelineItemSender
             switch senderProfile {
             case let .ready(displayName, isDisplayNameAmbiguous, avatarUrl):
-                let user = matrixUsers.first(where: { $0.matrixId == senderID })
                 sender = TimelineItemSender(id: senderID,
-                                            displayName: user?.displayName ?? displayName,
-                                            isDisplayNameAmbiguous: false,
+                                            displayName: displayName,
+                                            isDisplayNameAmbiguous: isDisplayNameAmbiguous,
                                             avatarURL: avatarUrl.flatMap(URL.init(string:)))
             default:
                 sender = TimelineItemSender(id: senderID,

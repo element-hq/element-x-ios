@@ -213,7 +213,7 @@ class TimelineInteractionHandler {
         }
         
         // Always update the mode first and then the text so that the composer has time to save the text draft
-        actionsSubject.send(.composer(action: .setMode(mode: .edit(originalEventOrTransactionID: eventOrTransactionID, source: .timeline))))
+        actionsSubject.send(.composer(action: .setMode(mode: .edit(originalEventOrTransactionID: eventOrTransactionID))))
         actionsSubject.send(.composer(action: .setText(plainText: text, htmlText: htmlText)))
     }
     

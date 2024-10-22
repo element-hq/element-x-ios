@@ -4,15 +4,17 @@ import MatrixRustSDK
 class ZeroMatrixUsersService {
     private let zeroUsersApi: ZeroUsersApi
     private let appSettings: AppSettings
+    private let client: ClientProtocol
     
     public let loggedInUserId: String
     
     private var allZeroUsers: [ZMatrixUser] = []
     
-    init(zeroUsersApi: ZeroUsersApi, appSettings: AppSettings, loggedInUserId: String) {
+    init(zeroUsersApi: ZeroUsersApi, appSettings: AppSettings, loggedInUserId: String, client: ClientProtocol) {
         self.zeroUsersApi = zeroUsersApi
         self.appSettings = appSettings
         self.loggedInUserId = loggedInUserId
+        self.client = client
         
         allZeroUsers = appSettings.zeroMatrixUsers ?? []
     }
@@ -101,6 +103,18 @@ class ZeroMatrixUsersService {
     func areUsersFetched() -> Bool { !allZeroUsers.isEmpty }
     
     func getAllRoomUsers() -> [ZMatrixUser] { allZeroUsers }
+    
+    func updateUserAvatar(avatarUrl: String) async throws {
+        _ = try await zeroUsersApi.updateUserProfile(displayName: nil, profileImage: avatarUrl, primaryZID: nil)
+    }
+    
+    func updateUserName(displayName: String) async throws {
+        _ = try await zeroUsersApi.updateUserProfile(displayName: displayName, profileImage: nil, primaryZID: nil)
+    }
+    
+    func getMatrixUserProfile(userId: String) async throws -> UserProfile {
+        try await client.getProfile(userId: userId)
+    }
     
     private func getZeroUsersToFetch(_ userIds: [String]) -> [String] {
         let existingUserIds = allZeroUsers.map(\.matrixId)

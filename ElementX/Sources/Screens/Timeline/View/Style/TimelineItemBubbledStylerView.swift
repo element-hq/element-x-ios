@@ -291,7 +291,7 @@ private extension EventBasedTimelineItemProtocol {
             switch self {
             case is ImageRoomTimelineItem, is VideoRoomTimelineItem:
                 // In case a reply detail or a thread decorator is present we render the color and the padding
-                return self.replyDetails != nil || self.isThreaded ? defaultColor : nil
+                return self.replyDetails != nil || self.isThreaded || self.hasMediaCaption ? defaultColor : nil
             default:
                 return defaultColor
             }
@@ -317,8 +317,7 @@ private extension EventBasedTimelineItemProtocol {
             // In case a reply detail or a thread decorator is present we render the color and the padding
             case is ImageRoomTimelineItem,
                  is VideoRoomTimelineItem:
-                return self.replyDetails != nil ||
-                    self.isThreaded ? defaultInsets : .zero
+                return self.replyDetails != nil || self.isThreaded || self.hasMediaCaption ? defaultInsets : .zero
             case let locationTimelineItem as LocationRoomTimelineItem:
                 return locationTimelineItem.content.geoURI == nil ||
                     self.replyDetails != nil ||

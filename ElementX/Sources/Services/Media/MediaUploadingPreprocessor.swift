@@ -449,10 +449,22 @@ struct MediaUploadingPreprocessor {
 private extension CGImageSource {
     var size: CGSize? {
         guard let properties = CGImageSourceCopyPropertiesAtIndex(self, 0, nil) as? [NSString: Any],
-              let width = properties[kCGImagePropertyPixelWidth] as? Int,
-              let height = properties[kCGImagePropertyPixelHeight] as? Int else {
+              var width = properties[kCGImagePropertyPixelWidth] as? Int,
+              var height = properties[kCGImagePropertyPixelHeight] as? Int else {
             return nil
         }
+        
+        // Make sure the width and height are the correct way around if an orientation is set.
+        if let orientationValue = properties[kCGImagePropertyOrientation] as? UInt32,
+           let orientation = CGImagePropertyOrientation(rawValue: orientationValue) {
+            switch orientation {
+            case .up, .down, .upMirrored, .downMirrored:
+                break
+            case .left, .right, .leftMirrored, .rightMirrored:
+                swap(&width, &height)
+            }
+        }
+        
         return CGSize(width: width, height: height)
     }
 }

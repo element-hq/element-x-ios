@@ -25,7 +25,6 @@ final class TimelineProxy: TimelineProxyProtocol {
         innerTimelineProvider
     }
     
-    private let zeroMatrixUsersService: ZeroMatrixUsersService
     private let room: RoomProtocol
     private let zeroChatApi: ZeroChatApiProtocol
     
@@ -36,24 +35,11 @@ final class TimelineProxy: TimelineProxyProtocol {
     init(timeline: Timeline,
          room: RoomProtocol,
          kind: TimelineKind,
-         zeroMatrixUsersService: ZeroMatrixUsersService,
          zeroChatApi: ZeroChatApiProtocol) {
         self.timeline = timeline
         self.kind = kind
-        self.zeroMatrixUsersService = zeroMatrixUsersService
         self.room = room
         self.zeroChatApi = zeroChatApi
-        
-        Task { await fetchAllRoomUsers() }
-    }
-    
-    private func fetchAllRoomUsers() async {
-        do {
-            let membersIterator = try await room.members()
-            if let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) {
-                try await zeroMatrixUsersService.fetchZeroUsers(userIds: members.map(\.userId))
-            }
-        } catch { }
     }
     
     func subscribeForUpdates() async {
@@ -70,8 +56,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         await subscribeToPagination()
         
         let provider = await RoomTimelineProvider(timeline: timeline, kind: kind,
-                                                  paginationStatePublisher: paginationStatePublisher,
-                                                  zeroMatrixUsersService: zeroMatrixUsersService)
+                                                  paginationStatePublisher: paginationStatePublisher)
         // Make sure the existing items are built so that we have content in the timeline before
         // determining whether or not the timeline should paginate to load more items.
         await provider.waitForInitialItems()
@@ -190,12 +175,10 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func edit(_ eventOrTransactionID: EventOrTransactionId, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
         do {
-            guard try await timeline.edit(eventOrTransactionId: eventOrTransactionID, newContent: .roomMessage(content: newContent)) == true else {
-                return .failure(.failedEditing)
-            }
+            try await timeline.edit(eventOrTransactionId: eventOrTransactionID, newContent: .roomMessage(content: newContent))
             
             MXLog.info("Finished editing timeline item: \(eventOrTransactionID)")
-            
+
             return .success(())
         } catch {
             MXLog.error("Failed editing timeline item: \(eventOrTransactionID) with error: \(error)")
@@ -495,13 +478,11 @@ final class TimelineProxy: TimelineProxyProtocol {
         do {
             let originalEvent = try await timeline.getEventTimelineItemByEventId(eventId: eventID)
             
-            guard try await timeline.edit(eventOrTransactionId: originalEvent.eventOrTransactionId,
-                                          newContent: .pollStart(pollData: .init(question: question,
-                                                                                 answers: answers,
-                                                                                 maxSelections: 1,
-                                                                                 pollKind: .init(pollKind: pollKind)))) else {
-                return .failure(.failedEditing)
-            }
+            try await timeline.edit(eventOrTransactionId: originalEvent.eventOrTransactionId,
+                                    newContent: .pollStart(pollData: .init(question: question,
+                                                                           answers: answers,
+                                                                           maxSelections: 1,
+                                                                           pollKind: .init(pollKind: pollKind))))
             
             MXLog.info("Finished editing poll with eventID: \(eventID)")
             

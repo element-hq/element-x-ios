@@ -54,6 +54,7 @@
 "action_forgot_password" = "忘記密碼？";
 "action_forward" = "轉寄";
 "action_go_back" = "返回";
+"action_ignore" = "Ignore";
 "action_invite" = "邀請";
 "action_invite_friends" = "邀請夥伴";
 "action_invite_friends_to_app" = "邀請朋友使用 %1$@";
@@ -133,6 +134,7 @@
 "common_dark" = "深色";
 "common_decryption_error" = "解密錯誤";
 "common_developer_options" = "開發者選項";
+"common_device_id" = "Device ID";
 "common_direct_chat" = "私訊";
 "common_edited_suffix" = "（已編輯）";
 "common_editing" = "編輯中";
@@ -226,6 +228,8 @@
 "common_username" = "使用者名稱";
 "common_verification_cancelled" = "驗證已取消";
 "common_verification_complete" = "驗證完成";
+"common_verification_failed" = "Verification failed";
+"common_verified" = "Verified";
 "common_verify_device" = "驗證裝置";
 "common_video" = "影片";
 "common_voice_message" = "語音訊息";
@@ -241,6 +245,8 @@
 "confirm_recovery_key_banner_title" = "輸入您的復原金鑰";
 "crash_detection_dialog_content" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
 "crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
+"crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity appears to have changed. %3$@";
+"crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
 "dialog_permission_camera" = "為了讓應用程式使用相機，請到系統設定中開啟權限。";
 "dialog_permission_generic" = "請到系統設定中開啟權限。";
 "dialog_permission_location_description_ios" = "在「設定」->「位置」中開啟權限。";
@@ -339,6 +345,13 @@
 "screen_create_room_access_section_header" = "Room Access";
 "screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
 "screen_create_room_access_section_knocking_option_title" = "Ask to join";
+"screen_join_room_cancel_knock_action" = "Cancel request";
+"screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
+"screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
+"screen_join_room_cancel_knock_alert_title" = "Cancel request to join";
+"screen_join_room_knock_message_description" = "Message (optional)";
+"screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
+"screen_join_room_knock_sent_title" = "Request to join sent";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
@@ -502,7 +515,7 @@
 "screen_invites_empty_list" = "沒有邀請";
 "screen_invites_invited_you" = "%1$@（%2$@）邀請您";
 "screen_join_room_join_action" = "Join room";
-"screen_join_room_knock_action" = "Knock to join";
+"screen_join_room_knock_action" = "Send request to join";
 "screen_join_room_space_not_supported_description" = "%1$@ does not support spaces yet. You can access spaces on web.";
 "screen_join_room_space_not_supported_title" = "Spaces are not supported yet";
 "screen_join_room_subtitle_knock" = "Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved.";
@@ -703,6 +716,8 @@
 "screen_room_member_details_unblock_alert_action" = "解除封鎖";
 "screen_room_member_details_unblock_alert_description" = "您將無法看到任何來自他們的訊息。";
 "screen_room_member_details_unblock_user" = "解除封鎖使用者";
+"screen_room_member_details_verify_button_subtitle" = "Use the web app to verify this user.";
+"screen_room_member_details_verify_button_title" = "Verify %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "加入黑名單";
 "screen_room_member_list_ban_member_confirmation_description" = "即使收到邀請，他們仍然無法加入聊天室。";
 "screen_room_member_list_ban_member_confirmation_title" = "您確定要將此成員加入黑名單？";
@@ -800,6 +815,7 @@
 "screen_session_verification_compare_numbers_title" = "Compare numbers";
 "screen_session_verification_complete_subtitle" = "新的工作階段已完成驗證。它能夠存取您的加密訊息，而其他使用者會將它視為可信任的。";
 "screen_session_verification_enter_recovery_key" = "Enter recovery key";
+"screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "為了存取被加密的歷史訊息，您需要證明這是您本人。";
 "screen_session_verification_open_existing_session_title" = "開啟一個現存的工作階段";
 "screen_session_verification_positive_button_canceled" = "重新嘗試驗證";
@@ -807,6 +823,10 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "等待比對";
 "screen_session_verification_ready_subtitle" = "比對一組唯一的表情符號。";
 "screen_session_verification_request_accepted_subtitle" = "表情符號是唯一的，請相互比對，確認它們的排列順序是否相同。";
+"screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
+"screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "不一樣";
 "screen_session_verification_they_match" = "一樣";
 "screen_session_verification_waiting_to_accept_subtitle" = "準備開始驗證，請到您的其他工作階段接受請求。";

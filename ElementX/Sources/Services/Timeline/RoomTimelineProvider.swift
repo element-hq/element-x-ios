@@ -40,18 +40,15 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         membershipChangeSubject
             .eraseToAnyPublisher()
     }
-    
-    private let allRoomUsers: [ZMatrixUser]
-    
+        
     deinit {
         roomTimelineObservationToken?.cancel()
     }
 
-    init(timeline: Timeline, kind: TimelineKind, paginationStatePublisher: AnyPublisher<PaginationState, Never>, zeroMatrixUsersService: ZeroMatrixUsersService?) {
+    init(timeline: Timeline, kind: TimelineKind, paginationStatePublisher: AnyPublisher<PaginationState, Never>) {
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         itemProxiesSubject = CurrentValueSubject<[TimelineItemProxy], Never>([])
         self.kind = kind
-        allRoomUsers = zeroMatrixUsersService?.getAllRoomUsers() ?? []
         
         paginationStatePublisher
             .sink { [weak self] in
@@ -117,7 +114,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             guard let items = diff.append() else { fatalError() }
 
             for (index, item) in items.enumerated() {
-                let itemProxy = TimelineItemProxy(item: item, allRoomUsers: allRoomUsers)
+                let itemProxy = TimelineItemProxy(item: item)
                 
                 if itemProxy.isMembershipChange {
                     membershipChangeSubject.send(())
@@ -132,7 +129,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         case .insert:
             guard let update = diff.insert() else { fatalError() }
 
-            let itemProxy = TimelineItemProxy(item: update.item, allRoomUsers: allRoomUsers)
+            let itemProxy = TimelineItemProxy(item: update.item)
             changes.append(.insert(offset: Int(update.index), element: itemProxy, associatedWith: nil))
         case .popBack:
             guard let itemProxy = itemProxies.last else { fatalError() }
@@ -145,7 +142,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         case .pushBack:
             guard let item = diff.pushBack() else { fatalError() }
             
-            let itemProxy = TimelineItemProxy(item: item, allRoomUsers: allRoomUsers)
+            let itemProxy = TimelineItemProxy(item: item)
             
             if itemProxy.isMembershipChange {
                 membershipChangeSubject.send(())
@@ -155,7 +152,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         case .pushFront:
             guard let item = diff.pushFront() else { fatalError() }
 
-            let itemProxy = TimelineItemProxy(item: item, allRoomUsers: allRoomUsers)
+            let itemProxy = TimelineItemProxy(item: item)
             changes.append(.insert(offset: 0, element: itemProxy, associatedWith: nil))
         case .remove:
             guard let index = diff.remove() else { fatalError() }
@@ -171,12 +168,12 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             }
 
             for (index, timelineItem) in items.enumerated() {
-                changes.append(.insert(offset: index, element: TimelineItemProxy(item: timelineItem, allRoomUsers: allRoomUsers), associatedWith: nil))
+                changes.append(.insert(offset: index, element: TimelineItemProxy(item: timelineItem), associatedWith: nil))
             }
         case .set:
             guard let update = diff.set() else { fatalError() }
 
-            let itemProxy = TimelineItemProxy(item: update.item, allRoomUsers: allRoomUsers)
+            let itemProxy = TimelineItemProxy(item: update.item)
             changes.append(.remove(offset: Int(update.index), element: itemProxy, associatedWith: nil))
             changes.append(.insert(offset: Int(update.index), element: itemProxy, associatedWith: nil))
         case .truncate:

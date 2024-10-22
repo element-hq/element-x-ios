@@ -38,6 +38,13 @@ enum SuggestionItem: Identifiable, Equatable {
             return item.range
         }
     }
+    
+    var displayName: String? {
+        switch self {
+        case .user(let item), .allUsers(let item):
+            return item.displayName
+        }
+    }
 }
 
 struct MentionSuggestionItem: Identifiable, Equatable {

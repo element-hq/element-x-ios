@@ -14,7 +14,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private let roomListService: RoomListServiceProtocol
     private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
-    private let zeroMatrixUsersService: ZeroMatrixUsersService
     let timeline: TimelineProxyProtocol
     private let zeroChatApi: ZeroChatApiProtocol
     
@@ -42,7 +41,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                                    maxConcurrentRequests: 10),
                                                                room: room,
                                                                kind: .pinned,
-                                                               zeroMatrixUsersService: zeroMatrixUsersService,
                                                                zeroChatApi: zeroChatApi)
                         await timeline.subscribeForUpdates()
                         innerPinnedEventsTimeline = timeline
@@ -176,23 +174,16 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     init(roomListService: RoomListServiceProtocol,
          roomListItem: RoomListItemProtocol,
          room: RoomProtocol,
-         zeroMatrixUsersService: ZeroMatrixUsersService,
          zeroChatApi: ZeroChatApiProtocol) async throws {
         self.roomListService = roomListService
         self.roomListItem = roomListItem
         self.room = room
-        self.zeroMatrixUsersService = zeroMatrixUsersService
         self.zeroChatApi = zeroChatApi
         
         timeline = try await TimelineProxy(timeline: room.timeline(),
                                            room: room,
                                            kind: .live,
-                                           zeroMatrixUsersService: zeroMatrixUsersService,
                                            zeroChatApi: zeroChatApi)
-        
-        Task {
-            await fetchAllRoomUsers()
-        }
         Task {
             self.roomInfo = try? await roomListItem.roomInfo()
         }
@@ -245,7 +236,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             return .success(TimelineProxy(timeline: timeline,
                                           room: room,
                                           kind: .detached,
-                                          zeroMatrixUsersService: zeroMatrixUsersService,
                                           zeroChatApi: zeroChatApi))
         } catch let error as FocusEventError {
             switch error {
@@ -292,8 +282,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             let membersNoSyncIterator = try await room.membersNoSync()
             if let members = membersNoSyncIterator.nextChunk(chunkSize: membersNoSyncIterator.len()) {
                 membersSubject.value = members.map { member in
-                    let zeroMember = zeroMatrixUsersService.getMatrixUser(userId: member.userId)
-                    return RoomMemberProxy(member: member, zeroMember: zeroMember)
+                    return RoomMemberProxy(member: member)
                 }
             }
         } catch {
@@ -305,22 +294,12 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             let membersIterator = try await room.members()
             if let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) {
                 membersSubject.value = members.map { member in
-                    let zeroMember = zeroMatrixUsersService.getMatrixUser(userId: member.userId)
-                    return RoomMemberProxy(member: member, zeroMember: zeroMember)
+                    return RoomMemberProxy(member: member)
                 }
             }
         } catch {
             MXLog.error("[RoomProxy] Failed updating members using sync API: \(error)")
         }
-    }
-    
-    private func fetchAllRoomUsers() async {
-        do {
-            let membersIterator = try await room.members()
-            if let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) {
-                try await zeroMatrixUsersService.fetchZeroUsers(userIds: members.map(\.userId))
-            }
-        } catch { }
     }
 
     func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError> {
@@ -772,11 +751,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     private func getZeroRoomName() -> String? {
         if let roomInfo = roomInfo {
-            var displayName: String? = roomInfo.displayName ?? roomInfo.rawName
-            if displayName?.stringMatchesUserIdFormatRegex() == true {
-                let user = zeroMatrixUsersService.getMatrixUserCleaned(userId: displayName!)
-                displayName = user?.displayName
-            }
+            let displayName: String? = roomInfo.displayName ?? roomInfo.rawName
             return displayName
         } else {
             return roomListItem.displayName()
@@ -785,12 +760,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     private func getZeroRoomAvatarUrl() -> String? {
         if let roomInfo = roomInfo {
-            var displayName: String? = roomInfo.displayName ?? roomInfo.rawName
-            var roomAvatar: String? = roomInfo.avatarUrl
-            if displayName?.stringMatchesUserIdFormatRegex() == true {
-                let user = zeroMatrixUsersService.getMatrixUserCleaned(userId: displayName!)
-                roomAvatar = user?.profileSummary?.profileImage
-            }
+            let roomAvatar: String? = roomInfo.avatarUrl
             return roomAvatar
         } else {
             return roomListItem.avatarUrl()

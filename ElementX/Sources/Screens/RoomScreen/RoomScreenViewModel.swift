@@ -218,7 +218,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             // Only remote events are pinned
             if case let .event(event) = item,
                let eventID = event.id.eventID {
-                pinnedEventContents.updateValue(pinnedEventStringBuilder.buildAttributedString(for: event, author: nil) ?? AttributedString(L10n.commonUnsupportedEvent),
+                pinnedEventContents.updateValue(pinnedEventStringBuilder.buildAttributedString(for: event) ?? AttributedString(L10n.commonUnsupportedEvent),
                                                 forKey: eventID)
             }
         }
