@@ -54,6 +54,7 @@
 "action_forgot_password" = "Kas unustasid salasõna?";
 "action_forward" = "Edasta";
 "action_go_back" = "Tagasi eelmisesse vaatesse";
+"action_ignore" = "Eira";
 "action_invite" = "Kutsu";
 "action_invite_friends" = "Kutsu osalejaid";
 "action_invite_friends_to_app" = "Kutsu huvilisi kasutama rakendust %1$@";
@@ -133,6 +134,7 @@
 "common_dark" = "Tume";
 "common_decryption_error" = "Dekrüptimisviga";
 "common_developer_options" = "Arendaja valikud";
+"common_device_id" = "Seadme tunnus";
 "common_direct_chat" = "Otsevestlus";
 "common_edited_suffix" = "(muudetud)";
 "common_editing" = "Muutmine";
@@ -226,6 +228,8 @@
 "common_username" = "Kasutajanimi";
 "common_verification_cancelled" = "Verifitseerimine on katkestatud";
 "common_verification_complete" = "Verifitseerimine on tehtud";
+"common_verification_failed" = "Verifitseerimine ei õnnestunud";
+"common_verified" = "Verifitseeritud";
 "common_verify_device" = "Verifitseeri seade";
 "common_video" = "Video";
 "common_voice_message" = "Häälsõnum";
@@ -241,6 +245,8 @@
 "confirm_recovery_key_banner_title" = "Sisesta oma taastevõti";
 "crash_detection_dialog_content" = "%1$@ jooksis kokku viimati, kui seda kasutasid. Kas tahaksid selle kohta meile veateate saata?";
 "crypto_identity_change_pin_violation" = "Kasutaja %1$@ võrguidentiteet tundub olema muutunud. %2$@";
+"crypto_identity_change_pin_violation_new" = "Kasutaja %1$@ %2$@ võrguidentiteet tundub olema muutunud. %3$@";
+"crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
 "dialog_permission_camera" = "Selleks, et rakendus saaks kaamerat kasutada, palun luba see süsteemi seadistuses.";
 "dialog_permission_generic" = "Palun luba süsteemi seadistustest vajalikud õigused.";
 "dialog_permission_location_description_ios" = "Luba õigused Seadistused -> Asukoht valikust.";
@@ -339,6 +345,13 @@
 "screen_create_room_access_section_header" = "Ligipääs jututoale";
 "screen_create_room_access_section_knocking_option_description" = "Kõik võivad paluda selle jututoaga liitumist, kuid peakasutaja või moderaator peavad selle kinnitama";
 "screen_create_room_access_section_knocking_option_title" = "Küsi võimalust liitumiseks";
+"screen_join_room_cancel_knock_action" = "Tühista liitumispalve";
+"screen_join_room_cancel_knock_alert_confirmation" = "Jah, tühista";
+"screen_join_room_cancel_knock_alert_description" = "Kas sa oled kindel, et soovid tühistada oma palve jututoaga liitumiseks?";
+"screen_join_room_cancel_knock_alert_title" = "Tühista liitumispalve";
+"screen_join_room_knock_message_description" = "Selgitus (kui soovid lisada)";
+"screen_join_room_knock_sent_description" = "Kui sinu liitumispalvega ollakse nõus, siis saad kutse jututoaga liitumiseks.";
+"screen_join_room_knock_sent_title" = "Liitumispalve on saadetud";
 "screen_pinned_timeline_empty_state_description" = "Siia lisamiseks vajuta sõnumil ja vali „%1$@“.";
 "screen_pinned_timeline_empty_state_headline" = "Et olulisi sõnumeid oleks lihtsam leida, tõsta nad esile";
 "screen_reset_encryption_password_error" = "Tekkis teadmata viga. Palun kontrolli, kas sinu kasutajakonto salasõna on õige ja proovi uuesti.";
@@ -703,6 +716,8 @@
 "screen_room_member_details_unblock_alert_action" = "Eemalda blokeering";
 "screen_room_member_details_unblock_alert_description" = "Nüüd näed sa jälle kõiki tema sõnumeid";
 "screen_room_member_details_unblock_user" = "Eemalda kasutajalt blokeering";
+"screen_room_member_details_verify_button_subtitle" = "Kasutaja verifitseerimiseks kasuta veebirakendust.";
+"screen_room_member_details_verify_button_title" = "Verifitseeri kasutaja %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "Sea suhtluskeeld";
 "screen_room_member_list_ban_member_confirmation_description" = "Ta ei saa selle jututoaga liituda isegi kutse olemasolul.";
 "screen_room_member_list_ban_member_confirmation_title" = "Kas sa oled kindel, et soovid sellele kasutajale seada suhtluskeelu?";
@@ -800,6 +815,7 @@
 "screen_session_verification_compare_numbers_title" = "Võrdle numbreid";
 "screen_session_verification_complete_subtitle" = "Sinu uus sessioon on nüüd verifitseeritud. Sellel sessioonil on nüüd ligipääs sinu krüptitud sõnumitele ja teised osapooled näevad teda usaldusväärsena.";
 "screen_session_verification_enter_recovery_key" = "Sisesta taastevõti";
+"screen_session_verification_failed_subtitle" = "Kas verifitseerimine aegus, teine osapool keeldus vastanast või tekkis vastuste mittevastavus.";
 "screen_session_verification_open_existing_session_subtitle" = "Saamaks ligipääsu krüptitud sõnumite ajaloole tõesta et tegemist on sinuga.";
 "screen_session_verification_open_existing_session_title" = "Ava olemasolev sessioon";
 "screen_session_verification_positive_button_canceled" = "Proovi verifitseerimist uuesti";
@@ -807,6 +823,10 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "Ootame kinnitust sobivusele";
 "screen_session_verification_ready_subtitle" = "Võrdle unikaalset emojide kombinatsiooni";
 "screen_session_verification_request_accepted_subtitle" = "Võrdle unikaalset emojide kombinatsiooni ning kontrolli, et nad on täpselt samas järjekorras.";
+"screen_session_verification_request_details_timestamp" = "Sisselogitud";
+"screen_session_verification_request_footer" = "Jätka vaid siis, kui sina algatasid verifitseerimise.";
+"screen_session_verification_request_subtitle" = "Hoidmaks oma sõnumiajalugu turvatuna verifitseeri teine seade.";
+"screen_session_verification_request_title" = "Verifitseerimispäring";
 "screen_session_verification_they_dont_match" = "Nad ei klapi omavahel";
 "screen_session_verification_they_match" = "Nad klapivad omavahel";
 "screen_session_verification_waiting_to_accept_subtitle" = "Jätkamaks nõustu verifitseerimisprotsessi alustamisega oma teises sessioonis.";

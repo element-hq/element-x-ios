@@ -54,6 +54,7 @@
 "action_forgot_password" = "Esqueceu-se da senha?";
 "action_forward" = "Reencaminhar";
 "action_go_back" = "Voltar";
+"action_ignore" = "Ignorar";
 "action_invite" = "Convidar";
 "action_invite_friends" = "Convidar pessoas";
 "action_invite_friends_to_app" = "Convidar amigos para %1$@";
@@ -133,6 +134,7 @@
 "common_dark" = "Escuro";
 "common_decryption_error" = "Erro de decifragem";
 "common_developer_options" = "Opções de programador";
+"common_device_id" = "ID do dispositivo";
 "common_direct_chat" = "Conversa direta";
 "common_edited_suffix" = "(editada)";
 "common_editing" = "A editar";
@@ -170,7 +172,7 @@
 "common_people" = "Pessoas";
 "common_permalink" = "Ligação permanente";
 "common_permission" = "Permissão";
-"common_please_wait" = "Por favor, aguarda…";
+"common_please_wait" = "Por favor, aguarde…";
 "common_poll_end_confirmation" = "Tens a certeza que queres concluir esta sondagem?";
 "common_poll_summary" = "Sondagem: %1$@";
 "common_poll_total_votes" = "Total de votos: %1$@";
@@ -226,6 +228,8 @@
 "common_username" = "Nome de utilizador";
 "common_verification_cancelled" = "Verificação cancelada";
 "common_verification_complete" = "Verificação concluída";
+"common_verification_failed" = "Verification failed";
+"common_verified" = "Verificado";
 "common_verify_device" = "Verificar o dispositivo";
 "common_video" = "Vídeo";
 "common_voice_message" = "Mensagem de voz";
@@ -241,6 +245,8 @@
 "confirm_recovery_key_banner_title" = "Insere a tua chave de recuperação";
 "crash_detection_dialog_content" = "A %1$@ teve uma falha da última vez que foi utilizada. Gostarias de partilhar um relatório de acidente connosco?";
 "crypto_identity_change_pin_violation" = "A identidade de %1$@ parece ter mudado. %2$@";
+"crypto_identity_change_pin_violation_new" = "A identidade de %1$@ (username: %2$@ ) aparenta ter mudado. %3$@";
+"crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
 "dialog_permission_camera" = "Para que a aplicação possa utilizar a câmara, concede a permissão nas configurações do sistema.";
 "dialog_permission_generic" = "Concede a permissão nas configurações do sistema.";
 "dialog_permission_location_description_ios" = "Concede a permissão em Definições -> Localização.";
@@ -270,7 +276,7 @@
 "error_message_not_found" = "Mensagem não encontrada";
 "error_no_compatible_app_found" = "Nenhuma aplicação encontrada capaz de continuar esta ação.";
 "error_some_messages_have_not_been_sent" = "Algumas mensagens não foram enviadas";
-"error_unknown" = "Ocorreu um erro, desculpa";
+"error_unknown" = "Desculpe, ocorreu um erro";
 "event_shield_reason_authenticity_not_guaranteed" = "A autenticidade desta mensagem cifrada não pode ser garantida neste dispositivo.";
 "event_shield_reason_previously_verified" = "Criptografado por um usuário verificado anteriormente.";
 "event_shield_reason_sent_in_clear" = "Não cifrado.";
@@ -334,11 +340,18 @@
 "screen_advanced_settings_element_call_base_url" = "URL base para Element Call personalizado";
 "screen_advanced_settings_element_call_base_url_description" = "Define um URL base para a Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL inválido, certifica-te de que incluis o protocolo (http/https) e o endereço correto.";
-"screen_create_room_access_section_anyone_option_description" = "Anyone can join this room";
-"screen_create_room_access_section_anyone_option_title" = "Anyone";
-"screen_create_room_access_section_header" = "Room Access";
-"screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
-"screen_create_room_access_section_knocking_option_title" = "Ask to join";
+"screen_create_room_access_section_anyone_option_description" = "Qualquer pessoa pode entrar nesta sala";
+"screen_create_room_access_section_anyone_option_title" = "Qualquer pessoa";
+"screen_create_room_access_section_header" = "Acesso à sala";
+"screen_create_room_access_section_knocking_option_description" = "Qualquer pessoa pode pedir para entrar na sala, mas um administrador ou um moderador terá de aceitar o pedido";
+"screen_create_room_access_section_knocking_option_title" = "Pedir para participar";
+"screen_join_room_cancel_knock_action" = "Cancelar pedido";
+"screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
+"screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
+"screen_join_room_cancel_knock_alert_title" = "Cancel request to join";
+"screen_join_room_knock_message_description" = "Mensagem (opcional)";
+"screen_join_room_knock_sent_description" = "Irá receber um convite para participar na sala se seu pedido for aceite.";
+"screen_join_room_knock_sent_title" = "Pedido de adesão enviado";
 "screen_pinned_timeline_empty_state_description" = "Pressione uma mensagem e escolha \"%1$@\" para incluir aqui.";
 "screen_pinned_timeline_empty_state_headline" = "Fixa mensagens importantes para que possam ser facilmente descobertas";
 "screen_reset_encryption_password_error" = "Um erro desconhecido aconteceu. Verifique se a senha da sua conta está correta e tente novamente.";
@@ -377,7 +390,7 @@
 "screen_analytics_prompt_help_us_improve" = "Partilhe dados de utilização anónimos para nos ajudar a identificar problemas.";
 "screen_analytics_prompt_read_terms" = "Podes ler todos os nossos termos %1$@.";
 "screen_analytics_prompt_read_terms_content_link" = "aqui";
-"screen_analytics_prompt_settings" = "Podes desligar qualquer momento";
+"screen_analytics_prompt_settings" = "Pode desactivar a qualquer momento";
 "screen_analytics_prompt_third_party_sharing" = "Não partilharemos os teus dados com terceiros";
 "screen_analytics_prompt_title" = "Ajude a melhorar a %1$@";
 "screen_analytics_settings_share_data" = "Partilhar dados de utilização";
@@ -495,9 +508,9 @@
 "screen_identity_confirmed_subtitle" = "Agora podes ler ou enviar mensagens de forma segura, e qualquer pessoa com quem converses também pode confiar neste dispositivo.";
 "screen_identity_confirmed_title" = "Dispositivo verificado";
 "screen_identity_waiting_on_other_device" = "A aguardar por outros dispositivos…";
-"screen_invites_decline_chat_message" = "Tens a certeza que queres rejeitar o convite para %1$@?";
-"screen_invites_decline_chat_title" = "Rejeitar conite";
-"screen_invites_decline_direct_chat_message" = "Tens a certeza que queres rejeitar esta conversa privada com %1$@?";
+"screen_invites_decline_chat_message" = "Tens a certeza que queres rejeitar o convite para entra em %1$@?";
+"screen_invites_decline_chat_title" = "Rejeitar convite";
+"screen_invites_decline_direct_chat_message" = "Tem a certeza que queres rejeitar esta conversa privada com %1$@?";
 "screen_invites_decline_direct_chat_title" = "Rejeitar conversa";
 "screen_invites_empty_list" = "Sem convites";
 "screen_invites_invited_you" = "%1$@ (%2$@) convidou-te";
@@ -593,7 +606,7 @@
 "screen_qr_code_login_initial_state_item_3" = "Seleciona %1$@";
 "screen_qr_code_login_initial_state_item_3_action" = "“Ligar novo dispositivo”";
 "screen_qr_code_login_initial_state_item_4" = "Lê o código QR com este dispositivo";
-"screen_qr_code_login_initial_state_subtitle" = "Only available if your account provider supports it.";
+"screen_qr_code_login_initial_state_subtitle" = "Disponível apenas se o seu fornecedor de conta o suportar.";
 "screen_qr_code_login_initial_state_title" = "Abre a %1$@ noutro dispositivo para obteres o código QR";
 "screen_qr_code_login_invalid_scan_state_description" = "Lê o código QR apresentado no outro dispositivo.";
 "screen_qr_code_login_invalid_scan_state_subtitle" = "Código QR inválido";
@@ -660,7 +673,7 @@
 "screen_room_change_permissions_room_name" = "Altera o nome da sala";
 "screen_room_change_permissions_room_topic" = "Alterar a descrição da sala";
 "screen_room_change_permissions_send_messages" = "Enviar mensagens";
-"screen_room_change_role_administrators_title" = "Editar administradores";
+"screen_room_change_role_administrators_title" = "Editar Administradores";
 "screen_room_change_role_confirm_add_admin_description" = "Não poderás desfazer esta ação. Estás a promover o utilizador para ter o mesmo nível de poder que tu.";
 "screen_room_change_role_confirm_add_admin_title" = "Adicionar administrador?";
 "screen_room_change_role_confirm_demote_self_action" = "Despromover";
@@ -668,7 +681,7 @@
 "screen_room_change_role_confirm_demote_self_title" = "Despromover-te?";
 "screen_room_change_role_invited_member_name" = "%1$@ (pendente)";
 "screen_room_change_role_moderators_admin_section_footer" = "Os administradores têm automaticamente privilégios de moderador";
-"screen_room_change_role_moderators_title" = "Editar moderadores";
+"screen_room_change_role_moderators_title" = "Editar Moderadores";
 "screen_room_change_role_unsaved_changes_description" = "Tens alterações por guardar.";
 "screen_room_details_add_topic_title" = "Adicionar descrição";
 "screen_room_details_already_a_member" = "Já é participante";
@@ -703,6 +716,8 @@
 "screen_room_member_details_unblock_alert_action" = "Desbloquear";
 "screen_room_member_details_unblock_alert_description" = "Poderás voltar a ver todas as suas mensagens.";
 "screen_room_member_details_unblock_user" = "Desbloquear utilizador";
+"screen_room_member_details_verify_button_subtitle" = "Utiliza a aplicação Web para verificar este utilizador.";
+"screen_room_member_details_verify_button_title" = "Verifique %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "Banir";
 "screen_room_member_list_ban_member_confirmation_description" = "Não poderão voltar a entrar nesta sala, mesmo se forem convidados.";
 "screen_room_member_list_ban_member_confirmation_title" = "Tens a certeza que queres banir este participante?";
@@ -800,6 +815,7 @@
 "screen_session_verification_compare_numbers_title" = "Comparar números";
 "screen_session_verification_complete_subtitle" = "A tua nova sessão está agora verificada, pelo que tem acesso às tuas mensagens cifradas e os outros utilizadores vão vê-la como de confiança.";
 "screen_session_verification_enter_recovery_key" = "Insere a chave de recuperação";
+"screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Prova que és tu para acederes ao teu histórico de mensagens cifradas.";
 "screen_session_verification_open_existing_session_title" = "Abrir sessão existente";
 "screen_session_verification_positive_button_canceled" = "Repetir verificação";
@@ -807,6 +823,10 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "A aguardar correspondência";
 "screen_session_verification_ready_subtitle" = "Compara um conjunto único de emojis.";
 "screen_session_verification_request_accepted_subtitle" = "Compara os emojis únicos, certificando-te de que aparecem pela mesma ordem.";
+"screen_session_verification_request_details_timestamp" = "Sessão iniciada";
+"screen_session_verification_request_footer" = "Continue apenas se tiver iniciado esta verificação.";
+"screen_session_verification_request_subtitle" = "Verifique o outro dispositivo para manter o histórico de mensagens seguro.";
+"screen_session_verification_request_title" = "Verificação solicitada";
 "screen_session_verification_they_dont_match" = "Não correspondem";
 "screen_session_verification_they_match" = "Correspondem";
 "screen_session_verification_waiting_to_accept_subtitle" = "Para continuar, aceita o pedido de verificação na tua outra sessão.";

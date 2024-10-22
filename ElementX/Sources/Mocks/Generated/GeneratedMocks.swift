@@ -4700,6 +4700,76 @@ class ClientProxyMock: ClientProxyProtocol {
             return resetIdentityReturnValue
         }
     }
+    //MARK: - userIdentity
+
+    var userIdentityForUnderlyingCallsCount = 0
+    var userIdentityForCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return userIdentityForUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = userIdentityForUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                userIdentityForUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    userIdentityForUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var userIdentityForCalled: Bool {
+        return userIdentityForCallsCount > 0
+    }
+    var userIdentityForReceivedUserID: String?
+    var userIdentityForReceivedInvocations: [String] = []
+
+    var userIdentityForUnderlyingReturnValue: Result<UserIdentity?, ClientProxyError>!
+    var userIdentityForReturnValue: Result<UserIdentity?, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return userIdentityForUnderlyingReturnValue
+            } else {
+                var returnValue: Result<UserIdentity?, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = userIdentityForUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                userIdentityForUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    userIdentityForUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var userIdentityForClosure: ((String) async -> Result<UserIdentity?, ClientProxyError>)?
+
+    func userIdentity(for userID: String) async -> Result<UserIdentity?, ClientProxyError> {
+        userIdentityForCallsCount += 1
+        userIdentityForReceivedUserID = userID
+        DispatchQueue.main.async {
+            self.userIdentityForReceivedInvocations.append(userID)
+        }
+        if let userIdentityForClosure = userIdentityForClosure {
+            return await userIdentityForClosure(userID)
+        } else {
+            return userIdentityForReturnValue
+        }
+    }
     //MARK: - loadMediaContentForSource
 
     var loadMediaContentForSourceThrowableError: Error?

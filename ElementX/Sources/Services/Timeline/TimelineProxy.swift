@@ -169,7 +169,7 @@ final class TimelineProxy: TimelineProxyProtocol {
             try await timeline.edit(eventOrTransactionId: eventOrTransactionID, newContent: .roomMessage(content: newContent))
             
             MXLog.info("Finished editing timeline item: \(eventOrTransactionID)")
-            
+
             return .success(())
         } catch {
             MXLog.error("Failed editing timeline item: \(eventOrTransactionID) with error: \(error)")

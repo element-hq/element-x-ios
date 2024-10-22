@@ -54,6 +54,7 @@
 "action_forgot_password" = "Elfelejtette a jelszót?";
 "action_forward" = "Tovább";
 "action_go_back" = "Visszalépés";
+"action_ignore" = "Mellőzés";
 "action_invite" = "Meghívás";
 "action_invite_friends" = "Ismerősök meghívása";
 "action_invite_friends_to_app" = "Ismerősök meghívása ide: %1$@";
@@ -133,6 +134,7 @@
 "common_dark" = "Sötét";
 "common_decryption_error" = "Visszafejtési hiba";
 "common_developer_options" = "Fejlesztői beállítások";
+"common_device_id" = "Eszközazonosító";
 "common_direct_chat" = "Közvetlen csevegés";
 "common_edited_suffix" = "(szerkesztve)";
 "common_editing" = "Szerkesztés";
@@ -226,6 +228,8 @@
 "common_username" = "Felhasználónév";
 "common_verification_cancelled" = "Az ellenőrzés megszakítva";
 "common_verification_complete" = "Az ellenőrzés befejeződött";
+"common_verification_failed" = "Az ellenőrzés sikertelen";
+"common_verified" = "Ellenőrizve";
 "common_verify_device" = "Eszköz ellenőrzése";
 "common_video" = "Videó";
 "common_voice_message" = "Hangüzenet";
@@ -241,6 +245,8 @@
 "confirm_recovery_key_banner_title" = "Helyreállítási kulcs megerősítése";
 "crash_detection_dialog_content" = "Az %1$@ összeomlott a legutóbbi használata óta. Megosztja velünk az összeomlás-jelentést?";
 "crypto_identity_change_pin_violation" = "Úgy tűnik, hogy %1$@ személyazonossága megváltozott. %2$@";
+"crypto_identity_change_pin_violation_new" = "Úgy tűnik, hogy %1$@ %2$@ személyazonossága megváltozott. %3$@";
+"crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
 "dialog_permission_camera" = "Hogy az alkalmazás használhassa a kamerát, adja meg az engedélyt a rendszerbeállításokban.";
 "dialog_permission_generic" = "Adja meg az engedélyt a rendszerbeállításokban.";
 "dialog_permission_location_description_ios" = "Adjon hozzáférést a Beállítások -> Hely menüpontban.";
@@ -339,6 +345,13 @@
 "screen_create_room_access_section_header" = "Szobahozzáférés";
 "screen_create_room_access_section_knocking_option_description" = "Bárki kérheti, hogy csatlakozzon a szobához, de egy adminisztrátornak vagy moderátornak el kell fogadnia a kérést";
 "screen_create_room_access_section_knocking_option_title" = "Csatlakozás kérése";
+"screen_join_room_cancel_knock_action" = "Kérés visszavonása";
+"screen_join_room_cancel_knock_alert_confirmation" = "Igen, visszavonás";
+"screen_join_room_cancel_knock_alert_description" = "Biztos, hogy visszavonja a szobához való csatlakozási kérését?";
+"screen_join_room_cancel_knock_alert_title" = "Csatlakozási kérés visszavonása";
+"screen_join_room_knock_message_description" = "Üzenet (nem kötelező)";
+"screen_join_room_knock_sent_description" = "Ha a kérését elfogadják, meghívót kap a szobához való csatlakozáshoz.";
+"screen_join_room_knock_sent_title" = "Csatlakozási kérés elküldve";
 "screen_pinned_timeline_empty_state_description" = "Nyomjon hosszan az üzenetre, és válassza a „%1$@” lehetőséget, hogy itt szerepeljen.";
 "screen_pinned_timeline_empty_state_headline" = "Tűzze ki a fontos üzeneteket, hogy könnyen felfedezhetők legyenek";
 "screen_reset_encryption_password_error" = "Ismeretlen hiba történt. Ellenőrizze, hogy a fiókja jelszava helyes-e, és próbálja meg újra.";
@@ -703,6 +716,8 @@
 "screen_room_member_details_unblock_alert_action" = "Letiltás feloldása";
 "screen_room_member_details_unblock_alert_description" = "Újra láthatja az összes üzenetét.";
 "screen_room_member_details_unblock_user" = "Felhasználó kitiltásának feloldása";
+"screen_room_member_details_verify_button_subtitle" = "Használja a webes alkalmazást a felhasználó ellenőrzéséhez.";
+"screen_room_member_details_verify_button_title" = "A(z) %1$@ ellenőrzése";
 "screen_room_member_list_ban_member_confirmation_action" = "Kitiltás";
 "screen_room_member_list_ban_member_confirmation_description" = "Többé nem csatlakozhat ehhez a szobához, akkor sem, ha meghívják.";
 "screen_room_member_list_ban_member_confirmation_title" = "Biztos, hogy kitiltja ezt a tagot?";
@@ -800,6 +815,7 @@
 "screen_session_verification_compare_numbers_title" = "Számok összehasonlítása";
 "screen_session_verification_complete_subtitle" = "Az új munkamenete most már ellenőrizve van. Eléri a titkosított üzeneteit, és a többi felhasználó is megbízhatónak fogja látni.";
 "screen_session_verification_enter_recovery_key" = "Adja meg a helyreállítási kulcsot";
+"screen_session_verification_failed_subtitle" = "A kérés túllépte az időkorlátot, el lett utasítva, vagy ellenőrzési eltérés történt.";
 "screen_session_verification_open_existing_session_subtitle" = "Bizonyítsa, hogy valóban Ön az, hogy elérje a titkosított üzeneteinek előzményeit.";
 "screen_session_verification_open_existing_session_title" = "Meglévő munkamenet megnyitása";
 "screen_session_verification_positive_button_canceled" = "Ellenőrzés újrapróbálása";
@@ -807,6 +823,10 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "Várakozás az egyezésre";
 "screen_session_verification_ready_subtitle" = "Egyedi emodzsik összehasonlítása.";
 "screen_session_verification_request_accepted_subtitle" = "Hasonlítsa össze az egyedi emodzsikat, meggyőződve arról, hogy azonos a sorrendjük.";
+"screen_session_verification_request_details_timestamp" = "Bejelentkezve";
+"screen_session_verification_request_footer" = "Csak akkor folytassa, ha Ön kezdeményezte ezt az ellenőrzést.";
+"screen_session_verification_request_subtitle" = "Az üzenetelőzmények biztonságának megőrzése érdekében ellenőrizze a másik eszközt.";
+"screen_session_verification_request_title" = "Ellenőrzés kérve";
 "screen_session_verification_they_dont_match" = "Nem egyeznek";
 "screen_session_verification_they_match" = "Megegyeznek";
 "screen_session_verification_waiting_to_accept_subtitle" = "A folytatáshoz fogadja el az ellenőrzési folyamat indítási kérését a másik munkamenetében.";

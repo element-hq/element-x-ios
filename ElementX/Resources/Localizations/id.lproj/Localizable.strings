@@ -54,6 +54,7 @@
 "action_forgot_password" = "Lupa kata sandi?";
 "action_forward" = "Teruskan";
 "action_go_back" = "Kembali";
+"action_ignore" = "Ignore";
 "action_invite" = "Undang";
 "action_invite_friends" = "Undang orang-orang";
 "action_invite_friends_to_app" = "Undang orang-orang ke %1$@";
@@ -133,6 +134,7 @@
 "common_dark" = "Gelap";
 "common_decryption_error" = "Kesalahan dekripsi";
 "common_developer_options" = "Opsi pengembang";
+"common_device_id" = "Device ID";
 "common_direct_chat" = "Obrolan langsung";
 "common_edited_suffix" = "(disunting)";
 "common_editing" = "Penyuntingan";
@@ -226,6 +228,8 @@
 "common_username" = "Nama pengguna";
 "common_verification_cancelled" = "Verifikasi dibatalkan";
 "common_verification_complete" = "Verifikasi selesai";
+"common_verification_failed" = "Verification failed";
+"common_verified" = "Verified";
 "common_verify_device" = "Verifikasi perangkat";
 "common_video" = "Video";
 "common_voice_message" = "Pesan suara";
@@ -241,6 +245,8 @@
 "confirm_recovery_key_banner_title" = "Konfirmasi kunci pemulihan Anda";
 "crash_detection_dialog_content" = "%1$@ mengalami kemogokan saat terakhir kali digunakan. Apakah Anda ingin berbagi laporan kerusakan dengan kami?";
 "crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
+"crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity appears to have changed. %3$@";
+"crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
 "dialog_permission_camera" = "Supaya aplikasinya dapat menggunakan kamera, berikan izin dalam pengaturan sistem.";
 "dialog_permission_generic" = "Silakan memberikan izin dalam pengaturan sistem.";
 "dialog_permission_location_description_ios" = "Berikan akses dalam Pengaturan -> Lokasi.";
@@ -339,6 +345,13 @@
 "screen_create_room_access_section_header" = "Room Access";
 "screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
 "screen_create_room_access_section_knocking_option_title" = "Ask to join";
+"screen_join_room_cancel_knock_action" = "Cancel request";
+"screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
+"screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
+"screen_join_room_cancel_knock_alert_title" = "Cancel request to join";
+"screen_join_room_knock_message_description" = "Message (optional)";
+"screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
+"screen_join_room_knock_sent_title" = "Request to join sent";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
@@ -703,6 +716,8 @@
 "screen_room_member_details_unblock_alert_action" = "Buka blokir";
 "screen_room_member_details_unblock_alert_description" = "Anda akan dapat melihat semua pesan dari mereka lagi.";
 "screen_room_member_details_unblock_user" = "Buka blokir pengguna";
+"screen_room_member_details_verify_button_subtitle" = "Use the web app to verify this user.";
+"screen_room_member_details_verify_button_title" = "Verify %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "Cekal";
 "screen_room_member_list_ban_member_confirmation_description" = "Mereka tidak akan dapat bergabung ke ruangan ini lagi jika diundang.";
 "screen_room_member_list_ban_member_confirmation_title" = "Apakah Anda yakin ingin mencekal anggota ini?";
@@ -800,6 +815,7 @@
 "screen_session_verification_compare_numbers_title" = "Bandingkan angka";
 "screen_session_verification_complete_subtitle" = "Sesi baru Anda sekarang diverifikasi. Ini memiliki akses ke pesan terenkripsi Anda, dan pengguna lain akan melihatnya sebagai tepercaya.";
 "screen_session_verification_enter_recovery_key" = "Masukkan kunci pemulihan";
+"screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Buktikan bahwa ini memang Anda untuk mengakses riwayat pesan terenkripsi Anda.";
 "screen_session_verification_open_existing_session_title" = "Buka sesi yang sudah ada";
 "screen_session_verification_positive_button_canceled" = "Verifikasi ulang";
@@ -807,6 +823,10 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "Menunggu untuk mencocokkan";
 "screen_session_verification_ready_subtitle" = "Bandingkan satu set emoji yang unik.";
 "screen_session_verification_request_accepted_subtitle" = "Bandingkan emoji unik, dan pastikan emoji tersebut muncul dalam urutan yang sama.";
+"screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
+"screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "Mereka tidak cocok";
 "screen_session_verification_they_match" = "Mereka cocok";
 "screen_session_verification_waiting_to_accept_subtitle" = "Terima permintaan untuk memulai proses verifikasi di sesi Anda yang lain untuk melanjutkan.";

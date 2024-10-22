@@ -950,6 +950,15 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
+    
+    func userIdentity(for userID: String) async -> Result<UserIdentity?, ClientProxyError> {
+        do {
+            return try await .success(client.encryption().userIdentity(userId: userID))
+        } catch {
+            MXLog.error("Failed retrieving user identity: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
 }
 
 extension ClientProxy: MediaLoaderProtocol {

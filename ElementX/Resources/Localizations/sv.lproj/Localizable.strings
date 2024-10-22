@@ -54,6 +54,7 @@
 "action_forgot_password" = "Glömt lösenordet?";
 "action_forward" = "Vidarebefordra";
 "action_go_back" = "Gå tillbaka";
+"action_ignore" = "Ignore";
 "action_invite" = "Bjud in";
 "action_invite_friends" = "Bjud in personer";
 "action_invite_friends_to_app" = "Bjud in personer till %1$@";
@@ -133,6 +134,7 @@
 "common_dark" = "Mörkt";
 "common_decryption_error" = "Avkrypteringsfel";
 "common_developer_options" = "Utvecklaralternativ";
+"common_device_id" = "Device ID";
 "common_direct_chat" = "Direktchatt";
 "common_edited_suffix" = "(redigerad)";
 "common_editing" = "Redigerar";
@@ -226,6 +228,8 @@
 "common_username" = "Användarnamn";
 "common_verification_cancelled" = "Verifiering avbruten";
 "common_verification_complete" = "Verifieringen slutförd";
+"common_verification_failed" = "Verification failed";
+"common_verified" = "Verified";
 "common_verify_device" = "Verifiera enheten";
 "common_video" = "Video";
 "common_voice_message" = "Röstmeddelande";
@@ -241,6 +245,8 @@
 "confirm_recovery_key_banner_title" = "Ange din återställningsnyckel";
 "crash_detection_dialog_content" = "%1$@ kraschade senast den användes. Vill du dela en kraschrapport med oss?";
 "crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
+"crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity appears to have changed. %3$@";
+"crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
 "dialog_permission_camera" = "För att låta programmet använda kameran, vänligen ge behörigheten i systeminställningarna.";
 "dialog_permission_generic" = "Vänligen ge behörigheten i systeminställningarna.";
 "dialog_permission_location_description_ios" = "Ge åtkomst i Inställningar -> Plats.";
@@ -339,6 +345,13 @@
 "screen_create_room_access_section_header" = "Room Access";
 "screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
 "screen_create_room_access_section_knocking_option_title" = "Ask to join";
+"screen_join_room_cancel_knock_action" = "Cancel request";
+"screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
+"screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
+"screen_join_room_cancel_knock_alert_title" = "Cancel request to join";
+"screen_join_room_knock_message_description" = "Message (optional)";
+"screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
+"screen_join_room_knock_sent_title" = "Request to join sent";
 "screen_pinned_timeline_empty_state_description" = "Tryck på ett meddelande och välj ”%1$@” för att inkludera det här.";
 "screen_pinned_timeline_empty_state_headline" = "Fäst viktiga meddelanden så att de lätt kan upptäckas";
 "screen_reset_encryption_password_error" = "Ett okänt fel inträffade. Kontrollera att ditt kontolösenord är korrekt och försök igen.";
@@ -703,6 +716,8 @@
 "screen_room_member_details_unblock_alert_action" = "Avblockera";
 "screen_room_member_details_unblock_alert_description" = "Du kommer att kunna se alla meddelanden från dem igen.";
 "screen_room_member_details_unblock_user" = "Avblockera användare";
+"screen_room_member_details_verify_button_subtitle" = "Use the web app to verify this user.";
+"screen_room_member_details_verify_button_title" = "Verify %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "Banna";
 "screen_room_member_list_ban_member_confirmation_description" = "Denne kommer inte att kunna gå med i det här rummet igen om denne bjuds in.";
 "screen_room_member_list_ban_member_confirmation_title" = "Är du säker på att du vill banna den här medlemmen?";
@@ -800,6 +815,7 @@
 "screen_session_verification_compare_numbers_title" = "Jämför siffror";
 "screen_session_verification_complete_subtitle" = "Din nya session är nu verifierad. Den har tillgång till dina krypterade meddelanden, och andra användare kommer att se den som betrodd.";
 "screen_session_verification_enter_recovery_key" = "Ange återställningsnyckel";
+"screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Bevisa att det är du för att komma åt din krypterade meddelandehistorik.";
 "screen_session_verification_open_existing_session_title" = "Öppna en befintlig session";
 "screen_session_verification_positive_button_canceled" = "Försök att verifiera igen";
@@ -807,6 +823,10 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "Väntar på att matcha";
 "screen_session_verification_ready_subtitle" = "Jämför en unik uppsättning emojis.";
 "screen_session_verification_request_accepted_subtitle" = "Jämför de unika emojierna och se till att de visas i samma ordning.";
+"screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
+"screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "De matchar inte";
 "screen_session_verification_they_match" = "De matchar";
 "screen_session_verification_waiting_to_accept_subtitle" = "Godkänn begäran om att starta verifieringsprocessen på din andra session för att fortsätta.";

@@ -54,6 +54,7 @@
 "action_forgot_password" = "Esqueceu a senha?";
 "action_forward" = "Encaminhar";
 "action_go_back" = "Voltar";
+"action_ignore" = "Ignore";
 "action_invite" = "Convidar";
 "action_invite_friends" = "Convidar pessoas";
 "action_invite_friends_to_app" = "Convidar pessoas para %1$@";
@@ -133,6 +134,7 @@
 "common_dark" = "Escuro";
 "common_decryption_error" = "Erro de descriptografia";
 "common_developer_options" = "Opções do desenvolvedor";
+"common_device_id" = "Device ID";
 "common_direct_chat" = "Conversa privada";
 "common_edited_suffix" = "(editado)";
 "common_editing" = "Editando";
@@ -226,6 +228,8 @@
 "common_username" = "Nome do usuário";
 "common_verification_cancelled" = "Verificação cancelada";
 "common_verification_complete" = "Verificação concluída";
+"common_verification_failed" = "Verification failed";
+"common_verified" = "Verified";
 "common_verify_device" = "Verificar dispositivo";
 "common_video" = "Vídeo";
 "common_voice_message" = "Mensagem de voz";
@@ -241,6 +245,8 @@
 "confirm_recovery_key_banner_title" = "Insira sua chave de recuperação";
 "crash_detection_dialog_content" = "%1$@ fechou inesperadamente na última vez que foi usado. Gostaria de compartilhar um relatório de falhas conosco?";
 "crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
+"crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity appears to have changed. %3$@";
+"crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
 "dialog_permission_camera" = "Para permitir que o aplicativo use a câmera, conceda a permissão nas configurações do sistema.";
 "dialog_permission_generic" = "Por favor, conceda a permissão nas configurações do sistema.";
 "dialog_permission_location_description_ios" = "Permita o acesso em Configurações -> Localização.";
@@ -339,6 +345,13 @@
 "screen_create_room_access_section_header" = "Room Access";
 "screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
 "screen_create_room_access_section_knocking_option_title" = "Ask to join";
+"screen_join_room_cancel_knock_action" = "Cancel request";
+"screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
+"screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
+"screen_join_room_cancel_knock_alert_title" = "Cancel request to join";
+"screen_join_room_knock_message_description" = "Message (optional)";
+"screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
+"screen_join_room_knock_sent_title" = "Request to join sent";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
@@ -502,7 +515,7 @@
 "screen_invites_empty_list" = "Sem convites";
 "screen_invites_invited_you" = "%1$@(%2$@) convidou você";
 "screen_join_room_join_action" = "Join room";
-"screen_join_room_knock_action" = "Knock to join";
+"screen_join_room_knock_action" = "Send request to join";
 "screen_join_room_space_not_supported_description" = "%1$@ does not support spaces yet. You can access spaces on web.";
 "screen_join_room_space_not_supported_title" = "Spaces are not supported yet";
 "screen_join_room_subtitle_knock" = "Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved.";
@@ -703,6 +716,8 @@
 "screen_room_member_details_unblock_alert_action" = "Desbloquear";
 "screen_room_member_details_unblock_alert_description" = "Você poderá ver todas as mensagens deles novamente.";
 "screen_room_member_details_unblock_user" = "Desbloquear usuário";
+"screen_room_member_details_verify_button_subtitle" = "Use the web app to verify this user.";
+"screen_room_member_details_verify_button_title" = "Verify %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "Banir";
 "screen_room_member_list_ban_member_confirmation_description" = "They won’t be able to join this room again if invited.";
 "screen_room_member_list_ban_member_confirmation_title" = "Tem certeza de que quer banir este membro?";
@@ -800,6 +815,7 @@
 "screen_session_verification_compare_numbers_title" = "Comparar números";
 "screen_session_verification_complete_subtitle" = "Sua nova sessão está agora verificada. Ela tem acesso às suas mensagens criptografadas e outros usuários a verão como confiável.";
 "screen_session_verification_enter_recovery_key" = "Insira a chave de recuperação";
+"screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Prove que é você para acessar seu histórico de mensagens criptografadas.";
 "screen_session_verification_open_existing_session_title" = "Abrir uma sessão existente";
 "screen_session_verification_positive_button_canceled" = "Repetir verificação";
@@ -807,6 +823,10 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "Esperando para combinar";
 "screen_session_verification_ready_subtitle" = "Compare um conjunto único de emojis.";
 "screen_session_verification_request_accepted_subtitle" = "Compare os emojis únicos, garantindo que apareçam na mesma ordem.";
+"screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
+"screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "Eles não combinam";
 "screen_session_verification_they_match" = "Eles combinam";
 "screen_session_verification_waiting_to_accept_subtitle" = "Aceite a solicitação para iniciar o processo de verificação em sua outra sessão para continuar.";

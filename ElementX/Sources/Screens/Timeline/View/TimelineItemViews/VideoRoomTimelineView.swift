@@ -12,13 +12,30 @@ struct VideoRoomTimelineView: View {
     @EnvironmentObject private var context: TimelineViewModel.Context
     let timelineItem: VideoRoomTimelineItem
     
+    private var hasMediaCaption: Bool { timelineItem.content.caption != nil }
+    
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            thumbnail
-                .timelineMediaFrame(height: timelineItem.content.height,
-                                    aspectRatio: timelineItem.content.aspectRatio)
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(L10n.commonVideo)
+            VStack(alignment: .leading, spacing: 4) {
+                thumbnail
+                    .timelineMediaFrame(height: timelineItem.content.height,
+                                        aspectRatio: timelineItem.content.aspectRatio)
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(L10n.commonVideo)
+                    // This clip shape is distinct from the one in the styler as that one
+                    // operates on the entire message so wouldn't round the bottom corners.
+                    .clipShape(RoundedRectangle(cornerRadius: hasMediaCaption ? 6 : 0))
+                
+                if let attributedCaption = timelineItem.content.formattedCaption {
+                    FormattedBodyText(attributedString: attributedCaption,
+                                      additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
+                                      boostEmojiSize: true)
+                } else if let caption = timelineItem.content.caption {
+                    FormattedBodyText(text: caption,
+                                      additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
+                                      boostEmojiSize: true)
+                }
+            }
         }
     }
     
@@ -100,6 +117,19 @@ struct VideoRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                                      thumbnailSource: nil,
                                                                                      aspectRatio: 0.7,
                                                                                      blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW")))
+            
+            VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: .randomEvent,
+                                                                      timestamp: "Now",
+                                                                      isOutgoing: false,
+                                                                      isEditable: false,
+                                                                      canBeRepliedTo: true,
+                                                                      isThreaded: false,
+                                                                      sender: .init(id: "Bob"),
+                                                                      content: .init(filename: "video.mp4",
+                                                                                     caption: "This is a caption",
+                                                                                     duration: 21,
+                                                                                     source: nil,
+                                                                                     thumbnailSource: nil)))
         }
     }
 }

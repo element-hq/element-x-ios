@@ -54,6 +54,7 @@
 "action_forgot_password" = "Ați uitat parola?";
 "action_forward" = "Redirecționați";
 "action_go_back" = "Înapoi";
+"action_ignore" = "Ignore";
 "action_invite" = "Invitați";
 "action_invite_friends" = "Invitați prieteni";
 "action_invite_friends_to_app" = "Invitați prieteni în %1$@";
@@ -133,6 +134,7 @@
 "common_dark" = "Întunecat";
 "common_decryption_error" = "Eroare de decriptare";
 "common_developer_options" = "Opțiuni programator";
+"common_device_id" = "Device ID";
 "common_direct_chat" = "Chat direct";
 "common_edited_suffix" = "(editat)";
 "common_editing" = "Editare";
@@ -226,6 +228,8 @@
 "common_username" = "Utilizator";
 "common_verification_cancelled" = "Verificare anulată";
 "common_verification_complete" = "Verificare completă";
+"common_verification_failed" = "Verification failed";
+"common_verified" = "Verified";
 "common_verify_device" = "Verificați dispozitivul";
 "common_video" = "Video";
 "common_voice_message" = "Mesaj vocal";
@@ -241,6 +245,8 @@
 "confirm_recovery_key_banner_title" = "Confirmați cheia de recuperare";
 "crash_detection_dialog_content" = "%1$@ s-a blocat ultima dată când a fost folosit. Doriți să ne trimiteți un raport?";
 "crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
+"crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity appears to have changed. %3$@";
+"crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
 "dialog_permission_camera" = "Pentru a permite aplicației să utilizeze camera, vă rugăm să acordați permisiunea în setările sistemului.";
 "dialog_permission_generic" = "Vă rugăm să acordați permisiunea în setările sistemului.";
 "dialog_permission_location_description_ios" = "Acordați accesul în Setări -> Locație.";
@@ -339,6 +345,13 @@
 "screen_create_room_access_section_header" = "Room Access";
 "screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
 "screen_create_room_access_section_knocking_option_title" = "Ask to join";
+"screen_join_room_cancel_knock_action" = "Cancel request";
+"screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
+"screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
+"screen_join_room_cancel_knock_alert_title" = "Cancel request to join";
+"screen_join_room_knock_message_description" = "Message (optional)";
+"screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
+"screen_join_room_knock_sent_title" = "Request to join sent";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
@@ -703,6 +716,8 @@
 "screen_room_member_details_unblock_alert_action" = "Deblocați";
 "screen_room_member_details_unblock_alert_description" = "La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta.";
 "screen_room_member_details_unblock_user" = "Deblocați utilizatorul";
+"screen_room_member_details_verify_button_subtitle" = "Use the web app to verify this user.";
+"screen_room_member_details_verify_button_title" = "Verify %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "Interzicere";
 "screen_room_member_list_ban_member_confirmation_description" = "Nu se vor putea alătura din nou acestei camere dacă sunt invitați.";
 "screen_room_member_list_ban_member_confirmation_title" = "Sunteți sigur că doriți să interziceți acest membru?";
@@ -800,6 +815,7 @@
 "screen_session_verification_compare_numbers_title" = "Comparați numerele";
 "screen_session_verification_complete_subtitle" = "Noua dumneavoastră sesiune este acum verificată. Are acces la mesajele dumneavoastră criptate, iar alți utilizatori vă vor vedea ca fiind de încredere.";
 "screen_session_verification_enter_recovery_key" = "Introduceți cheia de recuperare";
+"screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Demonstrați-vă identitatea pentru a accesa istoricul mesajelor criptate.";
 "screen_session_verification_open_existing_session_title" = "Deschideți o sesiune existentă";
 "screen_session_verification_positive_button_canceled" = "Reîncercați verificarea";
@@ -807,6 +823,10 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "Se așteaptă confirmarea";
 "screen_session_verification_ready_subtitle" = "Comparați un set unic de emoji-uri.";
 "screen_session_verification_request_accepted_subtitle" = "Comparăți emoticoalene asigurându-vă că apar în aceeași ordine.";
+"screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
+"screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "Nu se potrivesc";
 "screen_session_verification_they_match" = "Se potrivesc";
 "screen_session_verification_waiting_to_accept_subtitle" = "Acceptați solicitarea de a începe procesul de verificare în cealaltă sesiune pentru a continua.";

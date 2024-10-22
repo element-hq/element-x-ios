@@ -54,6 +54,7 @@
 "action_forgot_password" = "Забравена парола?";
 "action_forward" = "Препращане";
 "action_go_back" = "Go back";
+"action_ignore" = "Ignore";
 "action_invite" = "Поканване";
 "action_invite_friends" = "Поканване на хора";
 "action_invite_friends_to_app" = "Поканване на хора в %1$@";
@@ -133,6 +134,7 @@
 "common_dark" = "Тъмен";
 "common_decryption_error" = "Грешка при разшифроване";
 "common_developer_options" = "Опции за разработчици";
+"common_device_id" = "Device ID";
 "common_direct_chat" = "Директен чат";
 "common_edited_suffix" = "(редактирано)";
 "common_editing" = "Редактиране";
@@ -226,6 +228,8 @@
 "common_username" = "Потребителско име";
 "common_verification_cancelled" = "Потвърждаването е отменено";
 "common_verification_complete" = "Потвърждаването е завършено";
+"common_verification_failed" = "Verification failed";
+"common_verified" = "Verified";
 "common_verify_device" = "Потвърждаване на устройството";
 "common_video" = "Видео";
 "common_voice_message" = "Гласово съобщение";
@@ -241,6 +245,8 @@
 "confirm_recovery_key_banner_title" = "Потвърдете ключа си за възстановяване";
 "crash_detection_dialog_content" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
 "crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
+"crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity appears to have changed. %3$@";
+"crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
 "dialog_permission_camera" = "In order to let the application use the camera, please grant the permission in the system settings.";
 "dialog_permission_generic" = "Please grant the permission in the system settings.";
 "dialog_permission_location_description_ios" = "Grant access in Settings -> Location.";
@@ -339,6 +345,13 @@
 "screen_create_room_access_section_header" = "Room Access";
 "screen_create_room_access_section_knocking_option_description" = "Anyone can ask to join the room but an administrator or a moderator will have to accept the request";
 "screen_create_room_access_section_knocking_option_title" = "Ask to join";
+"screen_join_room_cancel_knock_action" = "Cancel request";
+"screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
+"screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
+"screen_join_room_cancel_knock_alert_title" = "Cancel request to join";
+"screen_join_room_knock_message_description" = "Message (optional)";
+"screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
+"screen_join_room_knock_sent_title" = "Request to join sent";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
@@ -502,7 +515,7 @@
 "screen_invites_empty_list" = "Няма покани";
 "screen_invites_invited_you" = "%1$@ (%2$@) ви покани";
 "screen_join_room_join_action" = "Join room";
-"screen_join_room_knock_action" = "Knock to join";
+"screen_join_room_knock_action" = "Send request to join";
 "screen_join_room_space_not_supported_description" = "%1$@ does not support spaces yet. You can access spaces on web.";
 "screen_join_room_space_not_supported_title" = "Spaces are not supported yet";
 "screen_join_room_subtitle_knock" = "Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved.";
@@ -703,6 +716,8 @@
 "screen_room_member_details_unblock_alert_action" = "Отблокиране";
 "screen_room_member_details_unblock_alert_description" = "You'll be able to see all messages from them again.";
 "screen_room_member_details_unblock_user" = "Отблокиране на потребителя";
+"screen_room_member_details_verify_button_subtitle" = "Use the web app to verify this user.";
+"screen_room_member_details_verify_button_title" = "Verify %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "Ban";
 "screen_room_member_list_ban_member_confirmation_description" = "They won’t be able to join this room again if invited.";
 "screen_room_member_list_ban_member_confirmation_title" = "Are you sure you want to ban this member?";
@@ -800,6 +815,7 @@
 "screen_session_verification_compare_numbers_title" = "Compare numbers";
 "screen_session_verification_complete_subtitle" = "Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.";
 "screen_session_verification_enter_recovery_key" = "Въвеждане на ключ за възстановяване";
+"screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Докажете, че сте вие, за да получите достъп до хронологията на шифрованите си съобщения.";
 "screen_session_verification_open_existing_session_title" = "Отворете съществуваща сесия";
 "screen_session_verification_positive_button_canceled" = "Повторен опит за потвърждаване";
@@ -807,6 +823,10 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "В очакване на съвпадение";
 "screen_session_verification_ready_subtitle" = "Сравнете уникален набор от емоджита.";
 "screen_session_verification_request_accepted_subtitle" = "Compare the unique emoji, ensuring they appear in the same order.";
+"screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
+"screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "Те не съвпадат";
 "screen_session_verification_they_match" = "Те съвпадат";
 "screen_session_verification_waiting_to_accept_subtitle" = "Приемете заявката, за да започнете процеса на потвърждаване в другата си сесия, за да продължите.";

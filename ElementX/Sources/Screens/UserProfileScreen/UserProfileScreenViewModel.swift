@@ -42,24 +42,8 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         
         showLoadingIndicator(allowsInteraction: true)
         Task {
-            defer {
-                hideLoadingIndicator()
-            }
-            
-            switch await clientProxy.profile(for: userID) {
-            case .success(let userProfile):
-                state.userProfile = userProfile
-                state.permalink = (try? matrixToUserPermalink(userId: userID)).flatMap(URL.init(string:))
-                switch await clientProxy.directRoomForUserID(userProfile.userID) {
-                case .success(let roomID):
-                    state.dmRoomID = roomID
-                case .failure:
-                    break
-                }
-            case .failure(let error):
-                state.bindings.alertInfo = .init(id: .unknown)
-                MXLog.error("Failed to find user profile: \(error)")
-            }
+            await loadProfile()
+            hideLoadingIndicator()
         }
     }
     
@@ -86,6 +70,32 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
     }
 
     // MARK: - Private
+    
+    private func loadProfile() async {
+        async let profileResult = clientProxy.profile(for: state.userID)
+        async let identityResult = clientProxy.userIdentity(for: state.userID)
+        
+        switch await profileResult {
+        case .success(let userProfile):
+            state.userProfile = userProfile
+            state.permalink = (try? matrixToUserPermalink(userId: state.userID)).flatMap(URL.init(string:))
+            switch await clientProxy.directRoomForUserID(userProfile.userID) {
+            case .success(let roomID):
+                state.dmRoomID = roomID
+            case .failure:
+                break
+            }
+        case .failure(let error):
+            state.bindings.alertInfo = .init(id: .unknown)
+            MXLog.error("Failed to find user profile: \(error)")
+        }
+        
+        if case let .success(.some(identity)) = await identityResult {
+            state.isVerified = identity.isVerified()
+        } else {
+            MXLog.error("Failed to find the user's identity.")
+        }
+    }
     
     private func displayFullScreenAvatar(_ url: URL) async {
         guard let userProfile = state.userProfile else { fatalError() }
