@@ -187,11 +187,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
         
         subscribedForUpdates = true
-        let settings = RoomSubscription(requiredState: SlidingSyncConstants.defaultRequiredState,
-                                        timelineLimit: SlidingSyncConstants.defaultTimelineLimit,
-                                        includeHeroes: false) // We don't need heroes here as they're already included in the `all_rooms` list
         do {
-            try roomListService.subscribeToRooms(roomIds: [id], settings: settings)
+            try roomListService.subscribeToRooms(roomIds: [id])
         } catch {
             MXLog.error("Failed subscribing to room with error: \(error)")
         }

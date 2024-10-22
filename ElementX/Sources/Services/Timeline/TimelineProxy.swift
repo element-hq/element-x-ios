@@ -227,7 +227,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending audio")
         
-        let handle = timeline.sendAudio(url: url.path(percentEncoded: false), audioInfo: audioInfo, caption: nil, formattedCaption: nil, progressWatcher: UploadProgressListener { progress in
+        let handle = timeline.sendAudio(url: url.path(percentEncoded: false), audioInfo: audioInfo, caption: nil, formattedCaption: nil, storeInCache: false, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
         })
         
@@ -250,7 +250,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending file")
         
-        let handle = timeline.sendFile(url: url.path(percentEncoded: false), fileInfo: fileInfo, progressWatcher: UploadProgressListener { progress in
+        let handle = timeline.sendFile(url: url.path(percentEncoded: false), fileInfo: fileInfo, storeInCache: false, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
         })
         
@@ -274,7 +274,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending image")
         
-        let handle = timeline.sendImage(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), imageInfo: imageInfo, caption: nil, formattedCaption: nil, progressWatcher: UploadProgressListener { progress in
+        let handle = timeline.sendImage(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), imageInfo: imageInfo, caption: nil, formattedCaption: nil, storeInCache: false, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
         })
         
@@ -316,7 +316,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending video")
         
-        let handle = timeline.sendVideo(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), videoInfo: videoInfo, caption: nil, formattedCaption: nil, progressWatcher: UploadProgressListener { progress in
+        let handle = timeline.sendVideo(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), videoInfo: videoInfo, caption: nil, formattedCaption: nil, storeInCache: false, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
         })
         
@@ -340,7 +340,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending voice message")
         
-        let handle = timeline.sendVoiceMessage(url: url.path(percentEncoded: false), audioInfo: audioInfo, waveform: waveform, caption: nil, formattedCaption: nil, progressWatcher: UploadProgressListener { progress in
+        let handle = timeline.sendVoiceMessage(url: url.path(percentEncoded: false), audioInfo: audioInfo, waveform: waveform, caption: nil, formattedCaption: nil, storeInCache: false, progressWatcher: UploadProgressListener { progress in
             progressSubject?.send(progress)
         })
         

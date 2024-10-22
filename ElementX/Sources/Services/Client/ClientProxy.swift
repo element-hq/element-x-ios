@@ -931,7 +931,7 @@ class ClientProxy: ClientProxyProtocol {
         MXLog.info("Pinning current identity for user: \(userID)")
         
         do {
-            guard let userIdentity = try await client.encryption().getUserIdentity(userId: userID) else {
+            guard let userIdentity = try await client.encryption().userIdentity(userId: userID) else {
                 MXLog.error("Failed retrieving identity for user: \(userID)")
                 return .failure(.failedRetrievingUserIdentity)
             }
