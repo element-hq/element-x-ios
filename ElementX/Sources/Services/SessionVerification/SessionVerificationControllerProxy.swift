@@ -67,11 +67,11 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     
     let actions = PassthroughSubject<SessionVerificationControllerProxyAction, Never>()
     
-    func acknowledgeVerificationRequest(senderID: String, flowID: String) async -> Result<Void, SessionVerificationControllerProxyError> {
+    func acknowledgeVerificationRequest(details: SessionVerificationRequestDetails) async -> Result<Void, SessionVerificationControllerProxyError> {
         MXLog.info("Acknowledging verification request")
         
         do {
-            try await sessionVerificationController.acknowledgeVerificationRequest(senderId: senderID, flowId: flowID)
+            try await sessionVerificationController.acknowledgeVerificationRequest(senderId: details.senderId, flowId: details.flowId)
             return .success(())
         } catch {
             MXLog.error("Failed requesting session verification with error: \(error)")
@@ -79,7 +79,7 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
         }
     }
     
-    func acceptVerificationRequest(senderID: String, flowID: String) async -> Result<Void, SessionVerificationControllerProxyError> {
+    func acceptVerificationRequest() async -> Result<Void, SessionVerificationControllerProxyError> {
         MXLog.info("Accepting verification request")
         
         do {

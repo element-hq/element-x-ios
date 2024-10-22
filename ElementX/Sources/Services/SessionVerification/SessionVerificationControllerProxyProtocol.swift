@@ -42,9 +42,9 @@ struct SessionVerificationEmoji: Hashable {
 protocol SessionVerificationControllerProxyProtocol {
     var actions: PassthroughSubject<SessionVerificationControllerProxyAction, Never> { get }
     
-    func acknowledgeVerificationRequest(senderID: String, flowID: String) async -> Result<Void, SessionVerificationControllerProxyError>
+    func acknowledgeVerificationRequest(details: SessionVerificationRequestDetails) async -> Result<Void, SessionVerificationControllerProxyError>
     
-    func acceptVerificationRequest(senderID: String, flowID: String) async -> Result<Void, SessionVerificationControllerProxyError>
+    func acceptVerificationRequest() async -> Result<Void, SessionVerificationControllerProxyError>
         
     func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError>
     

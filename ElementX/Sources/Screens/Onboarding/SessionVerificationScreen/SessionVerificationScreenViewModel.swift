@@ -41,7 +41,7 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
                 
                 switch callback {
                 case .receivedVerificationRequest:
-                    break
+                    break // Incoming verification requests are handled on the higher levels
                 case .acceptedVerificationRequest:
                     self.stateMachine.processEvent(.didAcceptVerificationRequest)
                 case .startedSasVerification:
@@ -65,7 +65,7 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
         
         if case .responder(let details) = flow {
             Task {
-                await self.sessionVerificationControllerProxy.acknowledgeVerificationRequest(senderID: details.senderId, flowID: details.flowId)
+                await self.sessionVerificationControllerProxy.acknowledgeVerificationRequest(details: details)
             }
         }
     }
@@ -139,12 +139,11 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
     
     private func acceptVerificationRequest() {
         Task {
-            guard case .responder(let details) = flow else {
-                return
+            guard case .responder = flow else {
+                fatalError("Incorrect API usage.")
             }
             
-            switch await sessionVerificationControllerProxy.acceptVerificationRequest(senderID: details.senderId,
-                                                                                      flowID: details.flowId) {
+            switch await sessionVerificationControllerProxy.acceptVerificationRequest() {
             case .success:
                 stateMachine.processEvent(.didAcceptVerificationRequest)
             case .failure:
