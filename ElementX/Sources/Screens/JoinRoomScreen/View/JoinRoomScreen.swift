@@ -14,7 +14,7 @@ struct JoinRoomScreen: View {
     @ObservedObject var context: JoinRoomScreenViewModel.Context
     
     var body: some View {
-        FullscreenDialog(topPadding: 80, background: .bloom) {
+        FullscreenDialog(topPadding: context.viewState.mode == .knocked ? 151 : 35, background: .bloom) {
             if context.viewState.mode == .loading {
                 EmptyView()
             } else {
@@ -27,6 +27,7 @@ struct JoinRoomScreen: View {
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbar }
     }
     
     @ViewBuilder
@@ -55,7 +56,7 @@ struct JoinRoomScreen: View {
                 
                 if let subtitle = context.viewState.subtitle {
                     Text(subtitle)
-                        .font(.compound.bodyMD)
+                        .font(.compound.bodyLG)
                         .foregroundStyle(.compound.textSecondary)
                         .multilineTextAlignment(.center)
                 }
@@ -109,7 +110,7 @@ struct JoinRoomScreen: View {
             HStack(spacing: 0) {
                 TextField("", text: $context.knockMessage, axis: .vertical)
                     .onChange(of: context.knockMessage) { newValue in
-                        context.knockMessage = String(newValue.prefix(1000))
+                        context.knockMessage = String(newValue.prefix(500))
                     }
                     .lineLimit(4, reservesSpace: true)
                     .font(.compound.bodyMD)
@@ -158,6 +159,17 @@ struct JoinRoomScreen: View {
             .buttonStyle(.compound(.secondary))
         Button(L10n.actionAccept) { context.send(viewAction: .acceptInvite) }
             .buttonStyle(.compound(.primary))
+    }
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        if context.viewState.mode == .knocked {
+            ToolbarItem(placement: .principal) {
+                RoomHeaderView(roomName: context.viewState.title,
+                               roomAvatar: context.viewState.avatar,
+                               mediaProvider: context.mediaProvider)
+            }
+        }
     }
 }
 
@@ -222,10 +234,17 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         if mode == .unknown {
             clientProxy.roomPreviewForIdentifierViaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         } else {
-            if mode == .knocked {
+            switch mode {
+            case .knocked:
                 clientProxy.roomForIdentifierClosure = { _ in
-                    .knocked(KnockedRoomProxyMock(.init()))
+                    .knocked(KnockedRoomProxyMock(.init(avatarURL: URL.homeDirectory)))
                 }
+            case .invited:
+                clientProxy.roomForIdentifierClosure = { _ in
+                    .invited(InvitedRoomProxyMock(.init(avatarURL: URL.homeDirectory)))
+                }
+            default:
+                break
             }
             clientProxy.roomPreviewForIdentifierViaReturnValue = .success(.init(roomID: "1",
                                                                                 name: "The Three-Body Problem - 三体",

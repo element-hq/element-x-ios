@@ -56,7 +56,7 @@ class JoinRoomScreenViewModelTests: XCTestCase {
         }.fulfill()
     }
     
-    func testCancelKnockAlert() async throws {
+    func testCancelKnock() async throws {
         setupViewModel(knocked: true)
         
         try await deferFulfillment(viewModel.context.$viewState) { state in
@@ -65,6 +65,12 @@ class JoinRoomScreenViewModelTests: XCTestCase {
         
         context.send(viewAction: .cancelKnock)
         XCTAssertEqual(viewModel.context.alertInfo?.id, .cancelKnock)
+        
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { action in
+            action == .dismiss
+        }
+        context.alertInfo?.secondaryButton?.action?()
+        try await deferred.fulfill()
     }
     
     private func setupViewModel(throwing: Bool = false, knocked: Bool = false) {

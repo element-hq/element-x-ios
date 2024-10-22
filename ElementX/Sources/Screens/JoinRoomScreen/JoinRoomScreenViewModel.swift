@@ -249,7 +249,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         if case .failure = result {
             userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
         } else {
-            await updateRoom()
+            actionsSubject.send(.dismiss)
         }
     }
     
@@ -270,7 +270,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         if case .failure = result {
             userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
         } else {
-            await updateRoom()
+            actionsSubject.send(.dismiss)
         }
     }
     
