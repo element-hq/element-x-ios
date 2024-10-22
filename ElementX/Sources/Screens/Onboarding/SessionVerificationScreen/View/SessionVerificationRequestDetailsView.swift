@@ -26,7 +26,7 @@ struct SessionVerificationRequestDetailsView: View {
                         .background(.compound.bgSubtleSecondary)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                     
-                    Text(details.displayName ?? details.senderId)
+                    Text(details.displayName ?? details.senderID)
                         .font(.compound.bodyMDSemibold)
                         .foregroundColor(.compound.textPrimary)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -46,7 +46,7 @@ struct SessionVerificationRequestDetailsView: View {
                         Text(L10n.commonDeviceId)
                             .font(.compound.bodySM)
                             .foregroundColor(.compound.textSecondary)
-                        Text(details.deviceId)
+                        Text(details.deviceID)
                             .font(.compound.bodyMD)
                             .foregroundColor(.compound.textPrimary)
                     }
@@ -69,11 +69,11 @@ struct SessionVerificationRequestDetailsView: View {
 
 struct SessionVerificationRequestDetailsView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        let details = SessionVerificationRequestDetails(senderId: "@bob:matrix.org",
-                                                        flowId: "123",
-                                                        deviceId: "CODEMISTAKE",
+        let details = SessionVerificationRequestDetails(senderID: "@bob:matrix.org",
+                                                        flowID: "123",
+                                                        deviceID: "CODEMISTAKE",
                                                         displayName: "Bob's Element X iOS",
-                                                        firstSeenTimestamp: 0)
+                                                        firstSeenDate: .init(timeIntervalSince1970: 0))
         
         SessionVerificationRequestDetailsView(details: details)
     }

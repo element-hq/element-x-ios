@@ -176,22 +176,16 @@ struct SessionVerificationScreen: View {
     }
 }
 
-extension SessionVerificationRequestDetails {
-    var firstSeenDate: Date {
-        Date(timeIntervalSince1970: TimeInterval(firstSeenTimestamp / 1000))
-    }
-}
-
 struct SessionVerification_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         sessionVerificationScreen(state: .initial)
             .previewDisplayName("Initial - Initiator")
         
-        let details = SessionVerificationRequestDetails(senderId: "@bob:matrix.org",
-                                                        flowId: "123",
-                                                        deviceId: "CODEMISTAKE",
+        let details = SessionVerificationRequestDetails(senderID: "@bob:matrix.org",
+                                                        flowID: "123",
+                                                        deviceID: "CODEMISTAKE",
                                                         displayName: "Bob's Element X iOS",
-                                                        firstSeenTimestamp: 0)
+                                                        firstSeenDate: .init(timeIntervalSince1970: 0))
         sessionVerificationScreen(state: .initial, flow: .responder(details: details))
             .previewDisplayName("Initial - Responder")
         
