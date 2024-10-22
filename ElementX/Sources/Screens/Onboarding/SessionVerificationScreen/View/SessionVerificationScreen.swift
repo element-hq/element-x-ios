@@ -35,19 +35,19 @@ struct SessionVerificationScreen: View {
                 BigIcon(icon: \.lockSolid)
                     .padding(.bottom, 16)
             default:
-                Image(systemName: headerImageName)
+                Image(systemName: context.viewState.headerImageName)
                     .bigIcon()
                     .padding(.bottom, 16)
             }
 
-            Text(title ?? "")
+            Text(context.viewState.title ?? "")
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textPrimary)
                 .padding(.bottom, 8)
-                .accessibilityIdentifier(titleAccessibilityIdentifier)
+                .accessibilityIdentifier(context.viewState.titleAccessibilityIdentifier)
 
-            Text(message)
+            Text(context.viewState.message)
                 .font(.compound.bodyMD)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
@@ -172,107 +172,6 @@ struct SessionVerificationScreen: View {
                     .foregroundColor(.compound.textSecondary)
             }
             .padding(8.0)
-        }
-    }
-    
-    private var headerImageName: String {
-        switch context.viewState.verificationState {
-        case .initial:
-            return "lock"
-        case .acceptingVerificationRequest:
-            return "hourglass"
-        case .requestingVerification:
-            return "hourglass"
-        case .verificationRequestAccepted:
-            return "face.smiling"
-        case .startingSasVerification:
-            return "hourglass"
-        case .sasVerificationStarted:
-            return "hourglass"
-        case .cancelling:
-            return "hourglass"
-        case .acceptingChallenge:
-            return "hourglass"
-        case .decliningChallenge:
-            return "hourglass"
-        case .showingChallenge:
-            return "face.smiling"
-        case .verified:
-            return "checkmark.shield"
-        case .cancelled:
-            return "exclamationmark.shield"
-        }
-    }
-    
-    private var title: String? {
-        switch context.viewState.verificationState {
-        case .initial:
-            switch context.viewState.flow {
-            case .initiator:
-                return L10n.screenSessionVerificationOpenExistingSessionTitle
-            case .responder:
-                return L10n.screenSessionVerificationRequestTitle
-            }
-        case .acceptingVerificationRequest:
-            return L10n.screenSessionVerificationRequestTitle
-        case .requestingVerification:
-            return L10n.screenSessionVerificationWaitingToAcceptTitle
-        case .verificationRequestAccepted:
-            return L10n.screenSessionVerificationCompareEmojisTitle
-        case .startingSasVerification:
-            return nil
-        case .sasVerificationStarted:
-            return nil
-        case .showingChallenge:
-            return L10n.screenSessionVerificationCompareEmojisTitle
-        case .acceptingChallenge:
-            return L10n.screenSessionVerificationCompareEmojisTitle
-        case .decliningChallenge:
-            return L10n.screenSessionVerificationCompareEmojisTitle
-        case .verified:
-            return L10n.commonVerificationComplete
-        case .cancelling:
-            return nil
-        case .cancelled:
-            return L10n.commonVerificationFailed
-        }
-    }
-    
-    private var titleAccessibilityIdentifier: String {
-        context.viewState.verificationState == .verified ? A11yIdentifiers.sessionVerificationScreen.verificationComplete : ""
-    }
-        
-    private var message: String {
-        switch context.viewState.verificationState {
-        case .initial:
-            switch context.viewState.flow {
-            case .initiator:
-                return L10n.screenSessionVerificationOpenExistingSessionSubtitle
-            case .responder:
-                return L10n.screenSessionVerificationRequestSubtitle
-            }
-        case .acceptingVerificationRequest:
-            return L10n.screenSessionVerificationRequestSubtitle
-        case .requestingVerification:
-            return L10n.screenSessionVerificationWaitingToAcceptSubtitle
-        case .verificationRequestAccepted:
-            return L10n.screenSessionVerificationRequestAcceptedSubtitle
-        case .startingSasVerification:
-            return L10n.commonWaiting
-        case .sasVerificationStarted:
-            return L10n.commonWaiting
-        case .acceptingChallenge:
-            return L10n.screenSessionVerificationCompareEmojisSubtitle
-        case .decliningChallenge:
-            return L10n.screenSessionVerificationCompareEmojisSubtitle
-        case .cancelling:
-            return L10n.commonWaiting
-        case .showingChallenge:
-            return L10n.screenSessionVerificationCompareEmojisSubtitle
-        case .verified:
-            return L10n.screenSessionVerificationCompleteSubtitle
-        case .cancelled:
-            return L10n.screenSessionVerificationFailedSubtitle
         }
     }
 }
