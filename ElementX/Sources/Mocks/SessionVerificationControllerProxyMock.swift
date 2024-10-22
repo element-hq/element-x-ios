@@ -22,7 +22,7 @@ extension SessionVerificationControllerProxyMock {
         let mock = SessionVerificationControllerProxyMock()
         mock.underlyingActions = actions
         
-        mock.acknowledgeVerificationRequestSenderIDFlowIDReturnValue = .success(())
+        mock.acknowledgeVerificationRequestDetailsReturnValue = .success(())
 
         mock.requestVerificationClosure = { [unowned mock] in
             Task.detached {
