@@ -176,10 +176,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 guard let self else { return }
                 
                 do {
-                    try roomListService.subscribeToRooms(roomIds: roomIDs,
-                                                         settings: .init(requiredState: SlidingSyncConstants.defaultRequiredState,
-                                                                         timelineLimit: SlidingSyncConstants.defaultTimelineLimit,
-                                                                         includeHeroes: false))
+                    try roomListService.subscribeToRooms(roomIds: roomIDs)
                 } catch {
                     MXLog.error("Failed subscribing to rooms with error: \(error)")
                 }
