@@ -755,6 +755,12 @@ extension PreviewTests {
         }
     }
 
+    func test_sessionVerificationRequestDetailsView() {
+        for preview in SessionVerificationRequestDetailsView_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_sessionVerification() {
         for preview in SessionVerification_Previews._allPreviews {
             assertSnapshots(matching: preview)

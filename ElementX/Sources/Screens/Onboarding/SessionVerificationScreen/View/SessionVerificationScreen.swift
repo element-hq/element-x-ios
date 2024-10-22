@@ -11,7 +11,6 @@ import SwiftUI
 
 struct SessionVerificationScreen: View {
     @ObservedObject var context: SessionVerificationScreenViewModel.Context
-    @ScaledMetric private var iconSize = 30.0
     
     var body: some View {
         FullscreenDialog {
@@ -61,7 +60,7 @@ struct SessionVerificationScreen: View {
         case .initial:
             switch context.viewState.flow {
             case .responder(let details):
-                requestDetails(details)
+                SessionVerificationRequestDetailsView(details: details)
             default:
                 EmptyView()
             }
@@ -70,58 +69,6 @@ struct SessionVerificationScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.emojiWrapper)
         default:
             EmptyView()
-        }
-    }
-    
-    private let outerShape = RoundedRectangle(cornerRadius: 8)
-    private func requestDetails(_ details: SessionVerificationRequestDetails) -> some View {
-        VStack(spacing: 24) {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(spacing: 16) {
-                    CompoundIcon(\.devices)
-                        .frame(width: iconSize, height: iconSize)
-                        .foregroundColor(.compound.iconSecondary)
-                        .padding(6)
-                        .background(.compound.bgSubtleSecondary)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                    
-                    Text(details.displayName ?? details.senderId)
-                        .font(.compound.bodyMDSemibold)
-                        .foregroundColor(.compound.textPrimary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                
-                HStack(spacing: 40) {
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text(L10n.screenSessionVerificationRequestDetailsTimestamp)
-                            .font(.compound.bodySM)
-                            .foregroundColor(.compound.textSecondary)
-                        Text(details.firstSeenDate.formattedMinimal())
-                            .font(.compound.bodyMD)
-                            .foregroundColor(.compound.textPrimary)
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text(L10n.commonDeviceId)
-                            .font(.compound.bodySM)
-                            .foregroundColor(.compound.textSecondary)
-                        Text(details.deviceId)
-                            .font(.compound.bodyMD)
-                            .foregroundColor(.compound.textPrimary)
-                    }
-                }
-            }
-            .padding(24)
-            .clipShape(outerShape)
-            .overlay {
-                outerShape
-                    .inset(by: 0.25)
-                    .stroke(.compound.borderDisabled)
-            }
-            
-            Text(L10n.screenSessionVerificationRequestFooter)
-                .font(.compound.bodyMDSemibold)
-                .foregroundColor(.compound.textPrimary)
         }
     }
     
