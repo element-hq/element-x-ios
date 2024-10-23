@@ -83,6 +83,12 @@ extension PreviewTests {
         }
     }
 
+    func test_bigIcon() {
+        for preview in BigIcon_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_blockedUsersScreen() {
         for preview in BlockedUsersScreen_Previews._allPreviews {
             assertSnapshots(matching: preview)
@@ -217,12 +223,6 @@ extension PreviewTests {
 
     func test_globalSearchScreen() {
         for preview in GlobalSearchScreen_Previews._allPreviews {
-            assertSnapshots(matching: preview)
-        }
-    }
-
-    func test_heroImage() {
-        for preview in HeroImage_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }

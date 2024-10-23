@@ -15,7 +15,7 @@ struct EncryptionResetPasswordScreen: View {
     var body: some View {
         FullscreenDialog {
             VStack(spacing: 16) {
-                HeroImage(icon: \.lockSolid)
+                BigIcon(icon: \.lockSolid)
                 
                 Text(L10n.screenResetEncryptionPasswordTitle)
                     .foregroundColor(.compound.textPrimary)

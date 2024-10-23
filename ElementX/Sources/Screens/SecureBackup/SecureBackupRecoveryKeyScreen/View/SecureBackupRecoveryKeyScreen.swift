@@ -53,7 +53,7 @@ struct SecureBackupRecoveryKeyScreen: View {
     
     private var header: some View {
         VStack(spacing: 16) {
-            HeroImage(icon: \.keySolid)
+            BigIcon(icon: \.keySolid)
             
             Text(context.viewState.title)
                 .foregroundColor(.compound.textPrimary)

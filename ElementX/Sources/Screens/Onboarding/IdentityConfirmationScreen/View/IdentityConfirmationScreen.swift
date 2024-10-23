@@ -37,7 +37,7 @@ struct IdentityConfirmationScreen: View {
     @ViewBuilder
     private var screenHeader: some View {
         VStack(spacing: 0) {
-            HeroImage(icon: \.lockSolid)
+            BigIcon(icon: \.lockSolid)
                 .padding(.bottom, 16)
             
             Text(L10n.screenIdentityConfirmationTitle)
