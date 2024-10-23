@@ -16,6 +16,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private let room: RoomProtocol
     let timeline: TimelineProxyProtocol
     private let zeroChatApi: ZeroChatApiProtocol
+    private let zeroUsersService: ZeroMatrixUsersService
     
     private var innerPinnedEventsTimeline: TimelineProxyProtocol?
     private var innerPinnedEventsTimelineTask: Task<TimelineProxyProtocol?, Never>?
@@ -109,7 +110,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     var avatarURL: URL? {
-        roomListItem.avatarUrl().flatMap(URL.init(string:))
+        //roomListItem.avatarUrl().flatMap(URL.init(string:))
+        zeroUsersService.getRoomAvatarFromCache(roomId: id).flatMap(URL.init(string:))
     }
     
     var avatar: RoomAvatar {
@@ -174,11 +176,13 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     init(roomListService: RoomListServiceProtocol,
          roomListItem: RoomListItemProtocol,
          room: RoomProtocol,
-         zeroChatApi: ZeroChatApiProtocol) async throws {
+         zeroChatApi: ZeroChatApiProtocol,
+         zeroUsersService: ZeroMatrixUsersService) async throws {
         self.roomListService = roomListService
         self.roomListItem = roomListItem
         self.room = room
         self.zeroChatApi = zeroChatApi
+        self.zeroUsersService = zeroUsersService
         
         timeline = try await TimelineProxy(timeline: room.timeline(),
                                            room: room,
@@ -755,15 +759,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             return displayName
         } else {
             return roomListItem.displayName()
-        }
-    }
-    
-    private func getZeroRoomAvatarUrl() -> String? {
-        if let roomInfo = roomInfo {
-            let roomAvatar: String? = roomInfo.avatarUrl
-            return roomAvatar
-        } else {
-            return roomListItem.avatarUrl()
         }
     }
 }

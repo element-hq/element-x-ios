@@ -9,6 +9,7 @@ class ZeroMatrixUsersService {
     public let loggedInUserId: String
     
     private var allZeroUsers: [ZMatrixUser] = []
+    private var roomAvatarsMap: [String: String?] = [:]
     
     init(zeroUsersApi: ZeroUsersApi, appSettings: AppSettings, loggedInUserId: String, client: ClientProtocol) {
         self.zeroUsersApi = zeroUsersApi
@@ -114,6 +115,16 @@ class ZeroMatrixUsersService {
     
     func getMatrixUserProfile(userId: String) async throws -> UserProfile {
         try await client.getProfile(userId: userId)
+    }
+    
+    func setRoomAvatarInCache(roomId: String, avatarUrl: String?) {
+        DispatchQueue.main.async {
+            self.roomAvatarsMap[roomId] = avatarUrl
+        }
+    }
+    
+    func getRoomAvatarFromCache(roomId: String) -> String? {
+        roomAvatarsMap[roomId] ?? nil
     }
     
     private func getZeroUsersToFetch(_ userIds: [String]) -> [String] {

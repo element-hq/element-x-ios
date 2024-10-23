@@ -918,7 +918,8 @@ class ClientProxy: ClientProxyProtocol {
                 let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,
                                                           roomListItem: roomListItem,
                                                           room: roomListItem.fullRoom(),
-                                                          zeroChatApi: zeroChatApi)
+                                                          zeroChatApi: zeroChatApi,
+                                                          zeroUsersService: zeroMatrixUsersService)
                 
                 return .joined(roomProxy)
             case .left:

@@ -216,11 +216,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         return updatedItems
     }
 
-    private func fetchRoomDetails(from roomListItem: RoomListItem) -> (roomInfo: RoomInfo?, latestEvent: EventTimelineItem?, directUserProfile: UserProfile?) {
+    private func fetchRoomDetails(from roomListItem: RoomListItem) -> (roomInfo: RoomInfo?, latestEvent: EventTimelineItem?, directUserProfile: UserProfile?, lastMessageSenderProfile: UserProfile?) {
         class FetchResult {
             var roomInfo: RoomInfo?
             var latestEvent: EventTimelineItem?
             var directUserProfile: UserProfile?
+            var lastMessageSenderProfile: UserProfile?
         }
         
         let semaphore = DispatchSemaphore(value: 0)
@@ -231,8 +232,21 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 result.latestEvent = await roomListItem.latestEvent()
                 let roomInfo = try await roomListItem.roomInfo()
                 result.roomInfo = roomInfo
-                if roomInfo.isDisplayNameAmbiguous(), let directUser = roomInfo.heroes.first {
-                    result.directUserProfile = try await zeroUsersService.getMatrixUserProfile(userId: directUser.userId)
+                
+                let isDirectChat = roomInfo.isDirect || roomInfo.joinedMembersCount <= 2
+                let shouldFetchProfile = (roomInfo.avatarUrl ?? "").isBlank
+                if isDirectChat, shouldFetchProfile {
+                    if let userInfo = roomInfo.heroes.first {
+                        result.directUserProfile = UserProfile(userId: userInfo.userId, displayName: userInfo.displayName, avatarUrl: userInfo.avatarUrl)
+                    } else if let directUserId = roomInfo.userPowerLevels.keys.first(where: { $0 != zeroUsersService.loggedInUserId }) {
+                        result.directUserProfile = try await zeroUsersService.getMatrixUserProfile(userId: directUserId)
+                    }
+                }
+                
+                let lastMessageSenderName = result.latestEvent?.senderName ?? ""
+                let lastMessageSenderId = result.latestEvent?.sender ?? ""
+                if lastMessageSenderName.isDisplayNameAmbiguous(), !lastMessageSenderId.isBlank {
+                    result.lastMessageSenderProfile = try await zeroUsersService.getMatrixUserProfile(userId: lastMessageSenderId)
                 }
             } catch {
                 MXLog.error("Failed fetching room info with error: \(error)")
@@ -240,7 +254,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             semaphore.signal()
         }
         semaphore.wait()
-        return (result.roomInfo, result.latestEvent, result.directUserProfile)
+        return (result.roomInfo, result.latestEvent, result.directUserProfile, result.lastMessageSenderProfile)
     }
     
     private func buildRoomSummary(from roomListItem: RoomListItem) -> RoomSummary {
@@ -256,7 +270,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         if let latestRoomMessage = roomDetails.latestEvent {
             let lastMessage = EventTimelineItemProxy(item: latestRoomMessage, uniqueID: .init(id: "0"))
             lastMessageFormattedTimestamp = lastMessage.timestamp.formattedMinimal()
-            attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage)
+            attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage, lastMessageSender: roomDetails.lastMessageSenderProfile)
         }
         
         var inviterProxy: RoomMemberProxyProtocol?
@@ -266,13 +280,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         let notificationMode = roomInfo.cachedUserDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
         
-        var displayName: String? = roomInfo.displayName ?? roomInfo.rawName
-        var roomAvatar: String? = roomInfo.avatarUrl ?? roomInfo.heroes.first?.avatarUrl
-        
-        if let directUser = roomDetails.directUserProfile {
-            displayName = directUser.displayName
-            roomAvatar = directUser.avatarUrl
-        }
+        let displayName: String? = roomInfo.displayName ?? roomDetails.directUserProfile?.displayName ?? roomInfo.rawName
+        let roomAvatar: String? = roomInfo.avatarUrl ?? roomDetails.directUserProfile?.avatarUrl
+        zeroUsersService.setRoomAvatarInCache(roomId: roomInfo.id, avatarUrl: roomAvatar)
         
         return RoomSummary(roomListItem: roomListItem,
                            id: roomInfo.id,
@@ -419,20 +429,30 @@ private class RoomListStateObserver: RoomListLoadingStateListener {
     }
 }
 
-private extension RoomInfo {
+private extension String {
     func isDisplayNameAmbiguous() -> Bool {
-        let input = displayName ?? rawName ?? ""
         // Define the regex pattern for 5 sections separated by hyphens
         let uuidPattern = "^[a-fA-F0-9]+-[a-fA-F0-9]+-[a-fA-F0-9]+-[a-fA-F0-9]+-[a-fA-F0-9]+$"
         
         // Check if the input matches the pattern
         let regex = try? NSRegularExpression(pattern: uuidPattern)
-        let range = NSRange(location: 0, length: input.utf16.count)
+        let range = NSRange(location: 0, length: self.utf16.count)
         
-        if let _ = regex?.firstMatch(in: input, options: [], range: range) {
+        if let _ = regex?.firstMatch(in: self, options: [], range: range) {
             return true // If the input matches the pattern
         }
         
         return false // If the input doesn't match the pattern
+    }
+}
+
+private extension EventTimelineItem {
+    var senderName: String? {
+        switch senderProfile {
+        case let .ready(displayName, isDisplayNameAmbiguous, avatarUrl):
+            return displayName
+        default:
+            return sender
+        }
     }
 }
