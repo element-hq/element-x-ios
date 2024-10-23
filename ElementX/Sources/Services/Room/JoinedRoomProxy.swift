@@ -187,6 +187,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
         
         subscribedForUpdates = true
+
         do {
             try roomListService.subscribeToRooms(roomIds: [id])
         } catch {

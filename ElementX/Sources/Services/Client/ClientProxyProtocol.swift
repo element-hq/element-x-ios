@@ -39,7 +39,6 @@ enum ClientProxyError: Error {
 }
 
 enum SlidingSyncConstants {
-    static let defaultTimelineLimit: UInt32 = 20
     static let maximumVisibleRangeSize = 30
 }
 
