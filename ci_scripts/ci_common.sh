@@ -42,7 +42,7 @@ setup_github_actions_environment() {
     unset HOMEBREW_NO_INSTALL_FROM_API
     export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
     
-    brew update && brew install xcodegen swiftformat git-lfs a7ex/homebrew-formulae/xcresultparser
+    brew update && brew install xcodegen swiftformat git-lfs xcbeautify a7ex/homebrew-formulae/xcresultparser
     
     if [ "$CI_WORKFLOW" = "PR_BUILD" ]; then
         brew install imagemagick@6

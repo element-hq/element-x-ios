@@ -88,7 +88,8 @@ lane :unit_tests do |options|
     ensure_devices_found: true,
     result_bundle: true,
     number_of_retries: 3,
-    reset_simulator: reset_simulator
+    reset_simulator: reset_simulator,
+    xcodebuild_formatter: "xcbeautify"
   )
   
   if !options[:skip_previews]
@@ -98,7 +99,8 @@ lane :unit_tests do |options|
       ensure_devices_found: true,
       result_bundle: true,
       number_of_retries: 3,
-      reset_simulator: reset_simulator
+      reset_simulator: reset_simulator,
+      xcodebuild_formatter: "xcbeautify"
     )
   end
   
@@ -134,7 +136,8 @@ lane :ui_tests do |options|
     result_bundle: true,
     only_testing: test_to_run,
     number_of_retries: 3,
-    reset_simulator: reset_simulator
+    reset_simulator: reset_simulator,
+    xcodebuild_formatter: "xcbeautify"
   )
 end
 
@@ -155,7 +158,8 @@ lane :integration_tests do
     destination: "platform=iOS Simulator,name=iPhone 16 Pro,OS=18.0",
     ensure_devices_found: true,
     result_bundle: true,
-    reset_simulator: reset_simulator
+    reset_simulator: reset_simulator,
+    xcodebuild_formatter: "xcbeautify"
   )
 end
 
