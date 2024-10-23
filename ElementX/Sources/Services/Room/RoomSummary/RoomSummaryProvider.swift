@@ -256,15 +256,14 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         let notificationMode = roomInfo.cachedUserDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
         
         let joinRequestType: RoomSummary.JoinRequestType? = switch roomInfo.membership {
-        case .invited: .invite
-        case .knocked: .knocked
+        case .invited: .invite(inviter: inviterProxy)
+        case .knocked: .knock
         default: nil
         }
         
         return RoomSummary(roomListItem: roomListItem,
                            id: roomInfo.id,
                            joinRequestType: joinRequestType,
-                           inviter: inviterProxy,
                            name: roomInfo.displayName ?? roomInfo.id,
                            isDirect: roomInfo.isDirect,
                            avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),

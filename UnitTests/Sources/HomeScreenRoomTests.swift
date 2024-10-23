@@ -24,7 +24,6 @@ class HomeScreenRoomTests: XCTestCase {
         roomSummary = RoomSummary(roomListItem: .init(noPointer: .init()),
                                   id: "Test room",
                                   joinRequestType: nil,
-                                  inviter: nil,
                                   name: "Test room",
                                   isDirect: false,
                                   avatarURL: nil,

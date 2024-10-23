@@ -127,11 +127,11 @@ struct HomeScreenViewStateBindings {
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {
-    enum RoomType {
+    enum RoomType: Equatable {
         case placeholder
         case room
-        case invite
-        case knocked
+        case invite(inviterDetails: RoomInviterDetails?)
+        case knock
     }
     
     static let placeholderLastMessage = AttributedString("Hidden last message")
@@ -143,6 +143,13 @@ struct HomeScreenRoom: Identifiable, Equatable {
     let roomID: String?
     
     let type: RoomType
+    
+    var inviter: RoomInviterDetails? {
+        if case .invite(let inviter) = type {
+            return inviter
+        }
+        return nil
+    }
     
     let badges: Badges
     struct Badges: Equatable {
@@ -165,9 +172,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
     let lastMessage: AttributedString?
     
     let avatar: RoomAvatar
-    
-    let inviter: RoomInviterDetails?
-    
+        
     let canonicalAlias: String?
     
     static func placeholder() -> HomeScreenRoom {
@@ -182,7 +187,6 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        timestamp: "Now",
                        lastMessage: placeholderLastMessage,
                        avatar: .room(id: "", name: "", avatarURL: nil),
-                       inviter: nil,
                        canonicalAlias: nil)
     }
 }
@@ -193,17 +197,15 @@ extension HomeScreenRoom {
         
         let hasUnreadMessages = hideUnreadMessagesBadge ? false : summary.hasUnreadMessages
         
-        let isDotShown = hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || summary.joinRequestType == .knocked
+        let isDotShown = hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || summary.joinRequestType?.isKnock == true
         let isMentionShown = summary.hasUnreadMentions && !summary.isMuted
         let isMuteShown = summary.isMuted
         let isCallShown = summary.hasOngoingCall
-        let isHighlighted = summary.isMarkedUnread || (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || summary.joinRequestType == .knocked
-        
-        let inviter = summary.inviter.map(RoomInviterDetails.init)
+        let isHighlighted = summary.isMarkedUnread || (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || summary.joinRequestType?.isKnock == true
         
         let type: HomeScreenRoom.RoomType = switch summary.joinRequestType {
-        case .invite: .invite
-        case .knocked: .knocked
+        case .invite(let inviter): .invite(inviterDetails: inviter.map(RoomInviterDetails.init))
+        case .knock: .knock
         case .none: .room
         }
         
@@ -221,7 +223,6 @@ extension HomeScreenRoom {
                   timestamp: summary.lastMessageFormattedTimestamp,
                   lastMessage: summary.lastMessage,
                   avatar: summary.avatar,
-                  inviter: inviter,
                   canonicalAlias: summary.canonicalAlias)
     }
 }
