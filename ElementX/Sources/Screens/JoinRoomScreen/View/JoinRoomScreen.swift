@@ -88,7 +88,7 @@ struct JoinRoomScreen: View {
     @ViewBuilder
     private var knockedView: some View {
         VStack(spacing: 16) {
-            HeroImage(icon: \.checkCircleSolid, style: .success)
+            BigIcon(icon: \.checkCircleSolid, style: .successSolid)
             VStack(spacing: 8) {
                 Text(L10n.screenJoinRoomKnockSentTitle)
                     .font(.compound.headingMDBold)

@@ -32,7 +32,7 @@ struct ServerSelectionScreen: View {
     var header: some View {
         VStack(spacing: 8) {
             Image(asset: Asset.Images.serverSelectionIcon)
-                .heroImage(insets: 19)
+                .bigIcon(insets: 19)
                 .padding(.bottom, 8)
             
             Text(L10n.screenChangeServerTitle)
