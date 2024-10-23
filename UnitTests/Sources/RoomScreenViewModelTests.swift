@@ -25,14 +25,14 @@ class RoomScreenViewModelTests: XCTestCase {
     
     func testPinnedEventsBanner() async throws {
         let timelineSubject = PassthroughSubject<TimelineProxyProtocol, Never>()
-        let updateSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
+        let infoSubject = CurrentValueSubject<RoomInfoProxy, Never>(.init(roomInfo: RoomInfo(.init())))
         let roomProxyMock = JoinedRoomProxyMock(.init())
         // setup a way to inject the mock of the pinned events timeline
         roomProxyMock.pinnedEventsTimelineClosure = {
             await timelineSubject.values.first()
         }
         // setup the room proxy actions publisher
-        roomProxyMock.underlyingActionsPublisher = updateSubject.eraseToAnyPublisher()
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
         let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
@@ -57,7 +57,7 @@ class RoomScreenViewModelTests: XCTestCase {
             viewState.pinnedEventsBannerState.count == 2
         }
         roomProxyMock.underlyingPinnedEventIDs = ["test1", "test2"]
-        updateSubject.send(.roomInfoUpdate)
+        infoSubject.send(.init(roomInfo: RoomInfo(.init())))
         try await deferred.fulfill()
         XCTAssertTrue(viewModel.context.viewState.pinnedEventsBannerState.isLoading)
         XCTAssertTrue(viewModel.context.viewState.shouldShowPinnedEventsBanner)
@@ -157,11 +157,12 @@ class RoomScreenViewModelTests: XCTestCase {
     }
     
     func testRoomInfoUpdate() async throws {
-        let updateSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
-        let roomProxyMock = JoinedRoomProxyMock(.init(id: "TestID", name: "StartingName", avatarURL: nil, hasOngoingCall: false))
+        let configuration = JoinedRoomProxyMockConfiguration(id: "TestID", name: "StartingName", avatarURL: nil, hasOngoingCall: false)
+        let infoSubject = CurrentValueSubject<RoomInfoProxy, Never>(.init(roomInfo: RoomInfo(configuration)))
+        let roomProxyMock = JoinedRoomProxyMock(configuration)
         // setup the room proxy actions publisher
         roomProxyMock.canUserJoinCallUserIDReturnValue = .success(false)
-        roomProxyMock.underlyingActionsPublisher = updateSubject.eraseToAnyPublisher()
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
         let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
@@ -193,7 +194,7 @@ class RoomScreenViewModelTests: XCTestCase {
                 viewState.hasOngoingCall
         }
         
-        updateSubject.send(.roomInfoUpdate)
+        infoSubject.send(.init(roomInfo: RoomInfo(configuration))) // This is dumb, its value isn't used.
         try await deferred.fulfill()
     }
     

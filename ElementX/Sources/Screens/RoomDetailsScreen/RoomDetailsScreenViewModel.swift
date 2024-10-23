@@ -162,10 +162,10 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     }
     
     // MARK: - Private
-
+    
     private func setupRoomSubscription() {
-        roomProxy.actionsPublisher
-            .filter { $0 == .roomInfoUpdate }
+        #warning("Use the room info directly.")
+        roomProxy.infoPublisher
             .throttle(for: .milliseconds(200), scheduler: DispatchQueue.main, latest: true)
             .sink { [weak self] _ in
                 self?.updateRoomInfo()
@@ -181,10 +181,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         state.topic = topic
         state.topicSummary = topic?.unattributedStringByReplacingNewlinesWithSpaces()
         state.joinedMembersCount = roomProxy.joinedMembersCount
-        
-        Task {
-            state.bindings.isFavourite = await roomProxy.isFavourite
-        }
+        state.bindings.isFavourite = roomProxy.isFavourite
     }
     
     private func fetchMembersIfNeeded() async {

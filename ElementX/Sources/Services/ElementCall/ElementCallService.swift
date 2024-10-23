@@ -294,13 +294,8 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         let isCallOngoing = roomProxy.hasOngoingCall
         
         roomProxy
-            .actionsPublisher
-            .compactMap { action -> (Bool, [String])? in
-                switch action {
-                case .roomInfoUpdate:
-                    return (roomProxy.hasOngoingCall, roomProxy.activeRoomCallParticipants)
-                }
-            }
+            .infoPublisher
+            .compactMap { ($0.hasRoomCall, $0.activeRoomCallParticipants) }
             .removeDuplicates { $0 == $1 }
             .dropFirst(isCallOngoing ? 0 : 1)
             .sink { [weak self] hasOngoingCall, activeRoomCallParticipants in
