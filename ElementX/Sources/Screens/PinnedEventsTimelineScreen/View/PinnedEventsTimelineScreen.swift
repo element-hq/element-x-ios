@@ -50,7 +50,7 @@ struct PinnedEventsTimelineScreen: View {
     private var content: some View {
         if timelineContext.viewState.pinnedEventIDs.isEmpty {
             VStack(spacing: 16) {
-                HeroImage(icon: \.pin, style: .normal)
+                BigIcon(icon: \.pin)
                 Text(L10n.screenPinnedTimelineEmptyStateHeadline)
                     .font(.compound.headingSMSemibold)
                     .foregroundStyle(.compound.textPrimary)

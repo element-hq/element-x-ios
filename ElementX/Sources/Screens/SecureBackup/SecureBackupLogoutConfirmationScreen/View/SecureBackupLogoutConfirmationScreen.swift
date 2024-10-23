@@ -15,7 +15,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
     var body: some View {
         FullscreenDialog {
             VStack(spacing: 16) {
-                HeroImage(icon: \.keyOffSolid)
+                BigIcon(icon: \.keyOffSolid)
                 content
             }
             .padding()

@@ -45,7 +45,7 @@ struct LoginScreen: View {
     /// The header containing the title and icon.
     var header: some View {
         VStack(spacing: 8) {
-            HeroImage(icon: \.lockSolid)
+            BigIcon(icon: \.lockSolid)
                 .padding(.bottom, 8)
             
             Text(L10n.screenLoginTitleWithHomeserver(context.viewState.homeserver.address))
