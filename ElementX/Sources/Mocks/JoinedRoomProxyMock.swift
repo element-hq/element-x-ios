@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import MatrixRustSDK
 
 enum RoomProxyMockError: Error {
     case generic
@@ -78,6 +79,7 @@ extension JoinedRoomProxyMock {
 
         ownUserID = configuration.ownUserID
         
+        infoPublisher = CurrentValueSubject(.init(roomInfo: .init(configuration))).asCurrentValuePublisher()
         membersPublisher = CurrentValueSubject(configuration.members).asCurrentValuePublisher()
         typingMembersPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
         identityStatusChangesPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
@@ -86,7 +88,6 @@ extension JoinedRoomProxyMock {
         activeMembersCount = configuration.members.filter { $0.membership == .join || $0.membership == .invite }.count
 
         updateMembersClosure = { }
-        underlyingActionsPublisher = Empty(completeImmediately: false).eraseToAnyPublisher()
         setNameClosure = { _ in .success(()) }
         setTopicClosure = { _ in .success(()) }
         getMemberUserIDClosure = { [weak self] userID in
@@ -152,5 +153,48 @@ extension JoinedRoomProxyMock {
         matrixToEventPermalinkReturnValue = .success(.homeDirectory)
         loadDraftReturnValue = .success(nil)
         clearDraftReturnValue = .success(())
+    }
+}
+
+extension RoomInfo {
+    @MainActor init(_ configuration: JoinedRoomProxyMockConfiguration) {
+        self.init(id: configuration.id,
+                  creator: nil,
+                  displayName: configuration.name,
+                  rawName: configuration.name,
+                  topic: configuration.topic,
+                  avatarUrl: configuration.avatarURL?.absoluteString,
+                  isDirect: configuration.isDirect,
+                  isPublic: configuration.isPublic,
+                  isSpace: configuration.isSpace,
+                  isTombstoned: false,
+                  isFavourite: false,
+                  canonicalAlias: configuration.canonicalAlias,
+                  alternativeAliases: [],
+                  membership: .joined,
+                  inviter: configuration.inviter.map { RoomMember(userId: $0.userID,
+                                                                  displayName: $0.displayName,
+                                                                  avatarUrl: $0.avatarURL?.absoluteString,
+                                                                  membership: $0.membership,
+                                                                  isNameAmbiguous: false,
+                                                                  powerLevel: Int64($0.powerLevel),
+                                                                  normalizedPowerLevel: Int64($0.powerLevel),
+                                                                  isIgnored: $0.isIgnored,
+                                                                  suggestedRoleForPowerLevel: $0.role) },
+                  heroes: [],
+                  activeMembersCount: UInt64(configuration.members.filter { $0.membership == .join || $0.membership == .invite }.count),
+                  invitedMembersCount: UInt64(configuration.members.filter { $0.membership == .invite }.count),
+                  joinedMembersCount: UInt64(configuration.members.filter { $0.membership == .join }.count),
+                  userPowerLevels: [:],
+                  highlightCount: 0,
+                  notificationCount: 0,
+                  cachedUserDefinedNotificationMode: .allMessages,
+                  hasRoomCall: configuration.hasOngoingCall,
+                  activeRoomCallParticipants: [],
+                  isMarkedUnread: false,
+                  numUnreadMessages: 0,
+                  numUnreadNotifications: 0,
+                  numUnreadMentions: 0,
+                  pinnedEventIds: Array(configuration.pinnedEventIDs))
     }
 }

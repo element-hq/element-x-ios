@@ -91,9 +91,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             showFocusLoadingIndicator()
         }
         
-        Task {
-            await updatePinnedEventIDs()
-        }
+        updatePinnedEventIDs()
         
         setupSubscriptions()
         setupDirectRoomSubscriptionsIfNeeded()
@@ -380,15 +378,13 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             }
             .store(in: &cancellables)
 
-        let roomInfoSubscription = roomProxy
-            .actionsPublisher
-            .filter { $0 == .roomInfoUpdate }
+        let roomInfoSubscription = roomProxy.infoPublisher
         Task { [weak self] in
             for await _ in roomInfoSubscription.receive(on: DispatchQueue.main).values {
                 guard !Task.isCancelled else {
                     return
                 }
-                await self?.updatePinnedEventIDs()
+                self?.updatePinnedEventIDs(); #warning("Use the room info directly here.")
                 await self?.updatePermissions()
             }
         }
@@ -457,8 +453,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             .store(in: &cancellables)
     }
     
-    private func updatePinnedEventIDs() async {
-        state.pinnedEventIDs = await roomProxy.pinnedEventIDs
+    private func updatePinnedEventIDs() {
+        state.pinnedEventIDs = roomProxy.pinnedEventIDs
     }
 
     private func setupDirectRoomSubscriptionsIfNeeded() {

@@ -37,10 +37,10 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         updateMembers(roomProxy.membersPublisher.value)
         
         // Automatically update the room permissions
-        roomProxy.actionsPublisher
-            .filter { $0 == .roomInfoUpdate }
+        roomProxy.infoPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
+                #warning("There isn't enough info on RoomInfo to use it here…")
                 Task { await self?.updatePermissions() }
             }
             .store(in: &cancellables)
@@ -93,7 +93,8 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         showSavingIndicator()
         
         // A task we can await until the room's info gets modified with the new power levels.
-        let infoTask = Task { await roomProxy.actionsPublisher.values.first { $0 == .roomInfoUpdate } }
+        // Note: Ignore the first value as the publisher is backed by a current value subject.
+        let infoTask = Task { await roomProxy.infoPublisher.dropFirst().values.first { _ in true } }
         
         switch await roomProxy.updatePowerLevelsForUsers([(userID: roomProxy.ownUserID, powerLevel: role.rustPowerLevel)]) {
         case .success:

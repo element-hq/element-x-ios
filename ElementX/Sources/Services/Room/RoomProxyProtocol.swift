@@ -69,19 +69,19 @@ enum JoinedRoomProxyAction: Equatable {
 // sourcery: AutoMockable
 protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     var isEncrypted: Bool { get }
-    var isFavourite: Bool { get async }
-    var pinnedEventIDs: Set<String> { get async }
+    var isFavourite: Bool { get }
+    var pinnedEventIDs: Set<String> { get }
     
     var hasOngoingCall: Bool { get }
     var activeRoomCallParticipants: [String] { get }
+    
+    var infoPublisher: CurrentValuePublisher<RoomInfoProxy, Never> { get }
 
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> { get }
     
     var typingMembersPublisher: CurrentValuePublisher<[String], Never> { get }
     
     var identityStatusChangesPublisher: CurrentValuePublisher<[IdentityStatusChange], Never> { get }
-    
-    var actionsPublisher: AnyPublisher<JoinedRoomProxyAction, Never> { get }
     
     var timeline: TimelineProxyProtocol { get }
     
