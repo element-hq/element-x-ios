@@ -54,7 +54,7 @@ struct HomeScreenKnockedCell: View {
                     badge
                 }
                 
-                Text(L10n.screenKnockedKnockSent)
+                Text(L10n.screenRoomlistKnockEventSentDescription)
                     .font(.compound.bodyMD)
                     .foregroundStyle(.compound.textPlaceholder)
                     .padding(.top, room.canonicalAlias == nil ? 0 : 4)

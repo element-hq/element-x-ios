@@ -241,6 +241,8 @@
 "common.pinned" = "Pinned";
 "common.send_to" = "Send to";
 "common.you" = "You";
+"common_unable_to_decrypt_insecure_device" = "Encrypted by an insecure device";
+"common_unable_to_decrypt_verification_violation" = "Sender's verified identity has changed";
 "confirm_recovery_key_banner_message" = "Your chat backup is currently out of sync. You need to enter your recovery key to maintain access to your chat backup.";
 "confirm_recovery_key_banner_title" = "Enter your recovery key";
 "crash_detection_dialog_content" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
@@ -352,7 +354,6 @@
 "screen_join_room_knock_message_description" = "Message (optional)";
 "screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
 "screen_join_room_knock_sent_title" = "Request to join sent";
-"screen_knocked_knock_sent" = "Request to join sent";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
@@ -370,6 +371,7 @@
 "screen_room_pinned_banner_loading_description" = "Loading message…";
 "screen_room_pinned_banner_view_all_button_title" = "View All";
 "screen_room_details_pinned_events_row_title" = "Pinned messages";
+"screen_roomlist_knock_event_sent_description" = "Request to join sent";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
@@ -821,12 +823,16 @@
 "screen_session_verification_open_existing_session_title" = "Open an existing session";
 "screen_session_verification_positive_button_canceled" = "Retry verification";
 "screen_session_verification_positive_button_initial" = "I am ready";
-"screen_session_verification_positive_button_verifying_ongoing" = "Waiting to match";
+"screen_session_verification_positive_button_verifying_ongoing" = "Waiting to match…";
 "screen_session_verification_ready_subtitle" = "Compare a unique set of emojis.";
 "screen_session_verification_request_accepted_subtitle" = "Compare the unique emoji, ensuring they appear in the same order.";
 "screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_failure_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
+"screen_session_verification_request_failure_title" = "Verification failed";
 "screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
 "screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_success_subtitle" = "Now you can read or send messages securely on your other device.";
+"screen_session_verification_request_success_title" = "Device verified";
 "screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "They don’t match";
 "screen_session_verification_they_match" = "They match";
