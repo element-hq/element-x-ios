@@ -68,14 +68,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.initialSelectedPinnedEventID = initialSelectedPinnedEventID
         pinnedEventStringBuilder = .pinnedEventStringBuilder(userID: roomProxy.ownUserID)
 
-        super.init(initialViewState: .init(roomTitle: roomProxy.roomTitle,
-                                           roomAvatar: roomProxy.avatar,
-                                           hasOngoingCall: roomProxy.hasOngoingCall,
+        super.init(initialViewState: .init(roomTitle: roomProxy.infoPublisher.value.displayName ?? roomProxy.id,
+                                           roomAvatar: roomProxy.infoPublisher.value.avatar,
+                                           hasOngoingCall: roomProxy.infoPublisher.value.hasRoomCall,
                                            bindings: .init()),
                    mediaProvider: mediaProvider)
         
         Task {
-            await handleRoomInfoUpdate()
+            await handleRoomInfoUpdate(roomProxy.infoPublisher.value)
         }
         
         setupSubscriptions(ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher)
@@ -120,25 +120,23 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         let roomInfoSubscription = roomProxy
             .infoPublisher
         
-        #warning("Use the room info directly.")
         roomInfoSubscription
             .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
-            .sink { [weak self] _ in
+            .sink { [weak self] roomInfo in
                 guard let self else { return }
-                state.roomTitle = roomProxy.roomTitle
-                state.roomAvatar = roomProxy.avatar
-                state.hasOngoingCall = roomProxy.hasOngoingCall
+                state.roomTitle = roomInfo.displayName ?? roomProxy.id
+                state.roomAvatar = roomInfo.avatar
+                state.hasOngoingCall = roomInfo.hasRoomCall
             }
             .store(in: &cancellables)
         
-        #warning("Use the room info directly.")
         Task { [weak self] in
-            for await _ in roomInfoSubscription.receive(on: DispatchQueue.main).values {
+            for await roomInfo in roomInfoSubscription.receive(on: DispatchQueue.main).values {
                 guard !Task.isCancelled else {
                     return
                 }
                 
-                await self?.handleRoomInfoUpdate()
+                await self?.handleRoomInfoUpdate(roomInfo)
             }
         }
         .store(in: &cancellables)
@@ -233,8 +231,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    private func handleRoomInfoUpdate() async {
-        let pinnedEventIDs = roomProxy.pinnedEventIDs
+    private func handleRoomInfoUpdate(_ roomInfo: RoomInfoProxy) async {
+        let pinnedEventIDs = roomInfo.pinnedEventIDs
         // Only update the loading state of the banner
         if state.pinnedEventsBannerState.isLoading {
             state.pinnedEventsBannerState = .loading(numbersOfEvents: pinnedEventIDs.count)

@@ -40,7 +40,6 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         roomProxy.infoPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                #warning("There isn't enough info on RoomInfo to use it here…")
                 Task { await self?.updatePermissions() }
             }
             .store(in: &cancellables)

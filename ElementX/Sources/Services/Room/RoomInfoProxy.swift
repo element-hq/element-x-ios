@@ -16,7 +16,9 @@ struct RoomInfoProxy {
     var displayName: String? { roomInfo.displayName }
     var rawName: String? { roomInfo.rawName }
     var topic: String? { roomInfo.topic }
+    /// The room's avatar URL. Use this for editing and favour ``avatar`` for display.
     var avatarURL: URL? { roomInfo.avatarUrl.flatMap(URL.init) }
+    /// The room's avatar info for use in a ``RoomAvatarImage``.
     var avatar: RoomAvatar {
         if isDirect, avatarURL == nil {
             if heroes.count == 1 {

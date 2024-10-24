@@ -170,7 +170,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                             return
                         }
                         
-                        await elementCallService.setupCallSession(roomID: roomProxy.id, roomDisplayName: roomProxy.roomTitle)
+                        await elementCallService.setupCallSession(roomID: roomProxy.id,
+                                                                  roomDisplayName: roomProxy.infoPublisher.value.displayName ?? roomProxy.id)
                         
                         _ = await roomProxy.sendCallNotificationIfNeeded()
                         

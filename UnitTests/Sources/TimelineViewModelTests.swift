@@ -347,7 +347,7 @@ class TimelineViewModelTests: XCTestCase {
     // MARK: - Pins
     
     func testPinnedEvents() async throws {
-        let configuration = JoinedRoomProxyMockConfiguration(name: "",
+        var configuration = JoinedRoomProxyMockConfiguration(name: "",
                                                              pinnedEventIDs: .init(["test1"]))
         let roomProxyMock = JoinedRoomProxyMock(configuration)
         let infoSubject = CurrentValueSubject<RoomInfoProxy, Never>(.init(roomInfo: RoomInfo(configuration)))
@@ -362,17 +362,13 @@ class TimelineViewModelTests: XCTestCase {
                                           appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
                                           analyticsService: ServiceLocator.shared.analytics)
+        XCTAssertEqual(configuration.pinnedEventIDs, viewModel.context.viewState.pinnedEventIDs)
         
-        var deferred = deferFulfillment(viewModel.context.$viewState) { value in
-            value.pinnedEventIDs == ["test1"]
-        }
-        try await deferred.fulfill()
-        
-        roomProxyMock.underlyingPinnedEventIDs = ["test1", "test2"]
-        deferred = deferFulfillment(viewModel.context.$viewState) { value in
+        configuration.pinnedEventIDs = ["test1", "test2"]
+        let deferred = deferFulfillment(viewModel.context.$viewState) { value in
             value.pinnedEventIDs == ["test1", "test2"]
         }
-        infoSubject.send(.init(roomInfo: RoomInfo(configuration))) // This is dumb, its value isn't used.
+        infoSubject.send(.init(roomInfo: RoomInfo(configuration)))
         try await deferred.fulfill()
     }
     
@@ -401,7 +397,7 @@ class TimelineViewModelTests: XCTestCase {
         deferred = deferFulfillment(viewModel.context.$viewState) { value in
             !value.canCurrentUserPin
         }
-        infoSubject.send(.init(roomInfo: RoomInfo(configuration))) // This is dumb, its value isn't used.
+        infoSubject.send(.init(roomInfo: RoomInfo(configuration)))
         try await deferred.fulfill()
     }
     

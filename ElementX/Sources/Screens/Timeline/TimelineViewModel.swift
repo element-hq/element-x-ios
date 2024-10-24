@@ -79,6 +79,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        ownUserID: roomProxy.ownUserID,
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,
                                                        hideTimelineMedia: appSettings.hideTimelineMedia,
+                                                       pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
                                                        bindings: .init(reactionsCollapsed: [:])),
                    mediaProvider: mediaProvider)
         
@@ -86,8 +87,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             // The timeline controller will start loading a detached timeline.
             showFocusLoadingIndicator()
         }
-        
-        updatePinnedEventIDs()
         
         setupSubscriptions()
         setupDirectRoomSubscriptionsIfNeeded()
@@ -374,11 +373,11 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
 
         let roomInfoSubscription = roomProxy.infoPublisher
         Task { [weak self] in
-            for await _ in roomInfoSubscription.receive(on: DispatchQueue.main).values {
+            for await roomInfo in roomInfoSubscription.receive(on: DispatchQueue.main).values {
                 guard !Task.isCancelled else {
                     return
                 }
-                self?.updatePinnedEventIDs(); #warning("Use the room info directly here.")
+                self?.state.pinnedEventIDs = roomInfo.pinnedEventIDs
                 await self?.updatePermissions()
             }
         }
@@ -446,13 +445,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             .weakAssign(to: \.state.hideTimelineMedia, on: self)
             .store(in: &cancellables)
     }
-    
-    private func updatePinnedEventIDs() {
-        state.pinnedEventIDs = roomProxy.pinnedEventIDs
-    }
 
     private func setupDirectRoomSubscriptionsIfNeeded() {
-        guard roomProxy.isDirect else {
+        guard roomProxy.infoPublisher.value.isDirect else {
             return
         }
 
@@ -461,7 +456,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             .map { [weak self] isFocused in
                 guard let self else { return false }
 
-                return isFocused && self.roomProxy.isUserAloneInDirectRoom
+                return isFocused && self.roomProxy.infoPublisher.value.isUserAloneInDirectRoom
             }
             // We want to show the alert just once, so we are taking the first "true" emitted
             .first { $0 }
@@ -732,7 +727,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private let inviteLoadingIndicatorID = UUID().uuidString
 
     private func inviteOtherDMUserBack() {
-        guard roomProxy.isUserAloneInDirectRoom else {
+        guard roomProxy.infoPublisher.value.isUserAloneInDirectRoom else {
             userIndicatorController.alertInfo = .init(id: .init(), title: L10n.commonError)
             return
         }
@@ -838,7 +833,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
 }
 
-private extension RoomProxyProtocol {
+private extension RoomInfoProxy {
     /// Checks if the other person left the room in a direct chat
     var isUserAloneInDirectRoom: Bool {
         isDirect && activeMembersCount == 1

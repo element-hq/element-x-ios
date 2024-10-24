@@ -584,7 +584,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                            timelineItemFactory: timelineItemFactory)
         self.timelineController = timelineController
         
-        analytics.trackViewRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace)
+        analytics.trackViewRoom(isDM: roomProxy.infoPublisher.value.isDirect, isSpace: roomProxy.infoPublisher.value.isSpace)
         
         let completionSuggestionService = CompletionSuggestionService(roomProxy: roomProxy)
         
@@ -681,7 +681,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                             await storeAndSubscribeToRoomProxy(roomProxy)
                             stateMachine.tryEvent(.presentRoom(focussedEvent: nil), userInfo: EventUserInfo(animated: animated))
                             
-                            analytics.trackJoinedRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace, activeMemberCount: UInt(roomProxy.activeMembersCount))
+                            analytics.trackJoinedRoom(isDM: roomProxy.infoPublisher.value.isDirect,
+                                                      isSpace: roomProxy.infoPublisher.value.isSpace,
+                                                      activeMemberCount: UInt(roomProxy.infoPublisher.value.activeMembersCount))
                         } else {
                             stateMachine.tryEvent(.dismissFlow, userInfo: EventUserInfo(animated: animated))
                         }
