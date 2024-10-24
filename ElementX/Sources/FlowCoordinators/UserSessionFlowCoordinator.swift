@@ -161,11 +161,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 case .unknown:
                     analytics.trackError(context: nil, domain: .E2EE, name: .UnknownError, timeToDecryptMillis: timeToDecryptMs)
                 case .unknownDevice:
-                    analytics.trackError(context: nil, domain: .E2EE, name: .UnknownError, timeToDecryptMillis: timeToDecryptMs)
+                    analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedSentByInsecureDevice, timeToDecryptMillis: timeToDecryptMs)
                 case .unsignedDevice:
-                    analytics.trackError(context: nil, domain: .E2EE, name: .RoomKeysWithheldForUnverifiedDevice, timeToDecryptMillis: timeToDecryptMs)
+                    analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedSentByInsecureDevice, timeToDecryptMillis: timeToDecryptMs)
                 case .verificationViolation:
-                    analytics.trackError(context: nil, domain: .E2EE, name: .RoomKeysWithheldForUnverifiedDevice, timeToDecryptMillis: timeToDecryptMs)
+                    analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedVerificationViolation, timeToDecryptMillis: timeToDecryptMs)
                 case .sentBeforeWeJoined:
                     analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedDueToMembership, timeToDecryptMillis: timeToDecryptMs)
                 }

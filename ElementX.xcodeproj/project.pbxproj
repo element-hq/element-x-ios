@@ -7822,7 +7822,7 @@
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 1.0.60;
+				version = 1.0.61;
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {
@@ -7862,7 +7862,7 @@
 			repositoryURL = "https://github.com/matrix-org/matrix-analytics-events";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.25.0;
+				minimumVersion = 0.27.0;
 			};
 		};
 		C13F55E4518415CB4C278E73 /* XCRemoteSwiftPackageReference "DTCoreText" */ = {

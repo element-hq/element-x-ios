@@ -154,10 +154,10 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         switch encryptedMessage {
         case .megolmV1AesSha2(let sessionID, let cause):
             switch cause {
-            case .unknown:
+            case .unknown, .verificationViolation, .unsignedDevice, .unknownDevice:
                 encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .unknown)
                 errorLabel = L10n.commonWaitingForDecryptionKey
-            default:
+            case .sentBeforeWeJoined:
                 encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .membership)
                 errorLabel = L10n.commonUnableToDecryptNoAccess
             }
