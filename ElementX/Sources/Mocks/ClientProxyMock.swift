@@ -10,6 +10,7 @@ import Foundation
 
 struct ClientProxyMockConfiguration {
     var homeserver = ""
+    var serverName: String?
     var userID: String = RoomMemberProxyMock.mockMe.userID
     var deviceID: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol? = RoomSummaryProviderMock(.init())
@@ -28,6 +29,7 @@ extension ClientProxyMock {
         deviceID = configuration.deviceID
         
         homeserver = configuration.homeserver
+        serverName = configuration.serverName
         
         roomSummaryProvider = configuration.roomSummaryProvider
         alternateRoomSummaryProvider = RoomSummaryProviderMock(.init())

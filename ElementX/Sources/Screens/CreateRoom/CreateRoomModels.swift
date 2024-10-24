@@ -41,7 +41,7 @@ struct CreateRoomViewStateBindings {
     var isRoomPrivate: Bool
     var isKnockingOnly = false
     var showAttachmentConfirmationDialog = false
-    var address = ""
+    var addressName = ""
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<CreateRoomScreenErrorType>?

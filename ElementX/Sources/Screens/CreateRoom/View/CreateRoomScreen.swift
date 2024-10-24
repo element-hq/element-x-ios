@@ -16,7 +16,7 @@ struct CreateRoomScreen: View {
         case name
         case topic
     }
-
+    
     var body: some View {
         Form {
             roomSection
@@ -151,7 +151,7 @@ struct CreateRoomScreen: View {
                                     iconAlignment: .top),
                     kind: .selection(isSelected: !context.isRoomPrivate) { context.isRoomPrivate = false })
         } header: {
-            Text(L10n.commonSecurity.uppercased())
+            Text(L10n.screenCreateRoomRoomVisibilitySectionTitle.uppercased())
                 .compoundListSectionHeader()
         }
     }
@@ -176,18 +176,22 @@ struct CreateRoomScreen: View {
                 Text("#")
                     .font(.compound.bodyLG)
                     .foregroundStyle(.compound.textSecondary)
-                TextField("", text: $context.address)
+                TextField("", text: $context.addressName)
+                    .autocapitalization(.none)
+                    .textCase(.lowercase)
                     .font(.compound.bodyLG)
                     .foregroundStyle(.compound.textPrimary)
+                    .padding(.horizontal, 8)
                 Text(context.viewState.homeserver)
                     .font(.compound.bodyLG)
                     .foregroundStyle(.compound.textSecondary)
             }
+            .environment(\.layoutDirection, .leftToRight)
         } header: {
-            Text("Room address".uppercased())
+            Text(L10n.screenCreateRoomRoomAddressSectionTitle.uppercased())
                 .compoundListSectionHeader()
         } footer: {
-            Text("In order for this room to be visible in the public room directory, you will need a room address. ")
+            Text(L10n.screenCreateRoomRoomAddressSectionFooter)
                 .compoundListSectionFooter()
         }
     }
@@ -231,7 +235,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let publicRoomViewModel = {
-        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(homeserver: "example.org", userID: "@userid:example.com"))))
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(serverName: "example.org", userID: "@userid:example.com"))))
         let parameters = CreateRoomFlowParameters(isRoomPrivate: false)
         let selectedUsers: [UserProfileProxy] = [.mockAlice, .mockBob, .mockCharlie]
         ServiceLocator.shared.settings.knockingEnabled = true

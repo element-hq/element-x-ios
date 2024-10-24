@@ -88,6 +88,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     var homeserver: String { get }
     
+    var serverName: String? { get }
+    
     var slidingSyncVersion: SlidingSyncVersion { get }
     var availableSlidingSyncVersions: [SlidingSyncVersion] { get async }
     

@@ -203,6 +203,10 @@ class ClientProxy: ClientProxyProtocol {
         client.homeserver()
     }
     
+    var serverName: String? {
+        try? client.userIdServerName()
+    }
+    
     var slidingSyncVersion: SlidingSyncVersion {
         client.slidingSyncVersion()
     }
