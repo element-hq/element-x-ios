@@ -291,16 +291,11 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         // it from what we have. If the call is running before subscribing then wait
         // for it to change to `false` otherwise wait for it to turn `true` before
         // changing to `false`
-        let isCallOngoing = roomProxy.hasOngoingCall
+        let isCallOngoing = roomProxy.infoPublisher.value.hasRoomCall
         
         roomProxy
-            .actionsPublisher
-            .compactMap { action -> (Bool, [String])? in
-                switch action {
-                case .roomInfoUpdate:
-                    return (roomProxy.hasOngoingCall, roomProxy.activeRoomCallParticipants)
-                }
-            }
+            .infoPublisher
+            .compactMap { ($0.hasRoomCall, $0.activeRoomCallParticipants) }
             .removeDuplicates { $0 == $1 }
             .dropFirst(isCallOngoing ? 0 : 1)
             .sink { [weak self] hasOngoingCall, activeRoomCallParticipants in

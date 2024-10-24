@@ -26,11 +26,11 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
         let bindings = RoomNotificationSettingsScreenViewStateBindings()
         self.notificationSettingsProxy = notificationSettingsProxy
         self.roomProxy = roomProxy
-        let navigationTitle = displayAsUserDefinedRoomSettings ? roomProxy.roomTitle : L10n.screenRoomDetailsNotificationTitle
+        let navigationTitle = displayAsUserDefinedRoomSettings ? roomProxy.infoPublisher.value.displayName : L10n.screenRoomDetailsNotificationTitle
         let customSettingsSectionHeader = displayAsUserDefinedRoomSettings ? L10n.screenRoomNotificationSettingsRoomCustomSettingsTitle : L10n.screenRoomNotificationSettingsCustomSettingsTitle
         super.init(initialViewState: RoomNotificationSettingsScreenViewState(bindings: bindings,
                                                                              displayAsUserDefinedRoomSettings: displayAsUserDefinedRoomSettings,
-                                                                             navigationTitle: navigationTitle,
+                                                                             navigationTitle: navigationTitle ?? L10n.screenRoomDetailsNotificationTitle,
                                                                              customSettingsSectionHeader: customSettingsSectionHeader))
         
         setupNotificationSettingsSubscription()
@@ -80,7 +80,7 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
             // `isOneToOne` here is not the same as `isDirect` on the room. From the point of view of the push rule, a one-to-one room is a room with exactly two active members.
             let settings = try await notificationSettingsProxy.getNotificationSettings(roomId: roomProxy.id,
                                                                                        isEncrypted: roomProxy.isEncrypted,
-                                                                                       isOneToOne: roomProxy.activeMembersCount == 2)
+                                                                                       isOneToOne: roomProxy.infoPublisher.value.activeMembersCount == 2)
             guard !Task.isCancelled else { return }
             state.notificationSettingsState = .loaded(settings: settings)
             if !state.isRestoringDefaultSetting {

@@ -63,14 +63,14 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         self.attributedStringBuilder = attributedStringBuilder
         self.appSettings = appSettings
         
-        let topic = attributedStringBuilder.fromPlain(roomProxy.topic)
+        let topic = attributedStringBuilder.fromPlain(roomProxy.infoPublisher.value.topic)
         
         super.init(initialViewState: .init(details: roomProxy.details,
                                            isEncrypted: roomProxy.isEncrypted,
-                                           isDirect: roomProxy.isDirect,
+                                           isDirect: roomProxy.infoPublisher.value.isDirect,
                                            topic: topic,
                                            topicSummary: topic?.unattributedStringByReplacingNewlinesWithSpaces(),
-                                           joinedMembersCount: roomProxy.joinedMembersCount,
+                                           joinedMembersCount: roomProxy.infoPublisher.value.joinedMembersCount,
                                            notificationSettingsState: .loading,
                                            bindings: .init()),
                    mediaProvider: mediaProvider)
@@ -96,7 +96,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
         }
         
-        updateRoomInfo()
+        updateRoomInfo(roomProxy.infoPublisher.value)
         Task { await updatePowerLevelPermissions() }
                 
         setupRoomSubscription()
@@ -124,7 +124,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                 state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomProxy.id, isDM: roomProxy.isEncryptedOneToOneRoom, state: .empty)
                 return
             }
-            state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomProxy.id, isDM: roomProxy.isEncryptedOneToOneRoom, state: roomProxy.isPublic ? .public : .private)
+            state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomProxy.id,
+                                                                   isDM: roomProxy.isEncryptedOneToOneRoom,
+                                                                   state: roomProxy.infoPublisher.value.isPublic ? .public : .private)
         case .confirmLeave:
             Task { await leaveRoom() }
         case .processTapIgnore:
@@ -162,29 +164,25 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     }
     
     // MARK: - Private
-
+    
     private func setupRoomSubscription() {
-        roomProxy.actionsPublisher
-            .filter { $0 == .roomInfoUpdate }
+        roomProxy.infoPublisher
             .throttle(for: .milliseconds(200), scheduler: DispatchQueue.main, latest: true)
-            .sink { [weak self] _ in
-                self?.updateRoomInfo()
+            .sink { [weak self] roomInfo in
+                self?.updateRoomInfo(roomInfo)
                 Task { await self?.updatePowerLevelPermissions() }
             }
             .store(in: &cancellables)
     }
     
-    private func updateRoomInfo() {
+    private func updateRoomInfo(_ roomInfo: RoomInfoProxy) {
         state.details = roomProxy.details
         
-        let topic = attributedStringBuilder.fromPlain(roomProxy.topic)
+        let topic = attributedStringBuilder.fromPlain(roomInfo.topic)
         state.topic = topic
         state.topicSummary = topic?.unattributedStringByReplacingNewlinesWithSpaces()
-        state.joinedMembersCount = roomProxy.joinedMembersCount
-        
-        Task {
-            state.bindings.isFavourite = await roomProxy.isFavourite
-        }
+        state.joinedMembersCount = roomInfo.joinedMembersCount
+        state.bindings.isFavourite = roomInfo.isFavourite
     }
     
     private func fetchMembersIfNeeded() async {
@@ -240,7 +238,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         do {
             let notificationMode = try await notificationSettingsProxy.getNotificationSettings(roomId: roomProxy.id,
                                                                                                isEncrypted: roomProxy.isEncrypted,
-                                                                                               isOneToOne: roomProxy.activeMembersCount == 2)
+                                                                                               isOneToOne: roomProxy.infoPublisher.value.activeMembersCount == 2)
             state.notificationSettingsState = .loaded(settings: notificationMode)
         } catch {
             state.notificationSettingsState = .error
@@ -258,7 +256,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             do {
                 try await notificationSettingsProxy.unmuteRoom(roomId: roomProxy.id,
                                                                isEncrypted: roomProxy.isEncrypted,
-                                                               isOneToOne: roomProxy.activeMembersCount == 2)
+                                                               isOneToOne: roomProxy.infoPublisher.value.activeMembersCount == 2)
             } catch {
                 state.bindings.alertInfo = AlertInfo(id: .alert,
                                                      title: L10n.commonError,
@@ -352,7 +350,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             
             // We don't actually know the mime type here, assume it's an image.
             if case let .success(file) = await mediaProvider.loadFileFromSource(.init(url: url, mimeType: "image/jpeg")) {
-                state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: roomProxy.roomTitle)
+                state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: roomProxy.infoPublisher.value.displayName)
             }
         }
     }

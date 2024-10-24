@@ -326,7 +326,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         switch paginationState.backward {
         case .timelineEndReached:
             if timelineKind != .pinned, !roomProxy.isEncryptedOneToOneRoom {
-                let timelineStart = TimelineStartRoomTimelineItem(name: roomProxy.name)
+                let timelineStart = TimelineStartRoomTimelineItem(name: roomProxy.infoPublisher.value.displayName)
                 newTimelineItems.insert(timelineStart, at: 0)
             }
         case .paginating:

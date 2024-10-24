@@ -347,10 +347,11 @@ class TimelineViewModelTests: XCTestCase {
     // MARK: - Pins
     
     func testPinnedEvents() async throws {
-        let roomProxyMock = JoinedRoomProxyMock(.init(name: "",
-                                                      pinnedEventIDs: .init(["test1"])))
-        let actionsSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
-        roomProxyMock.underlyingActionsPublisher = actionsSubject.eraseToAnyPublisher()
+        var configuration = JoinedRoomProxyMockConfiguration(name: "",
+                                                             pinnedEventIDs: .init(["test1"]))
+        let roomProxyMock = JoinedRoomProxyMock(configuration)
+        let infoSubject = CurrentValueSubject<RoomInfoProxy, Never>(.init(roomInfo: RoomInfo(configuration)))
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
         
         let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                           timelineController: MockRoomTimelineController(),
@@ -361,24 +362,21 @@ class TimelineViewModelTests: XCTestCase {
                                           appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
                                           analyticsService: ServiceLocator.shared.analytics)
+        XCTAssertEqual(configuration.pinnedEventIDs, viewModel.context.viewState.pinnedEventIDs)
         
-        var deferred = deferFulfillment(viewModel.context.$viewState) { value in
-            value.pinnedEventIDs == ["test1"]
-        }
-        try await deferred.fulfill()
-        
-        roomProxyMock.underlyingPinnedEventIDs = ["test1", "test2"]
-        deferred = deferFulfillment(viewModel.context.$viewState) { value in
+        configuration.pinnedEventIDs = ["test1", "test2"]
+        let deferred = deferFulfillment(viewModel.context.$viewState) { value in
             value.pinnedEventIDs == ["test1", "test2"]
         }
-        actionsSubject.send(.roomInfoUpdate)
+        infoSubject.send(.init(roomInfo: RoomInfo(configuration)))
         try await deferred.fulfill()
     }
     
     func testCanUserPinEvents() async throws {
-        let roomProxyMock = JoinedRoomProxyMock(.init(name: "", canUserPin: true))
-        let actionsSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
-        roomProxyMock.underlyingActionsPublisher = actionsSubject.eraseToAnyPublisher()
+        let configuration = JoinedRoomProxyMockConfiguration(name: "", canUserPin: true)
+        let roomProxyMock = JoinedRoomProxyMock(configuration)
+        let infoSubject = CurrentValueSubject<RoomInfoProxy, Never>(.init(roomInfo: RoomInfo(configuration)))
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
         
         let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                           timelineController: MockRoomTimelineController(),
@@ -399,7 +397,7 @@ class TimelineViewModelTests: XCTestCase {
         deferred = deferFulfillment(viewModel.context.$viewState) { value in
             !value.canCurrentUserPin
         }
-        actionsSubject.send(.roomInfoUpdate)
+        infoSubject.send(.init(roomInfo: RoomInfo(configuration)))
         try await deferred.fulfill()
     }
     
