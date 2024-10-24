@@ -1007,14 +1007,20 @@ internal enum L10n {
   internal static var screenChatBackupKeyBackupActionDisable: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_action_disable") }
   /// Turn on backup
   internal static var screenChatBackupKeyBackupActionEnable: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_action_enable") }
-  /// Backup ensures that you don't lose your message history. %1$@.
+  /// Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices. %1$@.
   internal static func screenChatBackupKeyBackupDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_chat_backup_key_backup_description", String(describing: p1))
   }
-  /// Backup
+  /// Key storage
   internal static var screenChatBackupKeyBackupTitle: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_title") }
+  /// Upload keys from this device
+  internal static var screenChatBackupKeyStorageToggleDescription: String { return L10n.tr("Localizable", "screen_chat_backup_key_storage_toggle_description") }
+  /// Allow key storage
+  internal static var screenChatBackupKeyStorageToggleTitle: String { return L10n.tr("Localizable", "screen_chat_backup_key_storage_toggle_title") }
   /// Change recovery key
   internal static var screenChatBackupRecoveryActionChange: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_change") }
+  /// Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.
+  internal static var screenChatBackupRecoveryActionChangeDescription: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_change_description") }
   /// Enter recovery key
   internal static var screenChatBackupRecoveryActionConfirm: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_confirm") }
   /// Your chat backup is currently out of sync.

@@ -450,9 +450,12 @@
 "screen_change_server_title" = "Select your server";
 "screen_chat_backup_key_backup_action_disable" = "Turn off backup";
 "screen_chat_backup_key_backup_action_enable" = "Turn on backup";
-"screen_chat_backup_key_backup_description" = "Backup ensures that you don't lose your message history. %1$@.";
-"screen_chat_backup_key_backup_title" = "Backup";
+"screen_chat_backup_key_backup_description" = "Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices. %1$@.";
+"screen_chat_backup_key_backup_title" = "Key storage";
+"screen_chat_backup_key_storage_toggle_description" = "Upload keys from this device";
+"screen_chat_backup_key_storage_toggle_title" = "Allow key storage";
 "screen_chat_backup_recovery_action_change" = "Change recovery key";
+"screen_chat_backup_recovery_action_change_description" = "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.";
 "screen_chat_backup_recovery_action_confirm_description" = "Your chat backup is currently out of sync.";
 "screen_chat_backup_recovery_action_setup" = "Set up recovery";
 "screen_chat_backup_recovery_action_setup_description" = "Get access to your encrypted messages if you lose all your devices or are signed out of %1$@ everywhere.";
