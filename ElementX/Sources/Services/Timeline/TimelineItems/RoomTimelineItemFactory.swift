@@ -157,7 +157,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             case .unknown:
                 encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .unknown)
                 errorLabel = L10n.commonWaitingForDecryptionKey
-            case .membership:
+            default:
                 encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .membership)
                 errorLabel = L10n.commonUnableToDecryptNoAccess
             }

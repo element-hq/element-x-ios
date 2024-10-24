@@ -59,6 +59,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     /// For testing purposes.
     var statePublisher: AnyPublisher<UserSessionFlowCoordinatorStateMachine.State, Never> { stateMachine.statePublisher }
     
+    // swiftlint:disable:next function_body_length
     init(userSession: UserSessionProtocol,
          navigationRootCoordinator: NavigationRootCoordinator,
          appLockService: AppLockServiceProtocol,
@@ -158,9 +159,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch info.cause {
                 case .unknown:
-                    analytics.trackError(context: nil, domain: .E2EE, name: .OlmKeysNotSentError, timeToDecryptMillis: timeToDecryptMs)
-                case .membership:
-                    analytics.trackError(context: nil, domain: .E2EE, name: .HistoricalMessage, timeToDecryptMillis: timeToDecryptMs)
+                    analytics.trackError(context: nil, domain: .E2EE, name: .UnknownError, timeToDecryptMillis: timeToDecryptMs)
+                case .unknownDevice:
+                    analytics.trackError(context: nil, domain: .E2EE, name: .UnknownError, timeToDecryptMillis: timeToDecryptMs)
+                case .unsignedDevice:
+                    analytics.trackError(context: nil, domain: .E2EE, name: .RoomKeysWithheldForUnverifiedDevice, timeToDecryptMillis: timeToDecryptMs)
+                case .verificationViolation:
+                    analytics.trackError(context: nil, domain: .E2EE, name: .RoomKeysWithheldForUnverifiedDevice, timeToDecryptMillis: timeToDecryptMs)
+                case .sentBeforeWeJoined:
+                    analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedDueToMembership, timeToDecryptMillis: timeToDecryptMs)
                 }
             }
             .store(in: &cancellables)
