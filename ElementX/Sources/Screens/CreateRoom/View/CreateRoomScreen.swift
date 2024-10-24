@@ -48,8 +48,13 @@ struct CreateRoomScreen: View {
                         .padding(.leading, ListRowPadding.horizontal)
                         .compoundListSectionHeader()
                     
+                    let binding = Binding(get: {
+                        context.viewState.roomName
+                    }, set: {
+                        context.send(viewAction: .updateName($0))
+                    })
                     TextField(L10n.screenCreateRoomRoomNameLabel,
-                              text: $context.roomName,
+                              text: binding,
                               prompt: Text(L10n.commonRoomNamePlaceholder).foregroundColor(.compound.textPlaceholder),
                               axis: .horizontal)
                         .focused($focus, equals: .name)
@@ -176,7 +181,14 @@ struct CreateRoomScreen: View {
                 Text("#")
                     .font(.compound.bodyLG)
                     .foregroundStyle(.compound.textSecondary)
-                TextField("", text: $context.addressName)
+                
+                let binding = Binding(get: {
+                    context.viewState.addressName
+                }, set: {
+                    context.send(viewAction: .updateAddress($0))
+                })
+                
+                TextField("", text: binding)
                     .autocapitalization(.none)
                     .textCase(.lowercase)
                     .font(.compound.bodyLG)

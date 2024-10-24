@@ -15,6 +15,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     private var createRoomParameters: CreateRoomFlowParameters
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private var syncNameAndAddress = true
     
     private var actionsSubject: PassthroughSubject<CreateRoomViewModelAction, Never> = .init()
     
@@ -35,11 +36,13 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         
-        let bindings = CreateRoomViewStateBindings(roomName: parameters.name, roomTopic: parameters.topic, isRoomPrivate: parameters.isRoomPrivate)
+        let bindings = CreateRoomViewStateBindings(roomTopic: parameters.topic, isRoomPrivate: parameters.isRoomPrivate)
 
-        super.init(initialViewState: CreateRoomViewState(homeserver: ":\(userSession.clientProxy.serverName ?? "")",
+        super.init(initialViewState: CreateRoomViewState(roomName: parameters.name,
+                                                         homeserver: ":\(userSession.clientProxy.serverName ?? "")",
                                                          isKnockingFeatureEnabled: appSettings.knockingEnabled,
                                                          selectedUsers: selectedUsers.value,
+                                                         addressName: parameters.name.split(separator: " ").joined(separator: "-").lowercased(),
                                                          bindings: bindings),
                    mediaProvider: userSession.mediaProvider)
         
@@ -84,6 +87,17 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             actionsSubject.send(.displayMediaPicker)
         case .removeImage:
             actionsSubject.send(.removeImage)
+        case .updateAddress(let address):
+            state.addressName = address
+            syncNameAndAddress = false
+        case .updateName(let name):
+            if name.isEmpty {
+                syncNameAndAddress = true
+            }
+            state.roomName = name
+            if syncNameAndAddress {
+                state.addressName = name.split(separator: " ").joined(separator: "-").lowercased()
+            }
         }
     }
     
@@ -91,24 +105,23 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
 
     private func setupBindings() {
         context.$viewState
-            .map(\.bindings)
             .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
             .removeDuplicates { old, new in
-                old.roomName == new.roomName && old.roomTopic == new.roomTopic && old.isRoomPrivate == new.isRoomPrivate
+                old.roomName == new.roomName && old.bindings.roomTopic == new.bindings.roomTopic && old.bindings.isRoomPrivate == new.bindings.isRoomPrivate
             }
-            .sink { [weak self] bindings in
+            .sink { [weak self] state in
                 guard let self else { return }
-                updateParameters(bindings: bindings)
+                updateParameters(state: state)
                 actionsSubject.send(.updateDetails(createRoomParameters))
             }
             .store(in: &cancellables)
     }
     
-    private func updateParameters(bindings: CreateRoomViewStateBindings) {
-        createRoomParameters.name = bindings.roomName
-        createRoomParameters.topic = bindings.roomTopic
-        createRoomParameters.isRoomPrivate = bindings.isRoomPrivate
-        createRoomParameters.isKnockingOnly = bindings.isKnockingOnly
+    private func updateParameters(state: CreateRoomViewState) {
+        createRoomParameters.name = state.roomName
+        createRoomParameters.topic = state.bindings.roomTopic
+        createRoomParameters.isRoomPrivate = state.bindings.isRoomPrivate
+        createRoomParameters.isKnockingOnly = state.bindings.isKnockingOnly
     }
     
     private func createRoom() async {
@@ -118,7 +131,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         showLoadingIndicator()
         
         // Since the parameters are throttled, we need to make sure that the latest values are used
-        updateParameters(bindings: state.bindings)
+        updateParameters(state: state)
         let avatarURL: URL?
         if let media = createRoomParameters.avatarImageMedia {
             switch await userSession.clientProxy.uploadMedia(media) {

@@ -25,23 +25,23 @@ enum CreateRoomViewModelAction {
 }
 
 struct CreateRoomViewState: BindableState {
+    var roomName: String
     let homeserver: String
     let isKnockingFeatureEnabled: Bool
     var selectedUsers: [UserProfileProxy]
+    var addressName: String
     var bindings: CreateRoomViewStateBindings
     var avatarURL: URL?
     var canCreateRoom: Bool {
-        !bindings.roomName.isEmpty
+        roomName.isEmpty
     }
 }
 
 struct CreateRoomViewStateBindings {
-    var roomName: String
     var roomTopic: String
     var isRoomPrivate: Bool
     var isKnockingOnly = false
     var showAttachmentConfirmationDialog = false
-    var addressName = ""
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<CreateRoomScreenErrorType>?
@@ -53,4 +53,6 @@ enum CreateRoomViewAction {
     case displayCameraPicker
     case displayMediaPicker
     case removeImage
+    case updateName(String)
+    case updateAddress(String)
 }
