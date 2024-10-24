@@ -1,3 +1,19 @@
+## Changes in 1.9.3 (2024-10-24)
+
+### What's Changed
+
+🙌 Improvements
+* Update HeroImage to match the BigIcon component from Compound. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3439
+* Update compound to change checkmark color by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3440
+
+🐛 Bugfixes
+* Fix a bug where the pinned items banner could overlay the composer. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3441
+* Fix composer mention pills showing up as file icons on first use on iOS 18 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3444
+* Fix a bug where the room state wouldn't indicate when a call was in progress. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3442
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.9.2...1.9.3
+
 ## Changes in 1.9.2 (2024-10-23)
 
 ### What's Changed
