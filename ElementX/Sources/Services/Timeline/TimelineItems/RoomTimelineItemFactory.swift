@@ -157,8 +157,14 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             case .unknown:
                 encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .unknown)
                 errorLabel = L10n.commonWaitingForDecryptionKey
-            case .membership:
-                encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .membership)
+            case .verificationViolation:
+                encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .verificationViolation)
+                errorLabel = L10n.commonUnableToDecryptVerificationViolation
+            case .unsignedDevice, .unknownDevice:
+                encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .insecureDevice)
+                errorLabel = L10n.commonUnableToDecryptInsecureDevice
+            case .sentBeforeWeJoined:
+                encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .sentBeforeWeJoined)
                 errorLabel = L10n.commonUnableToDecryptNoAccess
             }
         case .olmV1Curve25519AesSha2(let senderKey):

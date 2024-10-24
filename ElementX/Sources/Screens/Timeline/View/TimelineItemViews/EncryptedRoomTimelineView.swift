@@ -17,7 +17,9 @@ struct EncryptedRoomTimelineView: View {
             switch cause {
             case .unknown:
                 return \.time
-            case .membership:
+            case .sentBeforeWeJoined,
+                 .verificationViolation,
+                 .insecureDevice:
                 return \.block
             }
         default:
@@ -90,7 +92,7 @@ struct EncryptedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     private static func expectedItemWith(timestamp: String, isOutgoing: Bool, senderId: String) -> EncryptedRoomTimelineItem {
         EncryptedRoomTimelineItem(id: .randomEvent,
                                   body: L10n.commonUnableToDecryptNoAccess,
-                                  encryptionType: .megolmV1AesSha2(sessionID: "foo", cause: .membership),
+                                  encryptionType: .megolmV1AesSha2(sessionID: "foo", cause: .sentBeforeWeJoined),
                                   timestamp: timestamp,
                                   isOutgoing: isOutgoing,
                                   isEditable: false,
