@@ -342,7 +342,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     func setName(_ name: String) async -> Result<Void, RoomProxyError> {
         do {
-            return try await .success(room.setName(name: name))
+            try await room.setName(name: name)
+            roomInfo = try? await roomListItem.roomInfo()
+            return .success(())
         } catch {
             MXLog.error("Failed setting name with error: \(error)")
             return .failure(.sdkError(error))
@@ -375,7 +377,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
 
         do {
             let data = try Data(contentsOf: imageURL)
-            return try await .success(room.uploadAvatar(mimeType: mimeType, data: data, mediaInfo: nil))
+            try await room.uploadAvatar(mimeType: mimeType, data: data, mediaInfo: nil)
+            roomInfo = try? await roomListItem.roomInfo()
+            return .success(())
         } catch {
             MXLog.error("Failed uploading avatar with error: \(error)")
             return .failure(.sdkError(error))

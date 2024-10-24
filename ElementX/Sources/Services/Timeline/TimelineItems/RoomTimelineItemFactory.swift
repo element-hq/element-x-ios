@@ -751,11 +751,13 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                      avatarURLString: String?,
                                                      previousAvatarURLString: String?,
                                                      isOutgoing: Bool) -> RoomTimelineItemProtocol? {
+        let displayNameChanged = displayName != previousDisplayName
+        let memberName = displayNameChanged ? previousDisplayName : eventItemProxy.sender.displayName
         guard let text = stateEventStringBuilder.buildProfileChangeString(displayName: displayName,
                                                                           previousDisplayName: previousDisplayName,
                                                                           avatarURLString: avatarURLString,
                                                                           previousAvatarURLString: previousAvatarURLString,
-                                                                          member: eventItemProxy.sender.id,
+                                                                          member: memberName ?? eventItemProxy.sender.id,
                                                                           memberIsYou: isOutgoing) else { return nil }
         return buildStateTimelineItem(for: eventItemProxy, text: text, isOutgoing: isOutgoing)
     }

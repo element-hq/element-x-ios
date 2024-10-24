@@ -198,7 +198,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         rooms = diffs.reduce(rooms) { currentItems, diff in
-            return processDiff(diff, on: currentItems)
+            processDiff(diff, on: currentItems)
         }
     }
     

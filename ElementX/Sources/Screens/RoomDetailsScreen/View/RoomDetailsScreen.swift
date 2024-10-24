@@ -49,13 +49,13 @@ struct RoomDetailsScreen: View {
                actions: blockUserAlertActions,
                message: blockUserAlertMessage)
         .toolbar {
-//            ToolbarItem(placement: .navigationBarTrailing) {
-//                if context.viewState.canEdit {
-//                    Button(L10n.actionEdit) {
-//                        context.send(viewAction: .processTapEdit)
-//                    }
-//                }
-//            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                if context.viewState.canEdit {
+                    Button(L10n.actionEdit) {
+                        context.send(viewAction: .processTapEdit)
+                    }
+                }
+            }
         }
         .navigationTitle(L10n.screenRoomDetailsTitle)
         .navigationBarTitleDisplayMode(.inline)
