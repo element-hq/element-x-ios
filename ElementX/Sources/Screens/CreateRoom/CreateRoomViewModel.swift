@@ -104,6 +104,21 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     // MARK: - Private
 
     private func setupBindings() {
+        // Reset the state related to public rooms if the user choses the room to be empty
+        context.$viewState
+            .dropFirst()
+            .map(\.bindings.isRoomPrivate)
+            .removeDuplicates()
+            .filter { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                state.bindings.isKnockingOnly = false
+                state.addressName = state.roomName.toValidAddress
+                syncNameAndAddress = true
+            }
+            .store(in: &cancellables)
+        
         context.$viewState
             .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
             .removeDuplicates { old, new in
