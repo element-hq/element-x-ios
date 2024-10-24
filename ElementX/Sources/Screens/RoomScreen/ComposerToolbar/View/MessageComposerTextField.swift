@@ -110,6 +110,11 @@ private struct UITextViewWrapper: UIViewRepresentable {
             // Remember the selection if only the attributes have changed.
             let selection = textView.attributedText.string == text.string ? textView.selectedTextRange : nil
             
+            // Fixes pill views not loading on the first attempt on iOS 18
+            // because the textContainers's superview comes in as nil
+            // https://github.com/element-hq/element-x-ios/issues/3369
+            _ = textView.layoutManager
+            
             textView.attributedText = text
             
             // Re-apply the default font when setting text for e.g. edits.
