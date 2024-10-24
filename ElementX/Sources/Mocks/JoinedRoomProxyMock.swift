@@ -47,18 +47,7 @@ extension JoinedRoomProxyMock {
         self.init()
 
         id = configuration.id
-        name = configuration.name
-        topic = configuration.topic
-        avatar = .room(id: configuration.id, name: configuration.name, avatarURL: configuration.avatarURL) // Note: This doesn't replicate the real proxy logic.
-        avatarURL = configuration.avatarURL
-        isDirect = configuration.isDirect
-        isSpace = configuration.isSpace
-        isPublic = configuration.isPublic
         isEncrypted = configuration.isEncrypted
-        hasOngoingCall = configuration.hasOngoingCall
-        canonicalAlias = configuration.canonicalAlias
-        
-        underlyingPinnedEventIDs = configuration.pinnedEventIDs
         
         let timeline = TimelineProxyMock()
         timeline.sendMessageEventContentReturnValue = .success(())
@@ -83,9 +72,6 @@ extension JoinedRoomProxyMock {
         membersPublisher = CurrentValueSubject(configuration.members).asCurrentValuePublisher()
         typingMembersPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
         identityStatusChangesPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
-        
-        joinedMembersCount = configuration.members.filter { $0.membership == .join }.count
-        activeMembersCount = configuration.members.filter { $0.membership == .join || $0.membership == .invite }.count
 
         updateMembersClosure = { }
         setNameClosure = { _ in .success(()) }
@@ -103,7 +89,6 @@ extension JoinedRoomProxyMock {
 
         flagAsUnreadReturnValue = .success(())
         markAsReadReceiptTypeReturnValue = .success(())
-        underlyingIsFavourite = false
         flagAsFavouriteReturnValue = .success(())
         
         powerLevelsReturnValue = .success(.mock)

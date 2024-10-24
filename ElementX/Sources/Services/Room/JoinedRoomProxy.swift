@@ -86,69 +86,11 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     // A room identifier is constant and lazy stops it from being fetched
     // multiple times over FFI
     lazy var id: String = room.id()
-    
-    var canonicalAlias: String? {
-        infoSubject.value.canonicalAlias
-    }
-    
-    var ownUserID: String {
-        room.ownUserId()
-    }
-    
-    var name: String? {
-        infoSubject.value.displayName
-    }
-        
-    var topic: String? {
-        infoSubject.value.topic
-    }
-    
-    var avatarURL: URL? {
-        infoSubject.value.avatarURL
-    }
-    
-    var avatar: RoomAvatar {
-        infoSubject.value.avatar
-    }
-    
-    var isDirect: Bool {
-        infoSubject.value.isDirect
-    }
-    
-    var isPublic: Bool {
-        infoSubject.value.isPublic
-    }
-    
-    var isSpace: Bool {
-        infoSubject.value.isSpace
-    }
-    
-    var joinedMembersCount: Int {
-        infoSubject.value.joinedMembersCount
-    }
-    
-    var activeMembersCount: Int {
-        infoSubject.value.activeMembersCount
-    }
+    var ownUserID: String { room.ownUserId() }
+    var info: RoomInfoProxy { infoSubject.value }
     
     var isEncrypted: Bool {
         (try? room.isEncrypted()) ?? false
-    }
-    
-    var isFavourite: Bool {
-        infoSubject.value.isFavourite
-    }
-    
-    var pinnedEventIDs: Set<String> {
-        infoSubject.value.pinnedEventIDs
-    }
-    
-    var hasOngoingCall: Bool {
-        infoSubject.value.hasRoomCall
-    }
-    
-    var activeRoomCallParticipants: [String] {
-        infoSubject.value.activeRoomCallParticipants
     }
     
     init(roomListService: RoomListServiceProtocol,

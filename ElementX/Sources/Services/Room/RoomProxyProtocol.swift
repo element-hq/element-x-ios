@@ -28,37 +28,19 @@ enum RoomProxyType {
 // sourcery: AutoMockable
 protocol RoomProxyProtocol {
     var id: String { get }
-    var canonicalAlias: String? { get }
-    
     var ownUserID: String { get }
-    
-    var name: String? { get }
-    var topic: String? { get }
-    
-    /// The room's avatar info for use in a ``RoomAvatarImage``.
-    var avatar: RoomAvatar { get }
-    /// The room's avatar URL. Use this for editing and favour ``avatar`` for display.
-    var avatarURL: URL? { get }
-    
-    var isPublic: Bool { get }
-    var isDirect: Bool { get }
-    var isSpace: Bool { get }
-    
-    var joinedMembersCount: Int { get }
-    
-    var activeMembersCount: Int { get }
 }
 
 // sourcery: AutoMockable
 protocol InvitedRoomProxyProtocol: RoomProxyProtocol {
-    var inviter: RoomMemberProxyProtocol? { get async }
-    
+    var info: RoomInfoProxy { get }
     func rejectInvitation() async -> Result<Void, RoomProxyError>
     func acceptInvitation() async -> Result<Void, RoomProxyError>
 }
 
 // sourcery: AutoMockable
 protocol KnockedRoomProxyProtocol: RoomProxyProtocol {
+    var info: RoomInfoProxy { get }
     func cancelKnock() async -> Result<Void, RoomProxyError>
 }
 
@@ -69,11 +51,6 @@ enum JoinedRoomProxyAction: Equatable {
 // sourcery: AutoMockable
 protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     var isEncrypted: Bool { get }
-    var isFavourite: Bool { get }
-    var pinnedEventIDs: Set<String> { get }
-    
-    var hasOngoingCall: Bool { get }
-    var activeRoomCallParticipants: [String] { get }
     
     var infoPublisher: CurrentValuePublisher<RoomInfoProxy, Never> { get }
 
@@ -176,21 +153,15 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
 extension JoinedRoomProxyProtocol {
     var details: RoomDetails {
         RoomDetails(id: id,
-                    name: name,
-                    avatar: avatar,
-                    canonicalAlias: canonicalAlias,
+                    name: infoPublisher.value.displayName,
+                    avatar: infoPublisher.value.avatar,
+                    canonicalAlias: infoPublisher.value.canonicalAlias,
                     isEncrypted: isEncrypted,
-                    isPublic: isPublic)
-    }
-        
-    // Avoids to duplicate the same logic around in the app
-    // Probably this should be done in rust.
-    var roomTitle: String {
-        name ?? "Unknown room 💥"
+                    isPublic: infoPublisher.value.isPublic)
     }
     
     var isEncryptedOneToOneRoom: Bool {
-        isDirect && isEncrypted && activeMembersCount <= 2
+        infoPublisher.value.isDirect && isEncrypted && infoPublisher.value.activeMembersCount <= 2
     }
 
     func members() async -> [RoomMemberProxyProtocol]? {

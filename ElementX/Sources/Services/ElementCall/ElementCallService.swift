@@ -291,7 +291,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         // it from what we have. If the call is running before subscribing then wait
         // for it to change to `false` otherwise wait for it to turn `true` before
         // changing to `false`
-        let isCallOngoing = roomProxy.hasOngoingCall
+        let isCallOngoing = roomProxy.infoPublisher.value.hasRoomCall
         
         roomProxy
             .infoPublisher
