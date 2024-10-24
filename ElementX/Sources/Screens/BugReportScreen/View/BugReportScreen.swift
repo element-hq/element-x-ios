@@ -30,7 +30,7 @@ struct BugReportScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .interactiveDismissDisabled()
-        .onChange(of: selectedScreenshot) { _, newItem in
+        .onChange(of: selectedScreenshot, initial: true) { _, newItem in
             Task {
                 guard let data = try? await newItem?.loadTransferable(type: Data.self),
                       let image = UIImage(data: data)

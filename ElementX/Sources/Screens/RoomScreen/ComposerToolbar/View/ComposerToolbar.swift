@@ -180,12 +180,12 @@ struct ComposerToolbar: View {
             guard !composerFocused else { return }
             composerFocused = true
         }
-        .onChange(of: context.composerFocused) { _, newValue in
+        .onChange(of: context.composerFocused, initial: true) { _, newValue in
             guard composerFocused != newValue else { return }
             
             composerFocused = newValue
         }
-        .onChange(of: composerFocused) { _, newValue in
+        .onChange(of: composerFocused, initial: true) { _, newValue in
             context.composerFocused = newValue
         }
         .onChange(of: context.plainComposerText) {

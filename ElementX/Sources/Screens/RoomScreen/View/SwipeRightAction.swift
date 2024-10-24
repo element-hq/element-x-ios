@@ -32,7 +32,7 @@ struct SwipeRightAction<Label: View>: ViewModifier {
             .offset(x: xOffset, y: 0.0)
             .animation(.interactiveSpring().speed(0.5), value: xOffset)
             .timelineGesture(gesture)
-            .onChange(of: dragGestureActive) { _, newValue in
+            .onChange(of: dragGestureActive, initial: true) { _, newValue in
                 if newValue == true {
                     if shouldStartAction() {
                         feedbackGenerator.prepare()

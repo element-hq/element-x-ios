@@ -19,7 +19,7 @@ struct SecureBackupRecoveryKeyScreen: View {
             ScrollViewReader { reader in
                 mainContent
                     .padding(16)
-                    .onChange(of: focused) { _, newValue in
+                    .onChange(of: focused, initial: true) { _, newValue in
                         guard newValue == true else { return }
                         reader.scrollTo(textFieldIdentifier)
                     }
