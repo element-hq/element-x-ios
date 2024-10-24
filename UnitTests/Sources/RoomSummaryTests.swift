@@ -57,7 +57,6 @@ class RoomSummaryTests: XCTestCase {
         RoomSummary(roomListItem: .init(noPointer: .init()),
                     id: roomDetails.id,
                     joinRequestType: nil,
-                    inviter: nil,
                     name: roomDetails.name,
                     isDirect: isDirect,
                     avatarURL: hasRoomAvatar ? roomDetails.avatarURL : nil,
