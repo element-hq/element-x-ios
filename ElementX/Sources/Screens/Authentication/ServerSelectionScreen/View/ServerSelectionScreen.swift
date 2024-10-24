@@ -59,7 +59,7 @@ struct ServerSelectionScreen: View {
                 .keyboardType(.URL)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
-                .onChange(of: context.homeserverAddress) { _ in context.send(viewAction: .clearFooterError) }
+                .onChange(of: context.homeserverAddress) { context.send(viewAction: .clearFooterError) }
                 .submitLabel(.done)
                 .onSubmit(submit)
             

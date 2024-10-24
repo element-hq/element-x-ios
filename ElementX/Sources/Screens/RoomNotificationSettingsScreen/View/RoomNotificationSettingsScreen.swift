@@ -35,7 +35,7 @@ struct RoomNotificationSettingsScreen: View {
                     kind: .toggle($context.allowCustomSetting))
                 .accessibilityIdentifier(A11yIdentifiers.roomNotificationSettingsScreen.allowCustomSetting)
                 .disabled(context.viewState.notificationSettingsState.isLoading)
-                .onChange(of: context.allowCustomSetting) { _ in
+                .onChange(of: context.allowCustomSetting) {
                     context.send(viewAction: .changedAllowCustomSettings)
                 }
         } footer: {

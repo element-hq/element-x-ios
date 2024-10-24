@@ -74,7 +74,9 @@ struct LoginScreen: View {
             .textContentType(.username)
             .autocapitalization(.none)
             .submitLabel(.next)
-            .onChange(of: isUsernameFocused, perform: usernameFocusChanged)
+            .onChange(of: isUsernameFocused) { _, newValue in
+                usernameFocusChanged(isFocussed: newValue)
+            }
             .onSubmit { isPasswordFocused = true }
             .padding(.bottom, 20)
             
