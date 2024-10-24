@@ -42,7 +42,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                                                          homeserver: ":\(userSession.clientProxy.serverName ?? "")",
                                                          isKnockingFeatureEnabled: appSettings.knockingEnabled,
                                                          selectedUsers: selectedUsers.value,
-                                                         addressName: parameters.name.split(separator: " ").joined(separator: "-").lowercased(),
+                                                         addressName: parameters.name.toValidAddress,
                                                          bindings: bindings),
                    mediaProvider: userSession.mediaProvider)
         
@@ -88,7 +88,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         case .removeImage:
             actionsSubject.send(.removeImage)
         case .updateAddress(let address):
-            state.addressName = address
+            state.addressName = address.toValidAddress
             syncNameAndAddress = false
         case .updateName(let name):
             if name.isEmpty {
@@ -96,7 +96,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             }
             state.roomName = name
             if syncNameAndAddress {
-                state.addressName = name.split(separator: " ").joined(separator: "-").lowercased()
+                state.addressName = name.toValidAddress
             }
         }
     }
@@ -188,5 +188,11 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     
     private func hideLoadingIndicator() {
         userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+    }
+}
+
+private extension String {
+    var toValidAddress: Self {
+        split(separator: " ").joined(separator: "-").lowercased()
     }
 }
