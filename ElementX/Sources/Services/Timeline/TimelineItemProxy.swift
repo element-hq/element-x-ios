@@ -83,18 +83,19 @@ class EventTimelineItemProxy {
         }
         
         switch localSendState {
-        case .sendingFailed(_, let isRecoverable):
-            return isRecoverable ? .sending : .sendingFailed(.unknown)
+        case .sendingFailed(let error, let isRecoverable):
+            switch error {
+            case .identityViolations(let users):
+                return .sendingFailed(.verifiedUser(.changedIdentity(users: users)))
+            case .insecureDevices(let userDeviceMap):
+                return .sendingFailed(.verifiedUser(.hasUnsignedDevice(devices: userDeviceMap)))
+            default:
+                return .sendingFailed(.unknown)
+            }
         case .notSentYet:
             return .sending
         case .sent:
             return .sent
-        case .verifiedUserHasUnsignedDevice(devices: let devices):
-            return .sendingFailed(.verifiedUser(.hasUnsignedDevice(devices: devices)))
-        case .verifiedUserChangedIdentity(users: let users):
-            return .sendingFailed(.verifiedUser(.changedIdentity(users: users)))
-        case .crossSigningNotSetup, .sendingFromUnverifiedDevice:
-            return .sendingFailed(.unknown)
         }
     }()
     
