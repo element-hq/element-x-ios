@@ -37,7 +37,7 @@ struct IdentityConfirmationScreen: View {
     @ViewBuilder
     private var screenHeader: some View {
         VStack(spacing: 0) {
-            HeroImage(icon: \.lockSolid)
+            BigIcon(icon: \.lockSolid)
                 .padding(.bottom, 16)
             
             Text(L10n.screenIdentityConfirmationTitle)
@@ -108,7 +108,7 @@ struct IdentityConfirmationScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             IdentityConfirmationScreen(context: viewModel.context)
         }
-        .snapshotPreferences(delay: 0.25)
+        .snapshotPreferences(delay: 1)
     }
     
     private static var viewModel: IdentityConfirmationScreenViewModel {

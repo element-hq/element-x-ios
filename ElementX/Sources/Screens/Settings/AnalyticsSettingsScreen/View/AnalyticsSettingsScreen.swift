@@ -24,7 +24,7 @@ struct AnalyticsSettingsScreen: View {
         Section {
             ListRow(label: .plain(title: L10n.screenAnalyticsSettingsShareData),
                     kind: .toggle($context.enableAnalytics))
-                .onChange(of: context.enableAnalytics) { _ in
+                .onChange(of: context.enableAnalytics) {
                     context.send(viewAction: .toggleAnalytics)
                 }
         } footer: {

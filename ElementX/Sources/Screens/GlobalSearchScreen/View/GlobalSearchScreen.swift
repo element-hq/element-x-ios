@@ -49,7 +49,7 @@ struct GlobalSearchScreen: View {
             selectedRoom = context.viewState.rooms.first
             searchFieldFocus = true
         }
-        .onChange(of: context.viewState.rooms) { _ in
+        .onChange(of: context.viewState.rooms) {
             selectedRoom = context.viewState.rooms.first
         }
         .onTapGesture {

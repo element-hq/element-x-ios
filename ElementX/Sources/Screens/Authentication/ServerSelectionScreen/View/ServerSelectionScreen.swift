@@ -32,7 +32,7 @@ struct ServerSelectionScreen: View {
     var header: some View {
         VStack(spacing: 8) {
             Image(asset: Asset.Images.serverSelectionIcon)
-                .heroImage(insets: 19)
+                .bigIcon(insets: 19)
                 .padding(.bottom, 8)
             
             Text(L10n.screenChangeServerTitle)
@@ -59,7 +59,7 @@ struct ServerSelectionScreen: View {
                 .keyboardType(.URL)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
-                .onChange(of: context.homeserverAddress) { _ in context.send(viewAction: .clearFooterError) }
+                .onChange(of: context.homeserverAddress) { context.send(viewAction: .clearFooterError) }
                 .submitLabel(.done)
                 .onSubmit(submit)
             
@@ -107,7 +107,7 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             ServerSelectionScreen(context: invalidViewModel.context)
         }
-        .snapshotPreferences(delay: 0.25)
+        .snapshotPreferences(delay: 1)
     }
     
     static func makeViewModel(for homeserverAddress: String) -> ServerSelectionScreenViewModel {

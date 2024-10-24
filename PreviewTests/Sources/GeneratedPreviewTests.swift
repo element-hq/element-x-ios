@@ -83,6 +83,12 @@ extension PreviewTests {
         }
     }
 
+    func test_bigIcon() {
+        for preview in BigIcon_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_blockedUsersScreen() {
         for preview in BlockedUsersScreen_Previews._allPreviews {
             assertSnapshots(matching: preview)
@@ -221,12 +227,6 @@ extension PreviewTests {
         }
     }
 
-    func test_heroImage() {
-        for preview in HeroImage_Previews._allPreviews {
-            assertSnapshots(matching: preview)
-        }
-    }
-
     func test_highlightedTimelineItemModifier() {
         for preview in HighlightedTimelineItemModifier_Previews._allPreviews {
             assertSnapshots(matching: preview)
@@ -241,6 +241,12 @@ extension PreviewTests {
 
     func test_homeScreenInviteCell() {
         for preview in HomeScreenInviteCell_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_homeScreenKnockedCell() {
+        for preview in HomeScreenKnockedCell_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }

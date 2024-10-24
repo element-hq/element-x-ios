@@ -29,7 +29,7 @@ struct ServerConfirmationScreen: View {
     var header: some View {
         VStack(spacing: 8) {
             Image(systemSymbol: .personCropCircleFill)
-                .heroImage()
+                .bigIcon()
                 .padding(.bottom, 8)
             
             Text(context.viewState.title)

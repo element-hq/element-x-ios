@@ -59,8 +59,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         case .declineInvite:
             showDeclineInviteConfirmationAlert()
         case .cancelKnock:
-            // TODO: implement once available
-            break
+            showCancelKnockConfirmationAlert()
         }
     }
     
@@ -78,15 +77,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             Task { await updateRoomDetails() }
         }
         
-        // Using only the preview API isn't enough as it's not capable
-        // of giving us information for non-joined rooms (at least not on synapse)
-        // See if we known about the room locally and, if so, have that
-        // take priority over the preview one.
-        
-        if let room = await clientProxy.roomForIdentifier(roomID) {
-            self.room = room
-            await updateRoomDetails()
-        }
+        await updateRoom()
         
         switch await clientProxy.roomPreviewForIdentifier(roomID, via: via) {
         case .success(let roomPreviewDetails):
@@ -96,6 +87,17 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             break // Handled by the mode, we don't need an error indicator.
         case .failure:
             userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+        }
+    }
+    
+    private func updateRoom() async {
+        // Using only the preview API isn't enough as it's not capable
+        // of giving us information for non-joined rooms (at least not on synapse)
+        // See if we known about the room locally and, if so, have that
+        // take priority over the preview one.
+        if let room = await clientProxy.roomForIdentifier(roomID) {
+            self.room = room
+            await updateRoomDetails()
         }
     }
     
@@ -188,16 +190,19 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             switch await clientProxy.knockRoomAlias(alias,
                                                     message: state.bindings.knockMessage.isBlank ? nil : state.bindings.knockMessage) {
             case .success:
-                state.mode = .knocked
+                // The room should become knocked through the sync
+                await updateRoom()
             case .failure(let error):
                 MXLog.error("Failed knocking room alias: \(alias) with error: \(error)")
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
             }
         } else {
             switch await clientProxy.knockRoom(roomID,
+                                               via: via,
                                                message: state.bindings.knockMessage.isBlank ? nil : state.bindings.knockMessage) {
             case .success:
-                state.mode = .knocked
+                // The room should become knocked through the sync
+                await updateRoom()
             case .failure(let error):
                 MXLog.error("Failed knocking room id: \(roomID) with error: \(error)")
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
@@ -219,6 +224,14 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                                          secondaryButton: .init(title: L10n.actionDecline, role: .destructive, action: { Task { await self.declineInvite() } }))
     }
     
+    private func showCancelKnockConfirmationAlert() {
+        state.bindings.alertInfo = .init(id: .cancelKnock,
+                                         title: L10n.screenJoinRoomCancelKnockAlertTitle,
+                                         message: L10n.screenJoinRoomCancelKnockAlertDescription,
+                                         primaryButton: .init(title: L10n.actionNo, role: .cancel, action: nil),
+                                         secondaryButton: .init(title: L10n.screenJoinRoomCancelKnockAlertConfirmation, role: .destructive, action: { Task { await self.cancelKnock() } }))
+    }
+    
     private func declineInvite() async {
         defer {
             userIndicatorController.retractIndicatorWithId(roomID)
@@ -235,6 +248,29 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         
         if case .failure = result {
             userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+        } else {
+            actionsSubject.send(.dismiss)
+        }
+    }
+    
+    private func cancelKnock() async {
+        defer {
+            userIndicatorController.retractIndicatorWithId(roomID)
+        }
+        
+        userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
+        
+        guard case let .knocked(roomProxy) = room else {
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            return
+        }
+        
+        let result = await roomProxy.cancelKnock()
+        
+        if case .failure = result {
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+        } else {
+            actionsSubject.send(.dismiss)
         }
     }
     

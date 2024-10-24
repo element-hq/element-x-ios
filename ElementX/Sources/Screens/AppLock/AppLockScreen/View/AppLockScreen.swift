@@ -29,7 +29,7 @@ struct AppLockScreen: View {
                 pinInputField
                     .padding(.bottom, 16)
                     .offset(x: pinInputFieldOffset)
-                    .onChange(of: context.viewState.numberOfPINAttempts) { newValue in
+                    .onChange(of: context.viewState.numberOfPINAttempts) { _, newValue in
                         guard newValue > 0 else { return } // Reset without animation in Previews.
                         accessibilitySubtitleFocus = true
                         Task { await animatePINFailure() }

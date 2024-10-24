@@ -69,7 +69,8 @@ struct HomeScreenInviteCell: View {
 
     @ViewBuilder
     private var inviterView: some View {
-        if let inviter = room.inviter, !room.isDirect {
+        if let inviter = room.inviter,
+           !room.isDirect {
             RoomInviterLabel(inviter: inviter, mediaProvider: context.mediaProvider)
                 .font(.compound.bodyMD)
                 .foregroundStyle(.compound.textPlaceholder)
@@ -177,8 +178,7 @@ private extension HomeScreenRoom {
         
         let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
                                   id: "@someone:somewhere.com",
-                                  isInvite: false,
-                                  inviter: inviter,
+                                  joinRequestType: .invite(inviter: inviter),
                                   name: "Some Guy",
                                   isDirect: true,
                                   avatarURL: nil,
@@ -205,8 +205,7 @@ private extension HomeScreenRoom {
         
         let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
                                   id: "@someone:somewhere.com",
-                                  isInvite: false,
-                                  inviter: inviter,
+                                  joinRequestType: .invite(inviter: inviter),
                                   name: "Awesome Room",
                                   isDirect: false,
                                   avatarURL: avatarURL,

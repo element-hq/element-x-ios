@@ -51,8 +51,8 @@ struct VoiceMessageRoomPlaybackView: View {
         }
         .padding(.leading, 2)
         .padding(.trailing, 8)
-        .onChange(of: isDragging) { isDragging in
-            onScrubbing(isDragging)
+        .onChange(of: isDragging) { _, newValue in
+            onScrubbing(newValue)
         }
     }
 

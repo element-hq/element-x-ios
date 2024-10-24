@@ -1,3 +1,52 @@
+## Changes in 1.9.3 (2024-10-24)
+
+### What's Changed
+
+🙌 Improvements
+* Update HeroImage to match the BigIcon component from Compound. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3439
+* Update compound to change checkmark color by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3440
+
+🐛 Bugfixes
+* Fix a bug where the pinned items banner could overlay the composer. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3441
+* Fix composer mention pills showing up as file icons on first use on iOS 18 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3444
+* Fix a bug where the room state wouldn't indicate when a call was in progress. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3442
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.9.2...1.9.3
+
+## Changes in 1.9.2 (2024-10-23)
+
+### What's Changed
+
+🙌 Improvements
+* Add support for rendering media captions in the timeline. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3429
+* Show a verification badge on the Room Member/User Profile screens. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3427
+
+🐛 Bugfixes
+* Only subscribe to identity updates if the room is encrypted. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3414
+* Fix the pinned identity banner to always show the user ID regardless of ambiguity. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3415
+* Fix a bug where uploaded images could have the wrong aspect ratio in the timeline. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3435
+
+⚠️ API Changes
+* Adopt various rust side Timeline API additions by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3423
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3433
+
+🚧 In development 🚧
+* Allow image uploads to be optimised to reduce bandwidth. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3412
+* Knock and knocked state for the join room screen by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3424
+
+Others
+* Fix some warnings. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3416
+* Refactor the`TimelineItemIdentifier` handling by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3418
+* Remove superfluous media request upload handle cancellation call. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3425
+* Update dependency fastlane to v2.225.0 by @renovate in https://github.com/element-hq/element-x-ios/pull/3434
+* Adopt various Rust side API changes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3437
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.9.1...1.9.2
+
 ## Changes in 1.9.1 (2024-10-15)
 
 ### What's Changed

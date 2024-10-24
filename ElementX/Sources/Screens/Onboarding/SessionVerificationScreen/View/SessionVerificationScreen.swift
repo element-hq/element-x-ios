@@ -58,11 +58,11 @@ struct SessionVerificationScreen: View {
     private var screenHeader: some View {
         VStack(spacing: 0) {
             if context.viewState.verificationState == .initial {
-                HeroImage(icon: \.lockSolid)
+                BigIcon(icon: \.lockSolid)
                     .padding(.bottom, 16)
             } else {
                 Image(systemName: headerImageName)
-                    .heroImage()
+                    .bigIcon()
                     .padding(.bottom, 16)
             }
             

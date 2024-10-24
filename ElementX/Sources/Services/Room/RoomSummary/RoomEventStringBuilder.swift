@@ -26,7 +26,9 @@ struct RoomEventStringBuilder {
         switch eventItemProxy.content {
         case .unableToDecrypt(let encryptedMessage):
             let errorMessage = switch encryptedMessage {
-            case .megolmV1AesSha2(_, .membership): L10n.commonUnableToDecryptNoAccess
+            case .megolmV1AesSha2(_, .sentBeforeWeJoined): L10n.commonUnableToDecryptNoAccess
+            case .megolmV1AesSha2(_, .verificationViolation): L10n.commonUnableToDecryptVerificationViolation
+            case .megolmV1AesSha2(_, .unknownDevice), .megolmV1AesSha2(_, .unsignedDevice): L10n.commonUnableToDecryptInsecureDevice
             default: L10n.commonWaitingForDecryptionKey
             }
             return prefix(errorMessage, with: displayName)

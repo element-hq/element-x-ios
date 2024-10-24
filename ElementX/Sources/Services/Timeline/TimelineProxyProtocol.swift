@@ -18,7 +18,6 @@ enum TimelineKind {
 enum TimelineProxyError: Error {
     case sdkError(Error)
     
-    case failedEditing
     case failedRedacting
     case failedPaginatingEndReached
 }

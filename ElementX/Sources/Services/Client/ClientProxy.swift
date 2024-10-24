@@ -415,10 +415,9 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func knockRoom(_ roomID: String, message: String?) async -> Result<Void, ClientProxyError> {
+    func knockRoom(_ roomID: String, via: [String], message: String?) async -> Result<Void, ClientProxyError> {
         do {
-            // TODO: It should also include a message but the API for is not available yet
-            let _ = try await client.knock(roomIdOrAlias: roomID)
+            let _ = try await client.knock(roomIdOrAlias: roomID, reason: message, serverNames: via)
             await waitForRoomToSync(roomID: roomID, timeout: .seconds(30))
             return .success(())
         } catch {
@@ -429,8 +428,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func knockRoomAlias(_ roomAlias: String, message: String?) async -> Result<Void, ClientProxyError> {
         do {
-            // TODO: It should also include a message but the API for is not available yet
-            let room = try await client.knock(roomIdOrAlias: roomAlias)
+            let room = try await client.knock(roomIdOrAlias: roomAlias, reason: message, serverNames: [])
             await waitForRoomToSync(roomID: room.id(), timeout: .seconds(30))
             return .success(())
         } catch {

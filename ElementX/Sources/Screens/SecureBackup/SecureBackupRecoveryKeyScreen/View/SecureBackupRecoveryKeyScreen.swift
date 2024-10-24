@@ -19,7 +19,7 @@ struct SecureBackupRecoveryKeyScreen: View {
             ScrollViewReader { reader in
                 mainContent
                     .padding(16)
-                    .onChange(of: focused) { newValue in
+                    .onChange(of: focused) { _, newValue in
                         guard newValue == true else { return }
                         reader.scrollTo(textFieldIdentifier)
                     }
@@ -53,7 +53,7 @@ struct SecureBackupRecoveryKeyScreen: View {
     
     private var header: some View {
         VStack(spacing: 16) {
-            HeroImage(icon: \.keySolid)
+            BigIcon(icon: \.keySolid)
             
             Text(context.viewState.title)
                 .foregroundColor(.compound.textPrimary)

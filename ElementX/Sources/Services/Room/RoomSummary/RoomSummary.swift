@@ -9,12 +9,32 @@ import Foundation
 import MatrixRustSDK
 
 struct RoomSummary {
+    enum JoinRequestType {
+        case invite(inviter: RoomMemberProxyProtocol?)
+        case knock
+        
+        var isInvite: Bool {
+            if case .invite = self {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        var isKnock: Bool {
+            if case .knock = self {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+
     let roomListItem: RoomListItem
     
     let id: String
     
-    let isInvite: Bool
-    let inviter: RoomMemberProxyProtocol?
+    let joinRequestType: JoinRequestType?
     
     let name: String
     let isDirect: Bool
@@ -67,10 +87,9 @@ extension RoomSummary {
         unreadNotificationsCount = hasUnreadNotifications ? 1 : 0
         notificationMode = settingsMode
         canonicalAlias = nil
-        inviter = nil
         hasOngoingCall = false
         
-        isInvite = false
+        joinRequestType = nil
         isMarkedUnread = false
         isFavourite = false
     }

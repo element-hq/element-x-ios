@@ -43,7 +43,7 @@ struct ReactionsSummaryView: View {
                         scrollView.scrollTo(selectedReactionKey)
                     }
                 }
-                .onChange(of: selectedReactionKey) { _ in
+                .onChange(of: selectedReactionKey) {
                     scrollView.scrollTo(selectedReactionKey)
                 }
             }
