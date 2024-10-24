@@ -65,8 +65,8 @@ struct PollFormScreen: View {
                     }
                     .focused($focus, equals: .option(index: index))
                     .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.optionID(index))
-                    .onChange(of: context.options[index].text) { optionText in
-                        guard let lastCharacter = optionText.last, lastCharacter.isNewline else {
+                    .onChange(of: context.options[index].text) { _, newOptionText in
+                        guard let lastCharacter = newOptionText.last, lastCharacter.isNewline else {
                             return
                         }
                         

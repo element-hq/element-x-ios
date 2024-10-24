@@ -19,7 +19,7 @@ struct TypingIndicatorView: View {
             .truncationMode(.middle)
             .padding(.horizontal, 4)
             .animation(.elementDefault, value: typingMembers.members)
-            .onChange(of: typingMembers.members) { newValue in
+            .onChange(of: typingMembers.members) { _, newValue in
                 if !newValue.isEmpty {
                     didShowTextOnce = true
                 }

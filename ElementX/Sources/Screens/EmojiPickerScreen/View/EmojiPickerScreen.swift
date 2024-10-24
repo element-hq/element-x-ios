@@ -55,7 +55,7 @@ struct EmojiPickerScreen: View {
         }
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(isSearching ? .hidden : .visible)
-        .onChange(of: searchString) { _ in
+        .onChange(of: searchString) {
             context.send(viewAction: .search(searchString: searchString))
         }
     }

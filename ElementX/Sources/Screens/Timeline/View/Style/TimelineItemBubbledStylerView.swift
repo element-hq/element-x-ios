@@ -377,11 +377,12 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             .previewDisplayName("Replies")
         threads
             .previewDisplayName("Thread decorator")
+            .snapshotPreferences(delay: 1)
         encryptionAuthenticity
             .previewDisplayName("Encryption Indicators")
         pinned
             .previewDisplayName("Pinned messages")
-            .snapshotPreferences(delay: 2.0)
+            .snapshotPreferences(delay: 1)
     }
     
     static var mockTimeline: some View {
