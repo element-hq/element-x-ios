@@ -139,6 +139,7 @@
 "common_edited_suffix" = "(edited)";
 "common_editing" = "Editing";
 "common_emote" = "* %1$@ %2$@";
+"common_encryption" = "Encryption";
 "common_encryption_enabled" = "Encryption enabled";
 "common_enter_your_pin" = "Enter your PIN";
 "common_error" = "Error";
