@@ -452,15 +452,15 @@ private struct NavigationSplitCoordinatorView: View {
         }
         // Handle `horizontalSizeClass` changes breaking the navigation bar
         // https://github.com/element-hq/element-x-ios/issues/617
-        .onChange(of: horizontalSizeClass) { value in
+        .onChange(of: horizontalSizeClass) { _, newValue in
             guard scenePhase != .background else {
                 return
             }
             
-            isInSplitMode = value == .regular
+            isInSplitMode = newValue == .regular
         }
-        .onChange(of: scenePhase) { value in
-            guard value == .active else {
+        .onChange(of: scenePhase) { _, newValue in
+            guard newValue == .active else {
                 return
             }
             
