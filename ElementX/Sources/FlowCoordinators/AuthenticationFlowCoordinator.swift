@@ -212,17 +212,17 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
 //    private func showServerSelectionScreen(authenticationFlow: AuthenticationFlow) {
 //        let navigationCoordinator = NavigationStackCoordinator()
-//        
+//
 //        let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
 //                                                                    authenticationFlow: authenticationFlow,
 //                                                                    slidingSyncLearnMoreURL: appSettings.slidingSyncLearnMoreURL,
 //                                                                    userIndicatorController: userIndicatorController)
 //        let coordinator = ServerSelectionScreenCoordinator(parameters: parameters)
-//        
+//
 //        coordinator.actions
 //            .sink { [weak self] action in
 //                guard let self else { return }
-//                
+//
 //                switch action {
 //                case .updated:
 //                    navigationStackCoordinator.setSheetCoordinator(nil)
@@ -231,7 +231,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
 //                }
 //            }
 //            .store(in: &cancellables)
-//        
+//
 //        navigationCoordinator.setRootCoordinator(coordinator)
 //        navigationStackCoordinator.setSheetCoordinator(navigationCoordinator)
 //    }

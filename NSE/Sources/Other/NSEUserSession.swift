@@ -79,10 +79,8 @@ final class NSEUserSession {
                 return senderID
             }
         }
-        let senderDisplayInfo = NotificationSenderDisplayInfo(
-            name: notification.senderInfo.displayName ?? senderID,
-            avatarUrl: notification.senderInfo.avatarUrl
-        )
+        let senderDisplayInfo = NotificationSenderDisplayInfo(name: notification.senderInfo.displayName ?? senderID,
+                                                              avatarUrl: notification.senderInfo.avatarUrl)
         return senderDisplayInfo
     }
     

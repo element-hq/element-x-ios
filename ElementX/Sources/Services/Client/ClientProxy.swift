@@ -136,12 +136,10 @@ class ClientProxy: ClientProxyProtocol {
         /// Configure ZeroMatrixUserUtil
         let loggedInUser: String = (try? client.userId()) ?? ""
         let zeroUsersApi = ZeroUsersApi(appSettings: appSettings)
-        zeroMatrixUsersService = ZeroMatrixUsersService(
-            zeroUsersApi: zeroUsersApi,
-            appSettings: appSettings,
-            loggedInUserId: loggedInUser,
-            client: client
-        )
+        zeroMatrixUsersService = ZeroMatrixUsersService(zeroUsersApi: zeroUsersApi,
+                                                        appSettings: appSettings,
+                                                        loggedInUserId: loggedInUser,
+                                                        client: client)
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
@@ -349,7 +347,7 @@ class ClientProxy: ClientProxyProtocol {
                 let room = self.client.rooms().first(where: {
                     $0.heroes().count == 1 && $0.heroes().first?.userId == userID
                 })
-                //let roomID = try self.client.getDmRoom(userId: userID)?.id()
+                // let roomID = try self.client.getDmRoom(userId: userID)?.id()
                 return .success(room?.id())
             } catch {
                 MXLog.error("Failed retrieving direct room for userID: \(userID) with error: \(error)")

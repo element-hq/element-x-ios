@@ -16,7 +16,7 @@ struct RoomMemberDetailsScreen: View {
             headerSection
             
 //            verificationSection
-//            
+//
 //            if context.viewState.memberDetails != nil, !context.viewState.isOwnMemberDetails {
 //                blockUserSection
 //            }

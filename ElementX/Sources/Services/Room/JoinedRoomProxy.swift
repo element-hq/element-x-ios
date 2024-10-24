@@ -110,7 +110,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     var avatarURL: URL? {
-        //roomListItem.avatarUrl().flatMap(URL.init(string:))
+        // roomListItem.avatarUrl().flatMap(URL.init(string:))
         zeroUsersService.getRoomAvatarFromCache(roomId: id).flatMap(URL.init(string:))
     }
     
@@ -286,7 +286,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             let membersNoSyncIterator = try await room.membersNoSync()
             if let members = membersNoSyncIterator.nextChunk(chunkSize: membersNoSyncIterator.len()) {
                 membersSubject.value = members.map { member in
-                    return RoomMemberProxy(member: member)
+                    RoomMemberProxy(member: member)
                 }
             }
         } catch {
@@ -298,7 +298,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             let membersIterator = try await room.members()
             if let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) {
                 membersSubject.value = members.map { member in
-                    return RoomMemberProxy(member: member)
+                    RoomMemberProxy(member: member)
                 }
             }
         } catch {

@@ -1,7 +1,7 @@
 import Foundation
 
-extension String {
-    public func toMatrixUserIdFormat(_ homeServerPostFix: String) -> String? {
+public extension String {
+    func toMatrixUserIdFormat(_ homeServerPostFix: String) -> String? {
         if stringMatchesUserIdFormatRegex() {
             return "@\(self):\(homeServerPostFix)"
         } else {
@@ -10,19 +10,18 @@ extension String {
         }
     }
     
-    func stringMatchesUserIdFormatRegex() -> Bool {
+    internal func stringMatchesUserIdFormatRegex() -> Bool {
         let regex = #"^[0-9a-fA-F]+-[0-9a-fA-F]+-[0-9a-fA-F]+-[0-9a-fA-F]+-[0-9a-fA-F]+$"#
         let isMatch = range(of: regex, options: .regularExpression) != nil
         return isMatch
     }
     
-    public func matrixIdToCleanHex() -> String {
-        if self.contains("@"), self.contains(":") {
-            let startIndex = self.firstIndex(of: "@")!
-            let endIndex = self.firstIndex(of: ":")!
-            return self
-                .substring(to: endIndex)
-                .substring(from: self.index(after: startIndex))
+    func matrixIdToCleanHex() -> String {
+        if contains("@"), contains(":") {
+            let startIndex = firstIndex(of: "@")!
+            let endIndex = firstIndex(of: ":")!
+            return substring(to: endIndex)
+                .substring(from: index(after: startIndex))
         } else {
             return self
         }

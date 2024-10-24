@@ -215,46 +215,47 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         return updatedItems
     }
+    
+    struct RoomDetails {
+        var roomInfo: RoomInfo?
+        var latestEvent: EventTimelineItem?
+        var directUserProfile: UserProfile?
+        var lastMessageSenderProfile: UserProfile?
+    }
 
-    private func fetchRoomDetails(from roomListItem: RoomListItem) -> (roomInfo: RoomInfo?, latestEvent: EventTimelineItem?, directUserProfile: UserProfile?, lastMessageSenderProfile: UserProfile?) {
-        class FetchResult {
-            var roomInfo: RoomInfo?
-            var latestEvent: EventTimelineItem?
-            var directUserProfile: UserProfile?
-            var lastMessageSenderProfile: UserProfile?
-        }
-        
+    private func fetchRoomDetails(from roomListItem: RoomListItem) -> RoomDetails {
         let semaphore = DispatchSemaphore(value: 0)
-        let result = FetchResult()
+        var roomDetails = RoomDetails()
         
         Task {
             do {
-                result.latestEvent = await roomListItem.latestEvent()
+                roomDetails.latestEvent = await roomListItem.latestEvent()
                 let roomInfo = try await roomListItem.roomInfo()
-                result.roomInfo = roomInfo
+                roomDetails.roomInfo = roomInfo
                 
                 let isDirectChat = roomInfo.isDirect || roomInfo.joinedMembersCount <= 2
                 let shouldFetchProfile = (roomInfo.avatarUrl ?? "").isBlank
                 if isDirectChat, shouldFetchProfile {
                     if let userInfo = roomInfo.heroes.first {
-                        result.directUserProfile = UserProfile(userId: userInfo.userId, displayName: userInfo.displayName, avatarUrl: userInfo.avatarUrl)
+                        roomDetails.directUserProfile = UserProfile(userId: userInfo.userId, displayName: userInfo.displayName, avatarUrl: userInfo.avatarUrl)
                     } else if let directUserId = roomInfo.userPowerLevels.keys.first(where: { $0 != zeroUsersService.loggedInUserId }) {
-                        result.directUserProfile = try await zeroUsersService.getMatrixUserProfile(userId: directUserId)
+                        roomDetails.directUserProfile = try await zeroUsersService.getMatrixUserProfile(userId: directUserId)
                     }
                 }
                 
-                let lastMessageSenderName = result.latestEvent?.senderName ?? ""
-                let lastMessageSenderId = result.latestEvent?.sender ?? ""
-                if lastMessageSenderName.isDisplayNameAmbiguous(), !lastMessageSenderId.isBlank {
-                    result.lastMessageSenderProfile = try await zeroUsersService.getMatrixUserProfile(userId: lastMessageSenderId)
-                }
+//                let lastMessageSenderName = roomDetails.latestEvent?.senderName ?? ""
+//                let lastMessageSenderId = roomDetails.latestEvent?.sender ?? ""
+//                if lastMessageSenderName.isDisplayNameAmbiguous(), !lastMessageSenderId.isBlank {
+//                    roomDetails.lastMessageSenderProfile = try await zeroUsersService.getMatrixUserProfile(userId: lastMessageSenderId)
+//                }
             } catch {
                 MXLog.error("Failed fetching room info with error: \(error)")
             }
             semaphore.signal()
         }
         semaphore.wait()
-        return (result.roomInfo, result.latestEvent, result.directUserProfile, result.lastMessageSenderProfile)
+        
+        return roomDetails
     }
     
     private func buildRoomSummary(from roomListItem: RoomListItem) -> RoomSummary {
@@ -436,7 +437,7 @@ private extension String {
         
         // Check if the input matches the pattern
         let regex = try? NSRegularExpression(pattern: uuidPattern)
-        let range = NSRange(location: 0, length: self.utf16.count)
+        let range = NSRange(location: 0, length: utf16.count)
         
         if let _ = regex?.firstMatch(in: self, options: [], range: range) {
             return true // If the input matches the pattern
@@ -449,7 +450,7 @@ private extension String {
 private extension EventTimelineItem {
     var senderName: String? {
         switch senderProfile {
-        case let .ready(displayName, isDisplayNameAmbiguous, avatarUrl):
+        case let .ready(displayName, _, _):
             return displayName
         default:
             return sender
