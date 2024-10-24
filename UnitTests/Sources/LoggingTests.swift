@@ -80,8 +80,7 @@ class LoggingTests: XCTestCase {
         let heroName = "Pseudonym"
         let roomSummary = RoomSummary(roomListItem: .init(noPointer: .init()),
                                       id: "myroomid",
-                                      isInvite: false,
-                                      inviter: nil,
+                                      joinRequestType: nil,
                                       name: roomName,
                                       isDirect: true,
                                       avatarURL: nil,

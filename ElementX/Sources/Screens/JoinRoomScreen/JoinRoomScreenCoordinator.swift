@@ -49,7 +49,7 @@ final class JoinRoomScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .joined:
                 actionsSubject.send(.joined)
-            case .cancelled:
+            case .dismiss:
                 actionsSubject.send(.cancelled)
             }
         }

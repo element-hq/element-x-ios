@@ -10,7 +10,7 @@ import Compound
 import SwiftUI
 
 @MainActor
-struct HomeScreenInviteCell: View {
+struct HomeScreenKnockedCell: View {
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
     
     let room: HomeScreenRoom
@@ -54,26 +54,14 @@ struct HomeScreenInviteCell: View {
                     badge
                 }
                 
-                inviterView
-                    .padding(.top, 6)
+                Text(L10n.screenRoomlistKnockEventSentDescription)
+                    .font(.compound.bodyMD)
+                    .foregroundStyle(.compound.textPlaceholder)
+                    .padding(.top, room.canonicalAlias == nil ? 0 : 4)
                     .padding(.trailing, 16)
             }
             .fixedSize(horizontal: false, vertical: true)
             .accessibilityElement(children: .combine)
-            
-            buttons
-                .padding(.top, 14)
-                .padding(.trailing, 22)
-        }
-    }
-
-    @ViewBuilder
-    private var inviterView: some View {
-        if let inviter = room.inviter,
-           !room.isDirect {
-            RoomInviterLabel(inviter: inviter, mediaProvider: context.mediaProvider)
-                .font(.compound.bodyMD)
-                .foregroundStyle(.compound.textPlaceholder)
         }
     }
     
@@ -94,20 +82,6 @@ struct HomeScreenInviteCell: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
     
-    private var buttons: some View {
-        HStack(spacing: 12) {
-            Button(L10n.actionDecline) {
-                context.send(viewAction: .declineInvite(roomIdentifier: room.id))
-            }
-            .buttonStyle(.compound(.secondary, size: .medium))
-            
-            Button(L10n.actionAccept) {
-                context.send(viewAction: .acceptInvite(roomIdentifier: room.id))
-            }
-            .buttonStyle(.compound(.primary, size: .medium))
-        }
-    }
-    
     private var separator: some View {
         Rectangle()
             .fill(Color.compound.borderDisabled)
@@ -119,7 +93,7 @@ struct HomeScreenInviteCell: View {
     }
     
     private var subtitle: String? {
-        room.isDirect ? room.inviter?.id : room.canonicalAlias
+        room.canonicalAlias
     }
     
     private var badge: some View {
@@ -129,27 +103,27 @@ struct HomeScreenInviteCell: View {
     }
 }
 
-struct HomeScreenInviteCell_Previews: PreviewProvider, TestablePreview {
+struct HomeScreenKnockedCell_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         ScrollView {
             VStack(spacing: 0) {
-                HomeScreenInviteCell(room: .dmInvite,
-                                     context: viewModel().context)
+                HomeScreenKnockedCell(room: .dmInvite,
+                                      context: viewModel().context)
                 
-                HomeScreenInviteCell(room: .dmInvite,
-                                     context: viewModel().context)
+                HomeScreenKnockedCell(room: .dmInvite,
+                                      context: viewModel().context)
                 
-                HomeScreenInviteCell(room: .roomInvite(),
-                                     context: viewModel().context)
+                HomeScreenKnockedCell(room: .roomKnocked(),
+                                      context: viewModel().context)
                 
-                HomeScreenInviteCell(room: .roomInvite(),
-                                     context: viewModel().context)
+                HomeScreenKnockedCell(room: .roomKnocked(),
+                                      context: viewModel().context)
                 
-                HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org", avatarURL: .picturesDirectory),
-                                     context: viewModel().context)
+                HomeScreenKnockedCell(room: .roomKnocked(alias: "#footest:somewhere.org", avatarURL: .picturesDirectory),
+                                      context: viewModel().context)
                 
-                HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org"),
-                                     context: viewModel().context)
+                HomeScreenKnockedCell(room: .roomKnocked(alias: "#footest:somewhere.org"),
+                                      context: viewModel().context)
                     .dynamicTypeSize(.accessibility1)
                     .previewDisplayName("Aliased room (AX1)")
             }
@@ -197,7 +171,7 @@ private extension HomeScreenRoom {
         return .init(summary: summary, hideUnreadMessagesBadge: false)
     }
     
-    static func roomInvite(alias: String? = nil, avatarURL: URL? = nil) -> HomeScreenRoom {
+    static func roomKnocked(alias: String? = nil, avatarURL: URL? = nil) -> HomeScreenRoom {
         let inviter = RoomMemberProxyMock()
         inviter.displayName = "Luca"
         inviter.userID = "@jack:somewhi.nl"

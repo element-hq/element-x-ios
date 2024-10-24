@@ -9,7 +9,7 @@ import Foundation
 
 enum JoinRoomScreenViewModelAction {
     case joined
-    case cancelled
+    case dismiss
 }
 
 enum JoinRoomScreenInteractionMode {
@@ -65,6 +65,7 @@ struct JoinRoomScreenViewStateBindings {
 
 enum JoinRoomScreenAlertType {
     case declineInvite
+    case cancelKnock
 }
 
 enum JoinRoomScreenViewAction {

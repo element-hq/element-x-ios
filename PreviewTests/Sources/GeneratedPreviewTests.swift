@@ -245,6 +245,12 @@ extension PreviewTests {
         }
     }
 
+    func test_homeScreenKnockedCell() {
+        for preview in HomeScreenKnockedCell_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_homeScreenRecoveryKeyConfirmationBanner() {
         for preview in HomeScreenRecoveryKeyConfirmationBanner_Previews._allPreviews {
             assertSnapshots(matching: preview)
