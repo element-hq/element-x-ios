@@ -89,8 +89,11 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             actionsSubject.send(.removeImage)
         case .updateAddress(let address):
             state.addressName = address.toValidAddress
+            // If this has been called this means that the user wants a custom address not necessarily reflecting the name
+            // So we disable the two from syncing.
             syncNameAndAddress = false
         case .updateName(let name):
+            // Reset the syncing if the name is fully cancelled
             if name.isEmpty {
                 syncNameAndAddress = true
             }
