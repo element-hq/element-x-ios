@@ -74,7 +74,9 @@ struct LoginScreen: View {
             .textContentType(.username)
             .autocapitalization(.none)
             .submitLabel(.next)
-            .onChange(of: isUsernameFocused, perform: usernameFocusChanged)
+            .onChange(of: isUsernameFocused) { _, newValue in
+                usernameFocusChanged(isFocussed: newValue)
+            }
             .onSubmit { isPasswordFocused = true }
             .padding(.bottom, 20)
             
@@ -135,19 +137,19 @@ struct LoginScreen_Previews: PreviewProvider, TestablePreview {
             LoginScreen(context: viewModel.context)
         }
         .previewDisplayName("matrix.org")
-        .snapshotPreferences(delay: 0.1)
+        .snapshotPreferences(delay: 1)
         
         NavigationStack {
             LoginScreen(context: credentialsViewModel.context)
         }
         .previewDisplayName("Credentials Entered")
-        .snapshotPreferences(delay: 0.1)
+        .snapshotPreferences(delay: 1)
         
         NavigationStack {
             LoginScreen(context: unconfiguredViewModel.context)
         }
         .previewDisplayName("Unsupported")
-        .snapshotPreferences(delay: 0.1)
+        .snapshotPreferences(delay: 1)
     }
     
     static func makeViewModel(homeserverAddress: String = "matrix.org", withCredentials: Bool = false) -> LoginScreenViewModel {

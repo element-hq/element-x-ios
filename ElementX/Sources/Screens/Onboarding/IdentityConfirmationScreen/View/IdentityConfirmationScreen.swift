@@ -108,7 +108,7 @@ struct IdentityConfirmationScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             IdentityConfirmationScreen(context: viewModel.context)
         }
-        .snapshotPreferences(delay: 0.25)
+        .snapshotPreferences(delay: 1)
     }
     
     private static var viewModel: IdentityConfirmationScreenViewModel {
