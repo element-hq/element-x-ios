@@ -71,7 +71,7 @@ struct RoomChangeRolesScreen: View {
                         .frame(width: cellWidth)
                     }
                 }
-                .onChange(of: context.viewState.lastPromotedMember, initial: true) { _, newValue in
+                .onChange(of: context.viewState.lastPromotedMember) { _, newValue in
                     guard let member = newValue else { return }
                     withElementAnimation(.easeInOut) {
                         scrollView.scrollTo(member.id)

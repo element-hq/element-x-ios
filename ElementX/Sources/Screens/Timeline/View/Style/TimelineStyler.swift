@@ -25,7 +25,7 @@ struct TimelineStyler<Content: View>: View {
 
     var body: some View {
         mainContent
-            .onChange(of: timelineItem.properties.deliveryStatus, initial: true) { _, newStatus in
+            .onChange(of: timelineItem.properties.deliveryStatus) { _, newStatus in
                 if case .sendingFailed = newStatus {
                     guard task == nil else {
                         return

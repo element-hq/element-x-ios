@@ -171,7 +171,7 @@ struct IsSearchingModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .onChange(of: isSearchingEnv, initial: true) { isSearching = $1 }
+            .onChange(of: isSearchingEnv) { isSearching = $1 }
     }
 }
 

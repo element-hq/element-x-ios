@@ -107,7 +107,7 @@ struct JoinRoomScreen: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 0) {
                 TextField("", text: $context.knockMessage, axis: .vertical)
-                    .onChange(of: context.knockMessage, initial: true) { _, newValue in
+                    .onChange(of: context.knockMessage) { _, newValue in
                         context.knockMessage = String(newValue.prefix(1000))
                     }
                     .lineLimit(4, reservesSpace: true)
