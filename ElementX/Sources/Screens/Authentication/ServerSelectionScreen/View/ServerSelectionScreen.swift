@@ -107,7 +107,7 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             ServerSelectionScreen(context: invalidViewModel.context)
         }
-        .snapshotPreferences(delay: 0.25)
+        .snapshotPreferences(delay: 1)
     }
     
     static func makeViewModel(for homeserverAddress: String) -> ServerSelectionScreenViewModel {
