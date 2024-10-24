@@ -488,8 +488,12 @@ internal enum L10n {
   internal static var commonTouchIdIos: String { return L10n.tr("Localizable", "common_touch_id_ios") }
   /// Unable to decrypt
   internal static var commonUnableToDecrypt: String { return L10n.tr("Localizable", "common_unable_to_decrypt") }
+  /// Sent from an insecure device
+  internal static var commonUnableToDecryptInsecureDevice: String { return L10n.tr("Localizable", "common_unable_to_decrypt_insecure_device") }
   /// You don't have access to this message
   internal static var commonUnableToDecryptNoAccess: String { return L10n.tr("Localizable", "common_unable_to_decrypt_no_access") }
+  /// Sender's verified identity has changed
+  internal static var commonUnableToDecryptVerificationViolation: String { return L10n.tr("Localizable", "common_unable_to_decrypt_verification_violation") }
   /// Invites couldn't be sent to one or more users.
   internal static var commonUnableToInviteMessage: String { return L10n.tr("Localizable", "common_unable_to_invite_message") }
   /// Unable to send invite(s)

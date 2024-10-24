@@ -195,6 +195,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             }
         } else {
             switch await clientProxy.knockRoom(roomID,
+                                               via: via,
                                                message: state.bindings.knockMessage.isBlank ? nil : state.bindings.knockMessage) {
             case .success:
                 state.mode = .knocked

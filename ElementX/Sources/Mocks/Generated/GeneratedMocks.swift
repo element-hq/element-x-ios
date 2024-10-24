@@ -2837,15 +2837,15 @@ class ClientProxyMock: ClientProxyProtocol {
     }
     //MARK: - knockRoom
 
-    var knockRoomMessageUnderlyingCallsCount = 0
-    var knockRoomMessageCallsCount: Int {
+    var knockRoomViaMessageUnderlyingCallsCount = 0
+    var knockRoomViaMessageCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return knockRoomMessageUnderlyingCallsCount
+                return knockRoomViaMessageUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = knockRoomMessageUnderlyingCallsCount
+                    returnValue = knockRoomViaMessageUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -2853,29 +2853,29 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                knockRoomMessageUnderlyingCallsCount = newValue
+                knockRoomViaMessageUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    knockRoomMessageUnderlyingCallsCount = newValue
+                    knockRoomViaMessageUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var knockRoomMessageCalled: Bool {
-        return knockRoomMessageCallsCount > 0
+    var knockRoomViaMessageCalled: Bool {
+        return knockRoomViaMessageCallsCount > 0
     }
-    var knockRoomMessageReceivedArguments: (roomID: String, message: String?)?
-    var knockRoomMessageReceivedInvocations: [(roomID: String, message: String?)] = []
+    var knockRoomViaMessageReceivedArguments: (roomID: String, via: [String], message: String?)?
+    var knockRoomViaMessageReceivedInvocations: [(roomID: String, via: [String], message: String?)] = []
 
-    var knockRoomMessageUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var knockRoomMessageReturnValue: Result<Void, ClientProxyError>! {
+    var knockRoomViaMessageUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var knockRoomViaMessageReturnValue: Result<Void, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return knockRoomMessageUnderlyingReturnValue
+                return knockRoomViaMessageUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = knockRoomMessageUnderlyingReturnValue
+                    returnValue = knockRoomViaMessageUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -2883,26 +2883,26 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                knockRoomMessageUnderlyingReturnValue = newValue
+                knockRoomViaMessageUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    knockRoomMessageUnderlyingReturnValue = newValue
+                    knockRoomViaMessageUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var knockRoomMessageClosure: ((String, String?) async -> Result<Void, ClientProxyError>)?
+    var knockRoomViaMessageClosure: ((String, [String], String?) async -> Result<Void, ClientProxyError>)?
 
-    func knockRoom(_ roomID: String, message: String?) async -> Result<Void, ClientProxyError> {
-        knockRoomMessageCallsCount += 1
-        knockRoomMessageReceivedArguments = (roomID: roomID, message: message)
+    func knockRoom(_ roomID: String, via: [String], message: String?) async -> Result<Void, ClientProxyError> {
+        knockRoomViaMessageCallsCount += 1
+        knockRoomViaMessageReceivedArguments = (roomID: roomID, via: via, message: message)
         DispatchQueue.main.async {
-            self.knockRoomMessageReceivedInvocations.append((roomID: roomID, message: message))
+            self.knockRoomViaMessageReceivedInvocations.append((roomID: roomID, via: via, message: message))
         }
-        if let knockRoomMessageClosure = knockRoomMessageClosure {
-            return await knockRoomMessageClosure(roomID, message)
+        if let knockRoomViaMessageClosure = knockRoomViaMessageClosure {
+            return await knockRoomViaMessageClosure(roomID, via, message)
         } else {
-            return knockRoomMessageReturnValue
+            return knockRoomViaMessageReturnValue
         }
     }
     //MARK: - knockRoomAlias
