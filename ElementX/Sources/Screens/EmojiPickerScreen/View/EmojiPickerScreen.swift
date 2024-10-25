@@ -81,7 +81,7 @@ struct EmojiPickerScreen: View {
 // MARK: - Previews
 
 struct EmojiPickerScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = EmojiPickerScreenViewModel(emojiProvider: EmojiProvider())
+    static let viewModel = EmojiPickerScreenViewModel(emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
     
     static var previews: some View {
         EmojiPickerScreen(context: viewModel.context, selectedEmojis: ["😀", "😄"])
@@ -91,7 +91,7 @@ struct EmojiPickerScreen_Previews: PreviewProvider, TestablePreview {
 }
 
 struct EmojiPickerScreenSheet_Previews: PreviewProvider {
-    static let viewModel = EmojiPickerScreenViewModel(emojiProvider: EmojiProvider())
+    static let viewModel = EmojiPickerScreenViewModel(emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
     
     static var previews: some View {
         Text("Timeline view")

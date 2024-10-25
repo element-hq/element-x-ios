@@ -37,7 +37,8 @@ struct PinnedEventsTimelineScreen: View {
                                                              pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
                                                              isDM: timelineContext.viewState.isEncryptedOneToOneRoom,
                                                              isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
-                                                             isPinnedEventsTimeline: timelineContext.viewState.isPinnedEventsTimeline)
+                                                             isPinnedEventsTimeline: timelineContext.viewState.isPinnedEventsTimeline,
+                                                             emojiProvider: timelineContext.viewState.emojiProvider)
                     .makeActions()
                 if let actions {
                     TimelineItemMenu(item: info.item, actions: actions)
@@ -96,7 +97,8 @@ struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                  userIndicatorController: UserIndicatorControllerMock(),
                                  appMediator: AppMediatorMock.default,
                                  appSettings: ServiceLocator.shared.settings,
-                                 analyticsService: ServiceLocator.shared.analytics)
+                                 analyticsService: ServiceLocator.shared.analytics,
+                                 emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
     }()
         
     static var previews: some View {

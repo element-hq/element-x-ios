@@ -298,7 +298,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
                                                         isChildFlow: asChildFlow,
                                                         roomTimelineControllerFactory: timelineControllerFactory,
                                                         navigationStackCoordinator: navigationStackCoordinator,
-                                                        emojiProvider: EmojiProvider(),
+                                                        emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
                                                         ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                         appMediator: AppMediatorMock.default,
                                                         appSettings: ServiceLocator.shared.settings,

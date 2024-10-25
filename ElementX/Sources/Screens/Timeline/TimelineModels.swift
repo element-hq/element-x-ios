@@ -111,6 +111,8 @@ struct TimelineViewState: BindableState {
     
     /// A closure providing the associated audio player state for an item in the timeline.
     var audioPlayerStateProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> AudioPlayerState?)?
+    
+    var emojiProvider: EmojiProviderProtocol
 }
 
 struct TimelineViewStateBindings {

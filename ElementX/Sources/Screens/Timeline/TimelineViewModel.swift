@@ -28,6 +28,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
+    private let emojiProvider: EmojiProviderProtocol
     
     private let timelineInteractionHandler: TimelineInteractionHandler
     
@@ -50,7 +51,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
          userIndicatorController: UserIndicatorControllerProtocol,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
-         analyticsService: AnalyticsService) {
+         analyticsService: AnalyticsService,
+         emojiProvider: EmojiProviderProtocol) {
         self.timelineController = timelineController
         self.mediaPlayerProvider = mediaPlayerProvider
         self.roomProxy = roomProxy
@@ -58,6 +60,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         self.analyticsService = analyticsService
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
+        self.emojiProvider = emojiProvider
         
         let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
@@ -79,7 +82,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        ownUserID: roomProxy.ownUserID,
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,
                                                        hideTimelineMedia: appSettings.hideTimelineMedia,
-                                                       bindings: .init(reactionsCollapsed: [:])),
+                                                       bindings: .init(reactionsCollapsed: [:]),
+                                                       emojiProvider: emojiProvider),
                    mediaProvider: mediaProvider)
         
         if focussedEventID != nil {
@@ -132,6 +136,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .itemSendInfoTapped(let itemID):
             handleItemSendInfoTapped(itemID: itemID)
         case .toggleReaction(let emoji, let itemID):
+            emojiProvider.markEmojiAsFrequentlyUsed(emoji)
+            
             guard case let .event(_, eventOrTransactionID) = itemID else {
                 fatalError()
             }
@@ -861,7 +867,8 @@ extension TimelineViewModel {
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                         appMediator: AppMediatorMock.default,
                                         appSettings: ServiceLocator.shared.settings,
-                                        analyticsService: ServiceLocator.shared.analytics)
+                                        analyticsService: ServiceLocator.shared.analytics,
+                                        emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
     
     static let pinnedEventsTimelineMock = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                                             focussedEventID: nil,
@@ -872,7 +879,8 @@ extension TimelineViewModel {
                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                             appMediator: AppMediatorMock.default,
                                                             appSettings: ServiceLocator.shared.settings,
-                                                            analyticsService: ServiceLocator.shared.analytics)
+                                                            analyticsService: ServiceLocator.shared.analytics,
+                                                            emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
 }
 
 extension EnvironmentValues {

@@ -51,6 +51,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var elementCallBaseURLOverride: URL? { get set }
     var identityPinningViolationNotificationsEnabled: Bool { get set }
     var knockingEnabled: Bool { get set }
+    var frequentEmojisEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }
