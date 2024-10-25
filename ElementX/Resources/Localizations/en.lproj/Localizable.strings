@@ -628,7 +628,6 @@
 "screen_qr_code_login_verify_code_title" = "Your verification code";
 "screen_recovery_key_change_description" = "Get a new recovery key if you've lost your existing one. After changing your recovery key, your old one will no longer work.";
 "screen_recovery_key_change_generate_key" = "Generate a new recovery key";
-"screen_recovery_key_change_generate_key_description" = "Make sure you can store your recovery key somewhere safe";
 "screen_recovery_key_change_success" = "Recovery key changed";
 "screen_recovery_key_change_title" = "Change recovery key?";
 "screen_recovery_key_confirm_create_new_recovery_key" = "Create new recovery key";
@@ -642,14 +641,14 @@
 "screen_recovery_key_copied_to_clipboard" = "Copied recovery key";
 "screen_recovery_key_generating_key" = "Generating…";
 "screen_recovery_key_save_action" = "Save recovery key";
-"screen_recovery_key_save_description" = "Write down your recovery key somewhere safe or save it in a password manager.";
+"screen_recovery_key_save_description" = "Write down this recovery key somewhere safe, like a password manager, encrypted note, or a physical safe.";
 "screen_recovery_key_save_key_description" = "Tap to copy recovery key";
-"screen_recovery_key_save_title" = "Save your recovery key";
+"screen_recovery_key_save_title" = "Save your recovery key somewhere safe";
 "screen_recovery_key_setup_confirmation_description" = "You will not be able to access your new recovery key after this step.";
 "screen_recovery_key_setup_confirmation_title" = "Have you saved your recovery key?";
 "screen_recovery_key_setup_description" = "Your chat backup is protected by a recovery key. If you need a new recovery key after setup you can recreate by selecting ‘Change recovery key’.";
 "screen_recovery_key_setup_generate_key" = "Generate your recovery key";
-"screen_recovery_key_setup_generate_key_description" = "Make sure you can store your recovery key somewhere safe";
+"screen_recovery_key_setup_generate_key_description" = "Do not share this with anyone!";
 "screen_recovery_key_setup_success" = "Recovery setup successful";
 "screen_recovery_key_setup_title" = "Set up recovery";
 "screen_report_content_block_user_hint" = "Check if you want to hide all current and future messages from this user";
@@ -1023,6 +1022,7 @@
 "screen_login_subtitle" = "Matrix is an open network for secure, decentralised communication.";
 "screen_notification_settings_mentions_section_title" = "Mentions";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "Try again";
+"screen_recovery_key_change_generate_key_description" = "Do not share this with anyone!";
 "screen_recovery_key_confirm_title" = "Enter your recovery key";
 "screen_report_content_block_user" = "Block user";
 "screen_reset_encryption_password_placeholder" = "Enter…";
