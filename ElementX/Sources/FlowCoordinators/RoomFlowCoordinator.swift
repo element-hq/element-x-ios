@@ -1340,7 +1340,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                               roomTimelineControllerFactory: roomTimelineControllerFactory,
                                                               roomProxy: roomProxy,
                                                               userIndicatorController: userIndicatorController,
-                                                              appMediator: appMediator)
+                                                              appMediator: appMediator,
+                                                              emojiProvider: emojiProvider)
         
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else {

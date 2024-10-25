@@ -8,26 +8,37 @@
 import SFSafeSymbols
 import SwiftUI
 
+@MainActor
 struct TimelineItemMenuActions {
     let reactions: [TimelineItemMenuReaction]
     let actions: [TimelineItemMenuAction]
     let debugActions: [TimelineItemMenuAction]
     
-    init?(isReactable: Bool, actions: [TimelineItemMenuAction], debugActions: [TimelineItemMenuAction]) {
+    init?(isReactable: Bool,
+          actions: [TimelineItemMenuAction],
+          debugActions: [TimelineItemMenuAction],
+          emojiProvider: EmojiProviderProtocol) {
         if !isReactable, actions.isEmpty, debugActions.isEmpty {
             return nil
         }
         
         self.actions = actions
         self.debugActions = debugActions
+        
+        var frequentlyUsed = emojiProvider.frequentlyUsedSystemEmojis().prefix(5).map { TimelineItemMenuReaction(key: $0, symbol: .heart) }
+        
+        frequentlyUsed += [
+            .init(key: "👍️", symbol: .handThumbsup),
+            .init(key: "👎️", symbol: .handThumbsdown),
+            .init(key: "🔥", symbol: .flame),
+            .init(key: "❤️", symbol: .heart),
+            .init(key: "👏", symbol: .handsClap)
+        ]
+        
+        frequentlyUsed = Array(frequentlyUsed.prefix(5))
+        
         reactions = if isReactable {
-            [
-                .init(key: "👍️", symbol: .handThumbsup),
-                .init(key: "👎️", symbol: .handThumbsdown),
-                .init(key: "🔥", symbol: .flame),
-                .init(key: "❤️", symbol: .heart),
-                .init(key: "👏", symbol: .handsClap)
-            ]
+            frequentlyUsed
         } else {
             []
         }

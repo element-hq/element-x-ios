@@ -53,6 +53,10 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.identityPinningViolationNotificationsEnabled) {
                     Text("Identity pinning violation notifications")
                 }
+                
+                Toggle(isOn: $context.frequentEmojisEnabled) {
+                    Text("Show frequently used emojis")
+                }
             }
             
             Section("Join rules") {

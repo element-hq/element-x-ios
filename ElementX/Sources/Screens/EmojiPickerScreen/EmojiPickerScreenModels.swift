@@ -44,6 +44,8 @@ struct EmojiPickerEmojiCategoryViewData: Identifiable {
             return L10n.emojiPickerCategorySymbols
         case "flags":
             return L10n.emojiPickerCategoryFlags
+        case EmojiCategory.frequentlyUsedCategoryIdentifier:
+            return L10n.commonFrequentlyUsed
         default:
             MXLog.failure("Missing translation for emoji category with id \(id)")
             return ""

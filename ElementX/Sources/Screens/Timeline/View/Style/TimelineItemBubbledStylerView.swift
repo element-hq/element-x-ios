@@ -148,7 +148,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                                                               pinnedEventIDs: context.viewState.pinnedEventIDs,
                                                               isDM: context.viewState.isEncryptedOneToOneRoom,
                                                               isViewSourceEnabled: context.viewState.isViewSourceEnabled,
-                                                              isPinnedEventsTimeline: context.viewState.isPinnedEventsTimeline)
+                                                              isPinnedEventsTimeline: context.viewState.isPinnedEventsTimeline,
+                                                              emojiProvider: context.viewState.emojiProvider)
                 TimelineItemMacContextMenu(item: timelineItem, actionProvider: provider) { action in
                     context.send(viewAction: .handleTimelineItemMenuAction(itemID: timelineItem.id, action: action))
                 }
@@ -364,7 +365,8 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                  appMediator: AppMediatorMock.default,
                                  appSettings: ServiceLocator.shared.settings,
-                                 analyticsService: ServiceLocator.shared.analytics)
+                                 analyticsService: ServiceLocator.shared.analytics,
+                                 emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
     }()
 
     static var previews: some View {

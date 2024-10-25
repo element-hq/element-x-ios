@@ -492,7 +492,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                     isChildFlow: false,
                                                     roomTimelineControllerFactory: roomTimelineControllerFactory,
                                                     navigationStackCoordinator: detailNavigationStackCoordinator,
-                                                    emojiProvider: EmojiProvider(),
+                                                    emojiProvider: EmojiProvider(appSettings: appSettings),
                                                     ongoingCallRoomIDPublisher: elementCallService.ongoingCallRoomIDPublisher,
                                                     appMediator: appMediator,
                                                     appSettings: appSettings,
