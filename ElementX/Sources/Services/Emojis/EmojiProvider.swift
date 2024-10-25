@@ -31,8 +31,8 @@ class EmojiProvider: EmojiProviderProtocol {
             partialResult + category.emojis
         }
         
+        // Map frequently used system unicode emojis to our emoji provider ones
         let frequentlyUsedEmojis = frequentlyUsedSystemEmojis().prefix(20)
-        
         let emojis = allEmojis.filter { frequentlyUsedEmojis.contains($0.unicode) }
         
         if !emojis.isEmpty {

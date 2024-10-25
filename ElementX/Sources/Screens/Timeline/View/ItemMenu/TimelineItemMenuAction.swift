@@ -25,6 +25,7 @@ struct TimelineItemMenuActions {
         self.actions = actions
         self.debugActions = debugActions
         
+        // Only process 5 of the most frequently used emojis instead of all of them
         var frequentlyUsed = emojiProvider.frequentlyUsedSystemEmojis().prefix(5).map { TimelineItemMenuReaction(key: $0, symbol: .heart) }
         
         frequentlyUsed += [
