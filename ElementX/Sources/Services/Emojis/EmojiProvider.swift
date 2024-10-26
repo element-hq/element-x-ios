@@ -10,6 +10,7 @@ import Foundation
 import OrderedCollections
 
 class EmojiProvider: EmojiProviderProtocol {
+    private let maxFrequentEmojis = 20
     private let loader: EmojiLoaderProtocol
     private let appSettings: AppSettings
     
@@ -31,9 +32,18 @@ class EmojiProvider: EmojiProviderProtocol {
             partialResult + category.emojis
         }
         
-        // Map frequently used system unicode emojis to our emoji provider ones
-        let frequentlyUsedEmojis = frequentlyUsedSystemEmojis().prefix(20)
-        let emojis = allEmojis.filter { frequentlyUsedEmojis.contains($0.unicode) }
+        // Map frequently used system unicode emojis to our emoji provider ones and preserve the order
+        let frequentlyUsedEmojis = frequentlyUsedSystemEmojis().prefix(maxFrequentEmojis)
+        let emojis = allEmojis
+            .filter { frequentlyUsedEmojis.contains($0.unicode) }
+            .sorted { first, second in
+                guard let firstIndex = frequentlyUsedEmojis.firstIndex(of: first.unicode),
+                      let secondIndex = frequentlyUsedEmojis.firstIndex(of: second.unicode) else {
+                    return false
+                }
+                
+                return firstIndex < secondIndex
+            }
         
         if !emojis.isEmpty {
             emojiCategories.insert(.init(id: EmojiCategory.frequentlyUsedCategoryIdentifier, emojis: emojis), at: 0)
