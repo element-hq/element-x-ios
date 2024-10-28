@@ -28,9 +28,9 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.userIndicatorController = userIndicatorController
         
-        let roomAvatar = roomProxy.avatarURL
-        let roomName = roomProxy.name
-        let roomTopic = roomProxy.topic
+        let roomAvatar = roomProxy.infoPublisher.value.avatarURL
+        let roomName = roomProxy.infoPublisher.value.displayName
+        let roomTopic = roomProxy.infoPublisher.value.topic
         
         super.init(initialViewState: RoomDetailsEditScreenViewState(roomID: roomProxy.id,
                                                                     initialAvatarURL: roomAvatar,

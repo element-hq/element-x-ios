@@ -51,7 +51,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                         membersSuggestion
                             .insert(SuggestionItem.allUsers(item: .init(id: PillConstants.atRoom,
                                                                         displayName: PillConstants.everyone,
-                                                                        avatarURL: self.roomProxy.avatarURL,
+                                                                        avatarURL: self.roomProxy.infoPublisher.value.avatarURL,
                                                                         range: suggestionTrigger.range)), at: 0)
                     }
                     

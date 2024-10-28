@@ -74,7 +74,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         
         defer {
             hideLoadingIndicator()
-            Task { await updateRoomDetails() }
+            updateRoomDetails()
         }
         
         await updateRoom()
@@ -82,7 +82,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         switch await clientProxy.roomPreviewForIdentifier(roomID, via: via) {
         case .success(let roomPreviewDetails):
             self.roomPreviewDetails = roomPreviewDetails
-            await updateRoomDetails()
+            updateRoomDetails()
         case .failure(.roomPreviewIsPrivate):
             break // Handled by the mode, we don't need an error indicator.
         case .failure:
@@ -97,32 +97,32 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         // take priority over the preview one.
         if let room = await clientProxy.roomForIdentifier(roomID) {
             self.room = room
-            await updateRoomDetails()
+            updateRoomDetails()
         }
     }
     
-    private func updateRoomDetails() async {
-        var roomProxy: RoomProxyProtocol?
+    private func updateRoomDetails() {
+        var roomInfo: RoomInfoProxy?
         var inviter: RoomInviterDetails?
         
         switch room {
         case .joined(let joinedRoomProxy):
-            roomProxy = joinedRoomProxy
+            roomInfo = joinedRoomProxy.infoPublisher.value
         case .invited(let invitedRoomProxy):
-            inviter = await invitedRoomProxy.inviter.flatMap(RoomInviterDetails.init)
-            roomProxy = invitedRoomProxy
+            inviter = invitedRoomProxy.info.inviter.flatMap(RoomInviterDetails.init)
+            roomInfo = invitedRoomProxy.info
         case .knocked(let knockedRoomProxy):
-            roomProxy = knockedRoomProxy
+            roomInfo = knockedRoomProxy.info
         default:
             break
         }
         
-        let name = roomProxy?.name ?? roomPreviewDetails?.name
+        let name = roomInfo?.displayName ?? roomPreviewDetails?.name
         state.roomDetails = JoinRoomScreenRoomDetails(name: name,
-                                                      topic: roomProxy?.topic ?? roomPreviewDetails?.topic,
-                                                      canonicalAlias: roomProxy?.canonicalAlias ?? roomPreviewDetails?.canonicalAlias,
-                                                      avatar: roomProxy?.avatar ?? .room(id: roomID, name: name ?? "", avatarURL: roomPreviewDetails?.avatarURL),
-                                                      memberCount: UInt(roomProxy?.activeMembersCount ?? Int(roomPreviewDetails?.memberCount ?? 0)),
+                                                      topic: roomInfo?.topic ?? roomPreviewDetails?.topic,
+                                                      canonicalAlias: roomInfo?.canonicalAlias ?? roomPreviewDetails?.canonicalAlias,
+                                                      avatar: roomInfo?.avatar ?? .room(id: roomID, name: name ?? "", avatarURL: roomPreviewDetails?.avatarURL),
+                                                      memberCount: UInt(roomInfo?.activeMembersCount ?? Int(roomPreviewDetails?.memberCount ?? 0)),
                                                       inviter: inviter)
         
         updateMode()

@@ -62,6 +62,11 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private var identityStatusChangesObservationToken: TaskHandle?
     
     private var subscribedForUpdates = false
+    
+    private let infoSubject: CurrentValueSubject<RoomInfoProxy, Never>
+    var infoPublisher: CurrentValuePublisher<RoomInfoProxy, Never> {
+        infoSubject.asCurrentValuePublisher()
+    }
 
     private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {
@@ -77,93 +82,15 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     var identityStatusChangesPublisher: CurrentValuePublisher<[IdentityStatusChange], Never> {
         identityStatusChangesSubject.asCurrentValuePublisher()
     }
-        
-    private let actionsSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
-    var actionsPublisher: AnyPublisher<JoinedRoomProxyAction, Never> {
-        actionsSubject.eraseToAnyPublisher()
-    }
     
     // A room identifier is constant and lazy stops it from being fetched
     // multiple times over FFI
     lazy var id: String = room.id()
-    
-    var canonicalAlias: String? {
-        room.canonicalAlias()
-    }
-    
-    var ownUserID: String {
-        room.ownUserId()
-    }
-    
-    var name: String? {
-        roomListItem.displayName()
-    }
-        
-    var topic: String? {
-        room.topic()
-    }
-    
-    var avatarURL: URL? {
-        roomListItem.avatarUrl().flatMap(URL.init(string:))
-    }
-    
-    var avatar: RoomAvatar {
-        if isDirect, avatarURL == nil {
-            let heroes = room.heroes()
-            
-            if heroes.count == 1 {
-                return .heroes(heroes.map(UserProfileProxy.init))
-            }
-        }
-        
-        return .room(id: id, name: name, avatarURL: avatarURL)
-    }
-    
-    var isDirect: Bool {
-        room.isDirect()
-    }
-    
-    var isPublic: Bool {
-        room.isPublic()
-    }
-    
-    var isSpace: Bool {
-        room.isSpace()
-    }
-    
-    var joinedMembersCount: Int {
-        Int(room.joinedMembersCount())
-    }
-    
-    var activeMembersCount: Int {
-        Int(room.activeMembersCount())
-    }
+    var ownUserID: String { room.ownUserId() }
+    var info: RoomInfoProxy { infoSubject.value }
     
     var isEncrypted: Bool {
         (try? room.isEncrypted()) ?? false
-    }
-    
-    var isFavourite: Bool {
-        get async {
-            await (try? room.roomInfo().isFavourite) ?? false
-        }
-    }
-    
-    var pinnedEventIDs: Set<String> {
-        get async {
-            guard let pinnedEventIDs = try? await room.roomInfo().pinnedEventIds else {
-                return []
-            }
-            return .init(pinnedEventIDs)
-        }
-    }
-    
-    var hasOngoingCall: Bool {
-        room.hasActiveRoomCall()
-    }
-    
-    var activeRoomCallParticipants: [String] {
-        room.activeRoomCallParticipants()
     }
     
     init(roomListService: RoomListServiceProtocol,
@@ -173,6 +100,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         self.roomListItem = roomListItem
         self.room = room
         
+        infoSubject = try await .init(RoomInfoProxy(roomInfo: room.roomInfo()))
         timeline = try await TimelineProxy(timeline: room.timeline(), kind: .live)
         
         Task {
@@ -210,9 +138,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             return
         }
         
-        roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: RoomInfoUpdateListener { [weak self] in
+        roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: RoomInfoUpdateListener { [weak self] roomInfo in
             MXLog.info("Received room info update")
-            self?.actionsSubject.send(.roomInfoUpdate)
+            self?.infoSubject.send(.init(roomInfo: roomInfo))
         })
     }
     
@@ -730,14 +658,14 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
 }
 
 private final class RoomInfoUpdateListener: RoomInfoListener {
-    private let onUpdateClosure: () -> Void
+    private let onUpdateClosure: (RoomInfo) -> Void
     
-    init(_ onUpdateClosure: @escaping () -> Void) {
+    init(_ onUpdateClosure: @escaping (RoomInfo) -> Void) {
         self.onUpdateClosure = onUpdateClosure
     }
     
     func call(roomInfo: RoomInfo) {
-        onUpdateClosure()
+        onUpdateClosure(roomInfo)
     }
 }
 

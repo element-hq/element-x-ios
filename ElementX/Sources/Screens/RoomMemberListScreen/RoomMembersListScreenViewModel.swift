@@ -32,7 +32,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics
         
-        super.init(initialViewState: .init(joinedMembersCount: roomProxy.joinedMembersCount,
+        super.init(initialViewState: .init(joinedMembersCount: roomProxy.infoPublisher.value.joinedMembersCount,
                                            bindings: .init(mode: initialMode)),
                    mediaProvider: mediaProvider)
         
@@ -92,7 +92,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             let members = members.sorted()
             let roomMembersDetails = await buildMembersDetails(members: members)
             self.members = members
-            self.state = .init(joinedMembersCount: roomProxy.joinedMembersCount,
+            self.state = .init(joinedMembersCount: roomProxy.infoPublisher.value.joinedMembersCount,
                                joinedMembers: roomMembersDetails.joinedMembers,
                                invitedMembers: roomMembersDetails.invitedMembers,
                                bannedMembers: roomMembersDetails.bannedMembers,
