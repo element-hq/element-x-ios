@@ -49,6 +49,8 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
         
         switch viewAction {
         case .generateKey:
+            state.isGeneratingKey = true
+            
             Task {
                 switch await secureBackupController.generateRecoveryKey() {
                 case .success(let key):
@@ -58,7 +60,7 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
                     state.bindings.alertInfo = .init(id: .init())
                 }
                 
-                hideLoadingIndicator()
+                state.isGeneratingKey = false
             }
         case .copyKey:
             UIPasteboard.general.string = state.recoveryKey
