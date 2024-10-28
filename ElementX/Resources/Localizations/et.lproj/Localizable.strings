@@ -139,6 +139,7 @@
 "common_edited_suffix" = "(muudetud)";
 "common_editing" = "Muutmine";
 "common_emote" = "* %1$@ %2$@";
+"common_encryption" = "Krüptimine";
 "common_encryption_enabled" = "Krüptimine on kasutusel";
 "common_enter_your_pin" = "Sisesta oma PIN-kood";
 "common_error" = "Viga";
@@ -149,6 +150,7 @@
 "common_favourited" = "Lemmikuks määratud";
 "common_file" = "Fail";
 "common_forward_message" = "Edasta sõnum";
+"common_frequently_used" = "Sagedasti kasutatud";
 "common_gif" = "GIF";
 "common_image" = "Pilt";
 "common_in_reply_to" = "Vastuseks kasutajale %1$@";
@@ -241,6 +243,8 @@
 "common.pinned" = "Esiletõstetud";
 "common.send_to" = "Saada kasutajale";
 "common.you" = "Sina";
+"common_unable_to_decrypt_insecure_device" = "Saadetud ebaturvalisest seadmest";
+"common_unable_to_decrypt_verification_violation" = "Saatja verifitseeritud identiteet on muutunud";
 "confirm_recovery_key_banner_message" = "Sinu vestluste varukoopia pole hetkel sünkroonis. Säilitamaks ligipääsu vestluse varukoopiale palun sisesta oma taastevõti.";
 "confirm_recovery_key_banner_title" = "Sisesta oma taastevõti";
 "crash_detection_dialog_content" = "%1$@ jooksis kokku viimati, kui seda kasutasid. Kas tahaksid selle kohta meile veateate saata?";
@@ -340,6 +344,9 @@
 "screen_advanced_settings_element_call_base_url" = "Element Calli kohandatud teenuseaadress";
 "screen_advanced_settings_element_call_base_url_description" = "Seadista kohandatud teenuseaadress Element Calli jaoks.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Vigane url. Palun vaata, et url algaks protokolliga (http/https) ning aadress ise oleks ka õige.";
+"screen_create_room_room_address_section_footer" = "Selleks, et see jututuba oleks nähtav jututubade avalikus kataloogis, sa vajad jututoa aadressi.";
+"screen_create_room_room_address_section_title" = "Jututoa aadress";
+"screen_create_room_room_visibility_section_title" = "Jututoa nähtavus";
 "screen_create_room_access_section_anyone_option_description" = "Kõik võivad selle jututoaga liituda";
 "screen_create_room_access_section_anyone_option_title" = "Kõik";
 "screen_create_room_access_section_header" = "Ligipääs jututoale";
@@ -369,6 +376,7 @@
 "screen_room_pinned_banner_loading_description" = "Laadime sõnumit…";
 "screen_room_pinned_banner_view_all_button_title" = "Näita kõiki";
 "screen_room_details_pinned_events_row_title" = "Esiletõstetud sõnumid";
+"screen_roomlist_knock_event_sent_description" = "Liitumispäring on saadetud";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Sõnum on saatmata, kuna kasutaja %1$@ verifitseeritud identiteet on muutunud.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Sõnum on saatmata, kuna %1$@ pole verifitseerinud kõiki oma seadmeid.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Kuna sa pole üks või enamgi oma seadet verifitseerinud, siis sinu sõnum on saatmata.";
@@ -380,6 +388,8 @@
 "screen_account_provider_signup_title" = "Sa oled loomas kasutajakontot %@ teenuses";
 "screen_advanced_settings_developer_mode" = "Arendaja valikud";
 "screen_advanced_settings_developer_mode_description" = "Selle eelistuse sisselülitamisel lisanduvad rakendusse arendaja tööks vajalikud valikud.";
+"screen_advanced_settings_media_compression_description" = "Optimeeri üleslaadimiseks";
+"screen_advanced_settings_media_compression_title" = "Meedia";
 "screen_advanced_settings_rich_text_editor_description" = "Kui soovid Markdown-vormingut käsitsi lisada, siis lülita vormindatud teksti toimeti välja.";
 "screen_advanced_settings_send_read_receipts" = "Lugemisteatised";
 "screen_advanced_settings_send_read_receipts_description" = "Kui lülitad selle valiku välja, siis mitte keegi enam ei saa sinult lugemisteatisi. Küll aga saad sina teiste kasutajate lugemisteatisi.";
@@ -446,9 +456,12 @@
 "screen_change_server_title" = "Vali oma server";
 "screen_chat_backup_key_backup_action_disable" = "Lülita võtmete varundamine välja";
 "screen_chat_backup_key_backup_action_enable" = "Lülita võtmete varundamine sisse";
-"screen_chat_backup_key_backup_description" = "Varundamine tagab, et sinu sõnumite ajalugu on alati loetav. %1$@.";
-"screen_chat_backup_key_backup_title" = "Varundus";
+"screen_chat_backup_key_backup_description" = "Salvesta oma krüptoidentiteet ja sõnumite krüptovõtmed turvaliselt serveris. See tagab, et sinu sõnumite ajalugu on alati loetav, ka kõikides uutes seadmetes. %1$@.";
+"screen_chat_backup_key_backup_title" = "Krüptovõtmete varundus";
+"screen_chat_backup_key_storage_toggle_description" = "Laadi siin seadmes leiduvad võtmed üles";
+"screen_chat_backup_key_storage_toggle_title" = "Luba krüptovõtmete salvestamine";
 "screen_chat_backup_recovery_action_change" = "Muuda taastevõtit";
+"screen_chat_backup_recovery_action_change_description" = "Kui sa oled kaotanud ligipääsu kõikidele oma olemasolevatele seadmetele, siis sa saad taastevõtme abil taastada ligipääsu oma krüptoidentiteedile ja sõnumite ajaloole.";
 "screen_chat_backup_recovery_action_confirm_description" = "Sinu vestluste krüptograafia varukoopia pole hetkel enam sünkroonis.";
 "screen_chat_backup_recovery_action_setup" = "Seadista krüptovõtmete varundus";
 "screen_chat_backup_recovery_action_setup_description" = "Säilita ligipääs oma krüptitud sõnumitele ka siis, kui sa kaotad kõik oma seadmed ja/või logid kõikjal välja rakendusest %1$@.";
@@ -470,10 +483,10 @@
 "screen_create_poll_title" = "Loo küsitlus";
 "screen_create_room_action_create_room" = "Uus jututuba";
 "screen_create_room_error_creating_room" = "Jututoa loomisel tekkis viga";
-"screen_create_room_private_option_description" = "Sõnumid siin jututoas on krüptitud ja seda ei saa hiljem välja lülitada.";
-"screen_create_room_private_option_title" = "Privaatne jututuba (liitumine vaid kutsega)";
-"screen_create_room_public_option_description" = "Sõnumid pole krüptitud ja neid saavad kõik lugeda. Soovi korral saad hiljem krüptimise sisse lülitada.";
-"screen_create_room_public_option_title" = "Avalik jututuba (avatud kõigile)";
+"screen_create_room_private_option_description" = "Ligipääs siia jututuppa on vaid kutse alusel. Kõik sõnumid siin jututoas on läbivalt krüptitud.";
+"screen_create_room_private_option_title" = "Privaatne jututuba";
+"screen_create_room_public_option_description" = "Kõik saavad seda jututuba leida.\nSa võid seda jututoa seadistustest alati muuta.";
+"screen_create_room_public_option_title" = "Avalik jututuba";
 "screen_create_room_topic_label" = "Teema (kui soovid lisada)";
 "screen_deactivate_account_confirmation_dialog_content" = "Palun kinnita uuesti, et soovid eemaldada oma konto kasutusest";
 "screen_deactivate_account_delete_all_messages" = "Kustuta kõik minu sõnumid";
@@ -621,7 +634,6 @@
 "screen_qr_code_login_verify_code_title" = "Sinu verifitseerimiskood";
 "screen_recovery_key_change_description" = "Kui oled vana taastevõtme kaotanud, siis loo uus. Peale seda muudatust vana taastevõti enam ei tööta.";
 "screen_recovery_key_change_generate_key" = "Loo uus taastevõti";
-"screen_recovery_key_change_generate_key_description" = "Palun hoia taastevõtit turvaliselt, näiteks vana kooli seifis või digitaalses salasõnalaekas";
 "screen_recovery_key_change_success" = "Taastevõti on muudetud";
 "screen_recovery_key_change_title" = "Kas muudame taastevõtme?";
 "screen_recovery_key_confirm_create_new_recovery_key" = "Loo uus taastevõti";
@@ -635,14 +647,14 @@
 "screen_recovery_key_copied_to_clipboard" = "Taastevõti on kopeeritud lõikelauale";
 "screen_recovery_key_generating_key" = "Loome...";
 "screen_recovery_key_save_action" = "Salvesta taastevõti";
-"screen_recovery_key_save_description" = "Palun märgi taastevõti üles ja hoia seda turvaliselt, näiteks vana kooli seifis või digitaalses salasõnalaekas";
+"screen_recovery_key_save_description" = "Palun märgi taastevõti üles ja hoia seda turvaliselt, näiteks digitaalses salasõnalaekas, krüptitud märkmetes või vana kooli seifis.";
 "screen_recovery_key_save_key_description" = "Taastevõtme kopeerimiseks puuduta";
 "screen_recovery_key_save_title" = "Salvesta oma taastevõti";
 "screen_recovery_key_setup_confirmation_description" = "Peale seda sammu sul pole enam ligipääsu oma taastevõtmele.";
 "screen_recovery_key_setup_confirmation_title" = "Kas sa oled oma taastevõtme talletanud?";
 "screen_recovery_key_setup_description" = "Sinu vestluste varundus on krüptitud taastevõtmega. Kui peale muutusi peaks vaja olema uut taastevõtit, siis palun kasuta valikut „Loo taastevõti“";
 "screen_recovery_key_setup_generate_key" = "Loo oma taastevõti";
-"screen_recovery_key_setup_generate_key_description" = "Palun hoia taastevõtit turvaliselt, näiteks vana kooli seifis või digitaalses salasõnalaekas";
+"screen_recovery_key_setup_generate_key_description" = "Ära jaga seda kellegagi";
 "screen_recovery_key_setup_success" = "Andmete taastamise seadistamine õnnestus";
 "screen_recovery_key_setup_title" = "Seadista andmete taastamine";
 "screen_report_content_block_user_hint" = "Vali see eelistus, kui sa soovid peita selle kasutaja kõik senised ja tulevased sõnumid";
@@ -815,7 +827,7 @@
 "screen_session_verification_compare_numbers_title" = "Võrdle numbreid";
 "screen_session_verification_complete_subtitle" = "Sinu uus sessioon on nüüd verifitseeritud. Sellel sessioonil on nüüd ligipääs sinu krüptitud sõnumitele ja teised osapooled näevad teda usaldusväärsena.";
 "screen_session_verification_enter_recovery_key" = "Sisesta taastevõti";
-"screen_session_verification_failed_subtitle" = "Kas verifitseerimine aegus, teine osapool keeldus vastanast või tekkis vastuste mittevastavus.";
+"screen_session_verification_failed_subtitle" = "Kas verifitseerimine aegus, teine osapool keeldus vastamast või tekkis vastuste mittevastavus.";
 "screen_session_verification_open_existing_session_subtitle" = "Saamaks ligipääsu krüptitud sõnumite ajaloole tõesta et tegemist on sinuga.";
 "screen_session_verification_open_existing_session_title" = "Ava olemasolev sessioon";
 "screen_session_verification_positive_button_canceled" = "Proovi verifitseerimist uuesti";
@@ -824,8 +836,12 @@
 "screen_session_verification_ready_subtitle" = "Võrdle unikaalset emojide kombinatsiooni";
 "screen_session_verification_request_accepted_subtitle" = "Võrdle unikaalset emojide kombinatsiooni ning kontrolli, et nad on täpselt samas järjekorras.";
 "screen_session_verification_request_details_timestamp" = "Sisselogitud";
+"screen_session_verification_request_failure_subtitle" = "Kas verifitseerimine aegus, teine osapool keeldus vastamast või tekkis vastuste mittevastavus.";
+"screen_session_verification_request_failure_title" = "Verifitseerimine ei õnnestunud";
 "screen_session_verification_request_footer" = "Jätka vaid siis, kui sina algatasid verifitseerimise.";
 "screen_session_verification_request_subtitle" = "Hoidmaks oma sõnumiajalugu turvatuna verifitseeri teine seade.";
+"screen_session_verification_request_success_subtitle" = "Võid nüüd sõnumeid oma teises seadmes turvaliselt saata ja vastu võtta.";
+"screen_session_verification_request_success_title" = "Seade on verifitseeritud";
 "screen_session_verification_request_title" = "Verifitseerimispäring";
 "screen_session_verification_they_dont_match" = "Nad ei klapi omavahel";
 "screen_session_verification_they_match" = "Nad klapivad omavahel";
@@ -1012,6 +1028,7 @@
 "screen_login_subtitle" = "Matrix on avatud võrk turvalise ja hajutatud suhtluse jaoks.";
 "screen_notification_settings_mentions_section_title" = "Mainimiste alusel";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "Proovi uuesti";
+"screen_recovery_key_change_generate_key_description" = "Ära jaga seda kellegagi";
 "screen_recovery_key_confirm_title" = "Sisesta oma taastevõti";
 "screen_report_content_block_user" = "Blokeeri kasutaja";
 "screen_reset_encryption_password_placeholder" = "Sisesta...";
