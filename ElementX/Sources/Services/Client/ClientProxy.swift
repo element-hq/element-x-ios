@@ -134,11 +134,9 @@ class ClientProxy: ClientProxyProtocol {
         secureBackupController = SecureBackupController(encryption: client.encryption())
         
         /// Configure ZeroMatrixUserUtil
-        let loggedInUser: String = (try? client.userId()) ?? ""
         let zeroUsersApi = ZeroUsersApi(appSettings: appSettings)
         zeroMatrixUsersService = ZeroMatrixUsersService(zeroUsersApi: zeroUsersApi,
                                                         appSettings: appSettings,
-                                                        loggedInUserId: loggedInUser,
                                                         client: client)
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
@@ -428,10 +426,9 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func knockRoom(_ roomID: String, message: String?) async -> Result<Void, ClientProxyError> {
+    func knockRoom(_ roomID: String, via: [String], message: String?) async -> Result<Void, ClientProxyError> {
         do {
-            // TODO: It should also include a message but the API for is not available yet
-            let _ = try await client.knock(roomIdOrAlias: roomID)
+            let _ = try await client.knock(roomIdOrAlias: roomID, reason: message, serverNames: via)
             await waitForRoomToSync(roomID: roomID, timeout: .seconds(30))
             return .success(())
         } catch {
@@ -442,8 +439,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func knockRoomAlias(_ roomAlias: String, message: String?) async -> Result<Void, ClientProxyError> {
         do {
-            // TODO: It should also include a message but the API for is not available yet
-            let room = try await client.knock(roomIdOrAlias: roomAlias)
+            let room = try await client.knock(roomIdOrAlias: roomAlias, reason: message, serverNames: [])
             await waitForRoomToSync(roomID: room.id(), timeout: .seconds(30))
             return .success(())
         } catch {
@@ -723,7 +719,7 @@ class ClientProxy: ClientProxyProtocol {
         
         for roomID in roomIdentifiers {
             guard case let .joined(roomProxy) = await roomForIdentifier(roomID),
-                  roomProxy.isDirect,
+                  roomProxy.infoPublisher.value.isDirect,
                   let members = await roomProxy.members() else {
                 continue
             }
@@ -897,15 +893,18 @@ class ClientProxy: ClientProxyProtocol {
             
             switch roomListItem.membership() {
             case .invited:
-                return try .invited(InvitedRoomProxy(roomListItem: roomListItem,
-                                                     room: roomListItem.invitedRoom()))
+                return try await .invited(InvitedRoomProxy(roomListItem: roomListItem,
+                                                           room: roomListItem.invitedRoom(),
+                                                           zeroUsersService: zeroMatrixUsersService))
             case .knocked:
                 if appSettings.knockingEnabled {
-                    return try .knocked(KnockedRoomProxy(roomListItem: roomListItem,
-                                                         room: roomListItem.invitedRoom()))
+                    return try await .knocked(KnockedRoomProxy(roomListItem: roomListItem,
+                                                               room: roomListItem.invitedRoom(),
+                                                               zeroUsersService: zeroMatrixUsersService))
                 } else {
-                    return try .invited(InvitedRoomProxy(roomListItem: roomListItem,
-                                                         room: roomListItem.invitedRoom()))
+                    return try await .invited(InvitedRoomProxy(roomListItem: roomListItem,
+                                                               room: roomListItem.invitedRoom(),
+                                                               zeroUsersService: zeroMatrixUsersService))
                 }
             case .joined:
                 if roomListItem.isTimelineInitialized() == false {

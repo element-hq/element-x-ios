@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import MatrixRustSDK
 
 @MainActor
 struct KnockedRoomProxyMockConfiguration {
@@ -21,9 +22,41 @@ extension KnockedRoomProxyMock {
     convenience init(_ configuration: KnockedRoomProxyMockConfiguration) {
         self.init()
         id = configuration.id
-        name = configuration.name
-        avatarURL = configuration.avatarURL
-        avatar = .room(id: configuration.id, name: configuration.name, avatarURL: configuration.avatarURL) // Note: This doesn't replicate the real proxy logic.
-        activeMembersCount = configuration.members.filter { $0.membership == .join || $0.membership == .invite }.count
+        info = RoomInfoProxy(roomInfo: .init(configuration), roomAvatarCached: nil)
+    }
+}
+
+extension RoomInfo {
+    @MainActor init(_ configuration: KnockedRoomProxyMockConfiguration) {
+        self.init(id: configuration.id,
+                  creator: nil,
+                  displayName: configuration.name,
+                  rawName: nil,
+                  topic: nil,
+                  avatarUrl: configuration.avatarURL?.absoluteString,
+                  isDirect: false,
+                  isPublic: false,
+                  isSpace: false,
+                  isTombstoned: false,
+                  isFavourite: false,
+                  canonicalAlias: nil,
+                  alternativeAliases: [],
+                  membership: .knocked,
+                  inviter: nil,
+                  heroes: [],
+                  activeMembersCount: UInt64(configuration.members.filter { $0.membership == .join || $0.membership == .invite }.count),
+                  invitedMembersCount: UInt64(configuration.members.filter { $0.membership == .invite }.count),
+                  joinedMembersCount: UInt64(configuration.members.filter { $0.membership == .join }.count),
+                  userPowerLevels: [:],
+                  highlightCount: 0,
+                  notificationCount: 0,
+                  cachedUserDefinedNotificationMode: nil,
+                  hasRoomCall: false,
+                  activeRoomCallParticipants: [],
+                  isMarkedUnread: false,
+                  numUnreadMessages: 0,
+                  numUnreadNotifications: 0,
+                  numUnreadMentions: 0,
+                  pinnedEventIds: [])
     }
 }

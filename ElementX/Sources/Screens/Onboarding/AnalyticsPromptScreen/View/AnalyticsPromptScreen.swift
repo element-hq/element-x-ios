@@ -35,7 +35,7 @@ struct AnalyticsPromptScreen: View {
     
     private var header: some View {
         VStack(spacing: 8) {
-            HeroImage(icon: \.chart)
+            BigIcon(icon: \.chart)
                 .padding(.bottom, 8)
             
             Text(L10n.screenAnalyticsPromptTitle(InfoPlistReader.main.bundleDisplayName))

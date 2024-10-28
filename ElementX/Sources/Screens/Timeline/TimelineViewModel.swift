@@ -28,6 +28,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
+    private let emojiProvider: EmojiProviderProtocol
     
     private let timelineInteractionHandler: TimelineInteractionHandler
     
@@ -50,7 +51,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
          userIndicatorController: UserIndicatorControllerProtocol,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
-         analyticsService: AnalyticsService) {
+         analyticsService: AnalyticsService,
+         emojiProvider: EmojiProviderProtocol) {
         self.timelineController = timelineController
         self.mediaPlayerProvider = mediaPlayerProvider
         self.roomProxy = roomProxy
@@ -58,6 +60,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         self.analyticsService = analyticsService
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
+        self.emojiProvider = emojiProvider
         
         let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
@@ -79,16 +82,14 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        ownUserID: roomProxy.ownUserID,
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,
                                                        hideTimelineMedia: appSettings.hideTimelineMedia,
-                                                       bindings: .init(reactionsCollapsed: [:])),
+                                                       pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
+                                                       bindings: .init(reactionsCollapsed: [:]),
+                                                       emojiProvider: emojiProvider),
                    mediaProvider: mediaProvider)
         
         if focussedEventID != nil {
             // The timeline controller will start loading a detached timeline.
             showFocusLoadingIndicator()
-        }
-        
-        Task {
-            await updatePinnedEventIDs()
         }
         
         setupSubscriptions()
@@ -132,6 +133,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .itemSendInfoTapped(let itemID):
             handleItemSendInfoTapped(itemID: itemID)
         case .toggleReaction(let emoji, let itemID):
+            emojiProvider.markEmojiAsFrequentlyUsed(emoji)
+            
             guard case let .event(_, eventOrTransactionID) = itemID else {
                 fatalError()
             }
@@ -374,15 +377,13 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             }
             .store(in: &cancellables)
 
-        let roomInfoSubscription = roomProxy
-            .actionsPublisher
-            .filter { $0 == .roomInfoUpdate }
+        let roomInfoSubscription = roomProxy.infoPublisher
         Task { [weak self] in
-            for await _ in roomInfoSubscription.receive(on: DispatchQueue.main).values {
+            for await roomInfo in roomInfoSubscription.receive(on: DispatchQueue.main).values {
                 guard !Task.isCancelled else {
                     return
                 }
-                await self?.updatePinnedEventIDs()
+                self?.state.pinnedEventIDs = roomInfo.pinnedEventIDs
                 await self?.updatePermissions()
             }
         }
@@ -450,13 +451,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             .weakAssign(to: \.state.hideTimelineMedia, on: self)
             .store(in: &cancellables)
     }
-    
-    private func updatePinnedEventIDs() async {
-        state.pinnedEventIDs = await roomProxy.pinnedEventIDs
-    }
 
     private func setupDirectRoomSubscriptionsIfNeeded() {
-        guard roomProxy.isDirect else {
+        guard roomProxy.infoPublisher.value.isDirect else {
             return
         }
 
@@ -465,7 +462,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             .map { [weak self] isFocused in
                 guard let self else { return false }
 
-                return isFocused && self.roomProxy.isUserAloneInDirectRoom
+                return isFocused && self.roomProxy.infoPublisher.value.isUserAloneInDirectRoom
             }
             // We want to show the alert just once, so we are taking the first "true" emitted
             .first { $0 }
@@ -736,7 +733,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private let inviteLoadingIndicatorID = UUID().uuidString
 
     private func inviteOtherDMUserBack() {
-        guard roomProxy.isUserAloneInDirectRoom else {
+        guard roomProxy.infoPublisher.value.isUserAloneInDirectRoom else {
             userIndicatorController.alertInfo = .init(id: .init(), title: L10n.commonError)
             return
         }
@@ -842,7 +839,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
 }
 
-private extension RoomProxyProtocol {
+private extension RoomInfoProxy {
     /// Checks if the other person left the room in a direct chat
     var isUserAloneInDirectRoom: Bool {
         isDirect && activeMembersCount == 1
@@ -861,7 +858,8 @@ extension TimelineViewModel {
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                         appMediator: AppMediatorMock.default,
                                         appSettings: ServiceLocator.shared.settings,
-                                        analyticsService: ServiceLocator.shared.analytics)
+                                        analyticsService: ServiceLocator.shared.analytics,
+                                        emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
     
     static let pinnedEventsTimelineMock = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                                             focussedEventID: nil,
@@ -872,7 +870,8 @@ extension TimelineViewModel {
                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                             appMediator: AppMediatorMock.default,
                                                             appSettings: ServiceLocator.shared.settings,
-                                                            analyticsService: ServiceLocator.shared.analytics)
+                                                            analyticsService: ServiceLocator.shared.analytics,
+                                                            emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
 }
 
 extension EnvironmentValues {

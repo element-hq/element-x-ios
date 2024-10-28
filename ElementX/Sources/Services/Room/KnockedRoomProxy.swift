@@ -17,66 +17,25 @@ class KnockedRoomProxy: KnockedRoomProxyProtocol {
     // multiple times over FFI
     lazy var id: String = room.id()
     
-    var canonicalAlias: String? {
-        room.canonicalAlias()
-    }
+    var ownUserID: String { room.ownUserId() }
     
-    var ownUserID: String {
-        room.ownUserId()
-    }
-    
-    var name: String? {
-        roomListItem.displayName()
-    }
-        
-    var topic: String? {
-        room.topic()
-    }
-    
-    var avatarURL: URL? {
-        roomListItem.avatarUrl().flatMap(URL.init(string:))
-    }
-    
-    var avatar: RoomAvatar {
-        if isDirect, avatarURL == nil {
-            let heroes = room.heroes()
-            
-            if heroes.count == 1 {
-                return .heroes(heroes.map(UserProfileProxy.init))
-            }
-        }
-        
-        return .room(id: id, name: name, avatarURL: avatarURL)
-    }
-    
-    var isDirect: Bool {
-        room.isDirect()
-    }
-    
-    var isPublic: Bool {
-        room.isPublic()
-    }
-    
-    var isSpace: Bool {
-        room.isSpace()
-    }
-    
-    var joinedMembersCount: Int {
-        Int(room.joinedMembersCount())
-    }
-    
-    var activeMembersCount: Int {
-        Int(room.activeMembersCount())
-    }
+    let info: RoomInfoProxy
     
     init(roomListItem: RoomListItemProtocol,
-         room: RoomProtocol) {
+         room: RoomProtocol,
+         zeroUsersService: ZeroMatrixUsersService) async throws {
         self.roomListItem = roomListItem
         self.room = room
+        let cachedRoomAvatar = zeroUsersService.getRoomAvatarFromCache(roomId: room.id())
+        info = try await RoomInfoProxy(roomInfo: room.roomInfo(), roomAvatarCached: cachedRoomAvatar)
     }
     
     func cancelKnock() async -> Result<Void, RoomProxyError> {
-        // TODO: Implement this once the API is available
-        .failure(.invalidURL)
+        do {
+            return try await .success(room.leave())
+        } catch {
+            MXLog.error("Failed cancelling the knock with error: \(error)")
+            return .failure(.sdkError(error))
+        }
     }
 }

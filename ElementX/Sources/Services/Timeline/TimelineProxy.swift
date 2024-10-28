@@ -11,6 +11,8 @@ import MatrixRustSDK
 
 final class TimelineProxy: TimelineProxyProtocol {
     private let timeline: Timeline
+    private let roomId: String
+    private let zeroChatApi: ZeroChatApiProtocol
     
     private var backPaginationStatusObservationToken: TaskHandle?
     
@@ -24,21 +26,18 @@ final class TimelineProxy: TimelineProxyProtocol {
     var timelineProvider: RoomTimelineProviderProtocol {
         innerTimelineProvider
     }
-    
-    private let room: RoomProtocol
-    private let zeroChatApi: ZeroChatApiProtocol
-    
+        
     deinit {
         backPaginationStatusObservationToken?.cancel()
     }
     
     init(timeline: Timeline,
-         room: RoomProtocol,
+         roomId: String,
          kind: TimelineKind,
          zeroChatApi: ZeroChatApiProtocol) {
         self.timeline = timeline
         self.kind = kind
-        self.room = room
+        self.roomId = roomId
         self.zeroChatApi = zeroChatApi
     }
     
@@ -236,16 +235,21 @@ final class TimelineProxy: TimelineProxyProtocol {
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending audio")
         
-        let handle = timeline.sendAudio(url: url.path(percentEncoded: false), audioInfo: audioInfo, caption: nil, formattedCaption: nil, progressWatcher: UploadProgressListener { progress in
-            progressSubject?.send(progress)
-        })
+        let handle = timeline.sendAudio(url: url.path(percentEncoded: false),
+                                        audioInfo: audioInfo,
+                                        caption: nil,
+                                        formattedCaption: nil,
+                                        storeInCache: true,
+                                        progressWatcher: UploadProgressListener { progress in
+                                            progressSubject?.send(progress)
+                                        })
         
         await requestHandle(handle)
         
         do {
             try await handle.join()
             MXLog.info("Finished sending audio")
-            _ = try await zeroChatApi.notifyAboutMessage(roomId: room.id())
+            _ = try await zeroChatApi.notifyAboutMessage(roomId: roomId)
         } catch {
             MXLog.error("Failed sending audio with error: \(error)")
             return .failure(.sdkError(error))
@@ -260,16 +264,19 @@ final class TimelineProxy: TimelineProxyProtocol {
                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending file")
         
-        let handle = timeline.sendFile(url: url.path(percentEncoded: false), fileInfo: fileInfo, progressWatcher: UploadProgressListener { progress in
-            progressSubject?.send(progress)
-        })
+        let handle = timeline.sendFile(url: url.path(percentEncoded: false),
+                                       fileInfo: fileInfo,
+                                       storeInCache: true,
+                                       progressWatcher: UploadProgressListener { progress in
+                                           progressSubject?.send(progress)
+                                       })
         
         await requestHandle(handle)
         
         do {
             try await handle.join()
             MXLog.info("Finished sending file")
-            _ = try await zeroChatApi.notifyAboutMessage(roomId: room.id())
+            _ = try await zeroChatApi.notifyAboutMessage(roomId: roomId)
         } catch {
             MXLog.error("Failed sending file with error: \(error)")
             return .failure(.sdkError(error))
@@ -285,16 +292,22 @@ final class TimelineProxy: TimelineProxyProtocol {
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending image")
         
-        let handle = timeline.sendImage(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), imageInfo: imageInfo, caption: nil, formattedCaption: nil, progressWatcher: UploadProgressListener { progress in
-            progressSubject?.send(progress)
-        })
+        let handle = timeline.sendImage(url: url.path(percentEncoded: false),
+                                        thumbnailUrl: thumbnailURL.path(percentEncoded: false),
+                                        imageInfo: imageInfo,
+                                        caption: nil,
+                                        formattedCaption: nil,
+                                        storeInCache: true,
+                                        progressWatcher: UploadProgressListener { progress in
+                                            progressSubject?.send(progress)
+                                        })
         
         await requestHandle(handle)
         
         do {
             try await handle.join()
             MXLog.info("Finished sending image")
-            _ = try await zeroChatApi.notifyAboutMessage(roomId: room.id())
+            _ = try await zeroChatApi.notifyAboutMessage(roomId: roomId)
         } catch {
             MXLog.error("Failed sending image with error: \(error)")
             return .failure(.sdkError(error))
@@ -318,7 +331,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         MXLog.info("Finished sending location")
         do {
-            _ = try await zeroChatApi.notifyAboutMessage(roomId: room.id())
+            _ = try await zeroChatApi.notifyAboutMessage(roomId: roomId)
         } catch {
             MXLog.error(error)
         }
@@ -332,16 +345,22 @@ final class TimelineProxy: TimelineProxyProtocol {
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending video")
         
-        let handle = timeline.sendVideo(url: url.path(percentEncoded: false), thumbnailUrl: thumbnailURL.path(percentEncoded: false), videoInfo: videoInfo, caption: nil, formattedCaption: nil, progressWatcher: UploadProgressListener { progress in
-            progressSubject?.send(progress)
-        })
+        let handle = timeline.sendVideo(url: url.path(percentEncoded: false),
+                                        thumbnailUrl: thumbnailURL.path(percentEncoded: false),
+                                        videoInfo: videoInfo,
+                                        caption: nil,
+                                        formattedCaption: nil,
+                                        storeInCache: true,
+                                        progressWatcher: UploadProgressListener { progress in
+                                            progressSubject?.send(progress)
+                                        })
         
         await requestHandle(handle)
         
         do {
             try await handle.join()
             MXLog.info("Finished sending video")
-            _ = try await zeroChatApi.notifyAboutMessage(roomId: room.id())
+            _ = try await zeroChatApi.notifyAboutMessage(roomId: roomId)
         } catch {
             MXLog.error("Failed sending video with error: \(error)")
             return .failure(.sdkError(error))
@@ -357,16 +376,22 @@ final class TimelineProxy: TimelineProxyProtocol {
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending voice message")
         
-        let handle = timeline.sendVoiceMessage(url: url.path(percentEncoded: false), audioInfo: audioInfo, waveform: waveform, caption: nil, formattedCaption: nil, progressWatcher: UploadProgressListener { progress in
-            progressSubject?.send(progress)
-        })
+        let handle = timeline.sendVoiceMessage(url: url.path(percentEncoded: false),
+                                               audioInfo: audioInfo,
+                                               waveform: waveform,
+                                               caption: nil,
+                                               formattedCaption: nil,
+                                               storeInCache: true,
+                                               progressWatcher: UploadProgressListener { progress in
+                                                   progressSubject?.send(progress)
+                                               })
         
         await requestHandle(handle)
         
         do {
             try await handle.join()
             MXLog.info("Finished sending voice message")
-            _ = try await zeroChatApi.notifyAboutMessage(roomId: room.id())
+            _ = try await zeroChatApi.notifyAboutMessage(roomId: roomId)
         } catch {
             MXLog.error("Failed sending vocie message with error: \(error)")
             return .failure(.sdkError(error))
@@ -397,7 +422,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                 _ = try await timeline.send(msg: messageContent)
                 MXLog.info("Finished sending message")
             }
-            _ = try await zeroChatApi.notifyAboutMessage(roomId: room.id())
+            _ = try await zeroChatApi.notifyAboutMessage(roomId: roomId)
         } catch {
             if let inReplyToEventID {
                 MXLog.error("Failed sending reply to eventID: \(inReplyToEventID) with error: \(error)")
@@ -416,7 +441,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         do {
             _ = try await timeline.send(msg: messageContent)
-            _ = try await zeroChatApi.notifyAboutMessage(roomId: room.id())
+            _ = try await zeroChatApi.notifyAboutMessage(roomId: roomId)
         } catch {
             MXLog.error("Failed sending message with error: \(error)")
         }

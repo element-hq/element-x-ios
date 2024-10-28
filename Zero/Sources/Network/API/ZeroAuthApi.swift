@@ -3,6 +3,8 @@ import Foundation
 
 protocol ZeroAuthApiProtocol {
     func login(email: String, password: String) async throws -> Result<ZMatrixSession, Error>
+    
+    func loginSSO(email: String, password: String) async throws -> Result<ZSSOToken, Error>
 }
 
 class ZeroAuthApi: ZeroAuthApiProtocol {
@@ -37,6 +39,31 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
                 case .failure(let error):
                     return .failure(error)
                 }
+            case .failure(let error):
+                return .failure(error)
+            }
+            
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    func loginSSO(email: String, password: String) async throws -> Result<ZSSOToken, any Error> {
+        let parameters: Parameters = [
+            "email": email,
+            "password": password
+        ]
+        // login user
+        let authResult: Result<ZSessionDataResponse, Error> = try await APIManager.shared.request(AuthEndPoints.loginEndPoint, method: .post, parameters: parameters)
+        switch authResult {
+        case .success(let sessionData):
+            // save Access Token
+            appSettings.zeroAccessToken = sessionData.accessToken
+            // fetch SSO Token
+            let ssoResult: Result<ZSSOToken, Error> = try await fetchSSOToken()
+            switch ssoResult {
+            case .success(let ssoToken):
+                return .success(ssoToken)
             case .failure(let error):
                 return .failure(error)
             }

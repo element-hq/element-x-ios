@@ -2837,15 +2837,15 @@ class ClientProxyMock: ClientProxyProtocol {
     }
     //MARK: - knockRoom
 
-    var knockRoomMessageUnderlyingCallsCount = 0
-    var knockRoomMessageCallsCount: Int {
+    var knockRoomViaMessageUnderlyingCallsCount = 0
+    var knockRoomViaMessageCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return knockRoomMessageUnderlyingCallsCount
+                return knockRoomViaMessageUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = knockRoomMessageUnderlyingCallsCount
+                    returnValue = knockRoomViaMessageUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -2853,29 +2853,29 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                knockRoomMessageUnderlyingCallsCount = newValue
+                knockRoomViaMessageUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    knockRoomMessageUnderlyingCallsCount = newValue
+                    knockRoomViaMessageUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var knockRoomMessageCalled: Bool {
-        return knockRoomMessageCallsCount > 0
+    var knockRoomViaMessageCalled: Bool {
+        return knockRoomViaMessageCallsCount > 0
     }
-    var knockRoomMessageReceivedArguments: (roomID: String, message: String?)?
-    var knockRoomMessageReceivedInvocations: [(roomID: String, message: String?)] = []
+    var knockRoomViaMessageReceivedArguments: (roomID: String, via: [String], message: String?)?
+    var knockRoomViaMessageReceivedInvocations: [(roomID: String, via: [String], message: String?)] = []
 
-    var knockRoomMessageUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var knockRoomMessageReturnValue: Result<Void, ClientProxyError>! {
+    var knockRoomViaMessageUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var knockRoomViaMessageReturnValue: Result<Void, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return knockRoomMessageUnderlyingReturnValue
+                return knockRoomViaMessageUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = knockRoomMessageUnderlyingReturnValue
+                    returnValue = knockRoomViaMessageUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -2883,26 +2883,26 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                knockRoomMessageUnderlyingReturnValue = newValue
+                knockRoomViaMessageUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    knockRoomMessageUnderlyingReturnValue = newValue
+                    knockRoomViaMessageUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var knockRoomMessageClosure: ((String, String?) async -> Result<Void, ClientProxyError>)?
+    var knockRoomViaMessageClosure: ((String, [String], String?) async -> Result<Void, ClientProxyError>)?
 
-    func knockRoom(_ roomID: String, message: String?) async -> Result<Void, ClientProxyError> {
-        knockRoomMessageCallsCount += 1
-        knockRoomMessageReceivedArguments = (roomID: roomID, message: message)
+    func knockRoom(_ roomID: String, via: [String], message: String?) async -> Result<Void, ClientProxyError> {
+        knockRoomViaMessageCallsCount += 1
+        knockRoomViaMessageReceivedArguments = (roomID: roomID, via: via, message: message)
         DispatchQueue.main.async {
-            self.knockRoomMessageReceivedInvocations.append((roomID: roomID, message: message))
+            self.knockRoomViaMessageReceivedInvocations.append((roomID: roomID, via: via, message: message))
         }
-        if let knockRoomMessageClosure = knockRoomMessageClosure {
-            return await knockRoomMessageClosure(roomID, message)
+        if let knockRoomViaMessageClosure = knockRoomViaMessageClosure {
+            return await knockRoomViaMessageClosure(roomID, via, message)
         } else {
-            return knockRoomMessageReturnValue
+            return knockRoomViaMessageReturnValue
         }
     }
     //MARK: - knockRoomAlias
@@ -5824,67 +5824,21 @@ class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol {
     }
 }
 class InvitedRoomProxyMock: InvitedRoomProxyProtocol {
-    var inviterCallsCount = 0
-    var inviterCalled: Bool {
-        return inviterCallsCount > 0
+    var info: RoomInfoProxy {
+        get { return underlyingInfo }
+        set(value) { underlyingInfo = value }
     }
-
-    var inviter: RoomMemberProxyProtocol? {
-        get async {
-            inviterCallsCount += 1
-            if let inviterClosure = inviterClosure {
-                return await inviterClosure()
-            } else {
-                return underlyingInviter
-            }
-        }
-    }
-    var underlyingInviter: RoomMemberProxyProtocol?
-    var inviterClosure: (() async -> RoomMemberProxyProtocol?)?
+    var underlyingInfo: RoomInfoProxy!
     var id: String {
         get { return underlyingId }
         set(value) { underlyingId = value }
     }
     var underlyingId: String!
-    var canonicalAlias: String?
     var ownUserID: String {
         get { return underlyingOwnUserID }
         set(value) { underlyingOwnUserID = value }
     }
     var underlyingOwnUserID: String!
-    var name: String?
-    var topic: String?
-    var avatar: RoomAvatar {
-        get { return underlyingAvatar }
-        set(value) { underlyingAvatar = value }
-    }
-    var underlyingAvatar: RoomAvatar!
-    var avatarURL: URL?
-    var isPublic: Bool {
-        get { return underlyingIsPublic }
-        set(value) { underlyingIsPublic = value }
-    }
-    var underlyingIsPublic: Bool!
-    var isDirect: Bool {
-        get { return underlyingIsDirect }
-        set(value) { underlyingIsDirect = value }
-    }
-    var underlyingIsDirect: Bool!
-    var isSpace: Bool {
-        get { return underlyingIsSpace }
-        set(value) { underlyingIsSpace = value }
-    }
-    var underlyingIsSpace: Bool!
-    var joinedMembersCount: Int {
-        get { return underlyingJoinedMembersCount }
-        set(value) { underlyingJoinedMembersCount = value }
-    }
-    var underlyingJoinedMembersCount: Int!
-    var activeMembersCount: Int {
-        get { return underlyingActiveMembersCount }
-        set(value) { underlyingActiveMembersCount = value }
-    }
-    var underlyingActiveMembersCount: Int!
 
     //MARK: - rejectInvitation
 
@@ -6021,46 +5975,11 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
         set(value) { underlyingIsEncrypted = value }
     }
     var underlyingIsEncrypted: Bool!
-    var isFavouriteCallsCount = 0
-    var isFavouriteCalled: Bool {
-        return isFavouriteCallsCount > 0
+    var infoPublisher: CurrentValuePublisher<RoomInfoProxy, Never> {
+        get { return underlyingInfoPublisher }
+        set(value) { underlyingInfoPublisher = value }
     }
-
-    var isFavourite: Bool {
-        get async {
-            isFavouriteCallsCount += 1
-            if let isFavouriteClosure = isFavouriteClosure {
-                return await isFavouriteClosure()
-            } else {
-                return underlyingIsFavourite
-            }
-        }
-    }
-    var underlyingIsFavourite: Bool!
-    var isFavouriteClosure: (() async -> Bool)?
-    var pinnedEventIDsCallsCount = 0
-    var pinnedEventIDsCalled: Bool {
-        return pinnedEventIDsCallsCount > 0
-    }
-
-    var pinnedEventIDs: Set<String> {
-        get async {
-            pinnedEventIDsCallsCount += 1
-            if let pinnedEventIDsClosure = pinnedEventIDsClosure {
-                return await pinnedEventIDsClosure()
-            } else {
-                return underlyingPinnedEventIDs
-            }
-        }
-    }
-    var underlyingPinnedEventIDs: Set<String>!
-    var pinnedEventIDsClosure: (() async -> Set<String>)?
-    var hasOngoingCall: Bool {
-        get { return underlyingHasOngoingCall }
-        set(value) { underlyingHasOngoingCall = value }
-    }
-    var underlyingHasOngoingCall: Bool!
-    var activeRoomCallParticipants: [String] = []
+    var underlyingInfoPublisher: CurrentValuePublisher<RoomInfoProxy, Never>!
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {
         get { return underlyingMembersPublisher }
         set(value) { underlyingMembersPublisher = value }
@@ -6076,11 +5995,6 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
         set(value) { underlyingIdentityStatusChangesPublisher = value }
     }
     var underlyingIdentityStatusChangesPublisher: CurrentValuePublisher<[IdentityStatusChange], Never>!
-    var actionsPublisher: AnyPublisher<JoinedRoomProxyAction, Never> {
-        get { return underlyingActionsPublisher }
-        set(value) { underlyingActionsPublisher = value }
-    }
-    var underlyingActionsPublisher: AnyPublisher<JoinedRoomProxyAction, Never>!
     var timeline: TimelineProxyProtocol {
         get { return underlyingTimeline }
         set(value) { underlyingTimeline = value }
@@ -6108,45 +6022,11 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
         set(value) { underlyingId = value }
     }
     var underlyingId: String!
-    var canonicalAlias: String?
     var ownUserID: String {
         get { return underlyingOwnUserID }
         set(value) { underlyingOwnUserID = value }
     }
     var underlyingOwnUserID: String!
-    var name: String?
-    var topic: String?
-    var avatar: RoomAvatar {
-        get { return underlyingAvatar }
-        set(value) { underlyingAvatar = value }
-    }
-    var underlyingAvatar: RoomAvatar!
-    var avatarURL: URL?
-    var isPublic: Bool {
-        get { return underlyingIsPublic }
-        set(value) { underlyingIsPublic = value }
-    }
-    var underlyingIsPublic: Bool!
-    var isDirect: Bool {
-        get { return underlyingIsDirect }
-        set(value) { underlyingIsDirect = value }
-    }
-    var underlyingIsDirect: Bool!
-    var isSpace: Bool {
-        get { return underlyingIsSpace }
-        set(value) { underlyingIsSpace = value }
-    }
-    var underlyingIsSpace: Bool!
-    var joinedMembersCount: Int {
-        get { return underlyingJoinedMembersCount }
-        set(value) { underlyingJoinedMembersCount = value }
-    }
-    var underlyingJoinedMembersCount: Int!
-    var activeMembersCount: Int {
-        get { return underlyingActiveMembersCount }
-        set(value) { underlyingActiveMembersCount = value }
-    }
-    var underlyingActiveMembersCount: Int!
 
     //MARK: - subscribeForUpdates
 
@@ -9752,50 +9632,21 @@ class KeychainControllerMock: KeychainControllerProtocol {
     }
 }
 class KnockedRoomProxyMock: KnockedRoomProxyProtocol {
+    var info: RoomInfoProxy {
+        get { return underlyingInfo }
+        set(value) { underlyingInfo = value }
+    }
+    var underlyingInfo: RoomInfoProxy!
     var id: String {
         get { return underlyingId }
         set(value) { underlyingId = value }
     }
     var underlyingId: String!
-    var canonicalAlias: String?
     var ownUserID: String {
         get { return underlyingOwnUserID }
         set(value) { underlyingOwnUserID = value }
     }
     var underlyingOwnUserID: String!
-    var name: String?
-    var topic: String?
-    var avatar: RoomAvatar {
-        get { return underlyingAvatar }
-        set(value) { underlyingAvatar = value }
-    }
-    var underlyingAvatar: RoomAvatar!
-    var avatarURL: URL?
-    var isPublic: Bool {
-        get { return underlyingIsPublic }
-        set(value) { underlyingIsPublic = value }
-    }
-    var underlyingIsPublic: Bool!
-    var isDirect: Bool {
-        get { return underlyingIsDirect }
-        set(value) { underlyingIsDirect = value }
-    }
-    var underlyingIsDirect: Bool!
-    var isSpace: Bool {
-        get { return underlyingIsSpace }
-        set(value) { underlyingIsSpace = value }
-    }
-    var underlyingIsSpace: Bool!
-    var joinedMembersCount: Int {
-        get { return underlyingJoinedMembersCount }
-        set(value) { underlyingJoinedMembersCount = value }
-    }
-    var underlyingJoinedMembersCount: Int!
-    var activeMembersCount: Int {
-        get { return underlyingActiveMembersCount }
-        set(value) { underlyingActiveMembersCount = value }
-    }
-    var underlyingActiveMembersCount: Int!
 
     //MARK: - cancelKnock
 
@@ -12934,45 +12785,11 @@ class RoomProxyMock: RoomProxyProtocol {
         set(value) { underlyingId = value }
     }
     var underlyingId: String!
-    var canonicalAlias: String?
     var ownUserID: String {
         get { return underlyingOwnUserID }
         set(value) { underlyingOwnUserID = value }
     }
     var underlyingOwnUserID: String!
-    var name: String?
-    var topic: String?
-    var avatar: RoomAvatar {
-        get { return underlyingAvatar }
-        set(value) { underlyingAvatar = value }
-    }
-    var underlyingAvatar: RoomAvatar!
-    var avatarURL: URL?
-    var isPublic: Bool {
-        get { return underlyingIsPublic }
-        set(value) { underlyingIsPublic = value }
-    }
-    var underlyingIsPublic: Bool!
-    var isDirect: Bool {
-        get { return underlyingIsDirect }
-        set(value) { underlyingIsDirect = value }
-    }
-    var underlyingIsDirect: Bool!
-    var isSpace: Bool {
-        get { return underlyingIsSpace }
-        set(value) { underlyingIsSpace = value }
-    }
-    var underlyingIsSpace: Bool!
-    var joinedMembersCount: Int {
-        get { return underlyingJoinedMembersCount }
-        set(value) { underlyingJoinedMembersCount = value }
-    }
-    var underlyingJoinedMembersCount: Int!
-    var activeMembersCount: Int {
-        get { return underlyingActiveMembersCount }
-        set(value) { underlyingActiveMembersCount = value }
-    }
-    var underlyingActiveMembersCount: Int!
 
 }
 class RoomSummaryProviderMock: RoomSummaryProviderProtocol {

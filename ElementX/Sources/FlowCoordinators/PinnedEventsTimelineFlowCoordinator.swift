@@ -23,6 +23,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appSettings: AppSettings
     private let appMediator: AppMediatorProtocol
+    private let emojiProvider: EmojiProviderProtocol
     
     private let zeroAttachmentService: ZeroAttachmentService
     
@@ -39,7 +40,8 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
          roomProxy: JoinedRoomProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          appSettings: AppSettings,
-         appMediator: AppMediatorProtocol) {
+         appMediator: AppMediatorProtocol,
+         emojiProvider: EmojiProviderProtocol) {
         self.navigationStackCoordinator = navigationStackCoordinator
         self.userSession = userSession
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
@@ -47,6 +49,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         self.userIndicatorController = userIndicatorController
         self.appSettings = appSettings
         self.appMediator = appMediator
+        self.emojiProvider = emojiProvider
         
         zeroAttachmentService = ZeroAttachmentService(appSettings: appSettings, isRoomEncrypted: roomProxy.isEncrypted)
     }
@@ -78,7 +81,8 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                                   mediaProvider: userSession.mediaProvider,
                                                                                   mediaPlayerProvider: MediaPlayerProvider(),
                                                                                   voiceMessageMediaManager: userSession.voiceMessageMediaManager,
-                                                                                  appMediator: appMediator))
+                                                                                  appMediator: appMediator,
+                                                                                  emojiProvider: emojiProvider))
         
         coordinator.actions
             .sink { [weak self] action in

@@ -38,7 +38,7 @@ struct ResolveVerifiedUserSendFailureScreen: View {
     
     var header: some View {
         VStack(spacing: 8) {
-            HeroImage(icon: \.error, style: .critical)
+            BigIcon(icon: \.error, style: .alertSolid)
                 .padding(.bottom, 8)
             
             Text(context.viewState.title)

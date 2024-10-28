@@ -16,14 +16,15 @@ struct SecureBackupScreenViewState: BindableState {
     let chatBackupDetailsURL: URL
     var recoveryState = SecureBackupRecoveryState.unknown
     var keyBackupState = SecureBackupKeyBackupState.unknown
-    var bindings = SecureBackupScreenViewStateBindings()
+    var bindings: SecureBackupScreenViewStateBindings
 }
 
 struct SecureBackupScreenViewStateBindings {
+    var keyStorageEnabled: Bool
     var alertInfo: AlertInfo<UUID>?
 }
 
 enum SecureBackupScreenViewAction {
     case recoveryKey
-    case keyBackup
+    case keyStorageToggled(Bool)
 }

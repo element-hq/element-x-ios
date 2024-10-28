@@ -181,8 +181,14 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             case .unknown:
                 encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .unknown)
                 errorLabel = L10n.commonWaitingForDecryptionKey
-            case .membership:
-                encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .membership)
+            case .verificationViolation:
+                encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .verificationViolation)
+                errorLabel = L10n.commonUnableToDecryptVerificationViolation
+            case .unsignedDevice, .unknownDevice:
+                encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .insecureDevice)
+                errorLabel = L10n.commonUnableToDecryptInsecureDevice
+            case .sentBeforeWeJoined:
+                encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .sentBeforeWeJoined)
                 errorLabel = L10n.commonUnableToDecryptNoAccess
             }
         case .olmV1Curve25519AesSha2(let senderKey):
@@ -535,7 +541,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     private func buildTextTimelineItemContent(_ messageContent: TextMessageContent, _ senderId: String) -> TextRoomTimelineItemContent {
         var htmlBody = messageContent.formatted?.format == .html ? messageContent.formatted?.body : nil
-        if messageContent.formatted?.format == .html, senderId == userID {
+        if messageContent.formatted?.format == .html {
             htmlBody = convertTextToHTML(text: messageContent.body, htmlBody: htmlBody)
         }
         let formattedBody = (htmlBody != nil ? attributedStringBuilder.fromHTML(htmlBody) : attributedStringBuilder.fromPlain(messageContent.body))

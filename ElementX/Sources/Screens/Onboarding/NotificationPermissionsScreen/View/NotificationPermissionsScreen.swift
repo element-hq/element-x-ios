@@ -27,7 +27,7 @@ struct NotificationPermissionsScreen: View {
     /// The main content of the screen that is shown inside the scroll view.
     private var mainContent: some View {
         VStack(spacing: 8) {
-            HeroImage(icon: \.notificationsSolid)
+            BigIcon(icon: \.notificationsSolid)
                 .padding(.bottom, 8)
             
             Text(L10n.screenNotificationOptinTitle)

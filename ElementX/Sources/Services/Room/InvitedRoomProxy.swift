@@ -17,68 +17,17 @@ class InvitedRoomProxy: InvitedRoomProxyProtocol {
     // multiple times over FFI
     lazy var id: String = room.id()
     
-    var canonicalAlias: String? {
-        room.canonicalAlias()
-    }
+    var ownUserID: String { room.ownUserId() }
     
-    var ownUserID: String {
-        room.ownUserId()
-    }
-    
-    var name: String? {
-        roomListItem.displayName()
-    }
-        
-    var topic: String? {
-        room.topic()
-    }
-    
-    var avatarURL: URL? {
-        roomListItem.avatarUrl().flatMap(URL.init(string:))
-    }
-    
-    var avatar: RoomAvatar {
-        if isDirect, avatarURL == nil {
-            let heroes = room.heroes()
-            
-            if heroes.count == 1 {
-                return .heroes(heroes.map(UserProfileProxy.init))
-            }
-        }
-        
-        return .room(id: id, name: name, avatarURL: avatarURL)
-    }
-    
-    var isDirect: Bool {
-        room.isDirect()
-    }
-    
-    var isPublic: Bool {
-        room.isPublic()
-    }
-    
-    var isSpace: Bool {
-        room.isSpace()
-    }
-    
-    var joinedMembersCount: Int {
-        Int(room.joinedMembersCount())
-    }
-    
-    var activeMembersCount: Int {
-        Int(room.activeMembersCount())
-    }
-    
-    var inviter: RoomMemberProxyProtocol? {
-        get async {
-            await (try? roomListItem.roomInfo().inviter).map(RoomMemberProxy.init)
-        }
-    }
+    let info: RoomInfoProxy
     
     init(roomListItem: RoomListItemProtocol,
-         room: RoomProtocol) {
+         room: RoomProtocol,
+         zeroUsersService: ZeroMatrixUsersService) async throws {
         self.roomListItem = roomListItem
         self.room = room
+        let cachedRoomAvatar = zeroUsersService.getRoomAvatarFromCache(roomId: room.id())
+        info = try await RoomInfoProxy(roomInfo: room.roomInfo(), roomAvatarCached: cachedRoomAvatar)
     }
     
     func acceptInvitation() async -> Result<Void, RoomProxyError> {

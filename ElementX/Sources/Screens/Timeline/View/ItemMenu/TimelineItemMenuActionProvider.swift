@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 struct TimelineItemMenuActionProvider {
     let timelineItem: RoomTimelineItemProtocol
     let canCurrentUserRedactSelf: Bool
@@ -16,6 +17,7 @@ struct TimelineItemMenuActionProvider {
     let isDM: Bool
     let isViewSourceEnabled: Bool
     let isPinnedEventsTimeline: Bool
+    let emojiProvider: EmojiProviderProtocol
     
     // swiftlint:disable:next cyclomatic_complexity
     func makeActions() -> TimelineItemMenuActions? {
@@ -42,9 +44,14 @@ struct TimelineItemMenuActionProvider {
                 break
             }
             
-//            return .init(isReactable: false, actions: [.copyPermalink], debugActions: debugActions)
-            
-            return .init(isReactable: false, actions: [], debugActions: debugActions)
+//            return .init(isReactable: false,
+//                         actions: [.copyPermalink],
+//                         debugActions: debugActions,
+//                         emojiProvider: emojiProvider)
+            return .init(isReactable: false,
+                         actions: [],
+                         debugActions: debugActions,
+                         emojiProvider: emojiProvider)
         }
         
         var actions: [TimelineItemMenuAction] = []
@@ -57,9 +64,9 @@ struct TimelineItemMenuActionProvider {
             }
         }
         
-        if item.isForwardable {
-            actions.append(.forward(itemID: item.id))
-        }
+//        if item.isForwardable {
+//            actions.append(.forward(itemID: item.id))
+//        }
 
         if item.isEditable {
             actions.append(.edit)
@@ -102,9 +109,14 @@ struct TimelineItemMenuActionProvider {
 //            actions = actions.filter(\.canAppearInPinnedEventsTimeline)
 //        }
 
-//        return .init(isReactable: isPinnedEventsTimeline ? false : item.isReactable, actions: actions, debugActions: debugActions)
-        
-        return .init(isReactable: item.isReactable, actions: actions, debugActions: debugActions)
+//        return .init(isReactable: isPinnedEventsTimeline ? false : item.isReactable,
+//                     actions: actions,
+//                     debugActions: debugActions,
+//                     emojiProvider: emojiProvider)
+        return .init(isReactable: item.isReactable,
+                     actions: actions,
+                     debugActions: debugActions,
+                     emojiProvider: emojiProvider)
     }
     
     private func canRedactItem(_ item: EventBasedTimelineItemProtocol) -> Bool {

@@ -86,7 +86,7 @@ struct NotificationSettingsScreen: View {
         Section {
             ListRow(label: .plain(title: L10n.screenNotificationSettingsEnableNotifications),
                     kind: .toggle($context.enableNotifications))
-                .onChange(of: context.enableNotifications) { _ in
+                .onChange(of: context.enableNotifications) {
                     context.send(viewAction: .changedEnableNotifications)
                 }
         }
@@ -128,7 +128,7 @@ struct NotificationSettingsScreen: View {
                     kind: .toggle($context.roomMentionsEnabled))
                 .disabled(context.viewState.settings?.roomMentionsEnabled == nil)
                 .allowsHitTesting(!context.viewState.applyingChange)
-                .onChange(of: context.roomMentionsEnabled) { _ in
+                .onChange(of: context.roomMentionsEnabled) {
                     context.send(viewAction: .roomMentionChanged)
                 }
         } header: {
@@ -143,7 +143,7 @@ struct NotificationSettingsScreen: View {
                     kind: .toggle($context.callsEnabled))
                 .disabled(context.viewState.settings?.callsEnabled == nil)
                 .allowsHitTesting(!context.viewState.applyingChange)
-                .onChange(of: context.callsEnabled) { _ in
+                .onChange(of: context.callsEnabled) {
                     context.send(viewAction: .callsChanged)
                 }
         } header: {
@@ -158,7 +158,7 @@ struct NotificationSettingsScreen: View {
                     kind: .toggle($context.invitationsEnabled))
                 .disabled(context.viewState.settings?.invitationsEnabled == nil)
                 .allowsHitTesting(!context.viewState.applyingChange)
-                .onChange(of: context.invitationsEnabled) { _ in
+                .onChange(of: context.invitationsEnabled) {
                     context.send(viewAction: .invitationsChanged)
                 }
         } header: {

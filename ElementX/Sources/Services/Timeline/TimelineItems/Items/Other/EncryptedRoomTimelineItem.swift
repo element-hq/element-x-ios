@@ -15,7 +15,9 @@ struct EncryptedRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
     }
     
     enum UTDCause: Hashable {
-        case membership
+        case sentBeforeWeJoined
+        case verificationViolation
+        case insecureDevice
         case unknown
     }
     

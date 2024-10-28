@@ -134,13 +134,13 @@ struct RoomDetailsEditScreen: View {
         } label: {
             Text(L10n.actionChoosePhoto)
         }
-        if context.viewState.showDeleteImageAction {
-            Button(role: .destructive) {
-                context.send(viewAction: .removeImage)
-            } label: {
-                Text(L10n.actionRemove)
-            }
-        }
+//        if context.viewState.showDeleteImageAction {
+//            Button(role: .destructive) {
+//                context.send(viewAction: .removeImage)
+//            } label: {
+//                Text(L10n.actionRemove)
+//            }
+//        }
     }
 }
 

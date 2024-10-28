@@ -32,7 +32,7 @@ struct PillView: View {
             .padding(.trailing, 6)
             .padding(.vertical, 1)
             .background { Capsule().foregroundColor(backgroundColor) }
-            .onChange(of: context.viewState.displayText) { _ in
+            .onChange(of: context.viewState.displayText) {
                 didChangeText()
             }
     }

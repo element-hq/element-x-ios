@@ -27,6 +27,7 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
     let mode: SecureBackupRecoveryKeyScreenViewMode
     
     var recoveryKey: String?
+    var isGeneratingKey = false
     var doneButtonEnabled = false
     
     var bindings: SecureBackupRecoveryKeyScreenViewBindings

@@ -20,7 +20,7 @@ struct PINTextField: View {
             .textFieldStyle(PINTextFieldStyle(pinCode: pinCode, isSecure: isSecure, maxLength: maxLength, size: size))
             .keyboardType(.numberPad)
             .accessibilityIdentifier(A11yIdentifiers.appLockSetupPINScreen.textField)
-            .onChange(of: pinCode) { newValue in
+            .onChange(of: pinCode) { _, newValue in
                 let sanitized = sanitize(newValue)
                 if sanitized != newValue {
                     MXLog.warning("PIN code input sanitized.")

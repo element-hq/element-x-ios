@@ -123,29 +123,38 @@ class AuthenticationService: AuthenticationServiceProtocol {
     func login(username: String, password: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         guard let client else { return .failure(.failedLoggingIn) }
         do {
-//            try await client.login(username: username, password: password, initialDeviceName: initialDeviceName, deviceId: deviceID)
-//
-//            let refreshToken = try? client.session().refreshToken
-//            if refreshToken != nil {
-//                MXLog.warning("Refresh token found for a non oidc session, can't restore session, logging out")
-//                _ = try? await client.logout()
-//                return .failure(.sessionTokenRefreshNotSupported)
-//            }
-            let zeroMatrixSessionResult = try await zeroAuthApi.login(email: username, password: password)
-            switch zeroMatrixSessionResult {
-            case .success(let zeroMatrixSession):
-                let session = Session(accessToken: zeroMatrixSession.accessToken,
-                                      refreshToken: nil,
-                                      userId: zeroMatrixSession.userID,
-                                      deviceId: zeroMatrixSession.deviceID,
-                                      homeserverUrl: zeroMatrixSession.homeServer,
-                                      oidcData: nil,
-                                      slidingSyncVersion: .native)
-                try await client.restoreSession(session: session)
+            let zeroMatrixSSOResult = try await zeroAuthApi.loginSSO(email: username, password: password)
+            switch zeroMatrixSSOResult {
+            case .success(let zeroSSOToken):
+                try await client.customLoginWithJwt(jwt: zeroSSOToken.token, initialDeviceName: initialDeviceName, deviceId: deviceID)
+            
+                let refreshToken = try? client.session().refreshToken
+                if refreshToken != nil {
+                    MXLog.warning("Refresh token found for a non oidc session, can't restore session, logging out")
+                    _ = try? await client.logout()
+                    return .failure(.sessionTokenRefreshNotSupported)
+                }
+                
                 return await userSession(for: client)
             case .failure(let error):
                 return .failure(.failedLoggingIn)
             }
+            
+//            let zeroMatrixSessionResult = try await zeroAuthApi.login(email: username, password: password)
+//            switch zeroMatrixSessionResult {
+//            case .success(let zeroMatrixSession):
+//                let session = Session(accessToken: zeroMatrixSession.accessToken,
+//                                      refreshToken: nil,
+//                                      userId: zeroMatrixSession.userID,
+//                                      deviceId: zeroMatrixSession.deviceID,
+//                                      homeserverUrl: zeroMatrixSession.homeServer,
+//                                      oidcData: nil,
+//                                      slidingSyncVersion: .native)
+//                try await client.restoreSession(session: session)
+//                return await userSession(for: client)
+//            case .failure(let error):
+//                return .failure(.failedLoggingIn)
+//            }
         } catch {
             MXLog.error("Failed logging in with error: \(error)")
             // FIXME: How about we make a proper type in the FFI? 😅

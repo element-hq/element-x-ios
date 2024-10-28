@@ -48,8 +48,8 @@ final class AppSettings {
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
         case enableOnlySignedDeviceIsolationMode
-        case identityPinningViolationNotificationsEnabled
         case knockingEnabled
+        case frequentEmojisEnabled
         
         case zeroAccessToken
         case zeroMatrixUsers
@@ -288,12 +288,12 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.optimizeMediaUploads, defaultValue: false, storageType: .userDefaults(store))
     var optimizeMediaUploads
-	
-    @UserPreference(key: UserDefaultsKeys.identityPinningViolationNotificationsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
-    var identityPinningViolationNotificationsEnabled
     
     @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var knockingEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.frequentEmojisEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
+    var frequentEmojisEnabled
 
     #endif
     

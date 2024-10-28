@@ -50,8 +50,8 @@ struct DeveloperOptionsScreen: View {
                     Text("Hide image & video previews")
                 }
                 
-                Toggle(isOn: $context.identityPinningViolationNotificationsEnabled) {
-                    Text("Identity pinning violation notifications")
+                Toggle(isOn: $context.frequentEmojisEnabled) {
+                    Text("Show frequently used emojis")
                 }
             }
             

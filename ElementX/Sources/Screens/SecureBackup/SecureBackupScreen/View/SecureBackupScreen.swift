@@ -39,7 +39,7 @@ struct SecureBackupScreen: View {
     private var keyBackupSection: some View {
         Section {
             ListRow(kind: .custom {
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 8) {
                     Text(L10n.screenChatBackupKeyBackupTitle)
                         .font(.zero.bodyLGSemibold)
                         .foregroundColor(.compound.textPrimary)
@@ -53,7 +53,7 @@ struct SecureBackupScreen: View {
                 .accessibilityElement(children: .combine)
             })
             
-            keyBackupButton
+            keyStorageToggle
         }
     }
     
@@ -67,26 +67,23 @@ struct SecureBackupScreen: View {
         return description
     }
     
-    @ViewBuilder
-    private var keyBackupButton: some View {
-        switch context.viewState.keyBackupState {
-        case .enabled, .disabling:
-            ListRow(label: .plain(title: L10n.screenChatBackupKeyBackupActionDisable, role: .destructive), kind: .navigationLink {
-                context.send(viewAction: .keyBackup)
-            })
-        case .unknown, .enabling:
-            ListRow(label: .plain(title: L10n.screenChatBackupKeyBackupActionEnable), kind: .navigationLink {
-                context.send(viewAction: .keyBackup)
-            })
-        }
+    private var keyStorageToggle: some View {
+        ListRow(label: .plain(title: L10n.screenChatBackupKeyStorageToggleTitle,
+                              description: L10n.screenChatBackupKeyStorageToggleDescription),
+                kind: .toggle($context.keyStorageEnabled))
+            .onChange(of: context.keyStorageEnabled) { _, newValue in
+                context.send(viewAction: .keyStorageToggled(newValue))
+            }
     }
     
-    @ViewBuilder
     private var recoveryKeySection: some View {
         Section {
             switch context.viewState.recoveryState {
             case .enabled:
-                ListRow(label: .plain(title: L10n.screenChatBackupRecoveryActionChange),
+                ListRow(label: .default(title: L10n.screenChatBackupRecoveryActionChange,
+                                        description: L10n.screenChatBackupRecoveryActionChangeDescription,
+                                        icon: \.key,
+                                        iconAlignment: .top),
                         kind: .navigationLink { context.send(viewAction: .recoveryKey) })
             case .disabled:
                 ListRow(label: .plain(title: L10n.screenChatBackupRecoveryActionSetup),

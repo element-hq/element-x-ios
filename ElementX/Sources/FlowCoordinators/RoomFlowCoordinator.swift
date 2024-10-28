@@ -588,7 +588,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                            timelineItemFactory: timelineItemFactory)
         self.timelineController = timelineController
         
-        analytics.trackViewRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace)
+        analytics.trackViewRoom(isDM: roomProxy.infoPublisher.value.isDirect, isSpace: roomProxy.infoPublisher.value.isSpace)
         
         let completionSuggestionService = CompletionSuggestionService(roomProxy: roomProxy)
         
@@ -685,7 +685,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                             await storeAndSubscribeToRoomProxy(roomProxy)
                             stateMachine.tryEvent(.presentRoom(focussedEvent: nil), userInfo: EventUserInfo(animated: animated))
                             
-                            analytics.trackJoinedRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace, activeMemberCount: UInt(roomProxy.activeMembersCount))
+                            analytics.trackJoinedRoom(isDM: roomProxy.infoPublisher.value.isDirect,
+                                                      isSpace: roomProxy.infoPublisher.value.isSpace,
+                                                      activeMemberCount: UInt(roomProxy.infoPublisher.value.activeMembersCount))
                         } else {
                             stateMachine.tryEvent(.dismissFlow, userInfo: EventUserInfo(animated: animated))
                         }
@@ -1346,7 +1348,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                               roomProxy: roomProxy,
                                                               userIndicatorController: userIndicatorController,
                                                               appSettings: appSettings,
-                                                              appMediator: appMediator)
+                                                              appMediator: appMediator,
+                                                              emojiProvider: emojiProvider)
         
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else {
@@ -1377,34 +1380,23 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, itemID: TimelineItemIdentifier) {
-        // TODO: need to check this behavior (cannot reproduce it hence cannot verify it)
-        switch failure {
-        case .hasUnsignedDevice(let devices):
-            Task {
-                await roomProxy.ignoreDeviceTrustAndResend(devices: devices, itemID: itemID)
-            }
-        case .changedIdentity(let users):
-            Task {
-                await roomProxy.withdrawVerificationAndResend(userIDs: users, itemID: itemID)
+        let coordinator = ResolveVerifiedUserSendFailureScreenCoordinator(parameters: .init(failure: failure,
+                                                                                            itemID: itemID,
+                                                                                            roomProxy: roomProxy,
+                                                                                            userIndicatorController: userIndicatorController))
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+
+            switch action {
+            case .dismiss:
+                navigationStackCoordinator.setSheetCoordinator(nil)
             }
         }
-//        let coordinator = ResolveVerifiedUserSendFailureScreenCoordinator(parameters: .init(failure: failure,
-//                                                                                            itemID: itemID,
-//                                                                                            roomProxy: roomProxy,
-//                                                                                            userIndicatorController: userIndicatorController))
-//        coordinator.actionsPublisher.sink { [weak self] action in
-//            guard let self else { return }
-//
-//            switch action {
-//            case .dismiss:
-//                navigationStackCoordinator.setSheetCoordinator(nil)
-//            }
-//        }
-//        .store(in: &cancellables)
-//
-//        navigationStackCoordinator.setSheetCoordinator(coordinator) { [weak self] in
-//            self?.stateMachine.tryEvent(.dismissResolveSendFailure)
-//        }
+        .store(in: &cancellables)
+
+        navigationStackCoordinator.setSheetCoordinator(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissResolveSendFailure)
+        }
     }
     
     // MARK: - Child Flow

@@ -179,10 +179,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 guard let self else { return }
                 
                 do {
-                    try roomListService.subscribeToRooms(roomIds: roomIDs,
-                                                         settings: .init(requiredState: SlidingSyncConstants.defaultRequiredState,
-                                                                         timelineLimit: SlidingSyncConstants.defaultTimelineLimit,
-                                                                         includeHeroes: true))
+                    try roomListService.subscribeToRooms(roomIds: roomIDs)
                 } catch {
                     MXLog.error("Failed subscribing to rooms with error: \(error)")
                 }
@@ -233,7 +230,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 let roomInfo = try await roomListItem.roomInfo()
                 roomDetails.roomInfo = roomInfo
                 
-                let isDirectChat = roomInfo.isDirect || roomInfo.joinedMembersCount <= 2
+                let isDirectChat = (roomInfo.joinedMembersCount <= 2) || (roomInfo.isDirect && roomInfo.joinedMembersCount <= 2)
                 let shouldFetchProfile = (roomInfo.avatarUrl ?? "").isBlank
                 if isDirectChat, shouldFetchProfile {
                     if let userInfo = roomInfo.heroes.first {
@@ -285,10 +282,15 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         let roomAvatar: String? = roomInfo.avatarUrl ?? roomDetails.directUserProfile?.avatarUrl
         zeroUsersService.setRoomAvatarInCache(roomId: roomInfo.id, avatarUrl: roomAvatar)
         
+        let joinRequestType: RoomSummary.JoinRequestType? = switch roomInfo.membership {
+        case .invited: .invite(inviter: inviterProxy)
+        case .knocked: .knock
+        default: nil
+        }
+        
         return RoomSummary(roomListItem: roomListItem,
                            id: roomInfo.id,
-                           isInvite: roomInfo.membership == .invited,
-                           inviter: inviterProxy,
+                           joinRequestType: joinRequestType,
                            name: displayName ?? "",
                            isDirect: roomInfo.isDirect,
                            avatarURL: roomAvatar.flatMap(URL.init(string:)),

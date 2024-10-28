@@ -51,7 +51,8 @@ struct ReadReceiptsSummaryView_Previews: PreviewProvider, TestablePreview {
                                      userIndicatorController: UserIndicatorControllerMock(),
                                      appMediator: AppMediatorMock.default,
                                      appSettings: ServiceLocator.shared.settings,
-                                     analyticsService: ServiceLocator.shared.analytics)
+                                     analyticsService: ServiceLocator.shared.analytics,
+                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
         return mock
     }()
     

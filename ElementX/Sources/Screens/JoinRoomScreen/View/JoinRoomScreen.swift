@@ -14,7 +14,7 @@ struct JoinRoomScreen: View {
     @ObservedObject var context: JoinRoomScreenViewModel.Context
     
     var body: some View {
-        FullscreenDialog(topPadding: 80, background: .bloom) {
+        FullscreenDialog(topPadding: context.viewState.mode == .knocked ? 151 : 35, background: .bloom) {
             if context.viewState.mode == .loading {
                 EmptyView()
             } else {
@@ -27,13 +27,15 @@ struct JoinRoomScreen: View {
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbar }
     }
     
     @ViewBuilder
     var mainContent: some View {
-        if context.viewState.mode == .knocked {
+        switch context.viewState.mode {
+        case .knocked:
             knockedView
-        } else {
+        default:
             defaultView
         }
     }
@@ -88,7 +90,7 @@ struct JoinRoomScreen: View {
     @ViewBuilder
     private var knockedView: some View {
         VStack(spacing: 16) {
-            HeroImage(icon: \.checkCircleSolid, style: .success)
+            BigIcon(icon: \.checkCircleSolid, style: .successSolid)
             VStack(spacing: 8) {
                 Text(L10n.screenJoinRoomKnockSentTitle)
                     .font(.compound.headingMDBold)
@@ -101,13 +103,13 @@ struct JoinRoomScreen: View {
             }
         }
     }
-    
+        
     @ViewBuilder
     private var knockMessage: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 0) {
                 TextField("", text: $context.knockMessage, axis: .vertical)
-                    .onChange(of: context.knockMessage) { newValue in
+                    .onChange(of: context.knockMessage) { _, newValue in
                         context.knockMessage = String(newValue.prefix(1000))
                     }
                     .lineLimit(4, reservesSpace: true)
@@ -157,6 +159,17 @@ struct JoinRoomScreen: View {
             .buttonStyle(.compound(.secondary))
         Button(L10n.actionAccept) { context.send(viewAction: .acceptInvite) }
             .buttonStyle(.compound(.primary))
+    }
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        if context.viewState.mode == .knocked {
+            ToolbarItem(placement: .principal) {
+                RoomHeaderView(roomName: context.viewState.title,
+                               roomAvatar: context.viewState.avatar,
+                               mediaProvider: context.mediaProvider)
+            }
+        }
     }
 }
 
@@ -221,10 +234,17 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         if mode == .unknown {
             clientProxy.roomPreviewForIdentifierViaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         } else {
-            if mode == .knocked {
+            switch mode {
+            case .knocked:
                 clientProxy.roomForIdentifierClosure = { _ in
-                    .knocked(KnockedRoomProxyMock(.init()))
+                    .knocked(KnockedRoomProxyMock(.init(avatarURL: URL.homeDirectory)))
                 }
+            case .invited:
+                clientProxy.roomForIdentifierClosure = { _ in
+                    .invited(InvitedRoomProxyMock(.init(avatarURL: URL.homeDirectory)))
+                }
+            default:
+                break
             }
             clientProxy.roomPreviewForIdentifierViaReturnValue = .success(.init(roomID: "1",
                                                                                 name: "The Three-Body Problem - 三体",

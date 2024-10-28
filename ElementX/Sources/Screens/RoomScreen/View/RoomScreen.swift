@@ -27,7 +27,15 @@ struct RoomScreen: View {
 
     var body: some View {
         timeline
-            
+//            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+//            .overlay(alignment: .top) {
+//                Group {
+//                    if roomContext.viewState.shouldShowPinnedEventsBanner {
+//                        pinnedItemsBanner
+//                    }
+//                }
+//                .animation(.elementDefault, value: roomContext.viewState.shouldShowPinnedEventsBanner)
+//            }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 VStack(spacing: 0) {
                     RoomScreenFooterView(details: roomContext.viewState.footerDetails,
@@ -52,14 +60,6 @@ struct RoomScreen: View {
                         .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
                 }
             }
-//            .overlay(alignment: .top) {
-//                Group {
-//                    if roomContext.viewState.shouldShowPinnedEventsBanner {
-//                        pinnedItemsBanner
-//                    }
-//                }
-//                .animation(.elementDefault, value: roomContext.viewState.shouldShowPinnedEventsBanner)
-//            }
             .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(isNavigationBarHidden)
@@ -76,7 +76,8 @@ struct RoomScreen: View {
                                                              pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
                                                              isDM: timelineContext.viewState.isEncryptedOneToOneRoom,
                                                              isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
-                                                             isPinnedEventsTimeline: timelineContext.viewState.isPinnedEventsTimeline)
+                                                             isPinnedEventsTimeline: timelineContext.viewState.isPinnedEventsTimeline,
+                                                             emojiProvider: timelineContext.viewState.emojiProvider)
                     .makeActions()
                 if let actions {
                     TimelineItemMenu(item: info.item, actions: actions)
@@ -231,7 +232,8 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                      appMediator: AppMediatorMock.default,
                                                      appSettings: ServiceLocator.shared.settings,
-                                                     analyticsService: ServiceLocator.shared.analytics)
+                                                     analyticsService: ServiceLocator.shared.analytics,
+                                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
 
     static var previews: some View {
         NavigationStack {
