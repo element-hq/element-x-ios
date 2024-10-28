@@ -282,8 +282,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             presentCallScreen(genericCallLink: url)
         case .settings, .chatBackupSettings:
             settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
-        case .oidcCallback:
-            break
         }
     }
     

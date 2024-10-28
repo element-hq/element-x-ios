@@ -35,8 +35,7 @@ class OIDCAuthenticationPresenter: NSObject {
     func authenticate(using oidcData: OIDCAuthorizationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         await withCheckedContinuation { continuation in
             let session = ASWebAuthenticationSession(url: oidcData.url,
-                                                     callbackURLScheme: oidcRedirectURL.scheme) { [weak self] url, error in
-                // This closure won't be called if the scheme is https, see handleUniversalLinkCallback for more info.
+                                                     callback: .oidcRedirectURL(oidcRedirectURL)) { [weak self] url, error in
                 guard let self else { return }
                 
                 guard let url else {
@@ -62,12 +61,6 @@ class OIDCAuthenticationPresenter: NSObject {
             
             session.start()
         }
-    }
-    
-    /// This method will be used if the `appSettings.oidcRedirectURL`'s scheme is `https`.
-    /// When using a custom scheme, the redirect will be handled by the web auth session's closure.
-    func handleUniversalLinkCallback(_ url: URL) {
-        completeAuthentication(callbackURL: url)
     }
     
     /// Completes the authentication by exchanging the callback URL for a user session.
@@ -109,4 +102,16 @@ class OIDCAuthenticationPresenter: NSObject {
 
 extension OIDCAuthenticationPresenter: ASWebAuthenticationPresentationContextProviding {
     func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor { presentationAnchor }
+}
+
+extension ASWebAuthenticationSession.Callback {
+    static func oidcRedirectURL(_ url: URL) -> Self {
+        if url.scheme == "https", let host = url.host() {
+            .https(host: host, path: url.path())
+        } else if let scheme = url.scheme {
+            .customScheme(scheme)
+        } else {
+            fatalError("Invalid OIDC redirect URL: \(url)")
+        }
+    }
 }
