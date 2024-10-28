@@ -139,6 +139,7 @@
 "common_edited_suffix" = "(upraveno)";
 "common_editing" = "Úpravy";
 "common_emote" = "* %1$@ %2$@";
+"common_encryption" = "Šifrování";
 "common_encryption_enabled" = "Šifrování povoleno";
 "common_enter_your_pin" = "Zadejte svůj PIN";
 "common_error" = "Chyba";
@@ -149,6 +150,7 @@
 "common_favourited" = "Oblíbené";
 "common_file" = "Soubor";
 "common_forward_message" = "Přeposlat zprávu";
+"common_frequently_used" = "Frequently used";
 "common_gif" = "GIF";
 "common_image" = "Obrázek";
 "common_in_reply_to" = "V odpovědi na %1$@";
@@ -241,6 +243,8 @@
 "common.pinned" = "Připnuto";
 "common.send_to" = "Odeslat do";
 "common.you" = "Vy";
+"common_unable_to_decrypt_insecure_device" = "Šifrováno nezabezpečeným zařízením";
+"common_unable_to_decrypt_verification_violation" = "Ověřená identita odesílatele se změnila";
 "confirm_recovery_key_banner_message" = "Vaše záloha chatu není aktuálně synchronizována. Abyste si zachovali přístup k záloze chatu, musíte potvrdit klíč pro obnovení.";
 "confirm_recovery_key_banner_title" = "Potvrďte klíč pro obnovení";
 "crash_detection_dialog_content" = "%1$@ havaroval při posledním použití. Chcete se s námi podělit o zprávu o selhání?";
@@ -340,6 +344,9 @@
 "screen_advanced_settings_element_call_base_url" = "Vlastní URL pro Element Call";
 "screen_advanced_settings_element_call_base_url_description" = "Nastavte vlastní URL pro Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Neplatné URL, ujistěte se, že jste uvedli protokol (http/https) a správnou adresu.";
+"screen_create_room_room_address_section_footer" = "Aby byla tato místnost viditelná v adresáři veřejných místností, budete potřebovat adresu místnosti.";
+"screen_create_room_room_address_section_title" = "Adresa místnosti";
+"screen_create_room_room_visibility_section_title" = "Viditelnost místnosti";
 "screen_create_room_access_section_anyone_option_description" = "Do této místnosti může vstoupit kdokoli";
 "screen_create_room_access_section_anyone_option_title" = "Kdokoliv";
 "screen_create_room_access_section_header" = "Přístup do místnosti";
@@ -369,6 +376,7 @@
 "screen_room_pinned_banner_loading_description" = "Načítání zprávy...";
 "screen_room_pinned_banner_view_all_button_title" = "Zobrazit vše";
 "screen_room_details_pinned_events_row_title" = "Připnuté zprávy";
+"screen_roomlist_knock_event_sent_description" = "Žádost o vstup odeslána";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Zpráva nebyla odeslána, protože ověřená identita uživatele %1$@ se změnila.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Zpráva nebyla odeslána, protože%1$@ neověřil(a) všechna zařízení.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení.";
@@ -380,6 +388,8 @@
 "screen_account_provider_signup_title" = "Chystáte se vytvořit účet na %@";
 "screen_advanced_settings_developer_mode" = "Vývojářský režim";
 "screen_advanced_settings_developer_mode_description" = "Povolením získáte přístup k funkcím a funkcím pro vývojáře.";
+"screen_advanced_settings_media_compression_description" = "Optimize for upload";
+"screen_advanced_settings_media_compression_title" = "Media";
 "screen_advanced_settings_rich_text_editor_description" = "Vypněte editor formátovaného textu pro ruční zadání Markdown.";
 "screen_advanced_settings_send_read_receipts" = "Potvrzení o přečtení";
 "screen_advanced_settings_send_read_receipts_description" = "Pokud je vypnuto, potvrzení o přečtení se nikomu neodesílají. Stále budete dostávat potvrzení o přečtení od ostatních uživatelů.";
@@ -446,9 +456,12 @@
 "screen_change_server_title" = "Vyberte váš server";
 "screen_chat_backup_key_backup_action_disable" = "Vypnout zálohování";
 "screen_chat_backup_key_backup_action_enable" = "Zapnout zálohování";
-"screen_chat_backup_key_backup_description" = "Zálohování zajistí, že neztratíte historii zpráv. %1$@.";
-"screen_chat_backup_key_backup_title" = "Záloha";
+"screen_chat_backup_key_backup_description" = "Bezpečně uložte svou kryptografickou identitu a klíče zpráv na serveru. To vám umožní zobrazit historii zpráv na všech nových zařízeních. %1$@.";
+"screen_chat_backup_key_backup_title" = "Úložiště klíčů";
+"screen_chat_backup_key_storage_toggle_description" = "Nahrát klíče z tohoto zařízení";
+"screen_chat_backup_key_storage_toggle_title" = "Povolit ukládání klíčů";
 "screen_chat_backup_recovery_action_change" = "Změnit klíč pro obnovení";
+"screen_chat_backup_recovery_action_change_description" = "Obnovte svou kryptografickou identitu a historii zpráv pomocí klíče pro obnovení, pokud jste ztratili všechna stávající zařízení.";
 "screen_chat_backup_recovery_action_confirm_description" = "Vaše záloha chatu není aktuálně synchronizována.";
 "screen_chat_backup_recovery_action_setup" = "Nastavení obnovy";
 "screen_chat_backup_recovery_action_setup_description" = "Získejte přístup ke svým zašifrovaným zprávám, pokud ztratíte všechna zařízení nebo jste všude odhlášeni z %1$@.";
@@ -470,10 +483,10 @@
 "screen_create_poll_title" = "Vytvořit hlasování";
 "screen_create_room_action_create_room" = "Nová místnost";
 "screen_create_room_error_creating_room" = "Při vytváření místnosti došlo k chybě";
-"screen_create_room_private_option_description" = "Zprávy v této místnosti jsou šifrované. Šifrování nelze později vypnout.";
-"screen_create_room_private_option_title" = "Soukromá místnost (jen pro pozvané)";
-"screen_create_room_public_option_description" = "Zprávy nejsou šifrované a může si je přečíst kdokoli. Šifrování můžete povolit později.";
-"screen_create_room_public_option_title" = "Veřejná místnost (kdokoli)";
+"screen_create_room_private_option_description" = "Do této místnosti mají přístup pouze pozvaní lidé. Všechny zprávy jsou koncově šifrovány.";
+"screen_create_room_private_option_title" = "Soukromá místnost";
+"screen_create_room_public_option_description" = "Tuto místnost může najít kdokoli.\nTo můžete kdykoli změnit v nastavení místnosti.";
+"screen_create_room_public_option_title" = "Veřejná místnost";
 "screen_create_room_topic_label" = "Téma (nepovinné)";
 "screen_deactivate_account_confirmation_dialog_content" = "Potvrďte prosím, že chcete svůj účet deaktivovat. Tuto akci nelze vrátit zpět.";
 "screen_deactivate_account_delete_all_messages" = "Smazat všechny mé zprávy";
@@ -621,7 +634,6 @@
 "screen_qr_code_login_verify_code_title" = "Váš ověřovací kód";
 "screen_recovery_key_change_description" = "Získejte nový klíč pro obnovení, pokud jste ztratili stávající klíč. Po změně klíče pro obnovení již váš starý klíč nebude fungovat.";
 "screen_recovery_key_change_generate_key" = "Vygenerovat nový klíč pro obnovení";
-"screen_recovery_key_change_generate_key_description" = "Ujistěte se, že můžete klíč pro obnovení uložit někde v bezpečí";
 "screen_recovery_key_change_success" = "Klíč pro obnovení byl změněn";
 "screen_recovery_key_change_title" = "Změnit klíč pro obnovení?";
 "screen_recovery_key_confirm_create_new_recovery_key" = "Vytvořit nový klíč pro obnovení";
@@ -635,14 +647,14 @@
 "screen_recovery_key_copied_to_clipboard" = "Klíč pro obnovení zkopírován";
 "screen_recovery_key_generating_key" = "Generování...";
 "screen_recovery_key_save_action" = "Uložit klíč pro obnovení";
-"screen_recovery_key_save_description" = "Zapište si klíč pro obnovení na bezpečné místo nebo jej uložte do správce hesel.";
+"screen_recovery_key_save_description" = "Zapište si tento obnovovací klíč na bezpečné místo, jako je správce hesel, zašifrovaná poznámka nebo fyzický trezor.";
 "screen_recovery_key_save_key_description" = "Klepnutím zkopírujte klíč pro obnovení";
 "screen_recovery_key_save_title" = "Uložte si klíč pro obnovení";
 "screen_recovery_key_setup_confirmation_description" = "Po tomto kroku nebudete mít přístup k novému klíči pro obnovení.";
 "screen_recovery_key_setup_confirmation_title" = "Uložili jste si klíč pro obnovení?";
 "screen_recovery_key_setup_description" = "Záloha chatu je chráněna klíčem pro obnovení. Pokud potřebujete nový klíč pro obnovení po nastavení, můžete jej znovu vytvořit výběrem možnosti „Změnit klíč pro obnovení“.";
 "screen_recovery_key_setup_generate_key" = "Vygenerovat klíč pro obnovení";
-"screen_recovery_key_setup_generate_key_description" = "Ujistěte se, že můžete klíč pro obnovení uložit někde v bezpečí";
+"screen_recovery_key_setup_generate_key_description" = "Toto s nikým nesdílejte!";
 "screen_recovery_key_setup_success" = "Nastavení obnovení bylo úspěšné";
 "screen_recovery_key_setup_title" = "Nastavení obnovy";
 "screen_report_content_block_user_hint" = "Zaškrtněte, pokud chcete skrýt všechny aktuální a budoucí zprávy od tohoto uživatele";
@@ -824,8 +836,12 @@
 "screen_session_verification_ready_subtitle" = "Porovnejte jedinečnou sadu emotikonů.";
 "screen_session_verification_request_accepted_subtitle" = "Porovnejte jedinečné emotikony a ujistěte se, že jsou zobrazeny ve stejném pořadí.";
 "screen_session_verification_request_details_timestamp" = "Přihlášen";
+"screen_session_verification_request_failure_subtitle" = "Buď vypršel časový limit požadavku, požadavek byl zamítnut, nebo došlo k nesouladu ověření.";
+"screen_session_verification_request_failure_title" = "Ověření se nezdařilo";
 "screen_session_verification_request_footer" = "Pokračujte, pouze pokud jste toto ověření zahájili.";
 "screen_session_verification_request_subtitle" = "Ověřte druhé zařízení, aby byla vaše historie zpráv zabezpečená.";
+"screen_session_verification_request_success_subtitle" = "Nyní můžete bezpečně číst nebo odesílat zprávy na svém druhém zařízení.";
+"screen_session_verification_request_success_title" = "Zařízení ověřeno";
 "screen_session_verification_request_title" = "Požadováno ověření";
 "screen_session_verification_they_dont_match" = "Neshodují se";
 "screen_session_verification_they_match" = "Shodují se";
@@ -1012,6 +1028,7 @@
 "screen_login_subtitle" = "Matrix je otevřená síť pro bezpečnou a decentralizovanou komunikaci.";
 "screen_notification_settings_mentions_section_title" = "Zmínky";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "Zkusit znovu";
+"screen_recovery_key_change_generate_key_description" = "Toto s nikým nesdílejte!";
 "screen_recovery_key_confirm_title" = "Potvrďte klíč pro obnovení";
 "screen_report_content_block_user" = "Zablokovat uživatele";
 "screen_reset_encryption_password_placeholder" = "Zadejte...";
