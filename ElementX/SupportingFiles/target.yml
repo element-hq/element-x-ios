@@ -189,6 +189,7 @@ targets:
 
     dependencies:
     - target: NSE
+    - target: ShareExtension
     # not used yet
     # - target: NCE
     - package: MatrixRustSDK
