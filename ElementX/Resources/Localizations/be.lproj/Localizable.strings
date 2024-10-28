@@ -139,6 +139,7 @@
 "common_edited_suffix" = "(Адрэдагавана)";
 "common_editing" = "Рэдагаванне";
 "common_emote" = "* %1$@ %2$@";
+"common_encryption" = "Encryption";
 "common_encryption_enabled" = "Шыфраванне ўключана";
 "common_enter_your_pin" = "Увядзіце свой PIN-код";
 "common_error" = "Памылка";
@@ -149,6 +150,7 @@
 "common_favourited" = "Абранае";
 "common_file" = "Файл";
 "common_forward_message" = "Перасылка паведамлення";
+"common_frequently_used" = "Frequently used";
 "common_gif" = "GIF";
 "common_image" = "Відарыс";
 "common_in_reply_to" = "У адказ на %1$@";
@@ -241,6 +243,8 @@
 "common.pinned" = "Замацаваны";
 "common.send_to" = "Адправіць";
 "common.you" = "Вы";
+"common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
+"common_unable_to_decrypt_verification_violation" = "Sender's verified identity has changed";
 "confirm_recovery_key_banner_message" = "Ваша рэзервовая копія чата зараз не сінхранізавана. Вам трэба пацвердзіць ключ аднаўлення, каб захаваць доступ да рэзервовай копіі чата.";
 "confirm_recovery_key_banner_title" = "Увядзіце ключ аднаўлення";
 "crash_detection_dialog_content" = "Пры апошнім выкарыстанні %1$@ адбыўся збой. Хочаце падзяліцца справаздачай аб збоі?";
@@ -340,6 +344,9 @@
 "screen_advanced_settings_element_call_base_url" = "Карыстальніцкі URL сервера Element Call";
 "screen_advanced_settings_element_call_base_url_description" = "Усталюйце карыстальніцкі асноўны URL для Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Адрас пазначаны няправільна, пераканайцеся, што вы ўказалі пратакол (http/https) і правільны адрас.";
+"screen_create_room_room_address_section_footer" = "In order for this room to be visible in the public room directory, you will need a room address.";
+"screen_create_room_room_address_section_title" = "Room address";
+"screen_create_room_room_visibility_section_title" = "Room visibility";
 "screen_create_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_access_section_anyone_option_title" = "Хто заўгодна";
 "screen_create_room_access_section_header" = "Доступ у пакой";
@@ -369,6 +376,7 @@
 "screen_room_pinned_banner_loading_description" = "Загрузка паведамлення…";
 "screen_room_pinned_banner_view_all_button_title" = "Паглядзець усе";
 "screen_room_details_pinned_events_row_title" = "Замацаваныя паведамленні";
+"screen_roomlist_knock_event_sent_description" = "Request to join sent";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
@@ -380,6 +388,8 @@
 "screen_account_provider_signup_title" = "Вы збіраецеся стварыць уліковы запіс на %@";
 "screen_advanced_settings_developer_mode" = "Рэжым распрацоўшчыка";
 "screen_advanced_settings_developer_mode_description" = "Падайце распрацоўнікам доступ да функцый і функцыянальным магчымасцям.";
+"screen_advanced_settings_media_compression_description" = "Optimize for upload";
+"screen_advanced_settings_media_compression_title" = "Media";
 "screen_advanced_settings_rich_text_editor_description" = "Адключыць рэдактар фарматаванага тэксту і ўключыць Markdown.";
 "screen_advanced_settings_send_read_receipts" = "Апавяшчэнні аб чытанні";
 "screen_advanced_settings_send_read_receipts_description" = "Калі выключыць, вашы пасведчанні аб прачытанні нікому не будуць адпраўляцца. Вы па-ранейшаму будзеце атрымліваць пасведчанні аб прачытанні ад іншых карыстальнікаў.";
@@ -448,7 +458,10 @@
 "screen_chat_backup_key_backup_action_enable" = "Уключыце рэзервовае капіраванне";
 "screen_chat_backup_key_backup_description" = "Рэзервовае капіраванне гарантуе, што вы не страціце сваю гісторыю паведамленняў. %1$@.";
 "screen_chat_backup_key_backup_title" = "Рэзервовая копія";
+"screen_chat_backup_key_storage_toggle_description" = "Upload keys from this device";
+"screen_chat_backup_key_storage_toggle_title" = "Allow key storage";
 "screen_chat_backup_recovery_action_change" = "Змяніць ключ аднаўлення";
+"screen_chat_backup_recovery_action_change_description" = "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.";
 "screen_chat_backup_recovery_action_confirm_description" = "Ваша рэзервовая копія чата зараз не сінхранізавана.";
 "screen_chat_backup_recovery_action_setup" = "Наладзьце аднаўленне";
 "screen_chat_backup_recovery_action_setup_description" = "Атрымайце доступ да зашыфраваных паведамленняў, калі вы страціце ўсе свае прылады або выйдзеце з сістэмы %1$@ усюды.";
@@ -621,7 +634,6 @@
 "screen_qr_code_login_verify_code_title" = "Ваш код спраўджання";
 "screen_recovery_key_change_description" = "Атрымайце новы ключ аднаўлення, калі вы страцілі існуючы. Пасля змены ключа аднаўлення ваш стары больш не будзе працаваць.";
 "screen_recovery_key_change_generate_key" = "Стварыць новы ключ аднаўлення";
-"screen_recovery_key_change_generate_key_description" = "Пераканайцеся, што вы можаце захаваць ключ аднаўлення ў бяспечным месцы";
 "screen_recovery_key_change_success" = "Ключ аднаўлення зменены";
 "screen_recovery_key_change_title" = "Змяніць ключ аднаўлення?";
 "screen_recovery_key_confirm_create_new_recovery_key" = "Стварыць новы ключ аднаўлення";
@@ -824,8 +836,12 @@
 "screen_session_verification_ready_subtitle" = "Параўнайце ўнікальны набор эмодзі.";
 "screen_session_verification_request_accepted_subtitle" = "Параўнайце ўнікальныя эмодзі, пераканаўшыся, што яны размешчаны ў тым жа парадку.";
 "screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_failure_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
+"screen_session_verification_request_failure_title" = "Verification failed";
 "screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
 "screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_success_subtitle" = "Now you can read or send messages securely on your other device.";
+"screen_session_verification_request_success_title" = "Device verified";
 "screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "Яны не супадаюць";
 "screen_session_verification_they_match" = "Яны супадаюць";
@@ -1012,6 +1028,7 @@
 "screen_login_subtitle" = "Matrix - гэта адкрытая сетка для бяспечнай, дэцэнтралізаванай сувязі.";
 "screen_notification_settings_mentions_section_title" = "Згадванні";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "Паўтарыць спробу";
+"screen_recovery_key_change_generate_key_description" = "Пераканайцеся, што вы можаце захаваць ключ аднаўлення ў бяспечным месцы";
 "screen_recovery_key_confirm_title" = "Увядзіце ключ аднаўлення";
 "screen_report_content_block_user" = "Заблакіраваць карыстальніка";
 "screen_reset_encryption_password_placeholder" = "Увесці...";
