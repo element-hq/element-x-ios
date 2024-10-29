@@ -28,18 +28,6 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
         super.init(initialViewState: .init(isModallyPresented: isModallyPresented,
                                            mode: secureBackupController.recoveryState.value.viewMode,
                                            bindings: .init()))
-        
-        secureBackupController.recoveryState
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] state in
-                switch state {
-                case .settingUp:
-                    self?.showLoadingIndicator()
-                default:
-                    self?.hideLoadingIndicator()
-                }
-            })
-            .store(in: &cancellables)
     }
     
     // MARK: - Public
