@@ -28,7 +28,7 @@ struct SecureBackupScreen: View {
             }
         }
         .compoundList()
-        .navigationTitle(L10n.commonChatBackup)
+        .navigationTitle(L10n.commonEncryption)
         .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)
     }
