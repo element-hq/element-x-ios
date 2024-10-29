@@ -24,11 +24,11 @@ enum ListPosition {
     }
 }
 
-struct RoundedLabelItem<Icon: View>: View {
+struct VisualListItem<Icon: View>: View {
     @Environment(\.backgroundStyle) private var backgroundStyle
     
     let title: String
-    let listPosition: ListPosition
+    let position: ListPosition
     let iconContent: () -> Icon
     
     private var backgroundColor: AnyShapeStyle {
@@ -39,17 +39,17 @@ struct RoundedLabelItem<Icon: View>: View {
         Label { Text(title) } icon: {
             iconContent()
         }
-        .labelStyle(CheckmarkLabelStyle())
-        .padding(.horizontal, 20)
+        .labelStyle(VisualListItemLabelStyle())
+        .padding(.horizontal, 16)
         .padding(.vertical, 12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(backgroundColor, in: RoundedCornerShape(radius: 16, corners: listPosition.roundedCorners))
+        .background(backgroundColor, in: RoundedCornerShape(radius: 14, corners: position.roundedCorners))
     }
 }
 
-private struct CheckmarkLabelStyle: LabelStyle {
+private struct VisualListItemLabelStyle: LabelStyle {
     func makeBody(configuration: Configuration) -> some View {
-        HStack(alignment: .top, spacing: 16) {
+        HStack(alignment: .top, spacing: 12) {
             configuration.icon
             configuration.title
         }
@@ -60,7 +60,7 @@ private struct CheckmarkLabelStyle: LabelStyle {
 
 // MARK: - Previews
 
-struct AnalyticsPromptScreenCheckmarkItem_Previews: PreviewProvider, TestablePreview {
+struct VisualListItem_Previews: PreviewProvider, TestablePreview {
     static let strings = AnalyticsPromptScreenStrings(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
 
     @ViewBuilder
@@ -75,17 +75,17 @@ struct AnalyticsPromptScreenCheckmarkItem_Previews: PreviewProvider, TestablePre
     
     static var previews: some View {
         VStack(alignment: .leading, spacing: 4) {
-            RoundedLabelItem(title: strings.point1, listPosition: .top) {
+            VisualListItem(title: strings.point1, position: .top) {
                 testImage1
             }
-            RoundedLabelItem(title: strings.point2, listPosition: .middle) {
+            VisualListItem(title: strings.point2, position: .middle) {
                 testImage2
             }
-            RoundedLabelItem(title: "This is a short string.", listPosition: .middle) {
+            VisualListItem(title: "This is a short string.", position: .middle) {
                 testImage1
             }
-            RoundedLabelItem(title: "This is a very long string that will be used to test the layout over multiple lines of text to ensure everything is correct.",
-                             listPosition: .bottom) {
+            VisualListItem(title: "This is a very long string that will be used to test the layout over multiple lines of text to ensure everything is correct.",
+                           position: .bottom) {
                 testImage2
             }
         }

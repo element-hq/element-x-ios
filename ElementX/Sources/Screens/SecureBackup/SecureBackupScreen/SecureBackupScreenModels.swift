@@ -17,6 +17,10 @@ struct SecureBackupScreenViewState: BindableState {
     var recoveryState = SecureBackupRecoveryState.unknown
     var keyBackupState = SecureBackupKeyBackupState.unknown
     var bindings: SecureBackupScreenViewStateBindings
+    
+    var keyStorageToggleDescription: String? {
+        keyBackupState.keyStorageToggleState ? nil : L10n.screenChatBackupKeyStorageDisabledError
+    }
 }
 
 struct SecureBackupScreenViewStateBindings {

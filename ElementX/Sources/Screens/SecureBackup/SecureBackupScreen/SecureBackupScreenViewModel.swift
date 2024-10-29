@@ -26,7 +26,7 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: .init(chatBackupDetailsURL: chatBackupDetailsURL,
-                                           bindings: SecureBackupScreenViewStateBindings(keyStorageEnabled: secureBackupController.keyBackupState.value.toggleState)))
+                                           bindings: SecureBackupScreenViewStateBindings(keyStorageEnabled: secureBackupController.keyBackupState.value.keyStorageToggleState)))
         
         secureBackupController.recoveryState
             .receive(on: DispatchQueue.main)
@@ -38,7 +38,7 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
             .sink { [weak self] state in
                 guard let self else { return }
                 self.state.keyBackupState = state
-                self.state.bindings.keyStorageEnabled = state.toggleState
+                self.state.bindings.keyStorageEnabled = state.keyStorageToggleState
             }
             .store(in: &cancellables)
     }
@@ -53,10 +53,10 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
             let keyBackupState = secureBackupController.keyBackupState.value
             switch (keyBackupState, enable) {
             case (.unknown, true):
-                state.bindings.keyStorageEnabled = keyBackupState.toggleState // Reset the toggle in case enabling fails
+                state.bindings.keyStorageEnabled = keyBackupState.keyStorageToggleState // Reset the toggle in case enabling fails
                 enableBackup()
             case (.enabled, false):
-                state.bindings.keyStorageEnabled = keyBackupState.toggleState // Reset the toggle in case the user cancels
+                state.bindings.keyStorageEnabled = keyBackupState.keyStorageToggleState // Reset the toggle in case the user cancels
                 actionsSubject.send(.keyBackup)
             default:
                 break
@@ -83,8 +83,8 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
     }
 }
 
-private extension SecureBackupKeyBackupState {
-    var toggleState: Bool {
+extension SecureBackupKeyBackupState {
+    var keyStorageToggleState: Bool {
         switch self {
         case .unknown, .enabling: false
         case .enabled, .disabling: true
