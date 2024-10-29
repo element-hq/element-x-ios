@@ -34,7 +34,7 @@ struct SessionVerificationScreen: View {
             if context.viewState.verificationState == .initial {
                 BigIcon(icon: \.lockSolid)
                     .padding(.bottom, 16)
-            default:
+            } else {
                 Image(systemName: context.viewState.headerImageName)
                     .bigIcon()
                     .padding(.bottom, 16)

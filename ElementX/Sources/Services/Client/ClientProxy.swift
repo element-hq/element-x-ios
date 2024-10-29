@@ -495,7 +495,8 @@ class ClientProxy: ClientProxyProtocol {
     func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewDetails, ClientProxyError> {
         do {
             let roomPreview = try await client.getRoomPreviewFromRoomId(roomId: identifier, viaServers: via)
-            return .success(.init(roomPreview))
+            let roomPreviewInfo = try roomPreview.info()
+            return .success(.init(roomPreviewInfo))
         } catch let error as ClientError where error.code == .forbidden {
             return .failure(.roomPreviewIsPrivate)
         } catch {
@@ -1093,17 +1094,17 @@ private class SendQueueRoomErrorListenerProxy: SendQueueRoomErrorListener {
 }
 
 private extension RoomPreviewDetails {
-    init(_ roomPreview: RoomPreview) {
-        self = RoomPreviewDetails(roomID: roomPreview.roomId,
-                                  name: roomPreview.name,
-                                  canonicalAlias: roomPreview.canonicalAlias,
-                                  topic: roomPreview.topic,
-                                  avatarURL: roomPreview.avatarUrl.flatMap(URL.init(string:)),
-                                  memberCount: UInt(roomPreview.numJoinedMembers),
-                                  isHistoryWorldReadable: roomPreview.isHistoryWorldReadable,
-                                  isJoined: roomPreview.isJoined,
-                                  isInvited: roomPreview.isInvited,
-                                  isPublic: roomPreview.isPublic,
-                                  canKnock: roomPreview.canKnock)
+    init(_ roomPreviewInfo: RoomPreviewInfo) {
+        self = RoomPreviewDetails(roomID: roomPreviewInfo.roomId,
+                                  name: roomPreviewInfo.name,
+                                  canonicalAlias: roomPreviewInfo.canonicalAlias,
+                                  topic: roomPreviewInfo.topic,
+                                  avatarURL: roomPreviewInfo.avatarUrl.flatMap(URL.init(string:)),
+                                  memberCount: UInt(roomPreviewInfo.numJoinedMembers),
+                                  isHistoryWorldReadable: roomPreviewInfo.isHistoryWorldReadable,
+                                  isJoined: roomPreviewInfo.membership == .joined,
+                                  isInvited: roomPreviewInfo.membership == .invited,
+                                  isPublic: roomPreviewInfo.joinRule == .public,
+                                  canKnock: roomPreviewInfo.joinRule == .knock)
     }
 }
