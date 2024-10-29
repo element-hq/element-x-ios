@@ -68,8 +68,7 @@ struct SecureBackupScreen: View {
     }
     
     private var keyStorageToggle: some View {
-        ListRow(label: .plain(title: L10n.screenChatBackupKeyStorageToggleTitle,
-                              description: L10n.screenChatBackupKeyStorageToggleDescription),
+        ListRow(label: .plain(title: L10n.screenChatBackupKeyStorageToggleTitle),
                 kind: .toggle($context.keyStorageEnabled))
             .onChange(of: context.keyStorageEnabled) { _, newValue in
                 context.send(viewAction: .keyStorageToggled(newValue))
