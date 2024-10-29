@@ -85,7 +85,10 @@ struct SecureBackupScreen: View {
                                         iconAlignment: .top),
                         kind: .navigationLink { context.send(viewAction: .recoveryKey) })
             case .disabled:
-                ListRow(label: .plain(title: L10n.screenChatBackupRecoveryActionSetup),
+                ListRow(label: .default(title: L10n.screenChatBackupRecoveryActionSetup,
+                                        description: L10n.screenChatBackupRecoveryActionChangeDescription,
+                                        icon: \.key,
+                                        iconAlignment: .top),
                         details: .icon(BadgeView(size: 10)),
                         kind: .navigationLink { context.send(viewAction: .recoveryKey) })
             case .incomplete:
@@ -104,8 +107,6 @@ struct SecureBackupScreen: View {
     @ViewBuilder
     private var recoveryKeySectionFooter: some View {
         switch context.viewState.recoveryState {
-        case .disabled:
-            Text(L10n.screenChatBackupRecoveryActionSetupDescription(InfoPlistReader.main.bundleDisplayName))
         case .incomplete:
             Text(L10n.screenChatBackupRecoveryActionConfirmDescription)
         default:
