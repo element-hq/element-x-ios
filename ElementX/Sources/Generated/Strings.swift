@@ -266,8 +266,12 @@ internal enum L10n {
   internal static var bannerMigrateToNativeSlidingSyncForceLogoutTitle: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_force_logout_title") }
   /// Upgrade available
   internal static var bannerMigrateToNativeSlidingSyncTitle: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_title") }
+  /// Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.
+  internal static var bannerSetUpRecoveryContent: String { return L10n.tr("Localizable", "banner_set_up_recovery_content") }
   /// Set up recovery
   internal static var bannerSetUpRecoverySubmit: String { return L10n.tr("Localizable", "banner_set_up_recovery_submit") }
+  /// Set up recovery to protect your account
+  internal static var bannerSetUpRecoveryTitle: String { return L10n.tr("Localizable", "banner_set_up_recovery_title") }
   /// About
   internal static var commonAbout: String { return L10n.tr("Localizable", "common_about") }
   /// Acceptable use policy
@@ -1021,6 +1025,8 @@ internal enum L10n {
   }
   /// Key storage
   internal static var screenChatBackupKeyBackupTitle: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_title") }
+  /// Key storage must be turned on to set up recovery.
+  internal static var screenChatBackupKeyStorageDisabledError: String { return L10n.tr("Localizable", "screen_chat_backup_key_storage_disabled_error") }
   /// Upload keys from this device
   internal static var screenChatBackupKeyStorageToggleDescription: String { return L10n.tr("Localizable", "screen_chat_backup_key_storage_toggle_description") }
   /// Allow key storage
@@ -2498,15 +2504,6 @@ internal enum L10n {
   }
   /// Check UnifiedPush
   internal static var troubleshootNotificationsTestUnifiedPushTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_unified_push_title") }
-
-  internal enum Banner {
-    internal enum SetUpRecovery {
-      /// Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.
-      internal static var content: String { return L10n.tr("Localizable", "banner.set_up_recovery.content") }
-      /// Set up recovery to protect your account
-      internal static var title: String { return L10n.tr("Localizable", "banner.set_up_recovery.title") }
-    }
-  }
 
   internal enum Common {
     /// Copied to clipboard

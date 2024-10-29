@@ -115,9 +115,9 @@
 "banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
+"banner_set_up_recovery_content" = "Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.";
 "banner_set_up_recovery_submit" = "Set up recovery";
-"banner.set_up_recovery.content" = "Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.";
-"banner.set_up_recovery.title" = "Set up recovery to protect your account";
+"banner_set_up_recovery_title" = "Set up recovery to protect your account";
 "common_about" = "About";
 "common_acceptable_use_policy" = "Acceptable use policy";
 "common_advanced_settings" = "Advanced settings";
@@ -459,6 +459,7 @@
 "screen_chat_backup_key_backup_action_enable" = "Turn on backup";
 "screen_chat_backup_key_backup_description" = "Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices. %1$@.";
 "screen_chat_backup_key_backup_title" = "Key storage";
+"screen_chat_backup_key_storage_disabled_error" = "Key storage must be turned on to set up recovery.";
 "screen_chat_backup_key_storage_toggle_description" = "Upload keys from this device";
 "screen_chat_backup_key_storage_toggle_title" = "Allow key storage";
 "screen_chat_backup_recovery_action_change" = "Change recovery key";
