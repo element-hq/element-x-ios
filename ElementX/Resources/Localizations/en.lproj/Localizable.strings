@@ -115,8 +115,9 @@
 "banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
-"banner.set_up_recovery.content" = "Generate a new recovery key that can be used to restore your encrypted message history in case you lose access to your devices.";
-"banner.set_up_recovery.title" = "Set up recovery";
+"banner_set_up_recovery_submit" = "Set up recovery";
+"banner.set_up_recovery.content" = "Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.";
+"banner.set_up_recovery.title" = "Set up recovery to protect your account";
 "common_about" = "About";
 "common_acceptable_use_policy" = "Acceptable use policy";
 "common_advanced_settings" = "Advanced settings";
@@ -454,7 +455,7 @@
 "screen_change_server_form_notice" = "You can only connect to an existing server that supports sliding sync. Your homeserver admin will need to configure it. %1$@";
 "screen_change_server_subtitle" = "What is the address of your server?";
 "screen_change_server_title" = "Select your server";
-"screen_chat_backup_key_backup_action_disable" = "Turn off backup";
+"screen_chat_backup_key_backup_action_disable" = "Delete key storage";
 "screen_chat_backup_key_backup_action_enable" = "Turn on backup";
 "screen_chat_backup_key_backup_description" = "Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices. %1$@.";
 "screen_chat_backup_key_backup_title" = "Key storage";
@@ -538,10 +539,10 @@
 "screen_key_backup_disable_confirmation_action_turn_off" = "Turn off";
 "screen_key_backup_disable_confirmation_description" = "You will lose your encrypted messages if you are signed out of all devices.";
 "screen_key_backup_disable_confirmation_title" = "Are you sure you want to turn off backup?";
-"screen_key_backup_disable_description" = "Turning off backup will remove your current encryption key backup and turn off other security features. In this case, you will:";
-"screen_key_backup_disable_description_point_1" = "Not have encrypted message history on new devices";
-"screen_key_backup_disable_description_point_2" = "Lose access to your encrypted messages if you are signed out of %1$@ everywhere";
-"screen_key_backup_disable_title" = "Are you sure you want to turn off backup?";
+"screen_key_backup_disable_description" = "Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:";
+"screen_key_backup_disable_description_point_1" = "You will not have encrypted message history on new devices";
+"screen_key_backup_disable_description_point_2" = "You will lose access to your encrypted messages if you are signed out of %1$@ everywhere";
+"screen_key_backup_disable_title" = "Are you sure you want to turn off key storage and delete it?";
 "screen_login_error_deactivated_account" = "This account has been deactivated.";
 "screen_login_error_invalid_credentials" = "Incorrect username and/or password";
 "screen_login_error_invalid_user_id" = "This is not a valid user identifier. Expected format: ‘@user:homeserver.org’";
@@ -652,7 +653,7 @@
 "screen_recovery_key_save_title" = "Save your recovery key somewhere safe";
 "screen_recovery_key_setup_confirmation_description" = "You will not be able to access your new recovery key after this step.";
 "screen_recovery_key_setup_confirmation_title" = "Have you saved your recovery key?";
-"screen_recovery_key_setup_description" = "Your chat backup is protected by a recovery key. If you need a new recovery key after setup you can recreate by selecting ‘Change recovery key’.";
+"screen_recovery_key_setup_description" = "Your key storage is protected by a recovery key. If you need a new recovery key after setup, you can recreate it by selecting ‘Change recovery key’.";
 "screen_recovery_key_setup_generate_key" = "Generate your recovery key";
 "screen_recovery_key_setup_generate_key_description" = "Do not share this with anyone!";
 "screen_recovery_key_setup_success" = "Recovery setup successful";
