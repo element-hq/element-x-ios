@@ -65,15 +65,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         fatalError()
     }
     
-    func handleOIDCRedirectURL(_ url: URL) {
-        guard let oidcPresenter else {
-            MXLog.error("Failed to find an OIDC request in progress.")
-            return
-        }
-        
-        oidcPresenter.handleUniversalLinkCallback(url)
-    }
-    
     // MARK: - Private
     
     private func showStartScreen() {
