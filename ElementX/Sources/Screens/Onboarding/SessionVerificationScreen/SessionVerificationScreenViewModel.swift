@@ -123,7 +123,7 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
                 cancelVerification()
             case (_, _, .verified):
                 actionsSubject.send(.finished)
-            case (_, _, .cancelled):
+            case (.initial, _, .cancelled):
                 if case .responder = flow {
                     actionsSubject.send(.finished)
                 }
