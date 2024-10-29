@@ -31,6 +31,10 @@ targets:
     type: app-extension
     platform: iOS
 
+    dependencies:
+      - package: MatrixRustSDK
+      - package: Collections
+
     info:
       path: ../SupportingFiles/Info.plist
       properties:
@@ -43,7 +47,7 @@ targets:
         productionAppName: $(PRODUCTION_APP_NAME)
         NSExtension:
           NSExtensionPointIdentifier: com.apple.share-services
-          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareExtensionViewController
           NSExtensionAttributes:
             NSExtensionActivationRule:
               NSExtensionActivationSupportsFileWithMaxCount: 1
@@ -62,3 +66,13 @@ targets:
     sources:
     - path: ../Sources
     - path: ../SupportingFiles
+    - path: ../../ElementX/Sources/Application/AppSettings.swift
+    - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
+    - path: ../../ElementX/Sources/Other/Extensions/FileManager.swift
+    - path: ../../ElementX/Sources/Other/Extensions/NSItemProvider.swift
+    - path: ../../ElementX/Sources/Other/Extensions/ProcessInfo.swift
+    - path: ../../ElementX/Sources/Other/Extensions/URL.swift
+    - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
+    - path: ../../ElementX/Sources/Other/Logging
+    - path: ../../ElementX/Sources/UITests/UITestsScreenIdentifier.swift
+    - path: ../../ElementX/Sources/Other/UserPreference.swift

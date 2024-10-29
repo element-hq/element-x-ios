@@ -66,10 +66,10 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         handler = contentHandler
         modifiedContent = request.content.mutableCopy() as? UNMutableNotificationContent
 
-        NSELogger.configure(logLevel: settings.logLevel)
+        ExtensionLogger.configure(currentTarget: "nse", logLevel: settings.logLevel)
 
         MXLog.info("\(tag) #########################################")
-        NSELogger.logMemory(with: tag)
+        ExtensionLogger.logMemory(with: tag)
         MXLog.info("\(tag) Payload came: \(request.content.userInfo)")
         
         Self.serialQueue.sync {
@@ -201,7 +201,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
     deinit {
         cleanUp()
-        NSELogger.logMemory(with: tag)
+        ExtensionLogger.logMemory(with: tag)
         MXLog.info("\(tag) deinit")
     }
     
