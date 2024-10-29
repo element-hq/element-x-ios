@@ -28,7 +28,7 @@ struct SecureBackupScreen: View {
             }
         }
         .compoundList()
-        .navigationTitle(L10n.commonChatBackup)
+        .navigationTitle(L10n.commonEncryption)
         .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)
     }
@@ -68,8 +68,7 @@ struct SecureBackupScreen: View {
     }
     
     private var keyStorageToggle: some View {
-        ListRow(label: .plain(title: L10n.screenChatBackupKeyStorageToggleTitle,
-                              description: L10n.screenChatBackupKeyStorageToggleDescription),
+        ListRow(label: .plain(title: L10n.screenChatBackupKeyStorageToggleTitle),
                 kind: .toggle($context.keyStorageEnabled))
             .onChange(of: context.keyStorageEnabled) { _, newValue in
                 context.send(viewAction: .keyStorageToggled(newValue))
@@ -86,7 +85,10 @@ struct SecureBackupScreen: View {
                                         iconAlignment: .top),
                         kind: .navigationLink { context.send(viewAction: .recoveryKey) })
             case .disabled:
-                ListRow(label: .plain(title: L10n.screenChatBackupRecoveryActionSetup),
+                ListRow(label: .default(title: L10n.screenChatBackupRecoveryActionSetup,
+                                        description: L10n.screenChatBackupRecoveryActionChangeDescription,
+                                        icon: \.key,
+                                        iconAlignment: .top),
                         details: .icon(BadgeView(size: 10)),
                         kind: .navigationLink { context.send(viewAction: .recoveryKey) })
             case .incomplete:
@@ -105,8 +107,6 @@ struct SecureBackupScreen: View {
     @ViewBuilder
     private var recoveryKeySectionFooter: some View {
         switch context.viewState.recoveryState {
-        case .disabled:
-            Text(L10n.screenChatBackupRecoveryActionSetupDescription(InfoPlistReader.main.bundleDisplayName))
         case .incomplete:
             Text(L10n.screenChatBackupRecoveryActionConfirmDescription)
         default:
