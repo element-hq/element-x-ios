@@ -101,10 +101,10 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         // Check optimised video info
         XCTAssertEqual(optimizedVideoInfo.mimetype, "video/mp4")
-        XCTAssertEqual(optimizedVideoInfo.blurhash, "K32PJbx^I7jYaebHMvV?o$")
-        XCTAssertEqual(optimizedVideoInfo.size ?? 0, 4_090_898, accuracy: 100) // Note: This is slightly stupid because it is larger now 🤦‍♂️
-        XCTAssertEqual(optimizedVideoInfo.width, 640)
-        XCTAssertEqual(optimizedVideoInfo.height, 360)
+        XCTAssertEqual(optimizedVideoInfo.blurhash, "K22PJZx^DgadWAbbMuRio$")
+        XCTAssertEqual(optimizedVideoInfo.size ?? 0, 1_431_959, accuracy: 100) // Note: This is slightly stupid because it is larger now 🤦‍♂️
+        XCTAssertEqual(optimizedVideoInfo.width, 1280)
+        XCTAssertEqual(optimizedVideoInfo.height, 720)
         XCTAssertEqual(optimizedVideoInfo.duration ?? 0, 30, accuracy: 100)
     }
 
@@ -165,9 +165,9 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         // Check optimised video info
         XCTAssertEqual(optimizedVideoInfo.mimetype, "video/mp4")
         XCTAssertEqual(optimizedVideoInfo.blurhash, "K7BDNJD*0L%#sl_2~C9ZE1")
-        XCTAssertEqual(optimizedVideoInfo.size ?? 0, 6_520_897, accuracy: 100)
-        XCTAssertEqual(optimizedVideoInfo.width, 360)
-        XCTAssertEqual(optimizedVideoInfo.height, 640)
+        XCTAssertEqual(optimizedVideoInfo.size ?? 0, 21_936_767, accuracy: 100)
+        XCTAssertEqual(optimizedVideoInfo.width, 720)
+        XCTAssertEqual(optimizedVideoInfo.height, 1280)
         XCTAssertEqual(optimizedVideoInfo.duration ?? 0, 30, accuracy: 100)
     }
     
