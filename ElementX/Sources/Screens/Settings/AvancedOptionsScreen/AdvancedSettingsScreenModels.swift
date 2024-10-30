@@ -26,7 +26,9 @@ struct AdvancedSettingsScreenViewStateBindings {
     }
 }
 
-enum AdvancedSettingsScreenViewAction { }
+enum AdvancedSettingsScreenViewAction {
+    case optimizeMediaUploadsChanged
+}
 
 protocol AdvancedSettingsProtocol: AnyObject {
     var viewSourceEnabled: Bool { get set }

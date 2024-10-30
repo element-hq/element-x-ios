@@ -30,6 +30,9 @@ struct AdvancedSettingsScreen: View {
             Section {
                 ListRow(label: .plain(title: L10n.screenAdvancedSettingsMediaCompressionDescription),
                         kind: .toggle($context.optimizeMediaUploads))
+                    .onChange(of: context.optimizeMediaUploads) {
+                        context.send(viewAction: .optimizeMediaUploadsChanged)
+                    }
             } header: {
                 Text(L10n.screenAdvancedSettingsMediaCompressionTitle)
                     .compoundListSectionHeader()
@@ -57,7 +60,8 @@ private extension AppAppearance {
 // MARK: - Previews
 
 struct AdvancedSettingsScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = AdvancedSettingsScreenViewModel(advancedSettings: ServiceLocator.shared.settings)
+    static let viewModel = AdvancedSettingsScreenViewModel(advancedSettings: ServiceLocator.shared.settings,
+                                                           analytics: ServiceLocator.shared.analytics)
     static var previews: some View {
         NavigationStack {
             AdvancedSettingsScreen(context: viewModel.context)

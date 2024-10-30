@@ -99,7 +99,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                             secureBackupController: userSession.clientProxy.secureBackupController,
                                                                             appSettings: appSettings,
                                                                             navigationSplitCoordinator: navigationSplitCoordinator,
-                                                                            userIndicatorController: ServiceLocator.shared.userIndicatorController))
+                                                                            userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                            analytics: analytics))
         
         onboardingFlowCoordinator = OnboardingFlowCoordinator(userSession: userSession,
                                                               appLockService: appLockService,
