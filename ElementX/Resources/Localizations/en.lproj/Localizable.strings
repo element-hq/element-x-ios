@@ -234,6 +234,7 @@
 "common_verification_failed" = "Verification failed";
 "common_verified" = "Verified";
 "common_verify_device" = "Verify device";
+"common_verify_identity" = "Verify identity";
 "common_video" = "Video";
 "common_voice_message" = "Voice message";
 "common_waiting" = "Waiting…";

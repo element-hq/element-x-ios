@@ -526,6 +526,8 @@ internal enum L10n {
   internal static var commonVerified: String { return L10n.tr("Localizable", "common_verified") }
   /// Verify device
   internal static var commonVerifyDevice: String { return L10n.tr("Localizable", "common_verify_device") }
+  /// Verify identity
+  internal static var commonVerifyIdentity: String { return L10n.tr("Localizable", "common_verify_identity") }
   /// Video
   internal static var commonVideo: String { return L10n.tr("Localizable", "common_video") }
   /// Voice message

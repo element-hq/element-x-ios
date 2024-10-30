@@ -86,7 +86,7 @@ struct RoomMemberDetailsScreen: View {
     var verificationSection: some View {
         if context.viewState.showVerificationSection {
             Section {
-                ListRow(label: .default(title: context.viewState.verifyButtonTitle,
+                ListRow(label: .default(title: L10n.commonVerifyIdentity,
                                         description: L10n.screenRoomMemberDetailsVerifyButtonSubtitle,
                                         icon: \.lock),
                         kind: .button { })
