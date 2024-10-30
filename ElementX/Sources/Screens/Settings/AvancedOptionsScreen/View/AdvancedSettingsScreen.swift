@@ -25,17 +25,13 @@ struct AdvancedSettingsScreen: View {
                 ListRow(label: .plain(title: L10n.screenAdvancedSettingsSharePresence,
                                       description: L10n.screenAdvancedSettingsSharePresenceDescription),
                         kind: .toggle($context.sharePresence))
-            }
-            
-            Section {
-                ListRow(label: .plain(title: L10n.screenAdvancedSettingsMediaCompressionDescription),
+                
+                ListRow(label: .plain(title: L10n.screenAdvancedSettingsMediaCompressionTitle,
+                                      description: L10n.screenAdvancedSettingsMediaCompressionDescription),
                         kind: .toggle($context.optimizeMediaUploads))
                     .onChange(of: context.optimizeMediaUploads) {
                         context.send(viewAction: .optimizeMediaUploadsChanged)
                     }
-            } header: {
-                Text(L10n.screenAdvancedSettingsMediaCompressionTitle)
-                    .compoundListSectionHeader()
             }
         }
         .compoundList()
