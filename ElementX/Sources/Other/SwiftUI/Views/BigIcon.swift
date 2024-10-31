@@ -27,7 +27,7 @@ struct BigIcon: View {
             case .alertSolid, .alert:
                 .compound.iconCriticalPrimary
             case .successSolid, .success:
-                .zero.iconSuccessPrimary
+                .compound.iconSuccessPrimary
             }
         }
         
@@ -38,7 +38,7 @@ struct BigIcon: View {
             case .alertSolid:
                 .compound.bgCriticalSubtle
             case .successSolid:
-                .zero.bgSuccessSubtle
+                .compound.bgSuccessSubtle
             case .default, .alert, .success:
                 .compound.bgCanvasDefault
             }

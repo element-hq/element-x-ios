@@ -130,7 +130,7 @@ struct HomeScreenContent: View {
                 if context.viewState.slidingSyncMigrationBannerMode == .show {
                     HomeScreenSlidingSyncMigrationBanner(context: context)
                 } else if context.viewState.securityBannerMode == .show {
-                    HomeScreenRecoveryKeyConfirmationBanner(context: context)
+                    HomeScreenRecoveryKeyConfirmationBanner(requiresExtraAccountSetup: context.viewState.requiresExtraAccountSetup, context: context)
                 }
             }
             .background(Color.compound.bgCanvasDefault)

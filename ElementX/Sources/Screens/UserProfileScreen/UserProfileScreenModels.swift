@@ -32,10 +32,6 @@ struct UserProfileScreenViewState: BindableState {
     var showVerificationSection: Bool {
         isVerified == false && !isOwnUser
     }
-    
-    var verifyButtonTitle: String {
-        L10n.screenRoomMemberDetailsVerifyButtonTitle(userProfile?.displayName ?? "")
-    }
 }
 
 struct UserProfileScreenViewStateBindings {

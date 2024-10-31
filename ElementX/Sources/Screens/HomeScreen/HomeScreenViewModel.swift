@@ -58,7 +58,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 switch (securityState.verificationState, securityState.recoveryState) {
                 case (.verified, .disabled):
                     state.requiresExtraAccountSetup = true
-                    state.securityBannerMode = .none
+                    state.securityBannerMode = .show
                 case (.verified, .incomplete):
                     state.requiresExtraAccountSetup = true
                     

@@ -70,7 +70,7 @@ struct EncryptionResetScreen: View {
 
     @ViewBuilder
     private func checkMarkItem(title: String, position: ListPosition, positive: Bool) -> some View {
-        RoundedLabelItem(title: title, listPosition: position) {
+        VisualListItem(title: title, position: position) {
             CompoundIcon(positive ? \.check : \.info)
                 .foregroundColor(positive ? .zero.iconAccentPrimary : .compound.iconSecondary)
                 .alignmentGuide(.top) { _ in 2 }

@@ -389,7 +389,7 @@ struct MediaUploadingPreprocessor {
     /// - Returns: the URL for the resulting video and its media info as a `VideoProcessingResult`
     private func convertVideoToMP4(_ url: URL, targetFileSize: UInt = 0) async throws(MediaUploadingPreprocessorError) -> VideoProcessingInfo {
         let asset = AVURLAsset(url: url)
-        let presetName = appSettings.optimizeMediaUploads ? AVAssetExportPreset640x480 : AVAssetExportPreset1920x1080
+        let presetName = appSettings.optimizeMediaUploads ? AVAssetExportPreset1280x720 : AVAssetExportPreset1920x1080
 
         guard let exportSession = AVAssetExportSession(asset: asset, presetName: presetName) else {
             throw .failedConvertingVideo

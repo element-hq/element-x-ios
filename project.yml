@@ -11,6 +11,7 @@ options:
   createIntermediateGroups: true
   deploymentTarget:
     iOS: '17.6'
+    macOS: '14.6'
   groupOrdering:
   - order:
     - ElementX
@@ -59,7 +60,7 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 1.0.61
+    exactVersion: 1.0.62
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
@@ -67,7 +68,7 @@ packages:
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
-    minorVersion: 0.27.0
+    minorVersion: 0.28.0
     # path: ../matrix-analytics-events
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings

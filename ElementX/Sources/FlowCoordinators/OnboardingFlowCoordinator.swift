@@ -244,9 +244,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             
             switch action {
             case .otherDevice:
-                Task {
-                    await self.presentSessionVerificationScreen()
-                }
+                presentSessionVerificationScreen()
             case .recoveryKey:
                 presentRecoveryKeyScreen()
             case .skip:
@@ -263,12 +261,13 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         presentCoordinator(coordinator)
     }
     
-    private func presentSessionVerificationScreen() async {
-        guard case let .success(sessionVerificationController) = await userSession.clientProxy.sessionVerificationControllerProxy() else {
+    private func presentSessionVerificationScreen() {
+        guard let sessionVerificationController = userSession.clientProxy.sessionVerificationController else {
             fatalError("The sessionVerificationController should aways be valid at this point")
         }
         
-        let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController)
+        let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController,
+                                                                        flow: .initiator)
         
         let coordinator = SessionVerificationScreenCoordinator(parameters: parameters)
         

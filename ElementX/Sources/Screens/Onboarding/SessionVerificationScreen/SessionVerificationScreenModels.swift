@@ -11,13 +11,61 @@ enum SessionVerificationScreenViewModelAction {
     case finished
 }
 
+enum SessionVerificationScreenViewAction {
+    case acceptVerificationRequest
+    case ignoreVerificationRequest
+    case requestVerification
+    case startSasVerification
+    case restart
+    case accept
+    case decline
+    case done
+}
+
 struct SessionVerificationScreenViewState: BindableState {
-    var verificationState: SessionVerificationScreenStateMachine.State = .initial
+    let flow: SessionVerificationScreenFlow
+    var verificationState: SessionVerificationScreenStateMachine.State
+    
+    var headerImageName: String {
+        switch verificationState {
+        case .initial:
+            return "lock"
+        case .acceptingVerificationRequest:
+            return "hourglass"
+        case .requestingVerification:
+            return "hourglass"
+        case .verificationRequestAccepted:
+            return "face.smiling"
+        case .startingSasVerification:
+            return "hourglass"
+        case .sasVerificationStarted:
+            return "hourglass"
+        case .cancelling:
+            return "hourglass"
+        case .acceptingChallenge:
+            return "hourglass"
+        case .decliningChallenge:
+            return "hourglass"
+        case .showingChallenge:
+            return "face.smiling"
+        case .verified:
+            return "checkmark.shield"
+        case .cancelled:
+            return "exclamationmark.shield"
+        }
+    }
     
     var title: String? {
         switch verificationState {
         case .initial:
-            return L10n.screenSessionVerificationOpenExistingSessionTitle
+            switch flow {
+            case .initiator:
+                return L10n.screenSessionVerificationOpenExistingSessionTitle
+            case .responder:
+                return L10n.screenSessionVerificationRequestTitle
+            }
+        case .acceptingVerificationRequest:
+            return L10n.screenSessionVerificationRequestTitle
         case .requestingVerification:
             return L10n.screenSessionVerificationWaitingToAcceptTitle
         case .verificationRequestAccepted:
@@ -31,13 +79,13 @@ struct SessionVerificationScreenViewState: BindableState {
         case .acceptingChallenge:
             return L10n.screenSessionVerificationCompareEmojisTitle
         case .decliningChallenge:
-            return nil
+            return L10n.screenSessionVerificationCompareEmojisTitle
         case .verified:
             return L10n.commonVerificationComplete
         case .cancelling:
             return nil
         case .cancelled:
-            return L10n.commonVerificationCancelled
+            return L10n.commonVerificationFailed
         }
     }
     
@@ -48,7 +96,14 @@ struct SessionVerificationScreenViewState: BindableState {
     var message: String {
         switch verificationState {
         case .initial:
-            return L10n.screenSessionVerificationOpenExistingSessionSubtitle
+            switch flow {
+            case .initiator:
+                return L10n.screenSessionVerificationOpenExistingSessionSubtitle
+            case .responder:
+                return L10n.screenSessionVerificationRequestSubtitle
+            }
+        case .acceptingVerificationRequest:
+            return L10n.screenSessionVerificationRequestSubtitle
         case .requestingVerification:
             return L10n.screenSessionVerificationWaitingToAcceptSubtitle
         case .verificationRequestAccepted:
@@ -60,7 +115,7 @@ struct SessionVerificationScreenViewState: BindableState {
         case .acceptingChallenge:
             return L10n.screenSessionVerificationCompareEmojisSubtitle
         case .decliningChallenge:
-            return L10n.commonWaiting
+            return L10n.screenSessionVerificationCompareEmojisSubtitle
         case .cancelling:
             return L10n.commonWaiting
         case .showingChallenge:
@@ -68,15 +123,7 @@ struct SessionVerificationScreenViewState: BindableState {
         case .verified:
             return L10n.screenSessionVerificationCompleteSubtitle
         case .cancelled:
-            return L10n.screenSessionVerificationCancelledSubtitle
+            return L10n.screenSessionVerificationFailedSubtitle
         }
     }
-}
-
-enum SessionVerificationScreenViewAction {
-    case requestVerification
-    case startSasVerification
-    case restart
-    case accept
-    case decline
 }

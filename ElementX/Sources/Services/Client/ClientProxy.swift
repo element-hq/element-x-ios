@@ -50,6 +50,8 @@ class ClientProxy: ClientProxyProtocol {
 
     let secureBackupController: SecureBackupControllerProtocol
     
+    private(set) var sessionVerificationController: SessionVerificationControllerProxyProtocol?
+    
     private static var roomCreationPowerLevelOverrides: PowerLevels {
         .init(usersDefault: nil,
               eventsDefault: nil,
@@ -165,7 +167,16 @@ class ClientProxy: ClientProxyProtocol {
         updateVerificationState(client.encryption().verificationState())
         
         verificationStateListenerTaskHandle = client.encryption().verificationStateListener(listener: VerificationStateListenerProxy { [weak self] verificationState in
-            self?.updateVerificationState(verificationState)
+            guard let self else { return }
+            
+            updateVerificationState(verificationState)
+            
+            // The session verification controller requires the user's identity which
+            // isn't available before a keys query response. Use the verification
+            // state updates as an aproximation for when that happens.
+            Task {
+                await self.buildSessionVerificationControllerProxyIfPossible(verificationState: verificationState)
+            }
         })
         
         sendQueueListenerTaskHandle = client.subscribeToSendQueueStatus(listener: SendQueueRoomErrorListenerProxy { [weak self] roomID, error in
@@ -495,7 +506,8 @@ class ClientProxy: ClientProxyProtocol {
     func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewDetails, ClientProxyError> {
         do {
             let roomPreview = try await client.getRoomPreviewFromRoomId(roomId: identifier, viaServers: via)
-            return .success(.init(roomPreview))
+            let roomPreviewInfo = try roomPreview.info()
+            return .success(.init(roomPreviewInfo))
         } catch let error as ClientError where error.code == .forbidden {
             return .failure(.roomPreviewIsPrivate)
         } catch {
@@ -575,16 +587,6 @@ class ClientProxy: ClientProxyProtocol {
             return .success(())
         } catch {
             MXLog.error("Failed removing user avatar with error: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
-
-    func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
-        do {
-            let sessionVerificationController = try await client.getSessionVerificationController()
-            return .success(SessionVerificationControllerProxy(sessionVerificationController: sessionVerificationController))
-        } catch {
-            MXLog.error("Failed retrieving session verification controller proxy with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
@@ -750,6 +752,19 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         verificationStateSubject.send(verificationState)
+    }
+    
+    private func buildSessionVerificationControllerProxyIfPossible(verificationState: VerificationState) async {
+        guard sessionVerificationController == nil, verificationState != .unknown else {
+            return
+        }
+        
+        do {
+            let sessionVerificationController = try await client.getSessionVerificationController()
+            self.sessionVerificationController = SessionVerificationControllerProxy(sessionVerificationController: sessionVerificationController)
+        } catch {
+            MXLog.error("Failed retrieving session verification controller proxy with error: \(error)")
+        }
     }
 
     private func loadUserAvatarURLFromCache() {
@@ -1109,17 +1124,17 @@ private class SendQueueRoomErrorListenerProxy: SendQueueRoomErrorListener {
 }
 
 private extension RoomPreviewDetails {
-    init(_ roomPreview: RoomPreview) {
-        self = RoomPreviewDetails(roomID: roomPreview.roomId,
-                                  name: roomPreview.name,
-                                  canonicalAlias: roomPreview.canonicalAlias,
-                                  topic: roomPreview.topic,
-                                  avatarURL: roomPreview.avatarUrl.flatMap(URL.init(string:)),
-                                  memberCount: UInt(roomPreview.numJoinedMembers),
-                                  isHistoryWorldReadable: roomPreview.isHistoryWorldReadable,
-                                  isJoined: roomPreview.isJoined,
-                                  isInvited: roomPreview.isInvited,
-                                  isPublic: roomPreview.isPublic,
-                                  canKnock: roomPreview.canKnock)
+    init(_ roomPreviewInfo: RoomPreviewInfo) {
+        self = RoomPreviewDetails(roomID: roomPreviewInfo.roomId,
+                                  name: roomPreviewInfo.name,
+                                  canonicalAlias: roomPreviewInfo.canonicalAlias,
+                                  topic: roomPreviewInfo.topic,
+                                  avatarURL: roomPreviewInfo.avatarUrl.flatMap(URL.init(string:)),
+                                  memberCount: UInt(roomPreviewInfo.numJoinedMembers),
+                                  isHistoryWorldReadable: roomPreviewInfo.isHistoryWorldReadable,
+                                  isJoined: roomPreviewInfo.membership == .joined,
+                                  isInvited: roomPreviewInfo.membership == .invited,
+                                  isPublic: roomPreviewInfo.joinRule == .public,
+                                  canKnock: roomPreviewInfo.joinRule == .knock)
     }
 }

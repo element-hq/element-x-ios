@@ -92,6 +92,7 @@ class TimelineInteractionHandler {
         }
     }
 
+    // swiftlint:disable:next cyclomatic_complexity
     func handleTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: TimelineItemIdentifier) {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {

@@ -60,7 +60,6 @@ extension ClientProxyMock {
         logoutReturnValue = nil
         searchUsersSearchTermLimitReturnValue = .success(.init(results: [], limited: false))
         profileForReturnValue = .success(.init(userID: "@a:b.com", displayName: "Some user"))
-        sessionVerificationControllerProxyReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         ignoreUserReturnValue = .success(())
         unignoreUserReturnValue = .success(())
         

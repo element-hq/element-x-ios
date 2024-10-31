@@ -15,7 +15,7 @@ class SessionVerificationStateMachineTests: XCTestCase {
     
     @MainActor
     override func setUpWithError() throws {
-        stateMachine = SessionVerificationScreenStateMachine()
+        stateMachine = SessionVerificationScreenStateMachine(state: .initial)
     }
     
     func testAcceptChallenge() {

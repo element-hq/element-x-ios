@@ -112,9 +112,9 @@
 "action_view_source" = "Visa källkod";
 "action_yes" = "Ja";
 "banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
-"banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
+"banner_migrate_to_native_sliding_sync_description" = "Din server stöder nu ett nytt, snabbare protokoll. Logga ut och logga in igen för att uppgradera nu. Om du gör detta nu hjälper du dig att undvika en tvingad utloggning när det gamla protokollet tas bort senare.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.";
-"banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
+"banner_migrate_to_native_sliding_sync_title" = "Uppgradering tillgänglig";
 "banner.set_up_recovery.content" = "Skapa en ny återställningsnyckel som kan användas för att återställa din krypterade meddelandehistorik om du förlorar åtkomst till dina enheter.";
 "banner.set_up_recovery.title" = "Ställ in återställning";
 "common_about" = "Om";
@@ -139,6 +139,7 @@
 "common_edited_suffix" = "(redigerad)";
 "common_editing" = "Redigerar";
 "common_emote" = "* %1$@ %2$@";
+"common_encryption" = "Encryption";
 "common_encryption_enabled" = "Kryptering aktiverad";
 "common_enter_your_pin" = "Ange din PIN-kod";
 "common_error" = "Fel";
@@ -149,6 +150,7 @@
 "common_favourited" = "Favoriter";
 "common_file" = "Fil";
 "common_forward_message" = "Vidarebefordra meddelande";
+"common_frequently_used" = "Frequently used";
 "common_gif" = "GIF";
 "common_image" = "Bild";
 "common_in_reply_to" = "Som svar på %1$@";
@@ -241,6 +243,8 @@
 "common.pinned" = "Fäst";
 "common.send_to" = "Skicka till";
 "common.you" = "You";
+"common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
+"common_unable_to_decrypt_verification_violation" = "Sender's verified identity has changed";
 "confirm_recovery_key_banner_message" = "Din chattsäkerhetskopia är för närvarande inte synkroniserad. Du måste ange din återställningsnyckel för att behålla åtkomsten till din chattsäkerhetskopia.";
 "confirm_recovery_key_banner_title" = "Ange din återställningsnyckel";
 "crash_detection_dialog_content" = "%1$@ kraschade senast den användes. Vill du dela en kraschrapport med oss?";
@@ -340,6 +344,9 @@
 "screen_advanced_settings_element_call_base_url" = "Anpassad bas-URL för Element Call";
 "screen_advanced_settings_element_call_base_url_description" = "Ange en anpassad bas-URL för Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Ogiltig URL, se till att du inkluderar protokollet (http/https) och rätt adress.";
+"screen_create_room_room_address_section_footer" = "In order for this room to be visible in the public room directory, you will need a room address.";
+"screen_create_room_room_address_section_title" = "Room address";
+"screen_create_room_room_visibility_section_title" = "Room visibility";
 "screen_create_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_access_section_anyone_option_title" = "Anyone";
 "screen_create_room_access_section_header" = "Room Access";
@@ -369,6 +376,7 @@
 "screen_room_pinned_banner_loading_description" = "Laddar meddelande …";
 "screen_room_pinned_banner_view_all_button_title" = "Visa alla";
 "screen_room_details_pinned_events_row_title" = "Fästa meddelanden";
+"screen_roomlist_knock_event_sent_description" = "Request to join sent";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
@@ -380,6 +388,8 @@
 "screen_account_provider_signup_title" = "Du är på väg att skapa ett konto på %@";
 "screen_advanced_settings_developer_mode" = "Utvecklarläge";
 "screen_advanced_settings_developer_mode_description" = "Aktivera för att ha tillgång till funktionalitet för utvecklare.";
+"screen_advanced_settings_media_compression_description" = "Optimize for upload";
+"screen_advanced_settings_media_compression_title" = "Media";
 "screen_advanced_settings_rich_text_editor_description" = "Inaktivera rik-text-redigeraren för att skriva Markdown manuellt.";
 "screen_advanced_settings_send_read_receipts" = "Läskvitton";
 "screen_advanced_settings_send_read_receipts_description" = "Om det är avstängt kommer dina läskvitton inte att skickas till någon. Du kommer fortfarande att få läskvitton från andra användare.";
@@ -447,8 +457,11 @@
 "screen_chat_backup_key_backup_action_disable" = "Stäng av säkerhetskopiering";
 "screen_chat_backup_key_backup_action_enable" = "Slå på säkerhetskopiering";
 "screen_chat_backup_key_backup_description" = "Säkerhetskopior ser till att du inte blir av med din meddelandehistorik. %1$@.";
-"screen_chat_backup_key_backup_title" = "Säkerhetskopia";
+"screen_chat_backup_key_backup_title" = "Nyckellagring";
+"screen_chat_backup_key_storage_toggle_description" = "Upload keys from this device";
+"screen_chat_backup_key_storage_toggle_title" = "Allow key storage";
 "screen_chat_backup_recovery_action_change" = "Byt återställningsnyckel";
+"screen_chat_backup_recovery_action_change_description" = "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.";
 "screen_chat_backup_recovery_action_confirm_description" = "Din chattsäkerhetskopia är för närvarande osynkroniserad.";
 "screen_chat_backup_recovery_action_setup" = "Ställ in återställning";
 "screen_chat_backup_recovery_action_setup_description" = "Få tillgång till dina krypterade meddelanden om du tappar bort alla dina enheter eller blir utloggad ur %1$@ överallt.";
@@ -470,10 +483,10 @@
 "screen_create_poll_title" = "Skapa omröstning";
 "screen_create_room_action_create_room" = "Nytt rum";
 "screen_create_room_error_creating_room" = "Ett fel uppstod när rummet skapades";
-"screen_create_room_private_option_description" = "Meddelanden i det här rummet är krypterade. Kryptering kan inte inaktiveras efteråt.";
-"screen_create_room_private_option_title" = "Privat rum (endast inbjudan)";
-"screen_create_room_public_option_description" = "Meddelanden är inte krypterade och vem som helst kan läsa dem. Du kan aktivera kryptering vid ett senare tillfälle.";
-"screen_create_room_public_option_title" = "Offentligt rum (vem som helst)";
+"screen_create_room_private_option_description" = "Endast inbjudna personer har tillgång till detta rum. Alla meddelanden är totalsträckskrypterade.";
+"screen_create_room_private_option_title" = "Privat rum";
+"screen_create_room_public_option_description" = "Vem som helst kan hitta det här rummet.\nDu kan ändra detta när som helst i rumsinställningarna.";
+"screen_create_room_public_option_title" = "Offentligt rum";
 "screen_create_room_topic_label" = "Ämne (valfritt)";
 "screen_deactivate_account_confirmation_dialog_content" = "Please confirm that you want to deactivate your account. This action cannot be undone.";
 "screen_deactivate_account_delete_all_messages" = "Delete all my messages";
@@ -621,7 +634,6 @@
 "screen_qr_code_login_verify_code_title" = "Din verifieringskod";
 "screen_recovery_key_change_description" = "Få en ny återställningsnyckel om du har tappat bort din befintliga. När du har bytt din återställningsnyckel fungerar din gamla inte längre.";
 "screen_recovery_key_change_generate_key" = "Generera en ny återställningsnyckel";
-"screen_recovery_key_change_generate_key_description" = "Se till att du kan lagra din återställningsnyckel någonstans säkert";
 "screen_recovery_key_change_success" = "Återställningsnyckel ändrad";
 "screen_recovery_key_change_title" = "Byt återställningsnyckel?";
 "screen_recovery_key_confirm_create_new_recovery_key" = "Skapa ny återställningsnyckel";
@@ -824,8 +836,12 @@
 "screen_session_verification_ready_subtitle" = "Jämför en unik uppsättning emojis.";
 "screen_session_verification_request_accepted_subtitle" = "Jämför de unika emojierna och se till att de visas i samma ordning.";
 "screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_failure_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
+"screen_session_verification_request_failure_title" = "Verification failed";
 "screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
 "screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_success_subtitle" = "Now you can read or send messages securely on your other device.";
+"screen_session_verification_request_success_title" = "Device verified";
 "screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "De matchar inte";
 "screen_session_verification_they_match" = "De matchar";
@@ -1012,6 +1028,7 @@
 "screen_login_subtitle" = "Matrix är ett öppet nätverk för säker, decentraliserad kommunikation.";
 "screen_notification_settings_mentions_section_title" = "Omnämnanden";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "Försök igen";
+"screen_recovery_key_change_generate_key_description" = "Se till att du kan lagra din återställningsnyckel någonstans säkert";
 "screen_recovery_key_confirm_title" = "Ange din återställningsnyckel";
 "screen_report_content_block_user" = "Blockera användare";
 "screen_reset_encryption_password_placeholder" = "Ange …";

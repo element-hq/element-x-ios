@@ -30,10 +30,6 @@ struct RoomMemberDetailsScreenViewState: BindableState {
     var showVerificationSection: Bool {
         isVerified == false && !isOwnMemberDetails
     }
-    
-    var verifyButtonTitle: String {
-        L10n.screenRoomMemberDetailsVerifyButtonTitle(memberDetails?.name ?? "")
-    }
 }
 
 struct RoomMemberDetailsScreenViewStateBindings {
