@@ -65,7 +65,9 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
                     actionsSubject.send(.done(mode: context.viewState.mode))
                 case .failure(let error):
                     MXLog.error("Failed confirming recovery key with error: \(error)")
-                    state.bindings.alertInfo = .init(id: .init())
+                    state.bindings.alertInfo = .init(id: .init(),
+                                                     title: L10n.screenRecoveryKeyConfirmErrorTitle,
+                                                     message: L10n.screenRecoveryKeyConfirmErrorContent)
                 }
                 
                 hideLoadingIndicator()

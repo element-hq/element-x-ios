@@ -641,7 +641,7 @@
 "screen_recovery_key_change_title" = "Change recovery key?";
 "screen_recovery_key_confirm_create_new_recovery_key" = "Create new recovery key";
 "screen_recovery_key_confirm_description" = "Make sure nobody can see this screen!";
-"screen_recovery_key_confirm_error_content" = "Please try again to confirm access to your chat backup.";
+"screen_recovery_key_confirm_error_content" = "Please try again to confirm access to your key storage.";
 "screen_recovery_key_confirm_error_title" = "Incorrect recovery key";
 "screen_recovery_key_confirm_key_description" = "If you have a security key or security phrase, this will work too.";
 "screen_recovery_key_confirm_key_placeholder" = "Enter…";
