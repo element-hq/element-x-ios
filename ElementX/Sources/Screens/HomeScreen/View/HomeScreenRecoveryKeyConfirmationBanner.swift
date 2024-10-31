@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Compound
 import SwiftUI
 
 struct HomeScreenRecoveryKeyConfirmationBanner: View {
@@ -14,18 +15,28 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
     
     var title: String { requiresExtraAccountSetup ? L10n.bannerSetUpRecoveryTitle : L10n.confirmRecoveryKeyBannerTitle }
     var message: String { requiresExtraAccountSetup ? L10n.bannerSetUpRecoveryContent : L10n.confirmRecoveryKeyBannerMessage }
-    var actionTitle: String { requiresExtraAccountSetup ? L10n.bannerSetUpRecoverySubmit : L10n.actionContinue }
+    var actionTitle: String { requiresExtraAccountSetup ? L10n.bannerSetUpRecoverySubmit : L10n.confirmRecoveryKeyBannerPrimaryButtonTitle }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            VStack(alignment: .leading, spacing: 4) {
-                HStack(spacing: 16) {
-                    Text(title)
-                        .font(.compound.bodyLGSemibold)
-                        .foregroundColor(.compound.textPrimary)
-                    
-                    Spacer()
-                    
+        VStack(spacing: 16) {
+            content
+            buttons
+        }
+        .padding(16)
+        .background(Color.compound.bgSubtleSecondary)
+        .cornerRadius(14)
+        .padding(.horizontal, 16)
+    }
+    
+    var content: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(alignment: .firstTextBaseline, spacing: 16) {
+                Text(title)
+                    .font(.compound.bodyLGSemibold)
+                    .foregroundColor(.compound.textPrimary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                if requiresExtraAccountSetup {
                     Button {
                         context.send(viewAction: .skipRecoveryKeyConfirmation)
                     } label: {
@@ -34,22 +45,27 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
                             .frame(width: 12, height: 12)
                     }
                 }
-                Text(message)
-                    .font(.compound.bodyMD)
-                    .foregroundColor(.compound.textSecondary)
             }
             
+            Text(message)
+                .font(.compound.bodyMD)
+                .foregroundColor(.compound.textSecondary)
+        }
+    }
+    
+    var buttons: some View {
+        VStack(spacing: 16) {
             Button(actionTitle) {
                 context.send(viewAction: .confirmRecoveryKey)
             }
             .frame(maxWidth: .infinity)
             .buttonStyle(.compound(.primary, size: .medium))
             .accessibilityIdentifier(A11yIdentifiers.homeScreen.recoveryKeyConfirmationBannerContinue)
+            
+            if !requiresExtraAccountSetup {
+                // Missing encryption reset button to goes here once the flow exists.
+            }
         }
-        .padding(16)
-        .background(Color.compound.bgSubtleSecondary)
-        .cornerRadius(14)
-        .padding(.horizontal, 16)
     }
 }
 
