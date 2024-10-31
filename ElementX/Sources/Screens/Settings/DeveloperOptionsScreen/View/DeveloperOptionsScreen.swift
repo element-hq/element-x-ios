@@ -62,12 +62,6 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
-            Section("Media") {
-                Toggle(isOn: $context.optimizeMediaUploads) {
-                    Text("Optimise for upload")
-                }
-            }
-            
             Section {
                 Toggle(isOn: $context.enableOnlySignedDeviceIsolationMode) {
                     Text("Exclude insecure devices when sending/receiving messages")

@@ -17,6 +17,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
     override func setUp() {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
+        appSettings.optimizeMediaUploads = false
         ServiceLocator.shared.register(appSettings: appSettings)
         mediaUploadingPreprocessor = MediaUploadingPreprocessor(appSettings: appSettings)
     }

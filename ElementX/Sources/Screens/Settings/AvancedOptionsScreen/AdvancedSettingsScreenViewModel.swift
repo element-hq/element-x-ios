@@ -11,12 +11,20 @@ import SwiftUI
 typealias AdvancedSettingsScreenViewModelType = StateStoreViewModel<AdvancedSettingsScreenViewState, AdvancedSettingsScreenViewAction>
 
 class AdvancedSettingsScreenViewModel: AdvancedSettingsScreenViewModelType, AdvancedSettingsScreenViewModelProtocol {
-    init(advancedSettings: AdvancedSettingsProtocol) {
-        let bindings = AdvancedSettingsScreenViewStateBindings(advancedSettings: advancedSettings)
-        let state = AdvancedSettingsScreenViewState(bindings: bindings)
+    private let analytics: AnalyticsService
+    
+    init(advancedSettings: AdvancedSettingsProtocol, analytics: AnalyticsService) {
+        self.analytics = analytics
         
+        let state = AdvancedSettingsScreenViewState(bindings: .init(advancedSettings: advancedSettings))
         super.init(initialViewState: state)
     }
     
-    override func process(viewAction: AdvancedSettingsScreenViewAction) { }
+    override func process(viewAction: AdvancedSettingsScreenViewAction) {
+        switch viewAction {
+        case .optimizeMediaUploadsChanged:
+            // Note: Using a view action here as sinking the AppSettings publisher tracks the initial value.
+            analytics.trackInteraction(name: state.bindings.optimizeMediaUploads ? .MobileSettingsOptimizeMediaUploadsEnabled : .MobileSettingsOptimizeMediaUploadsDisabled)
+        }
+    }
 }

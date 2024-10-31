@@ -32,6 +32,7 @@ final class AppSettings {
         case pusherProfileTag
         case logLevel
         case viewSourceEnabled
+        case optimizeMediaUploads
         case appAppearance
         case sharePresence
         case hideUnreadMessagesBadge
@@ -42,7 +43,6 @@ final class AppSettings {
         
         // Feature flags
         case slidingSyncDiscovery
-        case optimizeMediaUploads
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
         case enableOnlySignedDeviceIsolationMode
@@ -237,6 +237,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.viewSourceEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var viewSourceEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.optimizeMediaUploads, defaultValue: true, storageType: .userDefaults(store))
+    var optimizeMediaUploads
 
     // MARK: - Element Call
     
@@ -274,9 +277,6 @@ final class AppSettings {
     enum SlidingSyncDiscovery: Codable { case proxy, native, forceNative }
     @UserPreference(key: UserDefaultsKeys.slidingSyncDiscovery, defaultValue: .native, storageType: .userDefaults(store))
     var slidingSyncDiscovery: SlidingSyncDiscovery
-    
-    @UserPreference(key: UserDefaultsKeys.optimizeMediaUploads, defaultValue: false, storageType: .userDefaults(store))
-    var optimizeMediaUploads
     
     @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var knockingEnabled
