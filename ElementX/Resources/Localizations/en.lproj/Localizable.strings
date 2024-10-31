@@ -116,7 +116,6 @@
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
 "banner_set_up_recovery_content" = "Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.";
-"banner_set_up_recovery_submit" = "Set up recovery";
 "banner_set_up_recovery_title" = "Set up recovery to protect your account";
 "common_about" = "About";
 "common_acceptable_use_policy" = "Acceptable use policy";
@@ -247,8 +246,10 @@
 "common.you" = "You";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity has changed";
-"confirm_recovery_key_banner_message" = "Your chat backup is currently out of sync. You need to enter your recovery key to maintain access to your chat backup.";
-"confirm_recovery_key_banner_title" = "Enter your recovery key";
+"confirm_recovery_key_banner_message" = "Confirm your recovery key to maintain access to your key storage and message history.";
+"confirm_recovery_key_banner_primary_button_title" = "Enter your recovery key";
+"confirm_recovery_key_banner_secondary_button_title" = "Forgot your recovery key?";
+"confirm_recovery_key_banner_title" = "Your key storage is out of sync";
 "crash_detection_dialog_content" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
 "crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity appears to have changed. %3$@";
@@ -465,8 +466,7 @@
 "screen_chat_backup_key_storage_toggle_title" = "Allow key storage";
 "screen_chat_backup_recovery_action_change" = "Change recovery key";
 "screen_chat_backup_recovery_action_change_description" = "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.";
-"screen_chat_backup_recovery_action_confirm_description" = "Your chat backup is currently out of sync.";
-"screen_chat_backup_recovery_action_setup" = "Set up recovery";
+"screen_chat_backup_recovery_action_confirm_description" = "Your key storage is currently out of sync.";
 "screen_chat_backup_recovery_action_setup_description" = "Get access to your encrypted messages if you lose all your devices or are signed out of %1$@ everywhere.";
 "screen_create_account_title" = "Create account";
 "screen_create_new_recovery_key_list_item_1" = "Open %1$@ in a desktop device";
@@ -641,7 +641,7 @@
 "screen_recovery_key_change_title" = "Change recovery key?";
 "screen_recovery_key_confirm_create_new_recovery_key" = "Create new recovery key";
 "screen_recovery_key_confirm_description" = "Make sure nobody can see this screen!";
-"screen_recovery_key_confirm_error_content" = "Please try again to confirm access to your chat backup.";
+"screen_recovery_key_confirm_error_content" = "Please try again to confirm access to your key storage.";
 "screen_recovery_key_confirm_error_title" = "Incorrect recovery key";
 "screen_recovery_key_confirm_key_description" = "If you have a security key or security phrase, this will work too.";
 "screen_recovery_key_confirm_key_placeholder" = "Enter…";
@@ -789,7 +789,6 @@
 "screen_room_timeline_less_reactions" = "Show less";
 "screen_room_timeline_message_copied" = "Message copied";
 "screen_room_timeline_no_permission_to_post" = "You do not have permission to post to this room";
-"screen_room_timeline_reactions_show_less" = "Show less";
 "screen_room_timeline_reactions_show_more" = "Show more";
 "screen_room_timeline_read_marker_title" = "New";
 "screen_room_title" = "Chat";
@@ -839,7 +838,6 @@
 "screen_session_verification_ready_subtitle" = "Compare a unique set of emojis.";
 "screen_session_verification_request_accepted_subtitle" = "Compare the unique emoji, ensuring they appear in the same order.";
 "screen_session_verification_request_details_timestamp" = "Signed in";
-"screen_session_verification_request_failure_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_request_failure_title" = "Verification failed";
 "screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
 "screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
@@ -995,6 +993,7 @@
 "troubleshoot_notifications_test_unified_push_failure" = "No push distributors found.";
 "troubleshoot_notifications_test_unified_push_title" = "Check UnifiedPush";
 "a11y_poll" = "Poll";
+"banner_set_up_recovery_submit" = "Set up recovery";
 "dialog_title_error" = "Error";
 "dialog_title_success" = "Success";
 "notification_fallback_content" = "Notification";
@@ -1015,6 +1014,7 @@
 "screen_blocked_users_unblock_alert_title" = "Unblock user";
 "screen_bug_report_rash_logs_alert_title" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
 "screen_chat_backup_recovery_action_confirm" = "Enter recovery key";
+"screen_chat_backup_recovery_action_setup" = "Set up recovery";
 "screen_create_poll_cancel_confirmation_content_ios" = "Your changes won’t be saved";
 "screen_create_room_add_people_title" = "Invite people";
 "screen_create_room_room_name_label" = "Room name";
@@ -1055,8 +1055,10 @@
 "screen_room_error_failed_processing_media" = "Failed processing media to upload, please try again.";
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Remove and ban member";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Mentions and Keywords only";
+"screen_room_timeline_reactions_show_less" = "Show less";
 "screen_roomlist_filter_people" = "People";
 "screen_server_confirmation_change_server" = "Change account provider";
+"screen_session_verification_request_failure_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_signout_confirmation_dialog_submit" = "Sign out";
 "screen_signout_confirmation_dialog_title" = "Sign out";
 "screen_signout_key_backup_offline_title" = "Your keys are still being backed up";
