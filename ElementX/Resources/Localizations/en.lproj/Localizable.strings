@@ -466,7 +466,7 @@
 "screen_chat_backup_key_storage_toggle_title" = "Allow key storage";
 "screen_chat_backup_recovery_action_change" = "Change recovery key";
 "screen_chat_backup_recovery_action_change_description" = "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.";
-"screen_chat_backup_recovery_action_confirm_description" = "Your chat backup is currently out of sync.";
+"screen_chat_backup_recovery_action_confirm_description" = "Your key storage is currently out of sync.";
 "screen_chat_backup_recovery_action_setup_description" = "Get access to your encrypted messages if you lose all your devices or are signed out of %1$@ everywhere.";
 "screen_create_account_title" = "Create account";
 "screen_create_new_recovery_key_list_item_1" = "Open %1$@ in a desktop device";
