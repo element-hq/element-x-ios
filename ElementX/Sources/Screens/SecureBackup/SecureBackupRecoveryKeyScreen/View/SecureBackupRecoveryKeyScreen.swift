@@ -89,6 +89,7 @@ struct SecureBackupRecoveryKeyScreen: View {
             }
             .buttonStyle(.compound(.primary))
             .disabled(context.confirmationRecoveryKey.isEmpty)
+            .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.confirm)
         }
     }
     
@@ -111,6 +112,7 @@ struct SecureBackupRecoveryKeyScreen: View {
             }
             .buttonStyle(.compound(.primary))
             .disabled(context.viewState.recoveryKey == nil || context.viewState.doneButtonEnabled == false)
+            .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.done)
         }
     }
     
@@ -140,6 +142,7 @@ struct SecureBackupRecoveryKeyScreen: View {
                         }
                         .font(.compound.bodyLGSemibold)
                         .padding(.vertical, 11)
+                        .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.generateRecoveryKey)
                     } else {
                         HStack(spacing: 8) {
                             ProgressView()
@@ -163,6 +166,7 @@ struct SecureBackupRecoveryKeyScreen: View {
                         }
                         .tint(.compound.iconSecondary)
                         .accessibilityLabel(L10n.actionCopy)
+                        .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.copyRecoveryKey)
                     }
                 }
             }
@@ -204,6 +208,7 @@ struct SecureBackupRecoveryKeyScreen: View {
                 .onSubmit {
                     context.send(viewAction: .confirmKey)
                 }
+                .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.recoveryKeyField)
             
             if let subtitle = context.viewState.recoveryKeySubtitle {
                 Text(subtitle)
