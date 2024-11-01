@@ -1380,22 +1380,36 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, itemID: TimelineItemIdentifier) {
-        let coordinator = ResolveVerifiedUserSendFailureScreenCoordinator(parameters: .init(failure: failure,
-                                                                                            itemID: itemID,
-                                                                                            roomProxy: roomProxy,
-                                                                                            userIndicatorController: userIndicatorController))
-        coordinator.actionsPublisher.sink { [weak self] action in
-            guard let self else { return }
-
-            switch action {
-            case .dismiss:
-                navigationStackCoordinator.setSheetCoordinator(nil)
-            }
+        Task { await resolveAndResend(failure: failure, itemID: itemID) }
+//        let coordinator = ResolveVerifiedUserSendFailureScreenCoordinator(parameters: .init(failure: failure,
+//                                                                                            itemID: itemID,
+//                                                                                            roomProxy: roomProxy,
+//                                                                                            userIndicatorController: userIndicatorController))
+//        coordinator.actionsPublisher.sink { [weak self] action in
+//            guard let self else { return }
+//
+//            switch action {
+//            case .dismiss:
+//                navigationStackCoordinator.setSheetCoordinator(nil)
+//            }
+//        }
+//        .store(in: &cancellables)
+//
+//        navigationStackCoordinator.setSheetCoordinator(coordinator) { [weak self] in
+//            self?.stateMachine.tryEvent(.dismissResolveSendFailure)
+//        }
+    }
+    
+    private func resolveAndResend(failure: TimelineItemSendFailure.VerifiedUser, itemID: TimelineItemIdentifier) async {
+        let result = switch failure {
+        case .hasUnsignedDevice(let devices):
+            await roomProxy.ignoreDeviceTrustAndResend(devices: devices, itemID: itemID)
+        case .changedIdentity(let users):
+            await roomProxy.withdrawVerificationAndResend(userIDs: users, itemID: itemID)
         }
-        .store(in: &cancellables)
-
-        navigationStackCoordinator.setSheetCoordinator(coordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissResolveSendFailure)
+        if case let .failure(error) = result {
+            MXLog.error("Failed to resolve send failure: \(error)")
+            return
         }
     }
     

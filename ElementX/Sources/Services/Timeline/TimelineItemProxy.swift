@@ -187,3 +187,33 @@ extension Receipt {
         return Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
     }
 }
+
+extension TimelineItemDeliveryStatus {
+    private var isSendingFailedDueToUnsignedDevice: Bool {
+        switch self {
+        case .sending, .sent:
+            return false
+        case .sendingFailed(let failureReason):
+            if case .verifiedUser(.hasUnsignedDevice) = failureReason {
+                return true
+            }
+            return false
+        }
+    }
+    
+    private var isSendingFailedDueToChangedIdentity: Bool {
+        switch self {
+        case .sending, .sent:
+            return false
+        case .sendingFailed(let failureReason):
+            if case .verifiedUser(.changedIdentity) = failureReason {
+                return true
+            }
+            return false
+        }
+    }
+    
+    var shouldAutomaticRetryMessageSending: Bool {
+        isSendingFailedDueToUnsignedDevice || isSendingFailedDueToChangedIdentity
+    }
+}

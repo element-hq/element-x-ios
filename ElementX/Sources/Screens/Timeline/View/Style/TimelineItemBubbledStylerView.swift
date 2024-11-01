@@ -141,6 +141,13 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     // Workaround to stop the message long press stealing the touch from the reaction buttons
                     .onTapGesture { }
             }
+            
+            if adjustedDeliveryStatus?.shouldAutomaticRetryMessageSending == true {
+                /// Calling auto resend once for message in case message delivery is failed due to device verification issue
+                VStack {}.onAppear {
+                    context.send(viewAction: .itemSendInfoTapped(itemID: timelineItem.id))
+                }
+            }
         }
     }
     
