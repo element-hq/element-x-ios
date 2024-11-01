@@ -647,6 +647,24 @@ class MockScreen: Identifiable {
             coordinator.start()
             
             return navigationStackCoordinator
+        case .encryptionReset:
+            let recoveryState: SecureBackupRecoveryState = id == .encryptionSettings ? .enabled : .incomplete
+            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", recoveryState: recoveryState))
+            let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+            
+            let userIndicatorController = UserIndicatorController()
+            userIndicatorController.window = windowManager.overlayWindow
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            
+            let coordinator = EncryptionResetFlowCoordinator(parameters: .init(userSession: userSession,
+                                                                               userIndicatorController: userIndicatorController,
+                                                                               navigationStackCoordinator: navigationStackCoordinator,
+                                                                               windowManger: windowManager))
+
+            retainedState.append(coordinator)
+            coordinator.start()
+            
+            return navigationStackCoordinator
         case .autoUpdatingTimeline:
             let appSettings: AppSettings = ServiceLocator.shared.settings
             appSettings.hasRunIdentityConfirmationOnboarding = true

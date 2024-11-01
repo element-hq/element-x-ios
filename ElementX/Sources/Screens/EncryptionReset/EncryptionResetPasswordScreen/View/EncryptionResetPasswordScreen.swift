@@ -36,6 +36,7 @@ struct EncryptionResetPasswordScreen: View {
                 context.send(viewAction: .submit)
             }
             .buttonStyle(.compound(.primary))
+            .accessibilityIdentifier(A11yIdentifiers.encryptionResetPasswordScreen.submit)
         }
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
@@ -61,6 +62,7 @@ struct EncryptionResetPasswordScreen: View {
                 .onSubmit {
                     context.send(viewAction: .submit)
                 }
+                .accessibilityIdentifier(A11yIdentifiers.encryptionResetPasswordScreen.passwordField)
         }
     }
 }
