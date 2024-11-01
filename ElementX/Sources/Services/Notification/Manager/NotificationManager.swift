@@ -146,7 +146,8 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
                                                               kind: .http(data: .init(url: appSettings.pushGatewayBaseURL.absoluteString,
                                                                                       format: .eventIdOnly,
                                                                                       defaultPayload: defaultPayload.toJsonString())),
-                                                              appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
+                                                              // appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
+                                                              appDisplayName: "\(InfoPlistReader.main.bundleDisplayName)",
                                                               deviceDisplayName: UIDevice.current.name,
                                                               profileTag: pusherProfileTag(),
                                                               lang: Bundle.app.preferredLocalizations.first ?? "en")

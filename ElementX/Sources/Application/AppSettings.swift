@@ -177,11 +177,12 @@ final class AppSettings {
     // MARK: - Notifications
     
     var pusherAppId: String {
-        #if DEBUG
-        InfoPlistReader.main.baseBundleIdentifier + ".ios.dev"
-        #else
-        InfoPlistReader.main.baseBundleIdentifier + ".ios.prod"
-        #endif
+//        #if DEBUG
+//        InfoPlistReader.main.baseBundleIdentifier + ".ios.dev"
+//        #else
+//        InfoPlistReader.main.baseBundleIdentifier + ".ios.prod"
+//        #endif
+        InfoPlistReader.main.baseBundleIdentifier
     }
     
     let pushGatewayBaseURL: URL = "https://zos-push-gateway-c101e2f4da49.herokuapp.com/_matrix/push/v1/notify"
