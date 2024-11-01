@@ -83,8 +83,6 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
                                                  actionsSubject.send(.done(mode: context.viewState.mode))
                                              },
                                              secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
-        case .resetEncryption:
-            actionsSubject.send(.resetEncryption)
         }
     }
     

@@ -76,8 +76,5 @@ class EncryptionSettingsUITests: XCTestCase {
         recoveryKeyField.clearAndTypeText("sUpe RSec rEtR Ecov ERYk Ey12", app: app)
         app.buttons[A11yIdentifiers.secureBackupRecoveryKeyScreen.confirm].tap()
         try await app.assertScreenshot(.encryptionSettings, step: Step.secureBackupScreenSetUp)
-        
-        // It turns out the EncryptionResetScreen was no longer hooked up from the recovery key screen. Either simplify the
-        // EncryptionSettingsFlow or add back the button when entering the key from this flow (rather than from the banner)
     }
 }

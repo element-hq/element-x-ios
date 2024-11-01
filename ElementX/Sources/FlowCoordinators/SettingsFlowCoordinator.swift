@@ -150,8 +150,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = EncryptionSettingsFlowCoordinator(parameters: .init(userSession: parameters.userSession,
                                                                               appSettings: parameters.appSettings,
                                                                               userIndicatorController: parameters.userIndicatorController,
-                                                                              navigationStackCoordinator: navigationStackCoordinator,
-                                                                              windowManager: parameters.windowManager))
+                                                                              navigationStackCoordinator: navigationStackCoordinator))
         coordinator.actionsPublisher.sink { [weak self] action in
             switch action {
             case .complete:

@@ -15,7 +15,6 @@ struct SecureBackupRecoveryKeyScreenCoordinatorParameters {
 }
 
 enum SecureBackupRecoveryKeyScreenCoordinatorAction {
-    case resetEncryption
     case complete
 }
 
@@ -57,8 +56,6 @@ final class SecureBackupRecoveryKeyScreenCoordinator: CoordinatorProtocol {
                     fatalError()
                 }
                 self.actionsSubject.send(.complete)
-            case .resetEncryption:
-                self.actionsSubject.send(.resetEncryption)
             }
         }
         .store(in: &cancellables)

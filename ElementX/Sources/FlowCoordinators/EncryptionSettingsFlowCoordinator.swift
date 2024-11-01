@@ -19,17 +19,13 @@ struct EncryptionSettingsFlowCoordinatorParameters {
     let appSettings: AppSettings
     let userIndicatorController: UserIndicatorControllerProtocol
     let navigationStackCoordinator: NavigationStackCoordinator
-    let windowManager: WindowManagerProtocol
 }
 
 class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
-    
     private let navigationStackCoordinator: NavigationStackCoordinator
-    private let recoveryNavigationStackCoordinator = NavigationStackCoordinator()
-    private let windowManager: WindowManagerProtocol
     
     // periphery:ignore - retaining purpose
     private var encryptionResetFlowCoordinator: EncryptionResetFlowCoordinator?
@@ -41,8 +37,6 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
         case secureBackupScreen
         /// The user is managing their recovery key.
         case recoveryKeyScreen
-        /// The user has forgotten their recovery key so is resetting everything.
-        case encryptionResetFlow
         /// The user is disabling key backups.
         case keyBackupScreen
     }
@@ -55,11 +49,6 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
         case manageRecoveryKey
         /// The user finished managing their recovery key.
         case finishedManagingRecoveryKey
-        
-        /// The user has forgotten their recovery key.
-        case startEncryptionResetFlow
-        /// The encryption reset flow is complete.
-        case finishedEncryptionResetFlow
         
         /// The user doesn't want to use key backup any more.
         case disableKeyBackup
@@ -80,7 +69,6 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
         appSettings = parameters.appSettings
         userIndicatorController = parameters.userIndicatorController
         navigationStackCoordinator = parameters.navigationStackCoordinator
-        windowManager = parameters.windowManager
         
         stateMachine = .init(state: .initial)
         configureStateMachine()
@@ -117,9 +105,6 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
             break
         case .recoveryKeyScreen:
             navigationStackCoordinator.setSheetCoordinator(nil, animated: animated) // RecoveryKey screen.
-        case .encryptionResetFlow:
-            encryptionResetFlowCoordinator?.clearRoute(animated: animated)
-            navigationStackCoordinator.setSheetCoordinator(nil, animated: animated) // RecoveryKey screen.
         case .keyBackupScreen:
             navigationStackCoordinator.setSheetCoordinator(nil, animated: animated) // KeyBackup screen.
         }
@@ -136,11 +121,6 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
             self?.presentRecoveryKeyScreen()
         }
         stateMachine.addRoutes(event: .finishedManagingRecoveryKey, transitions: [.recoveryKeyScreen => .secureBackupScreen])
-        
-        stateMachine.addRoutes(event: .startEncryptionResetFlow, transitions: [.recoveryKeyScreen => .encryptionResetFlow]) { [weak self] _ in
-            self?.startEncryptionResetFlow()
-        }
-        stateMachine.addRoutes(event: .finishedEncryptionResetFlow, transitions: [.encryptionResetFlow => .recoveryKeyScreen])
         
         stateMachine.addRoutes(event: .disableKeyBackup, transitions: [.secureBackupScreen => .keyBackupScreen]) { [weak self] _ in
             self?.presentKeyBackupScreen()
@@ -174,6 +154,7 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentRecoveryKeyScreen() {
+        let sheetNavigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = SecureBackupRecoveryKeyScreenCoordinator(parameters: .init(secureBackupController: userSession.clientProxy.secureBackupController,
                                                                                      userIndicatorController: userIndicatorController,
                                                                                      isModallyPresented: true))
@@ -181,46 +162,16 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .resetEncryption:
-                stateMachine.tryEvent(.startEncryptionResetFlow)
             case .complete:
                 navigationStackCoordinator.setSheetCoordinator(nil)
             }
         }
         .store(in: &cancellables)
         
-        recoveryNavigationStackCoordinator.setRootCoordinator(coordinator, animated: true)
+        sheetNavigationStackCoordinator.setRootCoordinator(coordinator, animated: true)
         
-        navigationStackCoordinator.setSheetCoordinator(recoveryNavigationStackCoordinator) { [stateMachine] in
+        navigationStackCoordinator.setSheetCoordinator(sheetNavigationStackCoordinator) { [stateMachine] in
             stateMachine.tryEvent(.finishedManagingRecoveryKey)
-        }
-    }
-    
-    private func startEncryptionResetFlow() {
-        let resetNavigationStackCoordinator = NavigationStackCoordinator()
-        let coordinator = EncryptionResetFlowCoordinator(parameters: .init(userSession: userSession,
-                                                                           userIndicatorController: userIndicatorController,
-                                                                           navigationStackCoordinator: resetNavigationStackCoordinator,
-                                                                           windowManger: windowManager))
-        
-        coordinator.actionsPublisher.sink { [weak self] action in
-            guard let self else { return }
-            switch action {
-            case .resetComplete:
-                recoveryNavigationStackCoordinator.setSheetCoordinator(nil)
-                navigationStackCoordinator.setSheetCoordinator(nil) // Dismiss the recovery key screen too.
-            case .cancel:
-                recoveryNavigationStackCoordinator.setSheetCoordinator(nil)
-            }
-        }
-        .store(in: &cancellables)
-        
-        encryptionResetFlowCoordinator = coordinator
-        coordinator.start()
-        
-        recoveryNavigationStackCoordinator.setSheetCoordinator(resetNavigationStackCoordinator) { [weak self] in
-            self?.encryptionResetFlowCoordinator = nil
-            self?.stateMachine.tryEvent(.finishedEncryptionResetFlow)
         }
     }
     

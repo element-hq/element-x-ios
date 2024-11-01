@@ -299,8 +299,6 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .complete:
                     break // Moving to next state is Handled by the global session verification listener
-                case .resetEncryption:
-                    startEncryptionResetFlow()
                 }
             }
             .store(in: &cancellables)
