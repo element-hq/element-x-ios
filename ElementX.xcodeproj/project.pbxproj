@@ -216,6 +216,10 @@
 		18CB80212C7F310E003BC289 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB80202C7F310E003BC289 /* ViewModifiers.swift */; };
 		18D1EE272CAE99B9007BEB15 /* ZeroInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18D1EE262CAE99B9007BEB15 /* ZeroInfo.plist */; };
 		18D1EE282CAE99B9007BEB15 /* ZeroInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18D1EE262CAE99B9007BEB15 /* ZeroInfo.plist */; };
+		18DFC5C82CD954EF00462FE1 /* EncryptionResetFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B011547B201A836C03052 /* EncryptionResetFlowCoordinator.swift */; };
+		18DFC5C92CD954FF00462FE1 /* EncryptionSettingsFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB836DD8BE31931F51B8AC9 /* EncryptionSettingsFlowCoordinator.swift */; };
+		18DFC5CA2CD9551800462FE1 /* IdentityResetHandleSDKMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFB1D29B0870AFB6A56E9B8 /* IdentityResetHandleSDKMock.swift */; };
+		18DFC5CB2CD9552900462FE1 /* SecureBackupControllerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB29A2D95D3469B5F016655 /* SecureBackupControllerMock.swift */; };
 		18E3786918486D4C9726BC84 /* FormButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FBFC09F9DAFF1E4BA97849 /* FormButtonStyles.swift */; };
 		18E99FED2C9446EB0082DDA4 /* MessageContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E99FEC2C9446EB0082DDA4 /* MessageContentHandler.swift */; };
 		18E99FF02C9447740082DDA4 /* MessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E99FEF2C9447740082DDA4 /* MessageContent.swift */; };
@@ -8057,6 +8061,7 @@
 				18E9A4E82C9829970082DDA4 /* EmojiPickerScreenHeaderView.swift in Sources */,
 				18E9A4E92C9829970082DDA4 /* EmojiPickerScreenModels.swift in Sources */,
 				18E9A4EA2C9829970082DDA4 /* EmojiPickerScreenViewModel.swift in Sources */,
+				18DFC5CA2CD9551800462FE1 /* IdentityResetHandleSDKMock.swift in Sources */,
 				18E9A4EB2C9829970082DDA4 /* EmojiPickerScreenViewModelProtocol.swift in Sources */,
 				18E9A4EC2C9829970082DDA4 /* EmojiProvider.swift in Sources */,
 				18E9A4ED2C9829970082DDA4 /* EmoteRoomTimelineItem.swift in Sources */,
@@ -8156,6 +8161,7 @@
 				18E9A5482C9829970082DDA4 /* JoinedRoomProxy.swift in Sources */,
 				18E9A5492C9829970082DDA4 /* JoinedRoomProxyMock.swift in Sources */,
 				18E9A54A2C9829970082DDA4 /* JoinedRoomSize+MemberCount.swift in Sources */,
+				18DFC5CB2CD9552900462FE1 /* SecureBackupControllerMock.swift in Sources */,
 				18E9A54B2C9829970082DDA4 /* KeychainController.swift in Sources */,
 				18E9A54C2C9829970082DDA4 /* ZMatrixUserProfile.swift in Sources */,
 				18E9A54D2C9829970082DDA4 /* KeychainControllerMock.swift in Sources */,
@@ -8380,6 +8386,7 @@
 				18E9A6222C9829970082DDA4 /* RoomChangeRolesScreenViewModel.swift in Sources */,
 				18E9A6232C9829970082DDA4 /* RoomChangeRolesScreenViewModelProtocol.swift in Sources */,
 				18E9A6242C9829970082DDA4 /* RoomDetails.swift in Sources */,
+				18DFC5C82CD954EF00462FE1 /* EncryptionResetFlowCoordinator.swift in Sources */,
 				18E9A6252C9829970082DDA4 /* RoomDetailsEditScreen.swift in Sources */,
 				18E9A6262C9829970082DDA4 /* RoomDetailsEditScreenCoordinator.swift in Sources */,
 				18E9A6272C9829970082DDA4 /* RoomDetailsEditScreenModels.swift in Sources */,
@@ -8708,6 +8715,7 @@
 				18E9A7512C9829970082DDA4 /* VoiceMessageRecorderProtocol.swift in Sources */,
 				18E9A7522C9829970082DDA4 /* VoiceMessageRecordingButton.swift in Sources */,
 				18E9A7532C9829970082DDA4 /* VoiceMessageRecordingComposer.swift in Sources */,
+				18DFC5C92CD954FF00462FE1 /* EncryptionSettingsFlowCoordinator.swift in Sources */,
 				18E9A7542C9829970082DDA4 /* VoiceMessageRecordingView.swift in Sources */,
 				18E9A7552C9829970082DDA4 /* VoiceMessageRoomPlaybackView.swift in Sources */,
 				18E9A7562C9829970082DDA4 /* VoiceMessageRoomTimelineItem.swift in Sources */,
@@ -9842,7 +9850,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.8.5;
+				MARKETING_VERSION = 0.8.6;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -9877,7 +9885,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.8.5;
+				MARKETING_VERSION = 0.8.6;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
