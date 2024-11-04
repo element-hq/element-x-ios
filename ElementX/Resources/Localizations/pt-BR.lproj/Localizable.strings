@@ -115,8 +115,8 @@
 "banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
-"banner.set_up_recovery.content" = "Generate a new recovery key that can be used to restore your encrypted message history in case you lose access to your devices.";
-"banner.set_up_recovery.title" = "Set up recovery";
+"banner_set_up_recovery_content" = "Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.";
+"banner_set_up_recovery_title" = "Set up recovery to protect your account";
 "common_about" = "Sobre";
 "common_acceptable_use_policy" = "Política de uso aceitável";
 "common_advanced_settings" = "Configurações avançadas";
@@ -233,6 +233,7 @@
 "common_verification_failed" = "Verification failed";
 "common_verified" = "Verified";
 "common_verify_device" = "Verificar dispositivo";
+"common_verify_identity" = "Verify identity";
 "common_video" = "Vídeo";
 "common_voice_message" = "Mensagem de voz";
 "common_waiting" = "Esperando...";
@@ -245,7 +246,9 @@
 "common.you" = "You";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity has changed";
-"confirm_recovery_key_banner_message" = "Your chat backup is currently out of sync. You need to enter your recovery key to maintain access to your chat backup.";
+"confirm_recovery_key_banner_message" = "Confirm your recovery key to maintain access to your key storage and message history.";
+"confirm_recovery_key_banner_primary_button_title" = "Enter your recovery key";
+"confirm_recovery_key_banner_secondary_button_title" = "Forgot your recovery key?";
 "confirm_recovery_key_banner_title" = "Insira sua chave de recuperação";
 "crash_detection_dialog_content" = "%1$@ fechou inesperadamente na última vez que foi usado. Gostaria de compartilhar um relatório de falhas conosco?";
 "crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
@@ -341,6 +344,7 @@
 "rich_text_editor_unindent" = "Desidentar";
 "rich_text_editor_url_placeholder" = "Link";
 "rich_text_editor_a11y_add_attachment" = "Adicionar anexo";
+"rich_text_editor_composer_caption_placeholder" = "Optional caption…";
 "screen_advanced_settings_element_call_base_url" = "Custom Element Call base URL";
 "screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL inválida, por favor verifique se o protocolo (http/https) e o endereço correto estão presentes.";
@@ -388,8 +392,8 @@
 "screen_account_provider_signup_title" = "Você está prestes a criar uma conta em %@";
 "screen_advanced_settings_developer_mode" = "Modo de desenvolvedor";
 "screen_advanced_settings_developer_mode_description" = "Habilite para ter acesso a recursos e funcionalidades para desenvolvedores.";
-"screen_advanced_settings_media_compression_description" = "Optimize for upload";
-"screen_advanced_settings_media_compression_title" = "Media";
+"screen_advanced_settings_media_compression_description" = "Upload photos and videos faster and reduce data usage";
+"screen_advanced_settings_media_compression_title" = "Optimise media quality";
 "screen_advanced_settings_rich_text_editor_description" = "Desative o editor de rich text para digitar Markdown manualmente.";
 "screen_advanced_settings_send_read_receipts" = "Confirmações de leitura";
 "screen_advanced_settings_send_read_receipts_description" = "Se desligado, suas confirmações de leitura não serão enviadas para ninguém. Você ainda receberá confirmações de leitura de outros usuários.";
@@ -458,12 +462,12 @@
 "screen_chat_backup_key_backup_action_enable" = "Ativar o backup";
 "screen_chat_backup_key_backup_description" = "O backup garante que você não perca seu histórico de mensagens. %1$@.";
 "screen_chat_backup_key_backup_title" = "Backup";
+"screen_chat_backup_key_storage_disabled_error" = "Key storage must be turned on to set up recovery.";
 "screen_chat_backup_key_storage_toggle_description" = "Upload keys from this device";
 "screen_chat_backup_key_storage_toggle_title" = "Allow key storage";
 "screen_chat_backup_recovery_action_change" = "Alterar chave de recuperação";
 "screen_chat_backup_recovery_action_change_description" = "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.";
 "screen_chat_backup_recovery_action_confirm_description" = "Seu backup das conversas está atualmente fora de sincronia.";
-"screen_chat_backup_recovery_action_setup" = "Configurar a recuperação";
 "screen_chat_backup_recovery_action_setup_description" = "Tenha acesso às suas mensagens criptografadas se você perder todos os seus dispositivos ou for desconectado do %1$@ em qualquer lugar.";
 "screen_create_account_title" = "Create account";
 "screen_create_new_recovery_key_list_item_1" = "Open %1$@ in a desktop device";
@@ -638,7 +642,7 @@
 "screen_recovery_key_change_title" = "Alterar chave de recuperação?";
 "screen_recovery_key_confirm_create_new_recovery_key" = "Create new recovery key";
 "screen_recovery_key_confirm_description" = "Certifique-se de que ninguém possa ver essa tela!";
-"screen_recovery_key_confirm_error_content" = "Please try again to confirm access to your chat backup.";
+"screen_recovery_key_confirm_error_content" = "Please try again to confirm access to your key storage.";
 "screen_recovery_key_confirm_error_title" = "Chave de recuperação incorreta";
 "screen_recovery_key_confirm_key_description" = "Se você tiver uma chave de segurança ou frase de segurança, isso também funcionará.";
 "screen_recovery_key_confirm_key_placeholder" = "Inserir...";
@@ -786,7 +790,6 @@
 "screen_room_timeline_less_reactions" = "Mostrar menos";
 "screen_room_timeline_message_copied" = "Mensagem copiada";
 "screen_room_timeline_no_permission_to_post" = "Você não tem permissão para postar nesta sala";
-"screen_room_timeline_reactions_show_less" = "Mostrar menos";
 "screen_room_timeline_reactions_show_more" = "Mostrar mais";
 "screen_room_timeline_read_marker_title" = "Novo";
 "screen_room_title" = "Chat";
@@ -836,7 +839,6 @@
 "screen_session_verification_ready_subtitle" = "Compare um conjunto único de emojis.";
 "screen_session_verification_request_accepted_subtitle" = "Compare os emojis únicos, garantindo que apareçam na mesma ordem.";
 "screen_session_verification_request_details_timestamp" = "Signed in";
-"screen_session_verification_request_failure_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_request_failure_title" = "Verification failed";
 "screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
 "screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
@@ -992,6 +994,7 @@
 "troubleshoot_notifications_test_unified_push_failure" = "No push distributors found.";
 "troubleshoot_notifications_test_unified_push_title" = "Check UnifiedPush";
 "a11y_poll" = "Enquete";
+"banner_set_up_recovery_submit" = "Configurar a recuperação";
 "dialog_title_error" = "Erro";
 "dialog_title_success" = "Sucesso";
 "notification_fallback_content" = "Notificação";
@@ -1012,6 +1015,7 @@
 "screen_blocked_users_unblock_alert_title" = "Desbloquear usuário";
 "screen_bug_report_rash_logs_alert_title" = "%1$@ fechou inesperadamente na última vez que foi usado. Gostaria de compartilhar um relatório de falhas conosco?";
 "screen_chat_backup_recovery_action_confirm" = "Insira a chave de recuperação";
+"screen_chat_backup_recovery_action_setup" = "Configurar a recuperação";
 "screen_create_poll_cancel_confirmation_content_ios" = "Suas alterações não serão salvas";
 "screen_create_room_add_people_title" = "Convidar pessoas";
 "screen_create_room_room_name_label" = "Nome da sala";
@@ -1029,7 +1033,7 @@
 "screen_notification_settings_mentions_section_title" = "Menções";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "Tente novamente";
 "screen_recovery_key_change_generate_key_description" = "Certifique-se de que você pode armazenar sua chave de recuperação em algum lugar seguro";
-"screen_recovery_key_confirm_title" = "Insira sua chave de recuperação";
+"screen_recovery_key_confirm_title" = "Enter your recovery key";
 "screen_report_content_block_user" = "Bloquear usuário";
 "screen_reset_encryption_password_placeholder" = "Inserir...";
 "screen_room_attachment_source_camera_photo" = "Tirar foto";
@@ -1052,8 +1056,10 @@
 "screen_room_error_failed_processing_media" = "Falha ao processar mídia para upload. Tente novamente.";
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Remover e banir membro";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Somente menções e palavras-chave";
+"screen_room_timeline_reactions_show_less" = "Mostrar menos";
 "screen_roomlist_filter_people" = "Pessoas";
 "screen_server_confirmation_change_server" = "Alterar provedor da conta";
+"screen_session_verification_request_failure_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_signout_confirmation_dialog_submit" = "Sair";
 "screen_signout_confirmation_dialog_title" = "Sair";
 "screen_signout_key_backup_offline_title" = "O backup das suas chaves ainda está em andamento";
