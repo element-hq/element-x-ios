@@ -56,14 +56,21 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
     var buttons: some View {
         VStack(spacing: 16) {
             Button(actionTitle) {
-                context.send(viewAction: .confirmRecoveryKey)
+                context.send(viewAction: .manageRecoveryKey)
             }
             .frame(maxWidth: .infinity)
             .buttonStyle(.compound(.primary, size: .medium))
             .accessibilityIdentifier(A11yIdentifiers.homeScreen.recoveryKeyConfirmationBannerContinue)
             
             if !requiresExtraAccountSetup {
-                // Missing encryption reset button to goes here once the flow exists.
+                Button {
+                    context.send(viewAction: .resetEncryption)
+                } label: {
+                    Text(L10n.confirmRecoveryKeyBannerSecondaryButtonTitle)
+                        .padding(.vertical, 7)
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.compound(.plain, size: .medium))
             }
         }
     }
