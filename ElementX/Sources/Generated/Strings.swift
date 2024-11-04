@@ -266,6 +266,12 @@ internal enum L10n {
   internal static var bannerMigrateToNativeSlidingSyncForceLogoutTitle: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_force_logout_title") }
   /// Upgrade available
   internal static var bannerMigrateToNativeSlidingSyncTitle: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_title") }
+  /// Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.
+  internal static var bannerSetUpRecoveryContent: String { return L10n.tr("Localizable", "banner_set_up_recovery_content") }
+  /// Set up recovery
+  internal static var bannerSetUpRecoverySubmit: String { return L10n.tr("Localizable", "banner_set_up_recovery_submit") }
+  /// Set up recovery to protect your account
+  internal static var bannerSetUpRecoveryTitle: String { return L10n.tr("Localizable", "banner_set_up_recovery_title") }
   /// About
   internal static var commonAbout: String { return L10n.tr("Localizable", "common_about") }
   /// Acceptable use policy
@@ -334,6 +340,8 @@ internal enum L10n {
   internal static var commonFile: String { return L10n.tr("Localizable", "common_file") }
   /// Forward message
   internal static var commonForwardMessage: String { return L10n.tr("Localizable", "common_forward_message") }
+  /// Frequently used
+  internal static var commonFrequentlyUsed: String { return L10n.tr("Localizable", "common_frequently_used") }
   /// GIF
   internal static var commonGif: String { return L10n.tr("Localizable", "common_gif") }
   /// Image
@@ -518,6 +526,8 @@ internal enum L10n {
   internal static var commonVerified: String { return L10n.tr("Localizable", "common_verified") }
   /// Verify device
   internal static var commonVerifyDevice: String { return L10n.tr("Localizable", "common_verify_device") }
+  /// Verify identity
+  internal static var commonVerifyIdentity: String { return L10n.tr("Localizable", "common_verify_identity") }
   /// Video
   internal static var commonVideo: String { return L10n.tr("Localizable", "common_video") }
   /// Voice message
@@ -526,9 +536,13 @@ internal enum L10n {
   internal static var commonWaiting: String { return L10n.tr("Localizable", "common_waiting") }
   /// Waiting for this message
   internal static var commonWaitingForDecryptionKey: String { return L10n.tr("Localizable", "common_waiting_for_decryption_key") }
-  /// Your chat backup is currently out of sync. You need to enter your recovery key to maintain access to your chat backup.
+  /// Confirm your recovery key to maintain access to your key storage and message history.
   internal static var confirmRecoveryKeyBannerMessage: String { return L10n.tr("Localizable", "confirm_recovery_key_banner_message") }
   /// Enter your recovery key
+  internal static var confirmRecoveryKeyBannerPrimaryButtonTitle: String { return L10n.tr("Localizable", "confirm_recovery_key_banner_primary_button_title") }
+  /// Forgot your recovery key?
+  internal static var confirmRecoveryKeyBannerSecondaryButtonTitle: String { return L10n.tr("Localizable", "confirm_recovery_key_banner_secondary_button_title") }
+  /// Your key storage is out of sync
   internal static var confirmRecoveryKeyBannerTitle: String { return L10n.tr("Localizable", "confirm_recovery_key_banner_title") }
   /// %1$@ crashed the last time it was used. Would you like to share a crash report with us?
   internal static func crashDetectionDialogContent(_ p1: Any) -> String {
@@ -766,6 +780,8 @@ internal enum L10n {
   internal static var richTextEditorCloseFormattingOptions: String { return L10n.tr("Localizable", "rich_text_editor_close_formatting_options") }
   /// Toggle code block
   internal static var richTextEditorCodeBlock: String { return L10n.tr("Localizable", "rich_text_editor_code_block") }
+  /// Optional caption…
+  internal static var richTextEditorComposerCaptionPlaceholder: String { return L10n.tr("Localizable", "rich_text_editor_composer_caption_placeholder") }
   /// Message…
   internal static var richTextEditorComposerPlaceholder: String { return L10n.tr("Localizable", "rich_text_editor_composer_placeholder") }
   /// Create a link
@@ -832,6 +848,10 @@ internal enum L10n {
   internal static var screenAdvancedSettingsElementCallBaseUrlDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_element_call_base_url_description") }
   /// Invalid URL, please make sure you include the protocol (http/https) and the correct address.
   internal static var screenAdvancedSettingsElementCallBaseUrlValidationError: String { return L10n.tr("Localizable", "screen_advanced_settings_element_call_base_url_validation_error") }
+  /// Upload photos and videos faster and reduce data usage
+  internal static var screenAdvancedSettingsMediaCompressionDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_media_compression_description") }
+  /// Optimise media quality
+  internal static var screenAdvancedSettingsMediaCompressionTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_media_compression_title") }
   /// Disable the rich text editor to type Markdown manually.
   internal static var screenAdvancedSettingsRichTextEditorDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_rich_text_editor_description") }
   /// Read receipts
@@ -1003,7 +1023,7 @@ internal enum L10n {
   internal static var screenChangeServerSubtitle: String { return L10n.tr("Localizable", "screen_change_server_subtitle") }
   /// Select your server
   internal static var screenChangeServerTitle: String { return L10n.tr("Localizable", "screen_change_server_title") }
-  /// Turn off backup
+  /// Delete key storage
   internal static var screenChatBackupKeyBackupActionDisable: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_action_disable") }
   /// Turn on backup
   internal static var screenChatBackupKeyBackupActionEnable: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_action_enable") }
@@ -1013,6 +1033,8 @@ internal enum L10n {
   }
   /// Key storage
   internal static var screenChatBackupKeyBackupTitle: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_title") }
+  /// Key storage must be turned on to set up recovery.
+  internal static var screenChatBackupKeyStorageDisabledError: String { return L10n.tr("Localizable", "screen_chat_backup_key_storage_disabled_error") }
   /// Upload keys from this device
   internal static var screenChatBackupKeyStorageToggleDescription: String { return L10n.tr("Localizable", "screen_chat_backup_key_storage_toggle_description") }
   /// Allow key storage
@@ -1023,7 +1045,7 @@ internal enum L10n {
   internal static var screenChatBackupRecoveryActionChangeDescription: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_change_description") }
   /// Enter recovery key
   internal static var screenChatBackupRecoveryActionConfirm: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_confirm") }
-  /// Your chat backup is currently out of sync.
+  /// Your key storage is currently out of sync.
   internal static var screenChatBackupRecoveryActionConfirmDescription: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_confirm_description") }
   /// Set up recovery
   internal static var screenChatBackupRecoveryActionSetup: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_setup") }
@@ -1252,15 +1274,15 @@ internal enum L10n {
   internal static var screenKeyBackupDisableConfirmationDescription: String { return L10n.tr("Localizable", "screen_key_backup_disable_confirmation_description") }
   /// Are you sure you want to turn off backup?
   internal static var screenKeyBackupDisableConfirmationTitle: String { return L10n.tr("Localizable", "screen_key_backup_disable_confirmation_title") }
-  /// Turning off backup will remove your current encryption key backup and turn off other security features. In this case, you will:
+  /// Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:
   internal static var screenKeyBackupDisableDescription: String { return L10n.tr("Localizable", "screen_key_backup_disable_description") }
-  /// Not have encrypted message history on new devices
+  /// You will not have encrypted message history on new devices
   internal static var screenKeyBackupDisableDescriptionPoint1: String { return L10n.tr("Localizable", "screen_key_backup_disable_description_point_1") }
-  /// Lose access to your encrypted messages if you are signed out of %1$@ everywhere
+  /// You will lose access to your encrypted messages if you are signed out of %1$@ everywhere
   internal static func screenKeyBackupDisableDescriptionPoint2(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_key_backup_disable_description_point_2", String(describing: p1))
   }
-  /// Are you sure you want to turn off backup?
+  /// Are you sure you want to turn off key storage and delete it?
   internal static var screenKeyBackupDisableTitle: String { return L10n.tr("Localizable", "screen_key_backup_disable_title") }
   /// This account has been deactivated.
   internal static var screenLoginErrorDeactivatedAccount: String { return L10n.tr("Localizable", "screen_login_error_deactivated_account") }
@@ -1490,7 +1512,7 @@ internal enum L10n {
   internal static var screenRecoveryKeyChangeDescription: String { return L10n.tr("Localizable", "screen_recovery_key_change_description") }
   /// Generate a new recovery key
   internal static var screenRecoveryKeyChangeGenerateKey: String { return L10n.tr("Localizable", "screen_recovery_key_change_generate_key") }
-  /// Make sure you can store your recovery key somewhere safe
+  /// Do not share this with anyone!
   internal static var screenRecoveryKeyChangeGenerateKeyDescription: String { return L10n.tr("Localizable", "screen_recovery_key_change_generate_key_description") }
   /// Recovery key changed
   internal static var screenRecoveryKeyChangeSuccess: String { return L10n.tr("Localizable", "screen_recovery_key_change_success") }
@@ -1500,7 +1522,7 @@ internal enum L10n {
   internal static var screenRecoveryKeyConfirmCreateNewRecoveryKey: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_create_new_recovery_key") }
   /// Make sure nobody can see this screen!
   internal static var screenRecoveryKeyConfirmDescription: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_description") }
-  /// Please try again to confirm access to your chat backup.
+  /// Please try again to confirm access to your key storage.
   internal static var screenRecoveryKeyConfirmErrorContent: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_error_content") }
   /// Incorrect recovery key
   internal static var screenRecoveryKeyConfirmErrorTitle: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_error_title") }
@@ -1520,21 +1542,21 @@ internal enum L10n {
   internal static var screenRecoveryKeyGeneratingKey: String { return L10n.tr("Localizable", "screen_recovery_key_generating_key") }
   /// Save recovery key
   internal static var screenRecoveryKeySaveAction: String { return L10n.tr("Localizable", "screen_recovery_key_save_action") }
-  /// Write down your recovery key somewhere safe or save it in a password manager.
+  /// Write down this recovery key somewhere safe, like a password manager, encrypted note, or a physical safe.
   internal static var screenRecoveryKeySaveDescription: String { return L10n.tr("Localizable", "screen_recovery_key_save_description") }
   /// Tap to copy recovery key
   internal static var screenRecoveryKeySaveKeyDescription: String { return L10n.tr("Localizable", "screen_recovery_key_save_key_description") }
-  /// Save your recovery key
+  /// Save your recovery key somewhere safe
   internal static var screenRecoveryKeySaveTitle: String { return L10n.tr("Localizable", "screen_recovery_key_save_title") }
   /// You will not be able to access your new recovery key after this step.
   internal static var screenRecoveryKeySetupConfirmationDescription: String { return L10n.tr("Localizable", "screen_recovery_key_setup_confirmation_description") }
   /// Have you saved your recovery key?
   internal static var screenRecoveryKeySetupConfirmationTitle: String { return L10n.tr("Localizable", "screen_recovery_key_setup_confirmation_title") }
-  /// Your chat backup is protected by a recovery key. If you need a new recovery key after setup you can recreate by selecting ‘Change recovery key’.
+  /// Your key storage is protected by a recovery key. If you need a new recovery key after setup, you can recreate it by selecting ‘Change recovery key’.
   internal static var screenRecoveryKeySetupDescription: String { return L10n.tr("Localizable", "screen_recovery_key_setup_description") }
   /// Generate your recovery key
   internal static var screenRecoveryKeySetupGenerateKey: String { return L10n.tr("Localizable", "screen_recovery_key_setup_generate_key") }
-  /// Make sure you can store your recovery key somewhere safe
+  /// Do not share this with anyone!
   internal static var screenRecoveryKeySetupGenerateKeyDescription: String { return L10n.tr("Localizable", "screen_recovery_key_setup_generate_key_description") }
   /// Recovery setup successful
   internal static var screenRecoveryKeySetupSuccess: String { return L10n.tr("Localizable", "screen_recovery_key_setup_success") }
@@ -2490,15 +2512,6 @@ internal enum L10n {
   }
   /// Check UnifiedPush
   internal static var troubleshootNotificationsTestUnifiedPushTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_unified_push_title") }
-
-  internal enum Banner {
-    internal enum SetUpRecovery {
-      /// Generate a new recovery key that can be used to restore your encrypted message history in case you lose access to your devices.
-      internal static var content: String { return L10n.tr("Localizable", "banner.set_up_recovery.content") }
-      /// Set up recovery
-      internal static var title: String { return L10n.tr("Localizable", "banner.set_up_recovery.title") }
-    }
-  }
 
   internal enum Common {
     /// Copied to clipboard
