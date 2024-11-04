@@ -19,6 +19,7 @@ struct EncryptionResetScreen: View {
                 context.send(viewAction: .reset)
             }
             .buttonStyle(.compound(.primary))
+            .accessibilityIdentifier(A11yIdentifiers.encryptionResetScreen.continueReset)
         }
         .background()
         .backgroundStyle(.compound.bgSubtleSecondary)

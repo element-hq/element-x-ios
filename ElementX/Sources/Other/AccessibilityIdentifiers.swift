@@ -16,6 +16,8 @@ enum A11yIdentifiers {
     static let appLockSetupSettingsScreen = AppLockSetupSettingsScreen()
     static let bugReportScreen = BugReportScreen()
     static let changeServerScreen = ChangeServer()
+    static let encryptionResetScreen = EncryptionResetScreen()
+    static let encryptionResetPasswordScreen = EncryptionResetPasswordScreen()
     static let homeScreen = HomeScreen()
     static let loginScreen = LoginScreen()
     static let authenticationStartScreen = AuthenticationStartScreen()
@@ -24,6 +26,9 @@ enum A11yIdentifiers {
     static let roomDetailsScreen = RoomDetailsScreen()
     static let roomNotificationSettingsScreen = RoomNotificationSettingsScreen()
     static let roomRolesAndPermissionsScreen = RoomRolesAndPermissionsScreen()
+    static let secureBackupScreen = SecureBackupScreen()
+    static let secureBackupKeyBackupScreen = SecureBackupKeyBackupScreen()
+    static let secureBackupRecoveryKeyScreen = SecureBackupRecoveryKeyScreen()
     static let serverConfirmationScreen = ServerConfirmationScreen()
     static let sessionVerificationScreen = SessionVerificationScreen()
     static let settingsScreen = SettingsScreen()
@@ -79,6 +84,15 @@ enum A11yIdentifiers {
         let server = "change_server-server"
         let `continue` = "change_server-continue"
         let dismiss = "change_server-dismiss"
+    }
+    
+    struct EncryptionResetScreen {
+        let continueReset = "encryption_reset-continue_reset"
+    }
+    
+    struct EncryptionResetPasswordScreen {
+        let passwordField = "encryption_reset_password-password_field"
+        let submit = "encryption_reset_password-submit"
     }
     
     struct HomeScreen {
@@ -176,6 +190,23 @@ enum A11yIdentifiers {
         let roomDetails = "room_roles_and_permissions-room_details"
         let messagesAndContent = "room_roles_and_permissions-messages_and_content"
         let memberModeration = "room_roles_and_permissions-member_moderation"
+    }
+    
+    struct SecureBackupScreen {
+        let keyStorage = "secure_backup-key_storage"
+        let recoveryKey = "secure_backup-recovery_key"
+    }
+    
+    struct SecureBackupKeyBackupScreen {
+        let deleteKeyStorage = "secure_backup_key_backup-delete_key_storage"
+    }
+    
+    struct SecureBackupRecoveryKeyScreen {
+        let generateRecoveryKey = "secure_backup_recovery_key-generate_recovery_key"
+        let copyRecoveryKey = "secure_backup_recovery_key-copy_recovery_key"
+        let done = "secure_backup_recovery_key-done"
+        let recoveryKeyField = "secure_backup_recovery_key-recovery_key_field"
+        let confirm = "secure_backup_recovery_key-confirm"
     }
     
     struct ServerConfirmationScreen {

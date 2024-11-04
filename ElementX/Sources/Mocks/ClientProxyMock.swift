@@ -13,6 +13,8 @@ struct ClientProxyMockConfiguration {
     var deviceID: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol? = RoomSummaryProviderMock(.init())
     var roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol?
+    
+    var recoveryState: SecureBackupRecoveryState = .enabled
 }
 
 enum ClientProxyMockError: Error {
@@ -78,12 +80,8 @@ extension ClientProxyMock {
         loadMediaThumbnailForSourceWidthHeightThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
         loadMediaFileForSourceFilenameThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
         
-        secureBackupController = {
-            let secureBackupController = SecureBackupControllerMock()
-            secureBackupController.underlyingRecoveryState = .init(CurrentValueSubject<SecureBackupRecoveryState, Never>(.enabled))
-            secureBackupController.underlyingKeyBackupState = .init(CurrentValueSubject<SecureBackupKeyBackupState, Never>(.enabled))
-            return secureBackupController
-        }()
+        secureBackupController = SecureBackupControllerMock(.init(recoveryState: configuration.recoveryState))
+        resetIdentityReturnValue = .success(IdentityResetHandleSDKMock(.init()))
         
         roomForIdentifierClosure = { [weak self] identifier in
             guard let room = self?.roomSummaryProvider?.roomListPublisher.value.first(where: { $0.id == identifier }) else {

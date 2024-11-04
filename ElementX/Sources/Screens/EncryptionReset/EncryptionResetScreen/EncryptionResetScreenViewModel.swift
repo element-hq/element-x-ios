@@ -21,6 +21,7 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
     }
     
     private var identityResetHandle: IdentityResetHandle?
+    private var passwordCancellable: AnyCancellable?
 
     init(clientProxy: ClientProxyProtocol, userIndicatorController: UserIndicatorControllerProtocol) {
         self.clientProxy = clientProxy
@@ -43,12 +44,6 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
                                              }))
         case .cancel:
             actionsSubject.send(.cancel)
-        }
-    }
-    
-    func continueResetFlowWith(password: String) {
-        Task {
-            await resetWith(password: password)
         }
     }
     
@@ -80,7 +75,14 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
             
             switch handle.authType() {
             case .uiaa:
-                actionsSubject.send(.requestPassword)
+                let passwordPublisher = PassthroughSubject<String, Never>()
+                passwordCancellable = passwordPublisher.sink { [weak self] password in
+                    guard let self else { return }
+                    passwordCancellable = nil
+                    Task { await self.resetWith(password: password) }
+                }
+                
+                actionsSubject.send(.requestPassword(passwordPublisher: passwordPublisher))
             case .oidc(let oidcInfo):
                 guard let url = URL(string: oidcInfo.approvalUrl) else {
                     fatalError("Invalid URL received through identity reset handle: \(oidcInfo.approvalUrl)")

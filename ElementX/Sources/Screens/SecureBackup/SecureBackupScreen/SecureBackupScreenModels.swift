@@ -8,8 +8,8 @@
 import Foundation
 
 enum SecureBackupScreenViewModelAction {
-    case recoveryKey
-    case keyBackup
+    case manageRecoveryKey
+    case disableKeyBackup
 }
 
 struct SecureBackupScreenViewState: BindableState {
