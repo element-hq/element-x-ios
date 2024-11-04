@@ -988,7 +988,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         // This is important for the app to keep refreshing in the background
         scheduleBackgroundAppRefresh()
         
-        task.expirationHandler = {
+        task.expirationHandler = { [weak self] in
+            self?.stopSync() // Attempt to stop the sync loop cleanly.
             MXLog.info("Background app refresh task expired")
             task.setTaskCompleted(success: true)
         }
@@ -1007,8 +1008,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             .collect(.byTimeOrCount(DispatchQueue.main, .seconds(10), 10))
             .sink(receiveValue: { [weak self] _ in
                 guard let self else { return }
-                
                 MXLog.info("Background app refresh finished")
+                
+                // Make sure we stop the sync loop, otherwise the ongoing request is immediately
+                // handled the next time the app refreshes, which can trigger timeout failures.
+                stopSync()
                 backgroundRefreshSyncObserver?.cancel()
                 
                 task.setTaskCompleted(success: true)

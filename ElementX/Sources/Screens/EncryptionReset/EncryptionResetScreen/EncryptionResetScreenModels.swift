@@ -5,10 +5,11 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import Combine
 import Foundation
 
 enum EncryptionResetScreenViewModelAction {
-    case requestPassword
+    case requestPassword(passwordPublisher: PassthroughSubject<String, Never>)
     case requestOIDCAuthorisation(url: URL)
     case resetFinished
     case cancel

@@ -78,13 +78,11 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
             state.bindings.alertInfo = .init(id: .init(),
                                              title: L10n.screenRecoveryKeySetupConfirmationTitle,
                                              message: L10n.screenRecoveryKeySetupConfirmationDescription,
-                                             primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                             secondaryButton: .init(title: L10n.actionContinue, action: { [weak self] in
+                                             primaryButton: .init(title: L10n.actionContinue) { [weak self] in
                                                  guard let self else { return }
                                                  actionsSubject.send(.done(mode: context.viewState.mode))
-                                             }))
-        case .resetEncryption:
-            actionsSubject.send(.resetEncryption)
+                                             },
+                                             secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
         }
     }
     

@@ -53,7 +53,13 @@ struct SecureBackupScreen: View {
                 .accessibilityElement(children: .combine)
             })
             
-            keyStorageToggle
+            ListRow(label: .plain(title: L10n.screenChatBackupKeyStorageToggleTitle,
+                                  description: context.viewState.keyStorageToggleDescription),
+                    kind: .toggle($context.keyStorageEnabled))
+                .onChange(of: context.keyStorageEnabled) { _, newValue in
+                    context.send(viewAction: .keyStorageToggled(newValue))
+                }
+                .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.keyStorage)
         }
     }
     
@@ -67,15 +73,6 @@ struct SecureBackupScreen: View {
         return description
     }
     
-    private var keyStorageToggle: some View {
-        ListRow(label: .plain(title: L10n.screenChatBackupKeyStorageToggleTitle,
-                              description: context.viewState.keyStorageToggleDescription),
-                kind: .toggle($context.keyStorageEnabled))
-            .onChange(of: context.keyStorageEnabled) { _, newValue in
-                context.send(viewAction: .keyStorageToggled(newValue))
-            }
-    }
-    
     private var recoveryKeySection: some View {
         Section {
             switch context.viewState.recoveryState {
@@ -85,6 +82,7 @@ struct SecureBackupScreen: View {
                                         icon: \.key,
                                         iconAlignment: .top),
                         kind: .navigationLink { context.send(viewAction: .recoveryKey) })
+                    .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
             case .disabled:
                 ListRow(label: .default(title: L10n.screenChatBackupRecoveryActionSetup,
                                         description: L10n.screenChatBackupRecoveryActionChangeDescription,
@@ -92,10 +90,12 @@ struct SecureBackupScreen: View {
                                         iconAlignment: .top),
                         details: .icon(BadgeView(size: 10)),
                         kind: .navigationLink { context.send(viewAction: .recoveryKey) })
+                    .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
             case .incomplete:
                 ListRow(label: .plain(title: L10n.screenChatBackupRecoveryActionConfirm),
                         details: .icon(BadgeView(size: 10)),
                         kind: .navigationLink { context.send(viewAction: .recoveryKey) })
+                    .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
             default:
                 ListRow(label: .plain(title: L10n.commonLoading), details: .isWaiting(true), kind: .label)
             }

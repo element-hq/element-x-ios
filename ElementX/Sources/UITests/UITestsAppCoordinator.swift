@@ -631,6 +631,40 @@ class MockScreen: Identifiable {
             let coordinator = PollFormScreenCoordinator(parameters: .init(mode: .new))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
+        case .encryptionSettings, .encryptionSettingsOutOfSync:
+            let recoveryState: SecureBackupRecoveryState = id == .encryptionSettings ? .enabled : .incomplete
+            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", recoveryState: recoveryState))
+            let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+            
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
+            
+            let coordinator = EncryptionSettingsFlowCoordinator(parameters: .init(userSession: userSession,
+                                                                                  appSettings: ServiceLocator.shared.settings,
+                                                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                                                  navigationStackCoordinator: navigationStackCoordinator))
+            retainedState.append(coordinator)
+            coordinator.start()
+            
+            return navigationStackCoordinator
+        case .encryptionReset:
+            let recoveryState: SecureBackupRecoveryState = id == .encryptionSettings ? .enabled : .incomplete
+            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", recoveryState: recoveryState))
+            let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+            
+            let userIndicatorController = UserIndicatorController()
+            userIndicatorController.window = windowManager.overlayWindow
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            
+            let coordinator = EncryptionResetFlowCoordinator(parameters: .init(userSession: userSession,
+                                                                               userIndicatorController: userIndicatorController,
+                                                                               navigationStackCoordinator: navigationStackCoordinator,
+                                                                               windowManger: windowManager))
+
+            retainedState.append(coordinator)
+            coordinator.start()
+            
+            return navigationStackCoordinator
         case .autoUpdatingTimeline:
             let appSettings: AppSettings = ServiceLocator.shared.settings
             appSettings.hasRunIdentityConfirmationOnboarding = true

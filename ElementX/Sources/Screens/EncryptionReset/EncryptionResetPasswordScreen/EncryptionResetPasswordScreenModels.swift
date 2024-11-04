@@ -7,15 +7,8 @@
 
 import Foundation
 
-enum EncryptionResetPasswordScreenViewModelAction: CustomStringConvertible {
-    case resetIdentity(String)
-    
-    var description: String {
-        switch self {
-        case .resetIdentity:
-            "resetIdentity"
-        }
-    }
+enum EncryptionResetPasswordScreenViewModelAction {
+    case passwordEntered
 }
 
 struct EncryptionResetPasswordScreenViewState: BindableState {
@@ -28,5 +21,5 @@ struct EncryptionResetPasswordScreenViewStateBindings {
 }
 
 enum EncryptionResetPasswordScreenViewAction {
-    case resetIdentity
+    case submit
 }
