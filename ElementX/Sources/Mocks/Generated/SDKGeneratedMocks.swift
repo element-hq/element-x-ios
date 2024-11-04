@@ -7047,6 +7047,71 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails {
         }
     }
 
+    //MARK: - supportedOidcPrompts
+
+    var supportedOidcPromptsUnderlyingCallsCount = 0
+    open var supportedOidcPromptsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return supportedOidcPromptsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = supportedOidcPromptsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                supportedOidcPromptsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    supportedOidcPromptsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var supportedOidcPromptsCalled: Bool {
+        return supportedOidcPromptsCallsCount > 0
+    }
+
+    var supportedOidcPromptsUnderlyingReturnValue: [OidcPrompt]!
+    open var supportedOidcPromptsReturnValue: [OidcPrompt]! {
+        get {
+            if Thread.isMainThread {
+                return supportedOidcPromptsUnderlyingReturnValue
+            } else {
+                var returnValue: [OidcPrompt]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = supportedOidcPromptsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                supportedOidcPromptsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    supportedOidcPromptsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var supportedOidcPromptsClosure: (() -> [OidcPrompt])?
+
+    open override func supportedOidcPrompts() -> [OidcPrompt] {
+        supportedOidcPromptsCallsCount += 1
+        if let supportedOidcPromptsClosure = supportedOidcPromptsClosure {
+            return supportedOidcPromptsClosure()
+        } else {
+            return supportedOidcPromptsReturnValue
+        }
+    }
+
     //MARK: - supportsOidcLogin
 
     var supportsOidcLoginUnderlyingCallsCount = 0
@@ -14359,16 +14424,16 @@ open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch {
 
     //MARK: - search
 
-    open var searchFilterBatchSizeThrowableError: Error?
-    var searchFilterBatchSizeUnderlyingCallsCount = 0
-    open var searchFilterBatchSizeCallsCount: Int {
+    open var searchFilterBatchSizeViaServerNameThrowableError: Error?
+    var searchFilterBatchSizeViaServerNameUnderlyingCallsCount = 0
+    open var searchFilterBatchSizeViaServerNameCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return searchFilterBatchSizeUnderlyingCallsCount
+                return searchFilterBatchSizeViaServerNameUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = searchFilterBatchSizeUnderlyingCallsCount
+                    returnValue = searchFilterBatchSizeViaServerNameUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -14376,31 +14441,31 @@ open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch {
         }
         set {
             if Thread.isMainThread {
-                searchFilterBatchSizeUnderlyingCallsCount = newValue
+                searchFilterBatchSizeViaServerNameUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    searchFilterBatchSizeUnderlyingCallsCount = newValue
+                    searchFilterBatchSizeViaServerNameUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var searchFilterBatchSizeCalled: Bool {
-        return searchFilterBatchSizeCallsCount > 0
+    open var searchFilterBatchSizeViaServerNameCalled: Bool {
+        return searchFilterBatchSizeViaServerNameCallsCount > 0
     }
-    open var searchFilterBatchSizeReceivedArguments: (filter: String?, batchSize: UInt32)?
-    open var searchFilterBatchSizeReceivedInvocations: [(filter: String?, batchSize: UInt32)] = []
-    open var searchFilterBatchSizeClosure: ((String?, UInt32) async throws -> Void)?
+    open var searchFilterBatchSizeViaServerNameReceivedArguments: (filter: String?, batchSize: UInt32, viaServerName: String?)?
+    open var searchFilterBatchSizeViaServerNameReceivedInvocations: [(filter: String?, batchSize: UInt32, viaServerName: String?)] = []
+    open var searchFilterBatchSizeViaServerNameClosure: ((String?, UInt32, String?) async throws -> Void)?
 
-    open override func search(filter: String?, batchSize: UInt32) async throws {
-        if let error = searchFilterBatchSizeThrowableError {
+    open override func search(filter: String?, batchSize: UInt32, viaServerName: String?) async throws {
+        if let error = searchFilterBatchSizeViaServerNameThrowableError {
             throw error
         }
-        searchFilterBatchSizeCallsCount += 1
-        searchFilterBatchSizeReceivedArguments = (filter: filter, batchSize: batchSize)
+        searchFilterBatchSizeViaServerNameCallsCount += 1
+        searchFilterBatchSizeViaServerNameReceivedArguments = (filter: filter, batchSize: batchSize, viaServerName: viaServerName)
         DispatchQueue.main.async {
-            self.searchFilterBatchSizeReceivedInvocations.append((filter: filter, batchSize: batchSize))
+            self.searchFilterBatchSizeViaServerNameReceivedInvocations.append((filter: filter, batchSize: batchSize, viaServerName: viaServerName))
         }
-        try await searchFilterBatchSizeClosure?(filter, batchSize)
+        try await searchFilterBatchSizeViaServerNameClosure?(filter, batchSize, viaServerName)
     }
 }
 open class RoomListSDKMock: MatrixRustSDK.RoomList {
@@ -15710,6 +15775,81 @@ open class RoomListItemSDKMock: MatrixRustSDK.RoomListItem {
         }
     }
 
+    //MARK: - previewRoom
+
+    open var previewRoomViaThrowableError: Error?
+    var previewRoomViaUnderlyingCallsCount = 0
+    open var previewRoomViaCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return previewRoomViaUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = previewRoomViaUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                previewRoomViaUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    previewRoomViaUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var previewRoomViaCalled: Bool {
+        return previewRoomViaCallsCount > 0
+    }
+    open var previewRoomViaReceivedVia: [String]?
+    open var previewRoomViaReceivedInvocations: [[String]] = []
+
+    var previewRoomViaUnderlyingReturnValue: RoomPreview!
+    open var previewRoomViaReturnValue: RoomPreview! {
+        get {
+            if Thread.isMainThread {
+                return previewRoomViaUnderlyingReturnValue
+            } else {
+                var returnValue: RoomPreview? = nil
+                DispatchQueue.main.sync {
+                    returnValue = previewRoomViaUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                previewRoomViaUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    previewRoomViaUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var previewRoomViaClosure: (([String]) async throws -> RoomPreview)?
+
+    open override func previewRoom(via: [String]) async throws -> RoomPreview {
+        if let error = previewRoomViaThrowableError {
+            throw error
+        }
+        previewRoomViaCallsCount += 1
+        previewRoomViaReceivedVia = via
+        DispatchQueue.main.async {
+            self.previewRoomViaReceivedInvocations.append(via)
+        }
+        if let previewRoomViaClosure = previewRoomViaClosure {
+            return try await previewRoomViaClosure(via)
+        } else {
+            return previewRoomViaReturnValue
+        }
+    }
+
     //MARK: - roomInfo
 
     open var roomInfoThrowableError: Error?
@@ -16349,6 +16489,126 @@ open class RoomMessageEventContentWithoutRelationSDKMock: MatrixRustSDK.RoomMess
         } else {
             return withMentionsMentionsReturnValue
         }
+    }
+}
+open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview {
+    init() {
+        super.init(noPointer: .init())
+    }
+
+    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    }
+
+    fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - info
+
+    open var infoThrowableError: Error?
+    var infoUnderlyingCallsCount = 0
+    open var infoCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return infoUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = infoUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                infoUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    infoUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var infoCalled: Bool {
+        return infoCallsCount > 0
+    }
+
+    var infoUnderlyingReturnValue: RoomPreviewInfo!
+    open var infoReturnValue: RoomPreviewInfo! {
+        get {
+            if Thread.isMainThread {
+                return infoUnderlyingReturnValue
+            } else {
+                var returnValue: RoomPreviewInfo? = nil
+                DispatchQueue.main.sync {
+                    returnValue = infoUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                infoUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    infoUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var infoClosure: (() throws -> RoomPreviewInfo)?
+
+    open override func info() throws -> RoomPreviewInfo {
+        if let error = infoThrowableError {
+            throw error
+        }
+        infoCallsCount += 1
+        if let infoClosure = infoClosure {
+            return try infoClosure()
+        } else {
+            return infoReturnValue
+        }
+    }
+
+    //MARK: - leave
+
+    open var leaveThrowableError: Error?
+    var leaveUnderlyingCallsCount = 0
+    open var leaveCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return leaveUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = leaveUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                leaveUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    leaveUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var leaveCalled: Bool {
+        return leaveCallsCount > 0
+    }
+    open var leaveClosure: (() async throws -> Void)?
+
+    open override func leave() async throws {
+        if let error = leaveThrowableError {
+            throw error
+        }
+        leaveCallsCount += 1
+        try await leaveClosure?()
     }
 }
 open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHandle {
