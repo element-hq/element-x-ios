@@ -28,7 +28,7 @@ class OIDCAccountSettingsPresenter: NSObject {
     
     /// Presents a web authentication session for the supplied data.
     func start() {
-        let session = ASWebAuthenticationSession(url: accountURL, callbackURLScheme: oidcRedirectURL.scheme) { _, _ in }
+        let session = ASWebAuthenticationSession(url: accountURL, callback: .oidcRedirectURL(oidcRedirectURL)) { _, _ in }
         session.prefersEphemeralWebBrowserSession = false
         session.presentationContextProvider = self
         session.start()

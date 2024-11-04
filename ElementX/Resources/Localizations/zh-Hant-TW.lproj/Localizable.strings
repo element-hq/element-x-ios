@@ -139,6 +139,7 @@
 "common_edited_suffix" = "（已編輯）";
 "common_editing" = "編輯中";
 "common_emote" = "* %1$@ %2$@";
+"common_encryption" = "Encryption";
 "common_encryption_enabled" = "已啟用加密";
 "common_enter_your_pin" = "輸入您的 PIN 碼";
 "common_error" = "錯誤";
@@ -149,6 +150,7 @@
 "common_favourited" = "我的最愛";
 "common_file" = "檔案";
 "common_forward_message" = "轉寄訊息";
+"common_frequently_used" = "Frequently used";
 "common_gif" = "GIF";
 "common_image" = "圖片";
 "common_in_reply_to" = "回覆 %1$@";
@@ -241,6 +243,8 @@
 "common.pinned" = "Pinned";
 "common.send_to" = "傳送給";
 "common.you" = "You";
+"common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
+"common_unable_to_decrypt_verification_violation" = "Sender's verified identity has changed";
 "confirm_recovery_key_banner_message" = "Your chat backup is currently out of sync. You need to enter your recovery key to maintain access to your chat backup.";
 "confirm_recovery_key_banner_title" = "輸入您的復原金鑰";
 "crash_detection_dialog_content" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
@@ -340,6 +344,9 @@
 "screen_advanced_settings_element_call_base_url" = "Custom Element Call base URL";
 "screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Invalid URL, please make sure you include the protocol (http/https) and the correct address.";
+"screen_create_room_room_address_section_footer" = "In order for this room to be visible in the public room directory, you will need a room address.";
+"screen_create_room_room_address_section_title" = "Room address";
+"screen_create_room_room_visibility_section_title" = "Room visibility";
 "screen_create_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_access_section_anyone_option_title" = "Anyone";
 "screen_create_room_access_section_header" = "Room Access";
@@ -369,6 +376,7 @@
 "screen_room_pinned_banner_loading_description" = "Loading message…";
 "screen_room_pinned_banner_view_all_button_title" = "View All";
 "screen_room_details_pinned_events_row_title" = "Pinned messages";
+"screen_roomlist_knock_event_sent_description" = "Request to join sent";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
@@ -380,6 +388,8 @@
 "screen_account_provider_signup_title" = "您即將在 %@ 建立帳號";
 "screen_advanced_settings_developer_mode" = "開發者模式";
 "screen_advanced_settings_developer_mode_description" = "Enable to have access to features and functionality for developers.";
+"screen_advanced_settings_media_compression_description" = "Optimize for upload";
+"screen_advanced_settings_media_compression_title" = "Media";
 "screen_advanced_settings_rich_text_editor_description" = "手動輸入 Markdown，停用格式化文字編輯器。";
 "screen_advanced_settings_send_read_receipts" = "已讀回條";
 "screen_advanced_settings_send_read_receipts_description" = "If turned off, your read receipts won't be sent to anyone. You will still receive read receipts from other users.";
@@ -448,7 +458,10 @@
 "screen_chat_backup_key_backup_action_enable" = "開啟備份功能";
 "screen_chat_backup_key_backup_description" = "備份可確保您不會遺失歷史訊息。%1$@。";
 "screen_chat_backup_key_backup_title" = "備份";
+"screen_chat_backup_key_storage_toggle_description" = "Upload keys from this device";
+"screen_chat_backup_key_storage_toggle_title" = "Allow key storage";
 "screen_chat_backup_recovery_action_change" = "變更復原金鑰";
+"screen_chat_backup_recovery_action_change_description" = "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.";
 "screen_chat_backup_recovery_action_confirm_description" = "Your chat backup is currently out of sync.";
 "screen_chat_backup_recovery_action_setup" = "Set up recovery";
 "screen_chat_backup_recovery_action_setup_description" = "Get access to your encrypted messages if you lose all your devices or are signed out of %1$@ everywhere.";
@@ -621,7 +634,6 @@
 "screen_qr_code_login_verify_code_title" = "Your verification code";
 "screen_recovery_key_change_description" = "Get a new recovery key if you've lost your existing one. After changing your recovery key, your old one will no longer work.";
 "screen_recovery_key_change_generate_key" = "Generate a new recovery key";
-"screen_recovery_key_change_generate_key_description" = "Make sure you can store your recovery key somewhere safe";
 "screen_recovery_key_change_success" = "Recovery key changed";
 "screen_recovery_key_change_title" = "Change recovery key?";
 "screen_recovery_key_confirm_create_new_recovery_key" = "Create new recovery key";
@@ -635,14 +647,14 @@
 "screen_recovery_key_copied_to_clipboard" = "Copied recovery key";
 "screen_recovery_key_generating_key" = "Generating…";
 "screen_recovery_key_save_action" = "Save recovery key";
-"screen_recovery_key_save_description" = "Write down your recovery key somewhere safe or save it in a password manager.";
+"screen_recovery_key_save_description" = "Write down this recovery key somewhere safe, like a password manager, encrypted note, or a physical safe.";
 "screen_recovery_key_save_key_description" = "點擊以複製復原金鑰";
-"screen_recovery_key_save_title" = "Save your recovery key";
+"screen_recovery_key_save_title" = "Save your recovery key somewhere safe";
 "screen_recovery_key_setup_confirmation_description" = "You will not be able to access your new recovery key after this step.";
 "screen_recovery_key_setup_confirmation_title" = "Have you saved your recovery key?";
 "screen_recovery_key_setup_description" = "Your chat backup is protected by a recovery key. If you need a new recovery key after setup you can recreate by selecting ‘Change recovery key’.";
 "screen_recovery_key_setup_generate_key" = "Generate your recovery key";
-"screen_recovery_key_setup_generate_key_description" = "Make sure you can store your recovery key somewhere safe";
+"screen_recovery_key_setup_generate_key_description" = "Do not share this with anyone!";
 "screen_recovery_key_setup_success" = "Recovery setup successful";
 "screen_recovery_key_setup_title" = "Set up recovery";
 "screen_report_content_block_user_hint" = "Check if you want to hide all current and future messages from this user";
@@ -824,8 +836,12 @@
 "screen_session_verification_ready_subtitle" = "比對一組唯一的表情符號。";
 "screen_session_verification_request_accepted_subtitle" = "表情符號是唯一的，請相互比對，確認它們的排列順序是否相同。";
 "screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_failure_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
+"screen_session_verification_request_failure_title" = "Verification failed";
 "screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
 "screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_success_subtitle" = "Now you can read or send messages securely on your other device.";
+"screen_session_verification_request_success_title" = "Device verified";
 "screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "不一樣";
 "screen_session_verification_they_match" = "一樣";
@@ -1012,6 +1028,7 @@
 "screen_login_subtitle" = "Matrix 是一個開放網路，為了安全且去中心化的通訊而生。";
 "screen_notification_settings_mentions_section_title" = "提及";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "再試一次";
+"screen_recovery_key_change_generate_key_description" = "Do not share this with anyone!";
 "screen_recovery_key_confirm_title" = "輸入您的復原金鑰";
 "screen_report_content_block_user" = "封鎖使用者";
 "screen_reset_encryption_password_placeholder" = "Enter…";

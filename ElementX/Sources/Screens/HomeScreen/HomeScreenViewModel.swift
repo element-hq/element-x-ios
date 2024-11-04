@@ -58,7 +58,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 switch (securityState.verificationState, securityState.recoveryState) {
                 case (.verified, .disabled):
                     state.requiresExtraAccountSetup = true
-                    state.securityBannerMode = .none
+                    state.securityBannerMode = .show
                 case (.verified, .incomplete):
                     state.requiresExtraAccountSetup = true
                     
@@ -360,10 +360,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 return
             }
             
-            if roomProxy.isPublic {
+            if roomProxy.infoPublisher.value.isPublic {
                 state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isEncryptedOneToOneRoom, state: .public)
             } else {
-                state.bindings.leaveRoomAlertItem = if roomProxy.joinedMembersCount > 1 {
+                state.bindings.leaveRoomAlertItem = if roomProxy.infoPublisher.value.joinedMembersCount > 1 {
                     LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isEncryptedOneToOneRoom, state: .private)
                 } else {
                     LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isEncryptedOneToOneRoom, state: .empty)
@@ -408,7 +408,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         switch await roomProxy.acceptInvitation() {
         case .success:
             actionsSubject.send(.presentRoom(roomIdentifier: roomID))
-            analyticsService.trackJoinedRoom(isDM: roomProxy.isDirect, isSpace: roomProxy.isSpace, activeMemberCount: UInt(roomProxy.activeMembersCount))
+            analyticsService.trackJoinedRoom(isDM: roomProxy.info.isDirect,
+                                             isSpace: roomProxy.info.isSpace,
+                                             activeMemberCount: UInt(roomProxy.info.activeMembersCount))
         case .failure:
             displayError()
         }

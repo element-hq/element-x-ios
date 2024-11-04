@@ -7,37 +7,88 @@
 
 import Emojibase
 import Foundation
-
-@MainActor
-protocol EmojiProviderProtocol {
-    func categories(searchString: String?) async -> [EmojiCategory]
-}
-
-private enum EmojiProviderState {
-    case notLoaded
-    case inProgress(Task<[EmojiCategory], Never>)
-    case loaded([EmojiCategory])
-}
+import OrderedCollections
 
 class EmojiProvider: EmojiProviderProtocol {
+    private let maxFrequentEmojis = 20
     private let loader: EmojiLoaderProtocol
-    private var state: EmojiProviderState = .notLoaded
+    private let appSettings: AppSettings
     
-    init(loader: EmojiLoaderProtocol = EmojibaseDatasource()) {
+    private(set) var state: EmojiProviderState = .notLoaded
+    
+    init(loader: EmojiLoaderProtocol = EmojibaseDatasource(), appSettings: AppSettings) {
         self.loader = loader
+        self.appSettings = appSettings
+        
         Task {
             await loadIfNeeded()
         }
     }
     
     func categories(searchString: String? = nil) async -> [EmojiCategory] {
-        let emojiCategories = await loadIfNeeded()
+        var emojiCategories = await loadIfNeeded()
+        
+        let allEmojis = emojiCategories.reduce([]) { partialResult, category in
+            partialResult + category.emojis
+        }
+        
+        // Map frequently used system unicode emojis to our emoji provider ones and preserve the order
+        let frequentlyUsedEmojis = frequentlyUsedSystemEmojis().prefix(maxFrequentEmojis)
+        let emojis = allEmojis
+            .filter { frequentlyUsedEmojis.contains($0.unicode) }
+            .sorted { first, second in
+                guard let firstIndex = frequentlyUsedEmojis.firstIndex(of: first.unicode),
+                      let secondIndex = frequentlyUsedEmojis.firstIndex(of: second.unicode) else {
+                    return false
+                }
+                
+                return firstIndex < secondIndex
+            }
+        
+        if !emojis.isEmpty {
+            emojiCategories.insert(.init(id: EmojiCategory.frequentlyUsedCategoryIdentifier, emojis: emojis), at: 0)
+        }
+        
         if let searchString, searchString.isEmpty == false {
             return search(searchString: searchString, emojiCategories: emojiCategories)
         } else {
             return emojiCategories
         }
     }
+    
+    func frequentlyUsedSystemEmojis() -> [String] {
+        guard appSettings.frequentEmojisEnabled, !ProcessInfo.processInfo.isiOSAppOnMac else {
+            return []
+        }
+        
+        guard let preferences = UserDefaults(suiteName: "com.apple.EmojiPreferences"),
+              let defaults = preferences.dictionary(forKey: "EMFDefaultsKey"),
+              let recents = defaults["EMFRecentsKey"] as? [String]
+        else {
+            return []
+        }
+        
+        return recents
+    }
+    
+    func markEmojiAsFrequentlyUsed(_ emoji: String) {
+        guard appSettings.frequentEmojisEnabled else {
+            return
+        }
+        
+        guard let preferences = UserDefaults(suiteName: "com.apple.EmojiPreferences"),
+              let defaults = preferences.dictionary(forKey: "EMFDefaultsKey"),
+              let recents = defaults["EMFRecentsKey"] as? [String] else {
+            return
+        }
+        
+        var uniqueOrderedRecents = OrderedSet(recents)
+        uniqueOrderedRecents.insert(emoji, at: 0)
+        
+        preferences.setValue(["EMFRecentsKey": Array(uniqueOrderedRecents)], forKey: "EMFDefaultsKey")
+    }
+    
+    // MARK: - Private
     
     private func search(searchString: String, emojiCategories: [EmojiCategory]) -> [EmojiCategory] {
         emojiCategories.compactMap { category in

@@ -139,6 +139,7 @@
 "common_edited_suffix" = "(editado)";
 "common_editing" = "Editando";
 "common_emote" = "* %1$@ %2$@";
+"common_encryption" = "Encryption";
 "common_encryption_enabled" = "Criptografia ativada";
 "common_enter_your_pin" = "Insira seu PIN";
 "common_error" = "Erro";
@@ -149,6 +150,7 @@
 "common_favourited" = "Favoritado";
 "common_file" = "Arquivo";
 "common_forward_message" = "Encaminhar mensagem";
+"common_frequently_used" = "Frequently used";
 "common_gif" = "GIF";
 "common_image" = "Imagem";
 "common_in_reply_to" = "Em resposta a %1$@";
@@ -241,6 +243,8 @@
 "common.pinned" = "Pinned";
 "common.send_to" = "Enviar para";
 "common.you" = "You";
+"common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
+"common_unable_to_decrypt_verification_violation" = "Sender's verified identity has changed";
 "confirm_recovery_key_banner_message" = "Your chat backup is currently out of sync. You need to enter your recovery key to maintain access to your chat backup.";
 "confirm_recovery_key_banner_title" = "Insira sua chave de recuperação";
 "crash_detection_dialog_content" = "%1$@ fechou inesperadamente na última vez que foi usado. Gostaria de compartilhar um relatório de falhas conosco?";
@@ -340,6 +344,9 @@
 "screen_advanced_settings_element_call_base_url" = "Custom Element Call base URL";
 "screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL inválida, por favor verifique se o protocolo (http/https) e o endereço correto estão presentes.";
+"screen_create_room_room_address_section_footer" = "In order for this room to be visible in the public room directory, you will need a room address.";
+"screen_create_room_room_address_section_title" = "Room address";
+"screen_create_room_room_visibility_section_title" = "Room visibility";
 "screen_create_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_access_section_anyone_option_title" = "Anyone";
 "screen_create_room_access_section_header" = "Room Access";
@@ -369,6 +376,7 @@
 "screen_room_pinned_banner_loading_description" = "Loading message…";
 "screen_room_pinned_banner_view_all_button_title" = "View All";
 "screen_room_details_pinned_events_row_title" = "Pinned messages";
+"screen_roomlist_knock_event_sent_description" = "Request to join sent";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
@@ -380,6 +388,8 @@
 "screen_account_provider_signup_title" = "Você está prestes a criar uma conta em %@";
 "screen_advanced_settings_developer_mode" = "Modo de desenvolvedor";
 "screen_advanced_settings_developer_mode_description" = "Habilite para ter acesso a recursos e funcionalidades para desenvolvedores.";
+"screen_advanced_settings_media_compression_description" = "Optimize for upload";
+"screen_advanced_settings_media_compression_title" = "Media";
 "screen_advanced_settings_rich_text_editor_description" = "Desative o editor de rich text para digitar Markdown manualmente.";
 "screen_advanced_settings_send_read_receipts" = "Confirmações de leitura";
 "screen_advanced_settings_send_read_receipts_description" = "Se desligado, suas confirmações de leitura não serão enviadas para ninguém. Você ainda receberá confirmações de leitura de outros usuários.";
@@ -448,7 +458,10 @@
 "screen_chat_backup_key_backup_action_enable" = "Ativar o backup";
 "screen_chat_backup_key_backup_description" = "O backup garante que você não perca seu histórico de mensagens. %1$@.";
 "screen_chat_backup_key_backup_title" = "Backup";
+"screen_chat_backup_key_storage_toggle_description" = "Upload keys from this device";
+"screen_chat_backup_key_storage_toggle_title" = "Allow key storage";
 "screen_chat_backup_recovery_action_change" = "Alterar chave de recuperação";
+"screen_chat_backup_recovery_action_change_description" = "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.";
 "screen_chat_backup_recovery_action_confirm_description" = "Seu backup das conversas está atualmente fora de sincronia.";
 "screen_chat_backup_recovery_action_setup" = "Configurar a recuperação";
 "screen_chat_backup_recovery_action_setup_description" = "Tenha acesso às suas mensagens criptografadas se você perder todos os seus dispositivos ou for desconectado do %1$@ em qualquer lugar.";
@@ -621,7 +634,6 @@
 "screen_qr_code_login_verify_code_title" = "Your verification code";
 "screen_recovery_key_change_description" = "Obtenha uma nova chave de recuperação caso tenha perdido a existente. Depois de alterar sua chave de recuperação, a antiga não funcionará mais.";
 "screen_recovery_key_change_generate_key" = "Gere uma nova chave de recuperação";
-"screen_recovery_key_change_generate_key_description" = "Certifique-se de que você pode armazenar sua chave de recuperação em algum lugar seguro";
 "screen_recovery_key_change_success" = "Chave de recuperação alterada";
 "screen_recovery_key_change_title" = "Alterar chave de recuperação?";
 "screen_recovery_key_confirm_create_new_recovery_key" = "Create new recovery key";
@@ -824,8 +836,12 @@
 "screen_session_verification_ready_subtitle" = "Compare um conjunto único de emojis.";
 "screen_session_verification_request_accepted_subtitle" = "Compare os emojis únicos, garantindo que apareçam na mesma ordem.";
 "screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_failure_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
+"screen_session_verification_request_failure_title" = "Verification failed";
 "screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
 "screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_success_subtitle" = "Now you can read or send messages securely on your other device.";
+"screen_session_verification_request_success_title" = "Device verified";
 "screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "Eles não combinam";
 "screen_session_verification_they_match" = "Eles combinam";
@@ -1012,6 +1028,7 @@
 "screen_login_subtitle" = "A Matrix é uma rede aberta para comunicação segura e descentralizada.";
 "screen_notification_settings_mentions_section_title" = "Menções";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "Tente novamente";
+"screen_recovery_key_change_generate_key_description" = "Certifique-se de que você pode armazenar sua chave de recuperação em algum lugar seguro";
 "screen_recovery_key_confirm_title" = "Insira sua chave de recuperação";
 "screen_report_content_block_user" = "Bloquear usuário";
 "screen_reset_encryption_password_placeholder" = "Inserir...";

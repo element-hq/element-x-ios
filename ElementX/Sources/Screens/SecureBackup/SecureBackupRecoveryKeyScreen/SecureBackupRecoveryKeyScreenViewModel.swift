@@ -28,18 +28,6 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
         super.init(initialViewState: .init(isModallyPresented: isModallyPresented,
                                            mode: secureBackupController.recoveryState.value.viewMode,
                                            bindings: .init()))
-        
-        secureBackupController.recoveryState
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] state in
-                switch state {
-                case .settingUp:
-                    self?.showLoadingIndicator()
-                default:
-                    self?.hideLoadingIndicator()
-                }
-            })
-            .store(in: &cancellables)
     }
     
     // MARK: - Public
@@ -49,6 +37,8 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
         
         switch viewAction {
         case .generateKey:
+            state.isGeneratingKey = true
+            
             Task {
                 switch await secureBackupController.generateRecoveryKey() {
                 case .success(let key):
@@ -58,7 +48,7 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
                     state.bindings.alertInfo = .init(id: .init())
                 }
                 
-                hideLoadingIndicator()
+                state.isGeneratingKey = false
             }
         case .copyKey:
             UIPasteboard.general.string = state.recoveryKey
@@ -75,7 +65,9 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
                     actionsSubject.send(.done(mode: context.viewState.mode))
                 case .failure(let error):
                     MXLog.error("Failed confirming recovery key with error: \(error)")
-                    state.bindings.alertInfo = .init(id: .init())
+                    state.bindings.alertInfo = .init(id: .init(),
+                                                     title: L10n.screenRecoveryKeyConfirmErrorTitle,
+                                                     message: L10n.screenRecoveryKeyConfirmErrorContent)
                 }
                 
                 hideLoadingIndicator()

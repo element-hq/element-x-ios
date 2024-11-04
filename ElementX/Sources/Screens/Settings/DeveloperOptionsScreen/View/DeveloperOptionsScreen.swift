@@ -50,8 +50,8 @@ struct DeveloperOptionsScreen: View {
                     Text("Hide image & video previews")
                 }
                 
-                Toggle(isOn: $context.identityPinningViolationNotificationsEnabled) {
-                    Text("Identity pinning violation notifications")
+                Toggle(isOn: $context.frequentEmojisEnabled) {
+                    Text("Show frequently used emojis")
                 }
             }
             
@@ -59,12 +59,6 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.knockingEnabled) {
                     Text("Knocking")
                     Text("Experimental, still using mocked data")
-                }
-            }
-            
-            Section("Media") {
-                Toggle(isOn: $context.optimizeMediaUploads) {
-                    Text("Optimise for upload")
                 }
             }
             

@@ -17,12 +17,6 @@ extension PreviewTests {
         }
     }
 
-    func test_analyticsPromptScreenCheckmarkItem() {
-        for preview in AnalyticsPromptScreenCheckmarkItem_Previews._allPreviews {
-            assertSnapshots(matching: preview)
-        }
-    }
-
     func test_analyticsPromptScreen() {
         for preview in AnalyticsPromptScreen_Previews._allPreviews {
             assertSnapshots(matching: preview)
@@ -755,6 +749,12 @@ extension PreviewTests {
         }
     }
 
+    func test_sessionVerificationRequestDetailsView() {
+        for preview in SessionVerificationRequestDetailsView_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_sessionVerification() {
         for preview in SessionVerification_Previews._allPreviews {
             assertSnapshots(matching: preview)
@@ -943,6 +943,12 @@ extension PreviewTests {
 
     func test_videoRoomTimelineView() {
         for preview in VideoRoomTimelineView_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_visualListItem() {
+        for preview in VisualListItem_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }

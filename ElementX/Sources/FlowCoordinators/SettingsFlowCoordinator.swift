@@ -27,6 +27,7 @@ struct SettingsFlowCoordinatorParameters {
     let appSettings: AppSettings
     let navigationSplitCoordinator: NavigationSplitCoordinator
     let userIndicatorController: UserIndicatorControllerProtocol
+    let analytics: AnalyticsService
 }
 
 class SettingsFlowCoordinator: FlowCoordinatorProtocol {
@@ -174,7 +175,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentAnalyticsScreen() {
         let coordinator = AnalyticsSettingsScreenCoordinator(parameters: .init(appSettings: parameters.appSettings,
-                                                                               analytics: ServiceLocator.shared.analytics))
+                                                                               analytics: parameters.analytics))
         navigationStackCoordinator?.push(coordinator)
     }
     
@@ -221,7 +222,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentAdvancedSettings() {
-        let coordinator = AdvancedSettingsScreenCoordinator()
+        let coordinator = AdvancedSettingsScreenCoordinator(parameters: .init(appSettings: parameters.appSettings,
+                                                                              analytics: parameters.analytics))
         navigationStackCoordinator.push(coordinator)
     }
     

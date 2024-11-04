@@ -90,7 +90,7 @@ struct SettingsScreen: View {
             
             switch context.viewState.securitySectionMode {
             case .secureBackup:
-                ListRow(label: .default(title: L10n.commonChatBackup,
+                ListRow(label: .default(title: L10n.commonEncryption,
                                         icon: \.key),
                         details: context.viewState.showSecuritySectionBadge ? .icon(securitySectionBadge) : nil,
                         kind: .navigationLink { context.send(viewAction: .secureBackup) })

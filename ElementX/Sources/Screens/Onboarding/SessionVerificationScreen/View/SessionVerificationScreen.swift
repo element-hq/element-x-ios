@@ -5,6 +5,8 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import Compound
+import MatrixRustSDK
 import SwiftUI
 
 struct SessionVerificationScreen: View {
@@ -14,7 +16,6 @@ struct SessionVerificationScreen: View {
         FullscreenDialog {
             VStack(spacing: 32) {
                 screenHeader
-                Spacer()
                 mainContent
             }
         } bottomContent: {
@@ -27,33 +28,6 @@ struct SessionVerificationScreen: View {
     
     // MARK: - Private
     
-    private var headerImageName: String {
-        switch context.viewState.verificationState {
-        case .initial:
-            return "lock"
-        case .cancelled:
-            return "exclamationmark.shield"
-        case .requestingVerification:
-            return "hourglass"
-        case .verificationRequestAccepted:
-            return "face.smiling"
-        case .startingSasVerification:
-            return "hourglass"
-        case .sasVerificationStarted:
-            return "hourglass"
-        case .cancelling:
-            return "hourglass"
-        case .acceptingChallenge:
-            return "hourglass"
-        case .decliningChallenge:
-            return "hourglass"
-        case .showingChallenge:
-            return "face.smiling"
-        case .verified:
-            return "checkmark.shield"
-        }
-    }
-    
     @ViewBuilder
     private var screenHeader: some View {
         VStack(spacing: 0) {
@@ -61,11 +35,11 @@ struct SessionVerificationScreen: View {
                 BigIcon(icon: \.lockSolid)
                     .padding(.bottom, 16)
             } else {
-                Image(systemName: headerImageName)
+                Image(systemName: context.viewState.headerImageName)
                     .bigIcon()
                     .padding(.bottom, 16)
             }
-            
+
             Text(context.viewState.title ?? "")
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)
@@ -83,18 +57,17 @@ struct SessionVerificationScreen: View {
     @ViewBuilder
     private var mainContent: some View {
         switch context.viewState.verificationState {
-        case .showingChallenge(let emojis):
+        case .initial:
+            switch context.viewState.flow {
+            case .responder(let details):
+                SessionVerificationRequestDetailsView(details: details)
+            default:
+                EmptyView()
+            }
+        case .showingChallenge(let emojis), .acceptingChallenge(let emojis), .decliningChallenge(let emojis):
             emojisPanel(with: emojis)
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.emojiWrapper)
-        case .acceptingChallenge(let emojis):
-            emojisPanel(with: emojis)
-                .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.emojiWrapper)
-        case .requestingVerification:
-            ProgressView()
-                .tint(.compound.textSecondary)
-                .scaleEffect(2)
         default:
-            // In All other cases, we just want an empty view
             EmptyView()
         }
     }
@@ -119,18 +92,41 @@ struct SessionVerificationScreen: View {
     private var actionButtons: some View {
         switch context.viewState.verificationState {
         case .initial:
-            VStack(spacing: 32) {
+            switch context.viewState.flow {
+            case .initiator:
                 Button(L10n.actionStartVerification) {
                     context.send(viewAction: .requestVerification)
                 }
                 .buttonStyle(.compound(.primary))
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.requestVerification)
+            case .responder:
+                VStack(spacing: 16) {
+                    Button(L10n.actionStart) {
+                        context.send(viewAction: .acceptVerificationRequest)
+                    }
+                    .buttonStyle(.compound(.primary))
+                    .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.acceptVerificationRequest)
+                    
+                    Button(L10n.actionIgnore) {
+                        context.send(viewAction: .ignoreVerificationRequest)
+                    }
+                    .buttonStyle(.compound(.plain))
+                    .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.ignoreVerificationRequest)
+                }
             }
         case .cancelled:
-            Button(L10n.actionRetry) {
-                context.send(viewAction: .restart)
+            switch context.viewState.flow {
+            case .initiator:
+                Button(L10n.actionRetry) {
+                    context.send(viewAction: .restart)
+                }
+                .buttonStyle(.compound(.primary))
+            case .responder:
+                Button(L10n.actionDone) {
+                    context.send(viewAction: .done)
+                }
+                .buttonStyle(.compound(.primary))
             }
-            .buttonStyle(.compound(.primary))
             
         case .verificationRequestAccepted:
             Button(L10n.actionStart) {
@@ -150,30 +146,14 @@ struct SessionVerificationScreen: View {
                 Button(L10n.screenSessionVerificationTheyDontMatch) {
                     context.send(viewAction: .decline)
                 }
-                .font(.compound.bodyLGSemibold)
+                .buttonStyle(.compound(.plain))
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.declineChallenge)
             }
             
-        case .acceptingChallenge:
-            VStack(spacing: 32) {
-                Button { context.send(viewAction: .accept) } label: {
-                    HStack(spacing: 16) {
-                        ProgressView()
-                            .tint(.compound.textOnSolidPrimary)
-                        Text(L10n.screenSessionVerificationTheyMatch)
-                    }
-                }
+        case .acceptingVerificationRequest, .acceptingChallenge, .decliningChallenge, .requestingVerification:
+            Button(L10n.screenIdentityWaitingOnOtherDevice) { }
                 .buttonStyle(.compound(.primary))
-                .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.acceptChallenge)
                 .disabled(true)
-
-                Button(L10n.screenSessionVerificationTheyDontMatch) {
-                    context.send(viewAction: .decline)
-                }
-                .font(.compound.bodyLGSemibold)
-                .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.declineChallenge)
-                .disabled(true)
-            }
 
         default:
             EmptyView()
@@ -196,27 +176,50 @@ struct SessionVerificationScreen: View {
     }
 }
 
-// MARK: - Previews
-
 struct SessionVerification_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         sessionVerificationScreen(state: .initial)
-            .previewDisplayName("Initial")
+            .previewDisplayName("Initial - Initiator")
+        
+        let details = SessionVerificationRequestDetails(senderID: "@bob:matrix.org",
+                                                        flowID: "123",
+                                                        deviceID: "CODEMISTAKE",
+                                                        displayName: "Bob's Element X iOS",
+                                                        firstSeenDate: .init(timeIntervalSince1970: 0))
+        sessionVerificationScreen(state: .initial, flow: .responder(details: details))
+            .previewDisplayName("Initial - Responder")
+        
+        sessionVerificationScreen(state: .acceptingVerificationRequest)
+            .previewDisplayName("Accepting Verification Request")
+        
         sessionVerificationScreen(state: .requestingVerification)
             .previewDisplayName("Requesting Verification")
         sessionVerificationScreen(state: .verificationRequestAccepted)
             .previewDisplayName("Request Accepted")
-        sessionVerificationScreen(state: .cancelled)
-            .previewDisplayName("Cancelled")
+        
+        sessionVerificationScreen(state: .startingSasVerification)
+            .previewDisplayName("Starting SAS Verification")
+        sessionVerificationScreen(state: .sasVerificationStarted)
+            .previewDisplayName("SAS Verification started")
         
         sessionVerificationScreen(state: .showingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
             .previewDisplayName("Showing Challenge")
+        sessionVerificationScreen(state: .acceptingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
+            .previewDisplayName("Accepting Challenge")
+        sessionVerificationScreen(state: .decliningChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
+            .previewDisplayName("Declining Challenge")
+        
         sessionVerificationScreen(state: .verified)
             .previewDisplayName("Verified")
+        
+        sessionVerificationScreen(state: .cancelled)
+            .previewDisplayName("Cancelled")
     }
     
-    static func sessionVerificationScreen(state: SessionVerificationScreenStateMachine.State) -> some View {
+    static func sessionVerificationScreen(state: SessionVerificationScreenStateMachine.State,
+                                          flow: SessionVerificationScreenFlow = .initiator) -> some View {
         let viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: SessionVerificationControllerProxyMock.configureMock(),
+                                                           flow: flow,
                                                            verificationState: state)
         
         return SessionVerificationScreen(context: viewModel.context)

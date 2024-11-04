@@ -139,6 +139,7 @@
 "common_edited_suffix" = "(szerkesztve)";
 "common_editing" = "Szerkesztés";
 "common_emote" = "* %1$@ %2$@";
+"common_encryption" = "Encryption";
 "common_encryption_enabled" = "Titkosítás engedélyezve";
 "common_enter_your_pin" = "Adja meg a PIN-kódját";
 "common_error" = "Hiba";
@@ -149,6 +150,7 @@
 "common_favourited" = "Kedvencnek jelölve";
 "common_file" = "Fájl";
 "common_forward_message" = "Üzenet továbbítása";
+"common_frequently_used" = "Frequently used";
 "common_gif" = "GIF";
 "common_image" = "Kép";
 "common_in_reply_to" = "Válasz erre: %1$@";
@@ -241,6 +243,8 @@
 "common.pinned" = "Kitűzve";
 "common.send_to" = "Címzett";
 "common.you" = "Ön";
+"common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
+"common_unable_to_decrypt_verification_violation" = "Sender's verified identity has changed";
 "confirm_recovery_key_banner_message" = "A csevegés biztonsági mentése nincs szinkronban. Meg kell erősítenie a helyreállítási kulcsát, hogy továbbra is hozzáférjen a csevegés biztonsági mentéséhez.";
 "confirm_recovery_key_banner_title" = "Helyreállítási kulcs megerősítése";
 "crash_detection_dialog_content" = "Az %1$@ összeomlott a legutóbbi használata óta. Megosztja velünk az összeomlás-jelentést?";
@@ -340,6 +344,9 @@
 "screen_advanced_settings_element_call_base_url" = "Egyéni Element Call alapwebcím";
 "screen_advanced_settings_element_call_base_url_description" = "Egyéni alapwebcím beállítása az Element Callhoz.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Érvénytelen webcím, győződjön meg arról, hogy szerepel-e benne a protokoll (http/https), és hogy helyes-e a cím.";
+"screen_create_room_room_address_section_footer" = "In order for this room to be visible in the public room directory, you will need a room address.";
+"screen_create_room_room_address_section_title" = "Room address";
+"screen_create_room_room_visibility_section_title" = "Room visibility";
 "screen_create_room_access_section_anyone_option_description" = "Bárki csatlakozhat ehhez a szobához";
 "screen_create_room_access_section_anyone_option_title" = "Bárki";
 "screen_create_room_access_section_header" = "Szobahozzáférés";
@@ -369,6 +376,7 @@
 "screen_room_pinned_banner_loading_description" = "Üzenet betöltése…";
 "screen_room_pinned_banner_view_all_button_title" = "Összes megtekintése";
 "screen_room_details_pinned_events_row_title" = "Kitűzött üzenetek";
+"screen_roomlist_knock_event_sent_description" = "Request to join sent";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Az üzenet nem lett elküldve, mert %1$@ ellenőrzött személyazonossága megváltozott.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Az üzenet nem lett elküldve, mert %1$@ nem ellenőrizte az összes eszközét.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Az üzenet nem lett elküldve, mert egy vagy több eszközét nem ellenőrizte.";
@@ -380,6 +388,8 @@
 "screen_account_provider_signup_title" = "Hamarosan létrehoz egy fiókot itt: %@";
 "screen_advanced_settings_developer_mode" = "Fejlesztői mód";
 "screen_advanced_settings_developer_mode_description" = "Engedélyezze, hogy elérje a fejlesztőknek szánt funkciókat.";
+"screen_advanced_settings_media_compression_description" = "Optimize for upload";
+"screen_advanced_settings_media_compression_title" = "Media";
 "screen_advanced_settings_rich_text_editor_description" = "A formázott szöveges szerkesztő letiltása, hogy kézzel írhasson Markdownt.";
 "screen_advanced_settings_send_read_receipts" = "Olvasási visszaigazolások";
 "screen_advanced_settings_send_read_receipts_description" = "Ha ki van kapcsolva, az olvasási visszaigazolások nem lesznek elküldve senkinek. A többi felhasználó olvasási visszaigazolását továbbra is meg fogja kapni.";
@@ -448,7 +458,10 @@
 "screen_chat_backup_key_backup_action_enable" = "Biztonsági mentés bekapcsolása";
 "screen_chat_backup_key_backup_description" = "A biztonsági mentés biztosítja, hogy ne veszítse el az üzenetelőzményeit. %1$@.";
 "screen_chat_backup_key_backup_title" = "Biztonsági mentés";
+"screen_chat_backup_key_storage_toggle_description" = "Upload keys from this device";
+"screen_chat_backup_key_storage_toggle_title" = "Allow key storage";
 "screen_chat_backup_recovery_action_change" = "Helyreállítási kulcs módosítása";
+"screen_chat_backup_recovery_action_change_description" = "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.";
 "screen_chat_backup_recovery_action_confirm_description" = "A csevegéselőzményei nincsenek szinkronban.";
 "screen_chat_backup_recovery_action_setup" = "Helyreállítás beállítása";
 "screen_chat_backup_recovery_action_setup_description" = "Szerezzen hozzáférést a titkosított üzeneteihez, ha elvesztette az összes eszközét, vagy ha mindenütt kijelentkezett az %1$@ből.";
@@ -621,7 +634,6 @@
 "screen_qr_code_login_verify_code_title" = "Az Ön ellenőrzőkódja";
 "screen_recovery_key_change_description" = "Szerezzen új helyreállítási kulcsot, ha elvesztette a meglévőt. A helyreállítása kulcsa módosítása után a régi már nem fog működni.";
 "screen_recovery_key_change_generate_key" = "Új helyreállítási kulcs előállítása";
-"screen_recovery_key_change_generate_key_description" = "Gondoskodjon arról, hogy biztonságos helyen tárolja a helyreállítási kulcsát";
 "screen_recovery_key_change_success" = "Helyreállítási kulcs lecserélve";
 "screen_recovery_key_change_title" = "Módosítja a helyreállítási kulcsot?";
 "screen_recovery_key_confirm_create_new_recovery_key" = "Új helyreállítási kulcs létrehozása";
@@ -824,8 +836,12 @@
 "screen_session_verification_ready_subtitle" = "Egyedi emodzsik összehasonlítása.";
 "screen_session_verification_request_accepted_subtitle" = "Hasonlítsa össze az egyedi emodzsikat, meggyőződve arról, hogy azonos a sorrendjük.";
 "screen_session_verification_request_details_timestamp" = "Bejelentkezve";
+"screen_session_verification_request_failure_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
+"screen_session_verification_request_failure_title" = "Verification failed";
 "screen_session_verification_request_footer" = "Csak akkor folytassa, ha Ön kezdeményezte ezt az ellenőrzést.";
 "screen_session_verification_request_subtitle" = "Az üzenetelőzmények biztonságának megőrzése érdekében ellenőrizze a másik eszközt.";
+"screen_session_verification_request_success_subtitle" = "Now you can read or send messages securely on your other device.";
+"screen_session_verification_request_success_title" = "Device verified";
 "screen_session_verification_request_title" = "Ellenőrzés kérve";
 "screen_session_verification_they_dont_match" = "Nem egyeznek";
 "screen_session_verification_they_match" = "Megegyeznek";
@@ -1012,6 +1028,7 @@
 "screen_login_subtitle" = "A Matrix egy nyitott hálózat a biztonságos, decentralizált kommunikációhoz.";
 "screen_notification_settings_mentions_section_title" = "Említések";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "Próbálja újra";
+"screen_recovery_key_change_generate_key_description" = "Gondoskodjon arról, hogy biztonságos helyen tárolja a helyreállítási kulcsát";
 "screen_recovery_key_confirm_title" = "Helyreállítási kulcs megerősítése";
 "screen_report_content_block_user" = "Felhasználó letiltása";
 "screen_reset_encryption_password_placeholder" = "Megadás…";

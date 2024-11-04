@@ -36,6 +36,7 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
                 state.categories = convert(emojiCategories: categories)
             }
         case let .emojiTapped(emoji: emoji):
+            emojiProvider.markEmojiAsFrequentlyUsed(emoji.value)
             actionsSubject.send(.emojiSelected(emoji: emoji.value))
         case .dismiss:
             actionsSubject.send(.dismiss)

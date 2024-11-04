@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import MatrixRustSDK
 
 @MainActor
 struct InvitedRoomProxyMockConfiguration {
@@ -22,10 +23,55 @@ extension InvitedRoomProxyMock {
     convenience init(_ configuration: InvitedRoomProxyMockConfiguration) {
         self.init()
         id = configuration.id
-        name = configuration.name
-        avatarURL = configuration.avatarURL
-        avatar = .room(id: configuration.id, name: configuration.name, avatarURL: configuration.avatarURL) // Note: This doesn't replicate the real proxy logic.
-        underlyingInviter = configuration.inviter
-        activeMembersCount = configuration.members.filter { $0.membership == .join || $0.membership == .invite }.count
+        info = RoomInfoProxy(roomInfo: .init(configuration))
+    }
+}
+
+extension RoomInfo {
+    @MainActor init(_ configuration: InvitedRoomProxyMockConfiguration) {
+        self.init(id: configuration.id,
+                  creator: nil,
+                  displayName: configuration.name,
+                  rawName: nil,
+                  topic: nil,
+                  avatarUrl: configuration.avatarURL?.absoluteString,
+                  isDirect: false,
+                  isPublic: false,
+                  isSpace: false,
+                  isTombstoned: false,
+                  isFavourite: false,
+                  canonicalAlias: nil,
+                  alternativeAliases: [],
+                  membership: .knocked,
+                  inviter: .init(configuration.inviter),
+                  heroes: [],
+                  activeMembersCount: UInt64(configuration.members.filter { $0.membership == .join || $0.membership == .invite }.count),
+                  invitedMembersCount: UInt64(configuration.members.filter { $0.membership == .invite }.count),
+                  joinedMembersCount: UInt64(configuration.members.filter { $0.membership == .join }.count),
+                  userPowerLevels: [:],
+                  highlightCount: 0,
+                  notificationCount: 0,
+                  cachedUserDefinedNotificationMode: nil,
+                  hasRoomCall: false,
+                  activeRoomCallParticipants: [],
+                  isMarkedUnread: false,
+                  numUnreadMessages: 0,
+                  numUnreadNotifications: 0,
+                  numUnreadMentions: 0,
+                  pinnedEventIds: [])
+    }
+}
+
+private extension RoomMember {
+    init(_ proxy: RoomMemberProxyProtocol) {
+        self.init(userId: proxy.userID,
+                  displayName: proxy.displayName,
+                  avatarUrl: proxy.avatarURL?.absoluteString,
+                  membership: proxy.membership,
+                  isNameAmbiguous: proxy.disambiguatedDisplayName != proxy.displayName,
+                  powerLevel: Int64(proxy.powerLevel),
+                  normalizedPowerLevel: Int64(proxy.powerLevel),
+                  isIgnored: proxy.isIgnored,
+                  suggestedRoleForPowerLevel: proxy.role)
     }
 }

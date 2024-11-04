@@ -32,6 +32,7 @@ final class AppSettings {
         case pusherProfileTag
         case logLevel
         case viewSourceEnabled
+        case optimizeMediaUploads
         case appAppearance
         case sharePresence
         case hideUnreadMessagesBadge
@@ -42,12 +43,11 @@ final class AppSettings {
         
         // Feature flags
         case slidingSyncDiscovery
-        case optimizeMediaUploads
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
         case enableOnlySignedDeviceIsolationMode
-        case identityPinningViolationNotificationsEnabled
         case knockingEnabled
+        case frequentEmojisEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -153,14 +153,8 @@ final class AppSettings {
     
     /// Any pre-defined static client registrations for OIDC issuers.
     let oidcStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
-    /// The redirect URL used for OIDC.
-    let oidcRedirectURL = {
-        guard let url = URL(string: "\(InfoPlistReader.main.appScheme):/callback") else {
-            fatalError("Invalid OIDC redirect URL")
-        }
-        
-        return url
-    }()
+    /// The redirect URL used for OIDC. This no longer uses universal links so we don't need the bundle ID to avoid conflicts between Element X, Nightly and PR builds.
+    let oidcRedirectURL: URL = "https://element.io/oidc/login"
     
     private(set) lazy var oidcConfiguration = OIDCConfigurationProxy(clientName: InfoPlistReader.main.bundleDisplayName,
                                                                      redirectURI: oidcRedirectURL,
@@ -243,6 +237,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.viewSourceEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var viewSourceEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.optimizeMediaUploads, defaultValue: true, storageType: .userDefaults(store))
+    var optimizeMediaUploads
 
     // MARK: - Element Call
     
@@ -281,14 +278,11 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.slidingSyncDiscovery, defaultValue: .native, storageType: .userDefaults(store))
     var slidingSyncDiscovery: SlidingSyncDiscovery
     
-    @UserPreference(key: UserDefaultsKeys.optimizeMediaUploads, defaultValue: false, storageType: .userDefaults(store))
-    var optimizeMediaUploads
-	
-    @UserPreference(key: UserDefaultsKeys.identityPinningViolationNotificationsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
-    var identityPinningViolationNotificationsEnabled
-    
     @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var knockingEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.frequentEmojisEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
+    var frequentEmojisEnabled
 
     #endif
     

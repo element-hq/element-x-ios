@@ -8,11 +8,16 @@
 import Combine
 import SwiftUI
 
+struct AdvancedSettingsScreenCoordinatorParameters {
+    let appSettings: AppSettings
+    let analytics: AnalyticsService
+}
+
 final class AdvancedSettingsScreenCoordinator: CoordinatorProtocol {
     private var viewModel: AdvancedSettingsScreenViewModelProtocol
     
-    init() {
-        viewModel = AdvancedSettingsScreenViewModel(advancedSettings: ServiceLocator.shared.settings)
+    init(parameters: AdvancedSettingsScreenCoordinatorParameters) {
+        viewModel = AdvancedSettingsScreenViewModel(advancedSettings: parameters.appSettings, analytics: parameters.analytics)
     }
             
     func toPresentable() -> AnyView {

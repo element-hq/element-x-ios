@@ -139,6 +139,7 @@
 "common_edited_suffix" = "(რედაქტირებულია)";
 "common_editing" = "რედაქტირება";
 "common_emote" = "* %1$@ %2$@";
+"common_encryption" = "Encryption";
 "common_encryption_enabled" = "დაშიფვრა ჩართულია";
 "common_enter_your_pin" = "შეიყვანეთ თქვენი PIN";
 "common_error" = "შეცდომა";
@@ -149,6 +150,7 @@
 "common_favourited" = "Favourited";
 "common_file" = "ფაილი";
 "common_forward_message" = "შეტყობინების გადაგზავნა";
+"common_frequently_used" = "Frequently used";
 "common_gif" = "GIF";
 "common_image" = "სურათი";
 "common_in_reply_to" = "%1$@-ს პასუხად";
@@ -241,6 +243,8 @@
 "common.pinned" = "Pinned";
 "common.send_to" = "Send to";
 "common.you" = "You";
+"common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
+"common_unable_to_decrypt_verification_violation" = "Sender's verified identity has changed";
 "confirm_recovery_key_banner_message" = "თქვენი ჩეთების სარეზერვო ასლი ამჟამად არ არის სინქრონიზებული. თქვენ უნდა შეიყვანოთ თქვენი აღდგენის გასაღები, რათა შეინარჩუნოთ წვდომა ჩეთების სარეზერვო ასლზე.";
 "confirm_recovery_key_banner_title" = "შეიყვანეთ აღდგენის გასაღები";
 "crash_detection_dialog_content" = "%1$@ ავარიულად გაითიშა ბოლოს გამოიყენებისას. გსურთ, გამოგვიგზავნოთ ავარიული გათიშვის ჟურნალი?";
@@ -340,6 +344,9 @@
 "screen_advanced_settings_element_call_base_url" = "მორგებული Element-ის ზარის საბაზისო URL";
 "screen_advanced_settings_element_call_base_url_description" = "დააყენეთ საბაზისო URL Element-ის ზარებისათვის.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "არასწორი URL, გთხოვთ, დარწმუნდეთ, რომ შეიტანეთ პროტოკოლი (http/https) და სწორი მისამართი.";
+"screen_create_room_room_address_section_footer" = "In order for this room to be visible in the public room directory, you will need a room address.";
+"screen_create_room_room_address_section_title" = "Room address";
+"screen_create_room_room_visibility_section_title" = "Room visibility";
 "screen_create_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_access_section_anyone_option_title" = "Anyone";
 "screen_create_room_access_section_header" = "Room Access";
@@ -369,6 +376,7 @@
 "screen_room_pinned_banner_loading_description" = "Loading message…";
 "screen_room_pinned_banner_view_all_button_title" = "View All";
 "screen_room_details_pinned_events_row_title" = "Pinned messages";
+"screen_roomlist_knock_event_sent_description" = "Request to join sent";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
@@ -380,6 +388,8 @@
 "screen_account_provider_signup_title" = "თქვენ აპირებთ ანგარიშის შექმნას %@-ში";
 "screen_advanced_settings_developer_mode" = "დეველოპერის რეჟიმი";
 "screen_advanced_settings_developer_mode_description" = "ჩართეთ დეველოპერების ფუნქციებზე წვდომა.";
+"screen_advanced_settings_media_compression_description" = "Optimize for upload";
+"screen_advanced_settings_media_compression_title" = "Media";
 "screen_advanced_settings_rich_text_editor_description" = "გამორთეთ მდიდარი ტექსტის რედაქტორი, რათა ხელით აკრიფოთ Markdown.";
 "screen_advanced_settings_send_read_receipts" = "Read receipts";
 "screen_advanced_settings_send_read_receipts_description" = "If turned off, your read receipts won't be sent to anyone. You will still receive read receipts from other users.";
@@ -448,7 +458,10 @@
 "screen_chat_backup_key_backup_action_enable" = "სარეზერვო ასლის ჩართვა";
 "screen_chat_backup_key_backup_description" = "სარეზერვო ასლი უზრუნველყოფს იმას, რომ თქვენ შეტყობინებების ისტორიას არ დაკარგავთ. %1$@";
 "screen_chat_backup_key_backup_title" = "სარეზერვო ასლი";
+"screen_chat_backup_key_storage_toggle_description" = "Upload keys from this device";
+"screen_chat_backup_key_storage_toggle_title" = "Allow key storage";
 "screen_chat_backup_recovery_action_change" = "აღდგენის გასაღების შეცვლა";
+"screen_chat_backup_recovery_action_change_description" = "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.";
 "screen_chat_backup_recovery_action_confirm_description" = "თქვენი ჩატის სარეზერვო ასლი ამჟამად არ არის სინქრონიზებული.";
 "screen_chat_backup_recovery_action_setup" = "აღდგენის დაყენება";
 "screen_chat_backup_recovery_action_setup_description" = "მიიღეთ წვდომა თქვენს დაშიფრულ შეტყობინებებზე, თუ დაკარგავთ თქვენს ყველა მოწყობილობას ან გამოხვალთ სისტემიდან %1$@-დან ყველგან.";
@@ -621,7 +634,6 @@
 "screen_qr_code_login_verify_code_title" = "Your verification code";
 "screen_recovery_key_change_description" = "მიიღეთ ახალი აღდგენის გასაღები, თუ დაკარგეთ არსებული. აღდგენის გასაღების შეცვლის შემდეგ, ძველი აღარ იმუშავებს.";
 "screen_recovery_key_change_generate_key" = "ახალი აღდგენის გასაღების შექმნა";
-"screen_recovery_key_change_generate_key_description" = "დარწმუნდით, რომ შეგიძლიათ შეინახოთ თქვენი აღდგენის გასაღები სადმე უსაფრთხო ადგილას";
 "screen_recovery_key_change_success" = "აღდგენის გასაღები შეიცვალა";
 "screen_recovery_key_change_title" = "გსურთ აღდგენის გასაღების შეცვლა?";
 "screen_recovery_key_confirm_create_new_recovery_key" = "Create new recovery key";
@@ -824,8 +836,12 @@
 "screen_session_verification_ready_subtitle" = "შეადარეთ ემოციების უნიკალური ნაკრები.";
 "screen_session_verification_request_accepted_subtitle" = "შეადარეთ უნიკალური ემოჯი, დარწმუნდით, რომ ისინი ერთი დ იმავე თანმიმდევრობით გამოჩნდნენ.";
 "screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_failure_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
+"screen_session_verification_request_failure_title" = "Verification failed";
 "screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
 "screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_success_subtitle" = "Now you can read or send messages securely on your other device.";
+"screen_session_verification_request_success_title" = "Device verified";
 "screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "ისინი არ ემთხვევიან ერთმანეთს";
 "screen_session_verification_they_match" = "ისინი ემთხვევიან ერთმანეთს";
@@ -1012,6 +1028,7 @@
 "screen_login_subtitle" = "Matrix არის ღია ქსელი უსაფრთხო, დეცენტრალიზებული კომუნიკაციისთვის.";
 "screen_notification_settings_mentions_section_title" = "ხსენებები";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "ხელახლა ცდა";
+"screen_recovery_key_change_generate_key_description" = "დარწმუნდით, რომ შეგიძლიათ შეინახოთ თქვენი აღდგენის გასაღები სადმე უსაფრთხო ადგილას";
 "screen_recovery_key_confirm_title" = "შეიყვანეთ აღდგენის გასაღები";
 "screen_report_content_block_user" = "მომხმარებლის დაბლოკვა";
 "screen_reset_encryption_password_placeholder" = "შეყვანა";

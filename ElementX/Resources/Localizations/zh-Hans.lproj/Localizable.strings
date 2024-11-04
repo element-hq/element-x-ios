@@ -139,6 +139,7 @@
 "common_edited_suffix" = "（已编辑）";
 "common_editing" = "编辑中";
 "common_emote" = "* %1$@ %2$@";
+"common_encryption" = "Encryption";
 "common_encryption_enabled" = "已启用加密";
 "common_enter_your_pin" = "输入 PIN 码";
 "common_error" = "错误";
@@ -149,6 +150,7 @@
 "common_favourited" = "已收藏";
 "common_file" = "文件";
 "common_forward_message" = "转发消息";
+"common_frequently_used" = "Frequently used";
 "common_gif" = "GIF";
 "common_image" = "图片";
 "common_in_reply_to" = "回复 %1$@";
@@ -241,6 +243,8 @@
 "common.pinned" = "Pinned";
 "common.send_to" = "发送至";
 "common.you" = "You";
+"common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
+"common_unable_to_decrypt_verification_violation" = "Sender's verified identity has changed";
 "confirm_recovery_key_banner_message" = "聊天备份目前不同步，需要输入恢复密钥才能访问聊天备份。";
 "confirm_recovery_key_banner_title" = "输入恢复密钥";
 "crash_detection_dialog_content" = "%1$@ 上次使用时崩溃了。想和我们分享崩溃报告吗？";
@@ -340,6 +344,9 @@
 "screen_advanced_settings_element_call_base_url" = "自定义 Element Call URL";
 "screen_advanced_settings_element_call_base_url_description" = "为 Element 通话设置根 URL。";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL 无效，请确保包含协议（http/https）和正确的地址。";
+"screen_create_room_room_address_section_footer" = "In order for this room to be visible in the public room directory, you will need a room address.";
+"screen_create_room_room_address_section_title" = "Room address";
+"screen_create_room_room_visibility_section_title" = "Room visibility";
 "screen_create_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_access_section_anyone_option_title" = "Anyone";
 "screen_create_room_access_section_header" = "Room Access";
@@ -369,6 +376,7 @@
 "screen_room_pinned_banner_loading_description" = "正在加载消息...";
 "screen_room_pinned_banner_view_all_button_title" = "查看全部";
 "screen_room_details_pinned_events_row_title" = "置顶消息";
+"screen_roomlist_knock_event_sent_description" = "Request to join sent";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "消息未发送，因为%1$@尚未验证所有设备。";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
@@ -380,6 +388,8 @@
 "screen_account_provider_signup_title" = "您即将在 %@ 上创建一个帐户";
 "screen_advanced_settings_developer_mode" = "开发者模式";
 "screen_advanced_settings_developer_mode_description" = "允许开发人员访问特性和功能。";
+"screen_advanced_settings_media_compression_description" = "Optimize for upload";
+"screen_advanced_settings_media_compression_title" = "Media";
 "screen_advanced_settings_rich_text_editor_description" = "禁用富文本编辑器，手动输入 Markdown。";
 "screen_advanced_settings_send_read_receipts" = "已读回执";
 "screen_advanced_settings_send_read_receipts_description" = "如果关闭，您的已读回执将不会发送给别人。您仍能收到别人的已读回执。";
@@ -448,7 +458,10 @@
 "screen_chat_backup_key_backup_action_enable" = "开启备份";
 "screen_chat_backup_key_backup_description" = "备份可确保你不会丢失消息历史记录。%1$@。";
 "screen_chat_backup_key_backup_title" = "备份";
+"screen_chat_backup_key_storage_toggle_description" = "Upload keys from this device";
+"screen_chat_backup_key_storage_toggle_title" = "Allow key storage";
 "screen_chat_backup_recovery_action_change" = "更改恢复密钥";
+"screen_chat_backup_recovery_action_change_description" = "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.";
 "screen_chat_backup_recovery_action_confirm_description" = "您的聊天备份当前不同步。";
 "screen_chat_backup_recovery_action_setup" = "设置恢复密钥";
 "screen_chat_backup_recovery_action_setup_description" = "在丢失或从 %1$@ 登出所有设备的情况下访问加密消息。";
@@ -621,7 +634,6 @@
 "screen_qr_code_login_verify_code_title" = "您的验证码";
 "screen_recovery_key_change_description" = "如果您丢失了现有的恢复密钥，请获取新的恢复密钥。更改恢复密钥后，您的旧密钥将不再起作用。";
 "screen_recovery_key_change_generate_key" = "生成新的恢复密钥";
-"screen_recovery_key_change_generate_key_description" = "确保您可以将恢复密钥存储在安全的地方";
 "screen_recovery_key_change_success" = "恢复密钥已更改";
 "screen_recovery_key_change_title" = "更改恢复密钥？";
 "screen_recovery_key_confirm_create_new_recovery_key" = "创建新的恢复密钥";
@@ -824,8 +836,12 @@
 "screen_session_verification_ready_subtitle" = "比较一组表情符号。";
 "screen_session_verification_request_accepted_subtitle" = "比较表情符号，确保它们以相同顺序排列。";
 "screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_failure_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
+"screen_session_verification_request_failure_title" = "Verification failed";
 "screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
 "screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_success_subtitle" = "Now you can read or send messages securely on your other device.";
+"screen_session_verification_request_success_title" = "Device verified";
 "screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "不匹配";
 "screen_session_verification_they_match" = "匹配";
@@ -1012,6 +1028,7 @@
 "screen_login_subtitle" = "Matrix 是一个用于安全、去中心化通信的开放网络。";
 "screen_notification_settings_mentions_section_title" = "提及";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "再试一次";
+"screen_recovery_key_change_generate_key_description" = "确保将恢复密钥存储在安全的地方";
 "screen_recovery_key_confirm_title" = "输入恢复密钥";
 "screen_report_content_block_user" = "封禁用户";
 "screen_reset_encryption_password_placeholder" = "输入……";

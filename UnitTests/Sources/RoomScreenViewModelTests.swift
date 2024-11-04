@@ -24,15 +24,16 @@ class RoomScreenViewModelTests: XCTestCase {
     }
     
     func testPinnedEventsBanner() async throws {
+        var configuration = JoinedRoomProxyMockConfiguration()
         let timelineSubject = PassthroughSubject<TimelineProxyProtocol, Never>()
-        let updateSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
-        let roomProxyMock = JoinedRoomProxyMock(.init())
+        let infoSubject = CurrentValueSubject<RoomInfoProxy, Never>(.init(roomInfo: RoomInfo(configuration)))
+        let roomProxyMock = JoinedRoomProxyMock(configuration)
         // setup a way to inject the mock of the pinned events timeline
         roomProxyMock.pinnedEventsTimelineClosure = {
             await timelineSubject.values.first()
         }
         // setup the room proxy actions publisher
-        roomProxyMock.underlyingActionsPublisher = updateSubject.eraseToAnyPublisher()
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
         let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
@@ -56,8 +57,8 @@ class RoomScreenViewModelTests: XCTestCase {
         deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
             viewState.pinnedEventsBannerState.count == 2
         }
-        roomProxyMock.underlyingPinnedEventIDs = ["test1", "test2"]
-        updateSubject.send(.roomInfoUpdate)
+        configuration.pinnedEventIDs = ["test1", "test2"]
+        infoSubject.send(.init(roomInfo: RoomInfo(configuration)))
         try await deferred.fulfill()
         XCTAssertTrue(viewModel.context.viewState.pinnedEventsBannerState.isLoading)
         XCTAssertTrue(viewModel.context.viewState.shouldShowPinnedEventsBanner)
@@ -157,11 +158,12 @@ class RoomScreenViewModelTests: XCTestCase {
     }
     
     func testRoomInfoUpdate() async throws {
-        let updateSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
-        let roomProxyMock = JoinedRoomProxyMock(.init(id: "TestID", name: "StartingName", avatarURL: nil, hasOngoingCall: false))
+        var configuration = JoinedRoomProxyMockConfiguration(id: "TestID", name: "StartingName", avatarURL: nil, hasOngoingCall: false)
+        let infoSubject = CurrentValueSubject<RoomInfoProxy, Never>(.init(roomInfo: RoomInfo(configuration)))
+        let roomProxyMock = JoinedRoomProxyMock(configuration)
         // setup the room proxy actions publisher
         roomProxyMock.canUserJoinCallUserIDReturnValue = .success(false)
-        roomProxyMock.underlyingActionsPublisher = updateSubject.eraseToAnyPublisher()
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
         let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
@@ -181,9 +183,9 @@ class RoomScreenViewModelTests: XCTestCase {
         }
         try await deferred.fulfill()
         
-        roomProxyMock.name = "NewName"
-        roomProxyMock.avatar = .room(id: "TestID", name: "NewName", avatarURL: .documentsDirectory)
-        roomProxyMock.hasOngoingCall = true
+        configuration.name = "NewName"
+        configuration.avatarURL = .documentsDirectory
+        configuration.hasOngoingCall = true
         roomProxyMock.canUserJoinCallUserIDReturnValue = .success(true)
         
         deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
@@ -193,7 +195,7 @@ class RoomScreenViewModelTests: XCTestCase {
                 viewState.hasOngoingCall
         }
         
-        updateSubject.send(.roomInfoUpdate)
+        infoSubject.send(.init(roomInfo: RoomInfo(configuration)))
         try await deferred.fulfill()
     }
     
