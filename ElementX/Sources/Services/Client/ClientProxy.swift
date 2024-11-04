@@ -306,15 +306,24 @@ class ClientProxy: ClientProxyProtocol {
             restartTask = nil
         }
         
+        guard let syncService else {
+            MXLog.warning("No sync service to stop.")
+            completion?()
+            return
+        }
+        
         // Capture the sync service strongly as this method is called on deinit and so the
         // existence of self when the Task executes is questionable and would sometimes crash.
+        // Note: This isn't strictly necessary now given the unwrap above, but leaving the code as
+        // documentation. SE-0371 will allow us to fix this by using an async deinit.
         Task { [syncService] in
             do {
                 defer {
                     completion?()
                 }
                 
-                try await syncService?.stop()
+                try await syncService.stop()
+                MXLog.info("Sync stopped")
             } catch {
                 MXLog.error("Failed stopping the sync service with error: \(error)")
             }
