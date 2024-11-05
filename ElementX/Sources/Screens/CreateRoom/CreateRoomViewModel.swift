@@ -39,10 +39,10 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         let bindings = CreateRoomViewStateBindings(roomTopic: parameters.topic, isRoomPrivate: parameters.isRoomPrivate)
 
         super.init(initialViewState: CreateRoomViewState(roomName: parameters.name,
-                                                         homeserver: ":\(userSession.clientProxy.serverName ?? "")",
+                                                         homeserver: userSession.clientProxy.serverName ?? "",
                                                          isKnockingFeatureEnabled: appSettings.knockingEnabled,
                                                          selectedUsers: selectedUsers.value,
-                                                         addressName: parameters.name.toValidAddress,
+                                                         addressName: parameters.addressName ?? parameters.name.toValidAddress,
                                                          bindings: bindings),
                    mediaProvider: userSession.mediaProvider)
         
@@ -133,6 +133,23 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                 actionsSubject.send(.updateDetails(createRoomParameters))
             }
             .store(in: &cancellables)
+        
+        context.$viewState
+            .map(\.addressName)
+            .removeDuplicates()
+            .debounce(for: 0.5, scheduler: DispatchQueue.main)
+            .sink { [weak self] addressName in
+                guard let self else {
+                    return
+                }
+                // TODO: Check if the alias is valid throught the SDK
+                if addressName.contains("wrong") {
+                    state.errorState = .invalidSymbols
+                } else {
+                    state.errorState = nil
+                }
+            }
+            .store(in: &cancellables)
     }
     
     private func updateParameters(state: CreateRoomViewState) {
@@ -141,9 +158,9 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         createRoomParameters.isRoomPrivate = state.bindings.isRoomPrivate
         createRoomParameters.isKnockingOnly = state.bindings.isKnockingOnly
         if !state.addressName.isEmpty {
-            createRoomParameters.canonicalAlias = "#\(state.addressName)\(state.homeserver)"
+            createRoomParameters.addressName = state.addressName
         } else {
-            createRoomParameters.canonicalAlias = nil
+            createRoomParameters.addressName = nil
         }
     }
     
@@ -156,8 +173,9 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         // Since the parameters are throttled, we need to make sure that the latest values are used
         updateParameters(state: state)
         
+        let alias = createRoomParameters.canonicalAlias(homeserver: userSession.clientProxy.serverName ?? "")
         if !createRoomParameters.isRoomPrivate {
-            guard let alias = createRoomParameters.canonicalAlias else {
+            guard let alias else {
                 state.errorState = .invalidSymbols
                 return
             }
@@ -207,7 +225,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                                                         isKnockingOnly: createRoomParameters.isRoomPrivate ? false : createRoomParameters.isKnockingOnly,
                                                         userIDs: state.selectedUsers.map(\.userID),
                                                         avatarURL: avatarURL,
-                                                        canonicalAlias: createRoomParameters.isRoomPrivate ? nil : createRoomParameters.canonicalAlias) {
+                                                        canonicalAlias: createRoomParameters.isRoomPrivate ? nil : alias) {
         case .success(let roomId):
             analytics.trackCreatedRoom(isDM: false)
             actionsSubject.send(.openRoom(withIdentifier: roomId))
@@ -235,6 +253,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
 }
 
 private extension String {
+    // TODO: This will be soon done by the SDK directly
     var toValidAddress: Self {
         split(separator: " ")
             .joined(separator: "-")

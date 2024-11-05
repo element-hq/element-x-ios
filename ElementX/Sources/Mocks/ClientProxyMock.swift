@@ -53,7 +53,7 @@ extension ClientProxyMock {
         canDeactivateAccount = false
         directRoomForUserIDReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         createDirectRoomWithExpectedRoomNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCanonicalAliasReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         uploadMediaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         loadUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         setUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))

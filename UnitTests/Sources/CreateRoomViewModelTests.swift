@@ -68,19 +68,19 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     
     func testCreateRoomRequirements() {
         XCTAssertFalse(context.viewState.canCreateRoom)
-        context.roomName = "A"
+        context.send(viewAction: .updateName("A"))
         XCTAssertTrue(context.viewState.canCreateRoom)
     }
     
     func testCreateKnockingRoom() async {
-        context.roomName = "A"
+        context.send(viewAction: .updateName("A"))
         context.roomTopic = "B"
         context.isRoomPrivate = false
         context.isKnockingOnly = true
         XCTAssertTrue(context.viewState.canCreateRoom)
         
         let expectation = expectation(description: "Wait for the room to be created")
-        clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLClosure = { _, _, isPrivate, isKnockingOnly, _, _ in
+        clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCanonicalAliasClosure = { _, _, isPrivate, isKnockingOnly, _, _, _ in
             XCTAssertTrue(isKnockingOnly)
             XCTAssertFalse(isPrivate)
             defer { expectation.fulfill() }
@@ -91,13 +91,13 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     }
     
     func testCreatePrivateRoomCantHaveKnockRule() async {
-        context.roomName = "A"
+        context.send(viewAction: .updateName("A"))
         context.roomTopic = "B"
         context.isRoomPrivate = true
         context.isKnockingOnly = true
         context.send(viewAction: .createRoom)
         let expectation = expectation(description: "Wait for the room to be created")
-        clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLClosure = { _, _, isPrivate, isKnockingOnly, _, _ in
+        clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCanonicalAliasClosure = { _, _, isPrivate, isKnockingOnly, _, _, _ in
             XCTAssertFalse(isKnockingOnly)
             XCTAssertTrue(isPrivate)
             expectation.fulfill()

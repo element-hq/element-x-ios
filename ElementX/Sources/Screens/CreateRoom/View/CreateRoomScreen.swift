@@ -194,7 +194,7 @@ struct CreateRoomScreen: View {
                     .font(.compound.bodyLG)
                     .foregroundStyle(.compound.textPrimary)
                     .padding(.horizontal, 8)
-                Text(context.viewState.homeserver)
+                Text(":\(context.viewState.homeserver)")
                     .font(.compound.bodyLG)
                     .foregroundStyle(.compound.textSecondary)
             }
@@ -203,9 +203,25 @@ struct CreateRoomScreen: View {
             Text(L10n.screenCreateRoomRoomAddressSectionTitle.uppercased())
                 .compoundListSectionHeader()
         } footer: {
-            Text(L10n.screenCreateRoomRoomAddressSectionFooter)
-                .compoundListSectionFooter()
+            VStack(alignment: .leading, spacing: 12) {
+                if let error = context.viewState.errorState {
+                    switch error {
+                    case .alreadyExists:
+                        Label("Already exists", icon: \.error, iconSize: .xSmall, relativeTo: .compound.bodySM)
+                            .foregroundStyle(.compound.textCriticalPrimary)
+                            .font(.compound.bodySM)
+                    case .invalidSymbols:
+                        Label("Invalid symbols", icon: \.error, iconSize: .xSmall, relativeTo: .compound.bodySM)
+                            .foregroundStyle(.compound.textCriticalPrimary)
+                            .font(.compound.bodySM)
+                    }
+                }
+                Text(L10n.screenCreateRoomRoomAddressSectionFooter)
+                    .compoundListSectionFooter()
+                    .font(.compound.bodySM)
+            }
         }
+        .errorBackground(context.viewState.errorState != nil)
     }
     
     private var toolbar: some ToolbarContent {
@@ -215,6 +231,20 @@ struct CreateRoomScreen: View {
                 context.send(viewAction: .createRoom)
             }
             .disabled(!context.viewState.canCreateRoom)
+        }
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func errorBackground(_ shouldDisplay: Bool) -> some View {
+        if shouldDisplay {
+            listRowBackground(RoundedRectangle(cornerRadius: 10)
+                .inset(by: 1)
+                .fill(.compound.bgCriticalSubtle)
+                .stroke(.compound.borderCriticalSubtle))
+        } else {
+            self
         }
     }
 }
@@ -259,6 +289,19 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                    appSettings: ServiceLocator.shared.settings)
     }()
     
+    static let publicRoomInvalidAliasViewModel = {
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(serverName: "example.org", userID: "@userid:example.com"))))
+        let parameters = CreateRoomFlowParameters(isRoomPrivate: false, addressName: "wrong")
+        let selectedUsers: [UserProfileProxy] = [.mockAlice, .mockBob, .mockCharlie]
+        ServiceLocator.shared.settings.knockingEnabled = true
+        return CreateRoomViewModel(userSession: userSession,
+                                   createRoomParameters: .init(parameters),
+                                   selectedUsers: .init([]),
+                                   analytics: ServiceLocator.shared.analytics,
+                                   userIndicatorController: UserIndicatorControllerMock(),
+                                   appSettings: ServiceLocator.shared.settings)
+    }()
+
     static var previews: some View {
         NavigationStack {
             CreateRoomScreen(context: viewModel.context)
@@ -272,5 +315,9 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
             CreateRoomScreen(context: publicRoomViewModel.context)
         }
         .previewDisplayName("Create Public Room")
+        NavigationStack {
+            CreateRoomScreen(context: publicRoomInvalidAliasViewModel.context)
+        }
+        .previewDisplayName("Create Public Room, invalid alias")
     }
 }
