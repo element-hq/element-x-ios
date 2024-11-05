@@ -35,14 +35,19 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         return CXProvider(configuration: configuration)
     }()
     
-    private weak var clientProxy: ClientProxyProtocol?
+    private weak var clientProxy: ClientProxyProtocol? {
+        didSet {
+            // There's a race condition where a call starts when the app has been killed and the
+            // observation set in `incomingCallID` occurs *before* the user session is restored.
+            // So observe when the client proxy is set to fix this (the method guards for the call).
+            Task { await observeIncomingCallRoomInfo() }
+        }
+    }
     
     private var incomingCallRoomInfoCancellable: AnyCancellable?
     private var incomingCallID: CallID? {
         didSet {
-            Task {
-                await observeIncomingCallRoomInfo()
-            }
+            Task { await observeIncomingCallRoomInfo() }
         }
     }
     
@@ -276,11 +281,18 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     private func observeIncomingCallRoomInfo() async {
         incomingCallRoomInfoCancellable = nil
         
-        guard let clientProxy, let incomingCallID else {
+        guard let incomingCallID else {
+            MXLog.info("No incoming call to observe for.")
+            return
+        }
+        
+        guard let clientProxy else {
+            MXLog.warning("A ClientProxy is needed to fetch the room.")
             return
         }
         
         guard case let .joined(roomProxy) = await clientProxy.roomForIdentifier(incomingCallID.roomID) else {
+            MXLog.warning("Failed to fetch a joined room for the incoming call.")
             return
         }
         
