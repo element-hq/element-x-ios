@@ -13,6 +13,7 @@ enum HomeScreenViewModelAction {
     case presentRoom(roomIdentifier: String)
     case presentRoomDetails(roomIdentifier: String)
     case roomLeft(roomIdentifier: String)
+    case presentSecureBackupSettings
     case presentRecoveryKeyScreen
     case presentEncryptionResetScreen
     case presentSettingsScreen
@@ -31,7 +32,8 @@ enum HomeScreenViewAction {
     case confirmLeaveRoom(roomIdentifier: String)
     case showSettings
     case startChat
-    case manageRecoveryKey
+    case setupRecovery
+    case confirmRecoveryKey
     case resetEncryption
     case skipRecoveryKeyConfirmation
     case confirmSlidingSyncUpgrade

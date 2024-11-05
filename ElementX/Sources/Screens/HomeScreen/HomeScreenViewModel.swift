@@ -138,7 +138,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             Task { await leaveRoom(roomID: roomIdentifier) }
         case .showSettings:
             actionsSubject.send(.presentSettingsScreen)
-        case .manageRecoveryKey:
+        case .setupRecovery:
+            actionsSubject.send(.presentSecureBackupSettings)
+        case .confirmRecoveryKey:
             actionsSubject.send(.presentRecoveryKeyScreen)
         case .resetEncryption:
             actionsSubject.send(.presentEncryptionResetScreen)
