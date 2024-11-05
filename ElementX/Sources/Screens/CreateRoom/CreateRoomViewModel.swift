@@ -140,6 +140,11 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         createRoomParameters.topic = state.bindings.roomTopic
         createRoomParameters.isRoomPrivate = state.bindings.isRoomPrivate
         createRoomParameters.isKnockingOnly = state.bindings.isKnockingOnly
+        if !state.addressName.isEmpty {
+            createRoomParameters.canonicalAlias = "#\(state.addressName)\(state.homeserver)"
+        } else {
+            createRoomParameters.canonicalAlias = nil
+        }
     }
     
     private func createRoom() async {
@@ -150,6 +155,25 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         
         // Since the parameters are throttled, we need to make sure that the latest values are used
         updateParameters(state: state)
+        
+        if !createRoomParameters.isRoomPrivate {
+            guard let alias = createRoomParameters.canonicalAlias else {
+                state.errorState = .invalidSymbols
+                return
+            }
+            
+            switch await userSession.clientProxy.isAliasAvailable(alias) {
+            case .success(true):
+                break
+            case .success(false):
+                state.errorState = .alreadyExists
+                return
+            case .failure:
+                state.bindings.alertInfo = AlertInfo(id: .unknown)
+                return
+            }
+        }
+        
         let avatarURL: URL?
         if let media = createRoomParameters.avatarImageMedia {
             switch await userSession.clientProxy.uploadMedia(media) {
@@ -182,7 +206,8 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                                                         // As of right now we don't want to make private rooms with the knock rule
                                                         isKnockingOnly: createRoomParameters.isRoomPrivate ? false : createRoomParameters.isKnockingOnly,
                                                         userIDs: state.selectedUsers.map(\.userID),
-                                                        avatarURL: avatarURL) {
+                                                        avatarURL: avatarURL,
+                                                        canonicalAlias: createRoomParameters.isRoomPrivate ? nil : createRoomParameters.canonicalAlias) {
         case .success(let roomId):
             analytics.trackCreatedRoom(isDM: false)
             actionsSubject.send(.openRoom(withIdentifier: roomId))
@@ -211,6 +236,10 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
 
 private extension String {
     var toValidAddress: Self {
-        split(separator: " ").joined(separator: "-").lowercased()
+        split(separator: " ")
+            .joined(separator: "-")
+            // Characters that can be % encoded need to be excluded
+            .replacingOccurrences(of: "[!#$&'()*+,/:;=?@\\[\\]]", with: "", options: .regularExpression)
+            .lowercased()
     }
 }

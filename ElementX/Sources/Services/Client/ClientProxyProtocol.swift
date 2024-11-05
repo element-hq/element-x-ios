@@ -36,6 +36,7 @@ enum ClientProxyError: Error {
     case failedUploadingMedia(Error, MatrixErrorCode)
     case roomPreviewIsPrivate
     case failedRetrievingUserIdentity
+    case failedResolvingRoomAlias
 }
 
 enum SlidingSyncConstants {
@@ -134,7 +135,13 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func createDirectRoom(with userID: String, expectedRoomName: String?) async -> Result<String, ClientProxyError>
     
     // swiftlint:disable:next function_parameter_count
-    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, isKnockingOnly: Bool, userIDs: [String], avatarURL: URL?) async -> Result<String, ClientProxyError>
+    func createRoom(name: String,
+                    topic: String?,
+                    isRoomPrivate: Bool,
+                    isKnockingOnly: Bool,
+                    userIDs: [String],
+                    avatarURL: URL?,
+                    canonicalAlias: String?) async -> Result<String, ClientProxyError>
     
     func joinRoom(_ roomID: String, via: [String]) async -> Result<Void, ClientProxyError>
     
@@ -173,6 +180,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func roomDirectorySearchProxy() -> RoomDirectorySearchProxyProtocol
     
     func resolveRoomAlias(_ alias: String) async -> Result<ResolvedRoomAlias, ClientProxyError>
+    
+    func isAliasAvailable(_ alias: String) async -> Result<Bool, ClientProxyError>
     
     func getElementWellKnown() async -> Result<ElementWellKnown?, ClientProxyError>
 

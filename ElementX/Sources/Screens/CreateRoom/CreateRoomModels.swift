@@ -35,6 +35,8 @@ struct CreateRoomViewState: BindableState {
     var canCreateRoom: Bool {
         roomName.isEmpty
     }
+
+    var errorState: CreateRoomAliasErrorState?
 }
 
 struct CreateRoomViewStateBindings {
@@ -55,4 +57,9 @@ enum CreateRoomViewAction {
     case removeImage
     case updateName(String)
     case updateAddress(String)
+}
+
+enum CreateRoomAliasErrorState {
+    case alreadyExists
+    case invalidSymbols
 }

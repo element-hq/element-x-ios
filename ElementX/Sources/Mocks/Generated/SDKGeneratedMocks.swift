@@ -2056,6 +2056,81 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
     }
 
+    //MARK: - isRoomAliasAvailable
+
+    open var isRoomAliasAvailableAliasThrowableError: Error?
+    var isRoomAliasAvailableAliasUnderlyingCallsCount = 0
+    open var isRoomAliasAvailableAliasCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return isRoomAliasAvailableAliasUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isRoomAliasAvailableAliasUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isRoomAliasAvailableAliasUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isRoomAliasAvailableAliasUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var isRoomAliasAvailableAliasCalled: Bool {
+        return isRoomAliasAvailableAliasCallsCount > 0
+    }
+    open var isRoomAliasAvailableAliasReceivedAlias: String?
+    open var isRoomAliasAvailableAliasReceivedInvocations: [String] = []
+
+    var isRoomAliasAvailableAliasUnderlyingReturnValue: Bool!
+    open var isRoomAliasAvailableAliasReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return isRoomAliasAvailableAliasUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isRoomAliasAvailableAliasUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isRoomAliasAvailableAliasUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isRoomAliasAvailableAliasUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var isRoomAliasAvailableAliasClosure: ((String) async throws -> Bool)?
+
+    open override func isRoomAliasAvailable(alias: String) async throws -> Bool {
+        if let error = isRoomAliasAvailableAliasThrowableError {
+            throw error
+        }
+        isRoomAliasAvailableAliasCallsCount += 1
+        isRoomAliasAvailableAliasReceivedAlias = alias
+        DispatchQueue.main.async {
+            self.isRoomAliasAvailableAliasReceivedInvocations.append(alias)
+        }
+        if let isRoomAliasAvailableAliasClosure = isRoomAliasAvailableAliasClosure {
+            return try await isRoomAliasAvailableAliasClosure(alias)
+        } else {
+            return isRoomAliasAvailableAliasReturnValue
+        }
+    }
+
     //MARK: - joinRoomById
 
     open var joinRoomByIdRoomIdThrowableError: Error?
@@ -2676,13 +2751,13 @@ open class ClientSDKMock: MatrixRustSDK.Client {
     open var resolveRoomAliasRoomAliasReceivedRoomAlias: String?
     open var resolveRoomAliasRoomAliasReceivedInvocations: [String] = []
 
-    var resolveRoomAliasRoomAliasUnderlyingReturnValue: ResolvedRoomAlias!
-    open var resolveRoomAliasRoomAliasReturnValue: ResolvedRoomAlias! {
+    var resolveRoomAliasRoomAliasUnderlyingReturnValue: ResolvedRoomAlias?
+    open var resolveRoomAliasRoomAliasReturnValue: ResolvedRoomAlias? {
         get {
             if Thread.isMainThread {
                 return resolveRoomAliasRoomAliasUnderlyingReturnValue
             } else {
-                var returnValue: ResolvedRoomAlias? = nil
+                var returnValue: ResolvedRoomAlias?? = nil
                 DispatchQueue.main.sync {
                     returnValue = resolveRoomAliasRoomAliasUnderlyingReturnValue
                 }
@@ -2700,9 +2775,9 @@ open class ClientSDKMock: MatrixRustSDK.Client {
             }
         }
     }
-    open var resolveRoomAliasRoomAliasClosure: ((String) async throws -> ResolvedRoomAlias)?
+    open var resolveRoomAliasRoomAliasClosure: ((String) async throws -> ResolvedRoomAlias?)?
 
-    open override func resolveRoomAlias(roomAlias: String) async throws -> ResolvedRoomAlias {
+    open override func resolveRoomAlias(roomAlias: String) async throws -> ResolvedRoomAlias? {
         if let error = resolveRoomAliasRoomAliasThrowableError {
             throw error
         }
@@ -2762,6 +2837,81 @@ open class ClientSDKMock: MatrixRustSDK.Client {
             self.restoreSessionSessionReceivedInvocations.append(session)
         }
         try await restoreSessionSessionClosure?(session)
+    }
+
+    //MARK: - roomAliasExists
+
+    open var roomAliasExistsRoomAliasThrowableError: Error?
+    var roomAliasExistsRoomAliasUnderlyingCallsCount = 0
+    open var roomAliasExistsRoomAliasCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return roomAliasExistsRoomAliasUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomAliasExistsRoomAliasUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomAliasExistsRoomAliasUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomAliasExistsRoomAliasUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var roomAliasExistsRoomAliasCalled: Bool {
+        return roomAliasExistsRoomAliasCallsCount > 0
+    }
+    open var roomAliasExistsRoomAliasReceivedRoomAlias: String?
+    open var roomAliasExistsRoomAliasReceivedInvocations: [String] = []
+
+    var roomAliasExistsRoomAliasUnderlyingReturnValue: Bool!
+    open var roomAliasExistsRoomAliasReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return roomAliasExistsRoomAliasUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomAliasExistsRoomAliasUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomAliasExistsRoomAliasUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomAliasExistsRoomAliasUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var roomAliasExistsRoomAliasClosure: ((String) async throws -> Bool)?
+
+    open override func roomAliasExists(roomAlias: String) async throws -> Bool {
+        if let error = roomAliasExistsRoomAliasThrowableError {
+            throw error
+        }
+        roomAliasExistsRoomAliasCallsCount += 1
+        roomAliasExistsRoomAliasReceivedRoomAlias = roomAlias
+        DispatchQueue.main.async {
+            self.roomAliasExistsRoomAliasReceivedInvocations.append(roomAlias)
+        }
+        if let roomAliasExistsRoomAliasClosure = roomAliasExistsRoomAliasClosure {
+            return try await roomAliasExistsRoomAliasClosure(roomAlias)
+        } else {
+            return roomAliasExistsRoomAliasReturnValue
+        }
     }
 
     //MARK: - roomDirectorySearch

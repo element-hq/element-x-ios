@@ -14,4 +14,5 @@ struct CreateRoomFlowParameters {
     var isRoomPrivate = true
     var isKnockingOnly = false
     var avatarImageMedia: MediaInfo?
+    var canonicalAlias: String?
 }
