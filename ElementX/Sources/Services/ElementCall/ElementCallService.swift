@@ -37,11 +37,11 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     private weak var clientProxy: ClientProxyProtocol?
     
-    private var cancellables = Set<AnyCancellable>()
+    private var incomingCallRoomInfoCancellable: AnyCancellable?
     private var incomingCallID: CallID? {
         didSet {
             Task {
-                await observeIncomingCallRoomStateUpdates()
+                await observeIncomingCallRoomInfo()
             }
         }
     }
@@ -260,7 +260,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     // MARK: - Private
     
-    func tearDownCallSession(sendEndCallAction: Bool = true) {
+    private func tearDownCallSession(sendEndCallAction: Bool = true) {
         if sendEndCallAction, let ongoingCallID {
             let transaction = CXTransaction(action: CXEndCallAction(call: ongoingCallID.callKitID))
             callController.request(transaction) { error in
@@ -273,8 +273,8 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         ongoingCallID = nil
     }
     
-    func observeIncomingCallRoomStateUpdates() async {
-        cancellables.removeAll()
+    private func observeIncomingCallRoomInfo() async {
+        incomingCallRoomInfoCancellable = nil
         
         guard let clientProxy, let incomingCallID else {
             return
@@ -286,17 +286,15 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         
         roomProxy.subscribeToRoomInfoUpdates()
         
-        // There's no incoming event for call cancellations so try to infer
-        // it from what we have. If the call is running before subscribing then wait
-        // for it to change to `false` otherwise wait for it to turn `true` before
-        // changing to `false`
-        let isCallOngoing = roomProxy.infoPublisher.value.hasRoomCall
-        
-        roomProxy
+        incomingCallRoomInfoCancellable = roomProxy
             .infoPublisher
             .compactMap { ($0.hasRoomCall, $0.activeRoomCallParticipants) }
             .removeDuplicates { $0 == $1 }
-            .dropFirst(isCallOngoing ? 0 : 1)
+            .drop(while: { hasRoomCall, _ in
+                // Filter all updates before hasRoomCall becomes `true`. Then we can correctly
+                // detect its change to `false` to stop ringing when the caller hangs up.
+                !hasRoomCall
+            })
             .sink { [weak self] hasOngoingCall, activeRoomCallParticipants in
                 guard let self else { return }
                 
@@ -305,17 +303,16 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
                 if !hasOngoingCall {
                     MXLog.info("Call cancelled by remote")
                     
-                    cancellables.removeAll()
+                    incomingCallRoomInfoCancellable = nil
                     endUnansweredCallTask?.cancel()
                     callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .remoteEnded)
                 } else if participants.contains(roomProxy.ownUserID) {
-                    MXLog.info("Call anwered elsewhere")
+                    MXLog.info("Call answered elsewhere")
                     
-                    cancellables.removeAll()
+                    incomingCallRoomInfoCancellable = nil
                     endUnansweredCallTask?.cancel()
                     callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .answeredElsewhere)
                 }
             }
-            .store(in: &cancellables)
     }
 }
