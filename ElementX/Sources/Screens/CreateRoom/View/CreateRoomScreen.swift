@@ -163,14 +163,15 @@ struct CreateRoomScreen: View {
     
     private var roomAccessSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenCreateRoomAccessSectionAnyoneOptionTitle,
-                                  description: L10n.screenCreateRoomAccessSectionAnyoneOptionDescription),
-                    kind: .selection(isSelected: !context.isKnockingOnly) { context.isKnockingOnly = false })
-            ListRow(label: .plain(title: L10n.screenCreateRoomAccessSectionKnockingOptionTitle,
-                                  description: L10n.screenCreateRoomAccessSectionKnockingOptionDescription),
+            ListRow(label: .plain(title:
+                L10n.screenCreateRoomRoomAccessSectionAnyoneOptionTitle,
+                description: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionDescription),
+            kind: .selection(isSelected: !context.isKnockingOnly) { context.isKnockingOnly = false })
+            ListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionKnockingOptionTitle,
+                                  description: L10n.screenCreateRoomRoomAccessSectionKnockingOptionDescription),
                     kind: .selection(isSelected: context.isKnockingOnly) { context.isKnockingOnly = true })
         } header: {
-            Text(L10n.screenCreateRoomAccessSectionHeader.uppercased())
+            Text(L10n.screenCreateRoomRoomAccessSectionHeader.uppercased())
                 .compoundListSectionHeader()
         }
     }
@@ -207,11 +208,11 @@ struct CreateRoomScreen: View {
                 if let error = context.viewState.errorState {
                     switch error {
                     case .alreadyExists:
-                        Label("Already exists", icon: \.error, iconSize: .xSmall, relativeTo: .compound.bodySM)
+                        Label(L10n.screenCreateRoomRoomAddressNotAvailableErrorDescription, icon: \.error, iconSize: .xSmall, relativeTo: .compound.bodySM)
                             .foregroundStyle(.compound.textCriticalPrimary)
                             .font(.compound.bodySM)
                     case .invalidSymbols:
-                        Label("Invalid symbols", icon: \.error, iconSize: .xSmall, relativeTo: .compound.bodySM)
+                        Label(L10n.screenCreateRoomRoomAddressInvalidSymbolsErrorDescription, icon: \.error, iconSize: .xSmall, relativeTo: .compound.bodySM)
                             .foregroundStyle(.compound.textCriticalPrimary)
                             .font(.compound.bodySM)
                     }
