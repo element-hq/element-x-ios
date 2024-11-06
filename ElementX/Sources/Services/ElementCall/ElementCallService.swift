@@ -170,10 +170,12 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         // https://stackoverflow.com/a/41230020/730924
         update.remoteHandle = .init(type: .generic, value: roomID)
         
-        callProvider.reportNewIncomingCall(with: callID.callKitID, update: update) { error in
+        callProvider.reportNewIncomingCall(with: callID.callKitID, update: update) { [weak self] error in
             if let error {
                 MXLog.error("Failed reporting new incoming call with error: \(error)")
             }
+            
+            self?.actionsSubject.send(.receivedIncomingCallRequest)
             
             completion()
         }
