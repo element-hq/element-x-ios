@@ -148,6 +148,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 switch action {
                 case .startCall(let roomID):
                     self?.handleAppRoute(.call(roomID: roomID))
+                case .receivedIncomingCallRequest:
+                    self?.scheduleDelayedSyncStop()
                 default:
                     break
                 }
@@ -912,6 +914,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func applicationWillResignActive() {
         MXLog.info("Application will resign active")
 
+        scheduleDelayedSyncStop()
+        scheduleBackgroundAppRefresh()
+    }
+    
+    private func scheduleDelayedSyncStop() {
         guard backgroundTask == nil else {
             return
         }
@@ -926,10 +933,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 self.backgroundTask = nil
             }
         }
-
-        // This does seem to work if scheduled from the background task above
-        // Schedule it here instead but with an earliest being date of 30 seconds
-        scheduleBackgroundAppRefresh()
     }
 
     @objc
