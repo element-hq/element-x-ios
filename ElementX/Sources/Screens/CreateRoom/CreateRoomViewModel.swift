@@ -38,7 +38,9 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         
-        let bindings = CreateRoomViewStateBindings(roomTopic: parameters.topic, isRoomPrivate: parameters.isRoomPrivate)
+        let bindings = CreateRoomViewStateBindings(roomTopic: parameters.topic,
+                                                   isRoomPrivate: parameters.isRoomPrivate,
+                                                   isKnockingOnly: appSettings.knockingEnabled ? parameters.isKnockingOnly : false)
 
         super.init(initialViewState: CreateRoomViewState(roomName: parameters.name,
                                                          homeserver: userSession.clientProxy.serverName ?? "",
@@ -119,6 +121,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             .sink { [weak self] _ in
                 guard let self else { return }
                 state.bindings.isKnockingOnly = false
+                state.aliasErrors = []
                 state.addressName = roomAliasNameFromRoomDisplayName(roomName: state.roomName)
                 syncNameAndAddress = true
             }
@@ -127,7 +130,11 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         context.$viewState
             .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
             .removeDuplicates { old, new in
-                old.roomName == new.roomName && old.bindings.roomTopic == new.bindings.roomTopic && old.bindings.isRoomPrivate == new.bindings.isRoomPrivate
+                old.roomName == new.roomName &&
+                    old.bindings.roomTopic == new.bindings.roomTopic &&
+                    old.bindings.isRoomPrivate == new.bindings.isRoomPrivate &&
+                    old.bindings.isKnockingOnly == new.bindings.isKnockingOnly &&
+                    old.addressName == new.addressName
             }
             .sink { [weak self] state in
                 guard let self else { return }
@@ -139,7 +146,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         context.$viewState
             .map(\.addressName)
             .removeDuplicates()
-            .debounce(for: 0.5, scheduler: DispatchQueue.main)
+            .debounce(for: 1, scheduler: DispatchQueue.main)
             .sink { [weak self] addressName in
                 guard let self else {
                     return
@@ -153,10 +160,14 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                 }
                 
                 if !isRoomAliasFormatValid(alias: canonicalAlias) {
-                    state.errors.insert(.invalidSymbols)
-                } else {
-                    state.errors.remove(.invalidSymbols)
+                    state.aliasErrors.insert(.invalidSymbols)
+                    // If the alias is invalid we don't need to check for availability
+                    state.aliasErrors.remove(.alreadyExists)
+                    checkAliasAvailabilityTask = nil
+                    return
                 }
+                
+                state.aliasErrors.remove(.invalidSymbols)
                 
                 checkAliasAvailabilityTask = Task { [weak self] in
                     guard let self else {
@@ -165,10 +176,10 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                     
                     if case .success(false) = await self.userSession.clientProxy.isAliasAvailable(canonicalAlias) {
                         guard !Task.isCancelled else { return }
-                        state.errors.insert(.alreadyExists)
+                        state.aliasErrors.insert(.alreadyExists)
                     } else {
                         guard !Task.isCancelled else { return }
-                        state.errors.remove(.alreadyExists)
+                        state.aliasErrors.remove(.alreadyExists)
                     }
                 }
             }
@@ -200,7 +211,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         let alias = canonicalAlias(addressName: createRoomParameters.addressName)
         if state.isKnockingFeatureEnabled, !createRoomParameters.isRoomPrivate {
             guard let alias, isRoomAliasFormatValid(alias: alias) else {
-                state.errors.insert(.invalidSymbols)
+                state.aliasErrors = [.invalidSymbols]
                 return
             }
             
@@ -208,7 +219,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             case .success(true):
                 break
             case .success(false):
-                state.errors.insert(.alreadyExists)
+                state.aliasErrors = [.alreadyExists]
                 return
             case .failure:
                 state.bindings.alertInfo = AlertInfo(id: .unknown)

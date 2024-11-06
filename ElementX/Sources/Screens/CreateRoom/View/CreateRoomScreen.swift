@@ -193,6 +193,7 @@ struct CreateRoomScreen: View {
                     TextField("", text: binding)
                         .autocapitalization(.none)
                         .textCase(.lowercase)
+                        .tint(.compound.iconAccentTertiary)
                         .font(.compound.bodyLG)
                         .foregroundStyle(.compound.textPrimary)
                         .padding(.horizontal, 8)
@@ -202,18 +203,18 @@ struct CreateRoomScreen: View {
                 }
                 .padding(ListRowPadding.textFieldInsets)
                 .environment(\.layoutDirection, .leftToRight)
-                .errorBackground(!context.viewState.errors.isEmpty)
+                .errorBackground(!context.viewState.aliasErrors.isEmpty)
             })
         } header: {
             Text(L10n.screenCreateRoomRoomAddressSectionTitle.uppercased())
                 .compoundListSectionHeader()
         } footer: {
             VStack(alignment: .leading, spacing: 12) {
-                if context.viewState.errors.contains(.alreadyExists) {
+                if context.viewState.aliasErrors.contains(.alreadyExists) {
                     Label(L10n.screenCreateRoomRoomAddressNotAvailableErrorDescription, icon: \.error, iconSize: .xSmall, relativeTo: .compound.bodySM)
                         .foregroundStyle(.compound.textCriticalPrimary)
                         .font(.compound.bodySM)
-                } else if context.viewState.errors.contains(.invalidSymbols) {
+                } else if context.viewState.aliasErrors.contains(.invalidSymbols) {
                     Label(L10n.screenCreateRoomRoomAddressInvalidSymbolsErrorDescription, icon: \.error, iconSize: .xSmall, relativeTo: .compound.bodySM)
                         .foregroundStyle(.compound.textCriticalPrimary)
                         .font(.compound.bodySM)

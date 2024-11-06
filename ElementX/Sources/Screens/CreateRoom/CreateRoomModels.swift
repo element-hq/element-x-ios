@@ -33,16 +33,16 @@ struct CreateRoomViewState: BindableState {
     var bindings: CreateRoomViewStateBindings
     var avatarURL: URL?
     var canCreateRoom: Bool {
-        !roomName.isEmpty && errors.isEmpty
+        !roomName.isEmpty && aliasErrors.isEmpty
     }
 
-    var errors: Set<CreateRoomAliasErrorState> = []
+    var aliasErrors: Set<CreateRoomAliasErrorState> = []
 }
 
 struct CreateRoomViewStateBindings {
     var roomTopic: String
     var isRoomPrivate: Bool
-    var isKnockingOnly = false
+    var isKnockingOnly: Bool
     var showAttachmentConfirmationDialog = false
     
     /// Information describing the currently displayed alert.
