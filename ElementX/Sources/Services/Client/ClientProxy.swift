@@ -625,7 +625,9 @@ class ClientProxy: ClientProxyProtocol {
     
     func resolveRoomAlias(_ alias: String) async -> Result<ResolvedRoomAlias, ClientProxyError> {
         do {
-            let resolvedAlias = try await client.resolveRoomAlias(roomAlias: alias)
+            guard let resolvedAlias = try await client.resolveRoomAlias(roomAlias: alias) else {
+                return .failure(.failedResolvingRoomAlias)
+            }
             
             // Resolving aliases is done through the directory/room API which returns too many / all known
             // vias, which in turn results in invalid join requests. Trim them to something manageable
