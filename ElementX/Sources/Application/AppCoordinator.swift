@@ -149,6 +149,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 case .startCall(let roomID):
                     self?.handleAppRoute(.call(roomID: roomID))
                 case .receivedIncomingCallRequest:
+                    // When reporting a VoIP call through the CXProvider's `reportNewIncomingVoIPPushPayload`
+                    // the UIApplication states don't change and syncing is neither started nor ran on
+                    // a background task. Handle both manually here.
+                    self?.startSync()
                     self?.scheduleDelayedSyncStop()
                 default:
                     break
