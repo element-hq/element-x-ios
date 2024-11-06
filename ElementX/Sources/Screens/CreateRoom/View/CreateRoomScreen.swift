@@ -241,8 +241,8 @@ private extension View {
     func errorBackground(_ shouldDisplay: Bool) -> some View {
         listRowBackground(shouldDisplay ? AnyView(RoundedRectangle(cornerRadius: 10)
                 .inset(by: 1)
-                .fill(.compound.bgCriticalSubtle)
-                .stroke(Color.compound.borderCriticalSubtle)) : AnyView(Color.compound.bgCanvasDefaultLevel1))
+                .fill(.compound.bgCriticalSubtleHovered)
+                .stroke(Color.compound.borderCriticalPrimary)) : AnyView(Color.compound.bgCanvasDefaultLevel1))
     }
 }
 
@@ -298,6 +298,21 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                    userIndicatorController: UserIndicatorControllerMock(),
                                    appSettings: ServiceLocator.shared.settings)
     }()
+    
+    static let publicRoomExistingAliasViewModel = {
+        let clientProxy = ClientProxyMock(.init(serverName: "example.org", userID: "@userid:example.com"))
+        clientProxy.isAliasAvailableReturnValue = .success(false)
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+        let parameters = CreateRoomFlowParameters(isRoomPrivate: false, addressName: "existing")
+        let selectedUsers: [UserProfileProxy] = [.mockAlice, .mockBob, .mockCharlie]
+        ServiceLocator.shared.settings.knockingEnabled = true
+        return CreateRoomViewModel(userSession: userSession,
+                                   createRoomParameters: .init(parameters),
+                                   selectedUsers: .init([]),
+                                   analytics: ServiceLocator.shared.analytics,
+                                   userIndicatorController: UserIndicatorControllerMock(),
+                                   appSettings: ServiceLocator.shared.settings)
+    }()
 
     static var previews: some View {
         NavigationStack {
@@ -315,6 +330,12 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             CreateRoomScreen(context: publicRoomInvalidAliasViewModel.context)
         }
+        .snapshot(delay: 2)
         .previewDisplayName("Create Public Room, invalid alias")
+        NavigationStack {
+            CreateRoomScreen(context: publicRoomExistingAliasViewModel.context)
+        }
+        .snapshot(delay: 2)
+        .previewDisplayName("Create Public Room, existing alias")
     }
 }
