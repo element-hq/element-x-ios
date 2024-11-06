@@ -289,7 +289,6 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     static let publicRoomInvalidAliasViewModel = {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(serverName: "example.org", userID: "@userid:example.com"))))
         let parameters = CreateRoomFlowParameters(isRoomPrivate: false, addressName: "#:")
-        let selectedUsers: [UserProfileProxy] = [.mockAlice, .mockBob, .mockCharlie]
         ServiceLocator.shared.settings.knockingEnabled = true
         return CreateRoomViewModel(userSession: userSession,
                                    createRoomParameters: .init(parameters),
@@ -304,7 +303,6 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         clientProxy.isAliasAvailableReturnValue = .success(false)
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         let parameters = CreateRoomFlowParameters(isRoomPrivate: false, addressName: "existing")
-        let selectedUsers: [UserProfileProxy] = [.mockAlice, .mockBob, .mockCharlie]
         ServiceLocator.shared.settings.knockingEnabled = true
         return CreateRoomViewModel(userSession: userSession,
                                    createRoomParameters: .init(parameters),
@@ -330,12 +328,12 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             CreateRoomScreen(context: publicRoomInvalidAliasViewModel.context)
         }
-        .snapshot(delay: 2)
+        .snapshotPreferences(delay: 1.5)
         .previewDisplayName("Create Public Room, invalid alias")
         NavigationStack {
             CreateRoomScreen(context: publicRoomExistingAliasViewModel.context)
         }
-        .snapshot(delay: 2)
+        .snapshotPreferences(delay: 1.5)
         .previewDisplayName("Create Public Room, existing alias")
     }
 }
