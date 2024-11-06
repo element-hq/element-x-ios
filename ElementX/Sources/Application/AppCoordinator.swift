@@ -235,6 +235,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 } else {
                     handleAppRoute(.childEventOnRoomAlias(eventID: eventID, alias: alias))
                 }
+            case .share(let payload):
+                guard isExternalURL else {
+                    MXLog.error("Received unexpected internal share route")
+                    break
+                }
+                handleAppRoute(route)
             default:
                 break
             }

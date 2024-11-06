@@ -206,6 +206,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             presentCallScreen(genericCallLink: url)
         case .settings, .chatBackupSettings:
             settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+        case .share(let payload):
+            switch payload {
+            case .mediaFile(let roomID, _):
+                stateMachine.processEvent(.selectRoom(roomID: roomID,
+                                                      via: [],
+                                                      entryPoint: .share(payload)),
+                                          userInfo: .init(animated: animated))
+            }
         }
     }
     
@@ -243,6 +251,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     case .room: .room(roomID: roomID, via: via)
                     case .roomDetails: .roomDetails(roomID: roomID)
                     case .eventID(let eventID): .event(eventID: eventID, roomID: roomID, via: via) // ignored.
+                    case .share(let payload): .share(payload)
                     }
                     roomFlowCoordinator.handleAppRoute(route, animated: animated)
                 } else {
@@ -583,6 +592,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             coordinator.handleAppRoute(.event(eventID: eventID, roomID: roomID, via: via), animated: animated)
         case .roomDetails:
             coordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: animated)
+        case .share(let payload):
+            coordinator.handleAppRoute(.share(payload), animated: animated)
         }
                 
         Task {

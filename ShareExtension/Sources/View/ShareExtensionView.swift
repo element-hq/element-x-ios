@@ -5,10 +5,14 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct ShareExtensionView: View {
     var body: some View {
-        ProgressView()
+        ZStack {
+            ProgressView()
+        }
+        .background(.compound.bgCanvasDefault)
     }
 }
