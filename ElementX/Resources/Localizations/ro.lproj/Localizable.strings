@@ -115,8 +115,8 @@
 "banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
-"banner.set_up_recovery.content" = "Generate a new recovery key that can be used to restore your encrypted message history in case you lose access to your devices.";
-"banner.set_up_recovery.title" = "Set up recovery";
+"banner_set_up_recovery_content" = "Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.";
+"banner_set_up_recovery_title" = "Set up recovery to protect your account";
 "common_about" = "Despre";
 "common_acceptable_use_policy" = "Politică de utilizare rezonabilă";
 "common_advanced_settings" = "Setări avansate";
@@ -233,6 +233,7 @@
 "common_verification_failed" = "Verification failed";
 "common_verified" = "Verified";
 "common_verify_device" = "Verificați dispozitivul";
+"common_verify_identity" = "Verify identity";
 "common_video" = "Video";
 "common_voice_message" = "Mesaj vocal";
 "common_waiting" = "Se aşteaptă…";
@@ -246,6 +247,8 @@
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity has changed";
 "confirm_recovery_key_banner_message" = "Backup-ul pentru chat nu este sincronizat în prezent. Trebuie să confirmați cheia de recuperare pentru a menține accesul la backup.";
+"confirm_recovery_key_banner_primary_button_title" = "Enter your recovery key";
+"confirm_recovery_key_banner_secondary_button_title" = "Forgot your recovery key?";
 "confirm_recovery_key_banner_title" = "Confirmați cheia de recuperare";
 "crash_detection_dialog_content" = "%1$@ s-a blocat ultima dată când a fost folosit. Doriți să ne trimiteți un raport?";
 "crypto_identity_change_pin_violation" = "%1$@'s identity appears to have changed. %2$@";
@@ -341,6 +344,7 @@
 "rich_text_editor_unindent" = "Dez-identare";
 "rich_text_editor_url_placeholder" = "Link";
 "rich_text_editor_a11y_add_attachment" = "Adăugați un atașament";
+"rich_text_editor_composer_caption_placeholder" = "Optional caption…";
 "screen_advanced_settings_element_call_base_url" = "Adresa URL de bază Element Call";
 "screen_advanced_settings_element_call_base_url_description" = "Setați o adresă URL de bază personalizată pentru Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL invalid, vă rugăm să vă asigurați că includeți protocolul (http/https) și adresa corectă.";
@@ -388,8 +392,8 @@
 "screen_account_provider_signup_title" = "Sunteți pe cale să creați un cont pe %@";
 "screen_advanced_settings_developer_mode" = "Modul dezvoltator";
 "screen_advanced_settings_developer_mode_description" = "Activați pentru a avea acces la funcționalități pentru dezvoltatori.";
-"screen_advanced_settings_media_compression_description" = "Optimize for upload";
-"screen_advanced_settings_media_compression_title" = "Media";
+"screen_advanced_settings_media_compression_description" = "Upload photos and videos faster and reduce data usage";
+"screen_advanced_settings_media_compression_title" = "Optimise media quality";
 "screen_advanced_settings_rich_text_editor_description" = "Dezactivați editorul avansat pentru a tasta manual Markdown.";
 "screen_advanced_settings_send_read_receipts" = "Chitanțe de citire";
 "screen_advanced_settings_send_read_receipts_description" = "Dacă dezactivată, chitanțele dumneavoastră de citire nu vor fi trimise nimănui. Veți primi în continuare chitanțe de citire de la alți utilizatori.";
@@ -458,12 +462,12 @@
 "screen_chat_backup_key_backup_action_enable" = "Activați backupul";
 "screen_chat_backup_key_backup_description" = "Backup vă asigură că nu pierdeți istoricul mesajelor. %1$@.";
 "screen_chat_backup_key_backup_title" = "Backup";
+"screen_chat_backup_key_storage_disabled_error" = "Key storage must be turned on to set up recovery.";
 "screen_chat_backup_key_storage_toggle_description" = "Upload keys from this device";
 "screen_chat_backup_key_storage_toggle_title" = "Allow key storage";
 "screen_chat_backup_recovery_action_change" = "Schimbați cheia de recuperare";
 "screen_chat_backup_recovery_action_change_description" = "Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.";
 "screen_chat_backup_recovery_action_confirm_description" = "Backup-ul pentru chat nu este sincronizat în prezent.";
-"screen_chat_backup_recovery_action_setup" = "Configurați recuperarea";
 "screen_chat_backup_recovery_action_setup_description" = "Obțineți acces la mesajele dumneavoastră criptate dacă vă pierdeți toate dispozitivele sau sunteți deconectat de la %1$@ peste tot.";
 "screen_create_account_title" = "Create account";
 "screen_create_new_recovery_key_list_item_1" = "Deschideți %1$@ pe un dispozitiv desktop";
@@ -786,7 +790,6 @@
 "screen_room_timeline_less_reactions" = "Afișați mai puțin";
 "screen_room_timeline_message_copied" = "Mesaj copiat";
 "screen_room_timeline_no_permission_to_post" = "Nu aveți permisiunea de a posta în această cameră";
-"screen_room_timeline_reactions_show_less" = "Afișați mai puțin";
 "screen_room_timeline_reactions_show_more" = "Afișați mai mult";
 "screen_room_timeline_read_marker_title" = "Nou";
 "screen_room_title" = "Chat";
@@ -836,7 +839,6 @@
 "screen_session_verification_ready_subtitle" = "Comparați un set unic de emoji-uri.";
 "screen_session_verification_request_accepted_subtitle" = "Comparăți emoticoalene asigurându-vă că apar în aceeași ordine.";
 "screen_session_verification_request_details_timestamp" = "Signed in";
-"screen_session_verification_request_failure_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_request_failure_title" = "Verification failed";
 "screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
 "screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
@@ -992,6 +994,7 @@
 "troubleshoot_notifications_test_unified_push_failure" = "Nu au fost găsiți distribuitori push.";
 "troubleshoot_notifications_test_unified_push_title" = "Verificați UnifiedPush";
 "a11y_poll" = "Sondaj";
+"banner_set_up_recovery_submit" = "Configurați recuperarea";
 "dialog_title_error" = "Eroare";
 "dialog_title_success" = "Succes";
 "notification_fallback_content" = "Notificare";
@@ -1012,6 +1015,7 @@
 "screen_blocked_users_unblock_alert_title" = "Deblocați utilizatorul";
 "screen_bug_report_rash_logs_alert_title" = "%1$@ s-a blocat ultima dată când a fost folosit. Doriți să ne trimiteți un raport?";
 "screen_chat_backup_recovery_action_confirm" = "Introduceți cheia de recuperare";
+"screen_chat_backup_recovery_action_setup" = "Configurați recuperarea";
 "screen_create_poll_cancel_confirmation_content_ios" = "Modificările dumneavoastră nu vor fi salvate";
 "screen_create_room_add_people_title" = "Invitați prieteni";
 "screen_create_room_room_name_label" = "Numele camerei";
@@ -1029,7 +1033,7 @@
 "screen_notification_settings_mentions_section_title" = "Mențiuni";
 "screen_qr_code_login_invalid_scan_state_retry_button" = "Încercați din nou";
 "screen_recovery_key_change_generate_key_description" = "Asigurați-vă că puteți stoca cheia de recuperare undeva în siguranță";
-"screen_recovery_key_confirm_title" = "Confirmați cheia de recuperare";
+"screen_recovery_key_confirm_title" = "Enter your recovery key";
 "screen_report_content_block_user" = "Blocați utilizatorul";
 "screen_reset_encryption_password_placeholder" = "Introduceți...";
 "screen_room_attachment_source_camera_photo" = "Faceți o fotografie";
@@ -1052,8 +1056,10 @@
 "screen_room_error_failed_processing_media" = "Procesarea datelor media a eșuat, vă rugăm să încercați din nou.";
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Eliminați și interziceți membrul";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Numai mențiuni și cuvinte cheie";
+"screen_room_timeline_reactions_show_less" = "Afișați mai puțin";
 "screen_roomlist_filter_people" = "Persoane";
 "screen_server_confirmation_change_server" = "Schimbați furnizorul contului";
+"screen_session_verification_request_failure_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_signout_confirmation_dialog_submit" = "Deconectați-vă";
 "screen_signout_confirmation_dialog_title" = "Deconectați-vă";
 "screen_signout_key_backup_offline_title" = "Cheile dumneavoastră sunt încă în curs de backup";

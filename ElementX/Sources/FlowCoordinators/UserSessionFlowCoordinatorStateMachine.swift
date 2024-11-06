@@ -24,6 +24,12 @@ class UserSessionFlowCoordinatorStateMachine {
         /// Showing the settings screen
         case settingsScreen(selectedRoomID: String?)
         
+        /// Showing the recovery key screen.
+        case recoveryKeyScreen(selectedRoomID: String?)
+        
+        /// Showing the encryption reset flow.
+        case encryptionResetFlow(selectedRoomID: String?)
+        
         /// Showing the start chat screen
         case startChatScreen(selectedRoomID: String?)
         
@@ -44,6 +50,8 @@ class UserSessionFlowCoordinatorStateMachine {
             case .roomList(let selectedRoomID),
                  .feedbackScreen(let selectedRoomID),
                  .settingsScreen(let selectedRoomID),
+                 .recoveryKeyScreen(let selectedRoomID),
+                 .encryptionResetFlow(let selectedRoomID),
                  .startChatScreen(let selectedRoomID),
                  .logoutConfirmationScreen(let selectedRoomID),
                  .roomDirectorySearchScreen(let selectedRoomID):
@@ -79,12 +87,22 @@ class UserSessionFlowCoordinatorStateMachine {
         /// The feedback screen has been dismissed
         case dismissedFeedbackScreen
         
+        /// Request presentation of the recovery key screen.
+        case showRecoveryKeyScreen
+        /// The recovery key screen has been dismissed.
+        case dismissedRecoveryKeyScreen
+        
+        /// Request presentation of the encryption reset flow.
+        case startEncryptionResetFlow
+        /// The encryption reset flow is complete and has been dismissed.
+        case finishedEncryptionResetFlow
+        
         /// Request the start of the start chat flow
         case showStartChatScreen
         /// Start chat has been dismissed
         case dismissedStartChatScreen
                 
-        /// Logout has been requested and this is the last sesion
+        /// Logout has been requested and this is the last session
         case showLogoutConfirmationScreen
         /// Logout has been cancelled
         case dismissedLogoutConfirmationScreen
@@ -134,6 +152,16 @@ class UserSessionFlowCoordinatorStateMachine {
             case (.roomList(let selectedRoomID), .feedbackScreen):
                 return .feedbackScreen(selectedRoomID: selectedRoomID)
             case (.feedbackScreen(let selectedRoomID), .dismissedFeedbackScreen):
+                return .roomList(selectedRoomID: selectedRoomID)
+                
+            case (.roomList(let selectedRoomID), .showRecoveryKeyScreen):
+                return .recoveryKeyScreen(selectedRoomID: selectedRoomID)
+            case (.recoveryKeyScreen(let selectedRoomID), .dismissedRecoveryKeyScreen):
+                return .roomList(selectedRoomID: selectedRoomID)
+                
+            case (.roomList(let selectedRoomID), .startEncryptionResetFlow):
+                return .encryptionResetFlow(selectedRoomID: selectedRoomID)
+            case (.encryptionResetFlow(let selectedRoomID), .finishedEncryptionResetFlow):
                 return .roomList(selectedRoomID: selectedRoomID)
                 
             case (.roomList(let selectedRoomID), .showStartChatScreen):

@@ -43,6 +43,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
     
     // periphery:ignore - retaining purpose
+    private var encryptionResetFlowCoordinator: EncryptionResetFlowCoordinator?
+    
+    // periphery:ignore - retaining purpose
     private var globalSearchScreenCoordinator: GlobalSearchScreenCoordinator?
     
     private var cancellables = Set<AnyCancellable>()
@@ -263,6 +266,16 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case (.feedbackScreen, .dismissedFeedbackScreen, .roomList):
                 break
                 
+            case (.roomList, .showRecoveryKeyScreen, .recoveryKeyScreen):
+                presentRecoveryKeyScreen(animated: animated)
+            case (.recoveryKeyScreen, .dismissedRecoveryKeyScreen, .roomList):
+                break
+                
+            case (.roomList, .startEncryptionResetFlow, .encryptionResetFlow):
+                startEncryptionResetFlow(animated: animated)
+            case (.encryptionResetFlow, .finishedEncryptionResetFlow, .roomList):
+                break
+                
             case (.roomList, .showStartChatScreen, .startChatScreen):
                 presentStartChat(animated: animated)
             case (.startChatScreen, .dismissedStartChatScreen, .roomList):
@@ -455,6 +468,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.feedbackScreen)
                 case .presentSecureBackupSettings:
                     settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
+                case .presentRecoveryKeyScreen:
+                    stateMachine.processEvent(.showRecoveryKeyScreen)
+                case .presentEncryptionResetScreen:
+                    stateMachine.processEvent(.startEncryptionResetFlow)
                 case .presentStartChatScreen:
                     stateMachine.processEvent(.showStartChatScreen)
                 case .presentGlobalSearch:
@@ -697,7 +714,59 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setOverlayCoordinator(nil)
     }
     
-    // MARK: Secure backup confirmation
+    // MARK: Secure backup
+    
+    private func presentRecoveryKeyScreen(animated: Bool) {
+        let sheetNavigationStackCoordinator = NavigationStackCoordinator()
+        let parameters = SecureBackupRecoveryKeyScreenCoordinatorParameters(secureBackupController: userSession.clientProxy.secureBackupController,
+                                                                            userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                            isModallyPresented: true)
+        
+        let coordinator = SecureBackupRecoveryKeyScreenCoordinator(parameters: parameters)
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .complete:
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        sheetNavigationStackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationSplitCoordinator.setSheetCoordinator(sheetNavigationStackCoordinator, animated: animated) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedRecoveryKeyScreen)
+        }
+    }
+    
+    private func startEncryptionResetFlow(animated: Bool) {
+        let sheetNavigationStackCoordinator = NavigationStackCoordinator()
+        let parameters = EncryptionResetFlowCoordinatorParameters(userSession: userSession,
+                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                  navigationStackCoordinator: sheetNavigationStackCoordinator,
+                                                                  windowManger: appMediator.windowManager)
+        
+        let coordinator = EncryptionResetFlowCoordinator(parameters: parameters)
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .resetComplete:
+                encryptionResetFlowCoordinator = nil
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            case .cancel:
+                encryptionResetFlowCoordinator = nil
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        coordinator.start()
+        encryptionResetFlowCoordinator = coordinator
+        
+        navigationSplitCoordinator.setSheetCoordinator(sheetNavigationStackCoordinator, animated: animated) { [weak self] in
+            self?.stateMachine.processEvent(.finishedEncryptionResetFlow)
+        }
+    }
     
     private func presentSecureBackupLogoutConfirmationScreen() {
         let coordinator = SecureBackupLogoutConfirmationScreenCoordinator(parameters: .init(secureBackupController: userSession.clientProxy.secureBackupController,

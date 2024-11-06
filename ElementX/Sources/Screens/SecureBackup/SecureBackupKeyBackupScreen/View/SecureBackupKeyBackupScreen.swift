@@ -22,6 +22,7 @@ struct SecureBackupKeyBackupScreen: View {
                 Text(L10n.screenChatBackupKeyBackupActionDisable)
             }
             .buttonStyle(.compound(.primary))
+            .accessibilityIdentifier(A11yIdentifiers.secureBackupKeyBackupScreen.deleteKeyStorage)
         }
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)

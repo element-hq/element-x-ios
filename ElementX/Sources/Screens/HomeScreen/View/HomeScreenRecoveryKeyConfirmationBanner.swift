@@ -16,6 +16,7 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
     var title: String { requiresExtraAccountSetup ? L10n.bannerSetUpRecoveryTitle : L10n.confirmRecoveryKeyBannerTitle }
     var message: String { requiresExtraAccountSetup ? L10n.bannerSetUpRecoveryContent : L10n.confirmRecoveryKeyBannerMessage }
     var actionTitle: String { requiresExtraAccountSetup ? L10n.bannerSetUpRecoverySubmit : L10n.confirmRecoveryKeyBannerPrimaryButtonTitle }
+    var primaryAction: HomeScreenViewAction { requiresExtraAccountSetup ? .setupRecovery : .confirmRecoveryKey }
     
     var body: some View {
         VStack(spacing: 16) {
@@ -56,14 +57,21 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
     var buttons: some View {
         VStack(spacing: 16) {
             Button(actionTitle) {
-                context.send(viewAction: .confirmRecoveryKey)
+                context.send(viewAction: primaryAction)
             }
             .frame(maxWidth: .infinity)
             .buttonStyle(.compound(.primary, size: .medium))
             .accessibilityIdentifier(A11yIdentifiers.homeScreen.recoveryKeyConfirmationBannerContinue)
             
             if !requiresExtraAccountSetup {
-                // Missing encryption reset button to goes here once the flow exists.
+                Button {
+                    context.send(viewAction: .resetEncryption)
+                } label: {
+                    Text(L10n.confirmRecoveryKeyBannerSecondaryButtonTitle)
+                        .padding(.vertical, 7)
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.compound(.plain, size: .medium))
             }
         }
     }

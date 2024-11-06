@@ -48,7 +48,7 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
     override func process(viewAction: SecureBackupScreenViewAction) {
         switch viewAction {
         case .recoveryKey:
-            actionsSubject.send(.recoveryKey)
+            actionsSubject.send(.manageRecoveryKey)
         case .keyStorageToggled(let enable):
             let keyBackupState = secureBackupController.keyBackupState.value
             switch (keyBackupState, enable) {
@@ -57,7 +57,7 @@ class SecureBackupScreenViewModel: SecureBackupScreenViewModelType, SecureBackup
                 enableBackup()
             case (.enabled, false):
                 state.bindings.keyStorageEnabled = keyBackupState.keyStorageToggleState // Reset the toggle in case the user cancels
-                actionsSubject.send(.keyBackup)
+                actionsSubject.send(.disableKeyBackup)
             default:
                 break
             }

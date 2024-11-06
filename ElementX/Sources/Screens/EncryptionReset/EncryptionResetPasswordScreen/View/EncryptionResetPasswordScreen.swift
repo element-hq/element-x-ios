@@ -5,6 +5,7 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import Combine
 import Compound
 import SwiftUI
 
@@ -32,9 +33,10 @@ struct EncryptionResetPasswordScreen: View {
             .padding(16)
         } bottomContent: {
             Button(L10n.actionResetIdentity, role: .destructive) {
-                context.send(viewAction: .resetIdentity)
+                context.send(viewAction: .submit)
             }
             .buttonStyle(.compound(.primary))
+            .accessibilityIdentifier(A11yIdentifiers.encryptionResetPasswordScreen.submit)
         }
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
@@ -58,8 +60,9 @@ struct EncryptionResetPasswordScreen: View {
                 .focused($textFieldFocus)
                 .submitLabel(.done)
                 .onSubmit {
-                    context.send(viewAction: .resetIdentity)
+                    context.send(viewAction: .submit)
                 }
+                .accessibilityIdentifier(A11yIdentifiers.encryptionResetPasswordScreen.passwordField)
         }
     }
 }
@@ -67,7 +70,8 @@ struct EncryptionResetPasswordScreen: View {
 // MARK: - Previews
 
 struct EncryptionResetPasswordScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = EncryptionResetPasswordScreenViewModel()
+    static let passwordPublisher = PassthroughSubject<String, Never>()
+    static let viewModel = EncryptionResetPasswordScreenViewModel(passwordPublisher: passwordPublisher)
     static var previews: some View {
         NavigationStack {
             EncryptionResetPasswordScreen(context: viewModel.context)

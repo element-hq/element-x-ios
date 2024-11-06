@@ -115,8 +115,8 @@
 "banner_migrate_to_native_sliding_sync_description" = "Теперь ваш сервер поддерживает новый, более быстрый протокол. Чтобы обновить его прямо сейчас, выйдите и войдите в свою учётную запись снова. Сделав это сейчас, вы сможете избежать принудительного выхода из системы при последующем удалении старого протокола.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Ваш домашний сервер больше не поддерживает старый протокол. Пожалуйста, выйдите и войдите в свою учётную запись снова, чтобы продолжить использование приложения.";
 "banner_migrate_to_native_sliding_sync_title" = "Доступно обновление";
-"banner.set_up_recovery.content" = "Создайте новый ключ восстановления, который можно использовать для восстановления зашифрованной истории сообщений в случае потери доступа к своим устройствам.";
-"banner.set_up_recovery.title" = "Настроить восстановление";
+"banner_set_up_recovery_content" = "Создайте новый ключ восстановления, который можно использовать для восстановления зашифрованной истории сообщений в случае потери доступа к своим устройствам.";
+"banner_set_up_recovery_title" = "Для защиты вашего аккаунта рекомендуется настроить восстановление";
 "common_about" = "О приложении";
 "common_acceptable_use_policy" = "Политика допустимого использования";
 "common_advanced_settings" = "Дополнительные настройки";
@@ -233,6 +233,7 @@
 "common_verification_failed" = "Сбой проверки";
 "common_verified" = "Проверено";
 "common_verify_device" = "Подтверждение устройства";
+"common_verify_identity" = "Подтвердить личность";
 "common_video" = "Видео";
 "common_voice_message" = "Голосовое сообщение";
 "common_waiting" = "Ожидание…";
@@ -245,8 +246,10 @@
 "common.you" = "Вы";
 "common_unable_to_decrypt_insecure_device" = "Отправлено с незащищенного устройства";
 "common_unable_to_decrypt_verification_violation" = "Подтвержденная личность отправителя изменилась";
-"confirm_recovery_key_banner_message" = "В настоящее время резервная копия ваших чатов не синхронизирована. Вам потребуется ввести свой ключ восстановления, чтобы сохранить доступ к резервной копии чатов.";
-"confirm_recovery_key_banner_title" = "Введите ключ восстановления";
+"confirm_recovery_key_banner_message" = "Подтвердите ключ восстановления, чтобы сохранить доступ к хранилищу ключей и истории сообщений.";
+"confirm_recovery_key_banner_primary_button_title" = "Введите ключ восстановления";
+"confirm_recovery_key_banner_secondary_button_title" = "Забыли ключ восстановления?";
+"confirm_recovery_key_banner_title" = "Хранилище ключей не синхронизировано";
 "crash_detection_dialog_content" = "При последнем использовании %1$@ произошел сбой. Хотите поделиться отчетом о сбое?";
 "crypto_identity_change_pin_violation" = "Судя по всему, идентификатор %1$@ изменился. %2$@";
 "crypto_identity_change_pin_violation_new" = "Пользователь %1$@ сменил имя пользователя на %2$@. %3$@";
@@ -341,6 +344,7 @@
 "rich_text_editor_unindent" = "Без отступа";
 "rich_text_editor_url_placeholder" = "Ссылка";
 "rich_text_editor_a11y_add_attachment" = "Прикрепить файл";
+"rich_text_editor_composer_caption_placeholder" = "Необязательный заголовок...";
 "screen_advanced_settings_element_call_base_url" = "Базовый URL сервера звонков Element";
 "screen_advanced_settings_element_call_base_url_description" = "Задайте свой сервер Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Адрес указан неверно, удостоверьтесь, что вы указали протокол (http/https) и правильный адрес.";
@@ -388,8 +392,8 @@
 "screen_account_provider_signup_title" = "Вы собираетесь создать учетную запись на %@";
 "screen_advanced_settings_developer_mode" = "Режим разработчика";
 "screen_advanced_settings_developer_mode_description" = "Предоставьте разработчикам доступ к функциям и функциональным возможностям.";
-"screen_advanced_settings_media_compression_description" = "Оптимизировать для загрузки";
-"screen_advanced_settings_media_compression_title" = "Медиа";
+"screen_advanced_settings_media_compression_description" = "Загружайте фотографии и видео быстрее и сокращайте потребление трафика";
+"screen_advanced_settings_media_compression_title" = "Оптимизировать качество мультимедиа";
 "screen_advanced_settings_rich_text_editor_description" = "Отключить редактор форматированного текста и включить Markdown.";
 "screen_advanced_settings_send_read_receipts" = "Уведомления о прочтении";
 "screen_advanced_settings_send_read_receipts_description" = "Если этот параметр выключен, ваш статус о прочтении не будет отображаться. Вы по-прежнему будете видеть статус о прочтении от других пользователей.";
@@ -454,16 +458,16 @@
 "screen_change_server_form_notice" = "Вы можете подключиться только к существующему серверу, поддерживающему sliding sync. Администратору домашнего сервера потребуется настроить его. %1$@";
 "screen_change_server_subtitle" = "Какой адрес у вашего сервера?";
 "screen_change_server_title" = "Выберите свой сервер";
-"screen_chat_backup_key_backup_action_disable" = "Отключить резервное копирование";
+"screen_chat_backup_key_backup_action_disable" = "Удалить хранилище ключей";
 "screen_chat_backup_key_backup_action_enable" = "Включить резервное копирование";
 "screen_chat_backup_key_backup_description" = "Сохраните вашу криптографическую идентификацию и ключи сообщений в безопасности на сервере. Это позволит вам просматривать историю сообщений на любых новых устройствах.%1$@ .";
 "screen_chat_backup_key_backup_title" = "Хранилище ключей";
+"screen_chat_backup_key_storage_disabled_error" = "Для настройки восстановления необходимо включить хранилище ключей.";
 "screen_chat_backup_key_storage_toggle_description" = "Загрузить ключи с этого устройства";
 "screen_chat_backup_key_storage_toggle_title" = "Разрешить хранение ключей";
 "screen_chat_backup_recovery_action_change" = "Изменить ключ восстановления";
 "screen_chat_backup_recovery_action_change_description" = "Если вы потеряли все существующие устройства, то сможете восстановить свою криптографическую идентификацию и историю сообщений с помощью ключа восстановления";
 "screen_chat_backup_recovery_action_confirm_description" = "В настоящее время резервная копия ваших чатов не синхронизирована.";
-"screen_chat_backup_recovery_action_setup" = "Настроить восстановление";
 "screen_chat_backup_recovery_action_setup_description" = "Получите доступ к зашифрованным сообщениям, если вы потеряете все свои устройства или выйдете из системы %1$@ отовсюду.";
 "screen_create_account_title" = "Создать учетную запись";
 "screen_create_new_recovery_key_list_item_1" = "Откройте %1$@ на компьютере";
@@ -538,10 +542,10 @@
 "screen_key_backup_disable_confirmation_action_turn_off" = "Выключить";
 "screen_key_backup_disable_confirmation_description" = "Вы потеряете зашифрованные сообщения, если выйдете из всех устройств.";
 "screen_key_backup_disable_confirmation_title" = "Вы действительно хотите отключить резервное копирование?";
-"screen_key_backup_disable_description" = "Отключение резервного копирования удалит текущую резервную копию ключа шифрования и отключит другие функции безопасности. В этом случае вы выполните следующие действия:";
+"screen_key_backup_disable_description" = "Удаление хранилища ключей приведёт к удалению вашей криптографической идентификации и ключей сообщений с сервера, а также отключению следующих функций безопасности:";
 "screen_key_backup_disable_description_point_1" = "Нет зашифрованной истории сообщений на новых устройствах";
 "screen_key_backup_disable_description_point_2" = "Вы потеряете доступ к зашифрованным сообщениям, если выйдете из %1$@ везде";
-"screen_key_backup_disable_title" = "Вы действительно хотите отключить резервное копирование?";
+"screen_key_backup_disable_title" = "Вы уверены, что хотите отключить хранение ключей и удалить их?";
 "screen_login_error_deactivated_account" = "Данная учётная запись была отключена.";
 "screen_login_error_invalid_credentials" = "Неверное имя пользователя и/или пароль";
 "screen_login_error_invalid_user_id" = "Это не корректный идентификатор пользователя. Ожидаемый формат: '@user:homeserver.org'";
@@ -652,7 +656,7 @@
 "screen_recovery_key_save_title" = "Сохраните ключ восстановления";
 "screen_recovery_key_setup_confirmation_description" = "После этого шага вы не сможете получить доступ к новому ключу восстановления.";
 "screen_recovery_key_setup_confirmation_title" = "Вы сохранили ключ восстановления?";
-"screen_recovery_key_setup_description" = "Резервная копия чата защищена ключом восстановления. Если после настройки вам понадобится новый ключ восстановления, вы можете создать его заново, выбрав «Изменить ключ восстановления».";
+"screen_recovery_key_setup_description" = "Ваше хранилище ключей защищено ключом восстановления. Если после настройки вам понадобится новый ключ восстановления, вы можете его пересоздать, выбрав «Изменить ключ восстановления».";
 "screen_recovery_key_setup_generate_key" = "Создайте ключ восстановления";
 "screen_recovery_key_setup_generate_key_description" = "Не сообщайте эту информацию никому!";
 "screen_recovery_key_setup_success" = "Настройка восстановления выполнена успешно";
@@ -786,7 +790,6 @@
 "screen_room_timeline_less_reactions" = "Показать меньше";
 "screen_room_timeline_message_copied" = "Сообщение скопировано";
 "screen_room_timeline_no_permission_to_post" = "У вас нет разрешения публиковать сообщения в этой комнате";
-"screen_room_timeline_reactions_show_less" = "Показать меньше";
 "screen_room_timeline_reactions_show_more" = "Показать больше";
 "screen_room_timeline_read_marker_title" = "Новый";
 "screen_room_title" = "Чат";
@@ -836,7 +839,6 @@
 "screen_session_verification_ready_subtitle" = "Сравните уникальный набор эмодзи.";
 "screen_session_verification_request_accepted_subtitle" = "Сравните уникальные смайлики, убедившись, что они расположены в том же порядке.";
 "screen_session_verification_request_details_timestamp" = "Вход выполнен";
-"screen_session_verification_request_failure_subtitle" = "Время ожидания подтверждения истекло, запрос был отклонён, или при подтверждении произошло несоответствие.";
 "screen_session_verification_request_failure_title" = "Сбой проверки";
 "screen_session_verification_request_footer" = "Продолжайте только если вы ожидали данное подтверждение.";
 "screen_session_verification_request_subtitle" = "Чтобы сохранить историю сообщений в безопасности, проверьте другое устройство.";
@@ -992,6 +994,7 @@
 "troubleshoot_notifications_test_unified_push_failure" = "Поставщиков push-уведомлений не найдено.";
 "troubleshoot_notifications_test_unified_push_title" = "Проверка UnifiedPush";
 "a11y_poll" = "Опрос";
+"banner_set_up_recovery_submit" = "Настроить восстановление";
 "dialog_title_error" = "Ошибка";
 "dialog_title_success" = "Успешно";
 "notification_fallback_content" = "Уведомление";
@@ -1012,6 +1015,7 @@
 "screen_blocked_users_unblock_alert_title" = "Разблокировать пользователя";
 "screen_bug_report_rash_logs_alert_title" = "При последнем использовании %1$@ произошел сбой. Хотите поделиться отчетом о сбое?";
 "screen_chat_backup_recovery_action_confirm" = "Введите ключ восстановления";
+"screen_chat_backup_recovery_action_setup" = "Настроить восстановление";
 "screen_create_poll_cancel_confirmation_content_ios" = "Ваши изменения не будут сохранены";
 "screen_create_room_add_people_title" = "Пригласить в комнату";
 "screen_create_room_room_name_label" = "Название комнаты";
@@ -1052,8 +1056,10 @@
 "screen_room_error_failed_processing_media" = "Не удалось обработать медиафайл для загрузки, попробуйте еще раз.";
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Удалить и заблокировать участника";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Только упоминания и ключевые слова";
+"screen_room_timeline_reactions_show_less" = "Показать меньше";
 "screen_roomlist_filter_people" = "Пользователи";
 "screen_server_confirmation_change_server" = "Сменить поставщика учетной записи";
+"screen_session_verification_request_failure_subtitle" = "Время ожидания подтверждения истекло, запрос был отклонён, или при подтверждении произошло несоответствие.";
 "screen_signout_confirmation_dialog_submit" = "Выйти";
 "screen_signout_confirmation_dialog_title" = "Выйти";
 "screen_signout_key_backup_offline_title" = "Резервное копирование ключей все еще продолжается";

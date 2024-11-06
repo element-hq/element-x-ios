@@ -172,19 +172,10 @@ class ClientProxy: ClientProxyProtocol {
             self?.ignoredUsersSubject.send(ignoredUsers)
         })
         
-        updateVerificationState(client.encryption().verificationState())
+        await updateVerificationState(client.encryption().verificationState())
         
         verificationStateListenerTaskHandle = client.encryption().verificationStateListener(listener: VerificationStateListenerProxy { [weak self] verificationState in
-            guard let self else { return }
-            
-            updateVerificationState(verificationState)
-            
-            // The session verification controller requires the user's identity which
-            // isn't available before a keys query response. Use the verification
-            // state updates as an aproximation for when that happens.
-            Task {
-                await self.buildSessionVerificationControllerProxyIfPossible(verificationState: verificationState)
-            }
+            Task { await self?.updateVerificationState(verificationState) }
         })
         
         sendQueueListenerTaskHandle = client.subscribeToSendQueueStatus(listener: SendQueueRoomErrorListenerProxy { [weak self] roomID, error in
@@ -326,15 +317,24 @@ class ClientProxy: ClientProxyProtocol {
             restartTask = nil
         }
         
+        guard let syncService else {
+            MXLog.warning("No sync service to stop.")
+            completion?()
+            return
+        }
+        
         // Capture the sync service strongly as this method is called on deinit and so the
         // existence of self when the Task executes is questionable and would sometimes crash.
+        // Note: This isn't strictly necessary now given the unwrap above, but leaving the code as
+        // documentation. SE-0371 will allow us to fix this by using an async deinit.
         Task { [syncService] in
             do {
                 defer {
                     completion?()
                 }
                 
-                try await syncService?.stop()
+                try await syncService.stop()
+                MXLog.info("Sync stopped")
             } catch {
                 MXLog.error("Failed stopping the sync service with error: \(error)")
             }
@@ -757,7 +757,7 @@ class ClientProxy: ClientProxyProtocol {
     
     // MARK: - Private
     
-    private func updateVerificationState(_ verificationState: VerificationState) {
+    private func updateVerificationState(_ verificationState: VerificationState) async {
         let verificationState: SessionVerificationState = switch verificationState {
         case .unknown:
             .unknown
@@ -767,10 +767,17 @@ class ClientProxy: ClientProxyProtocol {
             .verified
         }
         
+        // The session verification controller requires the user's identity which
+        // isn't available before a keys query response. Use the verification
+        // state updates as an aproximation for when that happens.
+        await buildSessionVerificationControllerProxyIfPossible(verificationState: verificationState)
+        
+        // Only update the session verification state after creating a session
+        // verification proxy to avoid race conditions
         verificationStateSubject.send(verificationState)
     }
     
-    private func buildSessionVerificationControllerProxyIfPossible(verificationState: VerificationState) async {
+    private func buildSessionVerificationControllerProxyIfPossible(verificationState: SessionVerificationState) async {
         guard sessionVerificationController == nil, verificationState != .unknown else {
             return
         }
