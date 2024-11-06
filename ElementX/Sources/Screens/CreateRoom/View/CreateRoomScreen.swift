@@ -178,51 +178,51 @@ struct CreateRoomScreen: View {
     
     private var roomAddressSection: some View {
         Section {
-            HStack(spacing: 0) {
-                Text("#")
-                    .font(.compound.bodyLG)
-                    .foregroundStyle(.compound.textSecondary)
-                
-                let binding = Binding(get: {
-                    context.viewState.addressName
-                }, set: {
-                    context.send(viewAction: .updateAddress($0))
-                })
-                
-                TextField("", text: binding)
-                    .autocapitalization(.none)
-                    .textCase(.lowercase)
-                    .font(.compound.bodyLG)
-                    .foregroundStyle(.compound.textPrimary)
-                    .padding(.horizontal, 8)
-                Text(":\(context.viewState.homeserver)")
-                    .font(.compound.bodyLG)
-                    .foregroundStyle(.compound.textSecondary)
-            }
-            .environment(\.layoutDirection, .leftToRight)
+            ListRow(kind: .custom {
+                HStack(spacing: 0) {
+                    Text("#")
+                        .font(.compound.bodyLG)
+                        .foregroundStyle(.compound.textSecondary)
+                    
+                    let binding = Binding(get: {
+                        context.viewState.addressName
+                    }, set: {
+                        context.send(viewAction: .updateAddress($0))
+                    })
+                    
+                    TextField("", text: binding)
+                        .autocapitalization(.none)
+                        .textCase(.lowercase)
+                        .font(.compound.bodyLG)
+                        .foregroundStyle(.compound.textPrimary)
+                        .padding(.horizontal, 8)
+                    Text(":\(context.viewState.homeserver)")
+                        .font(.compound.bodyLG)
+                        .foregroundStyle(.compound.textSecondary)
+                }
+                .padding(ListRowPadding.textFieldInsets)
+                .environment(\.layoutDirection, .leftToRight)
+                .errorBackground(!context.viewState.errors.isEmpty)
+            })
         } header: {
             Text(L10n.screenCreateRoomRoomAddressSectionTitle.uppercased())
                 .compoundListSectionHeader()
         } footer: {
             VStack(alignment: .leading, spacing: 12) {
-                if let error = context.viewState.errorState {
-                    switch error {
-                    case .alreadyExists:
-                        Label(L10n.screenCreateRoomRoomAddressNotAvailableErrorDescription, icon: \.error, iconSize: .xSmall, relativeTo: .compound.bodySM)
-                            .foregroundStyle(.compound.textCriticalPrimary)
-                            .font(.compound.bodySM)
-                    case .invalidSymbols:
-                        Label(L10n.screenCreateRoomRoomAddressInvalidSymbolsErrorDescription, icon: \.error, iconSize: .xSmall, relativeTo: .compound.bodySM)
-                            .foregroundStyle(.compound.textCriticalPrimary)
-                            .font(.compound.bodySM)
-                    }
+                if context.viewState.errors.contains(.alreadyExists) {
+                    Label(L10n.screenCreateRoomRoomAddressNotAvailableErrorDescription, icon: \.error, iconSize: .xSmall, relativeTo: .compound.bodySM)
+                        .foregroundStyle(.compound.textCriticalPrimary)
+                        .font(.compound.bodySM)
+                } else if context.viewState.errors.contains(.invalidSymbols) {
+                    Label(L10n.screenCreateRoomRoomAddressInvalidSymbolsErrorDescription, icon: \.error, iconSize: .xSmall, relativeTo: .compound.bodySM)
+                        .foregroundStyle(.compound.textCriticalPrimary)
+                        .font(.compound.bodySM)
                 }
                 Text(L10n.screenCreateRoomRoomAddressSectionFooter)
                     .compoundListSectionFooter()
                     .font(.compound.bodySM)
             }
         }
-        .errorBackground(context.viewState.errorState != nil)
     }
     
     private var toolbar: some ToolbarContent {
@@ -237,16 +237,11 @@ struct CreateRoomScreen: View {
 }
 
 private extension View {
-    @ViewBuilder
     func errorBackground(_ shouldDisplay: Bool) -> some View {
-        if shouldDisplay {
-            listRowBackground(RoundedRectangle(cornerRadius: 10)
+        listRowBackground(shouldDisplay ? AnyView(RoundedRectangle(cornerRadius: 10)
                 .inset(by: 1)
                 .fill(.compound.bgCriticalSubtle)
-                .stroke(.compound.borderCriticalSubtle))
-        } else {
-            self
-        }
+                .stroke(Color.compound.borderCriticalSubtle)) : AnyView(Color.compound.bgCanvasDefaultLevel1))
     }
 }
 
@@ -292,7 +287,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     
     static let publicRoomInvalidAliasViewModel = {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(serverName: "example.org", userID: "@userid:example.com"))))
-        let parameters = CreateRoomFlowParameters(isRoomPrivate: false, addressName: "wrong")
+        let parameters = CreateRoomFlowParameters(isRoomPrivate: false, addressName: "#:")
         let selectedUsers: [UserProfileProxy] = [.mockAlice, .mockBob, .mockCharlie]
         ServiceLocator.shared.settings.knockingEnabled = true
         return CreateRoomViewModel(userSession: userSession,

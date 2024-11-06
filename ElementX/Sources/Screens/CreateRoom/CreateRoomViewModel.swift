@@ -6,6 +6,7 @@
 //
 
 import Combine
+import MatrixRustSDK
 import SwiftUI
 
 typealias CreateRoomViewModelType = StateStoreViewModel<CreateRoomViewState, CreateRoomViewAction>
@@ -16,6 +17,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     private var syncNameAndAddress = true
+    @CancellableTask private var checkAliasAvailabilityTask: Task<Void, Never>?
     
     private var actionsSubject: PassthroughSubject<CreateRoomViewModelAction, Never> = .init()
     
@@ -42,7 +44,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                                                          homeserver: userSession.clientProxy.serverName ?? "",
                                                          isKnockingFeatureEnabled: appSettings.knockingEnabled,
                                                          selectedUsers: selectedUsers.value,
-                                                         addressName: parameters.addressName ?? parameters.name.toValidAddress,
+                                                         addressName: parameters.addressName ?? roomAliasNameFromRoomDisplayName(roomName: parameters.name),
                                                          bindings: bindings),
                    mediaProvider: userSession.mediaProvider)
         
@@ -88,7 +90,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         case .removeImage:
             actionsSubject.send(.removeImage)
         case .updateAddress(let address):
-            state.addressName = address.toValidAddress
+            state.addressName = address
             // If this has been called this means that the user wants a custom address not necessarily reflecting the name
             // So we disable the two from syncing.
             syncNameAndAddress = false
@@ -99,7 +101,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             }
             state.roomName = name
             if syncNameAndAddress {
-                state.addressName = name.toValidAddress
+                state.addressName = roomAliasNameFromRoomDisplayName(roomName: name)
             }
         }
     }
@@ -117,7 +119,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             .sink { [weak self] _ in
                 guard let self else { return }
                 state.bindings.isKnockingOnly = false
-                state.addressName = state.roomName.toValidAddress
+                state.addressName = roomAliasNameFromRoomDisplayName(roomName: state.roomName)
                 syncNameAndAddress = true
             }
             .store(in: &cancellables)
@@ -142,11 +144,32 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                 guard let self else {
                     return
                 }
-                // TODO: Check if the alias is valid throught the SDK
-                if addressName.contains("wrong") {
-                    state.errorState = .invalidSymbols
+                
+                guard state.isKnockingFeatureEnabled,
+                      !state.bindings.isRoomPrivate,
+                      let canonicalAlias = canonicalAlias(addressName: addressName) else {
+                    // While is empty or private room we don't change or display the error
+                    return
+                }
+                
+                if !isRoomAliasFormatValid(alias: canonicalAlias) {
+                    state.errors.insert(.invalidSymbols)
                 } else {
-                    state.errorState = nil
+                    state.errors.remove(.invalidSymbols)
+                }
+                
+                checkAliasAvailabilityTask = Task { [weak self] in
+                    guard let self else {
+                        return
+                    }
+                    
+                    if case .success(false) = await self.userSession.clientProxy.isAliasAvailable(canonicalAlias) {
+                        guard !Task.isCancelled else { return }
+                        state.errors.insert(.alreadyExists)
+                    } else {
+                        guard !Task.isCancelled else { return }
+                        state.errors.remove(.alreadyExists)
+                    }
                 }
             }
             .store(in: &cancellables)
@@ -173,10 +196,11 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         // Since the parameters are throttled, we need to make sure that the latest values are used
         updateParameters(state: state)
         
-        let alias = createRoomParameters.canonicalAlias(homeserver: userSession.clientProxy.serverName ?? "")
-        if !createRoomParameters.isRoomPrivate {
-            guard let alias else {
-                state.errorState = .invalidSymbols
+        // Better to double check the errors also when trying to create the room
+        let alias = canonicalAlias(addressName: createRoomParameters.addressName)
+        if state.isKnockingFeatureEnabled, !createRoomParameters.isRoomPrivate {
+            guard let alias, isRoomAliasFormatValid(alias: alias) else {
+                state.errors.insert(.invalidSymbols)
                 return
             }
             
@@ -184,7 +208,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             case .success(true):
                 break
             case .success(false):
-                state.errorState = .alreadyExists
+                state.errors.insert(.alreadyExists)
                 return
             case .failure:
                 state.bindings.alertInfo = AlertInfo(id: .unknown)
@@ -236,6 +260,14 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         }
     }
     
+    func canonicalAlias(addressName: String?) -> String? {
+        guard let addressName,
+              !addressName.isEmpty else {
+            return nil
+        }
+        return "#\(addressName):\(state.homeserver)"
+    }
+    
     // MARK: Loading indicator
     
     private static let loadingIndicatorIdentifier = "\(CreateRoomViewModel.self)-Loading"
@@ -249,16 +281,5 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     
     private func hideLoadingIndicator() {
         userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
-    }
-}
-
-private extension String {
-    // TODO: This will be soon done by the SDK directly
-    var toValidAddress: Self {
-        split(separator: " ")
-            .joined(separator: "-")
-            // Characters that can be % encoded need to be excluded
-            .replacingOccurrences(of: "[!#$&'()*+,/:;=?@\\[\\]]", with: "", options: .regularExpression)
-            .lowercased()
     }
 }

@@ -33,10 +33,10 @@ struct CreateRoomViewState: BindableState {
     var bindings: CreateRoomViewStateBindings
     var avatarURL: URL?
     var canCreateRoom: Bool {
-        !roomName.isEmpty
+        !roomName.isEmpty && errors.isEmpty
     }
 
-    var errorState: CreateRoomAliasErrorState?
+    var errors: Set<CreateRoomAliasErrorState> = []
 }
 
 struct CreateRoomViewStateBindings {

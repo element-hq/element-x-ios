@@ -15,11 +15,4 @@ struct CreateRoomFlowParameters {
     var isKnockingOnly = false
     var avatarImageMedia: MediaInfo?
     var addressName: String?
-    
-    func canonicalAlias(homeserver: String) -> String? {
-        guard let addressName = addressName else {
-            return nil
-        }
-        return "#\(addressName):\(homeserver)"
-    }
 }

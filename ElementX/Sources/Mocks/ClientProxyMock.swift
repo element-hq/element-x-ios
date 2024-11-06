@@ -60,6 +60,7 @@ extension ClientProxyMock {
         loadUserAvatarURLReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         setUserAvatarMediaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         removeUserAvatarReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        isAliasAvailableReturnValue = .success(true)
         logoutReturnValue = nil
         searchUsersSearchTermLimitReturnValue = .success(.init(results: [], limited: false))
         profileForReturnValue = .success(.init(userID: "@a:b.com", displayName: "Some user"))
