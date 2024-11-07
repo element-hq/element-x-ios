@@ -31,15 +31,10 @@ struct SessionVerificationScreen: View {
     @ViewBuilder
     private var screenHeader: some View {
         VStack(spacing: 0) {
-            if context.viewState.verificationState == .initial {
-                BigIcon(icon: \.lockSolid)
-                    .padding(.bottom, 16)
-            } else {
-                Image(systemName: context.viewState.headerImageName)
-                    .bigIcon()
-                    .padding(.bottom, 16)
-            }
-
+            BigIcon(icon: context.viewState.headerIcon.keyPath,
+                    style: context.viewState.headerIcon.style)
+                .padding(.bottom, 16)
+            
             Text(context.viewState.title ?? "")
                 .font(.compound.headingMDBold)
                 .multilineTextAlignment(.center)

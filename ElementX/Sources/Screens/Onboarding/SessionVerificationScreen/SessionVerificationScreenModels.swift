@@ -5,7 +5,8 @@
 // Please see LICENSE in the repository root for full details.
 //
 
-import Foundation
+import Compound
+import SwiftUI
 
 enum SessionVerificationScreenViewModelAction {
     case finished
@@ -26,32 +27,32 @@ struct SessionVerificationScreenViewState: BindableState {
     let flow: SessionVerificationScreenFlow
     var verificationState: SessionVerificationScreenStateMachine.State
     
-    var headerImageName: String {
+    var headerIcon: (keyPath: KeyPath<CompoundIcons, Image>, style: BigIcon.Style) {
         switch verificationState {
         case .initial:
-            return "lock"
+            return (\.devices, .defaultSolid)
         case .acceptingVerificationRequest:
-            return "hourglass"
+            return (\.devices, .defaultSolid)
         case .requestingVerification:
-            return "hourglass"
+            return (\.devices, .defaultSolid)
         case .verificationRequestAccepted:
-            return "face.smiling"
+            return (\.reaction, .defaultSolid)
         case .startingSasVerification:
-            return "hourglass"
+            return (\.devices, .defaultSolid)
         case .sasVerificationStarted:
-            return "hourglass"
+            return (\.devices, .defaultSolid)
         case .cancelling:
-            return "hourglass"
-        case .acceptingChallenge:
-            return "hourglass"
-        case .decliningChallenge:
-            return "hourglass"
+            return (\.lockSolid, .defaultSolid)
         case .showingChallenge:
-            return "face.smiling"
+            return (\.reaction, .defaultSolid)
+        case .acceptingChallenge:
+            return (\.reaction, .defaultSolid)
+        case .decliningChallenge:
+            return (\.reaction, .defaultSolid)
         case .verified:
-            return "checkmark.shield"
+            return (\.checkCircleSolid, .successSolid)
         case .cancelled:
-            return "exclamationmark.shield"
+            return (\.infoSolid, .alertSolid)
         }
     }
     
@@ -60,12 +61,12 @@ struct SessionVerificationScreenViewState: BindableState {
         case .initial:
             switch flow {
             case .initiator:
-                return L10n.screenSessionVerificationOpenExistingSessionTitle
+                return L10n.screenSessionVerificationUseAnotherDeviceTitle
             case .responder:
                 return L10n.screenSessionVerificationRequestTitle
             }
         case .acceptingVerificationRequest:
-            return L10n.screenSessionVerificationRequestTitle
+            return L10n.screenSessionVerificationWaitingAnotherDeviceTitle
         case .requestingVerification:
             return L10n.screenSessionVerificationWaitingToAcceptTitle
         case .verificationRequestAccepted:
@@ -98,12 +99,12 @@ struct SessionVerificationScreenViewState: BindableState {
         case .initial:
             switch flow {
             case .initiator:
-                return L10n.screenSessionVerificationOpenExistingSessionSubtitle
+                return L10n.screenSessionVerificationUseAnotherDeviceSubtitle
             case .responder:
                 return L10n.screenSessionVerificationRequestSubtitle
             }
         case .acceptingVerificationRequest:
-            return L10n.screenSessionVerificationRequestSubtitle
+            return L10n.screenSessionVerificationWaitingAnotherDeviceSubtitle
         case .requestingVerification:
             return L10n.screenSessionVerificationWaitingToAcceptSubtitle
         case .verificationRequestAccepted:
