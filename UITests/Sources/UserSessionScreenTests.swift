@@ -47,7 +47,7 @@ class UserSessionScreenTests: XCTestCase {
         let textField = app.textFields["Display name"]
         XCTAssert(textField.waitForExistence(timeout: 10))
         
-        let joinButton = app.buttons["Join call now"]
+        let joinButton = app.buttons["Continue"]
         XCTAssert(joinButton.waitForExistence(timeout: 10))
     }
 }
