@@ -20,10 +20,8 @@ enum LoginMode: Equatable {
     
     var supportsOIDCFlow: Bool {
         switch self {
-        case .oidc:
-            return true
-        default:
-            return false
+        case .oidc: true
+        default: false
         }
     }
 }

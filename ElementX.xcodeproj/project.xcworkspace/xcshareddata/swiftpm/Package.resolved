@@ -1,13 +1,13 @@
 {
-  "originHash" : "52385e2a478cc9455693d0b93dc33b988ac1d4742acceeaee288944dff8b78e0",
+  "originHash" : "f9011692b20e61e6f0df94b6e0946a4c8f4d58429a88998f249712bb1fee47f1",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-design-tokens",
       "state" : {
-        "revision" : "2af7bb571eb30cbfbd67cdda6617500507ef46aa",
-        "version" : "1.8.0"
+        "revision" : "976db67b849775799b4153e7894d61e90fc96888",
+        "version" : "1.9.0"
       }
     },
     {
@@ -15,7 +15,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-ios",
       "state" : {
-        "revision" : "92110afc158ac6ee7c68d5e975144bafa6c58396"
+        "revision" : "e3f9665621872f60d3652579c3f0dc7bf806e72c"
       }
     },
     {
@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/devicekit/DeviceKit",
       "state" : {
-        "revision" : "fe41d18eccd92a115cffaa35dfff03018c67e635",
-        "version" : "5.2.2"
+        "revision" : "7ff5331960151aec74fb422e1d45f54ef6cc086d",
+        "version" : "5.5.0"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/emojibase-bindings",
       "state" : {
-        "revision" : "6ca06fefac9329fece851a2a4df7979b1699970a",
-        "version" : "1.0.5"
+        "revision" : "d4682a2ad5e68cfd2f41544c3c6c970b4d524bd1",
+        "version" : "1.3.3"
       }
     },
     {
@@ -68,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nicklockwood/GZIP",
       "state" : {
-        "revision" : "bd55f1d89e71ae3f481da74cd4adeadbb849620c",
-        "version" : "1.3.1"
+        "revision" : "f710a37aa978a93b815a4f64bd504dc4c3256312",
+        "version" : "1.3.2"
       }
     },
     {
@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher",
       "state" : {
-        "revision" : "af4be924ad984cf4d16f4ae4df424e79a443d435",
-        "version" : "7.6.2"
+        "revision" : "33696a71dd4d71f1b0f781ade11a48ba5549581a",
+        "version" : "8.0.3"
       }
     },
     {
@@ -95,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/krzysztofzablocki/KZFileWatchers",
       "state" : {
-        "branch" : "master",
-        "revision" : "d27a9557427d261adccdf4b566acc9d9c0fec6f4"
+        "revision" : "d27a9557427d261adccdf4b566acc9d9c0fec6f4",
+        "version" : "1.2.0"
       }
     },
     {
@@ -131,17 +131,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-analytics-events",
       "state" : {
-        "revision" : "c9b40120a5f7b8ce1bab3f09f8417fdc9407f006",
-        "version" : "0.25.0"
+        "revision" : "632f4266d5ebd5b87b9eb52522f5117723fcd338",
+        "version" : "0.28.0"
       }
     },
     {
       "identity" : "matrix-rich-text-editor-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/matrix-org/matrix-rich-text-editor-swift",
+      "location" : "https://github.com/element-hq/matrix-rich-text-editor-swift",
       "state" : {
-        "revision" : "30909decc48be8e06c93eacffa4ec71b539888a9",
-        "version" : "2.37.7"
+        "revision" : "b6583a47b5d14d2dc8405a0303ebd4041b877707",
+        "version" : "2.37.12"
       }
     },
     {
@@ -149,8 +149,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "11c6d99d62035b02f4c448daebff4d63c962da20",
-        "version" : "1.0.52"
+        "revision" : "399cc70987856c73e24b8888ac1ecc0eecf1716b",
+        "version" : "1.0.65"
       }
     },
     {
@@ -284,8 +284,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mxcl/Version",
       "state" : {
-        "revision" : "1fe824b80d89201652e7eca7c9252269a1d85e25",
-        "version" : "2.0.1"
+        "revision" : "303a0f916772545e1e8667d3104f83be708a723c",
+        "version" : "2.1.0"
       }
     }
   ],

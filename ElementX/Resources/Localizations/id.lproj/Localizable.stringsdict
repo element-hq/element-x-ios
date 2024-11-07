@@ -180,10 +180,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d Pinned message</string>
 			<key>other</key>
-			<string>%1$d Pinned messages</string>
+			<string>%1$d Pesan yang disematkan</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>

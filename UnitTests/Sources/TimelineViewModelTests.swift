@@ -8,6 +8,7 @@
 @testable import ElementX
 
 import Combine
+import MatrixRustSDK
 import XCTest
 
 @MainActor
@@ -256,44 +257,11 @@ class TimelineViewModelTests: XCTestCase {
         XCTAssertEqual(arguments?.type, .read)
     }
     
-    func testSendMoreReadReceipts() async throws {
-        // Given a room with only text items in the timeline that are all read.
-        let items = [TextRoomTimelineItem(eventID: "t1"),
-                     TextRoomTimelineItem(eventID: "t2"),
-                     TextRoomTimelineItem(eventID: "t3")]
-        let (viewModel, _, timelineProxy, timelineController) = readReceiptsConfiguration(with: items)
-        viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.last!.id))
-        try await Task.sleep(for: .milliseconds(100))
-        XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCallsCount, 1)
-        var arguments = timelineProxy.sendReadReceiptForTypeReceivedArguments
-        XCTAssertEqual(arguments?.eventID, "t3")
-        XCTAssertEqual(arguments?.type, .read)
-        
-        // When sending a receipt for the first item in the timeline.
-        viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(items.first!.id))
-        try await Task.sleep(for: .milliseconds(100))
-        
-        // When a new message is received and marked as read.
-        let newMessage = TextRoomTimelineItem(eventID: "t4")
-        timelineController.timelineItems.append(newMessage)
-        timelineController.callbacks.send(.updatedTimelineItems(timelineItems: timelineController.timelineItems, isSwitchingTimelines: false))
-        try await Task.sleep(for: .milliseconds(100))
-        
-        viewModel.context.send(viewAction: .sendReadReceiptIfNeeded(newMessage.id))
-        try await Task.sleep(for: .milliseconds(100))
-        
-        // Then the request should be made.
-        XCTAssertEqual(timelineProxy.sendReadReceiptForTypeCallsCount, 3)
-        arguments = timelineProxy.sendReadReceiptForTypeReceivedArguments
-        XCTAssertEqual(arguments?.eventID, "t4")
-        XCTAssertEqual(arguments?.type, .read)
-    }
-    
     func testSendReadReceiptWithoutEvents() async throws {
         // Given a room with only virtual items.
-        let items = [SeparatorRoomTimelineItem(timelineID: "v1"),
-                     SeparatorRoomTimelineItem(timelineID: "v2"),
-                     SeparatorRoomTimelineItem(timelineID: "v3")]
+        let items = [SeparatorRoomTimelineItem(uniqueID: .init(id: "v1")),
+                     SeparatorRoomTimelineItem(uniqueID: .init(id: "v2")),
+                     SeparatorRoomTimelineItem(uniqueID: .init(id: "v3"))]
         let (viewModel, _, timelineProxy, _) = readReceiptsConfiguration(with: items)
         
         // When sending a read receipt for the last item.
@@ -308,7 +276,7 @@ class TimelineViewModelTests: XCTestCase {
         // Given a room where the last event is a virtual item.
         let items: [RoomTimelineItemProtocol] = [TextRoomTimelineItem(eventID: "t1"),
                                                  TextRoomTimelineItem(eventID: "t2"),
-                                                 SeparatorRoomTimelineItem(timelineID: "v3")]
+                                                 SeparatorRoomTimelineItem(uniqueID: .init(id: "v3"))]
         let (viewModel, _, _, _) = readReceiptsConfiguration(with: items)
         
         // When sending a read receipt for the last item.
@@ -336,13 +304,14 @@ class TimelineViewModelTests: XCTestCase {
 
         let viewModel = TimelineViewModel(roomProxy: roomProxy,
                                           timelineController: timelineController,
-                                          mediaProvider: MockMediaProvider(),
+                                          mediaProvider: MediaProviderMock(configuration: .init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                           userIndicatorController: userIndicatorControllerMock,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
-                                          analyticsService: ServiceLocator.shared.analytics)
+                                          analyticsService: ServiceLocator.shared.analytics,
+                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
         return (viewModel, roomProxy, timelineProxy, timelineController)
     }
     
@@ -360,13 +329,14 @@ class TimelineViewModelTests: XCTestCase {
         timelineController.timelineItems = [message]
         let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "", members: [RoomMemberProxyMock.mockAlice, RoomMemberProxyMock.mockCharlie])),
                                           timelineController: timelineController,
-                                          mediaProvider: MockMediaProvider(),
+                                          mediaProvider: MediaProviderMock(configuration: .init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                           userIndicatorController: userIndicatorControllerMock,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
-                                          analyticsService: ServiceLocator.shared.analytics)
+                                          analyticsService: ServiceLocator.shared.analytics,
+                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { value in
             value.bindings.readReceiptsSummaryInfo?.orderedReceipts == receipts
@@ -379,54 +349,48 @@ class TimelineViewModelTests: XCTestCase {
     // MARK: - Pins
     
     func testPinnedEvents() async throws {
-        ServiceLocator.shared.settings.pinningEnabled = true
-        
-        // Note: We need to start the test with a non-default value so we know the view model has finished the Task.
-        let roomProxyMock = JoinedRoomProxyMock(.init(name: "",
-                                                      pinnedEventIDs: .init(["test1"])))
-        let actionsSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
-        roomProxyMock.underlyingActionsPublisher = actionsSubject.eraseToAnyPublisher()
+        var configuration = JoinedRoomProxyMockConfiguration(name: "",
+                                                             pinnedEventIDs: .init(["test1"]))
+        let roomProxyMock = JoinedRoomProxyMock(configuration)
+        let infoSubject = CurrentValueSubject<RoomInfoProxy, Never>(.init(roomInfo: RoomInfo(configuration)))
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
         
         let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                           timelineController: MockRoomTimelineController(),
-                                          mediaProvider: MockMediaProvider(),
+                                          mediaProvider: MediaProviderMock(configuration: .init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                           userIndicatorController: userIndicatorControllerMock,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
-                                          analyticsService: ServiceLocator.shared.analytics)
+                                          analyticsService: ServiceLocator.shared.analytics,
+                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+        XCTAssertEqual(configuration.pinnedEventIDs, viewModel.context.viewState.pinnedEventIDs)
         
-        var deferred = deferFulfillment(viewModel.context.$viewState) { value in
-            value.pinnedEventIDs == ["test1"]
-        }
-        try await deferred.fulfill()
-        
-        roomProxyMock.underlyingPinnedEventIDs = ["test1", "test2"]
-        deferred = deferFulfillment(viewModel.context.$viewState) { value in
+        configuration.pinnedEventIDs = ["test1", "test2"]
+        let deferred = deferFulfillment(viewModel.context.$viewState) { value in
             value.pinnedEventIDs == ["test1", "test2"]
         }
-        actionsSubject.send(.roomInfoUpdate)
+        infoSubject.send(.init(roomInfo: RoomInfo(configuration)))
         try await deferred.fulfill()
     }
     
     func testCanUserPinEvents() async throws {
-        ServiceLocator.shared.settings.pinningEnabled = true
-        
-        // Note: We need to start the test with the non-default value so we know the view model has finished the Task.
-        let roomProxyMock = JoinedRoomProxyMock(.init(name: "", canUserPin: true))
-        let actionsSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
-        roomProxyMock.underlyingActionsPublisher = actionsSubject.eraseToAnyPublisher()
+        let configuration = JoinedRoomProxyMockConfiguration(name: "", canUserPin: true)
+        let roomProxyMock = JoinedRoomProxyMock(configuration)
+        let infoSubject = CurrentValueSubject<RoomInfoProxy, Never>(.init(roomInfo: RoomInfo(configuration)))
+        roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
         
         let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                           timelineController: MockRoomTimelineController(),
-                                          mediaProvider: MockMediaProvider(),
+                                          mediaProvider: MediaProviderMock(configuration: .init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                           userIndicatorController: userIndicatorControllerMock,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
-                                          analyticsService: ServiceLocator.shared.analytics)
+                                          analyticsService: ServiceLocator.shared.analytics,
+                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { value in
             value.canCurrentUserPin
@@ -437,7 +401,7 @@ class TimelineViewModelTests: XCTestCase {
         deferred = deferFulfillment(viewModel.context.$viewState) { value in
             !value.canCurrentUserPin
         }
-        actionsSubject.send(.roomInfoUpdate)
+        infoSubject.send(.init(roomInfo: RoomInfo(configuration)))
         try await deferred.fulfill()
     }
     
@@ -449,20 +413,21 @@ class TimelineViewModelTests: XCTestCase {
         TimelineViewModel(roomProxy: roomProxy ?? JoinedRoomProxyMock(.init(name: "")),
                           focussedEventID: focussedEventID,
                           timelineController: timelineController,
-                          mediaProvider: MockMediaProvider(),
+                          mediaProvider: MediaProviderMock(configuration: .init()),
                           mediaPlayerProvider: MediaPlayerProviderMock(),
                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                           userIndicatorController: userIndicatorControllerMock,
                           appMediator: AppMediatorMock.default,
                           appSettings: ServiceLocator.shared.settings,
-                          analyticsService: ServiceLocator.shared.analytics)
+                          analyticsService: ServiceLocator.shared.analytics,
+                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
     }
 }
 
 private extension TextRoomTimelineItem {
     init(text: String, sender: String, addReactions: Bool = false, addReadReceipts: [ReadReceipt] = []) {
         let reactions = addReactions ? [AggregatedReaction(accountOwnerID: "bob", key: "🦄", senders: [ReactionSender(id: sender, timestamp: Date())])] : []
-        self.init(id: .random,
+        self.init(id: .randomEvent,
                   timestamp: "10:47 am",
                   isOutgoing: sender == "bob",
                   isEditable: sender == "bob",
@@ -475,14 +440,14 @@ private extension TextRoomTimelineItem {
 }
 
 private extension SeparatorRoomTimelineItem {
-    init(timelineID: String) {
-        self.init(id: .init(timelineID: timelineID), text: "")
+    init(uniqueID: TimelineUniqueId) {
+        self.init(id: .virtual(uniqueID: uniqueID), text: "")
     }
 }
 
 private extension TextRoomTimelineItem {
     init(eventID: String) {
-        self.init(id: .init(timelineID: UUID().uuidString, eventID: eventID),
+        self.init(id: .event(uniqueID: .init(id: UUID().uuidString), eventOrTransactionID: .eventId(eventId: eventID)),
                   timestamp: "",
                   isOutgoing: false,
                   isEditable: false,

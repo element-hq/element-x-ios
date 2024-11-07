@@ -8,6 +8,6 @@
 import Foundation
 
 struct TimelineStartRoomTimelineItem: DecorationTimelineItemProtocol, Equatable {
-    let id = TimelineItemIdentifier(timelineID: UUID().uuidString)
+    let id: TimelineItemIdentifier = .virtual(uniqueID: .init(id: UUID().uuidString))
     let name: String?
 }

@@ -22,6 +22,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
+    private let emojiProvider: EmojiProviderProtocol
     
     private let actionsSubject: PassthroughSubject<PinnedEventsTimelineFlowCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<PinnedEventsTimelineFlowCoordinatorAction, Never> {
@@ -35,13 +36,15 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
          roomProxy: JoinedRoomProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         appMediator: AppMediatorProtocol) {
+         appMediator: AppMediatorProtocol,
+         emojiProvider: EmojiProviderProtocol) {
         self.navigationStackCoordinator = navigationStackCoordinator
         self.userSession = userSession
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
+        self.emojiProvider = emojiProvider
     }
     
     func start() {
@@ -71,7 +74,8 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                                   mediaProvider: userSession.mediaProvider,
                                                                                   mediaPlayerProvider: MediaPlayerProvider(),
                                                                                   voiceMessageMediaManager: userSession.voiceMessageMediaManager,
-                                                                                  appMediator: appMediator))
+                                                                                  appMediator: appMediator,
+                                                                                  emojiProvider: emojiProvider))
         
         coordinator.actions
             .sink { [weak self] action in

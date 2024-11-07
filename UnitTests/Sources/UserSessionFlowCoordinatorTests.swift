@@ -246,7 +246,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
     
     private func process(route: AppRoute, expectedState: UserSessionFlowCoordinatorStateMachine.State) async throws {
         // Sometimes the state machine's state changes before the coordinators have updated the stack.
-        let delayedPublisher = userSessionFlowCoordinator.statePublisher.delay(for: .milliseconds(10), scheduler: DispatchQueue.main)
+        let delayedPublisher = userSessionFlowCoordinator.statePublisher.delay(for: .milliseconds(100), scheduler: DispatchQueue.main)
         
         let deferred = deferFulfillment(delayedPublisher) { $0 == expectedState }
         userSessionFlowCoordinator.handleAppRoute(route, animated: true)

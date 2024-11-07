@@ -9,7 +9,7 @@ on:
 jobs:
   integration_tests:
     name: Integration Tests
-    runs-on: macos-14
+    runs-on: perf-only
 
     concurrency:
       # Only allow a single run of this workflow on each branch, automatically cancelling older runs.
@@ -29,13 +29,22 @@ jobs:
       - name: Setup environment
         run:
           source ci_scripts/ci_common.sh && setup_github_actions_environment
-      
+
+      - name: Delete old log files
+        run: find '/Users/Shared' -name 'console*' -delete
+
       - name: Run tests
         run: bundle exec fastlane integration_tests
         env:
           INTEGRATION_TESTS_HOST: ${{ secrets.INTEGRATION_TESTS_HOST }}
           INTEGRATION_TESTS_USERNAME: ${{ secrets.INTEGRATION_TESTS_USERNAME }}
           INTEGRATION_TESTS_PASSWORD: ${{ secrets.INTEGRATION_TESTS_PASSWORD }}
+
+      - name: Check logs are set to the `trace` level
+        run: (grep ' TRACE ' /Users/Shared -qR)
+
+      - name: Check logs don't contain private messages
+        run: "! grep 'Go down in flames' /Users/Shared -R"
 
       - name: Zip results # for faster upload
         if: failure()
@@ -69,6 +78,7 @@ jobs:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: integrationtests
+          version: v0.7.3
 
       - name: Collect test results
         if: ${{ !cancelled() }}

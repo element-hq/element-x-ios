@@ -35,14 +35,19 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         return CXProvider(configuration: configuration)
     }()
     
-    private weak var clientProxy: ClientProxyProtocol?
+    private weak var clientProxy: ClientProxyProtocol? {
+        didSet {
+            // There's a race condition where a call starts when the app has been killed and the
+            // observation set in `incomingCallID` occurs *before* the user session is restored.
+            // So observe when the client proxy is set to fix this (the method guards for the call).
+            Task { await observeIncomingCallRoomInfo() }
+        }
+    }
     
-    private var cancellables = Set<AnyCancellable>()
+    private var incomingCallRoomInfoCancellable: AnyCancellable?
     private var incomingCallID: CallID? {
         didSet {
-            Task {
-                await observeIncomingCallRoomStateUpdates()
-            }
+            Task { await observeIncomingCallRoomInfo() }
         }
     }
     
@@ -103,6 +108,17 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         } catch {
             MXLog.error("Failed requesting start call action with error: \(error)")
         }
+        
+        do {
+            // Have ElementCall default to the speaker so that the lock button doesn't end the call.
+            // Could also use `overrideOutputAudioPort` but the documentation is clear about it:
+            // `Sessions using PlayAndRecord category that always want to prefer the built-in
+            // speaker output over the receiver, should use AVAudioSessionCategoryOptionDefaultToSpeaker instead.`.
+            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoChat, options: [.defaultToSpeaker])
+            try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
+        } catch {
+            MXLog.error("Failed setting up audio session with error: \(error)")
+        }
     }
     
     func tearDownCallSession() {
@@ -154,10 +170,12 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         // https://stackoverflow.com/a/41230020/730924
         update.remoteHandle = .init(type: .generic, value: roomID)
         
-        callProvider.reportNewIncomingCall(with: callID.callKitID, update: update) { error in
+        callProvider.reportNewIncomingCall(with: callID.callKitID, update: update) { [weak self] error in
             if let error {
                 MXLog.error("Failed reporting new incoming call with error: \(error)")
             }
+            
+            self?.actionsSubject.send(.receivedIncomingCallRequest)
             
             completion()
         }
@@ -235,10 +253,8 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
         #if targetEnvironment(simulator)
         // This gets called for no reason on simulators, where CallKit
-        // isn't even supported. Ignore
-        return
-        #endif
-        
+        // isn't even supported, ignore it.
+        #else
         if let ongoingCallID {
             actionsSubject.send(.endCall(roomID: ongoingCallID.roomID))
         }
@@ -246,11 +262,12 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         tearDownCallSession(sendEndCallAction: false)
         
         action.fulfill()
+        #endif
     }
     
     // MARK: - Private
     
-    func tearDownCallSession(sendEndCallAction: Bool = true) {
+    private func tearDownCallSession(sendEndCallAction: Bool = true) {
         if sendEndCallAction, let ongoingCallID {
             let transaction = CXTransaction(action: CXEndCallAction(call: ongoingCallID.callKitID))
             callController.request(transaction) { error in
@@ -263,35 +280,35 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         ongoingCallID = nil
     }
     
-    func observeIncomingCallRoomStateUpdates() async {
-        cancellables.removeAll()
+    private func observeIncomingCallRoomInfo() async {
+        incomingCallRoomInfoCancellable = nil
         
-        guard let clientProxy, let incomingCallID else {
+        guard let incomingCallID else {
+            MXLog.info("No incoming call to observe for.")
+            return
+        }
+        
+        guard let clientProxy else {
+            MXLog.warning("A ClientProxy is needed to fetch the room.")
             return
         }
         
         guard case let .joined(roomProxy) = await clientProxy.roomForIdentifier(incomingCallID.roomID) else {
+            MXLog.warning("Failed to fetch a joined room for the incoming call.")
             return
         }
         
         roomProxy.subscribeToRoomInfoUpdates()
         
-        // There's no incoming event for call cancellations so try to infer
-        // it from what we have. If the call is running before subscribing then wait
-        // for it to change to `false` otherwise wait for it to turn `true` before
-        // changing to `false`
-        let isCallOngoing = roomProxy.hasOngoingCall
-        
-        roomProxy
-            .actionsPublisher
-            .map { action -> (Bool, [String]) in
-                switch action {
-                case .roomInfoUpdate:
-                    return (roomProxy.hasOngoingCall, roomProxy.activeRoomCallParticipants)
-                }
-            }
+        incomingCallRoomInfoCancellable = roomProxy
+            .infoPublisher
+            .compactMap { ($0.hasRoomCall, $0.activeRoomCallParticipants) }
             .removeDuplicates { $0 == $1 }
-            .dropFirst(isCallOngoing ? 0 : 1)
+            .drop(while: { hasRoomCall, _ in
+                // Filter all updates before hasRoomCall becomes `true`. Then we can correctly
+                // detect its change to `false` to stop ringing when the caller hangs up.
+                !hasRoomCall
+            })
             .sink { [weak self] hasOngoingCall, activeRoomCallParticipants in
                 guard let self else { return }
                 
@@ -300,17 +317,16 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
                 if !hasOngoingCall {
                     MXLog.info("Call cancelled by remote")
                     
-                    cancellables.removeAll()
+                    incomingCallRoomInfoCancellable = nil
                     endUnansweredCallTask?.cancel()
                     callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .remoteEnded)
                 } else if participants.contains(roomProxy.ownUserID) {
-                    MXLog.info("Call anwered elsewhere")
+                    MXLog.info("Call answered elsewhere")
                     
-                    cancellables.removeAll()
+                    incomingCallRoomInfoCancellable = nil
                     endUnansweredCallTask?.cancel()
                     callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .answeredElsewhere)
                 }
             }
-            .store(in: &cancellables)
     }
 }

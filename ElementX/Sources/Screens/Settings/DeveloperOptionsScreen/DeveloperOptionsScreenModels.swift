@@ -44,10 +44,12 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var logLevel: TracingConfiguration.LogLevel { get set }
     var slidingSyncDiscovery: AppSettings.SlidingSyncDiscovery { get set }
     var hideUnreadMessagesBadge: Bool { get set }
-    var elementCallBaseURLOverride: URL? { get set }
     var fuzzyRoomListSearchEnabled: Bool { get set }
-    var pinningEnabled: Bool { get set }
-    var invisibleCryptoEnabled: Bool { get set }
+    var hideTimelineMedia: Bool { get set }
+    var enableOnlySignedDeviceIsolationMode: Bool { get set }
+    var elementCallBaseURLOverride: URL? { get set }
+    var knockingEnabled: Bool { get set }
+    var frequentEmojisEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

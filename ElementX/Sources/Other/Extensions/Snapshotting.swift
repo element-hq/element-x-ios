@@ -33,7 +33,7 @@ public struct SnapshotPrecisionPreferenceKey: PreferenceKey {
 }
 
 public struct SnapshotPerceptualPrecisionPreferenceKey: PreferenceKey {
-    public static var defaultValue: Float = 1.0
+    public static var defaultValue: Float = 0.98
 
     public static func reduce(value: inout Float, nextValue: () -> Float) {
         value = nextValue()
@@ -50,7 +50,7 @@ public extension SwiftUI.View {
     ///   - precision: The percentage of pixels that must match.
     ///   - perceptualPrecision: The percentage a pixel must match the source pixel to be considered a match. 98-99% mimics the precision of the human eye.
     @inlinable
-    func snapshotPreferences(delay: TimeInterval = .zero, precision: Float = 1.0, perceptualPrecision: Float = 1.0) -> some SwiftUI.View {
+    func snapshotPreferences(delay: TimeInterval = .zero, precision: Float = 1.0, perceptualPrecision: Float = 0.98) -> some SwiftUI.View {
         preference(key: SnapshotDelayPreferenceKey.self, value: delay)
             .preference(key: SnapshotPrecisionPreferenceKey.self, value: precision)
             .preference(key: SnapshotPerceptualPrecisionPreferenceKey.self, value: perceptualPrecision)

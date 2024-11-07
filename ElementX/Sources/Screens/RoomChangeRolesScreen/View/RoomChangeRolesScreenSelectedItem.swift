@@ -60,7 +60,7 @@ struct RoomChangeRolesScreenSelectedItem_Previews: PreviewProvider, TestablePrev
         HStack(spacing: 12) {
             ForEach(members, id: \.id) { member in
                 RoomChangeRolesScreenSelectedItem(member: member,
-                                                  mediaProvider: MockMediaProvider(),
+                                                  mediaProvider: MediaProviderMock(configuration: .init()),
                                                   dismissAction: { })
                     .frame(width: 72)
             }

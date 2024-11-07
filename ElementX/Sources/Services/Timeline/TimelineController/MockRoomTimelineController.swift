@@ -81,17 +81,17 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     func sendMessage(_ message: String,
                      html: String?,
-                     inReplyTo itemID: TimelineItemIdentifier?,
+                     inReplyToEventID: String?,
                      intentionalMentions: IntentionalMentions) async { }
         
-    func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async { }
+    func toggleReaction(_ reaction: String, to eventID: EventOrTransactionId) async { }
     
-    func edit(_ timelineItemID: TimelineItemIdentifier,
+    func edit(_ eventOrTransactionID: EventOrTransactionId,
               message: String,
               html: String?,
               intentionalMentions: IntentionalMentions) async { }
     
-    func redact(_ itemID: TimelineItemIdentifier) async { }
+    func redact(_ eventOrTransactionID: EventOrTransactionId) async { }
     
     func pin(eventID: String) async { }
     

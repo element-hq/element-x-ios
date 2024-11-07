@@ -10,31 +10,39 @@ import Foundation
 import MatrixRustSDK
 
 class AuthenticationService: AuthenticationServiceProtocol {
-    private var client: Client?
+    private var client: ClientProtocol?
     private var sessionDirectories: SessionDirectories
     private let passphrase: String
     
+    private let clientBuilderFactory: AuthenticationClientBuilderFactoryProtocol
     private let userSessionStore: UserSessionStoreProtocol
     private let appSettings: AppSettings
     private let appHooks: AppHooks
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
+    private(set) var flow: AuthenticationFlow
     
-    init(userSessionStore: UserSessionStoreProtocol, encryptionKeyProvider: EncryptionKeyProviderProtocol, appSettings: AppSettings, appHooks: AppHooks) {
+    init(userSessionStore: UserSessionStoreProtocol,
+         encryptionKeyProvider: EncryptionKeyProviderProtocol,
+         clientBuilderFactory: AuthenticationClientBuilderFactoryProtocol = AuthenticationClientBuilderFactory(),
+         appSettings: AppSettings,
+         appHooks: AppHooks) {
         sessionDirectories = .init()
         passphrase = encryptionKeyProvider.generateKey().base64EncodedString()
+        self.clientBuilderFactory = clientBuilderFactory
         self.userSessionStore = userSessionStore
         self.appSettings = appSettings
         self.appHooks = appHooks
         
-        homeserverSubject = .init(LoginHomeserver(address: appSettings.defaultHomeserverAddress,
-                                                  loginMode: .unknown))
+        // When updating these, don't forget to update the reset method too.
+        homeserverSubject = .init(LoginHomeserver(address: appSettings.defaultHomeserverAddress, loginMode: .unknown))
+        flow = .login
     }
     
     // MARK: - Public
     
-    func configure(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError> {
+    func configure(for homeserverAddress: String, flow: AuthenticationFlow) async -> Result<Void, AuthenticationServiceError> {
         do {
             var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)
             
@@ -57,7 +65,15 @@ class AuthenticationService: AuthenticationServiceProtocol {
             case .failure: nil
             }
             
+            if flow == .login, homeserver.loginMode == .unsupported {
+                return .failure(.loginNotSupported)
+            }
+            if flow == .register, !homeserver.supportsRegistration {
+                return .failure(.registrationNotSupported)
+            }
+            
             self.client = client
+            self.flow = flow
             homeserverSubject.send(homeserver)
             return .success(())
         } catch ClientBuildError.WellKnownDeserializationError(let error) {
@@ -75,7 +91,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     func urlForOIDCLogin() async -> Result<OIDCAuthorizationDataProxy, AuthenticationServiceError> {
         guard let client else { return .failure(.oidcError(.urlFailure)) }
         do {
-            let oidcData = try await client.urlForOidcLogin(oidcConfiguration: appSettings.oidcConfiguration.rustValue)
+            let oidcData = try await client.urlForOidc(oidcConfiguration: appSettings.oidcConfiguration.rustValue, prompt: .consent)
             return .success(OIDCAuthorizationDataProxy(underlyingData: oidcData))
         } catch {
             MXLog.error("Failed to get URL for OIDC login: \(error)")
@@ -86,7 +102,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     func abortOIDCLogin(data: OIDCAuthorizationDataProxy) async {
         guard let client else { return }
         MXLog.info("Aborting OIDC login.")
-        await client.abortOidcLogin(authorizationData: data.underlyingData)
+        await client.abortOidcAuth(authorizationData: data.underlyingData)
     }
     
     func loginWithOIDCCallback(_ callbackURL: URL, data: OIDCAuthorizationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
@@ -150,18 +166,24 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
     }
     
+    func reset() {
+        homeserverSubject.send(LoginHomeserver(address: appSettings.defaultHomeserverAddress, loginMode: .unknown))
+        flow = .login
+        client = nil
+    }
+    
     // MARK: - Private
     
-    private func makeClientBuilder() -> AuthenticationClientBuilder {
+    private func makeClientBuilder() -> AuthenticationClientBuilderProtocol {
         // Use a fresh session directory each time the user enters a different server
         // so that caches (e.g. server versions) are always fresh for the new server.
         rotateSessionDirectory()
         
-        return AuthenticationClientBuilder(sessionDirectories: sessionDirectories,
-                                           passphrase: passphrase,
-                                           clientSessionDelegate: userSessionStore.clientSessionDelegate,
-                                           appSettings: appSettings,
-                                           appHooks: appHooks)
+        return clientBuilderFactory.makeBuilder(sessionDirectories: sessionDirectories,
+                                                passphrase: passphrase,
+                                                clientSessionDelegate: userSessionStore.clientSessionDelegate,
+                                                appSettings: appSettings,
+                                                appHooks: appHooks)
     }
     
     private func rotateSessionDirectory() {
@@ -169,12 +191,24 @@ class AuthenticationService: AuthenticationServiceProtocol {
         sessionDirectories = .init()
     }
     
-    private func userSession(for client: Client) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+    private func userSession(for client: ClientProtocol) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         switch await userSessionStore.userSession(for: client, sessionDirectories: sessionDirectories, passphrase: passphrase) {
         case .success(let clientProxy):
             return .success(clientProxy)
         case .failure:
             return .failure(.failedLoggingIn)
         }
+    }
+}
+
+// MARK: - Mocks
+
+extension AuthenticationService {
+    static var mock: AuthenticationService {
+        AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
+                              encryptionKeyProvider: EncryptionKeyProvider(),
+                              clientBuilderFactory: AuthenticationClientBuilderFactoryMock(configuration: .init()),
+                              appSettings: ServiceLocator.shared.settings,
+                              appHooks: AppHooks())
     }
 }

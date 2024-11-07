@@ -20,7 +20,9 @@ enum UITestsScreenIdentifier: String {
     case createPoll
     case createRoom
     case createRoomNoUsers
-    case login
+    case encryptionSettings
+    case encryptionSettingsOutOfSync
+    case encryptionReset
     case roomLayoutBottom
     case roomLayoutMiddle
     case roomLayoutTop

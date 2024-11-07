@@ -55,7 +55,7 @@ struct VoiceMessageRoomTimelineView: View {
 
 struct VoiceMessageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
-    static let timelineItemIdentifier = TimelineItemIdentifier.random
+    static let timelineItemIdentifier = TimelineItemIdentifier.randomEvent
     static let voiceRoomTimelineItem = VoiceMessageRoomTimelineItem(id: timelineItemIdentifier,
                                                                     timestamp: "Now",
                                                                     isOutgoing: false,
@@ -63,7 +63,7 @@ struct VoiceMessageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                     canBeRepliedTo: true,
                                                                     isThreaded: false,
                                                                     sender: .init(id: "Bob"),
-                                                                    content: .init(body: "audio.ogg",
+                                                                    content: .init(filename: "audio.ogg",
                                                                                    duration: 300,
                                                                                    waveform: EstimatedWaveform.mockWaveform,
                                                                                    source: nil,

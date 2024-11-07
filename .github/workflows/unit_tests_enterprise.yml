@@ -44,7 +44,7 @@ jobs:
       
       - name: SwiftFormat
         run: swiftformat --lint .
-      
+
       - name: Run tests
         run: bundle exec fastlane unit_tests skip_previews:true
         

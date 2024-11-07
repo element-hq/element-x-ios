@@ -72,7 +72,7 @@ enum NSELogger {
         }
         isConfigured = true
 
-        MXLog.configure(target: "nse", logLevel: logLevel)
+        MXLog.configure(currentTarget: "nse", filePrefix: "nse", logLevel: logLevel)
     }
 
     static func logMemory(with tag: String) {

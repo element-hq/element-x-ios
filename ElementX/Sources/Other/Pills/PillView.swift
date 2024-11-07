@@ -30,14 +30,14 @@ struct PillView: View {
             .padding(.trailing, 6)
             .padding(.vertical, 1)
             .background { Capsule().foregroundColor(backgroundColor) }
-            .onChange(of: context.viewState.displayText) { _ in
+            .onChange(of: context.viewState.displayText) {
                 didChangeText()
             }
     }
 }
 
 struct PillView_Previews: PreviewProvider, TestablePreview {
-    static let mockMediaProvider = MockMediaProvider()
+    static let mockMediaProvider = MediaProviderMock(configuration: .init())
     
     static var previews: some View {
         PillView(mediaProvider: mockMediaProvider,

@@ -34,7 +34,7 @@ class ServerSelectionUITests: XCTestCase {
         let app = Application.launch(.serverSelection)
         
         // When typing in an invalid homeserver
-        app.textFields[A11yIdentifiers.changeServerScreen.server].clearAndTypeText("thisisbad\n") // The tests only accept an address from LoginHomeserver.mockXYZ
+        app.textFields[A11yIdentifiers.changeServerScreen.server].clearAndTypeText("thisisbad\n", app: app) // The tests only accept an address from LoginHomeserver.mockXYZ
         
         // Then an error should be shown and the confirmation button disabled.
         try await app.assertScreenshot(.serverSelection, step: 2)

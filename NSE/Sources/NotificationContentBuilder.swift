@@ -11,6 +11,7 @@ import UserNotifications
 
 struct NotificationContentBuilder {
     let messageEventStringBuilder: RoomMessageEventStringBuilder
+    let settings: CommonSettingsProtocol
     
     /// Process the given notification item proxy
     /// - Parameters:
@@ -99,6 +100,8 @@ struct NotificationContentBuilder {
         
         let displayName = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
         notification.body = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName).characters)
+        
+        guard !settings.hideTimelineMedia else { return notification }
         
         switch messageType {
         case .image(content: let content):

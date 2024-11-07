@@ -83,13 +83,14 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
 
     static let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Test", members: members)),
                                              timelineController: MockRoomTimelineController(),
-                                             mediaProvider: MockMediaProvider(),
+                                             mediaProvider: MediaProviderMock(configuration: .init()),
                                              mediaPlayerProvider: MediaPlayerProviderMock(),
                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                              appMediator: AppMediatorMock.default,
                                              appSettings: ServiceLocator.shared.settings,
-                                             analyticsService: ServiceLocator.shared.analytics)
+                                             analyticsService: ServiceLocator.shared.analytics,
+                                             emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
 
     static let singleReceipt = [ReadReceipt(userID: RoomMemberProxyMock.mockAlice.userID, formattedTimestamp: "Now")]
     static let doubleReceipt = [ReadReceipt(userID: RoomMemberProxyMock.mockAlice.userID, formattedTimestamp: "Now"),
@@ -103,7 +104,7 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
                                    ReadReceipt(userID: RoomMemberProxyMock.mockDan.userID, formattedTimestamp: "Way, way before")]
 
     static func mockTimelineItem(with receipts: [ReadReceipt]) -> TextRoomTimelineItem {
-        TextRoomTimelineItem(id: .random,
+        TextRoomTimelineItem(id: .randomEvent,
                              timestamp: "Now",
                              isOutgoing: true,
                              isEditable: false,

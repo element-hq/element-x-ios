@@ -14,7 +14,7 @@ struct JoinRoomScreen: View {
     @ObservedObject var context: JoinRoomScreenViewModel.Context
     
     var body: some View {
-        FullscreenDialog(topPadding: 80, background: .bloom) {
+        FullscreenDialog(topPadding: context.viewState.mode == .knocked ? 151 : 35, background: .bloom) {
             if context.viewState.mode == .loading {
                 EmptyView()
             } else {
@@ -27,9 +27,21 @@ struct JoinRoomScreen: View {
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbar }
     }
     
+    @ViewBuilder
     var mainContent: some View {
+        switch context.viewState.mode {
+        case .knocked:
+            knockedView
+        default:
+            defaultView
+        }
+    }
+    
+    @ViewBuilder
+    private var defaultView: some View {
         VStack(spacing: 16) {
             RoomAvatarImage(avatar: context.viewState.avatar,
                             avatarSize: .room(on: .joinRoom),
@@ -44,7 +56,7 @@ struct JoinRoomScreen: View {
                 
                 if let subtitle = context.viewState.subtitle {
                     Text(subtitle)
-                        .font(.compound.bodyMD)
+                        .font(.compound.bodyLG)
                         .foregroundStyle(.compound.textSecondary)
                         .multilineTextAlignment(.center)
                 }
@@ -66,7 +78,56 @@ struct JoinRoomScreen: View {
                         .multilineTextAlignment(.center)
                         .lineLimit(3)
                 }
+                
+                if context.viewState.mode == .knock {
+                    knockMessage
+                        .padding(.top, 19)
+                }
             }
+        }
+    }
+    
+    @ViewBuilder
+    private var knockedView: some View {
+        VStack(spacing: 16) {
+            BigIcon(icon: \.checkCircleSolid, style: .successSolid)
+            VStack(spacing: 8) {
+                Text(L10n.screenJoinRoomKnockSentTitle)
+                    .font(.compound.headingMDBold)
+                    .foregroundStyle(.compound.textPrimary)
+                    .multilineTextAlignment(.center)
+                Text(L10n.screenJoinRoomKnockSentDescription)
+                    .font(.compound.bodyMD)
+                    .foregroundStyle(.compound.textSecondary)
+                    .multilineTextAlignment(.center)
+            }
+        }
+    }
+        
+    @ViewBuilder
+    private var knockMessage: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 0) {
+                TextField("", text: $context.knockMessage, axis: .vertical)
+                    .onChange(of: context.knockMessage) { _, newValue in
+                        context.knockMessage = String(newValue.prefix(1000))
+                    }
+                    .lineLimit(4, reservesSpace: true)
+                    .font(.compound.bodyMD)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+            }
+            .background(.compound.bgCanvasDefault)
+            .cornerRadius(8)
+            .overlay {
+                RoundedRectangle(cornerRadius: 8)
+                    .inset(by: 0.5)
+                    .stroke(.compound.borderInteractivePrimary)
+            }
+            
+            Text(L10n.screenJoinRoomKnockMessageDescription)
+                .font(.compound.bodyMD)
+                .foregroundStyle(.compound.textSecondary)
         }
     }
     
@@ -77,7 +138,10 @@ struct JoinRoomScreen: View {
             EmptyView()
         case .knock:
             Button(L10n.screenJoinRoomKnockAction) { context.send(viewAction: .knock) }
-                .buttonStyle(.compound(.primary))
+                .buttonStyle(.compound(.super))
+        case .knocked:
+            Button(L10n.screenJoinRoomCancelKnockAction) { context.send(viewAction: .cancelKnock) }
+                .buttonStyle(.compound(.secondary))
         case .join:
             Button(L10n.screenJoinRoomJoinAction) { context.send(viewAction: .join) }
                 .buttonStyle(.compound(.super))
@@ -96,6 +160,17 @@ struct JoinRoomScreen: View {
         Button(L10n.actionAccept) { context.send(viewAction: .acceptInvite) }
             .buttonStyle(.compound(.primary))
     }
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        if context.viewState.mode == .knocked {
+            ToolbarItem(placement: .principal) {
+                RoomHeaderView(roomName: context.viewState.title,
+                               roomAvatar: context.viewState.avatar,
+                               mediaProvider: context.mediaProvider)
+            }
+        }
+    }
 }
 
 // MARK: - Previews
@@ -105,6 +180,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
     static let knockViewModel = makeViewModel(mode: .knock)
     static let joinViewModel = makeViewModel(mode: .join)
     static let inviteViewModel = makeViewModel(mode: .invited)
+    static let knockedViewModel = makeViewModel(mode: .knocked)
     
     static var previews: some View {
         NavigationStack {
@@ -130,6 +206,12 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         }
         .previewDisplayName("Invite")
         .snapshotPreferences(delay: 0.25)
+        
+        NavigationStack {
+            JoinRoomScreen(context: knockedViewModel.context)
+        }
+        .previewDisplayName("Knocked")
+        .snapshotPreferences(delay: 0.25)
     }
     
     static func makeViewModel(mode: JoinRoomScreenInteractionMode) -> JoinRoomScreenViewModel {
@@ -145,11 +227,25 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
             (false, false, true, false)
         case .knock:
             (false, false, false, true)
+        case .knocked:
+            (false, false, false, false)
         }
         
         if mode == .unknown {
             clientProxy.roomPreviewForIdentifierViaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         } else {
+            switch mode {
+            case .knocked:
+                clientProxy.roomForIdentifierClosure = { _ in
+                    .knocked(KnockedRoomProxyMock(.init(avatarURL: URL.homeDirectory)))
+                }
+            case .invited:
+                clientProxy.roomForIdentifierClosure = { _ in
+                    .invited(InvitedRoomProxyMock(.init(avatarURL: URL.homeDirectory)))
+                }
+            default:
+                break
+            }
             clientProxy.roomPreviewForIdentifierViaReturnValue = .success(.init(roomID: "1",
                                                                                 name: "The Three-Body Problem - 三体",
                                                                                 canonicalAlias: "#3🌞problem:matrix.org",
@@ -164,11 +260,13 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
                                                                                 canKnock: membership.canKnock))
         }
         
+        ServiceLocator.shared.settings.knockingEnabled = true
+        
         return JoinRoomScreenViewModel(roomID: "1",
                                        via: [],
-                                       allowKnocking: true,
+                                       appSettings: ServiceLocator.shared.settings,
                                        clientProxy: clientProxy,
-                                       mediaProvider: MockMediaProvider(),
+                                       mediaProvider: MediaProviderMock(configuration: .init()),
                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }

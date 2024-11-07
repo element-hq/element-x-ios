@@ -34,13 +34,17 @@ struct AudioRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     }
     
     static var body: some View {
-        AudioRoomTimelineView(timelineItem: AudioRoomTimelineItem(id: .random,
+        AudioRoomTimelineView(timelineItem: AudioRoomTimelineItem(id: .randomEvent,
                                                                   timestamp: "Now",
                                                                   isOutgoing: false,
                                                                   isEditable: false,
                                                                   canBeRepliedTo: true,
                                                                   isThreaded: false,
                                                                   sender: .init(id: "Bob"),
-                                                                  content: .init(body: "audio.ogg", duration: 300, waveform: nil, source: nil, contentType: nil)))
+                                                                  content: .init(filename: "audio.ogg",
+                                                                                 duration: 300,
+                                                                                 waveform: nil,
+                                                                                 source: nil,
+                                                                                 contentType: nil)))
     }
 }

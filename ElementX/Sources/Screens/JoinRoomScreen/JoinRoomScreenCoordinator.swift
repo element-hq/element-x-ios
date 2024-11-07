@@ -14,6 +14,7 @@ struct JoinRoomScreenCoordinatorParameters {
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    let appSettings: AppSettings
 }
 
 enum JoinRoomScreenCoordinatorAction {
@@ -34,6 +35,7 @@ final class JoinRoomScreenCoordinator: CoordinatorProtocol {
     init(parameters: JoinRoomScreenCoordinatorParameters) {
         viewModel = JoinRoomScreenViewModel(roomID: parameters.roomID,
                                             via: parameters.via,
+                                            appSettings: parameters.appSettings,
                                             clientProxy: parameters.clientProxy,
                                             mediaProvider: parameters.mediaProvider,
                                             userIndicatorController: parameters.userIndicatorController)
@@ -47,7 +49,7 @@ final class JoinRoomScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .joined:
                 actionsSubject.send(.joined)
-            case .cancelled:
+            case .dismiss:
                 actionsSubject.send(.cancelled)
             }
         }

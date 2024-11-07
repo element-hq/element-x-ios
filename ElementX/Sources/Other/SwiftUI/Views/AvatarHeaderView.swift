@@ -17,6 +17,7 @@ struct AvatarHeaderView<Footer: View>: View {
     private enum Badge: Hashable {
         case encrypted(Bool)
         case `public`
+        case verified
     }
     
     private let avatarInfo: AvatarInfo
@@ -26,13 +27,13 @@ struct AvatarHeaderView<Footer: View>: View {
     
     private let avatarSize: AvatarSize
     private let mediaProvider: MediaProviderProtocol?
-    private var onAvatarTap: (() -> Void)?
+    private var onAvatarTap: ((URL) -> Void)?
     @ViewBuilder private var footer: () -> Footer
     
     init(room: RoomDetails,
          avatarSize: AvatarSize,
          mediaProvider: MediaProviderProtocol? = nil,
-         onAvatarTap: (() -> Void)? = nil,
+         onAvatarTap: ((URL) -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
         avatarInfo = .room(room.avatar)
         title = room.name ?? room.id
@@ -54,7 +55,7 @@ struct AvatarHeaderView<Footer: View>: View {
     init(accountOwner: RoomMemberDetails,
          dmRecipient: RoomMemberDetails,
          mediaProvider: MediaProviderProtocol? = nil,
-         onAvatarTap: (() -> Void)? = nil,
+         onAvatarTap: ((URL) -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
         let dmRecipientProfile = UserProfileProxy(member: dmRecipient)
         avatarInfo = .room(.heroes([dmRecipientProfile, UserProfileProxy(member: accountOwner)]))
@@ -70,13 +71,15 @@ struct AvatarHeaderView<Footer: View>: View {
     }
     
     init(member: RoomMemberDetails,
+         isVerified: Bool = false,
          avatarSize: AvatarSize,
          mediaProvider: MediaProviderProtocol? = nil,
-         onAvatarTap: (() -> Void)? = nil,
+         onAvatarTap: ((URL) -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
         let profile = UserProfileProxy(member: member)
         
         self.init(user: profile,
+                  isVerified: isVerified,
                   avatarSize: avatarSize,
                   mediaProvider: mediaProvider,
                   onAvatarTap: onAvatarTap,
@@ -84,9 +87,10 @@ struct AvatarHeaderView<Footer: View>: View {
     }
     
     init(user: UserProfileProxy,
+         isVerified: Bool,
          avatarSize: AvatarSize,
          mediaProvider: MediaProviderProtocol? = nil,
-         onAvatarTap: (() -> Void)? = nil,
+         onAvatarTap: ((URL) -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
         avatarInfo = .user(user)
         title = user.displayName ?? user.userID
@@ -96,27 +100,29 @@ struct AvatarHeaderView<Footer: View>: View {
         self.mediaProvider = mediaProvider
         self.onAvatarTap = onAvatarTap
         self.footer = footer
-        badges = []
+        badges = isVerified ? [.verified] : []
     }
     
     private var badgesStack: some View {
         HStack(spacing: 8) {
             ForEach(badges, id: \.self) { badge in
                 switch badge {
-                case .encrypted(let isEncrypted):
-                    if isEncrypted {
-                        BadgeLabel(title: L10n.screenRoomDetailsBadgeEncrypted,
-                                   icon: \.lockSolid,
-                                   isHighlighted: true)
-                    } else {
-                        BadgeLabel(title: L10n.screenRoomDetailsBadgeNotEncrypted,
-                                   icon: \.lockOff,
-                                   isHighlighted: false)
-                    }
+                case .encrypted(true):
+                    BadgeLabel(title: L10n.screenRoomDetailsBadgeEncrypted,
+                               icon: \.lockSolid,
+                               isHighlighted: true)
+                case .encrypted(false):
+                    BadgeLabel(title: L10n.screenRoomDetailsBadgeNotEncrypted,
+                               icon: \.lockOff,
+                               isHighlighted: false)
                 case .public:
                     BadgeLabel(title: L10n.screenRoomDetailsBadgePublic,
                                icon: \.public,
                                isHighlighted: false)
+                case .verified:
+                    BadgeLabel(title: L10n.commonVerified,
+                               icon: \.verified,
+                               isHighlighted: true)
                 }
             }
         }
@@ -128,24 +134,22 @@ struct AvatarHeaderView<Footer: View>: View {
         case .room(let roomAvatar):
             RoomAvatarImage(avatar: roomAvatar,
                             avatarSize: avatarSize,
-                            mediaProvider: mediaProvider)
+                            mediaProvider: mediaProvider,
+                            onAvatarTap: onAvatarTap)
+            
         case .user(let userProfile):
             LoadableAvatarImage(url: userProfile.avatarURL,
                                 name: userProfile.displayName,
                                 contentID: userProfile.userID,
                                 avatarSize: avatarSize,
-                                mediaProvider: mediaProvider)
+                                mediaProvider: mediaProvider,
+                                onTap: onAvatarTap)
         }
     }
     
     var body: some View {
         VStack(spacing: 8.0) {
-            Button {
-                onAvatarTap?()
-            } label: {
-                avatar
-            }
-            .buttonStyle(.borderless) // Add a button style to stop the whole row being tappable.
+            avatar
             
             Spacer()
                 .frame(height: 9)
@@ -191,7 +195,7 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
                                          isEncrypted: true,
                                          isPublic: true),
                              avatarSize: .room(on: .details),
-                             mediaProvider: MockMediaProvider()) {
+                             mediaProvider: MediaProviderMock(configuration: .init())) {
                 HStack(spacing: 32) {
                     ShareLink(item: "test") {
                         CompoundIcon(\.shareIos)
@@ -205,7 +209,7 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
         
         Form {
             AvatarHeaderView(accountOwner: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockMe), dmRecipient: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockAlice),
-                             mediaProvider: MockMediaProvider()) {
+                             mediaProvider: MediaProviderMock(configuration: .init())) {
                 HStack(spacing: 32) {
                     ShareLink(item: "test") {
                         CompoundIcon(\.shareIos)
@@ -220,11 +224,16 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
         VStack(spacing: 16) {
             AvatarHeaderView(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockAlice),
                              avatarSize: .room(on: .details),
-                             mediaProvider: MockMediaProvider()) { Text("") }
+                             mediaProvider: MediaProviderMock(configuration: .init())) { Text("") }
+            
+            AvatarHeaderView(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockBob),
+                             isVerified: true,
+                             avatarSize: .room(on: .details),
+                             mediaProvider: MediaProviderMock(configuration: .init())) { Text("") }
             
             AvatarHeaderView(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockBanned[3]),
                              avatarSize: .room(on: .details),
-                             mediaProvider: MockMediaProvider()) { Text("") }
+                             mediaProvider: MediaProviderMock(configuration: .init())) { Text("") }
         }
         .padding()
         .background(Color.compound.bgSubtleSecondaryLevel0)

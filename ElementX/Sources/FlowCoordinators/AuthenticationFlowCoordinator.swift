@@ -65,15 +65,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         fatalError()
     }
     
-    func handleOIDCRedirectURL(_ url: URL) {
-        guard let oidcPresenter else {
-            MXLog.error("Failed to find an OIDC request in progress.")
-            return
-        }
-        
-        oidcPresenter.handleUniversalLinkCallback(url)
-    }
-    
     // MARK: - Private
     
     private func showStartScreen() {
@@ -86,11 +77,11 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .loginManually:
-                    Task { await self.startAuthentication(flow: .login) }
+                    showServerConfirmationScreen(authenticationFlow: .login)
                 case .loginWithQR:
                     startQRCodeLogin()
                 case .register:
-                    Task { await self.startAuthentication(flow: .register) }
+                    showServerConfirmationScreen(authenticationFlow: .register)
                 case .reportProblem:
                     showReportProblemScreen()
                 }
@@ -113,7 +104,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .signInManually:
                 navigationStackCoordinator.setSheetCoordinator(nil)
-                Task { await self.startAuthentication(flow: .login) }
+                showServerConfirmationScreen(authenticationFlow: .login)
             case .cancel:
                 navigationStackCoordinator.setSheetCoordinator(nil)
             case .done(let userSession):
@@ -137,69 +128,15 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         bugReportFlowCoordinator?.start()
     }
     
-    private func startAuthentication(flow: AuthenticationFlow) async {
-        startLoading()
-        
-        switch await authenticationService.configure(for: appSettings.defaultHomeserverAddress) {
-        case .success:
-            stopLoading()
-            showServerConfirmationScreen(authenticationFlow: flow)
-        case .failure:
-            stopLoading()
-            showServerSelectionScreen(authenticationFlow: flow, isModallyPresented: false)
-        }
-    }
-    
-    private func showServerSelectionScreen(authenticationFlow: AuthenticationFlow, isModallyPresented: Bool) {
-        let navigationCoordinator = NavigationStackCoordinator()
-        
-        let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
-                                                                    userIndicatorController: userIndicatorController,
-                                                                    isModallyPresented: isModallyPresented)
-        let coordinator = ServerSelectionScreenCoordinator(parameters: parameters)
-        
-        coordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .updated:
-                    if isModallyPresented {
-                        navigationStackCoordinator.setSheetCoordinator(nil)
-                    } else {
-                        // We are here because the default server failed to respond.
-                        if authenticationService.homeserver.value.loginMode == .password {
-                            if authenticationFlow == .login {
-                                // Add the password login screen directly to the flow, its fine.
-                                showLoginScreen()
-                            } else {
-                                // Add the web registration screen directly to the flow, its fine.
-                                showWebRegistration()
-                            }
-                        } else {
-                            // OIDC is presented from the confirmation screen so replace the
-                            // server selection screen which was inserted to handle the failure.
-                            navigationStackCoordinator.pop()
-                            showServerConfirmationScreen(authenticationFlow: authenticationFlow)
-                        }
-                    }
-                case .dismiss:
-                    navigationStackCoordinator.setSheetCoordinator(nil)
-                }
-            }
-            .store(in: &cancellables)
-        
-        if isModallyPresented {
-            navigationCoordinator.setRootCoordinator(coordinator)
-            navigationStackCoordinator.setSheetCoordinator(navigationCoordinator)
-        } else {
-            navigationStackCoordinator.push(coordinator)
-        }
-    }
-    
     private func showServerConfirmationScreen(authenticationFlow: AuthenticationFlow) {
+        // Reset the service back to the default homeserver before continuing. This ensures
+        // we check that registration is supported if it was previously configured for login.
+        authenticationService.reset()
+        
         let parameters = ServerConfirmationScreenCoordinatorParameters(authenticationService: authenticationService,
-                                                                       authenticationFlow: authenticationFlow)
+                                                                       authenticationFlow: authenticationFlow,
+                                                                       slidingSyncLearnMoreURL: appSettings.slidingSyncLearnMoreURL,
+                                                                       userIndicatorController: userIndicatorController)
         let coordinator = ServerConfirmationScreenCoordinator(parameters: parameters)
         
         coordinator.actions.sink { [weak self] action in
@@ -215,12 +152,38 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                     showLoginScreen()
                 }
             case .changeServer:
-                showServerSelectionScreen(authenticationFlow: authenticationFlow, isModallyPresented: true)
+                showServerSelectionScreen(authenticationFlow: authenticationFlow)
             }
         }
         .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func showServerSelectionScreen(authenticationFlow: AuthenticationFlow) {
+        let navigationCoordinator = NavigationStackCoordinator()
+        
+        let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
+                                                                    authenticationFlow: authenticationFlow,
+                                                                    slidingSyncLearnMoreURL: appSettings.slidingSyncLearnMoreURL,
+                                                                    userIndicatorController: userIndicatorController)
+        let coordinator = ServerSelectionScreenCoordinator(parameters: parameters)
+        
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .updated:
+                    navigationStackCoordinator.setSheetCoordinator(nil)
+                case .dismiss:
+                    navigationStackCoordinator.setSheetCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(navigationCoordinator)
     }
     
     private func showWebRegistration() {
@@ -271,8 +234,9 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     private func showLoginScreen() {
         let parameters = LoginScreenCoordinatorParameters(authenticationService: authenticationService,
-                                                          analytics: analytics,
-                                                          userIndicatorController: userIndicatorController)
+                                                          slidingSyncLearnMoreURL: appSettings.slidingSyncLearnMoreURL,
+                                                          userIndicatorController: userIndicatorController,
+                                                          analytics: analytics)
         let coordinator = LoginScreenCoordinator(parameters: parameters)
         
         coordinator.actions

@@ -24,8 +24,8 @@ struct RoomHeaderView: View {
                 .font(.compound.bodyLGSemibold)
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.name)
         }
-        // Leading align whilst using the principal toolbar position.
-        .frame(maxWidth: .infinity, alignment: .leading)
+        // Take up as much space as possible, with a leading alignment for use in the principal toolbar position.
+        .frame(idealWidth: .greatestFiniteMagnitude, maxWidth: .infinity, alignment: .leading)
     }
     
     private var avatarImage: some View {
@@ -42,7 +42,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
                        roomAvatar: .room(id: "1",
                                          name: "Some Room Name",
                                          avatarURL: URL.picturesDirectory),
-                       mediaProvider: MockMediaProvider())
+                       mediaProvider: MediaProviderMock(configuration: .init()))
             .previewLayout(.sizeThatFits)
             .padding()
         
@@ -50,7 +50,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
                        roomAvatar: .room(id: "1",
                                          name: "Some Room Name",
                                          avatarURL: nil),
-                       mediaProvider: MockMediaProvider())
+                       mediaProvider: MediaProviderMock(configuration: .init()))
             .previewLayout(.sizeThatFits)
             .padding()
     }

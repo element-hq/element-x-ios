@@ -196,7 +196,7 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
         roomProxy = JoinedRoomProxyMock(.init(members: .allMembersAsAdmin))
         viewModel = RoomChangeRolesScreenViewModel(mode: mode,
                                                    roomProxy: roomProxy,
-                                                   mediaProvider: MockMediaProvider(),
+                                                   mediaProvider: MediaProviderMock(configuration: .init()),
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    analytics: ServiceLocator.shared.analytics)
     }

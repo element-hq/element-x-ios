@@ -35,7 +35,7 @@ struct AnalyticsPromptScreen: View {
     
     private var header: some View {
         VStack(spacing: 8) {
-            HeroImage(icon: \.chart)
+            BigIcon(icon: \.chart)
                 .padding(.bottom, 8)
             
             Text(L10n.screenAnalyticsPromptTitle(InfoPlistReader.main.bundleDisplayName))
@@ -65,7 +65,7 @@ struct AnalyticsPromptScreen: View {
 
     @ViewBuilder
     private func checkMarkItem(title: String, position: ListPosition) -> some View {
-        RoundedLabelItem(title: title, listPosition: position) {
+        VisualListItem(title: title, position: position) {
             CompoundIcon(\.checkCircle, size: .small, relativeTo: .body)
                 .foregroundColor(.compound.iconAccentPrimary)
         }

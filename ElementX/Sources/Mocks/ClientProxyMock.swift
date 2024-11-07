@@ -13,6 +13,8 @@ struct ClientProxyMockConfiguration {
     var deviceID: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol? = RoomSummaryProviderMock(.init())
     var roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol?
+    
+    var recoveryState: SecureBackupRecoveryState = .enabled
 }
 
 enum ClientProxyMockError: Error {
@@ -50,7 +52,7 @@ extension ClientProxyMock {
         canDeactivateAccount = false
         directRoomForUserIDReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         createDirectRoomWithExpectedRoomNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        createRoomNameTopicIsRoomPrivateUserIDsAvatarURLReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         uploadMediaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         loadUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         setUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
@@ -60,7 +62,6 @@ extension ClientProxyMock {
         logoutReturnValue = nil
         searchUsersSearchTermLimitReturnValue = .success(.init(results: [], limited: false))
         profileForReturnValue = .success(.init(userID: "@a:b.com", displayName: "Some user"))
-        sessionVerificationControllerProxyReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         ignoreUserReturnValue = .success(())
         unignoreUserReturnValue = .success(())
         
@@ -77,14 +78,10 @@ extension ClientProxyMock {
         
         loadMediaContentForSourceThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
         loadMediaThumbnailForSourceWidthHeightThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
-        loadMediaFileForSourceBodyThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
+        loadMediaFileForSourceFilenameThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
         
-        secureBackupController = {
-            let secureBackupController = SecureBackupControllerMock()
-            secureBackupController.underlyingRecoveryState = .init(CurrentValueSubject<SecureBackupRecoveryState, Never>(.enabled))
-            secureBackupController.underlyingKeyBackupState = .init(CurrentValueSubject<SecureBackupKeyBackupState, Never>(.enabled))
-            return secureBackupController
-        }()
+        secureBackupController = SecureBackupControllerMock(.init(recoveryState: configuration.recoveryState))
+        resetIdentityReturnValue = .success(IdentityResetHandleSDKMock(.init()))
         
         roomForIdentifierClosure = { [weak self] identifier in
             guard let room = self?.roomSummaryProvider?.roomListPublisher.value.first(where: { $0.id == identifier }) else {
@@ -93,5 +90,7 @@ extension ClientProxyMock {
             
             return await .joined(JoinedRoomProxyMock(.init(id: room.id, name: room.name)))
         }
+        
+        userIdentityForReturnValue = .success(UserIdentitySDKMock(configuration: .init()))
     }
 }

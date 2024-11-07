@@ -38,7 +38,7 @@ struct ResolveVerifiedUserSendFailureScreen: View {
     
     var header: some View {
         VStack(spacing: 8) {
-            HeroImage(icon: \.error, style: .critical)
+            BigIcon(icon: \.error, style: .alertSolid)
                 .padding(.bottom, 8)
             
             Text(context.viewState.title)
@@ -94,7 +94,7 @@ struct ResolveVerifiedUserSendFailureScreen_Previews: PreviewProvider, TestableP
     
     static func makeViewModel(failure: TimelineItemSendFailure.VerifiedUser) -> ResolveVerifiedUserSendFailureScreenViewModel {
         ResolveVerifiedUserSendFailureScreenViewModel(failure: failure,
-                                                      itemID: .random,
+                                                      itemID: .randomEvent,
                                                       roomProxy: JoinedRoomProxyMock(.init()),
                                                       userIndicatorController: UserIndicatorControllerMock())
     }
@@ -102,7 +102,7 @@ struct ResolveVerifiedUserSendFailureScreen_Previews: PreviewProvider, TestableP
 
 struct ResolveVerifiedUserSendFailureScreenSheet_Previews: PreviewProvider {
     static let viewModel = ResolveVerifiedUserSendFailureScreenViewModel(failure: .changedIdentity(users: ["@alice:matrix.org"]),
-                                                                         itemID: .random,
+                                                                         itemID: .randomEvent,
                                                                          roomProxy: JoinedRoomProxyMock(.init()),
                                                                          userIndicatorController: UserIndicatorControllerMock())
     

@@ -66,10 +66,10 @@ struct HomeScreenContent: View {
             .onReceive(scrollViewAdapter.isScrolling) { _ in
                 updateVisibleRange()
             }
-            .onChange(of: context.searchQuery) { _ in
+            .onChange(of: context.searchQuery) {
                 updateVisibleRange()
             }
-            .onChange(of: context.viewState.visibleRooms) { _ in
+            .onChange(of: context.viewState.visibleRooms) {
                 updateVisibleRange()
                 
                 // We have been seeing a lot of issues around the room list not updating properly after
@@ -130,7 +130,7 @@ struct HomeScreenContent: View {
                 if context.viewState.slidingSyncMigrationBannerMode == .show {
                     HomeScreenSlidingSyncMigrationBanner(context: context)
                 } else if context.viewState.securityBannerMode == .show {
-                    HomeScreenRecoveryKeyConfirmationBanner(context: context)
+                    HomeScreenRecoveryKeyConfirmationBanner(requiresExtraAccountSetup: context.viewState.requiresExtraAccountSetup, context: context)
                 }
             }
             .background(Color.compound.bgCanvasDefault)

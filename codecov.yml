@@ -14,6 +14,7 @@ ignore:
   - "ElementX/Sources/Vendor"
   - "ElementX/Sources/UITests"
   - "ElementX/Sources/UnitTests"
+  - "ElementX/Sources/Settings/DeveloperOptionsScreen"
   - "Tools"
   - "**/Mock*.swift"
   - "**/*Mock.swift"

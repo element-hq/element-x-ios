@@ -16,11 +16,20 @@ enum RoomMemberDetailsScreenViewModelAction {
 struct RoomMemberDetailsScreenViewState: BindableState {
     let userID: String
     var memberDetails: RoomMemberDetails?
+    var isVerified: Bool?
     var isOwnMemberDetails = false
     var isProcessingIgnoreRequest = false
     var dmRoomID: String?
 
     var bindings: RoomMemberDetailsScreenViewStateBindings
+    
+    var showVerifiedBadge: Bool {
+        isVerified == true // We purposely show the badge on your own account for consistency with Web.
+    }
+    
+    var showVerificationSection: Bool {
+        isVerified == false && !isOwnMemberDetails
+    }
 }
 
 struct RoomMemberDetailsScreenViewStateBindings {
@@ -74,7 +83,7 @@ enum RoomMemberDetailsScreenViewAction {
     case showIgnoreAlert
     case ignoreConfirmed
     case unignoreConfirmed
-    case displayAvatar
+    case displayAvatar(URL)
     case openDirectChat
     case startCall(roomID: String)
 }

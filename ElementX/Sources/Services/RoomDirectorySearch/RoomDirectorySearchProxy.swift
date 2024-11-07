@@ -47,7 +47,7 @@ final class RoomDirectorySearchProxy: RoomDirectorySearchProxyProtocol {
     
     func search(query: String?) async -> Result<Void, RoomDirectorySearchError> {
         do {
-            try await roomDirectorySearch.search(filter: query, batchSize: 50)
+            try await roomDirectorySearch.search(filter: query, batchSize: 50, viaServerName: nil)
             return .success(())
         } catch {
             return .failure(.searchFailed)

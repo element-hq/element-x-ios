@@ -9,7 +9,11 @@ import UIKit
 import UniformTypeIdentifiers
 
 struct AudioRoomTimelineItemContent: Hashable {
-    let body: String
+    let filename: String
+    var caption: String?
+    var formattedCaption: AttributedString?
+    /// The original textual representation of the formatted caption directly from the event (usually HTML code)
+    var formattedCaptionHTMLString: String?
     let duration: TimeInterval
     let waveform: EstimatedWaveform?
     let source: MediaSourceProxy?

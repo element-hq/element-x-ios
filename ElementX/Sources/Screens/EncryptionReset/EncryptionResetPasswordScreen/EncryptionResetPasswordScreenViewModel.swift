@@ -11,12 +11,16 @@ import SwiftUI
 typealias EncryptionResetPasswordScreenViewModelType = StateStoreViewModel<EncryptionResetPasswordScreenViewState, EncryptionResetPasswordScreenViewAction>
 
 class EncryptionResetPasswordScreenViewModel: EncryptionResetPasswordScreenViewModelType, EncryptionResetPasswordScreenViewModelProtocol {
+    private let passwordPublisher: PassthroughSubject<String, Never>
+    
     private let actionsSubject: PassthroughSubject<EncryptionResetPasswordScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<EncryptionResetPasswordScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init() {
+    init(passwordPublisher: PassthroughSubject<String, Never>) {
+        self.passwordPublisher = passwordPublisher
+        
         super.init(initialViewState: .init(bindings: .init(password: "")))
     }
     
@@ -26,8 +30,9 @@ class EncryptionResetPasswordScreenViewModel: EncryptionResetPasswordScreenViewM
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
-        case .resetIdentity:
-            actionsSubject.send(.resetIdentity(state.bindings.password))
+        case .submit:
+            passwordPublisher.send(state.bindings.password)
+            actionsSubject.send(.passwordEntered)
         }
     }
 }

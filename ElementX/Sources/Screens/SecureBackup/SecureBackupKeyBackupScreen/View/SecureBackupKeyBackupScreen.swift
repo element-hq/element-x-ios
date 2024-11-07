@@ -22,6 +22,7 @@ struct SecureBackupKeyBackupScreen: View {
                 Text(L10n.screenChatBackupKeyBackupActionDisable)
             }
             .buttonStyle(.compound(.primary))
+            .accessibilityIdentifier(A11yIdentifiers.secureBackupKeyBackupScreen.deleteKeyStorage)
         }
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
@@ -39,37 +40,37 @@ struct SecureBackupKeyBackupScreen: View {
     }
         
     private var disableBackupSection: some View {
-        VStack(spacing: 16) {
-            HeroImage(icon: \.keyOffSolid)
-            
-            Text(L10n.screenKeyBackupDisableTitle)
-                .foregroundColor(.compound.textPrimary)
-                .font(.compound.headingMDBold)
-                .multilineTextAlignment(.center)
-            
-            Text(L10n.screenKeyBackupDisableDescription)
-                .foregroundColor(.compound.textSecondary)
-                .font(.compound.bodyMD)
-                .multilineTextAlignment(.center)
-            
-            VStack(alignment: .leading, spacing: 10) {
-                Label {
-                    Text(L10n.screenKeyBackupDisableDescriptionPoint1)
-                        .foregroundColor(.compound.textSecondary)
-                        .font(.compound.bodyMD)
-                } icon: {
-                    CompoundIcon(\.close)
-                        .foregroundColor(.compound.iconCriticalPrimary)
-                }
+        VStack(spacing: 24) {
+            VStack(spacing: 16) {
+                BigIcon(icon: \.error, style: .alertSolid)
                 
-                Label {
-                    Text(L10n.screenKeyBackupDisableDescriptionPoint2(InfoPlistReader.main.bundleDisplayName))
+                VStack(spacing: 8) {
+                    Text(L10n.screenKeyBackupDisableTitle)
+                        .foregroundColor(.compound.textPrimary)
+                        .font(.compound.headingMDBold)
+                        .multilineTextAlignment(.center)
+                    
+                    Text(L10n.screenKeyBackupDisableDescription)
                         .foregroundColor(.compound.textSecondary)
                         .font(.compound.bodyMD)
-                } icon: {
-                    CompoundIcon(\.close)
+                        .multilineTextAlignment(.center)
+                }
+            }
+            
+            VStack(alignment: .leading, spacing: 4) {
+                VisualListItem(title: L10n.screenKeyBackupDisableDescriptionPoint1,
+                               position: .top) {
+                    CompoundIcon(\.close, size: .small, relativeTo: .body)
                         .foregroundColor(.compound.iconCriticalPrimary)
                 }
+                .backgroundStyle(.compound.bgActionSecondaryHovered)
+                
+                VisualListItem(title: L10n.screenKeyBackupDisableDescriptionPoint2(InfoPlistReader.main.productionAppName),
+                               position: .bottom) {
+                    CompoundIcon(\.close, size: .small, relativeTo: .body)
+                        .foregroundColor(.compound.iconCriticalPrimary)
+                }
+                .backgroundStyle(.compound.bgActionSecondaryHovered)
             }
         }
     }

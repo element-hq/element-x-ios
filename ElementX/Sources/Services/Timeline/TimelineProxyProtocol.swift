@@ -18,7 +18,6 @@ enum TimelineKind {
 enum TimelineProxyError: Error {
     case sdkError(Error)
     
-    case failedEditing
     case failedRedacting
     case failedPaginatingEndReached
 }
@@ -38,9 +37,10 @@ protocol TimelineProxyProtocol {
     func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError>
     func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError>
     
-    func edit(_ timelineItem: EventTimelineItem, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError>
+    func edit(_ eventOrTransactionID: EventOrTransactionId,
+              newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError>
     
-    func redact(_ timelineItemID: TimelineItemIdentifier,
+    func redact(_ eventOrTransactionID: EventOrTransactionId,
                 reason: String?) async -> Result<Void, TimelineProxyError>
     
     func pin(eventID: String) async -> Result<Bool, TimelineProxyError>
@@ -89,12 +89,11 @@ protocol TimelineProxyProtocol {
     
     func sendMessage(_ message: String,
                      html: String?,
-                     inReplyTo eventID: String?,
+                     inReplyToEventID: String?,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError>
     
-    func toggleReaction(_ reaction: String, to itemID: TimelineItemIdentifier) async -> Result<Void, TimelineProxyError>
+    func toggleReaction(_ reaction: String, to eventID: EventOrTransactionId) async -> Result<Void, TimelineProxyError>
     
-    // Polls
     func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError>
     
     func editPoll(original eventID: String,
@@ -111,15 +110,4 @@ protocol TimelineProxyProtocol {
     func buildMessageContentFor(_ message: String,
                                 html: String?,
                                 intentionalMentions: Mentions) -> RoomMessageEventContentWithoutRelation
-}
-
-extension TimelineProxyProtocol {
-    func sendMessage(_ message: String,
-                     html: String?,
-                     intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
-        await sendMessage(message,
-                          html: html,
-                          inReplyTo: nil,
-                          intentionalMentions: intentionalMentions)
-    }
 }

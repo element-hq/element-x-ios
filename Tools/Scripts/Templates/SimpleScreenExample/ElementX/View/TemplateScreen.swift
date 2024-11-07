@@ -24,7 +24,7 @@ struct TemplateScreen: View {
         }
         .compoundList()
         .navigationTitle(context.viewState.title)
-        .onChange(of: context.composerText) { _ in
+        .onChange(of: context.composerText) {
             context.send(viewAction: .textChanged)
         }
     }

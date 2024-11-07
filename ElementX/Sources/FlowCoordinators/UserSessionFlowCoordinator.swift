@@ -7,6 +7,7 @@
 
 import AVKit
 import Combine
+import MatrixRustSDK
 import SwiftUI
 
 enum UserSessionFlowCoordinatorAction {
@@ -40,6 +41,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     // periphery:ignore - retaining purpose
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
+    
+    // periphery:ignore - retaining purpose
+    private var encryptionResetFlowCoordinator: EncryptionResetFlowCoordinator?
     
     // periphery:ignore - retaining purpose
     private var globalSearchScreenCoordinator: GlobalSearchScreenCoordinator?
@@ -98,7 +102,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                             secureBackupController: userSession.clientProxy.secureBackupController,
                                                                             appSettings: appSettings,
                                                                             navigationSplitCoordinator: navigationSplitCoordinator,
-                                                                            userIndicatorController: ServiceLocator.shared.userIndicatorController))
+                                                                            userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                            analytics: analytics))
         
         onboardingFlowCoordinator = OnboardingFlowCoordinator(userSession: userSession,
                                                               appLockService: appLockService,
@@ -112,81 +117,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         setupStateMachine()
         
-        userSession.sessionSecurityStatePublisher
-            .map(\.verificationState)
-            .filter { $0 != .unknown }
-            .removeDuplicates()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                
-                attemptStartingOnboarding()
-            }
-            .store(in: &cancellables)
-        
-        settingsFlowCoordinator.actions.sink { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .presentedSettings:
-                stateMachine.processEvent(.showSettingsScreen)
-            case .dismissedSettings:
-                stateMachine.processEvent(.dismissedSettingsScreen)
-            case .runLogoutFlow:
-                Task { await self.runLogoutFlow() }
-            case .clearCache:
-                actionsSubject.send(.clearCache)
-            case .forceLogout:
-                actionsSubject.send(.forceLogout)
-            }
-        }
-        .store(in: &cancellables)
-        
-        userSession.clientProxy.actionsPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { action in
-                guard case let .receivedDecryptionError(info) = action else {
-                    return
-                }
-                
-                let timeToDecryptMs: Int
-                if let unsignedTimeToDecryptMs = info.timeToDecryptMs {
-                    timeToDecryptMs = Int(unsignedTimeToDecryptMs)
-                } else {
-                    timeToDecryptMs = -1
-                }
-                
-                switch info.cause {
-                case .unknown:
-                    analytics.trackError(context: nil, domain: .E2EE, name: .OlmKeysNotSentError, timeToDecryptMillis: timeToDecryptMs)
-                case .membership:
-                    analytics.trackError(context: nil, domain: .E2EE, name: .HistoricalMessage, timeToDecryptMillis: timeToDecryptMs)
-                }
-            }
-            .store(in: &cancellables)
-        
-        elementCallService.actions
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] action in
-                switch action {
-                case .endCall:
-                    self?.dismissCallScreenIfNeeded()
-                default:
-                    break
-                }
-            }
-            .store(in: &cancellables)
-        
-        onboardingFlowCoordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .logout:
-                    logout()
-                }
-            }
-            .store(in: &cancellables)
+        setupObservers()
     }
     
     func start() {
@@ -272,8 +203,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             presentCallScreen(genericCallLink: url)
         case .settings, .chatBackupSettings:
             settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
-        case .oidcCallback:
-            break
         }
     }
     
@@ -331,6 +260,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 bugReportFlowCoordinator?.start()
             case (.feedbackScreen, .dismissedFeedbackScreen, .roomList):
                 break
+            case (.roomList, .showRecoveryKeyScreen, .recoveryKeyScreen):
+                presentRecoveryKeyScreen(animated: animated)
+            case (.recoveryKeyScreen, .dismissedRecoveryKeyScreen, .roomList):
+                break
+            case (.roomList, .startEncryptionResetFlow, .encryptionResetFlow):
+                startEncryptionResetFlow(animated: animated)
+            case (.encryptionResetFlow, .finishedEncryptionResetFlow, .roomList):
+                break
             case (.roomList, .showStartChatScreen, .startChatScreen):
                 presentStartChat(animated: animated)
             case (.startChatScreen, .dismissedStartChatScreen, .roomList):
@@ -370,6 +307,129 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
+    private func setupObservers() {
+        userSession.sessionSecurityStatePublisher
+            .map(\.verificationState)
+            .filter { $0 != .unknown }
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                
+                attemptStartingOnboarding()
+                
+                setupSessionVerificationRequestsObserver()
+            }
+            .store(in: &cancellables)
+        
+        settingsFlowCoordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .presentedSettings:
+                stateMachine.processEvent(.showSettingsScreen)
+            case .dismissedSettings:
+                stateMachine.processEvent(.dismissedSettingsScreen)
+            case .runLogoutFlow:
+                Task { await self.runLogoutFlow() }
+            case .clearCache:
+                actionsSubject.send(.clearCache)
+            case .forceLogout:
+                actionsSubject.send(.forceLogout)
+            }
+        }
+        .store(in: &cancellables)
+        
+        userSession.clientProxy.actionsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                guard let self, case let .receivedDecryptionError(info) = action else {
+                    return
+                }
+                
+                let timeToDecryptMs: Int
+                if let unsignedTimeToDecryptMs = info.timeToDecryptMs {
+                    timeToDecryptMs = Int(unsignedTimeToDecryptMs)
+                } else {
+                    timeToDecryptMs = -1
+                }
+                
+                switch info.cause {
+                case .unknown:
+                    analytics.trackError(context: nil, domain: .E2EE, name: .UnknownError, timeToDecryptMillis: timeToDecryptMs)
+                case .unknownDevice:
+                    analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedSentByInsecureDevice, timeToDecryptMillis: timeToDecryptMs)
+                case .unsignedDevice:
+                    analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedSentByInsecureDevice, timeToDecryptMillis: timeToDecryptMs)
+                case .verificationViolation:
+                    analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedVerificationViolation, timeToDecryptMillis: timeToDecryptMs)
+                case .sentBeforeWeJoined:
+                    analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedDueToMembership, timeToDecryptMillis: timeToDecryptMs)
+                }
+            }
+            .store(in: &cancellables)
+                
+        elementCallService.actions
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                switch action {
+                case .endCall:
+                    self?.dismissCallScreenIfNeeded()
+                default:
+                    break
+                }
+            }
+            .store(in: &cancellables)
+        
+        onboardingFlowCoordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .logout:
+                    logout()
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func setupSessionVerificationRequestsObserver() {
+        userSession.clientProxy.sessionVerificationController?.actions
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                guard let self, case .receivedVerificationRequest(let details) = action else {
+                    return
+                }
+                
+                MXLog.info("Received session verification request")
+                
+                presentSessionVerificationScreen(details: details)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func presentSessionVerificationScreen(details: SessionVerificationRequestDetails) {
+        guard let sessionVerificationController = userSession.clientProxy.sessionVerificationController else {
+            fatalError("The sessionVerificationController should aways be valid at this point")
+        }
+        
+        let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController,
+                                                                        flow: .responder(details: details))
+        
+        let coordinator = SessionVerificationScreenCoordinator(parameters: parameters)
+        
+        coordinator.actions
+            .sink { [weak self] action in
+                switch action {
+                case .done:
+                    self?.navigationSplitCoordinator.setSheetCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationSplitCoordinator.setSheetCoordinator(coordinator)
+    }
+    
     private func presentHomeScreen() {
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
                                                          bugReportService: bugReportService,
@@ -396,6 +456,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.feedbackScreen)
                 case .presentSecureBackupSettings:
                     settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
+                case .presentRecoveryKeyScreen:
+                    stateMachine.processEvent(.showRecoveryKeyScreen)
+                case .presentEncryptionResetScreen:
+                    stateMachine.processEvent(.startEncryptionResetFlow)
                 case .presentStartChatScreen:
                     stateMachine.processEvent(.showStartChatScreen)
                 case .presentGlobalSearch:
@@ -475,7 +539,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                     isChildFlow: false,
                                                     roomTimelineControllerFactory: roomTimelineControllerFactory,
                                                     navigationStackCoordinator: detailNavigationStackCoordinator,
-                                                    emojiProvider: EmojiProvider(),
+                                                    emojiProvider: EmojiProvider(appSettings: appSettings),
                                                     ongoingCallRoomIDPublisher: elementCallService.ongoingCallRoomIDPublisher,
                                                     appMediator: appMediator,
                                                     appSettings: appSettings,
@@ -532,7 +596,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                               userSession: userSession,
                                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                               navigationStackCoordinator: startChatNavigationStackCoordinator,
-                                                              userDiscoveryService: userDiscoveryService)
+                                                              userDiscoveryService: userDiscoveryService,
+                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings))
         
         let coordinator = StartChatScreenCoordinator(parameters: parameters)
         coordinator.actions.sink { [weak self] action in
@@ -553,7 +618,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             self?.stateMachine.processEvent(.dismissedStartChatScreen)
         }
     }
-        
+    
+    // MARK: Session Verification
+    
     // MARK: Calls
     
     private func presentCallScreen(genericCallLink url: URL) {
@@ -635,7 +702,59 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setOverlayCoordinator(nil)
     }
     
-    // MARK: Secure backup confirmation
+    // MARK: Secure backup
+    
+    private func presentRecoveryKeyScreen(animated: Bool) {
+        let sheetNavigationStackCoordinator = NavigationStackCoordinator()
+        let parameters = SecureBackupRecoveryKeyScreenCoordinatorParameters(secureBackupController: userSession.clientProxy.secureBackupController,
+                                                                            userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                            isModallyPresented: true)
+        
+        let coordinator = SecureBackupRecoveryKeyScreenCoordinator(parameters: parameters)
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .complete:
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        sheetNavigationStackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationSplitCoordinator.setSheetCoordinator(sheetNavigationStackCoordinator, animated: animated) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedRecoveryKeyScreen)
+        }
+    }
+    
+    private func startEncryptionResetFlow(animated: Bool) {
+        let sheetNavigationStackCoordinator = NavigationStackCoordinator()
+        let parameters = EncryptionResetFlowCoordinatorParameters(userSession: userSession,
+                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                  navigationStackCoordinator: sheetNavigationStackCoordinator,
+                                                                  windowManger: appMediator.windowManager)
+        
+        let coordinator = EncryptionResetFlowCoordinator(parameters: parameters)
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .resetComplete:
+                encryptionResetFlowCoordinator = nil
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            case .cancel:
+                encryptionResetFlowCoordinator = nil
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        coordinator.start()
+        encryptionResetFlowCoordinator = coordinator
+        
+        navigationSplitCoordinator.setSheetCoordinator(sheetNavigationStackCoordinator, animated: animated) { [weak self] in
+            self?.stateMachine.processEvent(.finishedEncryptionResetFlow)
+        }
+    }
     
     private func presentSecureBackupLogoutConfirmationScreen() {
         let coordinator = SecureBackupLogoutConfirmationScreenCoordinator(parameters: .init(secureBackupController: userSession.clientProxy.secureBackupController,

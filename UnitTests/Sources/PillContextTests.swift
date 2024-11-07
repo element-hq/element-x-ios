@@ -19,13 +19,14 @@ class PillContextTests: XCTestCase {
         proxyMock.membersPublisher = subject.asCurrentValuePublisher()
         let mock = TimelineViewModel(roomProxy: proxyMock,
                                      timelineController: MockRoomTimelineController(),
-                                     mediaProvider: MockMediaProvider(),
+                                     mediaProvider: MediaProviderMock(configuration: .init()),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                      appMediator: AppMediatorMock.default,
                                      appSettings: ServiceLocator.shared.settings,
-                                     analyticsService: ServiceLocator.shared.analytics)
+                                     analyticsService: ServiceLocator.shared.analytics,
+                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertFalse(context.viewState.isOwnMention)
@@ -47,13 +48,14 @@ class PillContextTests: XCTestCase {
         proxyMock.membersPublisher = subject.asCurrentValuePublisher()
         let mock = TimelineViewModel(roomProxy: proxyMock,
                                      timelineController: MockRoomTimelineController(),
-                                     mediaProvider: MockMediaProvider(),
+                                     mediaProvider: MediaProviderMock(configuration: .init()),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                      appMediator: AppMediatorMock.default,
                                      appSettings: ServiceLocator.shared.settings,
-                                     analyticsService: ServiceLocator.shared.analytics)
+                                     analyticsService: ServiceLocator.shared.analytics,
+                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertTrue(context.viewState.isOwnMention)
@@ -68,13 +70,14 @@ class PillContextTests: XCTestCase {
         mockController.roomProxy = proxyMock
         let mock = TimelineViewModel(roomProxy: proxyMock,
                                      timelineController: mockController,
-                                     mediaProvider: MockMediaProvider(),
+                                     mediaProvider: MediaProviderMock(configuration: .init()),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                      appMediator: AppMediatorMock.default,
                                      appSettings: ServiceLocator.shared.settings,
-                                     analyticsService: ServiceLocator.shared.analytics)
+                                     analyticsService: ServiceLocator.shared.analytics,
+                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .allUsers, font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertTrue(context.viewState.isOwnMention)

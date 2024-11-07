@@ -33,7 +33,7 @@ struct RedactedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     }
     
     private static func itemWith(text: String, timestamp: String, senderId: String) -> RedactedRoomTimelineItem {
-        RedactedRoomTimelineItem(id: .random,
+        RedactedRoomTimelineItem(id: .randomEvent,
                                  body: text,
                                  timestamp: timestamp,
                                  isOutgoing: false,

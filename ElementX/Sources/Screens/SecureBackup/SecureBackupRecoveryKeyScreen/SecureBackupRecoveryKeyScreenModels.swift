@@ -10,7 +10,6 @@ import Foundation
 enum SecureBackupRecoveryKeyScreenViewModelAction {
     case done(mode: SecureBackupRecoveryKeyScreenViewMode)
     case cancel
-    case resetEncryption
 }
 
 enum SecureBackupRecoveryKeyScreenViewMode {
@@ -27,6 +26,7 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
     let mode: SecureBackupRecoveryKeyScreenViewMode
     
     var recoveryKey: String?
+    var isGeneratingKey = false
     var doneButtonEnabled = false
     
     var bindings: SecureBackupRecoveryKeyScreenViewBindings
@@ -81,7 +81,6 @@ enum SecureBackupRecoveryKeyScreenViewAction {
     case copyKey
     case keySaved
     case confirmKey
-    case resetEncryption
     case done
     case cancel
 }

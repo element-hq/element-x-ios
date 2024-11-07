@@ -29,6 +29,7 @@ struct LoginScreen: View {
                     // This should never be shown.
                     ProgressView()
                 default:
+                    // This should never be shown either.
                     loginUnavailableText
                 }
             }
@@ -37,13 +38,14 @@ struct LoginScreen: View {
             .padding(.bottom, 16)
         }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)
     }
     
     /// The header containing the title and icon.
     var header: some View {
         VStack(spacing: 8) {
-            HeroImage(icon: \.lockSolid)
+            BigIcon(icon: \.lockSolid)
                 .padding(.bottom, 8)
             
             Text(L10n.screenLoginTitleWithHomeserver(context.viewState.homeserver.address))
@@ -72,7 +74,9 @@ struct LoginScreen: View {
             .textContentType(.username)
             .autocapitalization(.none)
             .submitLabel(.next)
-            .onChange(of: isUsernameFocused, perform: usernameFocusChanged)
+            .onChange(of: isUsernameFocused) { _, newValue in
+                usernameFocusChanged(isFocussed: newValue)
+            }
             .onSubmit { isPasswordFocused = true }
             .padding(.bottom, 20)
             
@@ -124,35 +128,45 @@ struct LoginScreen: View {
 // MARK: - Previews
 
 struct LoginScreen_Previews: PreviewProvider, TestablePreview {
-    static let credentialsViewModel: LoginScreenViewModel = {
-        let viewModel = LoginScreenViewModel(homeserver: .mockMatrixDotOrg, slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL)
-        viewModel.context.username = "alice"
-        viewModel.context.password = "password"
-        return viewModel
-    }()
+    static let viewModel = makeViewModel()
+    static let credentialsViewModel = makeViewModel(withCredentials: true)
+    static let unconfiguredViewModel = makeViewModel(homeserverAddress: "somethingtofailconfiguration")
     
     static var previews: some View {
-        screen(for: LoginScreenViewModel(homeserver: .mockMatrixDotOrg, slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL))
-            .previewDisplayName("matrix.org")
-        screen(for: credentialsViewModel)
-            .previewDisplayName("Credentials Entered")
-        screen(for: LoginScreenViewModel(homeserver: .mockMatrixDotOrg, slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL))
-            .previewDisplayName("Unsupported")
-        screen(for: LoginScreenViewModel(homeserver: .mockMatrixDotOrg, slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL))
-            .previewDisplayName("OIDC Fallback")
-    }
-    
-    static func screen(for viewModel: LoginScreenViewModel) -> some View {
         NavigationStack {
             LoginScreen(context: viewModel.context)
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button { } label: {
-                            Text("\(Image(systemName: "chevron.backward")) Back")
-                        }
-                    }
-                }
         }
+        .previewDisplayName("matrix.org")
+        .snapshotPreferences(delay: 1)
+        
+        NavigationStack {
+            LoginScreen(context: credentialsViewModel.context)
+        }
+        .previewDisplayName("Credentials Entered")
+        .snapshotPreferences(delay: 1)
+        
+        NavigationStack {
+            LoginScreen(context: unconfiguredViewModel.context)
+        }
+        .previewDisplayName("Unsupported")
+        .snapshotPreferences(delay: 1)
+    }
+    
+    static func makeViewModel(homeserverAddress: String = "matrix.org", withCredentials: Bool = false) -> LoginScreenViewModel {
+        let authenticationService = AuthenticationService.mock
+        
+        Task { await authenticationService.configure(for: homeserverAddress, flow: .login) }
+        
+        let viewModel = LoginScreenViewModel(authenticationService: authenticationService,
+                                             slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
+                                             userIndicatorController: UserIndicatorControllerMock(),
+                                             analytics: ServiceLocator.shared.analytics)
+        
+        if withCredentials {
+            viewModel.context.username = "alice"
+            viewModel.context.password = "password"
+        }
+        
+        return viewModel
     }
 }

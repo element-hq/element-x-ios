@@ -12,6 +12,7 @@ struct UserDetailsEditScreenCoordinatorParameters {
     let orientationManager: OrientationManagerProtocol
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
+    let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     weak var navigationStackCoordinator: NavigationStackCoordinator?
     let userIndicatorController: UserIndicatorControllerProtocol
 }
@@ -26,6 +27,7 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
         
         viewModel = UserDetailsEditScreenViewModel(clientProxy: parameters.clientProxy,
                                                    mediaProvider: parameters.mediaProvider,
+                                                   mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
                                                    userIndicatorController: parameters.userIndicatorController)
     }
     

@@ -13,28 +13,48 @@ struct LoadableAvatarImage: View {
     private let contentID: String?
     private let avatarSize: AvatarSize
     private let mediaProvider: MediaProviderProtocol?
+    private let onTap: ((URL) -> Void)?
     
     @ScaledMetric private var frameSize: CGFloat
     
-    init(url: URL?, name: String?, contentID: String?, avatarSize: AvatarSize, mediaProvider: MediaProviderProtocol?) {
+    init(url: URL?, name: String?,
+         contentID: String?,
+         avatarSize: AvatarSize,
+         mediaProvider: MediaProviderProtocol?,
+         onTap: ((URL) -> Void)? = nil) {
         self.url = url
         self.name = name
         self.contentID = contentID
         self.avatarSize = avatarSize
         self.mediaProvider = mediaProvider
+        self.onTap = onTap
         
         _frameSize = ScaledMetric(wrappedValue: avatarSize.value)
     }
     
     var body: some View {
+        if let onTap, let url {
+            Button {
+                onTap(url)
+            } label: {
+                clippedAvatar
+            }
+            .buttonStyle(.borderless) // Add a button style to stop the whole row being tappable.
+        } else {
+            clippedAvatar
+        }
+    }
+    
+    private var clippedAvatar: some View {
         avatar
             .frame(width: frameSize, height: frameSize)
             .background(Color.compound.bgCanvasDefault)
             .clipShape(Circle())
+            .environment(\.shouldAutomaticallyLoadImages, true) // We always load avatars.
     }
     
     @ViewBuilder
-    var avatar: some View {
+    private var avatar: some View {
         if let url {
             LoadableImage(url: url,
                           mediaType: .avatar,

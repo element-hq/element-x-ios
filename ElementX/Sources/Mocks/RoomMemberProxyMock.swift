@@ -25,6 +25,11 @@ extension RoomMemberProxyMock {
         self.init()
         userID = configuration.userID
         displayName = configuration.displayName
+        
+        if let displayName = configuration.displayName {
+            disambiguatedDisplayName = "\(displayName) (\(userID))"
+        }
+        
         avatarURL = configuration.avatarURL
         
         membership = configuration.membership

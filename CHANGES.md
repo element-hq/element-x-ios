@@ -1,3 +1,182 @@
+## Changes in 1.9.3 (2024-10-24)
+
+### What's Changed
+
+🙌 Improvements
+* Update HeroImage to match the BigIcon component from Compound. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3439
+* Update compound to change checkmark color by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3440
+
+🐛 Bugfixes
+* Fix a bug where the pinned items banner could overlay the composer. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3441
+* Fix composer mention pills showing up as file icons on first use on iOS 18 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3444
+* Fix a bug where the room state wouldn't indicate when a call was in progress. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3442
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.9.2...1.9.3
+
+## Changes in 1.9.2 (2024-10-23)
+
+### What's Changed
+
+🙌 Improvements
+* Add support for rendering media captions in the timeline. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3429
+* Show a verification badge on the Room Member/User Profile screens. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3427
+
+🐛 Bugfixes
+* Only subscribe to identity updates if the room is encrypted. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3414
+* Fix the pinned identity banner to always show the user ID regardless of ambiguity. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3415
+* Fix a bug where uploaded images could have the wrong aspect ratio in the timeline. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3435
+
+⚠️ API Changes
+* Adopt various rust side Timeline API additions by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3423
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3433
+
+🚧 In development 🚧
+* Allow image uploads to be optimised to reduce bandwidth. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3412
+* Knock and knocked state for the join room screen by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3424
+
+Others
+* Fix some warnings. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3416
+* Refactor the`TimelineItemIdentifier` handling by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3418
+* Remove superfluous media request upload handle cancellation call. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3425
+* Update dependency fastlane to v2.225.0 by @renovate in https://github.com/element-hq/element-x-ios/pull/3434
+* Adopt various Rust side API changes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3437
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.9.1...1.9.2
+
+## Changes in 1.9.1 (2024-10-15)
+
+### What's Changed
+
+🐛 Bugfixes
+* Fix a bug opening images with a valid filename but a mimetype of `image/*` (sent by EXA). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3407
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3406
+
+🚧 In development 🚧
+* Create Room with knock rule by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3397
+* Allow video uploads to be optimised to reduce bandwidth. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3408
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.9.0...1.9.1
+
+## Changes in 1.9.0 (2024-10-10)
+
+### What's Changed
+
+🐛 Bugfixes
+* Fix identity pinning link. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3395
+
+🧱 Build
+* Update the version to 1.9.0. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3396
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.8.6...1.9.0
+
+## Changes in 1.8.6 (2024-10-10)
+
+### What's Changed
+
+✨ Features
+* crypto: Configure decryption trustRequirement based on config flag by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/3358
+* Introduce a feature flag for the new identity pinning violation notifications feature by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3394
+* Show the Login with QR Code button. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3392
+
+🙌 Improvements
+* Add a subtitle to the QR Code login instructions. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3386
+* Tweak the UI in the EncryptionReset, IdentityConfirmation and SecureBackupRecovery screens. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3391
+* Update the secondary button stroke colour. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3393
+
+Others
+* Fix an authentication UI test snapshot. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3387
+* Ask the iPad to reveal the keyboard in UI Tests when it's hidden. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3389
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.8.5...1.8.6
+
+## Changes in 1.8.5 (2024-10-08)
+
+### What's Changed
+
+✨ Features
+* Display a warning when a user's pinned identity changes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3368
+
+🙌 Improvements
+* Add detection for latest devices. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3327
+* Configure the AuthenticationService later now that we have 2 flows on the start screen. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3316
+* Selecting a server that doesn't support login now fails instead of letting you continue to a failure later. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3342
+* Add new emoji from iOS 17.4 to the reaction picker. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3376
+
+🐛 Bugfixes
+* Use a plain view for reactions instead of a TabView. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3328
+* Upgrade Kingfisher to fix a bug that prevented GIFs from being tapped. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3326
+* Make sure the room header takes up as much space as possible (to hide the back button). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3335
+* Have ElementCall always default to the speaker; prevent the lock button from ending the call by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3338
+* Allow focusing the different avatars making up a DM details cluster separately. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3341
+* Disable auto correction when running on the Mac by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3364
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3347
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3371
+
+🧱 Build
+* Start fixing flakey tests ❄️ by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3329
+* Integration test runner switch by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3343
+* Switch UI tests back to the perf-only runner. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3349
+
+🚧 In development 🚧
+* Add developer option to hide media in the timeline. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3366
+
+Others
+* Integration test improvements by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3330
+* crypto: rename invisible crypto flag to deviceIsolationMode by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/3331
+* chore(deps): update dependency fastlane to v2.223.0 by @renovate in https://github.com/element-hq/element-x-ios/pull/3337
+* Log any failures when creating a call widget. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3339
+* chore(deps): update dependency fastlane to v2.223.1 by @renovate in https://github.com/element-hq/element-x-ios/pull/3340
+* Tracing and integration test tweaks by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3336
+* Remove message pinning FF by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3318
+* Move the core logic in LoginScreenCoordinator into the ViewModel. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3348
+* Bump the RustSDK to v1.0.53: adopt latest record based timeline item APIs by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3356
+* use element-hq RTE version by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3360
+* Hide timeline media preparation by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3361
+* chore(deps): update dependency fastlane to v2.224.0 by @renovate in https://github.com/element-hq/element-x-ios/pull/3370
+* Record a missing snapshot. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3374
+* Update the SDK and use media `filename` and `caption` internally. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3375
+* update sdk by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3377
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.8.4...1.8.5
+
+## Changes in 1.8.4 (2024-09-24)
+
+### What's Changed
+
+✨ Features
+* Enable message pinning by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3308
+
+🐛 Bugfixes
+* Fix: confusion of lab flags for invisible crypto by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/3319
+* Fix a regression where you can't scroll the timeline on iOS 17 by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3320
+* Fix a bug where the Join Room screen was sometimes shown instead of the Room. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3323
+* Fix a bug on iOS 18 where the timeline background would use the wrong colour scheme when using the app switcher. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3324
+* Don't use the new iPad modal presentation mode for the timeline item menu by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3325
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3315
+
+🧱 Build
+* Update the project to use Xcode 16. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3303
+
+Others
+* A bunch of random tweaks. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3317
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.8.3...1.8.4
+
 ## Changes in 1.8.3 (2024-09-19)
 
 ### What's Changed

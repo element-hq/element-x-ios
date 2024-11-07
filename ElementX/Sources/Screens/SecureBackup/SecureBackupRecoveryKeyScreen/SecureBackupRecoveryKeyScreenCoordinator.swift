@@ -15,23 +15,22 @@ struct SecureBackupRecoveryKeyScreenCoordinatorParameters {
 }
 
 enum SecureBackupRecoveryKeyScreenCoordinatorAction {
-    case cancel
-    case recoverySetUp
-    case recoveryChanged
-    case recoveryFixed
-    case resetEncryption
+    case complete
 }
 
 final class SecureBackupRecoveryKeyScreenCoordinator: CoordinatorProtocol {
+    private let parameters: SecureBackupRecoveryKeyScreenCoordinatorParameters
     private var viewModel: SecureBackupRecoveryKeyScreenViewModelProtocol
-    private let actionsSubject: PassthroughSubject<SecureBackupRecoveryKeyScreenCoordinatorAction, Never> = .init()
+    
     private var cancellables = Set<AnyCancellable>()
     
+    private let actionsSubject: PassthroughSubject<SecureBackupRecoveryKeyScreenCoordinatorAction, Never> = .init()
     var actions: AnyPublisher<SecureBackupRecoveryKeyScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
     init(parameters: SecureBackupRecoveryKeyScreenCoordinatorParameters) {
+        self.parameters = parameters
         viewModel = SecureBackupRecoveryKeyScreenViewModel(secureBackupController: parameters.secureBackupController,
                                                            userIndicatorController: parameters.userIndicatorController,
                                                            isModallyPresented: parameters.isModallyPresented)
@@ -44,20 +43,19 @@ final class SecureBackupRecoveryKeyScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .cancel:
-                self.actionsSubject.send(.cancel)
+                self.actionsSubject.send(.complete)
             case .done(let mode):
                 switch mode {
                 case .setupRecovery:
-                    self.actionsSubject.send(.recoverySetUp)
+                    showSuccessIndicator(title: L10n.screenRecoveryKeySetupSuccess)
                 case .changeRecovery:
-                    self.actionsSubject.send(.recoveryChanged)
+                    showSuccessIndicator(title: L10n.screenRecoveryKeyChangeSuccess)
                 case .fixRecovery:
-                    self.actionsSubject.send(.recoveryFixed)
+                    showSuccessIndicator(title: L10n.screenRecoveryKeyConfirmSuccess)
                 case .unknown:
                     fatalError()
                 }
-            case .resetEncryption:
-                self.actionsSubject.send(.resetEncryption)
+                self.actionsSubject.send(.complete)
             }
         }
         .store(in: &cancellables)
@@ -65,5 +63,15 @@ final class SecureBackupRecoveryKeyScreenCoordinator: CoordinatorProtocol {
     
     func toPresentable() -> AnyView {
         AnyView(SecureBackupRecoveryKeyScreen(context: viewModel.context))
+    }
+    
+    // MARK: - Private
+    
+    private func showSuccessIndicator(title: String) {
+        parameters.userIndicatorController.submitIndicator(.init(id: .init(),
+                                                                 type: .modal(progress: .none, interactiveDismissDisabled: false, allowsInteraction: false),
+                                                                 title: title,
+                                                                 iconName: "checkmark",
+                                                                 persistent: false))
     }
 }

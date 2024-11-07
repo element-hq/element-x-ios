@@ -22,7 +22,7 @@ class LoggingTests: XCTestCase {
         let target = "tests"
         XCTAssertTrue(RustTracing.logFiles.isEmpty)
         
-        MXLog.configure(target: target, logLevel: .info)
+        MXLog.configure(currentTarget: target, filePrefix: target, logLevel: .info)
         
         // There is something weird with Rust logging where the file writing handle doesn't
         // notice that the file it is writing to was deleted, so we can't run these checks
@@ -80,8 +80,7 @@ class LoggingTests: XCTestCase {
         let heroName = "Pseudonym"
         let roomSummary = RoomSummary(roomListItem: .init(noPointer: .init()),
                                       id: "myroomid",
-                                      isInvite: false,
-                                      inviter: nil,
+                                      joinRequestType: nil,
                                       name: roomName,
                                       isDirect: true,
                                       avatarURL: nil,
@@ -116,7 +115,7 @@ class LoggingTests: XCTestCase {
     func validateTimelineContentIsRedacted() throws {
         // Given timeline items that contain text
         let textAttributedString = "TextAttributed"
-        let textMessage = TextRoomTimelineItem(id: .random,
+        let textMessage = TextRoomTimelineItem(id: .randomEvent,
                                                timestamp: "",
                                                isOutgoing: false,
                                                isEditable: false,
@@ -125,7 +124,7 @@ class LoggingTests: XCTestCase {
                                                sender: .init(id: "sender"),
                                                content: .init(body: "TextString", formattedBody: AttributedString(textAttributedString)))
         let noticeAttributedString = "NoticeAttributed"
-        let noticeMessage = NoticeRoomTimelineItem(id: .random,
+        let noticeMessage = NoticeRoomTimelineItem(id: .randomEvent,
                                                    timestamp: "",
                                                    isOutgoing: false,
                                                    isEditable: false,
@@ -134,7 +133,7 @@ class LoggingTests: XCTestCase {
                                                    sender: .init(id: "sender"),
                                                    content: .init(body: "NoticeString", formattedBody: AttributedString(noticeAttributedString)))
         let emoteAttributedString = "EmoteAttributed"
-        let emoteMessage = EmoteRoomTimelineItem(id: .random,
+        let emoteMessage = EmoteRoomTimelineItem(id: .randomEvent,
                                                  timestamp: "",
                                                  isOutgoing: false,
                                                  isEditable: false,
@@ -142,33 +141,44 @@ class LoggingTests: XCTestCase {
                                                  isThreaded: false,
                                                  sender: .init(id: "sender"),
                                                  content: .init(body: "EmoteString", formattedBody: AttributedString(emoteAttributedString)))
-        let imageMessage = ImageRoomTimelineItem(id: .init(timelineID: "myimagemessage"),
+        let imageMessage = ImageRoomTimelineItem(id: .randomEvent,
                                                  timestamp: "",
                                                  isOutgoing: false,
                                                  isEditable: false,
                                                  canBeRepliedTo: true,
                                                  isThreaded: false,
                                                  sender: .init(id: "sender"),
-                                                 content: .init(body: "ImageString", source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"), thumbnailSource: nil))
-        let videoMessage = VideoRoomTimelineItem(id: .random,
+                                                 content: .init(filename: "ImageString",
+                                                                caption: "ImageString",
+                                                                source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"),
+                                                                thumbnailSource: nil))
+        let videoMessage = VideoRoomTimelineItem(id: .randomEvent,
                                                  timestamp: "",
                                                  isOutgoing: false,
                                                  isEditable: false,
                                                  canBeRepliedTo: true,
                                                  isThreaded: false,
                                                  sender: .init(id: "sender"),
-                                                 content: .init(body: "VideoString", duration: 0, source: nil, thumbnailSource: nil))
-        let fileMessage = FileRoomTimelineItem(id: .random,
+                                                 content: .init(filename: "VideoString",
+                                                                caption: "VideoString",
+                                                                duration: 0,
+                                                                source: nil,
+                                                                thumbnailSource: nil))
+        let fileMessage = FileRoomTimelineItem(id: .randomEvent,
                                                timestamp: "",
                                                isOutgoing: false,
                                                isEditable: false,
                                                canBeRepliedTo: true,
                                                isThreaded: false,
                                                sender: .init(id: "sender"),
-                                               content: .init(body: "FileString", source: nil, thumbnailSource: nil, contentType: nil))
+                                               content: .init(filename: "FileString",
+                                                              caption: "FileString",
+                                                              source: nil,
+                                                              thumbnailSource: nil,
+                                                              contentType: nil))
         
         // When logging that value
-        MXLog.configure(logLevel: .info)
+        MXLog.configure(currentTarget: "tests", filePrefix: nil, logLevel: .info)
         
         MXLog.info(textMessage)
         MXLog.info(noticeMessage)
@@ -184,25 +194,25 @@ class LoggingTests: XCTestCase {
         }
         
         let content = try String(contentsOf: logFile)
-        XCTAssertTrue(content.contains(textMessage.id.timelineID))
+        XCTAssertTrue(content.contains(textMessage.id.uniqueID.id))
         XCTAssertFalse(content.contains(textMessage.body))
         XCTAssertFalse(content.contains(textAttributedString))
         
-        XCTAssertTrue(content.contains(noticeMessage.id.timelineID))
+        XCTAssertTrue(content.contains(noticeMessage.id.uniqueID.id))
         XCTAssertFalse(content.contains(noticeMessage.body))
         XCTAssertFalse(content.contains(noticeAttributedString))
         
-        XCTAssertTrue(content.contains(emoteMessage.id.timelineID))
+        XCTAssertTrue(content.contains(emoteMessage.id.uniqueID.id))
         XCTAssertFalse(content.contains(emoteMessage.body))
         XCTAssertFalse(content.contains(emoteAttributedString))
         
-        XCTAssertTrue(content.contains(imageMessage.id.timelineID))
+        XCTAssertTrue(content.contains(imageMessage.id.uniqueID.id))
         XCTAssertFalse(content.contains(imageMessage.body))
         
-        XCTAssertTrue(content.contains(videoMessage.id.timelineID))
+        XCTAssertTrue(content.contains(videoMessage.id.uniqueID.id))
         XCTAssertFalse(content.contains(videoMessage.body))
         
-        XCTAssertTrue(content.contains(fileMessage.id.timelineID))
+        XCTAssertTrue(content.contains(fileMessage.id.uniqueID.id))
         XCTAssertFalse(content.contains(fileMessage.body))
     }
         
@@ -218,9 +228,32 @@ class LoggingTests: XCTestCase {
         let rustEmoteMessage = EmoteMessageContent(body: emoteString,
                                                    formatted: FormattedBody(format: .html, body: "<b>\(emoteString)</b>"))
         
-        let rustImageMessage = ImageMessageContent(body: "ImageString", formatted: nil, filename: nil, source: MediaSource(noPointer: .init()), info: nil)
-        let rustVideoMessage = VideoMessageContent(body: "VideoString", formatted: nil, filename: nil, source: MediaSource(noPointer: .init()), info: nil)
-        let rustFileMessage = FileMessageContent(body: "FileString", formatted: nil, filename: "FileName", source: MediaSource(noPointer: .init()), info: nil)
+        let rustImageMessage = ImageMessageContent(body: "ImageString",
+                                                   formatted: nil,
+                                                   rawFilename: "ImageString",
+                                                   filename: "ImageString",
+                                                   caption: "ImageString",
+                                                   formattedCaption: nil,
+                                                   source: MediaSource(noPointer: .init()),
+                                                   info: nil)
+        
+        let rustVideoMessage = VideoMessageContent(body: "VideoString",
+                                                   formatted: nil,
+                                                   rawFilename: "VideoString",
+                                                   filename: "VideoString",
+                                                   caption: "VideoString",
+                                                   formattedCaption: nil,
+                                                   source: MediaSource(noPointer: .init()),
+                                                   info: nil)
+        
+        let rustFileMessage = FileMessageContent(body: "FileString",
+                                                 formatted: nil,
+                                                 rawFilename: "FileString",
+                                                 filename: "FileString",
+                                                 caption: "FileString",
+                                                 formattedCaption: nil,
+                                                 source: MediaSource(noPointer: .init()),
+                                                 info: nil)
         
         // When logging that value
         MXLog.info(rustTextMessage)

@@ -7,13 +7,6 @@
 
 import SwiftUI
 
-private struct AnalyticsServiceKey: EnvironmentKey {
-    static let defaultValue: AnalyticsService = ServiceLocator.shared.analytics
-}
-
 extension EnvironmentValues {
-    var analyticsService: AnalyticsService {
-        get { self[AnalyticsServiceKey.self] }
-        set { self[AnalyticsServiceKey.self] = newValue }
-    }
+    @Entry var analyticsService: AnalyticsService = ServiceLocator.shared.analytics
 }

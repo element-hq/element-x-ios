@@ -29,7 +29,7 @@ struct AppLockSetupSettingsScreen: View {
                 Section {
                     ListRow(label: .plain(title: context.viewState.enableBiometricsTitle),
                             kind: .toggle($context.enableBiometrics))
-                        .onChange(of: context.enableBiometrics) { _ in
+                        .onChange(of: context.enableBiometrics) {
                             context.send(viewAction: .enableBiometricsChanged)
                         }
                 }

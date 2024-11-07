@@ -5,7 +5,7 @@
 // Please see LICENSE in the repository root for full details.
 //
 @testable import ElementX
-import Kingfisher
+@testable import Kingfisher
 import UIKit
 
 class MockImageCache: ImageCache {
@@ -35,5 +35,6 @@ class MockImageCache: ImageCache {
                         callbackQueue: CallbackQueue = .untouch,
                         completionHandler: ((CacheStoreResult) -> Void)? = nil) {
         storedImages[key] = image
+        completionHandler?(.init(memoryCacheResult: .success(()), diskCacheResult: .success(())))
     }
 }

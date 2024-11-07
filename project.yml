@@ -10,8 +10,8 @@ options:
   groupSortPosition: bottom
   createIntermediateGroups: true
   deploymentTarget:
-    iOS: '16.4'
-    macOS: '13.3'
+    iOS: '17.6'
+    macOS: '14.6'
   groupOrdering:
   - order:
     - ElementX
@@ -41,7 +41,7 @@ settings:
   APP_GROUP_IDENTIFIER: group.$(BASE_APP_GROUP_IDENTIFIER)
   APP_NAME: ElementX
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: "$(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)"
-  MARKETING_VERSION: 1.8.4
+  MARKETING_VERSION: 1.9.4
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
 
@@ -60,26 +60,27 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 1.0.52
+    exactVersion: 1.0.65
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
-    revision: 92110afc158ac6ee7c68d5e975144bafa6c58396
+    revision: e3f9665621872f60d3652579c3f0dc7bf806e72c
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
-    minorVersion: 0.25.0
+    minorVersion: 0.28.0
     # path: ../matrix-analytics-events
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
-    minorVersion: 1.0.0
+    minorVersion: 1.3.3
+    # path: ../emojibase-bindings
   SwiftOGG:
     url: https://github.com/element-hq/swift-ogg
     minorVersion: 0.0.3
     # path: ../swift-ogg
   WysiwygComposer:
-    url: https://github.com/matrix-org/matrix-rich-text-editor-swift
-    exactVersion: 2.37.7
+    url: https://github.com/element-hq/matrix-rich-text-editor-swift
+    exactVersion: 2.37.12
     # path: ../matrix-rich-text-editor/platforms/ios/lib/WysiwygComposer
   
   # External dependencies
@@ -91,7 +92,7 @@ packages:
     minorVersion: 1.0.0
   DeviceKit:
     url: https://github.com/devicekit/DeviceKit
-    minorVersion: 5.2.2
+    minorVersion: 5.5.0
   DSWaveformImage:
     url: https://github.com/dmrschmidt/DSWaveformImage
     exactVersion: 14.1.1
@@ -100,16 +101,16 @@ packages:
     exactVersion: 1.6.26
   GZIP:
     url: https://github.com/nicklockwood/GZIP
-    minorVersion: 1.3.0
+    minorVersion: 1.3.2
   KeychainAccess:
     url: https://github.com/kishikawakatsumi/KeychainAccess
     minorVersion: 4.2.0
   Kingfisher:
     url: https://github.com/onevcat/Kingfisher
-    minorVersion: 7.6.0
+    minorVersion: 8.0.3
   KZFileWatchers:
     url: https://github.com/krzysztofzablocki/KZFileWatchers
-    branch: master
+    minorVersion: 1.2.0
   LoremSwiftum:
     url: https://github.com/lukaskubanek/LoremSwiftum
     minorVersion: 2.2.1
@@ -133,7 +134,7 @@ packages:
     minorVersion: 6.0.0
   Version:
     url: https://github.com/mxcl/Version
-    minorVersion: 2.0.0
+    minorVersion: 2.1.0
 
 aggregateTargets:
   Periphery:
