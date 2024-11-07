@@ -17,6 +17,22 @@ struct CreateRoomScreen: View {
         case topic
     }
     
+    private var aliasBinding: Binding<String> {
+        .init(get: {
+            context.viewState.aliasLocalPart
+        }, set: {
+            context.send(viewAction: .updateAliasLocalPart($0))
+        })
+    }
+    
+    private var roomNameBinding: Binding<String> {
+        .init(get: {
+            context.viewState.roomName
+        }, set: {
+            context.send(viewAction: .updateRoomName($0))
+        })
+    }
+    
     var body: some View {
         Form {
             roomSection
@@ -48,13 +64,8 @@ struct CreateRoomScreen: View {
                         .padding(.leading, ListRowPadding.horizontal)
                         .compoundListSectionHeader()
                     
-                    let binding = Binding(get: {
-                        context.viewState.roomName
-                    }, set: {
-                        context.send(viewAction: .updateName($0))
-                    })
                     TextField(L10n.screenCreateRoomRoomNameLabel,
-                              text: binding,
+                              text: roomNameBinding,
                               prompt: Text(L10n.commonRoomNamePlaceholder).foregroundColor(.compound.textPlaceholder),
                               axis: .horizontal)
                         .focused($focus, equals: .name)
@@ -183,13 +194,7 @@ struct CreateRoomScreen: View {
                         .font(.compound.bodyLG)
                         .foregroundStyle(.compound.textSecondary)
                     
-                    let binding = Binding(get: {
-                        context.viewState.aliasLocalPart
-                    }, set: {
-                        context.send(viewAction: .updateAddress($0))
-                    })
-                    
-                    TextField("", text: binding)
+                    TextField("", text: aliasBinding)
                         .autocapitalization(.none)
                         .textCase(.lowercase)
                         .tint(.compound.iconAccentTertiary)

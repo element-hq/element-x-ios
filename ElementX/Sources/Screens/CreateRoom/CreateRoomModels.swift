@@ -63,8 +63,8 @@ enum CreateRoomViewAction {
     case displayCameraPicker
     case displayMediaPicker
     case removeImage
-    case updateName(String)
-    case updateAddress(String)
+    case updateRoomName(String)
+    case updateAliasLocalPart(String)
 }
 
 enum CreateRoomAliasErrorState {

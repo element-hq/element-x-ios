@@ -68,12 +68,12 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     
     func testCreateRoomRequirements() {
         XCTAssertFalse(context.viewState.canCreateRoom)
-        context.send(viewAction: .updateName("A"))
+        context.send(viewAction: .updateRoomName("A"))
         XCTAssertTrue(context.viewState.canCreateRoom)
     }
     
     func testCreateKnockingRoom() async {
-        context.send(viewAction: .updateName("A"))
+        context.send(viewAction: .updateRoomName("A"))
         context.roomTopic = "B"
         context.isRoomPrivate = false
         // When setting the room as private we always reset the knocking state to the default value of false
@@ -95,7 +95,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     }
     
     func testCreatePublicRoomFailsForInvalidAlias() async throws {
-        context.send(viewAction: .updateName("A"))
+        context.send(viewAction: .updateRoomName("A"))
         context.roomTopic = "B"
         context.isRoomPrivate = false
         // When setting the room as private we always reset the alias
@@ -106,7 +106,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         let deferred = deferFulfillment(context.$viewState) { viewState in
             viewState.aliasErrors.contains(.invalidSymbols) && !viewState.canCreateRoom
         }
-        context.send(viewAction: .updateAddress("#:"))
+        context.send(viewAction: .updateAliasLocalPart("#:"))
         try await deferred.fulfill()
         
         // We also want to force the room creation in case the user may tap the button before the debounce
@@ -118,7 +118,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     
     func testCreatePublicRoomFailsForExistingAlias() async throws {
         clientProxy.isAliasAvailableReturnValue = .success(false)
-        context.send(viewAction: .updateName("A"))
+        context.send(viewAction: .updateRoomName("A"))
         context.roomTopic = "B"
         context.isRoomPrivate = false
         // When setting the room as private we always reset the alias
@@ -129,7 +129,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         let deferred = deferFulfillment(context.$viewState) { viewState in
             viewState.aliasErrors.contains(.alreadyExists) && !viewState.canCreateRoom
         }
-        context.send(viewAction: .updateAddress("abc"))
+        context.send(viewAction: .updateAliasLocalPart("abc"))
         try await deferred.fulfill()
         
         // We also want to force the room creation in case the user may tap the button before the debounce
@@ -148,7 +148,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     }
     
     func testCreatePrivateRoomCantHaveKnockRule() async {
-        context.send(viewAction: .updateName("A"))
+        context.send(viewAction: .updateRoomName("A"))
         context.roomTopic = "B"
         context.isRoomPrivate = true
         context.isKnockingOnly = true
@@ -166,30 +166,30 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     func testNameAndAddressSync() async {
         context.isRoomPrivate = true
         await Task.yield()
-        context.send(viewAction: .updateName("abc"))
+        context.send(viewAction: .updateRoomName("abc"))
         XCTAssertEqual(context.viewState.aliasLocalPart, "abc")
         XCTAssertEqual(context.viewState.roomName, "abc")
-        context.send(viewAction: .updateName("DEF"))
+        context.send(viewAction: .updateRoomName("DEF"))
         XCTAssertEqual(context.viewState.roomName, "DEF")
         XCTAssertEqual(context.viewState.aliasLocalPart, "def")
-        context.send(viewAction: .updateName("a  b c"))
+        context.send(viewAction: .updateRoomName("a  b c"))
         XCTAssertEqual(context.viewState.aliasLocalPart, "a-b-c")
         XCTAssertEqual(context.viewState.roomName, "a  b c")
-        context.send(viewAction: .updateAddress("hello-world"))
+        context.send(viewAction: .updateAliasLocalPart("hello-world"))
         // This removes the sync
         XCTAssertEqual(context.viewState.aliasLocalPart, "hello-world")
         XCTAssertEqual(context.viewState.roomName, "a  b c")
         
-        context.send(viewAction: .updateName("Hello Matrix!"))
+        context.send(viewAction: .updateRoomName("Hello Matrix!"))
         XCTAssertEqual(context.viewState.aliasLocalPart, "hello-world")
         XCTAssertEqual(context.viewState.roomName, "Hello Matrix!")
         
         // Deleting the whole name will restore the sync
-        context.send(viewAction: .updateName(""))
+        context.send(viewAction: .updateRoomName(""))
         XCTAssertEqual(context.viewState.aliasLocalPart, "")
         XCTAssertEqual(context.viewState.roomName, "")
         
-        context.send(viewAction: .updateName("Hello# Matrix!"))
+        context.send(viewAction: .updateRoomName("Hello# Matrix!"))
         XCTAssertEqual(context.viewState.aliasLocalPart, "hello-matrix!")
         XCTAssertEqual(context.viewState.roomName, "Hello# Matrix!")
     }

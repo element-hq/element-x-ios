@@ -91,12 +91,12 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             actionsSubject.send(.displayMediaPicker)
         case .removeImage:
             actionsSubject.send(.removeImage)
-        case .updateAddress(let address):
-            state.aliasLocalPart = address
+        case .updateAliasLocalPart(let aliasLocalPart):
+            state.aliasLocalPart = aliasLocalPart
             // If this has been called this means that the user wants a custom address not necessarily reflecting the name
             // So we disable the two from syncing.
             syncNameAndAlias = false
-        case .updateName(let name):
+        case .updateRoomName(let name):
             // Reset the syncing if the name is fully cancelled
             if name.isEmpty {
                 syncNameAndAlias = true
