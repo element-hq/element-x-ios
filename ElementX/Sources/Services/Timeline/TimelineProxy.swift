@@ -231,10 +231,10 @@ final class TimelineProxy: TimelineProxyProtocol {
                                         audioInfo: audioInfo,
                                         caption: nil,
                                         formattedCaption: nil,
-                                        storeInCache: true,
                                         progressWatcher: UploadProgressListener { progress in
                                             progressSubject?.send(progress)
-                                        })
+                                        },
+                                        useSendQueue: true)
         
         await requestHandle(handle)
         
@@ -257,10 +257,10 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         let handle = timeline.sendFile(url: url.path(percentEncoded: false),
                                        fileInfo: fileInfo,
-                                       storeInCache: true,
                                        progressWatcher: UploadProgressListener { progress in
                                            progressSubject?.send(progress)
-                                       })
+                                       },
+                                       useSendQueue: true)
         
         await requestHandle(handle)
         
@@ -287,10 +287,10 @@ final class TimelineProxy: TimelineProxyProtocol {
                                         imageInfo: imageInfo,
                                         caption: nil,
                                         formattedCaption: nil,
-                                        storeInCache: true,
                                         progressWatcher: UploadProgressListener { progress in
                                             progressSubject?.send(progress)
-                                        })
+                                        },
+                                        useSendQueue: true)
         
         await requestHandle(handle)
         
@@ -335,10 +335,10 @@ final class TimelineProxy: TimelineProxyProtocol {
                                         videoInfo: videoInfo,
                                         caption: nil,
                                         formattedCaption: nil,
-                                        storeInCache: true,
                                         progressWatcher: UploadProgressListener { progress in
                                             progressSubject?.send(progress)
-                                        })
+                                        },
+                                        useSendQueue: true)
         
         await requestHandle(handle)
         
@@ -365,10 +365,10 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                waveform: waveform,
                                                caption: nil,
                                                formattedCaption: nil,
-                                               storeInCache: true,
                                                progressWatcher: UploadProgressListener { progress in
                                                    progressSubject?.send(progress)
-                                               })
+                                               },
+                                               useSendQueue: true)
         
         await requestHandle(handle)
         
