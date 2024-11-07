@@ -19197,15 +19197,15 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
 
     //MARK: - sendAudio
 
-    var sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount = 0
-    open var sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherCallsCount: Int {
+    var sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount = 0
+    open var sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount
+                return sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount
+                    returnValue = sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -19213,29 +19213,29 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         set {
             if Thread.isMainThread {
-                sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount = newValue
+                sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount = newValue
+                    sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherCalled: Bool {
-        return sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherCallsCount > 0
+    open var sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueCalled: Bool {
+        return sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueCallsCount > 0
     }
-    open var sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherReceivedArguments: (url: String, audioInfo: AudioInfo, caption: String?, formattedCaption: FormattedBody?, storeInCache: Bool, progressWatcher: ProgressWatcher?)?
-    open var sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherReceivedInvocations: [(url: String, audioInfo: AudioInfo, caption: String?, formattedCaption: FormattedBody?, storeInCache: Bool, progressWatcher: ProgressWatcher?)] = []
+    open var sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueReceivedArguments: (url: String, audioInfo: AudioInfo, caption: String?, formattedCaption: FormattedBody?, progressWatcher: ProgressWatcher?, useSendQueue: Bool)?
+    open var sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueReceivedInvocations: [(url: String, audioInfo: AudioInfo, caption: String?, formattedCaption: FormattedBody?, progressWatcher: ProgressWatcher?, useSendQueue: Bool)] = []
 
-    var sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue: SendAttachmentJoinHandle!
-    open var sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherReturnValue: SendAttachmentJoinHandle! {
+    var sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue: SendAttachmentJoinHandle!
+    open var sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueReturnValue: SendAttachmentJoinHandle! {
         get {
             if Thread.isMainThread {
-                return sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue
+                return sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue
             } else {
                 var returnValue: SendAttachmentJoinHandle? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue
+                    returnValue = sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -19243,40 +19243,40 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         set {
             if Thread.isMainThread {
-                sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue = newValue
+                sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue = newValue
+                    sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherClosure: ((String, AudioInfo, String?, FormattedBody?, Bool, ProgressWatcher?) -> SendAttachmentJoinHandle)?
+    open var sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueClosure: ((String, AudioInfo, String?, FormattedBody?, ProgressWatcher?, Bool) -> SendAttachmentJoinHandle)?
 
-    open override func sendAudio(url: String, audioInfo: AudioInfo, caption: String?, formattedCaption: FormattedBody?, storeInCache: Bool, progressWatcher: ProgressWatcher?) -> SendAttachmentJoinHandle {
-        sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherCallsCount += 1
-        sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherReceivedArguments = (url: url, audioInfo: audioInfo, caption: caption, formattedCaption: formattedCaption, storeInCache: storeInCache, progressWatcher: progressWatcher)
+    open override func sendAudio(url: String, audioInfo: AudioInfo, caption: String?, formattedCaption: FormattedBody?, progressWatcher: ProgressWatcher?, useSendQueue: Bool) -> SendAttachmentJoinHandle {
+        sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueCallsCount += 1
+        sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueReceivedArguments = (url: url, audioInfo: audioInfo, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher, useSendQueue: useSendQueue)
         DispatchQueue.main.async {
-            self.sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherReceivedInvocations.append((url: url, audioInfo: audioInfo, caption: caption, formattedCaption: formattedCaption, storeInCache: storeInCache, progressWatcher: progressWatcher))
+            self.sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueReceivedInvocations.append((url: url, audioInfo: audioInfo, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher, useSendQueue: useSendQueue))
         }
-        if let sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherClosure = sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherClosure {
-            return sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherClosure(url, audioInfo, caption, formattedCaption, storeInCache, progressWatcher)
+        if let sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueClosure = sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueClosure {
+            return sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueClosure(url, audioInfo, caption, formattedCaption, progressWatcher, useSendQueue)
         } else {
-            return sendAudioUrlAudioInfoCaptionFormattedCaptionStoreInCacheProgressWatcherReturnValue
+            return sendAudioUrlAudioInfoCaptionFormattedCaptionProgressWatcherUseSendQueueReturnValue
         }
     }
 
     //MARK: - sendFile
 
-    var sendFileUrlFileInfoStoreInCacheProgressWatcherUnderlyingCallsCount = 0
-    open var sendFileUrlFileInfoStoreInCacheProgressWatcherCallsCount: Int {
+    var sendFileUrlFileInfoProgressWatcherUseSendQueueUnderlyingCallsCount = 0
+    open var sendFileUrlFileInfoProgressWatcherUseSendQueueCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendFileUrlFileInfoStoreInCacheProgressWatcherUnderlyingCallsCount
+                return sendFileUrlFileInfoProgressWatcherUseSendQueueUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendFileUrlFileInfoStoreInCacheProgressWatcherUnderlyingCallsCount
+                    returnValue = sendFileUrlFileInfoProgressWatcherUseSendQueueUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -19284,29 +19284,29 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         set {
             if Thread.isMainThread {
-                sendFileUrlFileInfoStoreInCacheProgressWatcherUnderlyingCallsCount = newValue
+                sendFileUrlFileInfoProgressWatcherUseSendQueueUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendFileUrlFileInfoStoreInCacheProgressWatcherUnderlyingCallsCount = newValue
+                    sendFileUrlFileInfoProgressWatcherUseSendQueueUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var sendFileUrlFileInfoStoreInCacheProgressWatcherCalled: Bool {
-        return sendFileUrlFileInfoStoreInCacheProgressWatcherCallsCount > 0
+    open var sendFileUrlFileInfoProgressWatcherUseSendQueueCalled: Bool {
+        return sendFileUrlFileInfoProgressWatcherUseSendQueueCallsCount > 0
     }
-    open var sendFileUrlFileInfoStoreInCacheProgressWatcherReceivedArguments: (url: String, fileInfo: FileInfo, storeInCache: Bool, progressWatcher: ProgressWatcher?)?
-    open var sendFileUrlFileInfoStoreInCacheProgressWatcherReceivedInvocations: [(url: String, fileInfo: FileInfo, storeInCache: Bool, progressWatcher: ProgressWatcher?)] = []
+    open var sendFileUrlFileInfoProgressWatcherUseSendQueueReceivedArguments: (url: String, fileInfo: FileInfo, progressWatcher: ProgressWatcher?, useSendQueue: Bool)?
+    open var sendFileUrlFileInfoProgressWatcherUseSendQueueReceivedInvocations: [(url: String, fileInfo: FileInfo, progressWatcher: ProgressWatcher?, useSendQueue: Bool)] = []
 
-    var sendFileUrlFileInfoStoreInCacheProgressWatcherUnderlyingReturnValue: SendAttachmentJoinHandle!
-    open var sendFileUrlFileInfoStoreInCacheProgressWatcherReturnValue: SendAttachmentJoinHandle! {
+    var sendFileUrlFileInfoProgressWatcherUseSendQueueUnderlyingReturnValue: SendAttachmentJoinHandle!
+    open var sendFileUrlFileInfoProgressWatcherUseSendQueueReturnValue: SendAttachmentJoinHandle! {
         get {
             if Thread.isMainThread {
-                return sendFileUrlFileInfoStoreInCacheProgressWatcherUnderlyingReturnValue
+                return sendFileUrlFileInfoProgressWatcherUseSendQueueUnderlyingReturnValue
             } else {
                 var returnValue: SendAttachmentJoinHandle? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendFileUrlFileInfoStoreInCacheProgressWatcherUnderlyingReturnValue
+                    returnValue = sendFileUrlFileInfoProgressWatcherUseSendQueueUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -19314,40 +19314,40 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         set {
             if Thread.isMainThread {
-                sendFileUrlFileInfoStoreInCacheProgressWatcherUnderlyingReturnValue = newValue
+                sendFileUrlFileInfoProgressWatcherUseSendQueueUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendFileUrlFileInfoStoreInCacheProgressWatcherUnderlyingReturnValue = newValue
+                    sendFileUrlFileInfoProgressWatcherUseSendQueueUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var sendFileUrlFileInfoStoreInCacheProgressWatcherClosure: ((String, FileInfo, Bool, ProgressWatcher?) -> SendAttachmentJoinHandle)?
+    open var sendFileUrlFileInfoProgressWatcherUseSendQueueClosure: ((String, FileInfo, ProgressWatcher?, Bool) -> SendAttachmentJoinHandle)?
 
-    open override func sendFile(url: String, fileInfo: FileInfo, storeInCache: Bool, progressWatcher: ProgressWatcher?) -> SendAttachmentJoinHandle {
-        sendFileUrlFileInfoStoreInCacheProgressWatcherCallsCount += 1
-        sendFileUrlFileInfoStoreInCacheProgressWatcherReceivedArguments = (url: url, fileInfo: fileInfo, storeInCache: storeInCache, progressWatcher: progressWatcher)
+    open override func sendFile(url: String, fileInfo: FileInfo, progressWatcher: ProgressWatcher?, useSendQueue: Bool) -> SendAttachmentJoinHandle {
+        sendFileUrlFileInfoProgressWatcherUseSendQueueCallsCount += 1
+        sendFileUrlFileInfoProgressWatcherUseSendQueueReceivedArguments = (url: url, fileInfo: fileInfo, progressWatcher: progressWatcher, useSendQueue: useSendQueue)
         DispatchQueue.main.async {
-            self.sendFileUrlFileInfoStoreInCacheProgressWatcherReceivedInvocations.append((url: url, fileInfo: fileInfo, storeInCache: storeInCache, progressWatcher: progressWatcher))
+            self.sendFileUrlFileInfoProgressWatcherUseSendQueueReceivedInvocations.append((url: url, fileInfo: fileInfo, progressWatcher: progressWatcher, useSendQueue: useSendQueue))
         }
-        if let sendFileUrlFileInfoStoreInCacheProgressWatcherClosure = sendFileUrlFileInfoStoreInCacheProgressWatcherClosure {
-            return sendFileUrlFileInfoStoreInCacheProgressWatcherClosure(url, fileInfo, storeInCache, progressWatcher)
+        if let sendFileUrlFileInfoProgressWatcherUseSendQueueClosure = sendFileUrlFileInfoProgressWatcherUseSendQueueClosure {
+            return sendFileUrlFileInfoProgressWatcherUseSendQueueClosure(url, fileInfo, progressWatcher, useSendQueue)
         } else {
-            return sendFileUrlFileInfoStoreInCacheProgressWatcherReturnValue
+            return sendFileUrlFileInfoProgressWatcherUseSendQueueReturnValue
         }
     }
 
     //MARK: - sendImage
 
-    var sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount = 0
-    open var sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherCallsCount: Int {
+    var sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount = 0
+    open var sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount
+                return sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount
+                    returnValue = sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -19355,29 +19355,29 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         set {
             if Thread.isMainThread {
-                sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount = newValue
+                sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount = newValue
+                    sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherCalled: Bool {
-        return sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherCallsCount > 0
+    open var sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueCalled: Bool {
+        return sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueCallsCount > 0
     }
-    open var sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherReceivedArguments: (url: String, thumbnailUrl: String?, imageInfo: ImageInfo, caption: String?, formattedCaption: FormattedBody?, storeInCache: Bool, progressWatcher: ProgressWatcher?)?
-    open var sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherReceivedInvocations: [(url: String, thumbnailUrl: String?, imageInfo: ImageInfo, caption: String?, formattedCaption: FormattedBody?, storeInCache: Bool, progressWatcher: ProgressWatcher?)] = []
+    open var sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueReceivedArguments: (url: String, thumbnailUrl: String?, imageInfo: ImageInfo, caption: String?, formattedCaption: FormattedBody?, progressWatcher: ProgressWatcher?, useSendQueue: Bool)?
+    open var sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueReceivedInvocations: [(url: String, thumbnailUrl: String?, imageInfo: ImageInfo, caption: String?, formattedCaption: FormattedBody?, progressWatcher: ProgressWatcher?, useSendQueue: Bool)] = []
 
-    var sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue: SendAttachmentJoinHandle!
-    open var sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherReturnValue: SendAttachmentJoinHandle! {
+    var sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue: SendAttachmentJoinHandle!
+    open var sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueReturnValue: SendAttachmentJoinHandle! {
         get {
             if Thread.isMainThread {
-                return sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue
+                return sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue
             } else {
                 var returnValue: SendAttachmentJoinHandle? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue
+                    returnValue = sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -19385,26 +19385,26 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         set {
             if Thread.isMainThread {
-                sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue = newValue
+                sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue = newValue
+                    sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherClosure: ((String, String?, ImageInfo, String?, FormattedBody?, Bool, ProgressWatcher?) -> SendAttachmentJoinHandle)?
+    open var sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueClosure: ((String, String?, ImageInfo, String?, FormattedBody?, ProgressWatcher?, Bool) -> SendAttachmentJoinHandle)?
 
-    open override func sendImage(url: String, thumbnailUrl: String?, imageInfo: ImageInfo, caption: String?, formattedCaption: FormattedBody?, storeInCache: Bool, progressWatcher: ProgressWatcher?) -> SendAttachmentJoinHandle {
-        sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherCallsCount += 1
-        sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherReceivedArguments = (url: url, thumbnailUrl: thumbnailUrl, imageInfo: imageInfo, caption: caption, formattedCaption: formattedCaption, storeInCache: storeInCache, progressWatcher: progressWatcher)
+    open override func sendImage(url: String, thumbnailUrl: String?, imageInfo: ImageInfo, caption: String?, formattedCaption: FormattedBody?, progressWatcher: ProgressWatcher?, useSendQueue: Bool) -> SendAttachmentJoinHandle {
+        sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueCallsCount += 1
+        sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueReceivedArguments = (url: url, thumbnailUrl: thumbnailUrl, imageInfo: imageInfo, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher, useSendQueue: useSendQueue)
         DispatchQueue.main.async {
-            self.sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherReceivedInvocations.append((url: url, thumbnailUrl: thumbnailUrl, imageInfo: imageInfo, caption: caption, formattedCaption: formattedCaption, storeInCache: storeInCache, progressWatcher: progressWatcher))
+            self.sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueReceivedInvocations.append((url: url, thumbnailUrl: thumbnailUrl, imageInfo: imageInfo, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher, useSendQueue: useSendQueue))
         }
-        if let sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherClosure = sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherClosure {
-            return sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherClosure(url, thumbnailUrl, imageInfo, caption, formattedCaption, storeInCache, progressWatcher)
+        if let sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueClosure = sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueClosure {
+            return sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueClosure(url, thumbnailUrl, imageInfo, caption, formattedCaption, progressWatcher, useSendQueue)
         } else {
-            return sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionStoreInCacheProgressWatcherReturnValue
+            return sendImageUrlThumbnailUrlImageInfoCaptionFormattedCaptionProgressWatcherUseSendQueueReturnValue
         }
     }
 
@@ -19590,15 +19590,15 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
 
     //MARK: - sendVideo
 
-    var sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount = 0
-    open var sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherCallsCount: Int {
+    var sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount = 0
+    open var sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount
+                return sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount
+                    returnValue = sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -19606,29 +19606,29 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         set {
             if Thread.isMainThread {
-                sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount = newValue
+                sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount = newValue
+                    sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherCalled: Bool {
-        return sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherCallsCount > 0
+    open var sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueCalled: Bool {
+        return sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueCallsCount > 0
     }
-    open var sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherReceivedArguments: (url: String, thumbnailUrl: String?, videoInfo: VideoInfo, caption: String?, formattedCaption: FormattedBody?, storeInCache: Bool, progressWatcher: ProgressWatcher?)?
-    open var sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherReceivedInvocations: [(url: String, thumbnailUrl: String?, videoInfo: VideoInfo, caption: String?, formattedCaption: FormattedBody?, storeInCache: Bool, progressWatcher: ProgressWatcher?)] = []
+    open var sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueReceivedArguments: (url: String, thumbnailUrl: String?, videoInfo: VideoInfo, caption: String?, formattedCaption: FormattedBody?, progressWatcher: ProgressWatcher?, useSendQueue: Bool)?
+    open var sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueReceivedInvocations: [(url: String, thumbnailUrl: String?, videoInfo: VideoInfo, caption: String?, formattedCaption: FormattedBody?, progressWatcher: ProgressWatcher?, useSendQueue: Bool)] = []
 
-    var sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue: SendAttachmentJoinHandle!
-    open var sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherReturnValue: SendAttachmentJoinHandle! {
+    var sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue: SendAttachmentJoinHandle!
+    open var sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueReturnValue: SendAttachmentJoinHandle! {
         get {
             if Thread.isMainThread {
-                return sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue
+                return sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue
             } else {
                 var returnValue: SendAttachmentJoinHandle? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue
+                    returnValue = sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -19636,40 +19636,40 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         set {
             if Thread.isMainThread {
-                sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue = newValue
+                sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue = newValue
+                    sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherClosure: ((String, String?, VideoInfo, String?, FormattedBody?, Bool, ProgressWatcher?) -> SendAttachmentJoinHandle)?
+    open var sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueClosure: ((String, String?, VideoInfo, String?, FormattedBody?, ProgressWatcher?, Bool) -> SendAttachmentJoinHandle)?
 
-    open override func sendVideo(url: String, thumbnailUrl: String?, videoInfo: VideoInfo, caption: String?, formattedCaption: FormattedBody?, storeInCache: Bool, progressWatcher: ProgressWatcher?) -> SendAttachmentJoinHandle {
-        sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherCallsCount += 1
-        sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherReceivedArguments = (url: url, thumbnailUrl: thumbnailUrl, videoInfo: videoInfo, caption: caption, formattedCaption: formattedCaption, storeInCache: storeInCache, progressWatcher: progressWatcher)
+    open override func sendVideo(url: String, thumbnailUrl: String?, videoInfo: VideoInfo, caption: String?, formattedCaption: FormattedBody?, progressWatcher: ProgressWatcher?, useSendQueue: Bool) -> SendAttachmentJoinHandle {
+        sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueCallsCount += 1
+        sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueReceivedArguments = (url: url, thumbnailUrl: thumbnailUrl, videoInfo: videoInfo, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher, useSendQueue: useSendQueue)
         DispatchQueue.main.async {
-            self.sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherReceivedInvocations.append((url: url, thumbnailUrl: thumbnailUrl, videoInfo: videoInfo, caption: caption, formattedCaption: formattedCaption, storeInCache: storeInCache, progressWatcher: progressWatcher))
+            self.sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueReceivedInvocations.append((url: url, thumbnailUrl: thumbnailUrl, videoInfo: videoInfo, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher, useSendQueue: useSendQueue))
         }
-        if let sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherClosure = sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherClosure {
-            return sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherClosure(url, thumbnailUrl, videoInfo, caption, formattedCaption, storeInCache, progressWatcher)
+        if let sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueClosure = sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueClosure {
+            return sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueClosure(url, thumbnailUrl, videoInfo, caption, formattedCaption, progressWatcher, useSendQueue)
         } else {
-            return sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionStoreInCacheProgressWatcherReturnValue
+            return sendVideoUrlThumbnailUrlVideoInfoCaptionFormattedCaptionProgressWatcherUseSendQueueReturnValue
         }
     }
 
     //MARK: - sendVoiceMessage
 
-    var sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount = 0
-    open var sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherCallsCount: Int {
+    var sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount = 0
+    open var sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount
+                return sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount
+                    returnValue = sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -19677,29 +19677,29 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         set {
             if Thread.isMainThread {
-                sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount = newValue
+                sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingCallsCount = newValue
+                    sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherCalled: Bool {
-        return sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherCallsCount > 0
+    open var sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueCalled: Bool {
+        return sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueCallsCount > 0
     }
-    open var sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherReceivedArguments: (url: String, audioInfo: AudioInfo, waveform: [UInt16], caption: String?, formattedCaption: FormattedBody?, storeInCache: Bool, progressWatcher: ProgressWatcher?)?
-    open var sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherReceivedInvocations: [(url: String, audioInfo: AudioInfo, waveform: [UInt16], caption: String?, formattedCaption: FormattedBody?, storeInCache: Bool, progressWatcher: ProgressWatcher?)] = []
+    open var sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueReceivedArguments: (url: String, audioInfo: AudioInfo, waveform: [UInt16], caption: String?, formattedCaption: FormattedBody?, progressWatcher: ProgressWatcher?, useSendQueue: Bool)?
+    open var sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueReceivedInvocations: [(url: String, audioInfo: AudioInfo, waveform: [UInt16], caption: String?, formattedCaption: FormattedBody?, progressWatcher: ProgressWatcher?, useSendQueue: Bool)] = []
 
-    var sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue: SendAttachmentJoinHandle!
-    open var sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherReturnValue: SendAttachmentJoinHandle! {
+    var sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue: SendAttachmentJoinHandle!
+    open var sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueReturnValue: SendAttachmentJoinHandle! {
         get {
             if Thread.isMainThread {
-                return sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue
+                return sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue
             } else {
                 var returnValue: SendAttachmentJoinHandle? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue
+                    returnValue = sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -19707,26 +19707,26 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
         set {
             if Thread.isMainThread {
-                sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue = newValue
+                sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherUnderlyingReturnValue = newValue
+                    sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherClosure: ((String, AudioInfo, [UInt16], String?, FormattedBody?, Bool, ProgressWatcher?) -> SendAttachmentJoinHandle)?
+    open var sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueClosure: ((String, AudioInfo, [UInt16], String?, FormattedBody?, ProgressWatcher?, Bool) -> SendAttachmentJoinHandle)?
 
-    open override func sendVoiceMessage(url: String, audioInfo: AudioInfo, waveform: [UInt16], caption: String?, formattedCaption: FormattedBody?, storeInCache: Bool, progressWatcher: ProgressWatcher?) -> SendAttachmentJoinHandle {
-        sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherCallsCount += 1
-        sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherReceivedArguments = (url: url, audioInfo: audioInfo, waveform: waveform, caption: caption, formattedCaption: formattedCaption, storeInCache: storeInCache, progressWatcher: progressWatcher)
+    open override func sendVoiceMessage(url: String, audioInfo: AudioInfo, waveform: [UInt16], caption: String?, formattedCaption: FormattedBody?, progressWatcher: ProgressWatcher?, useSendQueue: Bool) -> SendAttachmentJoinHandle {
+        sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueCallsCount += 1
+        sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueReceivedArguments = (url: url, audioInfo: audioInfo, waveform: waveform, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher, useSendQueue: useSendQueue)
         DispatchQueue.main.async {
-            self.sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherReceivedInvocations.append((url: url, audioInfo: audioInfo, waveform: waveform, caption: caption, formattedCaption: formattedCaption, storeInCache: storeInCache, progressWatcher: progressWatcher))
+            self.sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueReceivedInvocations.append((url: url, audioInfo: audioInfo, waveform: waveform, caption: caption, formattedCaption: formattedCaption, progressWatcher: progressWatcher, useSendQueue: useSendQueue))
         }
-        if let sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherClosure = sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherClosure {
-            return sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherClosure(url, audioInfo, waveform, caption, formattedCaption, storeInCache, progressWatcher)
+        if let sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueClosure = sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueClosure {
+            return sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueClosure(url, audioInfo, waveform, caption, formattedCaption, progressWatcher, useSendQueue)
         } else {
-            return sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionStoreInCacheProgressWatcherReturnValue
+            return sendVoiceMessageUrlAudioInfoWaveformCaptionFormattedCaptionProgressWatcherUseSendQueueReturnValue
         }
     }
 
