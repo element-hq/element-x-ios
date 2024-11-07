@@ -16,7 +16,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     private var createRoomParameters: CreateRoomFlowParameters
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private var syncNameAndAddress = true
+    private var syncNameAndAlias = true
     @CancellableTask private var checkAliasAvailabilityTask: Task<Void, Never>?
     
     private var actionsSubject: PassthroughSubject<CreateRoomViewModelAction, Never> = .init()
@@ -43,10 +43,10 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                                                    isKnockingOnly: appSettings.knockingEnabled ? parameters.isKnockingOnly : false)
 
         super.init(initialViewState: CreateRoomViewState(roomName: parameters.name,
-                                                         homeserver: userSession.clientProxy.serverName ?? "",
+                                                         serverName: userSession.clientProxy.userIDServerName ?? "",
                                                          isKnockingFeatureEnabled: appSettings.knockingEnabled,
                                                          selectedUsers: selectedUsers.value,
-                                                         addressName: parameters.addressName ?? roomAliasNameFromRoomDisplayName(roomName: parameters.name),
+                                                         aliasLocalPart: parameters.aliasLocalPart ?? roomAliasNameFromRoomDisplayName(roomName: parameters.name),
                                                          bindings: bindings),
                    mediaProvider: userSession.mediaProvider)
         
@@ -92,18 +92,18 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         case .removeImage:
             actionsSubject.send(.removeImage)
         case .updateAddress(let address):
-            state.addressName = address
+            state.aliasLocalPart = address
             // If this has been called this means that the user wants a custom address not necessarily reflecting the name
             // So we disable the two from syncing.
-            syncNameAndAddress = false
+            syncNameAndAlias = false
         case .updateName(let name):
             // Reset the syncing if the name is fully cancelled
             if name.isEmpty {
-                syncNameAndAddress = true
+                syncNameAndAlias = true
             }
             state.roomName = name
-            if syncNameAndAddress {
-                state.addressName = roomAliasNameFromRoomDisplayName(roomName: name)
+            if syncNameAndAlias {
+                state.aliasLocalPart = roomAliasNameFromRoomDisplayName(roomName: name)
             }
         }
     }
@@ -122,8 +122,8 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                 guard let self else { return }
                 state.bindings.isKnockingOnly = false
                 state.aliasErrors = []
-                state.addressName = roomAliasNameFromRoomDisplayName(roomName: state.roomName)
-                syncNameAndAddress = true
+                state.aliasLocalPart = roomAliasNameFromRoomDisplayName(roomName: state.roomName)
+                syncNameAndAlias = true
             }
             .store(in: &cancellables)
         
@@ -134,7 +134,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                     old.bindings.roomTopic == new.bindings.roomTopic &&
                     old.bindings.isRoomPrivate == new.bindings.isRoomPrivate &&
                     old.bindings.isKnockingOnly == new.bindings.isKnockingOnly &&
-                    old.addressName == new.addressName
+                    old.aliasLocalPart == new.aliasLocalPart
             }
             .sink { [weak self] state in
                 guard let self else { return }
@@ -144,17 +144,17 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             .store(in: &cancellables)
         
         context.$viewState
-            .map(\.addressName)
+            .map(\.aliasLocalPart)
             .removeDuplicates()
             .debounce(for: 1, scheduler: DispatchQueue.main)
-            .sink { [weak self] addressName in
+            .sink { [weak self] aliasLocalPart in
                 guard let self else {
                     return
                 }
                 
                 guard state.isKnockingFeatureEnabled,
                       !state.bindings.isRoomPrivate,
-                      let canonicalAlias = canonicalAlias(addressName: addressName) else {
+                      let canonicalAlias = canonicalAlias(aliasLocalPart: aliasLocalPart) else {
                     // While is empty or private room we don't change or display the error
                     return
                 }
@@ -191,10 +191,10 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         createRoomParameters.topic = state.bindings.roomTopic
         createRoomParameters.isRoomPrivate = state.bindings.isRoomPrivate
         createRoomParameters.isKnockingOnly = state.bindings.isKnockingOnly
-        if !state.addressName.isEmpty {
-            createRoomParameters.addressName = state.addressName
+        if !state.aliasLocalPart.isEmpty {
+            createRoomParameters.aliasLocalPart = state.aliasLocalPart
         } else {
-            createRoomParameters.addressName = nil
+            createRoomParameters.aliasLocalPart = nil
         }
     }
     
@@ -208,14 +208,14 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         updateParameters(state: state)
         
         // Better to double check the errors also when trying to create the room
-        let alias = canonicalAlias(addressName: createRoomParameters.addressName)
         if state.isKnockingFeatureEnabled, !createRoomParameters.isRoomPrivate {
-            guard let alias, isRoomAliasFormatValid(alias: alias) else {
+            guard let canonicalAlias = canonicalAlias(aliasLocalPart: createRoomParameters.aliasLocalPart),
+                  isRoomAliasFormatValid(alias: canonicalAlias) else {
                 state.aliasErrors = [.invalidSymbols]
                 return
             }
             
-            switch await userSession.clientProxy.isAliasAvailable(alias) {
+            switch await userSession.clientProxy.isAliasAvailable(canonicalAlias) {
             case .success(true):
                 break
             case .success(false):
@@ -260,7 +260,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                                                         isKnockingOnly: createRoomParameters.isRoomPrivate ? false : createRoomParameters.isKnockingOnly,
                                                         userIDs: state.selectedUsers.map(\.userID),
                                                         avatarURL: avatarURL,
-                                                        canonicalAlias: createRoomParameters.isRoomPrivate ? nil : alias) {
+                                                        aliasLocalPart: createRoomParameters.isRoomPrivate ? nil : createRoomParameters.aliasLocalPart) {
         case .success(let roomId):
             analytics.trackCreatedRoom(isDM: false)
             actionsSubject.send(.openRoom(withIdentifier: roomId))
@@ -271,12 +271,12 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         }
     }
     
-    func canonicalAlias(addressName: String?) -> String? {
-        guard let addressName,
-              !addressName.isEmpty else {
+    func canonicalAlias(aliasLocalPart: String?) -> String? {
+        guard let aliasLocalPart,
+              !aliasLocalPart.isEmpty else {
             return nil
         }
-        return "#\(addressName):\(state.homeserver)"
+        return "#\(aliasLocalPart):\(state.serverName)"
     }
     
     // MARK: Loading indicator

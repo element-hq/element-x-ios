@@ -88,9 +88,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var deviceID: String? { get }
 
     var homeserver: String { get }
-    
-    var serverName: String? { get }
-    
+
     var slidingSyncVersion: SlidingSyncVersion { get }
     var availableSlidingSyncVersions: [SlidingSyncVersion] { get async }
     
@@ -141,7 +139,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
                     isKnockingOnly: Bool,
                     userIDs: [String],
                     avatarURL: URL?,
-                    canonicalAlias: String?) async -> Result<String, ClientProxyError>
+                    aliasLocalPart: String?) async -> Result<String, ClientProxyError>
     
     func joinRoom(_ roomID: String, via: [String]) async -> Result<Void, ClientProxyError>
     

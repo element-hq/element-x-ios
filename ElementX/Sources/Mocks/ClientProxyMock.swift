@@ -10,7 +10,7 @@ import Foundation
 
 struct ClientProxyMockConfiguration {
     var homeserver = ""
-    var serverName: String?
+    var userIDServerName: String?
     var userID: String = RoomMemberProxyMock.mockMe.userID
     var deviceID: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol? = RoomSummaryProviderMock(.init())
@@ -31,7 +31,7 @@ extension ClientProxyMock {
         deviceID = configuration.deviceID
         
         homeserver = configuration.homeserver
-        serverName = configuration.serverName
+        userIDServerName = configuration.userIDServerName
         
         roomSummaryProvider = configuration.roomSummaryProvider
         alternateRoomSummaryProvider = RoomSummaryProviderMock(.init())
@@ -55,7 +55,7 @@ extension ClientProxyMock {
         canDeactivateAccount = false
         directRoomForUserIDReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         createDirectRoomWithExpectedRoomNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCanonicalAliasReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         uploadMediaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         loadUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         setUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))

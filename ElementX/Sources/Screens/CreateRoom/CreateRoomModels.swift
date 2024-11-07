@@ -26,10 +26,10 @@ enum CreateRoomViewModelAction {
 
 struct CreateRoomViewState: BindableState {
     var roomName: String
-    let homeserver: String
+    let serverName: String
     let isKnockingFeatureEnabled: Bool
     var selectedUsers: [UserProfileProxy]
-    var addressName: String
+    var aliasLocalPart: String
     var bindings: CreateRoomViewStateBindings
     var avatarURL: URL?
     var canCreateRoom: Bool {
@@ -37,6 +37,14 @@ struct CreateRoomViewState: BindableState {
     }
 
     var aliasErrors: Set<CreateRoomAliasErrorState> = []
+    var aliasErrorDescription: String? {
+        if aliasErrors.contains(.alreadyExists) {
+            return L10n.screenCreateRoomRoomAddressNotAvailableErrorDescription
+        } else if aliasErrors.contains(.invalidSymbols) {
+            return L10n.screenCreateRoomRoomAddressInvalidSymbolsErrorDescription
+        }
+        return nil
+    }
 }
 
 struct CreateRoomViewStateBindings {

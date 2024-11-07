@@ -221,10 +221,6 @@ class ClientProxy: ClientProxyProtocol {
         client.homeserver()
     }
     
-    var serverName: String? {
-        try? client.userIdServerName()
-    }
-    
     var slidingSyncVersion: SlidingSyncVersion {
         client.slidingSyncVersion()
     }
@@ -403,7 +399,7 @@ class ClientProxy: ClientProxyProtocol {
                     isKnockingOnly: Bool,
                     userIDs: [String],
                     avatarURL: URL?,
-                    canonicalAlias: String?) async -> Result<String, ClientProxyError> {
+                    aliasLocalPart: String?) async -> Result<String, ClientProxyError> {
         do {
             let parameters = CreateRoomParameters(name: name,
                                                   topic: topic,
@@ -414,7 +410,8 @@ class ClientProxy: ClientProxyProtocol {
                                                   invite: userIDs,
                                                   avatar: avatarURL?.absoluteString,
                                                   powerLevelContentOverride: isKnockingOnly ? Self.knockingRoomCreationPowerLevelOverrides : Self.roomCreationPowerLevelOverrides,
-                                                  canonicalAlias: canonicalAlias)
+                                                  // This is an FFI naming mistake, what is required is the `aliasLocalPart` not the whole alias
+                                                  canonicalAlias: aliasLocalPart)
             let roomID = try await client.createRoom(request: parameters)
             
             await waitForRoomToSync(roomID: roomID)

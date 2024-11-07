@@ -25,7 +25,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     
     override func setUpWithError() throws {
         cancellables.removeAll()
-        clientProxy = ClientProxyMock(.init(serverName: "matrix.org", userID: "@a:b.com"))
+        clientProxy = ClientProxyMock(.init(userIDServerName: "matrix.org", userID: "@a:b.com"))
         userSession = UserSessionMock(.init(clientProxy: clientProxy))
         let parameters = CreateRoomFlowParameters()
         usersSubject.send([.mockAlice, .mockBob, .mockCharlie])
@@ -83,7 +83,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.canCreateRoom)
         
         let expectation = expectation(description: "Wait for the room to be created")
-        clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCanonicalAliasClosure = { _, _, isPrivate, isKnockingOnly, _, _, canonicalAlias in
+        clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartClosure = { _, _, isPrivate, isKnockingOnly, _, _, canonicalAlias in
             XCTAssertTrue(isKnockingOnly)
             XCTAssertFalse(isPrivate)
             XCTAssertEqual(canonicalAlias, "#a:matrix.org")
@@ -113,7 +113,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         // blocked it
         context.send(viewAction: .createRoom)
         await Task.yield()
-        XCTAssertFalse(clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCanonicalAliasCalled)
+        XCTAssertFalse(clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartCalled)
     }
     
     func testCreatePublicRoomFailsForExistingAlias() async throws {
@@ -144,7 +144,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         context.send(viewAction: .createRoom)
         await fulfillment(of: [expectation])
         XCTAssertEqual(clientProxy.isAliasAvailableCallsCount, 2)
-        XCTAssertFalse(clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCanonicalAliasCalled)
+        XCTAssertFalse(clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartCalled)
     }
     
     func testCreatePrivateRoomCantHaveKnockRule() async {
@@ -154,7 +154,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         context.isKnockingOnly = true
         context.send(viewAction: .createRoom)
         let expectation = expectation(description: "Wait for the room to be created")
-        clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCanonicalAliasClosure = { _, _, isPrivate, isKnockingOnly, _, _, _ in
+        clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartClosure = { _, _, isPrivate, isKnockingOnly, _, _, _ in
             XCTAssertFalse(isKnockingOnly)
             XCTAssertTrue(isPrivate)
             expectation.fulfill()
@@ -167,30 +167,30 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         context.isRoomPrivate = true
         await Task.yield()
         context.send(viewAction: .updateName("abc"))
-        XCTAssertEqual(context.viewState.addressName, "abc")
+        XCTAssertEqual(context.viewState.aliasLocalPart, "abc")
         XCTAssertEqual(context.viewState.roomName, "abc")
         context.send(viewAction: .updateName("DEF"))
         XCTAssertEqual(context.viewState.roomName, "DEF")
-        XCTAssertEqual(context.viewState.addressName, "def")
+        XCTAssertEqual(context.viewState.aliasLocalPart, "def")
         context.send(viewAction: .updateName("a  b c"))
-        XCTAssertEqual(context.viewState.addressName, "a-b-c")
+        XCTAssertEqual(context.viewState.aliasLocalPart, "a-b-c")
         XCTAssertEqual(context.viewState.roomName, "a  b c")
         context.send(viewAction: .updateAddress("hello-world"))
         // This removes the sync
-        XCTAssertEqual(context.viewState.addressName, "hello-world")
+        XCTAssertEqual(context.viewState.aliasLocalPart, "hello-world")
         XCTAssertEqual(context.viewState.roomName, "a  b c")
         
         context.send(viewAction: .updateName("Hello Matrix!"))
-        XCTAssertEqual(context.viewState.addressName, "hello-world")
+        XCTAssertEqual(context.viewState.aliasLocalPart, "hello-world")
         XCTAssertEqual(context.viewState.roomName, "Hello Matrix!")
         
         // Deleting the whole name will restore the sync
         context.send(viewAction: .updateName(""))
-        XCTAssertEqual(context.viewState.addressName, "")
+        XCTAssertEqual(context.viewState.aliasLocalPart, "")
         XCTAssertEqual(context.viewState.roomName, "")
         
         context.send(viewAction: .updateName("Hello# Matrix!"))
-        XCTAssertEqual(context.viewState.addressName, "hello-matrix!")
+        XCTAssertEqual(context.viewState.aliasLocalPart, "hello-matrix!")
         XCTAssertEqual(context.viewState.roomName, "Hello# Matrix!")
     }
 }

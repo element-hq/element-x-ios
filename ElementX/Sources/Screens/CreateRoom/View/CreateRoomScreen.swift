@@ -25,7 +25,7 @@ struct CreateRoomScreen: View {
             if context.viewState.isKnockingFeatureEnabled,
                !context.isRoomPrivate {
                 roomAccessSection
-                roomAddressSection
+                roomAliasSection
             }
         }
         .compoundList()
@@ -156,27 +156,26 @@ struct CreateRoomScreen: View {
                                     iconAlignment: .top),
                     kind: .selection(isSelected: !context.isRoomPrivate) { context.isRoomPrivate = false })
         } header: {
-            Text(L10n.screenCreateRoomRoomVisibilitySectionTitle.uppercased())
+            Text(L10n.screenCreateRoomRoomVisibilitySectionTitle)
                 .compoundListSectionHeader()
         }
     }
     
     private var roomAccessSection: some View {
         Section {
-            ListRow(label: .plain(title:
-                L10n.screenCreateRoomRoomAccessSectionAnyoneOptionTitle,
-                description: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionDescription),
-            kind: .selection(isSelected: !context.isKnockingOnly) { context.isKnockingOnly = false })
+            ListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionTitle,
+                                  description: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionDescription),
+                    kind: .selection(isSelected: !context.isKnockingOnly) { context.isKnockingOnly = false })
             ListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionKnockingOptionTitle,
                                   description: L10n.screenCreateRoomRoomAccessSectionKnockingOptionDescription),
                     kind: .selection(isSelected: context.isKnockingOnly) { context.isKnockingOnly = true })
         } header: {
-            Text(L10n.screenCreateRoomRoomAccessSectionHeader.uppercased())
+            Text(L10n.screenCreateRoomRoomAccessSectionHeader)
                 .compoundListSectionHeader()
         }
     }
     
-    private var roomAddressSection: some View {
+    private var roomAliasSection: some View {
         Section {
             ListRow(kind: .custom {
                 HStack(spacing: 0) {
@@ -185,7 +184,7 @@ struct CreateRoomScreen: View {
                         .foregroundStyle(.compound.textSecondary)
                     
                     let binding = Binding(get: {
-                        context.viewState.addressName
+                        context.viewState.aliasLocalPart
                     }, set: {
                         context.send(viewAction: .updateAddress($0))
                     })
@@ -197,7 +196,7 @@ struct CreateRoomScreen: View {
                         .font(.compound.bodyLG)
                         .foregroundStyle(.compound.textPrimary)
                         .padding(.horizontal, 8)
-                    Text(":\(context.viewState.homeserver)")
+                    Text(":\(context.viewState.serverName)")
                         .font(.compound.bodyLG)
                         .foregroundStyle(.compound.textSecondary)
                 }
@@ -206,16 +205,12 @@ struct CreateRoomScreen: View {
                 .errorBackground(!context.viewState.aliasErrors.isEmpty)
             })
         } header: {
-            Text(L10n.screenCreateRoomRoomAddressSectionTitle.uppercased())
+            Text(L10n.screenCreateRoomRoomAddressSectionTitle)
                 .compoundListSectionHeader()
         } footer: {
             VStack(alignment: .leading, spacing: 12) {
-                if context.viewState.aliasErrors.contains(.alreadyExists) {
+                if let errorDescription = context.viewState.aliasErrorDescription {
                     Label(L10n.screenCreateRoomRoomAddressNotAvailableErrorDescription, icon: \.error, iconSize: .xSmall, relativeTo: .compound.bodySM)
-                        .foregroundStyle(.compound.textCriticalPrimary)
-                        .font(.compound.bodySM)
-                } else if context.viewState.aliasErrors.contains(.invalidSymbols) {
-                    Label(L10n.screenCreateRoomRoomAddressInvalidSymbolsErrorDescription, icon: \.error, iconSize: .xSmall, relativeTo: .compound.bodySM)
                         .foregroundStyle(.compound.textCriticalPrimary)
                         .font(.compound.bodySM)
                 }
@@ -274,7 +269,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let publicRoomViewModel = {
-        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(serverName: "example.org", userID: "@userid:example.com"))))
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
         let parameters = CreateRoomFlowParameters(isRoomPrivate: false)
         let selectedUsers: [UserProfileProxy] = [.mockAlice, .mockBob, .mockCharlie]
         ServiceLocator.shared.settings.knockingEnabled = true
@@ -287,8 +282,8 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let publicRoomInvalidAliasViewModel = {
-        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(serverName: "example.org", userID: "@userid:example.com"))))
-        let parameters = CreateRoomFlowParameters(isRoomPrivate: false, addressName: "#:")
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
+        let parameters = CreateRoomFlowParameters(isRoomPrivate: false, aliasLocalPart: "#:")
         ServiceLocator.shared.settings.knockingEnabled = true
         return CreateRoomViewModel(userSession: userSession,
                                    createRoomParameters: .init(parameters),
@@ -299,10 +294,10 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let publicRoomExistingAliasViewModel = {
-        let clientProxy = ClientProxyMock(.init(serverName: "example.org", userID: "@userid:example.com"))
+        let clientProxy = ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))
         clientProxy.isAliasAvailableReturnValue = .success(false)
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        let parameters = CreateRoomFlowParameters(isRoomPrivate: false, addressName: "existing")
+        let parameters = CreateRoomFlowParameters(isRoomPrivate: false, aliasLocalPart: "existing")
         ServiceLocator.shared.settings.knockingEnabled = true
         return CreateRoomViewModel(userSession: userSession,
                                    createRoomParameters: .init(parameters),
