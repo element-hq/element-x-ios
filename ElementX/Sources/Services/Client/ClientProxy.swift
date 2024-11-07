@@ -164,19 +164,10 @@ class ClientProxy: ClientProxyProtocol {
             self?.ignoredUsersSubject.send(ignoredUsers)
         })
         
-        updateVerificationState(client.encryption().verificationState())
+        await updateVerificationState(client.encryption().verificationState())
         
         verificationStateListenerTaskHandle = client.encryption().verificationStateListener(listener: VerificationStateListenerProxy { [weak self] verificationState in
-            guard let self else { return }
-            
-            updateVerificationState(verificationState)
-            
-            // The session verification controller requires the user's identity which
-            // isn't available before a keys query response. Use the verification
-            // state updates as an aproximation for when that happens.
-            Task {
-                await self.buildSessionVerificationControllerProxyIfPossible(verificationState: verificationState)
-            }
+            Task { await self?.updateVerificationState(verificationState) }
         })
         
         sendQueueListenerTaskHandle = client.subscribeToSendQueueStatus(listener: SendQueueRoomErrorListenerProxy { [weak self] roomID, error in
@@ -657,7 +648,9 @@ class ClientProxy: ClientProxyProtocol {
     
     func resolveRoomAlias(_ alias: String) async -> Result<ResolvedRoomAlias, ClientProxyError> {
         do {
-            let resolvedAlias = try await client.resolveRoomAlias(roomAlias: alias)
+            guard let resolvedAlias = try await client.resolveRoomAlias(roomAlias: alias) else {
+                return .failure(.failedResolvingRoomAlias)
+            }
             
             // Resolving aliases is done through the directory/room API which returns too many / all known
             // vias, which in turn results in invalid join requests. Trim them to something manageable
@@ -750,7 +743,7 @@ class ClientProxy: ClientProxyProtocol {
     
     // MARK: - Private
     
-    private func updateVerificationState(_ verificationState: VerificationState) {
+    private func updateVerificationState(_ verificationState: VerificationState) async {
         let verificationState: SessionVerificationState = switch verificationState {
         case .unknown:
             .unknown
@@ -760,10 +753,17 @@ class ClientProxy: ClientProxyProtocol {
             .verified
         }
         
+        // The session verification controller requires the user's identity which
+        // isn't available before a keys query response. Use the verification
+        // state updates as an aproximation for when that happens.
+        await buildSessionVerificationControllerProxyIfPossible(verificationState: verificationState)
+        
+        // Only update the session verification state after creating a session
+        // verification proxy to avoid race conditions
         verificationStateSubject.send(verificationState)
     }
     
-    private func buildSessionVerificationControllerProxyIfPossible(verificationState: VerificationState) async {
+    private func buildSessionVerificationControllerProxyIfPossible(verificationState: SessionVerificationState) async {
         guard sessionVerificationController == nil, verificationState != .unknown else {
             return
         }

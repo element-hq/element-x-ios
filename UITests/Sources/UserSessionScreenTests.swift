@@ -13,6 +13,9 @@ class UserSessionScreenTests: XCTestCase {
     
     func testUserSessionFlows() async throws {
         let app = Application.launch(.userSessionScreen)
+        
+        app.swipeDown() // Make sure the header shows a large title
+        
         try await app.assertScreenshot(.userSessionScreen, step: 1)
 
         app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
@@ -47,7 +50,7 @@ class UserSessionScreenTests: XCTestCase {
         let textField = app.textFields["Display name"]
         XCTAssert(textField.waitForExistence(timeout: 10))
         
-        let joinButton = app.buttons["Join call now"]
+        let joinButton = app.buttons["Continue"]
         XCTAssert(joinButton.waitForExistence(timeout: 10))
     }
 }

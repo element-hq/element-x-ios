@@ -1,3 +1,60 @@
+## Changes in 1.9.4 (2024-11-07)
+
+### What's Changed
+
+✨ Features
+* Hook reaction pickers into the system's recently used keyboard emojis by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3453
+* Incoming session verification support by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3428
+* Enable the Optimised Media Uploads feature. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3467
+
+🙌 Improvements
+* Enable identity pinning violation notifications unconditionally by @andybalaam in https://github.com/element-hq/element-x-ios/pull/3457
+* Tweak the flow for changing a recovery key. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3452
+* Replace individual RoomProxy properties with a stored RoomInfo. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3445
+* Use an https callback for OIDC once again. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3461
+* Tweak the flow for setting up a recovery key. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3463
+* Tweak the flow for disabling key storage. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3464
+* Directly show Recovery Key and Encryption Reset screens from the home screen banner. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3482
+
+🐛 Bugfixes
+* Fix the order of the frequently used emojis when showing them in the full reaction picker by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3455
+* Stop the sync loop after each background app refresh. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3481
+* Fix the Setup Recovery flow from the home screen banner. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3483
+* Fix race condition when setting up session verification controller subscriptions by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3486
+* Fix a couple of race conditions when observing room info updates for calls. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3487
+* Syncing fixes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3488
+* Start syncing when receiving a background VoIP call for the cases in which the app was suspended but not terminated by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3491
+* Update SDK 1.0.65 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3494
+
+🗣 Translations
+* Update translations and some snapshots. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3459
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3477
+
+🧱 Build
+* remove iOS 16 support by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3443
+* min macos support by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3451
+* Revert "min macos support" by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3458
+
+📄 Documentation
+* Update the README. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3480
+
+🚧 In development 🚧
+* Knocked Preview implementation by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3426
+* Switch optimised video uploads to use 720p by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3462
+
+Others
+* Update verify identity button title. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3466
+* Update the strings for out of sync Key Storage. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3468
+* Update SDK 1.0.63 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3479
+* Encryption Flow Coordinators. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3471
+* Update SDK 1.0.64 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3490
+* Fastlane fails resetting the right simulator, use `device` instead of `destination`. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3493
+
+### New Contributors
+* @andybalaam made their first contribution in https://github.com/element-hq/element-x-ios/pull/3457
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.9.3...1.9.4
+
 ## Changes in 1.9.3 (2024-10-24)
 
 ### What's Changed

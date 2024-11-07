@@ -467,6 +467,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     settingsFlowCoordinator.handleAppRoute(.settings, animated: true)
                 case .presentFeedbackScreen:
                     stateMachine.processEvent(.feedbackScreen)
+                case .presentSecureBackupSettings:
+                    settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
                 case .presentRecoveryKeyScreen:
                     stateMachine.processEvent(.showRecoveryKeyScreen)
                 case .presentEncryptionResetScreen:
