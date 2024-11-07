@@ -210,7 +210,7 @@ struct CreateRoomScreen: View {
         } footer: {
             VStack(alignment: .leading, spacing: 12) {
                 if let errorDescription = context.viewState.aliasErrorDescription {
-                    Label(L10n.screenCreateRoomRoomAddressNotAvailableErrorDescription, icon: \.error, iconSize: .xSmall, relativeTo: .compound.bodySM)
+                    Label(errorDescription, icon: \.error, iconSize: .xSmall, relativeTo: .compound.bodySM)
                         .foregroundStyle(.compound.textCriticalPrimary)
                         .font(.compound.bodySM)
                 }
