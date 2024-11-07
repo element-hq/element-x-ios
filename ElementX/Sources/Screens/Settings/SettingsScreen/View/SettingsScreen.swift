@@ -30,6 +30,15 @@ struct SettingsScreen: View {
 //
 //            generalSection
             
+            Section {
+                ListRow(label: .default(title: "Advanced Settings",
+                                        icon: \.code),
+                        kind: .navigationLink {
+                            context.send(viewAction: .developerOptions)
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
+            }
+            
             signOutSection
         }
         .compoundList()

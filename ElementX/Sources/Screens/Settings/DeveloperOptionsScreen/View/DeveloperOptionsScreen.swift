@@ -19,97 +19,97 @@ struct DeveloperOptionsScreen: View {
     
     var body: some View {
         Form {
-            Section("Logging") {
-                LogLevelConfigurationView(logLevel: $context.logLevel)
-            }
-            
-            Section {
-                Picker("Discovery", selection: $context.slidingSyncDiscovery) {
-                    Text("Proxy only").tag(AppSettings.SlidingSyncDiscovery.proxy)
-                    Text("Automatic").tag(AppSettings.SlidingSyncDiscovery.native)
-                    Text("Force Native ⚠️").tag(AppSettings.SlidingSyncDiscovery.forceNative)
-                }
-            } header: {
-                Text("Sliding Sync")
-            } footer: {
-                Text(context.viewState.slidingSyncFooter)
-            }
-            
-            Section("Room List") {
-                Toggle(isOn: $context.hideUnreadMessagesBadge) {
-                    Text("Hide grey dots")
-                }
-                
-                Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
-                    Text("Fuzzy searching")
-                }
-            }
-            
-            Section("Timeline") {
-                Toggle(isOn: $context.hideTimelineMedia) {
-                    Text("Hide image & video previews")
-                }
-                
-                Toggle(isOn: $context.frequentEmojisEnabled) {
-                    Text("Show frequently used emojis")
-                }
-            }
-            
-            Section("Join rules") {
-                Toggle(isOn: $context.knockingEnabled) {
-                    Text("Knocking")
-                    Text("Experimental, still using mocked data")
-                }
-            }
-            
-            Section {
-                Toggle(isOn: $context.enableOnlySignedDeviceIsolationMode) {
-                    Text("Exclude insecure devices when sending/receiving messages")
-                    Text("Requires app reboot")
-                }
-            } header: {
-                Text("Trust and Decoration")
-            } footer: {
-                Text("This setting controls how end-to-end encryption (E2EE) keys are exchanged. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
-            }
-
-            Section {
-                TextField(context.viewState.elementCallBaseURL.absoluteString, text: $elementCallURLOverrideString)
-                    .autocorrectionDisabled(true)
-                    .autocapitalization(.none)
-                    .foregroundColor(URL(string: elementCallURLOverrideString) == nil ? .red : .primary)
-                    .submitLabel(.done)
-                    .onSubmit {
-                        if elementCallURLOverrideString.isEmpty {
-                            context.elementCallBaseURLOverride = nil
-                        } else if let url = URL(string: elementCallURLOverrideString) {
-                            context.elementCallBaseURLOverride = url
-                        }
-                    }
-            } header: {
-                Text("Element Call")
-            } footer: {
-                if context.elementCallBaseURLOverride == nil {
-                    Text("The call URL may be overridden by your homeserver.")
-                }
-            }
-            
-            Section {
-                Button {
-                    showConfetti = true
-                } label: {
-                    Text("🥳")
-                        .frame(maxWidth: .infinity)
-                        .alignmentGuide(.listRowSeparatorLeading) { _ in 0 } // Fix separator alignment
-                }
-                
-                Button {
-                    fatalError("This crash is a test.")
-                } label: {
-                    Text("💥")
-                        .frame(maxWidth: .infinity)
-                }
-            }
+//            Section("Logging") {
+//                LogLevelConfigurationView(logLevel: $context.logLevel)
+//            }
+//            
+//            Section {
+//                Picker("Discovery", selection: $context.slidingSyncDiscovery) {
+//                    Text("Proxy only").tag(AppSettings.SlidingSyncDiscovery.proxy)
+//                    Text("Automatic").tag(AppSettings.SlidingSyncDiscovery.native)
+//                    Text("Force Native ⚠️").tag(AppSettings.SlidingSyncDiscovery.forceNative)
+//                }
+//            } header: {
+//                Text("Sliding Sync")
+//            } footer: {
+//                Text(context.viewState.slidingSyncFooter)
+//            }
+//            
+//            Section("Room List") {
+//                Toggle(isOn: $context.hideUnreadMessagesBadge) {
+//                    Text("Hide grey dots")
+//                }
+//                
+//                Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
+//                    Text("Fuzzy searching")
+//                }
+//            }
+//            
+//            Section("Timeline") {
+//                Toggle(isOn: $context.hideTimelineMedia) {
+//                    Text("Hide image & video previews")
+//                }
+//                
+//                Toggle(isOn: $context.frequentEmojisEnabled) {
+//                    Text("Show frequently used emojis")
+//                }
+//            }
+//            
+//            Section("Join rules") {
+//                Toggle(isOn: $context.knockingEnabled) {
+//                    Text("Knocking")
+//                    Text("Experimental, still using mocked data")
+//                }
+//            }
+//            
+//            Section {
+//                Toggle(isOn: $context.enableOnlySignedDeviceIsolationMode) {
+//                    Text("Exclude insecure devices when sending/receiving messages")
+//                    Text("Requires app reboot")
+//                }
+//            } header: {
+//                Text("Trust and Decoration")
+//            } footer: {
+//                Text("This setting controls how end-to-end encryption (E2EE) keys are exchanged. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
+//            }
+//
+//            Section {
+//                TextField(context.viewState.elementCallBaseURL.absoluteString, text: $elementCallURLOverrideString)
+//                    .autocorrectionDisabled(true)
+//                    .autocapitalization(.none)
+//                    .foregroundColor(URL(string: elementCallURLOverrideString) == nil ? .red : .primary)
+//                    .submitLabel(.done)
+//                    .onSubmit {
+//                        if elementCallURLOverrideString.isEmpty {
+//                            context.elementCallBaseURLOverride = nil
+//                        } else if let url = URL(string: elementCallURLOverrideString) {
+//                            context.elementCallBaseURLOverride = url
+//                        }
+//                    }
+//            } header: {
+//                Text("Element Call")
+//            } footer: {
+//                if context.elementCallBaseURLOverride == nil {
+//                    Text("The call URL may be overridden by your homeserver.")
+//                }
+//            }
+//            
+//            Section {
+//                Button {
+//                    showConfetti = true
+//                } label: {
+//                    Text("🥳")
+//                        .frame(maxWidth: .infinity)
+//                        .alignmentGuide(.listRowSeparatorLeading) { _ in 0 } // Fix separator alignment
+//                }
+//                
+//                Button {
+//                    fatalError("This crash is a test.")
+//                } label: {
+//                    Text("💥")
+//                        .frame(maxWidth: .infinity)
+//                }
+//            }
 
             Section {
                 Button(role: .destructive) {
@@ -122,7 +122,8 @@ struct DeveloperOptionsScreen: View {
         }
         .overlay(effectsView)
         .compoundList()
-        .navigationTitle(L10n.commonDeveloperOptions)
+        // .navigationTitle(L10n.commonDeveloperOptions)
+        .navigationTitle(L10n.commonAdvancedSettings)
         .navigationBarTitleDisplayMode(.inline)
     }
 
