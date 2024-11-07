@@ -35,13 +35,6 @@ struct DeveloperOptionsScreen: View {
                 Text(context.viewState.slidingSyncFooter)
             }
             
-            Section("Message Pinning") {
-                Toggle(isOn: $context.pinningEnabled) {
-                    Text("Enable message pinning")
-                    Text("Requires app reboot")
-                }
-            }
-            
             Section("Room List") {
                 Toggle(isOn: $context.hideUnreadMessagesBadge) {
                     Text("Hide grey dots")
@@ -52,15 +45,32 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
+            Section("Timeline") {
+                Toggle(isOn: $context.hideTimelineMedia) {
+                    Text("Hide image & video previews")
+                }
+                
+                Toggle(isOn: $context.frequentEmojisEnabled) {
+                    Text("Show frequently used emojis")
+                }
+            }
+            
+            Section("Join rules") {
+                Toggle(isOn: $context.knockingEnabled) {
+                    Text("Knocking")
+                    Text("Experimental, still using mocked data")
+                }
+            }
+            
             Section {
-                Toggle(isOn: $context.invisibleCryptoEnabled) {
-                    Text("Enabled Invisible Crypto")
+                Toggle(isOn: $context.enableOnlySignedDeviceIsolationMode) {
+                    Text("Exclude insecure devices when sending/receiving messages")
                     Text("Requires app reboot")
                 }
             } header: {
                 Text("Trust and Decoration")
             } footer: {
-                Text("This setting controls how end-to-end encryption (E2EE) keys are shared. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
+                Text("This setting controls how end-to-end encryption (E2EE) keys are exchanged. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
             }
 
             Section {
@@ -135,18 +145,6 @@ struct DeveloperOptionsScreen: View {
 private struct LogLevelConfigurationView: View {
     @Binding var logLevel: TracingConfiguration.LogLevel
     
-    @State private var customTracingConfiguration: String
-
-    init(logLevel: Binding<TracingConfiguration.LogLevel>) {
-        _logLevel = logLevel
-        
-        if case .custom(let configuration) = logLevel.wrappedValue {
-            customTracingConfiguration = configuration
-        } else {
-            customTracingConfiguration = TracingConfiguration(logLevel: .info, target: nil).filter
-        }
-    }
-    
     var body: some View {
         Picker(selection: $logLevel) {
             ForEach(logLevels, id: \.self) { logLevel in
@@ -156,24 +154,11 @@ private struct LogLevelConfigurationView: View {
             Text("Log level")
             Text("Requires app reboot")
         }
-        
-        if case .custom = logLevel {
-            TextEditor(text: $customTracingConfiguration)
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled()
-                .onChange(of: customTracingConfiguration) { newValue in
-                    logLevel = .custom(newValue)
-                }
-        }
     }
     
     /// Allows the picker to work with associated values
     private var logLevels: [TracingConfiguration.LogLevel] {
-        if case let .custom(filter) = logLevel {
-            return [.error, .warn, .info, .debug, .trace, .custom(filter)]
-        } else {
-            return [.error, .warn, .info, .debug, .trace, .custom("")]
-        }
+        [.error, .warn, .info, .debug, .trace]
     }
 }
 

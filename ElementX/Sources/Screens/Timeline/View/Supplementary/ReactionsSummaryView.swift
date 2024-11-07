@@ -13,6 +13,9 @@ struct ReactionsSummaryView: View {
     let mediaProvider: MediaProviderProtocol?
     
     @State var selectedReactionKey: String
+    private var selectedReaction: AggregatedReaction? {
+        reactions.first { $0.key == selectedReactionKey }
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -40,7 +43,7 @@ struct ReactionsSummaryView: View {
                         scrollView.scrollTo(selectedReactionKey)
                     }
                 }
-                .onChange(of: selectedReactionKey) { _ in
+                .onChange(of: selectedReactionKey) {
                     scrollView.scrollTo(selectedReactionKey)
                 }
             }
@@ -49,19 +52,17 @@ struct ReactionsSummaryView: View {
         .padding(.bottom, 12)
     }
     
+    @ViewBuilder
     private var sendersList: some View {
-        TabView(selection: $selectedReactionKey) {
-            ForEach(reactions) { reaction in
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 8) {
-                        ForEach(reaction.senders) { sender in
-                            ReactionSummarySenderView(sender: sender, member: members[sender.id], mediaProvider: mediaProvider)
-                                .padding(.horizontal, 16)
-                        }
+        if let selectedReaction {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(selectedReaction.senders) { sender in
+                        ReactionSummarySenderView(sender: sender, member: members[sender.id], mediaProvider: mediaProvider)
+                            .padding(.horizontal, 16)
                     }
-                    .frame(maxWidth: .infinity)
                 }
-                .tag(reaction.key)
+                .frame(maxWidth: .infinity)
             }
         }
     }
@@ -138,7 +139,7 @@ struct ReactionsSummaryView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         ReactionsSummaryView(reactions: AggregatedReaction.mockReactions,
                              members: [:],
-                             mediaProvider: MockMediaProvider(),
+                             mediaProvider: MediaProviderMock(configuration: .init()),
                              selectedReactionKey: AggregatedReaction.mockReactions[0].key)
     }
 }

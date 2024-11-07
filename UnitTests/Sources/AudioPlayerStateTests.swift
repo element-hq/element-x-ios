@@ -38,7 +38,7 @@ class AudioPlayerStateTests: XCTestCase {
     override func setUp() async throws {
         audioPlayerActionsSubject = .init()
         audioPlayerSeekCallsSubject = .init()
-        audioPlayerState = AudioPlayerState(id: .timelineItemIdentifier(.random), title: "", duration: Self.audioDuration)
+        audioPlayerState = AudioPlayerState(id: .timelineItemIdentifier(.randomEvent), title: "", duration: Self.audioDuration)
         audioPlayerMock = buildAudioPlayerMock()
         audioPlayerMock.seekToClosure = { [weak self] progress in
             self?.audioPlayerMock.currentTime = Self.audioDuration * progress
@@ -162,7 +162,7 @@ class AudioPlayerStateTests: XCTestCase {
     func testHandlingAudioPlayerActionDidFinishLoading() async throws {
         audioPlayerMock.duration = 10.0
         
-        audioPlayerState = AudioPlayerState(id: .timelineItemIdentifier(.random), title: "", duration: 0)
+        audioPlayerState = AudioPlayerState(id: .timelineItemIdentifier(.randomEvent), title: "", duration: 0)
         audioPlayerState.attachAudioPlayer(audioPlayerMock)
 
         let deferred = deferFulfillment(audioPlayerState.$playbackState) { action in

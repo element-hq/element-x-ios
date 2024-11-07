@@ -16,6 +16,11 @@ class JoinRoomScreenViewModelTests: XCTestCase {
     var context: JoinRoomScreenViewModelType.Context {
         viewModel.context
     }
+    
+    override func tearDown() {
+        viewModel = nil
+        AppSettings.resetAllSettings()
+    }
 
     func testInteraction() async throws {
         setupViewModel()
@@ -43,7 +48,32 @@ class JoinRoomScreenViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.context.alertInfo?.id, .declineInvite)
     }
     
-    private func setupViewModel(throwing: Bool = false) {
+    func testKnockedState() async throws {
+        setupViewModel(knocked: true)
+        
+        try await deferFulfillment(viewModel.context.$viewState) { state in
+            state.mode == .knocked
+        }.fulfill()
+    }
+    
+    func testCancelKnock() async throws {
+        setupViewModel(knocked: true)
+        
+        try await deferFulfillment(viewModel.context.$viewState) { state in
+            state.mode == .knocked
+        }.fulfill()
+        
+        context.send(viewAction: .cancelKnock)
+        XCTAssertEqual(viewModel.context.alertInfo?.id, .cancelKnock)
+        
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { action in
+            action == .dismiss
+        }
+        context.alertInfo?.secondaryButton?.action?()
+        try await deferred.fulfill()
+    }
+    
+    private func setupViewModel(throwing: Bool = false, knocked: Bool = false) {
         let clientProxy = ClientProxyMock(.init())
         
         clientProxy.joinRoomViaReturnValue = throwing ? .failure(.sdkError(ClientProxyMockError.generic)) : .success(())
@@ -60,10 +90,22 @@ class JoinRoomScreenViewModelTests: XCTestCase {
                                                                             isPublic: false,
                                                                             canKnock: false))
         
+        if knocked {
+            clientProxy.roomForIdentifierClosure = { _ in
+                let roomProxy = KnockedRoomProxyMock(.init())
+                // to test the cancel knock function
+                roomProxy.cancelKnockUnderlyingReturnValue = .success(())
+                return .knocked(roomProxy)
+            }
+        }
+        
+        ServiceLocator.shared.settings.knockingEnabled = true
+        
         viewModel = JoinRoomScreenViewModel(roomID: "1",
                                             via: [],
+                                            appSettings: ServiceLocator.shared.settings,
                                             clientProxy: clientProxy,
-                                            mediaProvider: MockMediaProvider(),
+                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }

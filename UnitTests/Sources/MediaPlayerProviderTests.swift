@@ -60,7 +60,7 @@ class MediaPlayerProviderTests: XCTestCase {
     }
     
     func testPlayerStates() async throws {
-        let audioPlayerStateId = AudioPlayerStateIdentifier.timelineItemIdentifier(.random)
+        let audioPlayerStateId = AudioPlayerStateIdentifier.timelineItemIdentifier(.randomEvent)
         // By default, there should be no player state
         XCTAssertNil(mediaPlayerProvider.playerState(for: audioPlayerStateId))
         
@@ -76,7 +76,7 @@ class MediaPlayerProviderTests: XCTestCase {
         let audioPlayer = AudioPlayerMock()
         audioPlayer.actions = PassthroughSubject<AudioPlayerAction, Never>().eraseToAnyPublisher()
         
-        let audioPlayerStates = Array(repeating: AudioPlayerState(id: .timelineItemIdentifier(.random), title: "", duration: 0), count: 10)
+        let audioPlayerStates = Array(repeating: AudioPlayerState(id: .timelineItemIdentifier(.randomEvent), title: "", duration: 0), count: 10)
         for audioPlayerState in audioPlayerStates {
             mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
             audioPlayerState.attachAudioPlayer(audioPlayer)
@@ -95,7 +95,7 @@ class MediaPlayerProviderTests: XCTestCase {
         let audioPlayer = AudioPlayerMock()
         audioPlayer.actions = PassthroughSubject<AudioPlayerAction, Never>().eraseToAnyPublisher()
         
-        let audioPlayerStates = Array(repeating: AudioPlayerState(id: .timelineItemIdentifier(.random), title: "", duration: 0), count: 10)
+        let audioPlayerStates = Array(repeating: AudioPlayerState(id: .timelineItemIdentifier(.randomEvent), title: "", duration: 0), count: 10)
         for audioPlayerState in audioPlayerStates {
             mediaPlayerProvider.register(audioPlayerState: audioPlayerState)
             audioPlayerState.attachAudioPlayer(audioPlayer)

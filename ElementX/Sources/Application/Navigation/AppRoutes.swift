@@ -9,8 +9,6 @@ import Foundation
 import MatrixRustSDK
 
 enum AppRoute: Equatable {
-    /// The callback used to complete login with OIDC.
-    case oidcCallback(url: URL)
     /// The app's home screen.
     case roomList
     /// A room, shown as the root of the stack (popping any child rooms).
@@ -52,7 +50,6 @@ struct AppRouteURLParser {
         urlParsers = [
             MatrixPermalinkParser(),
             ElementWebURLParser(domains: appSettings.elementWebHosts),
-            OIDCCallbackURLParser(appSettings: appSettings),
             ElementCallURLParser()
         ]
     }
@@ -74,16 +71,6 @@ struct AppRouteURLParser {
 /// - mobile.element.io
 protocol URLParser {
     func route(from url: URL) -> AppRoute?
-}
-
-/// The parser for the OIDC callback URL. This always returns a `.oidcCallback`.
-struct OIDCCallbackURLParser: URLParser {
-    let appSettings: AppSettings
-    
-    func route(from url: URL) -> AppRoute? {
-        guard url.absoluteString.starts(with: appSettings.oidcRedirectURL.absoluteString) else { return nil }
-        return .oidcCallback(url: url)
-    }
 }
 
 /// The parser for Element Call links. This always returns a `.genericCallLink`.

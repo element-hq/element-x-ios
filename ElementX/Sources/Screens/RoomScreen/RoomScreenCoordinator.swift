@@ -12,6 +12,7 @@ import SwiftUI
 import WysiwygComposer
 
 struct RoomScreenCoordinatorParameters {
+    let clientProxy: ClientProxyProtocol
     let roomProxy: JoinedRoomProxyProtocol
     var focussedEvent: FocusEvent?
     let timelineController: RoomTimelineControllerProtocol
@@ -61,13 +62,15 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             selectedPinnedEventID = focussedEvent.shouldSetPin ? focussedEvent.eventID : nil
         }
         
-        roomViewModel = RoomScreenViewModel(roomProxy: parameters.roomProxy,
+        roomViewModel = RoomScreenViewModel(clientProxy: parameters.clientProxy,
+                                            roomProxy: parameters.roomProxy,
                                             initialSelectedPinnedEventID: selectedPinnedEventID,
                                             mediaProvider: parameters.mediaProvider,
                                             ongoingCallRoomIDPublisher: parameters.ongoingCallRoomIDPublisher,
                                             appMediator: parameters.appMediator,
                                             appSettings: ServiceLocator.shared.settings,
-                                            analyticsService: ServiceLocator.shared.analytics)
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                               focussedEventID: parameters.focussedEvent?.eventID,
@@ -78,7 +81,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                               appMediator: parameters.appMediator,
                                               appSettings: parameters.appSettings,
-                                              analyticsService: ServiceLocator.shared.analytics)
+                                              analyticsService: ServiceLocator.shared.analytics,
+                                              emojiProvider: parameters.emojiProvider)
 
         wysiwygViewModel = WysiwygComposerViewModel(minHeight: ComposerConstant.minHeight,
                                                     maxCompressedHeight: ComposerConstant.maxHeight,
@@ -149,10 +153,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             .store(in: &cancellables)
         
         roomViewModel.actions
-            .sink { [weak self] actions in
+            .sink { [weak self] action in
                 guard let self else { return }
                 
-                switch actions {
+                switch action {
                 case .focusEvent(eventID: let eventID):
                     focusOnEvent(FocusEvent(eventID: eventID, shouldSetPin: false))
                 case .displayPinnedEventsTimeline:

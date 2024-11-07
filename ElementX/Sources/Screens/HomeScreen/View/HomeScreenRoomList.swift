@@ -32,6 +32,8 @@ struct HomeScreenRoomList: View {
                     .redacted(reason: .placeholder)
             case .invite:
                 HomeScreenInviteCell(room: room, context: context)
+            case .knock:
+                HomeScreenKnockedCell(room: room, context: context)
             case .room:
                 let isSelected = context.viewState.selectedRoomID == room.id
                 

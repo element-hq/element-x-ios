@@ -11,7 +11,8 @@ import SwiftUI
 // Common settings between app and NSE
 protocol CommonSettingsProtocol {
     var logLevel: TracingConfiguration.LogLevel { get }
-    var invisibleCryptoEnabled: Bool { get }
+    var enableOnlySignedDeviceIsolationMode: Bool { get }
+    var hideTimelineMedia: Bool { get }
 }
 
 /// Store Element specific app settings.
@@ -31,9 +32,11 @@ final class AppSettings {
         case pusherProfileTag
         case logLevel
         case viewSourceEnabled
+        case optimizeMediaUploads
         case appAppearance
         case sharePresence
         case hideUnreadMessagesBadge
+        case hideTimelineMedia
         
         case elementCallBaseURLOverride
         case elementCallEncryptionEnabled
@@ -42,8 +45,9 @@ final class AppSettings {
         case slidingSyncDiscovery
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
-        case pinningEnabled
-        case invisibleCryptoEnabled
+        case enableOnlySignedDeviceIsolationMode
+        case knockingEnabled
+        case frequentEmojisEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -131,6 +135,8 @@ final class AppSettings {
     let encryptionURL: URL = "https://element.io/help#encryption"
     /// A URL where users can go read more about the chat backup.
     let chatBackupDetailsURL: URL = "https://element.io/help#encryption5"
+    /// A URL where users can go read more about identity pinning violations
+    let identityPinningViolationDetailsURL: URL = "https://element.io/help#encryption18"
     /// Any domains that Element web may be hosted on - used for handling links.
     let elementWebHosts = ["app.element.io", "staging.element.io", "develop.element.io"]
     
@@ -156,14 +162,8 @@ final class AppSettings {
     
     /// Any pre-defined static client registrations for OIDC issuers.
     let oidcStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
-    /// The redirect URL used for OIDC.
-    let oidcRedirectURL = {
-        guard let url = URL(string: "\(InfoPlistReader.main.appScheme):/callback") else {
-            fatalError("Invalid OIDC redirect URL")
-        }
-        
-        return url
-    }()
+    /// The redirect URL used for OIDC. This no longer uses universal links so we don't need the bundle ID to avoid conflicts between Element X, Nightly and PR builds.
+    let oidcRedirectURL: URL = "https://element.io/oidc/login"
     
     private(set) lazy var oidcConfiguration = OIDCConfigurationProxy(clientName: InfoPlistReader.main.bundleDisplayName,
                                                                      redirectURI: oidcRedirectURL,
@@ -246,6 +246,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.viewSourceEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var viewSourceEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.optimizeMediaUploads, defaultValue: true, storageType: .userDefaults(store))
+    var optimizeMediaUploads
 
     // MARK: - Element Call
     
@@ -280,12 +283,15 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.fuzzyRoomListSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
     var fuzzyRoomListSearchEnabled
     
-    @UserPreference(key: UserDefaultsKeys.pinningEnabled, defaultValue: true, storageType: .userDefaults(store))
-    var pinningEnabled
-    
     enum SlidingSyncDiscovery: Codable { case proxy, native, forceNative }
     @UserPreference(key: UserDefaultsKeys.slidingSyncDiscovery, defaultValue: .native, storageType: .userDefaults(store))
     var slidingSyncDiscovery: SlidingSyncDiscovery
+    
+    @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var knockingEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.frequentEmojisEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
+    var frequentEmojisEnabled
 
     #endif
     
@@ -294,9 +300,12 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: TracingConfiguration.LogLevel.info, storageType: .userDefaults(store))
     var logLevel
     
-    /// Configuration to enable invisible crypto. In this mode only devices signed by their owner will be considered in e2ee rooms.
-    @UserPreference(key: UserDefaultsKeys.invisibleCryptoEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var invisibleCryptoEnabled
+    /// Configuration to enable only signed device isolation mode for  crypto. In this mode only devices signed by their owner will be considered in e2ee rooms.
+    @UserPreference(key: UserDefaultsKeys.enableOnlySignedDeviceIsolationMode, defaultValue: false, storageType: .userDefaults(store))
+    var enableOnlySignedDeviceIsolationMode
+    
+    @UserPreference(key: UserDefaultsKeys.hideTimelineMedia, defaultValue: false, storageType: .userDefaults(store))
+    var hideTimelineMedia
 }
 
 extension AppSettings: CommonSettingsProtocol { }

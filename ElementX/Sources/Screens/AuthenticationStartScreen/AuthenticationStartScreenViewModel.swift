@@ -19,7 +19,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
 
     init(webRegistrationEnabled: Bool) {
         super.init(initialViewState: AuthenticationStartScreenViewState(isWebRegistrationEnabled: webRegistrationEnabled,
-                                                                        isQRCodeLoginEnabled: !ProcessInfo.processInfo.isiOSAppOnMac && AppSettings.isDevelopmentBuild))
+                                                                        isQRCodeLoginEnabled: !ProcessInfo.processInfo.isiOSAppOnMac))
     }
 
     override func process(viewAction: AuthenticationStartScreenViewAction) {

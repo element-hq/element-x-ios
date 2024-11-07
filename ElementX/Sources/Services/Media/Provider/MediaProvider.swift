@@ -38,8 +38,8 @@ struct MediaProvider: MediaProviderProtocol {
         }
         
         let cacheKey = cacheKeyForURL(source.url, size: size)
-
-        if case let .success(cacheResult) = await imageCache.retrieveImage(forKey: cacheKey),
+        
+        if let cacheResult = try? await imageCache.retrieveImage(forKey: cacheKey, options: nil),
            let image = cacheResult.image {
             return .success(image)
         }
@@ -57,7 +57,7 @@ struct MediaProvider: MediaProviderProtocol {
                 return .failure(.invalidImageData)
             }
 
-            imageCache.store(image, forKey: cacheKey)
+            try await imageCache.store(image, forKey: cacheKey)
 
             return .success(image)
         } catch {
@@ -117,9 +117,9 @@ struct MediaProvider: MediaProviderProtocol {
     
     // MARK: Files
     
-    func loadFileFromSource(_ source: MediaSourceProxy, body: String?) async -> Result<MediaFileHandleProxy, MediaProviderError> {
+    func loadFileFromSource(_ source: MediaSourceProxy, filename: String?) async -> Result<MediaFileHandleProxy, MediaProviderError> {
         do {
-            let file = try await mediaLoader.loadMediaFileForSource(source, body: body)
+            let file = try await mediaLoader.loadMediaFileForSource(source, filename: filename)
             return .success(file)
         } catch {
             MXLog.error("Failed retrieving file with error: \(error)")
@@ -146,16 +146,6 @@ struct MediaProvider: MediaProviderProtocol {
             return "\(url.absoluteString){\(size.width),\(size.height)}"
         } else {
             return url.absoluteString
-        }
-    }
-}
-
-private extension ImageCache {
-    func retrieveImage(forKey key: String) async -> Result<ImageCacheResult, KingfisherError> {
-        await withCheckedContinuation { continuation in
-            retrieveImage(forKey: key) { result in
-                continuation.resume(returning: result)
-            }
         }
     }
 }

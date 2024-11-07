@@ -15,6 +15,7 @@ struct StickerRoomTimelineView: View {
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             LoadableImage(url: timelineItem.imageURL,
+                          mediaType: .timelineItem,
                           blurhash: timelineItem.blurhash,
                           mediaProvider: context.mediaProvider) {
                 placeholder
@@ -27,14 +28,9 @@ struct StickerRoomTimelineView: View {
     }
     
     private var placeholder: some View {
-        ZStack {
-            Rectangle()
-                .foregroundColor(timelineItem.isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming)
-                .opacity(0.3)
-            
-            ProgressView(L10n.commonLoading)
-                .frame(maxWidth: .infinity)
-        }
+        Rectangle()
+            .foregroundColor(timelineItem.isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming)
+            .opacity(0.3)
     }
 }
 
@@ -47,7 +43,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     static var body: some View {
         VStack(spacing: 20.0) {
-            StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .random,
+            StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .randomEvent,
                                                                           body: "Some image",
                                                                           timestamp: "Now",
                                                                           isOutgoing: false,
@@ -56,7 +52,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                           sender: .init(id: "Bob"),
                                                                           imageURL: URL.picturesDirectory))
             
-            StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .random,
+            StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .randomEvent,
                                                                           body: "Some other image",
                                                                           timestamp: "Now",
                                                                           isOutgoing: false,
@@ -65,7 +61,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                           sender: .init(id: "Bob"),
                                                                           imageURL: URL.picturesDirectory))
             
-            StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .random,
+            StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .randomEvent,
                                                                           body: "Blurhashed image",
                                                                           timestamp: "Now",
                                                                           isOutgoing: false,

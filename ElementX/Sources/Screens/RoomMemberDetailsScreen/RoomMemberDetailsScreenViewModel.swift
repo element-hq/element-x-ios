@@ -43,25 +43,8 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         
         showMemberLoadingIndicator()
         Task {
-            defer {
-                hideMemberLoadingIndicator()
-            }
-            
-            switch await roomProxy.getMember(userID: userID) {
-            case .success(let member):
-                roomMemberProxy = member
-                state.memberDetails = RoomMemberDetails(withProxy: member)
-                state.isOwnMemberDetails = member.userID == roomProxy.ownUserID
-                switch await clientProxy.directRoomForUserID(member.userID) {
-                case .success(let roomID):
-                    state.dmRoomID = roomID
-                case .failure:
-                    break
-                }
-            case .failure(let error):
-                MXLog.warning("Failed to find member: \(error)")
-                actionsSubject.send(.openUserProfile)
-            }
+            await loadMember()
+            hideMemberLoadingIndicator()
         }
     }
     
@@ -84,8 +67,8 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             Task { await ignoreUser() }
         case .unignoreConfirmed:
             Task { await unignoreUser() }
-        case .displayAvatar:
-            Task { await displayFullScreenAvatar() }
+        case .displayAvatar(let url):
+            Task { await displayFullScreenAvatar(url) }
         case .openDirectChat:
             Task { await openDirectChat() }
         case .startCall(let roomID):
@@ -94,8 +77,37 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
     }
 
     // MARK: - Private
-
-    @MainActor
+    
+    private func loadMember() async {
+        async let memberResult = roomProxy.getMember(userID: state.userID)
+        async let identityResult = clientProxy.userIdentity(for: state.userID)
+        
+        switch await memberResult {
+        case .success(let member):
+            roomMemberProxy = member
+            state.memberDetails = RoomMemberDetails(withProxy: member)
+            state.isOwnMemberDetails = member.userID == roomProxy.ownUserID
+            switch await clientProxy.directRoomForUserID(member.userID) {
+            case .success(let roomID):
+                state.dmRoomID = roomID
+            case .failure:
+                break
+            }
+        case .failure(let error):
+            MXLog.warning("Failed to find member: \(error)")
+            // As we didn't find a member with the specified user ID in this room we instead
+            // fall back to showing a generic user profile screen as the source is likely
+            // a message containing a permalink to someone who's not in this room.
+            actionsSubject.send(.openUserProfile)
+        }
+        
+        if case let .success(.some(identity)) = await identityResult {
+            state.isVerified = identity.isVerified()
+        } else {
+            MXLog.error("Failed to find the member's identity.")
+        }
+    }
+    
     private func ignoreUser() async {
         guard let roomMemberProxy else {
             fatalError()
@@ -143,13 +155,9 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         }
     }
     
-    private func displayFullScreenAvatar() async {
+    private func displayFullScreenAvatar(_ url: URL) async {
         guard let roomMemberProxy else {
             fatalError()
-        }
-        
-        guard let avatarURL = roomMemberProxy.avatarURL else {
-            return
         }
         
         let loadingIndicatorIdentifier = "roomMemberAvatarLoadingIndicator"
@@ -157,7 +165,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier) }
             
         // We don't actually know the mime type here, assume it's an image.
-        if case let .success(file) = await mediaProvider.loadFileFromSource(.init(url: avatarURL, mimeType: "image/jpeg")) {
+        if case let .success(file) = await mediaProvider.loadFileFromSource(.init(url: url, mimeType: "image/jpeg")) {
             state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: roomMemberProxy.displayName)
         }
     }

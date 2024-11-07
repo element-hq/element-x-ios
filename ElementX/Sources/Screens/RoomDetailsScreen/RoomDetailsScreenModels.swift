@@ -44,7 +44,6 @@ struct RoomDetailsScreenViewState: BindableState {
     var canEditRolesOrPermissions = false
     var notificationSettingsState: RoomDetailsNotificationSettingsState = .loading
     var canJoinCall = false
-    var isPinningEnabled = false
     var pinnedEventsActionState = RoomDetailsScreenPinnedEventsActionState.loading
     
     var canEdit: Bool {
@@ -183,7 +182,7 @@ enum RoomDetailsScreenViewAction {
     case unignoreConfirmed
     case processTapNotifications
     case processToggleMuteNotifications
-    case displayAvatar
+    case displayAvatar(URL)
     case processTapPolls
     case toggleFavourite(isFavourite: Bool)
     case processTapRolesAndPermissions

@@ -28,7 +28,7 @@ struct SecureBackupScreen: View {
             }
         }
         .compoundList()
-        .navigationTitle(L10n.commonChatBackup)
+        .navigationTitle(L10n.commonEncryption)
         .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)
     }
@@ -39,7 +39,7 @@ struct SecureBackupScreen: View {
     private var keyBackupSection: some View {
         Section {
             ListRow(kind: .custom {
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 8) {
                     Text(L10n.screenChatBackupKeyBackupTitle)
                         .font(.compound.bodyLGSemibold)
                         .foregroundColor(.compound.textPrimary)
@@ -53,7 +53,13 @@ struct SecureBackupScreen: View {
                 .accessibilityElement(children: .combine)
             })
             
-            keyBackupButton
+            ListRow(label: .plain(title: L10n.screenChatBackupKeyStorageToggleTitle,
+                                  description: context.viewState.keyStorageToggleDescription),
+                    kind: .toggle($context.keyStorageEnabled))
+                .onChange(of: context.keyStorageEnabled) { _, newValue in
+                    context.send(viewAction: .keyStorageToggled(newValue))
+                }
+                .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.keyStorage)
         }
     }
     
@@ -67,35 +73,29 @@ struct SecureBackupScreen: View {
         return description
     }
     
-    @ViewBuilder
-    private var keyBackupButton: some View {
-        switch context.viewState.keyBackupState {
-        case .enabled, .disabling:
-            ListRow(label: .plain(title: L10n.screenChatBackupKeyBackupActionDisable, role: .destructive), kind: .navigationLink {
-                context.send(viewAction: .keyBackup)
-            })
-        case .unknown, .enabling:
-            ListRow(label: .plain(title: L10n.screenChatBackupKeyBackupActionEnable), kind: .navigationLink {
-                context.send(viewAction: .keyBackup)
-            })
-        }
-    }
-    
-    @ViewBuilder
     private var recoveryKeySection: some View {
         Section {
             switch context.viewState.recoveryState {
             case .enabled:
-                ListRow(label: .plain(title: L10n.screenChatBackupRecoveryActionChange),
+                ListRow(label: .default(title: L10n.screenChatBackupRecoveryActionChange,
+                                        description: L10n.screenChatBackupRecoveryActionChangeDescription,
+                                        icon: \.key,
+                                        iconAlignment: .top),
                         kind: .navigationLink { context.send(viewAction: .recoveryKey) })
+                    .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
             case .disabled:
-                ListRow(label: .plain(title: L10n.screenChatBackupRecoveryActionSetup),
+                ListRow(label: .default(title: L10n.screenChatBackupRecoveryActionSetup,
+                                        description: L10n.screenChatBackupRecoveryActionChangeDescription,
+                                        icon: \.key,
+                                        iconAlignment: .top),
                         details: .icon(BadgeView(size: 10)),
                         kind: .navigationLink { context.send(viewAction: .recoveryKey) })
+                    .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
             case .incomplete:
                 ListRow(label: .plain(title: L10n.screenChatBackupRecoveryActionConfirm),
                         details: .icon(BadgeView(size: 10)),
                         kind: .navigationLink { context.send(viewAction: .recoveryKey) })
+                    .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
             default:
                 ListRow(label: .plain(title: L10n.commonLoading), details: .isWaiting(true), kind: .label)
             }
@@ -108,8 +108,6 @@ struct SecureBackupScreen: View {
     @ViewBuilder
     private var recoveryKeySectionFooter: some View {
         switch context.viewState.recoveryState {
-        case .disabled:
-            Text(L10n.screenChatBackupRecoveryActionSetupDescription(InfoPlistReader.main.bundleDisplayName))
         case .incomplete:
             Text(L10n.screenChatBackupRecoveryActionConfirmDescription)
         default:

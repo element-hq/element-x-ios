@@ -6,6 +6,7 @@
 //
 
 import Compound
+import MatrixRustSDK
 import SwiftUI
 import WysiwygComposer
 
@@ -284,8 +285,8 @@ extension FormatType {
 
 enum ComposerMode: Equatable {
     case `default`
-    case reply(itemID: TimelineItemIdentifier, replyDetails: TimelineItemReplyDetails, isThread: Bool)
-    case edit(originalItemId: TimelineItemIdentifier)
+    case reply(eventID: String, replyDetails: TimelineItemReplyDetails, isThread: Bool)
+    case edit(originalEventOrTransactionID: EventOrTransactionId)
     case recordVoiceMessage(state: AudioRecorderState)
     case previewVoiceMessage(state: AudioPlayerState, waveform: WaveformSource, isUploading: Bool)
 
@@ -323,8 +324,8 @@ enum ComposerMode: Equatable {
     
     var replyEventID: String? {
         switch self {
-        case .reply(let itemID, _, _):
-            return itemID.eventID
+        case .reply(let eventID, _, _):
+            return eventID
         default:
             return nil
         }

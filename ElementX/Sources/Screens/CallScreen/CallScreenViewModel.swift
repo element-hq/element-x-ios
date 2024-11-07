@@ -170,7 +170,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                             return
                         }
                         
-                        await elementCallService.setupCallSession(roomID: roomProxy.id, roomDisplayName: roomProxy.roomTitle)
+                        await elementCallService.setupCallSession(roomID: roomProxy.id,
+                                                                  roomDisplayName: roomProxy.infoPublisher.value.displayName ?? roomProxy.id)
                         
                         _ = await roomProxy.sendCallNotificationIfNeeded()
                         
@@ -213,14 +214,20 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     }
     
     private func postMessageToWidget(_ message: ElementCallWidgetMessage) async {
+        let data: Data
         do {
-            let data = try JSONEncoder().encode(message)
-            let json = String(decoding: data, as: UTF8.self)
-            
-            await postJSONToWidget(json)
+            data = try JSONEncoder().encode(message)
         } catch {
             MXLog.error("Failed encoding widget message with error: \(error)")
+            return
         }
+        
+        guard let json = String(data: data, encoding: .utf8) else {
+            MXLog.error("Invalid data for widget message")
+            return
+        }
+        
+        await postJSONToWidget(json)
     }
     
     private func postJSONToWidget(_ json: String) async {

@@ -49,7 +49,7 @@ struct GlobalSearchScreen: View {
             selectedRoom = context.viewState.rooms.first
             searchFieldFocus = true
         }
-        .onChange(of: context.viewState.rooms) { _ in
+        .onChange(of: context.viewState.rooms) {
             selectedRoom = context.viewState.rooms.first
         }
         .onTapGesture {
@@ -206,7 +206,7 @@ private class GlobalSearchTextField: UITextField {
 
 struct GlobalSearchScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = GlobalSearchScreenViewModel(roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
-                                                       mediaProvider: MockMediaProvider())
+                                                       mediaProvider: MediaProviderMock(configuration: .init()))
     
     static var previews: some View {
         NavigationStack {

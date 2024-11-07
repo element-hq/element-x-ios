@@ -8,17 +8,12 @@
 import Combine
 import SwiftUI
 
-struct EncryptionResetPasswordScreenCoordinatorParameters { }
+struct EncryptionResetPasswordScreenCoordinatorParameters {
+    let passwordPublisher: PassthroughSubject<String, Never>
+}
 
-enum EncryptionResetPasswordScreenCoordinatorAction: CustomStringConvertible {
-    case resetIdentity(String)
-    
-    var description: String {
-        switch self {
-        case .resetIdentity:
-            "resetIdentity"
-        }
-    }
+enum EncryptionResetPasswordScreenCoordinatorAction {
+    case passwordEntered
 }
 
 final class EncryptionResetPasswordScreenCoordinator: CoordinatorProtocol {
@@ -35,7 +30,7 @@ final class EncryptionResetPasswordScreenCoordinator: CoordinatorProtocol {
     init(parameters: EncryptionResetPasswordScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = EncryptionResetPasswordScreenViewModel()
+        viewModel = EncryptionResetPasswordScreenViewModel(passwordPublisher: parameters.passwordPublisher)
     }
     
     func start() {
@@ -44,8 +39,8 @@ final class EncryptionResetPasswordScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
-            case .resetIdentity(let password):
-                self.actionsSubject.send(.resetIdentity(password))
+            case .passwordEntered:
+                self.actionsSubject.send(.passwordEntered)
             }
         }
         .store(in: &cancellables)

@@ -32,7 +32,7 @@ struct ServerSelectionScreen: View {
     var header: some View {
         VStack(spacing: 8) {
             Image(asset: Asset.Images.serverSelectionIcon)
-                .heroImage(insets: 19)
+                .bigIcon(insets: 19)
                 .padding(.bottom, 8)
             
             Text(L10n.screenChangeServerTitle)
@@ -59,12 +59,12 @@ struct ServerSelectionScreen: View {
                 .keyboardType(.URL)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
-                .onChange(of: context.homeserverAddress) { _ in context.send(viewAction: .clearFooterError) }
+                .onChange(of: context.homeserverAddress) { context.send(viewAction: .clearFooterError) }
                 .submitLabel(.done)
                 .onSubmit(submit)
             
             Button(action: submit) {
-                Text(context.viewState.buttonTitle)
+                Text(L10n.actionContinue)
             }
             .buttonStyle(.compound(.primary))
             .disabled(context.viewState.hasValidationError)
@@ -72,15 +72,12 @@ struct ServerSelectionScreen: View {
         }
     }
     
-    @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            if context.viewState.isModallyPresented {
-                Button { context.send(viewAction: .dismiss) } label: {
-                    Text(L10n.actionCancel)
-                }
-                .accessibilityIdentifier(A11yIdentifiers.changeServerScreen.dismiss)
+            Button { context.send(viewAction: .dismiss) } label: {
+                Text(L10n.actionCancel)
             }
+            .accessibilityIdentifier(A11yIdentifiers.changeServerScreen.dismiss)
         }
     }
     
@@ -94,11 +91,38 @@ struct ServerSelectionScreen: View {
 // MARK: - Previews
 
 struct ServerSelection_Previews: PreviewProvider, TestablePreview {
+    static let matrixViewModel = makeViewModel(for: "https://matrix.org")
+    static let emptyViewModel = makeViewModel(for: "")
+    static let invalidViewModel = makeViewModel(for: "thisisbad")
+    
     static var previews: some View {
-        ForEach(MockServerSelectionScreenState.allCases, id: \.self) { state in
-            NavigationStack {
-                ServerSelectionScreen(context: state.viewModel.context)
-            }
+        NavigationStack {
+            ServerSelectionScreen(context: matrixViewModel.context)
         }
+        
+        NavigationStack {
+            ServerSelectionScreen(context: emptyViewModel.context)
+        }
+        
+        NavigationStack {
+            ServerSelectionScreen(context: invalidViewModel.context)
+        }
+        .snapshotPreferences(delay: 1)
+    }
+    
+    static func makeViewModel(for homeserverAddress: String) -> ServerSelectionScreenViewModel {
+        let authenticationService = AuthenticationService.mock
+        
+        let slidingSyncLearnMoreURL = ServiceLocator.shared.settings.slidingSyncLearnMoreURL
+        
+        let viewModel = ServerSelectionScreenViewModel(authenticationService: authenticationService,
+                                                       authenticationFlow: .login,
+                                                       slidingSyncLearnMoreURL: slidingSyncLearnMoreURL,
+                                                       userIndicatorController: UserIndicatorControllerMock())
+        viewModel.context.homeserverAddress = homeserverAddress
+        if homeserverAddress == "thisisbad" {
+            viewModel.context.send(viewAction: .confirm)
+        }
+        return viewModel
     }
 }

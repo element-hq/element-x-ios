@@ -17,12 +17,6 @@ extension PreviewTests {
         }
     }
 
-    func test_analyticsPromptScreenCheckmarkItem() {
-        for preview in AnalyticsPromptScreenCheckmarkItem_Previews._allPreviews {
-            assertSnapshots(matching: preview)
-        }
-    }
-
     func test_analyticsPromptScreen() {
         for preview in AnalyticsPromptScreen_Previews._allPreviews {
             assertSnapshots(matching: preview)
@@ -79,6 +73,12 @@ extension PreviewTests {
 
     func test_badgeLabel() {
         for preview in BadgeLabel_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_bigIcon() {
+        for preview in BigIcon_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }
@@ -221,12 +221,6 @@ extension PreviewTests {
         }
     }
 
-    func test_heroImage() {
-        for preview in HeroImage_Previews._allPreviews {
-            assertSnapshots(matching: preview)
-        }
-    }
-
     func test_highlightedTimelineItemModifier() {
         for preview in HighlightedTimelineItemModifier_Previews._allPreviews {
             assertSnapshots(matching: preview)
@@ -241,6 +235,12 @@ extension PreviewTests {
 
     func test_homeScreenInviteCell() {
         for preview in HomeScreenInviteCell_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_homeScreenKnockedCell() {
+        for preview in HomeScreenKnockedCell_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }
@@ -307,6 +307,12 @@ extension PreviewTests {
 
     func test_legalInformationScreen() {
         for preview in LegalInformationScreen_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_loadableImage() {
+        for preview in LoadableImage_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }
@@ -683,6 +689,12 @@ extension PreviewTests {
         }
     }
 
+    func test_roomScreenFooterView() {
+        for preview in RoomScreenFooterView_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_roomScreen() {
         for preview in RoomScreen_Previews._allPreviews {
             assertSnapshots(matching: preview)
@@ -733,6 +745,12 @@ extension PreviewTests {
 
     func test_serverSelection() {
         for preview in ServerSelection_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_sessionVerificationRequestDetailsView() {
+        for preview in SessionVerificationRequestDetailsView_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }
@@ -925,6 +943,12 @@ extension PreviewTests {
 
     func test_videoRoomTimelineView() {
         for preview in VideoRoomTimelineView_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_visualListItem() {
+        for preview in VisualListItem_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }

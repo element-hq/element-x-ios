@@ -48,8 +48,8 @@ struct VoiceMessagePreviewComposer: View {
                                      showCursor: playerState.showProgressIndicator,
                                      onSeek: onSeek)
         }
-        .onChange(of: isDragging) { isDragging in
-            onScrubbing(isDragging)
+        .onChange(of: isDragging) { _, newValue in
+            onScrubbing(newValue)
         }
         .padding(.vertical, 4.0)
         .padding(.horizontal, 6.0)

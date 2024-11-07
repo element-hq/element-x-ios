@@ -79,6 +79,12 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.textContainer.lineFragmentPadding = 0.0
         textView.textContainerInset = .zero
         textView.keyboardType = .default
+        
+        // AutoCorrection doesn't work properly when running on the Mac
+        // https://github.com/element-hq/element-x-ios/issues/1786
+        if ProcessInfo.processInfo.isiOSAppOnMac {
+            textView.autocorrectionType = .no
+        }
 
         textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         
@@ -103,6 +109,11 @@ private struct UITextViewWrapper: UIViewRepresentable {
         if textView.attributedText != text {
             // Remember the selection if only the attributes have changed.
             let selection = textView.attributedText.string == text.string ? textView.selectedTextRange : nil
+            
+            // Fixes pill views not loading on the first attempt on iOS 18
+            // because the textContainers's superview comes in as nil
+            // https://github.com/element-hq/element-x-ios/issues/3369
+            _ = textView.layoutManager
             
             textView.attributedText = text
             

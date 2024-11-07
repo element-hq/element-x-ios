@@ -18,7 +18,7 @@ final class EmojiProviderTests: XCTestCase {
         let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = [category]
         
-        let emojiProvider = EmojiProvider(loader: emojiLoaderMock)
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: ServiceLocator.shared.settings)
         
         let categories = await emojiProvider.categories()
         XCTAssertEqual(emojiLoaderMock.categories, categories)
@@ -31,7 +31,7 @@ final class EmojiProviderTests: XCTestCase {
         let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = [category]
         
-        let emojiProvider = EmojiProvider(loader: emojiLoaderMock)
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: ServiceLocator.shared.settings)
         
         let categories = await emojiProvider.categories(searchString: "")
         XCTAssertEqual(emojiLoaderMock.categories, categories)
@@ -48,7 +48,7 @@ final class EmojiProviderTests: XCTestCase {
         let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = categoriesForFirstLoad
         
-        let emojiProvider = EmojiProvider(loader: emojiLoaderMock)
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: ServiceLocator.shared.settings)
         
         _ = await emojiProvider.categories()
         emojiLoaderMock.categories = categoriesForSecondLoad
@@ -78,7 +78,7 @@ final class EmojiProviderTests: XCTestCase {
         let emojiLoaderMock = EmojiLoaderMock()
         emojiLoaderMock.categories = categories
         
-        let emojiProvider = EmojiProvider(loader: emojiLoaderMock)
+        let emojiProvider = EmojiProvider(loader: emojiLoaderMock, appSettings: ServiceLocator.shared.settings)
         
         _ = await emojiProvider.categories()
         let result = await emojiProvider.categories(searchString: searchString)

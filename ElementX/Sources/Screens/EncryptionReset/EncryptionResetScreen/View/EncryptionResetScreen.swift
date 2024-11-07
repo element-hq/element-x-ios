@@ -19,6 +19,7 @@ struct EncryptionResetScreen: View {
                 context.send(viewAction: .reset)
             }
             .buttonStyle(.compound(.primary))
+            .accessibilityIdentifier(A11yIdentifiers.encryptionResetScreen.continueReset)
         }
         .background()
         .backgroundStyle(.compound.bgSubtleSecondary)
@@ -39,7 +40,7 @@ struct EncryptionResetScreen: View {
     
     private var header: some View {
         VStack(spacing: 8) {
-            HeroImage(icon: \.error, style: .criticalOnSecondary)
+            BigIcon(icon: \.error, style: .alert)
                 .padding(.bottom, 8)
             
             Text(L10n.screenEncryptionResetTitle)
@@ -70,14 +71,10 @@ struct EncryptionResetScreen: View {
 
     @ViewBuilder
     private func checkMarkItem(title: String, position: ListPosition, positive: Bool) -> some View {
-        RoundedLabelItem(title: title, listPosition: position) {
-            if positive {
-                CompoundIcon(\.check)
-                    .foregroundColor(.compound.iconAccentPrimary)
-            } else {
-                CompoundIcon(\.close)
-                    .foregroundColor(.compound.iconCriticalPrimary)
-            }
+        VisualListItem(title: title, position: position) {
+            CompoundIcon(positive ? \.check : \.info)
+                .foregroundColor(positive ? .compound.iconAccentPrimary : .compound.iconSecondary)
+                .alignmentGuide(.top) { _ in 2 }
         }
         .backgroundStyle(.compound.bgCanvasDefault)
     }

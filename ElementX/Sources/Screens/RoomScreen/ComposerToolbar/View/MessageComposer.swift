@@ -206,16 +206,26 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
     static let replyTypes: [TimelineItemReplyDetails] = [
         .loaded(sender: .init(id: "Dave"),
                 eventID: "123",
-                eventContent: .message(.audio(.init(body: "Audio: Ride the lightning", duration: 100, waveform: nil, source: nil, contentType: nil)))),
+                eventContent: .message(.audio(.init(filename: "lightning.mp3",
+                                                    caption: "Audio: Ride the lightning",
+                                                    duration: 100,
+                                                    waveform: nil,
+                                                    source: nil,
+                                                    contentType: nil)))),
         .loaded(sender: .init(id: "James"),
                 eventID: "123",
                 eventContent: .message(.emote(.init(body: "Emote: James thinks he's the phantom lord")))),
         .loaded(sender: .init(id: "Robert"),
                 eventID: "123",
-                eventContent: .message(.file(.init(body: "File: Crash course in brain surgery.pdf", source: nil, thumbnailSource: nil, contentType: nil)))),
+                eventContent: .message(.file(.init(filename: "brain-surgery.pdf",
+                                                   caption: "File: Crash course in brain surgery",
+                                                   source: nil,
+                                                   thumbnailSource: nil,
+                                                   contentType: nil)))),
         .loaded(sender: .init(id: "Cliff"),
                 eventID: "123",
-                eventContent: .message(.image(.init(body: "Image: Pushead",
+                eventContent: .message(.image(.init(filename: "head.png",
+                                                    caption: "Image: Pushead",
                                                     source: .init(url: .picturesDirectory, mimeType: nil),
                                                     thumbnailSource: .init(url: .picturesDirectory, mimeType: nil))))),
         .loaded(sender: .init(id: "Jason"),
@@ -226,7 +236,8 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                 eventContent: .message(.text(.init(body: "Text: Where the wild things are")))),
         .loaded(sender: .init(id: "Lars"),
                 eventID: "123",
-                eventContent: .message(.video(.init(body: "Video: Through the never",
+                eventContent: .message(.video(.init(filename: "never.mov",
+                                                    caption: "Video: Through the never",
                                                     duration: 100,
                                                     source: nil,
                                                     thumbnailSource: .init(url: .picturesDirectory, mimeType: nil))))),
@@ -264,9 +275,9 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
             messageComposer()
             
             messageComposer(.init(string: "Some message"),
-                            mode: .edit(originalItemId: .random))
+                            mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString)))
             
-            messageComposer(mode: .reply(itemID: .random,
+            messageComposer(mode: .reply(eventID: UUID().uuidString,
                                          replyDetails: .loaded(sender: .init(id: "Kirk"),
                                                                eventID: "123",
                                                                eventContent: .message(.text(.init(body: "Text: Where the wild things are")))),
@@ -277,7 +288,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
         ScrollView {
             VStack(spacing: 8) {
                 ForEach(replyTypes, id: \.self) { replyDetails in
-                    messageComposer(mode: .reply(itemID: .random,
+                    messageComposer(mode: .reply(eventID: UUID().uuidString,
                                                  replyDetails: replyDetails, isThread: false))
                 }
             }
@@ -289,7 +300,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
         ScrollView {
             VStack(spacing: 8) {
                 ForEach(replyTypes, id: \.self) { replyDetails in
-                    messageComposer(mode: .reply(itemID: .random,
+                    messageComposer(mode: .reply(eventID: UUID().uuidString,
                                                  replyDetails: replyDetails, isThread: true))
                 }
             }

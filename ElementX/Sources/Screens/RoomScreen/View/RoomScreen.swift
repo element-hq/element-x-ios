@@ -28,21 +28,6 @@ struct RoomScreen: View {
     var body: some View {
         timeline
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-            .safeAreaInset(edge: .bottom, spacing: 0) {
-                composerToolbar
-                    .padding(.bottom, composerToolbarContext.composerFormattingEnabled ? 8 : 12)
-                    .background {
-                        if composerToolbarContext.composerFormattingEnabled {
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
-                                .ignoresSafeArea()
-                        }
-                    }
-                    .padding(.top, 8)
-                    .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-                    .environmentObject(timelineContext)
-                    .environment(\.timelineContext, timelineContext)
-            }
             .overlay(alignment: .top) {
                 Group {
                     if roomContext.viewState.shouldShowPinnedEventsBanner {
@@ -50,6 +35,30 @@ struct RoomScreen: View {
                     }
                 }
                 .animation(.elementDefault, value: roomContext.viewState.shouldShowPinnedEventsBanner)
+            }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                VStack(spacing: 0) {
+                    RoomScreenFooterView(details: roomContext.viewState.footerDetails,
+                                         mediaProvider: roomContext.mediaProvider) { action in
+                        roomContext.send(viewAction: .footerViewAction(action))
+                    }
+                    
+                    composerToolbar
+                        .padding(.bottom, composerToolbarContext.composerFormattingEnabled ? 8 : 12)
+                        .background {
+                            if composerToolbarContext.composerFormattingEnabled {
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
+                                    .ignoresSafeArea()
+                            }
+                        }
+                        .padding(.top, 8)
+                        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+                        .environmentObject(timelineContext)
+                        .environment(\.timelineContext, timelineContext)
+                        // Make sure the reply header honours the hideTimelineMedia setting too.
+                        .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
+                }
             }
             .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
             .navigationBarTitleDisplayMode(.inline)
@@ -67,7 +76,8 @@ struct RoomScreen: View {
                                                              pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
                                                              isDM: timelineContext.viewState.isEncryptedOneToOneRoom,
                                                              isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
-                                                             isPinnedEventsTimeline: timelineContext.viewState.isPinnedEventsTimeline)
+                                                             isPinnedEventsTimeline: timelineContext.viewState.isPinnedEventsTimeline,
+                                                             emojiProvider: timelineContext.viewState.emojiProvider)
                     .makeActions()
                 if let actions {
                     TimelineItemMenu(item: info.item, actions: actions)
@@ -214,13 +224,14 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
     static let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
     static let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                                      timelineController: MockRoomTimelineController(),
-                                                     mediaProvider: MockMediaProvider(),
+                                                     mediaProvider: MediaProviderMock(configuration: .init()),
                                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                      appMediator: AppMediatorMock.default,
                                                      appSettings: ServiceLocator.shared.settings,
-                                                     analyticsService: ServiceLocator.shared.analytics)
+                                                     analyticsService: ServiceLocator.shared.analytics,
+                                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
 
     static var previews: some View {
         NavigationStack {

@@ -19,10 +19,19 @@ struct UserProfileScreenViewState: BindableState {
     let isPresentedModally: Bool
     
     var userProfile: UserProfileProxy?
+    var isVerified: Bool?
     var permalink: URL?
     var dmRoomID: String?
 
     var bindings: UserProfileScreenViewStateBindings
+    
+    var showVerifiedBadge: Bool {
+        isVerified == true // We purposely show the badge on your own account for consistency with Web.
+    }
+    
+    var showVerificationSection: Bool {
+        isVerified == false && !isOwnUser
+    }
 }
 
 struct UserProfileScreenViewStateBindings {
@@ -33,7 +42,7 @@ struct UserProfileScreenViewStateBindings {
 }
 
 enum UserProfileScreenViewAction {
-    case displayAvatar
+    case displayAvatar(URL)
     case openDirectChat
     case startCall(roomID: String)
     case dismiss

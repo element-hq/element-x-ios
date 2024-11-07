@@ -29,11 +29,13 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         userSession = UserSessionMock(.init(clientProxy: clientProxy))
         let parameters = CreateRoomFlowParameters()
         usersSubject.send([.mockAlice, .mockBob, .mockCharlie])
+        ServiceLocator.shared.settings.knockingEnabled = true
         let viewModel = CreateRoomViewModel(userSession: userSession,
                                             createRoomParameters: .init(parameters),
                                             selectedUsers: usersSubject.asCurrentValuePublisher(),
                                             analytics: ServiceLocator.shared.analytics,
-                                            userIndicatorController: UserIndicatorControllerMock())
+                                            userIndicatorController: UserIndicatorControllerMock(),
+                                            appSettings: ServiceLocator.shared.settings)
         self.viewModel = viewModel
         
         viewModel.actions.sink { [weak self] action in
@@ -68,5 +70,39 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         XCTAssertFalse(context.viewState.canCreateRoom)
         context.roomName = "A"
         XCTAssertTrue(context.viewState.canCreateRoom)
+    }
+    
+    func testCreateKnockingRoom() async {
+        context.roomName = "A"
+        context.roomTopic = "B"
+        context.isRoomPrivate = false
+        context.isKnockingOnly = true
+        XCTAssertTrue(context.viewState.canCreateRoom)
+        
+        let expectation = expectation(description: "Wait for the room to be created")
+        clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLClosure = { _, _, isPrivate, isKnockingOnly, _, _ in
+            XCTAssertTrue(isKnockingOnly)
+            XCTAssertFalse(isPrivate)
+            defer { expectation.fulfill() }
+            return .success("")
+        }
+        context.send(viewAction: .createRoom)
+        await fulfillment(of: [expectation])
+    }
+    
+    func testCreatePrivateRoomCantHaveKnockRule() async {
+        context.roomName = "A"
+        context.roomTopic = "B"
+        context.isRoomPrivate = true
+        context.isKnockingOnly = true
+        context.send(viewAction: .createRoom)
+        let expectation = expectation(description: "Wait for the room to be created")
+        clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLClosure = { _, _, isPrivate, isKnockingOnly, _, _ in
+            XCTAssertFalse(isKnockingOnly)
+            XCTAssertTrue(isPrivate)
+            expectation.fulfill()
+            return .success("")
+        }
+        await fulfillment(of: [expectation])
     }
 }

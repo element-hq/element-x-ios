@@ -9,14 +9,14 @@ import Combine
 import SwiftUI
 
 enum EncryptionResetScreenCoordinatorAction {
-    case cancel
     case requestOIDCAuthorisation(URL)
+    case requestPassword(passwordPublisher: PassthroughSubject<String, Never>)
     case resetFinished
+    case cancel
 }
 
 struct EncryptionResetScreenCoordinatorParameters {
     let clientProxy: ClientProxyProtocol
-    let navigationStackCoordinator: NavigationStackCoordinator
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -43,10 +43,10 @@ final class EncryptionResetScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
-            case .requestPassword:
-                presentPasswordScreen()
             case .requestOIDCAuthorisation(let url):
                 self.actionsSubject.send(.requestOIDCAuthorisation(url))
+            case .requestPassword(let passwordPublisher):
+                self.actionsSubject.send(.requestPassword(passwordPublisher: passwordPublisher))
             case .resetFinished:
                 self.actionsSubject.send(.resetFinished)
             case .cancel:
@@ -62,24 +62,5 @@ final class EncryptionResetScreenCoordinator: CoordinatorProtocol {
         
     func toPresentable() -> AnyView {
         AnyView(EncryptionResetScreen(context: viewModel.context))
-    }
-    
-    // MARK: - Private
-    
-    private func presentPasswordScreen() {
-        let coordinator = EncryptionResetPasswordScreenCoordinator(parameters: .init())
-        
-        coordinator.actionsPublisher.sink { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .resetIdentity(let password):
-                viewModel.continueResetFlowWith(password: password)
-                parameters.navigationStackCoordinator.pop()
-            }
-        }
-        .store(in: &cancellables)
-        
-        parameters.navigationStackCoordinator.push(coordinator)
     }
 }

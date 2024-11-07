@@ -22,21 +22,18 @@ enum MXLog {
     private static var didConfigureOnce = false
     
     private static var rootSpan: Span!
-    private static var target: String!
+    private static var currentTarget: String!
     
-    static func configure(target: String? = nil,
+    static func configure(currentTarget: String,
+                          filePrefix: String?,
                           logLevel: TracingConfiguration.LogLevel) {
         guard !didConfigureOnce else { return }
         
-        RustTracing.setup(configuration: .init(logLevel: logLevel, target: target))
+        RustTracing.setup(configuration: .init(logLevel: logLevel, currentTarget: currentTarget, filePrefix: filePrefix))
         
-        if let target {
-            self.target = target
-        } else {
-            self.target = Constants.target
-        }
+        self.currentTarget = currentTarget
         
-        rootSpan = Span(file: #file, line: #line, level: .info, target: self.target, name: "root")
+        rootSpan = Span(file: #file, line: #line, level: .info, target: self.currentTarget, name: "root")
         rootSpan.enter()
         
         didConfigureOnce = true
@@ -138,7 +135,7 @@ enum MXLog {
             rootSpan.enter()
         }
         
-        return Span(file: file, line: UInt32(line), level: level, target: target, name: name)
+        return Span(file: file, line: UInt32(line), level: level, target: currentTarget, name: name)
     }
     
     // periphery:ignore:parameters function,column,context
@@ -157,6 +154,6 @@ enum MXLog {
             rootSpan.enter()
         }
         
-        logEvent(file: (file as NSString).lastPathComponent, line: UInt32(line), level: level, target: target, message: "\(message)")
+        logEvent(file: (file as NSString).lastPathComponent, line: UInt32(line), level: level, target: currentTarget, message: "\(message)")
     }
 }

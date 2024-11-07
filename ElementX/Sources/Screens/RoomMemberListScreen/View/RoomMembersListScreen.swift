@@ -174,7 +174,7 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
                                                                                    members: members,
                                                                                    ownUserID: ownUserID,
                                                                                    canUserInvite: false)),
-                                              mediaProvider: MockMediaProvider(),
+                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                               analytics: ServiceLocator.shared.analytics)
     }

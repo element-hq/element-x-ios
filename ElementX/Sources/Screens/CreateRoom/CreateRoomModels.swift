@@ -25,6 +25,7 @@ enum CreateRoomViewModelAction {
 }
 
 struct CreateRoomViewState: BindableState {
+    let isKnockingFeatureEnabled: Bool
     var selectedUsers: [UserProfileProxy]
     var bindings: CreateRoomViewStateBindings
     var avatarURL: URL?
@@ -37,6 +38,7 @@ struct CreateRoomViewStateBindings {
     var roomName: String
     var roomTopic: String
     var isRoomPrivate: Bool
+    var isKnockingOnly = false
     var showAttachmentConfirmationDialog = false
     
     /// Information describing the currently displayed alert.

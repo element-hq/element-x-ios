@@ -26,8 +26,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
     /// Common background task to continue long-running tasks in the background.
     private var backgroundTask: UIBackgroundTaskIdentifier?
-
-    private var isSuspended = false
     
     private var userSession: UserSessionProtocol? {
         didSet {
@@ -70,7 +68,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         let appSettings = appHooks.appSettingsHook.configure(AppSettings())
         
-        MXLog.configure(logLevel: appSettings.logLevel)
+        MXLog.configure(currentTarget: "elementx", filePrefix: nil, logLevel: appSettings.logLevel)
         
         let appName = InfoPlistReader.main.bundleDisplayName
         let appVersion = InfoPlistReader.main.bundleShortVersionString
@@ -150,6 +148,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 switch action {
                 case .startCall(let roomID):
                     self?.handleAppRoute(.call(roomID: roomID))
+                case .receivedIncomingCallRequest:
+                    // When reporting a VoIP call through the CXProvider's `reportNewIncomingVoIPPushPayload`
+                    // the UIApplication states don't change and syncing is neither started nor ran on
+                    // a background task. Handle both manually here.
+                    self?.startSync()
+                    self?.scheduleDelayedSyncStop()
                 default:
                     break
                 }
@@ -195,12 +199,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         if let route = appRouteURLParser.route(from: url) {
             switch route {
-            case .oidcCallback(let url):
-                if stateMachine.state == .softLogout {
-                    softLogoutCoordinator?.handleOIDCRedirectURL(url)
-                } else {
-                    authenticationFlowCoordinator?.handleOIDCRedirectURL(url)
-                }
             case .genericCallLink(let url):
                 if let userSessionFlowCoordinator {
                     userSessionFlowCoordinator.handleAppRoute(route, animated: true)
@@ -334,6 +332,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         switch await roomProxy.timeline.sendMessage(replyText,
                                                     html: nil,
+                                                    inReplyToEventID: nil,
                                                     intentionalMentions: .empty) {
         case .success:
             break
@@ -484,7 +483,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                               encryptionKeyProvider: EncryptionKeyProvider(),
                                                               appSettings: appSettings,
                                                               appHooks: appHooks)
-            _ = await authenticationService.configure(for: userSession.clientProxy.homeserver)
+            _ = await authenticationService.configure(for: userSession.clientProxy.homeserver, flow: .login)
             
             let parameters = SoftLogoutScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                    credentials: credentials,
@@ -573,7 +572,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         // The user will log out, clear any existing notifications and unregister from receving new ones
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
-        UIApplication.shared.applicationIconBadgeNumber = 0
+        UNUserNotificationCenter.current().setBadgeCount(0)
         
         unregisterForRemoteNotifications()
         
@@ -918,6 +917,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func applicationWillResignActive() {
         MXLog.info("Application will resign active")
 
+        scheduleDelayedSyncStop()
+        scheduleBackgroundAppRefresh()
+    }
+    
+    private func scheduleDelayedSyncStop() {
         guard backgroundTask == nil else {
             return
         }
@@ -932,12 +936,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 self.backgroundTask = nil
             }
         }
-
-        isSuspended = true
-
-        // This does seem to work if scheduled from the background task above
-        // Schedule it here instead but with an earliest being date of 30 seconds
-        scheduleBackgroundAppRefresh()
     }
 
     @objc
@@ -948,12 +946,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             appMediator.endBackgroundTask(backgroundTask)
             self.backgroundTask = nil
         }
-
-        if isSuspended {
-            startSync()
-        }
-
-        isSuspended = false
+        
+        startSync()
     }
     
     // MARK: Background app refresh
@@ -992,7 +986,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         // This is important for the app to keep refreshing in the background
         scheduleBackgroundAppRefresh()
         
-        task.expirationHandler = {
+        task.expirationHandler = { [weak self] in
+            if UIApplication.shared.applicationState != .active {
+                // Attempt to stop the sync loop cleanly, only if the app not already running
+                self?.stopSync()
+            }
+            
             MXLog.info("Background app refresh task expired")
             task.setTaskCompleted(success: true)
         }
@@ -1011,8 +1010,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             .collect(.byTimeOrCount(DispatchQueue.main, .seconds(10), 10))
             .sink(receiveValue: { [weak self] _ in
                 guard let self else { return }
-                
                 MXLog.info("Background app refresh finished")
+                
+                // Make sure we stop the sync loop, otherwise the ongoing request is immediately
+                // handled the next time the app refreshes, which can trigger timeout failures.
+                stopSync()
                 backgroundRefreshSyncObserver?.cancel()
                 
                 task.setTaskCompleted(success: true)

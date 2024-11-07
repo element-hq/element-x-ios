@@ -58,8 +58,15 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private var roomInfoObservationToken: TaskHandle?
     // periphery:ignore - required for instance retention in the rust codebase
     private var typingNotificationObservationToken: TaskHandle?
+    // periphery:ignore - required for instance retention in the rust codebase
+    private var identityStatusChangesObservationToken: TaskHandle?
     
     private var subscribedForUpdates = false
+    
+    private let infoSubject: CurrentValueSubject<RoomInfoProxy, Never>
+    var infoPublisher: CurrentValuePublisher<RoomInfoProxy, Never> {
+        infoSubject.asCurrentValuePublisher()
+    }
 
     private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {
@@ -70,93 +77,20 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     var typingMembersPublisher: CurrentValuePublisher<[String], Never> {
         typingMembersSubject.asCurrentValuePublisher()
     }
-        
-    private let actionsSubject = PassthroughSubject<JoinedRoomProxyAction, Never>()
-    var actionsPublisher: AnyPublisher<JoinedRoomProxyAction, Never> {
-        actionsSubject.eraseToAnyPublisher()
+    
+    private let identityStatusChangesSubject = CurrentValueSubject<[IdentityStatusChange], Never>([])
+    var identityStatusChangesPublisher: CurrentValuePublisher<[IdentityStatusChange], Never> {
+        identityStatusChangesSubject.asCurrentValuePublisher()
     }
     
     // A room identifier is constant and lazy stops it from being fetched
     // multiple times over FFI
     lazy var id: String = room.id()
-    
-    var canonicalAlias: String? {
-        room.canonicalAlias()
-    }
-    
-    var ownUserID: String {
-        room.ownUserId()
-    }
-    
-    var name: String? {
-        roomListItem.displayName()
-    }
-        
-    var topic: String? {
-        room.topic()
-    }
-    
-    var avatarURL: URL? {
-        roomListItem.avatarUrl().flatMap(URL.init(string:))
-    }
-    
-    var avatar: RoomAvatar {
-        if isDirect, avatarURL == nil {
-            let heroes = room.heroes()
-            
-            if heroes.count == 1 {
-                return .heroes(heroes.map(UserProfileProxy.init))
-            }
-        }
-        
-        return .room(id: id, name: name, avatarURL: avatarURL)
-    }
-    
-    var isDirect: Bool {
-        room.isDirect()
-    }
-    
-    var isPublic: Bool {
-        room.isPublic()
-    }
-    
-    var isSpace: Bool {
-        room.isSpace()
-    }
-    
-    var joinedMembersCount: Int {
-        Int(room.joinedMembersCount())
-    }
-    
-    var activeMembersCount: Int {
-        Int(room.activeMembersCount())
-    }
+    var ownUserID: String { room.ownUserId() }
+    var info: RoomInfoProxy { infoSubject.value }
     
     var isEncrypted: Bool {
         (try? room.isEncrypted()) ?? false
-    }
-    
-    var isFavourite: Bool {
-        get async {
-            await (try? room.roomInfo().isFavourite) ?? false
-        }
-    }
-    
-    var pinnedEventIDs: Set<String> {
-        get async {
-            guard let pinnedEventIDs = try? await room.roomInfo().pinnedEventIds else {
-                return []
-            }
-            return .init(pinnedEventIDs)
-        }
-    }
-    
-    var hasOngoingCall: Bool {
-        room.hasActiveRoomCall()
-    }
-    
-    var activeRoomCallParticipants: [String] {
-        room.activeRoomCallParticipants()
     }
     
     init(roomListService: RoomListServiceProtocol,
@@ -166,6 +100,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         self.roomListItem = roomListItem
         self.room = room
         
+        infoSubject = try await .init(RoomInfoProxy(roomInfo: room.roomInfo()))
         timeline = try await TimelineProxy(timeline: room.timeline(), kind: .live)
         
         Task {
@@ -180,11 +115,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
         
         subscribedForUpdates = true
-        let settings = RoomSubscription(requiredState: SlidingSyncConstants.defaultRequiredState,
-                                        timelineLimit: SlidingSyncConstants.defaultTimelineLimit,
-                                        includeHeroes: false) // We don't need heroes here as they're already included in the `all_rooms` list
+
         do {
-            try roomListService.subscribeToRooms(roomIds: [id], settings: settings)
+            try roomListService.subscribeToRooms(roomIds: [id])
         } catch {
             MXLog.error("Failed subscribing to room with error: \(error)")
         }
@@ -192,6 +125,10 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         await timeline.subscribeForUpdates()
         
         subscribeToRoomInfoUpdates()
+        
+        if isEncrypted {
+            subscribeToIdentityStatusChanges()
+        }
         
         subscribeToTypingNotifications()
     }
@@ -201,9 +138,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             return
         }
         
-        roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: RoomInfoUpdateListener { [weak self] in
+        roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: RoomInfoUpdateListener { [weak self] roomInfo in
             MXLog.info("Received room info update")
-            self?.actionsSubject.send(.roomInfoUpdate)
+            self?.infoSubject.send(.init(roomInfo: roomInfo))
         })
     }
     
@@ -369,8 +306,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     func sendTypingNotification(isTyping: Bool) async -> Result<Void, RoomProxyError> {
-        MXLog.info("Sending typing notification isTyping: \(isTyping)")
-        
         do {
             try await room.typingNotice(isTyping: isTyping)
             return .success(())
@@ -710,17 +645,27 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             typingMembersSubject.send(typingMembers)
         })
     }
+    
+    private func subscribeToIdentityStatusChanges() {
+        identityStatusChangesObservationToken = room.subscribeToIdentityStatusChanges(listener: RoomIdentityStatusChangeListener { [weak self] changes in
+            guard let self else { return }
+            
+            MXLog.info("Received identity status changes: \(changes)")
+            
+            identityStatusChangesSubject.send(changes)
+        })
+    }
 }
 
 private final class RoomInfoUpdateListener: RoomInfoListener {
-    private let onUpdateClosure: () -> Void
+    private let onUpdateClosure: (RoomInfo) -> Void
     
-    init(_ onUpdateClosure: @escaping () -> Void) {
+    init(_ onUpdateClosure: @escaping (RoomInfo) -> Void) {
         self.onUpdateClosure = onUpdateClosure
     }
     
     func call(roomInfo: RoomInfo) {
-        onUpdateClosure()
+        onUpdateClosure(roomInfo)
     }
 }
 
@@ -733,5 +678,17 @@ private final class RoomTypingNotificationUpdateListener: TypingNotificationsLis
     
     func call(typingUserIds: [String]) {
         onUpdateClosure(typingUserIds)
+    }
+}
+
+private final class RoomIdentityStatusChangeListener: IdentityStatusChangeListener {
+    private let onUpdateClosure: ([IdentityStatusChange]) -> Void
+    
+    init(_ onUpdateClosure: @escaping ([IdentityStatusChange]) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func call(identityStatusChange: [IdentityStatusChange]) {
+        onUpdateClosure(identityStatusChange)
     }
 }

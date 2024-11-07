@@ -17,7 +17,7 @@ extension UserSessionMock {
         self.init()
         
         clientProxy = configuration.clientProxy
-        mediaProvider = MockMediaProvider()
+        mediaProvider = MediaProviderMock(configuration: .init())
         voiceMessageMediaManager = VoiceMessageMediaManagerMock()
         
         sessionSecurityStatePublisher = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .verified, recoveryState: .enabled)).asCurrentValuePublisher()

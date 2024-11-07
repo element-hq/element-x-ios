@@ -35,7 +35,7 @@ struct MentionSuggestionItemView: View {
 }
 
 struct MentionSuggestionItemView_Previews: PreviewProvider, TestablePreview {
-    static let mockMediaProvider = MockMediaProvider()
+    static let mockMediaProvider = MediaProviderMock(configuration: .init())
     
     static var previews: some View {
         MentionSuggestionItemView(mediaProvider: mockMediaProvider, item: .init(id: "test", displayName: "Test", avatarURL: URL.documentsDirectory, range: .init()))

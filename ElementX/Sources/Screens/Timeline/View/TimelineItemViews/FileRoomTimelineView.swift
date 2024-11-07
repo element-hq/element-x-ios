@@ -35,32 +35,41 @@ struct FileRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     static var body: some View {
         VStack(spacing: 20.0) {
-            FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: .random,
+            FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: .randomEvent,
                                                                     timestamp: "Now",
                                                                     isOutgoing: false,
                                                                     isEditable: false,
                                                                     canBeRepliedTo: true,
                                                                     isThreaded: false,
                                                                     sender: .init(id: "Bob"),
-                                                                    content: .init(body: "document.pdf", source: nil, thumbnailSource: nil, contentType: nil)))
+                                                                    content: .init(filename: "document.pdf",
+                                                                                   source: nil,
+                                                                                   thumbnailSource: nil,
+                                                                                   contentType: nil)))
 
-            FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: .random,
+            FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: .randomEvent,
                                                                     timestamp: "Now",
                                                                     isOutgoing: false,
                                                                     isEditable: false,
                                                                     canBeRepliedTo: true,
                                                                     isThreaded: false,
                                                                     sender: .init(id: "Bob"),
-                                                                    content: .init(body: "document.docx", source: nil, thumbnailSource: nil, contentType: nil)))
+                                                                    content: .init(filename: "document.docx",
+                                                                                   source: nil,
+                                                                                   thumbnailSource: nil,
+                                                                                   contentType: nil)))
             
-            FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: .random,
+            FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: .randomEvent,
                                                                     timestamp: "Now",
                                                                     isOutgoing: false,
                                                                     isEditable: false,
                                                                     canBeRepliedTo: true,
                                                                     isThreaded: false,
                                                                     sender: .init(id: "Bob"),
-                                                                    content: .init(body: "document.txt", source: nil, thumbnailSource: nil, contentType: nil)))
+                                                                    content: .init(filename: "document.txt",
+                                                                                   source: nil,
+                                                                                   thumbnailSource: nil,
+                                                                                   contentType: nil)))
         }
     }
 }

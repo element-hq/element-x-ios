@@ -85,15 +85,6 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
         AnyView(SoftLogoutScreen(context: viewModel.context))
     }
     
-    func handleOIDCRedirectURL(_ url: URL) {
-        guard let oidcPresenter else {
-            MXLog.error("Failed to find an OIDC request in progress.")
-            return
-        }
-        
-        oidcPresenter.handleUniversalLinkCallback(url)
-    }
-    
     // MARK: - Private
     
     private static let loadingIndicatorIdentifier = "\(SoftLogoutScreenCoordinator.self)-Loading"

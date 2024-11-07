@@ -19,7 +19,7 @@ class RoomMembersListScreenUITests: XCTestCase {
         let app = Application.launch(.roomMembersListScreenPendingInvites)
         
         let searchBar = app.searchFields.firstMatch
-        searchBar.clearAndTypeText("alice\n")
+        searchBar.clearAndTypeText("alice\n", app: app)
         
         try await app.assertScreenshot(.roomMembersListScreenPendingInvites, step: 1)
     }
@@ -28,7 +28,7 @@ class RoomMembersListScreenUITests: XCTestCase {
         let app = Application.launch(.roomMembersListScreenPendingInvites)
         
         let searchBar = app.searchFields.firstMatch
-        searchBar.clearAndTypeText("bob\n")
+        searchBar.clearAndTypeText("bob\n", app: app)
         
         try await app.assertScreenshot(.roomMembersListScreenPendingInvites, step: 2)
     }

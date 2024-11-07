@@ -23,7 +23,7 @@ struct VoiceMessageRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equa
     var properties = RoomTimelineItemProperties()
     
     var body: String {
-        content.body
+        content.caption ?? content.filename
     }
     
     var contentType: EventBasedMessageTimelineItemContentType {

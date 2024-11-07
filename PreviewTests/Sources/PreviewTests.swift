@@ -11,6 +11,7 @@ import XCTest
 @testable import ElementX
 @testable import SnapshotTesting
 
+@MainActor
 class PreviewTests: XCTestCase {
     private let deviceConfig: ViewImageConfig = .iPhoneX
     private let simulatorDevice: String? = "iPhone14,6" // iPhone SE 3rd Generation
@@ -50,6 +51,22 @@ class PreviewTests: XCTestCase {
     // MARK: - Snapshots
 
     func assertSnapshots(matching preview: _Preview, testName: String = #function) {
+        let preferences = SnapshotPreferences()
+
+        let preferenceReadingView = preview.content
+            .onPreferenceChange(SnapshotDelayPreferenceKey.self) { preferences.delay = $0 }
+            .onPreferenceChange(SnapshotPrecisionPreferenceKey.self) { preferences.precision = $0 }
+            .onPreferenceChange(SnapshotPerceptualPrecisionPreferenceKey.self) { preferences.perceptualPrecision = $0 }
+        
+        // Render an image of the view in order to trigger the preference updates to occur.
+        let imageRenderer = ImageRenderer(content: preferenceReadingView)
+        _ = imageRenderer.uiImage
+        
+        // Delay the test now - a delay after creating the `snapshotView` results in the underlying view not getting updated for snapshotting.
+        if preferences.delay != .zero {
+            wait(for: preferences.delay)
+        }
+        
         for deviceName in snapshotDevices {
             guard var device = PreviewDevice(rawValue: deviceName).snapshotDevice() else {
                 fatalError("Unknown device name: \(deviceName)")
@@ -58,12 +75,13 @@ class PreviewTests: XCTestCase {
             device.safeArea = .one
             // Ignore specific device display scale
             let traits = UITraitCollection(displayScale: 2.0)
-            if let failure = assertSnapshots(matching: AnyView(preview.content),
+            if let failure = assertSnapshots(matching: preview.content,
                                              name: preview.displayName,
                                              isScreen: preview.layout == .device,
                                              device: device,
                                              testName: testName + deviceName + "-" + localeCode,
-                                             traits: traits) {
+                                             traits: traits,
+                                             preferences: preferences) {
                 XCTFail(failure)
             }
         }
@@ -85,19 +103,12 @@ class PreviewTests: XCTestCase {
     }
 
     private func assertSnapshots(matching view: AnyView,
-                                 name: String?, isScreen: Bool,
+                                 name: String?,
+                                 isScreen: Bool,
                                  device: ViewImageConfig,
                                  testName: String = #function,
-                                 traits: UITraitCollection = .init()) -> String? {
-        var delay: TimeInterval = 0
-        var precision: Float = 1
-        var perceptualPrecision: Float = 1
-
-        let view = view
-            .onPreferenceChange(SnapshotDelayPreferenceKey.self) { delay = $0 }
-            .onPreferenceChange(SnapshotPrecisionPreferenceKey.self) { precision = $0 }
-            .onPreferenceChange(SnapshotPerceptualPrecisionPreferenceKey.self) { perceptualPrecision = $0 }
-
+                                 traits: UITraitCollection = .init(),
+                                 preferences: SnapshotPreferences) -> String? {
         let matchingView = isScreen ? AnyView(view) : AnyView(view
             .frame(width: device.size?.width)
             .fixedSize(horizontal: false, vertical: true)
@@ -105,15 +116,27 @@ class PreviewTests: XCTestCase {
         
         return withSnapshotTesting(record: recordMode) {
             verifySnapshot(of: matchingView,
-                           as: .prefireImage(precision: { precision },
-                                             perceptualPrecision: { perceptualPrecision },
-                                             duration: { delay },
+                           as: .prefireImage(preferences: preferences,
                                              layout: isScreen ? .device(config: device) : .sizeThatFits,
                                              traits: traits),
                            named: name,
                            testName: testName)
         }
     }
+    
+    private func wait(for duration: TimeInterval) {
+        let expectation = XCTestExpectation(description: "Wait")
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            expectation.fulfill()
+        }
+        _ = XCTWaiter.wait(for: [expectation], timeout: duration + 1)
+    }
+}
+
+private class SnapshotPreferences {
+    var delay: TimeInterval = 0
+    var precision: Float = 1
+    var perceptualPrecision: Float = 1
 }
 
 // MARK: - SnapshotTesting + Extensions
@@ -144,9 +167,7 @@ private extension PreviewDevice {
 
 private extension Snapshotting where Value: SwiftUI.View, Format == UIImage {
     static func prefireImage(drawHierarchyInKeyWindow: Bool = false,
-                             precision: @escaping () -> Float,
-                             perceptualPrecision: @escaping () -> Float,
-                             duration: @escaping () -> TimeInterval,
+                             preferences: SnapshotPreferences,
                              layout: SwiftUISnapshotLayout = .sizeThatFits,
                              traits: UITraitCollection = .init()) -> Snapshotting {
         let config: ViewImageConfig
@@ -165,7 +186,7 @@ private extension Snapshotting where Value: SwiftUI.View, Format == UIImage {
             config = .init(safeArea: .one, size: size, traits: traits)
         }
 
-        return SimplySnapshotting<UIImage>(pathExtension: "png", diffing: .prefireImage(precision: precision, perceptualPrecision: perceptualPrecision, scale: traits.displayScale))
+        return SimplySnapshotting<UIImage>(pathExtension: "png", diffing: .prefireImage(preferences: preferences, scale: traits.displayScale))
             .asyncPullback { view in
                 var config = config
 
@@ -181,31 +202,19 @@ private extension Snapshotting where Value: SwiftUI.View, Format == UIImage {
 
                     controller = hostingController
                 }
-
-                return Async<UIImage> { callback in
-                    let strategy = snapshotView(config: config,
-                                                drawHierarchyInKeyWindow: drawHierarchyInKeyWindow,
-                                                traits: traits,
-                                                view: controller.view,
-                                                viewController: controller)
-
-                    let duration = duration()
-                    if duration != .zero {
-                        let expectation = XCTestExpectation(description: "Wait")
-                        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-                            expectation.fulfill()
-                        }
-                        _ = XCTWaiter.wait(for: [expectation], timeout: duration + 1)
-                    }
-                    strategy.run(callback)
-                }
+                
+                return snapshotView(config: config,
+                                    drawHierarchyInKeyWindow: drawHierarchyInKeyWindow,
+                                    traits: traits,
+                                    view: controller.view,
+                                    viewController: controller)
             }
     }
 }
 
 private extension Diffing where Value == UIImage {
-    static func prefireImage(precision: @escaping () -> Float, perceptualPrecision: @escaping () -> Float, scale: CGFloat?) -> Diffing {
-        lazy var originalDiffing = Diffing.image(precision: precision(), perceptualPrecision: 0.98, scale: scale)
+    static func prefireImage(preferences: SnapshotPreferences, scale: CGFloat?) -> Diffing {
+        lazy var originalDiffing = Diffing.image(precision: preferences.precision, perceptualPrecision: preferences.perceptualPrecision, scale: scale)
         return Diffing(toData: { originalDiffing.toData($0) },
                        fromData: { originalDiffing.fromData($0) },
                        diff: { originalDiffing.diff($0, $1) })

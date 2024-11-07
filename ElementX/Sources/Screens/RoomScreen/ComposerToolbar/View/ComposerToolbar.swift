@@ -143,6 +143,7 @@ struct ComposerToolbar: View {
         .disabled(context.viewState.sendButtonDisabled)
         .animation(.linear(duration: 0.1).disabledDuringTests(), value: context.viewState.sendButtonDisabled)
         .keyboardShortcut(.return, modifiers: [.command])
+        .accessibilityIdentifier(A11yIdentifiers.roomScreen.sendButton)
     }
     
     private var messageComposer: some View {
@@ -174,22 +175,23 @@ struct ComposerToolbar: View {
         .focused($composerFocused)
         .padding(.leading, context.composerFormattingEnabled ? 7 : 0)
         .padding(.trailing, context.composerFormattingEnabled ? 4 : 0)
+        .accessibilityIdentifier(A11yIdentifiers.roomScreen.messageComposer)
         .onTapGesture {
             guard !composerFocused else { return }
             composerFocused = true
         }
-        .onChange(of: context.composerFocused) { newValue in
+        .onChange(of: context.composerFocused) { _, newValue in
             guard composerFocused != newValue else { return }
             
             composerFocused = newValue
         }
-        .onChange(of: composerFocused) { newValue in
+        .onChange(of: composerFocused) { _, newValue in
             context.composerFocused = newValue
         }
-        .onChange(of: context.plainComposerText) { _ in
+        .onChange(of: context.plainComposerText) {
             context.send(viewAction: .plainComposerTextChanged)
         }
-        .onChange(of: context.composerFormattingEnabled) { _ in
+        .onChange(of: context.composerFormattingEnabled) {
             context.send(viewAction: .didToggleFormattingOptions)
         }
         .onAppear {
@@ -293,7 +295,7 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
     static let wysiwygViewModel = WysiwygComposerViewModel()
     static let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)),
-                                                            mediaProvider: MockMediaProvider(),
+                                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                                             mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                             analyticsService: ServiceLocator.shared.analytics,
                                                             composerDraftService: ComposerDraftServiceMock())
@@ -336,7 +338,7 @@ extension ComposerToolbar {
         var composerViewModel: ComposerToolbarViewModel {
             let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
-                                                 mediaProvider: MockMediaProvider(),
+                                                 mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                  analyticsService: ServiceLocator.shared.analytics,
                                                  composerDraftService: ComposerDraftServiceMock())
@@ -353,7 +355,7 @@ extension ComposerToolbar {
         var composerViewModel: ComposerToolbarViewModel {
             let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
-                                                 mediaProvider: MockMediaProvider(),
+                                                 mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                  analyticsService: ServiceLocator.shared.analytics,
                                                  composerDraftService: ComposerDraftServiceMock())
@@ -370,7 +372,7 @@ extension ComposerToolbar {
         var composerViewModel: ComposerToolbarViewModel {
             let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
-                                                 mediaProvider: MockMediaProvider(),
+                                                 mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                  analyticsService: ServiceLocator.shared.analytics,
                                                  composerDraftService: ComposerDraftServiceMock())
@@ -388,7 +390,7 @@ extension ComposerToolbar {
         var composerViewModel: ComposerToolbarViewModel {
             let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
-                                                 mediaProvider: MockMediaProvider(),
+                                                 mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                  analyticsService: ServiceLocator.shared.analytics,
                                                  composerDraftService: ComposerDraftServiceMock())
@@ -409,14 +411,14 @@ extension ComposerToolbar {
         var composerViewModel: ComposerToolbarViewModel {
             let model = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
-                                                 mediaProvider: MockMediaProvider(),
+                                                 mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                  analyticsService: ServiceLocator.shared.analytics,
                                                  composerDraftService: ComposerDraftServiceMock())
-            model.state.composerMode = isLoading ? .reply(itemID: .init(timelineID: ""),
+            model.state.composerMode = isLoading ? .reply(eventID: UUID().uuidString,
                                                           replyDetails: .loading(eventID: ""),
                                                           isThread: false) :
-                .reply(itemID: .init(timelineID: ""),
+                .reply(eventID: UUID().uuidString,
                        replyDetails: .loaded(sender: .init(id: "",
                                                            displayName: "Test"),
                                              eventID: "", eventContent: .message(.text(.init(body: "Hello World!")))), isThread: false)

@@ -25,6 +25,8 @@ struct RoomAvatarImage: View {
     let avatarSize: AvatarSize
     let mediaProvider: MediaProviderProtocol?
     
+    private(set) var onAvatarTap: ((URL) -> Void)?
+    
     var body: some View {
         switch avatar {
         case .room(let id, let name, let avatarURL):
@@ -32,7 +34,8 @@ struct RoomAvatarImage: View {
                                 name: name,
                                 contentID: id,
                                 avatarSize: avatarSize,
-                                mediaProvider: mediaProvider)
+                                mediaProvider: mediaProvider,
+                                onTap: onAvatarTap)
         case .heroes(let users):
             // We will expand upon this with more stack sizes in the future.
             if users.count == 0 {
@@ -45,14 +48,16 @@ struct RoomAvatarImage: View {
                                         name: users[0].displayName,
                                         contentID: users[0].userID,
                                         avatarSize: avatarSize,
-                                        mediaProvider: mediaProvider)
+                                        mediaProvider: mediaProvider,
+                                        onTap: onAvatarTap)
                         .scaledFrame(size: clusterSize, alignment: .topTrailing)
                     
                     LoadableAvatarImage(url: users[1].avatarURL,
                                         name: users[1].displayName,
                                         contentID: users[1].userID,
                                         avatarSize: avatarSize,
-                                        mediaProvider: mediaProvider)
+                                        mediaProvider: mediaProvider,
+                                        onTap: onAvatarTap)
                         .mask {
                             Rectangle()
                                 .fill(Color.white)
@@ -74,7 +79,8 @@ struct RoomAvatarImage: View {
                                     name: users[0].displayName,
                                     contentID: users[0].userID,
                                     avatarSize: avatarSize,
-                                    mediaProvider: mediaProvider)
+                                    mediaProvider: mediaProvider,
+                                    onTap: onAvatarTap)
             }
         }
     }
@@ -87,30 +93,30 @@ struct RoomAvatarImage_Previews: PreviewProvider, TestablePreview {
                                           name: "Room",
                                           avatarURL: nil),
                             avatarSize: .room(on: .home),
-                            mediaProvider: MockMediaProvider())
+                            mediaProvider: MediaProviderMock(configuration: .init()))
             
             RoomAvatarImage(avatar: .room(id: "!2:server.com",
                                           name: "Room",
                                           avatarURL: .picturesDirectory),
                             avatarSize: .room(on: .home),
-                            mediaProvider: MockMediaProvider())
+                            mediaProvider: MediaProviderMock(configuration: .init()))
             
             RoomAvatarImage(avatar: .heroes([.init(userID: "@user:server.com",
                                                    displayName: "User",
                                                    avatarURL: nil)]),
             avatarSize: .room(on: .home),
-            mediaProvider: MockMediaProvider())
+            mediaProvider: MediaProviderMock(configuration: .init()))
             
             RoomAvatarImage(avatar: .heroes([.init(userID: "@user:server.com",
                                                    displayName: "User",
                                                    avatarURL: .picturesDirectory)]),
             avatarSize: .room(on: .home),
-            mediaProvider: MockMediaProvider())
+            mediaProvider: MediaProviderMock(configuration: .init()))
             
             RoomAvatarImage(avatar: .heroes([.init(userID: "@alice:server.com", displayName: "Alice", avatarURL: nil),
                                              .init(userID: "@bob:server.net", displayName: "Bob", avatarURL: nil)]),
                             avatarSize: .room(on: .home),
-                            mediaProvider: MockMediaProvider())
+                            mediaProvider: MediaProviderMock(configuration: .init()))
         }
     }
 }

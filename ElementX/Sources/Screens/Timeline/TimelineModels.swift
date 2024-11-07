@@ -6,6 +6,7 @@
 //
 
 import Combine
+import MatrixRustSDK
 import OrderedCollections
 import SwiftUI
 
@@ -97,6 +98,7 @@ struct TimelineViewState: BindableState {
     var canCurrentUserRedactSelf = false
     var canCurrentUserPin = false
     var isViewSourceEnabled: Bool
+    var hideTimelineMedia: Bool
         
     // The `pinnedEventIDs` are used only to determine if an item is already pinned or not.
     // It's updated from the room info, so it's faster than using the timeline
@@ -109,6 +111,8 @@ struct TimelineViewState: BindableState {
     
     /// A closure providing the associated audio player state for an item in the timeline.
     var audioPlayerStateProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> AudioPlayerState?)?
+    
+    var emojiProvider: EmojiProviderProtocol
 }
 
 struct TimelineViewStateBindings {
@@ -201,9 +205,9 @@ struct TimelineState {
     // These can be removed when we have full swiftUI and moved as @State values in the view
     var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
     
-    var itemsDictionary = OrderedDictionary<String, RoomTimelineItemViewState>()
+    var itemsDictionary = OrderedDictionary<TimelineUniqueId, RoomTimelineItemViewState>()
     
-    var timelineIDs: [String] {
+    var uniqueIDs: [TimelineUniqueId] {
         itemsDictionary.keys.elements
     }
     

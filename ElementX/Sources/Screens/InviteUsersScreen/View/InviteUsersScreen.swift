@@ -110,7 +110,7 @@ struct InviteUsersScreen: View {
                         .frame(width: cellWidth)
                     }
                 }
-                .onChange(of: context.viewState.scrollToLastID) { lastAddedID in
+                .onChange(of: context.viewState.scrollToLastID) { _, lastAddedID in
                     guard let id = lastAddedID else { return }
                     withElementAnimation(.easeInOut) {
                         scrollView.scrollTo(id)
@@ -154,7 +154,7 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
         return InviteUsersScreenViewModel(clientProxy: ClientProxyMock(.init()),
                                           selectedUsers: .init([]),
                                           roomType: .draft,
-                                          mediaProvider: MockMediaProvider(),
+                                          mediaProvider: MediaProviderMock(configuration: .init()),
                                           userDiscoveryService: userDiscoveryService,
                                           userIndicatorController: UserIndicatorControllerMock())
     }()

@@ -25,7 +25,7 @@ schemes:
     test:
       config: Debug
       disableMainThreadChecker: false
-        
+
 targets:
   NSE-Production:
     type: app-extension
@@ -87,6 +87,7 @@ targets:
     - path: ../../../../ElementX/Sources/Other/Extensions/ImageCache.swift
     - path: ../../../../ElementX/Sources/Other/Extensions/LayoutDirection.swift
     - path: ../../../../ElementX/Sources/Other/Extensions/NSRegularExpresion.swift
+    - path: ../../../../ElementX/Sources/Other/Extensions/ProcessInfo.swift
     - path: ../../../../ElementX/Sources/Other/Extensions/String.swift
     - path: ../../../../ElementX/Sources/Other/Extensions/Task.swift
     - path: ../../../../ElementX/Sources/Other/Extensions/UNNotificationContent.swift
@@ -112,6 +113,7 @@ targets:
     - path: ../../../../ElementX/Sources/Services/Room/RoomSummary/RoomMessageEventStringBuilder.swift
     - path: ../../../../ElementX/Sources/Services/UserSession/RestorationToken.swift
     - path: ../../../../ElementX/Sources/Services/UserSession/SessionDirectories.swift
+    - path: ../../../../ElementX/Sources/UITests/UITestsScreenIdentifier.swift
     - path: ../../../../ElementX/Sources/Services/ElementCall/ElementCallServiceConstants.swift
     - path: ../../../../ElementX/Sources/Application/AppSettings.swift
     - path: ../../../../ElementX/Sources/AppHooks/AppHooks.swift

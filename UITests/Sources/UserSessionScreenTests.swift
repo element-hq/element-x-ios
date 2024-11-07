@@ -13,6 +13,9 @@ class UserSessionScreenTests: XCTestCase {
     
     func testUserSessionFlows() async throws {
         let app = Application.launch(.userSessionScreen)
+        
+        app.swipeDown() // Make sure the header shows a large title
+        
         try await app.assertScreenshot(.userSessionScreen, step: 1)
 
         app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
@@ -20,7 +23,7 @@ class UserSessionScreenTests: XCTestCase {
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(.userSessionScreen, step: 2)
 
-        app.buttons[A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions].forceTap()
+        app.buttons[A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions].tapCenter()
         try await app.assertScreenshot(.userSessionScreen, step: 3)
     }
 
@@ -47,7 +50,7 @@ class UserSessionScreenTests: XCTestCase {
         let textField = app.textFields["Display name"]
         XCTAssert(textField.waitForExistence(timeout: 10))
         
-        let joinButton = app.buttons["Join call now"]
+        let joinButton = app.buttons["Continue"]
         XCTAssert(joinButton.waitForExistence(timeout: 10))
     }
 }

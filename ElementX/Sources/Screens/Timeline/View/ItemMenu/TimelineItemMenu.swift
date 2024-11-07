@@ -309,7 +309,8 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
         guard var item = RoomTimelineItemFixtures.singleMessageChunk.first as? TextRoomTimelineItem,
               let actions = TimelineItemMenuActions(isReactable: true,
                                                     actions: [.copy, .edit, .reply(isThread: false), .pin, .redact],
-                                                    debugActions: [.viewSource]) else {
+                                                    debugActions: [.viewSource],
+                                                    emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings)) else {
             return nil
         }
         

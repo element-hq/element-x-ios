@@ -42,7 +42,7 @@ struct EmoteRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     }
     
     private static func itemWith(text: String, timestamp: String, senderId: String) -> EmoteRoomTimelineItem {
-        EmoteRoomTimelineItem(id: .random,
+        EmoteRoomTimelineItem(id: .randomEvent,
                               timestamp: timestamp,
                               isOutgoing: false,
                               isEditable: false,

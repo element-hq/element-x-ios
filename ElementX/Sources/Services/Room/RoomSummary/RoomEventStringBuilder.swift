@@ -23,10 +23,12 @@ struct RoomEventStringBuilder {
             sender.displayName ?? sender.id
         }
         
-        switch eventItemProxy.content.kind() {
+        switch eventItemProxy.content {
         case .unableToDecrypt(let encryptedMessage):
             let errorMessage = switch encryptedMessage {
-            case .megolmV1AesSha2(_, .membership): L10n.commonUnableToDecryptNoAccess
+            case .megolmV1AesSha2(_, .sentBeforeWeJoined): L10n.commonUnableToDecryptNoAccess
+            case .megolmV1AesSha2(_, .verificationViolation): L10n.commonUnableToDecryptVerificationViolation
+            case .megolmV1AesSha2(_, .unknownDevice), .megolmV1AesSha2(_, .unsignedDevice): L10n.commonUnableToDecryptInsecureDevice
             default: L10n.commonWaitingForDecryptionKey
             }
             return prefix(errorMessage, with: displayName)
@@ -41,13 +43,8 @@ struct RoomEventStringBuilder {
             return prefix(L10n.commonSticker, with: displayName)
         case .failedToParseMessageLike, .failedToParseState:
             return prefix(L10n.commonUnsupportedEvent, with: displayName)
-        case .message:
-            guard let messageContent = eventItemProxy.content.asMessage() else {
-                fatalError("Invalid message timeline item: \(eventItemProxy)")
-            }
-            
-            let messageType = messageContent.msgtype()
-            return messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName)
+        case .message(let messageContent):
+            return messageEventStringBuilder.buildAttributedString(for: messageContent.msgType, senderDisplayName: displayName)
         case .state(_, let state):
             return stateEventStringBuilder
                 .buildString(for: state, sender: sender, isOutgoing: isOutgoing)

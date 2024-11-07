@@ -16,6 +16,8 @@ enum A11yIdentifiers {
     static let appLockSetupSettingsScreen = AppLockSetupSettingsScreen()
     static let bugReportScreen = BugReportScreen()
     static let changeServerScreen = ChangeServer()
+    static let encryptionResetScreen = EncryptionResetScreen()
+    static let encryptionResetPasswordScreen = EncryptionResetPasswordScreen()
     static let homeScreen = HomeScreen()
     static let loginScreen = LoginScreen()
     static let authenticationStartScreen = AuthenticationStartScreen()
@@ -24,6 +26,9 @@ enum A11yIdentifiers {
     static let roomDetailsScreen = RoomDetailsScreen()
     static let roomNotificationSettingsScreen = RoomNotificationSettingsScreen()
     static let roomRolesAndPermissionsScreen = RoomRolesAndPermissionsScreen()
+    static let secureBackupScreen = SecureBackupScreen()
+    static let secureBackupKeyBackupScreen = SecureBackupKeyBackupScreen()
+    static let secureBackupRecoveryKeyScreen = SecureBackupRecoveryKeyScreen()
     static let serverConfirmationScreen = ServerConfirmationScreen()
     static let sessionVerificationScreen = SessionVerificationScreen()
     static let settingsScreen = SettingsScreen()
@@ -81,6 +86,15 @@ enum A11yIdentifiers {
         let dismiss = "change_server-dismiss"
     }
     
+    struct EncryptionResetScreen {
+        let continueReset = "encryption_reset-continue_reset"
+    }
+    
+    struct EncryptionResetPasswordScreen {
+        let passwordField = "encryption_reset_password-password_field"
+        let submit = "encryption_reset_password-submit"
+    }
+    
     struct HomeScreen {
         let userAvatar = "home_screen-user_avatar"
         let recoveryKeyConfirmationBannerContinue = "home_screen-recovery_key_confirmation_continue"
@@ -126,6 +140,9 @@ enum A11yIdentifiers {
         let timelineItemActionMenu = "room-timeline_item_action_menu"
         let joinCall = "room-join_call"
         let scrollToBottom = "room-scroll_to_bottom"
+        
+        let messageComposer = "room-message_composer"
+        let sendButton = "room-send_button"
 
         let composerToolbar = ComposerToolbar()
 
@@ -175,12 +192,31 @@ enum A11yIdentifiers {
         let memberModeration = "room_roles_and_permissions-member_moderation"
     }
     
+    struct SecureBackupScreen {
+        let keyStorage = "secure_backup-key_storage"
+        let recoveryKey = "secure_backup-recovery_key"
+    }
+    
+    struct SecureBackupKeyBackupScreen {
+        let deleteKeyStorage = "secure_backup_key_backup-delete_key_storage"
+    }
+    
+    struct SecureBackupRecoveryKeyScreen {
+        let generateRecoveryKey = "secure_backup_recovery_key-generate_recovery_key"
+        let copyRecoveryKey = "secure_backup_recovery_key-copy_recovery_key"
+        let done = "secure_backup_recovery_key-done"
+        let recoveryKeyField = "secure_backup_recovery_key-recovery_key_field"
+        let confirm = "secure_backup_recovery_key-confirm"
+    }
+    
     struct ServerConfirmationScreen {
         let `continue` = "server_confirmation-continue"
         let changeServer = "server_confirmation-change_server"
     }
     
     struct SessionVerificationScreen {
+        let acceptVerificationRequest = "session_verification-accept_verification_request"
+        let ignoreVerificationRequest = "session_verification-ignore_verification_request"
         let requestVerification = "session_verification-request_verification"
         let startSasVerification = "session_verification-start_sas_verification"
         let acceptChallenge = "session_verification-accept_challenge"

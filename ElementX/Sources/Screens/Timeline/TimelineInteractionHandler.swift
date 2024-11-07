@@ -91,6 +91,7 @@ class TimelineInteractionHandler {
         }
     }
 
+    // swiftlint:disable:next cyclomatic_complexity
     func handleTimelineItemMenuAction(_ action: TimelineItemMenuAction, itemID: TimelineItemIdentifier) {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID),
               let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol else {
@@ -132,8 +133,12 @@ class TimelineInteractionHandler {
                 UIPasteboard.general.url = permalinkURL
             }
         case .redact:
+            guard case let .event(_, eventOrTransactionID) = itemID else {
+                fatalError()
+            }
+            
             Task {
-                await timelineController.redact(itemID)
+                await timelineController.redact(eventOrTransactionID)
             }
         case .reply:
             guard let eventID = eventTimelineItem.id.eventID else {
@@ -143,7 +148,7 @@ class TimelineInteractionHandler {
             let replyInfo = buildReplyInfo(for: eventTimelineItem)
             let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, eventID: eventID, eventContent: replyInfo.type)
             
-            actionsSubject.send(.composer(action: .setMode(mode: .reply(itemID: eventTimelineItem.id, replyDetails: replyDetails, isThread: replyInfo.isThread))))
+            actionsSubject.send(.composer(action: .setMode(mode: .reply(eventID: eventID, replyDetails: replyDetails, isThread: replyInfo.isThread))))
         case .forward(let itemID):
             actionsSubject.send(.displayMessageForwarding(itemID: itemID))
         case .viewSource:
@@ -159,7 +164,13 @@ class TimelineInteractionHandler {
         case .react:
             displayEmojiPicker(for: itemID)
         case .toggleReaction(let key):
-            Task { await timelineController.toggleReaction(key, to: itemID) }
+            Task {
+                guard case let .event(_, eventOrTransactionID) = itemID else {
+                    fatalError()
+                }
+                
+                await timelineController.toggleReaction(key, to: eventOrTransactionID)
+            }
         case .endPoll(let pollStartID):
             endPoll(pollStartID: pollStartID)
         case .pin:
@@ -184,6 +195,11 @@ class TimelineInteractionHandler {
     }
     
     private func processEditMessageEvent(_ messageTimelineItem: EventBasedMessageTimelineItemProtocol) {
+        guard case let .event(_, eventOrTransactionID) = messageTimelineItem.id else {
+            MXLog.error("Failed editing message, missing event id")
+            return
+        }
+        
         let text: String
         var htmlText: String?
         switch messageTimelineItem.contentType {
@@ -197,7 +213,7 @@ class TimelineInteractionHandler {
         }
         
         // Always update the mode first and then the text so that the composer has time to save the text draft
-        actionsSubject.send(.composer(action: .setMode(mode: .edit(originalItemId: messageTimelineItem.id))))
+        actionsSubject.send(.composer(action: .setMode(mode: .edit(originalEventOrTransactionID: eventOrTransactionID))))
         actionsSubject.send(.composer(action: .setText(plainText: text, htmlText: htmlText)))
     }
     
@@ -532,30 +548,35 @@ class TimelineInteractionHandler {
     
     private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> RoomTimelineControllerAction {
         var source: MediaSourceProxy?
-        var body: String
+        var filename: String
+        var caption: String?
         
         switch timelineItem {
         case let item as ImageRoomTimelineItem:
             source = item.content.source
-            body = item.content.body
+            filename = item.content.filename
+            caption = item.content.caption
         case let item as VideoRoomTimelineItem:
             source = item.content.source
-            body = item.content.body
+            filename = item.content.filename
+            caption = item.content.caption
         case let item as FileRoomTimelineItem:
             source = item.content.source
-            body = item.content.body
+            filename = item.content.filename
+            caption = item.content.caption
         case let item as AudioRoomTimelineItem:
             // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
             source = item.content.source
-            body = item.content.body
+            filename = item.content.filename
+            caption = item.content.caption
         default:
             return .none
         }
 
         guard let source else { return .none }
-        switch await mediaProvider.loadFileFromSource(source, body: body) {
+        switch await mediaProvider.loadFileFromSource(source, filename: filename) {
         case .success(let file):
-            return .displayMediaFile(file: file, title: body)
+            return .displayMediaFile(file: file, title: caption ?? filename)
         case .failure:
             return .none
         }

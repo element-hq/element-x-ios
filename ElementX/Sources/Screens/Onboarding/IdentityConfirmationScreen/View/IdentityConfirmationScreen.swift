@@ -37,7 +37,7 @@ struct IdentityConfirmationScreen: View {
     @ViewBuilder
     private var screenHeader: some View {
         VStack(spacing: 0) {
-            HeroImage(icon: \.lockSolid)
+            BigIcon(icon: \.lockSolid)
                 .padding(.bottom, 16)
             
             Text(L10n.screenIdentityConfirmationTitle)
@@ -67,32 +67,27 @@ struct IdentityConfirmationScreen: View {
                     context.send(viewAction: .otherDevice)
                 }
                 .buttonStyle(.compound(.primary))
-                
-                if context.viewState.availableActions.contains(.recovery) {
-                    Button(L10n.screenIdentityConfirmationUseRecoveryKey) {
-                        context.send(viewAction: .recoveryKey)
-                    }
-                    .buttonStyle(.compound(.secondary))
-                }
-            } else if context.viewState.availableActions.contains(.recovery) {
+            }
+            
+            if context.viewState.availableActions.contains(.recovery) {
                 Button(L10n.screenIdentityConfirmationUseRecoveryKey) {
                     context.send(viewAction: .recoveryKey)
                 }
                 .buttonStyle(.compound(.primary))
             }
             
-            if shouldShowSkipButton {
-                Button(L10n.actionSkip) {
-                    context.send(viewAction: .skip)
-                }
-                .buttonStyle(.compound(.plain))
-            }
-            
             Button(L10n.screenIdentityConfirmationCannotConfirm) {
                 context.send(viewAction: .reset)
             }
-            .buttonStyle(.compound(.plain))
-            .padding(.vertical, 14)
+            .buttonStyle(.compound(.secondary))
+            
+            if shouldShowSkipButton {
+                Button("\(L10n.actionSkip) 🙉") {
+                    context.send(viewAction: .skip)
+                }
+                .buttonStyle(.compound(.plain))
+                .padding(.vertical, 14)
+            }
         }
     }
     
@@ -113,7 +108,7 @@ struct IdentityConfirmationScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             IdentityConfirmationScreen(context: viewModel.context)
         }
-        .snapshotPreferences(delay: 0.25)
+        .snapshotPreferences(delay: 1)
     }
     
     private static var viewModel: IdentityConfirmationScreenViewModel {

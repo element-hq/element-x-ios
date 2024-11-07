@@ -71,8 +71,8 @@ struct RoomChangeRolesScreen: View {
                         .frame(width: cellWidth)
                     }
                 }
-                .onChange(of: context.viewState.lastPromotedMember) { member in
-                    guard let member else { return }
+                .onChange(of: context.viewState.lastPromotedMember) { _, newValue in
+                    guard let member = newValue else { return }
                     withElementAnimation(.easeInOut) {
                         scrollView.scrollTo(member.id)
                     }
@@ -122,7 +122,7 @@ struct RoomChangeRolesScreen_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel(mode: RoomMemberDetails.Role) -> RoomChangeRolesScreenViewModel {
         RoomChangeRolesScreenViewModel(mode: mode,
                                        roomProxy: JoinedRoomProxyMock(.init(members: .allMembersAsAdmin)),
-                                       mediaProvider: MockMediaProvider(),
+                                       mediaProvider: MediaProviderMock(configuration: .init()),
                                        userIndicatorController: UserIndicatorControllerMock(),
                                        analytics: ServiceLocator.shared.analytics)
     }
