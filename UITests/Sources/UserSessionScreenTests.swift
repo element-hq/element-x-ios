@@ -13,6 +13,9 @@ class UserSessionScreenTests: XCTestCase {
     
     func testUserSessionFlows() async throws {
         let app = Application.launch(.userSessionScreen)
+        
+        app.swipeDown() // Make sure the header shows a large title
+        
         try await app.assertScreenshot(.userSessionScreen, step: 1)
 
         app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
