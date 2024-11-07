@@ -191,7 +191,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         createRoomParameters.topic = state.bindings.roomTopic
         createRoomParameters.isRoomPrivate = state.bindings.isRoomPrivate
         createRoomParameters.isKnockingOnly = state.bindings.isKnockingOnly
-        if !state.aliasLocalPart.isEmpty {
+        if state.isKnockingFeatureEnabled, !state.aliasLocalPart.isEmpty {
             createRoomParameters.aliasLocalPart = state.aliasLocalPart
         } else {
             createRoomParameters.aliasLocalPart = nil
