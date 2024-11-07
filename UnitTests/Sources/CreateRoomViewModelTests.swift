@@ -25,7 +25,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     
     override func setUpWithError() throws {
         cancellables.removeAll()
-        clientProxy = ClientProxyMock(.init(userID: "@a:b.com"))
+        clientProxy = ClientProxyMock(.init(serverName: "matrix.org", userID: "@a:b.com"))
         userSession = UserSessionMock(.init(clientProxy: clientProxy))
         let parameters = CreateRoomFlowParameters()
         usersSubject.send([.mockAlice, .mockBob, .mockCharlie])
@@ -76,18 +76,75 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         context.send(viewAction: .updateName("A"))
         context.roomTopic = "B"
         context.isRoomPrivate = false
+        // When setting the room as private we always reset the knocking state to the default value of false
+        // so we need to wait a main actor cycle to ensure the view state is updated
+        await Task.yield()
         context.isKnockingOnly = true
         XCTAssertTrue(context.viewState.canCreateRoom)
         
         let expectation = expectation(description: "Wait for the room to be created")
-        clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCanonicalAliasClosure = { _, _, isPrivate, isKnockingOnly, _, _, _ in
+        clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCanonicalAliasClosure = { _, _, isPrivate, isKnockingOnly, _, _, canonicalAlias in
             XCTAssertTrue(isKnockingOnly)
             XCTAssertFalse(isPrivate)
+            XCTAssertEqual(canonicalAlias, "#a:matrix.org")
             defer { expectation.fulfill() }
             return .success("")
         }
         context.send(viewAction: .createRoom)
         await fulfillment(of: [expectation])
+    }
+    
+    func testCreatePublicRoomFailsForInvalidAlias() async throws {
+        context.send(viewAction: .updateName("A"))
+        context.roomTopic = "B"
+        context.isRoomPrivate = false
+        // When setting the room as private we always reset the alias
+        // so we need to wait a main actor cycle to ensure the view state is updated
+        await Task.yield()
+        
+        // we wait for the debounce to show the error
+        let deferred = deferFulfillment(context.$viewState) { viewState in
+            viewState.aliasErrors.contains(.invalidSymbols) && !viewState.canCreateRoom
+        }
+        context.send(viewAction: .updateAddress("#:"))
+        try await deferred.fulfill()
+        
+        // We also want to force the room creation in case the user may tap the button before the debounce
+        // blocked it
+        context.send(viewAction: .createRoom)
+        await Task.yield()
+        XCTAssertFalse(clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCanonicalAliasCalled)
+    }
+    
+    func testCreatePublicRoomFailsForExistingAlias() async throws {
+        clientProxy.isAliasAvailableReturnValue = .success(false)
+        context.send(viewAction: .updateName("A"))
+        context.roomTopic = "B"
+        context.isRoomPrivate = false
+        // When setting the room as private we always reset the alias
+        // so we need to wait a main actor cycle to ensure the view state is updated
+        await Task.yield()
+        
+        // we wait for the debounce to show the error
+        let deferred = deferFulfillment(context.$viewState) { viewState in
+            viewState.aliasErrors.contains(.alreadyExists) && !viewState.canCreateRoom
+        }
+        context.send(viewAction: .updateAddress("abc"))
+        try await deferred.fulfill()
+        
+        // We also want to force the room creation in case the user may tap the button before the debounce
+        // blocked it
+        let expectation = expectation(description: "Wait for the alias to be checked again")
+        clientProxy.isAliasAvailableClosure = { _ in
+            defer {
+                expectation.fulfill()
+            }
+            return .success(false)
+        }
+        context.send(viewAction: .createRoom)
+        await fulfillment(of: [expectation])
+        XCTAssertEqual(clientProxy.isAliasAvailableCallsCount, 2)
+        XCTAssertFalse(clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCanonicalAliasCalled)
     }
     
     func testCreatePrivateRoomCantHaveKnockRule() async {
@@ -104,5 +161,36 @@ class CreateRoomScreenViewModelTests: XCTestCase {
             return .success("")
         }
         await fulfillment(of: [expectation])
+    }
+    
+    func testNameAndAddressSync() async {
+        context.isRoomPrivate = true
+        await Task.yield()
+        context.send(viewAction: .updateName("abc"))
+        XCTAssertEqual(context.viewState.addressName, "abc")
+        XCTAssertEqual(context.viewState.roomName, "abc")
+        context.send(viewAction: .updateName("DEF"))
+        XCTAssertEqual(context.viewState.roomName, "DEF")
+        XCTAssertEqual(context.viewState.addressName, "def")
+        context.send(viewAction: .updateName("a  b c"))
+        XCTAssertEqual(context.viewState.addressName, "a-b-c")
+        XCTAssertEqual(context.viewState.roomName, "a  b c")
+        context.send(viewAction: .updateAddress("hello-world"))
+        // This removes the sync
+        XCTAssertEqual(context.viewState.addressName, "hello-world")
+        XCTAssertEqual(context.viewState.roomName, "a  b c")
+        
+        context.send(viewAction: .updateName("Hello Matrix!"))
+        XCTAssertEqual(context.viewState.addressName, "hello-world")
+        XCTAssertEqual(context.viewState.roomName, "Hello Matrix!")
+        
+        // Deleting the whole name will restore the sync
+        context.send(viewAction: .updateName(""))
+        XCTAssertEqual(context.viewState.addressName, "")
+        XCTAssertEqual(context.viewState.roomName, "")
+        
+        context.send(viewAction: .updateName("Hello# Matrix!"))
+        XCTAssertEqual(context.viewState.addressName, "hello-matrix!")
+        XCTAssertEqual(context.viewState.roomName, "Hello# Matrix!")
     }
 }
