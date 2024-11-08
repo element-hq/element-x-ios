@@ -209,10 +209,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         case .share(let payload):
             switch payload {
             case .mediaFile(let roomID, _):
-                stateMachine.processEvent(.selectRoom(roomID: roomID,
-                                                      via: [],
-                                                      entryPoint: .share(payload)),
-                                          userInfo: .init(animated: animated))
+                if let roomID {
+                    stateMachine.processEvent(.selectRoom(roomID: roomID,
+                                                          via: [],
+                                                          entryPoint: .share(payload)),
+                                              userInfo: .init(animated: animated))
+                } else {
+                    stateMachine.processEvent(.showRoomSelectionScreen(sharePayload: payload), userInfo: .init(animated: animated))
+                }
             }
         }
     }
@@ -304,6 +308,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 presentUserProfileScreen(userID: userID, animated: animated)
             case (.userProfileScreen, .dismissedUserProfileScreen, .roomList):
                 break
+                
+            case (.roomList, .showRoomSelectionScreen, .roomSelectionScreen(let sharePayload)):
+                presentRoomSelectionScreen(sharePayload: sharePayload)
+            case (.roomSelectionScreen, .dismissedRoomSelectionScreen, .roomList):
+                dismissRoomSelectionScreen()
                 
             default:
                 fatalError("Unknown transition: \(context)")
@@ -903,6 +912,51 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedUserProfileScreen)
         }
+    }
+    
+    // MARK: Sharing
+    
+    private func presentRoomSelectionScreen(sharePayload: ShareExtensionPayload) {
+        guard let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider else {
+            fatalError()
+        }
+        
+        let stackCoordinator = NavigationStackCoordinator()
+        
+        let coordinator = RoomSelectionScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
+                                                                           roomSummaryProvider: roomSummaryProvider,
+                                                                           mediaProvider: userSession.mediaProvider))
+        
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .dismiss:
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            case .confirm(let roomID):
+                let sharePayload = switch sharePayload {
+                case .mediaFile(_, let mediaFile):
+                    ShareExtensionPayload.mediaFile(roomID: roomID, mediaFile: mediaFile)
+                }
+                
+                stateMachine.processEvent(.dismissedRoomSelectionScreen)
+                stateMachine.processEvent(.selectRoom(roomID: roomID,
+                                                      via: [],
+                                                      entryPoint: .share(sharePayload)),
+                                          userInfo: .init(animated: true))
+            }
+        }
+        .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationSplitCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedRoomSelectionScreen)
+        }
+    }
+    
+    private func dismissRoomSelectionScreen() {
+        navigationSplitCoordinator.setSheetCoordinator(nil)
     }
     
     // MARK: Toasts and loading indicators

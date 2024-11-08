@@ -200,7 +200,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return
             }
             
-            guard roomID == self.roomID else {
+            guard let roomID, roomID == self.roomID else {
                 fatalError("Navigation route doesn't belong to this room flow.")
             }
             

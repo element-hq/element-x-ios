@@ -75,7 +75,7 @@ class ShareExtensionViewController: UIViewController {
                 }
                 
                 Task {
-                    await self.openMainApp(payload: .mediaFile(roomID: "!POTexKBdzTfplmDWTc:matrix.org", mediaFile: .init(url: url, suggestedName: providerSuggestedName)))
+                    await self.openMainApp(payload: .mediaFile(roomID: nil, mediaFile: .init(url: url, suggestedName: providerSuggestedName)))
                     await self.dismiss()
                 }
             } catch {

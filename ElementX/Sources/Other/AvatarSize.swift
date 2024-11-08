@@ -87,6 +87,7 @@ enum RoomAvatarSizeOnScreen {
     case home
     case messageForwarding
     case globalSearch
+    case roomSelection
     case details
     case notificationSettings
     case roomDirectorySearch
@@ -103,6 +104,8 @@ enum RoomAvatarSizeOnScreen {
         case .messageForwarding:
             return 36
         case .globalSearch:
+            return 36
+        case .roomSelection:
             return 36
         case .home:
             return 52

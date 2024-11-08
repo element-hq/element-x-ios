@@ -10,7 +10,7 @@ import Foundation
 let ShareExtensionURLPath = "share"
 
 enum ShareExtensionPayload: Hashable, Codable {
-    case mediaFile(roomID: String, mediaFile: ShareExtensionMediaFile)
+    case mediaFile(roomID: String?, mediaFile: ShareExtensionMediaFile)
 }
 
 struct ShareExtensionMediaFile: Hashable, Codable {
