@@ -2082,6 +2082,14 @@ internal enum L10n {
   internal static var screenSessionVerificationTheyDontMatch: String { return L10n.tr("Localizable", "screen_session_verification_they_dont_match") }
   /// They match
   internal static var screenSessionVerificationTheyMatch: String { return L10n.tr("Localizable", "screen_session_verification_they_match") }
+  /// Make sure you have the app open in the other device before starting verification from here.
+  internal static var screenSessionVerificationUseAnotherDeviceSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_use_another_device_subtitle") }
+  /// Open the app on another verified device
+  internal static var screenSessionVerificationUseAnotherDeviceTitle: String { return L10n.tr("Localizable", "screen_session_verification_use_another_device_title") }
+  /// You should see a popup on the other device. Start the verification from there now.
+  internal static var screenSessionVerificationWaitingAnotherDeviceSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_another_device_subtitle") }
+  /// Start verification on the other device
+  internal static var screenSessionVerificationWaitingAnotherDeviceTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_another_device_title") }
   /// Accept the request to start the verification process in your other session to continue.
   internal static var screenSessionVerificationWaitingToAcceptSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_subtitle") }
   /// Waiting to accept request
@@ -2278,11 +2286,11 @@ internal enum L10n {
   }
   /// You joined the room
   internal static var stateEventRoomJoinByYou: String { return L10n.tr("Localizable", "state_event_room_join_by_you") }
-  /// %1$@ requested to join
+  /// %1$@ is requesting to join
   internal static func stateEventRoomKnock(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_knock", String(describing: p1))
   }
-  /// %1$@ allowed %2$@ to join
+  /// %1$@ granted access to %2$@
   internal static func stateEventRoomKnockAccepted(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_knock_accepted", String(describing: p1), String(describing: p2))
   }

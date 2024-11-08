@@ -849,6 +849,10 @@
 "screen_session_verification_request_title" = "Verification requested";
 "screen_session_verification_they_dont_match" = "They don’t match";
 "screen_session_verification_they_match" = "They match";
+"screen_session_verification_use_another_device_subtitle" = "Make sure you have the app open in the other device before starting verification from here.";
+"screen_session_verification_use_another_device_title" = "Open the app on another verified device";
+"screen_session_verification_waiting_another_device_subtitle" = "You should see a popup on the other device. Start the verification from there now.";
+"screen_session_verification_waiting_another_device_title" = "Start verification on the other device";
 "screen_session_verification_waiting_to_accept_subtitle" = "Accept the request to start the verification process in your other session to continue.";
 "screen_session_verification_waiting_to_accept_title" = "Waiting to accept request";
 "screen_share_location_title" = "Share location";
@@ -913,8 +917,8 @@
 "state_event_room_invite_you" = "%1$@ invited you";
 "state_event_room_join" = "%1$@ joined the room";
 "state_event_room_join_by_you" = "You joined the room";
-"state_event_room_knock" = "%1$@ requested to join";
-"state_event_room_knock_accepted" = "%1$@ allowed %2$@ to join";
+"state_event_room_knock" = "%1$@ is requesting to join";
+"state_event_room_knock_accepted" = "%1$@ granted access to %2$@";
 "state_event_room_knock_accepted_by_you" = "You allowed %1$@ to join";
 "state_event_room_knock_by_you" = "You requested to join";
 "state_event_room_knock_denied" = "%1$@ rejected %2$@'s request to join";
