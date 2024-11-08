@@ -45,8 +45,11 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
             .map(\.bindings.searchQuery)
             .removeDuplicates()
             .sink { [weak self] searchQuery in
-                guard let self else { return }
-                self.roomSummaryProvider.setFilter(.search(query: searchQuery))
+                if searchQuery.isEmpty {
+                    self?.roomSummaryProvider.setFilter(.all(filters: []))
+                } else {
+                    self?.roomSummaryProvider.setFilter(.search(query: searchQuery))
+                }
             }
             .store(in: &cancellables)
         
