@@ -83,10 +83,10 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.canCreateRoom)
         
         let expectation = expectation(description: "Wait for the room to be created")
-        clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartClosure = { _, _, isPrivate, isKnockingOnly, _, _, canonicalAlias in
+        clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartClosure = { _, _, isPrivate, isKnockingOnly, _, _, localAliasPart in
             XCTAssertTrue(isKnockingOnly)
             XCTAssertFalse(isPrivate)
-            XCTAssertEqual(canonicalAlias, "#a:matrix.org")
+            XCTAssertEqual(localAliasPart, "a")
             defer { expectation.fulfill() }
             return .success("")
         }
