@@ -82,8 +82,10 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
                 continue
             }
             
-            let room = MessageForwardingRoom(id: summary.id, name: summary.name, alias: summary.canonicalAlias, avatar: summary.avatar)
-            rooms.append(room)
+            rooms.append(.init(id: summary.id,
+                               title: summary.name,
+                               description: summary.roomListDescription,
+                               avatar: summary.avatar))
         }
         
         state.rooms = rooms
