@@ -11,7 +11,7 @@ on:
 jobs:
   tests:
     name: Tests (Enterprise)
-    runs-on: macos-14
+    runs-on: macos-15
     
     # Skip in forks
     if: github.repository == 'element-hq/element-x-ios'
