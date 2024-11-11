@@ -183,14 +183,14 @@ extension UNMutableNotificationContent {
     @MainActor
     private func getPlaceholderAvatarImageData(name: String, id: String) async -> Data? {
         // The version value is used in case the design of the placeholder is updated to force a replacement
-        let shouldFlipAvatar = shouldFlipAvatar()
-        let prefix = "notification_placeholder\(shouldFlipAvatar ? "V9F" : "V9")"
+        let prefix = "notification_placeholderV9"
+        
         let fileName = "\(prefix)_\(name)_\(id).png"
         if let data = try? Data(contentsOf: URL.temporaryDirectory.appendingPathComponent(fileName)) {
             MXLog.info("Found existing notification icon placeholder")
             return data
         }
-
+        
         MXLog.info("Generating notification icon placeholder")
         let image = PlaceholderAvatarImage(name: name,
                                            contentID: id)
@@ -208,13 +208,8 @@ extension UNMutableNotificationContent {
         }
         
         let data: Data?
-        
-        if shouldFlipAvatar {
-            data = image.flippedVertically().pngData()
-        } else {
-            data = image.pngData()
-        }
-        
+        data = image.pngData()
+
         if let data {
             do {
                 // cache image data
@@ -224,44 +219,7 @@ extension UNMutableNotificationContent {
                 return data
             }
         }
+        
         return data
-    }
-    
-    /// On simulators and macOS the image is rendered correctly
-    /// On devices before iOS 17 and iOS 17.2.0 it's rendered upside down and needs to be flipped
-    /// On all other versions it's rendered correctly and **doesn't** need to be flipped
-    private func shouldFlipAvatar() -> Bool {
-        #if targetEnvironment(simulator)
-        return false
-        #else
-        if ProcessInfo.processInfo.isiOSAppOnMac {
-            return false
-        }
-        
-        guard let version = Version(UIDevice.current.systemVersion) else {
-            return false
-        }
-        
-        if version < Version(17, 0, 0) {
-            return true
-        }
-        
-        if version == Version(17, 2, 0) {
-            return true
-        }
-        
-        return false
-        #endif
-    }
-}
-
-private extension UIImage {
-    func flippedVertically() -> UIImage {
-        let format = UIGraphicsImageRendererFormat()
-        format.scale = scale
-        return UIGraphicsImageRenderer(size: size, format: format).image { context in
-            context.cgContext.concatenate(CGAffineTransform(scaleX: 1, y: -1))
-            self.draw(at: CGPoint(x: 0, y: -size.height))
-        }
     }
 }
