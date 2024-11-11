@@ -1,3 +1,26 @@
+## Changes in 1.9.5 (2024-11-11)
+
+### What's Changed
+
+🐛 Bugfixes
+* Stop setting up CallKit sessions when joining calls by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3496
+* Fix for creating a knocking room by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3499
+* Make stopSync more aware of background usage. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3501
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3500
+
+🚧 In development 🚧
+* Add alias to public room creation by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3450
+
+Others
+* Fix incorrect analytics mapping for UTDs. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3497
+* Update compound. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3498
+* Tweak the session verification icons and copy. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3495
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.9.4...1.9.5
+
 ## Changes in 1.9.4 (2024-11-07)
 
 ### What's Changed
