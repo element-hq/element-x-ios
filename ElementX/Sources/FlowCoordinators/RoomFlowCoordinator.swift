@@ -633,7 +633,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
         let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
                                                                                            initialFocussedEventID: presentationAction?.focusedEvent?.eventID,
-                                                                                           timelineItemFactory: timelineItemFactory)
+                                                                                           timelineItemFactory: timelineItemFactory,
+                                                                                           mediaProvider: userSession.mediaProvider)
         self.timelineController = timelineController
         
         analytics.trackViewRoom(isDM: roomProxy.infoPublisher.value.isDirect, isSpace: roomProxy.infoPublisher.value.isSpace)
@@ -1150,7 +1151,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
         let roomTimelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
                                                                                                initialFocussedEventID: nil,
-                                                                                               timelineItemFactory: timelineItemFactory)
+                                                                                               timelineItemFactory: timelineItemFactory,
+                                                                                               mediaProvider: userSession.mediaProvider)
         
         let parameters = RoomPollsHistoryScreenCoordinatorParameters(pollInteractionHandler: PollInteractionHandler(analyticsService: analytics, roomProxy: roomProxy),
                                                                      roomTimelineController: roomTimelineController)

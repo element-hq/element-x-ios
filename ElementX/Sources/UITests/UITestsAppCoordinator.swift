@@ -684,6 +684,7 @@ class MockScreen: Identifiable {
                                                             timelineItemFactory: RoomTimelineItemFactory(userID: "@alice:matrix.org",
                                                                                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: "@alice:matrix.org")),
+                                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                                             appSettings: ServiceLocator.shared.settings)
             
             let flowCoordinator = UserSessionFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),

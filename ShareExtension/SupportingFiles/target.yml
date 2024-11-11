@@ -50,6 +50,9 @@ targets:
           NSExtensionPointIdentifier: com.apple.share-services
           NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareExtensionViewController
           NSExtensionAttributes:
+            IntentsSupported: [
+              INSendMessageIntent,
+            ]
             NSExtensionActivationRule:
               NSExtensionActivationSupportsFileWithMaxCount: 1
               NSExtensionActivationSupportsImageWithMaxCount: 1

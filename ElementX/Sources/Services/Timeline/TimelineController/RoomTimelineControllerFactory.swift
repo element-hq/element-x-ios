@@ -10,16 +10,19 @@ import Foundation
 struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
     func buildRoomTimelineController(roomProxy: JoinedRoomProxyProtocol,
                                      initialFocussedEventID: String?,
-                                     timelineItemFactory: RoomTimelineItemFactoryProtocol) -> RoomTimelineControllerProtocol {
+                                     timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                     mediaProvider: MediaProviderProtocol) -> RoomTimelineControllerProtocol {
         RoomTimelineController(roomProxy: roomProxy,
                                timelineProxy: roomProxy.timeline,
                                initialFocussedEventID: initialFocussedEventID,
                                timelineItemFactory: timelineItemFactory,
+                               mediaProvider: mediaProvider,
                                appSettings: ServiceLocator.shared.settings)
     }
     
     func buildRoomPinnedTimelineController(roomProxy: JoinedRoomProxyProtocol,
-                                           timelineItemFactory: RoomTimelineItemFactoryProtocol) async -> RoomTimelineControllerProtocol? {
+                                           timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                           mediaProvider: MediaProviderProtocol) async -> RoomTimelineControllerProtocol? {
         guard let pinnedEventsTimeline = await roomProxy.pinnedEventsTimeline else {
             return nil
         }
@@ -27,6 +30,7 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
                                       timelineProxy: pinnedEventsTimeline,
                                       initialFocussedEventID: nil,
                                       timelineItemFactory: timelineItemFactory,
+                                      mediaProvider: mediaProvider,
                                       appSettings: ServiceLocator.shared.settings)
     }
 }
