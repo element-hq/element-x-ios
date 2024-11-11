@@ -561,7 +561,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         showLoadingIndicator()
         
-        stopSync()
+        stopSync(isBackgroundTask: false)
         userSessionFlowCoordinator?.stop()
         
         guard !isSoft else {
@@ -748,7 +748,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         navigationRootCoordinator.setRootCoordinator(PlaceholderScreenCoordinator())
         
-        stopSync()
+        stopSync(isBackgroundTask: false)
         userSessionFlowCoordinator?.stop()
         
         let userID = userSession.clientProxy.userID
@@ -848,7 +848,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
     // MARK: - Application State
 
-    private func stopSync() {
+    private func stopSync(isBackgroundTask: Bool) {
+        if isBackgroundTask, UIApplication.shared.applicationState == .active {
+            // Attempt to stop the background task sync loop cleanly, only if the app not already running
+            return
+        }
         userSession?.clientProxy.stopSync()
         clientProxyObserver = nil
     }
@@ -911,7 +915,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
     @objc
     private func applicationWillTerminate() {
-        stopSync()
+        stopSync(isBackgroundTask: false)
     }
 
     @objc
@@ -930,7 +934,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         backgroundTask = appMediator.beginBackgroundTask { [weak self] in
             guard let self else { return }
             
-            stopSync()
+            stopSync(isBackgroundTask: true)
             
             if let backgroundTask {
                 appMediator.endBackgroundTask(backgroundTask)
@@ -988,10 +992,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         scheduleBackgroundAppRefresh()
         
         task.expirationHandler = { [weak self] in
-            if UIApplication.shared.applicationState != .active {
-                // Attempt to stop the sync loop cleanly, only if the app not already running
-                self?.stopSync()
-            }
+            self?.stopSync(isBackgroundTask: true)
             
             MXLog.info("Background app refresh task expired")
             task.setTaskCompleted(success: true)
@@ -1015,7 +1016,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 
                 // Make sure we stop the sync loop, otherwise the ongoing request is immediately
                 // handled the next time the app refreshes, which can trigger timeout failures.
-                stopSync()
+                stopSync(isBackgroundTask: true)
                 backgroundRefreshSyncObserver?.cancel()
                 
                 task.setTaskCompleted(success: true)
