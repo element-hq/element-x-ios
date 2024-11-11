@@ -131,7 +131,7 @@ struct NotificationContentBuilder {
     
     private func processCallInviteEvent(notificationItem: NotificationItemProxyProtocol, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
         let notification = try await processCommonRoomMessage(notificationItem: notificationItem, mediaProvider: mediaProvider)
-        notification.body = L10n.commonCallInvite
+        notification.body = L10n.commonUnsupportedCall
         return notification
     }
     
