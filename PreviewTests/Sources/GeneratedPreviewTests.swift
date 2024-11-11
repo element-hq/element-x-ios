@@ -785,6 +785,12 @@ extension PreviewTests {
         }
     }
 
+    func test_stackedAvatarsView() {
+        for preview in StackedAvatarsView_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_startChatScreen() {
         for preview in StartChatScreen_Previews._allPreviews {
             assertSnapshots(matching: preview)
