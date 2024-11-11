@@ -13,12 +13,15 @@ struct CallInviteRoomTimelineView: View {
     let timelineItem: CallInviteRoomTimelineItem
     
     var body: some View {
-        Label(title: { Text(L10n.commonCallInvite) },
-              icon: { CompoundIcon(\.voiceCall, size: .medium, relativeTo: .compound.bodyMD) })
-            .font(.compound.bodyMD)
-            .foregroundColor(.compound.textSecondary)
-            .frame(maxWidth: .infinity, alignment: .center)
-            .padding()
+        Label {
+            Text(L10n.screenRoomTimelineLegacyCall)
+        } icon: {
+            CompoundIcon(\.voiceCall, size: .medium, relativeTo: .compound.bodyMD)
+        }
+        .font(.compound.bodyMD)
+        .foregroundColor(.compound.textSecondary)
+        .frame(maxWidth: .infinity, alignment: .center)
+        .padding()
     }
 }
 
