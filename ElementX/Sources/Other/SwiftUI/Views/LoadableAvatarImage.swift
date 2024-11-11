@@ -11,7 +11,7 @@ struct LoadableAvatarImage: View {
     private let url: URL?
     private let name: String?
     private let contentID: String?
-    private let avatarSize: AvatarSize
+    private let avatarSize: Avatars.Size
     private let mediaProvider: MediaProviderProtocol?
     private let onTap: ((URL) -> Void)?
     
@@ -19,7 +19,7 @@ struct LoadableAvatarImage: View {
     
     init(url: URL?, name: String?,
          contentID: String?,
-         avatarSize: AvatarSize,
+         avatarSize: Avatars.Size,
          mediaProvider: MediaProviderProtocol?,
          onTap: ((URL) -> Void)? = nil) {
         self.url = url

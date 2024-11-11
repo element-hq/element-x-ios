@@ -9,6 +9,34 @@ import Foundation
 import SwiftUI
 
 enum Avatars {
+    enum Size {
+        case user(on: UserAvatarSizeOnScreen)
+        case room(on: RoomAvatarSizeOnScreen)
+        //  custom
+        case custom(CGFloat)
+
+        /// Value in UIKit points
+        var value: CGFloat {
+            switch self {
+            case .user(let screen):
+                return screen.value
+            case .room(let screen):
+                return screen.value
+            case .custom(let val):
+                return val
+            }
+        }
+
+        /// Value in pixels by using the scale of the main screen
+        var scaledValue: CGFloat {
+            value * UIScreen.main.scale
+        }
+        
+        var scaledSize: CGSize {
+            CGSize(width: scaledValue, height: scaledValue)
+        }
+    }
+    
     @MainActor
     static func generatePlaceholderAvatarImageData(name: String, id: String, size: CGSize) -> Data? {
         let image = PlaceholderAvatarImage(name: name, contentID: id)
@@ -27,30 +55,6 @@ enum Avatars {
         }
         
         return image.pngData()
-    }
-}
-
-enum AvatarSize {
-    case user(on: UserAvatarSizeOnScreen)
-    case room(on: RoomAvatarSizeOnScreen)
-    //  custom
-    case custom(CGFloat)
-
-    /// Value in UIKit points
-    var value: CGFloat {
-        switch self {
-        case .user(let screen):
-            return screen.value
-        case .room(let screen):
-            return screen.value
-        case .custom(let val):
-            return val
-        }
-    }
-
-    /// Value in pixels by using the scale of the main screen
-    var scaledValue: CGFloat {
-        value * UIScreen.main.scale
     }
 }
 
@@ -136,11 +140,5 @@ enum RoomAvatarSizeOnScreen {
         case .joinRoom:
             return 96
         }
-    }
-}
-
-extension AvatarSize {
-    var scaledSize: CGSize {
-        CGSize(width: scaledValue, height: scaledValue)
     }
 }

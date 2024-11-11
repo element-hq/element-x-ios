@@ -73,12 +73,12 @@ final class MediaProviderTests: XCTestCase {
     }
     
     func test_whenImageFromSourceWithSourceNil_nilReturned() throws {
-        let image = mediaProvider.imageFromSource(nil, size: AvatarSize.room(on: .timeline).scaledSize)
+        let image = mediaProvider.imageFromSource(nil, size: Avatars.Size.room(on: .timeline).scaledSize)
         XCTAssertNil(image)
     }
     
     func test_whenImageFromSourceWithSourceNotNilAndImageCacheContainsImage_ImageIsReturned() throws {
-        let avatarSize = AvatarSize.room(on: .timeline)
+        let avatarSize = Avatars.Size.room(on: .timeline)
         let url = URL.picturesDirectory
         let key = "\(url.absoluteString){\(avatarSize.scaledValue),\(avatarSize.scaledValue)}"
         let imageForKey = UIImage()
@@ -90,12 +90,12 @@ final class MediaProviderTests: XCTestCase {
     
     func test_whenImageFromSourceWithSourceNotNilAndImageNotCached_nilReturned() throws {
         let image = mediaProvider.imageFromSource(MediaSourceProxy(url: URL.picturesDirectory, mimeType: "image/jpeg"),
-                                                  size: AvatarSize.room(on: .timeline).scaledSize)
+                                                  size: Avatars.Size.room(on: .timeline).scaledSize)
         XCTAssertNil(image)
     }
     
     func test_whenLoadImageFromSourceAndImageCacheContainsImage_successIsReturned() async throws {
-        let avatarSize = AvatarSize.room(on: .timeline)
+        let avatarSize = Avatars.Size.room(on: .timeline)
         let url = URL.picturesDirectory
         let key = "\(url.absoluteString){\(avatarSize.scaledValue),\(avatarSize.scaledValue)}"
         let imageForKey = UIImage()
@@ -106,7 +106,7 @@ final class MediaProviderTests: XCTestCase {
     }
     
     func test_whenLoadImageFromSourceAndImageNotCachedAndRetrieveImageSucceeds_successIsReturned() async throws {
-        let avatarSize = AvatarSize.room(on: .timeline)
+        let avatarSize = Avatars.Size.room(on: .timeline)
         let url = URL.picturesDirectory
         let key = "\(url.absoluteString){\(avatarSize.scaledValue),\(avatarSize.scaledValue)}"
         let imageForKey = UIImage()
@@ -117,7 +117,7 @@ final class MediaProviderTests: XCTestCase {
     }
     
     func test_whenLoadImageFromSourceAndImageNotCachedAndRetrieveImageFails_imageThumbnailIsLoaded() async throws {
-        let avatarSize = AvatarSize.room(on: .timeline)
+        let avatarSize = Avatars.Size.room(on: .timeline)
         let expectedImage = try loadTestImage()
         
         mediaLoader.loadMediaThumbnailForSourceWidthHeightReturnValue = expectedImage.pngData()
@@ -133,7 +133,7 @@ final class MediaProviderTests: XCTestCase {
     }
     
     func test_whenLoadImageFromSourceAndImageNotCachedAndRetrieveImageFails_imageIsStored() async throws {
-        let avatarSize = AvatarSize.room(on: .timeline)
+        let avatarSize = Avatars.Size.room(on: .timeline)
         let url = URL.picturesDirectory
         let key = "\(url.absoluteString){\(avatarSize.scaledValue),\(avatarSize.scaledValue)}"
         let expectedImage = try loadTestImage()
@@ -165,7 +165,7 @@ final class MediaProviderTests: XCTestCase {
         mediaLoader.loadMediaThumbnailForSourceWidthHeightThrowableError = MediaProviderTestsError.error
         
         let result = await mediaProvider.loadImageFromSource(MediaSourceProxy(url: URL.picturesDirectory, mimeType: "image/jpeg"),
-                                                             size: AvatarSize.room(on: .timeline).scaledSize)
+                                                             size: Avatars.Size.room(on: .timeline).scaledSize)
         switch result {
         case .success:
             XCTFail("Should fail")
@@ -191,7 +191,7 @@ final class MediaProviderTests: XCTestCase {
         mediaLoader.loadMediaThumbnailForSourceWidthHeightReturnValue = Data()
         
         let result = await mediaProvider.loadImageFromSource(MediaSourceProxy(url: URL.picturesDirectory, mimeType: "image/jpeg"),
-                                                             size: AvatarSize.room(on: .timeline).scaledSize)
+                                                             size: Avatars.Size.room(on: .timeline).scaledSize)
         switch result {
         case .success:
             XCTFail("Should fail")
