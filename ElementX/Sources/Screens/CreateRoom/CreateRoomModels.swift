@@ -25,20 +25,32 @@ enum CreateRoomViewModelAction {
 }
 
 struct CreateRoomViewState: BindableState {
+    var roomName: String
+    let serverName: String
     let isKnockingFeatureEnabled: Bool
     var selectedUsers: [UserProfileProxy]
+    var aliasLocalPart: String
     var bindings: CreateRoomViewStateBindings
     var avatarURL: URL?
     var canCreateRoom: Bool {
-        !bindings.roomName.isEmpty
+        !roomName.isEmpty && aliasErrors.isEmpty
+    }
+
+    var aliasErrors: Set<CreateRoomAliasErrorState> = []
+    var aliasErrorDescription: String? {
+        if aliasErrors.contains(.alreadyExists) {
+            return L10n.screenCreateRoomRoomAddressNotAvailableErrorDescription
+        } else if aliasErrors.contains(.invalidSymbols) {
+            return L10n.screenCreateRoomRoomAddressInvalidSymbolsErrorDescription
+        }
+        return nil
     }
 }
 
 struct CreateRoomViewStateBindings {
-    var roomName: String
     var roomTopic: String
     var isRoomPrivate: Bool
-    var isKnockingOnly = false
+    var isKnockingOnly: Bool
     var showAttachmentConfirmationDialog = false
     
     /// Information describing the currently displayed alert.
@@ -51,4 +63,11 @@ enum CreateRoomViewAction {
     case displayCameraPicker
     case displayMediaPicker
     case removeImage
+    case updateRoomName(String)
+    case updateAliasLocalPart(String)
+}
+
+enum CreateRoomAliasErrorState {
+    case alreadyExists
+    case invalidSymbols
 }

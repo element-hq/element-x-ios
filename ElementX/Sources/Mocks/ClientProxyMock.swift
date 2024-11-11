@@ -9,6 +9,8 @@ import Combine
 import Foundation
 
 struct ClientProxyMockConfiguration {
+    var homeserver = ""
+    var userIDServerName: String?
     var userID: String = RoomMemberProxyMock.mockMe.userID
     var deviceID: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol? = RoomSummaryProviderMock(.init())
@@ -28,7 +30,8 @@ extension ClientProxyMock {
         userID = configuration.userID
         deviceID = configuration.deviceID
         
-        homeserver = ""
+        homeserver = configuration.homeserver
+        userIDServerName = configuration.userIDServerName
         
         roomSummaryProvider = configuration.roomSummaryProvider
         alternateRoomSummaryProvider = RoomSummaryProviderMock(.init())
@@ -52,13 +55,14 @@ extension ClientProxyMock {
         canDeactivateAccount = false
         directRoomForUserIDReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         createDirectRoomWithExpectedRoomNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         uploadMediaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         loadUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         setUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         loadUserAvatarURLReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         setUserAvatarMediaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         removeUserAvatarReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        isAliasAvailableReturnValue = .success(true)
         logoutReturnValue = nil
         searchUsersSearchTermLimitReturnValue = .success(.init(results: [], limited: false))
         profileForReturnValue = .success(.init(userID: "@a:b.com", displayName: "Some user"))

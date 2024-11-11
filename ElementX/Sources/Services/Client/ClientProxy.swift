@@ -67,6 +67,22 @@ class ClientProxy: ClientProxyProtocol {
                   "org.matrix.msc3401.call.member": Int32(0)
               ])
     }
+    
+    private static var knockingRoomCreationPowerLevelOverrides: PowerLevels {
+        .init(usersDefault: nil,
+              eventsDefault: nil,
+              stateDefault: nil,
+              ban: nil,
+              kick: nil,
+              redact: nil,
+              invite: Int32(50),
+              notifications: nil,
+              users: [:],
+              events: [
+                  "m.call.member": Int32(0),
+                  "org.matrix.msc3401.call.member": Int32(0)
+              ])
+    }
 
     private var loadCachedAvatarURLTask: Task<Void, Never>?
     private let userAvatarURLSubject = CurrentValueSubject<URL?, Never>(nil)
@@ -388,9 +404,14 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     // swiftlint:disable:next function_parameter_count
-    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, isKnockingOnly: Bool, userIDs: [String], avatarURL: URL?) async -> Result<String, ClientProxyError> {
+    func createRoom(name: String,
+                    topic: String?,
+                    isRoomPrivate: Bool,
+                    isKnockingOnly: Bool,
+                    userIDs: [String],
+                    avatarURL: URL?,
+                    aliasLocalPart: String?) async -> Result<String, ClientProxyError> {
         do {
-            // TODO: Revisit once the SDK supports the knocking API
             let parameters = CreateRoomParameters(name: name,
                                                   topic: topic,
                                                   isEncrypted: isRoomPrivate,
@@ -399,7 +420,10 @@ class ClientProxy: ClientProxyProtocol {
                                                   preset: isRoomPrivate ? .privateChat : .publicChat,
                                                   invite: userIDs,
                                                   avatar: avatarURL?.absoluteString,
-                                                  powerLevelContentOverride: Self.roomCreationPowerLevelOverrides)
+                                                  powerLevelContentOverride: isKnockingOnly ? Self.knockingRoomCreationPowerLevelOverrides : Self.roomCreationPowerLevelOverrides,
+                                                  joinRuleOverride: isKnockingOnly ? .knock : nil,
+                                                  // This is an FFI naming mistake, what is required is the `aliasLocalPart` not the whole alias
+                                                  canonicalAlias: aliasLocalPart)
             let roomID = try await client.createRoom(request: parameters)
             
             await waitForRoomToSync(roomID: roomID)
@@ -649,6 +673,7 @@ class ClientProxy: ClientProxyProtocol {
     func resolveRoomAlias(_ alias: String) async -> Result<ResolvedRoomAlias, ClientProxyError> {
         do {
             guard let resolvedAlias = try await client.resolveRoomAlias(roomAlias: alias) else {
+                MXLog.error("Failed resolving room alias, is nil")
                 return .failure(.failedResolvingRoomAlias)
             }
             
@@ -660,6 +685,16 @@ class ClientProxy: ClientProxyProtocol {
             return .success(limitedAlias)
         } catch {
             MXLog.error("Failed resolving room alias: \(alias) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func isAliasAvailable(_ alias: String) async -> Result<Bool, ClientProxyError> {
+        do {
+            let result = try await client.isRoomAliasAvailable(alias: alias)
+            return .success(result)
+        } catch {
+            MXLog.error("Failed checking if alias: \(alias) is available with error: \(error)")
             return .failure(.sdkError(error))
         }
     }

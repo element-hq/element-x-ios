@@ -1093,16 +1093,6 @@ internal enum L10n {
   internal static var screenCreatePollQuestionHint: String { return L10n.tr("Localizable", "screen_create_poll_question_hint") }
   /// Create Poll
   internal static var screenCreatePollTitle: String { return L10n.tr("Localizable", "screen_create_poll_title") }
-  /// Anyone can join this room
-  internal static var screenCreateRoomAccessSectionAnyoneOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_access_section_anyone_option_description") }
-  /// Anyone
-  internal static var screenCreateRoomAccessSectionAnyoneOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_access_section_anyone_option_title") }
-  /// Room Access
-  internal static var screenCreateRoomAccessSectionHeader: String { return L10n.tr("Localizable", "screen_create_room_access_section_header") }
-  /// Anyone can ask to join the room but an administrator or a moderator will have to accept the request
-  internal static var screenCreateRoomAccessSectionKnockingOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_access_section_knocking_option_description") }
-  /// Ask to join
-  internal static var screenCreateRoomAccessSectionKnockingOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_access_section_knocking_option_title") }
   /// New room
   internal static var screenCreateRoomActionCreateRoom: String { return L10n.tr("Localizable", "screen_create_room_action_create_room") }
   /// Invite people
@@ -1118,6 +1108,20 @@ internal enum L10n {
   internal static var screenCreateRoomPublicOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_public_option_description") }
   /// Public room
   internal static var screenCreateRoomPublicOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_public_option_title") }
+  /// Anyone can join this room
+  internal static var screenCreateRoomRoomAccessSectionAnyoneOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_anyone_option_description") }
+  /// Anyone
+  internal static var screenCreateRoomRoomAccessSectionAnyoneOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_anyone_option_title") }
+  /// Room Access
+  internal static var screenCreateRoomRoomAccessSectionHeader: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_header") }
+  /// Anyone can ask to join the room but an administrator or a moderator will have to accept the request
+  internal static var screenCreateRoomRoomAccessSectionKnockingOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_knocking_option_description") }
+  /// Ask to join
+  internal static var screenCreateRoomRoomAccessSectionKnockingOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_knocking_option_title") }
+  /// Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _
+  internal static var screenCreateRoomRoomAddressInvalidSymbolsErrorDescription: String { return L10n.tr("Localizable", "screen_create_room_room_address_invalid_symbols_error_description") }
+  /// This room address already exists, please try editing the room address field or change the room name
+  internal static var screenCreateRoomRoomAddressNotAvailableErrorDescription: String { return L10n.tr("Localizable", "screen_create_room_room_address_not_available_error_description") }
   /// In order for this room to be visible in the public room directory, you will need a room address.
   internal static var screenCreateRoomRoomAddressSectionFooter: String { return L10n.tr("Localizable", "screen_create_room_room_address_section_footer") }
   /// Room address
@@ -2078,6 +2082,14 @@ internal enum L10n {
   internal static var screenSessionVerificationTheyDontMatch: String { return L10n.tr("Localizable", "screen_session_verification_they_dont_match") }
   /// They match
   internal static var screenSessionVerificationTheyMatch: String { return L10n.tr("Localizable", "screen_session_verification_they_match") }
+  /// Make sure you have the app open in the other device before starting verification from here.
+  internal static var screenSessionVerificationUseAnotherDeviceSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_use_another_device_subtitle") }
+  /// Open the app on another verified device
+  internal static var screenSessionVerificationUseAnotherDeviceTitle: String { return L10n.tr("Localizable", "screen_session_verification_use_another_device_title") }
+  /// You should see a popup on the other device. Start the verification from there now.
+  internal static var screenSessionVerificationWaitingAnotherDeviceSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_another_device_subtitle") }
+  /// Start verification on the other device
+  internal static var screenSessionVerificationWaitingAnotherDeviceTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_another_device_title") }
   /// Accept the request to start the verification process in your other session to continue.
   internal static var screenSessionVerificationWaitingToAcceptSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_subtitle") }
   /// Waiting to accept request
@@ -2274,11 +2286,11 @@ internal enum L10n {
   }
   /// You joined the room
   internal static var stateEventRoomJoinByYou: String { return L10n.tr("Localizable", "state_event_room_join_by_you") }
-  /// %1$@ requested to join
+  /// %1$@ is requesting to join
   internal static func stateEventRoomKnock(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_knock", String(describing: p1))
   }
-  /// %1$@ allowed %2$@ to join
+  /// %1$@ granted access to %2$@
   internal static func stateEventRoomKnockAccepted(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_knock_accepted", String(describing: p1), String(describing: p2))
   }

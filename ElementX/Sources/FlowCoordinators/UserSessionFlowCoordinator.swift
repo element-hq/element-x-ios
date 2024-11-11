@@ -369,7 +369,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch info.cause {
                 case .unknown:
-                    analytics.trackError(context: nil, domain: .E2EE, name: .UnknownError, timeToDecryptMillis: timeToDecryptMs)
+                    analytics.trackError(context: nil, domain: .E2EE, name: .OlmKeysNotSentError, timeToDecryptMillis: timeToDecryptMs)
                 case .unknownDevice:
                     analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedSentByInsecureDevice, timeToDecryptMillis: timeToDecryptMs)
                 case .unsignedDevice:

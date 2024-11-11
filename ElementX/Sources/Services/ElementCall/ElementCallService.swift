@@ -99,26 +99,18 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         incomingCallID = nil
         ongoingCallID = callID
         
-        let handle = CXHandle(type: .generic, value: roomDisplayName)
-        let startCallAction = CXStartCallAction(call: callID.callKitID, handle: handle)
-        startCallAction.isVideo = true
+        // Don't bother starting another CallKit session as it won't work properly
+        // https://developer.apple.com/forums//thread/767949?answerId=812951022#812951022
         
-        do {
-            try await callController.request(CXTransaction(action: startCallAction))
-        } catch {
-            MXLog.error("Failed requesting start call action with error: \(error)")
-        }
+        // let handle = CXHandle(type: .generic, value: roomDisplayName)
+        // let startCallAction = CXStartCallAction(call: callID.callKitID, handle: handle)
+        // startCallAction.isVideo = true
         
-        do {
-            // Have ElementCall default to the speaker so that the lock button doesn't end the call.
-            // Could also use `overrideOutputAudioPort` but the documentation is clear about it:
-            // `Sessions using PlayAndRecord category that always want to prefer the built-in
-            // speaker output over the receiver, should use AVAudioSessionCategoryOptionDefaultToSpeaker instead.`.
-            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .videoChat, options: [.defaultToSpeaker])
-            try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
-        } catch {
-            MXLog.error("Failed setting up audio session with error: \(error)")
-        }
+        // do {
+        //     try await callController.request(CXTransaction(action: startCallAction))
+        // } catch {
+        //     MXLog.error("Failed requesting start call action with error: \(error)")
+        // }
     }
     
     func tearDownCallSession() {
@@ -221,6 +213,8 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         // unable to aquire media streams.
         // Reporting the call as ended imediately after answering it works around that
         // as EC gets access to media again and EX builds the right UI in `setupCallSession`
+        //
+        // https://developer.apple.com/forums//thread/767949?answerId=812951022#812951022
         //
         // https://github.com/element-hq/element-x-ios/issues/3041
         // https://forums.developer.apple.com/forums/thread/685268

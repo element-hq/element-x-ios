@@ -2628,15 +2628,15 @@ class ClientProxyMock: ClientProxyProtocol {
     }
     //MARK: - createRoom
 
-    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingCallsCount = 0
-    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCallsCount: Int {
+    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount = 0
+    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingCallsCount
+                return createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingCallsCount
+                    returnValue = createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -2644,29 +2644,29 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingCallsCount = newValue
+                createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingCallsCount = newValue
+                    createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCalled: Bool {
-        return createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCallsCount > 0
+    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartCalled: Bool {
+        return createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartCallsCount > 0
     }
-    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLReceivedArguments: (name: String, topic: String?, isRoomPrivate: Bool, isKnockingOnly: Bool, userIDs: [String], avatarURL: URL?)?
-    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLReceivedInvocations: [(name: String, topic: String?, isRoomPrivate: Bool, isKnockingOnly: Bool, userIDs: [String], avatarURL: URL?)] = []
+    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReceivedArguments: (name: String, topic: String?, isRoomPrivate: Bool, isKnockingOnly: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?)?
+    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReceivedInvocations: [(name: String, topic: String?, isRoomPrivate: Bool, isKnockingOnly: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?)] = []
 
-    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingReturnValue: Result<String, ClientProxyError>!
-    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLReturnValue: Result<String, ClientProxyError>! {
+    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue: Result<String, ClientProxyError>!
+    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReturnValue: Result<String, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingReturnValue
+                return createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue
             } else {
                 var returnValue: Result<String, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingReturnValue
+                    returnValue = createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -2674,26 +2674,26 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingReturnValue = newValue
+                createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLUnderlyingReturnValue = newValue
+                    createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLClosure: ((String, String?, Bool, Bool, [String], URL?) async -> Result<String, ClientProxyError>)?
+    var createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartClosure: ((String, String?, Bool, Bool, [String], URL?, String?) async -> Result<String, ClientProxyError>)?
 
-    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, isKnockingOnly: Bool, userIDs: [String], avatarURL: URL?) async -> Result<String, ClientProxyError> {
-        createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLCallsCount += 1
-        createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLReceivedArguments = (name: name, topic: topic, isRoomPrivate: isRoomPrivate, isKnockingOnly: isKnockingOnly, userIDs: userIDs, avatarURL: avatarURL)
+    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, isKnockingOnly: Bool, userIDs: [String], avatarURL: URL?, aliasLocalPart: String?) async -> Result<String, ClientProxyError> {
+        createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartCallsCount += 1
+        createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReceivedArguments = (name: name, topic: topic, isRoomPrivate: isRoomPrivate, isKnockingOnly: isKnockingOnly, userIDs: userIDs, avatarURL: avatarURL, aliasLocalPart: aliasLocalPart)
         DispatchQueue.main.async {
-            self.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLReceivedInvocations.append((name: name, topic: topic, isRoomPrivate: isRoomPrivate, isKnockingOnly: isKnockingOnly, userIDs: userIDs, avatarURL: avatarURL))
+            self.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReceivedInvocations.append((name: name, topic: topic, isRoomPrivate: isRoomPrivate, isKnockingOnly: isKnockingOnly, userIDs: userIDs, avatarURL: avatarURL, aliasLocalPart: aliasLocalPart))
         }
-        if let createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLClosure = createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLClosure {
-            return await createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLClosure(name, topic, isRoomPrivate, isKnockingOnly, userIDs, avatarURL)
+        if let createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartClosure = createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartClosure {
+            return await createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartClosure(name, topic, isRoomPrivate, isKnockingOnly, userIDs, avatarURL, aliasLocalPart)
         } else {
-            return createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLReturnValue
+            return createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReturnValue
         }
     }
     //MARK: - joinRoom
@@ -3971,6 +3971,76 @@ class ClientProxyMock: ClientProxyProtocol {
             return await resolveRoomAliasClosure(alias)
         } else {
             return resolveRoomAliasReturnValue
+        }
+    }
+    //MARK: - isAliasAvailable
+
+    var isAliasAvailableUnderlyingCallsCount = 0
+    var isAliasAvailableCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return isAliasAvailableUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isAliasAvailableUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isAliasAvailableUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isAliasAvailableUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var isAliasAvailableCalled: Bool {
+        return isAliasAvailableCallsCount > 0
+    }
+    var isAliasAvailableReceivedAlias: String?
+    var isAliasAvailableReceivedInvocations: [String] = []
+
+    var isAliasAvailableUnderlyingReturnValue: Result<Bool, ClientProxyError>!
+    var isAliasAvailableReturnValue: Result<Bool, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return isAliasAvailableUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Bool, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isAliasAvailableUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isAliasAvailableUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isAliasAvailableUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var isAliasAvailableClosure: ((String) async -> Result<Bool, ClientProxyError>)?
+
+    func isAliasAvailable(_ alias: String) async -> Result<Bool, ClientProxyError> {
+        isAliasAvailableCallsCount += 1
+        isAliasAvailableReceivedAlias = alias
+        DispatchQueue.main.async {
+            self.isAliasAvailableReceivedInvocations.append(alias)
+        }
+        if let isAliasAvailableClosure = isAliasAvailableClosure {
+            return await isAliasAvailableClosure(alias)
+        } else {
+            return isAliasAvailableReturnValue
         }
     }
     //MARK: - getElementWellKnown

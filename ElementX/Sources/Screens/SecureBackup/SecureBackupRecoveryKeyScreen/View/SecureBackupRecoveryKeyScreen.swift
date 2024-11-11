@@ -239,13 +239,13 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
             SecureBackupRecoveryKeyScreen(context: generatingViewModel.context)
         }
         .previewDisplayName("Generating")
-        .snapshot(delay: 0.25)
+        .snapshotPreferences(delay: 0.25)
         
         NavigationStack {
             SecureBackupRecoveryKeyScreen(context: setupViewModel.context)
         }
         .previewDisplayName("Set up")
-        .snapshot(delay: 0.25)
+        .snapshotPreferences(delay: 0.25)
 
         NavigationStack {
             SecureBackupRecoveryKeyScreen(context: incompleteViewModel.context)
