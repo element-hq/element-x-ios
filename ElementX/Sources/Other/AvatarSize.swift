@@ -6,7 +6,29 @@
 //
 
 import Foundation
-import UIKit
+import SwiftUI
+
+enum Avatars {
+    @MainActor
+    static func generatePlaceholderAvatarImageData(name: String, id: String, size: CGSize) -> Data? {
+        let image = PlaceholderAvatarImage(name: name, contentID: id)
+            .clipShape(Circle())
+            .frame(width: size.width, height: size.height)
+        
+        let renderer = ImageRenderer(content: image)
+        
+        // Specify the scale so the image is rendered correctly. We don't have access to the screen
+        // here so a hardcoded 3.0 will have to do
+        renderer.scale = 3.0
+        
+        guard let image = renderer.uiImage else {
+            MXLog.info("Generating notification icon placeholder failed")
+            return nil
+        }
+        
+        return image.pngData()
+    }
+}
 
 enum AvatarSize {
     case user(on: UserAvatarSizeOnScreen)

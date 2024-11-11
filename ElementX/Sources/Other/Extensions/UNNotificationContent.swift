@@ -191,25 +191,8 @@ extension UNMutableNotificationContent {
             return data
         }
         
-        MXLog.info("Generating notification icon placeholder")
-        let image = PlaceholderAvatarImage(name: name,
-                                           contentID: id)
-            .clipShape(Circle())
-            .frame(width: 50, height: 50)
-        let renderer = ImageRenderer(content: image)
+        let data = Avatars.generatePlaceholderAvatarImageData(name: name, id: id, size: .init(width: 50, height: 50))
         
-        // Specify the scale so the image is rendered correctly. We don't have access to the screen
-        // here so a hardcoded 3.0 will have to do
-        renderer.scale = 3.0
-        
-        guard let image = renderer.uiImage else {
-            MXLog.info("Generating notification icon placeholder failed")
-            return nil
-        }
-        
-        let data: Data?
-        data = image.pngData()
-
         if let data {
             do {
                 // cache image data
