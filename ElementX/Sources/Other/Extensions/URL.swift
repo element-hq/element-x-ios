@@ -60,7 +60,7 @@ extension URL: @retroactive ExpressibleByStringLiteral {
     }
     
     /// The base directory where all application support data is stored.
-    static var cachesBaseDirectory: URL {
+    static var sessionCachesBaseDirectory: URL {
         let url = appGroupContainerDirectory
             .appendingPathComponent("Library", isDirectory: true)
             .appendingPathComponent("Caches", isDirectory: true)
@@ -69,7 +69,20 @@ extension URL: @retroactive ExpressibleByStringLiteral {
 
         try? FileManager.default.createDirectoryIfNeeded(at: url)
         
-        // Caches are excluded from backups automatically anyway.
+        // Caches are excluded from backups automatically.
+        // https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html
+
+        return url
+    }
+    
+    /// The app group temporary directory
+    static var appGroupTemporaryDirectory: URL {
+        let url = appGroupContainerDirectory
+            .appendingPathComponent("Temp", isDirectory: true)
+
+        try? FileManager.default.createDirectoryIfNeeded(at: url)
+        
+        // Temporary files are excluded from backups automatically.
         // https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html
 
         return url
