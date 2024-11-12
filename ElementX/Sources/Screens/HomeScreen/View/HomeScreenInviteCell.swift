@@ -85,11 +85,14 @@ struct HomeScreenInviteCell: View {
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(2)
             
+            // Tchap: only display User ID in Invite list when in debug mode
+            #if DEBUG
             if let subtitle {
                 Text(subtitle)
                     .font(.compound.bodyMD)
                     .foregroundColor(.compound.textPlaceholder)
             }
+            #endif
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }

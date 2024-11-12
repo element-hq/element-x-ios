@@ -24,7 +24,12 @@ struct UserProfileListRow: View {
         if let membershipText = membership?.localizedDescription {
             return membershipText
         } else if user.displayName != nil {
+            // Tchap: only display matrixID in debug mode.
+            #if DEBUG
             return user.userID
+            #else
+            return nil
+            #endif
         } else {
             return nil
         }

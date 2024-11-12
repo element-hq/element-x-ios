@@ -27,7 +27,14 @@ struct RoomInviterDetails: Equatable {
         
         // Pre-compute the attributed string.
         let placeholder = "{displayname}"
+        // Tchap: only display User ID of Inviter when in debug mode
+        #if DEBUG
         var string = AttributedString(L10n.screenInvitesInvitedYou(placeholder, id))
+        #else
+        var string = AttributedString(L10n.screenInvitesInvitedYou(placeholder, ""))
+        // Tchap: the template string contains mandatory " (%2$@)" placeholder. Suppress it.
+        string.replace(" ()", with: "")
+        #endif
         var displayNameString = AttributedString(nameOrLocalPart)
         displayNameString.bold()
         displayNameString.foregroundColor = .compound.textPrimary
