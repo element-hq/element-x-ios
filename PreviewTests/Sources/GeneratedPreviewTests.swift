@@ -305,6 +305,12 @@ extension PreviewTests {
         }
     }
 
+    func test_knockRequestsBannerView() {
+        for preview in KnockRequestsBannerView_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_legalInformationScreen() {
         for preview in LegalInformationScreen_Previews._allPreviews {
             assertSnapshots(matching: preview)

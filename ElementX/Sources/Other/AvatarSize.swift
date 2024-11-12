@@ -47,6 +47,7 @@ enum UserAvatarSizeOnScreen {
     case suggestions
     case blockedUsers
     case knockingUsers
+    case knockingUser
 
     var value: CGFloat {
         switch self {
@@ -78,6 +79,8 @@ enum UserAvatarSizeOnScreen {
             return 75
         case .knockingUsers:
             return 28
+        case .knockingUser:
+            return 32
         }
     }
 }
