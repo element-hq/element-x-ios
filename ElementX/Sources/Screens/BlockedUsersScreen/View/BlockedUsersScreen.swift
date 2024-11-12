@@ -32,7 +32,11 @@ struct BlockedUsersScreen: View {
         } else {
             Form {
                 ForEach(context.viewState.blockedUsers, id: \.self) { user in
-                    ListRow(label: .avatar(title: user.displayName ?? user.userID, icon: avatar(for: user)),
+                    // Tchap: calculate displayname from userId if necessary.
+//                    ListRow(label: .avatar(title: user.displayName ?? user.userID, icon: avatar(for: user)),
+//                            details: .isWaiting(context.viewState.processingUserID == user.userID),
+//                            kind: .button(action: { context.send(viewAction: .unblockUser(user)) }))
+                    ListRow(label: .avatar(title: user.displayName ?? MatrixIdFromString(user.userID).userDisplayName?.displayName ?? user.userID, icon: avatar(for: user)),
                             details: .isWaiting(context.viewState.processingUserID == user.userID),
                             kind: .button(action: { context.send(viewAction: .unblockUser(user)) }))
                 }

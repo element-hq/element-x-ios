@@ -30,12 +30,15 @@ struct RoomMembersListScreenMemberCell: View {
                             .foregroundColor(.compound.textPrimary)
                             .lineLimit(1)
                         
+                        // Tchap: only display matrixID in debug mode
+                        #if DEBUG
                         if let subtitle {
                             Text(subtitle)
                                 .font(.compound.bodySM)
                                 .foregroundColor(.compound.textSecondary)
                                 .lineLimit(1)
                         }
+                        #endif
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     

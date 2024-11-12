@@ -160,6 +160,8 @@ struct AvatarHeaderView<Footer: View>: View {
                 .multilineTextAlignment(.center)
                 .textSelection(.enabled)
             
+            // Tchap: only display User ID or Room canonical alias in room info when in debug mode.
+            #if DEBUG
             if let subtitle {
                 Text(subtitle)
                     .foregroundColor(.compound.textSecondary)
@@ -167,6 +169,7 @@ struct AvatarHeaderView<Footer: View>: View {
                     .multilineTextAlignment(.center)
                     .textSelection(.enabled)
             }
+            #endif
             
             if !badges.isEmpty {
                 badgesStack

@@ -17,11 +17,14 @@ struct UserDetailsEditScreen: View {
             Section {
                 avatar
             } footer: {
+                // Tchap: only display User ID of Edit Profile when in debug mode
+                #if DEBUG
                 Text(context.viewState.userID)
                     .frame(maxWidth: .infinity)
                     .font(.compound.bodyLG)
                     .foregroundColor(.compound.textPrimary)
                     .padding(.bottom, 16)
+                #endif
             }
             
             nameSection
