@@ -310,7 +310,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 break
                 
             case (.roomList, .showRoomSelectionScreen, .roomSelectionScreen(let sharePayload)):
-                presentRoomSelectionScreen(sharePayload: sharePayload)
+                presentRoomSelectionScreen(sharePayload: sharePayload, animated: animated)
             case (.roomSelectionScreen, .dismissedRoomSelectionScreen, .roomList):
                 dismissRoomSelectionScreen()
                 
@@ -916,7 +916,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: Sharing
     
-    private func presentRoomSelectionScreen(sharePayload: ShareExtensionPayload) {
+    private func presentRoomSelectionScreen(sharePayload: ShareExtensionPayload, animated: Bool) {
         guard let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider else {
             fatalError()
         }
@@ -943,14 +943,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.processEvent(.selectRoom(roomID: roomID,
                                                       via: [],
                                                       entryPoint: .share(sharePayload)),
-                                          userInfo: .init(animated: true))
+                                          userInfo: .init(animated: animated))
             }
         }
         .store(in: &cancellables)
         
         stackCoordinator.setRootCoordinator(coordinator)
         
-        navigationSplitCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+        navigationSplitCoordinator.setSheetCoordinator(stackCoordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedRoomSelectionScreen)
         }
     }

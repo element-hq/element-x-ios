@@ -611,9 +611,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             default:
                 // The room is already on the stack, no need to present it again
                 
-                // Check if we need to focus on an event
-                if let focusedEvent = presentationAction?.focusedEvent {
+                switch presentationAction {
+                case .eventFocus(let focusedEvent):
                     roomScreenCoordinator?.focusOnEvent(focusedEvent)
+                case .share(.mediaFile(_, let mediaFile)):
+                    stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: mediaFile.url))
+                default:
+                    break
                 }
                 
                 return
