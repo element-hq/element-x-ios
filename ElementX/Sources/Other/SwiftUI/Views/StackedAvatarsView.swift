@@ -14,7 +14,6 @@ struct StackedAvatarInfo {
 }
 
 struct StackedAvatarsView: View {
-    /// Should be negative if we want to get the stacked behaviour
     let overlap: CGFloat
     let lineWidth: CGFloat
     var shouldStackFromLast = false
