@@ -15,7 +15,7 @@ struct StackedAvatarInfo {
 
 struct StackedAvatarsView: View {
     /// Should be negative if we want to get the stacked behaviour
-    let spacing: CGFloat
+    let overlap: CGFloat
     let lineWidth: CGFloat
     var shouldStackFromLast = false
     let avatars: [StackedAvatarInfo]
@@ -23,16 +23,17 @@ struct StackedAvatarsView: View {
     let mediaProvider: MediaProviderProtocol?
     
     var body: some View {
-        HStack(spacing: spacing) {
+        HStack(spacing: -overlap) {
             ForEach(0..<avatars.count, id: \.self) { index in
                 LoadableAvatarImage(url: avatars[index].url,
                                     name: avatars[index].name,
                                     contentID: avatars[index].contentID,
                                     avatarSize: avatarSize,
                                     mediaProvider: mediaProvider)
+                    .padding(lineWidth)
                     .overlay {
-                        RoundedRectangle(cornerRadius: .infinity)
-                            .stroke(Color.compound.bgCanvasDefault, lineWidth: lineWidth)
+                        Circle()
+                            .strokeBorder(Color.compound.bgCanvasDefault, lineWidth: lineWidth)
                     }
                     .zIndex(shouldStackFromLast ? Double(index) : Double(avatars.count - index))
             }
@@ -50,12 +51,12 @@ struct StackedAvatarsView_Previews: PreviewProvider, TestablePreview {
 
     static var previews: some View {
         VStack(spacing: 10) {
-            StackedAvatarsView(spacing: -12,
+            StackedAvatarsView(overlap: 16,
                                lineWidth: 2,
                                avatars: avatars,
                                avatarSize: .user(on: .knockingUsers),
                                mediaProvider: MediaProviderMock())
-            StackedAvatarsView(spacing: -12,
+            StackedAvatarsView(overlap: 16,
                                lineWidth: 2,
                                shouldStackFromLast: true,
                                avatars: avatars,

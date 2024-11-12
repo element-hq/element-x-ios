@@ -22,10 +22,11 @@ struct TimelineReadReceiptsView: View {
 
     var body: some View {
         HStack(spacing: 2) {
-            StackedAvatarsView(spacing: -4,
+            StackedAvatarsView(overlap: 6,
                                lineWidth: 1,
                                avatars: avatars, avatarSize: .user(on: .readReceipt),
                                mediaProvider: context.mediaProvider)
+                .padding(-1)
             if timelineItem.properties.orderedReadReceipts.count > displayNumber {
                 Text("+\(remaining)")
                     .font(.compound.bodySM)
