@@ -310,6 +310,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 break
                 
             case (.roomList, .showRoomSelectionScreen, .roomSelectionScreen(let sharePayload)):
+                clearRoute(animated: animated)
                 presentRoomSelectionScreen(sharePayload: sharePayload, animated: animated)
             case (.roomSelectionScreen, .dismissedRoomSelectionScreen, .roomList):
                 dismissRoomSelectionScreen()
