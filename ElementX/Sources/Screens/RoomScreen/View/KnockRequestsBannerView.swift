@@ -29,10 +29,22 @@ struct KnockRequestsBannerView: View {
             .reversed()
     }
     
+    private var multipleKnockRequestsTitle: String {
+        guard let first = requests.first else {
+            return ""
+        }
+        
+        let string = first.displayName ?? first.userID
+        return L10n.tr("Localizable", "screen_room_multiple_knock_requests_title", string, avatars.count - 1)
+    }
+    
     var body: some View {
         mainContent
             .padding(16)
-            .background(.compound.bgCanvasDefault)
+            .background(.compound.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 12))
+            .compositingGroup()
+            .shadow(color: Color(red: 0.11, green: 0.11, blue: 0.13).opacity(0.1), radius: 12, x: 0, y: 4)
+            .padding(.horizontal, 16)
     }
     
     @ViewBuilder
@@ -54,7 +66,7 @@ struct KnockRequestsBannerView: View {
                                     avatarSize: .user(on: .knockingUser), mediaProvider: mediaProvider)
                 VStack(spacing: 0) {
                     HStack(alignment: .top, spacing: 0) {
-                        Text("Message")
+                        Text(L10n.screenRoomSingleKnockRequestTitle(request.displayName ?? request.userID))
                             .lineLimit(2)
                             .font(.compound.bodyMDSemibold)
                             .foregroundStyle(.compound.textPrimary)
@@ -78,11 +90,11 @@ struct KnockRequestsBannerView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             HStack(spacing: 12) {
-                Button("View", action: {
+                Button(L10n.screenRoomSingleKnockRequestViewButtonTitle, action: {
                     onViewAll()
                 })
                 .buttonStyle(.compound(.secondary))
-                Button("Accept", action: {
+                Button(L10n.screenRoomSingleKnockRequestAcceptButtonTitle, action: {
                     onViewAll()
                 })
                 .buttonStyle(.compound(.primary))
@@ -96,14 +108,16 @@ struct KnockRequestsBannerView: View {
         VStack(spacing: 14) {
             HStack(spacing: 10) {
                 StackedAvatarsView(overlap: 16, lineWidth: 2, shouldStackFromLast: true, avatars: avatars, avatarSize: .user(on: .knockingUsers), mediaProvider: mediaProvider)
-                Text("Message")
-                    .lineLimit(2)
-                    .font(.compound.bodyMDSemibold)
-                    .foregroundStyle(.compound.textPrimary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                dismissButton
+                HStack(alignment: .top, spacing: 0) {
+                    Text(multipleKnockRequestsTitle)
+                        .lineLimit(2)
+                        .font(.compound.bodyMDSemibold)
+                        .foregroundStyle(.compound.textPrimary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    dismissButton
+                }
             }
-            Button("View All") {
+            Button(L10n.screenRoomMultipleKnockRequestsViewAllButtonTitle) {
                 onViewAll()
             }
             .buttonStyle(.compound(.primary))
@@ -117,6 +131,9 @@ struct KnockRequestsBannerView: View {
             CompoundIcon(\.close, size: .medium, relativeTo: .compound.bodySMSemibold)
                 .foregroundColor(.compound.iconTertiary)
         }
+        .alignmentGuide(.top, computeValue: { _ in
+            3
+        })
     }
 }
 
