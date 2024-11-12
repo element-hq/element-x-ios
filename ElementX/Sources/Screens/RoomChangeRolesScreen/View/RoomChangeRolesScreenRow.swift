@@ -17,7 +17,7 @@ struct RoomChangeRolesScreenRow: View {
     let action: () -> Void
     
     var body: some View {
-        // Tchap: only display User ID of Inviter when in debug mode
+        // Tchap: only display User ID of room member Edit Role when in debug mode
         #if DEBUG
         ListRow(label: .avatar(title: member.name ?? member.id,
                                status: member.isInvited ? L10n.screenRoomMemberListPendingHeaderTitle : nil,
