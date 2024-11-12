@@ -512,6 +512,8 @@ internal enum L10n {
   internal static var commonUnlock: String { return L10n.tr("Localizable", "common_unlock") }
   /// Unmute
   internal static var commonUnmute: String { return L10n.tr("Localizable", "common_unmute") }
+  /// Unsupported call
+  internal static var commonUnsupportedCall: String { return L10n.tr("Localizable", "common_unsupported_call") }
   /// Unsupported event
   internal static var commonUnsupportedEvent: String { return L10n.tr("Localizable", "common_unsupported_event") }
   /// Username
@@ -1926,6 +1928,8 @@ internal enum L10n {
   }
   /// This is the beginning of this conversation.
   internal static var screenRoomTimelineBeginningOfRoomNoName: String { return L10n.tr("Localizable", "screen_room_timeline_beginning_of_room_no_name") }
+  /// Unsupported call. Ask if the caller can use to the new Element X app.
+  internal static var screenRoomTimelineLegacyCall: String { return L10n.tr("Localizable", "screen_room_timeline_legacy_call") }
   /// Show less
   internal static var screenRoomTimelineLessReactions: String { return L10n.tr("Localizable", "screen_room_timeline_less_reactions") }
   /// Message copied

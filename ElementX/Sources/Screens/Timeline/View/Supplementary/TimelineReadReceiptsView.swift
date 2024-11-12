@@ -11,25 +11,22 @@ struct TimelineReadReceiptsView: View {
     let displayNumber = 3
     let timelineItem: EventBasedTimelineItemProtocol
     @EnvironmentObject private var context: TimelineViewModel.Context
+    
+    var avatars: [StackedAvatarInfo] {
+        timelineItem.properties.orderedReadReceipts.prefix(displayNumber).map { receipt in
+            StackedAvatarInfo(url: context.viewState.members[receipt.userID]?.avatarURL,
+                              name: context.viewState.members[receipt.userID]?.displayName,
+                              contentID: receipt.userID)
+        }
+    }
 
     var body: some View {
         HStack(spacing: 2) {
-            HStack(spacing: -4) {
-                let receiptsToDisplay = timelineItem.properties.orderedReadReceipts.prefix(displayNumber)
-                ForEach(0..<receiptsToDisplay.count, id: \.self) { index in
-                    let receipt = receiptsToDisplay[index]
-                    LoadableAvatarImage(url: context.viewState.members[receipt.userID]?.avatarURL,
-                                        name: context.viewState.members[receipt.userID]?.displayName,
-                                        contentID: receipt.userID,
-                                        avatarSize: .user(on: .readReceipt),
-                                        mediaProvider: context.mediaProvider)
-                        .overlay {
-                            RoundedRectangle(cornerRadius: .infinity)
-                                .stroke(Color.compound.bgCanvasDefault, lineWidth: 1)
-                        }
-                        .zIndex(Double(displayNumber - index))
-                }
-            }
+            StackedAvatarsView(overlap: 6,
+                               lineWidth: 1,
+                               avatars: avatars, avatarSize: .user(on: .readReceipt),
+                               mediaProvider: context.mediaProvider)
+                .padding(-1)
             if timelineItem.properties.orderedReadReceipts.count > displayNumber {
                 Text("+\(remaining)")
                     .font(.zero.bodySM)

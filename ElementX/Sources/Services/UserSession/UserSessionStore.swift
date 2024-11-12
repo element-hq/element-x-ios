@@ -118,6 +118,11 @@ class UserSessionStore: UserSessionStoreProtocol {
             MXLog.info("Restoring client with encrypted store.")
         }
         
+        guard credentials.restorationToken.sessionDirectories.isNonTransientUserDataValid() else {
+            MXLog.error("Failed restoring login, missing non-transient user data")
+            return .failure(.failedRestoringLogin)
+        }
+        
         let homeserverURL = credentials.restorationToken.session.homeserverUrl
         
         let builder = ClientBuilder

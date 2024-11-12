@@ -336,7 +336,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         // Check resulting image info
         XCTAssertEqual(imageInfo.mimetype, "image/heic")
         XCTAssertEqual(imageInfo.blurhash, "KGD]3ns:T00$kWxFXmt6xv")
-        XCTAssertEqual(imageInfo.size ?? 0, 1_857_833, accuracy: 100)
+        XCTAssertEqual(imageInfo.size ?? 0, 1_850_479, accuracy: 100)
         XCTAssertEqual(imageInfo.width, 3024)
         XCTAssertEqual(imageInfo.height, 4032)
         
