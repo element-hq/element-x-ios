@@ -23,12 +23,15 @@ struct MentionSuggestionItemView: View {
                     .font(.compound.bodyLG)
                     .foregroundColor(.compound.textPrimary)
                     .lineLimit(1)
+                // Tchap: only display User ID in Mention list when in debug mode.
+                #if DEBUG
                 if item.displayName != nil {
                     Text(item.id)
                         .font(.compound.bodySM)
                         .foregroundColor(.compound.textSecondary)
                         .lineLimit(1)
                 }
+                #endif
             }
         }
     }

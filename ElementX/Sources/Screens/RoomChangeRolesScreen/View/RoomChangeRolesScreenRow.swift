@@ -17,11 +17,20 @@ struct RoomChangeRolesScreenRow: View {
     let action: () -> Void
     
     var body: some View {
+        // Tchap: only display User ID of room member Edit Role when in debug mode
+        #if DEBUG
         ListRow(label: .avatar(title: member.name ?? member.id,
                                status: member.isInvited ? L10n.screenRoomMemberListPendingHeaderTitle : nil,
                                description: member.name == nil ? nil : member.id,
                                icon: avatar),
                 kind: .multiSelection(isSelected: isSelected, action: action))
+        #else
+        ListRow(label: .avatar(title: member.name ?? member.id,
+                               status: member.isInvited ? L10n.screenRoomMemberListPendingHeaderTitle : nil,
+                               description: nil,
+                               icon: avatar),
+                kind: .multiSelection(isSelected: isSelected, action: action))
+        #endif
     }
     
     var avatar: LoadableAvatarImage {

@@ -44,10 +44,13 @@ struct ReadReceiptCell: View {
                             .lineLimit(1)
                     }
                 }
+                // Tchap: only display User ID in "Seen by"" list when in debug mode.
+                #if DEBUG
                 Text(subtitle)
                     .font(.compound.bodySM)
                     .foregroundColor(.compound.textSecondary)
                     .lineLimit(1)
+                #endif
             }
         }
         .padding(.vertical, 8)

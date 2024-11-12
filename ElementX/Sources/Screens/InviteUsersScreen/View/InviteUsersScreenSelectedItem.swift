@@ -16,7 +16,9 @@ struct InviteUsersScreenSelectedItem: View {
         VStack(spacing: 0) {
             avatar
             
-            Text(user.displayName ?? user.userID)
+            // Tchap: calculate displayname from userId if necessary.
+            //            Text(user.displayName ?? user.userID)
+            Text((user.displayName ?? MatrixIdFromString(user.userID).userDisplayName?.displayName) ?? user.userID)
                 .font(.compound.bodyMD)
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
