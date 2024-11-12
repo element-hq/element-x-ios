@@ -5,6 +5,7 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import IntentsUI
 import SwiftUI
 
 class ShareExtensionViewController: UIViewController {
@@ -47,6 +48,7 @@ class ShareExtensionViewController: UIViewController {
             return
         }
         
+        let roomID = (extensionContext?.intent as? INSendMessageIntent)?.conversationIdentifier
         let providerSuggestedName = itemProvider.suggestedName
         let providerDescription = itemProvider.description
         
@@ -75,7 +77,7 @@ class ShareExtensionViewController: UIViewController {
                 }
                 
                 Task {
-                    await self.openMainApp(payload: .mediaFile(roomID: nil, mediaFile: .init(url: url, suggestedName: providerSuggestedName)))
+                    await self.openMainApp(payload: .mediaFile(roomID: roomID, mediaFile: .init(url: url, suggestedName: providerSuggestedName)))
                     await self.dismiss()
                 }
             } catch {
