@@ -42,12 +42,12 @@ class UserSessionFlowCoordinatorStateMachine {
         /// Showing the user profile screen. This screen clears the navigation.
         case userProfileScreen
         
-        case roomSelectionScreen(sharePayload: ShareExtensionPayload)
+        case shareExtensionRoomList(sharePayload: ShareExtensionPayload)
         
         /// The selected room ID from the state if available.
         var selectedRoomID: String? {
             switch self {
-            case .initial, .userProfileScreen, .roomSelectionScreen:
+            case .initial, .userProfileScreen, .shareExtensionRoomList:
                 nil
             case .roomList(let selectedRoomID),
                  .feedbackScreen(let selectedRoomID),
@@ -119,8 +119,8 @@ class UserSessionFlowCoordinatorStateMachine {
         /// The user profile screen has been dismissed.
         case dismissedUserProfileScreen
         
-        case showRoomSelectionScreen(sharePayload: ShareExtensionPayload)
-        case dismissedRoomSelectionScreen
+        case showShareExtensionRoomList(sharePayload: ShareExtensionPayload)
+        case dismissedShareExtensionRoomList
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -189,9 +189,9 @@ class UserSessionFlowCoordinatorStateMachine {
             case (.userProfileScreen, .dismissedUserProfileScreen):
                 return .roomList(selectedRoomID: nil)
                 
-            case (.roomList, .showRoomSelectionScreen(let sharePayload)):
-                return .roomSelectionScreen(sharePayload: sharePayload)
-            case (.roomSelectionScreen, .dismissedRoomSelectionScreen):
+            case (.roomList, .showShareExtensionRoomList(let sharePayload)):
+                return .shareExtensionRoomList(sharePayload: sharePayload)
+            case (.shareExtensionRoomList, .dismissedShareExtensionRoomList):
                 return .roomList(selectedRoomID: nil)
                 
             default:

@@ -215,7 +215,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                           entryPoint: .share(payload)),
                                               userInfo: .init(animated: animated))
                 } else {
-                    stateMachine.processEvent(.showRoomSelectionScreen(sharePayload: payload), userInfo: .init(animated: animated))
+                    stateMachine.processEvent(.showShareExtensionRoomList(sharePayload: payload), userInfo: .init(animated: animated))
                 }
             }
         }
@@ -309,10 +309,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case (.userProfileScreen, .dismissedUserProfileScreen, .roomList):
                 break
                 
-            case (.roomList, .showRoomSelectionScreen, .roomSelectionScreen(let sharePayload)):
+            case (.roomList, .showShareExtensionRoomList, .shareExtensionRoomList(let sharePayload)):
                 clearRoute(animated: animated)
                 presentRoomSelectionScreen(sharePayload: sharePayload, animated: animated)
-            case (.roomSelectionScreen, .dismissedRoomSelectionScreen, .roomList):
+            case (.shareExtensionRoomList, .dismissedShareExtensionRoomList, .roomList):
                 dismissRoomSelectionScreen()
                 
             default:
@@ -953,7 +953,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         stackCoordinator.setRootCoordinator(coordinator)
         
         navigationSplitCoordinator.setSheetCoordinator(stackCoordinator, animated: animated) { [weak self] in
-            self?.stateMachine.processEvent(.dismissedRoomSelectionScreen)
+            self?.stateMachine.processEvent(.dismissedShareExtensionRoomList)
         }
     }
     
