@@ -21,7 +21,7 @@ class SessionDirectoriesTests: XCTestCase {
         
         // Then the directories should be generated in the correct location, using an escaped version of the user ID
         XCTAssertEqual(sessionDirectories.dataDirectory, .sessionsBaseDirectory.appending(component: "@user_matrix.org"))
-        XCTAssertEqual(sessionDirectories.cacheDirectory, .cachesBaseDirectory.appending(component: "@user_matrix.org"))
+        XCTAssertEqual(sessionDirectories.cacheDirectory, .sessionCachesBaseDirectory.appending(component: "@user_matrix.org"))
     }
     
     func testInitWithDataDirectory() {
@@ -34,7 +34,7 @@ class SessionDirectoriesTests: XCTestCase {
         
         // Then the data directory should remain unchanged and the caches directory should be generated.
         XCTAssertEqual(sessionDirectories.dataDirectory, sessionDirectory)
-        XCTAssertEqual(sessionDirectories.cacheDirectory, .cachesBaseDirectory.appending(component: sessionDirectoryName))
+        XCTAssertEqual(sessionDirectories.cacheDirectory, .sessionCachesBaseDirectory.appending(component: sessionDirectoryName))
     }
     
     func testPathOutput() {

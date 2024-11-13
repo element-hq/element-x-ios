@@ -38,7 +38,7 @@ extension FileManager {
 
     @discardableResult
     func writeDataToTemporaryDirectory(data: Data, fileName: String) throws -> URL {
-        let newURL = URL.temporaryDirectory.appendingPathComponent(fileName)
+        let newURL = URL.appGroupTemporaryDirectory.appendingPathComponent(fileName)
         
         try data.write(to: newURL)
         

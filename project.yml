@@ -53,6 +53,7 @@ include:
 - path: UITests/SupportingFiles/target.yml
 - path: IntegrationTests/SupportingFiles/target.yml
 - path: NSE/SupportingFiles/target.yml
+- path: ShareExtension/SupportingFiles/target.yml
 # - path: NCE/SupportingFiles/target.yml (not used yet)
 # - path: MyAppVariant/override.yml
 

@@ -77,7 +77,7 @@ targets:
     - path: ../../ElementX/Sources/Application/AppSettings.swift
     - path: ../../ElementX/Sources/Generated/Assets.swift
     - path: ../../ElementX/Sources/Generated/Strings.swift
-    - path: ../../ElementX/Sources/Other/AvatarSize.swift
+    - path: ../../ElementX/Sources/Other/Avatars.swift
     - path: ../../ElementX/Sources/Other/CurrentValuePublisher.swift
     - path: ../../ElementX/Sources/Other/Extensions/AttributedString.swift
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift

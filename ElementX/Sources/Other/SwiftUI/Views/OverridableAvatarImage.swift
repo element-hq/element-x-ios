@@ -12,12 +12,12 @@ struct OverridableAvatarImage: View {
     private let url: URL?
     private let name: String?
     private let contentID: String?
-    private let avatarSize: AvatarSize
+    private let avatarSize: Avatars.Size
     private let mediaProvider: MediaProviderProtocol?
     
     @ScaledMetric private var frameSize: CGFloat
     
-    init(overrideURL: URL?, url: URL?, name: String?, contentID: String?, avatarSize: AvatarSize, mediaProvider: MediaProviderProtocol?) {
+    init(overrideURL: URL?, url: URL?, name: String?, contentID: String?, avatarSize: Avatars.Size, mediaProvider: MediaProviderProtocol?) {
         self.overrideURL = overrideURL
         self.url = url
         self.name = name

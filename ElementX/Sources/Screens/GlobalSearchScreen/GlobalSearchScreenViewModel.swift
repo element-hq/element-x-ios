@@ -36,7 +36,11 @@ class GlobalSearchScreenViewModel: GlobalSearchScreenViewModelType, GlobalSearch
             .map(\.bindings.searchQuery)
             .removeDuplicates()
             .sink { [weak self] searchQuery in
-                self?.roomSummaryProvider.setFilter(.search(query: searchQuery))
+                if searchQuery.isEmpty {
+                    self?.roomSummaryProvider.setFilter(.all(filters: []))
+                } else {
+                    self?.roomSummaryProvider.setFilter(.search(query: searchQuery))
+                }
             }
             .store(in: &cancellables)
         
@@ -66,8 +70,8 @@ class GlobalSearchScreenViewModel: GlobalSearchScreenViewModelType, GlobalSearch
     private func updateRooms(with summaries: [RoomSummary]) {
         state.rooms = summaries.compactMap { summary in
             GlobalSearchRoom(id: summary.id,
-                             name: summary.name,
-                             alias: summary.canonicalAlias,
+                             title: summary.name,
+                             description: summary.roomListDescription,
                              avatar: summary.avatar)
         }
     }

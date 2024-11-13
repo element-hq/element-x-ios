@@ -18,7 +18,7 @@ struct StackedAvatarsView: View {
     let lineWidth: CGFloat
     var shouldStackFromLast = false
     let avatars: [StackedAvatarInfo]
-    let avatarSize: AvatarSize
+    let avatarSize: Avatars.Size
     let mediaProvider: MediaProviderProtocol?
     
     var body: some View {

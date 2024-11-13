@@ -206,6 +206,18 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             presentCallScreen(genericCallLink: url)
         case .settings, .chatBackupSettings:
             settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+        case .share(let payload):
+            switch payload {
+            case .mediaFile(let roomID, _):
+                if let roomID {
+                    stateMachine.processEvent(.selectRoom(roomID: roomID,
+                                                          via: [],
+                                                          entryPoint: .share(payload)),
+                                              userInfo: .init(animated: animated))
+                } else {
+                    stateMachine.processEvent(.showShareExtensionRoomList(sharePayload: payload), userInfo: .init(animated: animated))
+                }
+            }
         }
     }
     
@@ -243,6 +255,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     case .room: .room(roomID: roomID, via: via)
                     case .roomDetails: .roomDetails(roomID: roomID)
                     case .eventID(let eventID): .event(eventID: eventID, roomID: roomID, via: via) // ignored.
+                    case .share(let payload): .share(payload)
                     }
                     roomFlowCoordinator.handleAppRoute(route, animated: animated)
                 } else {
@@ -295,6 +308,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 presentUserProfileScreen(userID: userID, animated: animated)
             case (.userProfileScreen, .dismissedUserProfileScreen, .roomList):
                 break
+                
+            case (.roomList, .showShareExtensionRoomList, .shareExtensionRoomList(let sharePayload)):
+                clearRoute(animated: animated)
+                presentRoomSelectionScreen(sharePayload: sharePayload, animated: animated)
+            case (.shareExtensionRoomList, .dismissedShareExtensionRoomList, .roomList):
+                dismissRoomSelectionScreen()
                 
             default:
                 fatalError("Unknown transition: \(context)")
@@ -583,6 +602,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             coordinator.handleAppRoute(.event(eventID: eventID, roomID: roomID, via: via), animated: animated)
         case .roomDetails:
             coordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: animated)
+        case .share(let payload):
+            coordinator.handleAppRoute(.share(payload), animated: animated)
         }
                 
         Task {
@@ -892,6 +913,52 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedUserProfileScreen)
         }
+    }
+    
+    // MARK: Sharing
+    
+    private func presentRoomSelectionScreen(sharePayload: ShareExtensionPayload, animated: Bool) {
+        guard let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider else {
+            fatalError()
+        }
+        
+        let stackCoordinator = NavigationStackCoordinator()
+        
+        let coordinator = RoomSelectionScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
+                                                                           roomSummaryProvider: roomSummaryProvider,
+                                                                           mediaProvider: userSession.mediaProvider))
+        
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .dismiss:
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            case .confirm(let roomID):
+                let sharePayload = switch sharePayload {
+                case .mediaFile(_, let mediaFile):
+                    ShareExtensionPayload.mediaFile(roomID: roomID, mediaFile: mediaFile)
+                }
+                
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+                
+                stateMachine.processEvent(.selectRoom(roomID: roomID,
+                                                      via: [],
+                                                      entryPoint: .share(sharePayload)),
+                                          userInfo: .init(animated: animated))
+            }
+        }
+        .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationSplitCoordinator.setSheetCoordinator(stackCoordinator, animated: animated) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedShareExtensionRoomList)
+        }
+    }
+    
+    private func dismissRoomSelectionScreen() {
+        navigationSplitCoordinator.setSheetCoordinator(nil)
     }
     
     // MARK: Toasts and loading indicators
