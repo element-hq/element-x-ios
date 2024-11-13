@@ -9569,11 +9569,11 @@ class KeychainControllerMock: KeychainControllerProtocol {
     }
 }
 class KnockedRoomProxyMock: KnockedRoomProxyProtocol {
-    var info: RoomInfoProxy {
+    var info: RoomPreviewInfoProxyProtocol {
         get { return underlyingInfo }
         set(value) { underlyingInfo = value }
     }
-    var underlyingInfo: RoomInfoProxy!
+    var underlyingInfo: RoomPreviewInfoProxyProtocol!
     var id: String {
         get { return underlyingId }
         set(value) { underlyingId = value }

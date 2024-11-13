@@ -40,7 +40,7 @@ protocol InvitedRoomProxyProtocol: RoomProxyProtocol {
 
 // sourcery: AutoMockable
 protocol KnockedRoomProxyProtocol: RoomProxyProtocol {
-    var info: RoomInfoProxy { get }
+    var info: RoomPreviewInfoProxyProtocol { get }
     func cancelKnock() async -> Result<Void, RoomProxyError>
 }
 

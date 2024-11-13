@@ -934,7 +934,8 @@ class ClientProxy: ClientProxyProtocol {
             case .knocked:
                 if appSettings.knockingEnabled {
                     return try await .knocked(KnockedRoomProxy(roomListItem: roomListItem,
-                                                               room: roomListItem.invitedRoom()))
+                                                               roomPreview: roomListItem.previewRoom(via: []),
+                                                               ownUserID: userID))
                 } else {
                     return try await .invited(InvitedRoomProxy(roomListItem: roomListItem,
                                                                room: roomListItem.invitedRoom()))
