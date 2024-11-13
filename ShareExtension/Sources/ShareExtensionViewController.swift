@@ -92,7 +92,7 @@ class ShareExtensionViewController: UIViewController {
             return
         }
         
-        guard let url = URL(string: "\(InfoPlistReader.main.baseBundleIdentifier):/\(ShareExtensionURLPath)?\(payload)") else {
+        guard let url = URL(string: "\(InfoPlistReader.main.baseBundleIdentifier):/\(ShareExtensionConstants.urlPath)?\(payload)") else {
             MXLog.error("Failed retrieving main application scheme")
             return
         }

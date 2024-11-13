@@ -80,7 +80,7 @@ struct AppGroupURLParser: URLParser {
     func route(from url: URL) -> AppRoute? {
         guard let scheme = url.scheme,
               scheme == InfoPlistReader.app.appScheme,
-              url.pathComponents.last == ShareExtensionURLPath else {
+              url.pathComponents.last == ShareExtensionConstants.urlPath else {
             return nil
         }
         
