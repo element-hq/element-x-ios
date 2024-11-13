@@ -242,6 +242,29 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
                        "A new timeline should be created for the same room ID, so that the screen isn't stale while loading.")
     }
     
+    func testShareRouteWithoutRoom() async throws {
+        try await process(route: .settings, expectedState: .settingsScreen(selectedRoomID: nil))
+        XCTAssertTrue((splitCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is SettingsScreenCoordinator)
+        
+        let sharePayload: ShareExtensionPayload = .mediaFile(roomID: nil, mediaFile: .init(url: .picturesDirectory, suggestedName: nil))
+        try await process(route: .share(sharePayload),
+                          expectedState: .shareExtensionRoomList(sharePayload: sharePayload))
+        
+        XCTAssertTrue((splitCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is RoomSelectionScreenCoordinator)
+    }
+    
+    func testShareRouteWithRoom() async throws {
+        try await process(route: .event(eventID: "1", roomID: "1", via: []), expectedState: .roomList(selectedRoomID: "1"))
+        XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
+        
+        let sharePayload: ShareExtensionPayload = .mediaFile(roomID: "2", mediaFile: .init(url: .picturesDirectory, suggestedName: nil))
+        try await process(route: .share(sharePayload),
+                          expectedState: .roomList(selectedRoomID: "2"))
+        
+        XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertTrue((splitCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is MediaUploadPreviewScreenCoordinator)
+    }
+    
     // MARK: - Private
     
     private func process(route: AppRoute, expectedState: UserSessionFlowCoordinatorStateMachine.State) async throws {
