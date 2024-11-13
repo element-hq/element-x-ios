@@ -25,57 +25,63 @@ class ShareExtensionViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        processShare()
+        Task {
+            if let payload = await prepareSharePayload() {
+                await self.openMainApp(payload: payload)
+            }
+            
+            self.dismiss()
+        }
     }
     
     // MARK: - Private
     
-    private func processShare() {
+    private func prepareSharePayload() async -> ShareExtensionPayload? {
         guard let extensionItem = extensionContext?.inputItems.first as? NSExtensionItem,
               let itemProvider = extensionItem.attachments?.first else {
-            return
+            return nil
         }
         
         guard let contentType = itemProvider.preferredContentType,
               let preferredExtension = contentType.preferredFilenameExtension else {
             MXLog.error("Invalid NSItemProvider: \(itemProvider)")
-            return
+            return nil
         }
         
         let roomID = (extensionContext?.intent as? INSendMessageIntent)?.conversationIdentifier
         let providerSuggestedName = itemProvider.suggestedName
         let providerDescription = itemProvider.description
         
-        _ = itemProvider.loadDataRepresentation(for: contentType) { [weak self] data, error in
-            guard let self else { return }
-            
-            if let error {
-                MXLog.error("Failed processing NSItemProvider: \(providerDescription) with error: \(error)")
-                return
-            }
-            
-            guard let data else {
-                MXLog.error("Invalid NSItemProvider data: \(providerDescription)")
-                return
-            }
-            
-            do {
-                let url: URL
-                if let filename = providerSuggestedName {
-                    let hasExtension = !(filename as NSString).pathExtension.isEmpty
-                    let filename = hasExtension ? filename : "\(filename).\(preferredExtension)"
-                    url = try FileManager.default.writeDataToTemporaryDirectory(data: data, fileName: filename)
-                } else {
-                    let filename = "\(UUID().uuidString).\(preferredExtension)"
-                    url = try FileManager.default.writeDataToTemporaryDirectory(data: data, fileName: filename)
+        return await withCheckedContinuation { continuation in
+            _ = itemProvider.loadDataRepresentation(for: contentType) { data, error in
+                if let error {
+                    MXLog.error("Failed processing NSItemProvider: \(providerDescription) with error: \(error)")
+                    continuation.resume(returning: nil)
+                    return
                 }
                 
-                Task {
-                    await self.openMainApp(payload: .mediaFile(roomID: roomID, mediaFile: .init(url: url, suggestedName: providerSuggestedName)))
-                    await self.dismiss()
+                guard let data else {
+                    MXLog.error("Invalid NSItemProvider data: \(providerDescription)")
+                    continuation.resume(returning: nil)
+                    return
                 }
-            } catch {
-                MXLog.error("Failed storing NSItemProvider data \(providerDescription) with error: \(error)")
+                
+                do {
+                    let url: URL
+                    if let filename = providerSuggestedName {
+                        let hasExtension = !(filename as NSString).pathExtension.isEmpty
+                        let filename = hasExtension ? filename : "\(filename).\(preferredExtension)"
+                        url = try FileManager.default.writeDataToTemporaryDirectory(data: data, fileName: filename)
+                    } else {
+                        let filename = "\(UUID().uuidString).\(preferredExtension)"
+                        url = try FileManager.default.writeDataToTemporaryDirectory(data: data, fileName: filename)
+                    }
+                    
+                    continuation.resume(returning: .mediaFile(roomID: roomID, mediaFile: .init(url: url, suggestedName: providerSuggestedName)))
+                } catch {
+                    MXLog.error("Failed storing NSItemProvider data \(providerDescription) with error: \(error)")
+                    continuation.resume(returning: nil)
+                }
             }
         }
     }
