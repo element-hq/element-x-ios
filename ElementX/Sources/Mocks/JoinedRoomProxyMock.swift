@@ -83,9 +83,8 @@ extension JoinedRoomProxyMock {
             return .success(member)
         }
         
-        resendItemIDReturnValue = .success(())
-        ignoreDeviceTrustAndResendDevicesItemIDReturnValue = .success(())
-        withdrawVerificationAndResendUserIDsItemIDReturnValue = .success(())
+        ignoreDeviceTrustAndResendDevicesSendHandleReturnValue = .success(())
+        withdrawVerificationAndResendUserIDsSendHandleReturnValue = .success(())
 
         flagAsUnreadReturnValue = .success(())
         markAsReadReceiptTypeReturnValue = .success(())

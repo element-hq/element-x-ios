@@ -97,11 +97,9 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     /// https://spec.matrix.org/v1.9/client-server-api/#typing-notifications
     @discardableResult func sendTypingNotification(isTyping: Bool) async -> Result<Void, RoomProxyError>
     
-    func resend(itemID: TimelineItemIdentifier) async -> Result<Void, RoomProxyError>
+    func ignoreDeviceTrustAndResend(devices: [String: [String]], sendHandle: SendHandleProxy) async -> Result<Void, RoomProxyError>
     
-    func ignoreDeviceTrustAndResend(devices: [String: [String]], itemID: TimelineItemIdentifier) async -> Result<Void, RoomProxyError>
-    
-    func withdrawVerificationAndResend(userIDs: [String], itemID: TimelineItemIdentifier) async -> Result<Void, RoomProxyError>
+    func withdrawVerificationAndResend(userIDs: [String], sendHandle: SendHandleProxy) async -> Result<Void, RoomProxyError>
     
     // MARK: - Room Flags
     

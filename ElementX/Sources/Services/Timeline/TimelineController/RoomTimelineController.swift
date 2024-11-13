@@ -308,6 +308,21 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         return .init(model: "Unknown item", originalJSON: nil, latestEditJSON: nil)
     }
     
+    func sendHandle(for itemID: TimelineItemIdentifier) -> SendHandleProxy? {
+        for timelineItemProxy in activeTimelineProvider.itemProxies {
+            switch timelineItemProxy {
+            case .event(let item):
+                if item.id == itemID {
+                    return item.sendHandle.map { .init(timelineID: itemID, underlyingHandle: $0) }
+                }
+            default:
+                continue
+            }
+        }
+        
+        return nil
+    }
+    
     func retryDecryption(for sessionID: String) async {
         await activeTimeline.retryDecryption(for: sessionID)
     }

@@ -33,7 +33,7 @@ import UserNotifications
 // database, logging, etc. are only ever setup once per *process*
 
 private let settings: CommonSettingsProtocol = AppSettings()
-private let notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder()), prefix: .none),
+private let notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder()), destination: .notification),
                                                                     settings: settings)
 private let keychainController = KeychainController(service: .sessions,
                                                     accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)

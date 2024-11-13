@@ -135,6 +135,8 @@ class EventTimelineItemProxy {
     
     lazy var shieldState = item.lazyProvider.getShields(strict: false)
     
+    lazy var sendHandle = item.lazyProvider.getSendHandle()
+    
     lazy var readReceipts = item.readReceipts
 }
 
@@ -176,6 +178,40 @@ struct TimelineItemDebugInfo: Identifiable, CustomStringConvertible {
         }
         
         return String(data: jsonData, encoding: .utf8)
+    }
+}
+
+struct SendHandleProxy: Hashable {
+    enum Error: Swift.Error {
+        case sdkError(Swift.Error)
+    }
+    
+    let timelineID: TimelineItemIdentifier
+    let underlyingHandle: SendHandle
+    
+    func resend() async -> Result<Void, Error> {
+        do {
+            try await underlyingHandle.tryResend()
+            return .success(())
+        } catch {
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    // MARK: - Hashable
+
+    static func == (lhs: SendHandleProxy, rhs: SendHandleProxy) -> Bool {
+        lhs.timelineID == rhs.timelineID
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(timelineID)
+    }
+    
+    static var randomSendHandle: SendHandleProxy {
+        .init(timelineID: .event(uniqueID: .init(id: UUID().uuidString),
+                                 eventOrTransactionID: .eventId(eventId: UUID().uuidString)),
+              underlyingHandle: .init(noPointer: .init()))
     }
 }
 

@@ -50,7 +50,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 return nil
             }
             return buildStateTimelineItem(for: eventItemProxy, state: content, isOutgoing: isOutgoing)
-        case .roomMembership(userId: let userID, let displayName, change: let change):
+        case .roomMembership(userId: let userID, let displayName, change: let change, _):
             if isDM, change == .joined, userID == self.userID {
                 return nil
             }
@@ -511,7 +511,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                             duration: messageContent.audio?.duration ?? 0,
                                             waveform: waveform,
                                             source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
-                                            contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
+                                            contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.filename))
     }
 
     private func buildImageTimelineItemContent(_ messageContent: ImageMessageContent) -> ImageRoomTimelineItemContent {
@@ -537,7 +537,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                      height: height,
                      aspectRatio: aspectRatio,
                      blurhash: messageContent.info?.blurhash,
-                     contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
+                     contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.filename))
     }
 
     private func buildVideoTimelineItemContent(_ messageContent: VideoMessageContent) -> VideoRoomTimelineItemContent {
@@ -564,7 +564,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                      height: height,
                      aspectRatio: aspectRatio,
                      blurhash: messageContent.info?.blurhash,
-                     contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
+                     contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.filename))
     }
 
     private func buildLocationTimelineItemContent(_ locationContent: LocationContent) -> LocationRoomTimelineItemContent {
@@ -585,7 +585,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                      formattedCaptionHTMLString: htmlCaption,
                      source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
                      thumbnailSource: thumbnailSource,
-                     contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.body))
+                     contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.filename))
     }
     
     private func buildNoticeTimelineItemContent(_ messageContent: NoticeMessageContent) -> NoticeRoomTimelineItemContent {
