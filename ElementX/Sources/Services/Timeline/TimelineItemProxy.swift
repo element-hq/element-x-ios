@@ -186,7 +186,7 @@ struct SendHandleProxy: Hashable {
         case sdkError(Swift.Error)
     }
     
-    let timelineID: TimelineItemIdentifier
+    let itemID: TimelineItemIdentifier
     let underlyingHandle: SendHandle
     
     func resend() async -> Result<Void, Error> {
@@ -201,16 +201,16 @@ struct SendHandleProxy: Hashable {
     // MARK: - Hashable
 
     static func == (lhs: SendHandleProxy, rhs: SendHandleProxy) -> Bool {
-        lhs.timelineID == rhs.timelineID
+        lhs.itemID == rhs.itemID
     }
 
     func hash(into hasher: inout Hasher) {
-        hasher.combine(timelineID)
+        hasher.combine(itemID)
     }
     
-    static var randomSendHandle: SendHandleProxy {
-        .init(timelineID: .event(uniqueID: .init(id: UUID().uuidString),
-                                 eventOrTransactionID: .eventId(eventId: UUID().uuidString)),
+    static var mock: SendHandleProxy {
+        .init(itemID: .event(uniqueID: .init(id: UUID().uuidString),
+                             eventOrTransactionID: .eventId(eventId: UUID().uuidString)),
               underlyingHandle: .init(noPointer: .init()))
     }
 }

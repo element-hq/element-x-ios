@@ -320,7 +320,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             try await room.ignoreDeviceTrustAndResend(devices: devices, sendHandle: sendHandle.underlyingHandle)
             return .success(())
         } catch {
-            MXLog.error("Failed trusting devices \(devices) and resending \(sendHandle.timelineID) with error: \(error)")
+            MXLog.error("Failed trusting devices \(devices) and resending \(sendHandle.itemID) with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
@@ -330,7 +330,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             try await room.withdrawVerificationAndResend(userIds: userIDs, sendHandle: sendHandle.underlyingHandle)
             return .success(())
         } catch {
-            MXLog.error("Failed withdrawing verification of \(userIDs) and resending \(sendHandle.timelineID) with error: \(error)")
+            MXLog.error("Failed withdrawing verification of \(userIDs) and resending \(sendHandle.itemID) with error: \(error)")
             return .failure(.sdkError(error))
         }
     }

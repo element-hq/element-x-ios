@@ -313,7 +313,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             switch timelineItemProxy {
             case .event(let item):
                 if item.id == itemID {
-                    return item.sendHandle.map { .init(timelineID: itemID, underlyingHandle: $0) }
+                    return item.sendHandle.map { .init(itemID: itemID, underlyingHandle: $0) }
                 }
             default:
                 continue
