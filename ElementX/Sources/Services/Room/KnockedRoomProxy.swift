@@ -12,7 +12,7 @@ import UIKit
 class KnockedRoomProxy: KnockedRoomProxyProtocol {
     private let roomListItem: RoomListItemProtocol
     private let roomPreview: RoomPreviewProtocol
-    let info: RoomPreviewInfoProxyProtocol
+    let info: BaseRoomInfoProxyProtocol
     
     // A room identifier is constant and lazy stops it from being fetched
     // multiple times over FFI

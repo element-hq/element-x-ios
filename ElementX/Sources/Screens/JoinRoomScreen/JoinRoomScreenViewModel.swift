@@ -102,7 +102,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     }
     
     private func updateRoomDetails() {
-        var roomPreviewInfo: RoomPreviewInfoProxyProtocol?
+        var roomPreviewInfo: BaseRoomInfoProxyProtocol?
         var inviter: RoomInviterDetails?
         
         switch room {

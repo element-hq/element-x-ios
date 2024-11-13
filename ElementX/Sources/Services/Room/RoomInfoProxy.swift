@@ -8,7 +8,7 @@
 import Foundation
 import MatrixRustSDK
 
-protocol RoomPreviewInfoProxyProtocol {
+protocol BaseRoomInfoProxyProtocol {
     var id: String { get }
     var displayName: String? { get }
     var avatar: RoomAvatar { get }
@@ -18,22 +18,7 @@ protocol RoomPreviewInfoProxyProtocol {
     var activeMembersCount: Int { get }
 }
 
-struct RoomPreviewInfoProxy: RoomPreviewInfoProxyProtocol {
-    let roomPreviewInfo: RoomPreviewInfo
-    
-    var id: String { roomPreviewInfo.roomId }
-    var displayName: String? { roomPreviewInfo.name }
-    var avatar: RoomAvatar {
-        .room(id: id, name: displayName, avatarURL: avatarURL)
-    }
-
-    var topic: String? { roomPreviewInfo.topic }
-    var canonicalAlias: String? { roomPreviewInfo.canonicalAlias }
-    var avatarURL: URL? { roomPreviewInfo.avatarUrl.flatMap(URL.init) }
-    var activeMembersCount: Int { Int(roomPreviewInfo.numJoinedMembers) }
-}
-
-struct RoomInfoProxy: RoomPreviewInfoProxyProtocol {
+struct RoomInfoProxy: BaseRoomInfoProxyProtocol {
     let roomInfo: RoomInfo
     
     var id: String { roomInfo.id }
@@ -78,4 +63,19 @@ struct RoomInfoProxy: RoomPreviewInfoProxyProtocol {
     var unreadNotificationsCount: UInt { UInt(roomInfo.numUnreadNotifications) }
     var unreadMentionsCount: UInt { UInt(roomInfo.numUnreadMentions) }
     var pinnedEventIDs: Set<String> { Set(roomInfo.pinnedEventIds) }
+}
+
+struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
+    let roomPreviewInfo: RoomPreviewInfo
+    
+    var id: String { roomPreviewInfo.roomId }
+    var displayName: String? { roomPreviewInfo.name }
+    var avatar: RoomAvatar {
+        .room(id: id, name: displayName, avatarURL: avatarURL)
+    }
+
+    var topic: String? { roomPreviewInfo.topic }
+    var canonicalAlias: String? { roomPreviewInfo.canonicalAlias }
+    var avatarURL: URL? { roomPreviewInfo.avatarUrl.flatMap(URL.init) }
+    var activeMembersCount: Int { Int(roomPreviewInfo.numJoinedMembers) }
 }
