@@ -7039,87 +7039,17 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
             return sendTypingNotificationIsTypingReturnValue
         }
     }
-    //MARK: - resend
-
-    var resendItemIDUnderlyingCallsCount = 0
-    var resendItemIDCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return resendItemIDUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = resendItemIDUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                resendItemIDUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    resendItemIDUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var resendItemIDCalled: Bool {
-        return resendItemIDCallsCount > 0
-    }
-    var resendItemIDReceivedItemID: TimelineItemIdentifier?
-    var resendItemIDReceivedInvocations: [TimelineItemIdentifier] = []
-
-    var resendItemIDUnderlyingReturnValue: Result<Void, RoomProxyError>!
-    var resendItemIDReturnValue: Result<Void, RoomProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return resendItemIDUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, RoomProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = resendItemIDUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                resendItemIDUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    resendItemIDUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var resendItemIDClosure: ((TimelineItemIdentifier) async -> Result<Void, RoomProxyError>)?
-
-    func resend(itemID: TimelineItemIdentifier) async -> Result<Void, RoomProxyError> {
-        resendItemIDCallsCount += 1
-        resendItemIDReceivedItemID = itemID
-        DispatchQueue.main.async {
-            self.resendItemIDReceivedInvocations.append(itemID)
-        }
-        if let resendItemIDClosure = resendItemIDClosure {
-            return await resendItemIDClosure(itemID)
-        } else {
-            return resendItemIDReturnValue
-        }
-    }
     //MARK: - ignoreDeviceTrustAndResend
 
-    var ignoreDeviceTrustAndResendDevicesItemIDUnderlyingCallsCount = 0
-    var ignoreDeviceTrustAndResendDevicesItemIDCallsCount: Int {
+    var ignoreDeviceTrustAndResendDevicesSendHandleUnderlyingCallsCount = 0
+    var ignoreDeviceTrustAndResendDevicesSendHandleCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return ignoreDeviceTrustAndResendDevicesItemIDUnderlyingCallsCount
+                return ignoreDeviceTrustAndResendDevicesSendHandleUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = ignoreDeviceTrustAndResendDevicesItemIDUnderlyingCallsCount
+                    returnValue = ignoreDeviceTrustAndResendDevicesSendHandleUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -7127,29 +7057,29 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                ignoreDeviceTrustAndResendDevicesItemIDUnderlyingCallsCount = newValue
+                ignoreDeviceTrustAndResendDevicesSendHandleUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    ignoreDeviceTrustAndResendDevicesItemIDUnderlyingCallsCount = newValue
+                    ignoreDeviceTrustAndResendDevicesSendHandleUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var ignoreDeviceTrustAndResendDevicesItemIDCalled: Bool {
-        return ignoreDeviceTrustAndResendDevicesItemIDCallsCount > 0
+    var ignoreDeviceTrustAndResendDevicesSendHandleCalled: Bool {
+        return ignoreDeviceTrustAndResendDevicesSendHandleCallsCount > 0
     }
-    var ignoreDeviceTrustAndResendDevicesItemIDReceivedArguments: (devices: [String: [String]], itemID: TimelineItemIdentifier)?
-    var ignoreDeviceTrustAndResendDevicesItemIDReceivedInvocations: [(devices: [String: [String]], itemID: TimelineItemIdentifier)] = []
+    var ignoreDeviceTrustAndResendDevicesSendHandleReceivedArguments: (devices: [String: [String]], sendHandle: SendHandleProxy)?
+    var ignoreDeviceTrustAndResendDevicesSendHandleReceivedInvocations: [(devices: [String: [String]], sendHandle: SendHandleProxy)] = []
 
-    var ignoreDeviceTrustAndResendDevicesItemIDUnderlyingReturnValue: Result<Void, RoomProxyError>!
-    var ignoreDeviceTrustAndResendDevicesItemIDReturnValue: Result<Void, RoomProxyError>! {
+    var ignoreDeviceTrustAndResendDevicesSendHandleUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var ignoreDeviceTrustAndResendDevicesSendHandleReturnValue: Result<Void, RoomProxyError>! {
         get {
             if Thread.isMainThread {
-                return ignoreDeviceTrustAndResendDevicesItemIDUnderlyingReturnValue
+                return ignoreDeviceTrustAndResendDevicesSendHandleUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, RoomProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = ignoreDeviceTrustAndResendDevicesItemIDUnderlyingReturnValue
+                    returnValue = ignoreDeviceTrustAndResendDevicesSendHandleUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -7157,39 +7087,39 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                ignoreDeviceTrustAndResendDevicesItemIDUnderlyingReturnValue = newValue
+                ignoreDeviceTrustAndResendDevicesSendHandleUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    ignoreDeviceTrustAndResendDevicesItemIDUnderlyingReturnValue = newValue
+                    ignoreDeviceTrustAndResendDevicesSendHandleUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var ignoreDeviceTrustAndResendDevicesItemIDClosure: (([String: [String]], TimelineItemIdentifier) async -> Result<Void, RoomProxyError>)?
+    var ignoreDeviceTrustAndResendDevicesSendHandleClosure: (([String: [String]], SendHandleProxy) async -> Result<Void, RoomProxyError>)?
 
-    func ignoreDeviceTrustAndResend(devices: [String: [String]], itemID: TimelineItemIdentifier) async -> Result<Void, RoomProxyError> {
-        ignoreDeviceTrustAndResendDevicesItemIDCallsCount += 1
-        ignoreDeviceTrustAndResendDevicesItemIDReceivedArguments = (devices: devices, itemID: itemID)
+    func ignoreDeviceTrustAndResend(devices: [String: [String]], sendHandle: SendHandleProxy) async -> Result<Void, RoomProxyError> {
+        ignoreDeviceTrustAndResendDevicesSendHandleCallsCount += 1
+        ignoreDeviceTrustAndResendDevicesSendHandleReceivedArguments = (devices: devices, sendHandle: sendHandle)
         DispatchQueue.main.async {
-            self.ignoreDeviceTrustAndResendDevicesItemIDReceivedInvocations.append((devices: devices, itemID: itemID))
+            self.ignoreDeviceTrustAndResendDevicesSendHandleReceivedInvocations.append((devices: devices, sendHandle: sendHandle))
         }
-        if let ignoreDeviceTrustAndResendDevicesItemIDClosure = ignoreDeviceTrustAndResendDevicesItemIDClosure {
-            return await ignoreDeviceTrustAndResendDevicesItemIDClosure(devices, itemID)
+        if let ignoreDeviceTrustAndResendDevicesSendHandleClosure = ignoreDeviceTrustAndResendDevicesSendHandleClosure {
+            return await ignoreDeviceTrustAndResendDevicesSendHandleClosure(devices, sendHandle)
         } else {
-            return ignoreDeviceTrustAndResendDevicesItemIDReturnValue
+            return ignoreDeviceTrustAndResendDevicesSendHandleReturnValue
         }
     }
     //MARK: - withdrawVerificationAndResend
 
-    var withdrawVerificationAndResendUserIDsItemIDUnderlyingCallsCount = 0
-    var withdrawVerificationAndResendUserIDsItemIDCallsCount: Int {
+    var withdrawVerificationAndResendUserIDsSendHandleUnderlyingCallsCount = 0
+    var withdrawVerificationAndResendUserIDsSendHandleCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return withdrawVerificationAndResendUserIDsItemIDUnderlyingCallsCount
+                return withdrawVerificationAndResendUserIDsSendHandleUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = withdrawVerificationAndResendUserIDsItemIDUnderlyingCallsCount
+                    returnValue = withdrawVerificationAndResendUserIDsSendHandleUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -7197,29 +7127,29 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                withdrawVerificationAndResendUserIDsItemIDUnderlyingCallsCount = newValue
+                withdrawVerificationAndResendUserIDsSendHandleUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    withdrawVerificationAndResendUserIDsItemIDUnderlyingCallsCount = newValue
+                    withdrawVerificationAndResendUserIDsSendHandleUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var withdrawVerificationAndResendUserIDsItemIDCalled: Bool {
-        return withdrawVerificationAndResendUserIDsItemIDCallsCount > 0
+    var withdrawVerificationAndResendUserIDsSendHandleCalled: Bool {
+        return withdrawVerificationAndResendUserIDsSendHandleCallsCount > 0
     }
-    var withdrawVerificationAndResendUserIDsItemIDReceivedArguments: (userIDs: [String], itemID: TimelineItemIdentifier)?
-    var withdrawVerificationAndResendUserIDsItemIDReceivedInvocations: [(userIDs: [String], itemID: TimelineItemIdentifier)] = []
+    var withdrawVerificationAndResendUserIDsSendHandleReceivedArguments: (userIDs: [String], sendHandle: SendHandleProxy)?
+    var withdrawVerificationAndResendUserIDsSendHandleReceivedInvocations: [(userIDs: [String], sendHandle: SendHandleProxy)] = []
 
-    var withdrawVerificationAndResendUserIDsItemIDUnderlyingReturnValue: Result<Void, RoomProxyError>!
-    var withdrawVerificationAndResendUserIDsItemIDReturnValue: Result<Void, RoomProxyError>! {
+    var withdrawVerificationAndResendUserIDsSendHandleUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var withdrawVerificationAndResendUserIDsSendHandleReturnValue: Result<Void, RoomProxyError>! {
         get {
             if Thread.isMainThread {
-                return withdrawVerificationAndResendUserIDsItemIDUnderlyingReturnValue
+                return withdrawVerificationAndResendUserIDsSendHandleUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, RoomProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = withdrawVerificationAndResendUserIDsItemIDUnderlyingReturnValue
+                    returnValue = withdrawVerificationAndResendUserIDsSendHandleUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -7227,26 +7157,26 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                withdrawVerificationAndResendUserIDsItemIDUnderlyingReturnValue = newValue
+                withdrawVerificationAndResendUserIDsSendHandleUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    withdrawVerificationAndResendUserIDsItemIDUnderlyingReturnValue = newValue
+                    withdrawVerificationAndResendUserIDsSendHandleUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var withdrawVerificationAndResendUserIDsItemIDClosure: (([String], TimelineItemIdentifier) async -> Result<Void, RoomProxyError>)?
+    var withdrawVerificationAndResendUserIDsSendHandleClosure: (([String], SendHandleProxy) async -> Result<Void, RoomProxyError>)?
 
-    func withdrawVerificationAndResend(userIDs: [String], itemID: TimelineItemIdentifier) async -> Result<Void, RoomProxyError> {
-        withdrawVerificationAndResendUserIDsItemIDCallsCount += 1
-        withdrawVerificationAndResendUserIDsItemIDReceivedArguments = (userIDs: userIDs, itemID: itemID)
+    func withdrawVerificationAndResend(userIDs: [String], sendHandle: SendHandleProxy) async -> Result<Void, RoomProxyError> {
+        withdrawVerificationAndResendUserIDsSendHandleCallsCount += 1
+        withdrawVerificationAndResendUserIDsSendHandleReceivedArguments = (userIDs: userIDs, sendHandle: sendHandle)
         DispatchQueue.main.async {
-            self.withdrawVerificationAndResendUserIDsItemIDReceivedInvocations.append((userIDs: userIDs, itemID: itemID))
+            self.withdrawVerificationAndResendUserIDsSendHandleReceivedInvocations.append((userIDs: userIDs, sendHandle: sendHandle))
         }
-        if let withdrawVerificationAndResendUserIDsItemIDClosure = withdrawVerificationAndResendUserIDsItemIDClosure {
-            return await withdrawVerificationAndResendUserIDsItemIDClosure(userIDs, itemID)
+        if let withdrawVerificationAndResendUserIDsSendHandleClosure = withdrawVerificationAndResendUserIDsSendHandleClosure {
+            return await withdrawVerificationAndResendUserIDsSendHandleClosure(userIDs, sendHandle)
         } else {
-            return withdrawVerificationAndResendUserIDsItemIDReturnValue
+            return withdrawVerificationAndResendUserIDsSendHandleReturnValue
         }
     }
     //MARK: - flagAsUnread

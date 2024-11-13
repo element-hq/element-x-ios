@@ -228,28 +228,19 @@ class LoggingTests: XCTestCase {
         let rustEmoteMessage = EmoteMessageContent(body: emoteString,
                                                    formatted: FormattedBody(format: .html, body: "<b>\(emoteString)</b>"))
         
-        let rustImageMessage = ImageMessageContent(body: "ImageString",
-                                                   formatted: nil,
-                                                   rawFilename: "ImageString",
-                                                   filename: "ImageString",
+        let rustImageMessage = ImageMessageContent(filename: "ImageString",
                                                    caption: "ImageString",
                                                    formattedCaption: nil,
                                                    source: MediaSource(noPointer: .init()),
                                                    info: nil)
         
-        let rustVideoMessage = VideoMessageContent(body: "VideoString",
-                                                   formatted: nil,
-                                                   rawFilename: "VideoString",
-                                                   filename: "VideoString",
+        let rustVideoMessage = VideoMessageContent(filename: "VideoString",
                                                    caption: "VideoString",
                                                    formattedCaption: nil,
                                                    source: MediaSource(noPointer: .init()),
                                                    info: nil)
         
-        let rustFileMessage = FileMessageContent(body: "FileString",
-                                                 formatted: nil,
-                                                 rawFilename: "FileString",
-                                                 filename: "FileString",
+        let rustFileMessage = FileMessageContent(filename: "FileString",
                                                  caption: "FileString",
                                                  formattedCaption: nil,
                                                  source: MediaSource(noPointer: .init()),
@@ -280,13 +271,13 @@ class LoggingTests: XCTestCase {
         XCTAssertFalse(content.contains(emoteString))
         
         XCTAssertTrue(content.contains(String(describing: ImageMessageContent.self)))
-        XCTAssertFalse(content.contains(rustImageMessage.body))
+        XCTAssertFalse(content.contains(rustImageMessage.filename))
         
         XCTAssertTrue(content.contains(String(describing: VideoMessageContent.self)))
-        XCTAssertFalse(content.contains(rustVideoMessage.body))
+        XCTAssertFalse(content.contains(rustVideoMessage.filename))
         
         XCTAssertTrue(content.contains(String(describing: FileMessageContent.self)))
-        XCTAssertFalse(content.contains(rustFileMessage.body))
+        XCTAssertFalse(content.contains(rustFileMessage.filename))
     }
     
     func testLogFileSorting() async throws {

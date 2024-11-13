@@ -19,7 +19,7 @@ import SwiftUI
 
 struct ResolveVerifiedUserSendFailureScreenCoordinatorParameters {
     let failure: TimelineItemSendFailure.VerifiedUser
-    let itemID: TimelineItemIdentifier
+    let sendHandle: SendHandleProxy
     let roomProxy: JoinedRoomProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
@@ -43,7 +43,7 @@ final class ResolveVerifiedUserSendFailureScreenCoordinator: CoordinatorProtocol
         self.parameters = parameters
         
         viewModel = ResolveVerifiedUserSendFailureScreenViewModel(failure: parameters.failure,
-                                                                  itemID: parameters.itemID,
+                                                                  sendHandle: parameters.sendHandle,
                                                                   roomProxy: parameters.roomProxy,
                                                                   userIndicatorController: parameters.userIndicatorController)
     }

@@ -22,7 +22,7 @@ typealias ResolveVerifiedUserSendFailureScreenViewModelType = StateStoreViewMode
 class ResolveVerifiedUserSendFailureScreenViewModel: ResolveVerifiedUserSendFailureScreenViewModelType, ResolveVerifiedUserSendFailureScreenViewModelProtocol {
     private let iterator: VerifiedUserSendFailureIterator
     private let failure: TimelineItemSendFailure.VerifiedUser
-    private let itemID: TimelineItemIdentifier
+    private let sendHandle: SendHandleProxy
     private let roomProxy: JoinedRoomProxyProtocol
     private var members: [String: RoomMemberProxyProtocol]
     
@@ -34,7 +34,7 @@ class ResolveVerifiedUserSendFailureScreenViewModel: ResolveVerifiedUserSendFail
     }
 
     init(failure: TimelineItemSendFailure.VerifiedUser,
-         itemID: TimelineItemIdentifier,
+         sendHandle: SendHandleProxy,
          roomProxy: JoinedRoomProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         iterator = switch failure {
@@ -43,7 +43,7 @@ class ResolveVerifiedUserSendFailureScreenViewModel: ResolveVerifiedUserSendFail
         }
         
         self.failure = failure
-        self.itemID = itemID
+        self.sendHandle = sendHandle
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         
@@ -77,9 +77,9 @@ class ResolveVerifiedUserSendFailureScreenViewModel: ResolveVerifiedUserSendFail
     private func resolveAndResend() async {
         let result = switch failure {
         case .hasUnsignedDevice(let devices):
-            await roomProxy.ignoreDeviceTrustAndResend(devices: devices, itemID: itemID)
+            await roomProxy.ignoreDeviceTrustAndResend(devices: devices, sendHandle: sendHandle)
         case .changedIdentity(let users):
-            await roomProxy.withdrawVerificationAndResend(userIDs: users, itemID: itemID)
+            await roomProxy.withdrawVerificationAndResend(userIDs: users, sendHandle: sendHandle)
         }
         
         if case let .failure(error) = result {
@@ -98,7 +98,7 @@ class ResolveVerifiedUserSendFailureScreenViewModel: ResolveVerifiedUserSendFail
     }
     
     private func resend() async {
-        switch await roomProxy.resend(itemID: itemID) {
+        switch await sendHandle.resend() {
         case .success:
             actionsSubject.send(.dismiss)
         case .failure(let error):

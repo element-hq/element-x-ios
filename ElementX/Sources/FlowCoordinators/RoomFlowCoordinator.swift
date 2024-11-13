@@ -556,8 +556,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomMemberDetails, .dismissUserProfile, .roomDetails):
                 break
             
-            case (.room, .presentResolveSendFailure(let failure, let itemID), .resolveSendFailure):
-                presentResolveSendFailure(failure: failure, itemID: itemID)
+            case (.room, .presentResolveSendFailure(let failure, let sendHandle), .resolveSendFailure):
+                presentResolveSendFailure(failure: failure, sendHandle: sendHandle)
             case (.resolveSendFailure, .dismissResolveSendFailure, .room):
                 break
             
@@ -691,8 +691,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
                 case .presentPinnedEventsTimeline:
                     stateMachine.tryEvent(.presentPinnedEventsTimeline)
-                case .presentResolveSendFailure(failure: let failure, itemID: let itemID):
-                    stateMachine.tryEvent(.presentResolveSendFailure(failure: failure, itemID: itemID))
+                case .presentResolveSendFailure(failure: let failure, sendHandle: let sendHandle):
+                    stateMachine.tryEvent(.presentResolveSendFailure(failure: failure, sendHandle: sendHandle))
                 }
             }
             .store(in: &cancellables)
@@ -1438,9 +1438,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.start()
     }
     
-    private func presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, itemID: TimelineItemIdentifier) {
+    private func presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy) {
         let coordinator = ResolveVerifiedUserSendFailureScreenCoordinator(parameters: .init(failure: failure,
-                                                                                            itemID: itemID,
+                                                                                            sendHandle: sendHandle,
                                                                                             roomProxy: roomProxy,
                                                                                             userIndicatorController: userIndicatorController))
         coordinator.actionsPublisher.sink { [weak self] action in
@@ -1607,7 +1607,7 @@ private extension RoomFlowCoordinator {
         case presentPinnedEventsTimeline
         case dismissPinnedEventsTimeline
         
-        case presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, itemID: TimelineItemIdentifier)
+        case presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
         case dismissResolveSendFailure
         
         // Child room flow events

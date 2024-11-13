@@ -562,7 +562,14 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         if case .sendingFailed(.unknown) = eventTimelineItem.properties.deliveryStatus {
             displayAlert(.sendingFailed)
         } else if case let .sendingFailed(.verifiedUser(failure)) = eventTimelineItem.properties.deliveryStatus {
-            actionsSubject.send(.displayResolveSendFailure(failure: failure, itemID: itemID))
+            guard let sendHandle = timelineController.sendHandle(for: itemID) else {
+                MXLog.error("Cannot find send handle for \(itemID).")
+                return
+            }
+            
+            actionsSubject.send(.displayResolveSendFailure(failure: failure,
+                                                           sendHandle: sendHandle))
+            
         } else if let authenticityMessage = eventTimelineItem.properties.encryptionAuthenticity?.message {
             displayAlert(.encryptionAuthenticity(authenticityMessage))
         }
