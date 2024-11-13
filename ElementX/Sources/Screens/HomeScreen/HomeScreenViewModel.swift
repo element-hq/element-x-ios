@@ -55,13 +55,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .sink { [weak self] securityState in
                 guard let self else { return }
                 
-                switch (securityState.verificationState, securityState.recoveryState) {
-                case (.verified, .disabled):
+                switch securityState.recoveryState {
+                case .disabled:
                     state.requiresExtraAccountSetup = true
                     if !state.securityBannerMode.isDismissed {
                         state.securityBannerMode = .show(.setUpRecovery)
                     }
-                case (.verified, .incomplete):
+                case .incomplete:
                     state.requiresExtraAccountSetup = true
                     state.securityBannerMode = .show(.recoveryOutOfSync)
                 default:

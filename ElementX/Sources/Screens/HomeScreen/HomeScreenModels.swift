@@ -66,7 +66,7 @@ enum HomeScreenRoomListMode: CustomStringConvertible {
     }
 }
 
-enum HomeScreenSecurityBannerMode {
+enum HomeScreenSecurityBannerMode: Equatable {
     case none
     case dismissed
     case show(HomeScreenRecoveryKeyConfirmationBanner.State)
