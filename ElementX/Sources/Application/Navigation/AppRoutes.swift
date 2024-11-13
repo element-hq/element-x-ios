@@ -84,7 +84,7 @@ struct AppGroupURLParser: URLParser {
             return nil
         }
         
-        guard let query = url.query()?.removingPercentEncoding,
+        guard let query = url.query(percentEncoded: false),
               let queryData = query.data(using: .utf8) else {
             MXLog.error("Failed processing share parameters")
             return nil

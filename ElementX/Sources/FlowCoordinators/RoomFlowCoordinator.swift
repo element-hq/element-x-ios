@@ -497,9 +497,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 break
                 
             case (.mediaUploadPicker, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL)):
-                presentMediaUploadPreviewScreen(for: fileURL)
+                presentMediaUploadPreviewScreen(for: fileURL, animated: animated)
             case (.room, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL)):
-                presentMediaUploadPreviewScreen(for: fileURL)
+                presentMediaUploadPreviewScreen(for: fileURL, animated: animated)
             case (.mediaUploadPreview, .dismissMediaUploadPreview, .room):
                 break
                 
@@ -715,7 +715,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             
         switch presentationAction {
         case .share(.mediaFile(_, let mediaFile)):
-            stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: mediaFile.url))
+            stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: mediaFile.url), userInfo: EventUserInfo(animated: animated))
         default:
             break
         }
@@ -958,7 +958,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
 
-    private func presentMediaUploadPreviewScreen(for url: URL) {
+    private func presentMediaUploadPreviewScreen(for url: URL, animated: Bool) {
         let stackCoordinator = NavigationStackCoordinator()
 
         let parameters = MediaUploadPreviewScreenCoordinatorParameters(userIndicatorController: userIndicatorController,
@@ -982,7 +982,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
 
         stackCoordinator.setRootCoordinator(mediaUploadPreviewScreenCoordinator)
         
-        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator, animated: animated) { [weak self] in
             self?.stateMachine.tryEvent(.dismissMediaUploadPreview)
         }
     }

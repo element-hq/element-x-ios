@@ -78,7 +78,7 @@ extension URL: @retroactive ExpressibleByStringLiteral {
     /// The app group temporary directory
     static var appGroupTemporaryDirectory: URL {
         let url = appGroupContainerDirectory
-            .appendingPathComponent("Temp", isDirectory: true)
+            .appendingPathComponent("tmp", isDirectory: true)
 
         try? FileManager.default.createDirectoryIfNeeded(at: url)
         

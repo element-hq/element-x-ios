@@ -191,6 +191,8 @@ extension UNMutableNotificationContent {
             return data
         }
         
+        MXLog.info("Generating notification icon placeholder")
+        
         let data = Avatars.generatePlaceholderAvatarImageData(name: name, id: id, size: .init(width: 50, height: 50))
         
         if let data {

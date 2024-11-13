@@ -16,14 +16,8 @@ class ShareExtensionViewController: UIViewController {
         super.viewDidLoad()
         
         addChild(hostingController)
-        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(hostingController.view)
+        view.addMatchedSubview(hostingController.view)
         hostingController.didMove(toParent: self)
-        
-        NSLayoutConstraint.activate([view.topAnchor.constraint(equalTo: hostingController.view.topAnchor),
-                                     view.leftAnchor.constraint(equalTo: hostingController.view.leftAnchor),
-                                     view.bottomAnchor.constraint(equalTo: hostingController.view.bottomAnchor),
-                                     view.rightAnchor.constraint(equalTo: hostingController.view.rightAnchor)])
         
         MXLog.configure(currentTarget: "shareextension", filePrefix: "shareextension", logLevel: appSettings.logLevel)
     }

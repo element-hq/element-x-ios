@@ -184,6 +184,7 @@
 		25C4C1100B6EA79F5CC7CBB5 /* AppLockSetupPINScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989D7380D9C86B3A10D30B13 /* AppLockSetupPINScreenViewModelTests.swift */; };
 		260FFC1475EE94F641C3F3F9 /* PollFormScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40F1985065500F0E7F61A27 /* PollFormScreenViewModelProtocol.swift */; };
 		261261778DEFAEFC042B875E /* JoinedRoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C6B0B087FE6601C3F77816 /* JoinedRoomProxy.swift */; };
+		26252AA9AED64010788F4C26 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05A3E8741D199CD1A37F4CBF /* UIView.swift */; };
 		2689D22EF1D10D22B0A4DAEA /* NotificationContentBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BB243B26D54EF1A0C422C0 /* NotificationContentBuilder.swift */; };
 		273AB64B9A26B61C51858867 /* AsyncSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73A07BAEDD74C48795A996A /* AsyncSequence.swift */; };
 		274CE3C986841D15FD530BF5 /* ShimmerModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97CE98208321C4D66E363612 /* ShimmerModifier.swift */; };
@@ -6446,6 +6447,7 @@
 				5AC5CD6D893073EE4D9A277E /* ShareExtensionViewController.swift in Sources */,
 				069358C2C825A19DE6CB127E /* TracingConfiguration.swift in Sources */,
 				03BD83E8BDD23AE059802E0D /* UITestsScreenIdentifier.swift in Sources */,
+				26252AA9AED64010788F4C26 /* UIView.swift in Sources */,
 				66E9202BED03B5BB00E812A1 /* URL.swift in Sources */,
 				4E22086585CB3B35FEEFBBB9 /* UserPreference.swift in Sources */,
 			);

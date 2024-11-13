@@ -77,8 +77,9 @@ targets:
     - path: ../../ElementX/Sources/Other/Extensions/FileManager.swift
     - path: ../../ElementX/Sources/Other/Extensions/NSItemProvider.swift
     - path: ../../ElementX/Sources/Other/Extensions/ProcessInfo.swift
+    - path: ../../ElementX/Sources/Other/Extensions/UIView.swift
     - path: ../../ElementX/Sources/Other/Extensions/URL.swift
     - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
     - path: ../../ElementX/Sources/Other/Logging
-    - path: ../../ElementX/Sources/UITests/UITestsScreenIdentifier.swift
     - path: ../../ElementX/Sources/Other/UserPreference.swift
+    - path: ../../ElementX/Sources/UITests/UITestsScreenIdentifier.swift

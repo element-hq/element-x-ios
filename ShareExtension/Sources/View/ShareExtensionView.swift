@@ -12,7 +12,12 @@ struct ShareExtensionView: View {
     var body: some View {
         ZStack {
             ProgressView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .background(.compound.bgCanvasDefault)
     }
+}
+
+#Preview {
+    ShareExtensionView()
 }

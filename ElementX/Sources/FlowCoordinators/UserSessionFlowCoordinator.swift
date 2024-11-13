@@ -940,7 +940,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     ShareExtensionPayload.mediaFile(roomID: roomID, mediaFile: mediaFile)
                 }
                 
-                stateMachine.processEvent(.dismissedRoomSelectionScreen)
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+                
                 stateMachine.processEvent(.selectRoom(roomID: roomID,
                                                       via: [],
                                                       entryPoint: .share(sharePayload)),
