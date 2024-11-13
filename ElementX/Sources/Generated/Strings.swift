@@ -1846,6 +1846,12 @@ internal enum L10n {
   internal static var screenRoomMentionsAtRoomSubtitle: String { return L10n.tr("Localizable", "screen_room_mentions_at_room_subtitle") }
   /// Everyone
   internal static var screenRoomMentionsAtRoomTitle: String { return L10n.tr("Localizable", "screen_room_mentions_at_room_title") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenRoomMultipleKnockRequestsTitle(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_room_multiple_knock_requests_title", p1)
+  }
+  /// View all
+  internal static var screenRoomMultipleKnockRequestsViewAllButtonTitle: String { return L10n.tr("Localizable", "screen_room_multiple_knock_requests_view_all_button_title") }
   /// Allow custom setting
   internal static var screenRoomNotificationSettingsAllowCustom: String { return L10n.tr("Localizable", "screen_room_notification_settings_allow_custom") }
   /// Turning this on will override your default setting
@@ -1920,6 +1926,14 @@ internal enum L10n {
   internal static var screenRoomRolesAndPermissionsRoomDetails: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_room_details") }
   /// Roles and permissions
   internal static var screenRoomRolesAndPermissionsTitle: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_title") }
+  /// Accept
+  internal static var screenRoomSingleKnockRequestAcceptButtonTitle: String { return L10n.tr("Localizable", "screen_room_single_knock_request_accept_button_title") }
+  /// %1$@ wants to join this room
+  internal static func screenRoomSingleKnockRequestTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_room_single_knock_request_title", String(describing: p1))
+  }
+  /// View
+  internal static var screenRoomSingleKnockRequestViewButtonTitle: String { return L10n.tr("Localizable", "screen_room_single_knock_request_view_button_title") }
   /// Add emoji
   internal static var screenRoomTimelineAddReaction: String { return L10n.tr("Localizable", "screen_room_timeline_add_reaction") }
   /// This is the beginning of %1$@.
@@ -1928,7 +1942,7 @@ internal enum L10n {
   }
   /// This is the beginning of this conversation.
   internal static var screenRoomTimelineBeginningOfRoomNoName: String { return L10n.tr("Localizable", "screen_room_timeline_beginning_of_room_no_name") }
-  /// Unsupported call. Ask if the caller can use to the new Element X app.
+  /// Unsupported call. Ask if the caller can use the new Element X app.
   internal static var screenRoomTimelineLegacyCall: String { return L10n.tr("Localizable", "screen_room_timeline_legacy_call") }
   /// Show less
   internal static var screenRoomTimelineLessReactions: String { return L10n.tr("Localizable", "screen_room_timeline_less_reactions") }
