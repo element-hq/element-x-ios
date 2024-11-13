@@ -52,15 +52,13 @@ private struct SingleKnockRequestBannerContent: View {
     
     var body: some View {
         VStack(spacing: 14) {
-            HStack(spacing: 10) {
-                header
-                if let reason = request.reason {
-                    Text(reason)
-                        .lineLimit(2)
-                        .font(.compound.bodyMD)
-                        .foregroundStyle(.compound.textPrimary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
+            header
+            if let reason = request.reason {
+                Text(reason)
+                    .lineLimit(2)
+                    .font(.compound.bodyMD)
+                    .foregroundStyle(.compound.textPrimary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             actions
         }
