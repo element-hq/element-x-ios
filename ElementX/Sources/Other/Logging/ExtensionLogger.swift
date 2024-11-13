@@ -8,7 +8,7 @@
 import Foundation
 import MatrixRustSDK
 
-enum NSELogger {
+enum ExtensionLogger {
     private static var isConfigured = false
 
     /// Memory formatter, uses exact 2 fraction digits and no grouping
@@ -66,13 +66,13 @@ enum NSELogger {
         return "\(formattedStr) MB"
     }
 
-    static func configure(logLevel: TracingConfiguration.LogLevel) {
+    static func configure(currentTarget: String, logLevel: TracingConfiguration.LogLevel) {
         guard !isConfigured else {
             return
         }
         isConfigured = true
 
-        MXLog.configure(currentTarget: "nse", filePrefix: "nse", logLevel: logLevel)
+        MXLog.configure(currentTarget: currentTarget, filePrefix: currentTarget, logLevel: logLevel)
     }
 
     static func logMemory(with tag: String) {

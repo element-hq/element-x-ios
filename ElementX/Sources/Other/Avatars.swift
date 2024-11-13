@@ -6,29 +6,55 @@
 //
 
 import Foundation
-import UIKit
+import SwiftUI
 
-enum AvatarSize {
-    case user(on: UserAvatarSizeOnScreen)
-    case room(on: RoomAvatarSizeOnScreen)
-    //  custom
-    case custom(CGFloat)
+enum Avatars {
+    enum Size {
+        case user(on: UserAvatarSizeOnScreen)
+        case room(on: RoomAvatarSizeOnScreen)
+        //  custom
+        case custom(CGFloat)
 
-    /// Value in UIKit points
-    var value: CGFloat {
-        switch self {
-        case .user(let screen):
-            return screen.value
-        case .room(let screen):
-            return screen.value
-        case .custom(let val):
-            return val
+        /// Value in UIKit points
+        var value: CGFloat {
+            switch self {
+            case .user(let screen):
+                return screen.value
+            case .room(let screen):
+                return screen.value
+            case .custom(let val):
+                return val
+            }
+        }
+
+        /// Value in pixels by using the scale of the main screen
+        var scaledValue: CGFloat {
+            value * UIScreen.main.scale
+        }
+        
+        var scaledSize: CGSize {
+            CGSize(width: scaledValue, height: scaledValue)
         }
     }
-
-    /// Value in pixels by using the scale of the main screen
-    var scaledValue: CGFloat {
-        value * UIScreen.main.scale
+    
+    @MainActor
+    static func generatePlaceholderAvatarImageData(name: String, id: String, size: CGSize) -> Data? {
+        let image = PlaceholderAvatarImage(name: name, contentID: id)
+            .clipShape(Circle())
+            .frame(width: size.width, height: size.height)
+        
+        let renderer = ImageRenderer(content: image)
+        
+        // Specify the scale so the image is rendered correctly. We don't have access to the screen
+        // here so a hardcoded 3.0 will have to do
+        renderer.scale = 3.0
+        
+        guard let image = renderer.uiImage else {
+            MXLog.info("Generating notification icon placeholder failed")
+            return nil
+        }
+        
+        return image.pngData()
     }
 }
 
@@ -87,6 +113,7 @@ enum RoomAvatarSizeOnScreen {
     case home
     case messageForwarding
     case globalSearch
+    case roomSelection
     case details
     case notificationSettings
     case roomDirectorySearch
@@ -104,6 +131,8 @@ enum RoomAvatarSizeOnScreen {
             return 36
         case .globalSearch:
             return 36
+        case .roomSelection:
+            return 36
         case .home:
             return 52
         case .details:
@@ -111,11 +140,5 @@ enum RoomAvatarSizeOnScreen {
         case .joinRoom:
             return 96
         }
-    }
-}
-
-extension AvatarSize {
-    var scaledSize: CGSize {
-        CGSize(width: scaledValue, height: scaledValue)
     }
 }

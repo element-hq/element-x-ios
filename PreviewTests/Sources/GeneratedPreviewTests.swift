@@ -701,6 +701,12 @@ extension PreviewTests {
         }
     }
 
+    func test_roomSelectionScreen() {
+        for preview in RoomSelectionScreen_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_sFNumberedListView() {
         for preview in SFNumberedListView_Previews._allPreviews {
             assertSnapshots(matching: preview)

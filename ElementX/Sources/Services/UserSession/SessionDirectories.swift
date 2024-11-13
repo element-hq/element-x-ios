@@ -72,19 +72,19 @@ extension SessionDirectories {
     init() {
         let sessionDirectoryName = UUID().uuidString
         dataDirectory = .sessionsBaseDirectory.appending(component: sessionDirectoryName)
-        cacheDirectory = .cachesBaseDirectory.appending(component: sessionDirectoryName)
+        cacheDirectory = .sessionCachesBaseDirectory.appending(component: sessionDirectoryName)
     }
     
     /// Creates the session directories for a user who signed in before the data directory was stored.
     init(userID: String) {
         dataDirectory = .legacySessionDirectory(for: userID)
-        cacheDirectory = .cachesBaseDirectory.appending(component: dataDirectory.lastPathComponent)
+        cacheDirectory = .sessionCachesBaseDirectory.appending(component: dataDirectory.lastPathComponent)
     }
     
     /// Creates the session directories for a user who has a single session directory stored without a separate caches directory.
     init(dataDirectory: URL) {
         self.dataDirectory = dataDirectory
-        cacheDirectory = .cachesBaseDirectory.appending(component: dataDirectory.lastPathComponent)
+        cacheDirectory = .sessionCachesBaseDirectory.appending(component: dataDirectory.lastPathComponent)
     }
 }
 

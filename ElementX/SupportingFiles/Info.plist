@@ -54,7 +54,7 @@
 			<string>Application</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>io.element</string>
+				<string>$(BASE_BUNDLE_IDENTIFIER)</string>
 			</array>
 		</dict>
 	</array>

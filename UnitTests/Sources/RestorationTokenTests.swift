@@ -31,7 +31,7 @@ class RestorationTokenTests: XCTestCase {
         XCTAssertNil(decodedToken.pusherNotificationClientIdentifier, "There should not be a push notification client ID.")
         XCTAssertEqual(decodedToken.sessionDirectories.dataDirectory, .sessionsBaseDirectory.appending(component: "@user_example.com"),
                        "The session directory should match the original location set by the Rust SDK from our base directory.")
-        XCTAssertEqual(decodedToken.sessionDirectories.cacheDirectory, .cachesBaseDirectory.appending(component: "@user_example.com"),
+        XCTAssertEqual(decodedToken.sessionDirectories.cacheDirectory, .sessionCachesBaseDirectory.appending(component: "@user_example.com"),
                        "The cache directory should be derived from the session directory but in the caches directory.")
     }
     
@@ -60,7 +60,7 @@ class RestorationTokenTests: XCTestCase {
                        "The push notification client identifier should not be changed.")
         XCTAssertEqual(decodedToken.sessionDirectories.dataDirectory, originalToken.sessionDirectory,
                        "The session directory should not be changed.")
-        XCTAssertEqual(decodedToken.sessionDirectories.cacheDirectory, .cachesBaseDirectory.appending(component: sessionDirectoryName),
+        XCTAssertEqual(decodedToken.sessionDirectories.cacheDirectory, .sessionCachesBaseDirectory.appending(component: sessionDirectoryName),
                        "The cache directory should be derived from the session directory but in the caches directory.")
     }
     
@@ -75,7 +75,7 @@ class RestorationTokenTests: XCTestCase {
                                                                 oidcData: "data-from-mas",
                                                                 slidingSyncVersion: .native),
                                                sessionDirectory: .sessionsBaseDirectory.appending(component: sessionDirectoryName),
-                                               cacheDirectory: .cachesBaseDirectory.appending(component: sessionDirectoryName),
+                                               cacheDirectory: .sessionCachesBaseDirectory.appending(component: sessionDirectoryName),
                                                passphrase: "passphrase",
                                                pusherNotificationClientIdentifier: "pusher-identifier")
         let data = try JSONEncoder().encode(originalToken)
