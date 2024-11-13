@@ -52,7 +52,7 @@ class ShareExtensionViewController: UIViewController {
         let providerSuggestedName = itemProvider.suggestedName
         let providerDescription = itemProvider.description
         
-        return await withCheckedContinuation { continuation in
+        let shareData: Data? = await withCheckedContinuation { continuation in
             _ = itemProvider.loadDataRepresentation(for: contentType) { data, error in
                 if let error {
                     MXLog.error("Failed processing NSItemProvider: \(providerDescription) with error: \(error)")
@@ -66,23 +66,29 @@ class ShareExtensionViewController: UIViewController {
                     return
                 }
                 
-                do {
-                    let url: URL
-                    if let filename = providerSuggestedName {
-                        let hasExtension = !(filename as NSString).pathExtension.isEmpty
-                        let filename = hasExtension ? filename : "\(filename).\(preferredExtension)"
-                        url = try FileManager.default.writeDataToTemporaryDirectory(data: data, fileName: filename)
-                    } else {
-                        let filename = "\(UUID().uuidString).\(preferredExtension)"
-                        url = try FileManager.default.writeDataToTemporaryDirectory(data: data, fileName: filename)
-                    }
-                    
-                    continuation.resume(returning: .mediaFile(roomID: roomID, mediaFile: .init(url: url, suggestedName: providerSuggestedName)))
-                } catch {
-                    MXLog.error("Failed storing NSItemProvider data \(providerDescription) with error: \(error)")
-                    continuation.resume(returning: nil)
-                }
+                continuation.resume(returning: data)
             }
+        }
+        
+        guard let shareData else {
+            return nil
+        }
+        
+        do {
+            let url: URL
+            if let filename = providerSuggestedName {
+                let hasExtension = !(filename as NSString).pathExtension.isEmpty
+                let filename = hasExtension ? filename : "\(filename).\(preferredExtension)"
+                url = try FileManager.default.writeDataToTemporaryDirectory(data: shareData, fileName: filename)
+            } else {
+                let filename = "\(UUID().uuidString).\(preferredExtension)"
+                url = try FileManager.default.writeDataToTemporaryDirectory(data: shareData, fileName: filename)
+            }
+            
+            return .mediaFile(roomID: roomID, mediaFile: .init(url: url, suggestedName: providerSuggestedName))
+        } catch {
+            MXLog.error("Failed storing NSItemProvider data \(providerDescription) with error: \(error)")
+            return nil
         }
     }
     
