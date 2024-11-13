@@ -18,7 +18,97 @@ struct KnockRequestInfo {
 struct KnockRequestsBannerView: View {
     let requests: [KnockRequestInfo]
     let onDismiss: () -> Void
-    let onAccept: () -> Void
+    let onAccept: (String) -> Void
+    let onViewAll: () -> Void
+    var mediaProvider: MediaProviderProtocol?
+    
+    var body: some View {
+        mainContent
+            .padding(16)
+            .background(.compound.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 12))
+            .compositingGroup()
+            .shadow(color: Color(red: 0.11, green: 0.11, blue: 0.13).opacity(0.1), radius: 12, x: 0, y: 4)
+            .padding(.horizontal, 16)
+    }
+    
+    @ViewBuilder
+    private var mainContent: some View {
+        if requests.count == 1 {
+            SingleKnockRequestBannerContent(request: requests[0], onDismiss: onDismiss, onAccept: onAccept, onViewAll: onViewAll)
+        } else if requests.count > 1 {
+            MultipleKnockRequestsBannerContent(requests: requests, onDismiss: onDismiss, onViewAll: onViewAll)
+        } else {
+            EmptyView()
+        }
+    }
+}
+
+private struct SingleKnockRequestBannerContent: View {
+    let request: KnockRequestInfo
+    let onDismiss: () -> Void
+    let onAccept: (String) -> Void
+    let onViewAll: () -> Void
+    var mediaProvider: MediaProviderProtocol?
+    
+    var body: some View {
+        VStack(spacing: 14) {
+            HStack(spacing: 10) {
+                header
+                if let reason = request.reason {
+                    Text(reason)
+                        .lineLimit(2)
+                        .font(.compound.bodyMD)
+                        .foregroundStyle(.compound.textPrimary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+            actions
+        }
+    }
+    
+    private var header: some View {
+        HStack(spacing: 10) {
+            LoadableAvatarImage(url: request.avatarURL,
+                                name: request.displayName,
+                                contentID: request.userID,
+                                avatarSize: .user(on: .knockingUser), mediaProvider: mediaProvider)
+            VStack(spacing: 0) {
+                HStack(alignment: .top, spacing: 0) {
+                    Text(L10n.screenRoomSingleKnockRequestTitle(request.displayName ?? request.userID))
+                        .lineLimit(2)
+                        .font(.compound.bodyMDSemibold)
+                        .foregroundStyle(.compound.textPrimary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    KnockRequestsBannerDismissButton(onDismiss: onDismiss)
+                }
+                if request.displayName != nil {
+                    Text(request.userID)
+                        .lineLimit(2)
+                        .font(.compound.bodySM)
+                        .foregroundStyle(.compound.textSecondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+        }
+    }
+    
+    private var actions: some View {
+        HStack(spacing: 12) {
+            Button(L10n.screenRoomSingleKnockRequestViewButtonTitle, action: onViewAll)
+                .buttonStyle(.compound(.secondary))
+            Button(L10n.screenRoomSingleKnockRequestAcceptButtonTitle, action: {
+                onAccept(request.userID)
+            })
+            .buttonStyle(.compound(.primary))
+        }
+        .padding(.top, request.reason == nil ? 0 : 2)
+        .frame(maxWidth: .infinity)
+    }
+}
+
+private struct MultipleKnockRequestsBannerContent: View {
+    let requests: [KnockRequestInfo]
+    let onDismiss: () -> Void
     let onViewAll: () -> Void
     var mediaProvider: MediaProviderProtocol?
     
@@ -39,82 +129,16 @@ struct KnockRequestsBannerView: View {
     }
     
     var body: some View {
-        mainContent
-            .padding(16)
-            .background(.compound.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 12))
-            .compositingGroup()
-            .shadow(color: Color(red: 0.11, green: 0.11, blue: 0.13).opacity(0.1), radius: 12, x: 0, y: 4)
-            .padding(.horizontal, 16)
-    }
-    
-    @ViewBuilder
-    private var mainContent: some View {
-        if requests.count == 1,
-           let request = requests.first {
-            singleRequestView(request: request)
-        } else {
-            multipleRequestsView
-        }
-    }
-    
-    private func singleRequestView(request: KnockRequestInfo) -> some View {
         VStack(spacing: 14) {
             HStack(spacing: 10) {
-                LoadableAvatarImage(url: request.avatarURL,
-                                    name: request.displayName,
-                                    contentID: request.userID,
-                                    avatarSize: .user(on: .knockingUser), mediaProvider: mediaProvider)
-                VStack(spacing: 0) {
-                    HStack(alignment: .top, spacing: 0) {
-                        Text(L10n.screenRoomSingleKnockRequestTitle(request.displayName ?? request.userID))
-                            .lineLimit(2)
-                            .font(.compound.bodyMDSemibold)
-                            .foregroundStyle(.compound.textPrimary)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        dismissButton
-                    }
-                    if request.displayName != nil {
-                        Text(request.userID)
-                            .lineLimit(2)
-                            .font(.compound.bodySM)
-                            .foregroundStyle(.compound.textSecondary)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                }
-            }
-            if let reason = request.reason {
-                Text(reason)
-                    .lineLimit(2)
-                    .font(.compound.bodyMD)
-                    .foregroundStyle(.compound.textPrimary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            HStack(spacing: 12) {
-                Button(L10n.screenRoomSingleKnockRequestViewButtonTitle, action: {
-                    onViewAll()
-                })
-                .buttonStyle(.compound(.secondary))
-                Button(L10n.screenRoomSingleKnockRequestAcceptButtonTitle, action: {
-                    onViewAll()
-                })
-                .buttonStyle(.compound(.primary))
-            }
-            .padding(.top, request.reason == nil ? 0 : 2)
-            .frame(maxWidth: .infinity)
-        }
-    }
-    
-    private var multipleRequestsView: some View {
-        VStack(spacing: 14) {
-            HStack(spacing: 10) {
-                StackedAvatarsView(overlap: 16, lineWidth: 2, shouldStackFromLast: true, avatars: avatars, avatarSize: .user(on: .knockingUsers), mediaProvider: mediaProvider)
+                StackedAvatarsView(overlap: 16, lineWidth: 2, shouldStackFromLast: true, avatars: avatars, avatarSize: .user(on: .knockingUsersStack), mediaProvider: mediaProvider)
                 HStack(alignment: .top, spacing: 0) {
                     Text(multipleKnockRequestsTitle)
                         .lineLimit(2)
                         .font(.compound.bodyMDSemibold)
                         .foregroundStyle(.compound.textPrimary)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    dismissButton
+                    KnockRequestsBannerDismissButton(onDismiss: onDismiss)
                 }
             }
             Button(L10n.screenRoomMultipleKnockRequestsViewAllButtonTitle) {
@@ -123,8 +147,12 @@ struct KnockRequestsBannerView: View {
             .buttonStyle(.compound(.primary))
         }
     }
+}
+
+private struct KnockRequestsBannerDismissButton: View {
+    let onDismiss: () -> Void
     
-    private var dismissButton: some View {
+    var body: some View {
         Button {
             onDismiss()
         } label: {
@@ -153,13 +181,13 @@ struct KnockRequestsBannerView_Previews: PreviewProvider, TestablePreview {
     ]
     
     static var previews: some View {
-        KnockRequestsBannerView(requests: singleRequest, onDismiss: { }, onAccept: { }, onViewAll: { })
+        KnockRequestsBannerView(requests: singleRequest, onDismiss: { }, onAccept: { _ in }, onViewAll: { })
             .previewDisplayName("Single Request")
-        KnockRequestsBannerView(requests: singleRequestWithReason, onDismiss: { }, onAccept: { }, onViewAll: { })
+        KnockRequestsBannerView(requests: singleRequestWithReason, onDismiss: { }, onAccept: { _ in }, onViewAll: { })
             .previewDisplayName("Single Request with reason")
-        KnockRequestsBannerView(requests: singleRequestNoDisplayName, onDismiss: { }, onAccept: { }, onViewAll: { })
+        KnockRequestsBannerView(requests: singleRequestNoDisplayName, onDismiss: { }, onAccept: { _ in }, onViewAll: { })
             .previewDisplayName("Single Request, No Display Name")
-        KnockRequestsBannerView(requests: multipleRequests, onDismiss: { }, onAccept: { }, onViewAll: { })
+        KnockRequestsBannerView(requests: multipleRequests, onDismiss: { }, onAccept: { _ in }, onViewAll: { })
             .previewDisplayName("Multiple Requests")
     }
 }
