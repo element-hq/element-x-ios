@@ -107,13 +107,13 @@ end
 
 lane :ui_tests do |options|
   create_simulator_if_necessary(
-    name: "iPhone 16 (18.1)",
+    name: "iPhone-18.1",
     type: "com.apple.CoreSimulator.SimDeviceType.iPhone-16",
     runtime: "com.apple.CoreSimulator.SimRuntime.iOS-18-1"
   )
   
   create_simulator_if_necessary(
-    name: "iPad (10th generation) (18.1)",
+    name: "iPad-18.1",
     type: "com.apple.CoreSimulator.SimDeviceType.iPad-10th-generation",
     runtime: "com.apple.CoreSimulator.SimRuntime.iOS-18-1"
   )
@@ -128,7 +128,7 @@ lane :ui_tests do |options|
 
   run_tests(
     scheme: "UITests",
-    devices: ["iPhone 16 (18.1)", "iPad (10th generation) (18.1)"],
+    devices: ["iPhone-18.1", "iPad-18.1"],
     ensure_devices_found: true,
     prelaunch_simulator: true,
     result_bundle: true,
@@ -143,7 +143,7 @@ lane :integration_tests do
   clear_derived_data()
   
   create_simulator_if_necessary(
-    name: "iPhone 16 Pro (18.1)",
+    name: "iPhone-18.1",
     type: "com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro",
     runtime: "com.apple.CoreSimulator.SimRuntime.iOS-18-1"
   )
@@ -152,7 +152,7 @@ lane :integration_tests do
 
   run_tests(
     scheme: "IntegrationTests",
-    device: "iPhone 16 Pro (18.1)",
+    device: "iPhone-18.1",
     ensure_devices_found: true,
     result_bundle: true,
     reset_simulator: reset_simulator

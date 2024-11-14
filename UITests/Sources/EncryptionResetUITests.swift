@@ -26,6 +26,9 @@ class EncryptionResetUITests: XCTestCase {
         // Confirm the intent to reset.
         app.buttons[A11yIdentifiers.encryptionResetScreen.continueReset].tap()
         app.buttons[A11yIdentifiers.alertInfo.primaryButton].tap()
+        
+        try await Task.sleep(for: .seconds(2.0))
+        
         try await app.assertScreenshot(.encryptionReset, step: Step.passwordScreen)
         
         // Enter the password and submit.
