@@ -120,7 +120,7 @@ struct HomeScreenContent: View {
     private var topSection: some View {
         // An empty VStack causes glitches within the room list
         if context.viewState.shouldShowFilters ||
-            context.viewState.securityBannerMode.isShow ||
+            context.viewState.securityBannerMode.isShown ||
             context.viewState.slidingSyncMigrationBannerMode == .show {
             VStack(spacing: 0) {
                 if context.viewState.shouldShowFilters {

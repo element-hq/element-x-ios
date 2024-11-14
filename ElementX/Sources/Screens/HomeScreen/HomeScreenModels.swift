@@ -78,7 +78,7 @@ enum HomeScreenSecurityBannerMode: Equatable {
         }
     }
     
-    var isShow: Bool {
+    var isShown: Bool {
         switch self {
         case .show: true
         default: false
