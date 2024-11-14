@@ -16,9 +16,7 @@ class KnockedRoomProxy: KnockedRoomProxyProtocol {
     
     // A room identifier is constant and lazy stops it from being fetched
     // multiple times over FFI
-    var id: String {
-        info.id
-    }
+    lazy var id = info.id
     
     let ownUserID: String
     
