@@ -45,11 +45,13 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         switch viewAction {
         case .send:
             Task {
-                startLoading()
+                let progressSubject = AppSettings.isDevelopmentBuild ? nil : CurrentValueSubject<Double, Never>(0.0)
+                
+                startLoading(progressPublisher: progressSubject?.asCurrentValuePublisher())
                 
                 switch await mediaUploadingPreprocessor.processMedia(at: url) {
                 case .success(let mediaInfo):
-                    switch await sendAttachment(mediaInfo: mediaInfo) {
+                    switch await sendAttachment(mediaInfo: mediaInfo, progressSubject: progressSubject) {
                     case .success:
                         actionsSubject.send(.dismiss)
                     case .failure(let error):
@@ -73,29 +75,35 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     
     // MARK: - Private
     
-    private func sendAttachment(mediaInfo: MediaInfo) async -> Result<Void, TimelineProxyError> {
+    private func sendAttachment(mediaInfo: MediaInfo, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, TimelineProxyError> {
         let requestHandle: ((SendAttachmentJoinHandleProtocol) -> Void) = { [weak self] handle in
             self?.requestHandle = handle
         }
         
         switch mediaInfo {
         case let .image(imageURL, thumbnailURL, imageInfo):
-            return await roomProxy.timeline.sendImage(url: imageURL, thumbnailURL: thumbnailURL, imageInfo: imageInfo, progressSubject: nil, requestHandle: requestHandle)
+            return await roomProxy.timeline.sendImage(url: imageURL, thumbnailURL: thumbnailURL, imageInfo: imageInfo, progressSubject: progressSubject, requestHandle: requestHandle)
         case let .video(videoURL, thumbnailURL, videoInfo):
-            return await roomProxy.timeline.sendVideo(url: videoURL, thumbnailURL: thumbnailURL, videoInfo: videoInfo, progressSubject: nil, requestHandle: requestHandle)
+            return await roomProxy.timeline.sendVideo(url: videoURL, thumbnailURL: thumbnailURL, videoInfo: videoInfo, progressSubject: progressSubject, requestHandle: requestHandle)
         case let .audio(audioURL, audioInfo):
-            return await roomProxy.timeline.sendAudio(url: audioURL, audioInfo: audioInfo, progressSubject: nil, requestHandle: requestHandle)
+            return await roomProxy.timeline.sendAudio(url: audioURL, audioInfo: audioInfo, progressSubject: progressSubject, requestHandle: requestHandle)
         case let .file(fileURL, fileInfo):
-            return await roomProxy.timeline.sendFile(url: fileURL, fileInfo: fileInfo, progressSubject: nil, requestHandle: requestHandle)
+            return await roomProxy.timeline.sendFile(url: fileURL, fileInfo: fileInfo, progressSubject: progressSubject, requestHandle: requestHandle)
         }
     }
     
     private static let loadingIndicatorIdentifier = "\(MediaUploadPreviewScreenViewModel.self)-Loading"
     
-    private func startLoading() {
+    private func startLoading(progressPublisher: CurrentValuePublisher<Double, Never>?) {
+        let progress: UserIndicator.Progress = if let progressPublisher {
+            .published(progressPublisher)
+        } else {
+            .indeterminate
+        }
+        
         userIndicatorController.submitIndicator(
             UserIndicator(id: Self.loadingIndicatorIdentifier,
-                          type: .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: true),
+                          type: .modal(progress: progress, interactiveDismissDisabled: false, allowsInteraction: true),
                           title: L10n.commonSending,
                           persistent: true)
         )
