@@ -234,7 +234,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                         progressWatcher: UploadProgressListener { progress in
                                             progressSubject?.send(progress)
                                         },
-                                        useSendQueue: false)
+                                        useSendQueue: AppSettings.isDevelopmentBuild)
         
         await requestHandle(handle)
         
@@ -260,7 +260,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                        progressWatcher: UploadProgressListener { progress in
                                            progressSubject?.send(progress)
                                        },
-                                       useSendQueue: false)
+                                       useSendQueue: AppSettings.isDevelopmentBuild)
         
         await requestHandle(handle)
         
@@ -290,7 +290,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                         progressWatcher: UploadProgressListener { progress in
                                             progressSubject?.send(progress)
                                         },
-                                        useSendQueue: false)
+                                        useSendQueue: AppSettings.isDevelopmentBuild)
         
         await requestHandle(handle)
         
@@ -338,7 +338,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                         progressWatcher: UploadProgressListener { progress in
                                             progressSubject?.send(progress)
                                         },
-                                        useSendQueue: false)
+                                        useSendQueue: AppSettings.isDevelopmentBuild)
         
         await requestHandle(handle)
         
@@ -368,7 +368,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                progressWatcher: UploadProgressListener { progress in
                                                    progressSubject?.send(progress)
                                                },
-                                               useSendQueue: false)
+                                               useSendQueue: AppSettings.isDevelopmentBuild)
         
         await requestHandle(handle)
         

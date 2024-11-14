@@ -18,7 +18,7 @@ struct VideoRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             VStack(alignment: .leading, spacing: 4) {
                 thumbnail
-                    .timelineMediaFrame(height: timelineItem.content.height,
+                    .timelineMediaFrame(height: timelineItem.content.thumbnailSize?.height,
                                         aspectRatio: timelineItem.content.aspectRatio)
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel(L10n.commonVideo)
@@ -45,6 +45,7 @@ struct VideoRoomTimelineView: View {
             LoadableImage(mediaSource: thumbnailSource,
                           mediaType: .timelineItem,
                           blurhash: timelineItem.content.blurhash,
+                          size: timelineItem.content.thumbnailSize,
                           mediaProvider: context.mediaProvider) { imageView in
                 imageView
                     .overlay { playIcon }
@@ -114,8 +115,8 @@ struct VideoRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       content: .init(filename: "Blurhashed.mp4",
                                                                                      duration: 23,
                                                                                      source: nil,
-                                                                                     thumbnailSource: nil,
                                                                                      aspectRatio: 0.7,
+                                                                                     thumbnailSource: nil,
                                                                                      blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW")))
             
             VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: .randomEvent,

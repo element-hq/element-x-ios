@@ -17,10 +17,11 @@ struct StickerRoomTimelineView: View {
             LoadableImage(url: timelineItem.imageURL,
                           mediaType: .timelineItem,
                           blurhash: timelineItem.blurhash,
+                          size: timelineItem.size,
                           mediaProvider: context.mediaProvider) {
                 placeholder
             }
-            .timelineMediaFrame(height: timelineItem.height,
+            .timelineMediaFrame(height: timelineItem.size?.height,
                                 aspectRatio: timelineItem.aspectRatio)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("\(L10n.commonSticker), \(timelineItem.body)")
