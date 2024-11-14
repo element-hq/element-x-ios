@@ -125,7 +125,6 @@
 "common_audio" = "Audio";
 "common_blocked_users" = "Blocked users";
 "common_bubbles" = "Bubbles";
-"common_call_invite" = "Call in progress (unsupported)";
 "common_call_started" = "Call started";
 "common_chat_backup" = "Chat backup";
 "common_copyright" = "Copyright";
@@ -366,6 +365,7 @@
 "screen_join_room_knock_message_description" = "Message (optional)";
 "screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
 "screen_join_room_knock_sent_title" = "Request to join sent";
+"screen_knock_requests_list_decline_and_ban_action_title" = "Decline and ban";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
