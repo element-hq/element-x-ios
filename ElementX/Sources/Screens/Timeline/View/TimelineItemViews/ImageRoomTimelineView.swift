@@ -61,15 +61,7 @@ struct ImageRoomTimelineView: View {
                                 aspectRatio: timelineItem.content.thumbnailAspectRatio ?? timelineItem.content.aspectRatio)
         }
     }
-    
-    var source: MediaSourceProxy {
-        guard timelineItem.content.contentType != .gif, let thumbnailSource = timelineItem.content.thumbnailSource else {
-            return timelineItem.content.source
-        }
         
-        return thumbnailSource
-    }
-    
     private var placeholder: some View {
         Rectangle()
             .foregroundColor(timelineItem.isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming)
