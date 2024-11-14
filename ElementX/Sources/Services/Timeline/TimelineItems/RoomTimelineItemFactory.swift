@@ -121,11 +121,16 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                           _ imageInfo: ImageInfo,
                                           _ imageURL: URL,
                                           _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
-        var aspectRatio: CGFloat?
-        let width = imageInfo.width.map(CGFloat.init)
-        let height = imageInfo.height.map(CGFloat.init)
-        if let width, let height, width > 0, height > 0 {
-            aspectRatio = width / height
+        var imageSize: CGSize?
+        var imageAspectRatio: CGFloat?
+        
+        if let height = imageInfo.height,
+           let width = imageInfo.width {
+            imageSize = .init(width: CGFloat(width), height: CGFloat(height))
+            
+            if width > 0, height > 0 {
+                imageAspectRatio = CGFloat(width) / CGFloat(height)
+            }
         }
         
         return StickerRoomTimelineItem(id: eventItemProxy.id,
@@ -136,9 +141,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                        canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                        sender: eventItemProxy.sender,
                                        imageURL: imageURL,
-                                       width: width,
-                                       height: height,
-                                       aspectRatio: aspectRatio,
+                                       size: imageSize,
+                                       aspectRatio: imageAspectRatio,
                                        blurhash: imageInfo.blurhash,
                                        properties: RoomTimelineItemProperties(reactions: aggregateReactions(eventItemProxy.reactions),
                                                                               deliveryStatus: eventItemProxy.deliveryStatus,
@@ -513,18 +517,37 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                             source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
                                             contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.filename))
     }
-
+    
     private func buildImageTimelineItemContent(_ messageContent: ImageMessageContent) -> ImageRoomTimelineItemContent {
         let htmlCaption = messageContent.formattedCaption?.format == .html ? messageContent.formattedCaption?.body : nil
         let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : attributedStringBuilder.fromPlain(messageContent.caption)
         
         let thumbnailSource = messageContent.info?.thumbnailSource.map { MediaSourceProxy(source: $0, mimeType: messageContent.info?.thumbnailInfo?.mimetype) }
-        let width = messageContent.info?.width.map(CGFloat.init)
-        let height = messageContent.info?.height.map(CGFloat.init)
         
-        var aspectRatio: CGFloat?
-        if let width, let height, width > 0, height > 0 {
-            aspectRatio = width / height
+        var thumbnailSize: CGSize?
+        var thumbnailAspectRatio: CGFloat?
+        
+        if let thumbnailInfo = messageContent.info?.thumbnailInfo,
+           let height = thumbnailInfo.height,
+           let width = thumbnailInfo.width {
+            thumbnailSize = .init(width: CGFloat(width), height: CGFloat(height))
+            
+            if width > 0, height > 0 {
+                thumbnailAspectRatio = CGFloat(width) / CGFloat(height)
+            }
+        }
+        
+        var imageSize: CGSize?
+        var imageAspectRatio: CGFloat?
+        
+        if let imageInfo = messageContent.info,
+           let height = imageInfo.height,
+           let width = imageInfo.width {
+            imageSize = .init(width: CGFloat(width), height: CGFloat(height))
+            
+            if width > 0, height > 0 {
+                imageAspectRatio = CGFloat(width) / CGFloat(height)
+            }
         }
         
         return .init(filename: messageContent.filename,
@@ -532,10 +555,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                      formattedCaption: formattedCaption,
                      formattedCaptionHTMLString: htmlCaption,
                      source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
+                     size: imageSize,
+                     aspectRatio: imageAspectRatio,
                      thumbnailSource: thumbnailSource,
-                     width: width,
-                     height: height,
-                     aspectRatio: aspectRatio,
+                     thumbnailSize: thumbnailSize,
+                     thumbnailAspectRatio: thumbnailAspectRatio,
                      blurhash: messageContent.info?.blurhash,
                      contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.filename))
     }
@@ -545,12 +569,31 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : attributedStringBuilder.fromPlain(messageContent.caption)
         
         let thumbnailSource = messageContent.info?.thumbnailSource.map { MediaSourceProxy(source: $0, mimeType: messageContent.info?.thumbnailInfo?.mimetype) }
-        let width = messageContent.info?.width.map(CGFloat.init)
-        let height = messageContent.info?.height.map(CGFloat.init)
+
+        var thumbnailSize: CGSize?
+        var thumbnailAspectRatio: CGFloat?
         
-        var aspectRatio: CGFloat?
-        if let width, let height, width > 0, height > 0 {
-            aspectRatio = width / height
+        if let thumbnailInfo = messageContent.info?.thumbnailInfo,
+           let height = thumbnailInfo.height,
+           let width = thumbnailInfo.width {
+            thumbnailSize = .init(width: CGFloat(width), height: CGFloat(height))
+            
+            if width > 0, height > 0 {
+                thumbnailAspectRatio = CGFloat(width) / CGFloat(height)
+            }
+        }
+        
+        var videoSize: CGSize?
+        var videoAspectRatio: CGFloat?
+        
+        if let videoInfo = messageContent.info,
+           let height = videoInfo.height,
+           let width = videoInfo.width {
+            videoSize = .init(width: CGFloat(width), height: CGFloat(height))
+            
+            if width > 0, height > 0 {
+                videoAspectRatio = CGFloat(width) / CGFloat(height)
+            }
         }
         
         return .init(filename: messageContent.filename,
@@ -559,10 +602,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                      formattedCaptionHTMLString: htmlCaption,
                      duration: messageContent.info?.duration ?? 0,
                      source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
+                     size: videoSize,
+                     aspectRatio: videoAspectRatio,
                      thumbnailSource: thumbnailSource,
-                     width: width,
-                     height: height,
-                     aspectRatio: aspectRatio,
+                     thumbnailSize: thumbnailSize,
+                     thumbnailAspectRatio: thumbnailAspectRatio,
                      blurhash: messageContent.info?.blurhash,
                      contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.filename))
     }

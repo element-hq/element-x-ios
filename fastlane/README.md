@@ -13,6 +13,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
+### config_enterprise
+
+```sh
+[bundle exec] fastlane config_enterprise
+```
+
+
+
 ### alpha
 
 ```sh
