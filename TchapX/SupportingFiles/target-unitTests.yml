@@ -21,7 +21,7 @@ schemes:
       coverageTargets:
         - TchapX-Development
       testPlans:
-        - path: UnitTests.xctestplan
+        - path: ../UnitTests/SupportingFiles/UnitTests.xctestplan
         # Don't set it as defaultPlan to avoid conflict with ElementX defaultPlan.
           defaultPlan: false
 
@@ -34,7 +34,7 @@ targets:
     - target: TchapX-Development
 
     info:
-      path: ../development/SupportingFiles/Info.plist
+      path: ../UnitTests/SupportingFiles/Info.plist
 
     settings:
       base:
