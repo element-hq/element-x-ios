@@ -5,6 +5,7 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import Compound
 import QuickLook
 import SwiftUI
 
@@ -17,12 +18,20 @@ struct MediaUploadPreviewScreen: View {
     
     var body: some View {
         mainContent
-            .id(UUID())
+            .environment(\.colorScheme, .dark)
+            .id(context.viewState.url)
+            .ignoresSafeArea(edges: [.horizontal])
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                composer
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 16)
+                    .background() // Don't use compound so we match the QLPreviewController.
+                    .environment(\.colorScheme, .dark)
+            }
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
-            .disabled(context.viewState.shouldDisableInteraction)
-            .ignoresSafeArea(edges: [.horizontal, .bottom])
             .toolbar { toolbar }
+            .disabled(context.viewState.shouldDisableInteraction)
             .interactiveDismissDisabled()
     }
     
@@ -38,18 +47,28 @@ struct MediaUploadPreviewScreen: View {
         }
     }
     
+    private var composer: some View {
+        HStack(spacing: 12) {
+            MessageComposerTextField(placeholder: L10n.richTextEditorComposerCaptionPlaceholder,
+                                     text: $context.caption,
+                                     presendCallback: $context.presendCallback,
+                                     maxHeight: ComposerConstant.maxHeight,
+                                     keyHandler: { _ in },
+                                     pasteHandler: { _ in })
+                .messageComposerStyle()
+            
+            SendButton {
+                context.send(viewAction: .send)
+            }
+        }
+    }
+    
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
             Button { context.send(viewAction: .cancel) } label: {
                 Text(L10n.actionCancel)
             }
-        }
-        ToolbarItem(placement: .confirmationAction) {
-            Button { context.send(viewAction: .send) } label: {
-                Text(L10n.actionSend)
-            }
-            .disabled(context.viewState.shouldDisableInteraction)
         }
     }
 }
@@ -111,21 +130,6 @@ private class PreviewItem: NSObject, QLPreviewItem {
     }
 }
 
-// MARK: - Previews
-
-struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = MediaUploadPreviewScreenViewModel(userIndicatorController: UserIndicatorControllerMock.default,
-                                                             roomProxy: JoinedRoomProxyMock(),
-                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
-                                                             title: "some random file name",
-                                                             url: URL.picturesDirectory)
-    static var previews: some View {
-        NavigationStack {
-            MediaUploadPreviewScreen(context: viewModel.context)
-        }
-    }
-}
-
 private class PreviewViewController: QLPreviewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -135,5 +139,23 @@ private class PreviewViewController: QLPreviewController {
                 
         // Hide toolbar share button
         toolbarItems?.first?.isHidden = true
+    }
+}
+
+// MARK: - Previews
+
+struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
+    static let viewModel = MediaUploadPreviewScreenViewModel(userIndicatorController: UserIndicatorControllerMock.default,
+                                                             roomProxy: JoinedRoomProxyMock(),
+                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
+                                                             title: "some random file name",
+                                                             url: Bundle.main.url(forResource: "AppIcon60x60@2x", withExtension: "png") ?? .picturesDirectory)
+    static var previews: some View {
+        Text("Hello")
+            .sheet(isPresented: .constant(true)) {
+                NavigationStack {
+                    MediaUploadPreviewScreen(context: viewModel.context)
+                }
+            }
     }
 }
