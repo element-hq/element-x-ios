@@ -21,7 +21,7 @@ struct SFNumberedListView: View {
                     Image(systemSymbol: getSymbol(for: index))
                         .imageScale(.large)
                         .fontWeight(.light)
-                        .foregroundColor(.compound.textPlaceholder)
+                        .foregroundColor(.compound.textSecondary)
                 }
                 .foregroundColor(.compound.textPrimary)
                 .font(.compound.bodyMD)

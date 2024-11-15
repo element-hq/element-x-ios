@@ -14,7 +14,7 @@ struct TypingIndicatorView: View {
     var body: some View {
         content
             .font(.compound.bodySM)
-            .foregroundColor(.compound.textPlaceholder)
+            .foregroundColor(.compound.textSecondary)
             .lineLimit(1)
             .truncationMode(.middle)
             .padding(.horizontal, 4)
