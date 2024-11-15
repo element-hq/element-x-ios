@@ -25,10 +25,10 @@ struct KnockRequestCellInfo {
 
 struct KnockRequestCell: View {
     let cellInfo: KnockRequestCellInfo
+    var mediaProvider: MediaProviderProtocol?
     let onAccept: (String) -> Void
     let onDecline: (String) -> Void
     let onDeclineAndBan: (String) -> Void
-    var mediaProvider: MediaProviderProtocol?
     
     var body: some View {
         VStack(spacing: 0) {
