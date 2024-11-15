@@ -17,10 +17,8 @@ struct StickerRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
     
     let sender: TimelineItemSender
     
-    let imageURL: URL
+    let imageInfo: ImageInfoProxy
     
-    var size: CGSize?
-    var aspectRatio: CGFloat?
     var blurhash: String?
     
     var properties = RoomTimelineItemProperties()
