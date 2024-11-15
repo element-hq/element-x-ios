@@ -75,6 +75,10 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            bindings: .init()),
                    mediaProvider: mediaProvider)
         
+        appSettings.$knockingEnabled
+            .weakAssign(to: \.state.knockingEnabled, on: self)
+            .store(in: &cancellables)
+        
         appMediator.networkMonitor.reachabilityPublisher
             .filter { $0 == .reachable }
             .receive(on: DispatchQueue.main)
@@ -160,6 +164,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .processTapPinnedEvents:
             analyticsService.trackInteraction(name: .PinnedMessageRoomInfoButton)
             actionsSubject.send(.displayPinnedEventsTimeline)
+        case .processTapRequestsToJoin:
+            actionsSubject.send(.displayKnockingRequests)
         }
     }
     
@@ -212,6 +218,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         state.canEditRoomAvatar = await (try? roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar).get()) == true
         state.canEditRolesOrPermissions = await (try? roomProxy.suggestedRole(for: roomProxy.ownUserID).get()) == .administrator
         state.canInviteUsers = await (try? roomProxy.canUserInvite(userID: roomProxy.ownUserID).get()) == true
+        state.canKickUsers = await (try? roomProxy.canUserKick(userID: roomProxy.ownUserID).get()) == true
     }
     
     private func setupNotificationSettingsSubscription() {

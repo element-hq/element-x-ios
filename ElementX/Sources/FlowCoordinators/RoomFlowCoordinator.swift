@@ -408,6 +408,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .presentingChild(childRoomID: roomID, previousState: fromState)
             case (.presentingChild(_, let previousState), .dismissChildFlow):
                 return previousState
+                
+            case (.roomDetails, .presentKnockRequestsListScreen):
+                return .knockRequestsList
+            case (.knockRequestsList, .dismissKnockRequestsListScreen):
+                return .roomDetails(isRoot: false)
             
             default:
                 return nil
@@ -559,6 +564,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.room, .presentResolveSendFailure(let failure, let sendHandle), .resolveSendFailure):
                 presentResolveSendFailure(failure: failure, sendHandle: sendHandle)
             case (.resolveSendFailure, .dismissResolveSendFailure, .room):
+                break
+                
+            case (.roomDetails, .presentKnockRequestsListScreen, .knockRequestsList):
+                presentKnockRequestsList()
+            case (.knockRequestsList, .dismissRoomMembersList, .roomDetails):
                 break
             
             // Child flow
@@ -826,6 +836,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
             case .presentPinnedEventsTimeline:
                 stateMachine.tryEvent(.presentPinnedEventsTimeline)
+            case .presentKnockingRequestsListScreen:
+                stateMachine.tryEvent(.presentKnockRequestsListScreen)
             }
         }
         .store(in: &cancellables)
@@ -869,6 +881,26 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationStackCoordinator.push(coordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissRoomMembersList)
+        }
+    }
+    
+    private func presentKnockRequestsList() {
+        let parameters = KnockRequestsListScreenCoordinatorParameters()
+        let coordinator = KnockRequestsListScreenCoordinator(parameters: parameters)
+        
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .done:
+                    break
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissKnockRequestsListScreen)
         }
     }
     
@@ -1535,6 +1567,7 @@ private extension RoomFlowCoordinator {
         case rolesAndPermissions
         case pinnedEventsTimeline(previousState: PinnedEventsTimelineSource)
         case resolveSendFailure
+        case knockRequestsList
         
         /// A child flow is in progress.
         case presentingChild(childRoomID: String, previousState: State)
@@ -1613,6 +1646,9 @@ private extension RoomFlowCoordinator {
         // Child room flow events
         case startChildFlow(roomID: String, via: [String], entryPoint: RoomFlowCoordinatorEntryPoint)
         case dismissChildFlow
+        
+        case presentKnockRequestsListScreen
+        case dismissKnockRequestsListScreen
     }
 }
 
