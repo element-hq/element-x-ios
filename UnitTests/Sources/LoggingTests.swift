@@ -150,8 +150,8 @@ class LoggingTests: XCTestCase {
                                                  sender: .init(id: "sender"),
                                                  content: .init(filename: "ImageString",
                                                                 caption: "ImageString",
-                                                                source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"),
-                                                                thumbnailSource: nil))
+                                                                imageInfo: .mockImage,
+                                                                thumbnailInfo: nil))
         let videoMessage = VideoRoomTimelineItem(id: .randomEvent,
                                                  timestamp: "",
                                                  isOutgoing: false,
@@ -161,9 +161,8 @@ class LoggingTests: XCTestCase {
                                                  sender: .init(id: "sender"),
                                                  content: .init(filename: "VideoString",
                                                                 caption: "VideoString",
-                                                                duration: 0,
-                                                                source: nil,
-                                                                thumbnailSource: nil))
+                                                                videoInfo: .mockVideo,
+                                                                thumbnailInfo: nil))
         let fileMessage = FileRoomTimelineItem(id: .randomEvent,
                                                timestamp: "",
                                                isOutgoing: false,

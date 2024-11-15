@@ -40,25 +40,23 @@ struct ImageRoomTimelineView: View {
     @ViewBuilder
     private var loadableImage: some View {
         if timelineItem.content.contentType == .gif {
-            LoadableImage(mediaSource: timelineItem.content.source,
+            LoadableImage(mediaSource: timelineItem.content.imageInfo.source,
                           mediaType: .timelineItem,
                           blurhash: timelineItem.content.blurhash,
-                          size: timelineItem.content.size,
+                          size: timelineItem.content.imageInfo.size,
                           mediaProvider: context.mediaProvider) {
                 placeholder
             }
-            .timelineMediaFrame(height: timelineItem.content.thumbnailSize?.height,
-                                aspectRatio: timelineItem.content.aspectRatio)
+            .timelineMediaFrame(imageInfo: timelineItem.content.imageInfo)
         } else {
-            LoadableImage(mediaSource: timelineItem.content.thumbnailSource ?? timelineItem.content.source,
+            LoadableImage(mediaSource: timelineItem.content.thumbnailInfo?.source ?? timelineItem.content.imageInfo.source,
                           mediaType: .timelineItem,
                           blurhash: timelineItem.content.blurhash,
-                          size: timelineItem.content.thumbnailSize ?? timelineItem.content.size,
+                          size: timelineItem.content.thumbnailInfo?.size ?? timelineItem.content.imageInfo.size,
                           mediaProvider: context.mediaProvider) {
                 placeholder
             }
-            .timelineMediaFrame(height: timelineItem.content.thumbnailSize?.height ?? timelineItem.content.size?.height,
-                                aspectRatio: timelineItem.content.thumbnailAspectRatio ?? timelineItem.content.aspectRatio)
+            .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo ?? timelineItem.content.imageInfo)
         }
     }
         
@@ -87,8 +85,8 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(filename: "image.jpg",
-                                                                                     source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/jpg"),
-                                                                                     thumbnailSource: nil)))
+                                                                                     imageInfo: .mockImage,
+                                                                                     thumbnailInfo: nil)))
             
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .randomEvent,
                                                                       timestamp: "Now",
@@ -98,8 +96,8 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(filename: "other.png",
-                                                                                     source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"),
-                                                                                     thumbnailSource: nil)))
+                                                                                     imageInfo: .mockImage,
+                                                                                     thumbnailInfo: nil)))
             
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .randomEvent,
                                                                       timestamp: "Now",
@@ -109,9 +107,8 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(filename: "Blurhashed.jpg",
-                                                                                     source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"),
-                                                                                     aspectRatio: 0.7,
-                                                                                     thumbnailSource: nil,
+                                                                                     imageInfo: .mockImage,
+                                                                                     thumbnailInfo: nil,
                                                                                      blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW",
                                                                                      contentType: .gif)))
             
@@ -124,10 +121,8 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(filename: "Blurhashed.jpg",
                                                                                      caption: "This is a great image 😎",
-                                                                                     source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"),
-                                                                                     size: .init(width: 50, height: 50),
-                                                                                     aspectRatio: 1,
-                                                                                     thumbnailSource: nil,
+                                                                                     imageInfo: .mockImage,
+                                                                                     thumbnailInfo: .mockThumbnail,
                                                                                      blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW",
                                                                                      contentType: .gif)))
         }

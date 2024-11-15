@@ -14,15 +14,9 @@ struct VideoRoomTimelineItemContent: Hashable {
     var formattedCaption: AttributedString?
     /// The original textual representation of the formatted caption directly from the event (usually HTML code)
     var formattedCaptionHTMLString: String?
-    let duration: TimeInterval
     
-    let source: MediaSourceProxy?
-    var size: CGSize?
-    var aspectRatio: CGFloat?
-    
-    let thumbnailSource: MediaSourceProxy?
-    var thumbnailSize: CGSize?
-    var thumbnailAspectRatio: CGFloat?
+    let videoInfo: VideoInfoProxy
+    let thumbnailInfo: ImageInfoProxy?
     
     var blurhash: String?
     var contentType: UTType?
