@@ -69,7 +69,7 @@ private struct SingleKnockRequestBannerContent: View {
             LoadableAvatarImage(url: request.avatarURL,
                                 name: request.displayName,
                                 contentID: request.userID,
-                                avatarSize: .user(on: .knockingUser), mediaProvider: mediaProvider)
+                                avatarSize: .user(on: .knockingUserBanner), mediaProvider: mediaProvider)
             VStack(spacing: 0) {
                 HStack(alignment: .top, spacing: 0) {
                     Text(L10n.screenRoomSingleKnockRequestTitle(request.displayName ?? request.userID))
@@ -129,7 +129,7 @@ private struct MultipleKnockRequestsBannerContent: View {
     var body: some View {
         VStack(spacing: 14) {
             HStack(spacing: 10) {
-                StackedAvatarsView(overlap: 16, lineWidth: 2, shouldStackFromLast: true, avatars: avatars, avatarSize: .user(on: .knockingUsersStack), mediaProvider: mediaProvider)
+                StackedAvatarsView(overlap: 16, lineWidth: 2, shouldStackFromLast: true, avatars: avatars, avatarSize: .user(on: .knockingUsersBannerStack), mediaProvider: mediaProvider)
                 HStack(alignment: .top, spacing: 0) {
                     Text(multipleKnockRequestsTitle)
                         .lineLimit(2)

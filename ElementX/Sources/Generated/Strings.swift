@@ -288,8 +288,6 @@ internal enum L10n {
   internal static var commonBlockedUsers: String { return L10n.tr("Localizable", "common_blocked_users") }
   /// Bubbles
   internal static var commonBubbles: String { return L10n.tr("Localizable", "common_bubbles") }
-  /// Call in progress (unsupported)
-  internal static var commonCallInvite: String { return L10n.tr("Localizable", "common_call_invite") }
   /// Call started
   internal static var commonCallStarted: String { return L10n.tr("Localizable", "common_call_started") }
   /// Chat backup
@@ -1290,6 +1288,8 @@ internal enum L10n {
   }
   /// Are you sure you want to turn off key storage and delete it?
   internal static var screenKeyBackupDisableTitle: String { return L10n.tr("Localizable", "screen_key_backup_disable_title") }
+  /// Decline and ban
+  internal static var screenKnockRequestsListDeclineAndBanActionTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_decline_and_ban_action_title") }
   /// This account has been deactivated.
   internal static var screenLoginErrorDeactivatedAccount: String { return L10n.tr("Localizable", "screen_login_error_deactivated_account") }
   /// Incorrect username and/or password
