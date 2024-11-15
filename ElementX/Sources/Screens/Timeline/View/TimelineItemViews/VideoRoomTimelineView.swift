@@ -18,8 +18,7 @@ struct VideoRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             VStack(alignment: .leading, spacing: 4) {
                 thumbnail
-                    .timelineMediaFrame(height: timelineItem.content.thumbnailInfo?.size?.height,
-                                        aspectRatio: timelineItem.content.thumbnailInfo?.aspectRatio)
+                    .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo)
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel(L10n.commonVideo)
                     // This clip shape is distinct from the one in the styler as that one

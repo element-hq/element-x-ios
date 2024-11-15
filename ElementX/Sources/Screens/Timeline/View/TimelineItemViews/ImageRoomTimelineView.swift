@@ -47,8 +47,7 @@ struct ImageRoomTimelineView: View {
                           mediaProvider: context.mediaProvider) {
                 placeholder
             }
-            .timelineMediaFrame(height: timelineItem.content.imageInfo.size?.height,
-                                aspectRatio: timelineItem.content.imageInfo.aspectRatio)
+            .timelineMediaFrame(imageInfo: timelineItem.content.imageInfo)
         } else {
             LoadableImage(mediaSource: timelineItem.content.thumbnailInfo?.source ?? timelineItem.content.imageInfo.source,
                           mediaType: .timelineItem,
@@ -57,8 +56,7 @@ struct ImageRoomTimelineView: View {
                           mediaProvider: context.mediaProvider) {
                 placeholder
             }
-            .timelineMediaFrame(height: timelineItem.content.thumbnailInfo?.size?.height ?? timelineItem.content.imageInfo.size?.height,
-                                aspectRatio: timelineItem.content.thumbnailInfo?.aspectRatio ?? timelineItem.content.imageInfo.aspectRatio)
+            .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo ?? timelineItem.content.imageInfo)
         }
     }
         
