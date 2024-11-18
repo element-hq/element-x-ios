@@ -26,7 +26,6 @@ struct MessageComposerTextField: View {
             .accessibilityLabel(placeholder)
             .background(placeholderView, alignment: .topLeading)
             .background { keyboardShortcuts }
-            .tint(.compound.iconAccentTertiary)
     }
 
     @ViewBuilder

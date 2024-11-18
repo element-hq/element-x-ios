@@ -147,17 +147,17 @@ private class PreviewViewController: QLPreviewController {
 // MARK: - Previews
 
 struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
+    static let snapshotURL = URL.picturesDirectory
+    static let testURL = Bundle.main.url(forResource: "AppIcon60x60@2x", withExtension: "png")
+    
     static let viewModel = MediaUploadPreviewScreenViewModel(userIndicatorController: UserIndicatorControllerMock.default,
                                                              roomProxy: JoinedRoomProxyMock(),
                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
-                                                             title: "some random file name",
-                                                             url: Bundle.main.url(forResource: "AppIcon60x60@2x", withExtension: "png") ?? .picturesDirectory)
+                                                             title: "App Icon.png",
+                                                             url: snapshotURL)
     static var previews: some View {
-        Text("Hello")
-            .sheet(isPresented: .constant(true)) {
-                NavigationStack {
-                    MediaUploadPreviewScreen(context: viewModel.context)
-                }
-            }
+        NavigationStack {
+            MediaUploadPreviewScreen(context: viewModel.context)
+        }
     }
 }

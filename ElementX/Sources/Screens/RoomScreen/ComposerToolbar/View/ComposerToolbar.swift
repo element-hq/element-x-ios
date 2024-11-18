@@ -293,6 +293,8 @@ struct ComposerToolbar: View {
     }
 }
 
+// MARK: - Previews
+
 struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
     static let wysiwygViewModel = WysiwygComposerViewModel()
     static let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
@@ -331,8 +333,6 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Reply")
     }
 }
-
-// MARK: - Mock
 
 extension ComposerToolbar {
     static func mock(focused: Bool = true) -> ComposerToolbar {
