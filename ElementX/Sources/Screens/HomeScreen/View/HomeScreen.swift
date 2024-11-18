@@ -144,6 +144,22 @@ struct HomeScreen: View {
                         .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
                         .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
                         .compositingGroup()
+                        .overlay {
+                            if context.viewState.showNewUserRewardsIntimation {
+                                ZStack(alignment: .center) {
+                                    Circle().stroke(Color.zero.bgAccentRest.opacity(0.5), lineWidth: 1)
+                                        .frame(width: 38, height: 38)
+                                    Circle().stroke(Color.zero.bgAccentRest, lineWidth: 1)
+                                        .frame(width: 35, height: 35)
+                                }
+                                .task {
+                                    context.send(viewAction: .rewardsIntimated)
+                                }
+                                
+                                userRewardsToolTip
+                                    .offset(x: 85, y: 45)
+                            }
+                        }
                     
                     Text(context.viewState.userDisplayName ?? "")
                         .font(.zero.bodyMD)
@@ -188,6 +204,45 @@ struct HomeScreen: View {
     
     private func leaveRoomAlertMessage(_ item: LeaveRoomAlertItem) -> some View {
         Text(item.subtitle)
+    }
+    
+    private var userRewardsToolTip: some View {
+        VStack(alignment: .leading) {
+            Triangle()
+                .fill(.ultraThickMaterial)
+                .frame(width: 25, height: 15)
+                .padding(.leading, 16)
+            
+            Button {
+                context.send(viewAction: .rewardsIntimated)
+            } label: {
+                HStack {
+                    Text("You earned $\(context.viewState.userRewards.getRefPriceFormatted())")
+                        .font(.inter(size: 16))
+                    
+                    Spacer()
+                    
+                    Image(systemName: "xmark")
+                        .font(.system(size: 16))
+                }
+                .padding(.all, 16)
+                .background(.ultraThickMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+            }
+            .frame(width: 225, height: 30, alignment: .leading)
+        }
+    }
+    
+    private struct Triangle: Shape {
+        func path(in rect: CGRect) -> Path {
+            var path = Path()
+            // Define the three points of the triangle
+            path.move(to: CGPoint(x: rect.midX, y: rect.minY)) // Top middle
+            path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY)) // Bottom right
+            path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY)) // Bottom left
+            path.closeSubpath()
+            return path
+        }
     }
 }
 

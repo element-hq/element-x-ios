@@ -101,6 +101,16 @@ class ClientProxy: ClientProxyProtocol {
             .asCurrentValuePublisher()
     }
     
+    private let userRewardsSubject = CurrentValueSubject<ZeroRewards, Never>(ZeroRewards.empty())
+    var userRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never> {
+        userRewardsSubject.asCurrentValuePublisher()
+    }
+    
+    private let showNewUserRewardsIntimationSubject = CurrentValueSubject<Bool, Never>(false)
+    var showNewUserRewardsIntimationPublisher: CurrentValuePublisher<Bool, Never> {
+        showNewUserRewardsIntimationSubject.asCurrentValuePublisher()
+    }
+    
     private var cancellables = Set<AnyCancellable>()
     
     /// Will be `true` whilst the app cleans up and forces a logout. Prevents the sync service from restarting
@@ -135,6 +145,7 @@ class ClientProxy: ClientProxyProtocol {
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
     
     private let zeroMatrixUsersService: ZeroMatrixUsersService
+    private let zeroRewardsApi: ZeroRewardsApi
     
     init(client: ClientProtocol,
          networkMonitor: NetworkMonitorProtocol,
@@ -151,11 +162,12 @@ class ClientProxy: ClientProxyProtocol {
         
         secureBackupController = SecureBackupController(encryption: client.encryption())
         
-        /// Configure ZeroMatrixUserUtil
+        /// Configure Zero Utlils, Services and APIs
         let zeroUsersApi = ZeroUsersApi(appSettings: appSettings)
         zeroMatrixUsersService = ZeroMatrixUsersService(zeroUsersApi: zeroUsersApi,
                                                         appSettings: appSettings,
                                                         client: client)
+        zeroRewardsApi = ZeroRewardsApi(appSettings: appSettings)
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
@@ -774,6 +786,49 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         return users.elements
+    }
+    
+    func getUserRewards(shouldCheckRewardsIntiamtion: Bool = false) async -> Result<Void, ClientProxyError> {
+        do {
+            let oldRewards = appSettings.zeroRewardsCredit
+            if shouldCheckRewardsIntiamtion {
+                userRewardsSubject.send(oldRewards)
+            }
+            
+            let apiRewards = try await zeroRewardsApi.fetchMyRewards()
+            switch apiRewards {
+            case .success(let zRewards):
+                let apiCurrency = try await zeroRewardsApi.loadZeroCurrenyRate()
+                switch apiCurrency {
+                case .success(let zCurrency):
+                    let zeroRewards = ZeroRewards(rewards: zRewards, currency: zCurrency)
+                    
+                    if shouldCheckRewardsIntiamtion {
+                        let oldCredits = oldRewards.getZeroCredits()
+                        let newCredits = zeroRewards.getZeroCredits()
+                        showNewUserRewardsIntimationSubject.send(newCredits > oldCredits)
+                    }
+                    
+                    appSettings.zeroRewardsCredit = zeroRewards
+                    userRewardsSubject.send(zeroRewards)
+                    return .success(())
+                case .failure(let error):
+                    return .failure(.zeroError(error))
+                }
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func dismissRewardsIntimation() {
+        Task {
+            try await Task.sleep(for: .seconds(3))
+            showNewUserRewardsIntimationSubject.send(false)
+        }
     }
     
     // MARK: - Private

@@ -68,12 +68,24 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .weakAssign(to: \.state.showBlockedUsers, on: self)
             .store(in: &cancellables)
         
+        userSession.clientProxy.userRewardsPublisher
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.userRewards, on: self)
+            .store(in: &cancellables)
+        
+        userSession.clientProxy.showNewUserRewardsIntimationPublisher
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.showNewUserRewardsIntimation, on: self)
+            .store(in: &cancellables)
+        
         Task {
             await userSession.clientProxy.loadUserAvatarURL()
             await userSession.clientProxy.loadUserDisplayName()
             await state.accountProfileURL = userSession.clientProxy.accountURL(action: .profile)
             await state.accountSessionsListURL = userSession.clientProxy.accountURL(action: .sessionsList)
         }
+        
+        dismissRewardsIntimation(userSession.clientProxy)
     }
     
     override func process(viewAction: SettingsScreenViewAction) {
@@ -108,6 +120,12 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.developerOptions)
         case .deactivateAccount:
             actionsSubject.send(.deactivateAccount)
+        case .rewards:
+            actionsSubject.send(.rewards)
         }
+    }
+    
+    private func dismissRewardsIntimation(_ clientProxy: ClientProxyProtocol) {
+        clientProxy.dismissRewardsIntimation()
     }
 }

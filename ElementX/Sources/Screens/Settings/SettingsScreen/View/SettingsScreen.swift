@@ -22,6 +22,8 @@ struct SettingsScreen: View {
         Form {
             userSection
             
+            userRewardsSection
+            
             manageMyAppSection
             
 //            if !shouldHideManageAccountSection {
@@ -76,6 +78,56 @@ struct SettingsScreen: View {
                     }
                     .padding(.horizontal, ListRowPadding.horizontal)
                     .padding(.vertical, 8)
+                }
+            })
+        }
+    }
+    
+    private var userRewardsSection: some View {
+        Section {
+            ListRow(kind: .custom{
+                Button {
+                    context.send(viewAction: .rewards)
+                } label: {
+                    HStack {
+                        Spacer()
+                        
+                        VStack(alignment: .center) {
+                            Text("Income")
+                                .font(.zero.bodyXS)
+                                .foregroundColor(.compound.textPrimary)
+                            
+                            Text("$\(context.viewState.userRewards.getRefPriceFormatted())")
+                                .font(.robotoMonoRegular(size: 24))
+                                .foregroundColor(.compound.textPrimary)
+                                .padding(.top, 8)
+                                .overlay(alignment: .topTrailing) {
+                                    if context.viewState.showNewUserRewardsIntimation {
+                                        ZStack(alignment: .center) {
+                                            Circle().stroke(Color.zero.bgAccentRest.opacity(0.5), lineWidth: 2)
+                                                .frame(width: 16, height: 16)
+                                            Circle().stroke(Color.zero.bgAccentRest, lineWidth: 2)
+                                                .frame(width: 12, height: 12)
+                                                .padding(4)
+                                            Circle()
+                                                .fill(Color.zero.bgAccentRest)
+                                                .frame(width: 8, height: 8)
+                                                .padding(4)
+                                        }
+                                        .transition(.opacity)
+                                        .offset(x: 24, y :-8)
+                                    }
+                                }
+                            
+                            Text("\(context.viewState.userRewards.getZeroCreditsFormatted()) MEOW")
+                                .font(.robotoMonoRegular(size: 14))
+                                .foregroundColor(.compound.textSecondary)
+                                .padding(.top, 1)
+                        }
+                        .padding(.vertical, 12)
+                        
+                        Spacer()
+                    }
                 }
             })
         }

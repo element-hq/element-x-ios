@@ -66,6 +66,7 @@ internal enum Asset {
     internal static let defaultLoginButton = ImageAsset(name: "images/default-login-button")
     internal static let defaultWalletConnectButton = ImageAsset(name: "images/default-wallet-connect-button")
     internal static let landingBackground = ImageAsset(name: "images/landing-background")
+    internal static let rewardsVector = ImageAsset(name: "images/rewards-vector")
     internal static let zeroBackupHeader = ImageAsset(name: "images/zero-backup-header")
     internal static let zeroLogoMark = ImageAsset(name: "images/zero-logo-mark")
   }

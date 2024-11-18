@@ -30,6 +30,7 @@ enum ClientProxyLoadingState {
 
 enum ClientProxyError: Error {
     case sdkError(Error)
+    case zeroError(Error)
     
     case invalidMedia
     case invalidServerName
@@ -206,4 +207,12 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func resetIdentity() async -> Result<IdentityResetHandle?, ClientProxyError>
     
     func userIdentity(for userID: String) async -> Result<UserIdentity?, ClientProxyError>
+    
+    // MARK: - Zero Rewards
+    
+    var userRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never> { get }
+    var showNewUserRewardsIntimationPublisher: CurrentValuePublisher<Bool, Never> { get }
+    
+    func getUserRewards(shouldCheckRewardsIntiamtion: Bool) async -> Result<Void, ClientProxyError>
+    func dismissRewardsIntimation()
 }

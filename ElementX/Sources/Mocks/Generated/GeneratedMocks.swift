@@ -2211,6 +2211,16 @@ class ClientProxyMock: ClientProxyProtocol {
     }
     var underlyingSecureBackupController: SecureBackupControllerProtocol!
     var sessionVerificationController: SessionVerificationControllerProxyProtocol?
+    var userRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never> {
+        get { return underlyingUserRewardsPublisher }
+        set(value) { underlyingUserRewardsPublisher = value }
+    }
+    var underlyingUserRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never>!
+    var showNewUserRewardsIntimationPublisher: CurrentValuePublisher<Bool, Never> {
+        get { return underlyingShowNewUserRewardsIntimationPublisher }
+        set(value) { underlyingShowNewUserRewardsIntimationPublisher = value }
+    }
+    var underlyingShowNewUserRewardsIntimationPublisher: CurrentValuePublisher<Bool, Never>!
 
     //MARK: - isOnlyDeviceLeft
 
@@ -4776,6 +4786,111 @@ class ClientProxyMock: ClientProxyProtocol {
         } else {
             return userIdentityForReturnValue
         }
+    }
+    //MARK: - getUserRewards
+
+    var getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount = 0
+    var getUserRewardsShouldCheckRewardsIntiamtionCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getUserRewardsShouldCheckRewardsIntiamtionCalled: Bool {
+        return getUserRewardsShouldCheckRewardsIntiamtionCallsCount > 0
+    }
+    var getUserRewardsShouldCheckRewardsIntiamtionReceivedShouldCheckRewardsIntiamtion: Bool?
+    var getUserRewardsShouldCheckRewardsIntiamtionReceivedInvocations: [Bool] = []
+
+    var getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var getUserRewardsShouldCheckRewardsIntiamtionReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getUserRewardsShouldCheckRewardsIntiamtionClosure: ((Bool) async -> Result<Void, ClientProxyError>)?
+
+    func getUserRewards(shouldCheckRewardsIntiamtion: Bool) async -> Result<Void, ClientProxyError> {
+        getUserRewardsShouldCheckRewardsIntiamtionCallsCount += 1
+        getUserRewardsShouldCheckRewardsIntiamtionReceivedShouldCheckRewardsIntiamtion = shouldCheckRewardsIntiamtion
+        DispatchQueue.main.async {
+            self.getUserRewardsShouldCheckRewardsIntiamtionReceivedInvocations.append(shouldCheckRewardsIntiamtion)
+        }
+        if let getUserRewardsShouldCheckRewardsIntiamtionClosure = getUserRewardsShouldCheckRewardsIntiamtionClosure {
+            return await getUserRewardsShouldCheckRewardsIntiamtionClosure(shouldCheckRewardsIntiamtion)
+        } else {
+            return getUserRewardsShouldCheckRewardsIntiamtionReturnValue
+        }
+    }
+    //MARK: - dismissRewardsIntimation
+
+    var dismissRewardsIntimationUnderlyingCallsCount = 0
+    var dismissRewardsIntimationCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return dismissRewardsIntimationUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = dismissRewardsIntimationUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                dismissRewardsIntimationUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    dismissRewardsIntimationUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var dismissRewardsIntimationCalled: Bool {
+        return dismissRewardsIntimationCallsCount > 0
+    }
+    var dismissRewardsIntimationClosure: (() -> Void)?
+
+    func dismissRewardsIntimation() {
+        dismissRewardsIntimationCallsCount += 1
+        dismissRewardsIntimationClosure?()
     }
     //MARK: - loadMediaContentForSource
 

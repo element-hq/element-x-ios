@@ -53,6 +53,7 @@ final class AppSettings {
         
         case zeroAccessToken
         case zeroMatrixUsers
+        case zeroRewardsCredit
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -313,6 +314,11 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.zeroMatrixUsers, defaultValue: nil, storageType: .userDefaults(store))
     var zeroMatrixUsers: [ZMatrixUser]?
+    
+    // MARK: - ZERO Rewards
+    
+    @UserPreference(key: UserDefaultsKeys.zeroRewardsCredit, defaultValue: ZeroRewards.empty(), storageType: .userDefaults(store))
+    var zeroRewardsCredit: ZeroRewards
 }
 
 extension AppSettings: CommonSettingsProtocol { }

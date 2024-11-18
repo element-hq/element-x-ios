@@ -130,6 +130,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentDeveloperOptions()
                 case .deactivateAccount:
                     presentDeactivateAccount()
+                case .rewards:
+                    presentUserRewards()
                 }
             }
             .store(in: &cancellables)
@@ -262,6 +264,12 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
+        navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func presentUserRewards() {
+        let userRewardsParameters = UserRewardsSettingsScreenCoordinatorParameters(userSession: parameters.userSession)
+        let coordinator = UserRewardsSettingsScreenCoordinator(parameters: userRewardsParameters)
         navigationStackCoordinator.push(coordinator)
     }
 

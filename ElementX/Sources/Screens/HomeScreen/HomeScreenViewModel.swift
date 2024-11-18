@@ -87,6 +87,16 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
+        userSession.clientProxy.userRewardsPublisher
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.userRewards, on: self)
+            .store(in: &cancellables)
+        
+        userSession.clientProxy.showNewUserRewardsIntimationPublisher
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.showNewUserRewardsIntimation, on: self)
+            .store(in: &cancellables)
+        
         selectedRoomPublisher
             .weakAssign(to: \.state.selectedRoomID, on: self)
             .store(in: &cancellables)
@@ -118,7 +128,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         setupRoomListSubscriptions()
         
         updateRooms()
-        
+                
         Task {
             await checkSlidingSyncMigration()
         }
@@ -201,6 +211,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
         case .declineInvite(let roomIdentifier):
             showDeclineInviteConfirmationAlert(roomID: roomIdentifier)
+        case .loadRewards:
+            loadUserRewards()
+        case .rewardsIntimated:
+            dismissNewRewardsIntimation()
         }
     }
     
@@ -460,6 +474,20 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         state.bindings.alertInfo = .init(id: UUID(),
                                          title: L10n.commonError,
                                          message: L10n.errorUnknown)
+    }
+    
+    private func loadUserRewards() {
+        Task.detached {
+            try await Task.sleep(for: .seconds(2))
+            _ = await self.userSession.clientProxy.getUserRewards(shouldCheckRewardsIntiamtion: true)
+        }
+    }
+    
+    private func dismissNewRewardsIntimation() {
+        Task {
+            try await Task.sleep(for: .seconds(5))
+            state.showNewUserRewardsIntimation = false
+        }
     }
 }
 
