@@ -92,9 +92,6 @@ struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
     var isSpace: Bool { roomPreviewInfo.roomType == .space }
     
     var activeMembersCount: Int {
-        guard let numActiveMembers = roomPreviewInfo.numActiveMembers else {
-            return Int(roomPreviewInfo.numJoinedMembers)
-        }
-        return Int(numActiveMembers)
+        return Int(roomPreviewInfo.numActiveMembers ?? roomPreviewInfo.numJoinedMembers)
     }
 }
