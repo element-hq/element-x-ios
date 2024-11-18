@@ -42,7 +42,7 @@ struct VideoRoomTimelineView: View {
     var thumbnail: some View {
         if let thumbnailSource = timelineItem.content.thumbnailInfo?.source {
             LoadableImage(mediaSource: thumbnailSource,
-                          mediaType: .timelineItem,
+                          mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
                           blurhash: timelineItem.content.blurhash,
                           size: timelineItem.content.thumbnailInfo?.size,
                           mediaProvider: context.mediaProvider) { imageView in
