@@ -33,9 +33,9 @@ protocol RoomProxyProtocol {
 
 // sourcery: AutoMockable
 protocol InvitedRoomProxyProtocol: RoomProxyProtocol {
-    var info: RoomInfoProxy { get }
+    var info: BaseRoomInfoProxyProtocol { get }
+    var inviter: RoomMemberProxyProtocol? { get }
     func rejectInvitation() async -> Result<Void, RoomProxyError>
-    func acceptInvitation() async -> Result<Void, RoomProxyError>
 }
 
 // sourcery: AutoMockable

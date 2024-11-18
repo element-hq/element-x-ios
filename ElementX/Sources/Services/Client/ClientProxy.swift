@@ -930,16 +930,15 @@ class ClientProxy: ClientProxyProtocol {
             switch roomListItem.membership() {
             case .invited:
                 return try await .invited(InvitedRoomProxy(roomListItem: roomListItem,
-                                                           room: roomListItem.invitedRoom()))
+                                                           roomPreview: roomListItem.previewRoom(via: []),
+                                                           ownUserID: userID))
             case .knocked:
                 if appSettings.knockingEnabled {
                     return try await .knocked(KnockedRoomProxy(roomListItem: roomListItem,
                                                                roomPreview: roomListItem.previewRoom(via: []),
                                                                ownUserID: userID))
-                } else {
-                    return try await .invited(InvitedRoomProxy(roomListItem: roomListItem,
-                                                               room: roomListItem.invitedRoom()))
                 }
+                return nil
             case .joined:
                 if roomListItem.isTimelineInitialized() == false {
                     try await roomListItem.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
