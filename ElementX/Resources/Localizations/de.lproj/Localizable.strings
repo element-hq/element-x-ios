@@ -125,7 +125,6 @@
 "common_audio" = "Audio";
 "common_blocked_users" = "Blockierte Nutzer";
 "common_bubbles" = "Sprechblasen";
-"common_call_invite" = "Aktiver Anruf (nicht unterstützt)";
 "common_call_started" = "Aufruf gestartet";
 "common_chat_backup" = "Chat-Backup";
 "common_copyright" = "Copyright";
@@ -226,6 +225,7 @@
 "common_unable_to_invite_title" = "Einladung(en) konnte(n) nicht gesendet werden";
 "common_unlock" = "Entsperren";
 "common_unmute" = "Stummschaltung aufheben";
+"common_unsupported_call" = "Unsupported call";
 "common_unsupported_event" = "Nicht unterstütztes Ereignis";
 "common_username" = "Benutzername";
 "common_verification_cancelled" = "Verifizierung abgebrochen";
@@ -365,6 +365,7 @@
 "screen_join_room_knock_message_description" = "Message (optional)";
 "screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
 "screen_join_room_knock_sent_title" = "Request to join sent";
+"screen_knock_requests_list_decline_and_ban_action_title" = "Decline and ban";
 "screen_pinned_timeline_empty_state_description" = "Drücke auf eine Nachricht und wähle “%1$@”, um sie hier einzufügen.";
 "screen_pinned_timeline_empty_state_headline" = "Fixiere wichtige Nachrichten, so dass sie leicht gefunden werden können";
 "screen_reset_encryption_password_error" = "Es ist ein unbekannter Fehler aufgetreten. Bitte überprüfe das Passwort deines Kontos und versuche es erneut.";
@@ -377,11 +378,16 @@
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "One or more of your devices are unverified. You can send the message anyway, or you can cancel for now and try again later after you have verified all of your devices.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Your message was not sent because you have not verified one or more of your devices";
 "screen_room_mentions_at_room_subtitle" = "Alle Mitglieder benachrichtigen";
+"screen_room_multiple_knock_requests_view_all_button_title" = "View all";
 "screen_room_pinned_banner_indicator" = "%1$@ von %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ fixierte Nachrichten";
 "screen_room_pinned_banner_loading_description" = "Nachricht wird geladen…";
 "screen_room_pinned_banner_view_all_button_title" = "Alle anzeigen";
+"screen_room_single_knock_request_accept_button_title" = "Accept";
+"screen_room_single_knock_request_title" = "%1$@ wants to join this room";
+"screen_room_single_knock_request_view_button_title" = "View";
 "screen_room_details_pinned_events_row_title" = "Fixierte Nachrichten";
+"screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_roomlist_knock_event_sent_description" = "Request to join sent";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Nachricht nicht gesendet, weil sich die verifizierte Identität von %1$@ geändert hat.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Nachricht wurde nicht gesendet, weil %1$@ nicht alle Geräte verifiziert hat";
@@ -789,6 +795,7 @@
 "screen_room_timeline_add_reaction" = "Emoji hinzufügen";
 "screen_room_timeline_beginning_of_room" = "Dies ist der Anfang von %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Dies ist der Anfang dieses Gesprächs.";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
 "screen_room_timeline_less_reactions" = "Weniger anzeigen";
 "screen_room_timeline_message_copied" = "Nachricht wurde kopiert";
 "screen_room_timeline_no_permission_to_post" = "Du bist nicht berechtigt, in diesem Raum zu schreiben";
