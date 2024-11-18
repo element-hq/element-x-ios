@@ -26,6 +26,10 @@ We suggest using an Xcode version later than 15.0.1.
 The Xcode project can be directly compiled through the shared ElementX scheme which includes the main application as well as the unit and UI tests.
 
 The Xcode project itself is generated through [xcodegen](https://github.com/yonaskolb/XcodeGen) so any changes shouldn't be made directly to it but to the configuration files.
+The command to generate the Tchap X project is: `xcodegen generate --spec project-tchap-x.yml`.
+
+The project needs the `Generated` files to build its structure.
+If these files are not presents, generate them with the command: `swiftgen config run --config Tools/SwiftGen/swiftgen-config.yml --config Tools/SwiftGen/swiftgen-config-tchap.yml`.
 
 ### Dependencies
 
