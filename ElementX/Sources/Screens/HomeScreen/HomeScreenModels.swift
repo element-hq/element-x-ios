@@ -47,6 +47,8 @@ enum HomeScreenViewAction {
     
     case acceptInvite(roomIdentifier: String)
     case declineInvite(roomIdentifier: String)
+    
+    case rewardsIntimated
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -98,6 +100,9 @@ struct HomeScreenViewState: BindableState {
         
         return rooms
     }
+    
+    var userRewards: ZeroRewards = ZeroRewards.empty()
+    var showNewUserRewardsIntimation: Bool = false
     
     var bindings = HomeScreenViewStateBindings()
     

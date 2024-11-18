@@ -2216,6 +2216,11 @@ class ClientProxyMock: ClientProxyProtocol {
         set(value) { underlyingUserRewardsPublisher = value }
     }
     var underlyingUserRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never>!
+    var showNewUserRewardsIntimationPublisher: CurrentValuePublisher<Bool, Never> {
+        get { return underlyingShowNewUserRewardsIntimationPublisher }
+        set(value) { underlyingShowNewUserRewardsIntimationPublisher = value }
+    }
+    var underlyingShowNewUserRewardsIntimationPublisher: CurrentValuePublisher<Bool, Never>!
 
     //MARK: - isOnlyDeviceLeft
 
@@ -4784,15 +4789,15 @@ class ClientProxyMock: ClientProxyProtocol {
     }
     //MARK: - getUserRewards
 
-    var getUserRewardsUnderlyingCallsCount = 0
-    var getUserRewardsCallsCount: Int {
+    var getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount = 0
+    var getUserRewardsShouldCheckRewardsIntiamtionCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return getUserRewardsUnderlyingCallsCount
+                return getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getUserRewardsUnderlyingCallsCount
+                    returnValue = getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -4800,27 +4805,29 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                getUserRewardsUnderlyingCallsCount = newValue
+                getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getUserRewardsUnderlyingCallsCount = newValue
+                    getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var getUserRewardsCalled: Bool {
-        return getUserRewardsCallsCount > 0
+    var getUserRewardsShouldCheckRewardsIntiamtionCalled: Bool {
+        return getUserRewardsShouldCheckRewardsIntiamtionCallsCount > 0
     }
+    var getUserRewardsShouldCheckRewardsIntiamtionReceivedShouldCheckRewardsIntiamtion: Bool?
+    var getUserRewardsShouldCheckRewardsIntiamtionReceivedInvocations: [Bool] = []
 
-    var getUserRewardsUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var getUserRewardsReturnValue: Result<Void, ClientProxyError>! {
+    var getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var getUserRewardsShouldCheckRewardsIntiamtionReturnValue: Result<Void, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return getUserRewardsUnderlyingReturnValue
+                return getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getUserRewardsUnderlyingReturnValue
+                    returnValue = getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -4828,23 +4835,62 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                getUserRewardsUnderlyingReturnValue = newValue
+                getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getUserRewardsUnderlyingReturnValue = newValue
+                    getUserRewardsShouldCheckRewardsIntiamtionUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var getUserRewardsClosure: (() async -> Result<Void, ClientProxyError>)?
+    var getUserRewardsShouldCheckRewardsIntiamtionClosure: ((Bool) async -> Result<Void, ClientProxyError>)?
 
-    func getUserRewards() async -> Result<Void, ClientProxyError> {
-        getUserRewardsCallsCount += 1
-        if let getUserRewardsClosure = getUserRewardsClosure {
-            return await getUserRewardsClosure()
-        } else {
-            return getUserRewardsReturnValue
+    func getUserRewards(shouldCheckRewardsIntiamtion: Bool) async -> Result<Void, ClientProxyError> {
+        getUserRewardsShouldCheckRewardsIntiamtionCallsCount += 1
+        getUserRewardsShouldCheckRewardsIntiamtionReceivedShouldCheckRewardsIntiamtion = shouldCheckRewardsIntiamtion
+        DispatchQueue.main.async {
+            self.getUserRewardsShouldCheckRewardsIntiamtionReceivedInvocations.append(shouldCheckRewardsIntiamtion)
         }
+        if let getUserRewardsShouldCheckRewardsIntiamtionClosure = getUserRewardsShouldCheckRewardsIntiamtionClosure {
+            return await getUserRewardsShouldCheckRewardsIntiamtionClosure(shouldCheckRewardsIntiamtion)
+        } else {
+            return getUserRewardsShouldCheckRewardsIntiamtionReturnValue
+        }
+    }
+    //MARK: - dismissRewardsIntimation
+
+    var dismissRewardsIntimationUnderlyingCallsCount = 0
+    var dismissRewardsIntimationCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return dismissRewardsIntimationUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = dismissRewardsIntimationUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                dismissRewardsIntimationUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    dismissRewardsIntimationUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var dismissRewardsIntimationCalled: Bool {
+        return dismissRewardsIntimationCallsCount > 0
+    }
+    var dismissRewardsIntimationClosure: (() -> Void)?
+
+    func dismissRewardsIntimation() {
+        dismissRewardsIntimationCallsCount += 1
+        dismissRewardsIntimationClosure?()
     }
     //MARK: - loadMediaContentForSource
 

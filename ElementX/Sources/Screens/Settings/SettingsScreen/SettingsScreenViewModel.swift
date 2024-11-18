@@ -21,8 +21,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
                                            userID: userSession.clientProxy.userID,
                                            showAccountDeactivation: userSession.clientProxy.canDeactivateAccount,
-                                           showDeveloperOptions: AppSettings.isDevelopmentBuild,
-                                           userRewards: ZeroRewards.empty()),
+                                           showDeveloperOptions: AppSettings.isDevelopmentBuild),
                    mediaProvider: userSession.mediaProvider)
         
         userSession.clientProxy.userAvatarURLPublisher
@@ -74,13 +73,19 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .weakAssign(to: \.state.userRewards, on: self)
             .store(in: &cancellables)
         
+        userSession.clientProxy.showNewUserRewardsIntimationPublisher
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.showNewUserRewardsIntimation, on: self)
+            .store(in: &cancellables)
+        
         Task {
             await userSession.clientProxy.loadUserAvatarURL()
             await userSession.clientProxy.loadUserDisplayName()
-            await userSession.clientProxy.getUserRewards()
             await state.accountProfileURL = userSession.clientProxy.accountURL(action: .profile)
             await state.accountSessionsListURL = userSession.clientProxy.accountURL(action: .sessionsList)
         }
+        
+        dismissRewardsIntimation(userSession.clientProxy)
     }
     
     override func process(viewAction: SettingsScreenViewAction) {
@@ -118,5 +123,9 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         case .rewards:
             actionsSubject.send(.rewards)
         }
+    }
+    
+    private func dismissRewardsIntimation(_ clientProxy: ClientProxyProtocol) {
+        clientProxy.dismissRewardsIntimation()
     }
 }

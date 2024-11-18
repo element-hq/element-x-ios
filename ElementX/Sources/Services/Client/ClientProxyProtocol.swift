@@ -211,6 +211,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     // MARK: - Zero Rewards
     
     var userRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never> { get }
+    var showNewUserRewardsIntimationPublisher: CurrentValuePublisher<Bool, Never> { get }
     
-    func getUserRewards() async -> Result<Void, ClientProxyError>
+    func getUserRewards(shouldCheckRewardsIntiamtion: Bool) async -> Result<Void, ClientProxyError>
+    func dismissRewardsIntimation()
 }

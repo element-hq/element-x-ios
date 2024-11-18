@@ -23,7 +23,7 @@ class UserRewardsSettingsScreenViewModel:
             .store(in: &cancellables)
         
         Task {
-            await userSession.clientProxy.getUserRewards()
+            await userSession.clientProxy.getUserRewards(shouldCheckRewardsIntiamtion: false)
         }
     }
 }
