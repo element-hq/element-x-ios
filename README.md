@@ -9,15 +9,15 @@
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=element-x-ios&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=element-x-ios)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=element-x-ios&metric=bugs)](https://sonarcloud.io/summary/new_code?id=element-x-ios)
 
-# Element X iOS
+# Tchap X iOS
 
-Element X iOS is a [Matrix](https://matrix.org/) iOS Client provided by [Element](https://element.io/).
+Tchap X iOS is a [Matrix](https://matrix.org/) iOS Client based on [Element](https://element.io/).
 
-The application is a total rewrite of [Element iOS](https://github.com/element-hq/element-ios) using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targeting devices running iOS 17+.
+The application is a total rewrite of [Tchap iOS](https://github.com/tchapgouv/tchap-ios) using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targeting devices running iOS 17+.
 
 ## Rust SDK
 
-Element X leverages the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) through an FFI layer exposed as a [swift package](https://github.com/matrix-org/matrix-rust-components-swift) that the final client can directly import and use. We're doing this as a way to share code between platforms, with [Element X Android](https://github.com/element-hq/element-x-android) using the same SDK.
+Tchap X leverages the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) through an FFI layer exposed as a [swift package](https://github.com/matrix-org/matrix-rust-components-swift) that the final client can directly import and use. We're doing this as a way to share code between platforms, with [Tchap X Android](https://github.com/tchapgouv/tchap-x-android) using the same SDK.
 
 ## Status
 
@@ -35,9 +35,9 @@ Please refer to the [setting up a development environment](CONTRIBUTING.md#setti
 
 ## Support
 
-When you are experiencing an issue on Element X iOS, please first search in [GitHub issues](https://github.com/element-hq/element-x-ios/issues)
+When you are experiencing an issue on Tchap X iOS, please first search in [GitHub issues](https://github.com/tchapgouv/tchap-x-ios/issues)
 and then in [#element-x-ios:matrix.org](https://matrix.to/#/#element-x-ios:matrix.org).
-If after your research you still have a question, ask at [#element-x-ios:matrix.org](https://matrix.to/#/#element-x-ios:matrix.org). Otherwise feel free to create a GitHub issue if you encounter a bug or a crash, by explaining clearly in detail what happened. You can also perform bug reporting (Rageshake) from the Element application by going to the application settings. This is especially recommended when you encounter a crash.
+If after your research you still have a question, you can consult [Tchap FAQ](https://aide.tchap.beta.gouv.fr/fr/). Otherwise feel free to create a GitHub issue if you encounter a bug or a crash, by explaining clearly in detail what happened. You can also perform bug reporting (Rageshake) from the Tchap application by going to the application settings. This is especially recommended when you encounter a crash.
 
 ## Forking
 
