@@ -118,7 +118,7 @@ targets:
         BASE_BUNDLE_IDENTIFIER: fr.gouv.tchapx.dev
         APP_NAME: TchapX-Development
         APP_DISPLAY_NAME: TchapX Development # The name used in the application.
-        
+
         PRODUCT_NAME: $(APP_NAME)
         PRODUCT_BUNDLE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER)
         ASSETCATALOG_COMPILER_APPICON_NAME: TchapX-icon
@@ -129,7 +129,6 @@ targets:
         OTHER_SWIFT_FLAGS:
         - "-DIS_MAIN_APP -DIS_TCHAP_DEVELOPMENT"
 
-
     preBuildScripts:
     - name: 🛠 SwiftGen
       runOnlyWhenInstalling: false
@@ -138,7 +137,7 @@ targets:
       script: |
         export PATH="$PATH:/opt/homebrew/bin"
         if which swiftgen >/dev/null; then
-            swiftgen config run --config Tools/SwiftGen/swiftgen-config.yml
+            swiftgen config run --config Tools/SwiftGen/swiftgen-config.yml --config Tools/SwiftGen/swiftgen-config-tchap.yml
         else
             echo "warning: SwiftGen not installed, download from https://github.com/SwiftGen/SwiftGen"
         fi
@@ -216,6 +215,7 @@ targets:
     - path: ../main/Sources
       excludes:
         - Other/Extensions/XCUIElement.swift
+    - path: ../main/Resources
     - path: ../../ElementX/Resources
     - path: ../../ElementX/SupportingFiles/Settings.bundle
     - path: ../development/Resources

@@ -1,6 +1,8 @@
 --swiftversion 5.6
 
---exclude ElementX/Sources/Generated,vendor,**/Package.swift,ElementX/Sources/Mocks/Generated
+# Tchap: add TchapX generated files to exclusion list.
+# --exclude ElementX/Sources/Generated,vendor,**/Package.swift,ElementX/Sources/Mocks/Generated
+--exclude ElementX/Sources/Generated,vendor,**/Package.swift,ElementX/Sources/Mocks/Generated,TchapX/Sources/main/Generated
 
 --disable wrapMultiLineStatementBraces
 --disable hoistPatternLet

@@ -18,6 +18,8 @@ included:
 excluded:
   - IntegrationTests
   - ElementX/Sources/Generated
+# Tchap: add TchapX generated files to exclusion list.
+  - TchapX/Sources/main/Generated
 
 line_length:
   warning: 250
