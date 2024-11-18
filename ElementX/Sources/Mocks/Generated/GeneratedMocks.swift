@@ -2211,6 +2211,11 @@ class ClientProxyMock: ClientProxyProtocol {
     }
     var underlyingSecureBackupController: SecureBackupControllerProtocol!
     var sessionVerificationController: SessionVerificationControllerProxyProtocol?
+    var userRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never> {
+        get { return underlyingUserRewardsPublisher }
+        set(value) { underlyingUserRewardsPublisher = value }
+    }
+    var underlyingUserRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never>!
 
     //MARK: - isOnlyDeviceLeft
 
@@ -4775,6 +4780,70 @@ class ClientProxyMock: ClientProxyProtocol {
             return await userIdentityForClosure(userID)
         } else {
             return userIdentityForReturnValue
+        }
+    }
+    //MARK: - getUserRewards
+
+    var getUserRewardsUnderlyingCallsCount = 0
+    var getUserRewardsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getUserRewardsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getUserRewardsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getUserRewardsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getUserRewardsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getUserRewardsCalled: Bool {
+        return getUserRewardsCallsCount > 0
+    }
+
+    var getUserRewardsUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var getUserRewardsReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getUserRewardsUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getUserRewardsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getUserRewardsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getUserRewardsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getUserRewardsClosure: (() async -> Result<Void, ClientProxyError>)?
+
+    func getUserRewards() async -> Result<Void, ClientProxyError> {
+        getUserRewardsCallsCount += 1
+        if let getUserRewardsClosure = getUserRewardsClosure {
+            return await getUserRewardsClosure()
+        } else {
+            return getUserRewardsReturnValue
         }
     }
     //MARK: - loadMediaContentForSource

@@ -23,6 +23,7 @@ enum SettingsScreenViewModelAction: Equatable {
     case developerOptions
     case logout
     case deactivateAccount
+    case rewards
 }
 
 enum SettingsScreenSecuritySectionMode {
@@ -44,6 +45,8 @@ struct SettingsScreenViewState: BindableState {
     var showSecuritySectionBadge = false
     
     var showBlockedUsers = false
+    
+    var userRewards: ZeroRewards
     
     var bindings = SettingsScreenViewStateBindings()
 }
@@ -68,4 +71,5 @@ enum SettingsScreenViewAction {
     case advancedSettings
     case logout
     case deactivateAccount
+    case rewards
 }

@@ -20,6 +20,7 @@ public struct ZeroFonts {
     public let headingSM = Font.inter(size: 20) // title3
     public let headingSMSemibold = Font.inter(size: 20, weight: .semibold)
     public let headingMD = Font.inter(size: 22) // title2
+    public let headingMDRoboto = Font.robotoMonoRegular(size: 22) // title2
     public let headingMDBold = Font.inter(size: 22, weight: .bold)
     public let headingLG = Font.inter(size: 28) // title1
     public let headingLGBold = Font.inter(size: 28, weight: .bold)

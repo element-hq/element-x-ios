@@ -21,7 +21,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
                                            userID: userSession.clientProxy.userID,
                                            showAccountDeactivation: userSession.clientProxy.canDeactivateAccount,
-                                           showDeveloperOptions: AppSettings.isDevelopmentBuild),
+                                           showDeveloperOptions: AppSettings.isDevelopmentBuild,
+                                           userRewards: ZeroRewards.empty()),
                    mediaProvider: userSession.mediaProvider)
         
         userSession.clientProxy.userAvatarURLPublisher
@@ -68,9 +69,15 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .weakAssign(to: \.state.showBlockedUsers, on: self)
             .store(in: &cancellables)
         
+        userSession.clientProxy.userRewardsPublisher
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.userRewards, on: self)
+            .store(in: &cancellables)
+        
         Task {
             await userSession.clientProxy.loadUserAvatarURL()
             await userSession.clientProxy.loadUserDisplayName()
+            await userSession.clientProxy.getUserRewards()
             await state.accountProfileURL = userSession.clientProxy.accountURL(action: .profile)
             await state.accountSessionsListURL = userSession.clientProxy.accountURL(action: .sessionsList)
         }
@@ -108,6 +115,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.developerOptions)
         case .deactivateAccount:
             actionsSubject.send(.deactivateAccount)
+        case .rewards:
+            actionsSubject.send(.rewards)
         }
     }
 }

@@ -947,6 +947,12 @@ extension PreviewTests {
         }
     }
 
+    func test_userRewardsSettingsScreen() {
+        for preview in UserRewardsSettingsScreen_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_videoRoomTimelineView() {
         for preview in VideoRoomTimelineView_Previews._allPreviews {
             assertSnapshots(matching: preview)
