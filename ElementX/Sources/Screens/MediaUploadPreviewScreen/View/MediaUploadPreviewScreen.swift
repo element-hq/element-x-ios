@@ -18,7 +18,6 @@ struct MediaUploadPreviewScreen: View {
     
     var body: some View {
         mainContent
-            .environment(\.colorScheme, .dark)
             .id(context.viewState.url)
             .ignoresSafeArea(edges: [.horizontal])
             .safeAreaInset(edge: .bottom, spacing: 0) {
@@ -26,13 +25,13 @@ struct MediaUploadPreviewScreen: View {
                     .padding(.horizontal, 12)
                     .padding(.vertical, 16)
                     .background() // Don't use compound so we match the QLPreviewController.
-                    .environment(\.colorScheme, .dark)
             }
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .disabled(context.viewState.shouldDisableInteraction)
             .interactiveDismissDisabled()
+            .preferredColorScheme(.dark)
     }
     
     @ViewBuilder
@@ -69,6 +68,9 @@ struct MediaUploadPreviewScreen: View {
             Button { context.send(viewAction: .cancel) } label: {
                 Text(L10n.actionCancel)
             }
+            // Fix a bug with the preferredColorScheme on iOS 18 where the button doesn't
+            // follow the dark colour scheme on devices running with dark mode disabled.
+            .tint(.compound.textActionPrimary)
         }
     }
 }
