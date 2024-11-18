@@ -48,6 +48,7 @@ enum HomeScreenViewAction {
     case acceptInvite(roomIdentifier: String)
     case declineInvite(roomIdentifier: String)
     
+    case loadRewards
     case rewardsIntimated
 }
 

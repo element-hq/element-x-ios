@@ -128,9 +128,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         setupRoomListSubscriptions()
         
         updateRooms()
-        
-        loadUserRewards(userSession.clientProxy)
-        
+                
         Task {
             await checkSlidingSyncMigration()
         }
@@ -213,6 +211,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
         case .declineInvite(let roomIdentifier):
             showDeclineInviteConfirmationAlert(roomID: roomIdentifier)
+        case .loadRewards:
+            loadUserRewards()
         case .rewardsIntimated:
             dismissNewRewardsIntimation()
         }
@@ -476,10 +476,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                                          message: L10n.errorUnknown)
     }
     
-    private func loadUserRewards(_ clientProxy: ClientProxyProtocol) {
+    private func loadUserRewards() {
         Task.detached {
             try await Task.sleep(for: .seconds(2))
-            _ = await clientProxy.getUserRewards(shouldCheckRewardsIntiamtion: true)
+            _ = await self.userSession.clientProxy.getUserRewards(shouldCheckRewardsIntiamtion: true)
         }
     }
     

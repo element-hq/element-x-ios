@@ -18,6 +18,9 @@ struct HomeScreenContent: View {
     var body: some View {
         roomList
             .sentryTrace("\(Self.self)")
+            .task {
+                context.send(viewAction: .loadRewards)
+            }
     }
     
     private var roomList: some View {
