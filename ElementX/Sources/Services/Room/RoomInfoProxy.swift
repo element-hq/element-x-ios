@@ -90,8 +90,5 @@ struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
     var avatarURL: URL? { roomPreviewInfo.avatarUrl.flatMap(URL.init) }
     var isDirect: Bool { roomPreviewInfo.isDirect ?? false }
     var isSpace: Bool { roomPreviewInfo.roomType == .space }
-    
-    var activeMembersCount: Int {
-        return Int(roomPreviewInfo.numActiveMembers ?? roomPreviewInfo.numJoinedMembers)
-    }
+    var activeMembersCount: Int { Int(roomPreviewInfo.numActiveMembers ?? roomPreviewInfo.numJoinedMembers) }
 }
