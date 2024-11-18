@@ -1,0 +1,29 @@
+input_dir: ../../TchapX/main/
+output_dir: ../../TchapX/main/Sources/Generated/
+xcassets:
+  inputs:
+    - Resources/Assets.xcassets
+  outputs:
+    templateName: swift5
+    output: TchapAssets.swift
+    params:
+      enumName: TchapAssets # To not conflict with ElementX/Assets.swift
+strings:
+  - inputs: Resources/Localizations/en.lproj
+    filter: TchapLocalizable*
+    outputs:
+      templatePath: Templates/Strings/structured-swift5-element.stencil
+      output: TchapStrings.swift
+      params:
+        enumName: TchapL10n
+        lookupFunction: tr  # used for the loc to be computed variables
+        publicAccess: false
+  - inputs: Resources/Localizations/en.lproj
+    filter: TchapUntranslated*
+    outputs:
+      templatePath: Templates/Strings/structured-swift5-element-untranslated.stencil
+      output: TchapStrings+Untranslated.swift
+      params:
+        enumName: TchapUntranslatedL10n
+        lookupFunction: tr  # used for the loc to be computed variables
+        publicAccess: false

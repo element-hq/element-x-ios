@@ -119,4 +119,5 @@ targets:
     - path: ../../../../ElementX/Sources/AppHooks/AppHooks.swift
     - path: ../../../../ElementX/Sources/AppHooks/Hooks/ClientBuilderHook.swift
     - path: ../PrivacyInfo.xcprivacy
-#    - path: ../../../main/Sources/Other/Helpers/TchapX-String.swift
+    - path: ../../../main/Sources/Generated/TchapAssets.swift
+    - path: ../../../main/Sources/Generated/TchapStrings.swift
