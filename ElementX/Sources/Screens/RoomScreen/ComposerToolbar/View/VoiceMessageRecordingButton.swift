@@ -32,18 +32,15 @@ struct VoiceMessageRecordingButton: View {
         } label: {
             switch mode {
             case .idle:
-                CompoundIcon(\.micOn, size: .medium, relativeTo: .title)
+                CompoundIcon(\.micOn, size: .medium, relativeTo: .compound.headingLG)
                     .foregroundColor(.compound.iconSecondary)
-                    .scaledPadding(10, relativeTo: .title)
+                    .scaledPadding(10, relativeTo: .compound.headingLG)
             case .recording:
-                CompoundIcon(asset: Asset.Images.stopRecording, size: .medium, relativeTo: .title)
+                CompoundIcon(asset: Asset.Images.stopRecording, size: .medium, relativeTo: .compound.headingLG)
                     .foregroundColor(.compound.iconOnSolidPrimary)
-                    .scaledPadding(6, relativeTo: .title)
-                    .background(
-                        Circle()
-                            .foregroundColor(.compound.bgActionPrimaryRest)
-                    )
-                    .scaledPadding(4, relativeTo: .title)
+                    .scaledPadding(6, relativeTo: .compound.headingLG)
+                    .background(.compound.bgActionPrimaryRest, in: Circle())
+                    .scaledPadding(4, relativeTo: .compound.headingLG)
             }
         }
         .buttonStyle(VoiceMessageRecordingButtonStyle())
