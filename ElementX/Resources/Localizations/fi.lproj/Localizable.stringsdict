@@ -13,9 +13,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d ციფრი ჩაიწერა</string>
+			<string>%1$d numero syötetty</string>
 			<key>other</key>
-			<string>%1$d ციფრი ჩაიწერა</string>
+			<string>%1$d numeroa syötetty</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -29,9 +29,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>წაკითხულია %1$@ და %2$d-ს ადამიანის მიერ</string>
+			<string>%1$@ ja %2$d muu on lukenut viestin</string>
 			<key>other</key>
-			<string>წაკითხულია %1$@ და %2$d-ს ადამიანის მიერ</string>
+			<string>%1$@ ja %2$d muuta on lukenut viestin</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -45,9 +45,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d წევრი</string>
+			<string>%1$d jäsen</string>
 			<key>other</key>
-			<string>%1$d წევრები</string>
+			<string>%1$d jäsentä</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -61,9 +61,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d ხმა</string>
+			<string>%d ääni</string>
 			<key>other</key>
-			<string>%d ხმა</string>
+			<string>%d ääntä</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -77,9 +77,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@: %2$d შეტყობინება</string>
+			<string>%1$@: %2$d viesti</string>
 			<key>other</key>
-			<string>%1$@: %2$d შეტყობინება</string>
+			<string>%1$@: %2$d viestiä</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -93,9 +93,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d შეტყობინება</string>
+			<string>%d ilmoitus</string>
 			<key>other</key>
-			<string>%d შეტყობინება</string>
+			<string>%d ilmoitusta</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -109,9 +109,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d მოწვევა</string>
+			<string>%d kutsu</string>
 			<key>other</key>
-			<string>%d მოწვევები</string>
+			<string>%d kutsua</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -125,9 +125,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d ახალი მესიჯი</string>
+			<string>%d uusi viesti</string>
 			<key>other</key>
-			<string>%d ახალი მესიჯი</string>
+			<string>%d uutta viestiä</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages</key>
@@ -141,9 +141,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d წაუკითხავი შეტყობინება</string>
+			<string>%d lukematon viesti</string>
 			<key>other</key>
-			<string>%d წაუკითხავი შეტყობინება</string>
+			<string>%d lukematonta viestiä</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -157,9 +157,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d ოთახი</string>
+			<string>%d huoneessa</string>
 			<key>other</key>
-			<string>%d ოთახი</string>
+			<string>%d huoneessa</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle</key>
@@ -173,9 +173,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>თქვენ გაქვთ %1$d მცდელობა განსაბლოკად</string>
+			<string>Sinulla on %1$d yritys</string>
 			<key>other</key>
-			<string>თქვენ გაქვთ %1$d მცდელობა განსაბლოკად</string>
+			<string>Sinulla on %1$d yritystä</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -189,9 +189,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>არასწორი PIN. თქვენ %1$d შანსი დაგრჩათ</string>
+			<string>Väärä PIN-koodi. Sinulla on %1$d yritys jäljellä</string>
 			<key>other</key>
-			<string>არასწორი PIN. თქვენ %1$d შანსი დაგრჩათ</string>
+			<string>Väärä PIN-koodi. Sinulla on %1$d yritystä jäljellä</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -205,9 +205,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Pinned message</string>
+			<string>%1$d kiinnitetty viesti</string>
 			<key>other</key>
-			<string>%1$d Pinned messages</string>
+			<string>%1$d kiinnitettyä viestiä</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -221,9 +221,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d ადამიანი</string>
+			<string>%1$d henkilö</string>
 			<key>other</key>
-			<string>%1$d ადამიანი</string>
+			<string>%1$d henkilöä</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>
@@ -253,9 +253,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$dოთახის ცვლილება</string>
+			<string>%1$d muutos huoneeseen</string>
 			<key>other</key>
-			<string>%1$dოთახის ცვლილებები</string>
+			<string>%1$d muutosta huoneeseen</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>
@@ -269,9 +269,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@, %2$@ and %3$d other</string>
+			<string>%1$@, %2$@ ja %3$d muu</string>
 			<key>other</key>
-			<string>%1$@, %2$@ and %3$d others</string>
+			<string>%1$@, %2$@ ja %3$d muuta</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members_second_component_ios</key>
@@ -285,9 +285,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d other</string>
+			<string>%d muu</string>
 			<key>other</key>
-			<string>%d others</string>
+			<string>%d muuta</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>
@@ -301,9 +301,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ is typing</string>
+			<string>%1$@ kirjoittaa</string>
 			<key>other</key>
-			<string>%1$@ are typing</string>
+			<string>%1$@ kirjoittavat</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
@@ -317,9 +317,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Found %1$d push provider: %2$@</string>
+			<string>Löytyi %1$d push-palveluntarjoaja: %2$@</string>
 			<key>other</key>
-			<string>Found %1$d push providers: %2$@</string>
+			<string>Löytyi %1$d push-palveluntarjoajaa: %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_unified_push_success</key>
@@ -333,9 +333,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d distributor found: %2$@.</string>
+			<string>%1$d jakelija löytyi: %2$@.</string>
 			<key>other</key>
-			<string>%1$d distributors found: %2$@.</string>
+			<string>%1$d jakelijaa löytyi: %2$@.</string>
 		</dict>
 	</dict>
 </dict>

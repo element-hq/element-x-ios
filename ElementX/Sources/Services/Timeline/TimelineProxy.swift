@@ -257,6 +257,8 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         let handle = timeline.sendFile(url: url.path(percentEncoded: false),
                                        fileInfo: fileInfo,
+                                       caption: nil,
+                                       formattedCaption: nil,
                                        progressWatcher: UploadProgressListener { progress in
                                            progressSubject?.send(progress)
                                        },

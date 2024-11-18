@@ -125,7 +125,6 @@
 "common_audio" = "Geluid";
 "common_blocked_users" = "Geblokkeerde gebruikers";
 "common_bubbles" = "Bubbels";
-"common_call_invite" = "Gesprek bezig (niet ondersteund)";
 "common_call_started" = "Oproep gestart";
 "common_chat_backup" = "Chat back-up";
 "common_copyright" = "Copyright";
@@ -226,6 +225,7 @@
 "common_unable_to_invite_title" = "Kan uitnodiging(en) niet verzenden";
 "common_unlock" = "Ontgrendelen";
 "common_unmute" = "Dempen opheffen";
+"common_unsupported_call" = "Unsupported call";
 "common_unsupported_event" = "Niet-ondersteunde gebeurtenis";
 "common_username" = "Gebruikersnaam";
 "common_verification_cancelled" = "Verificatie geannuleerd";
@@ -365,6 +365,7 @@
 "screen_join_room_knock_message_description" = "Bericht (optioneel)";
 "screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
 "screen_join_room_knock_sent_title" = "Verzoek om toe te treden verzonden";
+"screen_knock_requests_list_decline_and_ban_action_title" = "Decline and ban";
 "screen_pinned_timeline_empty_state_description" = "Druk op een bericht en kies „%1$@” om het hier toe te voegen.";
 "screen_pinned_timeline_empty_state_headline" = "Zet belangrijke berichten vast zodat ze gemakkelijk te vinden zijn";
 "screen_reset_encryption_password_error" = "Er is een onbekende fout opgetreden. Controleer of het wachtwoord van je account juist is en probeer het opnieuw.";
@@ -377,11 +378,16 @@
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Een of meer van je apparaten zijn niet geverifieerd. Je kunt het bericht toch verzenden, of je kunt het voorlopig annuleren en het later opnieuw proberen nadat je al je apparaten hebt geverifieerd.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Je bericht is niet verzonden omdat je een of meerdere apparaten niet geverifieerd hebt";
 "screen_room_mentions_at_room_subtitle" = "Stuur een melding naar de hele kamer";
+"screen_room_multiple_knock_requests_view_all_button_title" = "View all";
 "screen_room_pinned_banner_indicator" = "%1$@ van %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Vastgezette berichten";
 "screen_room_pinned_banner_loading_description" = "Bericht laden...";
 "screen_room_pinned_banner_view_all_button_title" = "Bekijk alles";
+"screen_room_single_knock_request_accept_button_title" = "Accept";
+"screen_room_single_knock_request_title" = "%1$@ wants to join this room";
+"screen_room_single_knock_request_view_button_title" = "View";
 "screen_room_details_pinned_events_row_title" = "Vastgezette berichten";
+"screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_roomlist_knock_event_sent_description" = "Request to join sent";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Bericht niet verzonden omdat %1$@'s geverifieerde identiteit is gewijzigd.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Bericht niet verzonden omdat %1$@ niet alle apparaten heeft geverifieerd.";
@@ -789,6 +795,7 @@
 "screen_room_timeline_add_reaction" = "Emoji toevoegen";
 "screen_room_timeline_beginning_of_room" = "Dit is het begin van %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Dit is het begin van dit gesprek.";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
 "screen_room_timeline_less_reactions" = "Toon minder";
 "screen_room_timeline_message_copied" = "Bericht gekopieerd";
 "screen_room_timeline_no_permission_to_post" = "Je hebt geen toestemming om berichten in deze kamer te plaatsen";

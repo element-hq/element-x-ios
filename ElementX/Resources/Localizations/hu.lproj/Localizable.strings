@@ -125,7 +125,6 @@
 "common_audio" = "Hang";
 "common_blocked_users" = "Letiltott felhasználók";
 "common_bubbles" = "Buborékok";
-"common_call_invite" = "Folyamatban lévő hívás (nem támogatott)";
 "common_call_started" = "A hívás elindult";
 "common_chat_backup" = "Csevegés biztonsági mentése";
 "common_copyright" = "Szerzői jogok";
@@ -226,6 +225,7 @@
 "common_unable_to_invite_title" = "Nem sikerült elküldeni a meghívót (meghívókat)";
 "common_unlock" = "Feloldás";
 "common_unmute" = "Némítás feloldása";
+"common_unsupported_call" = "Unsupported call";
 "common_unsupported_event" = "Nem támogatott esemény";
 "common_username" = "Felhasználónév";
 "common_verification_cancelled" = "Az ellenőrzés megszakítva";
@@ -365,6 +365,7 @@
 "screen_join_room_knock_message_description" = "Üzenet (nem kötelező)";
 "screen_join_room_knock_sent_description" = "Ha a kérését elfogadják, meghívót kap a szobához való csatlakozáshoz.";
 "screen_join_room_knock_sent_title" = "Csatlakozási kérés elküldve";
+"screen_knock_requests_list_decline_and_ban_action_title" = "Decline and ban";
 "screen_pinned_timeline_empty_state_description" = "Nyomjon hosszan az üzenetre, és válassza a „%1$@” lehetőséget, hogy itt szerepeljen.";
 "screen_pinned_timeline_empty_state_headline" = "Tűzze ki a fontos üzeneteket, hogy könnyen felfedezhetők legyenek";
 "screen_reset_encryption_password_error" = "Ismeretlen hiba történt. Ellenőrizze, hogy a fiókja jelszava helyes-e, és próbálja meg újra.";
@@ -377,11 +378,16 @@
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Egy vagy több eszköze nincs ellenőrizve. Így is elküldheti az üzenetet, vagy egyelőre megszakíthatja, és később, az összes eszköz ellenőrzése után újrapróbálkozhat.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Az üzenet nem lett elküldve, mert egy vagy több eszközét nem ellenőrizte";
 "screen_room_mentions_at_room_subtitle" = "Az egész szoba értesítése";
+"screen_room_multiple_knock_requests_view_all_button_title" = "View all";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ kitűzött üzenet";
 "screen_room_pinned_banner_loading_description" = "Üzenet betöltése…";
 "screen_room_pinned_banner_view_all_button_title" = "Összes megtekintése";
+"screen_room_single_knock_request_accept_button_title" = "Accept";
+"screen_room_single_knock_request_title" = "%1$@ wants to join this room";
+"screen_room_single_knock_request_view_button_title" = "View";
 "screen_room_details_pinned_events_row_title" = "Kitűzött üzenetek";
+"screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_roomlist_knock_event_sent_description" = "Csatlakozási kérés elküldve";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Az üzenet nem lett elküldve, mert %1$@ ellenőrzött személyazonossága megváltozott.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Az üzenet nem lett elküldve, mert %1$@ nem ellenőrizte az összes eszközét.";
@@ -789,6 +795,7 @@
 "screen_room_timeline_add_reaction" = "Emodzsi hozzáadása";
 "screen_room_timeline_beginning_of_room" = "Ez a(z) %1$@ kezdete.";
 "screen_room_timeline_beginning_of_room_no_name" = "Ez a beszélgetés kezdete.";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
 "screen_room_timeline_less_reactions" = "Kevesebb megjelenítése";
 "screen_room_timeline_message_copied" = "Üzenet másolva";
 "screen_room_timeline_no_permission_to_post" = "Nincs jogosultsága arra, hogy bejegyzést tegyen közzé ebben a szobában";

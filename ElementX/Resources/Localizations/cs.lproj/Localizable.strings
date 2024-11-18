@@ -125,7 +125,6 @@
 "common_audio" = "Zvuk";
 "common_blocked_users" = "Blokovaní uživatelé";
 "common_bubbles" = "Bubliny";
-"common_call_invite" = "Probíhá hovor (nepodporováno)";
 "common_call_started" = "Hovor zahájen";
 "common_chat_backup" = "Záloha chatu";
 "common_copyright" = "Autorská práva";
@@ -226,6 +225,7 @@
 "common_unable_to_invite_title" = "Nelze odeslat pozvánky";
 "common_unlock" = "Odemknout";
 "common_unmute" = "Zrušit ztlumení";
+"common_unsupported_call" = "Nepodporované volání";
 "common_unsupported_event" = "Nepodporovaná událost";
 "common_username" = "Uživatelské jméno";
 "common_verification_cancelled" = "Ověření zrušeno";
@@ -365,6 +365,7 @@
 "screen_join_room_knock_message_description" = "Zpráva (nepovinné)";
 "screen_join_room_knock_sent_description" = "Pokud bude váš požadavek přijat, obdržíte pozvánku na vstup do místnosti.";
 "screen_join_room_knock_sent_title" = "Žádost o vstup odeslána";
+"screen_knock_requests_list_decline_and_ban_action_title" = "Odmítnout a vykázat";
 "screen_pinned_timeline_empty_state_description" = "Přidržte zprávu a vyberte „%1$@“, kterou chcete zahrnout sem.";
 "screen_pinned_timeline_empty_state_headline" = "Připněte důležité zprávy, aby je bylo možné snadno najít";
 "screen_reset_encryption_password_error" = "Došlo k neznámé chybě. Zkontrolujte, zda je heslo k účtu správné a zkuste to znovu.";
@@ -377,11 +378,16 @@
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Jedno nebo více vašich zařízení není ověřeno. Zprávu můžete přesto odeslat, nebo ji můžete prozatím zrušit a zkusit to znovu později, až ověříte všechna svá zařízení.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Vaše zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení";
 "screen_room_mentions_at_room_subtitle" = "Informujte celou místnost";
+"screen_room_multiple_knock_requests_view_all_button_title" = "Zobrazit vše";
 "screen_room_pinned_banner_indicator" = "%1$@ z %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Připnuté zprávy";
 "screen_room_pinned_banner_loading_description" = "Načítání zprávy...";
 "screen_room_pinned_banner_view_all_button_title" = "Zobrazit vše";
+"screen_room_single_knock_request_accept_button_title" = "Přijmout";
+"screen_room_single_knock_request_title" = "%1$@ chce vstoupit do této místnosti";
+"screen_room_single_knock_request_view_button_title" = "Zobrazit";
 "screen_room_details_pinned_events_row_title" = "Připnuté zprávy";
+"screen_room_details_requests_to_join_title" = "Žádosti o vstup";
 "screen_roomlist_knock_event_sent_description" = "Žádost o vstup odeslána";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Zpráva nebyla odeslána, protože ověřená identita uživatele %1$@ se změnila.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Zpráva nebyla odeslána, protože%1$@ neověřil(a) všechna zařízení.";
@@ -789,6 +795,7 @@
 "screen_room_timeline_add_reaction" = "Přidat emoji";
 "screen_room_timeline_beginning_of_room" = "Toto je začátek %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Toto je začátek této konverzace.";
+"screen_room_timeline_legacy_call" = "Nepodporované volání. Zeptejte se, zda volající může používat novou aplikaci Element X.";
 "screen_room_timeline_less_reactions" = "Zobrazit méně";
 "screen_room_timeline_message_copied" = "Zpráva zkopírována";
 "screen_room_timeline_no_permission_to_post" = "Nemáte oprávnění zveřejňovat příspěvky v této místnosti";
@@ -917,7 +924,7 @@
 "state_event_room_invite_you" = "Pozvali jste %1$@";
 "state_event_room_join" = "%1$@ vstoupil(a) do místnosti";
 "state_event_room_join_by_you" = "Vstoupili jste do místnosti";
-"state_event_room_knock" = "%1$@ požádal(a) o vstup";
+"state_event_room_knock" = "%1$@ žádá o vstup";
 "state_event_room_knock_accepted" = "%1$@ povolil(a) vstoupit %2$@";
 "state_event_room_knock_accepted_by_you" = "Povolili jste %1$@ vstoupit";
 "state_event_room_knock_by_you" = "Požádali jste o vstup";
