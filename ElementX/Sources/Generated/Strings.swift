@@ -1738,6 +1738,8 @@ internal enum L10n {
   internal static var screenRoomDetailsNotificationTitle: String { return L10n.tr("Localizable", "screen_room_details_notification_title") }
   /// Pinned messages
   internal static var screenRoomDetailsPinnedEventsRowTitle: String { return L10n.tr("Localizable", "screen_room_details_pinned_events_row_title") }
+  /// Requests to join
+  internal static var screenRoomDetailsRequestsToJoinTitle: String { return L10n.tr("Localizable", "screen_room_details_requests_to_join_title") }
   /// Roles and permissions
   internal static var screenRoomDetailsRolesAndPermissions: String { return L10n.tr("Localizable", "screen_room_details_roles_and_permissions") }
   /// Room name
