@@ -162,8 +162,9 @@ struct RoomDetailsScreen: View {
             }
             if context.viewState.canSeeKnockingRequests {
                 ListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
-                                        icon: \.user),
-                        details: .title(String(context.viewState.joinedMembersCount)),
+                                        icon: \.askToJoin),
+                        // TODO: Display count if requests > 0 when an API for them is available
+                        details: .counter(1),
                         kind: .navigationLink {
                             context.send(viewAction: .processTapRequestsToJoin)
                         })
@@ -366,6 +367,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let simpleRoomViewModel = {
+        ServiceLocator.shared.settings.knockingEnabled = true
         let members: [RoomMemberProxyMock] = [
             .mockMeAdmin,
             .mockAlice,

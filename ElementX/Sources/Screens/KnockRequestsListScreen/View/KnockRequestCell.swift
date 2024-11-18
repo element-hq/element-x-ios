@@ -26,9 +26,9 @@ struct KnockRequestCellInfo {
 struct KnockRequestCell: View {
     let cellInfo: KnockRequestCellInfo
     var mediaProvider: MediaProviderProtocol?
-    let onAccept: (String) -> Void
-    let onDecline: (String) -> Void
-    let onDeclineAndBan: (String) -> Void
+    let onAccept: ((String) -> Void)?
+    let onDecline: ((String) -> Void)?
+    let onDeclineAndBan: ((String) -> Void)?
     
     var body: some View {
         VStack(spacing: 0) {
@@ -70,23 +70,33 @@ struct KnockRequestCell: View {
     
     @ViewBuilder
     private var actions: some View {
-        HStack(spacing: 16) {
-            Button(L10n.actionDecline) {
-                onDecline(cellInfo.userID)
+        if onDecline != nil || onAccept != nil {
+            HStack(spacing: 16) {
+                if let onDecline {
+                    Button(L10n.actionDecline) {
+                        onDecline(cellInfo.userID)
+                    }
+                    .buttonStyle(.compound(.secondary))
+                }
+                
+                if let onAccept {
+                    Button(L10n.actionAccept) {
+                        onAccept(cellInfo.userID)
+                    }
+                    .buttonStyle(.compound(.primary))
+                }
             }
-            .buttonStyle(.compound(.secondary))
-            Button(L10n.actionAccept) {
-                onAccept(cellInfo.userID)
+        }
+        
+        if let onDeclineAndBan {
+            Button(L10n.screenKnockRequestsListDeclineAndBanActionTitle, role: .destructive) {
+                onDeclineAndBan(cellInfo.userID)
             }
-            .buttonStyle(.compound(.primary))
+            .buttonStyle(.compound(.plain))
+            .frame(maxWidth: .infinity)
+            .padding(.top, 12)
+            .padding(.bottom, 4)
         }
-        Button(L10n.screenKnockRequestsListDeclineAndBanActionTitle, role: .destructive) {
-            onDeclineAndBan(cellInfo.userID)
-        }
-        .buttonStyle(.compound(.plain))
-        .frame(maxWidth: .infinity)
-        .padding(.top, 12)
-        .padding(.bottom, 4)
     }
 }
 
@@ -158,5 +168,11 @@ struct KnockRequestCell_Previews: PreviewProvider, TestablePreview {
             .previewDisplayName("No reason")
         KnockRequestCell(cellInfo: aliceWithNoName, onAccept: { _ in }, onDecline: { _ in }, onDeclineAndBan: { _ in })
             .previewDisplayName("No name")
+        KnockRequestCell(cellInfo: aliceWithShortReason, onAccept: nil, onDecline: { _ in }, onDeclineAndBan: { _ in })
+            .previewDisplayName("No Accept")
+        KnockRequestCell(cellInfo: aliceWithShortReason, onAccept: nil, onDecline: nil, onDeclineAndBan: { _ in })
+            .previewDisplayName("No Accept and Decline")
+        KnockRequestCell(cellInfo: aliceWithShortReason, onAccept: { _ in }, onDecline: { _ in }, onDeclineAndBan: nil)
+            .previewDisplayName("No Ban")
     }
 }

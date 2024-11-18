@@ -18,7 +18,7 @@ struct KnockRequestInfo {
 struct KnockRequestsBannerView: View {
     let requests: [KnockRequestInfo]
     let onDismiss: () -> Void
-    let onAccept: (String) -> Void
+    let onAccept: ((String) -> Void)?
     let onViewAll: () -> Void
     var mediaProvider: MediaProviderProtocol?
     
@@ -46,7 +46,7 @@ struct KnockRequestsBannerView: View {
 private struct SingleKnockRequestBannerContent: View {
     let request: KnockRequestInfo
     let onDismiss: () -> Void
-    let onAccept: (String) -> Void
+    let onAccept: ((String) -> Void)?
     let onViewAll: () -> Void
     var mediaProvider: MediaProviderProtocol?
     
@@ -94,10 +94,12 @@ private struct SingleKnockRequestBannerContent: View {
         HStack(spacing: 12) {
             Button(L10n.screenRoomSingleKnockRequestViewButtonTitle, action: onViewAll)
                 .buttonStyle(.compound(.secondary))
-            Button(L10n.screenRoomSingleKnockRequestAcceptButtonTitle, action: {
-                onAccept(request.userID)
-            })
-            .buttonStyle(.compound(.primary))
+            if let onAccept {
+                Button(L10n.screenRoomSingleKnockRequestAcceptButtonTitle, action: {
+                    onAccept(request.userID)
+                })
+                .buttonStyle(.compound(.primary))
+            }
         }
         .padding(.top, request.reason == nil ? 0 : 2)
         .frame(maxWidth: .infinity)
@@ -181,6 +183,8 @@ struct KnockRequestsBannerView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         KnockRequestsBannerView(requests: singleRequest, onDismiss: { }, onAccept: { _ in }, onViewAll: { })
             .previewDisplayName("Single Request")
+        KnockRequestsBannerView(requests: singleRequest, onDismiss: { }, onAccept: nil, onViewAll: { })
+            .previewDisplayName("Single Request, no accept action")
         KnockRequestsBannerView(requests: singleRequestWithReason, onDismiss: { }, onAccept: { _ in }, onViewAll: { })
             .previewDisplayName("Single Request with reason")
         KnockRequestsBannerView(requests: singleRequestNoDisplayName, onDismiss: { }, onAccept: { _ in }, onViewAll: { })

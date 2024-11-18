@@ -219,6 +219,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         state.canEditRolesOrPermissions = await (try? roomProxy.suggestedRole(for: roomProxy.ownUserID).get()) == .administrator
         state.canInviteUsers = await (try? roomProxy.canUserInvite(userID: roomProxy.ownUserID).get()) == true
         state.canKickUsers = await (try? roomProxy.canUserKick(userID: roomProxy.ownUserID).get()) == true
+        state.canBanUsers = await (try? roomProxy.canUserBan(userID: roomProxy.ownUserID).get()) == true
     }
     
     private func setupNotificationSettingsSubscription() {
