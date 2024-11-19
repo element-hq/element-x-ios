@@ -43,7 +43,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     
     override func process(viewAction: MediaUploadPreviewScreenViewAction) {
         // Get the current caption before all the processing starts.
-        let caption = state.bindings.caption.nonEmptyString
+        let caption = state.bindings.caption.nonBlankString
         
         switch viewAction {
         case .send:
@@ -141,8 +141,8 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
 }
 
 extension NSAttributedString {
-    var nonEmptyString: String? {
-        guard !string.isEmpty else { return nil }
+    var nonBlankString: String? {
+        guard !string.isBlank else { return nil }
         return string
     }
 }
