@@ -50,7 +50,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var enableOnlySignedDeviceIsolationMode: Bool { get set }
     var elementCallBaseURLOverride: URL? { get set }
     var knockingEnabled: Bool { get set }
-    var frequentEmojisEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

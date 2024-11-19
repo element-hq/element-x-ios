@@ -57,7 +57,7 @@ class EmojiProvider: EmojiProviderProtocol {
     }
     
     func frequentlyUsedSystemEmojis() -> [String] {
-        guard appSettings.frequentEmojisEnabled, !ProcessInfo.processInfo.isiOSAppOnMac else {
+        guard !ProcessInfo.processInfo.isiOSAppOnMac else {
             return []
         }
         
@@ -72,7 +72,7 @@ class EmojiProvider: EmojiProviderProtocol {
     }
     
     func markEmojiAsFrequentlyUsed(_ emoji: String) {
-        guard appSettings.frequentEmojisEnabled else {
+        guard !ProcessInfo.processInfo.isiOSAppOnMac else {
             return
         }
         
