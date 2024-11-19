@@ -596,18 +596,16 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         let height: CGFloat? = messageContent.info?.height ?? messageContent.info?.h
         let fallbackName: String = messageContent.info?.name ?? "Image"
         
-        var aspectRatio: CGFloat?
-        if let width, let height, width > 0, height > 0 {
-            aspectRatio = width / height
-        }
+        let source = MediaSourceProxy(url: URL(string: messageContent.url ?? "") ?? URL("about:blank"),
+                                      mimeType: messageContent.info?.mimeType)
+        let imageInfo = ImageInfoProxy(source: source,
+                                       width: (width != nil) ? UInt64(max(0, floor(width!))) : nil,
+                                       height: (height != nil) ? UInt64(max(0, floor(height!))) : nil,
+                                       mimeType: messageContent.info?.mimeType)
         
         return .init(filename: messageContent.info?.name ?? "",
-                     source: MediaSourceProxy(url: URL(string: messageContent.url ?? "") ?? URL("about:blank"),
-                                              mimeType: messageContent.info?.mimeType),
-                     thumbnailSource: nil,
-                     width: width,
-                     height: height,
-                     aspectRatio: aspectRatio,
+                     imageInfo: imageInfo,
+                     thumbnailInfo: nil,
                      blurhash: nil,
                      contentType: UTType(mimeType: messageContent.info?.mimeType, fallbackFilename: fallbackName),
                      isZeroImage: true,

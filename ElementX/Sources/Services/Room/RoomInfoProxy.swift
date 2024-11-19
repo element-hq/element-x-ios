@@ -71,6 +71,7 @@ struct RoomInfoProxy: BaseRoomInfoProxyProtocol {
 
 struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
     let roomPreviewInfo: RoomPreviewInfo
+    let roomAvatarCached: String?
     
     var id: String { roomPreviewInfo.roomId }
     var displayName: String? { roomPreviewInfo.name }
@@ -80,6 +81,9 @@ struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
 
     var topic: String? { roomPreviewInfo.topic }
     var canonicalAlias: String? { roomPreviewInfo.canonicalAlias }
-    var avatarURL: URL? { roomPreviewInfo.avatarUrl.flatMap(URL.init) }
+    var avatarURL: URL? {
+        //roomPreviewInfo.avatarUrl.flatMap(URL.init)
+        roomAvatarCached.flatMap(URL.init) ?? roomPreviewInfo.avatarUrl.flatMap(URL.init)
+    }
     var activeMembersCount: Int { Int(roomPreviewInfo.numJoinedMembers) }
 }

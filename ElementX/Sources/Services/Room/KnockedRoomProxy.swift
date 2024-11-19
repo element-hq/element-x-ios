@@ -22,13 +22,13 @@ class KnockedRoomProxy: KnockedRoomProxyProtocol {
     
     init(roomListItem: RoomListItemProtocol,
          roomPreview: RoomPreviewProtocol,
-         ownUserID: String) async throws {
+         ownUserID: String,
          zeroUsersService: ZeroMatrixUsersService) async throws {
         self.roomListItem = roomListItem
         self.roomPreview = roomPreview
         self.ownUserID = ownUserID
-        let cachedRoomAvatar = zeroUsersService.getRoomAvatarFromCache(roomId: room.id())
-        info = try await RoomInfoProxy(roomInfo: room.roomInfo(), roomAvatarCached: cachedRoomAvatar)
+        let cachedRoomAvatar = zeroUsersService.getRoomAvatarFromCache(roomId: roomListItem.id())
+        info = try RoomPreviewInfoProxy(roomPreviewInfo: roomPreview.info(), roomAvatarCached: cachedRoomAvatar)
     }
     
     func cancelKnock() async -> Result<Void, RoomProxyError> {

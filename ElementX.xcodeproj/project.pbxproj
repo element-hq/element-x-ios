@@ -249,7 +249,6 @@
 		18DFC5CA2CD9551800462FE1 /* IdentityResetHandleSDKMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFB1D29B0870AFB6A56E9B8 /* IdentityResetHandleSDKMock.swift */; };
 		18DFC5CB2CD9552900462FE1 /* SecureBackupControllerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB29A2D95D3469B5F016655 /* SecureBackupControllerMock.swift */; };
 		18E3786918486D4C9726BC84 /* FormButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FBFC09F9DAFF1E4BA97849 /* FormButtonStyles.swift */; };
-		18FDE4ED6D83B0771452B43D /* RoomSelectionScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F104596B0620CEFE5DFD31B1 /* RoomSelectionScreenCoordinator.swift */; };
 		18E99FED2C9446EB0082DDA4 /* MessageContentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E99FEC2C9446EB0082DDA4 /* MessageContentHandler.swift */; };
 		18E99FF02C9447740082DDA4 /* MessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E99FEF2C9447740082DDA4 /* MessageContent.swift */; };
 		18E99FF22C944F350082DDA4 /* ZeroAttachmentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E99FF12C944F350082DDA4 /* ZeroAttachmentService.swift */; };
@@ -356,7 +355,7 @@
 		18E9A47E2C9829970082DDA4 /* AuthenticationStartScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F7CCC4A9D1927223F559D5 /* AuthenticationStartScreenViewModelProtocol.swift */; };
 		18E9A47F2C9829970082DDA4 /* AuthenticationTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCACD75595C40EACD6AD4A74 /* AuthenticationTextFieldStyle.swift */; };
 		18E9A4802C9829970082DDA4 /* AvatarHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC743C7A85E3171BCBF0A653 /* AvatarHeaderView.swift */; };
-		18E9A4812C9829970082DDA4 /* AvatarSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24B88AD3D1599E8CB1376E0 /* AvatarSize.swift */; };
+		18E9A4812C9829970082DDA4 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		18E9A4822C9829970082DDA4 /* BadgeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A028783CFFF861C5E44FFB1 /* BadgeLabel.swift */; };
 		18E9A4832C9829970082DDA4 /* BadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FA515B3B0D61EF1E907D2D /* BadgeView.swift */; };
 		18E9A4842C9829970082DDA4 /* BindableState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1D2CBAEA5D0BD00B90D1B /* BindableState.swift */; };
@@ -876,9 +875,9 @@
 		18E9A6872C9829970082DDA4 /* RustTracing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542D4F49FABA056DEEEB3400 /* RustTracing.swift */; };
 		18E9A6882C9829970082DDA4 /* SDKGeneratedMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F079B5DBD0D85FEA687AAE /* SDKGeneratedMocks.swift */; };
 		18E9A6892C9829970082DDA4 /* SFNumberedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEB5FF7A09B79B0C6B528F7C /* SFNumberedListView.swift */; };
-		18E9A68A2C9829970082DDA4 /* ScaledFrameModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D82F234B3576BD6268C7950 /* ScaledFrameModifier.swift */; };
-		18E9A68B2C9829970082DDA4 /* ScaledOffsetModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC5D7DA665E1F5F509C994C7 /* ScaledOffsetModifier.swift */; };
-		18E9A68C2C9829970082DDA4 /* ScaledPaddingModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26C69EC1157D71CC61ADAE4 /* ScaledPaddingModifier.swift */; };
+		18E9A68A2C9829970082DDA4 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		18E9A68B2C9829970082DDA4 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		18E9A68C2C9829970082DDA4 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		18E9A68D2C9829970082DDA4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A37E2FACFD041CE466223CD /* SceneDelegate.swift */; };
 		18E9A68E2C9829970082DDA4 /* ScreenTrackerViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 196004E7695FBA292A7944AF /* ScreenTrackerViewModifier.swift */; };
 		18E9A68F2C9829970082DDA4 /* ScrollViewAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53482ECA4B6633961EC224F5 /* ScrollViewAdapter.swift */; };
@@ -1132,6 +1131,20 @@
 		18ECA49C2CB53E7500938F8B /* RoomScreenFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4137900E28201C314C835C11 /* RoomScreenFooterView.swift */; };
 		18F3D1F42CD41A77002D2677 /* VisualListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD529C89924EE32CE307F36F /* VisualListItem.swift */; };
 		18F3D1F52CD41AC8002D2677 /* SessionVerificationRequestDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1265FAF2C0AF1C30605BE7 /* SessionVerificationRequestDetailsView.swift */; };
+		18FDE4ED6D83B0771452B43D /* RoomSelectionScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F104596B0620CEFE5DFD31B1 /* RoomSelectionScreenCoordinator.swift */; };
+		18FFCECA2CEC86F9002F2647 /* ZMatrixUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB7A2C8F8542001DA2A9 /* ZMatrixUser.swift */; };
+		18FFCECB2CEC8721002F2647 /* ZeroRewards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9A92CEB5A9000107940 /* ZeroRewards.swift */; };
+		18FFCECC2CEC8748002F2647 /* ZMatrixUserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB832C8F85F5001DA2A9 /* ZMatrixUserProfile.swift */; };
+		18FFCECD2CEC8764002F2647 /* ZRewards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9A32CEB56F500107940 /* ZRewards.swift */; };
+		18FFCECE2CEC87DF002F2647 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB922C90FE9C001DA2A9 /* String+Extensions.swift */; };
+		18FFCED02CEC8849002F2647 /* Tagged in Frameworks */ = {isa = PBXBuildFile; productRef = 18FFCECF2CEC8849002F2647 /* Tagged */; };
+		18FFCED12CEC8E71002F2647 /* Avatars.swift in Sources */ = {isa = PBXBuildFile; fileRef = C142248014E08E885E323E56 /* Avatars.swift */; };
+		18FFCED22CEC8EB9002F2647 /* ShareExtensionModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCAC01A97A43BE07B9E94E43 /* ShareExtensionModels.swift */; };
+		18FFCED32CEC8F45002F2647 /* RoomSelectionScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F104596B0620CEFE5DFD31B1 /* RoomSelectionScreenCoordinator.swift */; };
+		18FFCED42CEC8F66002F2647 /* RoomSelectionScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9D191A81FFB0C72CE73E77 /* RoomSelectionScreenModels.swift */; };
+		18FFCED52CEC8F71002F2647 /* RoomSelectionScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B4E3F1265581683E4997B8 /* RoomSelectionScreenViewModel.swift */; };
+		18FFCED62CEC8F77002F2647 /* RoomSelectionScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD2A058F3566FEEBA1D11B3 /* RoomSelectionScreenViewModelProtocol.swift */; };
+		18FFCED72CEC8F7E002F2647 /* RoomSelectionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D879DC5515B1D42577F96C94 /* RoomSelectionScreen.swift */; };
 		192A3CDCD0174AD1E4A128E4 /* AudioRecorderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2441E2424E78A40FC95DBA76 /* AudioRecorderTests.swift */; };
 		1950A80CD198BED283DFC2CE /* ClientProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2958E6D247AE2516BEEE8 /* ClientProxy.swift */; };
 		197441F1EF23A5DABACCA79F /* StickerRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5338450E6783A576B5C16DD /* StickerRoomTimelineView.swift */; };
@@ -2018,7 +2031,6 @@
 		D7CDBAE82782BD0529DECB5F /* AttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52BD6ED18E2EB61E28C340AD /* AttributedString.swift */; };
 		D8459AAD6969B1431ECBE990 /* UnsupportedRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9E535B3388755B65C34CD10 /* UnsupportedRoomTimelineView.swift */; };
 		D8CFA0EE46376F9FF04EEE45 /* TextRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4853C923A1AF43711D025EAF /* TextRoomTimelineView.swift */; };
-		D8F1462EA00AFC939FF9ACCA /* target.yml in Resources */ = {isa = PBXBuildFile; fileRef = 203D1ACC20287F8986C959D3 /* target.yml */; };
 		D98B5EE8C4F5A2CE84687AE8 /* UTType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897DF5E9A70CE05A632FC8AF /* UTType.swift */; };
 		D9F80CE61BF8FF627FDB0543 /* LoadableImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C352359663A0E52BA20761EE /* LoadableImage.swift */; };
 		DA7E867F5EAFF8E20B2EE3B6 /* SecureBackupScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3D16709ADD4F4BCC710B1E /* SecureBackupScreenModels.swift */; };
@@ -3551,6 +3563,7 @@
 			files = (
 				F66BBBE51B258BBB0B918C68 /* MatrixRustSDK in Frameworks */,
 				FDE47D4686BA0F86BB584633 /* Collections in Frameworks */,
+				18FFCED02CEC8849002F2647 /* Tagged in Frameworks */,
 				558F37B1A8F2C4CC9B1ACEDA /* Compound in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7201,28 +7214,6 @@
 			productReference = F506C6ADB1E1DA6638078E11 /* UITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		19F0C845D67E9BEA4BE7133E /* ShareExtension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A60414DDC2A95B206C91D4A4 /* Build configuration list for PBXNativeTarget "ShareExtension" */;
-			buildPhases = (
-				8431C24C3AE0AA27308F4185 /* Sources */,
-				087F14F27D0A6FDFB80392A1 /* Resources */,
-				7E8EB7CD881C54161D4474E5 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = ShareExtension;
-			packageProductDependencies = (
-				C79D91A7F9F378CECEF64B5A /* MatrixRustSDK */,
-				CAA3B9DF998B397C9EE64E8B /* Collections */,
-				3262F08E1C3483C22A7A319F /* Compound */,
-			);
-			productName = ShareExtension;
-			productReference = 3D8BEEFCA07BEA43F4F4BF77 /* ShareExtension.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 		18E9A3DF2C9829970082DDA4 /* Zero */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 18E9A78F2C9829970082DDA4 /* Build configuration list for PBXNativeTarget "Zero" */;
@@ -7278,6 +7269,28 @@
 			productName = ElementX;
 			productReference = 18E9A7922C9829970082DDA4 /* Zero.app */;
 			productType = "com.apple.product-type.application";
+		};
+		19F0C845D67E9BEA4BE7133E /* ShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A60414DDC2A95B206C91D4A4 /* Build configuration list for PBXNativeTarget "ShareExtension" */;
+			buildPhases = (
+				8431C24C3AE0AA27308F4185 /* Sources */,
+				7E8EB7CD881C54161D4474E5 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ShareExtension;
+			packageProductDependencies = (
+				C79D91A7F9F378CECEF64B5A /* MatrixRustSDK */,
+				CAA3B9DF998B397C9EE64E8B /* Collections */,
+				3262F08E1C3483C22A7A319F /* Compound */,
+				18FFCECF2CEC8849002F2647 /* Tagged */,
+			);
+			productName = ShareExtension;
+			productReference = 3D8BEEFCA07BEA43F4F4BF77 /* ShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		32C23C8D224D46EFE62AFAD0 /* UnitTests */ = {
 			isa = PBXNativeTarget;
@@ -8141,9 +8154,11 @@
 				18E9A4512C9829970082DDA4 /* AppLockSetupPINScreenViewModel.swift in Sources */,
 				18E9A4522C9829970082DDA4 /* AppLockSetupPINScreenViewModelProtocol.swift in Sources */,
 				18E9A4532C9829970082DDA4 /* AppLockSetupSettingsScreen.swift in Sources */,
+				18FFCED12CEC8E71002F2647 /* Avatars.swift in Sources */,
 				18E9A4542C9829970082DDA4 /* AppLockSetupSettingsScreenCoordinator.swift in Sources */,
 				18D5D9AB2CEB5A9600107940 /* ZeroRewards.swift in Sources */,
 				18E9A4552C9829970082DDA4 /* AppLockSetupSettingsScreenModels.swift in Sources */,
+				18FFCED22CEC8EB9002F2647 /* ShareExtensionModels.swift in Sources */,
 				18E9A4562C9829970082DDA4 /* AppLockSetupSettingsScreenViewModel.swift in Sources */,
 				18E9A4572C9829970082DDA4 /* AppLockSetupSettingsScreenViewModelProtocol.swift in Sources */,
 				18E9A4582C9829970082DDA4 /* AppLockTimer.swift in Sources */,
@@ -8188,7 +8203,7 @@
 				18E9A47E2C9829970082DDA4 /* AuthenticationStartScreenViewModelProtocol.swift in Sources */,
 				18E9A47F2C9829970082DDA4 /* AuthenticationTextFieldStyle.swift in Sources */,
 				18E9A4802C9829970082DDA4 /* AvatarHeaderView.swift in Sources */,
-				18E9A4812C9829970082DDA4 /* AvatarSize.swift in Sources */,
+				18E9A4812C9829970082DDA4 /* (null) in Sources */,
 				18E9A4822C9829970082DDA4 /* BadgeLabel.swift in Sources */,
 				18E9A4832C9829970082DDA4 /* BadgeView.swift in Sources */,
 				18E9A4842C9829970082DDA4 /* BindableState.swift in Sources */,
@@ -8212,6 +8227,7 @@
 				18E9A4952C9829970082DDA4 /* BugReportService.swift in Sources */,
 				18E9A4962C9829970082DDA4 /* BugReportServiceProtocol.swift in Sources */,
 				18E9A4972C9829970082DDA4 /* Bundle.swift in Sources */,
+				18FFCED62CEC8F77002F2647 /* RoomSelectionScreenViewModelProtocol.swift in Sources */,
 				18E9A4982C9829970082DDA4 /* ButtonStyle.swift in Sources */,
 				18E9A4992C9829970082DDA4 /* CallInviteRoomTimelineItem.swift in Sources */,
 				18E9A49A2C9829970082DDA4 /* CallInviteRoomTimelineView.swift in Sources */,
@@ -8244,6 +8260,7 @@
 				18E9A4B42C9829970082DDA4 /* ComposerDraftService.swift in Sources */,
 				18E9A4B52C9829970082DDA4 /* ComposerDraftServiceMock.swift in Sources */,
 				18E9A4B62C9829970082DDA4 /* ComposerDraftServiceProtocol.swift in Sources */,
+				18FFCED32CEC8F45002F2647 /* RoomSelectionScreenCoordinator.swift in Sources */,
 				182725742C9995B800B513B5 /* WebRegistrationScreen.swift in Sources */,
 				18E9A4B72C9829970082DDA4 /* ComposerToolbar.swift in Sources */,
 				18E9A4B82C9829970082DDA4 /* ComposerToolbarModels.swift in Sources */,
@@ -8562,6 +8579,7 @@
 				18E9A5E12C9829970082DDA4 /* PlaceholderAvatarImage.swift in Sources */,
 				18E9A5E22C9829970082DDA4 /* PlaceholderScreenCoordinator.swift in Sources */,
 				18E9A5E32C9829970082DDA4 /* PlainMentionBuilder.swift in Sources */,
+				18FFCED52CEC8F71002F2647 /* RoomSelectionScreenViewModel.swift in Sources */,
 				18E9A5E42C9829970082DDA4 /* PlatformViewVersionPredicate.swift in Sources */,
 				18E9A5E52C9829970082DDA4 /* ZeroAuthApi.swift in Sources */,
 				18E9A5E62C9829970082DDA4 /* PollFormScreen.swift in Sources */,
@@ -8726,6 +8744,7 @@
 				18E9A67C2C9829970082DDA4 /* RoomTimelineItemFactoryProtocol.swift in Sources */,
 				184EC9972CA5AF03000F405E /* AuthenticationClientBuilderFactory.swift in Sources */,
 				18E9A67D2C9829970082DDA4 /* RoomTimelineItemFixtures.swift in Sources */,
+				18FFCED72CEC8F7E002F2647 /* RoomSelectionScreen.swift in Sources */,
 				18E9A67E2C9829970082DDA4 /* RoomTimelineItemProperties.swift in Sources */,
 				18E9A67F2C9829970082DDA4 /* RoomTimelineItemProtocol.swift in Sources */,
 				18E9A6802C9829970082DDA4 /* RoomTimelineItemView.swift in Sources */,
@@ -8740,9 +8759,9 @@
 				18E9A6872C9829970082DDA4 /* RustTracing.swift in Sources */,
 				18E9A6882C9829970082DDA4 /* SDKGeneratedMocks.swift in Sources */,
 				18E9A6892C9829970082DDA4 /* SFNumberedListView.swift in Sources */,
-				18E9A68A2C9829970082DDA4 /* ScaledFrameModifier.swift in Sources */,
-				18E9A68B2C9829970082DDA4 /* ScaledOffsetModifier.swift in Sources */,
-				18E9A68C2C9829970082DDA4 /* ScaledPaddingModifier.swift in Sources */,
+				18E9A68A2C9829970082DDA4 /* (null) in Sources */,
+				18E9A68B2C9829970082DDA4 /* (null) in Sources */,
+				18E9A68C2C9829970082DDA4 /* (null) in Sources */,
 				18E9A68D2C9829970082DDA4 /* SceneDelegate.swift in Sources */,
 				18E9A68E2C9829970082DDA4 /* ScreenTrackerViewModifier.swift in Sources */,
 				18E9A68F2C9829970082DDA4 /* ScrollViewAdapter.swift in Sources */,
@@ -8948,6 +8967,7 @@
 				18E9A7452C9829970082DDA4 /* UserSessionStoreProtocol.swift in Sources */,
 				18E9A7462C9829970082DDA4 /* VideoRoomTimelineItem.swift in Sources */,
 				18E9A7472C9829970082DDA4 /* VideoRoomTimelineItemContent.swift in Sources */,
+				18FFCED42CEC8F66002F2647 /* RoomSelectionScreenModels.swift in Sources */,
 				18E9A7482C9829970082DDA4 /* VideoRoomTimelineView.swift in Sources */,
 				18E9A7492C9829970082DDA4 /* ViewFrameReader.swift in Sources */,
 				18E9A74A2C9829970082DDA4 /* VoiceMessageButton.swift in Sources */,
@@ -8990,18 +9010,23 @@
 				2F2906AE9BC3D0E79A6F98F8 /* Bundle.swift in Sources */,
 				F38D32C1B0232AAFE6A0822C /* ExtensionLogger.swift in Sources */,
 				C022284E2774A5E1EF683B4D /* FileManager.swift in Sources */,
+				18FFCECA2CEC86F9002F2647 /* ZMatrixUser.swift in Sources */,
 				05FF0CD80EDAB3A7C0D4700A /* InfoPlistReader.swift in Sources */,
 				0638CBDE3098B1C3F23AFCFA /* MXLog.swift in Sources */,
 				1A3783005E6945F8583AF997 /* NSItemProvider.swift in Sources */,
 				BE8E5985771DF9137C6CE89A /* ProcessInfo.swift in Sources */,
 				7AED78DC086695E93F0647D2 /* RustTracing.swift in Sources */,
+				18FFCECC2CEC8748002F2647 /* ZMatrixUserProfile.swift in Sources */,
 				DAF63A9CF9932CA8F6830F11 /* ShareExtensionModels.swift in Sources */,
+				18FFCECE2CEC87DF002F2647 /* String+Extensions.swift in Sources */,
 				5AA81A4E2D40A32A9E7F71F2 /* ShareExtensionView.swift in Sources */,
 				5AC5CD6D893073EE4D9A277E /* ShareExtensionViewController.swift in Sources */,
 				069358C2C825A19DE6CB127E /* TracingConfiguration.swift in Sources */,
+				18FFCECD2CEC8764002F2647 /* ZRewards.swift in Sources */,
 				03BD83E8BDD23AE059802E0D /* UITestsScreenIdentifier.swift in Sources */,
 				26252AA9AED64010788F4C26 /* UIView.swift in Sources */,
 				66E9202BED03B5BB00E812A1 /* URL.swift in Sources */,
+				18FFCECB2CEC8721002F2647 /* ZeroRewards.swift in Sources */,
 				4E22086585CB3B35FEEFBBB9 /* UserPreference.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -10145,7 +10170,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.8.9;
+				MARKETING_VERSION = 0.9.0;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -10180,7 +10205,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.8.9;
+				MARKETING_VERSION = 0.9.0;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -11341,6 +11366,11 @@
 			package = 18E9A4182C9829970082DDA4 /* XCRemoteSwiftPackageReference "CryptoSwift" */;
 			productName = CryptoSwift;
 		};
+		18FFCECF2CEC8849002F2647 /* Tagged */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1882EB7C2C8F85C7001DA2A9 /* XCRemoteSwiftPackageReference "swift-tagged" */;
+			productName = Tagged;
+		};
 		19CD5B074D7DD44AF4C58BB6 /* SwiftState */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6582B5AF3F104B0F7E031E7D /* XCRemoteSwiftPackageReference "SwiftState" */;
@@ -11590,11 +11620,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6FC4820D8D4559CEECA064D7 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
 			productName = MatrixRustSDK;
-		};
-		CA07D57389DACE18AEB6A5E2 /* WysiwygComposer */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EE40B0E16A55BD23ECBFFD22 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */;
-			productName = WysiwygComposer;
 		};
 		CAA3B9DF998B397C9EE64E8B /* Collections */ = {
 			isa = XCSwiftPackageProductDependency;

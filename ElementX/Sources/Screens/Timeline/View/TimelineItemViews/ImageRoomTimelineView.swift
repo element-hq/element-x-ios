@@ -26,16 +26,16 @@ struct ImageRoomTimelineView: View {
                             }
                             .startLoadingBeforeViewAppear(false)
                     } else {
-                        LoadableImage(mediaSource: source,
-                                      mediaType: .timelineItem,
-                                      blurhash: timelineItem.content.blurhash,
-                                      mediaProvider: context.mediaProvider) {
-                            placeholder
-                        }
+                        LoadableImage(mediaSource: timelineItem.content.imageInfo.source,
+                                                  mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
+                                                  blurhash: timelineItem.content.blurhash,
+                                                  size: timelineItem.content.imageInfo.size,
+                                                  mediaProvider: context.mediaProvider) {
+                                        placeholder
+                                    }
                     }
                 }
-                .timelineMediaFrame(height: timelineItem.content.height,
-                                    aspectRatio: timelineItem.content.aspectRatio)
+                .timelineMediaFrame(imageInfo: timelineItem.content.imageInfo)
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(L10n.commonImage)
                 // This clip shape is distinct from the one in the styler as that one

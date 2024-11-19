@@ -66,7 +66,7 @@ struct ZeroLoginScreen: View {
     var loginForm: some View {
         VStack(alignment: .center, spacing: 0) {
             TextField(text: $context.username) {
-                Text("Email").foregroundColor(.compound.textPlaceholder)
+                Text("Email").foregroundColor(.compound.textSecondary)
             }
             .focused($isUsernameFocused)
             .textFieldStyle(.authentication(accessibilityIdentifier: A11yIdentifiers.loginScreen.emailUsername))
@@ -80,7 +80,7 @@ struct ZeroLoginScreen: View {
             .padding(.bottom, 20)
             
             SecureField(text: $context.password) {
-                Text(L10n.commonPassword).foregroundColor(.compound.textPlaceholder)
+                Text(L10n.commonPassword).foregroundColor(.compound.textSecondary)
             }
             .focused($isPasswordFocused)
             .textFieldStyle(.authentication(accessibilityIdentifier: A11yIdentifiers.loginScreen.password))

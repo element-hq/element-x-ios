@@ -1015,7 +1015,7 @@ class ClientProxy: ClientProxyProtocol {
                 if appSettings.knockingEnabled {
                     return try await .knocked(KnockedRoomProxy(roomListItem: roomListItem,
                                                                roomPreview: roomListItem.previewRoom(via: []),
-                                                               ownUserID: userID))
+                                                               ownUserID: userID,
                                                                zeroUsersService: zeroMatrixUsersService))
                 } else {
                     return try await .invited(InvitedRoomProxy(roomListItem: roomListItem,

@@ -17,7 +17,7 @@ struct UserRewardsSettingsScreen: View {
                 rewardsView
             }
         }
-        .navigationTitle(showRewardsFAQ ? "Income FAQ" : "Income")
+        .navigationTitle(showRewardsFAQ ? "ZBI FAQ" : "ZBI")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden()
         .toolbar {

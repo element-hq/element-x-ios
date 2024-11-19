@@ -66,7 +66,7 @@ struct CreateRoomScreen: View {
                     
                     TextField(L10n.screenCreateRoomRoomNameLabel,
                               text: roomNameBinding,
-                              prompt: Text("Group Name").foregroundColor(.compound.textPlaceholder),
+                              prompt: Text("Group Name").foregroundColor(.compound.textSecondary),
                               axis: .horizontal)
                         .focused($focus, equals: .name)
                         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)

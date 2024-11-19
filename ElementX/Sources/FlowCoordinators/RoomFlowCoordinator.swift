@@ -1444,8 +1444,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.start()
     }
     
-    private func presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, itemID: TimelineItemIdentifier) {
-        Task { await resolveAndResend(failure: failure, itemID: itemID) }
+    private func presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy) {
+        Task { await resolveAndResend(failure: failure, sendHandle: sendHandle) }
 //        let coordinator = ResolveVerifiedUserSendFailureScreenCoordinator(parameters: .init(failure: failure,
 //                                                                                            itemID: itemID,
 //                                                                                            roomProxy: roomProxy,
@@ -1465,12 +1465,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
 //        }
     }
     
-    private func resolveAndResend(failure: TimelineItemSendFailure.VerifiedUser, itemID: TimelineItemIdentifier) async {
+    private func resolveAndResend(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy) async {
         let result = switch failure {
         case .hasUnsignedDevice(let devices):
-            await roomProxy.ignoreDeviceTrustAndResend(devices: devices, itemID: itemID)
+            await roomProxy.ignoreDeviceTrustAndResend(devices: devices, sendHandle: sendHandle)
         case .changedIdentity(let users):
-            await roomProxy.withdrawVerificationAndResend(userIDs: users, itemID: itemID)
+            await roomProxy.withdrawVerificationAndResend(userIDs: users, sendHandle: sendHandle)
         }
         if case let .failure(error) = result {
             MXLog.error("Failed to resolve send failure: \(error)")
