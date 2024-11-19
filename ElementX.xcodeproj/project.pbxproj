@@ -689,6 +689,7 @@
 		90EB25D13AE6EEF034BDE9D2 /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D52BAA5BADB06E5E8C295D /* Assets.swift */; };
 		914BDF61447C723F104BCE33 /* SessionDirectories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43C2067FF58B4996323EB40C /* SessionDirectories.swift */; };
 		915B4CDAF220D9AEB4047D45 /* PollInteractionHandlerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 259E5B05BDE6E20C26CF11B4 /* PollInteractionHandlerProtocol.swift */; };
+		919BAE492CECA981009F6A5B /* TimelineProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919BAE482CECA981009F6A5B /* TimelineProxyMock.swift */; };
 		91ABC91758A6E4A5FAA2E9C4 /* ReadReceipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 314F1C79850BE46E8ABEAFCB /* ReadReceipt.swift */; };
 		91C6AC0E9D2B9C0C76CC6AD4 /* RoomDirectorySearchScreenScreenModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3984C93B8E9B10C92DADF9EE /* RoomDirectorySearchScreenScreenModelProtocol.swift */; };
 		91D1A46A733EC24C081DD353 /* SessionVerificationRequestDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1265FAF2C0AF1C30605BE7 /* SessionVerificationRequestDetailsView.swift */; };
@@ -1900,6 +1901,7 @@
 		90F2F8998E5632668B0AD848 /* RoomTimelineItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineItemView.swift; sourceTree = "<group>"; };
 		913C8E13B8B602C7B6C0C4AE /* PillTextAttachmentData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillTextAttachmentData.swift; sourceTree = "<group>"; };
 		91868EB98818044E6FEBE532 /* NotificationPermissionsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionsScreenCoordinator.swift; sourceTree = "<group>"; };
+		919BAE482CECA981009F6A5B /* TimelineProxyMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineProxyMock.swift; sourceTree = "<group>"; };
 		91C8BD78F7B9247AC57FA1A3 /* RedactedRoomTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedactedRoomTimelineView.swift; sourceTree = "<group>"; };
 		91CF6F7D08228D16BA69B63B /* zh-Hant-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant-TW"; path = "zh-Hant-TW.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		91FFE1F410969ECB23FE9BB2 /* TimelineItemMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemMenu.swift; sourceTree = "<group>"; };
@@ -3032,6 +3034,7 @@
 				9EB9BA2F30EB8C33226D8FF1 /* UserSessionStoreMock.swift */,
 				B23135B06B044CB811139D2F /* Generated */,
 				E5E545F92D01588360A9BAC5 /* SDK */,
+				919BAE482CECA981009F6A5B /* TimelineProxyMock.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -7096,6 +7099,7 @@
 				50C90117FE25390BFBD40173 /* RustTracing.swift in Sources */,
 				D43F0503EF2CBC55272538FE /* SDKGeneratedMocks.swift in Sources */,
 				88CBF1595E39CE697928DE48 /* SFNumberedListView.swift in Sources */,
+				919BAE492CECA981009F6A5B /* TimelineProxyMock.swift in Sources */,
 				FB595EC9C00AB32F39034055 /* SceneDelegate.swift in Sources */,
 				0437765FF480249486893CC7 /* ScreenTrackerViewModifier.swift in Sources */,
 				0BFA67AFD757EE2BA569836A /* ScrollViewAdapter.swift in Sources */,
