@@ -408,7 +408,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
-        switch await roomProxy.acceptInvitation() {
+        switch await userSession.clientProxy.joinRoom(roomID, via: []) {
         case .success:
             actionsSubject.send(.presentRoom(roomIdentifier: roomID))
             analyticsService.trackJoinedRoom(isDM: roomProxy.info.isDirect,
