@@ -125,7 +125,6 @@
 "common_audio" = "Аўдыя";
 "common_blocked_users" = "Заблакіраваныя карыстальнікі";
 "common_bubbles" = "Бурбалкі";
-"common_call_invite" = "Ідзе званок (не падтрымліваецца)";
 "common_call_started" = "Званок пачаўся";
 "common_chat_backup" = "Рэзервовае капіраванне чатаў";
 "common_copyright" = "Аўтарскае права";
@@ -226,6 +225,7 @@
 "common_unable_to_invite_title" = "Немагчыма адправіць запрашэнне(я)";
 "common_unlock" = "Разблакіраваць";
 "common_unmute" = "Укл. гук";
+"common_unsupported_call" = "Unsupported call";
 "common_unsupported_event" = "Падзея не падтрымліваецца";
 "common_username" = "Імя карыстальніка";
 "common_verification_cancelled" = "Праверка адменена";
@@ -365,6 +365,7 @@
 "screen_join_room_knock_message_description" = "Message (optional)";
 "screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
 "screen_join_room_knock_sent_title" = "Request to join sent";
+"screen_knock_requests_list_decline_and_ban_action_title" = "Decline and ban";
 "screen_pinned_timeline_empty_state_description" = "Націсніце на паведамленне і абярыце «%1$@ », каб уключыць сюды.";
 "screen_pinned_timeline_empty_state_headline" = "Замацуеце важныя паведамленні, каб іх можна было лёгка знайсці";
 "screen_reset_encryption_password_error" = "Адбылася невядомая памылка. Калі ласка, праверце правільнасць пароля вашага ўліковага запісу і паўтарыце спробу.";
@@ -377,11 +378,16 @@
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "One or more of your devices are unverified. You can send the message anyway, or you can cancel for now and try again later after you have verified all of your devices.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Your message was not sent because you have not verified one or more of your devices";
 "screen_room_mentions_at_room_subtitle" = "Апавясціць увесь пакой";
+"screen_room_multiple_knock_requests_view_all_button_title" = "View all";
 "screen_room_pinned_banner_indicator" = "%1$@ з %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Замацаваныя паведамленні";
 "screen_room_pinned_banner_loading_description" = "Загрузка паведамлення…";
 "screen_room_pinned_banner_view_all_button_title" = "Паглядзець усе";
+"screen_room_single_knock_request_accept_button_title" = "Accept";
+"screen_room_single_knock_request_title" = "%1$@ wants to join this room";
+"screen_room_single_knock_request_view_button_title" = "View";
 "screen_room_details_pinned_events_row_title" = "Замацаваныя паведамленні";
+"screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_roomlist_knock_event_sent_description" = "Request to join sent";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
@@ -789,6 +795,7 @@
 "screen_room_timeline_add_reaction" = "Дадаць эмодзі";
 "screen_room_timeline_beginning_of_room" = "Гэта пачатак %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Гэта пачатак гэтай размовы.";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
 "screen_room_timeline_less_reactions" = "Паказаць менш";
 "screen_room_timeline_message_copied" = "Паведамленне скапіравана";
 "screen_room_timeline_no_permission_to_post" = "У Вас няма дазволу на публікацыю ў гэтым пакоі";

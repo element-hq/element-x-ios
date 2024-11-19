@@ -254,6 +254,24 @@
 			<string>%1$d osôb</string>
 		</dict>
 	</dict>
+	<key>screen_room_multiple_knock_requests_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ +%2$d ďalší chcú vstúpiť do tejto miestnosti</string>
+			<key>few</key>
+			<string>%1$@ +%2$d ďalší chcú vstúpiť do tejto miestnosti</string>
+			<key>other</key>
+			<string>%1$@ +%2$d ďalších chce vstúpiť do tejto miestnosti</string>
+		</dict>
+	</dict>
 	<key>screen_room_timeline_state_changes</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>

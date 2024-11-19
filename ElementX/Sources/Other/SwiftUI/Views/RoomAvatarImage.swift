@@ -22,7 +22,7 @@ enum RoomAvatar: Equatable {
 struct RoomAvatarImage: View {
     let avatar: RoomAvatar
     
-    let avatarSize: AvatarSize
+    let avatarSize: Avatars.Size
     let mediaProvider: MediaProviderProtocol?
     
     private(set) var onAvatarTap: ((URL) -> Void)?

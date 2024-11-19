@@ -305,6 +305,18 @@ extension PreviewTests {
         }
     }
 
+    func test_knockRequestCell() {
+        for preview in KnockRequestCell_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_knockRequestsBannerView() {
+        for preview in KnockRequestsBannerView_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_legalInformationScreen() {
         for preview in LegalInformationScreen_Previews._allPreviews {
             assertSnapshots(matching: preview)
@@ -697,6 +709,12 @@ extension PreviewTests {
 
     func test_roomScreen() {
         for preview in RoomScreen_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_roomSelectionScreen() {
+        for preview in RoomSelectionScreen_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }

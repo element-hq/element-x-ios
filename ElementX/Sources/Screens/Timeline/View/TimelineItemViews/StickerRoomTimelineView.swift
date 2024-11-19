@@ -14,14 +14,14 @@ struct StickerRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            LoadableImage(url: timelineItem.imageURL,
-                          mediaType: .timelineItem,
+            LoadableImage(mediaSource: timelineItem.imageInfo.source,
+                          mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
                           blurhash: timelineItem.blurhash,
+                          size: timelineItem.imageInfo.size,
                           mediaProvider: context.mediaProvider) {
                 placeholder
             }
-            .timelineMediaFrame(height: timelineItem.height,
-                                aspectRatio: timelineItem.aspectRatio)
+            .timelineMediaFrame(imageInfo: timelineItem.imageInfo)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("\(L10n.commonSticker), \(timelineItem.body)")
         }
@@ -50,7 +50,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                           isEditable: false,
                                                                           canBeRepliedTo: true,
                                                                           sender: .init(id: "Bob"),
-                                                                          imageURL: URL.picturesDirectory))
+                                                                          imageInfo: .mockImage))
             
             StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .randomEvent,
                                                                           body: "Some other image",
@@ -59,7 +59,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                           isEditable: false,
                                                                           canBeRepliedTo: true,
                                                                           sender: .init(id: "Bob"),
-                                                                          imageURL: URL.picturesDirectory))
+                                                                          imageInfo: .mockImage))
             
             StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .randomEvent,
                                                                           body: "Blurhashed image",
@@ -68,8 +68,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                           isEditable: false,
                                                                           canBeRepliedTo: true,
                                                                           sender: .init(id: "Bob"),
-                                                                          imageURL: URL.picturesDirectory,
-                                                                          aspectRatio: 0.7,
+                                                                          imageInfo: .mockImage,
                                                                           blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW"))
         }
     }

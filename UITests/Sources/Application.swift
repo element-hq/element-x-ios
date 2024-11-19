@@ -53,11 +53,11 @@ enum Application {
 extension XCUIApplication {
     static var recordMode: SnapshotTestingConfiguration.Record = .missing
     
-    @MainActor
     /// Assert screenshot for a screen with the given identifier. Does not fail if a screenshot is newly created.
     /// - Parameter identifier: Identifier of the UI test screen
     /// - Parameter step: An optional integer that can be used to take multiple snapshots per test identifier.
     /// - Parameter insets: Optional insets with which to crop the image by.
+    @MainActor
     func assertScreenshot(_ identifier: UITestsScreenIdentifier, step: Int? = nil, insets: UIEdgeInsets? = nil, delay: Duration = .seconds(1), precision: Float = 0.99) async throws {
         var snapshotName = identifier.rawValue
         if let step {

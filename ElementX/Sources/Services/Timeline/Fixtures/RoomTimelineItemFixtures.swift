@@ -258,12 +258,8 @@ enum RoomTimelineItemFixtures {
                                   isThreaded: false,
                                   sender: .init(id: ""),
                                   content: .init(filename: "video.mp4",
-                                                 duration: 100,
-                                                 source: .init(url: .picturesDirectory, mimeType: nil),
-                                                 thumbnailSource: .init(url: .picturesDirectory, mimeType: nil),
-                                                 width: 1920,
-                                                 height: 1080,
-                                                 aspectRatio: 1.78,
+                                                 videoInfo: .mockVideo,
+                                                 thumbnailInfo: .mockThumbnail,
                                                  blurhash: "KtI~70X5V?yss9oyrYs:t6")),
             ImageRoomTimelineItem(id: .randomEvent,
                                   timestamp: "10:47 am",
@@ -273,11 +269,8 @@ enum RoomTimelineItemFixtures {
                                   isThreaded: false,
                                   sender: .init(id: ""),
                                   content: .init(filename: "image.jpg",
-                                                 source: .init(url: .picturesDirectory, mimeType: nil),
-                                                 thumbnailSource: nil,
-                                                 width: 5120,
-                                                 height: 3412,
-                                                 aspectRatio: 1.5,
+                                                 imageInfo: .mockImage,
+                                                 thumbnailInfo: nil,
                                                  blurhash: "KpE4oyayR5|GbHb];3j@of"))
         ]
     }

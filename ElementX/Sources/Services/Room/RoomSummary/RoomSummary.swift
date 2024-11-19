@@ -69,6 +69,20 @@ extension RoomSummary: CustomStringConvertible {
     - notificationMode: \(notificationMode?.rawValue ?? "nil")
     """
     }
+    
+    /// Used where summaries are shown in a list e.g. message forwarding,
+    /// global search, share destination list etc.
+    var roomListDescription: String {
+        if isDirect {
+            return canonicalAlias ?? ""
+        }
+        
+        if let alias = canonicalAlias {
+            return alias
+        }
+        
+        return heroes.compactMap(\.displayName).formatted(.list(type: .and))
+    }
 }
 
 extension RoomSummary {

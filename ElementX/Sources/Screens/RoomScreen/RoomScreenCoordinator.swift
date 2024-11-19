@@ -40,7 +40,7 @@ enum RoomScreenCoordinatorAction {
     case presentMessageForwarding(forwardingItem: MessageForwardingItem)
     case presentCallScreen
     case presentPinnedEventsTimeline
-    case presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, itemID: TimelineItemIdentifier)
+    case presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
@@ -132,8 +132,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentMessageForwarding(forwardingItem: forwardingItem))
                 case .displayLocation(let body, let geoURI, let description):
                     actionsSubject.send(.presentLocationViewer(body: body, geoURI: geoURI, description: description))
-                case .displayResolveSendFailure(let failure, let itemID):
-                    actionsSubject.send(.presentResolveSendFailure(failure: failure, itemID: itemID))
+                case .displayResolveSendFailure(let failure, let sendHandle):
+                    actionsSubject.send(.presentResolveSendFailure(failure: failure, sendHandle: sendHandle))
                 case .composer(let action):
                     composerViewModel.process(timelineAction: action)
                 case .hasScrolled(direction: let direction):

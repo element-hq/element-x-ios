@@ -139,7 +139,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%d 个房间</string>
+			<string>%d 个聊天室</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle</key>
@@ -198,6 +198,22 @@
 			<string>%1$d 人</string>
 		</dict>
 	</dict>
+	<key>screen_room_multiple_knock_requests_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ +%2$d other want to join this room</string>
+			<key>other</key>
+			<string>%1$@ +%2$d others want to join this room</string>
+		</dict>
+	</dict>
 	<key>screen_room_timeline_state_changes</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -209,7 +225,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$d 聊天室变更</string>
+			<string>%1$d 个聊天室变化</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>

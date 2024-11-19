@@ -11,28 +11,29 @@ import UIKit
 
 class KnockedRoomProxy: KnockedRoomProxyProtocol {
     private let roomListItem: RoomListItemProtocol
-    private let room: RoomProtocol
+    private let roomPreview: RoomPreviewProtocol
+    let info: BaseRoomInfoProxyProtocol
     
     // A room identifier is constant and lazy stops it from being fetched
     // multiple times over FFI
-    lazy var id: String = room.id()
+    lazy var id = info.id
     
-    var ownUserID: String { room.ownUserId() }
-    
-    let info: RoomInfoProxy
+    let ownUserID: String
     
     init(roomListItem: RoomListItemProtocol,
-         room: RoomProtocol,
+         roomPreview: RoomPreviewProtocol,
+         ownUserID: String) async throws {
          zeroUsersService: ZeroMatrixUsersService) async throws {
         self.roomListItem = roomListItem
-        self.room = room
+        self.roomPreview = roomPreview
+        self.ownUserID = ownUserID
         let cachedRoomAvatar = zeroUsersService.getRoomAvatarFromCache(roomId: room.id())
         info = try await RoomInfoProxy(roomInfo: room.roomInfo(), roomAvatarCached: cachedRoomAvatar)
     }
     
     func cancelKnock() async -> Result<Void, RoomProxyError> {
         do {
-            return try await .success(room.leave())
+            return try await .success(roomPreview.leave())
         } catch {
             MXLog.error("Failed cancelling the knock with error: \(error)")
             return .failure(.sdkError(error))

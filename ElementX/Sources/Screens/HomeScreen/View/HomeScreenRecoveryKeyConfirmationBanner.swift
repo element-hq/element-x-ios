@@ -10,13 +10,37 @@ import Compound
 import SwiftUI
 
 struct HomeScreenRecoveryKeyConfirmationBanner: View {
-    let requiresExtraAccountSetup: Bool
+    enum State { case setUpRecovery, recoveryOutOfSync }
+    let state: State
     var context: HomeScreenViewModel.Context
     
-    var title: String { requiresExtraAccountSetup ? L10n.bannerSetUpRecoveryTitle : L10n.confirmRecoveryKeyBannerTitle }
-    var message: String { requiresExtraAccountSetup ? L10n.bannerSetUpRecoveryContent : L10n.confirmRecoveryKeyBannerMessage }
-    var actionTitle: String { requiresExtraAccountSetup ? L10n.bannerSetUpRecoverySubmit : L10n.confirmRecoveryKeyBannerPrimaryButtonTitle }
-    var primaryAction: HomeScreenViewAction { requiresExtraAccountSetup ? .setupRecovery : .confirmRecoveryKey }
+    var title: String {
+        switch state {
+        case .setUpRecovery: L10n.bannerSetUpRecoveryTitle
+        case .recoveryOutOfSync: L10n.confirmRecoveryKeyBannerTitle
+        }
+    }
+
+    var message: String {
+        switch state {
+        case .setUpRecovery: L10n.bannerSetUpRecoveryContent
+        case .recoveryOutOfSync: L10n.confirmRecoveryKeyBannerMessage
+        }
+    }
+
+    var actionTitle: String {
+        switch state {
+        case .setUpRecovery: L10n.bannerSetUpRecoverySubmit
+        case .recoveryOutOfSync: L10n.confirmRecoveryKeyBannerPrimaryButtonTitle
+        }
+    }
+
+    var primaryAction: HomeScreenViewAction {
+        switch state {
+        case .setUpRecovery: .setupRecovery
+        case .recoveryOutOfSync: .confirmRecoveryKey
+        }
+    }
     
     var body: some View {
         VStack(spacing: 16) {
@@ -37,7 +61,7 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
                     .foregroundColor(.compound.textPrimary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
-                if requiresExtraAccountSetup {
+                if state == .setUpRecovery {
                     Button {
                         context.send(viewAction: .skipRecoveryKeyConfirmation)
                     } label: {
@@ -63,7 +87,7 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
             .buttonStyle(.compound(.primary, size: .medium))
             .accessibilityIdentifier(A11yIdentifiers.homeScreen.recoveryKeyConfirmationBannerContinue)
             
-            if !requiresExtraAccountSetup {
+            if state == .recoveryOutOfSync {
                 Button {
                     context.send(viewAction: .resetEncryption)
                 } label: {
@@ -81,10 +105,10 @@ struct HomeScreenRecoveryKeyConfirmationBanner_Previews: PreviewProvider, Testab
     static let viewModel = buildViewModel()
     
     static var previews: some View {
-        HomeScreenRecoveryKeyConfirmationBanner(requiresExtraAccountSetup: true,
+        HomeScreenRecoveryKeyConfirmationBanner(state: .setUpRecovery,
                                                 context: viewModel.context)
             .previewDisplayName("Set up recovery")
-        HomeScreenRecoveryKeyConfirmationBanner(requiresExtraAccountSetup: false,
+        HomeScreenRecoveryKeyConfirmationBanner(state: .recoveryOutOfSync,
                                                 context: viewModel.context)
             .previewDisplayName("Out of sync")
     }

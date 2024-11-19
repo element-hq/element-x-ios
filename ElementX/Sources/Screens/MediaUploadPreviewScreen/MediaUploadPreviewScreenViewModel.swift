@@ -45,9 +45,9 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         switch viewAction {
         case .send:
             Task {
-                let progressSubject = CurrentValueSubject<Double, Never>(0.0)
+                let progressSubject = AppSettings.isDevelopmentBuild ? nil : CurrentValueSubject<Double, Never>(0.0)
                 
-                startLoading(progressPublisher: progressSubject.asCurrentValuePublisher())
+                startLoading(progressPublisher: progressSubject?.asCurrentValuePublisher())
                 
                 switch await mediaUploadingPreprocessor.processMedia(at: url) {
                 case .success(let mediaInfo):
@@ -75,7 +75,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     
     // MARK: - Private
     
-    private func sendAttachment(mediaInfo: MediaInfo, progressSubject: CurrentValueSubject<Double, Never>) async -> Result<Void, TimelineProxyError> {
+    private func sendAttachment(mediaInfo: MediaInfo, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, TimelineProxyError> {
         let requestHandle: ((SendAttachmentJoinHandleProtocol) -> Void) = { [weak self] handle in
             self?.requestHandle = handle
         }
@@ -94,10 +94,16 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     
     private static let loadingIndicatorIdentifier = "\(MediaUploadPreviewScreenViewModel.self)-Loading"
     
-    private func startLoading(progressPublisher: CurrentValuePublisher<Double, Never>) {
+    private func startLoading(progressPublisher: CurrentValuePublisher<Double, Never>?) {
+        let progress: UserIndicator.Progress = if let progressPublisher {
+            .published(progressPublisher)
+        } else {
+            .indeterminate
+        }
+        
         userIndicatorController.submitIndicator(
             UserIndicator(id: Self.loadingIndicatorIdentifier,
-                          type: .modal(progress: .published(progressPublisher), interactiveDismissDisabled: false, allowsInteraction: true),
+                          type: .modal(progress: progress, interactiveDismissDisabled: false, allowsInteraction: true),
                           title: L10n.commonSending,
                           persistent: true)
         )

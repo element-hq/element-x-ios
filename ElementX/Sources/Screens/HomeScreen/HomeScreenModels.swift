@@ -69,10 +69,28 @@ enum HomeScreenRoomListMode: CustomStringConvertible {
     }
 }
 
-enum HomeScreenBannerMode {
+enum HomeScreenSecurityBannerMode: Equatable {
     case none
     case dismissed
-    case show
+    case show(HomeScreenRecoveryKeyConfirmationBanner.State)
+    
+    var isDismissed: Bool {
+        switch self {
+        case .dismissed: true
+        default: false
+        }
+    }
+    
+    var isShown: Bool {
+        switch self {
+        case .show: true
+        default: false
+        }
+    }
+}
+
+enum HomeScreenMigrationBannerMode {
+    case none, show, dismissed
 }
 
 struct HomeScreenViewState: BindableState {
@@ -80,8 +98,8 @@ struct HomeScreenViewState: BindableState {
     var userDisplayName: String?
     var userAvatarURL: URL?
     
-    var securityBannerMode = HomeScreenBannerMode.none
-    var slidingSyncMigrationBannerMode = HomeScreenBannerMode.none
+    var securityBannerMode = HomeScreenSecurityBannerMode.none
+    var slidingSyncMigrationBannerMode = HomeScreenMigrationBannerMode.none
     
     var requiresExtraAccountSetup = false
         

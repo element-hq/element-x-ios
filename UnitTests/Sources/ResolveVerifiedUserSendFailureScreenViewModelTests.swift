@@ -61,7 +61,7 @@ class ResolveVerifiedUserSendFailureScreenViewModelTests: XCTestCase {
     
     private func makeViewModel(with failure: TimelineItemSendFailure.VerifiedUser) -> ResolveVerifiedUserSendFailureScreenViewModel {
         ResolveVerifiedUserSendFailureScreenViewModel(failure: failure,
-                                                      itemID: .randomEvent,
+                                                      sendHandle: .mock,
                                                       roomProxy: roomProxy,
                                                       userIndicatorController: UserIndicatorControllerMock())
     }

@@ -68,7 +68,7 @@ public struct AuthenticationTextFieldStyle: TextFieldStyle {
     
     /// The color of the placeholder text inside the text field.
     private var placeholderColor: UIColor {
-        .compound.textPlaceholder
+        .compound.textSecondary
     }
     
     /// The color of the label above the text field.

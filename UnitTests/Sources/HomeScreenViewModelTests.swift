@@ -20,13 +20,6 @@ class HomeScreenViewModelTests: XCTestCase {
     
     override func setUpWithError() throws {
         cancellables.removeAll()
-        roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
-        clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: roomSummaryProvider))
-        viewModel = HomeScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                        analyticsService: ServiceLocator.shared.analytics,
-                                        appSettings: ServiceLocator.shared.settings,
-                                        selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
     
     override func tearDown() {
@@ -34,6 +27,8 @@ class HomeScreenViewModelTests: XCTestCase {
     }
     
     func testSelectRoom() async throws {
+        setupViewModel()
+        
         let mockRoomId = "mock_room_id"
         var correctResult = false
         var selectedRoomId = ""
@@ -57,6 +52,8 @@ class HomeScreenViewModelTests: XCTestCase {
     }
 
     func testTapUserAvatar() async throws {
+        setupViewModel()
+        
         var correctResult = false
         
         viewModel.actions
@@ -76,6 +73,8 @@ class HomeScreenViewModelTests: XCTestCase {
     }
     
     func testLeaveRoomAlert() async throws {
+        setupViewModel()
+        
         let mockRoomId = "1"
         
         clientProxy.roomForIdentifierClosure = { _ in .joined(JoinedRoomProxyMock(.init(id: mockRoomId, name: "Some room"))) }
@@ -92,6 +91,8 @@ class HomeScreenViewModelTests: XCTestCase {
     }
     
     func testLeaveRoomError() async throws {
+        setupViewModel()
+        
         let mockRoomId = "1"
         let room = JoinedRoomProxyMock(.init(id: mockRoomId, name: "Some room"))
         room.leaveRoomClosure = { .failure(.sdkError(ClientProxyMockError.generic)) }
@@ -110,6 +111,8 @@ class HomeScreenViewModelTests: XCTestCase {
     }
     
     func testLeaveRoomSuccess() async throws {
+        setupViewModel()
+        
         let mockRoomId = "1"
         var correctResult = false
         let expectation = expectation(description: #function)
@@ -136,6 +139,8 @@ class HomeScreenViewModelTests: XCTestCase {
     }
     
     func testShowRoomDetails() async throws {
+        setupViewModel()
+        
         let mockRoomId = "1"
         var correctResult = false
         viewModel.actions
@@ -155,6 +160,8 @@ class HomeScreenViewModelTests: XCTestCase {
     }
     
     func testFilters() async throws {
+        setupViewModel()
+        
         context.filtersState.activateFilter(.people)
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertEqual(roomSummaryProvider.roomListPublisher.value.count, 2)
@@ -162,6 +169,8 @@ class HomeScreenViewModelTests: XCTestCase {
     }
     
     func testSearch() async throws {
+        setupViewModel()
+        
         context.isSearchFieldFocused = true
         context.searchQuery = "lude to Found"
         try await Task.sleep(for: .milliseconds(100))
@@ -170,11 +179,98 @@ class HomeScreenViewModelTests: XCTestCase {
     }
     
     func testFiltersEmptyState() async throws {
+        setupViewModel()
+        
         context.filtersState.activateFilter(.people)
         context.filtersState.activateFilter(.favourites)
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertTrue(context.viewState.shouldShowEmptyFilterState)
         context.isSearchFieldFocused = true
         XCTAssertFalse(context.viewState.shouldShowEmptyFilterState)
+    }
+    
+    func testSetUpRecoveryBannerState() async throws {
+        // Given a view model without a visible security banner.
+        let securityStateStateSubject = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .verified, recoveryState: .unknown))
+        setupViewModel(securityStatePublisher: securityStateStateSubject.asCurrentValuePublisher())
+        XCTAssertEqual(context.viewState.securityBannerMode, .none)
+        
+        // When the recovery state comes through as disabled.
+        var deferred = deferFulfillment(context.$viewState) { $0.requiresExtraAccountSetup == true }
+        securityStateStateSubject.send(.init(verificationState: .verified, recoveryState: .disabled))
+        try await deferred.fulfill()
+        
+        // Then the banner should be shown to set up recovery.
+        XCTAssertEqual(context.viewState.securityBannerMode, .show(.setUpRecovery))
+        
+        // When the recovery is enabled.
+        deferred = deferFulfillment(context.$viewState) { $0.requiresExtraAccountSetup == false }
+        securityStateStateSubject.send(.init(verificationState: .verified, recoveryState: .enabled))
+        try await deferred.fulfill()
+        
+        // Then the banner should no longer be shown.
+        XCTAssertEqual(context.viewState.securityBannerMode, .none)
+    }
+    
+    func testDismissSetUpRecoveryBannerState() async throws {
+        // Given a view model with the setup recovery banner shown.
+        let securityStateStateSubject = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .verified, recoveryState: .unknown))
+        setupViewModel(securityStatePublisher: securityStateStateSubject.asCurrentValuePublisher())
+        var deferred = deferFulfillment(context.$viewState) { $0.securityBannerMode == .show(.setUpRecovery) }
+        securityStateStateSubject.send(.init(verificationState: .verified, recoveryState: .disabled))
+        try await deferred.fulfill()
+        
+        // When the banner is dismissed.
+        deferred = deferFulfillment(context.$viewState) { $0.securityBannerMode == .dismissed }
+        context.send(viewAction: .skipRecoveryKeyConfirmation)
+        
+        // Then the banner should no longer be shown.
+        try await deferred.fulfill()
+        
+        // And when the recovery state comes through a second time the banner should still not be shown.
+        let failure = deferFailure(context.$viewState, timeout: 1) { $0.securityBannerMode != .dismissed }
+        securityStateStateSubject.send(.init(verificationState: .verified, recoveryState: .disabled))
+        try await failure.fulfill()
+    }
+    
+    func testOutOfSyncRecoveryBannerState() async throws {
+        // Given a view model without a visible security banner.
+        let securityStateStateSubject = CurrentValueSubject<SessionSecurityState, Never>(.init(verificationState: .verified, recoveryState: .unknown))
+        setupViewModel(securityStatePublisher: securityStateStateSubject.asCurrentValuePublisher())
+        XCTAssertEqual(context.viewState.securityBannerMode, .none)
+        
+        // When the recovery state comes through as incomplete.
+        var deferred = deferFulfillment(context.$viewState) { $0.requiresExtraAccountSetup == true }
+        securityStateStateSubject.send(.init(verificationState: .verified, recoveryState: .incomplete))
+        try await deferred.fulfill()
+        
+        // Then the banner should be shown for out of sync recovery.
+        XCTAssertEqual(context.viewState.securityBannerMode, .show(.recoveryOutOfSync))
+        
+        // When the recovery is enabled.
+        deferred = deferFulfillment(context.$viewState) { $0.requiresExtraAccountSetup == false }
+        securityStateStateSubject.send(.init(verificationState: .verified, recoveryState: .enabled))
+        try await deferred.fulfill()
+        
+        // Then the banner should no longer be shown.
+        XCTAssertEqual(context.viewState.securityBannerMode, .none)
+    }
+    
+    // MARK: - Helpers
+    
+    private func setupViewModel(securityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never>? = nil) {
+        roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
+        clientProxy = ClientProxyMock(.init(userID: "@mock:client.com",
+                                            roomSummaryProvider: roomSummaryProvider))
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+        if let securityStatePublisher {
+            userSession.sessionSecurityStatePublisher = securityStatePublisher
+        }
+        
+        viewModel = HomeScreenViewModel(userSession: userSession,
+                                        analyticsService: ServiceLocator.shared.analytics,
+                                        appSettings: ServiceLocator.shared.settings,
+                                        selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }

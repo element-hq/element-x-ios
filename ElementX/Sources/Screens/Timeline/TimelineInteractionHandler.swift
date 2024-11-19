@@ -554,11 +554,11 @@ class TimelineInteractionHandler {
         
         switch timelineItem {
         case let item as ImageRoomTimelineItem:
-            source = item.content.source
+            source = item.content.imageInfo.source
             filename = item.content.filename
             caption = item.content.caption
         case let item as VideoRoomTimelineItem:
-            source = item.content.source
+            source = item.content.videoInfo.source
             filename = item.content.filename
             caption = item.content.caption
         case let item as FileRoomTimelineItem:

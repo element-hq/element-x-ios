@@ -8,7 +8,7 @@
 import Foundation
 import MatrixRustSDK
 
-enum AppRoute: Equatable {
+enum AppRoute: Equatable, Hashable {
     /// The app's home screen.
     case roomList
     /// A room, shown as the root of the stack (popping any child rooms).
@@ -41,6 +41,8 @@ enum AppRoute: Equatable {
     case settings
     /// The setting screen for key backup.
     case chatBackupSettings
+    /// An external share request e.g. from the ShareExtension
+    case share(ShareExtensionPayload)
 }
 
 struct AppRouteURLParser {
@@ -48,6 +50,7 @@ struct AppRouteURLParser {
     
     init(appSettings: AppSettings) {
         urlParsers = [
+            AppGroupURLParser(),
             MatrixPermalinkParser(),
             ElementWebURLParser(domains: appSettings.elementWebHosts),
             ElementCallURLParser()
@@ -71,6 +74,30 @@ struct AppRouteURLParser {
 /// - mobile.element.io
 protocol URLParser {
     func route(from url: URL) -> AppRoute?
+}
+
+struct AppGroupURLParser: URLParser {
+    func route(from url: URL) -> AppRoute? {
+        guard let scheme = url.scheme,
+              scheme == InfoPlistReader.app.appScheme,
+              url.pathComponents.last == ShareExtensionConstants.urlPath else {
+            return nil
+        }
+        
+        guard let query = url.query(percentEncoded: false),
+              let queryData = query.data(using: .utf8) else {
+            MXLog.error("Failed processing share parameters")
+            return nil
+        }
+        
+        do {
+            let payload = try JSONDecoder().decode(ShareExtensionPayload.self, from: queryData)
+            return .share(payload)
+        } catch {
+            MXLog.error("Failed decoding share payload with error: \(error)")
+            return nil
+        }
+    }
 }
 
 /// The parser for Element Call links. This always returns a `.genericCallLink`.

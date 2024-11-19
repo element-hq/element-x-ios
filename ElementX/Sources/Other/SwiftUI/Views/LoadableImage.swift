@@ -11,11 +11,11 @@ import Kingfisher
 import SwiftUI
 
 /// Used to configure animations
-enum LoadableImageMediaType {
+enum LoadableImageMediaType: Equatable {
     /// An avatar (can be displayed anywhere within the app).
     case avatar
     /// An image displayed in the timeline.
-    case timelineItem
+    case timelineItem(uniqueID: String)
     /// Any other media (can be displayed anywhere within the app).
     case generic
 }
@@ -77,9 +77,19 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
                              mediaProvider: mediaProvider,
                              transformer: transformer,
                              placeholder: placeholder)
+            .id(stableMediaIdentifier)
+    }
+    
+    private var stableMediaIdentifier: String {
+        switch mediaType {
+        case .timelineItem(let uniqueID):
+            // Consider media for the same item to be the same view
+            uniqueID
+        default:
             // Binds the lifecycle of the LoadableImage to the associated URL.
             // This fixes the problem of the cache returning old values after a change in the URL.
-            .id(mediaSource.url)
+            mediaSource.url.absoluteString
+        }
     }
 }
 
@@ -311,33 +321,33 @@ struct LoadableImage_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         LazyVGrid(columns: [.init(.adaptive(minimum: 110, maximum: 110))], spacing: 24) {
             LoadableImage(url: "mxc://wherever/1234",
-                          mediaType: .timelineItem,
+                          mediaType: .timelineItem(uniqueID: "id"),
                           mediaProvider: mediaProvider,
                           placeholder: placeholder)
                 .layout(title: "Loaded")
             
             LoadableImage(url: "mxc://wherever/2345",
-                          mediaType: .timelineItem,
+                          mediaType: .timelineItem(uniqueID: "id"),
                           blurhash: "KpE4oyayR5|GbHb];3j@of",
                           mediaProvider: mediaProvider,
                           placeholder: placeholder)
                 .layout(title: "Hidden (blurhash)", hideTimelineMedia: true)
             
             LoadableImage(url: "mxc://wherever/3456",
-                          mediaType: .timelineItem,
+                          mediaType: .timelineItem(uniqueID: "id"),
                           mediaProvider: mediaProvider,
                           placeholder: placeholder)
                 .layout(title: "Hidden (placeholder)", hideTimelineMedia: true)
             
             LoadableImage(url: "mxc://wherever/4567",
-                          mediaType: .timelineItem,
+                          mediaType: .timelineItem(uniqueID: "id"),
                           blurhash: "KbLM^j]q$jT|EfR-3rtjXk",
                           mediaProvider: loadingMediaProvider,
                           placeholder: placeholder)
                 .layout(title: "Loading (blurhash)")
             
             LoadableImage(url: "mxc://wherever/5678",
-                          mediaType: .timelineItem,
+                          mediaType: .timelineItem(uniqueID: "id"),
                           mediaProvider: loadingMediaProvider,
                           placeholder: placeholder)
                 .layout(title: "Loading (placeholder)")
@@ -349,7 +359,7 @@ struct LoadableImage_Previews: PreviewProvider, TestablePreview {
                 .layout(title: "Loading (avatar)")
 
             LoadableImage(url: "mxc://wherever/345",
-                          mediaType: .timelineItem,
+                          mediaType: .timelineItem(uniqueID: "id"),
                           blurhash: "KbLM^j]q$jT|EfR-3rtjXk",
                           mediaProvider: mediaProvider,
                           transformer: transformer,
@@ -357,7 +367,7 @@ struct LoadableImage_Previews: PreviewProvider, TestablePreview {
                 .layout(title: "Loaded (transformer)")
             
             LoadableImage(url: "mxc://wherever/345",
-                          mediaType: .timelineItem,
+                          mediaType: .timelineItem(uniqueID: "id"),
                           blurhash: "KbLM^j]q$jT|EfR-3rtjXk",
                           mediaProvider: loadingMediaProvider,
                           transformer: transformer,
@@ -365,7 +375,7 @@ struct LoadableImage_Previews: PreviewProvider, TestablePreview {
                 .layout(title: "Loading (transformer)")
             
             LoadableImage(url: "mxc://wherever/234",
-                          mediaType: .timelineItem,
+                          mediaType: .timelineItem(uniqueID: "id"),
                           blurhash: "KbLM^j]q$jT|EfR-3rtjXk",
                           mediaProvider: mediaProvider,
                           transformer: transformer,
