@@ -35,17 +35,8 @@ struct MessageComposer: View {
                 resizeGrabber
             }
             
-            mainContent
-                .padding(.horizontal, 12.0)
-                .clipShape(composerShape)
-                .background {
-                    ZStack {
-                        composerShape
-                            .fill(Color.compound.bgSubtleSecondary)
-                        composerShape
-                            .stroke(Color.compound._borderTextFieldFocused, lineWidth: 0.5)
-                    }
-                }
+            composerTextField
+                .messageComposerStyle(header: header)
                 // Explicitly disable all animations to fix weirdness with the header immediately
                 // appearing whilst the text field and keyboard are still animating up to it.
                 .animation(.noAnimation, value: mode)
@@ -57,34 +48,27 @@ struct MessageComposer: View {
     
     @State private var composerFrame = CGRect.zero
     
-    private var mainContent: some View {
-        VStack(alignment: .leading, spacing: -6) {
-            header
-            
-            if composerFormattingEnabled {
-                Color.clear
-                    .overlay(alignment: .top) {
-                        composerView
-                            .clipped()
-                            .readFrame($composerFrame)
-                    }
-                    .frame(minHeight: ComposerConstant.minHeight, maxHeight: max(composerHeight, composerFrame.height),
-                           alignment: .top)
-                    .tint(.compound.iconAccentTertiary)
-                    .padding(.vertical, 10)
-                    .onAppear {
-                        onAppearAction()
-                    }
-            } else {
-                MessageComposerTextField(placeholder: L10n.richTextEditorComposerPlaceholder,
-                                         text: $plainComposerText,
-                                         presendCallback: $presendCallback,
-                                         maxHeight: ComposerConstant.maxHeight,
-                                         keyHandler: { handleKeyPress($0) },
-                                         pasteHandler: pasteAction)
-                    .tint(.compound.iconAccentTertiary)
-                    .padding(.vertical, 10)
-            }
+    @ViewBuilder
+    private var composerTextField: some View {
+        if composerFormattingEnabled {
+            Color.clear
+                .overlay(alignment: .top) {
+                    composerView
+                        .clipped()
+                        .readFrame($composerFrame)
+                }
+                .frame(minHeight: ComposerConstant.minHeight, maxHeight: max(composerHeight, composerFrame.height),
+                       alignment: .top)
+                .onAppear {
+                    onAppearAction()
+                }
+        } else {
+            MessageComposerTextField(placeholder: L10n.richTextEditorComposerPlaceholder,
+                                     text: $plainComposerText,
+                                     presendCallback: $presendCallback,
+                                     maxHeight: ComposerConstant.maxHeight,
+                                     keyHandler: { handleKeyPress($0) },
+                                     pasteHandler: pasteAction)
         }
     }
 
@@ -199,6 +183,42 @@ private struct MessageComposerHeaderLabelStyle: LabelStyle {
         .lineLimit(1)
     }
 }
+
+// MARK: - Style
+
+extension View {
+    func messageComposerStyle(header: some View = EmptyView()) -> some View {
+        modifier(MessageComposerStyleModifier(header: header))
+    }
+}
+
+private struct MessageComposerStyleModifier<Header: View>: ViewModifier {
+    private let composerShape = RoundedRectangle(cornerRadius: 21, style: .circular)
+    
+    let header: Header
+    
+    func body(content: Content) -> some View {
+        VStack(alignment: .leading, spacing: -6) {
+            header
+            
+            content
+                .tint(.compound.iconAccentTertiary)
+                .padding(.vertical, 10)
+        }
+        .padding(.horizontal, 12.0)
+        .clipShape(composerShape)
+        .background {
+            ZStack {
+                composerShape
+                    .fill(Color.compound.bgSubtleSecondary)
+                composerShape
+                    .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
+            }
+        }
+    }
+}
+
+// MARK: - Previews
 
 struct MessageComposer_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock

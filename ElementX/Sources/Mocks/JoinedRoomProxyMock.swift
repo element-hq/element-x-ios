@@ -49,22 +49,8 @@ extension JoinedRoomProxyMock {
         id = configuration.id
         isEncrypted = configuration.isEncrypted
         
-        let timeline = TimelineProxyMock()
-        timeline.sendMessageEventContentReturnValue = .success(())
-        timeline.paginateBackwardsRequestSizeReturnValue = .success(())
-        timeline.paginateForwardsRequestSizeReturnValue = .success(())
-        timeline.sendReadReceiptForTypeReturnValue = .success(())
-        
-        if configuration.shouldUseAutoUpdatingTimeline {
-            timeline.underlyingTimelineProvider = AutoUpdatingRoomTimelineProviderMock()
-        } else {
-            let timelineProvider = RoomTimelineProviderMock()
-            timelineProvider.paginationState = .init(backward: configuration.timelineStartReached ? .timelineEndReached : .idle, forward: .timelineEndReached)
-            timelineProvider.underlyingMembershipChangePublisher = PassthroughSubject().eraseToAnyPublisher()
-            timeline.underlyingTimelineProvider = timelineProvider
-        }
-        
-        self.timeline = timeline
+        timeline = TimelineProxyMock(.init(isAutoUpdating: configuration.shouldUseAutoUpdatingTimeline,
+                                           timelineStartReached: configuration.timelineStartReached))
 
         ownUserID = configuration.ownUserID
         

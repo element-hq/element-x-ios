@@ -62,7 +62,7 @@ struct ComposerToolbar: View {
             if !context.composerFormattingEnabled {
                 if context.viewState.isUploading {
                     ProgressView()
-                        .scaledFrame(size: 44, relativeTo: .title)
+                        .scaledFrame(size: 44, relativeTo: .compound.headingLG)
                         .padding(.leading, 3)
                 } else if context.viewState.showSendButton {
                     sendButton
@@ -119,27 +119,29 @@ struct ComposerToolbar: View {
             Image(Asset.Images.closeRte.name)
                 .resizable()
                 .scaledToFit()
-                .scaledFrame(size: 30, relativeTo: .title)
-                .scaledPadding(7, relativeTo: .title)
+                .scaledFrame(size: 30, relativeTo: .compound.headingLG)
+                .scaledPadding(7, relativeTo: .compound.headingLG)
         }
         .accessibilityLabel(L10n.actionClose)
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions)
     }
     
     private var sendButton: some View {
-        Button {
-            sendMessage()
-        } label: {
-            CompoundIcon(context.viewState.composerMode.isEdit ? \.check : \.sendSolid)
-                .scaledPadding(6, relativeTo: .title)
-                .accessibilityLabel(context.viewState.composerMode.isEdit ? L10n.actionConfirm : L10n.actionSend)
-                .foregroundColor(context.viewState.sendButtonDisabled ? .compound.iconDisabled : .white)
-                .background {
-                    Circle()
-                        .foregroundColor(context.viewState.sendButtonDisabled ? .clear : .compound.iconAccentTertiary)
+        Group {
+            if context.viewState.composerMode.isEdit {
+                Button(action: sendMessage) {
+                    CompoundIcon(\.check, size: .medium, relativeTo: .compound.headingLG)
+                        .foregroundColor(.white)
+                        .scaledPadding(6, relativeTo: .compound.headingLG)
+                        .background(.compound.iconAccentTertiary, in: Circle())
+                        .accessibilityLabel(L10n.actionConfirm)
                 }
-                .scaledPadding(4, relativeTo: .title)
+            } else {
+                SendButton(action: sendMessage)
+                    .accessibilityLabel(L10n.actionSend)
+            }
         }
+        .scaledPadding(4, relativeTo: .compound.headingLG)
         .disabled(context.viewState.sendButtonDisabled)
         .animation(.linear(duration: 0.1).disabledDuringTests(), value: context.viewState.sendButtonDisabled)
         .keyboardShortcut(.return, modifiers: [.command])
@@ -271,8 +273,8 @@ struct ComposerToolbar: View {
         } label: {
             CompoundIcon(\.delete)
                 .scaledToFit()
-                .scaledFrame(size: 30, relativeTo: .title)
-                .scaledPadding(7, relativeTo: .title)
+                .scaledFrame(size: 30, relativeTo: .compound.headingLG)
+                .scaledPadding(7, relativeTo: .compound.headingLG)
         }
         .buttonStyle(.compound(.plain))
         .accessibilityLabel(L10n.a11yDelete)
@@ -290,6 +292,8 @@ struct ComposerToolbar: View {
         }
     }
 }
+
+// MARK: - Previews
 
 struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
     static let wysiwygViewModel = WysiwygComposerViewModel()
@@ -329,8 +333,6 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Reply")
     }
 }
-
-// MARK: - Mock
 
 extension ComposerToolbar {
     static func mock(focused: Bool = true) -> ComposerToolbar {
