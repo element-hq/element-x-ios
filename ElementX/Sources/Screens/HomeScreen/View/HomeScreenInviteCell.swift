@@ -73,7 +73,7 @@ struct HomeScreenInviteCell: View {
            !room.isDirect {
             RoomInviterLabel(inviter: inviter, mediaProvider: context.mediaProvider)
                 .font(.zero.bodyMD)
-                .foregroundStyle(.compound.textPlaceholder)
+                .foregroundStyle(.compound.textSecondary)
         }
     }
     
@@ -88,7 +88,7 @@ struct HomeScreenInviteCell: View {
             if let subtitle {
                 Text(subtitle)
                     .font(.zero.bodyMD)
-                    .foregroundColor(.compound.textPlaceholder)
+                    .foregroundColor(.compound.textSecondary)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

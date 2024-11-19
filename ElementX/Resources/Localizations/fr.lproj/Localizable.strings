@@ -125,7 +125,6 @@
 "common_audio" = "Audio";
 "common_blocked_users" = "Utilisateurs bloqués";
 "common_bubbles" = "Bulles";
-"common_call_invite" = "Appel en cours (non supporté)";
 "common_call_started" = "Appel démarré";
 "common_chat_backup" = "Sauvegarde des discussions";
 "common_copyright" = "Droits d’auteur";
@@ -226,6 +225,7 @@
 "common_unable_to_invite_title" = "Impossible d’envoyer une ou plusieurs invitations";
 "common_unlock" = "Déverrouillage";
 "common_unmute" = "Retirer la sourdine";
+"common_unsupported_call" = "Unsupported call";
 "common_unsupported_event" = "Événement non pris en charge";
 "common_username" = "Nom d’utilisateur";
 "common_verification_cancelled" = "Vérification annulée";
@@ -365,6 +365,7 @@
 "screen_join_room_knock_message_description" = "Message (facultatif)";
 "screen_join_room_knock_sent_description" = "Vous recevrez une invitation à rejoindre le salon si votre demande est acceptée.";
 "screen_join_room_knock_sent_title" = "Demande de rejoindre le salon envoyée";
+"screen_knock_requests_list_decline_and_ban_action_title" = "Decline and ban";
 "screen_pinned_timeline_empty_state_description" = "Cliquez (clic long) sur un message et choisissez « %1$@ » pour qu‘il apparaisse ici.";
 "screen_pinned_timeline_empty_state_headline" = "Épinglez les messages importants pour leur donner plus de visibilité";
 "screen_reset_encryption_password_error" = "Une erreur s'est produite. Vérifiez que le mot de passe de votre compte est correct et réessayez.";
@@ -377,11 +378,16 @@
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Un ou plusieurs de vos appareils ne sont pas vérifiés. Vous pouvez quand même envoyer le message, ou vous pouvez annuler et réessayer plus tard après avoir vérifié tous vos appareils.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Votre message n'a pas été envoyé car vous n'avez pas vérifié tous vos appareils";
 "screen_room_mentions_at_room_subtitle" = "Notifier tout le salon";
+"screen_room_multiple_knock_requests_view_all_button_title" = "View all";
 "screen_room_pinned_banner_indicator" = "%1$@ sur %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Messages épinglés";
 "screen_room_pinned_banner_loading_description" = "Chargement du message...";
 "screen_room_pinned_banner_view_all_button_title" = "Voir tout";
+"screen_room_single_knock_request_accept_button_title" = "Accept";
+"screen_room_single_knock_request_title" = "%1$@ wants to join this room";
+"screen_room_single_knock_request_view_button_title" = "View";
 "screen_room_details_pinned_events_row_title" = "Messages épinglés";
+"screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_roomlist_knock_event_sent_description" = "Demande d'adhésion envoyée";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Le message n'a pas été envoyé car l'identité vérifiée de %1$@ a changé.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Le message n'a pas été envoyé car %1$@ n'a pas vérifié tous ses appareils.";
@@ -789,6 +795,7 @@
 "screen_room_timeline_add_reaction" = "Ajouter un émoji";
 "screen_room_timeline_beginning_of_room" = "Ceci est le début de %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Ceci est le début de cette conversation.";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
 "screen_room_timeline_less_reactions" = "Afficher moins";
 "screen_room_timeline_message_copied" = "Message copié";
 "screen_room_timeline_no_permission_to_post" = "Vous n’êtes pas autorisé à publier dans ce salon";

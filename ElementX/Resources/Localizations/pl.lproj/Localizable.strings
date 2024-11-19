@@ -125,7 +125,6 @@
 "common_audio" = "Dźwięk";
 "common_blocked_users" = "Zablokowani użytkownicy";
 "common_bubbles" = "Bąbelki";
-"common_call_invite" = "Rozmowa w trakcie (niewspierane)";
 "common_call_started" = "Rozpoczęto rozmowę";
 "common_chat_backup" = "Backup czatu";
 "common_copyright" = "Prawa autorskie";
@@ -226,6 +225,7 @@
 "common_unable_to_invite_title" = "Nie można wysłać zaproszeń";
 "common_unlock" = "Odblokuj";
 "common_unmute" = "Wyłącz wyciszenie";
+"common_unsupported_call" = "Unsupported call";
 "common_unsupported_event" = "Nieobsługiwane zdarzenie";
 "common_username" = "Nazwa użytkownika";
 "common_verification_cancelled" = "Weryfikacja anulowana";
@@ -365,6 +365,7 @@
 "screen_join_room_knock_message_description" = "Wiadomość (opcjonalne)";
 "screen_join_room_knock_sent_description" = "Otrzymasz zaproszenie dołączenia do pokoju, jeśli prośba zostanie zaakceptowana.";
 "screen_join_room_knock_sent_title" = "Wysłano prośbę o dołączenie";
+"screen_knock_requests_list_decline_and_ban_action_title" = "Decline and ban";
 "screen_pinned_timeline_empty_state_description" = "Naciśnij wiadomość i wybierz “%1$@”, aby dołączyć tutaj.";
 "screen_pinned_timeline_empty_state_headline" = "Przypinaj ważne wiadomości, aby można było je łatwo znaleźć";
 "screen_reset_encryption_password_error" = "Wystąpił nieznany błąd. Sprawdź, czy hasło jest poprawne i spróbuj ponownie.";
@@ -377,11 +378,16 @@
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Jedno lub więcej z Twoich urządzeń jest niezweryfikowanych. Wyślij wiadomość mimo to lub anuluj i spróbuj ponownie po zweryfikowaniu wszystkich swoich urządzeń.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Twoja wiadomość nie została wysłana, ponieważ nie zweryfikowałeś jednego lub więcej swoich urządzeń.";
 "screen_room_mentions_at_room_subtitle" = "Powiadom cały pokój";
+"screen_room_multiple_knock_requests_view_all_button_title" = "View all";
 "screen_room_pinned_banner_indicator" = "%1$@ z %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ przypiętych wiadomości";
 "screen_room_pinned_banner_loading_description" = "Wczytywanie wiadomości...";
 "screen_room_pinned_banner_view_all_button_title" = "Wyświetl wszystkie";
+"screen_room_single_knock_request_accept_button_title" = "Accept";
+"screen_room_single_knock_request_title" = "%1$@ wants to join this room";
+"screen_room_single_knock_request_view_button_title" = "View";
 "screen_room_details_pinned_events_row_title" = "Przypięte wiadomości";
+"screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_roomlist_knock_event_sent_description" = "Wysłano prośbę o dołączenie";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Wiadomość nie została wysłana, ponieważ tożsamość %1$@ uległa zmianie.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Wiadomość nie została wysłana, ponieważ %1$@ nie zweryfikował wszystkich urządzeń.";
@@ -789,6 +795,7 @@
 "screen_room_timeline_add_reaction" = "Dodaj emoji";
 "screen_room_timeline_beginning_of_room" = "To jest początek %1$@";
 "screen_room_timeline_beginning_of_room_no_name" = "To jest początek tej konwersacji";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
 "screen_room_timeline_less_reactions" = "Pokaż mniej";
 "screen_room_timeline_message_copied" = "Skopiowano wiadomość";
 "screen_room_timeline_no_permission_to_post" = "Nie masz uprawnień, aby pisać w tym pokoju";

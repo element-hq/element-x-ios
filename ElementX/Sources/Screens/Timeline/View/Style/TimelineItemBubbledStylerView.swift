@@ -539,8 +539,8 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                       isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(filename: "other.png",
-                                                                                     source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"),
-                                                                                     thumbnailSource: nil),
+                                                                                     imageInfo: .mockImage,
+                                                                                     thumbnailInfo: nil),
                                                                       
                                                                       properties: RoomTimelineItemProperties(encryptionAuthenticity: .notGuaranteed(color: .gray))))
             
@@ -618,8 +618,8 @@ private struct MockTimelineContent: View {
                                                   isThreaded: isThreaded,
                                                   sender: .init(id: ""),
                                                   content: .init(filename: "image.jpg",
-                                                                 source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"),
-                                                                 thumbnailSource: nil),
+                                                                 imageInfo: .mockImage,
+                                                                 thumbnailInfo: nil),
                                                   replyDetails: replyDetails))
         
         LocationRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),

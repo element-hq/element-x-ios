@@ -66,7 +66,7 @@ struct LoginScreen: View {
                 .padding(.bottom, 8)
             
             TextField(text: $context.username) {
-                Text(L10n.commonUsername).foregroundColor(.compound.textPlaceholder)
+                Text(L10n.commonUsername).foregroundColor(.compound.textSecondary)
             }
             .focused($isUsernameFocused)
             .textFieldStyle(.authentication(accessibilityIdentifier: A11yIdentifiers.loginScreen.emailUsername))
@@ -81,7 +81,7 @@ struct LoginScreen: View {
             .padding(.bottom, 20)
             
             SecureField(text: $context.password) {
-                Text(L10n.commonPassword).foregroundColor(.compound.textPlaceholder)
+                Text(L10n.commonPassword).foregroundColor(.compound.textSecondary)
             }
             .focused($isPasswordFocused)
             .textFieldStyle(.authentication(accessibilityIdentifier: A11yIdentifiers.loginScreen.password))

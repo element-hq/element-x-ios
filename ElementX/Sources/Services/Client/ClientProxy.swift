@@ -889,13 +889,14 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let syncService = try await client
                 .syncService()
-                .withCrossProcessLock(appIdentifier: "MainApp")
+                .withCrossProcessLock()
                 .withUtdHook(delegate: ClientDecryptionErrorDelegate(actionsSubject: actionsSubject))
                 .finish()
+            
             let roomListService = syncService.roomListService()
             
             let roomMessageEventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(cacheKey: "roomList",
-                                                                                                                               mentionBuilder: PlainMentionBuilder()), prefix: .senderName)
+                                                                                                                               mentionBuilder: PlainMentionBuilder()), destination: .roomList)
             let eventStringBuilder = RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID, shouldDisambiguateDisplayNames: false),
                                                             messageEventStringBuilder: roomMessageEventStringBuilder,
                                                             shouldDisambiguateDisplayNames: false,
@@ -912,7 +913,7 @@ class ClientProxy: ClientProxyProtocol {
             
             alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                                eventStringBuilder: eventStringBuilder,
-                                                               name: "MessageForwarding",
+                                                               name: "AlternateAllRooms",
                                                                notificationSettings: notificationSettings,
                                                                appSettings: appSettings,
                                                                zeroUsersService: zeroMatrixUsersService)
@@ -1013,7 +1014,8 @@ class ClientProxy: ClientProxyProtocol {
             case .knocked:
                 if appSettings.knockingEnabled {
                     return try await .knocked(KnockedRoomProxy(roomListItem: roomListItem,
-                                                               room: roomListItem.invitedRoom(),
+                                                               roomPreview: roomListItem.previewRoom(via: []),
+                                                               ownUserID: userID,
                                                                zeroUsersService: zeroMatrixUsersService))
                 } else {
                     return try await .invited(InvitedRoomProxy(roomListItem: roomListItem,

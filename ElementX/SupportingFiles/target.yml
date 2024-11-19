@@ -66,7 +66,7 @@ targets:
             CFBundleTypeRole: Editor,
             CFBundleURLName: "Application",
             CFBundleURLSchemes: [
-              io.element
+              $(BASE_BUNDLE_IDENTIFIER)
             ]
           }
         ]
@@ -189,6 +189,7 @@ targets:
 
     dependencies:
     - target: NSE
+    - target: ShareExtension
     # not used yet
     # - target: NCE
     - package: MatrixRustSDK

@@ -125,7 +125,6 @@
 "common_audio" = "Audio";
 "common_blocked_users" = "Pengguna yang diblokir";
 "common_bubbles" = "Gelembung";
-"common_call_invite" = "Panggilan sedang berjalan (tidak didukung)";
 "common_call_started" = "Panggilan dimulai";
 "common_chat_backup" = "Pencadangan percakapan";
 "common_copyright" = "Hak cipta";
@@ -226,6 +225,7 @@
 "common_unable_to_invite_title" = "Tidak dapat mengirim undangan";
 "common_unlock" = "Buka kunci";
 "common_unmute" = "Bunyikan";
+"common_unsupported_call" = "Unsupported call";
 "common_unsupported_event" = "Peristiwa tidak didukung";
 "common_username" = "Nama pengguna";
 "common_verification_cancelled" = "Verifikasi dibatalkan";
@@ -353,8 +353,8 @@
 "screen_create_room_room_access_section_header" = "Akses Ruangan";
 "screen_create_room_room_access_section_knocking_option_description" = "Siapa pun dapat meminta untuk bergabung dengan ruangan tetapi administrator atau moderator harus menerima permintaan tersebut";
 "screen_create_room_room_access_section_knocking_option_title" = "Minta untuk bergabung";
-"screen_create_room_room_address_invalid_symbols_error_description" = "Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
-"screen_create_room_room_address_not_available_error_description" = "This room address already exists, please try editing the room address field or change the room name";
+"screen_create_room_room_address_invalid_symbols_error_description" = "Beberapa karakter tidak diperbolehkan. Hanya huruf, angka, dan simbol berikut didukung ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"screen_create_room_room_address_not_available_error_description" = "Alamat ruangan sudah ada, silakan coba sunting kolom alamat ruangan atau ubah nama ruangan";
 "screen_create_room_room_address_section_footer" = "Supaya ruangan ini terlihat di direktori ruangan publik, Anda memerlukan alamat ruangan.";
 "screen_create_room_room_address_section_title" = "Alamat ruangan";
 "screen_create_room_room_visibility_section_title" = "Keterlihatan ruangan";
@@ -365,6 +365,7 @@
 "screen_join_room_knock_message_description" = "Pesan (opsional)";
 "screen_join_room_knock_sent_description" = "Anda akan menerima undangan untuk bergabung dengan ruangan jika permintaan Anda diterima.";
 "screen_join_room_knock_sent_title" = "Permintaan untuk bergabung dikirim";
+"screen_knock_requests_list_decline_and_ban_action_title" = "Decline and ban";
 "screen_pinned_timeline_empty_state_description" = "Tekan pesan dan pilih “%1$@” untuk disertakan di sini.";
 "screen_pinned_timeline_empty_state_headline" = "Sematkan pesan penting agar mudah ditemukan";
 "screen_reset_encryption_password_error" = "Terjadi kesalahan yang tidak diketahui. Harap periksa apakah kata sandi akun Anda sudah benar dan coba lagi.";
@@ -377,11 +378,16 @@
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Satu atau beberapa perangkat Anda tidak terverifikasi. Anda tetap dapat mengirim pesan, atau Anda dapat membatalkannya dan mencoba lagi nanti setelah Anda memverifikasi semua perangkat.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Pesan Anda tidak terkirim karena Anda belum memverifikasi satu atau beberapa perangkat Anda";
 "screen_room_mentions_at_room_subtitle" = "Beri tahu seluruh ruangan";
+"screen_room_multiple_knock_requests_view_all_button_title" = "View all";
 "screen_room_pinned_banner_indicator" = "%1$@ dari %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Pesan yang disematkan";
 "screen_room_pinned_banner_loading_description" = "Memuat pesan…";
 "screen_room_pinned_banner_view_all_button_title" = "Lihat Semua";
+"screen_room_single_knock_request_accept_button_title" = "Accept";
+"screen_room_single_knock_request_title" = "%1$@ wants to join this room";
+"screen_room_single_knock_request_view_button_title" = "View";
 "screen_room_details_pinned_events_row_title" = "Pesan yang disematkan";
+"screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_roomlist_knock_event_sent_description" = "Permintaan untuk bergabung dikirim";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Pesan tidak terkirim karena identitas terverifikasi %1$@ telah berubah.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Pesan tidak terkirim karena %1$@ belum memverifikasi semua perangkat.";
@@ -789,6 +795,7 @@
 "screen_room_timeline_add_reaction" = "Tambahkan emoji";
 "screen_room_timeline_beginning_of_room" = "Ini adalah awal dari %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Ini adalah awal dari percakapan ini.";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
 "screen_room_timeline_less_reactions" = "Tampilkan lebih sedikit";
 "screen_room_timeline_message_copied" = "Pesan disalin";
 "screen_room_timeline_no_permission_to_post" = "Anda tidak memiliki izin untuk mengirim di ruangan ini";
@@ -849,10 +856,10 @@
 "screen_session_verification_request_title" = "Verifikasi diminta";
 "screen_session_verification_they_dont_match" = "Mereka tidak cocok";
 "screen_session_verification_they_match" = "Mereka cocok";
-"screen_session_verification_use_another_device_subtitle" = "Make sure you have the app open in the other device before starting verification from here.";
-"screen_session_verification_use_another_device_title" = "Open the app on another verified device";
-"screen_session_verification_waiting_another_device_subtitle" = "You should see a popup on the other device. Start the verification from there now.";
-"screen_session_verification_waiting_another_device_title" = "Start verification on the other device";
+"screen_session_verification_use_another_device_subtitle" = "Pastikan Anda membuka aplikasi di perangkat lain sebelum memulai verifikasi dari sini.";
+"screen_session_verification_use_another_device_title" = "Buka aplikasi di perangkat terverifikasi lain";
+"screen_session_verification_waiting_another_device_subtitle" = "Anda akan melihat popup di perangkat lain. Mulai verifikasi dari sana sekarang.";
+"screen_session_verification_waiting_another_device_title" = "Mulai verifikasi di perangkat lain";
 "screen_session_verification_waiting_to_accept_subtitle" = "Terima permintaan untuk memulai proses verifikasi di sesi Anda yang lain untuk melanjutkan.";
 "screen_session_verification_waiting_to_accept_title" = "Menunggu untuk menerima permintaan";
 "screen_share_location_title" = "Bagikan lokasi";
@@ -918,7 +925,7 @@
 "state_event_room_join" = "%1$@ bergabung ke ruangan";
 "state_event_room_join_by_you" = "Anda bergabung ke ruangan";
 "state_event_room_knock" = "%1$@ meminta untuk bergabung";
-"state_event_room_knock_accepted" = "%1$@ memperbolehkan %2$@ untuk bergabung";
+"state_event_room_knock_accepted" = "%1$@ memberikan akses kepada %2$@";
 "state_event_room_knock_accepted_by_you" = "Anda memperbolehkan %1$@ untuk bergabung";
 "state_event_room_knock_by_you" = "Anda meminta untuk bergabung";
 "state_event_room_knock_denied" = "%1$@ menolak permintaan %2$@ untuk bergabung";

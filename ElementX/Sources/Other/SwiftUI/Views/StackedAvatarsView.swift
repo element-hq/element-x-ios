@@ -18,7 +18,7 @@ struct StackedAvatarsView: View {
     let lineWidth: CGFloat
     var shouldStackFromLast = false
     let avatars: [StackedAvatarInfo]
-    let avatarSize: AvatarSize
+    let avatarSize: Avatars.Size
     let mediaProvider: MediaProviderProtocol?
     
     var body: some View {
@@ -53,13 +53,13 @@ struct StackedAvatarsView_Previews: PreviewProvider, TestablePreview {
             StackedAvatarsView(overlap: 16,
                                lineWidth: 2,
                                avatars: avatars,
-                               avatarSize: .user(on: .knockingUsers),
+                               avatarSize: .user(on: .knockingUsersBannerStack),
                                mediaProvider: MediaProviderMock())
             StackedAvatarsView(overlap: 16,
                                lineWidth: 2,
                                shouldStackFromLast: true,
                                avatars: avatars,
-                               avatarSize: .user(on: .knockingUsers),
+                               avatarSize: .user(on: .knockingUsersBannerStack),
                                mediaProvider: MediaProviderMock())
         }
     }

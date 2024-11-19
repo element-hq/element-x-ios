@@ -226,8 +226,8 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                 eventID: "123",
                 eventContent: .message(.image(.init(filename: "head.png",
                                                     caption: "Image: Pushead",
-                                                    source: .init(url: .picturesDirectory, mimeType: nil),
-                                                    thumbnailSource: .init(url: .picturesDirectory, mimeType: nil))))),
+                                                    imageInfo: .mockImage,
+                                                    thumbnailInfo: .mockThumbnail)))),
         .loaded(sender: .init(id: "Jason"),
                 eventID: "123",
                 eventContent: .message(.notice(.init(body: "Notice: Too far gone?")))),
@@ -238,9 +238,8 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                 eventID: "123",
                 eventContent: .message(.video(.init(filename: "never.mov",
                                                     caption: "Video: Through the never",
-                                                    duration: 100,
-                                                    source: nil,
-                                                    thumbnailSource: .init(url: .picturesDirectory, mimeType: nil))))),
+                                                    videoInfo: .mockVideo,
+                                                    thumbnailInfo: .mockThumbnail)))),
         .loading(eventID: "")
     ]
     

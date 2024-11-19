@@ -242,7 +242,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                         progressWatcher: UploadProgressListener { progress in
                                             progressSubject?.send(progress)
                                         },
-                                        useSendQueue: false)
+                                        useSendQueue: AppSettings.isDevelopmentBuild)
         
         await requestHandle(handle)
         
@@ -266,10 +266,12 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         let handle = timeline.sendFile(url: url.path(percentEncoded: false),
                                        fileInfo: fileInfo,
+                                       caption: nil,
+                                       formattedCaption: nil,
                                        progressWatcher: UploadProgressListener { progress in
                                            progressSubject?.send(progress)
                                        },
-                                       useSendQueue: false)
+                                       useSendQueue: AppSettings.isDevelopmentBuild)
         
         await requestHandle(handle)
         
@@ -300,7 +302,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                         progressWatcher: UploadProgressListener { progress in
                                             progressSubject?.send(progress)
                                         },
-                                        useSendQueue: false)
+                                        useSendQueue: AppSettings.isDevelopmentBuild)
         
         await requestHandle(handle)
         
@@ -353,7 +355,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                         progressWatcher: UploadProgressListener { progress in
                                             progressSubject?.send(progress)
                                         },
-                                        useSendQueue: false)
+                                        useSendQueue: AppSettings.isDevelopmentBuild)
         
         await requestHandle(handle)
         
@@ -384,7 +386,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                progressWatcher: UploadProgressListener { progress in
                                                    progressSubject?.send(progress)
                                                },
-                                               useSendQueue: false)
+                                               useSendQueue: AppSettings.isDevelopmentBuild)
         
         await requestHandle(handle)
         

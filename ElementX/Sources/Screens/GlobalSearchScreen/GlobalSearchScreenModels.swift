@@ -30,7 +30,7 @@ enum GlobalSearchScreenViewAction {
 
 struct GlobalSearchRoom: Identifiable, Equatable {
     let id: String
-    let name: String
-    let alias: String?
+    let title: String
+    let description: String
     let avatar: RoomAvatar
 }

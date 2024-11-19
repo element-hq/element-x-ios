@@ -36,6 +36,10 @@ struct DeveloperOptionsScreen: View {
 //            }
 //            
 //            Section("Room List") {
+//                Toggle(isOn: $context.publicSearchEnabled) {
+//                    Text("Public search")
+//                }
+//                
 //                Toggle(isOn: $context.hideUnreadMessagesBadge) {
 //                    Text("Hide grey dots")
 //                }
@@ -71,44 +75,6 @@ struct DeveloperOptionsScreen: View {
 //                Text("Trust and Decoration")
 //            } footer: {
 //                Text("This setting controls how end-to-end encryption (E2EE) keys are exchanged. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
-//            }
-//
-//            Section {
-//                TextField(context.viewState.elementCallBaseURL.absoluteString, text: $elementCallURLOverrideString)
-//                    .autocorrectionDisabled(true)
-//                    .autocapitalization(.none)
-//                    .foregroundColor(URL(string: elementCallURLOverrideString) == nil ? .red : .primary)
-//                    .submitLabel(.done)
-//                    .onSubmit {
-//                        if elementCallURLOverrideString.isEmpty {
-//                            context.elementCallBaseURLOverride = nil
-//                        } else if let url = URL(string: elementCallURLOverrideString) {
-//                            context.elementCallBaseURLOverride = url
-//                        }
-//                    }
-//            } header: {
-//                Text("Element Call")
-//            } footer: {
-//                if context.elementCallBaseURLOverride == nil {
-//                    Text("The call URL may be overridden by your homeserver.")
-//                }
-//            }
-//            
-//            Section {
-//                Button {
-//                    showConfetti = true
-//                } label: {
-//                    Text("🥳")
-//                        .frame(maxWidth: .infinity)
-//                        .alignmentGuide(.listRowSeparatorLeading) { _ in 0 } // Fix separator alignment
-//                }
-//                
-//                Button {
-//                    fatalError("This crash is a test.")
-//                } label: {
-//                    Text("💥")
-//                        .frame(maxWidth: .infinity)
-//                }
 //            }
 
             Section {

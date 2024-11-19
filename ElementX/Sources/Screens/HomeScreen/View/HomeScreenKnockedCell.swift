@@ -56,7 +56,7 @@ struct HomeScreenKnockedCell: View {
                 
                 Text(L10n.screenRoomlistKnockEventSentDescription)
                     .font(.compound.bodyMD)
-                    .foregroundStyle(.compound.textPlaceholder)
+                    .foregroundStyle(.compound.textSecondary)
                     .padding(.top, room.canonicalAlias == nil ? 0 : 4)
                     .padding(.trailing, 16)
             }
@@ -76,7 +76,7 @@ struct HomeScreenKnockedCell: View {
             if let subtitle {
                 Text(subtitle)
                     .font(.compound.bodyMD)
-                    .foregroundColor(.compound.textPlaceholder)
+                    .foregroundColor(.compound.textSecondary)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

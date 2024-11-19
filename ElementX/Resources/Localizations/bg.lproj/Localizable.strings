@@ -125,7 +125,6 @@
 "common_audio" = "Аудио";
 "common_blocked_users" = "Блокирани потребители";
 "common_bubbles" = "Bubbles";
-"common_call_invite" = "Call in progress (unsupported)";
 "common_call_started" = "Call started";
 "common_chat_backup" = "Резервно копие на чатовете";
 "common_copyright" = "Copyright";
@@ -226,6 +225,7 @@
 "common_unable_to_invite_title" = "Не може да се изпрати покана(и)";
 "common_unlock" = "Отключване";
 "common_unmute" = "Раззаглушаване";
+"common_unsupported_call" = "Unsupported call";
 "common_unsupported_event" = "Неподдържано събитие";
 "common_username" = "Потребителско име";
 "common_verification_cancelled" = "Потвърждаването е отменено";
@@ -365,6 +365,7 @@
 "screen_join_room_knock_message_description" = "Message (optional)";
 "screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
 "screen_join_room_knock_sent_title" = "Request to join sent";
+"screen_knock_requests_list_decline_and_ban_action_title" = "Decline and ban";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
@@ -377,11 +378,16 @@
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "One or more of your devices are unverified. You can send the message anyway, or you can cancel for now and try again later after you have verified all of your devices.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Your message was not sent because you have not verified one or more of your devices";
 "screen_room_mentions_at_room_subtitle" = "Notify the whole room";
+"screen_room_multiple_knock_requests_view_all_button_title" = "View all";
 "screen_room_pinned_banner_indicator" = "%1$@ of %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ Pinned messages";
 "screen_room_pinned_banner_loading_description" = "Loading message…";
 "screen_room_pinned_banner_view_all_button_title" = "View All";
+"screen_room_single_knock_request_accept_button_title" = "Accept";
+"screen_room_single_knock_request_title" = "%1$@ wants to join this room";
+"screen_room_single_knock_request_view_button_title" = "View";
 "screen_room_details_pinned_events_row_title" = "Pinned messages";
+"screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_roomlist_knock_event_sent_description" = "Request to join sent";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
@@ -789,6 +795,7 @@
 "screen_room_timeline_add_reaction" = "Добавяне на емоджи";
 "screen_room_timeline_beginning_of_room" = "Това е началото на %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Това е началото на този разговор.";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
 "screen_room_timeline_less_reactions" = "Показване на по-малко";
 "screen_room_timeline_message_copied" = "Съобщението е копирано";
 "screen_room_timeline_no_permission_to_post" = "You do not have permission to post to this room";

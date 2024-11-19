@@ -26,16 +26,16 @@ struct ImageRoomTimelineView: View {
                             }
                             .startLoadingBeforeViewAppear(false)
                     } else {
-                        LoadableImage(mediaSource: source,
-                                      mediaType: .timelineItem,
-                                      blurhash: timelineItem.content.blurhash,
-                                      mediaProvider: context.mediaProvider) {
-                            placeholder
-                        }
+                        LoadableImage(mediaSource: timelineItem.content.imageInfo.source,
+                                                  mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
+                                                  blurhash: timelineItem.content.blurhash,
+                                                  size: timelineItem.content.imageInfo.size,
+                                                  mediaProvider: context.mediaProvider) {
+                                        placeholder
+                                    }
                     }
                 }
-                .timelineMediaFrame(height: timelineItem.content.height,
-                                    aspectRatio: timelineItem.content.aspectRatio)
+                .timelineMediaFrame(imageInfo: timelineItem.content.imageInfo)
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(L10n.commonImage)
                 // This clip shape is distinct from the one in the styler as that one
@@ -55,15 +55,30 @@ struct ImageRoomTimelineView: View {
         }
     }
     
-    var source: MediaSourceProxy {
-        guard timelineItem.content.contentType != .gif, let thumbnailSource = timelineItem.content.thumbnailSource else {
-            return timelineItem.content.source
+    @ViewBuilder
+    private var loadableImage: some View {
+        if timelineItem.content.contentType == .gif {
+            LoadableImage(mediaSource: timelineItem.content.imageInfo.source,
+                          mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
+                          blurhash: timelineItem.content.blurhash,
+                          size: timelineItem.content.imageInfo.size,
+                          mediaProvider: context.mediaProvider) {
+                placeholder
+            }
+            .timelineMediaFrame(imageInfo: timelineItem.content.imageInfo)
+        } else {
+            LoadableImage(mediaSource: timelineItem.content.thumbnailInfo?.source ?? timelineItem.content.imageInfo.source,
+                          mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
+                          blurhash: timelineItem.content.blurhash,
+                          size: timelineItem.content.thumbnailInfo?.size ?? timelineItem.content.imageInfo.size,
+                          mediaProvider: context.mediaProvider) {
+                placeholder
+            }
+            .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo ?? timelineItem.content.imageInfo)
         }
-        
-        return thumbnailSource
     }
-    
-    var placeholder: some View {
+        
+    private var placeholder: some View {
         Rectangle()
             .foregroundColor(timelineItem.isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming)
             .opacity(0.3)
@@ -88,8 +103,8 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(filename: "image.jpg",
-                                                                                     source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/jpg"),
-                                                                                     thumbnailSource: nil)))
+                                                                                     imageInfo: .mockImage,
+                                                                                     thumbnailInfo: nil)))
             
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .randomEvent,
                                                                       timestamp: "Now",
@@ -99,8 +114,8 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(filename: "other.png",
-                                                                                     source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"),
-                                                                                     thumbnailSource: nil)))
+                                                                                     imageInfo: .mockImage,
+                                                                                     thumbnailInfo: nil)))
             
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .randomEvent,
                                                                       timestamp: "Now",
@@ -110,9 +125,8 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(filename: "Blurhashed.jpg",
-                                                                                     source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/gif"),
-                                                                                     thumbnailSource: nil,
-                                                                                     aspectRatio: 0.7,
+                                                                                     imageInfo: .mockImage,
+                                                                                     thumbnailInfo: nil,
                                                                                      blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW",
                                                                                      contentType: .gif)))
             
@@ -125,11 +139,8 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(filename: "Blurhashed.jpg",
                                                                                      caption: "This is a great image 😎",
-                                                                                     source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"),
-                                                                                     thumbnailSource: nil,
-                                                                                     width: 50,
-                                                                                     height: 50,
-                                                                                     aspectRatio: 1,
+                                                                                     imageInfo: .mockImage,
+                                                                                     thumbnailInfo: .mockThumbnail,
                                                                                      blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW",
                                                                                      contentType: .gif)))
         }

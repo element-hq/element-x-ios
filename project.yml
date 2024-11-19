@@ -53,6 +53,7 @@ include:
 - path: UITests/SupportingFiles/target.yml
 - path: IntegrationTests/SupportingFiles/target.yml
 - path: NSE/SupportingFiles/target.yml
+- path: ShareExtension/SupportingFiles/target.yml
 # - path: NCE/SupportingFiles/target.yml (not used yet)
 # - path: MyAppVariant/override.yml
 
@@ -60,11 +61,11 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 1.0.66
+    exactVersion: 1.0.68
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
-    revision: 950a8884e269194e6030cbddabebbb116cdfe02a
+    revision: 80edb8829b4ca00c0a52a39b7d9024e3ebdc1acb
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events

@@ -123,7 +123,7 @@ struct HomeScreenContent: View {
     private var topSection: some View {
         // An empty VStack causes glitches within the room list
         if context.viewState.shouldShowFilters ||
-            context.viewState.securityBannerMode == .show ||
+            context.viewState.securityBannerMode.isShown ||
             context.viewState.slidingSyncMigrationBannerMode == .show {
             VStack(spacing: 0) {
                 if context.viewState.shouldShowFilters {
@@ -132,8 +132,8 @@ struct HomeScreenContent: View {
             
                 if context.viewState.slidingSyncMigrationBannerMode == .show {
                     HomeScreenSlidingSyncMigrationBanner(context: context)
-                } else if context.viewState.securityBannerMode == .show {
-                    HomeScreenRecoveryKeyConfirmationBanner(requiresExtraAccountSetup: context.viewState.requiresExtraAccountSetup, context: context)
+                } else if case let .show(state) = context.viewState.securityBannerMode {
+                    HomeScreenRecoveryKeyConfirmationBanner(state: state, context: context)
                 }
             }
             .background(Color.compound.bgCanvasDefault)

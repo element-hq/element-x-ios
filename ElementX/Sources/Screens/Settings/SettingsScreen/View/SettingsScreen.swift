@@ -93,14 +93,9 @@ struct SettingsScreen: View {
                         Spacer()
                         
                         VStack(alignment: .center) {
-                            Text("Income")
-                                .font(.zero.bodyXS)
-                                .foregroundColor(.compound.textPrimary)
-                            
                             Text("$\(context.viewState.userRewards.getRefPriceFormatted())")
                                 .font(.robotoMonoRegular(size: 24))
                                 .foregroundColor(.compound.textPrimary)
-                                .padding(.top, 8)
                                 .overlay(alignment: .topTrailing) {
                                     if context.viewState.showNewUserRewardsIntimation {
                                         ZStack(alignment: .center) {
