@@ -10,16 +10,14 @@
 import Combine
 import SwiftUI
 
-struct KnockRequestsListScreenCoordinatorParameters { }
-
-enum KnockRequestsListScreenCoordinatorAction {
-    case done
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
+struct KnockRequestsListScreenCoordinatorParameters {
+    let roomProxy: JoinedRoomProxyProtocol
+    let mediaProvider: MediaProviderProtocol
 }
 
+enum KnockRequestsListScreenCoordinatorAction { }
+
 final class KnockRequestsListScreenCoordinator: CoordinatorProtocol {
-    private let parameters: KnockRequestsListScreenCoordinatorParameters
     private let viewModel: KnockRequestsListScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
@@ -30,20 +28,13 @@ final class KnockRequestsListScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: KnockRequestsListScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
-        viewModel = KnockRequestsListScreenViewModel()
+        viewModel = KnockRequestsListScreenViewModel(roomProxy: parameters.roomProxy,
+                                                     mediaProvider: parameters.mediaProvider)
     }
     
     func start() {
         viewModel.actionsPublisher.sink { [weak self] action in
             MXLog.info("Coordinator: received view model action: \(action)")
-            
-            guard let self else { return }
-            switch action {
-            case .done:
-                actionsSubject.send(.done)
-            }
         }
         .store(in: &cancellables)
     }

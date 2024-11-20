@@ -15,8 +15,8 @@
 import Compound
 import SwiftUI
 
-struct KnockRequestCellInfo {
-    let userID: String
+struct KnockRequestCellInfo: Identifiable {
+    let id: String
     let displayName: String?
     let avatarUrl: URL?
     let timestamp: String?
@@ -31,41 +31,39 @@ struct KnockRequestCell: View {
     let onDeclineAndBan: ((String) -> Void)?
     
     var body: some View {
-        VStack(spacing: 0) {
-            HStack(alignment: .top, spacing: 16) {
-                LoadableAvatarImage(url: cellInfo.avatarUrl,
-                                    name: cellInfo.displayName,
-                                    contentID: cellInfo.userID,
-                                    avatarSize: .user(on: .knockingUserList),
-                                    mediaProvider: mediaProvider)
-                VStack(alignment: .leading, spacing: 12) {
-                    VStack(alignment: .leading, spacing: 0) {
-                        HStack(alignment: .top, spacing: 0) {
-                            Text(cellInfo.displayName ?? cellInfo.userID)
-                                .font(.compound.bodyLGSemibold)
-                                .foregroundStyle(.compound.textPrimary)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            if let timestamp = cellInfo.timestamp {
-                                Text(timestamp)
-                                    .font(.compound.bodySM)
-                                    .foregroundStyle(.compound.textSecondary)
-                            }
-                        }
-                        if cellInfo.displayName != nil {
-                            Text(cellInfo.userID)
-                                .font(.compound.bodyMD)
+        HStack(alignment: .top, spacing: 16) {
+            LoadableAvatarImage(url: cellInfo.avatarUrl,
+                                name: cellInfo.displayName,
+                                contentID: cellInfo.id,
+                                avatarSize: .user(on: .knockingUserList),
+                                mediaProvider: mediaProvider)
+            VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: 0) {
+                    HStack(alignment: .top, spacing: 0) {
+                        Text(cellInfo.displayName ?? cellInfo.id)
+                            .font(.compound.bodyLGSemibold)
+                            .foregroundStyle(.compound.textPrimary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        if let timestamp = cellInfo.timestamp {
+                            Text(timestamp)
+                                .font(.compound.bodySM)
                                 .foregroundStyle(.compound.textSecondary)
                         }
                     }
-                    if let reason = cellInfo.reason {
-                        DisclosableText(text: reason)
+                    if cellInfo.displayName != nil {
+                        Text(cellInfo.id)
+                            .font(.compound.bodyMD)
+                            .foregroundStyle(.compound.textSecondary)
                     }
-                    actions
                 }
+                if let reason = cellInfo.reason {
+                    DisclosableText(text: reason)
+                }
+                actions
             }
-            .padding(16)
-            Divider()
         }
+        .padding(16)
+        .background(.compound.bgCanvasDefault)
     }
     
     @ViewBuilder
@@ -74,14 +72,14 @@ struct KnockRequestCell: View {
             HStack(spacing: 16) {
                 if let onDecline {
                     Button(L10n.actionDecline) {
-                        onDecline(cellInfo.userID)
+                        onDecline(cellInfo.id)
                     }
                     .buttonStyle(.compound(.secondary))
                 }
                 
                 if let onAccept {
                     Button(L10n.actionAccept) {
-                        onAccept(cellInfo.userID)
+                        onAccept(cellInfo.id)
                     }
                     .buttonStyle(.compound(.primary))
                 }
@@ -90,7 +88,7 @@ struct KnockRequestCell: View {
         
         if let onDeclineAndBan {
             Button(L10n.screenKnockRequestsListDeclineAndBanActionTitle, role: .destructive) {
-                onDeclineAndBan(cellInfo.userID)
+                onDeclineAndBan(cellInfo.id)
             }
             .buttonStyle(.compound(.plain))
             .frame(maxWidth: .infinity)
@@ -151,13 +149,13 @@ private struct DisclosableText: View {
 
 struct KnockRequestCell_Previews: PreviewProvider, TestablePreview {
     // swiftlint:disable:next line_length
-    static let aliceWithLongReason = KnockRequestCellInfo(userID: "@alice:matrix.org", displayName: "Alice", avatarUrl: nil, timestamp: "20 Nov 2024", reason: "Hello would like to join this room, also this is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long reason")
+    static let aliceWithLongReason = KnockRequestCellInfo(id: "@alice:matrix.org", displayName: "Alice", avatarUrl: nil, timestamp: "20 Nov 2024", reason: "Hello would like to join this room, also this is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long reason")
     
-    static let aliceWithShortReason = KnockRequestCellInfo(userID: "@alice:matrix.org", displayName: "Alice", avatarUrl: nil, timestamp: "20 Nov 2024", reason: "Hello, I am Alice and would like to join this room, please")
+    static let aliceWithShortReason = KnockRequestCellInfo(id: "@alice:matrix.org", displayName: "Alice", avatarUrl: nil, timestamp: "20 Nov 2024", reason: "Hello, I am Alice and would like to join this room, please")
     
-    static let aliceWithNoReason = KnockRequestCellInfo(userID: "@alice:matrix.org", displayName: "Alice", avatarUrl: nil, timestamp: "20 Nov 2024", reason: nil)
+    static let aliceWithNoReason = KnockRequestCellInfo(id: "@alice:matrix.org", displayName: "Alice", avatarUrl: nil, timestamp: "20 Nov 2024", reason: nil)
     
-    static let aliceWithNoName = KnockRequestCellInfo(userID: "@alice:matrix.org", displayName: nil, avatarUrl: nil, timestamp: "20 Nov 2024", reason: nil)
+    static let aliceWithNoName = KnockRequestCellInfo(id: "@alice:matrix.org", displayName: nil, avatarUrl: nil, timestamp: "20 Nov 2024", reason: nil)
     
     static var previews: some View {
         KnockRequestCell(cellInfo: aliceWithLongReason, onAccept: { _ in }, onDecline: { _ in }, onDeclineAndBan: { _ in })

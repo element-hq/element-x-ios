@@ -18,6 +18,6 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
     }
     
     override func setUpWithError() throws {
-        viewModel = KnockRequestsListScreenViewModel()
+        viewModel = KnockRequestsListScreenViewModel(roomProxy: JoinedRoomProxyMock(.init()), mediaProvider: MediaProviderMock())
     }
 }

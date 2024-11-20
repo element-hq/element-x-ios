@@ -11,27 +11,42 @@ import SwiftUI
 typealias KnockRequestsListScreenViewModelType = StateStoreViewModel<KnockRequestsListScreenViewState, KnockRequestsListScreenViewAction>
 
 class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, KnockRequestsListScreenViewModelProtocol {
+    private let roomProxy: JoinedRoomProxyProtocol
+    
     private let actionsSubject: PassthroughSubject<KnockRequestsListScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<KnockRequestsListScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init() {
-        super.init(initialViewState: KnockRequestsListScreenViewState(title: "KnockRequestsList title",
-                                                                      placeholder: "Enter something here",
-                                                                      bindings: .init(composerText: "Initial composer text")))
+    init(roomProxy: JoinedRoomProxyProtocol, mediaProvider: MediaProviderProtocol) {
+        self.roomProxy = roomProxy
+        super.init(initialViewState: KnockRequestsListScreenViewState(), mediaProvider: mediaProvider)
     }
     
     // MARK: - Public
     
     override func process(viewAction: KnockRequestsListScreenViewAction) {
-        MXLog.info("View model: received view action: \(viewAction)")
-        
         switch viewAction {
-        case .done:
-            actionsSubject.send(.done)
-        case .textChanged:
-            MXLog.info("View model: composer text changed to: \(state.bindings.composerText)")
+        case .acceptAllRequests:
+            break
+        case .acceptRequest(userID: let userID):
+            break
+        case .declineRequest(userID: let userID):
+            break
+        case .ban(userID: let userID):
+            break
         }
+    }
+    
+    // For testing purposes
+    private init(initialViewState: KnockRequestsListScreenViewState) {
+        roomProxy = JoinedRoomProxyMock(.init())
+        super.init(initialViewState: initialViewState)
+    }
+}
+
+extension KnockRequestsListScreenViewModel {
+    static func mockWithInitialState(_ initialViewState: KnockRequestsListScreenViewState) -> KnockRequestsListScreenViewModel {
+        .init(initialViewState: initialViewState)
     }
 }

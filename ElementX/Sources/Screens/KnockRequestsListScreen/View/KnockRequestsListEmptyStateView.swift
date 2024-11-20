@@ -13,11 +13,11 @@ struct KnockRequestsListEmptyStateView: View {
         VStack(spacing: 16) {
             BigIcon(icon: \.askToJoin)
             VStack(spacing: 8) {
-                Text("No pending request to join")
+                Text(L10n.screenKnockRequestsListEmptyStateTitle)
                     .multilineTextAlignment(.center)
                     .font(.compound.headingMDBold)
                     .foregroundStyle(.compound.textPrimary)
-                Text("When somebody will ask to join the room, you’ll be able to see their request here.")
+                Text(L10n.screenKnockRequestsListEmptyStateDescription)
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.compound.textSecondary)
                     .font(.compound.bodyMD)

@@ -7,25 +7,18 @@
 
 import Foundation
 
-enum KnockRequestsListScreenViewModelAction {
-    case done
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
-}
+enum KnockRequestsListScreenViewModelAction { }
 
 struct KnockRequestsListScreenViewState: BindableState {
-    var title: String
-    var placeholder: String
-    var bindings: KnockRequestsListScreenViewStateBindings
-}
-
-struct KnockRequestsListScreenViewStateBindings {
-    var composerText: String
+    var requests: [KnockRequestCellInfo] = []
+    var canAccept = false
+    var canDecline = false
+    var canBan = false
 }
 
 enum KnockRequestsListScreenViewAction {
-    case done
-    case textChanged
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
+    case acceptAllRequests
+    case acceptRequest(userID: String)
+    case declineRequest(userID: String)
+    case ban(userID: String)
 }

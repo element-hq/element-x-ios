@@ -885,17 +885,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentKnockRequestsList() {
-        let parameters = KnockRequestsListScreenCoordinatorParameters()
+        let parameters = KnockRequestsListScreenCoordinatorParameters(roomProxy: roomProxy, mediaProvider: userSession.mediaProvider)
         let coordinator = KnockRequestsListScreenCoordinator(parameters: parameters)
         
         coordinator.actionsPublisher
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .done:
-                    break
-                }
+            .sink { [weak self] _ in
             }
             .store(in: &cancellables)
         
