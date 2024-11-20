@@ -108,15 +108,16 @@ final class NotificationManagerTests: XCTestCase {
         XCTAssertEqual(request.content.title, "Title")
         XCTAssertEqual(request.content.subtitle, "Subtitle")
     }
-
+    
     func test_whenStart_notificationCategoriesAreSet() throws {
-        //        let replyAction = UNTextInputNotificationAction(identifier: NotificationConstants.Action.inlineReply,
-        //                                                        title: L10n.actionQuickReply,
-        //                                                        options: [])
+        let replyAction = UNTextInputNotificationAction(identifier: NotificationConstants.Action.inlineReply,
+                                                        title: L10n.actionQuickReply,
+                                                        options: [])
         let messageCategory = UNNotificationCategory(identifier: NotificationConstants.Category.message,
-                                                     actions: [],
+                                                     actions: [replyAction],
                                                      intentIdentifiers: [],
                                                      options: [])
+        
         let inviteCategory = UNNotificationCategory(identifier: NotificationConstants.Category.invite,
                                                     actions: [],
                                                     intentIdentifiers: [],
