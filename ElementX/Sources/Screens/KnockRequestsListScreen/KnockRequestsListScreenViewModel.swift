@@ -21,6 +21,12 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     init(roomProxy: JoinedRoomProxyProtocol, mediaProvider: MediaProviderProtocol) {
         self.roomProxy = roomProxy
         super.init(initialViewState: KnockRequestsListScreenViewState(), mediaProvider: mediaProvider)
+        
+        Task {
+            await updatePermissions()
+        }
+        
+        setupSubscriptions()
     }
     
     // MARK: - Public
@@ -36,6 +42,23 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
         case .ban(userID: let userID):
             break
         }
+    }
+    
+    // MARK: - Private
+    
+    private func setupSubscriptions() {
+        roomProxy.infoPublisher
+            .throttle(for: .milliseconds(200), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] _ in
+                Task { await self?.updatePermissions() }
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func updatePermissions() async {
+        state.canAccept = await (try? roomProxy.canUserInvite(userID: roomProxy.ownUserID).get()) == true
+        state.canDecline = await (try? roomProxy.canUserKick(userID: roomProxy.ownUserID).get()) == true
+        state.canBan = await (try? roomProxy.canUserBan(userID: roomProxy.ownUserID).get()) == true
     }
     
     // For testing purposes

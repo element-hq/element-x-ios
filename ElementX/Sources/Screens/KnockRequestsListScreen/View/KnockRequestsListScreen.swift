@@ -48,7 +48,7 @@ struct KnockRequestsListScreen: View {
     }
     
     private var acceptAllButton: some View {
-        Button("Accept all") {
+        Button(L10n.screenKnockRequestsListAcceptAllButtonTitle) {
             context.send(viewAction: .acceptAllRequests)
         }
         .buttonStyle(.compound(.secondary))
