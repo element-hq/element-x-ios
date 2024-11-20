@@ -40,7 +40,7 @@ extension NSItemProvider {
         }
         
         do {
-            if let suggestedName = (suggestedName as? NSString),
+            if let suggestedName = suggestedName as? NSString,
                // Suggestions are nice but their extension is `jpeg`
                let filename = (suggestedName.deletingPathExtension as NSString).appendingPathExtension(contentType.fileExtension) {
                 return try FileManager.default.writeDataToTemporaryDirectory(data: pngData, fileName: filename)
@@ -80,9 +80,9 @@ extension NSItemProvider {
         }
         
         do {
-            if let suggestedName = (suggestedName as? NSString),
-               // Suggestions are nice but their extension is `jpeg`
-               let filename = (suggestedName.deletingPathExtension as NSString).appendingPathExtension(contentType.fileExtension) {
+            if let filename = suggestedName {
+                let hasExtension = !(filename as NSString).pathExtension.isEmpty
+                let filename = hasExtension ? filename : "\(filename).\(contentType.fileExtension)"
                 return try FileManager.default.writeDataToTemporaryDirectory(data: shareData, fileName: filename)
             } else {
                 let filename = "\(UUID().uuidString).\(contentType.fileExtension)"
@@ -133,6 +133,8 @@ extension NSItemProvider {
     }
     
     private func isIdentifierSupported(_ identifier: String?) -> Bool {
+        // Don't filter out generic public.image content as screenshots are in this format
+        // and we can convert them to a PNG ourselves.
         identifier == UTType.image.identifier
     }
     
