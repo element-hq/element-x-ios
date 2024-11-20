@@ -606,11 +606,17 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                  html: html,
                                                  inReplyToEventID: eventID,
                                                  intentionalMentions: intentionalMentions)
-        case .edit(let originalEventOrTransactionID):
+        case .edit(let originalEventOrTransactionID, type: .default):
             await timelineController.edit(originalEventOrTransactionID,
                                           message: message,
                                           html: html,
                                           intentionalMentions: intentionalMentions)
+        case .edit(let originalEventOrTransactionID, .addCaption),
+             .edit(let originalEventOrTransactionID, .editCaption):
+            await timelineController.editCaption(originalEventOrTransactionID,
+                                                 message: message,
+                                                 html: html,
+                                                 intentionalMentions: intentionalMentions)
         case .default:
             switch slashCommand(message: message) {
             case .join:

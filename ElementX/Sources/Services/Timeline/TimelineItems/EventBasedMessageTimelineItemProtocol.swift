@@ -26,6 +26,15 @@ protocol EventBasedMessageTimelineItemProtocol: EventBasedTimelineItemProtocol {
 }
 
 extension EventBasedMessageTimelineItemProtocol {
+    var supportsMediaCaption: Bool {
+        switch contentType {
+        case .audio, .file, .image, .video:
+            true
+        case .emote, .notice, .text, .location, .voice:
+            false
+        }
+    }
+    
     var hasMediaCaption: Bool {
         switch contentType {
         case .audio(let content):
