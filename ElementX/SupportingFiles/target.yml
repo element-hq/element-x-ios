@@ -193,6 +193,7 @@ targets:
     # not used yet
     # - target: NCE
     - package: MatrixRustSDK
+      embed: true
     - package: Compound
     - package: Algorithms
     - package: AnalyticsEvents
