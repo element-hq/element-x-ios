@@ -8,6 +8,10 @@ xcassets:
     output: TchapAssets.swift
     params:
       enumName: TchapAssets # To not conflict with ElementX/Assets.swift
+      colorTypeName: TchapColor # To not conflict with ElementX/Assets.swift
+      colorAliasName: TchapAssetColorTypeAlias # To not conflict with ElementX/Assets.swift
+      imageTypeName: TchapImage # To not conflict with ElementX/Assets.swift
+      imageAliasName: TchapAssetImageTypeAlias # To not conflict with ElementX/Assets.swift
 strings:
   - inputs: Resources/Localizations/en.lproj
     filter: TchapLocalizable*
