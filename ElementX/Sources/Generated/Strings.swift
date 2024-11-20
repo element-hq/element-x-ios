@@ -76,6 +76,8 @@ internal enum L10n {
   internal static var a11yVoiceMessageStopRecording: String { return L10n.tr("Localizable", "a11y_voice_message_stop_recording") }
   /// Accept
   internal static var actionAccept: String { return L10n.tr("Localizable", "action_accept") }
+  /// Add caption
+  internal static var actionAddCaption: String { return L10n.tr("Localizable", "action_add_caption") }
   /// Add to timeline
   internal static var actionAddToTimeline: String { return L10n.tr("Localizable", "action_add_to_timeline") }
   /// Back
@@ -126,6 +128,8 @@ internal enum L10n {
   internal static var actionDone: String { return L10n.tr("Localizable", "action_done") }
   /// Edit
   internal static var actionEdit: String { return L10n.tr("Localizable", "action_edit") }
+  /// Edit caption
+  internal static var actionEditCaption: String { return L10n.tr("Localizable", "action_edit_caption") }
   /// Edit poll
   internal static var actionEditPoll: String { return L10n.tr("Localizable", "action_edit_poll") }
   /// Enable
@@ -198,6 +202,8 @@ internal enum L10n {
   internal static var actionReject: String { return L10n.tr("Localizable", "action_reject") }
   /// Remove
   internal static var actionRemove: String { return L10n.tr("Localizable", "action_remove") }
+  /// Remove caption
+  internal static var actionRemoveCaption: String { return L10n.tr("Localizable", "action_remove_caption") }
   /// Reply
   internal static var actionReply: String { return L10n.tr("Localizable", "action_reply") }
   /// Reply in thread
@@ -276,6 +282,8 @@ internal enum L10n {
   internal static var commonAbout: String { return L10n.tr("Localizable", "common_about") }
   /// Acceptable use policy
   internal static var commonAcceptableUsePolicy: String { return L10n.tr("Localizable", "common_acceptable_use_policy") }
+  /// Adding caption
+  internal static var commonAddingCaption: String { return L10n.tr("Localizable", "common_adding_caption") }
   /// Advanced settings
   internal static var commonAdvancedSettings: String { return L10n.tr("Localizable", "common_advanced_settings") }
   /// Analytics
@@ -312,6 +320,8 @@ internal enum L10n {
   internal static var commonEditedSuffix: String { return L10n.tr("Localizable", "common_edited_suffix") }
   /// Editing
   internal static var commonEditing: String { return L10n.tr("Localizable", "common_editing") }
+  /// Editing caption
+  internal static var commonEditingCaption: String { return L10n.tr("Localizable", "common_editing_caption") }
   /// * %1$@ %2$@
   internal static func commonEmote(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "common_emote", String(describing: p1), String(describing: p2))
@@ -1290,6 +1300,10 @@ internal enum L10n {
   internal static var screenKeyBackupDisableTitle: String { return L10n.tr("Localizable", "screen_key_backup_disable_title") }
   /// Decline and ban
   internal static var screenKnockRequestsListDeclineAndBanActionTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_decline_and_ban_action_title") }
+  /// When somebody will ask to join the room, you’ll be able to see their request here.
+  internal static var screenKnockRequestsListEmptyStateDescription: String { return L10n.tr("Localizable", "screen_knock_requests_list_empty_state_description") }
+  /// No pending request to join
+  internal static var screenKnockRequestsListEmptyStateTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_empty_state_title") }
   /// This account has been deactivated.
   internal static var screenLoginErrorDeactivatedAccount: String { return L10n.tr("Localizable", "screen_login_error_deactivated_account") }
   /// Incorrect username and/or password
