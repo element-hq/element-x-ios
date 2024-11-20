@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-design-tokens",
       "state" : {
-        "revision" : "d81c1aa03fed8662cf85702310542bdc9e5b3d93",
-        "version" : "2.0.2"
+        "revision" : "3adf924aec63f1addfe9124a95fa4c9e9b5bff7d",
+        "version" : "2.1.0"
       }
     },
     {
@@ -15,7 +15,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-ios",
       "state" : {
-        "revision" : "80edb8829b4ca00c0a52a39b7d9024e3ebdc1acb"
+        "revision" : "f0436aa767f614584bf119defa6372ddb3b60080"
       }
     },
     {
@@ -248,8 +248,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
       "state" : {
-        "revision" : "42a086182681cf661f5c47c9b7dc3931de18c6d7",
-        "version" : "1.17.6"
+        "revision" : "7b0bbbae90c41f848f90ac7b4df6c4f50068256d",
+        "version" : "1.17.5"
       }
     },
     {
