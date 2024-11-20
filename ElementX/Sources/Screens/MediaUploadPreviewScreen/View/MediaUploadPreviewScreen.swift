@@ -10,11 +10,12 @@ import QuickLook
 import SwiftUI
 
 struct MediaUploadPreviewScreen: View {
+    @Environment(\.colorScheme) private var colorScheme
+    
     @ObservedObject var context: MediaUploadPreviewScreenViewModel.Context
     
-    var title: String {
-        ProcessInfo.processInfo.isiOSAppOnMac ? context.viewState.title ?? "" : ""
-    }
+    var title: String { ProcessInfo.processInfo.isiOSAppOnMac ? context.viewState.title ?? "" : "" }
+    var colorSchemeOverride: ColorScheme { ProcessInfo.processInfo.isiOSAppOnMac ? colorScheme : .dark }
     
     var body: some View {
         mainContent
@@ -31,7 +32,7 @@ struct MediaUploadPreviewScreen: View {
             .toolbar { toolbar }
             .disabled(context.viewState.shouldDisableInteraction)
             .interactiveDismissDisabled()
-            .preferredColorScheme(.dark)
+            .preferredColorScheme(colorSchemeOverride)
     }
     
     @ViewBuilder
@@ -40,6 +41,7 @@ struct MediaUploadPreviewScreen: View {
             Text(title)
                 .font(.compound.headingMD)
                 .foregroundColor(.compound.textSecondary)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else {
             PreviewView(fileURL: context.viewState.url,
                         title: context.viewState.title)
