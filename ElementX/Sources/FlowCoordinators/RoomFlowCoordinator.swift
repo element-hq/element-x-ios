@@ -568,7 +568,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
             case (.roomDetails, .presentKnockRequestsListScreen, .knockRequestsList):
                 presentKnockRequestsList()
-            case (.knockRequestsList, .dismissRoomMembersList, .roomDetails):
+            case (.knockRequestsList, .dismissKnockRequestsListScreen, .roomDetails):
                 break
             
             // Child flow
