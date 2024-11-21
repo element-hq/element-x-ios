@@ -183,6 +183,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         Task { await timelineViewModel.focusOnEvent(eventID: eventID) }
     }
     
+    func shareText(_ string: String) {
+        composerViewModel.process(timelineAction: .setText(plainText: string, htmlText: nil))
+    }
+    
     func stop() {
         composerViewModel.saveDraft()
         timelineViewModel.stop()

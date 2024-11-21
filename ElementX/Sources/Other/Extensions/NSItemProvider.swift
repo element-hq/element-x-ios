@@ -6,13 +6,26 @@
 //
 
 import Foundation
-import UIKit
+import SwiftUI
 import UniformTypeIdentifiers
 
 extension NSItemProvider {
     struct PreferredContentType {
         let type: UTType
         let fileExtension: String
+    }
+    
+    func loadTransferable<T: Transferable>(type transferableType: T.Type) async -> T? {
+        try? await withCheckedContinuation { continuation in
+            _ = loadTransferable(type: T.self) { result in
+                continuation.resume(returning: result)
+            }
+        }
+        .get()
+    }
+    
+    func loadString() async -> String? {
+        try? await loadItem(forTypeIdentifier: UTType.text.identifier) as? String
     }
     
     func storeData() async -> URL? {

@@ -196,11 +196,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 roomScreenCoordinator?.focusOnEvent(.init(eventID: eventID, shouldSetPin: false))
             }
         case .share(let payload):
-            guard case let .mediaFile(roomID, _) = payload else {
-                return
-            }
-            
-            guard let roomID, roomID == self.roomID else {
+            guard let roomID = payload.roomID, roomID == self.roomID else {
                 fatalError("Navigation route doesn't belong to this room flow.")
             }
             
@@ -614,9 +610,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 switch presentationAction {
                 case .eventFocus(let focusedEvent):
                     roomScreenCoordinator?.focusOnEvent(focusedEvent)
-                case .share(.mediaFile(_, let mediaFile)):
-                    stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: mediaFile.url))
-                default:
+                case .share(let payload):
+                    handleSharePresentationAction(payload, animated: animated)
+                case .none:
                     break
                 }
                 
@@ -634,7 +630,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
-                
+        
         let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
                                                                                            initialFocussedEventID: presentationAction?.focusedEvent?.eventID,
                                                                                            timelineItemFactory: timelineItemFactory,
@@ -714,10 +710,22 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
             
         switch presentationAction {
-        case .share(.mediaFile(_, let mediaFile)):
-            stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: mediaFile.url), userInfo: EventUserInfo(animated: animated))
-        default:
+        case .share(let payload):
+            handleSharePresentationAction(payload, animated: animated)
+        case .eventFocus, .none:
             break
+        }
+    }
+    
+    /// Handles the `.share` presentation action from `presentRoom`.
+    ///
+    /// **Note:** This should not be called from any other method.
+    private func handleSharePresentationAction(_ payload: ShareExtensionPayload, animated: Bool) {
+        switch payload {
+        case .mediaFile(_, let mediaFile):
+            stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: mediaFile.url), userInfo: EventUserInfo(animated: animated))
+        case .text(_, let text):
+            roomScreenCoordinator?.shareText(text)
         }
     }
     

@@ -42,14 +42,18 @@ class ShareExtensionViewController: UIViewController {
             return nil
         }
         
-        guard let fileURL = await itemProvider.storeData() else {
-            MXLog.error("Failed storing NSItemProvider data \(itemProvider)")
+        let roomID = (extensionContext?.intent as? INSendMessageIntent)?.conversationIdentifier
+        
+        if let fileURL = await itemProvider.storeData() {
+            return .mediaFile(roomID: roomID, mediaFile: .init(url: fileURL, suggestedName: fileURL.lastPathComponent))
+        } else if let url = await itemProvider.loadTransferable(type: URL.self) {
+            return .text(roomID: roomID, text: url.absoluteString)
+        } else if let string = await itemProvider.loadString() {
+            return .text(roomID: roomID, text: string)
+        } else {
+            MXLog.error("Failed loading NSItemProvider data: \(itemProvider)")
             return nil
         }
-        
-        let roomID = (extensionContext?.intent as? INSendMessageIntent)?.conversationIdentifier
-                
-        return .mediaFile(roomID: roomID, mediaFile: .init(url: fileURL, suggestedName: fileURL.lastPathComponent))
     }
     
     private func openMainApp(payload: ShareExtensionPayload) async {
