@@ -15,6 +15,7 @@ struct RoomScreenCoordinatorParameters {
     let clientProxy: ClientProxyProtocol
     let roomProxy: JoinedRoomProxyProtocol
     var focussedEvent: FocusEvent?
+    var sharedText: String?
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
@@ -88,7 +89,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                                     maxCompressedHeight: ComposerConstant.maxHeight,
                                                     maxExpandedHeight: ComposerConstant.maxHeight,
                                                     parserStyle: .elementX)
-        let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+        let composerViewModel = ComposerToolbarViewModel(initialText: parameters.sharedText,
+                                                         wysiwygViewModel: wysiwygViewModel,
                                                          completionSuggestionService: parameters.completionSuggestionService,
                                                          mediaProvider: parameters.mediaProvider,
                                                          mentionDisplayHelper: ComposerMentionDisplayHelper(timelineContext: timelineViewModel.context),
@@ -172,7 +174,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             .store(in: &cancellables)
         
         // Loading the draft requires the subscriptions to be set up first otherwise the room won't be be able to propagate the information to the composer.
-        composerViewModel.loadDraft()
+        Task { await composerViewModel.loadDraft() }
     }
     
     func focusOnEvent(_ focussedEvent: FocusEvent) {
@@ -184,7 +186,9 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     func shareText(_ string: String) {
+        composerViewModel.process(timelineAction: .setMode(mode: .default)) // Make sure we're not e.g. replying.
         composerViewModel.process(timelineAction: .setText(plainText: string, htmlText: nil))
+        composerViewModel.process(timelineAction: .setFocus)
     }
     
     func stop() {
