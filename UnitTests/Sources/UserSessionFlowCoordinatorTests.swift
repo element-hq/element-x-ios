@@ -242,7 +242,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
                        "A new timeline should be created for the same room ID, so that the screen isn't stale while loading.")
     }
     
-    func testShareRouteWithoutRoom() async throws {
+    func testShareMediaRouteWithoutRoom() async throws {
         try await process(route: .settings, expectedState: .settingsScreen(selectedRoomID: nil))
         XCTAssertTrue((splitCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is SettingsScreenCoordinator)
         
@@ -253,7 +253,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         XCTAssertTrue((splitCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is RoomSelectionScreenCoordinator)
     }
     
-    func testShareRouteWithRoom() async throws {
+    func testShareMediaRouteWithRoom() async throws {
         try await process(route: .event(eventID: "1", roomID: "1", via: []), expectedState: .roomList(selectedRoomID: "1"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         
@@ -263,6 +263,29 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertTrue((splitCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is MediaUploadPreviewScreenCoordinator)
+    }
+    
+    func testShareTextRouteWithoutRoom() async throws {
+        try await process(route: .settings, expectedState: .settingsScreen(selectedRoomID: nil))
+        XCTAssertTrue((splitCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is SettingsScreenCoordinator)
+        
+        let sharePayload: ShareExtensionPayload = .text(roomID: nil, text: "Important Text")
+        try await process(route: .share(sharePayload),
+                          expectedState: .shareExtensionRoomList(sharePayload: sharePayload))
+        
+        XCTAssertTrue((splitCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is RoomSelectionScreenCoordinator)
+    }
+    
+    func testShareTextRouteWithRoom() async throws {
+        try await process(route: .event(eventID: "1", roomID: "1", via: []), expectedState: .roomList(selectedRoomID: "1"))
+        XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
+        
+        let sharePayload: ShareExtensionPayload = .text(roomID: "2", text: "Important text")
+        try await process(route: .share(sharePayload),
+                          expectedState: .roomList(selectedRoomID: "2"))
+        
+        XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertNil(splitCoordinator?.sheetCoordinator, "The media upload sheet shouldn't be shown when sharing text.")
     }
     
     // MARK: - Private

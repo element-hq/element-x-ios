@@ -79,6 +79,7 @@ enum TimelineViewAction {
 enum TimelineComposerAction {
     case setMode(mode: ComposerMode)
     case setText(plainText: String, htmlText: String?)
+    case setFocus
     case removeFocus
     case clear
 }

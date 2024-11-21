@@ -57,6 +57,9 @@ struct TimelineItemMenuReaction: Hashable {
 enum TimelineItemMenuAction: Identifiable, Hashable {
     case copy
     case edit
+    case addCaption
+    case editCaption
+    case removeCaption
     case copyPermalink
     case redact
     case reply(isThread: Bool)
@@ -76,7 +79,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     /// Whether the item should cancel a reply/edit occurring in the composer.
     var switchToDefaultComposer: Bool {
         switch self {
-        case .reply, .edit:
+        case .reply, .edit, .addCaption, .editCaption:
             return false
         default:
             return true
@@ -106,7 +109,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     /// Whether or not the action is destructive.
     var isDestructive: Bool {
         switch self {
-        case .redact, .report:
+        case .redact, .report, .removeCaption:
             return true
         default:
             return false
@@ -130,6 +133,12 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             Label(L10n.actionCopy, icon: \.copy)
         case .edit:
             Label(L10n.actionEdit, icon: \.edit)
+        case .addCaption:
+            Label(L10n.actionAddCaption, icon: \.edit)
+        case .editCaption:
+            Label(L10n.actionEditCaption, icon: \.edit)
+        case .removeCaption:
+            Label(L10n.actionRemoveCaption, icon: \.delete)
         case .copyPermalink:
             Label(L10n.actionCopyLinkToMessage, icon: \.link)
         case .reply(let isThread):

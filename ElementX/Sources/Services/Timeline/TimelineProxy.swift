@@ -164,9 +164,9 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func edit(_ eventOrTransactionID: EventOrTransactionId, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
+    func edit(_ eventOrTransactionID: EventOrTransactionId, newContent: EditedContent) async -> Result<Void, TimelineProxyError> {
         do {
-            try await timeline.edit(eventOrTransactionId: eventOrTransactionID, newContent: .roomMessage(content: newContent))
+            try await timeline.edit(eventOrTransactionId: eventOrTransactionID, newContent: newContent)
             
             MXLog.info("Finished editing timeline item: \(eventOrTransactionID)")
 
