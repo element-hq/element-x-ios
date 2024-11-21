@@ -210,7 +210,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 set(text: plainText)
             }
         case .setFocus:
-            state.bindings.composerFocused = false
+            state.bindings.composerFocused = true
         case .removeFocus:
             state.bindings.composerFocused = false
         case .clear:
