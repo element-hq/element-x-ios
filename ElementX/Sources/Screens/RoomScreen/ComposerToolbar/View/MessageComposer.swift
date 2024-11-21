@@ -307,6 +307,13 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                                                                eventID: "123",
                                                                eventContent: .message(.text(.init(body: "Text: Where the wild things are")))),
                                          isThread: false))
+            
+            Color.clear.frame(height: 20)
+            
+            messageComposer(.init(string: "Some new caption"),
+                            mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString), type: .addCaption))
+            messageComposer(.init(string: "Some updated caption"),
+                            mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString), type: .editCaption))
         }
         .padding(.horizontal)
         
