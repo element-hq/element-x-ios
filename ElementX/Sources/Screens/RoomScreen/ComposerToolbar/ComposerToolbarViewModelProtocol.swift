@@ -15,6 +15,6 @@ protocol ComposerToolbarViewModelProtocol {
     var keyCommands: [WysiwygKeyCommand] { get }
 
     func process(timelineAction: TimelineComposerAction)
-    func loadDraft()
+    func loadDraft() async
     func saveDraft()
 }

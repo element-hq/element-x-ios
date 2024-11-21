@@ -123,6 +123,7 @@ extension JoinedRoomProxyMock {
         matrixToEventPermalinkReturnValue = .success(.homeDirectory)
         loadDraftReturnValue = .success(nil)
         clearDraftReturnValue = .success(())
+        sendTypingNotificationIsTypingReturnValue = .success(())
     }
 }
 

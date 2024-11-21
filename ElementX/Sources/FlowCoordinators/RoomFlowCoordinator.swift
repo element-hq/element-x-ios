@@ -62,9 +62,18 @@ private enum PresentationAction: Hashable {
     var focusedEvent: FocusEvent? {
         switch self {
         case .eventFocus(let focusEvent):
-            return focusEvent
+            focusEvent
         default:
-            return nil
+            nil
+        }
+    }
+    
+    var sharedText: String? {
+        switch self {
+        case .share(.text(_, let text)):
+            text
+        default:
+            nil
         }
     }
 }
@@ -196,11 +205,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 roomScreenCoordinator?.focusOnEvent(.init(eventID: eventID, shouldSetPin: false))
             }
         case .share(let payload):
-            guard case let .mediaFile(roomID, _) = payload else {
-                return
-            }
-            
-            guard let roomID, roomID == self.roomID else {
+            guard let roomID = payload.roomID, roomID == self.roomID else {
                 fatalError("Navigation route doesn't belong to this room flow.")
             }
             
@@ -615,8 +620,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .eventFocus(let focusedEvent):
                     roomScreenCoordinator?.focusOnEvent(focusedEvent)
                 case .share(.mediaFile(_, let mediaFile)):
-                    stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: mediaFile.url))
-                default:
+                    stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: mediaFile.url), userInfo: EventUserInfo(animated: animated))
+                case .share(.text(_, let text)):
+                    roomScreenCoordinator?.shareText(text)
+                case .none:
                     break
                 }
                 
@@ -624,32 +631,57 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             }
         }
         
-        Task {
-            // Flag the room as read on entering, the timeline will take care of the read receipts
-            await roomProxy.flagAsUnread(false)
+        // Flag the room as read on entering, the timeline will take care of the read receipts
+        Task { await roomProxy.flagAsUnread(false) }
+        
+        analytics.trackViewRoom(isDM: roomProxy.infoPublisher.value.isDirect, isSpace: roomProxy.infoPublisher.value.isSpace)
+        
+        let coordinator = makeRoomScreenCoordinator(presentationAction: presentationAction)
+        roomScreenCoordinator = coordinator
+        
+        if !isChildFlow {
+            let animated = UIDevice.current.userInterfaceIdiom == .phone ? animated : false
+            navigationStackCoordinator.setRootCoordinator(coordinator, animated: animated) { [weak self] in
+                self?.stateMachine.tryEvent(.dismissFlow)
+            }
+        } else {
+            if joinRoomScreenCoordinator != nil {
+                navigationStackCoordinator.pop()
+            }
+            
+            navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
+                self?.stateMachine.tryEvent(.dismissFlow)
+            }
         }
-        
+            
+        switch presentationAction {
+        case .share(.mediaFile(_, let mediaFile)):
+            stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: mediaFile.url), userInfo: EventUserInfo(animated: animated))
+        case .share(.text), .eventFocus:
+            break // These are both handled in the coordinator's init.
+        case .none:
+            break
+        }
+    }
+    
+    private func makeRoomScreenCoordinator(presentationAction: PresentationAction?) -> RoomScreenCoordinator {
         let userID = userSession.clientProxy.userID
-        
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
-                
         let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
                                                                                            initialFocussedEventID: presentationAction?.focusedEvent?.eventID,
                                                                                            timelineItemFactory: timelineItemFactory,
                                                                                            mediaProvider: userSession.mediaProvider)
         self.timelineController = timelineController
         
-        analytics.trackViewRoom(isDM: roomProxy.infoPublisher.value.isDirect, isSpace: roomProxy.infoPublisher.value.isSpace)
-        
         let completionSuggestionService = CompletionSuggestionService(roomProxy: roomProxy)
-        
         let composerDraftService = ComposerDraftService(roomProxy: roomProxy, timelineItemfactory: timelineItemFactory)
         
         let parameters = RoomScreenCoordinatorParameters(clientProxy: userSession.clientProxy,
                                                          roomProxy: roomProxy,
                                                          focussedEvent: presentationAction?.focusedEvent,
+                                                         sharedText: presentationAction?.sharedText,
                                                          timelineController: timelineController,
                                                          mediaProvider: userSession.mediaProvider,
                                                          mediaPlayerProvider: MediaPlayerProvider(),
@@ -697,28 +729,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        roomScreenCoordinator = coordinator
-        if !isChildFlow {
-            let animated = UIDevice.current.userInterfaceIdiom == .phone ? animated : false
-            navigationStackCoordinator.setRootCoordinator(coordinator, animated: animated) { [weak self] in
-                self?.stateMachine.tryEvent(.dismissFlow)
-            }
-        } else {
-            if joinRoomScreenCoordinator != nil {
-                navigationStackCoordinator.pop()
-            }
-            
-            navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
-                self?.stateMachine.tryEvent(.dismissFlow)
-            }
-        }
-            
-        switch presentationAction {
-        case .share(.mediaFile(_, let mediaFile)):
-            stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: mediaFile.url), userInfo: EventUserInfo(animated: animated))
-        default:
-            break
-        }
+        return coordinator
     }
     
     private func presentJoinRoomScreen(via: [String], animated: Bool) {

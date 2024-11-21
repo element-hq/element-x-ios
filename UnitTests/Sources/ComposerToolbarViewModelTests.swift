@@ -23,17 +23,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         AppSettings.resetAllSettings()
         appSettings = AppSettings()
         ServiceLocator.shared.register(appSettings: appSettings)
-        wysiwygViewModel = WysiwygComposerViewModel()
-        completionSuggestionServiceMock = CompletionSuggestionServiceMock(configuration: .init())
-        draftServiceMock = ComposerDraftServiceMock()
-        viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
-                                             completionSuggestionService: completionSuggestionServiceMock,
-                                             mediaProvider: MediaProviderMock(configuration: .init()),
-                                             mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
-                                             analyticsService: ServiceLocator.shared.analytics,
-                                             composerDraftService: draftServiceMock)
-        
-        viewModel.context.composerFormattingEnabled = true
+        setUpViewModel()
     }
     
     override func tearDown() {
@@ -340,7 +330,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
             return .success(nil)
         }
         
-        viewModel.loadDraft()
+        await viewModel.loadDraft()
         await fulfillment(of: [expectation], timeout: 10)
         XCTAssertFalse(viewModel.context.composerFormattingEnabled)
         XCTAssertTrue(viewModel.state.composerEmpty)
@@ -356,7 +346,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                   htmlText: nil,
                                   draftType: .newMessage))
         }
-        viewModel.loadDraft()
+        await viewModel.loadDraft()
         
         await fulfillment(of: [expectation], timeout: 10)
         XCTAssertFalse(viewModel.context.composerFormattingEnabled)
@@ -373,7 +363,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                   htmlText: "<strong>Hello</strong> world!",
                                   draftType: .newMessage))
         }
-        viewModel.loadDraft()
+        await viewModel.loadDraft()
         
         await fulfillment(of: [expectation], timeout: 10)
         XCTAssertTrue(viewModel.context.composerFormattingEnabled)
@@ -391,7 +381,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                   htmlText: nil,
                                   draftType: .edit(eventID: "testID")))
         }
-        viewModel.loadDraft()
+        await viewModel.loadDraft()
         
         await fulfillment(of: [expectation], timeout: 10)
         XCTAssertFalse(viewModel.context.composerFormattingEnabled)
@@ -424,7 +414,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
             return .success(.init(details: loadedReply,
                                   isThreaded: true))
         }
-        viewModel.loadDraft()
+        await viewModel.loadDraft()
         
         await fulfillment(of: [draftExpectation], timeout: 10)
         XCTAssertFalse(viewModel.context.composerFormattingEnabled)
@@ -464,7 +454,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
             return .success(.init(details: loadedReply,
                                   isThreaded: true))
         }
-        viewModel.loadDraft()
+        await viewModel.loadDraft()
         
         await fulfillment(of: [draftExpectation], timeout: 10)
         XCTAssertFalse(viewModel.context.composerFormattingEnabled)
@@ -621,6 +611,45 @@ class ComposerToolbarViewModelTests: XCTestCase {
         
         viewModel.process(viewAction: .sendMessage)
         try await deferred.fulfill()
+    }
+    
+    func testRestoreDoesntOverwriteInitialText() async {
+        let sharedText = "Some shared text"
+        let expectation = expectation(description: "Wait for draft to be restored")
+        expectation.isInverted = true
+        setUpViewModel(initialText: sharedText) {
+            defer { expectation.fulfill() }
+            return .success(.init(plainText: "Hello world!",
+                                  htmlText: nil,
+                                  draftType: .newMessage))
+        }
+        viewModel.context.composerFormattingEnabled = false
+        await viewModel.loadDraft()
+        
+        await fulfillment(of: [expectation], timeout: 1)
+        XCTAssertFalse(viewModel.context.composerFormattingEnabled)
+        XCTAssertEqual(viewModel.state.composerMode, .default)
+        XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: sharedText))
+    }
+    
+    // MARK: - Helpers
+    
+    private func setUpViewModel(initialText: String? = nil, loadDraftClosure: (() async -> Result<ComposerDraftProxy?, ComposerDraftServiceError>)? = nil) {
+        wysiwygViewModel = WysiwygComposerViewModel()
+        completionSuggestionServiceMock = CompletionSuggestionServiceMock(configuration: .init())
+        draftServiceMock = ComposerDraftServiceMock()
+        if let loadDraftClosure {
+            draftServiceMock.loadDraftClosure = loadDraftClosure
+        }
+        
+        viewModel = ComposerToolbarViewModel(initialText: initialText,
+                                             wysiwygViewModel: wysiwygViewModel,
+                                             completionSuggestionService: completionSuggestionServiceMock,
+                                             mediaProvider: MediaProviderMock(configuration: .init()),
+                                             mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                             analyticsService: ServiceLocator.shared.analytics,
+                                             composerDraftService: draftServiceMock)
+        viewModel.context.composerFormattingEnabled = true
     }
 }
 
