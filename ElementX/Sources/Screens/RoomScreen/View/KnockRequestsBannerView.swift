@@ -34,9 +34,16 @@ struct KnockRequestsBannerView: View {
     @ViewBuilder
     private var mainContent: some View {
         if requests.count == 1 {
-            SingleKnockRequestBannerContent(request: requests[0], onDismiss: onDismiss, onAccept: onAccept, onViewAll: onViewAll)
+            SingleKnockRequestBannerContent(request: requests[0],
+                                            onDismiss: onDismiss,
+                                            onAccept: onAccept,
+                                            onViewAll: onViewAll,
+                                            mediaProvider: mediaProvider)
         } else if requests.count > 1 {
-            MultipleKnockRequestsBannerContent(requests: requests, onDismiss: onDismiss, onViewAll: onViewAll)
+            MultipleKnockRequestsBannerContent(requests: requests,
+                                               onDismiss: onDismiss,
+                                               onViewAll: onViewAll,
+                                               mediaProvider: mediaProvider)
         } else {
             EmptyView()
         }
