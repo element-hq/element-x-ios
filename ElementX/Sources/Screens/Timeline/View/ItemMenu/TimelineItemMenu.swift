@@ -11,6 +11,7 @@ import SwiftUI
 struct TimelineItemMenu: View {
     @EnvironmentObject private var context: TimelineViewModel.Context
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     @State private var reactionsFrame = CGRect.zero
     
@@ -112,31 +113,43 @@ struct TimelineItemMenu: View {
     }
     
     private var reactionsSection: some View {
-        ScrollView(.horizontal) {
-            HStack(alignment: .center, spacing: 8) {
-                ForEach(actions.reactions, id: \.key) {
-                    reactionButton(for: $0.key)
-                }
-                
-                Button {
-                    dismiss()
-                    // Otherwise we get errors that a sheet is already presented
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        context.send(viewAction: .displayEmojiPicker(itemID: item.id))
+        HStack(spacing: 8) {
+            ScrollView(.horizontal) {
+                HStack(alignment: .center, spacing: 8) {
+                    ForEach(actions.reactions, id: \.key) {
+                        reactionButton(for: $0.key)
                     }
-                } label: {
-                    CompoundIcon(\.reactionAdd, size: .medium, relativeTo: .compound.headingLG)
-                        .foregroundColor(.compound.iconSecondary)
-                        .padding(10)
                 }
-                .accessibilityLabel(L10n.actionReact)
+                .padding(.horizontal)
+                .frame(minWidth: reactionsFrame.width, maxWidth: .infinity, alignment: .center)
             }
-            .padding(.horizontal)
-            .frame(minWidth: reactionsFrame.width, maxWidth: .infinity, alignment: .center)
+            .scrollIndicators(.hidden)
+            .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
+            .readFrame($reactionsFrame)
+            .overlay {
+                if horizontalSizeClass == .compact {
+                    LinearGradient(stops: [.init(color: .clear, location: 0.0),
+                                           .init(color: .clear, location: 0.9),
+                                           .init(color: .compound.bgCanvasDefault, location: 1.0)],
+                                   startPoint: .leading,
+                                   endPoint: .trailing)
+                        .allowsHitTesting(false)
+                }
+            }
+            
+            Button {
+                dismiss()
+                // Otherwise we get errors that a sheet is already presented
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    context.send(viewAction: .displayEmojiPicker(itemID: item.id))
+                }
+            } label: {
+                CompoundIcon(\.reactionAdd, size: .medium, relativeTo: .compound.headingLG)
+                    .foregroundColor(.compound.iconSecondary)
+                    .padding(10)
+            }
+            .accessibilityLabel(L10n.actionReact)
         }
-        .scrollIndicators(.hidden)
-        .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
-        .readFrame($reactionsFrame)
     }
     
     private func reactionButton(for emoji: String) -> some View {

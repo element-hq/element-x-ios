@@ -1009,7 +1009,8 @@ class ClientProxy: ClientProxyProtocol {
             switch roomListItem.membership() {
             case .invited:
                 return try await .invited(InvitedRoomProxy(roomListItem: roomListItem,
-                                                           room: roomListItem.invitedRoom(),
+                                                           roomPreview: roomListItem.previewRoom(via: []),
+                                                           ownUserID: userID,
                                                            zeroUsersService: zeroMatrixUsersService))
             case .knocked:
                 if appSettings.knockingEnabled {
@@ -1017,11 +1018,8 @@ class ClientProxy: ClientProxyProtocol {
                                                                roomPreview: roomListItem.previewRoom(via: []),
                                                                ownUserID: userID,
                                                                zeroUsersService: zeroMatrixUsersService))
-                } else {
-                    return try await .invited(InvitedRoomProxy(roomListItem: roomListItem,
-                                                               room: roomListItem.invitedRoom(),
-                                                               zeroUsersService: zeroMatrixUsersService))
                 }
+                return nil
             case .joined:
                 if roomListItem.isTimelineInitialized() == false {
                     try await roomListItem.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)

@@ -249,54 +249,20 @@ class TimelineInteractionHandler {
     // MARK: Pasting and dropping
     
     func handlePasteOrDrop(_ provider: NSItemProvider) {
-        guard let contentType = provider.preferredContentType,
-              let preferredExtension = contentType.preferredFilenameExtension else {
-            MXLog.error("Invalid NSItemProvider: \(provider)")
-            actionsSubject.send(.displayErrorToast(L10n.screenRoomErrorFailedProcessingMedia))
-            return
-        }
-        
-        let providerSuggestedName = provider.suggestedName
-        let providerDescription = provider.description
-        
-        _ = provider.loadDataRepresentation(for: contentType) { data, error in
-            Task { @MainActor in
-                let loadingIndicatorIdentifier = UUID().uuidString
-                self.userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
-                defer {
-                    self.userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
-                }
-
-                if let error {
-                    self.actionsSubject.send(.displayErrorToast(L10n.screenRoomErrorFailedProcessingMedia))
-                    MXLog.error("Failed processing NSItemProvider: \(providerDescription) with error: \(error)")
-                    return
-                }
-
-                guard let data else {
-                    self.actionsSubject.send(.displayErrorToast(L10n.screenRoomErrorFailedProcessingMedia))
-                    MXLog.error("Invalid NSItemProvider data: \(providerDescription)")
-                    return
-                }
-
-                do {
-                    let url = try await Task.detached {
-                        if let filename = providerSuggestedName {
-                            let hasExtension = !(filename as NSString).pathExtension.isEmpty
-                            let filename = hasExtension ? filename : "\(filename).\(preferredExtension)"
-                            return try FileManager.default.writeDataToTemporaryDirectory(data: data, fileName: filename)
-                        } else {
-                            let filename = "\(UUID().uuidString).\(preferredExtension)"
-                            return try FileManager.default.writeDataToTemporaryDirectory(data: data, fileName: filename)
-                        }
-                    }.value
-
-                    self.actionsSubject.send(.displayMediaUploadPreviewScreen(url: url))
-                } catch {
-                    self.actionsSubject.send(.displayErrorToast(L10n.screenRoomErrorFailedProcessingMedia))
-                    MXLog.error("Failed storing NSItemProvider data \(providerDescription) with error: \(error)")
-                }
+        Task {
+            let loadingIndicatorIdentifier = UUID().uuidString
+            self.userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+            defer {
+                self.userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
             }
+            
+            guard let fileURL = await provider.storeData() else {
+                MXLog.error("Failed storing NSItemProvider data \(provider)")
+                self.actionsSubject.send(.displayErrorToast(L10n.screenRoomErrorFailedProcessingMedia))
+                return
+            }
+            
+            self.actionsSubject.send(.displayMediaUploadPreviewScreen(url: fileURL))
         }
     }
     

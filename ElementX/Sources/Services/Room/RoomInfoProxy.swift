@@ -16,6 +16,8 @@ protocol BaseRoomInfoProxyProtocol {
     var canonicalAlias: String? { get }
     var avatarURL: URL? { get }
     var activeMembersCount: Int { get }
+    var isDirect: Bool { get }
+    var isSpace: Bool { get }
 }
 
 struct RoomInfoProxy: BaseRoomInfoProxyProtocol {
@@ -75,15 +77,23 @@ struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
     
     var id: String { roomPreviewInfo.roomId }
     var displayName: String? { roomPreviewInfo.name }
-    var avatar: RoomAvatar {
-        .room(id: id, name: displayName, avatarURL: avatarURL)
-    }
-
+    var heroes: [RoomHero] { roomPreviewInfo.heroes ?? [] }
     var topic: String? { roomPreviewInfo.topic }
     var canonicalAlias: String? { roomPreviewInfo.canonicalAlias }
     var avatarURL: URL? {
         //roomPreviewInfo.avatarUrl.flatMap(URL.init)
         roomAvatarCached.flatMap(URL.init) ?? roomPreviewInfo.avatarUrl.flatMap(URL.init)
     }
-    var activeMembersCount: Int { Int(roomPreviewInfo.numJoinedMembers) }
+    var isDirect: Bool { roomPreviewInfo.isDirect ?? false }
+    var isSpace: Bool { roomPreviewInfo.roomType == .space }
+    var activeMembersCount: Int { Int(roomPreviewInfo.numActiveMembers ?? roomPreviewInfo.numJoinedMembers) }
+    var avatar: RoomAvatar {
+        if isDirect, avatarURL == nil {
+            if heroes.count == 1 {
+                return .heroes(heroes.map(UserProfileProxy.init))
+            }
+        }
+        
+        return .room(id: id, name: displayName, avatarURL: avatarURL)
+    }
 }

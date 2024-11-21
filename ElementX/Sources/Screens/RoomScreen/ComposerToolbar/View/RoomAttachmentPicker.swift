@@ -18,8 +18,8 @@ struct RoomAttachmentPicker: View {
         Menu {
             menuContent
         } label: {
-            CompoundIcon(asset: Asset.Images.composerAttachment, size: .custom(30), relativeTo: .title)
-                .scaledPadding(7, relativeTo: .title)
+            CompoundIcon(asset: Asset.Images.composerAttachment, size: .custom(30), relativeTo: .compound.headingLG)
+                .scaledPadding(7, relativeTo: .compound.headingLG)
                 .foregroundStyle(.zero.iconAccentTertiary)
         }
         .buttonStyle(RoomAttachmentPickerButtonStyle())

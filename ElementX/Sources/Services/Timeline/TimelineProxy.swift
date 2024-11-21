@@ -231,13 +231,14 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func sendAudio(url: URL,
                    audioInfo: AudioInfo,
+                   caption: String?,
                    progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending audio")
         
         let handle = timeline.sendAudio(url: url.path(percentEncoded: false),
                                         audioInfo: audioInfo,
-                                        caption: nil,
+                                        caption: caption,
                                         formattedCaption: nil,
                                         progressWatcher: UploadProgressListener { progress in
                                             progressSubject?.send(progress)
@@ -260,13 +261,14 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func sendFile(url: URL,
                   fileInfo: FileInfo,
+                  caption: String?,
                   progressSubject: CurrentValueSubject<Double, Never>?,
                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending file")
         
         let handle = timeline.sendFile(url: url.path(percentEncoded: false),
                                        fileInfo: fileInfo,
-                                       caption: nil,
+                                       caption: caption,
                                        formattedCaption: nil,
                                        progressWatcher: UploadProgressListener { progress in
                                            progressSubject?.send(progress)
@@ -287,9 +289,11 @@ final class TimelineProxy: TimelineProxyProtocol {
         return .success(())
     }
     
+    // swiftlint:disable:next function_parameter_count
     func sendImage(url: URL,
                    thumbnailURL: URL,
                    imageInfo: ImageInfo,
+                   caption: String?,
                    progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending image")
@@ -297,7 +301,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         let handle = timeline.sendImage(url: url.path(percentEncoded: false),
                                         thumbnailUrl: thumbnailURL.path(percentEncoded: false),
                                         imageInfo: imageInfo,
-                                        caption: nil,
+                                        caption: caption,
                                         formattedCaption: nil,
                                         progressWatcher: UploadProgressListener { progress in
                                             progressSubject?.send(progress)
@@ -340,9 +344,11 @@ final class TimelineProxy: TimelineProxyProtocol {
         return .success(())
     }
     
+    // swiftlint:disable:next function_parameter_count
     func sendVideo(url: URL,
                    thumbnailURL: URL,
                    videoInfo: VideoInfo,
+                   caption: String?,
                    progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending video")
@@ -350,7 +356,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         let handle = timeline.sendVideo(url: url.path(percentEncoded: false),
                                         thumbnailUrl: thumbnailURL.path(percentEncoded: false),
                                         videoInfo: videoInfo,
-                                        caption: nil,
+                                        caption: caption,
                                         formattedCaption: nil,
                                         progressWatcher: UploadProgressListener { progress in
                                             progressSubject?.send(progress)

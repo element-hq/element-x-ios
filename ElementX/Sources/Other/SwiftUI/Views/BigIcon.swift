@@ -50,7 +50,7 @@ struct BigIcon: View {
     var style: Style = .defaultSolid
     
     var body: some View {
-        CompoundIcon(icon, size: .custom(32), relativeTo: .title)
+        CompoundIcon(icon, size: .custom(32), relativeTo: .compound.headingLG)
             .modifier(BigIconModifier(style: style))
     }
 }
@@ -62,7 +62,7 @@ extension Image {
         resizable()
             .renderingMode(.template)
             .aspectRatio(contentMode: .fit)
-            .scaledPadding(insets, relativeTo: .title)
+            .scaledPadding(insets, relativeTo: .compound.headingLG)
             .modifier(BigIconModifier(style: style))
     }
 }
@@ -72,7 +72,7 @@ private struct BigIconModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .scaledFrame(size: 64, relativeTo: .title)
+            .scaledFrame(size: 64, relativeTo: .compound.headingLG)
             .foregroundColor(style.foregroundColor)
             .background {
                 RoundedRectangle(cornerRadius: 14)

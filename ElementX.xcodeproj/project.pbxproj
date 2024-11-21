@@ -117,6 +117,7 @@
 		1621BF6316FFFEF5AE067C77 /* Avatars.swift in Sources */ = {isa = PBXBuildFile; fileRef = C142248014E08E885E323E56 /* Avatars.swift */; };
 		1653275750CE11F5CE94DDFD /* ReadReceiptsSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8063E65441E771200108C558 /* ReadReceiptsSummaryView.swift */; };
 		167D00CAA13FAFB822298021 /* MediaProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62A81CCC2516D9CF9322DF01 /* MediaProviderTests.swift */; };
+		16A1F6C703305FCAF4E14EC6 /* TimelineProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A8AA0DFA06012A9DAB951E /* TimelineProxyMock.swift */; };
 		16CBD087038DE3815CDA512C /* PollMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38391154120264910D19528 /* PollMock.swift */; };
 		16E4F1B8B9BFE1367F96DDA7 /* CompletionSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989FC684408B31A677F5538B /* CompletionSuggestionView.swift */; };
 		1702981A8085BE4FB0EC001B /* Application.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33116993D54FADC0C721C1F /* Application.swift */; };
@@ -193,6 +194,7 @@
 		1868A8C32CA338DF00DC382D /* Encodable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8C12CA338DF00DC382D /* Encodable+Extensions.swift */; };
 		1868A8C52CA33BBE00DC382D /* EmptyResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */; };
 		1868A8C62CA33BBE00DC382D /* EmptyResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */; };
+		188207EB2CEF3FAF00856A39 /* TimelineProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A8AA0DFA06012A9DAB951E /* TimelineProxyMock.swift */; };
 		1882EB792C8F84BD001DA2A9 /* ZeroUsersApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB782C8F84BD001DA2A9 /* ZeroUsersApi.swift */; };
 		1882EB7B2C8F8542001DA2A9 /* ZMatrixUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB7A2C8F8542001DA2A9 /* ZMatrixUser.swift */; };
 		1882EB7E2C8F85C7001DA2A9 /* Tagged in Frameworks */ = {isa = PBXBuildFile; productRef = 1882EB7D2C8F85C7001DA2A9 /* Tagged */; };
@@ -1472,6 +1474,7 @@
 		61941DEE5F3834765770BE01 /* InviteUsersScreenSelectedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F32E0B4B83D2A11EE8D011 /* InviteUsersScreenSelectedItem.swift */; };
 		61A36B9BB2ADE36CEFF5E98C /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E93A1BE7D8A2EBCAD51EEB4 /* Array.swift */; };
 		62418EA4E3EB597AD184AEB6 /* PillConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB8D34E94AB07128DB73D6C7 /* PillConstants.swift */; };
+		62684AECDFC5C7DC989CBD9E /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 7B6BC3219ADD8AA0311D2B86 /* SnapshotTesting */; };
 		627139A3D79F032BA81E3A53 /* UserSessionFlowCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA29BAE9B0F2D90E57B261C /* UserSessionFlowCoordinatorTests.swift */; };
 		62910B515BCB4B455E24D7C1 /* AdvancedSettingsScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D086854995173E897F993C26 /* AdvancedSettingsScreenViewModelProtocol.swift */; };
 		6298AB0906DDD3525CD78C6B /* LoremSwiftum in Frameworks */ = {isa = PBXBuildFile; productRef = 1A6B622CCFDEFB92D9CF1CA5 /* LoremSwiftum */; };
@@ -1613,7 +1616,7 @@
 		7D249465ED00988EEEC14E05 /* JoinedRoomProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 867DC9530C42F7B5176BE465 /* JoinedRoomProxyMock.swift */; };
 		7D261B5119E78CC8E771CA15 /* GlobalSearchScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74653BE903970C0E36867D46 /* GlobalSearchScreenCoordinator.swift */; };
 		7D58B4F46CAA9A7C3E4C6A30 /* UserDetailsEditScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88410BD213FDF9B28E8B671F /* UserDetailsEditScreen.swift */; };
-		7D6DC832DE7A3DE874E2E9BC /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 7B6BC3219ADD8AA0311D2B86 /* SnapshotTesting */; };
+		7D6DC832DE7A3DE874E2E9BC /* MatrixRustSDK in Frameworks */ = {isa = PBXBuildFile; productRef = BB111AE9D390233CDD2C7FD5 /* MatrixRustSDK */; };
 		7E2BB42805C59DB57E95610F /* PillView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7773CBFDBD458E0B7E270507 /* PillView.swift */; };
 		7E91BAC17963ED41208F489B /* UserSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8BDC092D817B68CD9040C5 /* UserSessionStore.swift */; };
 		7ECF12D5DCD69F67BD3E3842 /* RoomTimelineControllerFactoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FE0CDF1FFA92EA7EE17B0B /* RoomTimelineControllerFactoryProtocol.swift */; };
@@ -1622,6 +1625,7 @@
 		7F825CBD857D65DC986087BA /* NoticeRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F54FA7C5CB7B342EF9B9B2F /* NoticeRoomTimelineView.swift */; };
 		7F941B063C94E1718DFC2CF3 /* RoomChangeRolesScreenRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E6EB7960BC9D0F7396B3BD /* RoomChangeRolesScreenRow.swift */; };
 		7FED77802940EA7DF4D0D3A2 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 36DA824791172B9821EACBED /* PrivacyInfo.xcprivacy */; };
+		7FF27DA70D833CFC5724EFC5 /* MatrixRustSDK in Frameworks */ = {isa = PBXBuildFile; productRef = C07EA60CAB296D7726210F5B /* MatrixRustSDK */; };
 		7FF6E1FBE6E9517FD29A1D8E /* RoomChangeRolesScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A5C34C4E4268EF65D171EF /* RoomChangeRolesScreenModels.swift */; };
 		8015842CB4DE1BE414D2CDED /* AppLockSetupBiometricsScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C62E07C1164F5120727A2A8 /* AppLockSetupBiometricsScreenCoordinator.swift */; };
 		804C15D8ADE0EA7A5268F58A /* OverridableAvatarImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648DD1C10E4957CB791FE0B8 /* OverridableAvatarImage.swift */; };
@@ -1961,6 +1965,7 @@
 		C9A631FD968249B4BA0B7B3C /* ReactionsSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02EE0FABA8ED6D6C1D6CE71D /* ReactionsSummaryView.swift */; };
 		C9ABF75A43F2D26F1D9A1F27 /* DeactivateAccountScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC3FDB58F57386741A4FC7F /* DeactivateAccountScreenViewModel.swift */; };
 		C9BE065FA7D4E77E4C61CB69 /* MapLibreModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81B6170DB690013CEB646F4 /* MapLibreModels.swift */; };
+		C9C562D85999E436C7265AF1 /* MatrixRustSDK in Embed Frameworks */ = {isa = PBXBuildFile; productRef = A678E40E917620059695F067 /* MatrixRustSDK */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C9F5B48D15B9BCAE1F8D564E /* RoomNotificationModeProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1511766C534367700C8DD75 /* RoomNotificationModeProxy.swift */; };
 		CA12AE0DCD57D49CD96C699A /* WaveformCursorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9EABCA9348DFA27439A809 /* WaveformCursorView.swift */; };
 		CACD1352927336F01FC76612 /* EncryptionResetUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4C76F31A382B8E4DD07583 /* EncryptionResetUITests.swift */; };
@@ -2304,6 +2309,17 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		F5356A7EB31909A578B8B4FB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C9C562D85999E436C7265AF1 /* MatrixRustSDK in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -2412,6 +2428,7 @@
 		16D09C79746BDCD9173EB3A7 /* RoomDetailsEditScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDetailsEditScreenModels.swift; sourceTree = "<group>"; };
 		1715E3D7F53C0748AA50C91C /* PostHogAnalyticsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHogAnalyticsClient.swift; sourceTree = "<group>"; };
 		1734A445A58ED855B977A0A8 /* TracingConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracingConfigurationTests.swift; sourceTree = "<group>"; };
+		17A8AA0DFA06012A9DAB951E /* TimelineProxyMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineProxyMock.swift; sourceTree = "<group>"; };
 		180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixSearchedUser.swift; sourceTree = "<group>"; };
 		18115E512CAEA4D4001A8F4A /* ZeroContants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroContants.swift; sourceTree = "<group>"; };
 		18326FD72CA53E6D00389CB2 /* ZeroColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroColors.swift; sourceTree = "<group>"; };
@@ -3568,6 +3585,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A7A4BAD642A61DCC41621311 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7FF27DA70D833CFC5724EFC5 /* MatrixRustSDK in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BF59B36A7B2DB184B62826F6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -3589,7 +3614,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D6DC832DE7A3DE874E2E9BC /* SnapshotTesting in Frameworks */,
+				7D6DC832DE7A3DE874E2E9BC /* MatrixRustSDK in Frameworks */,
+				62684AECDFC5C7DC989CBD9E /* SnapshotTesting in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4421,6 +4447,7 @@
 				F74532E01B317C56C1BE8FA8 /* RoomTimelineProviderMock.swift */,
 				4AB29A2D95D3469B5F016655 /* SecureBackupControllerMock.swift */,
 				248649EBA5BC33DB93698734 /* SessionVerificationControllerProxyMock.swift */,
+				17A8AA0DFA06012A9DAB951E /* TimelineProxyMock.swift */,
 				7893780A1FD6E3F38B3E9049 /* UserIndicatorControllerMock.swift */,
 				AAD01F7FC2BBAC7351948595 /* UserProfile+Mock.swift */,
 				F4469F6AE311BDC439B3A5EC /* UserSessionMock.swift */,
@@ -7298,6 +7325,7 @@
 			buildPhases = (
 				11F93544B4FC60F78F47D89C /* Sources */,
 				9B3512762CF4A1D45A79C340 /* Resources */,
+				A7A4BAD642A61DCC41621311 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -7305,6 +7333,9 @@
 				0EEC1557A40FBA6DF49D83A2 /* PBXTargetDependency */,
 			);
 			name = UnitTests;
+			packageProductDependencies = (
+				C07EA60CAB296D7726210F5B /* MatrixRustSDK */,
+			);
 			productName = UnitTests;
 			productReference = AAC9344689121887B74877AF /* UnitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -7324,6 +7355,7 @@
 			);
 			name = PreviewTests;
 			packageProductDependencies = (
+				BB111AE9D390233CDD2C7FD5 /* MatrixRustSDK */,
 				7B6BC3219ADD8AA0311D2B86 /* SnapshotTesting */,
 			);
 			productName = PreviewTests;
@@ -7341,6 +7373,7 @@
 				215E1D91B98672C856F559D0 /* Resources */,
 				EE878EAA342710DB973E0A87 /* Frameworks */,
 				8E3CD0D0BB6697512E867C1D /* Embed Foundation Extensions */,
+				F5356A7EB31909A578B8B4FB /* Embed Frameworks */,
 				98CA896D84BFD53B2554E891 /* ⚠️ SwiftLint */,
 				B35AB66424BB30087EEE408C /* 🧹 SwiftFormat */,
 				30D6E0F72C87CB9100786D34 /* Embed Frameworks */,
@@ -8356,6 +8389,7 @@
 				184EC99A2CA5AF3F000F405E /* AuthenticationClientBuilderMock.swift in Sources */,
 				18A042172C9AB5FA00727739 /* DeactivateAccountScreenViewModel.swift in Sources */,
 				18E9A50C2C9829970082DDA4 /* FormButtonStyles.swift in Sources */,
+				188207EB2CEF3FAF00856A39 /* TimelineProxyMock.swift in Sources */,
 				18E9A50D2C9829970082DDA4 /* VerifyBackupKeyScreen.swift in Sources */,
 				18E9A50E2C9829970082DDA4 /* FormattedBodyText.swift in Sources */,
 				18E9A50F2C9829970082DDA4 /* FormattingToolbar.swift in Sources */,
@@ -9817,6 +9851,7 @@
 				562EFB9AB62B38830D9AA778 /* TimelineMediaFrame.swift in Sources */,
 				B818580464CFB5400A3EF6AE /* TimelineModels.swift in Sources */,
 				E82E13CC3EB923CCB8F8273C /* TimelineProxy.swift in Sources */,
+				16A1F6C703305FCAF4E14EC6 /* TimelineProxyMock.swift in Sources */,
 				2FEC6652055984389CE1BBEC /* TimelineProxyProtocol.swift in Sources */,
 				8446C2A7ECEFDA79F622725F /* TimelineReactionsView.swift in Sources */,
 				4DAEE2468669848B6C9F55B4 /* TimelineReadReceiptsView.swift in Sources */,
@@ -10170,7 +10205,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.9.0;
+				MARKETING_VERSION = 0.9.1;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -10205,7 +10240,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.9.0;
+				MARKETING_VERSION = 0.9.1;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -11041,8 +11076,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
-				kind = exactVersion;
-				version = 1.0.68;
+				kind = revision;
+				revision = 50769941247cc87760c8d3c3a28f8753555c19fb;
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {
@@ -11154,7 +11189,7 @@
 			repositoryURL = "https://github.com/element-hq/compound-ios";
 			requirement = {
 				kind = revision;
-				revision = 80edb8829b4ca00c0a52a39b7d9024e3ebdc1acb;
+				revision = f0436aa767f614584bf119defa6372ddb3b60080;
 			};
 		};
 		F76A08D0EA29A07A54F4EB4D /* XCRemoteSwiftPackageReference "swift-collections" */ = {
@@ -11596,6 +11631,11 @@
 			package = F76A08D0EA29A07A54F4EB4D /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = Collections;
 		};
+		BB111AE9D390233CDD2C7FD5 /* MatrixRustSDK */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6FC4820D8D4559CEECA064D7 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
+			productName = MatrixRustSDK;
+		};
 		BC01130651CB23340B899032 /* DeviceKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D5F7D47BBAAE0CF1DDEB3034 /* XCRemoteSwiftPackageReference "DeviceKit" */;
@@ -11605,6 +11645,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 821C67C9A7F8CC3FD41B28B4 /* XCRemoteSwiftPackageReference "emojibase-bindings" */;
 			productName = Emojibase;
+		};
+		C07EA60CAB296D7726210F5B /* MatrixRustSDK */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6FC4820D8D4559CEECA064D7 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
+			productName = MatrixRustSDK;
 		};
 		C1BF15833233CD3BDB7E2B1D /* Mapbox */ = {
 			isa = XCSwiftPackageProductDependency;
