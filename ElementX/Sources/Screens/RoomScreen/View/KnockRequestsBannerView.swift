@@ -93,12 +93,12 @@ private struct SingleKnockRequestBannerContent: View {
     private var actions: some View {
         HStack(spacing: 12) {
             Button(L10n.screenRoomSingleKnockRequestViewButtonTitle, action: onViewAll)
-                .buttonStyle(.compound(.secondary))
+                .buttonStyle(.compound(.secondary, size: .medium))
             if let onAccept {
                 Button(L10n.screenRoomSingleKnockRequestAcceptButtonTitle, action: {
                     onAccept(request.userID)
                 })
-                .buttonStyle(.compound(.primary))
+                .buttonStyle(.compound(.primary, size: .medium))
             }
         }
         .padding(.top, request.reason == nil ? 0 : 2)
@@ -144,7 +144,7 @@ private struct MultipleKnockRequestsBannerContent: View {
             Button(L10n.screenRoomMultipleKnockRequestsViewAllButtonTitle) {
                 onViewAll()
             }
-            .buttonStyle(.compound(.primary))
+            .buttonStyle(.compound(.primary, size: .medium))
         }
     }
 }

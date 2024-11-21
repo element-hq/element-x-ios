@@ -19,21 +19,20 @@ struct KnockRequestsListScreen: View {
     
     @ViewBuilder
     private var mainContent: some View {
-        List {
-            if !context.viewState.requests.isEmpty {
-                header
+        ScrollView {
+            LazyVStack(spacing: 0) {
+                ForEach(context.viewState.requests) { requestInfo in
+                    ListRow(kind: .custom {
+                        KnockRequestCell(cellInfo: requestInfo,
+                                         mediaProvider: context.mediaProvider,
+                                         onAccept: context.viewState.canAccept ? onAccept : nil,
+                                         onDecline: context.viewState.canDecline ? onDecline : nil,
+                                         onDeclineAndBan: context.viewState.canBan ? onDeclineAndBan : nil)
+                    })
+                }
             }
-            ForEach(context.viewState.requests) { requestInfo in
-                ListRow(kind: .custom {
-                    KnockRequestCell(cellInfo: requestInfo,
-                                     mediaProvider: context.mediaProvider,
-                                     onAccept: context.viewState.canAccept ? onAccept : nil,
-                                     onDecline: context.viewState.canDecline ? onDecline : nil,
-                                     onDeclineAndBan: context.viewState.canBan ? onDeclineAndBan : nil)
-                })
-            }
+            .padding(.top, 40)
         }
-        .listStyle(.plain)
         .background(.compound.bgCanvasDefault)
         .overlay {
             if context.viewState.requests.isEmpty {
@@ -56,13 +55,6 @@ struct KnockRequestsListScreen: View {
         .padding(.top, 16)
         .padding(.bottom, 4)
         .background(.compound.bgCanvasDefault)
-    }
-    
-    private var header: some View {
-        Text(L10n.screenKnockRequestsListTitle.uppercased())
-            .compoundListSectionHeader()
-            .padding(.top, 20)
-            .listRowSeparator(.hidden)
     }
     
     private func onAccept(userID: String) {

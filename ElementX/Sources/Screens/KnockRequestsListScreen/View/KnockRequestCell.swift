@@ -61,8 +61,15 @@ struct KnockRequestCell: View {
                 }
                 actions
             }
+            .padding(.trailing, 16)
+            .overlay(alignment: .bottom) {
+                VStack(spacing: 0) {
+                    Divider()
+                }
+            }
         }
-        .padding(16)
+        .padding(.top, 16)
+        .padding(.leading, 16)
         .background(.compound.bgCanvasDefault)
     }
     
@@ -74,26 +81,29 @@ struct KnockRequestCell: View {
                     Button(L10n.actionDecline) {
                         onDecline(cellInfo.id)
                     }
-                    .buttonStyle(.compound(.secondary))
+                    .buttonStyle(.compound(.secondary, size: .medium))
                 }
                 
                 if let onAccept {
                     Button(L10n.actionAccept) {
                         onAccept(cellInfo.id)
                     }
-                    .buttonStyle(.compound(.primary))
+                    .buttonStyle(.compound(.primary, size: .medium))
                 }
             }
         }
         
         if let onDeclineAndBan {
-            Button(L10n.screenKnockRequestsListDeclineAndBanActionTitle, role: .destructive) {
+            Button(role: .destructive) {
                 onDeclineAndBan(cellInfo.id)
+            } label: {
+                Text(L10n.screenKnockRequestsListDeclineAndBanActionTitle)
+                    .padding(.vertical, 4)
             }
             .buttonStyle(.compound(.plain))
             .frame(maxWidth: .infinity)
-            .padding(.top, 12)
-            .padding(.bottom, 4)
+            .padding(.top, 8)
+            .padding(.bottom, 16)
         }
     }
 }
@@ -138,8 +148,8 @@ private struct DisclosableText: View {
                 }
             } label: {
                 CompoundIcon(\.chevronDown, size: .medium, relativeTo: .compound.bodyMD)
+                    .rotationEffect(.degrees(isExpanded ? 180 : 0))
             }
-            .rotationEffect(.degrees(isExpanded ? 180 : 0))
             .foregroundStyle(.compound.iconTertiary)
             .opacity(collapsedHeight < expandedHeight ? 1 : 0)
             .disabled(collapsedHeight >= expandedHeight)
