@@ -30,8 +30,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private var userSession: UserSessionProtocol? {
         didSet {
             userSessionObserver?.cancel()
-            if let userSession {
-                userSession.clientProxy.roomsToAwait = storedRoomsToAwait
+            if userSession != nil {
                 configureElementCallService()
                 configureNotificationManager()
                 observeUserSessionChanges()
@@ -55,8 +54,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     let notificationManager: NotificationManagerProtocol
 
     private let appRouteURLParser: AppRouteURLParser
+    
     @Consumable private var storedAppRoute: AppRoute?
-    private var storedRoomsToAwait: Set<String> = []
+    @Consumable private var storedInlineReply: (roomID: String, message: String)?
+    @Consumable private var storedRoomsToAwait: Set<String>?
 
     init(appDelegate: AppDelegate) {
         let appHooks = AppHooks()
@@ -313,7 +314,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             if let userSession {
                 userSession.clientProxy.roomsToAwait.insert(roomID)
             } else {
-                storedRoomsToAwait.insert(roomID)
+                storedRoomsToAwait = [roomID]
             }
         }
         
@@ -321,32 +322,19 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {
-        guard let userSession else {
-            fatalError("User session not setup")
-        }
-        
         MXLog.info("[AppCoordinator] handle notification reply")
         
         guard let roomID = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
             return
         }
         
-        guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
-            MXLog.error("Tried to reply in an unjoined room: \(roomID)")
+        if userSession == nil {
+            // Store the data so it can be used after the session is established
+            storedInlineReply = (roomID, replyText)
             return
         }
         
-        switch await roomProxy.timeline.sendMessage(replyText,
-                                                    html: nil,
-                                                    inReplyToEventID: nil,
-                                                    intentionalMentions: .empty) {
-        case .success:
-            break
-        default:
-            // error or no room proxy
-            await service.showLocalNotification(with: "⚠️ " + L10n.commonError,
-                                                subtitle: L10n.errorSomeMessagesHaveNotBeenSent)
-        }
+        await processInlineReply(roomID: roomID, replyText: replyText)
     }
     
     // MARK: - Private
@@ -474,6 +462,24 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         authenticationFlowCoordinator?.start()
     }
+    
+    private func runPostSessionSetupTasks() async {
+        guard let userSession, let userSessionFlowCoordinator else {
+            fatalError("User session not setup")
+        }
+        
+        if let storedRoomsToAwait {
+            userSession.clientProxy.roomsToAwait = storedRoomsToAwait
+        }
+        
+        if let storedAppRoute {
+            userSessionFlowCoordinator.handleAppRoute(storedAppRoute, animated: false)
+        }
+        
+        if let storedInlineReply {
+            await processInlineReply(roomID: storedInlineReply.roomID, replyText: storedInlineReply.message)
+        }
+    }
 
     private func startAuthenticationSoftLogout() {
         guard let userSession else {
@@ -554,9 +560,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         userSessionFlowCoordinator.start()
         
         self.userSessionFlowCoordinator = userSessionFlowCoordinator
-
-        if let storedAppRoute {
-            userSessionFlowCoordinator.handleAppRoute(storedAppRoute, animated: false)
+        
+        Task {
+            await runPostSessionSetupTasks()
         }
     }
         
@@ -832,7 +838,29 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         SentrySDK.close()
         MXLog.info("SentrySDK stopped")
     }
-           
+    
+    private func processInlineReply(roomID: String, replyText: String) async {
+        guard let userSession else {
+            fatalError("User session not setup")
+        }
+        
+        guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            MXLog.error("Tried to reply in an unjoined room: \(roomID)")
+            return
+        }
+        
+        switch await roomProxy.timeline.sendMessage(replyText,
+                                                    html: nil,
+                                                    inReplyToEventID: nil,
+                                                    intentionalMentions: .empty) {
+        case .success:
+            break
+        default:
+            await notificationManager.showLocalNotification(with: "⚠️ " + L10n.commonError,
+                                                            subtitle: L10n.errorSomeMessagesHaveNotBeenSent)
+        }
+    }
+    
     // MARK: Toasts and loading indicators
     
     private static let loadingIndicatorIdentifier = "\(AppCoordinator.self)-Loading"
