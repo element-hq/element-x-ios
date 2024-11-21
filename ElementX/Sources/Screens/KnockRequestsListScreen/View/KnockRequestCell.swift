@@ -47,9 +47,9 @@ struct KnockRequestCell: View {
             }
             .padding(.trailing, 16)
             .overlay(alignment: .bottom) {
-                VStack(spacing: 0) {
-                    Divider()
-                }
+                // Custom separator that uses the same color from the compound one
+                Color.compound._borderInteractiveSecondaryAlpha
+                    .frame(height: 0.5)
             }
         }
         .padding(.top, 16)
@@ -80,36 +80,39 @@ struct KnockRequestCell: View {
     
     @ViewBuilder
     private var actions: some View {
-        if onDecline != nil || onAccept != nil {
-            HStack(spacing: 16) {
-                if let onDecline {
-                    Button(L10n.actionDecline) {
-                        onDecline(cellInfo.id)
+        VStack(spacing: 0) {
+            if onDecline != nil || onAccept != nil {
+                HStack(spacing: 16) {
+                    if let onDecline {
+                        Button(L10n.actionDecline) {
+                            onDecline(cellInfo.id)
+                        }
+                        .buttonStyle(.compound(.secondary, size: .medium))
                     }
-                    .buttonStyle(.compound(.secondary, size: .medium))
-                }
-                
-                if let onAccept {
-                    Button(L10n.actionAccept) {
-                        onAccept(cellInfo.id)
+                    
+                    if let onAccept {
+                        Button(L10n.actionAccept) {
+                            onAccept(cellInfo.id)
+                        }
+                        .buttonStyle(.compound(.primary, size: .medium))
                     }
-                    .buttonStyle(.compound(.primary, size: .medium))
                 }
             }
-        }
-        
-        if let onDeclineAndBan {
-            Button(role: .destructive) {
-                onDeclineAndBan(cellInfo.id)
-            } label: {
-                Text(L10n.screenKnockRequestsListDeclineAndBanActionTitle)
-                    .padding(.vertical, 4)
+            
+            if let onDeclineAndBan {
+                Button(role: .destructive) {
+                    onDeclineAndBan(cellInfo.id)
+                } label: {
+                    Text(L10n.screenKnockRequestsListDeclineAndBanActionTitle)
+                        .padding(.top, 8)
+                        .padding(.bottom, 4)
+                }
+                .frame(maxWidth: .infinity)
+                .buttonStyle(.compound(.plain))
+                .padding(.top, 16)
             }
-            .buttonStyle(.compound(.plain))
-            .frame(maxWidth: .infinity)
-            .padding(.top, 8)
-            .padding(.bottom, 16)
         }
+        .padding(.bottom, 16)
     }
 }
 
