@@ -606,7 +606,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                  html: html,
                                                  inReplyToEventID: eventID,
                                                  intentionalMentions: intentionalMentions)
-        case .edit(let originalEventOrTransactionID, type: .default):
+        case .edit(let originalEventOrTransactionID, .default):
             await timelineController.edit(originalEventOrTransactionID,
                                           message: message,
                                           html: html,
