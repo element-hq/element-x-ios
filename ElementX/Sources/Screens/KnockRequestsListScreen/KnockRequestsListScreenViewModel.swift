@@ -35,11 +35,11 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
         switch viewAction {
         case .acceptAllRequests:
             break
-        case .acceptRequest(userID: let userID):
+        case .acceptRequest(let userID):
             break
-        case .declineRequest(userID: let userID):
+        case .declineRequest(let userID):
             break
-        case .ban(userID: let userID):
+        case .ban(let userID):
             break
         }
     }

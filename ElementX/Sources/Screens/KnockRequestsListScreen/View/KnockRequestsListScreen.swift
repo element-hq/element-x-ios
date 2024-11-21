@@ -15,6 +15,17 @@ struct KnockRequestsListScreen: View {
         mainContent
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(L10n.screenKnockRequestsListTitle)
+            .background(.compound.bgCanvasDefault)
+            .overlay {
+                if context.viewState.requests.isEmpty {
+                    KnockRequestsListEmptyStateView()
+                }
+            }
+            .safeAreaInset(edge: .bottom) {
+                if !context.viewState.requests.isEmpty {
+                    acceptAllButton
+                }
+            }
     }
     
     @ViewBuilder
@@ -32,17 +43,6 @@ struct KnockRequestsListScreen: View {
                 }
             }
             .padding(.top, 40)
-        }
-        .background(.compound.bgCanvasDefault)
-        .overlay {
-            if context.viewState.requests.isEmpty {
-                KnockRequestsListEmptyStateView()
-            }
-        }
-        .safeAreaInset(edge: .bottom) {
-            if !context.viewState.requests.isEmpty {
-                acceptAllButton
-            }
         }
     }
     

@@ -16,6 +16,7 @@ import Compound
 import SwiftUI
 
 struct KnockRequestCellInfo: Identifiable {
+    /// user identifier of the usee that sent the request
     let id: String
     let displayName: String?
     let avatarUrl: URL?
@@ -38,24 +39,7 @@ struct KnockRequestCell: View {
                                 avatarSize: .user(on: .knockingUserList),
                                 mediaProvider: mediaProvider)
             VStack(alignment: .leading, spacing: 12) {
-                VStack(alignment: .leading, spacing: 0) {
-                    HStack(alignment: .top, spacing: 0) {
-                        Text(cellInfo.displayName ?? cellInfo.id)
-                            .font(.compound.bodyLGSemibold)
-                            .foregroundStyle(.compound.textPrimary)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        if let timestamp = cellInfo.timestamp {
-                            Text(timestamp)
-                                .font(.compound.bodySM)
-                                .foregroundStyle(.compound.textSecondary)
-                        }
-                    }
-                    if cellInfo.displayName != nil {
-                        Text(cellInfo.id)
-                            .font(.compound.bodyMD)
-                            .foregroundStyle(.compound.textSecondary)
-                    }
-                }
+                header
                 if let reason = cellInfo.reason {
                     DisclosableText(text: reason)
                 }
@@ -71,6 +55,27 @@ struct KnockRequestCell: View {
         .padding(.top, 16)
         .padding(.leading, 16)
         .background(.compound.bgCanvasDefault)
+    }
+    
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(alignment: .top, spacing: 0) {
+                Text(cellInfo.displayName ?? cellInfo.id)
+                    .font(.compound.bodyLGSemibold)
+                    .foregroundStyle(.compound.textPrimary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                if let timestamp = cellInfo.timestamp {
+                    Text(timestamp)
+                        .font(.compound.bodySM)
+                        .foregroundStyle(.compound.textSecondary)
+                }
+            }
+            if cellInfo.displayName != nil {
+                Text(cellInfo.id)
+                    .font(.compound.bodyMD)
+                    .foregroundStyle(.compound.textSecondary)
+            }
+        }
     }
     
     @ViewBuilder
