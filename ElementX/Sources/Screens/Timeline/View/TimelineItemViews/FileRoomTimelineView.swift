@@ -9,6 +9,7 @@ import Compound
 import SwiftUI
 
 struct FileRoomTimelineView: View {
+    @EnvironmentObject private var context: TimelineViewModel.Context
     let timelineItem: FileRoomTimelineItem
     
     var body: some View {
@@ -18,7 +19,10 @@ struct FileRoomTimelineView: View {
                                          caption: timelineItem.content.caption,
                                          formattedCaption: timelineItem.content.formattedCaption,
                                          additionalWhitespaces: timelineItem.additionalWhitespaces())
-                .accessibilityLabel(L10n.commonFile)
+            .accessibilityLabel(L10n.commonFile)
+            .onTapGesture {
+                context.send(viewAction: .itemTapped(itemID: timelineItem.id))
+            }
         }
     }
 }

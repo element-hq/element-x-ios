@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct AudioRoomTimelineView: View {
+    @EnvironmentObject private var context: TimelineViewModel.Context
     let timelineItem: AudioRoomTimelineItem
     
     var body: some View {
@@ -19,7 +20,10 @@ struct AudioRoomTimelineView: View {
                                          formattedCaption: timelineItem.content.formattedCaption,
                                          additionalWhitespaces: timelineItem.additionalWhitespaces(),
                                          isAudioFile: true)
-                .accessibilityLabel(L10n.commonAudio)
+            .accessibilityLabel(L10n.commonAudio)
+            .onTapGesture {
+                context.send(viewAction: .itemTapped(itemID: timelineItem.id))
+            }
         }
     }
 }

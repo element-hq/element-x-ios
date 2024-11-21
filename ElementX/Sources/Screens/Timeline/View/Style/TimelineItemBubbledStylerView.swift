@@ -124,11 +124,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     var messageBubbleWithActions: some View {
         messageBubble
-            .onTapGesture {
-                context.send(viewAction: .itemTapped(itemID: timelineItem.id))
-            }
-            // We need a tap gesture before this long one so that it doesn't
-            // steal away the gestures from the scroll view
             .longPressWithFeedback {
                 context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
             }
