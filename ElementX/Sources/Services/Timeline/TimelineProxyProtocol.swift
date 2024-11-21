@@ -51,17 +51,21 @@ protocol TimelineProxyProtocol {
     
     func sendAudio(url: URL,
                    audioInfo: AudioInfo,
+                   caption: String?,
                    progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
     func sendFile(url: URL,
                   fileInfo: FileInfo,
+                  caption: String?,
                   progressSubject: CurrentValueSubject<Double, Never>?,
                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
+    // swiftlint:disable:next function_parameter_count
     func sendImage(url: URL,
                    thumbnailURL: URL,
                    imageInfo: ImageInfo,
+                   caption: String?,
                    progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
@@ -71,9 +75,11 @@ protocol TimelineProxyProtocol {
                       zoomLevel: UInt8?,
                       assetType: AssetType?) async -> Result<Void, TimelineProxyError>
     
+    // swiftlint:disable:next function_parameter_count
     func sendVideo(url: URL,
                    thumbnailURL: URL,
                    videoInfo: VideoInfo,
+                   caption: String?,
                    progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     

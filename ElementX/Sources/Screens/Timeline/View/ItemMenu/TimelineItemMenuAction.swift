@@ -5,6 +5,7 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import OrderedCollections
 import SFSafeSymbols
 import SwiftUI
 
@@ -25,30 +26,32 @@ struct TimelineItemMenuActions {
         self.actions = actions
         self.debugActions = debugActions
         
-        // Only process 5 of the most frequently used emojis instead of all of them
-        var frequentlyUsed = emojiProvider.frequentlyUsedSystemEmojis().prefix(5).map { TimelineItemMenuReaction(key: $0, symbol: .heart) }
-        
-        frequentlyUsed += [
+        var frequentlyUsed: OrderedSet<TimelineItemMenuReaction> = [
             .init(key: "👍️", symbol: .handThumbsup),
             .init(key: "👎️", symbol: .handThumbsdown),
-            .init(key: "🔥", symbol: .flame),
-            .init(key: "❤️", symbol: .heart),
-            .init(key: "👏", symbol: .handsClap)
+            .init(key: "🎉", symbol: .partyPopper),
+            .init(key: "❤️", symbol: .heart)
         ]
         
-        frequentlyUsed = Array(frequentlyUsed.prefix(5))
+        frequentlyUsed.append(contentsOf: emojiProvider.frequentlyUsedSystemEmojis().map { TimelineItemMenuReaction(key: $0, symbol: .heart) })
         
         reactions = if isReactable {
-            frequentlyUsed
+            Array(frequentlyUsed.elements.prefix(10))
         } else {
             []
         }
     }
 }
 
-struct TimelineItemMenuReaction {
+struct TimelineItemMenuReaction: Hashable {
     let key: String
     let symbol: SFSymbol
+    
+    // Frequently used emojis on the all use the same .heart SFSymbol.
+    // Override equatable so we can remove duplicates.
+    static func == (lhs: TimelineItemMenuReaction, rhs: TimelineItemMenuReaction) -> Bool {
+        lhs.key == rhs.key
+    }
 }
 
 enum TimelineItemMenuAction: Identifiable, Hashable {

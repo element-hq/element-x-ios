@@ -13,16 +13,15 @@ class KnockedRoomProxy: KnockedRoomProxyProtocol {
     private let roomListItem: RoomListItemProtocol
     private let roomPreview: RoomPreviewProtocol
     let info: BaseRoomInfoProxyProtocol
+    let ownUserID: String
     
     // A room identifier is constant and lazy stops it from being fetched
     // multiple times over FFI
     lazy var id = info.id
-    
-    let ownUserID: String
-    
+        
     init(roomListItem: RoomListItemProtocol,
          roomPreview: RoomPreviewProtocol,
-         ownUserID: String) async throws {
+         ownUserID: String) throws {
         self.roomListItem = roomListItem
         self.roomPreview = roomPreview
         self.ownUserID = ownUserID

@@ -11,36 +11,28 @@ import UIKit
 
 class InvitedRoomProxy: InvitedRoomProxyProtocol {
     private let roomListItem: RoomListItemProtocol
-    private let room: RoomProtocol
+    private let roomPreview: RoomPreviewProtocol
+    let info: BaseRoomInfoProxyProtocol
+    let ownUserID: String
+    let inviter: RoomMemberProxyProtocol?
     
     // A room identifier is constant and lazy stops it from being fetched
     // multiple times over FFI
-    lazy var id: String = room.id()
-    
-    var ownUserID: String { room.ownUserId() }
-    
-    let info: RoomInfoProxy
-    
+    lazy var id: String = info.id
+        
     init(roomListItem: RoomListItemProtocol,
-         room: RoomProtocol) async throws {
+         roomPreview: RoomPreviewProtocol,
+         ownUserID: String) async throws {
         self.roomListItem = roomListItem
-        self.room = room
-        info = try await RoomInfoProxy(roomInfo: room.roomInfo())
-    }
-    
-    func acceptInvitation() async -> Result<Void, RoomProxyError> {
-        do {
-            try await room.join()
-            return .success(())
-        } catch {
-            MXLog.error("Failed accepting invitation with error: \(error)")
-            return .failure(.sdkError(error))
-        }
+        self.roomPreview = roomPreview
+        self.ownUserID = ownUserID
+        info = try RoomPreviewInfoProxy(roomPreviewInfo: roomPreview.info())
+        inviter = await roomPreview.inviter().map(RoomMemberProxy.init)
     }
     
     func rejectInvitation() async -> Result<Void, RoomProxyError> {
         do {
-            return try await .success(room.leave())
+            return try await .success(roomPreview.leave())
         } catch {
             MXLog.error("Failed rejecting invitiation with error: \(error)")
             return .failure(.sdkError(error))

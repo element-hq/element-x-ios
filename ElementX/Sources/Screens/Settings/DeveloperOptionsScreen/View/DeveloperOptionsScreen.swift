@@ -53,10 +53,6 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.hideTimelineMedia) {
                     Text("Hide image & video previews")
                 }
-                
-                Toggle(isOn: $context.frequentEmojisEnabled) {
-                    Text("Show frequently used emojis")
-                }
             }
             
             Section("Join rules") {

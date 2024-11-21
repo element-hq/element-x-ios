@@ -1,3 +1,47 @@
+## Changes in 1.9.6 (2024-11-19)
+
+### What's Changed
+
+✨ Features
+* Share extension by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3506
+* Enable local echoes for media uploads on development builds. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3514
+
+🙌 Improvements
+* Stacked Avatars View by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3504
+
+🐛 Bugfixes
+* Regenerate thumbnails to see if it helps with phantom avatar switching. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3503
+* Fix #1947 - Check expected files are still present before restoring a session. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3507
+* Fix Rooms that user has knocked not displaying the request sent screen by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3513
+* Fix share extension app group so it works for nightlies too by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3520
+* Fix toolbar icons disappearing on the iPad after backgrounding the app by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3521
+* Fix a bug where the security banner has the wrong state when out of sync. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3511
+* Fix image animations / remove fading when switching between local and remote echoes. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3525
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3523
+
+🧱 Build
+* Update the project to use Xcode 16.1 by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3505
+
+🚧 In development 🚧
+* Knock requests banner by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3510
+* Knocking Request Cell by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3516
+
+Others
+* Update the strings for unsupported calls. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3502
+* Bump the RustSDK to v1.0.67 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3512
+* UI test fixes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3515
+* Group image and video metadata in specialised structs by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3518
+* Update compound by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3519
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3524
+* Update compound iOS by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3532
+* Expose the public search feature flag in the developer settings and disable it by default. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3528
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3535
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.9.5...1.9.6
+
 ## Changes in 1.9.5 (2024-11-11)
 
 ### What's Changed

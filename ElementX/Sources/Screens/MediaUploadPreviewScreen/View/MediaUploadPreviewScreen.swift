@@ -5,25 +5,34 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import Compound
 import QuickLook
 import SwiftUI
 
 struct MediaUploadPreviewScreen: View {
+    @Environment(\.colorScheme) private var colorScheme
+    
     @ObservedObject var context: MediaUploadPreviewScreenViewModel.Context
     
-    var title: String {
-        ProcessInfo.processInfo.isiOSAppOnMac ? context.viewState.title ?? "" : ""
-    }
+    var title: String { ProcessInfo.processInfo.isiOSAppOnMac ? context.viewState.title ?? "" : "" }
+    var colorSchemeOverride: ColorScheme { ProcessInfo.processInfo.isiOSAppOnMac ? colorScheme : .dark }
     
     var body: some View {
         mainContent
-            .id(UUID())
+            .id(context.viewState.url)
+            .ignoresSafeArea(edges: [.horizontal])
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                composer
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 16)
+                    .background() // Don't use compound so we match the QLPreviewController.
+            }
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
-            .disabled(context.viewState.shouldDisableInteraction)
-            .ignoresSafeArea(edges: [.horizontal, .bottom])
             .toolbar { toolbar }
+            .disabled(context.viewState.shouldDisableInteraction)
             .interactiveDismissDisabled()
+            .preferredColorScheme(colorSchemeOverride)
     }
     
     @ViewBuilder
@@ -32,9 +41,26 @@ struct MediaUploadPreviewScreen: View {
             Text(title)
                 .font(.compound.headingMD)
                 .foregroundColor(.compound.textSecondary)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else {
             PreviewView(fileURL: context.viewState.url,
                         title: context.viewState.title)
+        }
+    }
+    
+    private var composer: some View {
+        HStack(spacing: 12) {
+            MessageComposerTextField(placeholder: L10n.richTextEditorComposerCaptionPlaceholder,
+                                     text: $context.caption,
+                                     presendCallback: $context.presendCallback,
+                                     maxHeight: ComposerConstant.maxHeight,
+                                     keyHandler: { _ in },
+                                     pasteHandler: { _ in })
+                .messageComposerStyle()
+            
+            SendButton {
+                context.send(viewAction: .send)
+            }
         }
     }
     
@@ -44,12 +70,9 @@ struct MediaUploadPreviewScreen: View {
             Button { context.send(viewAction: .cancel) } label: {
                 Text(L10n.actionCancel)
             }
-        }
-        ToolbarItem(placement: .confirmationAction) {
-            Button { context.send(viewAction: .send) } label: {
-                Text(L10n.actionSend)
-            }
-            .disabled(context.viewState.shouldDisableInteraction)
+            // Fix a bug with the preferredColorScheme on iOS 18 where the button doesn't
+            // follow the dark colour scheme on devices running with dark mode disabled.
+            .tint(.compound.textActionPrimary)
         }
     }
 }
@@ -111,21 +134,6 @@ private class PreviewItem: NSObject, QLPreviewItem {
     }
 }
 
-// MARK: - Previews
-
-struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = MediaUploadPreviewScreenViewModel(userIndicatorController: UserIndicatorControllerMock.default,
-                                                             roomProxy: JoinedRoomProxyMock(),
-                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
-                                                             title: "some random file name",
-                                                             url: URL.picturesDirectory)
-    static var previews: some View {
-        NavigationStack {
-            MediaUploadPreviewScreen(context: viewModel.context)
-        }
-    }
-}
-
 private class PreviewViewController: QLPreviewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -135,5 +143,23 @@ private class PreviewViewController: QLPreviewController {
                 
         // Hide toolbar share button
         toolbarItems?.first?.isHidden = true
+    }
+}
+
+// MARK: - Previews
+
+struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
+    static let snapshotURL = URL.picturesDirectory
+    static let testURL = Bundle.main.url(forResource: "AppIcon60x60@2x", withExtension: "png")
+    
+    static let viewModel = MediaUploadPreviewScreenViewModel(userIndicatorController: UserIndicatorControllerMock.default,
+                                                             roomProxy: JoinedRoomProxyMock(),
+                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
+                                                             title: "App Icon.png",
+                                                             url: snapshotURL)
+    static var previews: some View {
+        NavigationStack {
+            MediaUploadPreviewScreen(context: viewModel.context)
+        }
     }
 }
