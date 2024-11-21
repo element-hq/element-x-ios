@@ -148,9 +148,10 @@ private struct DisclosableText: View {
                 }
             } label: {
                 CompoundIcon(\.chevronDown, size: .medium, relativeTo: .compound.bodyMD)
+                    .foregroundStyle(.compound.iconTertiary)
                     .rotationEffect(.degrees(isExpanded ? 180 : 0))
             }
-            .foregroundStyle(.compound.iconTertiary)
+            .buttonStyle(.plain)
             .opacity(collapsedHeight < expandedHeight ? 1 : 0)
             .disabled(collapsedHeight >= expandedHeight)
         }
