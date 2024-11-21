@@ -160,6 +160,15 @@ struct RoomDetailsScreen: View {
                         })
                         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
             }
+            if context.viewState.canSeeKnockingRequests {
+                ListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
+                                        icon: \.askToJoin),
+                        // TODO: Display count if requests > 0 when an API for them is available
+                        details: .counter(1),
+                        kind: .navigationLink {
+                            context.send(viewAction: .processTapRequestsToJoin)
+                        })
+            }
             ListRow(label: .default(title: L10n.screenPollsHistoryTitle,
                                     icon: \.polls),
                     kind: .navigationLink {
@@ -294,6 +303,7 @@ struct RoomDetailsScreen: View {
 
 struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static let genericRoomViewModel = {
+        ServiceLocator.shared.settings.knockingEnabled = true
         let members: [RoomMemberProxyMock] = [
             .mockMeAdmin,
             .mockAlice,
@@ -357,6 +367,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let simpleRoomViewModel = {
+        ServiceLocator.shared.settings.knockingEnabled = true
         let members: [RoomMemberProxyMock] = [
             .mockMeAdmin,
             .mockAlice,
