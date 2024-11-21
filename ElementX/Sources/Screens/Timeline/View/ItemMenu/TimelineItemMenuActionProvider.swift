@@ -65,7 +65,15 @@ struct TimelineItemMenuActionProvider {
         }
 
         if item.isEditable {
-            actions.append(.edit)
+            if let messageItem = item as? EventBasedMessageTimelineItemProtocol, messageItem.supportsMediaCaption {
+                if messageItem.hasMediaCaption {
+                    actions.append(contentsOf: [.editCaption, .removeCaption])
+                } else {
+                    actions.append(.addCaption)
+                }
+            } else if !(item is VoiceMessageRoomTimelineItem) {
+                actions.append(.edit)
+            }
         }
         
         if canCurrentUserPin, let eventID = item.id.eventID {

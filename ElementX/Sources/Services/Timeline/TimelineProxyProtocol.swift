@@ -38,7 +38,7 @@ protocol TimelineProxyProtocol {
     func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError>
     
     func edit(_ eventOrTransactionID: EventOrTransactionId,
-              newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError>
+              newContent: EditedContent) async -> Result<Void, TimelineProxyError>
     
     func redact(_ eventOrTransactionID: EventOrTransactionId,
                 reason: String?) async -> Result<Void, TimelineProxyError>
