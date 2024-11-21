@@ -8194,8 +8194,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
-				kind = revision;
-				revision = 50769941247cc87760c8d3c3a28f8753555c19fb;
+				kind = exactVersion;
+				version = 1.0.73;
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {
