@@ -58,9 +58,18 @@ struct MediaUploadPreviewScreen: View {
                                      pasteHandler: { _ in })
                 .messageComposerStyle()
             
-            SendButton {
+            Button {
                 context.send(viewAction: .send)
+            } label: {
+                CompoundIcon(\.sendSolid)
+                    .foregroundColor(.zero.iconAccentTertiary)
+                    .background {
+                        Circle().foregroundColor(.clear)
+                    }
             }
+//            SendButton {
+//                context.send(viewAction: .send)
+//            }
         }
     }
     

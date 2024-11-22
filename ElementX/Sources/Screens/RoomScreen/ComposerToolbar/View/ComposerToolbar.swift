@@ -127,21 +127,34 @@ struct ComposerToolbar: View {
     }
     
     private var sendButton: some View {
-        Group {
-            if context.viewState.composerMode.isEdit {
-                Button(action: sendMessage) {
-                    CompoundIcon(\.check, size: .medium, relativeTo: .compound.headingLG)
-                        .foregroundColor(context.viewState.sendButtonDisabled ? .compound.iconDisabled : .white)
-                        .scaledPadding(6, relativeTo: .compound.headingLG)
-                        .background(context.viewState.sendButtonDisabled ? .clear : .compound.iconAccentTertiary, in: Circle())
-                        .accessibilityLabel(L10n.actionConfirm)
+//        Group {
+//            if context.viewState.composerMode.isEdit {
+//                Button(action: sendMessage) {
+//                    CompoundIcon(\.check, size: .medium, relativeTo: .compound.headingLG)
+//                        .foregroundColor(context.viewState.sendButtonDisabled ? .compound.iconDisabled : .white)
+//                        .scaledPadding(6, relativeTo: .compound.headingLG)
+//                        .background(context.viewState.sendButtonDisabled ? .clear : .compound.iconAccentTertiary, in: Circle())
+//                        .accessibilityLabel(L10n.actionConfirm)
+//                }
+//            } else {
+//                SendButton(action: sendMessage)
+//                    .accessibilityLabel(L10n.actionSend)
+//            }
+//        }
+//        .scaledPadding(4, relativeTo: .compound.headingLG)
+        Button {
+            sendMessage()
+        } label: {
+            CompoundIcon(context.viewState.composerMode.isEdit ? \.check : \.sendSolid)
+                .scaledPadding(6, relativeTo: .title)
+                .accessibilityLabel(context.viewState.composerMode.isEdit ? L10n.actionConfirm : L10n.actionSend)
+                .foregroundColor(context.viewState.sendButtonDisabled ? .compound.iconDisabled : .zero.iconAccentTertiary)
+                .background {
+                    Circle()
+                        .foregroundColor(context.viewState.sendButtonDisabled ? .clear : Asset.Colors.zeroDarkGrey.swiftUIColor)
                 }
-            } else {
-                SendButton(action: sendMessage)
-                    .accessibilityLabel(L10n.actionSend)
-            }
+                .scaledPadding(4, relativeTo: .compound.headingLG)
         }
-        .scaledPadding(4, relativeTo: .compound.headingLG)
         .disabled(context.viewState.sendButtonDisabled)
         .animation(.linear(duration: 0.1).disabledDuringTests(), value: context.viewState.sendButtonDisabled)
         .keyboardShortcut(.return, modifiers: [.command])
