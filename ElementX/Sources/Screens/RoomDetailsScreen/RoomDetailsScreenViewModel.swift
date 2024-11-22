@@ -191,9 +191,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         state.bindings.isFavourite = roomInfo.isFavourite
         switch roomInfo.joinRule {
         case .knock, .knockRestricted:
-            state.isKnockgRoom = true
+            state.isKnockableRoom = true
         default:
-            state.isKnockgRoom = false
+            state.isKnockableRoom = false
         }
     }
     
