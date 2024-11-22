@@ -32,7 +32,7 @@ struct UserProfileListRow: View {
     
     var body: some View {
         ListRow(label: .avatar(title: user.displayName ?? user.userID,
-                               description: nil,
+                               description: user.primaryZeroId,
                                icon: avatar,
                                role: isUnknownProfile ? .error : nil),
                 kind: kind)

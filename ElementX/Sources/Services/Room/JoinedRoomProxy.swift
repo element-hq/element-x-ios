@@ -227,13 +227,16 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
 
     func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError> {
-        if let member = membersPublisher.value.filter({ $0.userID == userID }).first {
-            return .success(member)
-        }
+//        if let member = membersPublisher.value.filter({ $0.userID == userID }).first {
+//            return .success(member)
+//        }
         
         do {
-            let member = try await room.member(userId: userID)
-            return .success(RoomMemberProxy(member: member))
+            async let zeroProfile = zeroUsersService.fetchZeroUser(userId: userID)
+            async let memberProfile = room.member(userId: userID)
+            // Await both results
+            let (sdkProfileResult, zeroProfileResult) = try await (memberProfile, zeroProfile)
+            return .success(RoomMemberProxy(member: sdkProfileResult, zeroMember: zeroProfileResult))
         } catch {
             MXLog.error("Failed retrieving member \(userID) with error: \(error)")
             return .failure(.sdkError(error))

@@ -24,6 +24,8 @@ protocol RoomMemberProxyProtocol: AnyObject {
     var powerLevel: Int { get }
     
     var role: RoomMemberRole { get }
+    
+    var primaryZeroId: String? { get }
 }
 
 extension RoomMemberProxyProtocol {

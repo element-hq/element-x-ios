@@ -660,7 +660,7 @@ class ClientProxy: ClientProxyProtocol {
             let zeroUsers = try await zeroMatrixUsersService.searchZeroUsers(query: searchTerm)
             let matrixUsers = try await zeroUsers.concurrentMap { zeroUser in
                 let userProfile = try await self.client.getProfile(userId: zeroUser.matrixId)
-                return UserProfileProxy(sdkUserProfile: userProfile)
+                return UserProfileProxy(sdkUserProfile: userProfile, zeroUserProfile: zeroUser)
             }
             return .success(.init(results: matrixUsers, limited: false))
         } catch {
@@ -671,7 +671,11 @@ class ClientProxy: ClientProxyProtocol {
     
     func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError> {
         do {
-            return try await .success(.init(sdkUserProfile: client.getProfile(userId: userID)))
+            async let sdkProfile = client.getProfile(userId: userID)
+            async let zeroProfile = zeroMatrixUsersService.fetchZeroUser(userId: userID)
+            // Await both results
+            let (sdkProfileResult, zeroProfileResult) = try await (sdkProfile, zeroProfile)
+            return .success(.init(zeroUserProfile: zeroProfileResult, sdkUserProfile: sdkProfileResult))
         } catch {
             MXLog.error("Failed retrieving profile for userID: \(userID) with error: \(error)")
             return .failure(.sdkError(error))

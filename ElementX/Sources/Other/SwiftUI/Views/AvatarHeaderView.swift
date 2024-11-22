@@ -37,7 +37,8 @@ struct AvatarHeaderView<Footer: View>: View {
          @ViewBuilder footer: @escaping () -> Footer) {
         avatarInfo = .room(room.avatar)
         title = room.name ?? room.id
-        subtitle = room.canonicalAlias
+        // subtitle = room.canonicalAlias
+        subtitle = nil
         
         self.avatarSize = avatarSize
         self.mediaProvider = mediaProvider
@@ -60,7 +61,8 @@ struct AvatarHeaderView<Footer: View>: View {
         let dmRecipientProfile = UserProfileProxy(member: dmRecipient)
         avatarInfo = .room(.heroes([dmRecipientProfile, UserProfileProxy(member: accountOwner)]))
         title = dmRecipientProfile.displayName ?? dmRecipientProfile.userID
-        subtitle = dmRecipientProfile.displayName == nil ? nil : dmRecipientProfile.userID
+//        subtitle = dmRecipientProfile.displayName == nil ? nil : dmRecipientProfile.userID
+        subtitle = nil
         
         avatarSize = .user(on: .dmDetails)
         self.mediaProvider = mediaProvider
@@ -94,7 +96,8 @@ struct AvatarHeaderView<Footer: View>: View {
          @ViewBuilder footer: @escaping () -> Footer) {
         avatarInfo = .user(user)
         title = user.displayName ?? user.userID
-        subtitle = user.displayName == nil ? nil : user.userID
+        // subtitle = user.displayName == nil ? nil : user.userID
+        subtitle = user.primaryZeroId
         
         self.avatarSize = avatarSize
         self.mediaProvider = mediaProvider
@@ -158,13 +161,13 @@ struct AvatarHeaderView<Footer: View>: View {
                 .multilineTextAlignment(.center)
                 .textSelection(.enabled)
             
-//            if let subtitle {
-//                Text(subtitle)
-//                    .foregroundColor(.compound.textSecondary)
-//                    .font(.zero.bodyLG)
-//                    .multilineTextAlignment(.center)
-//                    .textSelection(.enabled)
-//            }
+            if let subtitle {
+                Text(subtitle)
+                    .foregroundColor(.compound.textSecondary)
+                    .font(.zero.bodyLG)
+                    .multilineTextAlignment(.center)
+                    .textSelection(.enabled)
+            }
             
             if !badges.isEmpty {
                 badgesStack

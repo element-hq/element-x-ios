@@ -12,35 +12,55 @@ struct UserProfileProxy: Equatable, Hashable {
     let userID: String
     let displayName: String?
     let avatarURL: URL?
+    var primaryZeroId: String?
     
     init(userID: String, displayName: String? = nil, avatarURL: URL? = nil) {
         self.userID = userID
         self.displayName = displayName
         self.avatarURL = avatarURL
+        primaryZeroId = nil
     }
     
     init(member: RoomMemberDetails) {
         userID = member.id
         displayName = member.isBanned ? nil : member.name
         avatarURL = member.isBanned ? nil : member.avatarURL
+        primaryZeroId = member.primaryZeroId
     }
     
     init(sdkUserProfile: MatrixRustSDK.UserProfile) {
         userID = sdkUserProfile.userId
         displayName = sdkUserProfile.displayName
         avatarURL = sdkUserProfile.avatarUrl.flatMap(URL.init(string:))
+        primaryZeroId = nil
     }
     
     init(sdkRoomHero: MatrixRustSDK.RoomHero) {
         userID = sdkRoomHero.userId
         displayName = sdkRoomHero.displayName
         avatarURL = sdkRoomHero.avatarUrl.flatMap(URL.init(string:))
+        primaryZeroId = nil
     }
     
     init(zeroSearchedUser: ZMatrixSearchedUser, avatarUrl: String?) {
         userID = zeroSearchedUser.matrixId
         displayName = zeroSearchedUser.name
         avatarURL = avatarUrl.flatMap(URL.init(string:))
+        primaryZeroId = zeroSearchedUser.primaryZID
+    }
+    
+    init(sdkUserProfile: MatrixRustSDK.UserProfile, zeroUserProfile: ZMatrixSearchedUser?) {
+        userID = sdkUserProfile.userId
+        displayName = sdkUserProfile.displayName
+        avatarURL = sdkUserProfile.avatarUrl.flatMap(URL.init(string:))
+        primaryZeroId = zeroUserProfile?.primaryZID
+    }
+    
+    init(zeroUserProfile: ZMatrixUser?, sdkUserProfile: MatrixRustSDK.UserProfile) {
+        userID = sdkUserProfile.userId
+        displayName = sdkUserProfile.displayName
+        avatarURL = sdkUserProfile.avatarUrl.flatMap(URL.init(string:))
+        primaryZeroId = zeroUserProfile?.primaryZID
     }
     
     /// A user is meant to be "verified" when the GET profile returns back either the display name or the avatar

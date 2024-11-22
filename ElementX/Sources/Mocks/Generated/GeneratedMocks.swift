@@ -12753,6 +12753,7 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
         set(value) { underlyingRole = value }
     }
     var underlyingRole: RoomMemberRole!
+    var primaryZeroId: String?
 
 }
 class RoomNotificationSettingsProxyMock: RoomNotificationSettingsProxyProtocol {
