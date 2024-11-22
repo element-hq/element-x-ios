@@ -17,12 +17,12 @@ struct KnockRequestsListScreen: View {
             .navigationTitle(L10n.screenKnockRequestsListTitle)
             .background(.compound.bgCanvasDefault)
             .overlay {
-                if context.viewState.requests.isEmpty {
+                if !context.viewState.shouldDisplayRequests {
                     KnockRequestsListEmptyStateView()
                 }
             }
             .safeAreaInset(edge: .bottom) {
-                if !context.viewState.requests.isEmpty {
+                if context.viewState.shouldDisplayRequests {
                     acceptAllButton
                 }
             }
@@ -32,14 +32,16 @@ struct KnockRequestsListScreen: View {
     private var mainContent: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
-                ForEach(context.viewState.requests) { requestInfo in
-                    ListRow(kind: .custom {
-                        KnockRequestCell(cellInfo: requestInfo,
-                                         mediaProvider: context.mediaProvider,
-                                         onAccept: context.viewState.canAccept ? onAccept : nil,
-                                         onDecline: context.viewState.canDecline ? onDecline : nil,
-                                         onDeclineAndBan: context.viewState.canBan ? onDeclineAndBan : nil)
-                    })
+                if context.viewState.shouldDisplayRequests {
+                    ForEach(context.viewState.requests) { requestInfo in
+                        ListRow(kind: .custom {
+                            KnockRequestCell(cellInfo: requestInfo,
+                                             mediaProvider: context.mediaProvider,
+                                             onAccept: context.viewState.canAccept ? onAccept : nil,
+                                             onDecline: context.viewState.canDecline ? onDecline : nil,
+                                             onDeclineAndBan: context.viewState.canBan ? onDeclineAndBan : nil)
+                        })
+                    }
                 }
             }
             .padding(.top, 40)
@@ -79,10 +81,7 @@ struct KnockRequestsListScreen_Previews: PreviewProvider, TestablePreview {
                                                                                                   // swiftlint:disable:next line_length
                                                                                                   .init(id: "@bob:matrix.org", displayName: "Bob", avatarUrl: nil, timestamp: "Now", reason: "Hello this one is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long reason"),
                                                                                                   .init(id: "@charlie:matrix.org", displayName: "Charlie", avatarUrl: nil, timestamp: "Now", reason: nil),
-                                                                                                  .init(id: "@dan:matrix.org", displayName: "Dan", avatarUrl: nil, timestamp: "Now", reason: "Hello! It's a me! Dan!")],
-                                                                                       canAccept: true,
-                                                                                       canDecline: true,
-                                                                                       canBan: true))
+                                                                                                  .init(id: "@dan:matrix.org", displayName: "Dan", avatarUrl: nil, timestamp: "Now", reason: "Hello! It's a me! Dan!")]))
                                                                                       
     static var previews: some View {
         NavigationStack {

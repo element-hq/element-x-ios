@@ -189,6 +189,12 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         state.topicSummary = topic?.unattributedStringByReplacingNewlinesWithSpaces()
         state.joinedMembersCount = roomInfo.joinedMembersCount
         state.bindings.isFavourite = roomInfo.isFavourite
+        switch roomInfo.joinRule {
+        case .knock, .knockRestricted:
+            state.isKnockgRoom = true
+        default:
+            state.isKnockgRoom = false
+        }
     }
     
     private func fetchMembersIfNeeded() async {

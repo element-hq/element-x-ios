@@ -49,9 +49,10 @@ struct RoomDetailsScreenViewState: BindableState {
     var canJoinCall = false
     var pinnedEventsActionState = RoomDetailsScreenPinnedEventsActionState.loading
     var knockingEnabled = false
+    var isKnockgRoom = false
     
     var canSeeKnockingRequests: Bool {
-        knockingEnabled && dmRecipient == nil && (canInviteUsers || canKickUsers || canBanUsers)
+        knockingEnabled && dmRecipient == nil && isKnockgRoom && (canInviteUsers || canKickUsers || canBanUsers)
     }
     
     var canEdit: Bool {
