@@ -173,6 +173,7 @@ class LoggingTests: XCTestCase {
                                                content: .init(filename: "FileString",
                                                               caption: "FileString",
                                                               source: nil,
+                                                              fileSize: nil,
                                                               thumbnailSource: nil,
                                                               contentType: nil))
         

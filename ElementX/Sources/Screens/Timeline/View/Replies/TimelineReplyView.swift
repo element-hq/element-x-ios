@@ -250,6 +250,7 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
                                                                                                     duration: 0,
                                                                                                     waveform: nil,
                                                                                                     source: nil,
+                                                                                                    fileSize: nil,
                                                                                                     contentType: nil))))),
             
             TimelineReplyView(placement: .timeline,
@@ -258,6 +259,7 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
                                                                 eventContent: .message(.file(.init(filename: "file.txt",
                                                                                                    caption: "Some file",
                                                                                                    source: nil,
+                                                                                                   fileSize: nil,
                                                                                                    thumbnailSource: nil,
                                                                                                    contentType: nil))))),
             
@@ -289,6 +291,7 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
                                                                                                     duration: 0,
                                                                                                     waveform: nil,
                                                                                                     source: nil,
+                                                                                                    fileSize: nil,
                                                                                                     contentType: nil))))),
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),

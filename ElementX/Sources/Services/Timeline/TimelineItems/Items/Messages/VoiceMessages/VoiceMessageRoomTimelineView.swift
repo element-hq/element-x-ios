@@ -67,6 +67,7 @@ struct VoiceMessageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                                    duration: 300,
                                                                                    waveform: EstimatedWaveform.mockWaveform,
                                                                                    source: nil,
+                                                                                   fileSize: nil,
                                                                                    contentType: nil))
     
     static let playerState = AudioPlayerState(id: .timelineItemIdentifier(timelineItemIdentifier),
