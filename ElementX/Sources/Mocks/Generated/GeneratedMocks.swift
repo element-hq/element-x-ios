@@ -14249,8 +14249,8 @@ class TimelineProxyMock: TimelineProxyProtocol {
     var editNewContentCalled: Bool {
         return editNewContentCallsCount > 0
     }
-    var editNewContentReceivedArguments: (eventOrTransactionID: EventOrTransactionId, newContent: RoomMessageEventContentWithoutRelation)?
-    var editNewContentReceivedInvocations: [(eventOrTransactionID: EventOrTransactionId, newContent: RoomMessageEventContentWithoutRelation)] = []
+    var editNewContentReceivedArguments: (eventOrTransactionID: EventOrTransactionId, newContent: EditedContent)?
+    var editNewContentReceivedInvocations: [(eventOrTransactionID: EventOrTransactionId, newContent: EditedContent)] = []
 
     var editNewContentUnderlyingReturnValue: Result<Void, TimelineProxyError>!
     var editNewContentReturnValue: Result<Void, TimelineProxyError>! {
@@ -14276,9 +14276,9 @@ class TimelineProxyMock: TimelineProxyProtocol {
             }
         }
     }
-    var editNewContentClosure: ((EventOrTransactionId, RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError>)?
+    var editNewContentClosure: ((EventOrTransactionId, EditedContent) async -> Result<Void, TimelineProxyError>)?
 
-    func edit(_ eventOrTransactionID: EventOrTransactionId, newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError> {
+    func edit(_ eventOrTransactionID: EventOrTransactionId, newContent: EditedContent) async -> Result<Void, TimelineProxyError> {
         editNewContentCallsCount += 1
         editNewContentReceivedArguments = (eventOrTransactionID: eventOrTransactionID, newContent: newContent)
         DispatchQueue.main.async {

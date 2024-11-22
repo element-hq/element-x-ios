@@ -13,6 +13,15 @@ enum ShareExtensionConstants {
 
 enum ShareExtensionPayload: Hashable, Codable {
     case mediaFile(roomID: String?, mediaFile: ShareExtensionMediaFile)
+    case text(roomID: String?, text: String)
+    
+    var roomID: String? {
+        switch self {
+        case .mediaFile(let roomID, _),
+             .text(let roomID, _):
+            roomID
+        }
+    }
 }
 
 struct ShareExtensionMediaFile: Hashable, Codable {

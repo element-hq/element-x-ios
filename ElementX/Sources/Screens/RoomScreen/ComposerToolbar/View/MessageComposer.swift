@@ -83,8 +83,8 @@ struct MessageComposer: View {
         switch mode {
         case .reply(_, let replyDetails, _):
             MessageComposerReplyHeader(replyDetails: replyDetails, action: cancellationAction)
-        case .edit:
-            MessageComposerEditHeader(action: cancellationAction)
+        case .edit(_, let editType):
+            MessageComposerEditHeader(editType: editType, action: cancellationAction)
         case .recordVoiceMessage, .previewVoiceMessage, .default:
             EmptyView()
         }
@@ -153,14 +153,20 @@ private struct MessageComposerReplyHeader: View {
 }
 
 private struct MessageComposerEditHeader: View {
+    let editType: ComposerMode.EditType
     let action: () -> Void
+    
+    private var title: String {
+        switch editType {
+        case .default: L10n.commonEditing
+        case .addCaption: L10n.commonAddingCaption
+        case .editCaption: L10n.commonEditingCaption
+        }
+    }
     
     var body: some View {
         HStack(alignment: .center, spacing: 8) {
-            Label(L10n.commonEditing,
-                  icon: \.editSolid,
-                  iconSize: .xSmall,
-                  relativeTo: .compound.bodySMSemibold)
+            Label(title, icon: \.editSolid, iconSize: .xSmall, relativeTo: .compound.bodySMSemibold)
                 .labelStyle(MessageComposerHeaderLabelStyle())
             Spacer()
             Button(action: action) {
@@ -295,13 +301,20 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
             messageComposer()
             
             messageComposer(.init(string: "Some message"),
-                            mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString)))
+                            mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString), type: .default))
             
             messageComposer(mode: .reply(eventID: UUID().uuidString,
                                          replyDetails: .loaded(sender: .init(id: "Kirk"),
                                                                eventID: "123",
                                                                eventContent: .message(.text(.init(body: "Text: Where the wild things are")))),
                                          isThread: false))
+            
+            Color.clear.frame(height: 20)
+            
+            messageComposer(.init(string: "Some new caption"),
+                            mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString), type: .addCaption))
+            messageComposer(.init(string: "Some updated caption"),
+                            mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString), type: .editCaption))
         }
         .padding(.horizontal)
         

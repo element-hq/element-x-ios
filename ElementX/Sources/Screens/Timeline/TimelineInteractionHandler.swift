@@ -101,10 +101,7 @@ class TimelineInteractionHandler {
         
         switch action {
         case .copy:
-            guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else {
-                return
-            }
-            
+            guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else { return }
             UIPasteboard.general.string = messageTimelineItem.body
         case .edit:
             switch timelineItem {
@@ -119,6 +116,19 @@ class TimelineInteractionHandler {
             default:
                 MXLog.error("Cannot edit item with id: \(timelineItem.id)")
             }
+        case .addCaption, .editCaption:
+            switch timelineItem {
+            case let messageTimelineItem as EventBasedMessageTimelineItemProtocol:
+                processEditMessageEvent(messageTimelineItem)
+            default:
+                MXLog.error("Cannot add/edit caption on item with id: \(timelineItem.id)")
+            }
+        case .removeCaption:
+            guard case let .event(_, eventOrTransactionID) = timelineItem.id else {
+                MXLog.error("Failed removing caption, missing event ID")
+                return
+            }
+            Task { await timelineController.removeCaption(eventOrTransactionID) }
         case .copyPermalink:
             guard let eventID = eventTimelineItem.id.eventID else {
                 actionsSubject.send(.displayErrorToast(L10n.errorFailedCreatingThePermalink))
@@ -134,17 +144,10 @@ class TimelineInteractionHandler {
                 UIPasteboard.general.url = permalinkURL
             }
         case .redact:
-            guard case let .event(_, eventOrTransactionID) = itemID else {
-                fatalError()
-            }
-            
-            Task {
-                await timelineController.redact(eventOrTransactionID)
-            }
+            guard case let .event(_, eventOrTransactionID) = itemID else { fatalError() }
+            Task { await timelineController.redact(eventOrTransactionID) }
         case .reply:
-            guard let eventID = eventTimelineItem.id.eventID else {
-                return
-            }
+            guard let eventID = eventTimelineItem.id.eventID else { return }
             
             let replyInfo = buildReplyInfo(for: eventTimelineItem)
             let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, eventID: eventID, eventContent: replyInfo.type)
@@ -157,21 +160,14 @@ class TimelineInteractionHandler {
             MXLog.info("Showing debug info for \(eventTimelineItem.id)")
             actionsSubject.send(.showDebugInfo(debugInfo))
         case .retryDecryption(let sessionID):
-            Task {
-                await timelineController.retryDecryption(for: sessionID)
-            }
+            Task { await timelineController.retryDecryption(for: sessionID) }
         case .report:
             actionsSubject.send(.displayReportContent(itemID: itemID, senderID: eventTimelineItem.sender.id))
         case .react:
             displayEmojiPicker(for: itemID)
         case .toggleReaction(let key):
-            Task {
-                guard case let .event(_, eventOrTransactionID) = itemID else {
-                    fatalError()
-                }
-                
-                await timelineController.toggleReaction(key, to: eventOrTransactionID)
-            }
+            guard case let .event(_, eventOrTransactionID) = itemID else { fatalError() }
+            Task { await timelineController.toggleReaction(key, to: eventOrTransactionID) }
         case .endPoll(let pollStartID):
             endPoll(pollStartID: pollStartID)
         case .pin:
@@ -203,18 +199,35 @@ class TimelineInteractionHandler {
         
         let text: String
         var htmlText: String?
+        var editType = ComposerMode.EditType.default
         switch messageTimelineItem.contentType {
         case .text(let content):
             text = content.body
             htmlText = content.formattedBodyHTMLString
         case .emote(let content):
             text = "/me " + content.body
+        case .audio(let content):
+            text = content.caption ?? ""
+            htmlText = content.formattedCaptionHTMLString
+            editType = text.isEmpty ? .addCaption : .editCaption
+        case .file(let content):
+            text = content.caption ?? ""
+            htmlText = content.formattedCaptionHTMLString
+            editType = text.isEmpty ? .addCaption : .editCaption
+        case .image(let content):
+            text = content.caption ?? ""
+            htmlText = content.formattedCaptionHTMLString
+            editType = text.isEmpty ? .addCaption : .editCaption
+        case .video(let content):
+            text = content.caption ?? ""
+            htmlText = content.formattedCaptionHTMLString
+            editType = text.isEmpty ? .addCaption : .editCaption
         default:
             text = messageTimelineItem.body
         }
         
         // Always update the mode first and then the text so that the composer has time to save the text draft
-        actionsSubject.send(.composer(action: .setMode(mode: .edit(originalEventOrTransactionID: eventOrTransactionID))))
+        actionsSubject.send(.composer(action: .setMode(mode: .edit(originalEventOrTransactionID: eventOrTransactionID, type: editType))))
         actionsSubject.send(.composer(action: .setText(plainText: text, htmlText: htmlText)))
     }
     

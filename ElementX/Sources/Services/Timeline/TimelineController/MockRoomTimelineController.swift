@@ -91,6 +91,13 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
               html: String?,
               intentionalMentions: IntentionalMentions) async { }
     
+    func editCaption(_ eventOrTransactionID: EventOrTransactionId,
+                     message: String,
+                     html: String?,
+                     intentionalMentions: IntentionalMentions) async { }
+    
+    func removeCaption(_ eventOrTransactionID: EventOrTransactionId) async { }
+    
     func redact(_ eventOrTransactionID: EventOrTransactionId) async { }
     
     func pin(eventID: String) async { }

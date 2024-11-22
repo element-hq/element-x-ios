@@ -208,16 +208,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         case .settings, .chatBackupSettings:
             settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
         case .share(let payload):
-            switch payload {
-            case .mediaFile(let roomID, _):
-                if let roomID {
-                    stateMachine.processEvent(.selectRoom(roomID: roomID,
-                                                          via: [],
-                                                          entryPoint: .share(payload)),
-                                              userInfo: .init(animated: animated))
-                } else {
-                    stateMachine.processEvent(.showShareExtensionRoomList(sharePayload: payload), userInfo: .init(animated: animated))
-                }
+            if let roomID = payload.roomID {
+                stateMachine.processEvent(.selectRoom(roomID: roomID,
+                                                      via: [],
+                                                      entryPoint: .share(payload)),
+                                          userInfo: .init(animated: animated))
+            } else {
+                stateMachine.processEvent(.showShareExtensionRoomList(sharePayload: payload), userInfo: .init(animated: animated))
             }
         }
     }
@@ -939,6 +936,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 let sharePayload = switch sharePayload {
                 case .mediaFile(_, let mediaFile):
                     ShareExtensionPayload.mediaFile(roomID: roomID, mediaFile: mediaFile)
+                case .text(_, let text):
+                    ShareExtensionPayload.text(roomID: roomID, text: text)
                 }
                 
                 navigationSplitCoordinator.setSheetCoordinator(nil)

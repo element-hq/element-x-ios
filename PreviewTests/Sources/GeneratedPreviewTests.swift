@@ -317,6 +317,18 @@ extension PreviewTests {
         }
     }
 
+    func test_knockRequestsListEmptyStateView() {
+        for preview in KnockRequestsListEmptyStateView_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_knockRequestsListScreen() {
+        for preview in KnockRequestsListScreen_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_legalInformationScreen() {
         for preview in LegalInformationScreen_Previews._allPreviews {
             assertSnapshots(matching: preview)
