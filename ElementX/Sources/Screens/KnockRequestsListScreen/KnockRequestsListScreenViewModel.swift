@@ -49,7 +49,7 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     
     private func setupSubscriptions() {
         roomProxy.infoPublisher
-            .throttle(for: .milliseconds(200), scheduler: DispatchQueue.main, latest: true)
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] roomInfo in
                 self?.updateRoomInfo(roomInfo: roomInfo)
                 Task { await self?.updatePermissions() }
@@ -60,9 +60,9 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     private func updateRoomInfo(roomInfo: RoomInfoProxy) {
         switch roomInfo.joinRule {
         case .knock, .knockRestricted:
-            state.isKnockRoom = true
+            state.isKnockableRoom = true
         default:
-            state.isKnockRoom = false
+            state.isKnockableRoom = false
         }
     }
     

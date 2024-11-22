@@ -117,6 +117,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Private
     
     private func setupSubscriptions(ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>) {
+        appSettings.$knockingEnabled
+            .weakAssign(to: \.state.isKnockingEnabled, on: self)
+            .store(in: &cancellables)
+        
         let roomInfoSubscription = roomProxy
             .infoPublisher
         
@@ -239,6 +243,15 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         let userID = roomProxy.ownUserID
         if case let .success(permission) = await roomProxy.canUserJoinCall(userID: userID) {
             state.canJoinCall = permission
+        }
+        state.canAcceptKnocks = await (try? roomProxy.canUserInvite(userID: roomProxy.ownUserID).get()) == true
+        state.canDeclineKnocks = await (try? roomProxy.canUserKick(userID: roomProxy.ownUserID).get()) == true
+        state.canBan = await (try? roomProxy.canUserBan(userID: roomProxy.ownUserID).get()) == true
+        switch roomInfo.joinRule {
+        case .knock, .knockRestricted:
+            state.isKnockableRoom = true
+        default:
+            state.isKnockableRoom = false
         }
     }
     
