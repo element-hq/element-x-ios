@@ -29,13 +29,13 @@ struct RoomAttachmentPicker: View {
     
     var menuContent: some View {
         VStack(alignment: .leading, spacing: 0.0) {
-            Button {
-                context.send(viewAction: .enableTextFormatting)
-            } label: {
-                Label(L10n.screenRoomAttachmentTextFormatting, icon: \.textFormatting)
-                    .labelStyle(.menuSheet)
-            }
-            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)
+//            Button {
+//                context.send(viewAction: .enableTextFormatting)
+//            } label: {
+//                Label(L10n.screenRoomAttachmentTextFormatting, icon: \.textFormatting)
+//                    .labelStyle(.menuSheet)
+//            }
+//            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)
             
             /// Hiding `menu item` which are not needed for `zero`
             
