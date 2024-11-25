@@ -22,6 +22,7 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
         self.roomProxy = roomProxy
         super.init(initialViewState: KnockRequestsListScreenViewState(), mediaProvider: mediaProvider)
         
+        updateRoomInfo(roomInfo: roomProxy.infoPublisher.value)
         Task {
             await updatePermissions()
         }
@@ -48,11 +49,21 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     
     private func setupSubscriptions() {
         roomProxy.infoPublisher
-            .throttle(for: .milliseconds(200), scheduler: DispatchQueue.main, latest: true)
-            .sink { [weak self] _ in
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] roomInfo in
+                self?.updateRoomInfo(roomInfo: roomInfo)
                 Task { await self?.updatePermissions() }
             }
             .store(in: &cancellables)
+    }
+    
+    private func updateRoomInfo(roomInfo: RoomInfoProxy) {
+        switch roomInfo.joinRule {
+        case .knock, .knockRestricted:
+            state.isKnockableRoom = true
+        default:
+            state.isKnockableRoom = false
+        }
     }
     
     private func updatePermissions() async {
