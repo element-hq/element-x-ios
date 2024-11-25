@@ -414,8 +414,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
             case (_, .presentKnockRequestsListScreen):
                 return .knockRequestsList(previousState: fromState)
-            case (.knockRequestsList(let state), .dismissKnockRequestsListScreen):
-                return state
+            case (.knockRequestsList(let previousState), .dismissKnockRequestsListScreen):
+                return previousState
             
             default:
                 return nil
