@@ -134,6 +134,9 @@
 		18115E522CAEA4D9001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
 		18115E532CAEA4D9001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
 		18115E542CAEB318001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
+		1812FEE72CF48C530098241C /* MatrixRustSDK in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 18E9A3E22C9829970082DDA4 /* MatrixRustSDK */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		1812FEE82CF48CA70098241C /* ShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3D8BEEFCA07BEA43F4F4BF77 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1812FEEB2CF48CEC0098241C /* KnockRequestsListEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A8B5E798CC778C363655E /* KnockRequestsListEmptyStateView.swift */; };
 		182258E42CCC3D5B00BBEDC0 /* BigIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01FD1171FF40E34D707FD00 /* BigIcon.swift */; };
 		182258E52CCC3D7600BBEDC0 /* HomeScreenKnockedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A103580EBA06155B1343EF16 /* HomeScreenKnockedCell.swift */; };
 		182258E62CCC3D9500BBEDC0 /* EmojiProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCCE3D12B0A9C6E559B5B5A /* EmojiProviderProtocol.swift */; };
@@ -226,7 +229,7 @@
 		18C454072CF09A4200F25539 /* KnockRequestsListScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD9C9A31D9AB3B6D8128E69 /* KnockRequestsListScreenModels.swift */; };
 		18C454082CF09A4700F25539 /* KnockRequestsListScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09227E671DB30795C43FFFD /* KnockRequestsListScreenViewModel.swift */; };
 		18C454092CF09A4D00F25539 /* KnockRequestsListScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5C217DD0749EC709EED028 /* KnockRequestsListScreenViewModelProtocol.swift */; };
-		18C4540A2CF09A5200F25539 /* KnockRequestsListEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A756F1792CEDFF7300128047 /* KnockRequestsListEmptyStateView.swift */; };
+		18C4540A2CF09A5200F25539 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		18C4540B2CF09A5800F25539 /* KnockRequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44B71F6D9062E8EB8929BB97 /* KnockRequestCell.swift */; };
 		18C4540C2CF09A5E00F25539 /* KnockRequestsListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1511B1DCECC0DC75EB267328 /* KnockRequestsListScreen.swift */; };
 		18CB801E2C7F2CE2003BC289 /* ZeroLoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB801D2C7F2CE2003BC289 /* ZeroLoginScreen.swift */; };
@@ -2228,6 +2231,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1812FEE92CF48CA70098241C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AC22997D58D612146053154D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 19F0C845D67E9BEA4BE7133E;
+			remoteInfo = ShareExtension;
+		};
 		18E9A3E12C9829970082DDA4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AC22997D58D612146053154D /* Project object */;
@@ -2286,6 +2296,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				1812FEE82CF48CA70098241C /* ShareExtension.appex in Embed Foundation Extensions */,
 				18E9A78B2C9829970082DDA4 /* NSE.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
@@ -2297,6 +2308,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				1812FEE72CF48C530098241C /* MatrixRustSDK in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2679,7 +2691,7 @@
 		3D4DD336905C72F95EAF34B7 /* ElementX-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ElementX-Bridging-Header.h"; sourceTree = "<group>"; };
 		3D65BCC659FD9087E49B3C25 /* AppAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAppearance.swift; sourceTree = "<group>"; };
 		3D75941CBD7D336F831924EC /* ReadReceiptCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadReceiptCell.swift; sourceTree = "<group>"; };
-		3D8BEEFCA07BEA43F4F4BF77 /* ShareExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D8BEEFCA07BEA43F4F4BF77 /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D9B45D584D232CB9E5C7734 /* RoomChangeRolesScreenSelectedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomChangeRolesScreenSelectedItem.swift; sourceTree = "<group>"; };
 		3D9FCE4D1E3A81AC1CC5CB91 /* AppLockSetupSettingsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockSetupSettingsScreenCoordinator.swift; sourceTree = "<group>"; };
 		3DBE70FFB7936F35811772C1 /* IdentityConfirmedScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityConfirmedScreenModels.swift; sourceTree = "<group>"; };
@@ -7288,6 +7300,7 @@
 			);
 			dependencies = (
 				18E9A3E02C9829970082DDA4 /* PBXTargetDependency */,
+				1812FEEA2CF48CA70098241C /* PBXTargetDependency */,
 			);
 			name = Zero;
 			packageProductDependencies = (
@@ -8191,7 +8204,7 @@
 				18E9A43B2C9829970082DDA4 /* AppCoordinatorProtocol.swift in Sources */,
 				1896C50C2CC7DAC000142C49 /* UserIdentitySDKMock.swift in Sources */,
 				18E9A43C2C9829970082DDA4 /* AppCoordinatorStateMachine.swift in Sources */,
-				18C4540A2CF09A5200F25539 /* KnockRequestsListEmptyStateView.swift in Sources */,
+				18C4540A2CF09A5200F25539 /* (null) in Sources */,
 				18E9A43D2C9829970082DDA4 /* AppDelegate.swift in Sources */,
 				18E9A43E2C9829970082DDA4 /* AppHooks.swift in Sources */,
 				18E9A43F2C9829970082DDA4 /* AppLockFlowCoordinator.swift in Sources */,
@@ -8842,6 +8855,7 @@
 				1896C50B2CC7DAB800142C49 /* KnockedRoomProxy.swift in Sources */,
 				18E9A6942C9829970082DDA4 /* SecureBackupKeyBackupScreen.swift in Sources */,
 				18E9A6952C9829970082DDA4 /* SecureBackupKeyBackupScreenCoordinator.swift in Sources */,
+				1812FEEB2CF48CEC0098241C /* KnockRequestsListEmptyStateView.swift in Sources */,
 				18E9A6962C9829970082DDA4 /* SecureBackupKeyBackupScreenModels.swift in Sources */,
 				18E9A6972C9829970082DDA4 /* SecureBackupKeyBackupScreenViewModel.swift in Sources */,
 				18E9A6982C9829970082DDA4 /* SecureBackupKeyBackupScreenViewModelProtocol.swift in Sources */,
@@ -10048,6 +10062,11 @@
 			target = C0FAEB81CFD9776CD78CE489 /* ElementX */;
 			targetProxy = 4D8DD8FE84794CA168A8499A /* PBXContainerItemProxy */;
 		};
+		1812FEEA2CF48CA70098241C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 19F0C845D67E9BEA4BE7133E /* ShareExtension */;
+			targetProxy = 1812FEE92CF48CA70098241C /* PBXContainerItemProxy */;
+		};
 		18E9A3E02C9829970082DDA4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FEB53A5BC378C913769656D8 /* NSE */;
@@ -10418,6 +10437,9 @@
 		7620CDAB1B38B30431DA8878 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APP_NAME = Zero;
+				BASE_APP_GROUP_IDENTIFIER = com.zero.ios.messenger;
+				BASE_BUNDLE_IDENTIFIER = com.zero.ios.messenger;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/SupportingFiles/ShareExtension.entitlements;
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEVELOPMENT_TEAM = "$(DEVELOPMENT_TEAM)";
@@ -10692,6 +10714,9 @@
 		E57C898C511BBC8215673DEF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APP_NAME = Zero;
+				BASE_APP_GROUP_IDENTIFIER = com.zero.ios.messenger;
+				BASE_BUNDLE_IDENTIFIER = com.zero.ios.messenger;
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/SupportingFiles/ShareExtension.entitlements;
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEVELOPMENT_TEAM = "$(DEVELOPMENT_TEAM)";
