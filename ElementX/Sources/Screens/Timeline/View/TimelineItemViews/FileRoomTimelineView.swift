@@ -33,6 +33,10 @@ struct MediaFileRoomTimelineContent: View {
     let additionalWhitespaces: Int
     var isAudioFile = false
     
+    var icon: KeyPath<CompoundIcons, Image> {
+        isAudioFile ? \.audio : \.attachment
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             filePreview
@@ -62,21 +66,13 @@ struct MediaFileRoomTimelineContent: View {
             .foregroundStyle(.compound.textPrimary)
             .lineLimit(1)
         } icon: {
-            icon
+            CompoundIcon(icon, size: .xSmall, relativeTo: .body)
                 .foregroundColor(.compound.iconPrimary)
-                .padding(8)
+                .scaledPadding(8)
                 .background(.compound.iconOnSolidPrimary, in: Circle())
         }
         .labelStyle(.custom(spacing: 8, alignment: .center))
         .padding(.horizontal, 4) // Add to the styler's padding of 8, as we use the default insets for the caption.
-    }
-    
-    var icon: CompoundIcon {
-        if isAudioFile {
-            CompoundIcon(\.audio)
-        } else {
-            CompoundIcon(\.attachment)
-        }
     }
 }
 
