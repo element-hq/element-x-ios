@@ -22,6 +22,7 @@
 "a11y_voice_message_record" = "Nauhoita ääniviesti.";
 "a11y_voice_message_stop_recording" = "Lopeta nauhoittaminen";
 "action_accept" = "Hyväksy";
+"action_add_caption" = "Add caption";
 "action_add_to_timeline" = "Lisää aikajanalle";
 "action_back" = "Takaisin";
 "action_call" = "Soita";
@@ -47,6 +48,7 @@
 "action_discard" = "Hylkää";
 "action_done" = "Valmis";
 "action_edit" = "Muokkaa";
+"action_edit_caption" = "Edit caption";
 "action_edit_poll" = "Muokkaa kyselyä";
 "action_enable" = "Ota käyttöön";
 "action_end_poll" = "Lopeta kysely";
@@ -81,6 +83,7 @@
 "action_react" = "Reagoi";
 "action_reject" = "Hylkää";
 "action_remove" = "Poista";
+"action_remove_caption" = "Remove caption";
 "action_reply" = "Vastaa";
 "action_reply_in_thread" = "Vastaa ketjuun";
 "action_report_bug" = "Ilmoita virheestä";
@@ -119,6 +122,7 @@
 "banner_set_up_recovery_title" = "Ota palautus käyttöön tilisi suojaamiseksi";
 "common_about" = "Tietoa";
 "common_acceptable_use_policy" = "Hyväksyttävän käytön käytäntö";
+"common_adding_caption" = "Adding caption";
 "common_advanced_settings" = "Edistyneet asetukset";
 "common_analytics" = "Analytiikka";
 "common_appearance" = "Ulkoasu";
@@ -137,6 +141,7 @@
 "common_direct_chat" = "Yksityinen keskustelu";
 "common_edited_suffix" = "(muokattu)";
 "common_editing" = "Muokataan viestiä";
+"common_editing_caption" = "Editing caption";
 "common_emote" = "* %1$@ %2$@";
 "common_encryption" = "Salaus";
 "common_encryption_enabled" = "Salaus käytössä";
@@ -225,7 +230,7 @@
 "common_unable_to_invite_title" = "Kutsujen lähettäminen ei onnistunut";
 "common_unlock" = "Avaa";
 "common_unmute" = "Poista mykistys";
-"common_unsupported_call" = "Unsupported call";
+"common_unsupported_call" = "Puhelu, jota ei tueta";
 "common_unsupported_event" = "Tapahtumaa ei tueta";
 "common_username" = "Käyttäjänimi";
 "common_verification_cancelled" = "Vahvistus peruttu";
@@ -365,7 +370,11 @@
 "screen_join_room_knock_message_description" = "Viesti (valinnainen)";
 "screen_join_room_knock_sent_description" = "Saat kutsun liittyä huoneeseen, jos pyyntösi hyväksytään.";
 "screen_join_room_knock_sent_title" = "Liittymispyyntö lähetetty";
+"screen_knock_requests_list_accept_all_button_title" = "Accept all";
 "screen_knock_requests_list_decline_and_ban_action_title" = "Decline and ban";
+"screen_knock_requests_list_empty_state_description" = "When somebody will ask to join the room, you’ll be able to see their request here.";
+"screen_knock_requests_list_empty_state_title" = "No pending request to join";
+"screen_knock_requests_list_title" = "Requests to join";
 "screen_pinned_timeline_empty_state_description" = "Paina viestiä ja valitse “%1$@” lisätäksesi sen tänne.";
 "screen_pinned_timeline_empty_state_headline" = "Kiinnitä tärkeät viestit, jotta ne löytyvät helposti.";
 "screen_reset_encryption_password_error" = "Tapahtui tuntematon virhe. Tarkista, että tilisi salasana on oikein ja yritä uudelleen.";
@@ -795,7 +804,7 @@
 "screen_room_timeline_add_reaction" = "Lisää emoji";
 "screen_room_timeline_beginning_of_room" = "Tämä on huoneen %1$@ alku.";
 "screen_room_timeline_beginning_of_room_no_name" = "Tämä on tämän keskustelun alku.";
-"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
+"screen_room_timeline_legacy_call" = "Puhelu, jota ei tueta. Kysy, voiko soittaja käyttää uutta Element X -sovellusta.";
 "screen_room_timeline_less_reactions" = "Näytä vähemmän";
 "screen_room_timeline_message_copied" = "Viesti kopioitu";
 "screen_room_timeline_no_permission_to_post" = "Sinulla ei ole oikeutta kirjoittaa tässä huoneessa";

@@ -22,6 +22,7 @@
 "a11y_voice_message_record" = "Salvesta häälsõnum";
 "a11y_voice_message_stop_recording" = "Lõpeta salvestamine";
 "action_accept" = "Nõustu";
+"action_add_caption" = "Lisa selgitus";
 "action_add_to_timeline" = "Lisa ajajoonele";
 "action_back" = "Tagasi";
 "action_call" = "Helista";
@@ -47,6 +48,7 @@
 "action_discard" = "Loobu";
 "action_done" = "Valmis";
 "action_edit" = "Muuda";
+"action_edit_caption" = "Muuda selgitust";
 "action_edit_poll" = "Muuda küsitlust";
 "action_enable" = "Võta kasutusele";
 "action_end_poll" = "Lõpeta küsitlus";
@@ -81,6 +83,7 @@
 "action_react" = "Reageeri";
 "action_reject" = "Keeldu";
 "action_remove" = "Eemalda";
+"action_remove_caption" = "Eemalda selgitus";
 "action_reply" = "Vasta";
 "action_reply_in_thread" = "Vasta jutulõngas";
 "action_report_bug" = "Teata veast";
@@ -119,6 +122,7 @@
 "banner_set_up_recovery_title" = "Seadista taastamine";
 "common_about" = "Rakenduse teave";
 "common_acceptable_use_policy" = "Vastuvõetava kasutamise põhimõtted";
+"common_adding_caption" = "Lisame selgitust";
 "common_advanced_settings" = "Täiendavad seadistused";
 "common_analytics" = "Analüütika";
 "common_appearance" = "Välimus";
@@ -137,6 +141,7 @@
 "common_direct_chat" = "Otsevestlus";
 "common_edited_suffix" = "(muudetud)";
 "common_editing" = "Muutmine";
+"common_editing_caption" = "Muudame selgitust";
 "common_emote" = "* %1$@ %2$@";
 "common_encryption" = "Krüptimine";
 "common_encryption_enabled" = "Krüptimine on kasutusel";
@@ -365,7 +370,11 @@
 "screen_join_room_knock_message_description" = "Selgitus (kui soovid lisada)";
 "screen_join_room_knock_sent_description" = "Kui sinu liitumispalvega ollakse nõus, siis saad kutse jututoaga liitumiseks.";
 "screen_join_room_knock_sent_title" = "Liitumispalve on saadetud";
+"screen_knock_requests_list_accept_all_button_title" = "Nõustu kõigiga";
 "screen_knock_requests_list_decline_and_ban_action_title" = "Keeldu ja määra suhtluskeeld";
+"screen_knock_requests_list_empty_state_description" = "Kui keegi soovib jututoaga liituda, siis need päringud on kuvatud siin.";
+"screen_knock_requests_list_empty_state_title" = "Pole ühtegi liitumispalvet";
+"screen_knock_requests_list_title" = "Liitumispalved";
 "screen_pinned_timeline_empty_state_description" = "Siia lisamiseks vajuta sõnumil ja vali „%1$@“.";
 "screen_pinned_timeline_empty_state_headline" = "Et olulisi sõnumeid oleks lihtsam leida, tõsta nad esile";
 "screen_reset_encryption_password_error" = "Tekkis teadmata viga. Palun kontrolli, kas sinu kasutajakonto salasõna on õige ja proovi uuesti.";

@@ -1,8 +1,8 @@
 name: Open Translations PR
 on:
   schedule:
-    # At 00:00 on every Monday UTC
-    - cron: '0 0 * * 1'
+    # At 03:00 on every Monday UTC
+    - cron: '0 3 * * 1'
   workflow_dispatch:
 
 jobs:

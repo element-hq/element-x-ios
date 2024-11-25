@@ -237,9 +237,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ +%2$d other want to join this room</string>
+			<string>Οι χρήστες %1$@ +%2$d ακόμη θέλουν να συμμετάσχουν σε αυτό το δωμάτιο</string>
 			<key>other</key>
-			<string>%1$@ +%2$d others want to join this room</string>
+			<string>Οι χρήστες %1$@ +%2$d ακόμη θέλουν να συμμετάσχουν σε αυτό το δωμάτιο</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>

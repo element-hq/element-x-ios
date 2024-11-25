@@ -22,6 +22,7 @@
 "a11y_voice_message_record" = "Nahrajte hlasovou zprávu.";
 "a11y_voice_message_stop_recording" = "Zastavit nahrávání";
 "action_accept" = "Přijmout";
+"action_add_caption" = "Přidat titulek";
 "action_add_to_timeline" = "Přidat na časovou osu";
 "action_back" = "Zpět";
 "action_call" = "Hovor";
@@ -47,6 +48,7 @@
 "action_discard" = "Vyřadit";
 "action_done" = "Hotovo";
 "action_edit" = "Upravit";
+"action_edit_caption" = "Upravit titulek";
 "action_edit_poll" = "Upravit hlasování";
 "action_enable" = "Povolit";
 "action_end_poll" = "Ukončit hlasování";
@@ -81,6 +83,7 @@
 "action_react" = "Reagovat";
 "action_reject" = "Odmítnout";
 "action_remove" = "Odstranit";
+"action_remove_caption" = "Odstranit titulek";
 "action_reply" = "Odpovědět";
 "action_reply_in_thread" = "Odpovědět ve vlákně";
 "action_report_bug" = "Nahlásit chybu";
@@ -119,6 +122,7 @@
 "banner_set_up_recovery_title" = "Nastavení obnovy";
 "common_about" = "O aplikaci";
 "common_acceptable_use_policy" = "Zásady používání";
+"common_adding_caption" = "Přidání titulku";
 "common_advanced_settings" = "Pokročilá nastavení";
 "common_analytics" = "Analytika";
 "common_appearance" = "Vzhled";
@@ -137,6 +141,7 @@
 "common_direct_chat" = "Přímý chat";
 "common_edited_suffix" = "(upraveno)";
 "common_editing" = "Úpravy";
+"common_editing_caption" = "Úprava titulku";
 "common_emote" = "* %1$@ %2$@";
 "common_encryption" = "Šifrování";
 "common_encryption_enabled" = "Šifrování povoleno";
@@ -365,7 +370,11 @@
 "screen_join_room_knock_message_description" = "Zpráva (nepovinné)";
 "screen_join_room_knock_sent_description" = "Pokud bude váš požadavek přijat, obdržíte pozvánku na vstup do místnosti.";
 "screen_join_room_knock_sent_title" = "Žádost o vstup odeslána";
+"screen_knock_requests_list_accept_all_button_title" = "Přijmout vše";
 "screen_knock_requests_list_decline_and_ban_action_title" = "Odmítnout a vykázat";
+"screen_knock_requests_list_empty_state_description" = "Když někdo požádá o vstup do místnosti, uvidíte jeho žádost zde.";
+"screen_knock_requests_list_empty_state_title" = "Žádná čekající žádost o vstup";
+"screen_knock_requests_list_title" = "Žádosti o vstup";
 "screen_pinned_timeline_empty_state_description" = "Přidržte zprávu a vyberte „%1$@“, kterou chcete zahrnout sem.";
 "screen_pinned_timeline_empty_state_headline" = "Připněte důležité zprávy, aby je bylo možné snadno najít";
 "screen_reset_encryption_password_error" = "Došlo k neznámé chybě. Zkontrolujte, zda je heslo k účtu správné a zkuste to znovu.";
