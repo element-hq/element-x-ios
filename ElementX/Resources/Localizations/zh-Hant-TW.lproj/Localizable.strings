@@ -22,6 +22,7 @@
 "a11y_voice_message_record" = "錄製語音訊息。";
 "a11y_voice_message_stop_recording" = "停止錄音";
 "action_accept" = "接受";
+"action_add_caption" = "Add caption";
 "action_add_to_timeline" = "新增至時間軸";
 "action_back" = "返回";
 "action_call" = "通話";
@@ -47,6 +48,7 @@
 "action_discard" = "捨棄";
 "action_done" = "完成";
 "action_edit" = "編輯";
+"action_edit_caption" = "Edit caption";
 "action_edit_poll" = "編輯投票";
 "action_enable" = "啟用";
 "action_end_poll" = "結束投票";
@@ -81,6 +83,7 @@
 "action_react" = "回應";
 "action_reject" = "拒絕";
 "action_remove" = "移除";
+"action_remove_caption" = "Remove caption";
 "action_reply" = "回覆";
 "action_reply_in_thread" = "在討論串中回覆";
 "action_report_bug" = "回報程式錯誤";
@@ -119,6 +122,7 @@
 "banner_set_up_recovery_title" = "Set up recovery to protect your account";
 "common_about" = "關於";
 "common_acceptable_use_policy" = "可接受使用政策";
+"common_adding_caption" = "Adding caption";
 "common_advanced_settings" = "進階設定";
 "common_analytics" = "分析";
 "common_appearance" = "外觀";
@@ -137,6 +141,7 @@
 "common_direct_chat" = "私訊";
 "common_edited_suffix" = "（已編輯）";
 "common_editing" = "編輯中";
+"common_editing_caption" = "Editing caption";
 "common_emote" = "* %1$@ %2$@";
 "common_encryption" = "Encryption";
 "common_encryption_enabled" = "已啟用加密";
@@ -365,7 +370,11 @@
 "screen_join_room_knock_message_description" = "Message (optional)";
 "screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
 "screen_join_room_knock_sent_title" = "Request to join sent";
+"screen_knock_requests_list_accept_all_button_title" = "Accept all";
 "screen_knock_requests_list_decline_and_ban_action_title" = "Decline and ban";
+"screen_knock_requests_list_empty_state_description" = "When somebody will ask to join the room, you’ll be able to see their request here.";
+"screen_knock_requests_list_empty_state_title" = "No pending request to join";
+"screen_knock_requests_list_title" = "Requests to join";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";

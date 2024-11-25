@@ -22,6 +22,7 @@
 "a11y_voice_message_record" = "Nagraj wiadomość głosową.";
 "a11y_voice_message_stop_recording" = "Zatrzymaj nagrywanie";
 "action_accept" = "Akceptuj";
+"action_add_caption" = "Add caption";
 "action_add_to_timeline" = "Dodaj do osi czasu";
 "action_back" = "Wróć";
 "action_call" = "Zadzwoń";
@@ -47,6 +48,7 @@
 "action_discard" = "Odrzuć";
 "action_done" = "Gotowe";
 "action_edit" = "Edytuj";
+"action_edit_caption" = "Edit caption";
 "action_edit_poll" = "Edytuj ankietę";
 "action_enable" = "Włącz";
 "action_end_poll" = "Zakończ ankietę";
@@ -81,6 +83,7 @@
 "action_react" = "Dodaj reakcję";
 "action_reject" = "Odrzuć";
 "action_remove" = "Usuń";
+"action_remove_caption" = "Remove caption";
 "action_reply" = "Odpowiedz";
 "action_reply_in_thread" = "Odpowiedz w wątku";
 "action_report_bug" = "Zgłoś błąd";
@@ -119,6 +122,7 @@
 "banner_set_up_recovery_title" = "Skonfiguruj przywracanie";
 "common_about" = "O programie";
 "common_acceptable_use_policy" = "Polityka użytkowania";
+"common_adding_caption" = "Adding caption";
 "common_advanced_settings" = "Ustawienia zaawansowane";
 "common_analytics" = "Analityka";
 "common_appearance" = "Wygląd";
@@ -137,6 +141,7 @@
 "common_direct_chat" = "Czat prywatny";
 "common_edited_suffix" = "(edytowane)";
 "common_editing" = "Edytowanie";
+"common_editing_caption" = "Editing caption";
 "common_emote" = "* %1$@ %2$@";
 "common_encryption" = "Szyfrowanie";
 "common_encryption_enabled" = "Szyfrowanie włączone";
@@ -365,7 +370,11 @@
 "screen_join_room_knock_message_description" = "Wiadomość (opcjonalne)";
 "screen_join_room_knock_sent_description" = "Otrzymasz zaproszenie dołączenia do pokoju, jeśli prośba zostanie zaakceptowana.";
 "screen_join_room_knock_sent_title" = "Wysłano prośbę o dołączenie";
+"screen_knock_requests_list_accept_all_button_title" = "Accept all";
 "screen_knock_requests_list_decline_and_ban_action_title" = "Decline and ban";
+"screen_knock_requests_list_empty_state_description" = "When somebody will ask to join the room, you’ll be able to see their request here.";
+"screen_knock_requests_list_empty_state_title" = "No pending request to join";
+"screen_knock_requests_list_title" = "Requests to join";
 "screen_pinned_timeline_empty_state_description" = "Naciśnij wiadomość i wybierz “%1$@”, aby dołączyć tutaj.";
 "screen_pinned_timeline_empty_state_headline" = "Przypinaj ważne wiadomości, aby można było je łatwo znaleźć";
 "screen_reset_encryption_password_error" = "Wystąpił nieznany błąd. Sprawdź, czy hasło jest poprawne i spróbuj ponownie.";

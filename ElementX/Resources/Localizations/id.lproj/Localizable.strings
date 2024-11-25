@@ -22,6 +22,7 @@
 "a11y_voice_message_record" = "Rekam pesan suara.";
 "a11y_voice_message_stop_recording" = "Berhenti merekam";
 "action_accept" = "Terima";
+"action_add_caption" = "Add caption";
 "action_add_to_timeline" = "Tambahkan ke lini masa";
 "action_back" = "Kembali";
 "action_call" = "Panggil";
@@ -47,6 +48,7 @@
 "action_discard" = "Abaikan";
 "action_done" = "Selesai";
 "action_edit" = "Sunting";
+"action_edit_caption" = "Edit caption";
 "action_edit_poll" = "Sunting pemungutan suara";
 "action_enable" = "Aktifkan";
 "action_end_poll" = "Akhiri pemungutan suara";
@@ -81,6 +83,7 @@
 "action_react" = "Bereaksi";
 "action_reject" = "Tolak";
 "action_remove" = "Hapus";
+"action_remove_caption" = "Remove caption";
 "action_reply" = "Balas";
 "action_reply_in_thread" = "Balas dalam utas";
 "action_report_bug" = "Laporkan kutu";
@@ -119,6 +122,7 @@
 "banner_set_up_recovery_title" = "Siapkan pemulihan";
 "common_about" = "Tentang";
 "common_acceptable_use_policy" = "Kebijakan penggunaan wajar";
+"common_adding_caption" = "Adding caption";
 "common_advanced_settings" = "Pengaturan tingkat lanjut";
 "common_analytics" = "Analitik";
 "common_appearance" = "Penampilan";
@@ -137,6 +141,7 @@
 "common_direct_chat" = "Obrolan langsung";
 "common_edited_suffix" = "(disunting)";
 "common_editing" = "Penyuntingan";
+"common_editing_caption" = "Editing caption";
 "common_emote" = "* %1$@ %2$@";
 "common_encryption" = "Enkripsi";
 "common_encryption_enabled" = "Enkripsi diaktifkan";
@@ -365,7 +370,11 @@
 "screen_join_room_knock_message_description" = "Pesan (opsional)";
 "screen_join_room_knock_sent_description" = "Anda akan menerima undangan untuk bergabung dengan ruangan jika permintaan Anda diterima.";
 "screen_join_room_knock_sent_title" = "Permintaan untuk bergabung dikirim";
+"screen_knock_requests_list_accept_all_button_title" = "Accept all";
 "screen_knock_requests_list_decline_and_ban_action_title" = "Decline and ban";
+"screen_knock_requests_list_empty_state_description" = "When somebody will ask to join the room, you’ll be able to see their request here.";
+"screen_knock_requests_list_empty_state_title" = "No pending request to join";
+"screen_knock_requests_list_title" = "Requests to join";
 "screen_pinned_timeline_empty_state_description" = "Tekan pesan dan pilih “%1$@” untuk disertakan di sini.";
 "screen_pinned_timeline_empty_state_headline" = "Sematkan pesan penting agar mudah ditemukan";
 "screen_reset_encryption_password_error" = "Terjadi kesalahan yang tidak diketahui. Harap periksa apakah kata sandi akun Anda sudah benar dan coba lagi.";

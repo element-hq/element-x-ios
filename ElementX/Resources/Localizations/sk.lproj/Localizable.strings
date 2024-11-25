@@ -22,6 +22,7 @@
 "a11y_voice_message_record" = "Nahrať hlasovú správu.";
 "a11y_voice_message_stop_recording" = "Zastaviť nahrávanie";
 "action_accept" = "Prijať";
+"action_add_caption" = "Pridať titulok";
 "action_add_to_timeline" = "Pridať na časovú os";
 "action_back" = "Späť";
 "action_call" = "Zavolať";
@@ -47,6 +48,7 @@
 "action_discard" = "Zahodiť";
 "action_done" = "Hotovo";
 "action_edit" = "Upraviť";
+"action_edit_caption" = "Upraviť titulok";
 "action_edit_poll" = "Upraviť anketu";
 "action_enable" = "Povoliť";
 "action_end_poll" = "Ukončiť anketu";
@@ -81,6 +83,7 @@
 "action_react" = "Reagovať";
 "action_reject" = "Odmietnuť";
 "action_remove" = "Odstrániť";
+"action_remove_caption" = "Odstrániť titulok";
 "action_reply" = "Odpovedať";
 "action_reply_in_thread" = "Odpovedať vo vlákne";
 "action_report_bug" = "Nahlásiť chybu";
@@ -119,6 +122,7 @@
 "banner_set_up_recovery_title" = "Nastaviť obnovenie";
 "common_about" = "O aplikácii";
 "common_acceptable_use_policy" = "Zásady prijateľného používania";
+"common_adding_caption" = "Pridáva sa titulok";
 "common_advanced_settings" = "Pokročilé nastavenia";
 "common_analytics" = "Analytika";
 "common_appearance" = "Vzhľad";
@@ -137,6 +141,7 @@
 "common_direct_chat" = "Priama konverzácia";
 "common_edited_suffix" = "(upravené)";
 "common_editing" = "Upravuje sa";
+"common_editing_caption" = "Úprava titulku";
 "common_emote" = "* %1$@ %2$@";
 "common_encryption" = "Šifrovanie";
 "common_encryption_enabled" = "Šifrovanie zapnuté";
@@ -365,7 +370,11 @@
 "screen_join_room_knock_message_description" = "Správa (voliteľné)";
 "screen_join_room_knock_sent_description" = "Ak bude vaša žiadosť prijatá, dostanete pozvánku na vstup do miestnosti.";
 "screen_join_room_knock_sent_title" = "Žiadosť o pripojenie bola odoslaná";
+"screen_knock_requests_list_accept_all_button_title" = "Prijať všetky";
 "screen_knock_requests_list_decline_and_ban_action_title" = "Odmietnuť a zakázať";
+"screen_knock_requests_list_empty_state_description" = "Keď niekto požiada, aby sa pripojil k miestnosti, jeho žiadosť si môžete pozrieť tu.";
+"screen_knock_requests_list_empty_state_title" = "Žiadna čakajúca žiadosť o pripojenie";
+"screen_knock_requests_list_title" = "Žiadosti o pripojenie";
 "screen_pinned_timeline_empty_state_description" = "Stlačte správu a vyberte možnosť „%1$@“, ktorú chcete zahrnúť sem.";
 "screen_pinned_timeline_empty_state_headline" = "Pripnite dôležité správy, aby sa dali ľahko nájsť";
 "screen_reset_encryption_password_error" = "Nastala neznáma chyba. Skontrolujte, či je heslo vášho účtu správne a skúste to znova.";
