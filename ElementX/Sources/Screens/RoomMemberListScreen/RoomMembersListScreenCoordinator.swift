@@ -13,6 +13,7 @@ struct RoomMembersListScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let analytics: AnalyticsService
+    let showBanned: Bool
 }
 
 enum RoomMembersListScreenCoordinatorAction {
@@ -31,7 +32,8 @@ final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: RoomMembersListScreenCoordinatorParameters) {
-        viewModel = RoomMembersListScreenViewModel(roomProxy: parameters.roomProxy,
+        viewModel = RoomMembersListScreenViewModel(initialMode: parameters.showBanned ? .banned : .members,
+                                                   roomProxy: parameters.roomProxy,
                                                    mediaProvider: parameters.mediaProvider,
                                                    userIndicatorController: parameters.userIndicatorController,
                                                    analytics: parameters.analytics)

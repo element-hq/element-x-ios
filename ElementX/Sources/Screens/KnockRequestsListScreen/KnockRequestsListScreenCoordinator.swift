@@ -15,7 +15,9 @@ struct KnockRequestsListScreenCoordinatorParameters {
     let mediaProvider: MediaProviderProtocol
 }
 
-enum KnockRequestsListScreenCoordinatorAction { }
+enum KnockRequestsListScreenCoordinatorAction {
+    case displayBannedUsers
+}
 
 final class KnockRequestsListScreenCoordinator: CoordinatorProtocol {
     private let viewModel: KnockRequestsListScreenViewModelProtocol
@@ -35,6 +37,11 @@ final class KnockRequestsListScreenCoordinator: CoordinatorProtocol {
     func start() {
         viewModel.actionsPublisher.sink { [weak self] action in
             MXLog.info("Coordinator: received view model action: \(action)")
+            guard let self else { return }
+            switch action {
+            case .displayBannedUsers:
+                actionsSubject.send(.displayBannedUsers)
+            }
         }
         .store(in: &cancellables)
     }

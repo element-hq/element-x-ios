@@ -26,6 +26,7 @@ struct KnockRequestsListScreen: View {
                     acceptAllButton
                 }
             }
+            .alert(item: $context.alertInfo)
     }
     
     @ViewBuilder
@@ -75,7 +76,7 @@ struct KnockRequestsListScreen: View {
 // MARK: - Previews
 
 struct KnockRequestsListScreen_Previews: PreviewProvider, TestablePreview {
-    static let emptyViewModel = KnockRequestsListScreenViewModel.mockWithInitialState(.init())
+    static let emptyViewModel = KnockRequestsListScreenViewModel.mockWithInitialState(.init(requests: []))
     
     static let viewModel = KnockRequestsListScreenViewModel.mockWithInitialState(.init(requests: [.init(id: "@alice:matrix.org", displayName: "Alice", avatarUrl: nil, timestamp: "Now", reason: "Hello"),
                                                                                                   // swiftlint:disable:next line_length

@@ -148,15 +148,15 @@ struct RoomScreen: View {
     }
     
     private func dismissKnockRequestsBanner() {
-        // TODO: Implement
+        roomContext.send(viewAction: .dismissKnockRequests)
     }
     
     private func acceptKnockRequest(userID: String) {
-        // TODO: Implement
+        roomContext.send(viewAction: .acceptKnock(userID: userID))
     }
     
     private func onViewAllKnockRequests() {
-        // TODO: Implement
+        roomContext.send(viewAction: .viewKnockRequests)
     }
     
     private var scrollToBottomButton: some View {

@@ -103,6 +103,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             case .resolvePinViolation(let userID):
                 Task { await resolveIdentityPinningViolation(userID) }
             }
+        case .acceptKnock(userID: let userID):
+            // TODO: API to accept a knock required
+            break
+        case .dismissKnockRequests:
+            // TODO: API to mark knocks as seen required
+            break
+        case .viewKnockRequests:
+            actionsSubject.send(.displayKnockRequests)
         }
     }
     

@@ -35,17 +35,44 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     override func process(viewAction: KnockRequestsListScreenViewAction) {
         switch viewAction {
         case .acceptAllRequests:
-            break
+            state.bindings.alertInfo = .init(id: .acceptAllRequests,
+                                             title: L10n.screenKnockRequestsListAcceptAllAlertTitle,
+                                             message: L10n.screenKnockRequestsListAcceptAllAlertDescription,
+                                             primaryButton: .init(title: L10n.screenKnockRequestsListAcceptAllAlertConfirmButtonTitle,
+                                                                  // TODO: Implement action
+                                                                  action: nil),
+                                             secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
         case .acceptRequest(let userID):
+            // TODO: Implement
             break
         case .declineRequest(let userID):
-            break
+            state.bindings.alertInfo = .init(id: .declineRequest,
+                                             title: L10n.screenKnockRequestsListDeclineAlertTitle,
+                                             message: L10n.screenKnockRequestsListDeclineAlertDescription(userID),
+                                             primaryButton: .init(title: L10n.screenKnockRequestsListDeclineAlertConfirmButtonTitle,
+                                                                  role: .destructive,
+                                                                  // TODO: Implement action
+                                                                  action: nil),
+                                             secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
         case .ban(let userID):
-            break
+            state.bindings.alertInfo = .init(id: .declineAndBan,
+                                             title: L10n.screenKnockRequestsListBanAlertTitle,
+                                             message: L10n.screenKnockRequestsListBanAlertDescription(userID),
+                                             // TODO: Implement action
+                                             primaryButton: .init(title: L10n.screenKnockRequestsListBanAlertConfirmButtonTitle,
+                                                                  role: .destructive,
+                                                                  action: { [weak self] in self?.banUser(userID: userID) }),
+                                             secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
         }
     }
     
     // MARK: - Private
+    
+    private func banUser(userID: String) {
+        // TODO: Implement ban through the request API
+        
+        actionsSubject.send(.displayBannedUsers)
+    }
     
     private func setupSubscriptions() {
         roomProxy.infoPublisher
