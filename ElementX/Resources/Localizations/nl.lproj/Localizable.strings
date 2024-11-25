@@ -22,6 +22,7 @@
 "a11y_voice_message_record" = "Spraakbericht opnemen.";
 "a11y_voice_message_stop_recording" = "Opnemen stoppen";
 "action_accept" = "Accepteren";
+"action_add_caption" = "Add caption";
 "action_add_to_timeline" = "Toevoegen aan tijdlijn";
 "action_back" = "Terug";
 "action_call" = "Bellen";
@@ -47,6 +48,7 @@
 "action_discard" = "Verwerpen";
 "action_done" = "Gereed";
 "action_edit" = "Bewerken";
+"action_edit_caption" = "Edit caption";
 "action_edit_poll" = "Peiling wijzigen";
 "action_enable" = "Activeren";
 "action_end_poll" = "Peiling beëindigen";
@@ -81,6 +83,7 @@
 "action_react" = "Reageren";
 "action_reject" = "Weiger";
 "action_remove" = "Verwijderen";
+"action_remove_caption" = "Remove caption";
 "action_reply" = "Antwoorden";
 "action_reply_in_thread" = "Antwoord in subchat";
 "action_report_bug" = "Probleem melden";
@@ -119,6 +122,7 @@
 "banner_set_up_recovery_title" = "Set up recovery to protect your account";
 "common_about" = "Over";
 "common_acceptable_use_policy" = "Beleid inzake redelijk gebruik";
+"common_adding_caption" = "Adding caption";
 "common_advanced_settings" = "Geavanceerde instellingen";
 "common_analytics" = "Gebruiksgegevens";
 "common_appearance" = "Weergave";
@@ -137,6 +141,7 @@
 "common_direct_chat" = "Directe chat";
 "common_edited_suffix" = "(bewerkt)";
 "common_editing" = "Bewerken";
+"common_editing_caption" = "Editing caption";
 "common_emote" = "* %1$@ %2$@";
 "common_encryption" = "Encryption";
 "common_encryption_enabled" = "Encryptie ingeschakeld";
@@ -290,7 +295,7 @@
 "event_shield_reason_unknown_device" = "Versleuteld door een onbekend of verwijderd apparaat.";
 "event_shield_reason_unsigned_device" = "Versleuteld door een apparaat dat niet is geverifieerd door de eigenaar.";
 "event_shield_reason_unverified_identity" = "Versleuteld door een niet-geverifieerde gebruiker.";
-"full_screen_intent_banner_message" = "To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.";
+"full_screen_intent_banner_message" = "Pas je instellingen aan om meldingen op het volledige scherm toe te staan wanneer de telefoon is vergrendeld. Zo mis je nooit een belangrijk gesprek.";
 "full_screen_intent_banner_title" = "Verbeter je gesprekservaring";
 "invite_friends_rich_title" = "🔐️ Sluit je bij mij aan op %1$@";
 "invite_friends_text" = "Hé, praat met me op %1$@: %2$@";
@@ -365,7 +370,11 @@
 "screen_join_room_knock_message_description" = "Bericht (optioneel)";
 "screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
 "screen_join_room_knock_sent_title" = "Verzoek om toe te treden verzonden";
+"screen_knock_requests_list_accept_all_button_title" = "Accept all";
 "screen_knock_requests_list_decline_and_ban_action_title" = "Decline and ban";
+"screen_knock_requests_list_empty_state_description" = "When somebody will ask to join the room, you’ll be able to see their request here.";
+"screen_knock_requests_list_empty_state_title" = "No pending request to join";
+"screen_knock_requests_list_title" = "Requests to join";
 "screen_pinned_timeline_empty_state_description" = "Druk op een bericht en kies „%1$@” om het hier toe te voegen.";
 "screen_pinned_timeline_empty_state_headline" = "Zet belangrijke berichten vast zodat ze gemakkelijk te vinden zijn";
 "screen_reset_encryption_password_error" = "Er is een onbekende fout opgetreden. Controleer of het wachtwoord van je account juist is en probeer het opnieuw.";

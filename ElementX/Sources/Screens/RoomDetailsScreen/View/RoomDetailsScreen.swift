@@ -326,7 +326,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                                   isDirect: false,
                                                   isEncrypted: true,
                                                   canonicalAlias: "#alias:domain.com",
-                                                  members: members))
+                                                  members: members,
+                                                  joinRule: .knock))
         
         var notificationSettingsProxyMockConfiguration = NotificationSettingsProxyMockConfiguration()
         notificationSettingsProxyMockConfiguration.roomMode.isDefault = false
@@ -381,7 +382,8 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                                   name: "Room A",
                                                   isDirect: false,
                                                   isEncrypted: false,
-                                                  members: members))
+                                                  members: members,
+                                                  joinRule: .knock))
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         
         return RoomDetailsScreenViewModel(roomProxy: roomProxy,

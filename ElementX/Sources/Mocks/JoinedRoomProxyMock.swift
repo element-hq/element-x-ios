@@ -39,6 +39,7 @@ struct JoinedRoomProxyMockConfiguration {
     var canUserPin = true
     
     var shouldUseAutoUpdatingTimeline = false
+    var joinRule: JoinRule?
 }
 
 extension JoinedRoomProxyMock {
@@ -166,6 +167,7 @@ extension RoomInfo {
                   numUnreadMessages: 0,
                   numUnreadNotifications: 0,
                   numUnreadMentions: 0,
-                  pinnedEventIds: Array(configuration.pinnedEventIDs))
+                  pinnedEventIds: Array(configuration.pinnedEventIDs),
+                  joinRule: configuration.joinRule)
     }
 }

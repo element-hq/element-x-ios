@@ -59,7 +59,8 @@ extension RoomInfo {
                   numUnreadMessages: 0,
                   numUnreadNotifications: 0,
                   numUnreadMentions: 0,
-                  pinnedEventIds: [])
+                  pinnedEventIds: [],
+                  joinRule: .invite)
     }
 }
 

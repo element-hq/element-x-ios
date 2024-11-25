@@ -22,6 +22,7 @@
 "a11y_voice_message_record" = "Записати голосове повідомлення.";
 "a11y_voice_message_stop_recording" = "Припинити запис";
 "action_accept" = "Прийняти";
+"action_add_caption" = "Add caption";
 "action_add_to_timeline" = "Додати до стрічки";
 "action_back" = "Назад";
 "action_call" = "Зателефонувати";
@@ -47,6 +48,7 @@
 "action_discard" = "Відкинути";
 "action_done" = "Готово";
 "action_edit" = "Редагувати";
+"action_edit_caption" = "Edit caption";
 "action_edit_poll" = "Редагувати опитування";
 "action_enable" = "Увімкнути";
 "action_end_poll" = "Завершити опитування";
@@ -81,6 +83,7 @@
 "action_react" = "Реакція";
 "action_reject" = "Відхилити";
 "action_remove" = "Вилучити";
+"action_remove_caption" = "Remove caption";
 "action_reply" = "Відповісти";
 "action_reply_in_thread" = "Відповісти в гілці";
 "action_report_bug" = "Повідомити про помилку";
@@ -119,6 +122,7 @@
 "banner_set_up_recovery_title" = "Налаштуйте відновлення для захисту свого облікового запису";
 "common_about" = "Відомості";
 "common_acceptable_use_policy" = "Політика прийнятного використання";
+"common_adding_caption" = "Adding caption";
 "common_advanced_settings" = "Додаткові налаштування";
 "common_analytics" = "Аналітика";
 "common_appearance" = "Тема";
@@ -137,6 +141,7 @@
 "common_direct_chat" = "Особиста бесіда";
 "common_edited_suffix" = "(відредаговано)";
 "common_editing" = "Редагування";
+"common_editing_caption" = "Editing caption";
 "common_emote" = "* %1$@ %2$@";
 "common_encryption" = "Шифрування";
 "common_encryption_enabled" = "Шифрування ввімкнено";
@@ -365,7 +370,11 @@
 "screen_join_room_knock_message_description" = "Повідомлення (необов'язково)";
 "screen_join_room_knock_sent_description" = "Ви отримаєте запрошення приєднатися до кімнати, якщо ваш запит буде прийнятий.";
 "screen_join_room_knock_sent_title" = "Запит на приєднання надіслано";
+"screen_knock_requests_list_accept_all_button_title" = "Accept all";
 "screen_knock_requests_list_decline_and_ban_action_title" = "Decline and ban";
+"screen_knock_requests_list_empty_state_description" = "When somebody will ask to join the room, you’ll be able to see their request here.";
+"screen_knock_requests_list_empty_state_title" = "No pending request to join";
+"screen_knock_requests_list_title" = "Requests to join";
 "screen_pinned_timeline_empty_state_description" = "Натисніть на повідомлення і виберіть \"%1$@\", щоб додати його сюди.";
 "screen_pinned_timeline_empty_state_headline" = "Закріпіть важливі повідомлення, щоб їх можна було легко знайти";
 "screen_reset_encryption_password_error" = "Сталася невідома помилка. Будь ласка, перевірте правильність пароля свого облікового запису та повторіть спробу.";

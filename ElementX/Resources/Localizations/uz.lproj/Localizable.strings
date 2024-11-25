@@ -22,6 +22,7 @@
 "a11y_voice_message_record" = "Ovoz yozishni amalga oshiring";
 "a11y_voice_message_stop_recording" = "Stop recording";
 "action_accept" = "Qabul qiling";
+"action_add_caption" = "Add caption";
 "action_add_to_timeline" = "Vaqt jadvaliga qo'shing";
 "action_back" = "Orqaga";
 "action_call" = "Call";
@@ -47,6 +48,7 @@
 "action_discard" = "Discard";
 "action_done" = "Bajarildi";
 "action_edit" = "Tahrirlash";
+"action_edit_caption" = "Edit caption";
 "action_edit_poll" = "So‘rovnomani tahrirlash";
 "action_enable" = "Yoqish";
 "action_end_poll" = "So‘rovnomani tugatish";
@@ -81,6 +83,7 @@
 "action_react" = "Reaksiya qilish";
 "action_reject" = "Reject";
 "action_remove" = "Ochirish";
+"action_remove_caption" = "Remove caption";
 "action_reply" = "Javob bering";
 "action_reply_in_thread" = "Mavzuda javob bering";
 "action_report_bug" = "Xato haqida xabar berish";
@@ -119,6 +122,7 @@
 "banner_set_up_recovery_title" = "Set up recovery to protect your account";
 "common_about" = "Haqida";
 "common_acceptable_use_policy" = "Qabul qilinadigan foydalanish siyosati";
+"common_adding_caption" = "Adding caption";
 "common_advanced_settings" = "Kengaytirilgan sozlamalar";
 "common_analytics" = "Analitika";
 "common_appearance" = "Appearance";
@@ -137,6 +141,7 @@
 "common_direct_chat" = "Direct chat";
 "common_edited_suffix" = "(tahrirlangan)";
 "common_editing" = "Tahrirlash";
+"common_editing_caption" = "Editing caption";
 "common_emote" = "*%1$@%2$@";
 "common_encryption" = "Encryption";
 "common_encryption_enabled" = "Shifrlash yoqilgan";
@@ -346,7 +351,7 @@
 "rich_text_editor_a11y_add_attachment" = "Biriktirma qo'shing";
 "rich_text_editor_composer_caption_placeholder" = "Optional caption…";
 "screen_advanced_settings_element_call_base_url" = "Maxsus element qo‘ng‘iroqlar bazasi URL manzili";
-"screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
+"screen_advanced_settings_element_call_base_url_description" = "Element qo'ng'irog'iga maxsus asosiy url or'natish";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Invalid URL, please make sure you include the protocol (http/https) and the correct address.";
 "screen_create_room_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_room_access_section_anyone_option_title" = "Anyone";
@@ -365,7 +370,11 @@
 "screen_join_room_knock_message_description" = "Message (optional)";
 "screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
 "screen_join_room_knock_sent_title" = "Request to join sent";
+"screen_knock_requests_list_accept_all_button_title" = "Accept all";
 "screen_knock_requests_list_decline_and_ban_action_title" = "Decline and ban";
+"screen_knock_requests_list_empty_state_description" = "When somebody will ask to join the room, you’ll be able to see their request here.";
+"screen_knock_requests_list_empty_state_title" = "No pending request to join";
+"screen_knock_requests_list_title" = "Requests to join";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";

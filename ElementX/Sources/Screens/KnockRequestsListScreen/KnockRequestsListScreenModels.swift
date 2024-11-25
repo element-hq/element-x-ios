@@ -11,9 +11,17 @@ enum KnockRequestsListScreenViewModelAction { }
 
 struct KnockRequestsListScreenViewState: BindableState {
     var requests: [KnockRequestCellInfo] = []
-    var canAccept = false
-    var canDecline = false
-    var canBan = false
+    // If you are in this view one of these must have been true so by default we assume all of them to be true
+    var canAccept = true
+    var canDecline = true
+    var canBan = true
+    var isKnockableRoom = true
+    
+    // If all the permissions are denied or the join rule changes while we are in the view
+    // we want to stop displaying any request
+    var shouldDisplayRequests: Bool {
+        !requests.isEmpty && isKnockableRoom && (canAccept || canDecline || canBan)
+    }
 }
 
 enum KnockRequestsListScreenViewAction {

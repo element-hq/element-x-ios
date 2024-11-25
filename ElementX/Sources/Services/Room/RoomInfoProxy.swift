@@ -69,6 +69,7 @@ struct RoomInfoProxy: BaseRoomInfoProxyProtocol {
     var unreadNotificationsCount: UInt { UInt(roomInfo.numUnreadNotifications) }
     var unreadMentionsCount: UInt { UInt(roomInfo.numUnreadMentions) }
     var pinnedEventIDs: Set<String> { Set(roomInfo.pinnedEventIds) }
+    var joinRule: JoinRule? { roomInfo.joinRule }
 }
 
 struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
