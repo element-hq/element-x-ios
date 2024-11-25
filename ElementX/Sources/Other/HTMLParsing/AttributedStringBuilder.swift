@@ -68,6 +68,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
                 
         let htmlString = originalHTMLString.replacingHtmlBreaksOccurrences()
+            .replacingOccurrences(of: "\n", with: "<br>")
         
         guard let data = htmlString.data(using: .utf8) else {
             return nil
@@ -81,7 +82,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             DTDefaultFontName: defaultFont.fontName,
             DTDefaultFontSize: defaultFont.pointSize,
             DTDefaultStyleSheet: DTCSSStylesheet(styleBlock: defaultCSS) as Any,
-            DTDefaultLinkDecoration: false
+            DTDefaultLinkDecoration: false,
+            DTDocumentPreserveTrailingSpaces: true
         ]
         
         guard let builder = DTHTMLAttributedStringBuilder(html: data, options: parsingOptions, documentAttributes: nil) else {
