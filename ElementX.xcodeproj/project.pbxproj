@@ -134,7 +134,7 @@
 		18115E522CAEA4D9001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
 		18115E532CAEA4D9001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
 		18115E542CAEB318001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
-		1812FEE72CF48C530098241C /* MatrixRustSDK in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 18E9A3E22C9829970082DDA4 /* MatrixRustSDK */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		1812FEE72CF48C530098241C /* MatrixRustSDK in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 18E9A3E22C9829970082DDA4 /* MatrixRustSDK */; };
 		1812FEE82CF48CA70098241C /* ShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3D8BEEFCA07BEA43F4F4BF77 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1812FEEB2CF48CEC0098241C /* KnockRequestsListEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A8B5E798CC778C363655E /* KnockRequestsListEmptyStateView.swift */; };
 		182258E42CCC3D5B00BBEDC0 /* BigIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01FD1171FF40E34D707FD00 /* BigIcon.swift */; };
@@ -198,6 +198,7 @@
 		1868A8C32CA338DF00DC382D /* Encodable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8C12CA338DF00DC382D /* Encodable+Extensions.swift */; };
 		1868A8C52CA33BBE00DC382D /* EmptyResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */; };
 		1868A8C62CA33BBE00DC382D /* EmptyResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */; };
+		18793DE82CF5052F00F1C85D /* KnockRequestsBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F441A78A5CAA9E2937E463 /* KnockRequestsBannerView.swift */; };
 		188207EB2CEF3FAF00856A39 /* TimelineProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A8AA0DFA06012A9DAB951E /* TimelineProxyMock.swift */; };
 		1882EB792C8F84BD001DA2A9 /* ZeroUsersApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB782C8F84BD001DA2A9 /* ZeroUsersApi.swift */; };
 		1882EB7B2C8F8542001DA2A9 /* ZMatrixUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB7A2C8F8542001DA2A9 /* ZMatrixUser.swift */; };
@@ -8416,6 +8417,7 @@
 				18C4540C2CF09A5E00F25539 /* KnockRequestsListScreen.swift in Sources */,
 				18E9A4FB2C9829970082DDA4 /* EncryptionResetScreen.swift in Sources */,
 				18E9A4FC2C9829970082DDA4 /* EncryptionResetScreenCoordinator.swift in Sources */,
+				18793DE82CF5052F00F1C85D /* KnockRequestsBannerView.swift in Sources */,
 				18E9A4FD2C9829970082DDA4 /* EncryptionResetScreenModels.swift in Sources */,
 				18E9A4FE2C9829970082DDA4 /* EncryptionResetScreenViewModel.swift in Sources */,
 				18E9A4FF2C9829970082DDA4 /* EncryptionResetScreenViewModelProtocol.swift in Sources */,

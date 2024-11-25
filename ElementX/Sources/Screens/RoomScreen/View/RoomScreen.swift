@@ -27,14 +27,14 @@ struct RoomScreen: View {
 
     var body: some View {
         timeline
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-            .overlay(alignment: .top) {
-                pinnedItemsBanner
-            }
-            // This can overlay on top of the pinnedItemsBanner
-            .overlay(alignment: .top) {
-                knockRequestsBanner
-            }
+//            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+//            .overlay(alignment: .top) {
+//                pinnedItemsBanner
+//            }
+//            // This can overlay on top of the pinnedItemsBanner
+//            .overlay(alignment: .top) {
+//                knockRequestsBanner
+//            }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 VStack(spacing: 0) {
                     RoomScreenFooterView(details: roomContext.viewState.footerDetails,
