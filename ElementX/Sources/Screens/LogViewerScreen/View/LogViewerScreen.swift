@@ -25,11 +25,7 @@ private struct PreviewView: UIViewControllerRepresentable {
         previewController.dataSource = context.coordinator
         previewController.delegate = context.coordinator
         
-        if ProcessInfo.processInfo.isiOSAppOnMac {
-            return previewController
-        } else {
-            return UINavigationController(rootViewController: previewController)
-        }
+        return UINavigationController(rootViewController: previewController)
     }
 
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) { }
