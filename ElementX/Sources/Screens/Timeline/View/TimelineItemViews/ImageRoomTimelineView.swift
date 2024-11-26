@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct ImageRoomTimelineView: View {
-    @EnvironmentObject private var context: TimelineViewModel.Context
+    @Environment(\.timelineContext) private var context
     let timelineItem: ImageRoomTimelineItem
     
     var hasMediaCaption: Bool { timelineItem.content.caption != nil }
@@ -23,6 +23,9 @@ struct ImageRoomTimelineView: View {
                     // This clip shape is distinct from the one in the styler as that one
                     // operates on the entire message so wouldn't round the bottom corners.
                     .clipShape(RoundedRectangle(cornerRadius: hasMediaCaption ? 6 : 0))
+                    .onTapGesture {
+                        context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
+                    }
                 
                 if let attributedCaption = timelineItem.content.formattedCaption {
                     FormattedBodyText(attributedString: attributedCaption,
@@ -44,7 +47,7 @@ struct ImageRoomTimelineView: View {
                           mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
                           blurhash: timelineItem.content.blurhash,
                           size: timelineItem.content.imageInfo.size,
-                          mediaProvider: context.mediaProvider) {
+                          mediaProvider: context?.mediaProvider) {
                 placeholder
             }
             .timelineMediaFrame(imageInfo: timelineItem.content.imageInfo)
@@ -53,7 +56,7 @@ struct ImageRoomTimelineView: View {
                           mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
                           blurhash: timelineItem.content.blurhash,
                           size: timelineItem.content.thumbnailInfo?.size ?? timelineItem.content.imageInfo.size,
-                          mediaProvider: context.mediaProvider) {
+                          mediaProvider: context?.mediaProvider) {
                 placeholder
             }
             .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo ?? timelineItem.content.imageInfo)
@@ -73,6 +76,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         body
             .environmentObject(viewModel.context)
+            .environment(\.timelineContext, viewModel.context)
     }
     
     static var body: some View {

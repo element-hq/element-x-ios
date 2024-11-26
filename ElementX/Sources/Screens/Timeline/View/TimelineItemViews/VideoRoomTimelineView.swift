@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct VideoRoomTimelineView: View {
-    @EnvironmentObject private var context: TimelineViewModel.Context
+    @Environment(\.timelineContext) private var context
     let timelineItem: VideoRoomTimelineItem
     
     private var hasMediaCaption: Bool { timelineItem.content.caption != nil }
@@ -24,6 +24,9 @@ struct VideoRoomTimelineView: View {
                     // This clip shape is distinct from the one in the styler as that one
                     // operates on the entire message so wouldn't round the bottom corners.
                     .clipShape(RoundedRectangle(cornerRadius: hasMediaCaption ? 6 : 0))
+                    .onTapGesture {
+                        context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
+                    }
                 
                 if let attributedCaption = timelineItem.content.formattedCaption {
                     FormattedBodyText(attributedString: attributedCaption,
@@ -45,7 +48,7 @@ struct VideoRoomTimelineView: View {
                           mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
                           blurhash: timelineItem.content.blurhash,
                           size: timelineItem.content.thumbnailInfo?.size,
-                          mediaProvider: context.mediaProvider) { imageView in
+                          mediaProvider: context?.mediaProvider) { imageView in
                 imageView
                     .overlay { playIcon }
             } placeholder: {

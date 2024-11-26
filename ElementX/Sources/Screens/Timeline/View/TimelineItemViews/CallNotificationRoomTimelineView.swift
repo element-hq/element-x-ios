@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 struct CallNotificationRoomTimelineView: View {
-    @EnvironmentObject private var context: TimelineViewModel.Context
+    @Environment(\.timelineContext) private var context
     
     let timelineItem: CallNotificationRoomTimelineItem
     
@@ -20,7 +20,7 @@ struct CallNotificationRoomTimelineView: View {
                                 name: timelineItem.sender.displayName ?? timelineItem.sender.id,
                                 contentID: timelineItem.sender.id,
                                 avatarSize: .user(on: .timeline),
-                                mediaProvider: context.mediaProvider)
+                                mediaProvider: context?.mediaProvider)
                 .accessibilityHidden(true)
             
             VStack(alignment: .leading, spacing: 0) {

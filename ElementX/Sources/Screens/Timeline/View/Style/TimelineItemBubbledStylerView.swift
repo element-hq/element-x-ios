@@ -124,11 +124,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     var messageBubbleWithActions: some View {
         messageBubble
-            .onTapGesture {
-                context.send(viewAction: .itemTapped(itemID: timelineItem.id))
-            }
-            // We need a tap gesture before this long one so that it doesn't
-            // steal away the gestures from the scroll view
             .longPressWithFeedback {
                 context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
             }
@@ -396,6 +391,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             }
         }
         .environmentObject(viewModel.context)
+        .environment(\.timelineContext, viewModel.context)
     }
     
     static var replies: some View {
@@ -427,6 +423,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                   groupStyle: .single))
         }
         .environmentObject(viewModel.context)
+        .environment(\.timelineContext, viewModel.context)
     }
     
     static var threads: some View {
@@ -434,6 +431,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             MockTimelineContent(isThreaded: true)
         }
         .environmentObject(viewModel.context)
+        .environment(\.timelineContext, viewModel.context)
     }
       
     static var pinned: some View {
@@ -441,6 +439,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             MockTimelineContent(isPinned: true)
         }
         .environmentObject(viewModelWithPins.context)
+        .environment(\.timelineContext, viewModel.context)
     }
     
     static var encryptionAuthenticity: some View {
@@ -523,6 +522,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                        waveform: EstimatedWaveform.mockWaveform))
         }
         .environmentObject(viewModel.context)
+        .environment(\.timelineContext, viewModel.context)
     }
 }
 
