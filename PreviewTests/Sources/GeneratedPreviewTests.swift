@@ -287,6 +287,12 @@ extension PreviewTests {
         }
     }
 
+    func test_inviteFriendSettingsScreen() {
+        for preview in InviteFriendSettingsScreen_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_inviteUsersScreenSelectedItem() {
         for preview in InviteUsersScreenSelectedItem_Previews._allPreviews {
             assertSnapshots(matching: preview)
