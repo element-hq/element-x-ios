@@ -78,11 +78,11 @@ struct KnockRequestsListScreen: View {
 struct KnockRequestsListScreen_Previews: PreviewProvider, TestablePreview {
     static let emptyViewModel = KnockRequestsListScreenViewModel.mockWithInitialState(.init(requests: []))
     
-    static let viewModel = KnockRequestsListScreenViewModel.mockWithInitialState(.init(requests: [.init(id: "@alice:matrix.org", displayName: "Alice", avatarUrl: nil, timestamp: "Now", reason: "Hello"),
+    static let viewModel = KnockRequestsListScreenViewModel.mockWithInitialState(.init(requests: [.init(id: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "Now", reason: "Hello"),
                                                                                                   // swiftlint:disable:next line_length
-                                                                                                  .init(id: "@bob:matrix.org", displayName: "Bob", avatarUrl: nil, timestamp: "Now", reason: "Hello this one is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long reason"),
-                                                                                                  .init(id: "@charlie:matrix.org", displayName: "Charlie", avatarUrl: nil, timestamp: "Now", reason: nil),
-                                                                                                  .init(id: "@dan:matrix.org", displayName: "Dan", avatarUrl: nil, timestamp: "Now", reason: "Hello! It's a me! Dan!")]))
+                                                                                                  .init(id: "@bob:matrix.org", displayName: "Bob", avatarURL: nil, timestamp: "Now", reason: "Hello this one is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long reason"),
+                                                                                                  .init(id: "@charlie:matrix.org", displayName: "Charlie", avatarURL: nil, timestamp: "Now", reason: nil),
+                                                                                                  .init(id: "@dan:matrix.org", displayName: "Dan", avatarURL: nil, timestamp: "Now", reason: "Hello! It's a me! Dan!")]))
                                                                                       
     static var previews: some View {
         NavigationStack {
