@@ -305,6 +305,7 @@ struct CallScreen_Previews: PreviewProvider {
                                                         elementCallBaseURLOverride: nil,
                                                         colorScheme: .light),
                                    allowPictureInPicture: false,
+                                   notifyOtherParticipants: false,
                                    appHooks: AppHooks())
     }()
     

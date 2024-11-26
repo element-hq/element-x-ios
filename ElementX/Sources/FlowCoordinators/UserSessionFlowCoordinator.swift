@@ -201,7 +201,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         case .userProfile(let userID):
             stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
         case .call(let roomID):
-            Task { await presentCallScreen(roomID: roomID) }
+            Task { await presentCallScreen(roomID: roomID, notifyOtherParticipants: false) }
         case .genericCallLink(let url):
             presentCallScreen(genericCallLink: url)
         case .settings, .chatBackupSettings:
@@ -579,7 +579,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             
             switch action {
             case .presentCallScreen(let roomProxy):
-                presentCallScreen(roomProxy: roomProxy)
+                // Here we assume that the app is running and the call state is already up to date
+                presentCallScreen(roomProxy: roomProxy, notifyOtherParticipants: !roomProxy.infoPublisher.value.hasRoomCall)
             case .finished:
                 stateMachine.processEvent(.deselectRoom)
             }
@@ -654,29 +655,30 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: Calls
     
     private func presentCallScreen(genericCallLink url: URL) {
-        presentCallScreen(configuration: .init(genericCallLink: url))
+        presentCallScreen(configuration: .init(genericCallLink: url), notifyOtherParticipants: false)
     }
     
-    private func presentCallScreen(roomID: String) async {
+    private func presentCallScreen(roomID: String, notifyOtherParticipants: Bool) async {
         guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             return
         }
         
-        presentCallScreen(roomProxy: roomProxy)
+        presentCallScreen(roomProxy: roomProxy, notifyOtherParticipants: notifyOtherParticipants)
     }
     
-    private func presentCallScreen(roomProxy: JoinedRoomProxyProtocol) {
+    private func presentCallScreen(roomProxy: JoinedRoomProxyProtocol, notifyOtherParticipants: Bool) {
         let colorScheme: ColorScheme = appMediator.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
         presentCallScreen(configuration: .init(roomProxy: roomProxy,
                                                clientProxy: userSession.clientProxy,
                                                clientID: InfoPlistReader.main.bundleIdentifier,
                                                elementCallBaseURL: appSettings.elementCallBaseURL,
                                                elementCallBaseURLOverride: appSettings.elementCallBaseURLOverride,
-                                               colorScheme: colorScheme))
+                                               colorScheme: colorScheme),
+                          notifyOtherParticipants: notifyOtherParticipants)
     }
     
     private var callScreenPictureInPictureController: AVPictureInPictureController?
-    private func presentCallScreen(configuration: ElementCallConfiguration) {
+    private func presentCallScreen(configuration: ElementCallConfiguration, notifyOtherParticipants: Bool) {
         guard elementCallService.ongoingCallRoomIDPublisher.value != configuration.callRoomID else {
             MXLog.info("Returning to existing call.")
             callScreenPictureInPictureController?.stopPictureInPicture()
@@ -686,6 +688,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: elementCallService,
                                                                             configuration: configuration,
                                                                             allowPictureInPicture: true,
+                                                                            notifyOtherParticipants: notifyOtherParticipants,
                                                                             appHooks: appHooks))
         
         callScreenCoordinator.actions
@@ -899,7 +902,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 navigationSplitCoordinator.setSheetCoordinator(nil)
                 stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
             case .startCall(let roomID):
-                Task { await self.presentCallScreen(roomID: roomID) }
+                Task { await self.presentCallScreen(roomID: roomID, notifyOtherParticipants: false) }
             case .dismiss:
                 navigationSplitCoordinator.setSheetCoordinator(nil)
             }
