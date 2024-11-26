@@ -67,9 +67,11 @@ struct SettingsScreen: View {
                             Text(context.viewState.userDisplayName ?? "")
                                 .font(.zero.headingMD)
                                 .foregroundColor(.compound.textPrimary)
-//                            Text(context.viewState.userID)
-//                                .font(.zero.bodySM)
-//                                .foregroundColor(.compound.textSecondary)
+                            if context.viewState.primaryZeroId != nil {
+                                Text(context.viewState.primaryZeroId!)
+                                    .font(.zero.bodySM)
+                                    .foregroundColor(.compound.textSecondary)
+                            }
                         }
                         
 //                        Spacer()

@@ -111,6 +111,11 @@ class ClientProxy: ClientProxyProtocol {
         showNewUserRewardsIntimationSubject.asCurrentValuePublisher()
     }
     
+    private let primaryZeroIdSubject = CurrentValueSubject<String?, Never>(nil)
+    var primaryZeroId: CurrentValuePublisher<String?, Never> {
+        primaryZeroIdSubject.asCurrentValuePublisher()
+    }
+    
     private var cancellables = Set<AnyCancellable>()
     
     /// Will be `true` whilst the app cleans up and forces a logout. Prevents the sync service from restarting
@@ -554,7 +559,6 @@ class ClientProxy: ClientProxyProtocol {
 
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
         do {
-            let userId = try client.userId()
             let displayName = try await client.displayName()
             userDisplayNameSubject.send(displayName)
             return .success(())
@@ -611,6 +615,18 @@ class ClientProxy: ClientProxyProtocol {
         } catch {
             MXLog.error("Failed setting user avatar with error: \(error)")
             return .failure(.sdkError(error))
+        }
+    }
+    
+    func loadUserPrimaryZeroId() {
+        Task {
+            do {
+                let userId = try client.userId()
+                let zeroProfile = try await zeroMatrixUsersService.fetchZeroUser(userId: userId)
+                primaryZeroIdSubject.send(zeroProfile?.primaryZID)
+            } catch {
+                MXLog.error("Failed loading user primary zero id with error: \(error)")
+            }
         }
     }
     
