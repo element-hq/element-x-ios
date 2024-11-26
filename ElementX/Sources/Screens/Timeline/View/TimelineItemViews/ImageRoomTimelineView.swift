@@ -76,6 +76,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         body
             .environmentObject(viewModel.context)
+            .environment(\.timelineContext, viewModel.context)
     }
     
     static var body: some View {

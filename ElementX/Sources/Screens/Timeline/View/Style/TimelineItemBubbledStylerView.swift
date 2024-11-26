@@ -391,6 +391,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             }
         }
         .environmentObject(viewModel.context)
+        .environment(\.timelineContext, viewModel.context)
     }
     
     static var replies: some View {
@@ -422,6 +423,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                   groupStyle: .single))
         }
         .environmentObject(viewModel.context)
+        .environment(\.timelineContext, viewModel.context)
     }
     
     static var threads: some View {
@@ -429,6 +431,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             MockTimelineContent(isThreaded: true)
         }
         .environmentObject(viewModel.context)
+        .environment(\.timelineContext, viewModel.context)
     }
       
     static var pinned: some View {
@@ -436,6 +439,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             MockTimelineContent(isPinned: true)
         }
         .environmentObject(viewModelWithPins.context)
+        .environment(\.timelineContext, viewModel.context)
     }
     
     static var encryptionAuthenticity: some View {
@@ -518,6 +522,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                        waveform: EstimatedWaveform.mockWaveform))
         }
         .environmentObject(viewModel.context)
+        .environment(\.timelineContext, viewModel.context)
     }
 }
 

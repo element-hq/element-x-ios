@@ -41,7 +41,9 @@ struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
     
     static var previews: some View {
-        body.environmentObject(viewModel.context)
+        body
+            .environmentObject(viewModel.context)
+            .environment(\.timelineContext, viewModel.context)
     }
     
     static var body: some View {
