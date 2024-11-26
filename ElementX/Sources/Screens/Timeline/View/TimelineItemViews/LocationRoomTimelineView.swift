@@ -17,7 +17,7 @@ struct LocationRoomTimelineView: View {
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(accessibilityLabel)
                 .onTapGesture {
-                    context?.send(viewAction: .itemTapped(itemID: timelineItem.id))
+                    context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
                 }
         }
     }

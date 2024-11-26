@@ -25,7 +25,7 @@ struct VideoRoomTimelineView: View {
                     // operates on the entire message so wouldn't round the bottom corners.
                     .clipShape(RoundedRectangle(cornerRadius: hasMediaCaption ? 6 : 0))
                     .onTapGesture {
-                        context?.send(viewAction: .itemTapped(itemID: timelineItem.id))
+                        context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
                     }
                 
                 if let attributedCaption = timelineItem.content.formattedCaption {

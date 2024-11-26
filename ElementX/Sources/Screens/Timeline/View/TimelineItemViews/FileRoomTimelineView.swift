@@ -21,7 +21,7 @@ struct FileRoomTimelineView: View {
                                          additionalWhitespaces: timelineItem.additionalWhitespaces())
             .accessibilityLabel(L10n.commonFile)
             .onTapGesture {
-                context?.send(viewAction: .itemTapped(itemID: timelineItem.id))
+                context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
             }
         }
     }
