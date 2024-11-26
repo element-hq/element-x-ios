@@ -9,21 +9,18 @@ import Foundation
 import SwiftUI
 
 struct AudioRoomTimelineView: View {
-    @EnvironmentObject private var context: TimelineViewModel.Context
     let timelineItem: AudioRoomTimelineItem
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            MediaFileRoomTimelineContent(filename: timelineItem.content.filename,
+            MediaFileRoomTimelineContent(timelineItemID: timelineItem.id,
+                                         filename: timelineItem.content.filename,
                                          fileSize: timelineItem.content.fileSize,
                                          caption: timelineItem.content.caption,
                                          formattedCaption: timelineItem.content.formattedCaption,
                                          additionalWhitespaces: timelineItem.additionalWhitespaces(),
                                          isAudioFile: true)
-            .accessibilityLabel(L10n.commonAudio)
-            .onTapGesture {
-                context.send(viewAction: .itemTapped(itemID: timelineItem.id))
-            }
+                .accessibilityLabel(L10n.commonAudio)
         }
     }
 }
