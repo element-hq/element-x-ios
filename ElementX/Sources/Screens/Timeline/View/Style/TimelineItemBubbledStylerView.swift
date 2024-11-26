@@ -555,6 +555,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                             duration: 100,
                                                                             waveform: EstimatedWaveform.mockWaveform,
                                                                             source: nil,
+                                                                            fileSize: nil,
                                                                             contentType: nil),
                                                              properties: RoomTimelineItemProperties(encryptionAuthenticity: .notGuaranteed(color: .gray))),
                                          playerState: AudioPlayerState(id: .timelineItemIdentifier(.randomEvent),
@@ -593,6 +594,7 @@ private struct MockTimelineContent: View {
                                                                  duration: 100,
                                                                  waveform: EstimatedWaveform.mockWaveform,
                                                                  source: nil,
+                                                                 fileSize: nil,
                                                                  contentType: nil),
                                                   replyDetails: replyDetails))
         
@@ -606,6 +608,7 @@ private struct MockTimelineContent: View {
                                                  content: .init(filename: "file.txt",
                                                                 caption: "File",
                                                                 source: nil,
+                                                                fileSize: nil,
                                                                 thumbnailSource: nil,
                                                                 contentType: nil),
                                                  replyDetails: replyDetails))
@@ -657,6 +660,7 @@ private struct MockTimelineContent: View {
                                                                         duration: 100,
                                                                         waveform: EstimatedWaveform.mockWaveform,
                                                                         source: nil,
+                                                                        fileSize: nil,
                                                                         contentType: nil),
                                                          replyDetails: replyDetails),
                                      playerState: AudioPlayerState(id: .timelineItemIdentifier(.randomEvent),

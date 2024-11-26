@@ -59,7 +59,7 @@ struct InviteFriendSettingsScreen: View {
     }
     
     private func inviteCodeMessage(inviteSlug: String) -> String {
-        return """
+        """
         Here's your invite code to ZERO Messenger:
         \(inviteSlug)
 
