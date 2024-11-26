@@ -111,6 +111,11 @@ class ClientProxy: ClientProxyProtocol {
         showNewUserRewardsIntimationSubject.asCurrentValuePublisher()
     }
     
+    private let zeroMessengerInviteSubject = CurrentValueSubject<ZeroMessengerInvite, Never>(ZeroMessengerInvite.empty())
+    var messengerInvitePublisher: CurrentValuePublisher<ZeroMessengerInvite, Never> {
+        zeroMessengerInviteSubject.asCurrentValuePublisher()
+    }
+    
     private var cancellables = Set<AnyCancellable>()
     
     /// Will be `true` whilst the app cleans up and forces a logout. Prevents the sync service from restarting
@@ -145,7 +150,8 @@ class ClientProxy: ClientProxyProtocol {
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
     
     private let zeroMatrixUsersService: ZeroMatrixUsersService
-    private let zeroRewardsApi: ZeroRewardsApi
+    private let zeroRewardsApi: ZeroRewardsApiProtocol
+    private let zeroMessengerInviteApi: ZeroMessengerInviteApiProtocol
     
     init(client: ClientProtocol,
          networkMonitor: NetworkMonitorProtocol,
@@ -168,6 +174,7 @@ class ClientProxy: ClientProxyProtocol {
                                                         appSettings: appSettings,
                                                         client: client)
         zeroRewardsApi = ZeroRewardsApi(appSettings: appSettings)
+        zeroMessengerInviteApi = ZeroMessengerInviteApi(appSettings: appSettings)
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
@@ -832,6 +839,23 @@ class ClientProxy: ClientProxyProtocol {
         Task {
             try await Task.sleep(for: .seconds(3))
             showNewUserRewardsIntimationSubject.send(false)
+        }
+    }
+    
+    func loadZeroMessengerInvite() async -> Result<Void, ClientProxyError> {
+        do {
+            let apiMessengerInvite = try await zeroMessengerInviteApi.fetchMessengerInvite()
+            switch apiMessengerInvite {
+            case .success(let invite):
+                let zeroMessengerInvite = ZeroMessengerInvite(messengerInvite: invite)
+                zeroMessengerInviteSubject.send(zeroMessengerInvite)
+                return .success(())
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
         }
     }
     

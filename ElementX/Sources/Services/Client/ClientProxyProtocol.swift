@@ -215,4 +215,10 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func getUserRewards(shouldCheckRewardsIntiamtion: Bool) async -> Result<Void, ClientProxyError>
     func dismissRewardsIntimation()
+    
+    // MARK: - Zero Messenger Invite
+    
+    var messengerInvitePublisher: CurrentValuePublisher<ZeroMessengerInvite, Never> { get }
+    
+    @discardableResult func loadZeroMessengerInvite() async -> Result<Void, ClientProxyError>
 }

@@ -31,15 +31,15 @@ struct SettingsScreen: View {
 //            }
 //
 //            generalSection
-            
-            Section {
-                ListRow(label: .default(title: "Advanced Settings",
-                                        icon: \.code),
-                        kind: .navigationLink {
-                            context.send(viewAction: .developerOptions)
-                        })
-                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
-            }
+//            
+//            Section {
+//                ListRow(label: .default(title: "Advanced Settings",
+//                                        icon: \.code),
+//                        kind: .navigationLink {
+//                            context.send(viewAction: .developerOptions)
+//                        })
+//                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
+//            }
             
             signOutSection
         }
@@ -130,6 +130,13 @@ struct SettingsScreen: View {
     
     private var manageMyAppSection: some View {
         Section {
+            ListRow(label: .default(title: "Invite Friend",
+                                    icon: \.plus),
+                    kind: .navigationLink {
+                context.send(viewAction: .inviteFriend)
+            })
+            .accessibilityIdentifier("settings-invite-friend")
+            
             ListRow(label: .default(title: L10n.screenNotificationSettingsTitle,
                                     icon: \.notifications),
                     kind: .navigationLink {
@@ -154,6 +161,13 @@ struct SettingsScreen: View {
             default:
                 EmptyView()
             }
+            
+            ListRow(label: .default(title: "Advanced Settings",
+                                    icon: \.code),
+                    kind: .navigationLink {
+                        context.send(viewAction: .developerOptions)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
         }
     }
     

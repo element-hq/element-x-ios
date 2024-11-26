@@ -2221,6 +2221,11 @@ class ClientProxyMock: ClientProxyProtocol {
         set(value) { underlyingShowNewUserRewardsIntimationPublisher = value }
     }
     var underlyingShowNewUserRewardsIntimationPublisher: CurrentValuePublisher<Bool, Never>!
+    var messengerInvitePublisher: CurrentValuePublisher<ZeroMessengerInvite, Never> {
+        get { return underlyingMessengerInvitePublisher }
+        set(value) { underlyingMessengerInvitePublisher = value }
+    }
+    var underlyingMessengerInvitePublisher: CurrentValuePublisher<ZeroMessengerInvite, Never>!
 
     //MARK: - isOnlyDeviceLeft
 
@@ -4891,6 +4896,71 @@ class ClientProxyMock: ClientProxyProtocol {
     func dismissRewardsIntimation() {
         dismissRewardsIntimationCallsCount += 1
         dismissRewardsIntimationClosure?()
+    }
+    //MARK: - loadZeroMessengerInvite
+
+    var loadZeroMessengerInviteUnderlyingCallsCount = 0
+    var loadZeroMessengerInviteCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadZeroMessengerInviteUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadZeroMessengerInviteUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadZeroMessengerInviteUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadZeroMessengerInviteUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadZeroMessengerInviteCalled: Bool {
+        return loadZeroMessengerInviteCallsCount > 0
+    }
+
+    var loadZeroMessengerInviteUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var loadZeroMessengerInviteReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return loadZeroMessengerInviteUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadZeroMessengerInviteUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadZeroMessengerInviteUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadZeroMessengerInviteUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadZeroMessengerInviteClosure: (() async -> Result<Void, ClientProxyError>)?
+
+    @discardableResult
+    func loadZeroMessengerInvite() async -> Result<Void, ClientProxyError> {
+        loadZeroMessengerInviteCallsCount += 1
+        if let loadZeroMessengerInviteClosure = loadZeroMessengerInviteClosure {
+            return await loadZeroMessengerInviteClosure()
+        } else {
+            return loadZeroMessengerInviteReturnValue
+        }
     }
     //MARK: - loadMediaContentForSource
 
