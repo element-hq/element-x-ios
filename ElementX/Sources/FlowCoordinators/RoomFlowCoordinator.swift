@@ -316,9 +316,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomMembersList, .dismissRoomMembersList):
                 return .roomDetails(isRoot: false)
 
-            case (.room, .presentRoomMemberDetails(userID: let userID)):
-                return .roomMemberDetails(userID: userID, previousState: .room)
-            case (.roomMembersList, .presentRoomMemberDetails(userID: let userID)):
+            case (_, .presentRoomMemberDetails(userID: let userID)):
                 return .roomMemberDetails(userID: userID, previousState: fromState)
             case (.roomMemberDetails(_, let previousState), .dismissRoomMemberDetails):
                 return previousState
@@ -396,9 +394,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .rolesAndPermissions
             case (.rolesAndPermissions, .dismissRolesAndPermissionsScreen):
                 return .roomDetails(isRoot: false)
-                
-            case (.roomDetails, .presentRoomMemberDetails(let userID)):
-                return .roomMemberDetails(userID: userID, previousState: fromState)
             
             case (.room, .presentResolveSendFailure):
                 return .resolveSendFailure
