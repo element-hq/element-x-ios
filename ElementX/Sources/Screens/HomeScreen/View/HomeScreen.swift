@@ -161,9 +161,16 @@ struct HomeScreen: View {
                             }
                         }
                     
-                    Text(context.viewState.userDisplayName ?? "")
-                        .font(.zero.bodyMD)
-                        .foregroundColor(.compound.textPrimary)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(context.viewState.userDisplayName ?? "")
+                            .font(.zero.bodyMD)
+                            .foregroundColor(.compound.textPrimary)
+                        if context.viewState.primaryZeroId != nil {
+                            Text(context.viewState.primaryZeroId!)
+                                .font(.zero.bodyXS)
+                                .foregroundColor(.compound.textSecondary)
+                        }
+                    }
                 }
             }
             .accessibilityLabel(L10n.commonSettings)

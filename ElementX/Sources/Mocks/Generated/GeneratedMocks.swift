@@ -2221,6 +2221,11 @@ class ClientProxyMock: ClientProxyProtocol {
         set(value) { underlyingShowNewUserRewardsIntimationPublisher = value }
     }
     var underlyingShowNewUserRewardsIntimationPublisher: CurrentValuePublisher<Bool, Never>!
+    var primaryZeroId: CurrentValuePublisher<String?, Never> {
+        get { return underlyingPrimaryZeroId }
+        set(value) { underlyingPrimaryZeroId = value }
+    }
+    var underlyingPrimaryZeroId: CurrentValuePublisher<String?, Never>!
     var messengerInvitePublisher: CurrentValuePublisher<ZeroMessengerInvite, Never> {
         get { return underlyingMessengerInvitePublisher }
         set(value) { underlyingMessengerInvitePublisher = value }
@@ -4896,6 +4901,41 @@ class ClientProxyMock: ClientProxyProtocol {
     func dismissRewardsIntimation() {
         dismissRewardsIntimationCallsCount += 1
         dismissRewardsIntimationClosure?()
+    }
+    //MARK: - loadUserPrimaryZeroId
+
+    var loadUserPrimaryZeroIdUnderlyingCallsCount = 0
+    var loadUserPrimaryZeroIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadUserPrimaryZeroIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadUserPrimaryZeroIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadUserPrimaryZeroIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadUserPrimaryZeroIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadUserPrimaryZeroIdCalled: Bool {
+        return loadUserPrimaryZeroIdCallsCount > 0
+    }
+    var loadUserPrimaryZeroIdClosure: (() -> Void)?
+
+    func loadUserPrimaryZeroId() {
+        loadUserPrimaryZeroIdCallsCount += 1
+        loadUserPrimaryZeroIdClosure?()
     }
     //MARK: - loadZeroMessengerInvite
 
