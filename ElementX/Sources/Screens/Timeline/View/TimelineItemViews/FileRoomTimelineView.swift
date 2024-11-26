@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct FileRoomTimelineView: View {
-    @EnvironmentObject private var context: TimelineViewModel.Context
+    @Environment(\.timelineContext) private var context
     let timelineItem: FileRoomTimelineItem
     
     var body: some View {
@@ -21,7 +21,7 @@ struct FileRoomTimelineView: View {
                                          additionalWhitespaces: timelineItem.additionalWhitespaces())
             .accessibilityLabel(L10n.commonFile)
             .onTapGesture {
-                context.send(viewAction: .itemTapped(itemID: timelineItem.id))
+                context?.send(viewAction: .itemTapped(itemID: timelineItem.id))
             }
         }
     }

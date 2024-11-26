@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct StickerRoomTimelineView: View {
-    @EnvironmentObject private var context: TimelineViewModel.Context
+    @Environment(\.timelineContext) private var context
     let timelineItem: StickerRoomTimelineItem
     
     var body: some View {
@@ -18,14 +18,14 @@ struct StickerRoomTimelineView: View {
                           mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
                           blurhash: timelineItem.blurhash,
                           size: timelineItem.imageInfo.size,
-                          mediaProvider: context.mediaProvider) {
+                          mediaProvider: context?.mediaProvider) {
                 placeholder
             }
             .timelineMediaFrame(imageInfo: timelineItem.imageInfo)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("\(L10n.commonSticker), \(timelineItem.body)")
             .onTapGesture {
-                context.send(viewAction: .itemTapped(itemID: timelineItem.id))
+                context?.send(viewAction: .itemTapped(itemID: timelineItem.id))
             }
         }
     }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LocationRoomTimelineView: View {
-    @EnvironmentObject private var context: TimelineViewModel.Context
+    @Environment(\.timelineContext) private var context
     let timelineItem: LocationRoomTimelineItem
     
     var body: some View {
@@ -17,7 +17,7 @@ struct LocationRoomTimelineView: View {
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(accessibilityLabel)
                 .onTapGesture {
-                    context.send(viewAction: .itemTapped(itemID: timelineItem.id))
+                    context?.send(viewAction: .itemTapped(itemID: timelineItem.id))
                 }
         }
     }

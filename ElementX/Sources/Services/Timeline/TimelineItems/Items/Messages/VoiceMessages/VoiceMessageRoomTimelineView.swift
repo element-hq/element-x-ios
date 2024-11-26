@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct VoiceMessageRoomTimelineView: View {
-    @EnvironmentObject private var context: TimelineViewModel.Context
+    @Environment(\.timelineContext) private var context
     private let timelineItem: VoiceMessageRoomTimelineItem
     private let playerState: AudioPlayerState
     @State private var resumePlaybackAfterScrubbing = false
@@ -31,22 +31,22 @@ struct VoiceMessageRoomTimelineView: View {
     }
     
     private func onPlaybackPlayPause() {
-        context.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
+        context?.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
     }
     
     private func onPlaybackSeek(_ progress: Double) {
-        context.send(viewAction: .handleAudioPlayerAction(.seek(itemID: timelineItem.id, progress: progress)))
+        context?.send(viewAction: .handleAudioPlayerAction(.seek(itemID: timelineItem.id, progress: progress)))
     }
     
     private func onPlaybackScrubbing(_ dragging: Bool) {
         if dragging {
             if playerState.playbackState == .playing {
                 resumePlaybackAfterScrubbing = true
-                context.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
+                context?.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
             }
         } else {
             if resumePlaybackAfterScrubbing {
-                context.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
+                context?.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
                 resumePlaybackAfterScrubbing = false
             }
         }
