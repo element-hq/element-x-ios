@@ -7,9 +7,7 @@
 
 import Foundation
 
-enum KnockRequestsListScreenViewModelAction {
-    case displayBannedUsers
-}
+enum KnockRequestsListScreenViewModelAction { }
 
 struct KnockRequestsListScreenViewState: BindableState {
     // TODO: Not sure yet how we will fetch this, this is just for testing purposes

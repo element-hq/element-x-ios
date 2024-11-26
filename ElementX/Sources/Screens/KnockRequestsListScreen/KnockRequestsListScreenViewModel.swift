@@ -61,18 +61,12 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
                                              // TODO: Implement action
                                              primaryButton: .init(title: L10n.screenKnockRequestsListBanAlertConfirmButtonTitle,
                                                                   role: .destructive,
-                                                                  action: { [weak self] in self?.banUser(userID: userID) }),
+                                                                  action: nil),
                                              secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
         }
     }
     
     // MARK: - Private
-    
-    private func banUser(userID: String) {
-        // TODO: Implement ban through the request API
-        
-        actionsSubject.send(.displayBannedUsers)
-    }
     
     private func setupSubscriptions() {
         roomProxy.infoPublisher

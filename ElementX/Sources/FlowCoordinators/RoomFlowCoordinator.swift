@@ -311,10 +311,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.globalNotificationSettings, .dismissGlobalNotificationSettingsScreen):
                 return .notificationSettings
                 
-            case (_, .presentRoomMembersList):
-                return .roomMembersList(previousState: fromState)
-            case (.roomMembersList(let previousState), .dismissRoomMembersList):
-                return previousState
+            case (.roomDetails, .presentRoomMembersList):
+                return .roomMembersList
+            case (.roomMembersList, .dismissRoomMembersList):
+                return .roomDetails(isRoot: false)
 
             case (.room, .presentRoomMemberDetails(userID: let userID)):
                 return .roomMemberDetails(userID: userID, previousState: .room)
@@ -464,13 +464,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.globalNotificationSettings, .dismissGlobalNotificationSettingsScreen, .notificationSettings):
                 break
                 
-            case (.roomDetails, .presentRoomMembersList(let showBanned), .roomMembersList):
-                presentRoomMembersList(showBanned: showBanned)
+            case (.roomDetails, .presentRoomMembersList, .roomMembersList):
+                presentRoomMembersList()
             case (.roomMembersList, .dismissRoomMembersList, .roomDetails):
-                break
-            case (.knockRequestsList, .presentRoomMembersList(let showBanned), .roomMembersList):
-                presentRoomMembersList(showBanned: showBanned)
-            case (.roomMembersList, .dismissRoomMembersList, .knockRequestsList):
                 break
                 
             case (.room, .presentRoomMemberDetails, .roomMemberDetails(let userID, _)):
@@ -840,7 +836,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .leftRoom:
                 stateMachine.tryEvent(.dismissFlow)
             case .presentRoomMembersList:
-                stateMachine.tryEvent(.presentRoomMembersList(showBanned: false))
+                stateMachine.tryEvent(.presentRoomMembersList)
             case .presentRoomDetailsEditScreen:
                 stateMachine.tryEvent(.presentRoomDetailsEditScreen)
             case .presentNotificationSettingsScreen:
@@ -878,12 +874,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentRoomMembersList(showBanned: Bool) {
+    private func presentRoomMembersList() {
         let parameters = RoomMembersListScreenCoordinatorParameters(mediaProvider: userSession.mediaProvider,
                                                                     roomProxy: roomProxy,
                                                                     userIndicatorController: userIndicatorController,
-                                                                    analytics: analytics,
-                                                                    showBanned: showBanned)
+                                                                    analytics: analytics)
         let coordinator = RoomMembersListScreenCoordinator(parameters: parameters)
         
         coordinator.actions
@@ -907,15 +902,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentKnockRequestsList() {
         let parameters = KnockRequestsListScreenCoordinatorParameters(roomProxy: roomProxy, mediaProvider: userSession.mediaProvider)
         let coordinator = KnockRequestsListScreenCoordinator(parameters: parameters)
-        
-        coordinator.actionsPublisher
-            .sink { [weak self] action in
-                switch action {
-                case .displayBannedUsers:
-                    self?.stateMachine.tryEvent(.presentRoomMembersList(showBanned: true))
-                }
-            }
-            .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissKnockRequestsListScreen)
@@ -1569,7 +1555,7 @@ private extension RoomFlowCoordinator {
         case roomDetailsEditScreen
         case notificationSettings
         case globalNotificationSettings
-        case roomMembersList(previousState: State)
+        case roomMembersList
         case roomMemberDetails(userID: String, previousState: State)
         case userProfile(userID: String, previousState: State)
         case inviteUsersScreen(previousState: State)
@@ -1619,7 +1605,7 @@ private extension RoomFlowCoordinator {
         case presentGlobalNotificationSettingsScreen
         case dismissGlobalNotificationSettingsScreen
         
-        case presentRoomMembersList(showBanned: Bool)
+        case presentRoomMembersList
         case dismissRoomMembersList
         
         case presentRoomMemberDetails(userID: String)
