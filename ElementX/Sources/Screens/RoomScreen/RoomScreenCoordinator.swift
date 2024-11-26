@@ -42,6 +42,7 @@ enum RoomScreenCoordinatorAction {
     case presentCallScreen
     case presentPinnedEventsTimeline
     case presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
+    case presentKnockRequestsList
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
@@ -169,6 +170,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentCallScreen)
                 case .removeComposerFocus:
                     composerViewModel.process(timelineAction: .removeFocus)
+                case .displayKnockRequests:
+                    actionsSubject.send(.presentKnockRequestsList)
                 }
             }
             .store(in: &cancellables)

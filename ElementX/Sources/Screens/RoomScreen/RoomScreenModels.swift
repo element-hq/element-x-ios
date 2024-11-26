@@ -14,6 +14,7 @@ enum RoomScreenViewModelAction {
     case displayRoomDetails
     case displayCall
     case removeComposerFocus
+    case displayKnockRequests
 }
 
 enum RoomScreenViewAction {
@@ -22,6 +23,9 @@ enum RoomScreenViewAction {
     case displayRoomDetails
     case displayCall
     case footerViewAction(RoomScreenFooterViewAction)
+    case acceptKnock(userID: String)
+    case dismissKnockRequests
+    case viewKnockRequests
 }
 
 struct RoomScreenViewState: BindableState {

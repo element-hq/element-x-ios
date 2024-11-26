@@ -1298,8 +1298,30 @@ internal enum L10n {
   }
   /// Are you sure you want to turn off key storage and delete it?
   internal static var screenKeyBackupDisableTitle: String { return L10n.tr("Localizable", "screen_key_backup_disable_title") }
+  /// Yes, accept all
+  internal static var screenKnockRequestsListAcceptAllAlertConfirmButtonTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_all_alert_confirm_button_title") }
+  /// Are you sure you want to accept all requests to join?
+  internal static var screenKnockRequestsListAcceptAllAlertDescription: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_all_alert_description") }
+  /// Accept all requests
+  internal static var screenKnockRequestsListAcceptAllAlertTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_all_alert_title") }
   /// Accept all
   internal static var screenKnockRequestsListAcceptAllButtonTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_all_button_title") }
+  /// Yes, decline and ban
+  internal static var screenKnockRequestsListBanAlertConfirmButtonTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_ban_alert_confirm_button_title") }
+  /// Are you sure you want to decline and ban %1$@? This user won’t be able to request access to join this room again.
+  internal static func screenKnockRequestsListBanAlertDescription(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_knock_requests_list_ban_alert_description", String(describing: p1))
+  }
+  /// Decline and ban from accessing
+  internal static var screenKnockRequestsListBanAlertTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_ban_alert_title") }
+  /// Yes, decline
+  internal static var screenKnockRequestsListDeclineAlertConfirmButtonTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_decline_alert_confirm_button_title") }
+  /// Are you sure you want to decline %1$@ request to join this room?
+  internal static func screenKnockRequestsListDeclineAlertDescription(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_knock_requests_list_decline_alert_description", String(describing: p1))
+  }
+  /// Decline access
+  internal static var screenKnockRequestsListDeclineAlertTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_decline_alert_title") }
   /// Decline and ban
   internal static var screenKnockRequestsListDeclineAndBanActionTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_decline_and_ban_action_title") }
   /// When somebody will ask to join the room, you’ll be able to see their request here.
