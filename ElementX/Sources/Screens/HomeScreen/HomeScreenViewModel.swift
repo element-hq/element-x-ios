@@ -50,6 +50,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
         
+        userSession.clientProxy.primaryZeroId
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.primaryZeroId, on: self)
+            .store(in: &cancellables)
+        
         userSession.sessionSecurityStatePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] securityState in
@@ -298,6 +303,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             Task {
                 await self.userSession.clientProxy.loadUserAvatarURL()
                 await self.userSession.clientProxy.loadUserDisplayName()
+                self.userSession.clientProxy.loadUserPrimaryZeroId()
             }
         }
     }
