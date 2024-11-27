@@ -18,7 +18,7 @@ struct ReportContentScreen: View {
             ignoreUserSection
         }
         .scrollDismissesKeyboard(.immediately)
-        .compoundList()
+        .zeroList()
         .navigationTitle(L10n.actionReportContent)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }

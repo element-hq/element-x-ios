@@ -15,7 +15,7 @@ struct RoomChangeRolesScreen: View {
     
     var body: some View {
         mainContent
-            .compoundList()
+            .zeroList()
             .scrollDismissesKeyboard(.immediately)
             .navigationTitle(context.viewState.title)
             .navigationBarTitleDisplayMode(.inline)

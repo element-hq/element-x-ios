@@ -19,7 +19,7 @@ struct NotificationSettingsEditScreen: View {
                 roomsWithCustomSettingsSection
             }
         }
-        .compoundList()
+        .zeroList()
         .navigationTitle(context.viewState.strings.navigationTitle)
         .alert(item: $context.alertInfo)
         .track(screen: .SettingsDefaultNotifications)

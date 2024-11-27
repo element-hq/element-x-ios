@@ -25,7 +25,7 @@ struct SecureBackupKeyBackupScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.secureBackupKeyBackupScreen.deleteKeyStorage)
         }
         .background()
-        .backgroundStyle(.compound.bgCanvasDefault)
+        .backgroundStyle(.zero.bgCanvasDefault)
         .interactiveDismissDisabled()
         .toolbar { toolbar }
         .alert(item: $context.alertInfo)

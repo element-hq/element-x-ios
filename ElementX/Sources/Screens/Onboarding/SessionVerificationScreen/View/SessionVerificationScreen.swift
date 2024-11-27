@@ -22,7 +22,7 @@ struct SessionVerificationScreen: View {
             actionButtons
         }
         .background()
-        .backgroundStyle(.compound.bgCanvasDefault)
+        .backgroundStyle(.zero.bgCanvasDefault)
         .interactiveDismissDisabled()
     }
     

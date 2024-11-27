@@ -17,7 +17,7 @@ struct UserProfileScreen: View {
             
             verificationSection
         }
-        .compoundList()
+        .zeroList()
         .navigationTitle(L10n.screenRoomMemberDetailsTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }

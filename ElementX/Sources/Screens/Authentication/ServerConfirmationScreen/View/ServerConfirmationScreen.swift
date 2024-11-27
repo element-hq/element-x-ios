@@ -18,7 +18,7 @@ struct ServerConfirmationScreen: View {
             buttons
         }
         .background()
-        .backgroundStyle(.compound.bgCanvasDefault)
+        .backgroundStyle(.zero.bgCanvasDefault)
         .alert(item: $context.alertInfo)
         .introspect(.window, on: .supportedVersions) { window in
             context.send(viewAction: .updateWindow(window))

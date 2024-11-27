@@ -37,7 +37,7 @@ struct LoginScreen: View {
             .padding(.horizontal, 16)
             .padding(.bottom, 16)
         }
-        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)
     }

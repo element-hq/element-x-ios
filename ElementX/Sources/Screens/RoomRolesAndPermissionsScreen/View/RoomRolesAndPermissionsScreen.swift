@@ -18,7 +18,7 @@ struct RoomRolesAndPermissionsScreen: View {
             
             resetSection
         }
-        .compoundList()
+        .zeroList()
         .navigationTitle(L10n.screenRoomRolesAndPermissionsTitle)
         .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)

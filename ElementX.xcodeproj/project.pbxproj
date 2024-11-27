@@ -218,6 +218,8 @@
 		1868A8C32CA338DF00DC382D /* Encodable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8C12CA338DF00DC382D /* Encodable+Extensions.swift */; };
 		1868A8C52CA33BBE00DC382D /* EmptyResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */; };
 		1868A8C62CA33BBE00DC382D /* EmptyResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */; };
+		187112532CF75350001E8964 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187112522CF75344001E8964 /* View+Extensions.swift */; };
+		187112542CF75350001E8964 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187112522CF75344001E8964 /* View+Extensions.swift */; };
 		18793DE82CF5052F00F1C85D /* KnockRequestsBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F441A78A5CAA9E2937E463 /* KnockRequestsBannerView.swift */; };
 		188207EB2CEF3FAF00856A39 /* TimelineProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A8AA0DFA06012A9DAB951E /* TimelineProxyMock.swift */; };
 		1882EB792C8F84BD001DA2A9 /* ZeroUsersApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB782C8F84BD001DA2A9 /* ZeroUsersApi.swift */; };
@@ -2510,6 +2512,7 @@
 		1868A8BE2CA2D91000DC382D /* ZSentMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZSentMessage.swift; path = Zero/Sources/Network/Models/Response/ZSentMessage.swift; sourceTree = SOURCE_ROOT; };
 		1868A8C12CA338DF00DC382D /* Encodable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Extensions.swift"; sourceTree = "<group>"; };
 		1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyResponse.swift; sourceTree = "<group>"; };
+		187112522CF75344001E8964 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		1882EB782C8F84BD001DA2A9 /* ZeroUsersApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroUsersApi.swift; sourceTree = "<group>"; };
 		1882EB7A2C8F8542001DA2A9 /* ZMatrixUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixUser.swift; sourceTree = "<group>"; };
 		1882EB832C8F85F5001DA2A9 /* ZMatrixUserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixUserProfile.swift; sourceTree = "<group>"; };
@@ -4151,6 +4154,7 @@
 		1882EB8A2C90C8DC001DA2A9 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				187112522CF75344001E8964 /* View+Extensions.swift */,
 				1882EB8B2C90C8EC001DA2A9 /* Sequence+Extensions.swift */,
 				1882EB8D2C90E9E7001DA2A9 /* RoomInfo+Extensions.swift */,
 				1882EB922C90FE9C001DA2A9 /* String+Extensions.swift */,
@@ -8905,6 +8909,7 @@
 				18E9A6892C9829970082DDA4 /* SFNumberedListView.swift in Sources */,
 				18E9A68A2C9829970082DDA4 /* (null) in Sources */,
 				18E9A68B2C9829970082DDA4 /* (null) in Sources */,
+				187112542CF75350001E8964 /* View+Extensions.swift in Sources */,
 				18E9A68C2C9829970082DDA4 /* (null) in Sources */,
 				18E9A68D2C9829970082DDA4 /* SceneDelegate.swift in Sources */,
 				18E9A68E2C9829970082DDA4 /* ScreenTrackerViewModifier.swift in Sources */,
@@ -9285,6 +9290,7 @@
 				184D6FD22C7D8C8D006266D8 /* ZMatrixSession.swift in Sources */,
 				A4AF12D9D8BA34B3B7B55B08 /* AuthenticationStartScreenCoordinator.swift in Sources */,
 				0E3A2787C6AEC761A81A938A /* AuthenticationStartScreenModels.swift in Sources */,
+				187112532CF75350001E8964 /* View+Extensions.swift in Sources */,
 				E79B247A6DD28759636317EA /* AuthenticationStartScreenViewModel.swift in Sources */,
 				874FEFB9D4A4AF447E0E086E /* AuthenticationStartScreenViewModelProtocol.swift in Sources */,
 				6146996D5C4DDD5DA816FC87 /* AuthenticationTextFieldStyle.swift in Sources */,

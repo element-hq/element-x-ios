@@ -138,7 +138,7 @@ private struct MessageComposerReplyHeader: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .fixedSize(horizontal: false, vertical: true)
             .padding(4.0)
-            .background(.compound.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 13, style: .circular))
+            .background(.zero.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 13, style: .circular))
             .overlay(alignment: .topTrailing) {
                 Button(action: action) {
                     CompoundIcon(\.close, size: .small, relativeTo: .compound.bodySMSemibold)

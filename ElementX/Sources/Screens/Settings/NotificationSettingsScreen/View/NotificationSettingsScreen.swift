@@ -39,7 +39,7 @@ struct NotificationSettingsScreen: View {
                 }
             }
         }
-        .compoundList()
+        .zeroList()
         .navigationTitle(L10n.screenNotificationSettingsTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }

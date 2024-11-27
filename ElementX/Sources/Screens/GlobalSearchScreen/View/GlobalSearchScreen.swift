@@ -39,7 +39,7 @@ struct GlobalSearchScreen: View {
         }
         .listStyle(.plain)
         .frame(maxWidth: 700, maxHeight: 800)
-        .background(.compound.bgCanvasDefault)
+        .background(.zero.bgCanvasDefault)
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -104,7 +104,7 @@ struct GlobalSearchScreen: View {
         if selectedRoom == room {
             .compound.bgSubtlePrimary
         } else {
-            .compound.bgCanvasDefault
+            .zero.bgCanvasDefault
         }
     }
     

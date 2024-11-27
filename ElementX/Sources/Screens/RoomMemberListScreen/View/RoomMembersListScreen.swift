@@ -37,7 +37,7 @@ struct RoomMembersListScreen: View {
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
-                    .background(.compound.bgCanvasDefault)
+                    .background(.zero.bgCanvasDefault)
             }
         }
         .searchable(text: $context.searchQuery,
@@ -45,7 +45,7 @@ struct RoomMembersListScreen: View {
                     prompt: L10n.commonSearchForSomeone)
         .compoundSearchField()
         .autocorrectionDisabled()
-        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .navigationTitle(L10n.commonPeople)
         .sheet(item: $context.memberToManage) {
             RoomMembersListManageMemberSheet(member: $0.member, actions: $0.actions, context: context)

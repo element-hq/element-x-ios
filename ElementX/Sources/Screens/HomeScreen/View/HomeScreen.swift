@@ -30,7 +30,7 @@ struct HomeScreen: View {
                    message: leaveRoomAlertMessage)
 //            .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
             .toolbar { toolbar }
-//            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+            .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
 //            .track(screen: .Home)
 //            .introspect(.viewController, on: .supportedVersions) { controller in
 //                Task {
@@ -72,7 +72,7 @@ struct HomeScreen: View {
     // MARK: - Private
     
     private var bloomGradient: some View {
-        LinearGradient(colors: [.clear, .compound.bgCanvasDefault], startPoint: .top, endPoint: .bottom)
+        LinearGradient(colors: [.clear, .zero.bgCanvasDefault], startPoint: .top, endPoint: .bottom)
             .mask {
                 LinearGradient(stops: [.init(color: .white, location: 0.75), .init(color: .clear, location: 1.0)],
                                startPoint: .leading,

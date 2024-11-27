@@ -26,7 +26,7 @@ struct UserDetailsEditScreen: View {
             
             nameSection
         }
-        .compoundList()
+        .zeroList()
         .scrollDismissesKeyboard(.immediately)
         .navigationTitle(L10n.screenEditProfileTitle)
         .navigationBarTitleDisplayMode(.inline)

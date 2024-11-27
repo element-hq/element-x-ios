@@ -29,7 +29,7 @@ struct ReadReceiptsSummaryView: View {
         }
         .padding(.top, 24)
         .presentationDetents([.medium, .large])
-        .presentationBackground(Color.compound.bgCanvasDefault)
+        .presentationBackground(Color.zero.bgCanvasDefault)
         .presentationDragIndicator(.visible)
     }
 }

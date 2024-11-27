@@ -15,7 +15,7 @@ struct AnalyticsSettingsScreen: View {
         Form {
             analyticsSection
         }
-        .compoundList()
+        .zeroList()
         .navigationTitle(L10n.commonAnalytics)
         .navigationBarTitleDisplayMode(.inline)
     }

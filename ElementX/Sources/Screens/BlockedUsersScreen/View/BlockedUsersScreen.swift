@@ -13,7 +13,7 @@ struct BlockedUsersScreen: View {
     
     var body: some View {
         content
-            .compoundList()
+            .zeroList()
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(L10n.commonBlockedUsers)
             .alert(item: $context.alertInfo)

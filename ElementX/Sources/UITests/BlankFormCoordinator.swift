@@ -20,7 +20,7 @@ private struct BlankForm: View {
         Form {
             Text("Nothing to see here.")
         }
-        .compoundList()
+        .zeroList()
     }
 }
 

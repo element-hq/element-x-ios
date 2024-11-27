@@ -18,7 +18,7 @@ struct IdentityConfirmedScreen: View {
             actionButtons
         }
         .background()
-        .backgroundStyle(.compound.bgCanvasDefault)
+        .backgroundStyle(.zero.bgCanvasDefault)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .interactiveDismissDisabled()

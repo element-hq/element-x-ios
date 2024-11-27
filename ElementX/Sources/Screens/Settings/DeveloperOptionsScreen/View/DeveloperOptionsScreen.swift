@@ -83,7 +83,7 @@ struct DeveloperOptionsScreen: View {
             }
         }
         .overlay(effectsView)
-        .compoundList()
+        .zeroList()
         // .navigationTitle(L10n.commonDeveloperOptions)
         .navigationTitle(L10n.commonAdvancedSettings)
         .navigationBarTitleDisplayMode(.inline)

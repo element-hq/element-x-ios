@@ -70,6 +70,6 @@ struct RoomChangeRolesScreenRow_Previews: PreviewProvider, TestablePreview {
                                      isSelected: false,
                                      action: action)
         }
-        .compoundList()
+        .zeroList()
     }
 }

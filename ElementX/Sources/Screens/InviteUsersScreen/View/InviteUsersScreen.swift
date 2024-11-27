@@ -17,7 +17,7 @@ struct InviteUsersScreen: View {
     
     var body: some View {
         mainContent
-            .compoundList()
+            .zeroList()
             .scrollDismissesKeyboard(.immediately)
             .navigationTitle("Select Members")
             .navigationBarTitleDisplayMode(.inline)

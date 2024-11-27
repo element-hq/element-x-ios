@@ -22,7 +22,7 @@ struct TemplateScreen: View {
                         kind: .button { context.send(viewAction: .done) })
             }
         }
-        .compoundList()
+        .zeroList()
         .navigationTitle(context.viewState.title)
         .onChange(of: context.composerText) {
             context.send(viewAction: .textChanged)

@@ -107,7 +107,7 @@ struct HomeScreenContent: View {
             .overlay {
                 if context.viewState.shouldShowEmptyFilterState {
                     RoomListFiltersEmptyStateView(state: context.filtersState)
-                        .background(.compound.bgCanvasDefault)
+                        .background(.zero.bgCanvasDefault)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
@@ -136,7 +136,7 @@ struct HomeScreenContent: View {
                     HomeScreenRecoveryKeyConfirmationBanner(state: state, context: context)
                 }
             }
-            .background(Color.compound.bgCanvasDefault)
+            .background(Color.zero.bgCanvasDefault)
         }
     }
     

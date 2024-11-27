@@ -104,7 +104,7 @@ struct TimelineReactionButtonLabel<Content: View>: View {
         content()
             .background(backgroundShape.inset(by: 1).fill(overlayBackgroundColor))
             .overlay(backgroundShape.inset(by: 2.0).strokeBorder(overlayBorderColor))
-            .overlay(backgroundShape.strokeBorder(Color.compound.bgCanvasDefault, lineWidth: 2))
+            .overlay(backgroundShape.strokeBorder(Color.zero.bgCanvasDefault, lineWidth: 2))
             .accessibilityElement(children: .combine)
     }
     

@@ -21,7 +21,7 @@ struct RoomMemberDetailsScreen: View {
 //                blockUserSection
 //            }
         }
-        .compoundList()
+        .zeroList()
         .navigationTitle(L10n.screenRoomMemberDetailsTitle)
         .alert(item: $context.ignoreUserAlert, actions: blockUserAlertActions, message: blockUserAlertMessage)
         .alert(item: $context.alertInfo)

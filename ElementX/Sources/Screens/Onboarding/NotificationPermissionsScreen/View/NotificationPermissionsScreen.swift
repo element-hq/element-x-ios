@@ -18,7 +18,7 @@ struct NotificationPermissionsScreen: View {
             buttons
         }
         .background()
-        .backgroundStyle(.compound.bgCanvasDefault)
+        .backgroundStyle(.zero.bgCanvasDefault)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .interactiveDismissDisabled()

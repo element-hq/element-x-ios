@@ -54,7 +54,7 @@ private extension FormatItem {
         case .reversed:
             return .zero._bgAccentSelected
         case .enabled, .disabled:
-            return .compound.bgCanvasDefault
+            return .zero.bgCanvasDefault
         }
     }
 }

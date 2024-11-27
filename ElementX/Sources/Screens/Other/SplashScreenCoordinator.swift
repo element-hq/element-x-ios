@@ -18,7 +18,7 @@ class SplashScreenCoordinator: CoordinatorProtocol {
 /// these 2 screens are matched.
 struct SplashScreen: View {
     var body: some View {
-        Color.compound.bgCanvasDefault.ignoresSafeArea()
+        Color.zero.bgCanvasDefault.ignoresSafeArea()
     }
 }
 

@@ -54,7 +54,7 @@ struct KnockRequestCell: View {
         }
         .padding(.top, 16)
         .padding(.leading, 16)
-        .background(.compound.bgCanvasDefault)
+        .background(.zero.bgCanvasDefault)
     }
     
     private var header: some View {

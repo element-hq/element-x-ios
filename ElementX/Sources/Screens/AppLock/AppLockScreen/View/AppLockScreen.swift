@@ -46,7 +46,7 @@ struct AppLockScreen: View {
             .font(.zero.bodyMDSemibold)
         }
         .background()
-        .backgroundStyle(.compound.bgCanvasDefault)
+        .backgroundStyle(.zero.bgCanvasDefault)
         .disabled(context.viewState.forcedLogoutIndicator != nil)
         .overlay {
             context.viewState.forcedLogoutIndicator.map(UserIndicatorModalView.init)

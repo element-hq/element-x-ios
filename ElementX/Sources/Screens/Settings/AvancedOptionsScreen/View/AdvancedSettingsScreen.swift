@@ -34,7 +34,7 @@ struct AdvancedSettingsScreen: View {
                     }
             }
         }
-        .compoundList()
+        .zeroList()
         .navigationTitle(L10n.commonAdvancedSettings)
         .navigationBarTitleDisplayMode(.inline)
     }

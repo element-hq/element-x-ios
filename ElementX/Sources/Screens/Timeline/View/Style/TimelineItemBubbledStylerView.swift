@@ -213,7 +213,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(4.0)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.compound.bgCanvasDefault)
+                        .background(Color.zero.bgCanvasDefault)
                         .cornerRadius(8)
                         .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
                         .onTapGesture {

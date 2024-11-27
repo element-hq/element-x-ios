@@ -27,7 +27,7 @@ struct RoomScreen: View {
 
     var body: some View {
         timeline
-//            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+            .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
 //            .overlay(alignment: .top) {
 //                pinnedItemsBanner
 //            }
@@ -52,7 +52,7 @@ struct RoomScreen: View {
                             }
                         }
                         .padding(.top, 8)
-//                        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+                        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
                         .environmentObject(timelineContext)
                         .environment(\.timelineContext, timelineContext)
                         // Make sure the reply header honours the hideTimelineMedia setting too.

@@ -46,7 +46,7 @@ struct AppLockSetupPINScreen: View {
             .padding(.top, UIConstants.iconTopPaddingToNavigationBar)
             .frame(maxWidth: .infinity)
         }
-        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .toolbar { toolbar }
         .toolbar(.visible, for: .navigationBar)
         .navigationBarBackButtonHidden()

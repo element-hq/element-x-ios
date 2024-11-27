@@ -54,13 +54,13 @@ struct RoomNotificationSettingsCustomSectionView_Previews: PreviewProvider, Test
         Form {
             RoomNotificationSettingsCustomSectionView(context: viewModel.context)
         }
-        .compoundList()
+        .zeroList()
         .previewDisplayName("Encrypted")
         
         Form {
             RoomNotificationSettingsCustomSectionView(context: viewModelUnencrypted.context)
         }
-        .compoundList()
+        .zeroList()
         .previewDisplayName("Unencrypted")
     }
 }

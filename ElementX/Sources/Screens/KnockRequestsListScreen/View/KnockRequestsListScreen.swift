@@ -15,7 +15,7 @@ struct KnockRequestsListScreen: View {
         mainContent
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(L10n.screenKnockRequestsListTitle)
-            .background(.compound.bgCanvasDefault)
+            .background(.zero.bgCanvasDefault)
             .overlay {
                 if !context.viewState.shouldDisplayRequests {
                     KnockRequestsListEmptyStateView()
@@ -57,7 +57,7 @@ struct KnockRequestsListScreen: View {
         .padding(.horizontal, 16)
         .padding(.top, 16)
         .padding(.bottom, 4)
-        .background(.compound.bgCanvasDefault)
+        .background(.zero.bgCanvasDefault)
     }
     
     private func onAccept(userID: String) {

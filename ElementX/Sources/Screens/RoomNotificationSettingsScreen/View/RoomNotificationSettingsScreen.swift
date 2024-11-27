@@ -21,7 +21,7 @@ struct RoomNotificationSettingsScreen: View {
                 customSettingsSection
             }
         }
-        .compoundList()
+        .zeroList()
         .navigationTitle(context.viewState.navigationTitle)
         .alert(item: $context.alertInfo)
         .track(screen: .RoomNotifications)
