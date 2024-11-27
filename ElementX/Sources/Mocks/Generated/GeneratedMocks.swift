@@ -2346,6 +2346,41 @@ class ClientProxyMock: ClientProxyProtocol {
         stopSyncCallsCount += 1
         stopSyncClosure?()
     }
+    //MARK: - stopSync
+
+    var stopSyncCompletionUnderlyingCallsCount = 0
+    var stopSyncCompletionCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return stopSyncCompletionUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = stopSyncCompletionUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                stopSyncCompletionUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    stopSyncCompletionUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var stopSyncCompletionCalled: Bool {
+        return stopSyncCompletionCallsCount > 0
+    }
+    var stopSyncCompletionClosure: (((() -> Void)?) -> Void)?
+
+    func stopSync(completion: (() -> Void)?) {
+        stopSyncCompletionCallsCount += 1
+        stopSyncCompletionClosure?(completion)
+    }
     //MARK: - accountURL
 
     var accountURLActionUnderlyingCallsCount = 0
