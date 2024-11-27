@@ -38,7 +38,7 @@ struct SoftLogoutScreen: View {
             .padding(.horizontal, 16)
             .padding(.bottom, 16)
         }
-        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .alert(item: $context.alertInfo)
         .introspect(.window, on: .supportedVersions) { window in
             context.send(viewAction: .updateWindow(window))

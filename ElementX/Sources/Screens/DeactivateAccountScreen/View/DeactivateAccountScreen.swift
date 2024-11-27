@@ -17,7 +17,7 @@ struct DeactivateAccountScreen: View {
             eraseDataSection
             passwordSection
         }
-        .compoundList()
+        .zeroList()
         .safeAreaInset(edge: .bottom) {
             Button(L10n.actionDeactivateAccount, role: .destructive) {
                 context.send(viewAction: .deactivate)

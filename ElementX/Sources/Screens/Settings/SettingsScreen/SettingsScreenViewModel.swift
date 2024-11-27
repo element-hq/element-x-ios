@@ -128,6 +128,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.deactivateAccount)
         case .rewards:
             actionsSubject.send(.rewards)
+        case .inviteFriend:
+            actionsSubject.send(.inviteFriend)
         }
     }
     

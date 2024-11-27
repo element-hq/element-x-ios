@@ -57,7 +57,7 @@ struct TimelineItemMenu: View {
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.timelineItemActionMenu)
         .presentationPage()
         .presentationDetents([.medium, .large])
-        .presentationBackground(Color.compound.bgCanvasDefault)
+        .presentationBackground(Color.zero.bgCanvasDefault)
         .presentationDragIndicator(.visible)
     }
     
@@ -130,7 +130,7 @@ struct TimelineItemMenu: View {
                 if horizontalSizeClass == .compact {
                     LinearGradient(stops: [.init(color: .clear, location: 0.0),
                                            .init(color: .clear, location: 0.9),
-                                           .init(color: .compound.bgCanvasDefault, location: 1.0)],
+                                           .init(color: .zero.bgCanvasDefault, location: 1.0)],
                                    startPoint: .leading,
                                    endPoint: .trailing)
                         .allowsHitTesting(false)

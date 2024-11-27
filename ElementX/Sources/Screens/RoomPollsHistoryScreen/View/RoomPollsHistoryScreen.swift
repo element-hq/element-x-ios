@@ -74,7 +74,7 @@ struct RoomPollsHistoryScreen: View {
                 }
             }
             .padding(.init(top: 12, leading: 12, bottom: 12, trailing: 12))
-            .background(.compound.bgCanvasDefaultLevel1)
+            .background(.zero.bgCanvasDefault)
             .cornerRadius(12, corners: .allCorners)
         }
     }

@@ -32,7 +32,7 @@ private struct FilterToggleStyle: ToggleStyle {
     }
     
     private func backgroundColor(isOn: Bool) -> Color {
-        isOn ? .compound.bgActionPrimaryRest : .compound.bgCanvasDefault
+        isOn ? .compound.bgActionPrimaryRest : .zero.bgCanvasDefault
     }
     
     private func foregroundColor(isOn: Bool) -> Color {

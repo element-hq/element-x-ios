@@ -27,7 +27,7 @@ struct SecureBackupScreen: View {
                 }
             }
         }
-        .compoundList()
+        .zeroList()
         .navigationTitle(L10n.commonEncryption)
         .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)

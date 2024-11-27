@@ -83,6 +83,6 @@ struct UserProfileCell_Previews: PreviewProvider, TestablePreview {
             UserProfileListRow(user: .init(userID: "@someone:matrix.org"), membership: nil, mediaProvider: MediaProviderMock(configuration: .init()),
                                kind: .multiSelection(isSelected: false, action: action))
         }
-        .compoundList()
+        .zeroList()
     }
 }

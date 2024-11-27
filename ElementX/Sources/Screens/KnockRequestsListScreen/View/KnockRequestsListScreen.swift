@@ -15,7 +15,7 @@ struct KnockRequestsListScreen: View {
         mainContent
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(L10n.screenKnockRequestsListTitle)
-            .background(.compound.bgCanvasDefault)
+            .background(.zero.bgCanvasDefault)
             .overlay {
                 if !context.viewState.shouldDisplayRequests {
                     KnockRequestsListEmptyStateView()
@@ -26,6 +26,7 @@ struct KnockRequestsListScreen: View {
                     acceptAllButton
                 }
             }
+            .alert(item: $context.alertInfo)
     }
     
     @ViewBuilder
@@ -56,7 +57,7 @@ struct KnockRequestsListScreen: View {
         .padding(.horizontal, 16)
         .padding(.top, 16)
         .padding(.bottom, 4)
-        .background(.compound.bgCanvasDefault)
+        .background(.zero.bgCanvasDefault)
     }
     
     private func onAccept(userID: String) {
@@ -75,13 +76,13 @@ struct KnockRequestsListScreen: View {
 // MARK: - Previews
 
 struct KnockRequestsListScreen_Previews: PreviewProvider, TestablePreview {
-    static let emptyViewModel = KnockRequestsListScreenViewModel.mockWithInitialState(.init())
+    static let emptyViewModel = KnockRequestsListScreenViewModel.mockWithInitialState(.init(requests: []))
     
-    static let viewModel = KnockRequestsListScreenViewModel.mockWithInitialState(.init(requests: [.init(id: "@alice:matrix.org", displayName: "Alice", avatarUrl: nil, timestamp: "Now", reason: "Hello"),
+    static let viewModel = KnockRequestsListScreenViewModel.mockWithInitialState(.init(requests: [.init(id: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "Now", reason: "Hello"),
                                                                                                   // swiftlint:disable:next line_length
-                                                                                                  .init(id: "@bob:matrix.org", displayName: "Bob", avatarUrl: nil, timestamp: "Now", reason: "Hello this one is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long reason"),
-                                                                                                  .init(id: "@charlie:matrix.org", displayName: "Charlie", avatarUrl: nil, timestamp: "Now", reason: nil),
-                                                                                                  .init(id: "@dan:matrix.org", displayName: "Dan", avatarUrl: nil, timestamp: "Now", reason: "Hello! It's a me! Dan!")]))
+                                                                                                  .init(id: "@bob:matrix.org", displayName: "Bob", avatarURL: nil, timestamp: "Now", reason: "Hello this one is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long reason"),
+                                                                                                  .init(id: "@charlie:matrix.org", displayName: "Charlie", avatarURL: nil, timestamp: "Now", reason: nil),
+                                                                                                  .init(id: "@dan:matrix.org", displayName: "Dan", avatarURL: nil, timestamp: "Now", reason: "Hello! It's a me! Dan!")]))
                                                                                       
     static var previews: some View {
         NavigationStack {

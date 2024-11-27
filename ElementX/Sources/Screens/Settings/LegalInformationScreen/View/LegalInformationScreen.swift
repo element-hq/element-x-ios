@@ -23,7 +23,7 @@ struct LegalInformationScreen: View {
                         kind: .button { openURL(context.viewState.privacyURL) })
             }
         }
-        .compoundList()
+        .zeroList()
         .navigationTitle(L10n.commonAbout)
         .navigationBarTitleDisplayMode(.inline)
     }

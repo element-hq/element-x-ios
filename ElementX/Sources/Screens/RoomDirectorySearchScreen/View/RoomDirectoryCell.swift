@@ -126,6 +126,6 @@ struct RoomDirectorySearchCell_Previews: PreviewProvider, TestablePreview {
                                                   canBeJoined: false),
                                     mediaProvider: MediaProviderMock(configuration: .init())) { }
         }
-        .compoundList()
+        .zeroList()
     }
 }

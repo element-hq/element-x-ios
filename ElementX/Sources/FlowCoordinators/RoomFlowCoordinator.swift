@@ -319,10 +319,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomMembersList, .dismissRoomMembersList):
                 return .roomDetails(isRoot: false)
 
-            case (.room, .presentRoomMemberDetails(userID: let userID)):
-                return .roomMemberDetails(userID: userID, previousState: .room)
-            case (.roomMembersList, .presentRoomMemberDetails(userID: let userID)):
-                return .roomMemberDetails(userID: userID, previousState: .roomMembersList)
+            case (_, .presentRoomMemberDetails(userID: let userID)):
+                return .roomMemberDetails(userID: userID, previousState: fromState)
             case (.roomMemberDetails(_, let previousState), .dismissRoomMemberDetails):
                 return previousState
             
@@ -331,12 +329,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.userProfile(_, let previousState), .dismissUserProfile):
                 return previousState
                 
-            case (.roomDetails, .presentInviteUsersScreen):
-                return .inviteUsersScreen(fromRoomMembersList: false)
-            case (.roomMembersList, .presentInviteUsersScreen):
-                return .inviteUsersScreen(fromRoomMembersList: true)
-            case (.inviteUsersScreen(let fromRoomMembersList), .dismissInviteUsersScreen):
-                return fromRoomMembersList ? .roomMembersList : .roomDetails(isRoot: false)
+            case (_, .presentInviteUsersScreen):
+                return .inviteUsersScreen(previousState: fromState)
+            case (.inviteUsersScreen(let previousState), .dismissInviteUsersScreen):
+                return previousState
                 
             case (.room, .presentReportContent(let itemID, let senderID)):
                 return .reportContent(itemID: itemID, senderID: senderID)
@@ -401,9 +397,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .rolesAndPermissions
             case (.rolesAndPermissions, .dismissRolesAndPermissionsScreen):
                 return .roomDetails(isRoot: false)
-                
-            case (.roomDetails, .presentRoomMemberDetails(let userID)):
-                return .roomMemberDetails(userID: userID, previousState: fromState)
             
             case (.room, .presentResolveSendFailure):
                 return .resolveSendFailure
@@ -417,10 +410,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.presentingChild(_, let previousState), .dismissChildFlow):
                 return previousState
                 
-            case (.roomDetails, .presentKnockRequestsListScreen):
-                return .knockRequestsList
-            case (.knockRequestsList, .dismissKnockRequestsListScreen):
-                return .roomDetails(isRoot: false)
+            case (_, .presentKnockRequestsListScreen):
+                return .knockRequestsList(previousState: fromState)
+            case (.knockRequestsList(let previousState), .dismissKnockRequestsListScreen):
+                return previousState
             
             default:
                 return nil
@@ -577,6 +570,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomDetails, .presentKnockRequestsListScreen, .knockRequestsList):
                 presentKnockRequestsList()
             case (.knockRequestsList, .dismissKnockRequestsListScreen, .roomDetails):
+                break
+            case (.room, .presentKnockRequestsListScreen, .knockRequestsList):
+                presentKnockRequestsList()
+            case (.knockRequestsList, .dismissKnockRequestsListScreen, .room):
                 break
             
             // Child flow
@@ -740,6 +737,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentPinnedEventsTimeline)
                 case .presentResolveSendFailure(failure: let failure, sendHandle: let sendHandle):
                     stateMachine.tryEvent(.presentResolveSendFailure(failure: failure, sendHandle: sendHandle))
+                case .presentKnockRequestsList:
+                    stateMachine.tryEvent(.presentKnockRequestsListScreen)
                 }
             }
             .store(in: &cancellables)
@@ -903,11 +902,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentKnockRequestsList() {
         let parameters = KnockRequestsListScreenCoordinatorParameters(roomProxy: roomProxy, mediaProvider: userSession.mediaProvider)
         let coordinator = KnockRequestsListScreenCoordinator(parameters: parameters)
-        
-        coordinator.actionsPublisher
-            .sink { [weak self] _ in
-            }
-            .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissKnockRequestsListScreen)
@@ -1580,7 +1574,7 @@ private extension RoomFlowCoordinator {
         case roomMembersList
         case roomMemberDetails(userID: String, previousState: State)
         case userProfile(userID: String, previousState: State)
-        case inviteUsersScreen(fromRoomMembersList: Bool)
+        case inviteUsersScreen(previousState: State)
         case mediaUploadPicker(source: MediaPickerScreenSource)
         case mediaUploadPreview(fileURL: URL)
         case emojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
@@ -1593,7 +1587,7 @@ private extension RoomFlowCoordinator {
         case rolesAndPermissions
         case pinnedEventsTimeline(previousState: PinnedEventsTimelineSource)
         case resolveSendFailure
-        case knockRequestsList
+        case knockRequestsList(previousState: State)
         
         /// A child flow is in progress.
         case presentingChild(childRoomID: String, previousState: State)

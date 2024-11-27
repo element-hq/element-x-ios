@@ -23,7 +23,7 @@ struct ReactionsSummaryView: View {
             sendersList
         }
         .presentationDetents([.medium])
-        .presentationBackground(Color.compound.bgCanvasDefault)
+        .presentationBackground(Color.zero.bgCanvasDefault)
         .presentationDragIndicator(.visible)
     }
     

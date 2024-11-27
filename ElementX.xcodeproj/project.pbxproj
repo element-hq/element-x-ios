@@ -168,6 +168,26 @@
 		184EC99A2CA5AF3F000F405E /* AuthenticationClientBuilderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4760CE2128FBC217304272AB /* AuthenticationClientBuilderMock.swift */; };
 		184EC99B2CA5AFC6000F405E /* (null) in Sources */ = {isa = PBXBuildFile; };
 		184EC99C2CA5AFCC000F405E /* ClientSDKMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAF4A49F3ACD8BB8B0D2371 /* ClientSDKMock.swift */; };
+		18525CF52CF5E7B20055C5E8 /* InviteFriendSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525CF42CF5E7A60055C5E8 /* InviteFriendSettingsScreen.swift */; };
+		18525CF62CF5E7B20055C5E8 /* InviteFriendSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525CF42CF5E7A60055C5E8 /* InviteFriendSettingsScreen.swift */; };
+		18525CF82CF5E7D50055C5E8 /* InviteFriendSettingsScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525CF72CF5E7B90055C5E8 /* InviteFriendSettingsScreenViewModelProtocol.swift */; };
+		18525CF92CF5E7D50055C5E8 /* InviteFriendSettingsScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525CF72CF5E7B90055C5E8 /* InviteFriendSettingsScreenViewModelProtocol.swift */; };
+		18525CFB2CF5E7E20055C5E8 /* InviteFriendSettingsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525CFA2CF5E7DB0055C5E8 /* InviteFriendSettingsScreenViewModel.swift */; };
+		18525CFC2CF5E7E20055C5E8 /* InviteFriendSettingsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525CFA2CF5E7DB0055C5E8 /* InviteFriendSettingsScreenViewModel.swift */; };
+		18525CFE2CF5E7F20055C5E8 /* InviteFriendSettingsScreenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525CFD2CF5E7E90055C5E8 /* InviteFriendSettingsScreenModel.swift */; };
+		18525CFF2CF5E7F20055C5E8 /* InviteFriendSettingsScreenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525CFD2CF5E7E90055C5E8 /* InviteFriendSettingsScreenModel.swift */; };
+		18525D012CF5E7FF0055C5E8 /* InviteFriendSettingsScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525D002CF5E7F60055C5E8 /* InviteFriendSettingsScreenCoordinator.swift */; };
+		18525D022CF5E7FF0055C5E8 /* InviteFriendSettingsScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525D002CF5E7F60055C5E8 /* InviteFriendSettingsScreenCoordinator.swift */; };
+		18525D042CF5EDED0055C5E8 /* ZMessengerInvite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525D032CF5EDE60055C5E8 /* ZMessengerInvite.swift */; };
+		18525D052CF5EDED0055C5E8 /* ZMessengerInvite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525D032CF5EDE60055C5E8 /* ZMessengerInvite.swift */; };
+		18525D072CF5EE240055C5E8 /* ZeroMessengerInvite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525D062CF5EE1F0055C5E8 /* ZeroMessengerInvite.swift */; };
+		18525D082CF5EE240055C5E8 /* ZeroMessengerInvite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525D062CF5EE1F0055C5E8 /* ZeroMessengerInvite.swift */; };
+		18525D092CF5EE240055C5E8 /* ZeroMessengerInvite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525D062CF5EE1F0055C5E8 /* ZeroMessengerInvite.swift */; };
+		18525D0A2CF5EE240055C5E8 /* ZeroMessengerInvite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525D062CF5EE1F0055C5E8 /* ZeroMessengerInvite.swift */; };
+		18525D0B2CF5EEDF0055C5E8 /* ZMessengerInvite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525D032CF5EDE60055C5E8 /* ZMessengerInvite.swift */; };
+		18525D0C2CF5EFC20055C5E8 /* ZMessengerInvite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525D032CF5EDE60055C5E8 /* ZMessengerInvite.swift */; };
+		18525D0E2CF5F1040055C5E8 /* ZeroMessengerInviteApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525D0D2CF5F0FC0055C5E8 /* ZeroMessengerInviteApi.swift */; };
+		18525D0F2CF5F1040055C5E8 /* ZeroMessengerInviteApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525D0D2CF5F0FC0055C5E8 /* ZeroMessengerInviteApi.swift */; };
 		1868A88F2CA2181200DC382D /* ZeroFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A88E2CA2181200DC382D /* ZeroFonts.swift */; };
 		1868A8902CA2181200DC382D /* ZeroFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A88E2CA2181200DC382D /* ZeroFonts.swift */; };
 		1868A8952CA2198200DC382D /* Font+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8942CA2198200DC382D /* Font+Extensions.swift */; };
@@ -198,6 +218,8 @@
 		1868A8C32CA338DF00DC382D /* Encodable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8C12CA338DF00DC382D /* Encodable+Extensions.swift */; };
 		1868A8C52CA33BBE00DC382D /* EmptyResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */; };
 		1868A8C62CA33BBE00DC382D /* EmptyResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */; };
+		187112532CF75350001E8964 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187112522CF75344001E8964 /* View+Extensions.swift */; };
+		187112542CF75350001E8964 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187112522CF75344001E8964 /* View+Extensions.swift */; };
 		18793DE82CF5052F00F1C85D /* KnockRequestsBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F441A78A5CAA9E2937E463 /* KnockRequestsBannerView.swift */; };
 		188207EB2CEF3FAF00856A39 /* TimelineProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A8AA0DFA06012A9DAB951E /* TimelineProxyMock.swift */; };
 		1882EB792C8F84BD001DA2A9 /* ZeroUsersApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB782C8F84BD001DA2A9 /* ZeroUsersApi.swift */; };
@@ -2467,6 +2489,14 @@
 		184D6FD12C7D8C8D006266D8 /* ZMatrixSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixSession.swift; sourceTree = "<group>"; };
 		184D6FD32C7D8F45006266D8 /* ZSessionDataResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZSessionDataResponse.swift; sourceTree = "<group>"; };
 		184D6FD52C7D9261006266D8 /* ZSSOToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZSSOToken.swift; sourceTree = "<group>"; };
+		18525CF42CF5E7A60055C5E8 /* InviteFriendSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteFriendSettingsScreen.swift; sourceTree = "<group>"; };
+		18525CF72CF5E7B90055C5E8 /* InviteFriendSettingsScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteFriendSettingsScreenViewModelProtocol.swift; sourceTree = "<group>"; };
+		18525CFA2CF5E7DB0055C5E8 /* InviteFriendSettingsScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteFriendSettingsScreenViewModel.swift; sourceTree = "<group>"; };
+		18525CFD2CF5E7E90055C5E8 /* InviteFriendSettingsScreenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteFriendSettingsScreenModel.swift; sourceTree = "<group>"; };
+		18525D002CF5E7F60055C5E8 /* InviteFriendSettingsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteFriendSettingsScreenCoordinator.swift; sourceTree = "<group>"; };
+		18525D032CF5EDE60055C5E8 /* ZMessengerInvite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMessengerInvite.swift; sourceTree = "<group>"; };
+		18525D062CF5EE1F0055C5E8 /* ZeroMessengerInvite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMessengerInvite.swift; sourceTree = "<group>"; };
+		18525D0D2CF5F0FC0055C5E8 /* ZeroMessengerInviteApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMessengerInviteApi.swift; sourceTree = "<group>"; };
 		1868A88E2CA2181200DC382D /* ZeroFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroFonts.swift; sourceTree = "<group>"; };
 		1868A8942CA2198200DC382D /* Font+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Extensions.swift"; sourceTree = "<group>"; };
 		1868A8972CA21A1F00DC382D /* RobotoMono.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = RobotoMono.ttf; sourceTree = "<group>"; };
@@ -2482,6 +2512,7 @@
 		1868A8BE2CA2D91000DC382D /* ZSentMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZSentMessage.swift; path = Zero/Sources/Network/Models/Response/ZSentMessage.swift; sourceTree = SOURCE_ROOT; };
 		1868A8C12CA338DF00DC382D /* Encodable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Extensions.swift"; sourceTree = "<group>"; };
 		1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyResponse.swift; sourceTree = "<group>"; };
+		187112522CF75344001E8964 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		1882EB782C8F84BD001DA2A9 /* ZeroUsersApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroUsersApi.swift; sourceTree = "<group>"; };
 		1882EB7A2C8F8542001DA2A9 /* ZMatrixUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixUser.swift; sourceTree = "<group>"; };
 		1882EB832C8F85F5001DA2A9 /* ZMatrixUserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixUserProfile.swift; sourceTree = "<group>"; };
@@ -4023,6 +4054,7 @@
 		184D6FCB2C7D8A97006266D8 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				18525D0D2CF5F0FC0055C5E8 /* ZeroMessengerInviteApi.swift */,
 				18D5D9A62CEB576B00107940 /* ZeroRewardsApi.swift */,
 				184D6FCC2C7D8AC2006266D8 /* ZeroAuthApi.swift */,
 				1882EB782C8F84BD001DA2A9 /* ZeroUsersApi.swift */,
@@ -4052,6 +4084,7 @@
 		184D6FD02C7D8B91006266D8 /* Response */ = {
 			isa = PBXGroup;
 			children = (
+				18525D032CF5EDE60055C5E8 /* ZMessengerInvite.swift */,
 				18D5D9A32CEB56F500107940 /* ZRewards.swift */,
 				180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */,
 				184D6FD12C7D8C8D006266D8 /* ZMatrixSession.swift */,
@@ -4063,6 +4096,26 @@
 				1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */,
 			);
 			path = Response;
+			sourceTree = "<group>";
+		};
+		18525CF12CF5E7470055C5E8 /* InviteFriend */ = {
+			isa = PBXGroup;
+			children = (
+				18525D002CF5E7F60055C5E8 /* InviteFriendSettingsScreenCoordinator.swift */,
+				18525CFD2CF5E7E90055C5E8 /* InviteFriendSettingsScreenModel.swift */,
+				18525CFA2CF5E7DB0055C5E8 /* InviteFriendSettingsScreenViewModel.swift */,
+				18525CF72CF5E7B90055C5E8 /* InviteFriendSettingsScreenViewModelProtocol.swift */,
+				18525CF32CF5E7A00055C5E8 /* View */,
+			);
+			path = InviteFriend;
+			sourceTree = "<group>";
+		};
+		18525CF32CF5E7A00055C5E8 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				18525CF42CF5E7A60055C5E8 /* InviteFriendSettingsScreen.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		1868A86B2CA2175A00DC382D /* Resources */ = {
@@ -4101,6 +4154,7 @@
 		1882EB8A2C90C8DC001DA2A9 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				187112522CF75344001E8964 /* View+Extensions.swift */,
 				1882EB8B2C90C8EC001DA2A9 /* Sequence+Extensions.swift */,
 				1882EB8D2C90E9E7001DA2A9 /* RoomInfo+Extensions.swift */,
 				1882EB922C90FE9C001DA2A9 /* String+Extensions.swift */,
@@ -4201,6 +4255,7 @@
 		18E99FEE2C9447620082DDA4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				18525D062CF5EE1F0055C5E8 /* ZeroMessengerInvite.swift */,
 				18D5D9A92CEB5A9000107940 /* ZeroRewards.swift */,
 				18E99FEF2C9447740082DDA4 /* MessageContent.swift */,
 			);
@@ -5336,6 +5391,7 @@
 		70B74A432C241E56A7ACE610 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				18525CF12CF5E7470055C5E8 /* InviteFriend */,
 				18D5D9AF2CEB72A900107940 /* UserRewards */,
 				EB5B1119B5AD79297F1D49EB /* AccountSettings */,
 				09C599CB430ABF160C1EE55C /* AnalyticsSettingsScreen */,
@@ -8021,6 +8077,7 @@
 				1882EB852C8F8A38001DA2A9 /* ZMatrixUser.swift in Sources */,
 				E0FB26262689F04D66A949D7 /* TestablePreview.swift in Sources */,
 				24DF253C18D3E2C56DD0E597 /* TracingConfiguration.swift in Sources */,
+				18525D072CF5EE240055C5E8 /* ZeroMessengerInvite.swift in Sources */,
 				DDB47D29C6865669288BF87C /* UIFont+AttributedStringBuilder.m in Sources */,
 				45D6DC594816288983627484 /* UITestsScreenIdentifier.swift in Sources */,
 				18D5D9AD2CEB6E4000107940 /* ZRewards.swift in Sources */,
@@ -8029,6 +8086,7 @@
 				06B55882911B4BF5B14E9851 /* URL.swift in Sources */,
 				18D5D9AC2CEB6E0D00107940 /* ZeroRewards.swift in Sources */,
 				D98B5EE8C4F5A2CE84687AE8 /* UTType.swift in Sources */,
+				18525D0C2CF5EFC20055C5E8 /* ZMessengerInvite.swift in Sources */,
 				34357B287357BC0B9715DD51 /* UserAgentBuilder.swift in Sources */,
 				3B28408450BCAED911283AA2 /* UserPreference.swift in Sources */,
 				1882EB862C8F8A3B001DA2A9 /* ZMatrixUserProfile.swift in Sources */,
@@ -8169,6 +8227,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18525D0F2CF5F1040055C5E8 /* ZeroMessengerInviteApi.swift in Sources */,
 				18E9A41D2C9829970082DDA4 /* APNSPayload.swift in Sources */,
 				18E9A41E2C9829970082DDA4 /* AVMetadataMachineReadableCodeObject.swift in Sources */,
 				18E9A41F2C9829970082DDA4 /* AccessibilityIdentifiers.swift in Sources */,
@@ -8198,6 +8257,7 @@
 				18E9A4342C9829970082DDA4 /* AnalyticsSettingsScreenCoordinator.swift in Sources */,
 				18E9A4352C9829970082DDA4 /* AnalyticsSettingsScreenModels.swift in Sources */,
 				18E9A4362C9829970082DDA4 /* AnalyticsSettingsScreenViewModel.swift in Sources */,
+				18525D042CF5EDED0055C5E8 /* ZMessengerInvite.swift in Sources */,
 				18E9A4372C9829970082DDA4 /* AnalyticsSettingsScreenViewModelProtocol.swift in Sources */,
 				18E9A4382C9829970082DDA4 /* AppActivityView.swift in Sources */,
 				18E9A4392C9829970082DDA4 /* AppAppearance.swift in Sources */,
@@ -8555,6 +8615,7 @@
 				18E9A57A2C9829970082DDA4 /* MediaFileHandleProxy.swift in Sources */,
 				18E9A57B2C9829970082DDA4 /* MediaLoader.swift in Sources */,
 				18E9A57C2C9829970082DDA4 /* MediaLoaderProtocol.swift in Sources */,
+				18525D022CF5E7FF0055C5E8 /* InviteFriendSettingsScreenCoordinator.swift in Sources */,
 				18E9A57D2C9829970082DDA4 /* MediaPickerScreenCoordinator.swift in Sources */,
 				18E9A57E2C9829970082DDA4 /* MediaPlayerProtocol.swift in Sources */,
 				18E9A57F2C9829970082DDA4 /* MediaPlayerProvider.swift in Sources */,
@@ -8569,6 +8630,7 @@
 				18E9A5882C9829970082DDA4 /* MediaUploadPreviewScreenModels.swift in Sources */,
 				18E9A5892C9829970082DDA4 /* MediaUploadPreviewScreenViewModel.swift in Sources */,
 				18E9A58A2C9829970082DDA4 /* MediaUploadPreviewScreenViewModelProtocol.swift in Sources */,
+				18525D092CF5EE240055C5E8 /* ZeroMessengerInvite.swift in Sources */,
 				18E9A58B2C9829970082DDA4 /* MediaUploadingPreprocessor.swift in Sources */,
 				18E9A58C2C9829970082DDA4 /* MentionBuilder.swift in Sources */,
 				18E9A58D2C9829970082DDA4 /* MentionSuggestionItemView.swift in Sources */,
@@ -8763,6 +8825,7 @@
 				18E9A6402C9829970082DDA4 /* RoomListFiltersView.swift in Sources */,
 				18E9A6412C9829970082DDA4 /* RoomMemberDetails.swift in Sources */,
 				18E9A6422C9829970082DDA4 /* RoomMemberDetailsScreen.swift in Sources */,
+				18525CF52CF5E7B20055C5E8 /* InviteFriendSettingsScreen.swift in Sources */,
 				18E9A6432C9829970082DDA4 /* RoomMemberDetailsScreenCoordinator.swift in Sources */,
 				18E9A6442C9829970082DDA4 /* RoomMemberDetailsScreenModels.swift in Sources */,
 				18E9A6452C9829970082DDA4 /* RoomMemberDetailsScreenViewModel.swift in Sources */,
@@ -8841,10 +8904,12 @@
 				18D5D9A72CEB577300107940 /* ZeroRewardsApi.swift in Sources */,
 				18E9A6862C9829970082DDA4 /* (null) in Sources */,
 				18E9A6872C9829970082DDA4 /* RustTracing.swift in Sources */,
+				18525CF82CF5E7D50055C5E8 /* InviteFriendSettingsScreenViewModelProtocol.swift in Sources */,
 				18E9A6882C9829970082DDA4 /* SDKGeneratedMocks.swift in Sources */,
 				18E9A6892C9829970082DDA4 /* SFNumberedListView.swift in Sources */,
 				18E9A68A2C9829970082DDA4 /* (null) in Sources */,
 				18E9A68B2C9829970082DDA4 /* (null) in Sources */,
+				187112542CF75350001E8964 /* View+Extensions.swift in Sources */,
 				18E9A68C2C9829970082DDA4 /* (null) in Sources */,
 				18E9A68D2C9829970082DDA4 /* SceneDelegate.swift in Sources */,
 				18E9A68E2C9829970082DDA4 /* ScreenTrackerViewModifier.swift in Sources */,
@@ -8861,6 +8926,7 @@
 				18E9A6962C9829970082DDA4 /* SecureBackupKeyBackupScreenModels.swift in Sources */,
 				18E9A6972C9829970082DDA4 /* SecureBackupKeyBackupScreenViewModel.swift in Sources */,
 				18E9A6982C9829970082DDA4 /* SecureBackupKeyBackupScreenViewModelProtocol.swift in Sources */,
+				18525CFB2CF5E7E20055C5E8 /* InviteFriendSettingsScreenViewModel.swift in Sources */,
 				18E9A6992C9829970082DDA4 /* SecureBackupLogoutConfirmationScreen.swift in Sources */,
 				18E9A69A2C9829970082DDA4 /* SecureBackupLogoutConfirmationScreenCoordinator.swift in Sources */,
 				18E9A69B2C9829970082DDA4 /* SecureBackupLogoutConfirmationScreenModels.swift in Sources */,
@@ -8923,6 +8989,7 @@
 				18E9A6CD2C9829970082DDA4 /* SoftLogoutScreenViewModelProtocol.swift in Sources */,
 				18E9A6CE2C9829970082DDA4 /* SplashScreenCoordinator.swift in Sources */,
 				18E9A6CF2C9829970082DDA4 /* StartChatScreen.swift in Sources */,
+				18525CFE2CF5E7F20055C5E8 /* InviteFriendSettingsScreenModel.swift in Sources */,
 				18E9A6D02C9829970082DDA4 /* StartChatScreenCoordinator.swift in Sources */,
 				18E9A6D12C9829970082DDA4 /* StartChatScreenModels.swift in Sources */,
 				18E9A6D22C9829970082DDA4 /* StartChatScreenViewModel.swift in Sources */,
@@ -9094,6 +9161,7 @@
 			files = (
 				B8EC8A544162B0A41B9AB339 /* AppSettings.swift in Sources */,
 				2F2906AE9BC3D0E79A6F98F8 /* Bundle.swift in Sources */,
+				18525D082CF5EE240055C5E8 /* ZeroMessengerInvite.swift in Sources */,
 				F38D32C1B0232AAFE6A0822C /* ExtensionLogger.swift in Sources */,
 				C022284E2774A5E1EF683B4D /* FileManager.swift in Sources */,
 				18FFCECA2CEC86F9002F2647 /* ZMatrixUser.swift in Sources */,
@@ -9102,6 +9170,7 @@
 				1A3783005E6945F8583AF997 /* NSItemProvider.swift in Sources */,
 				BE8E5985771DF9137C6CE89A /* ProcessInfo.swift in Sources */,
 				7AED78DC086695E93F0647D2 /* RustTracing.swift in Sources */,
+				18525D0B2CF5EEDF0055C5E8 /* ZMessengerInvite.swift in Sources */,
 				18FFCECC2CEC8748002F2647 /* ZMatrixUserProfile.swift in Sources */,
 				DAF63A9CF9932CA8F6830F11 /* ShareExtensionModels.swift in Sources */,
 				18FFCECE2CEC87DF002F2647 /* String+Extensions.swift in Sources */,
@@ -9221,6 +9290,7 @@
 				184D6FD22C7D8C8D006266D8 /* ZMatrixSession.swift in Sources */,
 				A4AF12D9D8BA34B3B7B55B08 /* AuthenticationStartScreenCoordinator.swift in Sources */,
 				0E3A2787C6AEC761A81A938A /* AuthenticationStartScreenModels.swift in Sources */,
+				187112532CF75350001E8964 /* View+Extensions.swift in Sources */,
 				E79B247A6DD28759636317EA /* AuthenticationStartScreenViewModel.swift in Sources */,
 				874FEFB9D4A4AF447E0E086E /* AuthenticationStartScreenViewModelProtocol.swift in Sources */,
 				6146996D5C4DDD5DA816FC87 /* AuthenticationTextFieldStyle.swift in Sources */,
@@ -9357,6 +9427,7 @@
 				36926D795D6D19177C7812F8 /* EncryptionResetPasswordScreenCoordinator.swift in Sources */,
 				B1B255CE0E4306DD6E09D936 /* EncryptionResetPasswordScreenModels.swift in Sources */,
 				D6152E21036B88C44ECB22E7 /* EncryptionResetPasswordScreenViewModel.swift in Sources */,
+				18525CF92CF5E7D50055C5E8 /* InviteFriendSettingsScreenViewModelProtocol.swift in Sources */,
 				A0601810597769B81C2358AF /* EncryptionResetPasswordScreenViewModelProtocol.swift in Sources */,
 				F3F9D61C53C348043D3D6F51 /* EncryptionResetScreen.swift in Sources */,
 				3041EBA2660F28FFB7BDA339 /* EncryptionResetScreenCoordinator.swift in Sources */,
@@ -9468,6 +9539,7 @@
 				A9D349478F7D4A2B1E40CEF9 /* LegalInformationScreenViewModelProtocol.swift in Sources */,
 				6E47D126DD7585E8F8237CE7 /* LoadableAvatarImage.swift in Sources */,
 				D9F80CE61BF8FF627FDB0543 /* LoadableImage.swift in Sources */,
+				18525D012CF5E7FF0055C5E8 /* InviteFriendSettingsScreenCoordinator.swift in Sources */,
 				256D76972BA3254F7CB7F88B /* LocationAnnotation.swift in Sources */,
 				B5479997ECC516C121E6625E /* LocationMarkerView.swift in Sources */,
 				D46C33F8B61B55F0C8C2D15F /* LocationRoomTimelineItem.swift in Sources */,
@@ -9503,6 +9575,7 @@
 				8658F5034EAD7357CE7F9AC7 /* MatrixUserShareLink.swift in Sources */,
 				BCC864190651B3A3CF51E4DF /* MediaFileHandleProxy.swift in Sources */,
 				208C19811613F9A10F8A7B75 /* MediaLoader.swift in Sources */,
+				18525CFC2CF5E7E20055C5E8 /* InviteFriendSettingsScreenViewModel.swift in Sources */,
 				A2434D4DFB49A68E5CD0F53C /* MediaLoaderProtocol.swift in Sources */,
 				4E0D9E09B52CEC4C0E6211A8 /* MediaPickerScreenCoordinator.swift in Sources */,
 				D0550B8E0AE2C0CDBE52C88F /* MediaPlayerProtocol.swift in Sources */,
@@ -9531,6 +9604,7 @@
 				F54E2D6CAD96E1AC15BC526F /* MessageForwardingScreenViewModel.swift in Sources */,
 				C13128AAA787A4C2CBE4EE82 /* MessageForwardingScreenViewModelProtocol.swift in Sources */,
 				C97325EFDCCEE457432A9E82 /* MessageText.swift in Sources */,
+				18525D052CF5EDED0055C5E8 /* ZMessengerInvite.swift in Sources */,
 				09C83DDDB07C28364F325209 /* MockRoomTimelineController.swift in Sources */,
 				AF2ABA2794E376B64104C964 /* MockSoftLogoutScreenState.swift in Sources */,
 				F9842667B68DC6FA1F9ECCBB /* NSItemProvider.swift in Sources */,
@@ -9548,6 +9622,7 @@
 				3F70E237CE4C3FAB02FC227F /* NotificationConstants.swift in Sources */,
 				CE9530A4CA661E090635C2F2 /* NotificationItemProxy.swift in Sources */,
 				FD4C21F8DA1E273DE94FCD1A /* NotificationItemProxyProtocol.swift in Sources */,
+				18525CF62CF5E7B20055C5E8 /* InviteFriendSettingsScreen.swift in Sources */,
 				652ACCF104A8CEF30788963C /* NotificationManager.swift in Sources */,
 				1882EB912C90F0F5001DA2A9 /* AvatarView.swift in Sources */,
 				06D3942496E9E0E655F14D21 /* NotificationManagerProtocol.swift in Sources */,
@@ -9769,6 +9844,7 @@
 				1868A8BF2CA2D91000DC382D /* ZSentMessage.swift in Sources */,
 				7ECF12D5DCD69F67BD3E3842 /* RoomTimelineControllerFactoryProtocol.swift in Sources */,
 				18E99FF42C944F670082DDA4 /* ZeroAttachmentApi.swift in Sources */,
+				18525D0A2CF5EE240055C5E8 /* ZeroMessengerInvite.swift in Sources */,
 				E89536FC8C0E4B79E9842A78 /* RoomTimelineControllerProtocol.swift in Sources */,
 				18D5D9B82CEB749B00107940 /* UserRewardsSettingsScreenViewModelProtocol.swift in Sources */,
 				4E945AD6862C403F74E57755 /* RoomTimelineItemFactory.swift in Sources */,
@@ -9851,6 +9927,7 @@
 				8BC8EF6705A78946C1F22891 /* SoftLogoutScreen.swift in Sources */,
 				A3A7A05E8F9B7EB0E1A09A2A /* SoftLogoutScreenCoordinator.swift in Sources */,
 				F86102DC2C68BBBB0521BAAE /* SoftLogoutScreenModels.swift in Sources */,
+				18525CFF2CF5E7F20055C5E8 /* InviteFriendSettingsScreenModel.swift in Sources */,
 				F37629BAA5E8F50AAF2A131D /* SoftLogoutScreenViewModel.swift in Sources */,
 				CF4044A8EED5C41BC0ED6ABE /* SoftLogoutScreenViewModelProtocol.swift in Sources */,
 				DF004A5B2EABBD0574D06A04 /* SplashScreenCoordinator.swift in Sources */,
@@ -9955,6 +10032,7 @@
 				C7B07EBA0F12B5912DA9BB97 /* UserIdentitySDKMock.swift in Sources */,
 				988BA75A182738150894A23F /* UserIndicator.swift in Sources */,
 				C4E0D03DF88242697545A9B7 /* UserIndicatorController.swift in Sources */,
+				18525D0E2CF5F1040055C5E8 /* ZeroMessengerInviteApi.swift in Sources */,
 				3467FEE8210D301FF1B77001 /* UserIndicatorControllerMock.swift in Sources */,
 				E3E1E255DC8CB34BD8573E0D /* UserIndicatorControllerProtocol.swift in Sources */,
 				A14A9419105A1CD42F0511C4 /* UserIndicatorModalView.swift in Sources */,
@@ -10268,7 +10346,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.9.3;
+				MARKETING_VERSION = 0.9.4;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -10303,7 +10381,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.9.3;
+				MARKETING_VERSION = 0.9.4;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -11258,7 +11336,7 @@
 			repositoryURL = "https://github.com/element-hq/compound-ios";
 			requirement = {
 				kind = revision;
-				revision = f0436aa767f614584bf119defa6372ddb3b60080;
+				revision = 901f3f2fc150db82cf8a2c4da53914b31f681b56;
 			};
 		};
 		F76A08D0EA29A07A54F4EB4D /* XCRemoteSwiftPackageReference "swift-collections" */ = {

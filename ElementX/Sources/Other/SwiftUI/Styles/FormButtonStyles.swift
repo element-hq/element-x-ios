@@ -44,6 +44,6 @@ struct FormButtonStyles_Previews: PreviewProvider, TestablePreview {
                 .buttonStyle(FormActionButtonStyle(title: "Share"))
             }
         }
-        .compoundList()
+        .zeroList()
     }
 }

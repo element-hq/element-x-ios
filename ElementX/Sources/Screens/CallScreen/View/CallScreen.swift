@@ -18,7 +18,7 @@ struct CallScreen: View {
         NavigationStack {
             content
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+                .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {

@@ -10,7 +10,8 @@ import Foundation
 enum KnockRequestsListScreenViewModelAction { }
 
 struct KnockRequestsListScreenViewState: BindableState {
-    var requests: [KnockRequestCellInfo] = []
+    // TODO: Not sure yet how we will fetch this, this is just for testing purposes
+    var requests: [KnockRequestCellInfo] = [.init(id: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "Now", reason: "Hello")]
     // If you are in this view one of these must have been true so by default we assume all of them to be true
     var canAccept = true
     var canDecline = true
@@ -22,6 +23,18 @@ struct KnockRequestsListScreenViewState: BindableState {
     var shouldDisplayRequests: Bool {
         !requests.isEmpty && isKnockableRoom && (canAccept || canDecline || canBan)
     }
+    
+    var bindings = KnockRequestsListStateBindings()
+}
+
+struct KnockRequestsListStateBindings {
+    var alertInfo: AlertInfo<KnockRequestsListAlertType>?
+}
+
+enum KnockRequestsListAlertType {
+    case acceptAllRequests
+    case declineRequest
+    case declineAndBan
 }
 
 enum KnockRequestsListScreenViewAction {

@@ -49,7 +49,7 @@ struct RoomMembersListManageMemberSheet: View {
 //                }
             }
         }
-        .compoundList()
+        .zeroList()
         .scrollBounceBehavior(.basedOnSize)
         .presentationDragIndicator(.visible)
         .presentationDetents([.large, .fraction(0.54)]) // Maybe find a way to use the ideal height somehow?

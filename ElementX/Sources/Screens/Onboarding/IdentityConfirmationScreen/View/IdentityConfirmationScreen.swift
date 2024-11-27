@@ -27,7 +27,7 @@ struct IdentityConfirmationScreen: View {
         }
         .toolbar { toolbar }
         .background()
-        .backgroundStyle(.compound.bgCanvasDefault)
+        .backgroundStyle(.zero.bgCanvasDefault)
         .navigationBarBackButtonHidden(true)
         .interactiveDismissDisabled()
     }

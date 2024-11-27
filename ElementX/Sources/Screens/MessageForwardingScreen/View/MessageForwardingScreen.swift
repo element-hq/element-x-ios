@@ -32,7 +32,7 @@ struct MessageForwardingScreen: View {
                     }
             }
         }
-        .compoundList()
+        .zeroList()
         .navigationTitle(L10n.commonForwardMessage)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

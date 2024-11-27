@@ -35,7 +35,7 @@ struct AppLockSetupSettingsScreen: View {
                 }
             }
         }
-        .compoundList()
+        .zeroList()
         .navigationTitle(L10n.commonScreenLock)
         .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)

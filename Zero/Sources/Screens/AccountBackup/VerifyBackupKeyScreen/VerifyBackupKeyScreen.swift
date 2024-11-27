@@ -33,7 +33,7 @@ struct VerifyBackupKeyScreen: View {
         .toolbar { toolbar }
         .toolbar(.visible, for: .navigationBar)
         .background()
-        .backgroundStyle(Asset.Colors.zeroDarkGrey.swiftUIColor)
+        .backgroundStyle(.zero.bgCanvasDefault)
         .interactiveDismissDisabled()
         .alert(item: $context.alertInfo)
     }

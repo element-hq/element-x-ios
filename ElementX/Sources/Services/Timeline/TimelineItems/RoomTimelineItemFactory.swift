@@ -588,6 +588,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                             duration: messageContent.audio?.duration ?? 0,
                                             waveform: waveform,
                                             source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
+                                            fileSize: messageContent.info?.size.map(UInt.init),
                                             contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.filename))
     }
     
@@ -679,6 +680,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                      formattedCaption: formattedCaption,
                      formattedCaptionHTMLString: htmlCaption,
                      source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
+                     fileSize: messageContent.info?.size.map(UInt.init),
                      thumbnailSource: thumbnailSource,
                      contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.filename))
     }

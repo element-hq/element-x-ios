@@ -22,7 +22,7 @@ struct ServerSelectionScreen: View {
             .readableFrame()
             .padding(.horizontal, 16)
         }
-        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .toolbar { toolbar }
         .alert(item: $context.alertInfo)
         .interactiveDismissDisabled()

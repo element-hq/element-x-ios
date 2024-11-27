@@ -23,7 +23,7 @@ struct RoomDetailsEditScreen: View {
             nameSection
 //            topicSection
         }
-        .compoundList()
+        .zeroList()
         .scrollDismissesKeyboard(.immediately)
         .navigationTitle(L10n.screenRoomDetailsEditRoomTitle)
         .navigationBarTitleDisplayMode(.inline)

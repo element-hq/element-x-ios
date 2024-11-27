@@ -76,7 +76,7 @@ struct EncryptionResetScreen: View {
                 .foregroundColor(positive ? .zero.iconAccentPrimary : .compound.iconSecondary)
                 .alignmentGuide(.top) { _ in 2 }
         }
-        .backgroundStyle(.compound.bgCanvasDefault)
+        .backgroundStyle(.zero.bgCanvasDefault)
     }
     
     @ToolbarContentBuilder

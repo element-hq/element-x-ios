@@ -132,6 +132,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentDeactivateAccount()
                 case .rewards:
                     presentUserRewards()
+                case .inviteFriend:
+                    presentInviteFriend()
                 }
             }
             .store(in: &cancellables)
@@ -270,6 +272,12 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentUserRewards() {
         let userRewardsParameters = UserRewardsSettingsScreenCoordinatorParameters(userSession: parameters.userSession)
         let coordinator = UserRewardsSettingsScreenCoordinator(parameters: userRewardsParameters)
+        navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func presentInviteFriend() {
+        let inviteFriendParameters = InviteFriendSettingsScreenCoordinatorParameters(userSession: parameters.userSession)
+        let coordinator = InviteFriendSettingsScreenCoordinator(parameters: inviteFriendParameters)
         navigationStackCoordinator.push(coordinator)
     }
 

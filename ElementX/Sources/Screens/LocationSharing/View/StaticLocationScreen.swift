@@ -113,7 +113,7 @@ struct StaticLocationScreen: View {
         } label: {
             CompoundIcon(context.viewState.isSharingUserLocation ? \.locationNavigatorCentred : \.locationNavigator)
                 .padding(8)
-                .background(.compound.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 6))
+                .background(.zero.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 6))
         }
         .dynamicTypeSize(.large)
         .padding(16)

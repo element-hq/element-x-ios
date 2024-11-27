@@ -40,7 +40,7 @@ struct RoomDetailsScreen: View {
                 leaveRoomSection
             }
         }
-        .compoundList()
+        .zeroList()
         .alert(item: $context.alertInfo)
         .alert(item: $context.leaveRoomAlertItem,
                actions: leaveRoomAlertActions,

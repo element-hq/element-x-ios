@@ -30,7 +30,7 @@ struct VerifyLoginScreen: View {
             actionButton
         }
         .background()
-        .backgroundStyle(Asset.Colors.zeroDarkGrey.swiftUIColor)
+        .backgroundStyle(.zero.bgCanvasDefault)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .interactiveDismissDisabled()

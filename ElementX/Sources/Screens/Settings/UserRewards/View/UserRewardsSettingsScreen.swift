@@ -19,7 +19,7 @@ struct UserRewardsSettingsScreen: View {
         }
         .navigationTitle(showRewardsFAQ ? "ZBI FAQ" : "ZBI")
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden()
+        .navigationBarBackButtonHidden(showRewardsFAQ)
         .toolbar {
             if showRewardsFAQ {
                 ToolbarItem(placement: .topBarLeading) {

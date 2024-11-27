@@ -44,7 +44,7 @@ struct CreateRoomScreen: View {
                 roomAliasSection
             }
         }
-        .compoundList()
+        .zeroList()
         .track(screen: .CreateRoom)
         .scrollDismissesKeyboard(.immediately)
         .navigationTitle("Group Details")
@@ -72,7 +72,7 @@ struct CreateRoomScreen: View {
                         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)
                         .padding(.horizontal, ListRowPadding.horizontal)
                         .padding(.vertical, ListRowPadding.vertical)
-                        .background(.compound.bgCanvasDefaultLevel1, in: RoundedRectangle(cornerRadius: 12))
+                        .background(.zero.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 12))
                 }
             }
             .listRowInsets(.init())
@@ -242,7 +242,7 @@ private extension View {
         listRowBackground(shouldDisplay ? AnyView(RoundedRectangle(cornerRadius: 10)
                 .inset(by: 1)
                 .fill(.compound.bgCriticalSubtleHovered)
-                .stroke(Color.compound.borderCriticalPrimary)) : AnyView(Color.compound.bgCanvasDefaultLevel1))
+                .stroke(Color.compound.borderCriticalPrimary)) : AnyView(Color.zero.bgCanvasDefault))
     }
 }
 

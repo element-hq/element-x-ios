@@ -138,7 +138,7 @@ private struct MessageComposerReplyHeader: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .fixedSize(horizontal: false, vertical: true)
             .padding(4.0)
-            .background(.compound.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 13, style: .circular))
+            .background(.zero.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 13, style: .circular))
             .overlay(alignment: .topTrailing) {
                 Button(action: action) {
                     CompoundIcon(\.close, size: .small, relativeTo: .compound.bodySMSemibold)
@@ -238,6 +238,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                                                     duration: 100,
                                                     waveform: nil,
                                                     source: nil,
+                                                    fileSize: nil,
                                                     contentType: nil)))),
         .loaded(sender: .init(id: "James"),
                 eventID: "123",
@@ -247,6 +248,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                 eventContent: .message(.file(.init(filename: "brain-surgery.pdf",
                                                    caption: "File: Crash course in brain surgery",
                                                    source: nil,
+                                                   fileSize: nil,
                                                    thumbnailSource: nil,
                                                    contentType: nil)))),
         .loaded(sender: .init(id: "Cliff"),

@@ -222,7 +222,7 @@ struct QRCodeLoginScreen: View {
             .aspectRatio(1.0, contentMode: .fill)
             .frame(maxWidth: 312)
             .readFrame($qrFrame)
-            .background(.compound.bgCanvasDefault)
+            .background(.zero.bgCanvasDefault)
             .overlay(
                 QRScannerViewOverlay(length: qrFrame.height)
             )

@@ -25,7 +25,7 @@ struct JoinRoomScreen: View {
         }
         .alert(item: $context.alertInfo)
         .background()
-        .backgroundStyle(.compound.bgCanvasDefault)
+        .backgroundStyle(.zero.bgCanvasDefault)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
     }
@@ -117,7 +117,7 @@ struct JoinRoomScreen: View {
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
             }
-            .background(.compound.bgCanvasDefault)
+            .background(.zero.bgCanvasDefault)
             .cornerRadius(8)
             .overlay {
                 RoundedRectangle(cornerRadius: 8)

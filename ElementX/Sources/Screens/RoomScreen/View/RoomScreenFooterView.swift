@@ -18,7 +18,7 @@ struct RoomScreenFooterView: View {
                 VStack(spacing: 0) {
                     Color.compound.borderInfoSubtle
                         .frame(height: 1)
-                    LinearGradient(colors: [.compound.bgInfoSubtle, .compound.bgCanvasDefault],
+                    LinearGradient(colors: [.compound.bgInfoSubtle, .zero.bgCanvasDefault],
                                    startPoint: .top,
                                    endPoint: .bottom)
                 }

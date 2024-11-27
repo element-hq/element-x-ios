@@ -25,7 +25,7 @@ struct PinnedEventsTimelineScreen: View {
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
-            .background(.compound.bgCanvasDefault)
+            .background(.zero.bgCanvasDefault)
             .interactiveDismissDisabled()
             .interactiveQuickLook(item: $timelineContext.mediaPreviewItem)
 //            .sheet(item: $timelineContext.debugInfo) { TimelineItemDebugView(info: $0) }

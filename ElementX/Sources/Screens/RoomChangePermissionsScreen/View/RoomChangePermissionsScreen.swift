@@ -23,7 +23,7 @@ struct RoomChangePermissionsScreen: View {
                 }
             }
         }
-        .compoundList()
+        .zeroList()
         .navigationTitle(context.viewState.title)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(context.viewState.hasChanges)

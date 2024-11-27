@@ -184,7 +184,7 @@ struct FullscreenDialog_Previews: PreviewProvider, TestablePreview {
             buttons
         }
         .background()
-        .backgroundStyle(.compound.bgCanvasDefault)
+        .backgroundStyle(.zero.bgCanvasDefault)
         .previewDisplayName("Plain")
         
         FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar, background: .gradient) {
@@ -193,7 +193,7 @@ struct FullscreenDialog_Previews: PreviewProvider, TestablePreview {
             buttons
         }
         .background()
-        .backgroundStyle(.compound.bgCanvasDefault)
+        .backgroundStyle(.zero.bgCanvasDefault)
         .previewDisplayName("Gradient")
         
         FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar, background: .bloom) {
@@ -202,7 +202,7 @@ struct FullscreenDialog_Previews: PreviewProvider, TestablePreview {
             buttons
         }
         .background()
-        .backgroundStyle(.compound.bgCanvasDefault)
+        .backgroundStyle(.zero.bgCanvasDefault)
         .previewDisplayName("Bloom")
     }
     

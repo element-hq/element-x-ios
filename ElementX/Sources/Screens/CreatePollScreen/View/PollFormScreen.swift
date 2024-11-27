@@ -25,7 +25,7 @@ struct PollFormScreen: View {
             deletePollSection
         }
         .trackAnalyticsIfNeeded(context: context)
-        .compoundList()
+        .zeroList()
         .scrollDismissesKeyboard(.immediately)
         .environment(\.editMode, .constant(.active))
         .navigationTitle(context.viewState.navigationTitle)

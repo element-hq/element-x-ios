@@ -19,7 +19,7 @@ struct KnockRequestCellInfo: Identifiable {
     /// user identifier of the usee that sent the request
     let id: String
     let displayName: String?
-    let avatarUrl: URL?
+    let avatarURL: URL?
     let timestamp: String?
     let reason: String?
 }
@@ -33,7 +33,7 @@ struct KnockRequestCell: View {
     
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
-            LoadableAvatarImage(url: cellInfo.avatarUrl,
+            LoadableAvatarImage(url: cellInfo.avatarURL,
                                 name: cellInfo.displayName,
                                 contentID: cellInfo.id,
                                 avatarSize: .user(on: .knockingUserList),
@@ -54,7 +54,7 @@ struct KnockRequestCell: View {
         }
         .padding(.top, 16)
         .padding(.leading, 16)
-        .background(.compound.bgCanvasDefault)
+        .background(.zero.bgCanvasDefault)
     }
     
     private var header: some View {
@@ -168,13 +168,13 @@ private struct DisclosableText: View {
 
 struct KnockRequestCell_Previews: PreviewProvider, TestablePreview {
     // swiftlint:disable:next line_length
-    static let aliceWithLongReason = KnockRequestCellInfo(id: "@alice:matrix.org", displayName: "Alice", avatarUrl: nil, timestamp: "20 Nov 2024", reason: "Hello would like to join this room, also this is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long reason")
+    static let aliceWithLongReason = KnockRequestCellInfo(id: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "20 Nov 2024", reason: "Hello would like to join this room, also this is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long reason")
     
-    static let aliceWithShortReason = KnockRequestCellInfo(id: "@alice:matrix.org", displayName: "Alice", avatarUrl: nil, timestamp: "20 Nov 2024", reason: "Hello, I am Alice and would like to join this room, please")
+    static let aliceWithShortReason = KnockRequestCellInfo(id: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "20 Nov 2024", reason: "Hello, I am Alice and would like to join this room, please")
     
-    static let aliceWithNoReason = KnockRequestCellInfo(id: "@alice:matrix.org", displayName: "Alice", avatarUrl: nil, timestamp: "20 Nov 2024", reason: nil)
+    static let aliceWithNoReason = KnockRequestCellInfo(id: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "20 Nov 2024", reason: nil)
     
-    static let aliceWithNoName = KnockRequestCellInfo(id: "@alice:matrix.org", displayName: nil, avatarUrl: nil, timestamp: "20 Nov 2024", reason: nil)
+    static let aliceWithNoName = KnockRequestCellInfo(id: "@alice:matrix.org", displayName: nil, avatarURL: nil, timestamp: "20 Nov 2024", reason: nil)
     
     static var previews: some View {
         KnockRequestCell(cellInfo: aliceWithLongReason, onAccept: { _ in }, onDecline: { _ in }, onDeclineAndBan: { _ in })

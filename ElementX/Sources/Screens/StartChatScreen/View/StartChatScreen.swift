@@ -19,7 +19,7 @@ struct StartChatScreen: View {
                 searchContent
             }
         }
-        .compoundList()
+        .zeroList()
         .track(screen: .StartChat)
         .scrollDismissesKeyboard(.immediately)
         .navigationTitle("New Conversation")

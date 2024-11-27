@@ -32,7 +32,7 @@ struct RoomSelectionScreen: View {
                     }
             }
         }
-        .compoundList()
+        .zeroList()
         .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
