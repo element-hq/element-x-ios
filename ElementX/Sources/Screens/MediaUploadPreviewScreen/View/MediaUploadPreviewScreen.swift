@@ -76,6 +76,16 @@ struct MediaUploadPreviewScreen: View {
             // follow the dark colour scheme on devices running with dark mode disabled.
             .tint(.compound.textActionPrimary)
         }
+        
+        if !context.viewState.showMediaCaptionComposer {
+            ToolbarItem(placement: .confirmationAction) {
+                Button { context.send(viewAction: .send) } label: {
+                    Text(L10n.actionSend)
+                }
+                // Same fix as above (this button is temporary anyway).
+                .tint(.compound.textActionPrimary)
+            }
+        }
     }
 }
 
