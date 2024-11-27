@@ -102,6 +102,12 @@ class TimelineInteractionHandler {
         case .copy:
             guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else { return }
             UIPasteboard.general.string = messageTimelineItem.body
+        case .copyCaption:
+            guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol,
+                  let caption = messageTimelineItem.mediaCaption else {
+                return
+            }
+            UIPasteboard.general.string = caption
         case .edit:
             switch timelineItem {
             case let messageTimelineItem as EventBasedMessageTimelineItemProtocol:

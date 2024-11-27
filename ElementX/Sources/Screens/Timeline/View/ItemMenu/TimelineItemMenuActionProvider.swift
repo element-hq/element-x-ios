@@ -83,6 +83,8 @@ struct TimelineItemMenuActionProvider {
 
         if item.isCopyable {
             actions.append(.copy)
+        } else if item.hasMediaCaption {
+            actions.append(.copyCaption)
         }
         
         if item.isRemoteMessage {

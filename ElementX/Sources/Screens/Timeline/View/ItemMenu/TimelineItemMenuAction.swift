@@ -56,6 +56,7 @@ struct TimelineItemMenuReaction: Hashable {
 
 enum TimelineItemMenuAction: Identifiable, Hashable {
     case copy
+    case copyCaption
     case edit
     case addCaption
     case editCaption
@@ -131,6 +132,8 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         switch self {
         case .copy:
             Label(L10n.actionCopy, icon: \.copy)
+        case .copyCaption:
+            Label(L10n.actionCopyCaption, icon: \.copy)
         case .edit:
             Label(L10n.actionEdit, icon: \.edit)
         case .addCaption:

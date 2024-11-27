@@ -104,6 +104,8 @@ internal enum L10n {
   internal static var actionContinue: String { return L10n.tr("Localizable", "action_continue") }
   /// Copy
   internal static var actionCopy: String { return L10n.tr("Localizable", "action_copy") }
+  /// Copy caption
+  internal static var actionCopyCaption: String { return L10n.tr("Localizable", "action_copy_caption") }
   /// Copy link
   internal static var actionCopyLink: String { return L10n.tr("Localizable", "action_copy_link") }
   /// Copy link to message
