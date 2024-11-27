@@ -15,7 +15,7 @@ final class MediaLoaderTests: XCTestCase {
         mediaLoadingClient.getMediaContentMediaSourceReturnValue = Data()
         let mediaLoader = MediaLoader(client: mediaLoadingClient)
         
-        let mediaSource = MediaSourceProxy(url: URL.documentsDirectory, mimeType: nil)
+        let mediaSource = MediaSourceProxy(url: .mockMXCFile, mimeType: nil)
         
         do {
             for _ in 1...10 {
@@ -33,7 +33,7 @@ final class MediaLoaderTests: XCTestCase {
         mediaLoadingClient.getMediaThumbnailMediaSourceWidthHeightReturnValue = Data()
         let mediaLoader = MediaLoader(client: mediaLoadingClient)
         
-        let mediaSource = MediaSourceProxy(url: URL.documentsDirectory, mimeType: nil)
+        let mediaSource = MediaSourceProxy(url: .mockMXCImage, mimeType: nil)
         
         do {
             for _ in 1...10 {

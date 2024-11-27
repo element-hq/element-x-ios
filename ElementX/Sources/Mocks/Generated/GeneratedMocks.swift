@@ -1200,12 +1200,7 @@ class AudioConverterMock: AudioConverterProtocol {
     }
 }
 class AudioPlayerMock: AudioPlayerProtocol {
-    var actions: AnyPublisher<AudioPlayerAction, Never> {
-        get { return underlyingActions }
-        set(value) { underlyingActions = value }
-    }
-    var underlyingActions: AnyPublisher<AudioPlayerAction, Never>!
-    var mediaSource: MediaSourceProxy?
+    var sourceURL: URL?
     var duration: TimeInterval {
         get { return underlyingDuration }
         set(value) { underlyingDuration = value }
@@ -1216,24 +1211,29 @@ class AudioPlayerMock: AudioPlayerProtocol {
         set(value) { underlyingCurrentTime = value }
     }
     var underlyingCurrentTime: TimeInterval!
-    var url: URL?
+    var playbackURL: URL?
     var state: MediaPlayerState {
         get { return underlyingState }
         set(value) { underlyingState = value }
     }
     var underlyingState: MediaPlayerState!
+    var actions: AnyPublisher<AudioPlayerAction, Never> {
+        get { return underlyingActions }
+        set(value) { underlyingActions = value }
+    }
+    var underlyingActions: AnyPublisher<AudioPlayerAction, Never>!
 
     //MARK: - load
 
-    var loadMediaSourceUsingAutoplayUnderlyingCallsCount = 0
-    var loadMediaSourceUsingAutoplayCallsCount: Int {
+    var loadSourceURLPlaybackURLAutoplayUnderlyingCallsCount = 0
+    var loadSourceURLPlaybackURLAutoplayCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return loadMediaSourceUsingAutoplayUnderlyingCallsCount
+                return loadSourceURLPlaybackURLAutoplayUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = loadMediaSourceUsingAutoplayUnderlyingCallsCount
+                    returnValue = loadSourceURLPlaybackURLAutoplayUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -1241,28 +1241,28 @@ class AudioPlayerMock: AudioPlayerProtocol {
         }
         set {
             if Thread.isMainThread {
-                loadMediaSourceUsingAutoplayUnderlyingCallsCount = newValue
+                loadSourceURLPlaybackURLAutoplayUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    loadMediaSourceUsingAutoplayUnderlyingCallsCount = newValue
+                    loadSourceURLPlaybackURLAutoplayUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var loadMediaSourceUsingAutoplayCalled: Bool {
-        return loadMediaSourceUsingAutoplayCallsCount > 0
+    var loadSourceURLPlaybackURLAutoplayCalled: Bool {
+        return loadSourceURLPlaybackURLAutoplayCallsCount > 0
     }
-    var loadMediaSourceUsingAutoplayReceivedArguments: (mediaSource: MediaSourceProxy, url: URL, autoplay: Bool)?
-    var loadMediaSourceUsingAutoplayReceivedInvocations: [(mediaSource: MediaSourceProxy, url: URL, autoplay: Bool)] = []
-    var loadMediaSourceUsingAutoplayClosure: ((MediaSourceProxy, URL, Bool) -> Void)?
+    var loadSourceURLPlaybackURLAutoplayReceivedArguments: (sourceURL: URL, playbackURL: URL, autoplay: Bool)?
+    var loadSourceURLPlaybackURLAutoplayReceivedInvocations: [(sourceURL: URL, playbackURL: URL, autoplay: Bool)] = []
+    var loadSourceURLPlaybackURLAutoplayClosure: ((URL, URL, Bool) -> Void)?
 
-    func load(mediaSource: MediaSourceProxy, using url: URL, autoplay: Bool) {
-        loadMediaSourceUsingAutoplayCallsCount += 1
-        loadMediaSourceUsingAutoplayReceivedArguments = (mediaSource: mediaSource, url: url, autoplay: autoplay)
+    func load(sourceURL: URL, playbackURL: URL, autoplay: Bool) {
+        loadSourceURLPlaybackURLAutoplayCallsCount += 1
+        loadSourceURLPlaybackURLAutoplayReceivedArguments = (sourceURL: sourceURL, playbackURL: playbackURL, autoplay: autoplay)
         DispatchQueue.main.async {
-            self.loadMediaSourceUsingAutoplayReceivedInvocations.append((mediaSource: mediaSource, url: url, autoplay: autoplay))
+            self.loadSourceURLPlaybackURLAutoplayReceivedInvocations.append((sourceURL: sourceURL, playbackURL: playbackURL, autoplay: autoplay))
         }
-        loadMediaSourceUsingAutoplayClosure?(mediaSource, url, autoplay)
+        loadSourceURLPlaybackURLAutoplayClosure?(sourceURL, playbackURL, autoplay)
     }
     //MARK: - reset
 
@@ -9812,320 +9812,13 @@ class MediaLoaderMock: MediaLoaderProtocol {
         }
     }
 }
-class MediaPlayerMock: MediaPlayerProtocol {
-    var mediaSource: MediaSourceProxy?
-    var duration: TimeInterval {
-        get { return underlyingDuration }
-        set(value) { underlyingDuration = value }
-    }
-    var underlyingDuration: TimeInterval!
-    var currentTime: TimeInterval {
-        get { return underlyingCurrentTime }
-        set(value) { underlyingCurrentTime = value }
-    }
-    var underlyingCurrentTime: TimeInterval!
-    var url: URL?
-    var state: MediaPlayerState {
-        get { return underlyingState }
-        set(value) { underlyingState = value }
-    }
-    var underlyingState: MediaPlayerState!
-
-    //MARK: - load
-
-    var loadMediaSourceUsingAutoplayUnderlyingCallsCount = 0
-    var loadMediaSourceUsingAutoplayCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return loadMediaSourceUsingAutoplayUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loadMediaSourceUsingAutoplayUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loadMediaSourceUsingAutoplayUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loadMediaSourceUsingAutoplayUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var loadMediaSourceUsingAutoplayCalled: Bool {
-        return loadMediaSourceUsingAutoplayCallsCount > 0
-    }
-    var loadMediaSourceUsingAutoplayReceivedArguments: (mediaSource: MediaSourceProxy, url: URL, autoplay: Bool)?
-    var loadMediaSourceUsingAutoplayReceivedInvocations: [(mediaSource: MediaSourceProxy, url: URL, autoplay: Bool)] = []
-    var loadMediaSourceUsingAutoplayClosure: ((MediaSourceProxy, URL, Bool) -> Void)?
-
-    func load(mediaSource: MediaSourceProxy, using url: URL, autoplay: Bool) {
-        loadMediaSourceUsingAutoplayCallsCount += 1
-        loadMediaSourceUsingAutoplayReceivedArguments = (mediaSource: mediaSource, url: url, autoplay: autoplay)
-        DispatchQueue.main.async {
-            self.loadMediaSourceUsingAutoplayReceivedInvocations.append((mediaSource: mediaSource, url: url, autoplay: autoplay))
-        }
-        loadMediaSourceUsingAutoplayClosure?(mediaSource, url, autoplay)
-    }
-    //MARK: - reset
-
-    var resetUnderlyingCallsCount = 0
-    var resetCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return resetUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = resetUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                resetUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    resetUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var resetCalled: Bool {
-        return resetCallsCount > 0
-    }
-    var resetClosure: (() -> Void)?
-
-    func reset() {
-        resetCallsCount += 1
-        resetClosure?()
-    }
-    //MARK: - play
-
-    var playUnderlyingCallsCount = 0
-    var playCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return playUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = playUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                playUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    playUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var playCalled: Bool {
-        return playCallsCount > 0
-    }
-    var playClosure: (() -> Void)?
-
-    func play() {
-        playCallsCount += 1
-        playClosure?()
-    }
-    //MARK: - pause
-
-    var pauseUnderlyingCallsCount = 0
-    var pauseCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return pauseUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = pauseUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                pauseUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    pauseUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var pauseCalled: Bool {
-        return pauseCallsCount > 0
-    }
-    var pauseClosure: (() -> Void)?
-
-    func pause() {
-        pauseCallsCount += 1
-        pauseClosure?()
-    }
-    //MARK: - stop
-
-    var stopUnderlyingCallsCount = 0
-    var stopCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return stopUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = stopUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                stopUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    stopUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var stopCalled: Bool {
-        return stopCallsCount > 0
-    }
-    var stopClosure: (() -> Void)?
-
-    func stop() {
-        stopCallsCount += 1
-        stopClosure?()
-    }
-    //MARK: - seek
-
-    var seekToUnderlyingCallsCount = 0
-    var seekToCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return seekToUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = seekToUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                seekToUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    seekToUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var seekToCalled: Bool {
-        return seekToCallsCount > 0
-    }
-    var seekToReceivedProgress: Double?
-    var seekToReceivedInvocations: [Double] = []
-    var seekToClosure: ((Double) async -> Void)?
-
-    func seek(to progress: Double) async {
-        seekToCallsCount += 1
-        seekToReceivedProgress = progress
-        DispatchQueue.main.async {
-            self.seekToReceivedInvocations.append(progress)
-        }
-        await seekToClosure?(progress)
-    }
-}
 class MediaPlayerProviderMock: MediaPlayerProviderProtocol {
-
-    //MARK: - player
-
-    var playerForUnderlyingCallsCount = 0
-    var playerForCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return playerForUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = playerForUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                playerForUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    playerForUnderlyingCallsCount = newValue
-                }
-            }
-        }
+    var player: AudioPlayerProtocol {
+        get { return underlyingPlayer }
+        set(value) { underlyingPlayer = value }
     }
-    var playerForCalled: Bool {
-        return playerForCallsCount > 0
-    }
-    var playerForReceivedMediaSource: MediaSourceProxy?
-    var playerForReceivedInvocations: [MediaSourceProxy] = []
+    var underlyingPlayer: AudioPlayerProtocol!
 
-    var playerForUnderlyingReturnValue: Result<MediaPlayerProtocol, MediaPlayerProviderError>!
-    var playerForReturnValue: Result<MediaPlayerProtocol, MediaPlayerProviderError>! {
-        get {
-            if Thread.isMainThread {
-                return playerForUnderlyingReturnValue
-            } else {
-                var returnValue: Result<MediaPlayerProtocol, MediaPlayerProviderError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = playerForUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                playerForUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    playerForUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var playerForClosure: ((MediaSourceProxy) -> Result<MediaPlayerProtocol, MediaPlayerProviderError>)?
-
-    func player(for mediaSource: MediaSourceProxy) -> Result<MediaPlayerProtocol, MediaPlayerProviderError> {
-        playerForCallsCount += 1
-        playerForReceivedMediaSource = mediaSource
-        DispatchQueue.main.async {
-            self.playerForReceivedInvocations.append(mediaSource)
-        }
-        if let playerForClosure = playerForClosure {
-            return playerForClosure(mediaSource)
-        } else {
-            return playerForReturnValue
-        }
-    }
     //MARK: - playerState
 
     var playerStateForUnderlyingCallsCount = 0

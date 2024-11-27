@@ -408,10 +408,7 @@ class TimelineInteractionHandler {
             return
         }
         
-        guard case .success(let mediaPlayer) = mediaPlayerProvider.player(for: source), let audioPlayer = mediaPlayer as? AudioPlayerProtocol else {
-            MXLog.error("Cannot play a voice message without an audio player")
-            return
-        }
+        let audioPlayer = mediaPlayerProvider.player
 
         // Stop any recording in progress
         if voiceMessageRecorder.isRecording {
@@ -430,7 +427,7 @@ class TimelineInteractionHandler {
         // Detach all other states
         await mediaPlayerProvider.detachAllStates(except: audioPlayerState)
 
-        guard audioPlayer.mediaSource == source, audioPlayer.state != .error else {
+        guard audioPlayer.sourceURL == source.url, audioPlayer.state != .error else {
             // Load content
             do {
                 MXLog.info("Loading voice message audio content from source for itemID \(itemID)")
@@ -438,7 +435,7 @@ class TimelineInteractionHandler {
 
                 // Make sure that the player is still attached, as it may have been detached while waiting for the voice message to be loaded.
                 if audioPlayerState.isAttached {
-                    audioPlayer.load(mediaSource: source, using: url, autoplay: true)
+                    audioPlayer.load(sourceURL: source.url, playbackURL: url, autoplay: true)
                 }
             } catch {
                 MXLog.error("Failed to load voice message: \(error)")

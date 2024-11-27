@@ -15,48 +15,11 @@ class MediaPlayerProviderTests: XCTestCase {
     private var mediaPlayerProvider: MediaPlayerProvider!
     
     private let oggMimeType = "audio/ogg"
-    private let someURL = URL("/some/url")
-    private let someOtherURL = URL("/some/other/url")
+    private let someURL = URL.mockMXCAudio
+    private let someOtherURL = URL.mockMXCFile
     
     override func setUp() async throws {
         mediaPlayerProvider = MediaPlayerProvider()
-    }
-    
-    func testPlayerForWrongMediaType() async throws {
-        let mediaSourceWithoutMimeType = MediaSourceProxy(url: someURL, mimeType: nil)
-        switch mediaPlayerProvider.player(for: mediaSourceWithoutMimeType) {
-        case .failure(.unsupportedMediaType):
-            // Ok
-            break
-        default:
-            XCTFail("An error is expected")
-        }
-
-        let mediaSourceVideo = MediaSourceProxy(url: someURL, mimeType: "video/mp4")
-        switch mediaPlayerProvider.player(for: mediaSourceVideo) {
-        case .failure(.unsupportedMediaType):
-            // Ok
-            break
-        default:
-            XCTFail("An error is expected")
-        }
-    }
-    
-    func testPlayerFor() async throws {
-        let mediaSource = MediaSourceProxy(url: someURL, mimeType: oggMimeType)
-        guard case .success(let playerA) = mediaPlayerProvider.player(for: mediaSource) else {
-            XCTFail("A valid player is expected")
-            return
-        }
-        
-        // calling it again with another mediasource must returns the same player
-        let otherMediaSource = MediaSourceProxy(url: someOtherURL, mimeType: oggMimeType)
-        guard case .success(let playerB) = mediaPlayerProvider.player(for: otherMediaSource) else {
-            XCTFail("A valid player is expected")
-            return
-        }
-
-        XCTAssert(playerA === playerB)
     }
     
     func testPlayerStates() async throws {

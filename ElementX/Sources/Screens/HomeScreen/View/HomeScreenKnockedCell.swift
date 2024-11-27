@@ -119,7 +119,7 @@ struct HomeScreenKnockedCell_Previews: PreviewProvider, TestablePreview {
                 HomeScreenKnockedCell(room: .roomKnocked(),
                                       context: viewModel().context)
                 
-                HomeScreenKnockedCell(room: .roomKnocked(alias: "#footest:somewhere.org", avatarURL: .picturesDirectory),
+                HomeScreenKnockedCell(room: .roomKnocked(alias: "#footest:somewhere.org", avatarURL: .mockMXCAvatar),
                                       context: viewModel().context)
                 
                 HomeScreenKnockedCell(room: .roomKnocked(alias: "#footest:somewhere.org"),

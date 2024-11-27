@@ -18,7 +18,8 @@ extension MediaProviderMock {
                 return nil
             }
             
-            if mediaSource?.url == .picturesDirectory {
+            // At some stage it would be nice to return different images, but for now they can be the same.
+            if mediaSource?.url == .mockMXCImage || mediaSource?.url == .mockMXCAvatar {
                 return Asset.Images.appLogo.image
             }
             

@@ -237,11 +237,11 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
             switch mode {
             case .knocked:
                 clientProxy.roomForIdentifierClosure = { _ in
-                    .knocked(KnockedRoomProxyMock(.init(avatarURL: URL.homeDirectory)))
+                    .knocked(KnockedRoomProxyMock(.init(avatarURL: .mockMXCAvatar)))
                 }
             case .invited:
                 clientProxy.roomForIdentifierClosure = { _ in
-                    .invited(InvitedRoomProxyMock(.init(avatarURL: URL.homeDirectory)))
+                    .invited(InvitedRoomProxyMock(.init(avatarURL: .mockMXCAvatar)))
                 }
             default:
                 break
@@ -251,7 +251,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
                                                                                 canonicalAlias: "#3🌞problem:matrix.org",
                                                                                 // swiftlint:disable:next line_length
                                                                                 topic: "“Science and technology were the only keys to opening the door to the future, and people approached science with the faith and sincerity of elementary school students.”",
-                                                                                avatarURL: URL.homeDirectory,
+                                                                                avatarURL: .mockMXCAvatar,
                                                                                 memberCount: UInt(100),
                                                                                 isHistoryWorldReadable: false,
                                                                                 isJoined: membership.isJoined,

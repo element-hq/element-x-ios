@@ -16,7 +16,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
     private var voiceMessageCache: VoiceMessageCacheMock!
     private var mediaProvider: MediaProviderMock!
     
-    private let someURL = URL("/some/url")
+    private let someURL = URL.mockMXCAudio
     private let audioOGGMimeType = "audio/ogg"
     
     override func setUp() async throws {
