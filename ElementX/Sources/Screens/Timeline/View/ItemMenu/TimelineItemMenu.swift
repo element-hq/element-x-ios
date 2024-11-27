@@ -179,8 +179,8 @@ struct TimelineItemMenu: View {
                 send(action)
             } label: {
                 action.label
-                    .labelStyle(.menuSheet)
             }
+            .buttonStyle(.menuSheet)
         }
     }
     
