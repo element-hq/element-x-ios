@@ -658,7 +658,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: elementCallService,
                                                                             configuration: configuration,
                                                                             allowPictureInPicture: false,
-                                                                            notifyOtherParticipants: false,
                                                                             appHooks: appHooks))
         
         callScreenCoordinator.actions

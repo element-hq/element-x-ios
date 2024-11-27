@@ -655,7 +655,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: Calls
     
     private func presentCallScreen(genericCallLink url: URL) {
-        presentCallScreen(configuration: .init(genericCallLink: url), notifyOtherParticipants: false)
+        presentCallScreen(configuration: .init(genericCallLink: url))
     }
     
     private func presentCallScreen(roomID: String, notifyOtherParticipants: Bool) async {
@@ -673,12 +673,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                clientID: InfoPlistReader.main.bundleIdentifier,
                                                elementCallBaseURL: appSettings.elementCallBaseURL,
                                                elementCallBaseURLOverride: appSettings.elementCallBaseURLOverride,
-                                               colorScheme: colorScheme),
-                          notifyOtherParticipants: notifyOtherParticipants)
+                                               colorScheme: colorScheme,
+                                               notifyOtherParticipants: notifyOtherParticipants))
     }
     
     private var callScreenPictureInPictureController: AVPictureInPictureController?
-    private func presentCallScreen(configuration: ElementCallConfiguration, notifyOtherParticipants: Bool) {
+    private func presentCallScreen(configuration: ElementCallConfiguration) {
         guard elementCallService.ongoingCallRoomIDPublisher.value != configuration.callRoomID else {
             MXLog.info("Returning to existing call.")
             callScreenPictureInPictureController?.stopPictureInPicture()
@@ -688,7 +688,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: elementCallService,
                                                                             configuration: configuration,
                                                                             allowPictureInPicture: true,
-                                                                            notifyOtherParticipants: notifyOtherParticipants,
                                                                             appHooks: appHooks))
         
         callScreenCoordinator.actions

@@ -33,7 +33,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     init(elementCallService: ElementCallServiceProtocol,
          configuration: ElementCallConfiguration,
          allowPictureInPicture: Bool,
-         notifyOtherParticipants: Bool,
          appHooks: AppHooks) {
         self.elementCallService = elementCallService
         self.configuration = configuration
@@ -42,7 +41,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         switch configuration.kind {
         case .genericCallLink(let url):
             widgetDriver = GenericCallLinkWidgetDriver(url: url)
-        case .roomCall(let roomProxy, let clientProxy, _, _, _, _):
+        case .roomCall(let roomProxy, let clientProxy, _, _, _, _, _):
             guard let deviceID = clientProxy.deviceID else { fatalError("Missing device ID for the call.") }
             widgetDriver = roomProxy.elementCallWidgetDriver(deviceID: deviceID)
         }
@@ -102,7 +101,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        setupCall(notifyOtherParticipants: notifyOtherParticipants)
+        setupCall()
     }
     
     override func process(viewAction: CallScreenViewAction) {
@@ -131,13 +130,13 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     
     // MARK: - Private
     
-    private func setupCall(notifyOtherParticipants: Bool) {
+    private func setupCall() {
         switch configuration.kind {
         case .genericCallLink(let url):
             state.url = url
             // We need widget messaging to work before enabling CallKit, otherwise mute, hangup etc do nothing.
             
-        case .roomCall(let roomProxy, let clientProxy, let clientID, let elementCallBaseURL, let elementCallBaseURLOverride, let colorScheme):
+        case .roomCall(let roomProxy, let clientProxy, let clientID, let elementCallBaseURL, let elementCallBaseURLOverride, let colorScheme, let notifyOtherParticipants):
             Task { [weak self] in
                 guard let self else { return }
                 

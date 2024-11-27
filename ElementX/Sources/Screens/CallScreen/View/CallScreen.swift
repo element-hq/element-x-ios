@@ -303,9 +303,9 @@ struct CallScreen_Previews: PreviewProvider {
                                                         clientID: "io.element.elementx",
                                                         elementCallBaseURL: "https://call.element.io",
                                                         elementCallBaseURLOverride: nil,
-                                                        colorScheme: .light),
+                                                        colorScheme: .light,
+                                                        notifyOtherParticipants: false),
                                    allowPictureInPicture: false,
-                                   notifyOtherParticipants: false,
                                    appHooks: AppHooks())
     }()
     
