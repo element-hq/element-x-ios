@@ -68,7 +68,7 @@ struct RoomPreviewDetails {
     let topic: String?
     let avatarURL: URL?
     let memberCount: UInt
-    let isHistoryWorldReadable: Bool
+    let isHistoryWorldReadable: Bool?
     let isJoined: Bool
     let isInvited: Bool
     let isPublic: Bool
