@@ -81,6 +81,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        timelineViewState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                        ownUserID: roomProxy.ownUserID,
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,
+                                                       isCreateMediaCaptionsEnabled: appSettings.createMediaCaptionsEnabled,
                                                        hideTimelineMedia: appSettings.hideTimelineMedia,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
                                                        bindings: .init(reactionsCollapsed: [:]),
@@ -445,6 +446,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         
         appSettings.$viewSourceEnabled
             .weakAssign(to: \.state.isViewSourceEnabled, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.$createMediaCaptionsEnabled
+            .weakAssign(to: \.state.isCreateMediaCaptionsEnabled, on: self)
             .store(in: &cancellables)
         
         appSettings.$hideTimelineMedia

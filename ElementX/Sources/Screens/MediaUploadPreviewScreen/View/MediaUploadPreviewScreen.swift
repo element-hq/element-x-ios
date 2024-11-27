@@ -22,10 +22,12 @@ struct MediaUploadPreviewScreen: View {
             .id(context.viewState.url)
             .ignoresSafeArea(edges: [.horizontal])
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                composer
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 16)
-                    .background() // Don't use compound so we match the QLPreviewController.
+                if context.viewState.showMediaCaptionComposer {
+                    composer
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 16)
+                        .background() // Don't use compound so we match the QLPreviewController.
+                }
             }
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
@@ -156,7 +158,8 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
                                                              roomProxy: JoinedRoomProxyMock(),
                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
                                                              title: "App Icon.png",
-                                                             url: snapshotURL)
+                                                             url: snapshotURL,
+                                                             createMediaCaptionsEnabled: true)
     static var previews: some View {
         NavigationStack {
             MediaUploadPreviewScreen(context: viewModel.context)

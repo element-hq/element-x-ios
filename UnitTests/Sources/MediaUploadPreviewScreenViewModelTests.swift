@@ -125,7 +125,8 @@ class MediaUploadPreviewScreenViewModelTests: XCTestCase {
                                                       roomProxy: roomProxy,
                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
                                                       title: "Some File",
-                                                      url: url)
+                                                      url: url,
+                                                      createMediaCaptionsEnabled: true)
     }
     
     private func verifyCaption(_ caption: String?, expectedCaption: String?) -> Result<Void, TimelineProxyError> {

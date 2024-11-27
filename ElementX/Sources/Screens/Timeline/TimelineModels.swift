@@ -99,6 +99,7 @@ struct TimelineViewState: BindableState {
     var canCurrentUserRedactSelf = false
     var canCurrentUserPin = false
     var isViewSourceEnabled: Bool
+    var isCreateMediaCaptionsEnabled: Bool
     var hideTimelineMedia: Bool
         
     // The `pinnedEventIDs` are used only to determine if an item is already pinned or not.
