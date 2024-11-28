@@ -8248,6 +8248,71 @@ open class MediaSourceSDKMock: MatrixRustSDK.MediaSource {
     {
     }
 
+    //MARK: - toJson
+
+    var toJsonUnderlyingCallsCount = 0
+    open var toJsonCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return toJsonUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = toJsonUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                toJsonUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    toJsonUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var toJsonCalled: Bool {
+        return toJsonCallsCount > 0
+    }
+
+    var toJsonUnderlyingReturnValue: String!
+    open var toJsonReturnValue: String! {
+        get {
+            if Thread.isMainThread {
+                return toJsonUnderlyingReturnValue
+            } else {
+                var returnValue: String? = nil
+                DispatchQueue.main.sync {
+                    returnValue = toJsonUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                toJsonUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    toJsonUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var toJsonClosure: (() -> String)?
+
+    open override func toJson() -> String {
+        toJsonCallsCount += 1
+        if let toJsonClosure = toJsonClosure {
+            return toJsonClosure()
+        } else {
+            return toJsonReturnValue
+        }
+    }
+
     //MARK: - url
 
     var urlUnderlyingCallsCount = 0
@@ -12382,6 +12447,75 @@ open class RoomSDKMock: MatrixRustSDK.Room {
             return try await matrixToPermalinkClosure()
         } else {
             return matrixToPermalinkReturnValue
+        }
+    }
+
+    //MARK: - mediaEventsTimeline
+
+    open var mediaEventsTimelineThrowableError: Error?
+    var mediaEventsTimelineUnderlyingCallsCount = 0
+    open var mediaEventsTimelineCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return mediaEventsTimelineUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = mediaEventsTimelineUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                mediaEventsTimelineUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    mediaEventsTimelineUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var mediaEventsTimelineCalled: Bool {
+        return mediaEventsTimelineCallsCount > 0
+    }
+
+    var mediaEventsTimelineUnderlyingReturnValue: Timeline!
+    open var mediaEventsTimelineReturnValue: Timeline! {
+        get {
+            if Thread.isMainThread {
+                return mediaEventsTimelineUnderlyingReturnValue
+            } else {
+                var returnValue: Timeline? = nil
+                DispatchQueue.main.sync {
+                    returnValue = mediaEventsTimelineUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                mediaEventsTimelineUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    mediaEventsTimelineUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var mediaEventsTimelineClosure: (() async throws -> Timeline)?
+
+    open override func mediaEventsTimeline() async throws -> Timeline {
+        if let error = mediaEventsTimelineThrowableError {
+            throw error
+        }
+        mediaEventsTimelineCallsCount += 1
+        if let mediaEventsTimelineClosure = mediaEventsTimelineClosure {
+            return try await mediaEventsTimelineClosure()
+        } else {
+            return mediaEventsTimelineReturnValue
         }
     }
 

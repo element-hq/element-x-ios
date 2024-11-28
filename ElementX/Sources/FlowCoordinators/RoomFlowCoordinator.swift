@@ -846,6 +846,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
             case .presentPinnedEventsTimeline:
                 stateMachine.tryEvent(.presentPinnedEventsTimeline)
+            case .presentMediaEventsTimeline:
+                Task {
+                    await self.presentMediaTimeline()
+                }
             case .presentKnockingRequestsListScreen:
                 stateMachine.tryEvent(.presentKnockRequestsListScreen)
             }
@@ -867,6 +871,31 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 }
             }
         }
+    }
+    
+    private func presentMediaTimeline() async {
+        let timelineItemFactory = RoomTimelineItemFactory(userID: userSession.clientProxy.userID,
+                                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID))
+        
+        guard case let .success(timelineController) = await roomTimelineControllerFactory.buildMediaRoomTimelineController(roomProxy: roomProxy,
+                                                                                                                           timelineItemFactory: timelineItemFactory,
+                                                                                                                           mediaProvider: userSession.mediaProvider) else {
+            MXLog.error("Failed presenting media timeline")
+            return
+        }
+        
+        let parameters = MediaEventsTimelineScreenCoordinatorParameters(roomProxy: roomProxy,
+                                                                        timelineController: timelineController,
+                                                                        mediaProvider: userSession.mediaProvider,
+                                                                        mediaPlayerProvider: MediaPlayerProvider(),
+                                                                        voiceMessageMediaManager: userSession.voiceMessageMediaManager,
+                                                                        appMediator: appMediator,
+                                                                        emojiProvider: emojiProvider)
+        
+        let coordinator = MediaEventsTimelineScreenCoordinator(parameters: parameters)
+        
+        navigationStackCoordinator.push(coordinator)
     }
     
     private func presentRoomMembersList() {

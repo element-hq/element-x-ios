@@ -13,6 +13,7 @@ enum TimelineKind {
     case live
     case detached
     case pinned
+    case media
 }
 
 enum TimelineProxyError: Error {

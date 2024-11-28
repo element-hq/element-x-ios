@@ -150,7 +150,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             case .unsignedDevice, .unknownDevice:
                 encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .insecureDevice)
                 errorLabel = L10n.commonUnableToDecryptInsecureDevice
-            case .sentBeforeWeJoined:
+            case .sentBeforeWeJoined, .historicalMessage:
                 encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .sentBeforeWeJoined)
                 errorLabel = L10n.commonUnableToDecryptNoAccess
             case .historicalMessage:

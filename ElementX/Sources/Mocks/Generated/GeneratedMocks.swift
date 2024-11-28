@@ -6147,6 +6147,70 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
             return timelineFocusedOnEventEventIDNumberOfEventsReturnValue
         }
     }
+    //MARK: - mediaEventsTimeline
+
+    var mediaEventsTimelineUnderlyingCallsCount = 0
+    var mediaEventsTimelineCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return mediaEventsTimelineUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = mediaEventsTimelineUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                mediaEventsTimelineUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    mediaEventsTimelineUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var mediaEventsTimelineCalled: Bool {
+        return mediaEventsTimelineCallsCount > 0
+    }
+
+    var mediaEventsTimelineUnderlyingReturnValue: Result<TimelineProxyProtocol, RoomProxyError>!
+    var mediaEventsTimelineReturnValue: Result<TimelineProxyProtocol, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return mediaEventsTimelineUnderlyingReturnValue
+            } else {
+                var returnValue: Result<TimelineProxyProtocol, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = mediaEventsTimelineUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                mediaEventsTimelineUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    mediaEventsTimelineUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var mediaEventsTimelineClosure: (() async -> Result<TimelineProxyProtocol, RoomProxyError>)?
+
+    func mediaEventsTimeline() async -> Result<TimelineProxyProtocol, RoomProxyError> {
+        mediaEventsTimelineCallsCount += 1
+        if let mediaEventsTimelineClosure = mediaEventsTimelineClosure {
+            return await mediaEventsTimelineClosure()
+        } else {
+            return mediaEventsTimelineReturnValue
+        }
+    }
     //MARK: - redact
 
     var redactUnderlyingCallsCount = 0
@@ -12670,6 +12734,76 @@ class RoomTimelineControllerFactoryMock: RoomTimelineControllerFactoryProtocol {
             return await buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryMediaProviderClosure(roomProxy, timelineItemFactory, mediaProvider)
         } else {
             return buildRoomPinnedTimelineControllerRoomProxyTimelineItemFactoryMediaProviderReturnValue
+        }
+    }
+    //MARK: - buildMediaRoomTimelineController
+
+    var buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount = 0
+    var buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderCalled: Bool {
+        return buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderCallsCount > 0
+    }
+    var buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderReceivedArguments: (roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol)?
+    var buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderReceivedInvocations: [(roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol)] = []
+
+    var buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue: Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError>!
+    var buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderReturnValue: Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError>! {
+        get {
+            if Thread.isMainThread {
+                return buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue
+            } else {
+                var returnValue: Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderClosure: ((JoinedRoomProxyProtocol, RoomTimelineItemFactoryProtocol, MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError>)?
+
+    func buildMediaRoomTimelineController(roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError> {
+        buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderCallsCount += 1
+        buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderReceivedArguments = (roomProxy: roomProxy, timelineItemFactory: timelineItemFactory, mediaProvider: mediaProvider)
+        DispatchQueue.main.async {
+            self.buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderReceivedInvocations.append((roomProxy: roomProxy, timelineItemFactory: timelineItemFactory, mediaProvider: mediaProvider))
+        }
+        if let buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderClosure = buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderClosure {
+            return await buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderClosure(roomProxy, timelineItemFactory, mediaProvider)
+        } else {
+            return buildMediaRoomTimelineControllerRoomProxyTimelineItemFactoryMediaProviderReturnValue
         }
     }
 }

@@ -184,6 +184,12 @@ struct RoomDetailsScreen: View {
                         context.send(viewAction: .processTapPolls)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
+            
+            #warning("Fix this title")
+            ListRow(label: .default(title: "Media and files", icon: \.image),
+                    kind: .navigationLink(action: {
+                        context.send(viewAction: .processTapMediaEvents)
+                    }))
         }
     }
     

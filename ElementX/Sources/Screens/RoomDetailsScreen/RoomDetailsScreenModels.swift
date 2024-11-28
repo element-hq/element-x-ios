@@ -22,6 +22,7 @@ enum RoomDetailsScreenViewModelAction {
     case requestRolesAndPermissionsPresentation
     case startCall
     case displayPinnedEventsTimeline
+    case displayMediaEventsTimeline
     case displayKnockingRequests
 }
 
@@ -178,6 +179,7 @@ struct LeaveRoomAlertItem: AlertProtocol {
     }
 }
 
+#warning("Isn't `process` assumed? Also, it's not an action, it's more of a request")
 enum RoomDetailsScreenViewAction {
     case processTapPeople
     case processTapInvite
@@ -197,6 +199,7 @@ enum RoomDetailsScreenViewAction {
     case processTapRolesAndPermissions
     case processTapCall
     case processTapPinnedEvents
+    case processTapMediaEvents
     case processTapRequestsToJoin
 }
 

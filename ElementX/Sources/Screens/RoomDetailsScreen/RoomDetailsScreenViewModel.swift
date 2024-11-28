@@ -164,6 +164,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .processTapPinnedEvents:
             analyticsService.trackInteraction(name: .PinnedMessageRoomInfoButton)
             actionsSubject.send(.displayPinnedEventsTimeline)
+        case .processTapMediaEvents:
+            actionsSubject.send(.displayMediaEventsTimeline)
         case .processTapRequestsToJoin:
             actionsSubject.send(.displayKnockingRequests)
         }

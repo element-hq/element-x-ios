@@ -26,11 +26,28 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
         guard let pinnedEventsTimeline = await roomProxy.pinnedEventsTimeline else {
             return nil
         }
+        
         return RoomTimelineController(roomProxy: roomProxy,
                                       timelineProxy: pinnedEventsTimeline,
                                       initialFocussedEventID: nil,
                                       timelineItemFactory: timelineItemFactory,
                                       mediaProvider: mediaProvider,
                                       appSettings: ServiceLocator.shared.settings)
+    }
+    
+    func buildMediaRoomTimelineController(roomProxy: JoinedRoomProxyProtocol,
+                                          timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                          mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError> {
+        switch await roomProxy.mediaEventsTimeline() {
+        case .success(let mediaEventsTimeline):
+            return .success(RoomTimelineController(roomProxy: roomProxy,
+                                                   timelineProxy: mediaEventsTimeline,
+                                                   initialFocussedEventID: nil,
+                                                   timelineItemFactory: timelineItemFactory,
+                                                   mediaProvider: mediaProvider,
+                                                   appSettings: ServiceLocator.shared.settings))
+        case .failure(let error):
+            return .failure(.roomProxyError(error))
+        }
     }
 }

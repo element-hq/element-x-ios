@@ -90,7 +90,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         // can be shared between multiple instances of the same room on the stack, it is
         // safer to still use the subscription logic for back pagination when live.
         switch kind {
-        case .live:
+        case .live, .media:
             return await paginateBackwardsOnLive(requestSize: requestSize)
         case .detached:
             return await focussedPaginate(.backwards, requestSize: requestSize)
@@ -560,7 +560,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     private func subscribeToPagination() async {
         switch kind {
-        case .live:
+        case .live, .media:
             let backPaginationListener = RoomPaginationStatusListener { [weak self] status in
                 guard let self else {
                     return

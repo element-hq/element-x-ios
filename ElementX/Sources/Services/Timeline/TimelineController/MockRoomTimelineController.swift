@@ -33,6 +33,15 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         callbacks.send(.paginationState(PaginationState(backward: .idle, forward: .timelineEndReached)))
         callbacks.send(.isLive(true))
         
+        switch timelineKind {
+        case .media:
+            timelineItems = (0..<50).reduce([]) { partialResult, _ in
+                partialResult + RoomTimelineItemFixtures.mediaChunk
+            }
+        default:
+            break
+        }
+        
         guard listenForSignals else { return }
         
         do {

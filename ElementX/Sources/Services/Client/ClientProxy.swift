@@ -1146,7 +1146,7 @@ private extension RoomPreviewDetails {
                                   topic: roomPreviewInfo.topic,
                                   avatarURL: roomPreviewInfo.avatarUrl.flatMap(URL.init(string:)),
                                   memberCount: UInt(roomPreviewInfo.numJoinedMembers),
-                                  isHistoryWorldReadable: roomPreviewInfo.isHistoryWorldReadable,
+                                  isHistoryWorldReadable: roomPreviewInfo.isHistoryWorldReadable ?? false,
                                   isJoined: roomPreviewInfo.membership == .joined,
                                   isInvited: roomPreviewInfo.membership == .invited,
                                   isPublic: roomPreviewInfo.joinRule == .public,

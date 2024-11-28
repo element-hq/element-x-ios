@@ -16,6 +16,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private let room: RoomProtocol
     let timeline: TimelineProxyProtocol
     
+    #warning("why is this an optional? Is all of this even necessary?")
     private var innerPinnedEventsTimeline: TimelineProxyProtocol?
     private var innerPinnedEventsTimelineTask: Task<TimelineProxyProtocol?, Never>?
     var pinnedEventsTimeline: TimelineProxyProtocol? {
@@ -162,6 +163,19 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             }
         } catch {
             MXLog.error("Unexpected error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func mediaEventsTimeline() async -> Result<any TimelineProxyProtocol, RoomProxyError> {
+        do {
+            let timeline = try await TimelineProxy(timeline: room.mediaEventsTimeline(),
+                                                   kind: .media)
+            await timeline.subscribeForUpdates()
+            
+            return .success(timeline)
+        } catch {
+            MXLog.error("Failed retrieving media events timeline with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
