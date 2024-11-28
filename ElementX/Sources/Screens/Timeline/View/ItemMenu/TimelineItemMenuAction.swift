@@ -61,6 +61,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     case addCaption
     case editCaption
     case removeCaption
+    case editPoll
     case copyPermalink
     case redact
     case reply(isThread: Bool)
@@ -80,7 +81,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     /// Whether the item should cancel a reply/edit occurring in the composer.
     var switchToDefaultComposer: Bool {
         switch self {
-        case .reply, .edit, .addCaption, .editCaption:
+        case .reply, .edit, .addCaption, .editCaption, .editPoll:
             return false
         default:
             return true
@@ -90,7 +91,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     /// Whether the action should be shown for an item that failed to send.
     var canAppearInFailedEcho: Bool {
         switch self {
-        case .copy, .edit, .redact, .viewSource:
+        case .copy, .edit, .redact, .viewSource, .editPoll:
             return true
         default:
             return false
@@ -142,6 +143,8 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             Label(L10n.actionEditCaption, icon: \.edit)
         case .removeCaption:
             Label(L10n.actionRemoveCaption, icon: \.close)
+        case .editPoll:
+            Label(L10n.actionEditPoll, icon: \.edit)
         case .copyPermalink:
             Label(L10n.actionCopyLinkToMessage, icon: \.link)
         case .reply(let isThread):

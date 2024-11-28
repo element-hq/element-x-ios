@@ -66,6 +66,8 @@ struct TimelineItemMenuActionProvider {
                 } else if isCreateMediaCaptionsEnabled {
                     actions.append(.addCaption)
                 }
+            } else if item is PollRoomTimelineItem {
+                actions.append(.editPoll)
             } else if !(item is VoiceMessageRoomTimelineItem) {
                 actions.append(.edit)
             }

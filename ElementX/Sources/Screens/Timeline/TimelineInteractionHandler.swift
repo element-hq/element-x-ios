@@ -108,7 +108,7 @@ class TimelineInteractionHandler {
                 return
             }
             UIPasteboard.general.string = caption
-        case .edit:
+        case .edit, .addCaption, .editCaption, .editPoll:
             switch timelineItem {
             case let messageTimelineItem as EventBasedMessageTimelineItemProtocol:
                 processEditMessageEvent(messageTimelineItem)
@@ -120,13 +120,6 @@ class TimelineInteractionHandler {
                 actionsSubject.send(.displayPollForm(mode: .edit(eventID: eventID, poll: pollTimelineItem.poll)))
             default:
                 MXLog.error("Cannot edit item with id: \(timelineItem.id)")
-            }
-        case .addCaption, .editCaption:
-            switch timelineItem {
-            case let messageTimelineItem as EventBasedMessageTimelineItemProtocol:
-                processEditMessageEvent(messageTimelineItem)
-            default:
-                MXLog.error("Cannot add/edit caption on item with id: \(timelineItem.id)")
             }
         case .removeCaption:
             guard case let .event(_, eventOrTransactionID) = timelineItem.id else {
