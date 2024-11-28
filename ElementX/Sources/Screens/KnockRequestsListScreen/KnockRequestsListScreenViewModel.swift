@@ -76,6 +76,14 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
                 Task { await self?.updatePermissions() }
             }
             .store(in: &cancellables)
+        
+        roomProxy.requestsToJoinPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] requests in
+                guard let self else { return }
+                state.requests = requests.map(KnockRequestCellInfo.init)
+            }
+            .store(in: &cancellables)
     }
     
     private func updateRoomInfo(roomInfo: RoomInfoProxy) {
@@ -103,5 +111,16 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
 extension KnockRequestsListScreenViewModel {
     static func mockWithInitialState(_ initialViewState: KnockRequestsListScreenViewState) -> KnockRequestsListScreenViewModel {
         .init(initialViewState: initialViewState)
+    }
+}
+
+extension KnockRequestCellInfo {
+    init(from proxy: RequestToJoinProxyProtocol) {
+        self.init(id: proxy.eventID,
+                  userID: proxy.userID,
+                  displayName: proxy.displayName,
+                  avatarURL: proxy.avatarURL,
+                  timestamp: proxy.formattedTimestamp,
+                  reason: proxy.reason)
     }
 }
