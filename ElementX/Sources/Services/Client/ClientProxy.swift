@@ -229,6 +229,8 @@ class ClientProxy: ClientProxyProtocol {
                 }
             }
             .store(in: &cancellables)
+        
+        await loadZeroMessengerInvite()
     }
     
     var userID: String {

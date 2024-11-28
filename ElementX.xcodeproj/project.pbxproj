@@ -245,6 +245,20 @@
 		18A042172C9AB5FA00727739 /* DeactivateAccountScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC3FDB58F57386741A4FC7F /* DeactivateAccountScreenViewModel.swift */; };
 		18A042182C9AB5FE00727739 /* DeactivateAccountScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82EE3B877D91030248B1242D /* DeactivateAccountScreenViewModelProtocol.swift */; };
 		18A042192C9AB60300727739 /* DeactivateAccountScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E49D10BFA7E4D70A947888C /* DeactivateAccountScreen.swift */; };
+		18AF61532CF85A8200921644 /* ZeroListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AF61522CF85A7E00921644 /* ZeroListRow.swift */; };
+		18AF61542CF85A8200921644 /* ZeroListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AF61522CF85A7E00921644 /* ZeroListRow.swift */; };
+		18AF61572CF85AE600921644 /* ZeroListRowDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AF61562CF85AE600921644 /* ZeroListRowDetails.swift */; };
+		18AF61582CF85AE600921644 /* ZeroListRowDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AF61562CF85AE600921644 /* ZeroListRowDetails.swift */; };
+		18AF615A2CF85B7100921644 /* ZeroListRowLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AF61592CF85B7100921644 /* ZeroListRowLabelStyle.swift */; };
+		18AF615B2CF85B7100921644 /* ZeroListRowLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AF61592CF85B7100921644 /* ZeroListRowLabelStyle.swift */; };
+		18AF615D2CF85E3200921644 /* ZeroListRowButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AF615C2CF85E3200921644 /* ZeroListRowButtonStyle.swift */; };
+		18AF615E2CF85E3200921644 /* ZeroListRowButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AF615C2CF85E3200921644 /* ZeroListRowButtonStyle.swift */; };
+		18AF61602CF85E9E00921644 /* ZeroListInlinePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AF615F2CF85E9E00921644 /* ZeroListInlinePicker.swift */; };
+		18AF61612CF85E9E00921644 /* ZeroListInlinePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AF615F2CF85E9E00921644 /* ZeroListInlinePicker.swift */; };
+		18AF61632CF85F1900921644 /* ZeroListRowAccessory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AF61622CF85F1900921644 /* ZeroListRowAccessory.swift */; };
+		18AF61642CF85F1900921644 /* ZeroListRowAccessory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AF61622CF85F1900921644 /* ZeroListRowAccessory.swift */; };
+		18AF61662CF85F5600921644 /* ListRowTrailingSectionSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AF61652CF85F5600921644 /* ListRowTrailingSectionSpacing.swift */; };
+		18AF61672CF85F5600921644 /* ListRowTrailingSectionSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AF61652CF85F5600921644 /* ListRowTrailingSectionSpacing.swift */; };
 		18B9B8BF2CE3F5F100DDD64D /* StackedAvatarsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8558D41DD4B553A752C868A /* StackedAvatarsView.swift */; };
 		18BF59CF2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18BF59CE2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard */; };
 		18BF59D02CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18BF59CE2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard */; };
@@ -2521,6 +2535,13 @@
 		1882EB902C90F0F5001DA2A9 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		1882EB922C90FE9C001DA2A9 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		1882EB992C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMatrixUsersService.swift; sourceTree = "<group>"; };
+		18AF61522CF85A7E00921644 /* ZeroListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroListRow.swift; sourceTree = "<group>"; };
+		18AF61562CF85AE600921644 /* ZeroListRowDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroListRowDetails.swift; sourceTree = "<group>"; };
+		18AF61592CF85B7100921644 /* ZeroListRowLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroListRowLabelStyle.swift; sourceTree = "<group>"; };
+		18AF615C2CF85E3200921644 /* ZeroListRowButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroListRowButtonStyle.swift; sourceTree = "<group>"; };
+		18AF615F2CF85E9E00921644 /* ZeroListInlinePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroListInlinePicker.swift; sourceTree = "<group>"; };
+		18AF61622CF85F1900921644 /* ZeroListRowAccessory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroListRowAccessory.swift; sourceTree = "<group>"; };
+		18AF61652CF85F5600921644 /* ListRowTrailingSectionSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowTrailingSectionSpacing.swift; sourceTree = "<group>"; };
 		18BF59CE2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ZeroLaunchScreen.storyboard; sourceTree = "<group>"; };
 		18CB801D2C7F2CE2003BC289 /* ZeroLoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroLoginScreen.swift; sourceTree = "<group>"; };
 		18CB80202C7F310E003BC289 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
@@ -4005,6 +4026,7 @@
 		18115E4F2CAE9D47001A8F4A /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				18AF61512CF85A6B00921644 /* Components */,
 				18115E502CAEA4C0001A8F4A /* Constants */,
 				18E99FEE2C9447620082DDA4 /* Models */,
 				1882EB982C91B9F6001DA2A9 /* Utils */,
@@ -4181,6 +4203,28 @@
 				18E99FF12C944F350082DDA4 /* ZeroAttachmentService.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		18AF61512CF85A6B00921644 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				18AF61552CF85ADE00921644 /* ListRow */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		18AF61552CF85ADE00921644 /* ListRow */ = {
+			isa = PBXGroup;
+			children = (
+				18AF61652CF85F5600921644 /* ListRowTrailingSectionSpacing.swift */,
+				18AF61622CF85F1900921644 /* ZeroListRowAccessory.swift */,
+				18AF615F2CF85E9E00921644 /* ZeroListInlinePicker.swift */,
+				18AF615C2CF85E3200921644 /* ZeroListRowButtonStyle.swift */,
+				18AF61592CF85B7100921644 /* ZeroListRowLabelStyle.swift */,
+				18AF61562CF85AE600921644 /* ZeroListRowDetails.swift */,
+				18AF61522CF85A7E00921644 /* ZeroListRow.swift */,
+			);
+			path = ListRow;
 			sourceTree = "<group>";
 		};
 		18BF59CD2CA4A4DA006D7BAB /* Launch */ = {
@@ -8291,6 +8335,7 @@
 				18E9A4512C9829970082DDA4 /* AppLockSetupPINScreenViewModel.swift in Sources */,
 				18E9A4522C9829970082DDA4 /* AppLockSetupPINScreenViewModelProtocol.swift in Sources */,
 				18E9A4532C9829970082DDA4 /* AppLockSetupSettingsScreen.swift in Sources */,
+				18AF61672CF85F5600921644 /* ListRowTrailingSectionSpacing.swift in Sources */,
 				18FFCED12CEC8E71002F2647 /* Avatars.swift in Sources */,
 				18E9A4542C9829970082DDA4 /* AppLockSetupSettingsScreenCoordinator.swift in Sources */,
 				18D5D9AB2CEB5A9600107940 /* ZeroRewards.swift in Sources */,
@@ -8487,6 +8532,7 @@
 				18E9A5032C9829970082DDA4 /* EventBasedTimelineItemProtocol.swift in Sources */,
 				18E9A5042C9829970082DDA4 /* (null) in Sources */,
 				18E9A5052C9829970082DDA4 /* ExpiringTaskRunner.swift in Sources */,
+				18AF615D2CF85E3200921644 /* ZeroListRowButtonStyle.swift in Sources */,
 				18E9A5062C9829970082DDA4 /* FileManager.swift in Sources */,
 				18E9A5072C9829970082DDA4 /* LandingScreen.swift in Sources */,
 				18E9A5082C9829970082DDA4 /* FileRoomTimelineItem.swift in Sources */,
@@ -8702,6 +8748,7 @@
 				18E9A5CB2C9829970082DDA4 /* PHGPostHogProtocol.swift in Sources */,
 				18E9A5CC2C9829970082DDA4 /* PINTextField.swift in Sources */,
 				18E9A5CD2C9829970082DDA4 /* PaginationIndicatorRoomTimelineItem.swift in Sources */,
+				18AF61532CF85A8200921644 /* ZeroListRow.swift in Sources */,
 				18E9A5CE2C9829970082DDA4 /* PaginationIndicatorRoomTimelineView.swift in Sources */,
 				18E9A5CF2C9829970082DDA4 /* PhotoLibraryPicker.swift in Sources */,
 				18E9A5D02C9829970082DDA4 /* Sequence+Extensions.swift in Sources */,
@@ -8764,6 +8811,7 @@
 				18E9A6062C9829970082DDA4 /* ReadReceiptsSummaryView.swift in Sources */,
 				18E9A6072C9829970082DDA4 /* ReadableFrameModifier.swift in Sources */,
 				18E9A6082C9829970082DDA4 /* RedactedRoomTimelineItem.swift in Sources */,
+				18AF61642CF85F1900921644 /* ZeroListRowAccessory.swift in Sources */,
 				18E9A6092C9829970082DDA4 /* RedactedRoomTimelineView.swift in Sources */,
 				18E9A60A2C9829970082DDA4 /* ReportContentScreen.swift in Sources */,
 				18E9A60B2C9829970082DDA4 /* ReportContentScreenCoordinator.swift in Sources */,
@@ -8890,6 +8938,7 @@
 				18E9A67B2C9829970082DDA4 /* RoomTimelineItemFactory.swift in Sources */,
 				18E9A67C2C9829970082DDA4 /* RoomTimelineItemFactoryProtocol.swift in Sources */,
 				184EC9972CA5AF03000F405E /* AuthenticationClientBuilderFactory.swift in Sources */,
+				18AF615A2CF85B7100921644 /* ZeroListRowLabelStyle.swift in Sources */,
 				18E9A67D2C9829970082DDA4 /* RoomTimelineItemFixtures.swift in Sources */,
 				18FFCED72CEC8F7E002F2647 /* RoomSelectionScreen.swift in Sources */,
 				18E9A67E2C9829970082DDA4 /* RoomTimelineItemProperties.swift in Sources */,
@@ -8946,6 +8995,7 @@
 				18E9A6A82C9829970082DDA4 /* SeparatorRoomTimelineItem.swift in Sources */,
 				182258E82CCC3EC300BBEDC0 /* InvitedRoomProxyMock.swift in Sources */,
 				1868A8C32CA338DF00DC382D /* Encodable+Extensions.swift in Sources */,
+				18AF61602CF85E9E00921644 /* ZeroListInlinePicker.swift in Sources */,
 				18E9A6A92C9829970082DDA4 /* SeparatorRoomTimelineView.swift in Sources */,
 				18E9A6AA2C9829970082DDA4 /* ServerConfirmationScreen.swift in Sources */,
 				18E9A6AB2C9829970082DDA4 /* ServerConfirmationScreenCoordinator.swift in Sources */,
@@ -8979,6 +9029,7 @@
 				18E9A6C32C9829970082DDA4 /* SettingsScreenViewModel.swift in Sources */,
 				18E9A6C42C9829970082DDA4 /* SettingsScreenViewModelProtocol.swift in Sources */,
 				18E9A6C52C9829970082DDA4 /* ShareToMapsAppActivity.swift in Sources */,
+				18AF61572CF85AE600921644 /* ZeroListRowDetails.swift in Sources */,
 				18E9A6C62C9829970082DDA4 /* ShimmerModifier.swift in Sources */,
 				18E9A6C72C9829970082DDA4 /* Signposter.swift in Sources */,
 				18E9A6C82C9829970082DDA4 /* Snapshotting.swift in Sources */,
@@ -9224,6 +9275,7 @@
 				A021827B528F1EDC9101CA58 /* AppCoordinatorProtocol.swift in Sources */,
 				4FF90E2242DBD596E1ED2E27 /* AppCoordinatorStateMachine.swift in Sources */,
 				9D9690D2FD4CD26FF670620F /* AppDelegate.swift in Sources */,
+				18AF615E2CF85E3200921644 /* ZeroListRowButtonStyle.swift in Sources */,
 				4CE638FD837ED72CD98AD9A9 /* AppHooks.swift in Sources */,
 				6851B077B4C913CC12DB6E77 /* AppLockFlowCoordinator.swift in Sources */,
 				06F8EDF52E33A2D36BCC1161 /* AppLockScreen.swift in Sources */,
@@ -9359,6 +9411,7 @@
 				A6B83EB78F025D21B6EBA90C /* CompoundIcon.swift in Sources */,
 				EA6613B29BA671F39CE1B1D2 /* ConfirmationDialog.swift in Sources */,
 				AC7AA215D60FBC307F984028 /* Consumable.swift in Sources */,
+				18AF61582CF85AE600921644 /* ZeroListRowDetails.swift in Sources */,
 				C3522917C0C367C403429EEC /* CoordinatorProtocol.swift in Sources */,
 				564BF06B3E93D6DD55F903B2 /* CreateRoomCoordinator.swift in Sources */,
 				C32765D740C81AD4C42E8F50 /* CreateRoomFlowParameters.swift in Sources */,
@@ -9640,6 +9693,7 @@
 				D5FE90A6AF5FD5AE91BD37C7 /* NotificationSettingsEditScreenViewModel.swift in Sources */,
 				2F623DA1122140A987B34D08 /* NotificationSettingsEditScreenViewModelProtocol.swift in Sources */,
 				B93FA0DA1504B301CAEE141B /* NotificationSettingsProxy.swift in Sources */,
+				18AF61612CF85E9E00921644 /* ZeroListInlinePicker.swift in Sources */,
 				4BAB8222DBA0B4207D1223E0 /* NotificationSettingsProxyMock.swift in Sources */,
 				A1BA8D6BABAFA9BAAEAA3FFD /* NotificationSettingsProxyProtocol.swift in Sources */,
 				6786C4B0936AC84D993B20BF /* NotificationSettingsScreen.swift in Sources */,
@@ -9665,6 +9719,7 @@
 				EE4E2C1922BBF5169E213555 /* PillAttachmentViewProvider.swift in Sources */,
 				899359A4D1147601F6C4E364 /* PillConstants.swift in Sources */,
 				18326FD92CA53E7400389CB2 /* ZeroColors.swift in Sources */,
+				18AF61662CF85F5600921644 /* ListRowTrailingSectionSpacing.swift in Sources */,
 				767D366C40F1311CFA333763 /* PillContext.swift in Sources */,
 				7708976CEE6AFB5CFAEFBA68 /* PillTextAttachment.swift in Sources */,
 				8C050A8012E6078BEAEF5BC8 /* PillTextAttachmentData.swift in Sources */,
@@ -9711,6 +9766,7 @@
 				C8C7AF33AADF88B306CD2695 /* QRCodeLoginService.swift in Sources */,
 				BB04B1D8E7401C90506D401E /* QRCodeLoginServiceProtocol.swift in Sources */,
 				FDD5B4B616D9FF4DE3E9A418 /* QRCodeScannerView.swift in Sources */,
+				18AF61632CF85F1900921644 /* ZeroListRowAccessory.swift in Sources */,
 				C9A631FD968249B4BA0B7B3C /* ReactionsSummaryView.swift in Sources */,
 				743790BF6A5B0577EA74AF14 /* ReadMarkerRoomTimelineItem.swift in Sources */,
 				2BBC0EB1E07963810A5D7423 /* ReadMarkerRoomTimelineView.swift in Sources */,
@@ -9816,6 +9872,7 @@
 				79741C1953269FF1A211D246 /* RoomPollsHistoryScreenViewModel.swift in Sources */,
 				F103924DED414ADFE398CE99 /* RoomPollsHistoryScreenViewModelProtocol.swift in Sources */,
 				FA9C427FFB11B1AA2DCC5602 /* RoomProxyProtocol.swift in Sources */,
+				18AF61542CF85A8200921644 /* ZeroListRow.swift in Sources */,
 				DC77E9DB2CFBE84A2BDF20C5 /* RoomRolesAndPermissionsFlowCoordinator.swift in Sources */,
 				D10BA4F041DC58580A440A32 /* RoomRolesAndPermissionsScreen.swift in Sources */,
 				B13774779EA19FDD7A35A4A8 /* RoomRolesAndPermissionsScreenCoordinator.swift in Sources */,
@@ -9911,6 +9968,7 @@
 				D02DEB36D32A72A1B365E452 /* SessionVerificationScreenCoordinator.swift in Sources */,
 				5710AAB27D5D866292C1FE06 /* SessionVerificationScreenModels.swift in Sources */,
 				601AB75BD52B0B4276CEB84A /* SessionVerificationScreenStateMachine.swift in Sources */,
+				18AF615B2CF85B7100921644 /* ZeroListRowLabelStyle.swift in Sources */,
 				4A8287E5281B44A8754BE509 /* SessionVerificationScreenViewModel.swift in Sources */,
 				762DB0973865293F0C3D3D7B /* SessionVerificationScreenViewModelProtocol.swift in Sources */,
 				755395927DDD6EBDDA5E217A /* SettingsFlowCoordinator.swift in Sources */,
