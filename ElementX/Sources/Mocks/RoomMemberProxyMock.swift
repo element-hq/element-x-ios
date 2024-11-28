@@ -43,14 +43,14 @@ extension RoomMemberProxyMock {
     static var mockMe: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@me:matrix.org",
                                         displayName: "Me",
-                                        avatarURL: URL.picturesDirectory,
+                                        avatarURL: .mockMXCAvatar,
                                         membership: .join))
     }
     
     static var mockMeAdmin: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@me:matrix.org",
                                         displayName: "Me",
-                                        avatarURL: URL.picturesDirectory,
+                                        avatarURL: .mockMXCAvatar,
                                         membership: .join,
                                         powerLevel: 100,
                                         role: .administrator))
@@ -83,7 +83,7 @@ extension RoomMemberProxyMock {
     static var mockDan: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@dan:matrix.org",
                                         displayName: "Dan",
-                                        avatarURL: URL.picturesDirectory,
+                                        avatarURL: .mockMXCAvatar,
                                         membership: .join))
     }
     

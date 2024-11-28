@@ -22,7 +22,7 @@ private enum InternalAudioPlayerState {
 }
 
 class AudioPlayer: NSObject, AudioPlayerProtocol {
-    var mediaSource: MediaSourceProxy?
+    var sourceURL: URL?
     
     private var playerItem: AVPlayerItem?
     private var internalAudioPlayer: AVQueuePlayer?
@@ -46,7 +46,7 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     
     private let releaseAudioSessionTimeoutInterval = 5.0
     
-    private(set) var url: URL?
+    private(set) var playbackURL: URL?
     
     private var deinitInProgress = false
     
@@ -86,13 +86,13 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
         unloadContent()
     }
     
-    func load(mediaSource: MediaSourceProxy, using url: URL, autoplay: Bool) {
+    func load(sourceURL: URL, playbackURL: URL, autoplay: Bool) {
         unloadContent()
         setInternalState(.loading)
-        self.mediaSource = mediaSource
-        self.url = url
+        self.sourceURL = sourceURL
+        self.playbackURL = playbackURL
         self.autoplay = autoplay
-        playerItem = AVPlayerItem(url: url)
+        playerItem = AVPlayerItem(url: playbackURL)
         internalAudioPlayer = AVQueuePlayer(playerItem: playerItem)
         addObservers()
     }
@@ -162,8 +162,8 @@ class AudioPlayer: NSObject, AudioPlayerProtocol {
     }
     
     private func unloadContent() {
-        mediaSource = nil
-        url = nil
+        sourceURL = nil
+        playbackURL = nil
         internalAudioPlayer?.replaceCurrentItem(with: nil)
         internalAudioPlayer = nil
         playerItem = nil

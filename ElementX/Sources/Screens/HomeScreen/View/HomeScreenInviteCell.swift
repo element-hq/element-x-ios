@@ -145,7 +145,7 @@ struct HomeScreenInviteCell_Previews: PreviewProvider, TestablePreview {
                 HomeScreenInviteCell(room: .roomInvite(),
                                      context: viewModel().context)
                 
-                HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org", avatarURL: .picturesDirectory),
+                HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org", avatarURL: .mockMXCAvatar),
                                      context: viewModel().context)
                 
                 HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org"),

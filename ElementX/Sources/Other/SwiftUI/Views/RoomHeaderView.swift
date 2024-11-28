@@ -41,7 +41,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
         RoomHeaderView(roomName: "Some Room name",
                        roomAvatar: .room(id: "1",
                                          name: "Some Room Name",
-                                         avatarURL: URL.picturesDirectory),
+                                         avatarURL: .mockMXCAvatar),
                        mediaProvider: MediaProviderMock(configuration: .init()))
             .previewLayout(.sizeThatFits)
             .padding()

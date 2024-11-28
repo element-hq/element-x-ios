@@ -190,7 +190,7 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
                                          name: "Test Room",
                                          avatar: .room(id: "@test:matrix.org",
                                                        name: "Test Room",
-                                                       avatarURL: .picturesDirectory),
+                                                       avatarURL: .mockMXCAvatar),
                                          canonicalAlias: "#test:matrix.org",
                                          isEncrypted: true,
                                          isPublic: true),

@@ -243,7 +243,7 @@ struct VideoInfoProxy: Hashable {
     }
     
     static var mockVideo: VideoInfoProxy {
-        .init(source: .init(url: .picturesDirectory, mimeType: nil),
+        .init(source: .init(url: .mockMXCVideo, mimeType: nil),
               duration: 100,
               size: .init(width: 1920, height: 1080),
               aspectRatio: 1.78,
@@ -292,14 +292,14 @@ struct ImageInfoProxy: Hashable {
     }
     
     static var mockImage: ImageInfoProxy {
-        .init(source: .init(url: .picturesDirectory, mimeType: "image/png"),
+        .init(source: .init(url: .mockMXCImage, mimeType: "image/png"),
               size: .init(width: 100, height: 100),
               aspectRatio: 1,
               mimeType: "image/png")
     }
     
     static var mockThumbnail: ImageInfoProxy {
-        .init(source: .init(url: .picturesDirectory, mimeType: nil),
+        .init(source: .init(url: .mockMXCImage, mimeType: nil),
               size: nil,
               aspectRatio: nil,
               mimeType: nil)
