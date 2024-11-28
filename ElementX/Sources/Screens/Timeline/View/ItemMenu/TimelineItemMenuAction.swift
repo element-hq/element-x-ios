@@ -152,7 +152,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         case .forward:
             Label(L10n.actionForward, icon: \.forward)
         case .redact:
-            Label(L10n.actionRemove, icon: \.delete)
+            Label(L10n.actionRemoveMessage, icon: \.delete)
         case .viewSource:
             Label(L10n.actionViewSource, icon: \.code)
         case .retryDecryption:

@@ -208,6 +208,8 @@ internal enum L10n {
   internal static var actionRemove: String { return L10n.tr("Localizable", "action_remove") }
   /// Remove caption
   internal static var actionRemoveCaption: String { return L10n.tr("Localizable", "action_remove_caption") }
+  /// Remove message
+  internal static var actionRemoveMessage: String { return L10n.tr("Localizable", "action_remove_message") }
   /// Reply
   internal static var actionReply: String { return L10n.tr("Localizable", "action_reply") }
   /// Reply in thread

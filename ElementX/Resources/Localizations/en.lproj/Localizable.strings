@@ -86,6 +86,7 @@
 "action_reject" = "Reject";
 "action_remove" = "Remove";
 "action_remove_caption" = "Remove caption";
+"action_remove_message" = "Remove message";
 "action_reply" = "Reply";
 "action_reply_in_thread" = "Reply in thread";
 "action_report_bug" = "Report bug";
