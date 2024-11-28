@@ -92,7 +92,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         case .removeImage:
             actionsSubject.send(.removeImage)
         case .updateAliasLocalPart(let aliasLocalPart):
-            state.aliasLocalPart = aliasLocalPart
+            state.aliasLocalPart = aliasLocalPart.lowercased()
             // If this has been called this means that the user wants a custom address not necessarily reflecting the name
             // So we disable the two from syncing.
             syncNameAndAlias = false
