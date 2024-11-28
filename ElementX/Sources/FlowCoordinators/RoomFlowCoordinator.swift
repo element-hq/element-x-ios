@@ -1001,7 +1001,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                        roomProxy: roomProxy,
                                                                        mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
                                                                        title: url.lastPathComponent,
-                                                                       url: url)
+                                                                       url: url,
+                                                                       createMediaCaptionsEnabled: appSettings.createMediaCaptionsEnabled)
 
         let mediaUploadPreviewScreenCoordinator = MediaUploadPreviewScreenCoordinator(parameters: parameters)
         

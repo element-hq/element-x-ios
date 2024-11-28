@@ -13,7 +13,8 @@ struct AudioRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            MediaFileRoomTimelineContent(filename: timelineItem.content.filename,
+            MediaFileRoomTimelineContent(timelineItemID: timelineItem.id,
+                                         filename: timelineItem.content.filename,
                                          fileSize: timelineItem.content.fileSize,
                                          caption: timelineItem.content.caption,
                                          formattedCaption: timelineItem.content.formattedCaption,

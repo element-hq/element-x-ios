@@ -24,8 +24,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private var syncUpdateCancellable: AnyCancellable?
-    
     /// Designated initialiser
     /// - Parameters:
     ///   - elementCallService: service responsible for setting up CallKit
@@ -43,7 +41,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         switch configuration.kind {
         case .genericCallLink(let url):
             widgetDriver = GenericCallLinkWidgetDriver(url: url)
-        case .roomCall(let roomProxy, let clientProxy, _, _, _, _):
+        case .roomCall(let roomProxy, let clientProxy, _, _, _, _, _):
             guard let deviceID = clientProxy.deviceID else { fatalError("Missing device ID for the call.") }
             widgetDriver = roomProxy.elementCallWidgetDriver(deviceID: deviceID)
         }
@@ -137,47 +135,39 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         case .genericCallLink(let url):
             state.url = url
             // We need widget messaging to work before enabling CallKit, otherwise mute, hangup etc do nothing.
-        
-        case .roomCall(let roomProxy, let clientProxy, let clientID, let elementCallBaseURL, let elementCallBaseURLOverride, let colorScheme):
-            // Wait for room states to be up to date before starting the call and notifying others
-            syncUpdateCancellable = clientProxy.actionsPublisher
-                .filter(\.isSyncUpdate)
-                .timeout(.seconds(5), scheduler: DispatchQueue.main)
-                .first() // Timeout will make the publisher complete, use first to handle both branches in the same place
-                .sink(receiveCompletion: { [weak self] _ in
-                    Task { [weak self] in
-                        guard let self else { return }
-                        
-                        let baseURL = if let elementCallBaseURLOverride {
-                            elementCallBaseURLOverride
-                        } else if case .success(let wellKnown) = await clientProxy.getElementWellKnown(), let wellKnownCall = wellKnown?.call {
-                            wellKnownCall.widgetURL
-                        } else {
-                            elementCallBaseURL
-                        }
-                        
-                        switch await widgetDriver.start(baseURL: baseURL, clientID: clientID, colorScheme: colorScheme) {
-                        case .success(let url):
-                            state.url = url
-                        case .failure(let error):
-                            MXLog.error("Failed starting ElementCall Widget Driver with error: \(error)")
-                            state.bindings.alertInfo = .init(id: UUID(),
-                                                             title: L10n.errorUnknown,
-                                                             primaryButton: .init(title: L10n.actionOk) {
-                                                                 self.actionsSubject.send(.dismiss)
-                                                             })
-                            
-                            return
-                        }
-                        
-                        await elementCallService.setupCallSession(roomID: roomProxy.id,
-                                                                  roomDisplayName: roomProxy.infoPublisher.value.displayName ?? roomProxy.id)
-                        
-                        _ = await roomProxy.sendCallNotificationIfNeeded()
-                        
-                        syncUpdateCancellable = nil
-                    }
-                }, receiveValue: { _ in })
+            
+        case .roomCall(let roomProxy, let clientProxy, let clientID, let elementCallBaseURL, let elementCallBaseURLOverride, let colorScheme, let notifyOtherParticipants):
+            Task { [weak self] in
+                guard let self else { return }
+                
+                let baseURL = if let elementCallBaseURLOverride {
+                    elementCallBaseURLOverride
+                } else if case .success(let wellKnown) = await clientProxy.getElementWellKnown(), let wellKnownCall = wellKnown?.call {
+                    wellKnownCall.widgetURL
+                } else {
+                    elementCallBaseURL
+                }
+                
+                switch await widgetDriver.start(baseURL: baseURL, clientID: clientID, colorScheme: colorScheme) {
+                case .success(let url):
+                    state.url = url
+                case .failure(let error):
+                    MXLog.error("Failed starting ElementCall Widget Driver with error: \(error)")
+                    state.bindings.alertInfo = .init(id: UUID(),
+                                                     title: L10n.errorUnknown,
+                                                     primaryButton: .init(title: L10n.actionOk) {
+                                                         self.actionsSubject.send(.dismiss)
+                                                     })
+                    return
+                }
+                
+                await elementCallService.setupCallSession(roomID: roomProxy.id,
+                                                          roomDisplayName: roomProxy.infoPublisher.value.displayName ?? roomProxy.id)
+                
+                if notifyOtherParticipants {
+                    _ = await roomProxy.sendCallNotificationIfNeeded()
+                }
+            }
         }
     }
     

@@ -16,6 +16,7 @@ struct TimelineItemMenuActionProvider {
     let pinnedEventIDs: Set<String>
     let isDM: Bool
     let isViewSourceEnabled: Bool
+    let isCreateMediaCaptionsEnabled: Bool
     let isPinnedEventsTimeline: Bool
     let emojiProvider: EmojiProviderProtocol
     
@@ -72,7 +73,7 @@ struct TimelineItemMenuActionProvider {
             if let messageItem = item as? EventBasedMessageTimelineItemProtocol, messageItem.supportsMediaCaption {
                 if messageItem.hasMediaCaption {
                     actions.append(contentsOf: [.editCaption, .removeCaption])
-                } else {
+                } else if isCreateMediaCaptionsEnabled {
                     actions.append(.addCaption)
                 }
             } else if !(item is VoiceMessageRoomTimelineItem) {

@@ -13,7 +13,8 @@ struct FileRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            MediaFileRoomTimelineContent(filename: timelineItem.content.filename,
+            MediaFileRoomTimelineContent(timelineItemID: timelineItem.id,
+                                         filename: timelineItem.content.filename,
                                          fileSize: timelineItem.content.fileSize,
                                          caption: timelineItem.content.caption,
                                          formattedCaption: timelineItem.content.formattedCaption,
@@ -26,6 +27,9 @@ struct FileRoomTimelineView: View {
 // MARK: Content
 
 struct MediaFileRoomTimelineContent: View {
+    @Environment(\.timelineContext) private var context
+    
+    let timelineItemID: TimelineItemIdentifier
     let filename: String
     let fileSize: UInt?
     let caption: String?
@@ -40,6 +44,9 @@ struct MediaFileRoomTimelineContent: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             filePreview
+                .onTapGesture {
+                    context?.send(viewAction: .mediaTapped(itemID: timelineItemID))
+                }
             
             if let formattedCaption {
                 FormattedBodyText(attributedString: formattedCaption,

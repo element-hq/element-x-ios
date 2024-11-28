@@ -22,10 +22,12 @@ struct MediaUploadPreviewScreen: View {
             .id(context.viewState.url)
             .ignoresSafeArea(edges: [.horizontal])
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                composer
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 16)
-                    .background() // Don't use compound so we match the QLPreviewController.
+                if context.viewState.showMediaCaptionComposer {
+                    composer
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 16)
+                        .background() // Don't use compound so we match the QLPreviewController.
+                }
             }
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
@@ -82,6 +84,16 @@ struct MediaUploadPreviewScreen: View {
             // Fix a bug with the preferredColorScheme on iOS 18 where the button doesn't
             // follow the dark colour scheme on devices running with dark mode disabled.
             .tint(.compound.textActionPrimary)
+        }
+        
+        if !context.viewState.showMediaCaptionComposer {
+            ToolbarItem(placement: .confirmationAction) {
+                Button { context.send(viewAction: .send) } label: {
+                    Text(L10n.actionSend)
+                }
+                // Same fix as above (this button is temporary anyway).
+                .tint(.compound.textActionPrimary)
+            }
         }
     }
 }
@@ -165,7 +177,8 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
                                                              roomProxy: JoinedRoomProxyMock(),
                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
                                                              title: "App Icon.png",
-                                                             url: snapshotURL)
+                                                             url: snapshotURL,
+                                                             createMediaCaptionsEnabled: true)
     static var previews: some View {
         NavigationStack {
             MediaUploadPreviewScreen(context: viewModel.context)

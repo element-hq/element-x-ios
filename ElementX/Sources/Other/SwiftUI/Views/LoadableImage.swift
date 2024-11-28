@@ -204,7 +204,7 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
         ZStack {
             Color.black.opacity(0.6)
                 .contentShape(.rect)
-                .onTapGesture { /* Empty gesture to block the itemTapped action */ }
+                .onTapGesture { /* Empty gesture to block the `mediaTapped` action */ }
             
             // Don't use a real Button as it sometimes triggers simultaneously with the long press gesture.
             Text(L10n.actionShow)
