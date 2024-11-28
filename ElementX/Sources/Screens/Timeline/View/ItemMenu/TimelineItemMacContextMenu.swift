@@ -51,7 +51,7 @@ struct TimelineItemMacContextMenu: View {
                 }
                 
                 Section {
-                    ForEach(menuActions.debugActions) { action in
+                    ForEach(menuActions.secondaryActions) { action in
                         Button(role: action.isDestructive ? .destructive : nil) {
                             send(action)
                         } label: {

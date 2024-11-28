@@ -13,18 +13,18 @@ import SwiftUI
 struct TimelineItemMenuActions {
     let reactions: [TimelineItemMenuReaction]
     let actions: [TimelineItemMenuAction]
-    let debugActions: [TimelineItemMenuAction]
+    let secondaryActions: [TimelineItemMenuAction]
     
     init?(isReactable: Bool,
           actions: [TimelineItemMenuAction],
-          debugActions: [TimelineItemMenuAction],
+          secondaryActions: [TimelineItemMenuAction],
           emojiProvider: EmojiProviderProtocol) {
-        if !isReactable, actions.isEmpty, debugActions.isEmpty {
+        if !isReactable, actions.isEmpty, secondaryActions.isEmpty {
             return nil
         }
         
         self.actions = actions
-        self.debugActions = debugActions
+        self.secondaryActions = secondaryActions
         
         var frequentlyUsed: OrderedSet<TimelineItemMenuReaction> = [
             .init(key: "👍️", symbol: .handThumbsup),
@@ -131,7 +131,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     var label: some View {
         switch self {
         case .copy:
-            Label(L10n.actionCopy, icon: \.copy)
+            Label(L10n.actionCopyText, icon: \.copy)
         case .copyCaption:
             Label(L10n.actionCopyCaption, icon: \.copy)
         case .edit:
@@ -141,7 +141,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         case .editCaption:
             Label(L10n.actionEditCaption, icon: \.edit)
         case .removeCaption:
-            Label(L10n.actionRemoveCaption, icon: \.delete)
+            Label(L10n.actionRemoveCaption, icon: \.close)
         case .copyPermalink:
             Label(L10n.actionCopyLinkToMessage, icon: \.link)
         case .reply(let isThread):
