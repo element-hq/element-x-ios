@@ -882,12 +882,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
     // MARK: - Application State
 
-    private func stopSync(isBackgroundTask: Bool) {
+    private func stopSync(isBackgroundTask: Bool, completion: (() -> Void)? = nil) {
         if isBackgroundTask, UIApplication.shared.applicationState == .active {
             // Attempt to stop the background task sync loop cleanly, only if the app not already running
             return
         }
-        userSession?.clientProxy.stopSync()
+        userSession?.clientProxy.stopSync(completion: completion)
         clientProxyObserver = nil
     }
 
@@ -968,9 +968,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         backgroundTask = appMediator.beginBackgroundTask { [weak self] in
             guard let self else { return }
             
-            stopSync(isBackgroundTask: true)
-            
-            if let backgroundTask {
+            MXLog.info("Background task is about to expire.")
+            stopSync(isBackgroundTask: true) { [weak self] in
+                guard let self, let backgroundTask else { return }
+                
+                MXLog.info("Ending background task.")
                 appMediator.endBackgroundTask(backgroundTask)
                 self.backgroundTask = nil
             }
@@ -1026,10 +1028,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         scheduleBackgroundAppRefresh()
         
         task.expirationHandler = { [weak self] in
-            self?.stopSync(isBackgroundTask: true)
+            MXLog.info("Background app refresh task is about to expire.")
             
-            MXLog.info("Background app refresh task expired")
-            task.setTaskCompleted(success: true)
+            self?.stopSync(isBackgroundTask: true) {
+                MXLog.info("Marking Background app refresh task as complete.")
+                task.setTaskCompleted(success: true)
+            }
         }
         
         guard let userSession else {
@@ -1047,13 +1051,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             .sink(receiveValue: { [weak self] _ in
                 guard let self else { return }
                 MXLog.info("Background app refresh finished")
+                backgroundRefreshSyncObserver?.cancel()
                 
                 // Make sure we stop the sync loop, otherwise the ongoing request is immediately
                 // handled the next time the app refreshes, which can trigger timeout failures.
-                stopSync(isBackgroundTask: true)
-                backgroundRefreshSyncObserver?.cancel()
-                
-                task.setTaskCompleted(success: true)
+                stopSync(isBackgroundTask: true) {
+                    MXLog.info("Marking Background app refresh task as complete.")
+                    task.setTaskCompleted(success: true)
+                }
             })
     }
 }
