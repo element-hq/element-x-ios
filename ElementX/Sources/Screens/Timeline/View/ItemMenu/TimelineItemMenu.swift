@@ -278,6 +278,11 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
     static let (ownUnsignedDevicesItem, _) = makeActions(deliveryStatus: .sendingFailed(.verifiedUser(.hasUnsignedDevice(devices: [
         RoomMemberProxyMock.mockMe.userID: ["DEVICE1"]
     ]))))
+    
+    // Media
+    
+    static let (mediaItem, mediaItemActions) = makeActions(itemType: .outgoingMedia)
+    static let (mediaItemWithCaption, mediaItemWithCaptionActions) = makeActions(itemType: .outgoingMediaWithCaption)
 
     static var previews: some View {
         TimelineItemMenu(item: item, actions: actions)
@@ -316,6 +321,16 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
         TimelineItemMenu(item: identityChangedItem, actions: actions)
             .environmentObject(viewModel.context)
             .previewDisplayName("Identity Changed")
+        
+        // Media
+        
+        TimelineItemMenu(item: mediaItem, actions: mediaItemActions)
+            .environmentObject(viewModel.context)
+            .previewDisplayName("Media")
+        
+        TimelineItemMenu(item: mediaItemWithCaption, actions: mediaItemWithCaptionActions)
+            .environmentObject(viewModel.context)
+            .previewDisplayName("Media with Caption")
     }
     
     static func makeActions(itemType: ItemType = .incomingText,
@@ -342,6 +357,7 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
             if let deliveryStatus {
                 textItem.properties.deliveryStatus = deliveryStatus
             }
+            item = textItem
         }
         
         return (item, actions)
@@ -352,9 +368,9 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
         case .incomingText:
             RoomTimelineItemFixtures.singleMessageChunk.first as? EventBasedTimelineItemProtocol
         case .outgoingMedia:
-            RoomTimelineItemFixtures.mediaChunk.first as? EventBasedTimelineItemProtocol
+            RoomTimelineItemFixtures.mediaChunk[1] as? EventBasedTimelineItemProtocol
         case .outgoingMediaWithCaption:
-            RoomTimelineItemFixtures.mediaChunk.last as? EventBasedTimelineItemProtocol
+            RoomTimelineItemFixtures.mediaChunk[5] as? EventBasedTimelineItemProtocol
         }
     }
 }
