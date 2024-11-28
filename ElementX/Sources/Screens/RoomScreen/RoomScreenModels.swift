@@ -48,8 +48,7 @@ struct RoomScreenViewState: BindableState {
     var canAcceptKnocks = false
     var canDeclineKnocks = false
     var canBan = false
-    // TODO: We still don't know how to get these, but these will be the non already seen knock requests of the room, for now we are using this as a mock for testing purposes
-    var unseenKnockRequests: [KnockRequestInfo] = [.init(displayName: "Alice", avatarURL: nil, userID: "@alice:matrix.org", reason: "Helloooo")]
+    var unseenKnockRequests: [KnockRequestInfo] = []
     
     var shouldSeeKnockRequests: Bool {
         isKnockingEnabled && isKnockableRoom && !unseenKnockRequests.isEmpty && (canAcceptKnocks || canDeclineKnocks || canBan)

@@ -85,6 +85,11 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         identityStatusChangesSubject.asCurrentValuePublisher()
     }
     
+    private let requestsToJoinSubject = CurrentValueSubject<[RequestToJoinProxyProtocol], Never>([])
+    var requestsToJoinPublisher: CurrentValuePublisher<[RequestToJoinProxyProtocol], Never> {
+        requestsToJoinSubject.asCurrentValuePublisher()
+    }
+    
     // A room identifier is constant and lazy stops it from being fetched
     // multiple times over FFI
     lazy var id: String = room.id()
@@ -654,7 +659,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         do {
             requestsToJoinChangesObservationToken = try await room.subscribeToRequestsToJoin(listener: RoomRequestsToJoinListener { [weak self] requests in
                 guard let self else { return }
-                MXLog.info("Received requests to join update: \(requests)")
+                
+                MXLog.info("Received requests to join update, requests id: \(requests.map(\.eventId))")
+                requestsToJoinSubject.send(requests.map(RequestToJoinProxy.init))
             })
         } catch {
             MXLog.error("Failed observing requests to join with error: \(error)")

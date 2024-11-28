@@ -31,6 +31,10 @@ protocol RequestToJoinProxyProtocol {
 struct RequestToJoinProxy: RequestToJoinProxyProtocol {
     private let requestToJoin: RequestToJoin
     
+    init(requestToJoin: RequestToJoin) {
+        self.requestToJoin = requestToJoin
+    }
+    
     var eventID: String {
         requestToJoin.eventId
     }
