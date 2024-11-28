@@ -60,6 +60,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private var typingNotificationObservationToken: TaskHandle?
     // periphery:ignore - required for instance retention in the rust codebase
     private var identityStatusChangesObservationToken: TaskHandle?
+    // periphery:ignore - required for instance retention in the rust codebase
+    private var requestsToJoinChangesObservationToken: TaskHandle?
     
     private var subscribedForUpdates = false
     
@@ -131,6 +133,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
         
         subscribeToTypingNotifications()
+        
+        await subscribeToRequestsToJoin()
     }
     
     func subscribeToRoomInfoUpdates() {
@@ -645,6 +649,17 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             identityStatusChangesSubject.send(changes)
         })
     }
+    
+    private func subscribeToRequestsToJoin() async {
+        do {
+            requestsToJoinChangesObservationToken = try await room.subscribeToRequestsToJoin(listener: RoomRequestsToJoinListener { [weak self] requests in
+                guard let self else { return }
+                MXLog.info("Received requests to join update: \(requests)")
+            })
+        } catch {
+            MXLog.error("Failed observing requests to join with error: \(error)")
+        }
+    }
 }
 
 private final class RoomInfoUpdateListener: RoomInfoListener {
@@ -680,5 +695,17 @@ private final class RoomIdentityStatusChangeListener: IdentityStatusChangeListen
     
     func call(identityStatusChange: [IdentityStatusChange]) {
         onUpdateClosure(identityStatusChange)
+    }
+}
+
+private final class RoomRequestsToJoinListener: RequestsToJoinListener {
+    private let onUpdateClosure: ([RequestToJoin]) -> Void
+    
+    init(_ onUpdateClosure: @escaping ([RequestToJoin]) -> Void) {
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func call(requestsToJoin: [RequestToJoin]) {
+        onUpdateClosure(requestsToJoin)
     }
 }
