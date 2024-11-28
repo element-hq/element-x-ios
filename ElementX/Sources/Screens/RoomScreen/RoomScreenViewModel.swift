@@ -181,6 +181,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 state.shouldShowCallButton = ongoingCallRoomID != roomProxy.id
             }
             .store(in: &cancellables)
+        
+        roomProxy.requestsToJoinPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] requests in
+                guard let self else { return }
+                state.unseenKnockRequests = requests
+                    .filter { !$0.isSeen }
+                    .map(KnockRequestInfo.init)
+            }
+            .store(in: &cancellables)
     }
     
     private func processIdentityStatusChanges(_ changes: [IdentityStatusChange]) async {
@@ -302,5 +312,14 @@ extension RoomScreenViewModel {
                             appSettings: ServiceLocator.shared.settings,
                             analyticsService: ServiceLocator.shared.analytics,
                             userIndicatorController: ServiceLocator.shared.userIndicatorController)
+    }
+}
+
+private extension KnockRequestInfo {
+    init(from proxy: RequestToJoinProxyProtocol) {
+        self.init(displayName: proxy.displayName,
+                  avatarURL: proxy.avatarURL,
+                  userID: proxy.userID,
+                  reason: proxy.reason)
     }
 }
