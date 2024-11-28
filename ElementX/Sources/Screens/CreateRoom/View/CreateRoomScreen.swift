@@ -196,6 +196,7 @@ struct CreateRoomScreen: View {
                     
                     TextField("", text: aliasBinding)
                         .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
                         .tint(.compound.iconAccentTertiary)
                         .font(.compound.bodyLG)
                         .foregroundStyle(.compound.textPrimary)
