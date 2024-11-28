@@ -26,7 +26,7 @@ struct RoomRolesAndPermissionsScreen: View {
     
     private var rolesSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsAdmins,
+            ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsAdmins,
                                     icon: \.admin),
                     details: administratorDetails,
                     kind: .navigationLink {
@@ -34,7 +34,7 @@ struct RoomRolesAndPermissionsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.administrators)
             
-            ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsModerators,
+            ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsModerators,
                                     icon: \.chatProblem),
                     details: moderatorDetails,
                     kind: .navigationLink {
@@ -42,7 +42,7 @@ struct RoomRolesAndPermissionsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.moderators)
             
-            ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsChangeMyRole,
+            ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsChangeMyRole,
                                     icon: \.edit),
                     kind: .button {
                         context.send(viewAction: .editOwnUserRole)
@@ -53,7 +53,7 @@ struct RoomRolesAndPermissionsScreen: View {
         }
     }
     
-    private var administratorDetails: ListRowDetails<Image> {
+    private var administratorDetails: ZeroListRowDetails<Image> {
         if let administratorCount = context.viewState.administratorCount {
             .title("\(administratorCount)")
         } else {
@@ -61,7 +61,7 @@ struct RoomRolesAndPermissionsScreen: View {
         }
     }
     
-    private var moderatorDetails: ListRowDetails<Image> {
+    private var moderatorDetails: ZeroListRowDetails<Image> {
         if let moderatorCount = context.viewState.moderatorCount {
             .title("\(moderatorCount)")
         } else {
@@ -71,7 +71,7 @@ struct RoomRolesAndPermissionsScreen: View {
     
     private var permissionsSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsRoomDetails,
+            ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsRoomDetails,
                                     icon: \.info),
                     details: .isWaiting(context.viewState.permissions == nil),
                     kind: .navigationLink {
@@ -80,7 +80,7 @@ struct RoomRolesAndPermissionsScreen: View {
                     .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.roomDetails)
                     .disabled(context.viewState.permissions == nil)
             
-            ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsMessagesAndContent,
+            ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsMessagesAndContent,
                                     icon: \.chat),
                     details: .isWaiting(context.viewState.permissions == nil),
                     kind: .navigationLink {
@@ -89,7 +89,7 @@ struct RoomRolesAndPermissionsScreen: View {
                     .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.messagesAndContent)
                     .disabled(context.viewState.permissions == nil)
             
-            ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsMemberModeration,
+            ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsMemberModeration,
                                     icon: \.user),
                     details: .isWaiting(context.viewState.permissions == nil),
                     kind: .navigationLink {
@@ -105,7 +105,7 @@ struct RoomRolesAndPermissionsScreen: View {
     
     private var resetSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenRoomRolesAndPermissionsReset,
+            ZeroListRow(label: .plain(title: L10n.screenRoomRolesAndPermissionsReset,
                                   role: .destructive),
                     kind: .button {
                         context.send(viewAction: .reset)

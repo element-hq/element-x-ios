@@ -44,7 +44,7 @@ struct BugReportScreen: View {
     
     private var textFieldSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenBugReportEditorPlaceholder),
+            ZeroListRow(label: .plain(title: L10n.screenBugReportEditorPlaceholder),
                     kind: .textField(text: $context.reportText, axis: .vertical))
                 .lineLimit(4, reservesSpace: true)
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.report)
@@ -56,10 +56,10 @@ struct BugReportScreen: View {
     
     private var sendLogsSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenBugReportIncludeLogs),
+            ZeroListRow(label: .plain(title: L10n.screenBugReportIncludeLogs),
                     kind: .toggle($context.sendingLogsEnabled))
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.sendLogs)
-            ListRow(label: .plain(title: L10n.screenBugReportViewLogs),
+            ZeroListRow(label: .plain(title: L10n.screenBugReportViewLogs),
                     kind: .navigationLink { context.send(viewAction: .viewLogs) })
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.sendLogs)
         } footer: {
@@ -70,7 +70,7 @@ struct BugReportScreen: View {
 
     private var canContactSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenBugReportContactMeTitle),
+            ZeroListRow(label: .plain(title: L10n.screenBugReportContactMeTitle),
                     kind: .toggle($context.canContact))
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.canContact)
         } footer: {
@@ -82,11 +82,11 @@ struct BugReportScreen: View {
     @ViewBuilder
     private var attachScreenshotSection: some View {
         Section {
-            ListRow(kind: .custom {
+            ZeroListRow(kind: .custom {
                 PhotosPicker(selection: $selectedScreenshot,
                              matching: .screenshots,
                              photoLibrary: .shared()) {
-                    ListRowLabel.plain(title: photosPickerTitle)
+                    ZeroListRowLabel.plain(title: photosPickerTitle)
                 }
             })
             .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.attachScreenshot)

@@ -55,7 +55,7 @@ struct StartChatScreen: View {
     
     private var createRoomSection: some View {
         Section {
-            ListRow(label: .default(title: "Create a Group",
+            ZeroListRow(label: .default(title: "Create a Group",
                                     icon: \.plus),
                     kind: .navigationLink { context.send(viewAction: .createRoom) })
                 .accessibilityIdentifier(A11yIdentifiers.startChatScreen.createRoom)
@@ -64,9 +64,9 @@ struct StartChatScreen: View {
     
     private var inviteFriendsSection: some View {
         Section {
-            ListRow(kind: .custom {
+            ZeroListRow(kind: .custom {
                 MatrixUserShareLink(userID: context.viewState.userID) {
-                    ListRowLabel.default(title: L10n.actionInvitePeopleToApp(InfoPlistReader.main.bundleDisplayName),
+                    ZeroListRowLabel.default(title: L10n.actionInvitePeopleToApp(InfoPlistReader.main.bundleDisplayName),
                                          icon: \.shareIos)
                 }
             })

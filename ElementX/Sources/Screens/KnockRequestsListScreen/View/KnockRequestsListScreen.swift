@@ -35,7 +35,7 @@ struct KnockRequestsListScreen: View {
             LazyVStack(spacing: 0) {
                 if context.viewState.shouldDisplayRequests {
                     ForEach(context.viewState.requests) { requestInfo in
-                        ListRow(kind: .custom {
+                        ZeroListRow(kind: .custom {
                             KnockRequestCell(cellInfo: requestInfo,
                                              mediaProvider: context.mediaProvider,
                                              onAccept: context.viewState.canAccept ? onAccept : nil,

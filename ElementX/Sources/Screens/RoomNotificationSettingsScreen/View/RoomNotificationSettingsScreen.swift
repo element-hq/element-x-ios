@@ -31,7 +31,7 @@ struct RoomNotificationSettingsScreen: View {
 
     private var allowCustomSettingSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenRoomNotificationSettingsAllowCustom),
+            ZeroListRow(label: .plain(title: L10n.screenRoomNotificationSettingsAllowCustom),
                     kind: .toggle($context.allowCustomSetting))
                 .accessibilityIdentifier(A11yIdentifiers.roomNotificationSettingsScreen.allowCustomSetting)
                 .disabled(context.viewState.notificationSettingsState.isLoading)
@@ -46,7 +46,7 @@ struct RoomNotificationSettingsScreen: View {
     
     private var defaultSettingSection: some View {
         Section {
-            ListRow(label: .plain(title: context.viewState.isRestoringDefaultSetting ? L10n.commonLoading : context.viewState.strings.string(for: context.viewState.notificationSettingsState)),
+            ZeroListRow(label: .plain(title: context.viewState.isRestoringDefaultSetting ? L10n.commonLoading : context.viewState.strings.string(for: context.viewState.notificationSettingsState)),
                     kind: .label)
                 .disabled(context.viewState.isRestoringDefaultSetting)
         } header: {

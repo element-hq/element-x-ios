@@ -26,7 +26,7 @@ struct RoomNotificationSettingsUserDefinedScreen: View {
     // MARK: - Private
     
     private var deleteButton: some View {
-        ListRow(label: .action(title: L10n.screenRoomNotificationSettingsEditRemoveSetting,
+        ZeroListRow(label: .action(title: L10n.screenRoomNotificationSettingsEditRemoveSetting,
                                icon: \.delete,
                                role: .destructive),
                 details: context.viewState.deletingCustomSetting ? .isWaiting(true) : nil,

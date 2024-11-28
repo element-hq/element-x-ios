@@ -62,7 +62,7 @@ struct NotificationSettingsScreen: View {
     
     private var userPermissionSection: some View {
         Section {
-            ListRow(kind: .custom {
+            ZeroListRow(kind: .custom {
                 HStack(alignment: .firstTextBaseline, spacing: 13) {
                     Image(systemSymbol: .exclamationmarkCircleFill)
                         .foregroundColor(.compound.iconTertiaryAlpha)
@@ -76,7 +76,7 @@ struct NotificationSettingsScreen: View {
                             .tint(.compound.textPrimary)
                     }
                 }
-                .padding(.horizontal, ListRowPadding.horizontal)
+                .padding(.horizontal, ZeroListRowPadding.horizontal)
                 .padding(.vertical, 8)
             })
         }
@@ -84,7 +84,7 @@ struct NotificationSettingsScreen: View {
     
     private var enableNotificationSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenNotificationSettingsEnableNotifications),
+            ZeroListRow(label: .plain(title: L10n.screenNotificationSettingsEnableNotifications),
                     kind: .toggle($context.enableNotifications))
                 .onChange(of: context.enableNotifications) {
                     context.send(viewAction: .changedEnableNotifications)
@@ -95,7 +95,7 @@ struct NotificationSettingsScreen: View {
     private var roomsNotificationSection: some View {
         Section {
             // Group chats
-            ListRow(label: .plain(title: L10n.screenNotificationSettingsGroupChats),
+            ZeroListRow(label: .plain(title: L10n.screenNotificationSettingsGroupChats),
                     details: context.viewState.settings.map {
                         .title(context.viewState.strings.string(for: $0.groupChatsMode))
                     } ?? .isWaiting(true),
@@ -106,7 +106,7 @@ struct NotificationSettingsScreen: View {
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
             
             // Direct chats
-            ListRow(label: .plain(title: L10n.screenNotificationSettingsDirectChats),
+            ZeroListRow(label: .plain(title: L10n.screenNotificationSettingsDirectChats),
                     details: context.viewState.settings.map {
                         .title(context.viewState.strings.string(for: $0.directChatsMode))
                     } ?? .isWaiting(true),
@@ -124,7 +124,7 @@ struct NotificationSettingsScreen: View {
         
     private var mentionsSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenNotificationSettingsRoomMentionLabel),
+            ZeroListRow(label: .plain(title: L10n.screenNotificationSettingsRoomMentionLabel),
                     kind: .toggle($context.roomMentionsEnabled))
                 .disabled(context.viewState.settings?.roomMentionsEnabled == nil)
                 .allowsHitTesting(!context.viewState.applyingChange)
@@ -139,7 +139,7 @@ struct NotificationSettingsScreen: View {
     
     private var callsSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenNotificationSettingsCallsLabel),
+            ZeroListRow(label: .plain(title: L10n.screenNotificationSettingsCallsLabel),
                     kind: .toggle($context.callsEnabled))
                 .disabled(context.viewState.settings?.callsEnabled == nil)
                 .allowsHitTesting(!context.viewState.applyingChange)
@@ -154,7 +154,7 @@ struct NotificationSettingsScreen: View {
     
     private var additionalSettingsSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenNotificationSettingsInviteForMeLabel),
+            ZeroListRow(label: .plain(title: L10n.screenNotificationSettingsInviteForMeLabel),
                     kind: .toggle($context.invitationsEnabled))
                 .disabled(context.viewState.settings?.invitationsEnabled == nil)
                 .allowsHitTesting(!context.viewState.applyingChange)
@@ -169,7 +169,7 @@ struct NotificationSettingsScreen: View {
     
     private var configurationMismatchSection: some View {
         Section {
-            ListRow(kind: .custom {
+            ZeroListRow(kind: .custom {
                 VStack(alignment: .leading, spacing: 16) {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(L10n.screenNotificationSettingsConfigurationMismatch)
@@ -187,7 +187,7 @@ struct NotificationSettingsScreen: View {
                     .disabled(context.viewState.fixingConfigurationMismatch)
                     .accessibilityIdentifier(A11yIdentifiers.notificationSettingsScreen.fixMismatchConfiguration)
                 }
-                .padding(.horizontal, ListRowPadding.horizontal)
+                .padding(.horizontal, ZeroListRowPadding.horizontal)
                 .padding(.vertical, 24)
             })
         }

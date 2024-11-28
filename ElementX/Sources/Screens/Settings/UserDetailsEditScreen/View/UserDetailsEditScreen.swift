@@ -70,7 +70,7 @@ struct UserDetailsEditScreen: View {
 
     private var nameSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenEditProfileDisplayNamePlaceholder),
+            ZeroListRow(label: .plain(title: L10n.screenEditProfileDisplayNamePlaceholder),
                     kind: .textField(text: $context.name, axis: .horizontal))
                 .focused($focus)
         } header: {

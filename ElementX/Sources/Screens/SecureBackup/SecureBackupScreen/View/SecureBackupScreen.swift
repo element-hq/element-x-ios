@@ -38,7 +38,7 @@ struct SecureBackupScreen: View {
     @ViewBuilder
     private var keyBackupSection: some View {
         Section {
-            ListRow(kind: .custom {
+            ZeroListRow(kind: .custom {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(L10n.screenChatBackupKeyBackupTitle)
                         .font(.zero.bodyLGSemibold)
@@ -48,12 +48,12 @@ struct SecureBackupScreen: View {
                         .font(.zero.bodySM)
                         .foregroundColor(.compound.textSecondary)
                 }
-                .padding(.horizontal, ListRowPadding.horizontal)
-                .padding(.vertical, ListRowPadding.vertical)
+                .padding(.horizontal, ZeroListRowPadding.horizontal)
+                .padding(.vertical, ZeroListRowPadding.vertical)
                 .accessibilityElement(children: .combine)
             })
             
-            ListRow(label: .plain(title: L10n.screenChatBackupKeyStorageToggleTitle,
+            ZeroListRow(label: .plain(title: L10n.screenChatBackupKeyStorageToggleTitle,
                                   description: context.viewState.keyStorageToggleDescription),
                     kind: .toggle($context.keyStorageEnabled))
                 .onChange(of: context.keyStorageEnabled) { _, newValue in
@@ -77,14 +77,14 @@ struct SecureBackupScreen: View {
         Section {
             switch context.viewState.recoveryState {
             case .enabled:
-                ListRow(label: .default(title: L10n.screenChatBackupRecoveryActionChange,
+                ZeroListRow(label: .default(title: L10n.screenChatBackupRecoveryActionChange,
                                         description: L10n.screenChatBackupRecoveryActionChangeDescription,
                                         icon: \.key,
                                         iconAlignment: .top),
                         kind: .navigationLink { context.send(viewAction: .recoveryKey) })
                     .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
             case .disabled:
-                ListRow(label: .default(title: L10n.screenChatBackupRecoveryActionSetup,
+                ZeroListRow(label: .default(title: L10n.screenChatBackupRecoveryActionSetup,
                                         description: L10n.screenChatBackupRecoveryActionChangeDescription,
                                         icon: \.key,
                                         iconAlignment: .top),
@@ -92,12 +92,12 @@ struct SecureBackupScreen: View {
                         kind: .navigationLink { context.send(viewAction: .recoveryKey) })
                     .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
             case .incomplete:
-                ListRow(label: .plain(title: L10n.screenChatBackupRecoveryActionConfirm),
+                ZeroListRow(label: .plain(title: L10n.screenChatBackupRecoveryActionConfirm),
                         details: .icon(BadgeView(size: 10)),
                         kind: .navigationLink { context.send(viewAction: .recoveryKey) })
                     .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
             default:
-                ListRow(label: .plain(title: L10n.commonLoading), details: .isWaiting(true), kind: .label)
+                ZeroListRow(label: .plain(title: L10n.commonLoading), details: .isWaiting(true), kind: .label)
             }
         } footer: {
             recoveryKeySectionFooter

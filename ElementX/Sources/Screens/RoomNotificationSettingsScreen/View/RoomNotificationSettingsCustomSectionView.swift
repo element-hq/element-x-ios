@@ -14,7 +14,7 @@ struct RoomNotificationSettingsCustomSectionView: View {
     var body: some View {
         Section {
             ForEach(context.viewState.availableCustomRoomNotificationModes, id: \.self) { mode in
-                ListRow(label: .plain(title: context.viewState.strings.string(for: mode),
+                ZeroListRow(label: .plain(title: context.viewState.strings.string(for: mode),
                                       description: context.viewState.description(mode: mode)),
                         details: (context.viewState.pendingCustomMode == mode) ? .isWaiting(true) : nil,
                         kind: .selection(isSelected: context.viewState.isSelected(mode: mode)) {

@@ -78,12 +78,12 @@ struct RoomDetailsEditScreen: View {
     private var nameSection: some View {
         Section {
             if context.viewState.canEditName {
-                ListRow(label: .plain(title: L10n.commonRoomNamePlaceholder),
+                ZeroListRow(label: .plain(title: L10n.commonRoomNamePlaceholder),
                         kind: .textField(text: $context.name, axis: .horizontal))
                     .focused($focus, equals: .name)
             } else {
-                ListRow(kind: .custom {
-                    ListRowLabel.plain(title: context.viewState.nameRowTitle)
+                ZeroListRow(kind: .custom {
+                    ZeroListRowLabel.plain(title: context.viewState.nameRowTitle)
                         .listRowBackground(Color.clear)
                 })
             }
@@ -96,13 +96,13 @@ struct RoomDetailsEditScreen: View {
     private var topicSection: some View {
         Section {
             if context.viewState.canEditTopic {
-                ListRow(label: .plain(title: L10n.commonTopicPlaceholder),
+                ZeroListRow(label: .plain(title: L10n.commonTopicPlaceholder),
                         kind: .textField(text: $context.topic, axis: .vertical))
                     .focused($focus, equals: .topic)
                     .lineLimit(3...)
             } else {
-                ListRow(kind: .custom {
-                    ListRowLabel.plain(title: context.viewState.topicRowTitle)
+                ZeroListRow(kind: .custom {
+                    ZeroListRowLabel.plain(title: context.viewState.topicRowTitle)
                         .listRowBackground(Color.clear)
                 })
             }

@@ -61,7 +61,7 @@ struct CreateRoomScreen: View {
                 
                 VStack(alignment: .leading, spacing: 8) {
 //                    Text(L10n.screenCreateRoomRoomNameLabel.uppercased())
-//                        .padding(.leading, ListRowPadding.horizontal)
+//                        .padding(.leading, ZeroListRowPadding.horizontal)
 //                        .compoundListSectionHeader()
                     
                     TextField(L10n.screenCreateRoomRoomNameLabel,
@@ -70,8 +70,8 @@ struct CreateRoomScreen: View {
                               axis: .horizontal)
                         .focused($focus, equals: .name)
                         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)
-                        .padding(.horizontal, ListRowPadding.horizontal)
-                        .padding(.vertical, ListRowPadding.vertical)
+                        .padding(.horizontal, ZeroListRowPadding.horizontal)
+                        .padding(.vertical, ZeroListRowPadding.vertical)
                         .background(.zero.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 12))
                 }
             }
@@ -120,7 +120,7 @@ struct CreateRoomScreen: View {
     
     private var topicSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.commonTopicPlaceholder),
+            ZeroListRow(label: .plain(title: L10n.commonTopicPlaceholder),
                     kind: .textField(text: $context.roomTopic, axis: .vertical))
                 .lineLimit(3, reservesSpace: false)
                 .focused($focus, equals: .topic)
@@ -148,7 +148,7 @@ struct CreateRoomScreen: View {
                     .frame(width: invitedUserCellWidth)
                 }
             }
-            .padding(.horizontal, ListRowPadding.horizontal)
+            .padding(.horizontal, ZeroListRowPadding.horizontal)
             .padding(.vertical, 22)
         }
         .frame(width: frame.width)
@@ -156,12 +156,12 @@ struct CreateRoomScreen: View {
     
     private var securitySection: some View {
         Section {
-            ListRow(label: .default(title: "Encrypted Group",
+            ZeroListRow(label: .default(title: "Encrypted Group",
                                     description: "Encrypted Groups are ideal for more focused, intimate conversations and are encrypted by default. Check this box if you are creating a room intended for smaller groups.",
                                     icon: \.lock,
                                     iconAlignment: .top),
                     kind: .selection(isSelected: context.isRoomPrivate) { context.isRoomPrivate = true })
-            ListRow(label: .default(title: "Super Group",
+            ZeroListRow(label: .default(title: "Super Group",
                                     description: "Super Groups are designed to accommodate larger communities and are not encrypted by default. Check this box if you are creating a room intended for larger groups (10+ people).",
                                     icon: \.public,
                                     iconAlignment: .top),
@@ -174,10 +174,10 @@ struct CreateRoomScreen: View {
     
     private var roomAccessSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionTitle,
+            ZeroListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionTitle,
                                   description: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionDescription),
                     kind: .selection(isSelected: !context.isKnockingOnly) { context.isKnockingOnly = false })
-            ListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionKnockingOptionTitle,
+            ZeroListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionKnockingOptionTitle,
                                   description: L10n.screenCreateRoomRoomAccessSectionKnockingOptionDescription),
                     kind: .selection(isSelected: context.isKnockingOnly) { context.isKnockingOnly = true })
         } header: {
@@ -188,7 +188,7 @@ struct CreateRoomScreen: View {
     
     private var roomAliasSection: some View {
         Section {
-            ListRow(kind: .custom {
+            ZeroListRow(kind: .custom {
                 HStack(spacing: 0) {
                     Text("#")
                         .font(.compound.bodyLG)
@@ -205,7 +205,7 @@ struct CreateRoomScreen: View {
                         .font(.compound.bodyLG)
                         .foregroundStyle(.compound.textSecondary)
                 }
-                .padding(ListRowPadding.textFieldInsets)
+                .padding(ZeroListRowPadding.textFieldInsets)
                 .environment(\.layoutDirection, .leftToRight)
                 .errorBackground(!context.viewState.aliasErrors.isEmpty)
             })

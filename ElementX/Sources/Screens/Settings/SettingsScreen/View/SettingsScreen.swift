@@ -33,7 +33,7 @@ struct SettingsScreen: View {
 //            generalSection
 //            
 //            Section {
-//                ListRow(label: .default(title: "Advanced Settings",
+//                ZeroListRow(label: .default(title: "Advanced Settings",
 //                                        icon: \.code),
 //                        kind: .navigationLink {
 //                            context.send(viewAction: .developerOptions)
@@ -43,7 +43,7 @@ struct SettingsScreen: View {
             
             signOutSection
         }
-        .compoundList()
+        .zeroList()
         // .navigationTitle(L10n.commonSettings)
         // .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
@@ -51,7 +51,7 @@ struct SettingsScreen: View {
     
     private var userSection: some View {
         Section {
-            ListRow(kind: .custom {
+            ZeroListRow(kind: .custom {
                 Button {
                     context.send(viewAction: .userDetails)
                 } label: {
@@ -76,9 +76,9 @@ struct SettingsScreen: View {
                         
 //                        Spacer()
 //
-//                        ListRowAccessory.navigationLink
+//                        ZeroListRowAccessory.navigationLink
                     }
-                    .padding(.horizontal, ListRowPadding.horizontal)
+                    .padding(.horizontal, ZeroListRowPadding.horizontal)
                     .padding(.vertical, 8)
                 }
             })
@@ -87,7 +87,7 @@ struct SettingsScreen: View {
     
     private var userRewardsSection: some View {
         Section {
-            ListRow(kind: .custom{
+            ZeroListRow(kind: .custom{
                 Button {
                     context.send(viewAction: .rewards)
                 } label: {
@@ -125,6 +125,12 @@ struct SettingsScreen: View {
                         
                         Spacer()
                     }
+                    .background {
+                        RoundedRectangle(cornerRadius: 12)
+                                .fill(.clear)
+                                .stroke(.zero.bgAccentRest, lineWidth: 1)
+                    }
+                    .padding(.horizontal, 32)
                 }
             })
         }
@@ -132,21 +138,21 @@ struct SettingsScreen: View {
     
     private var manageMyAppSection: some View {
         Section {
-            ListRow(label: .default(title: "Invite Friend",
+            ZeroListRow(label: .default(title: "Invite Friend",
                                     icon: \.plus),
                     kind: .navigationLink {
                 context.send(viewAction: .inviteFriend)
             })
             .accessibilityIdentifier("settings-invite-friend")
             
-            ListRow(label: .default(title: L10n.screenNotificationSettingsTitle,
+            ZeroListRow(label: .default(title: L10n.screenNotificationSettingsTitle,
                                     icon: \.notifications),
                     kind: .navigationLink {
                         context.send(viewAction: .notifications)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.notifications)
             
-//            ListRow(label: .default(title: L10n.commonScreenLock,
+//            ZeroListRow(label: .default(title: L10n.commonScreenLock,
 //                                    icon: \.lock),
 //                    kind: .navigationLink {
 //                        context.send(viewAction: .appLock)
@@ -155,7 +161,7 @@ struct SettingsScreen: View {
             
             switch context.viewState.securitySectionMode {
             case .secureBackup:
-                ListRow(label: .default(title: L10n.commonEncryption,
+                ZeroListRow(label: .default(title: L10n.commonEncryption,
                                         icon: \.key),
                         details: context.viewState.showSecuritySectionBadge ? .icon(securitySectionBadge) : nil,
                         kind: .navigationLink { context.send(viewAction: .secureBackup) })
@@ -164,7 +170,7 @@ struct SettingsScreen: View {
                 EmptyView()
             }
             
-            ListRow(label: .default(title: "Advanced Settings",
+            ZeroListRow(label: .default(title: "Advanced Settings",
                                     icon: \.code),
                     kind: .navigationLink {
                         context.send(viewAction: .developerOptions)
@@ -176,7 +182,7 @@ struct SettingsScreen: View {
     private var manageAccountSection: some View {
         Section {
             if let url = context.viewState.accountProfileURL {
-                ListRow(label: .default(title: L10n.actionManageAccount,
+                ZeroListRow(label: .default(title: L10n.actionManageAccount,
                                         icon: \.userProfile),
                         kind: .button {
                             context.send(viewAction: .manageAccount(url: url))
@@ -185,7 +191,7 @@ struct SettingsScreen: View {
             }
             
             if let url = context.viewState.accountSessionsListURL {
-                ListRow(label: .default(title: L10n.actionManageDevices,
+                ZeroListRow(label: .default(title: L10n.actionManageDevices,
                                         icon: \.devices),
                         kind: .button {
                             context.send(viewAction: .manageAccount(url: url))
@@ -193,7 +199,7 @@ struct SettingsScreen: View {
             }
             
             if context.viewState.showBlockedUsers {
-                ListRow(label: .default(title: L10n.commonBlockedUsers,
+                ZeroListRow(label: .default(title: L10n.commonBlockedUsers,
                                         icon: \.block),
                         kind: .navigationLink {
                             context.send(viewAction: .blockedUsers)
@@ -205,28 +211,28 @@ struct SettingsScreen: View {
     
     private var generalSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.commonAbout,
+            ZeroListRow(label: .default(title: L10n.commonAbout,
                                     icon: \.info),
                     kind: .navigationLink {
                         context.send(viewAction: .about)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.about)
             
-            ListRow(label: .default(title: L10n.commonReportAProblem,
+            ZeroListRow(label: .default(title: L10n.commonReportAProblem,
                                     icon: \.chatProblem),
                     kind: .navigationLink {
                         context.send(viewAction: .reportBug)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.reportBug)
             
-            ListRow(label: .default(title: L10n.commonAnalytics,
+            ZeroListRow(label: .default(title: L10n.commonAnalytics,
                                     icon: \.chart),
                     kind: .navigationLink {
                         context.send(viewAction: .analytics)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.analytics)
             
-            ListRow(label: .default(title: L10n.commonAdvancedSettings,
+            ZeroListRow(label: .default(title: L10n.commonAdvancedSettings,
                                     icon: \.settings),
                     kind: .navigationLink {
                         context.send(viewAction: .advancedSettings)
@@ -234,7 +240,7 @@ struct SettingsScreen: View {
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.advancedSettings)
             
             if context.viewState.showDeveloperOptions {
-                ListRow(label: .default(title: L10n.commonDeveloperOptions,
+                ZeroListRow(label: .default(title: L10n.commonDeveloperOptions,
                                         icon: \.code),
                         kind: .navigationLink {
                             context.send(viewAction: .developerOptions)
@@ -246,7 +252,7 @@ struct SettingsScreen: View {
     
     private var signOutSection: some View {
         Section {
-            ListRow(label: .action(title: L10n.screenSignoutPreferenceItem,
+            ZeroListRow(label: .action(title: L10n.screenSignoutPreferenceItem,
                                    icon: \.signOut,
                                    role: .destructive),
                     kind: .button {
@@ -255,7 +261,7 @@ struct SettingsScreen: View {
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.logout)
             
 //            if context.viewState.showAccountDeactivation {
-//                ListRow(label: .action(title: L10n.actionDeactivateAccount,
+//                ZeroListRow(label: .action(title: L10n.actionDeactivateAccount,
 //                                       icon: \.warning,
 //                                       role: .destructive),
 //                        kind: .navigationLink {

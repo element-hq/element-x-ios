@@ -41,6 +41,14 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         
         super.init(initialViewState: initialViewState, mediaProvider: mediaProvider)
         
+        roomProxy.roomMemberPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] roomMemberProxy in
+                self?.roomMemberProxy = roomMemberProxy
+                self?.state.memberDetails = (roomMemberProxy != nil) ? RoomMemberDetails(withProxy: roomMemberProxy!) : nil
+            }
+            .store(in: &cancellables)
+        
         showMemberLoadingIndicator()
         Task {
             await loadMember()

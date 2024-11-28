@@ -40,7 +40,7 @@ struct PollFormScreen: View {
     
     private var questionSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenCreatePollQuestionHint),
+            ZeroListRow(label: .plain(title: L10n.screenCreatePollQuestionHint),
                     kind: .textField(text: $context.question, axis: .vertical))
                 .focused($focus, equals: .question)
                 .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.question)
@@ -84,7 +84,7 @@ struct PollFormScreen: View {
             }
             
             if context.options.count < context.viewState.maxNumberOfOptions {
-                ListRow(label: .plain(title: L10n.screenCreatePollAddOptionBtn),
+                ZeroListRow(label: .plain(title: L10n.screenCreatePollAddOptionBtn),
                         kind: .button {
                             context.send(viewAction: .addOption)
                             focus = context.options.indices.last.map { .option(index: $0) }
@@ -103,7 +103,7 @@ struct PollFormScreen: View {
     
     private var showResultsSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenCreatePollAnonymousDesc),
+            ZeroListRow(label: .plain(title: L10n.screenCreatePollAnonymousDesc),
                     kind: .toggle($context.isUndisclosed))
                 .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.pollKind)
         }
@@ -114,7 +114,7 @@ struct PollFormScreen: View {
         switch context.viewState.mode {
         case .edit:
             Section {
-                ListRow(label: .plain(title: L10n.actionDeletePoll, role: .destructive),
+                ZeroListRow(label: .plain(title: L10n.actionDeletePoll, role: .destructive),
                         kind: .button { context.send(viewAction: .delete) })
             }
         case .new:
@@ -160,7 +160,7 @@ private struct PollFormOptionRow: View {
     let deleteAction: () -> Void
     
     var body: some View {
-        ListRow(kind: .custom {
+        ZeroListRow(kind: .custom {
             HStack(spacing: 16) {
                 if editMode?.wrappedValue == .active {
                     Button(role: .destructive, action: deleteAction) {
@@ -178,8 +178,8 @@ private struct PollFormOptionRow: View {
                 .tint(.zero.iconAccentTertiary)
                 .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
             }
-            .padding(.horizontal, ListRowPadding.horizontal)
-            .padding(.vertical, ListRowPadding.vertical)
+            .padding(.horizontal, ZeroListRowPadding.horizontal)
+            .padding(.vertical, ZeroListRowPadding.vertical)
         })
     }
 }

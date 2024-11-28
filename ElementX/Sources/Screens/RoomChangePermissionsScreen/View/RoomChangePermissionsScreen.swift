@@ -15,7 +15,7 @@ struct RoomChangePermissionsScreen: View {
         Form {
             ForEach($context.settings) { $setting in
                 Section {
-                    ListRow(label: .plain(title: setting.title),
+                    ZeroListRow(label: .plain(title: setting.title),
                             kind: .inlinePicker(selection: $setting.value, items: setting.allValues))
                 } header: {
                     Text(setting.title)

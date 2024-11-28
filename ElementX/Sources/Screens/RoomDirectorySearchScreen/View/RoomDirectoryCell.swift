@@ -28,7 +28,7 @@ struct RoomDirectorySearchCell: View {
     }
 
     var body: some View {
-        ListRow(label: .avatar(title: result.name ?? result.alias ?? result.id,
+        ZeroListRow(label: .avatar(title: result.name ?? result.alias ?? result.id,
                                description: description,
                                icon: avatar),
                 kind: result.canBeJoined ? .navigationLink(action: joinAction) : .label)

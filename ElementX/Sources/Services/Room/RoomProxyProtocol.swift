@@ -77,6 +77,8 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     func leaveRoom() async -> Result<Void, RoomProxyError>
     
     func updateMembers() async
+    
+    var roomMemberPublisher: CurrentValuePublisher<RoomMemberProxyProtocol?, Never> { get }
 
     func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError>
     
