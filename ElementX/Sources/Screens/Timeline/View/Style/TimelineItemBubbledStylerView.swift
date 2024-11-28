@@ -124,6 +124,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     var messageBubbleWithActions: some View {
         messageBubble
+            .onTapGesture {
+                // We need a tap gesture before the long press gesture below, otherwise something
+                // on iOS 17 hijacks the long press and you can't bring up the context menu. This
+                // is no longer an issue on iOS 18. Note: it's fine for this to be empty, we handle
+                // specific taps within the timeline views themselves.
+            }
             .longPressWithFeedback {
                 context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
             }
