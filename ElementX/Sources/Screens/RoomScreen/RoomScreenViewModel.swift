@@ -106,8 +106,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .acceptKnock(let eventID):
             Task { await acceptKnock(eventID: eventID) }
         case .dismissKnockRequests:
-            // TODO: API to mark knocks as seen required
-            break
+            Task { await markAllKnocksAsSeen() }
         case .viewKnockRequests:
             actionsSubject.send(.displayKnockRequests)
         }
@@ -302,6 +301,25 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             userIndicatorController.submitIndicator(.init(id: Self.errorIndicatorIdentifier, type: .toast, title: L10n.errorUnknown))
             state.handledEventIDs.remove(eventID)
         }
+    }
+    
+    private func markAllKnocksAsSeen() async {
+        let requests = roomProxy.requestsToJoinPublisher.value
+        state.handledEventIDs.formUnion(Set(requests.map(\.eventID)))
+        let failedIDs = await withTaskGroup(of: (String, Result<Void, RequestToJoinProxyError>).self) { group in
+            for request in requests {
+                group.addTask {
+                    await (request.eventID, request.markAsSeen())
+                }
+            }
+            
+            var failedIDs = [String]()
+            for await result in group where result.1.isFailure {
+                failedIDs.append(result.0)
+            }
+            return failedIDs
+        }
+        state.handledEventIDs.subtract(failedIDs)
     }
     
     // MARK: Loading indicators
