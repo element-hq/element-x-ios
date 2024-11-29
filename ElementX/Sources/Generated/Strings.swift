@@ -104,10 +104,14 @@ internal enum L10n {
   internal static var actionContinue: String { return L10n.tr("Localizable", "action_continue") }
   /// Copy
   internal static var actionCopy: String { return L10n.tr("Localizable", "action_copy") }
+  /// Copy caption
+  internal static var actionCopyCaption: String { return L10n.tr("Localizable", "action_copy_caption") }
   /// Copy link
   internal static var actionCopyLink: String { return L10n.tr("Localizable", "action_copy_link") }
   /// Copy link to message
   internal static var actionCopyLinkToMessage: String { return L10n.tr("Localizable", "action_copy_link_to_message") }
+  /// Copy text
+  internal static var actionCopyText: String { return L10n.tr("Localizable", "action_copy_text") }
   /// Create
   internal static var actionCreate: String { return L10n.tr("Localizable", "action_create") }
   /// Create a room
@@ -204,6 +208,8 @@ internal enum L10n {
   internal static var actionRemove: String { return L10n.tr("Localizable", "action_remove") }
   /// Remove caption
   internal static var actionRemoveCaption: String { return L10n.tr("Localizable", "action_remove_caption") }
+  /// Remove message
+  internal static var actionRemoveMessage: String { return L10n.tr("Localizable", "action_remove_message") }
   /// Reply
   internal static var actionReply: String { return L10n.tr("Localizable", "action_reply") }
   /// Reply in thread

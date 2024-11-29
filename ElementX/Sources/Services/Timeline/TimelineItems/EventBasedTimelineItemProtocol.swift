@@ -99,4 +99,14 @@ extension EventBasedTimelineItemProtocol {
             return true
         }
     }
+    
+    var supportsMediaCaption: Bool {
+        guard let messageBasedItem = self as? EventBasedMessageTimelineItemProtocol else { return false }
+        return messageBasedItem.supportsMediaCaption
+    }
+    
+    var hasMediaCaption: Bool {
+        guard let messageBasedItem = self as? EventBasedMessageTimelineItemProtocol else { return false }
+        return messageBasedItem.hasMediaCaption
+    }
 }

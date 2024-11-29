@@ -35,18 +35,22 @@ extension EventBasedMessageTimelineItemProtocol {
         }
     }
     
-    var hasMediaCaption: Bool {
+    var mediaCaption: String? {
         switch contentType {
         case .audio(let content):
-            content.caption != nil
+            content.caption
         case .file(let content):
-            content.caption != nil
+            content.caption
         case .image(let content):
-            content.caption != nil
+            content.caption
         case .video(let content):
-            content.caption != nil
+            content.caption
         case .emote, .notice, .text, .location, .voice:
-            false
+            nil
         }
+    }
+    
+    var hasMediaCaption: Bool {
+        mediaCaption != nil
     }
 }
