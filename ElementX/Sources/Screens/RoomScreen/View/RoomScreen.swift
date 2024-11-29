@@ -137,7 +137,7 @@ struct RoomScreen: View {
     private var knockRequestsBanner: some View {
         Group {
             if roomContext.viewState.shouldSeeKnockRequests {
-                KnockRequestsBannerView(requests: roomContext.viewState.unseenKnockRequests,
+                KnockRequestsBannerView(requests: roomContext.viewState.displayedKnockRequests,
                                         onDismiss: dismissKnockRequestsBanner,
                                         onAccept: roomContext.viewState.canAcceptKnocks ? acceptKnockRequest : nil,
                                         onViewAll: onViewAllKnockRequests,
@@ -153,8 +153,8 @@ struct RoomScreen: View {
         roomContext.send(viewAction: .dismissKnockRequests)
     }
     
-    private func acceptKnockRequest(userID: String) {
-        roomContext.send(viewAction: .acceptKnock(userID: userID))
+    private func acceptKnockRequest(eventID: String) {
+        roomContext.send(viewAction: .acceptKnock(eventID: eventID))
     }
     
     private func onViewAllKnockRequests() {
