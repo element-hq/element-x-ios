@@ -128,20 +128,20 @@ struct RoomDetailsScreen: View {
         if context.viewState.hasTopicSection {
             Section {
                 if let topic = context.viewState.topic, !topic.characters.isEmpty, let topicSummary = context.viewState.topicSummary {
-                    ListRow(kind: .custom {
+                    ZeroListRow(kind: .custom {
                         Text(isTopicExpanded ? topic : topicSummary)
                             .font(.zero.bodySM)
                             .foregroundColor(.compound.textSecondary)
                             .lineLimit(isTopicExpanded ? nil : 3)
                             .accentColor(.compound.textLinkExternal)
-                            .padding(ListRowPadding.insets)
+                            .padding(ZeroListRowPadding.insets)
                             .textSelection(.enabled)
                     })
                     .onTapGesture {
                         isTopicExpanded.toggle()
                     }
                 } else {
-                    ListRow(label: .plain(title: L10n.screenRoomDetailsAddTopicTitle),
+                    ZeroListRow(label: .plain(title: L10n.screenRoomDetailsAddTopicTitle),
                             kind: .button { context.send(viewAction: .processTapAddTopic) })
                         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.addTopic)
                 }
@@ -155,7 +155,7 @@ struct RoomDetailsScreen: View {
     private var aboutSection: some View {
         Section {
             if context.viewState.dmRecipient == nil {
-                ListRow(label: .default(title: L10n.commonPeople,
+                ZeroListRow(label: .default(title: L10n.commonPeople,
                                         icon: \.user),
                         details: .title(String(context.viewState.joinedMembersCount)),
                         kind: .navigationLink {
@@ -164,7 +164,7 @@ struct RoomDetailsScreen: View {
                         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
             }
 //            if context.viewState.canSeeKnockingRequests {
-//                ListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
+//                ZeroListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
 //                                        icon: \.askToJoin),
 //                        // TODO: Display count if requests > 0 when an API for them is available
 //                        details: .counter(1),
@@ -172,7 +172,7 @@ struct RoomDetailsScreen: View {
 //                            context.send(viewAction: .processTapRequestsToJoin)
 //                        })
 //            }
-//            ListRow(label: .default(title: L10n.screenPollsHistoryTitle,
+//            ZeroListRow(label: .default(title: L10n.screenPollsHistoryTitle,
 //                                    icon: \.polls),
 //                    kind: .navigationLink {
 //                        context.send(viewAction: .processTapPolls)
@@ -183,7 +183,7 @@ struct RoomDetailsScreen: View {
     
     private var configurationSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.screenRoomDetailsNotificationTitle,
+            ZeroListRow(label: .default(title: L10n.screenRoomDetailsNotificationTitle,
                                     icon: \.notifications),
                     details: context.viewState.notificationSettingsState.isLoading ? .isWaiting(true)
                         : context.viewState.notificationSettingsState.isError ? .systemIcon(.exclamationmarkCircle)
@@ -194,14 +194,14 @@ struct RoomDetailsScreen: View {
                     .disabled(context.viewState.notificationSettingsState.isLoading)
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
             
-//            ListRow(label: .default(title: L10n.commonFavourite, icon: \.favourite),
+//            ZeroListRow(label: .default(title: L10n.commonFavourite, icon: \.favourite),
 //                    kind: .toggle($context.isFavourite))
 //                .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.favourite)
 //                .onChange(of: context.isFavourite) { newValue in
 //                    context.send(viewAction: .toggleFavourite(isFavourite: newValue))
 //                }
             
-//            ListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
+//            ZeroListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
 //                                    icon: \.pin),
 //                    details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
 //                    kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink(action: {
@@ -210,7 +210,7 @@ struct RoomDetailsScreen: View {
 //                    .disabled(context.viewState.pinnedEventsActionState.isLoading)
             
 //            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
-//                ListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
+//                ZeroListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
 //                                        icon: \.admin),
 //                        kind: .navigationLink {
 //                            context.send(viewAction: .processTapRolesAndPermissions)
@@ -238,7 +238,7 @@ struct RoomDetailsScreen: View {
     private var securitySection: some View {
         if context.viewState.isEncrypted {
             Section {
-                ListRow(label: .default(title: L10n.screenRoomDetailsEncryptionEnabledTitle,
+                ZeroListRow(label: .default(title: L10n.screenRoomDetailsEncryptionEnabledTitle,
                                         description: L10n.screenRoomDetailsEncryptionEnabledSubtitle,
                                         icon: \.lock,
                                         iconAlignment: .top),
@@ -256,7 +256,7 @@ struct RoomDetailsScreen: View {
 
     private var leaveRoomSection: some View {
         Section {
-            ListRow(label: .action(title: leaveRoomTitle,
+            ZeroListRow(label: .action(title: leaveRoomTitle,
                                    icon: \.leave,
                                    role: .destructive),
                     kind: .button { context.send(viewAction: .processTapLeave) })
@@ -265,7 +265,7 @@ struct RoomDetailsScreen: View {
     
     private func ignoreUserSection(user: RoomMemberDetails) -> some View {
         Section {
-            ListRow(label: .default(title: user.isIgnored ? L10n.screenDmDetailsUnblockUser : L10n.screenDmDetailsBlockUser,
+            ZeroListRow(label: .default(title: user.isIgnored ? L10n.screenDmDetailsUnblockUser : L10n.screenDmDetailsBlockUser,
                                     icon: \.block,
                                     role: user.isIgnored ? nil : .destructive),
                     details: .isWaiting(context.viewState.isProcessingIgnoreRequest),

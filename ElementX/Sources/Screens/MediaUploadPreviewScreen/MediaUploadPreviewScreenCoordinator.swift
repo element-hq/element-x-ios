@@ -14,6 +14,7 @@ struct MediaUploadPreviewScreenCoordinatorParameters {
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     let title: String?
     let url: URL
+    let createMediaCaptionsEnabled: Bool
 }
 
 enum MediaUploadPreviewScreenCoordinatorAction {
@@ -34,7 +35,8 @@ final class MediaUploadPreviewScreenCoordinator: CoordinatorProtocol {
                                                       roomProxy: parameters.roomProxy,
                                                       mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
                                                       title: parameters.title,
-                                                      url: parameters.url)
+                                                      url: parameters.url,
+                                                      createMediaCaptionsEnabled: parameters.createMediaCaptionsEnabled)
     }
     
     func start() {

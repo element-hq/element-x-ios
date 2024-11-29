@@ -10,13 +10,18 @@ struct UserRewardsSettingsScreen: View {
     @Environment(\.openURL) private var openURL
 
     var body: some View {
-        VStack {
-            if showRewardsFAQ {
-                rewardsFaqView
-            } else {
-                rewardsView
-            }
+        Form {
+            ZeroListRow(kind: .custom {
+                ZStack {
+                    if showRewardsFAQ {
+                        rewardsFaqView
+                    } else {
+                        rewardsView
+                    }
+                }
+            })
         }
+        .zeroList()
         .navigationTitle(showRewardsFAQ ? "ZBI FAQ" : "ZBI")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(showRewardsFAQ)
@@ -44,21 +49,18 @@ struct UserRewardsSettingsScreen: View {
                     Image(asset: Asset.Images.rewardsVector)
                     Image(asset: Asset.Images.zeroLogoMark)
                 }
-                .padding(.top, 16)
 
                 Text(
                     "$\(context.viewState.bindings.userRewards.getRefPriceFormatted())"
                 )
                 .font(.robotoMonoRegular(size: 38))
                 .foregroundColor(.compound.textPrimary)
-                .padding(.top, 1)
 
                 Text(
                     "\(context.viewState.bindings.userRewards.getZeroCreditsFormatted()) MEOW"
                 )
                 .font(.robotoMonoRegular(size: 14))
                 .foregroundColor(.compound.textSecondary)
-                .padding(.top, 1)
             }
 
             Spacer()
@@ -73,7 +75,8 @@ struct UserRewardsSettingsScreen: View {
                     .font(.zero.bodyMD)
                     .foregroundColor(Color.zero.bgAccentRest)
             }
-            .padding(.all, 48)
+            .padding(.horizontal, 24)
+            .padding(.top, 200)
             .onTapGesture {
                 withAnimation {
                     showRewardsFAQ = true
@@ -84,7 +87,7 @@ struct UserRewardsSettingsScreen: View {
 
     var rewardsFaqView: some View {
         ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading) {
                 ForEach(ZeroRewardFaqProvider.faqsList) { faq in
                     let isExpanded = expandedFAQ == faq.id
                     VStack(alignment: .leading) {

@@ -14,7 +14,7 @@ struct UserProfileListRow: View {
     let membership: MembershipState?
     let mediaProvider: MediaProviderProtocol?
     
-    let kind: ListRow<LoadableAvatarImage, EmptyView, EmptyView, Bool>.Kind<EmptyView, Bool>
+    let kind: ZeroListRow<LoadableAvatarImage, EmptyView, EmptyView, Bool>.Kind<EmptyView, Bool>
     
     var isUnknownProfile: Bool { !user.isVerified && membership == nil }
     
@@ -31,7 +31,7 @@ struct UserProfileListRow: View {
     }
     
     var body: some View {
-        ListRow(label: .avatar(title: user.displayName ?? user.userID,
+        ZeroListRow(label: .avatar(title: user.displayName ?? user.userID,
                                description: user.primaryZeroId,
                                icon: avatar,
                                role: isUnknownProfile ? .error : nil),

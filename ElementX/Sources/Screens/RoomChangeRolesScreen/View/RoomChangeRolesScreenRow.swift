@@ -17,7 +17,7 @@ struct RoomChangeRolesScreenRow: View {
     let action: () -> Void
     
     var body: some View {
-        ListRow(label: .avatar(title: member.name ?? member.id,
+        ZeroListRow(label: .avatar(title: member.name ?? member.id,
                                status: member.isInvited ? L10n.screenRoomMemberListPendingHeaderTitle : nil,
                                description: member.name == nil ? nil : member.id,
                                icon: avatar),

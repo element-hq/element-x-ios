@@ -32,13 +32,14 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
          roomProxy: JoinedRoomProxyProtocol,
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          title: String?,
-         url: URL) {
+         url: URL,
+         createMediaCaptionsEnabled: Bool) {
         self.userIndicatorController = userIndicatorController
         self.roomProxy = roomProxy
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.url = url
         
-        super.init(initialViewState: MediaUploadPreviewScreenViewState(url: url, title: title))
+        super.init(initialViewState: MediaUploadPreviewScreenViewState(url: url, title: title, showMediaCaptionComposer: createMediaCaptionsEnabled))
     }
     
     override func process(viewAction: MediaUploadPreviewScreenViewAction) {

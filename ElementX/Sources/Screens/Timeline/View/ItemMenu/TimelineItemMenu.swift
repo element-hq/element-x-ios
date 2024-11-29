@@ -235,7 +235,7 @@ private struct VerifiedUserSendFailureView: View {
                     .font(.zero.bodySMSemibold)
                     .foregroundStyle(.compound.textCriticalPrimary)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                ListRowAccessory.navigationLink
+                ZeroListRowAccessory.navigationLink
             }
         }
     }

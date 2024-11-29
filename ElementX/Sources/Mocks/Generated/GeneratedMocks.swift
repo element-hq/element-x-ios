@@ -6186,6 +6186,11 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
     }
     var underlyingPinnedEventsTimeline: TimelineProxyProtocol?
     var pinnedEventsTimelineClosure: (() async -> TimelineProxyProtocol?)?
+    var roomMemberPublisher: CurrentValuePublisher<RoomMemberProxyProtocol?, Never> {
+        get { return underlyingRoomMemberPublisher }
+        set(value) { underlyingRoomMemberPublisher = value }
+    }
+    var underlyingRoomMemberPublisher: CurrentValuePublisher<RoomMemberProxyProtocol?, Never>!
     var id: String {
         get { return underlyingId }
         set(value) { underlyingId = value }

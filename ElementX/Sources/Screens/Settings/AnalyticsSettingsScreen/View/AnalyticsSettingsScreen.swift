@@ -22,7 +22,7 @@ struct AnalyticsSettingsScreen: View {
     
     var analyticsSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenAnalyticsSettingsShareData),
+            ZeroListRow(label: .plain(title: L10n.screenAnalyticsSettingsShareData),
                     kind: .toggle($context.enableAnalytics))
                 .onChange(of: context.enableAnalytics) {
                     context.send(viewAction: .toggleAnalytics)

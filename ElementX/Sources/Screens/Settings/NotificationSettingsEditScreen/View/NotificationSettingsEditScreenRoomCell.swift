@@ -15,7 +15,7 @@ struct NotificationSettingsEditScreenRoomCell: View {
     let context: NotificationSettingsEditScreenViewModel.Context
     
     var body: some View {
-        ListRow(label: .action(title: room.name,
+        ZeroListRow(label: .action(title: room.name,
                                icon: avatar),
                 details: roomDetailsLabel,
                 kind: .navigationLink {
@@ -39,7 +39,7 @@ struct NotificationSettingsEditScreenRoomCell: View {
     }
     
     @MainActor
-    var roomDetailsLabel: ListRowDetails<EmptyView>? {
+    var roomDetailsLabel: ZeroListRowDetails<EmptyView>? {
         guard let mode = room.notificationMode else { return nil }
         return .label(title: context.viewState.strings.string(for: mode),
                       icon: EmptyView())

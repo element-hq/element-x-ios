@@ -5,40 +5,51 @@ struct InviteFriendSettingsScreen: View {
     @ObservedObject var context: InviteFriendSettingsScreenViewModel.Context
     
     var body: some View {
-        ZStack {
-            VStack {
-                Image(asset: Asset.Images.inviteImage)
-                
-                Text("Invite a friend.\nEarn rewards.")
-                    .font(.compound.headingMDBold)
-                    .foregroundColor(.compound.textPrimary)
-                    .padding(.vertical, 24)
-                
-                if context.viewState.bindings.messengerInvite.remainingInvites > 0 {
-                    Button {
-                        UIPasteboard.general.string = inviteCodeMessage(inviteSlug: context.viewState.bindings.messengerInvite.slug)
-                        context.send(viewAction: .inviteCopied)
-                    } label: {
-                        Image(asset: Asset.Images.btnCopyInviteCode)
+        Form {
+            ZeroListRow(kind: .custom {
+                ZStack {
+                    VStack {
+                        Image(asset: Asset.Images.inviteImage)
+                        
+                        Text("Invite a friend.")
+                            .font(.compound.headingMDBold)
+                            .foregroundColor(.compound.textPrimary)
+                            .padding(.top, 24)
+                        
+                        Text("Earn rewards.")
+                            .font(.compound.headingMDBold)
+                            .foregroundColor(.compound.textPrimary)
+                            .padding(.bottom, 24)
+                        
+                        if context.viewState.bindings.messengerInvite.remainingInvites > 0 {
+                            Button {
+                                UIPasteboard.general.string = inviteCodeMessage(inviteSlug: context.viewState.bindings.messengerInvite.slug)
+                                context.send(viewAction: .inviteCopied)
+                            } label: {
+                                Image(asset: Asset.Images.btnCopyInviteCode)
+                            }
+                            .padding(.vertical, 16)
+                            
+                            Text("\(context.viewState.bindings.messengerInvite.remainingInvites) Remaining")
+                                .font(.zero.bodyLG)
+                                .foregroundColor(.compound.textSecondary)
+                                .padding(.bottom, 16)
+                        } else {
+                            Text("Thank you! You’ve used all of your available invites. We’ll let you know when you can invite more people.")
+                                .font(.zero.bodyLG)
+                                .foregroundColor(.compound.textSecondary)
+                                .padding(.vertical, 16)
+                                .padding(.horizontal, 24)
+                        }
                     }
-                    .padding(.vertical, 16)
                     
-                    Text("\(context.viewState.bindings.messengerInvite.remainingInvites) Remaining")
-                        .font(.zero.bodyLG)
-                        .foregroundColor(.compound.textSecondary)
-                        .padding(.bottom, 16)
-                } else {
-                    Text("Thank you! You’ve used all of your available invites. We’ll let you know when you can invite more people.")
-                        .font(.zero.bodyLG)
-                        .foregroundColor(.compound.textSecondary)
-                        .padding(.vertical, 16)
+                    if context.viewState.bindings.inviteCopied {
+                        inviteCopiedView
+                    }
                 }
-            }
-            
-            if context.viewState.bindings.inviteCopied {
-                inviteCopiedView
-            }
+            })
         }
+        .zeroList()
     }
     
     var inviteCopiedView: some View {
@@ -54,7 +65,7 @@ struct InviteFriendSettingsScreen: View {
         .padding(.all, 24)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color.black)
+                .fill(.compound.bgCanvasDefaultLevel1)
         )
     }
     

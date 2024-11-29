@@ -14,10 +14,10 @@ struct TemplateScreen: View {
     var body: some View {
         Form {
             Section {
-                ListRow(label: .plain(title: context.viewState.placeholder),
+                ZeroListRow(label: .plain(title: context.viewState.placeholder),
                         kind: .textField(text: $context.composerText))
                 
-                ListRow(label: .centeredAction(title: L10n.actionDone,
+                ZeroListRow(label: .centeredAction(title: L10n.actionDone,
                                                systemIcon: .doorLeftHandClosed),
                         kind: .button { context.send(viewAction: .done) })
             }

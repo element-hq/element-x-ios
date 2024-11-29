@@ -16,7 +16,7 @@ struct GlobalSearchScreenListRow: View {
     
     var body: some View {
         ZStack { // The list row swallows listRowBackgrounds for some reason
-            ListRow(label: .avatar(title: room.title,
+            ZeroListRow(label: .avatar(title: room.title,
                                    description: room.description,
                                    icon: avatar),
                     kind: .label)

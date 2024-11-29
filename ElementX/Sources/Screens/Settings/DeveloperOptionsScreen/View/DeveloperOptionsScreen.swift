@@ -53,6 +53,10 @@ struct DeveloperOptionsScreen: View {
 //                Toggle(isOn: $context.hideTimelineMedia) {
 //                    Text("Hide image & video previews")
 //                }
+//                
+//                Toggle(isOn: $context.createMediaCaptionsEnabled) {
+//                    Text("Allow creation of media captions")
+//                }
 //            }
 //            
 //            Section("Join rules") {

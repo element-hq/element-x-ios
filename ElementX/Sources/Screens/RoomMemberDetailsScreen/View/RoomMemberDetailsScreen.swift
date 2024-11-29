@@ -86,7 +86,7 @@ struct RoomMemberDetailsScreen: View {
     var verificationSection: some View {
         if context.viewState.showVerificationSection {
             Section {
-                ListRow(label: .default(title: L10n.commonVerifyIdentity,
+                ZeroListRow(label: .default(title: L10n.commonVerifyIdentity,
                                         description: L10n.screenRoomMemberDetailsVerifyButtonSubtitle,
                                         icon: \.lock),
                         kind: .button { })
@@ -103,7 +103,7 @@ struct RoomMemberDetailsScreen: View {
             let accessibilityIdentifier = memberDetails.isIgnored ? A11yIdentifiers.roomMemberDetailsScreen.unignore : A11yIdentifiers.roomMemberDetailsScreen.ignore
             
             Section {
-                ListRow(label: .default(title: title,
+                ZeroListRow(label: .default(title: title,
                                         icon: \.block,
                                         role: memberDetails.isIgnored ? nil : .destructive),
                         details: .isWaiting(context.viewState.isProcessingIgnoreRequest),

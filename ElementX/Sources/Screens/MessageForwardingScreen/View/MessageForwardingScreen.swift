@@ -68,7 +68,7 @@ private struct MessageForwardingListRow: View {
     let context: MessageForwardingScreenViewModel.Context
     
     var body: some View {
-        ListRow(label: .avatar(title: room.title,
+        ZeroListRow(label: .avatar(title: room.title,
                                description: room.description,
                                icon: avatar),
                 kind: .selection(isSelected: isSelected) {

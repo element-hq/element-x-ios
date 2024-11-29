@@ -33,7 +33,7 @@ struct DeactivateAccountScreen: View {
     }
     
     private var infoSection: some View {
-        ListRow(kind: .custom {
+        ZeroListRow(kind: .custom {
             VStack(alignment: .leading, spacing: 16) {
                 Text(context.viewState.info)
                 
@@ -52,7 +52,7 @@ struct DeactivateAccountScreen: View {
     
     private var eraseDataSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenDeactivateAccountDeleteAllMessages),
+            ZeroListRow(label: .plain(title: L10n.screenDeactivateAccountDeleteAllMessages),
                     kind: .toggle($context.eraseData))
         } footer: {
             Text(L10n.screenDeactivateAccountDeleteAllMessagesNotice)
@@ -62,7 +62,7 @@ struct DeactivateAccountScreen: View {
     
     private var passwordSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.commonPassword),
+            ZeroListRow(label: .plain(title: L10n.commonPassword),
                     kind: .secureField(text: $context.password))
                 .submitLabel(.done)
         } header: {

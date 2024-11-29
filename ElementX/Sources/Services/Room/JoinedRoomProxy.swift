@@ -86,6 +86,11 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     var identityStatusChangesPublisher: CurrentValuePublisher<[IdentityStatusChange], Never> {
         identityStatusChangesSubject.asCurrentValuePublisher()
     }
+    
+    private let roomMemberProxySubject = CurrentValueSubject<RoomMemberProxyProtocol?, Never>(nil)
+    var roomMemberPublisher: CurrentValuePublisher<RoomMemberProxyProtocol?, Never> {
+        roomMemberProxySubject.asCurrentValuePublisher()
+    }
         
     // A room identifier is constant and lazy stops it from being fetched
     // multiple times over FFI
@@ -227,16 +232,19 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
 
     func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError> {
-//        if let member = membersPublisher.value.filter({ $0.userID == userID }).first {
-//            return .success(member)
-//        }
+        if let member = membersPublisher.value.filter({ $0.userID == userID }).first {
+            roomMemberProxySubject.send(member)
+            //return .success(member)
+        }
         
         do {
             async let zeroProfile = zeroUsersService.fetchZeroUser(userId: userID)
             async let memberProfile = room.member(userId: userID)
             // Await both results
             let (sdkProfileResult, zeroProfileResult) = try await (memberProfile, zeroProfile)
-            return .success(RoomMemberProxy(member: sdkProfileResult, zeroMember: zeroProfileResult))
+            let member = RoomMemberProxy(member: sdkProfileResult, zeroMember: zeroProfileResult)
+            roomMemberProxySubject.send(member)
+            return .success(member)
         } catch {
             MXLog.error("Failed retrieving member \(userID) with error: \(error)")
             return .failure(.sdkError(error))
