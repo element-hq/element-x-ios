@@ -12,68 +12,118 @@ struct MediaEventsTimelineScreen: View {
     @ObservedObject var context: MediaEventsTimelineScreenViewModel.Context
     @ObservedObject var timelineContext: TimelineViewModel.Context
         
+    @State private var topTimelineItemIdentifier: TimelineItemIdentifier?
+    
     var body: some View {
         content
             .navigationBarTitleDisplayMode(.inline)
             .background(.compound.bgCanvasDefault)
-            .interactiveDismissDisabled()
-            .interactiveQuickLook(item: $timelineContext.mediaPreviewItem)
-            .sheet(item: $timelineContext.debugInfo) { TimelineItemDebugView(info: $0) }
-            .sheet(item: $timelineContext.actionMenuInfo) { info in
-                let actions = TimelineItemMenuActionProvider(timelineItem: info.item,
-                                                             canCurrentUserRedactSelf: timelineContext.viewState.canCurrentUserRedactSelf,
-                                                             canCurrentUserRedactOthers: timelineContext.viewState.canCurrentUserRedactOthers,
-                                                             canCurrentUserPin: timelineContext.viewState.canCurrentUserPin,
-                                                             pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
-                                                             isDM: timelineContext.viewState.isEncryptedOneToOneRoom,
-                                                             isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
-                                                             isCreateMediaCaptionsEnabled: timelineContext.viewState.isCreateMediaCaptionsEnabled,
-                                                             isPinnedEventsTimeline: timelineContext.viewState.isPinnedEventsTimeline,
-                                                             emojiProvider: timelineContext.viewState.emojiProvider)
-                    .makeActions()
-                if let actions {
-                    TimelineItemMenu(item: info.item, actions: actions)
-                        .environmentObject(timelineContext)
-                }
-            }
-            .task {
-                timelineContext.send(viewAction: .paginateBackwards)
-            }
+            .navigationTitle("Media and files") // TODO: fix this title too
     }
     
     @ViewBuilder
     private var content: some View {
-        let collumns = Array(repeating: GridItem(.flexible(minimum: 50)), count: 5)
-        
         ScrollView {
-            LazyVGrid(columns: collumns) {
+            if timelineContext.viewState.timelineViewState.paginationState.backward == .paginating {
+                ProgressView()
+            }
+                
+            let columns = [GridItem(.adaptive(minimum: 80, maximum: 150), spacing: 1)]
+            LazyVGrid(columns: columns, alignment: .center, spacing: 1) {
                 ForEach(timelineContext.viewState.timelineViewState.itemViewStates) { item in
-//                    viewForTimelineItem(item)
-                    Rectangle()
-                        .frame(height: 50)
+                    Color.clear // Let the image aspect fill in place
+                        .aspectRatio(1, contentMode: .fill)
+                        .overlay {
+                            viewForTimelineItem(item)
+                                .id(item.identifier)
+                        }
+                        .clipped()
                 }
             }
+            .scrollTargetLayout()
         }
-        .defaultScrollAnchor(.bottom)
+        .scrollPosition(id: $topTimelineItemIdentifier, anchor: .topLeading)
+        .scrollAnchor
+        .onChange(of: topTimelineItemIdentifier) { _, newValue in
+            // Filter out date separators when checking the top identifier
+            let firstIdentifier = timelineContext.viewState.timelineViewState.itemViewStates.first(where: { item in
+                switch item.type {
+                case .separator:
+                    false
+                default:
+                    true
+                }
+            })?.identifier
+            
+            if newValue == firstIdentifier {
+                timelineContext.send(viewAction: .paginateBackwards)
+            }
+        }
     }
     
     @ViewBuilder func viewForTimelineItem(_ item: RoomTimelineItemViewState) -> some View {
         switch item.type {
         case .image(let timelineItem):
-            LoadableImage(mediaSource: timelineItem.content.imageInfo.source,
+            LoadableImage(mediaSource: timelineItem.content.thumbnailInfo?.source ?? timelineItem.content.imageInfo.source,
                           mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
                           blurhash: timelineItem.content.blurhash,
-                          size: timelineItem.content.imageInfo.size,
+                          size: timelineItem.content.thumbnailInfo?.size ?? timelineItem.content.imageInfo.size,
                           mediaProvider: timelineContext.mediaProvider) {
-                Rectangle()
-                    .foregroundColor(.compound._bgBubbleOutgoing)
-                    .opacity(0.3)
+                placeholder
             }
-            .frame(height: 50)
-            .aspectRatio(contentMode: .fill)
+            .mediaItemAspectRatio(imageInfo: timelineItem.content.thumbnailInfo ?? timelineItem.content.imageInfo)
+        case .video(let timelineItem):
+            if let thumbnailSource = timelineItem.content.thumbnailInfo?.source {
+                LoadableImage(mediaSource: thumbnailSource,
+                              mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
+                              blurhash: timelineItem.content.blurhash,
+                              size: timelineItem.content.thumbnailInfo?.size,
+                              mediaProvider: timelineContext.mediaProvider) { imageView in
+                    imageView
+                        .overlay { playIcon }
+                } placeholder: {
+                    placeholder
+                }
+                .mediaItemAspectRatio(imageInfo: timelineItem.content.thumbnailInfo)
+            } else {
+                playIcon
+            }
         default:
             EmptyView()
         }
+    }
+    
+    var playIcon: some View {
+        Image(systemName: "play.circle.fill")
+            .resizable()
+            .frame(width: 50, height: 50)
+            .background(.ultraThinMaterial, in: Circle())
+            .foregroundColor(.white)
+    }
+    
+    var placeholder: some View {
+        Rectangle()
+            .foregroundColor(.compound._bgBubbleIncoming)
+            .opacity(0.3)
+    }
+}
+
+extension View {
+    @ViewBuilder
+    var scrollAnchor: some View {
+        if #available(iOS 18.0, *) {
+            defaultScrollAnchor(.bottom, for: .sizeChanges)
+                .defaultScrollAnchor(.bottom, for: .alignment)
+                .defaultScrollAnchor(.bottom, for: .initialOffset)
+        } else {
+            defaultScrollAnchor(.bottom)
+        }
+    }
+    
+    /// Constrains the max height of a media item in the timeline, whilst preserving its aspect ratio.
+    @ViewBuilder
+    func mediaItemAspectRatio(imageInfo: ImageInfoProxy?) -> some View {
+        aspectRatio(imageInfo?.aspectRatio, contentMode: .fill)
     }
 }
 
@@ -83,7 +133,6 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = MediaEventsTimelineScreenViewModel(analyticsService: ServiceLocator.shared.analytics)
     static let emptyTimelineViewModel: TimelineViewModel = {
         let timelineController = MockRoomTimelineController(timelineKind: .media)
-        timelineController.timelineItems = []
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                  timelineController: timelineController,
                                  mediaProvider: MediaProviderMock(configuration: .init()),
