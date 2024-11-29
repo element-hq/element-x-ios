@@ -26,7 +26,7 @@ class VoiceMessageCacheTests: XCTestCase {
         voiceMessageCache.clearCache()
         
         fileManager = FileManager.default
-        mediaSource = MediaSourceProxy(url: someURL, mimeType: "audio/ogg")
+        mediaSource = try MediaSourceProxy(url: someURL, mimeType: "audio/ogg")
         
         // Create the temporary directory we will use
         try fileManager.createDirectory(at: testTemporaryDirectory, withIntermediateDirectories: true)
