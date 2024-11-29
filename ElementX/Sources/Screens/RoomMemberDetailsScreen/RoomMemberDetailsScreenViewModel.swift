@@ -165,7 +165,8 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier) }
             
         // We don't actually know the mime type here, assume it's an image.
-        if case let .success(file) = await mediaProvider.loadFileFromSource(.init(url: url, mimeType: "image/jpeg")) {
+        if let mediaSource = try? MediaSourceProxy(url: url, mimeType: "image/jpeg"),
+           case let .success(file) = await mediaProvider.loadFileFromSource(mediaSource) {
             state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: roomMemberProxy.displayName)
         }
     }

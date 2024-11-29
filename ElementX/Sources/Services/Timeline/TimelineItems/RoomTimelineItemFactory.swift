@@ -33,12 +33,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .redactedMessage:
             return buildRedactedTimelineItem(eventItemProxy, isOutgoing)
         case .sticker(let body, let imageInfo, let mediaSource):
-            guard let url = URL(string: mediaSource.url()) else {
-                MXLog.error("Invalid sticker url string: \(mediaSource.url())")
-                return buildUnsupportedTimelineItem(eventItemProxy, "m.sticker", "Invalid Sticker URL", isOutgoing)
-            }
-            
-            return buildStickerTimelineItem(eventItemProxy, body, imageInfo, url, isOutgoing)
+            return buildStickerTimelineItem(eventItemProxy, body, imageInfo, mediaSource, isOutgoing)
         case .failedToParseMessageLike(let eventType, let error):
             return buildUnsupportedTimelineItem(eventItemProxy, eventType, error, isOutgoing)
         case .failedToParseState(let eventType, _, let error):
@@ -119,9 +114,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private func buildStickerTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
                                           _ body: String,
                                           _ info: MatrixRustSDK.ImageInfo,
-                                          _ imageURL: URL,
+                                          _ mediaSource: MediaSource,
                                           _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
-        let imageInfo = ImageInfoProxy(url: imageURL, width: info.width, height: info.height, mimeType: info.mimetype)
+        let imageInfo = ImageInfoProxy(source: mediaSource, width: info.width, height: info.height, mimeType: info.mimetype)
         
         return StickerRoomTimelineItem(id: eventItemProxy.id,
                                        body: body,
