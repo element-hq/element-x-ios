@@ -14,26 +14,27 @@ struct MediaUploadPreviewScreen: View {
     
     @ObservedObject var context: MediaUploadPreviewScreenViewModel.Context
     
-    var title: String { ProcessInfo.processInfo.isiOSAppOnMac ? context.viewState.title ?? "" : "" }
-    var colorSchemeOverride: ColorScheme { ProcessInfo.processInfo.isiOSAppOnMac ? colorScheme : .dark }
+    @State private var captionWarningFrame: CGRect = .zero
+    
+    private var title: String { ProcessInfo.processInfo.isiOSAppOnMac ? context.viewState.title ?? "" : "" }
+    private var colorSchemeOverride: ColorScheme { ProcessInfo.processInfo.isiOSAppOnMac ? colorScheme : .dark }
     
     var body: some View {
         mainContent
             .id(context.viewState.url)
             .ignoresSafeArea(edges: [.horizontal])
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                if context.viewState.showMediaCaptionComposer {
-                    composer
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 16)
-                        .background() // Don't use compound so we match the QLPreviewController.
-                }
+                composer
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 16)
+                    .background() // Don't use compound so we match the QLPreviewController.
             }
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .disabled(context.viewState.shouldDisableInteraction)
             .interactiveDismissDisabled()
+            .presentationBackground(.background) // Fix a bug introduced by the caption warning.
             .preferredColorScheme(colorSchemeOverride)
     }
     
@@ -52,18 +53,65 @@ struct MediaUploadPreviewScreen: View {
     
     private var composer: some View {
         HStack(spacing: 12) {
-            MessageComposerTextField(placeholder: L10n.richTextEditorComposerCaptionPlaceholder,
-                                     text: $context.caption,
-                                     presendCallback: $context.presendCallback,
-                                     maxHeight: ComposerConstant.maxHeight,
-                                     keyHandler: { _ in },
-                                     pasteHandler: { _ in })
-                .messageComposerStyle()
+            HStack(spacing: 6) {
+                MessageComposerTextField(placeholder: L10n.richTextEditorComposerCaptionPlaceholder,
+                                         text: $context.caption,
+                                         presendCallback: $context.presendCallback,
+                                         maxHeight: ComposerConstant.maxHeight,
+                                         keyHandler: { _ in },
+                                         pasteHandler: { _ in })
+                
+                if context.viewState.shouldShowCaptionWarning {
+                    captionWarningButton
+                }
+            }
+            .messageComposerStyle()
             
             SendButton {
                 context.send(viewAction: .send)
             }
         }
+    }
+    
+    private var captionWarningButton: some View {
+        Button {
+            context.isPresentingMediaCaptionWarning = true
+        } label: {
+            CompoundIcon(\.infoSolid, size: .xSmall, relativeTo: .compound.bodyLG)
+        }
+        .tint(.compound.iconCriticalPrimary)
+        .popover(isPresented: $context.isPresentingMediaCaptionWarning, arrowEdge: .bottom) {
+            captionWarningContent
+                .presentationDetents([.height(captionWarningFrame.height)])
+                .presentationDragIndicator(.visible)
+                .padding(.top, 19) // For the drag indicator
+                .presentationBackground(.compound.bgCanvasDefault)
+                .preferredColorScheme(colorSchemeOverride)
+        }
+    }
+    
+    var captionWarningContent: some View {
+        VStack(spacing: 0) {
+            VStack(spacing: 16) {
+                BigIcon(icon: \.infoSolid, style: .alertSolid)
+                
+                Text(L10n.screenMediaUploadPreviewCaptionWarning)
+                    .font(.compound.bodyMD)
+                    .foregroundStyle(.compound.textPrimary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(24)
+            .padding(.bottom, 8)
+            
+            Button(L10n.actionOk) {
+                context.isPresentingMediaCaptionWarning = false
+            }
+            .buttonStyle(.compound(.secondary))
+            .padding(.horizontal, 16)
+            .padding(.bottom, 16)
+        }
+        .readFrame($captionWarningFrame)
     }
     
     @ToolbarContentBuilder
@@ -75,16 +123,6 @@ struct MediaUploadPreviewScreen: View {
             // Fix a bug with the preferredColorScheme on iOS 18 where the button doesn't
             // follow the dark colour scheme on devices running with dark mode disabled.
             .tint(.compound.textActionPrimary)
-        }
-        
-        if !context.viewState.showMediaCaptionComposer {
-            ToolbarItem(placement: .confirmationAction) {
-                Button { context.send(viewAction: .send) } label: {
-                    Text(L10n.actionSend)
-                }
-                // Same fix as above (this button is temporary anyway).
-                .tint(.compound.textActionPrimary)
-            }
         }
     }
 }
@@ -169,10 +207,14 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
                                                              title: "App Icon.png",
                                                              url: snapshotURL,
-                                                             createMediaCaptionsEnabled: true)
+                                                             shouldShowCaptionWarning: true)
     static var previews: some View {
         NavigationStack {
             MediaUploadPreviewScreen(context: viewModel.context)
         }
+        
+        MediaUploadPreviewScreen(context: viewModel.context)
+            .captionWarningContent
+            .previewDisplayName("Caption warning")
     }
 }
