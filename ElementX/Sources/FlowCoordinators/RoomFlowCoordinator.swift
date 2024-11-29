@@ -1682,14 +1682,3 @@ private extension RoomFlowCoordinator {
         case dismissMediaEventsTimeline
     }
 }
-
-private extension Result {
-    var isFailure: Bool {
-        switch self {
-        case .success:
-            return false
-        case .failure:
-            return true
-        }
-    }
-}
