@@ -33,13 +33,13 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          title: String?,
          url: URL,
-         createMediaCaptionsEnabled: Bool) {
+         shouldShowCaptionWarning: Bool) {
         self.userIndicatorController = userIndicatorController
         self.roomProxy = roomProxy
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.url = url
         
-        super.init(initialViewState: MediaUploadPreviewScreenViewState(url: url, title: title, showMediaCaptionComposer: createMediaCaptionsEnabled))
+        super.init(initialViewState: MediaUploadPreviewScreenViewState(url: url, title: title, shouldShowCaptionWarning: shouldShowCaptionWarning))
     }
     
     override func process(viewAction: MediaUploadPreviewScreenViewAction) {
