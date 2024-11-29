@@ -195,9 +195,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             }
         }
         
-        if let avatarURL {
-            let mediaSource = MediaSourceProxy(url: avatarURL, mimeType: nil)
-            
+        if let avatarURL, let mediaSource = try? MediaSourceProxy(url: avatarURL, mimeType: nil) {
             if case let .success(avatarData) = await mediaProvider.loadThumbnailForSource(source: mediaSource, size: .init(width: 100, height: 100)) {
                 sendMessageIntent.setImage(INImage(imageData: avatarData), forParameterNamed: \.speakableGroupName)
             } else {
