@@ -1651,14 +1651,3 @@ private extension RoomFlowCoordinator {
         case dismissKnockRequestsListScreen
     }
 }
-
-private extension Result {
-    var isFailure: Bool {
-        switch self {
-        case .success:
-            return false
-        case .failure:
-            return true
-        }
-    }
-}
