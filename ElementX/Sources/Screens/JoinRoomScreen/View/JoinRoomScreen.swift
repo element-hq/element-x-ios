@@ -9,9 +9,17 @@ import Compound
 import SwiftUI
 
 struct JoinRoomScreen: View {
+    private let maxKnockMessageLength = 500
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     
     @ObservedObject var context: JoinRoomScreenViewModel.Context
+    
+    private var knockMessageFooterString: String {
+        guard !context.knockMessage.isEmpty else {
+            return L10n.screenJoinRoomKnockMessageDescription
+        }
+        return "\(context.knockMessage.count)/\(maxKnockMessageLength)"
+    }
     
     var body: some View {
         FullscreenDialog(topPadding: context.viewState.mode == .knocked ? 151 : 35, background: .bloom) {
@@ -110,7 +118,7 @@ struct JoinRoomScreen: View {
             HStack(spacing: 0) {
                 TextField("", text: $context.knockMessage, axis: .vertical)
                     .onChange(of: context.knockMessage) { _, newValue in
-                        context.knockMessage = String(newValue.prefix(500))
+                        context.knockMessage = String(newValue.prefix(maxKnockMessageLength))
                     }
                     .lineLimit(4, reservesSpace: true)
                     .font(.compound.bodyMD)
@@ -125,8 +133,8 @@ struct JoinRoomScreen: View {
                     .stroke(.compound.borderInteractivePrimary)
             }
             
-            Text(L10n.screenJoinRoomKnockMessageDescription)
-                .font(.compound.bodyMD)
+            Text(knockMessageFooterString)
+                .font(.compound.bodySM)
                 .foregroundStyle(.compound.textSecondary)
         }
     }
