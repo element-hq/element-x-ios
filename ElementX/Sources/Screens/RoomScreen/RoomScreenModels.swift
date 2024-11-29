@@ -23,7 +23,7 @@ enum RoomScreenViewAction {
     case displayRoomDetails
     case displayCall
     case footerViewAction(RoomScreenFooterViewAction)
-    case acceptKnock(userID: String)
+    case acceptKnock(eventID: String)
     case dismissKnockRequests
     case viewKnockRequests
 }
@@ -49,9 +49,17 @@ struct RoomScreenViewState: BindableState {
     var canDeclineKnocks = false
     var canBan = false
     var unseenKnockRequests: [KnockRequestInfo] = []
+    var handledEventIDs: Set<String> = []
+    
+    var displayedKnockRequests: [KnockRequestInfo] {
+        unseenKnockRequests.filter { !handledEventIDs.contains($0.eventID) }
+    }
     
     var shouldSeeKnockRequests: Bool {
-        isKnockingEnabled && isKnockableRoom && !unseenKnockRequests.isEmpty && (canAcceptKnocks || canDeclineKnocks || canBan)
+        isKnockingEnabled &&
+            isKnockableRoom &&
+            !displayedKnockRequests.isEmpty &&
+            (canAcceptKnocks || canDeclineKnocks || canBan)
     }
     
     var footerDetails: RoomScreenFooterViewDetails?
