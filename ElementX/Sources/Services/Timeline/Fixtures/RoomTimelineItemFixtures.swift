@@ -296,7 +296,7 @@ private extension AudioRoomTimelineItem {
                                  caption: caption,
                                  duration: 60,
                                  waveform: nil,
-                                 source: .init(url: .mockMXCAudio, mimeType: nil),
+                                 source: try? .init(url: .mockMXCAudio, mimeType: nil),
                                  fileSize: nil,
                                  contentType: .mp3))
     }
@@ -313,7 +313,7 @@ private extension FileRoomTimelineItem {
                   sender: .init(id: isOutgoing ? "@alice:matrix.org" : "@bob:matrix.org"),
                   content: .init(filename: "file.pdf",
                                  caption: caption,
-                                 source: .init(url: .mockMXCFile, mimeType: nil),
+                                 source: try? .init(url: .mockMXCFile, mimeType: nil),
                                  fileSize: nil,
                                  thumbnailSource: nil,
                                  contentType: .pdf))
@@ -366,7 +366,7 @@ private extension VoiceMessageRoomTimelineItem {
                   content: .init(filename: "message.ogg",
                                  duration: 10,
                                  waveform: .mockWaveform,
-                                 source: .init(url: .mockMXCAudio, mimeType: nil),
+                                 source: try? .init(url: .mockMXCAudio, mimeType: nil),
                                  fileSize: nil,
                                  contentType: .audio))
     }
