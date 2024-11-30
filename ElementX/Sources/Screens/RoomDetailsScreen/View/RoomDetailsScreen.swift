@@ -163,6 +163,15 @@ struct RoomDetailsScreen: View {
                         })
                         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
             }
+            
+//            ZeroListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
+//                                    icon: \.pin),
+//                    details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
+//                    kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink(action: {
+//                        context.send(viewAction: .processTapPinnedEvents)
+//                    }))
+//                    .disabled(context.viewState.pinnedEventsActionState.isLoading)
+//            
 //            if context.viewState.canSeeKnockingRequests {
 //                ZeroListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
 //                                        icon: \.askToJoin),
@@ -200,15 +209,7 @@ struct RoomDetailsScreen: View {
 //                .onChange(of: context.isFavourite) { newValue in
 //                    context.send(viewAction: .toggleFavourite(isFavourite: newValue))
 //                }
-            
-//            ZeroListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
-//                                    icon: \.pin),
-//                    details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
-//                    kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink(action: {
-//                        context.send(viewAction: .processTapPinnedEvents)
-//                    }))
-//                    .disabled(context.viewState.pinnedEventsActionState.isLoading)
-            
+//            
 //            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
 //                ZeroListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
 //                                        icon: \.admin),

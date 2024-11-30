@@ -14,7 +14,7 @@ struct MediaUploadPreviewScreenCoordinatorParameters {
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     let title: String?
     let url: URL
-    let createMediaCaptionsEnabled: Bool
+    let shouldShowCaptionWarning: Bool
 }
 
 enum MediaUploadPreviewScreenCoordinatorAction {
@@ -36,7 +36,7 @@ final class MediaUploadPreviewScreenCoordinator: CoordinatorProtocol {
                                                       mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
                                                       title: parameters.title,
                                                       url: parameters.url,
-                                                      createMediaCaptionsEnabled: parameters.createMediaCaptionsEnabled)
+                                                      shouldShowCaptionWarning: parameters.shouldShowCaptionWarning)
     }
     
     func start() {

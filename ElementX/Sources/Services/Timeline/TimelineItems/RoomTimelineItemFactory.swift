@@ -39,12 +39,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .redactedMessage:
             return buildRedactedTimelineItem(eventItemProxy, isOutgoing)
         case .sticker(let body, let imageInfo, let mediaSource):
-            guard let url = URL(string: mediaSource.url()) else {
-                MXLog.error("Invalid sticker url string: \(mediaSource.url())")
-                return buildUnsupportedTimelineItem(eventItemProxy, "m.sticker", "Invalid Sticker URL", isOutgoing)
-            }
-            
-            return buildStickerTimelineItem(eventItemProxy, body, imageInfo, url, isOutgoing)
+            return buildStickerTimelineItem(eventItemProxy, body, imageInfo, mediaSource, isOutgoing)
         case .failedToParseMessageLike(let eventType, let error):
             /// If message content parsing is failed (GIPHY case in this), we need to handle the content ourself rather than returning unsupportedTimelineItem
             if let messageContent = messageContentHandler.parseMessageContent(contentJsonString: eventItemProxy.debugInfo.originalJSON) {
@@ -143,9 +138,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private func buildStickerTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
                                           _ body: String,
                                           _ info: MatrixRustSDK.ImageInfo,
-                                          _ imageURL: URL,
+                                          _ mediaSource: MediaSource,
                                           _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
-        let imageInfo = ImageInfoProxy(url: imageURL, width: info.width, height: info.height, mimeType: info.mimetype)
+        let imageInfo = ImageInfoProxy(source: mediaSource, width: info.width, height: info.height, mimeType: info.mimetype)
         
         return StickerRoomTimelineItem(id: eventItemProxy.id,
                                        body: body,
@@ -597,9 +592,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         let height: CGFloat? = messageContent.info?.height ?? messageContent.info?.h
         let fallbackName: String = messageContent.info?.name ?? "Image"
         
-        let source = MediaSourceProxy(url: URL(string: messageContent.url ?? "") ?? URL("about:blank"),
+        let source = try? MediaSourceProxy(url: URL(string: messageContent.url ?? "") ?? URL("about:blank"),
                                       mimeType: messageContent.info?.mimeType)
-        let imageInfo = ImageInfoProxy(source: source,
+        let imageInfo = ImageInfoProxy(source: source ?? MediaSourceProxy.empty(),
                                        width: (width != nil) ? UInt64(max(0, floor(width!))) : nil,
                                        height: (height != nil) ? UInt64(max(0, floor(height!))) : nil,
                                        mimeType: messageContent.info?.mimeType)

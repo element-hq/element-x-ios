@@ -33,33 +33,28 @@ struct RoomAttachmentPicker: View {
 //                context.send(viewAction: .enableTextFormatting)
 //            } label: {
 //                Label(L10n.screenRoomAttachmentTextFormatting, icon: \.textFormatting)
-//                    .labelStyle(.menuSheet)
 //            }
 //            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)
-            
-            /// Hiding `menu item` which are not needed for `zero`
-            
+//            
 //            Button {
 //                context.send(viewAction: .attach(.poll))
 //            } label: {
 //                Label(L10n.screenRoomAttachmentSourcePoll, icon: \.polls)
-//                    .labelStyle(.menuSheet)
 //            }
 //            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)
-//
+//            /// Hiding `menu item` which are not needed for `zero`
+//            
 //            Button {
 //                context.send(viewAction: .attach(.location))
 //            } label: {
 //                Label(L10n.screenRoomAttachmentSourceLocation, icon: \.locationPin)
-//                    .labelStyle(.menuSheet)
 //            }
 //            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerLocation)
-//
+//            
 //            Button {
 //                context.send(viewAction: .attach(.file))
 //            } label: {
 //                Label(L10n.screenRoomAttachmentSourceFiles, icon: \.attachment)
-//                    .labelStyle(.menuSheet)
 //            }
 //            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerDocuments)
             
@@ -67,7 +62,6 @@ struct RoomAttachmentPicker: View {
                 context.send(viewAction: .attach(.photoLibrary))
             } label: {
                 Label(L10n.screenRoomAttachmentSourceGallery, icon: \.image)
-                    .labelStyle(.menuSheet)
             }
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary)
             
@@ -75,7 +69,6 @@ struct RoomAttachmentPicker: View {
                 context.send(viewAction: .attach(.camera))
             } label: {
                 Label(L10n.screenRoomAttachmentSourceCamera, icon: \.takePhoto)
-                    .labelStyle(.menuSheet)
             }
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerCamera)
         }

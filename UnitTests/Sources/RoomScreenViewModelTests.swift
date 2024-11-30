@@ -184,13 +184,13 @@ class RoomScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         configuration.name = "NewName"
-        configuration.avatarURL = .documentsDirectory
+        configuration.avatarURL = .mockMXCAvatar
         configuration.hasOngoingCall = true
         roomProxyMock.canUserJoinCallUserIDReturnValue = .success(true)
         
         deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
             viewState.roomTitle == "NewName" &&
-                viewState.roomAvatar == .room(id: "TestID", name: "NewName", avatarURL: .documentsDirectory) &&
+                viewState.roomAvatar == .room(id: "TestID", name: "NewName", avatarURL: .mockMXCAvatar) &&
                 viewState.canJoinCall &&
                 viewState.hasOngoingCall
         }

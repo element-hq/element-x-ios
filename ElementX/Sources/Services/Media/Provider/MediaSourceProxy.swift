@@ -23,8 +23,8 @@ struct MediaSourceProxy: Hashable {
         self.mimeType = mimeType
     }
     
-    init(url: URL, mimeType: String?) {
-        underlyingSource = mediaSourceFromUrl(url: url.absoluteString)
+    init(url: URL, mimeType: String?) throws {
+        underlyingSource = try MediaSource.fromUrl(url: url.absoluteString)
         self.url = URL(string: underlyingSource.url())
         self.mimeType = mimeType
     }
@@ -37,5 +37,9 @@ struct MediaSourceProxy: Hashable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(url)
+    }
+    
+    static func empty() -> MediaSourceProxy {
+        try! MediaSourceProxy(url: .mockMXCImage, mimeType: "image/png")
     }
 }

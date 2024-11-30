@@ -103,7 +103,13 @@ class TimelineInteractionHandler {
         case .copy:
             guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else { return }
             UIPasteboard.general.string = messageTimelineItem.body
-        case .edit:
+        case .copyCaption:
+            guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol,
+                  let caption = messageTimelineItem.mediaCaption else {
+                return
+            }
+            UIPasteboard.general.string = caption
+        case .edit, .addCaption, .editCaption, .editPoll:
             switch timelineItem {
             case let messageTimelineItem as EventBasedMessageTimelineItemProtocol:
                 processEditMessageEvent(messageTimelineItem)
@@ -115,13 +121,6 @@ class TimelineInteractionHandler {
                 actionsSubject.send(.displayPollForm(mode: .edit(eventID: eventID, poll: pollTimelineItem.poll)))
             default:
                 MXLog.error("Cannot edit item with id: \(timelineItem.id)")
-            }
-        case .addCaption, .editCaption:
-            switch timelineItem {
-            case let messageTimelineItem as EventBasedMessageTimelineItemProtocol:
-                processEditMessageEvent(messageTimelineItem)
-            default:
-                MXLog.error("Cannot add/edit caption on item with id: \(timelineItem.id)")
             }
         case .removeCaption:
             guard case let .event(_, eventOrTransactionID) = timelineItem.id else {
@@ -409,10 +408,7 @@ class TimelineInteractionHandler {
             return
         }
         
-        guard case .success(let mediaPlayer) = mediaPlayerProvider.player(for: source), let audioPlayer = mediaPlayer as? AudioPlayerProtocol else {
-            MXLog.error("Cannot play a voice message without an audio player")
-            return
-        }
+        let audioPlayer = mediaPlayerProvider.player
 
         // Stop any recording in progress
         if voiceMessageRecorder.isRecording {
@@ -431,7 +427,7 @@ class TimelineInteractionHandler {
         // Detach all other states
         await mediaPlayerProvider.detachAllStates(except: audioPlayerState)
 
-        guard audioPlayer.mediaSource == source, audioPlayer.state != .error else {
+        guard audioPlayer.sourceURL == source.url, audioPlayer.state != .error else {
             // Load content
             do {
                 MXLog.info("Loading voice message audio content from source for itemID \(itemID)")
@@ -439,7 +435,7 @@ class TimelineInteractionHandler {
 
                 // Make sure that the player is still attached, as it may have been detached while waiting for the voice message to be loaded.
                 if audioPlayerState.isAttached {
-                    audioPlayer.load(mediaSource: source, using: url, autoplay: true)
+                    audioPlayer.load(sourceURL: source.url, playbackURL: url, autoplay: true)
                 }
             } catch {
                 MXLog.error("Failed to load voice message: \(error)")

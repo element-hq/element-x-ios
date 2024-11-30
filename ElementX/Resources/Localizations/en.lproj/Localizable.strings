@@ -36,8 +36,10 @@
 "action_confirm_password" = "Confirm password";
 "action_continue" = "Continue";
 "action_copy" = "Copy";
+"action_copy_caption" = "Copy caption";
 "action_copy_link" = "Copy link";
 "action_copy_link_to_message" = "Copy link to message";
+"action_copy_text" = "Copy text";
 "action_create" = "Create";
 "action_create_a_room" = "Create a room";
 "action_deactivate" = "Deactivate";
@@ -84,6 +86,7 @@
 "action_reject" = "Reject";
 "action_remove" = "Delete";
 "action_remove_caption" = "Remove caption";
+"action_remove_message" = "Remove message";
 "action_reply" = "Reply";
 "action_reply_in_thread" = "Reply in thread";
 "action_report_bug" = "Report bug";
@@ -384,6 +387,9 @@
 "screen_knock_requests_list_empty_state_description" = "When somebody will ask to join the room, you’ll be able to see their request here.";
 "screen_knock_requests_list_empty_state_title" = "No pending request to join";
 "screen_knock_requests_list_title" = "Requests to join";
+"screen_media_upload_preview_caption_warning" = "Captions might not be visible to people using older apps.";
+"screen_media_upload_preview_error_failed_processing" = "Failed processing media to upload, please try again.";
+"screen_media_upload_preview_error_failed_sending" = "Failed uploading media, please try again.";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
@@ -581,8 +587,6 @@
 "screen_login_title" = "Welcome back!";
 "screen_login_title_with_homeserver" = "Sign in to %1$@";
 "screen_media_picker_error_failed_selection" = "Failed selecting media, please try again.";
-"screen_media_upload_preview_error_failed_processing" = "Failed processing media to upload, please try again.";
-"screen_media_upload_preview_error_failed_sending" = "Failed uploading media, please try again.";
 "screen_migration_message" = "This is a one time process, thanks for waiting.";
 "screen_migration_title" = "Setting up your account.";
 "screen_notification_optin_subtitle" = "You can change your settings later.";
