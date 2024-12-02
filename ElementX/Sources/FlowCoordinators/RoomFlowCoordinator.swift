@@ -50,11 +50,6 @@ struct FocusEvent: Hashable {
     let shouldSetPin: Bool
 }
 
-private enum PinnedEventsTimelineSource: Hashable {
-    case room
-    case details(isRoot: Bool)
-}
-
 private enum PresentationAction: Hashable {
     case eventFocus(FocusEvent)
     case share(ShareExtensionPayload)
@@ -368,16 +363,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .room
                 
             case (.room, .presentPinnedEventsTimeline):
-                return .pinnedEventsTimeline(previousState: .room)
-            case (.roomDetails(let isRoot), .presentPinnedEventsTimeline):
-                return .pinnedEventsTimeline(previousState: .details(isRoot: isRoot))
+                return .pinnedEventsTimeline(previousState: fromState)
+            case (.roomDetails, .presentPinnedEventsTimeline):
+                return .pinnedEventsTimeline(previousState: fromState)
             case (.pinnedEventsTimeline(let previousState), .dismissPinnedEventsTimeline):
-                switch previousState {
-                case .room:
-                    return .room
-                case .details(let isRoot):
-                    return .roomDetails(isRoot: isRoot)
-                }
+                return previousState
                 
             case (.roomDetails, .presentPollsHistory):
                 return .pollsHistory
@@ -399,8 +389,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.resolveSendFailure, .dismissResolveSendFailure):
                 return .room
             
-            // Child flow
-            
             case (_, .startChildFlow(let roomID, _, _)):
                 return .presentingChild(childRoomID: roomID, previousState: fromState)
             case (.presentingChild(_, let previousState), .dismissChildFlow):
@@ -409,6 +397,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (_, .presentKnockRequestsListScreen):
                 return .knockRequestsList(previousState: fromState)
             case (.knockRequestsList(let previousState), .dismissKnockRequestsListScreen):
+                return previousState
+                
+            case (.roomDetails, .presentMediaEventsTimeline):
+                return .mediaEventsTimeline(previousState: fromState)
+            case (.mediaEventsTimeline(let previousState), .dismissMediaEventsTimeline):
                 return previousState
             
             default:
@@ -570,6 +563,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.room, .presentKnockRequestsListScreen, .knockRequestsList):
                 presentKnockRequestsList()
             case (.knockRequestsList, .dismissKnockRequestsListScreen, .room):
+                break
+            
+            case (.roomDetails, .presentMediaEventsTimeline, .mediaEventsTimeline):
+                Task { await self.presentMediaEventsTimeline() }
+            case (.mediaEventsTimeline, .dismissMediaEventsTimeline, .roomDetails):
                 break
             
             // Child flow
@@ -845,12 +843,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
             case .presentPinnedEventsTimeline:
                 stateMachine.tryEvent(.presentPinnedEventsTimeline)
-            case .presentMediaEventsTimeline:
-                Task {
-                    await self.presentMediaTimeline()
-                }
             case .presentKnockingRequestsListScreen:
                 stateMachine.tryEvent(.presentKnockRequestsListScreen)
+            case .presentMediaEventsTimeline:
+                stateMachine.tryEvent(.presentMediaEventsTimeline)
             }
         }
         .store(in: &cancellables)
@@ -872,7 +868,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentMediaTimeline() async {
+    private func presentMediaEventsTimeline() async {
         let timelineItemFactory = RoomTimelineItemFactory(userID: userSession.clientProxy.userID,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID))
@@ -894,7 +890,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let coordinator = MediaEventsTimelineScreenCoordinator(parameters: parameters)
         
-        navigationStackCoordinator.push(coordinator)
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissMediaEventsTimeline)
+        }
     }
     
     private func presentRoomMembersList() {
@@ -1593,9 +1591,10 @@ private extension RoomFlowCoordinator {
         case pollsHistory
         case pollsHistoryForm
         case rolesAndPermissions
-        case pinnedEventsTimeline(previousState: PinnedEventsTimelineSource)
+        case pinnedEventsTimeline(previousState: State)
         case resolveSendFailure
         case knockRequestsList(previousState: State)
+        case mediaEventsTimeline(previousState: State)
         
         /// A child flow is in progress.
         case presentingChild(childRoomID: String, previousState: State)
@@ -1677,6 +1676,9 @@ private extension RoomFlowCoordinator {
         
         case presentKnockRequestsListScreen
         case dismissKnockRequestsListScreen
+        
+        case presentMediaEventsTimeline
+        case dismissMediaEventsTimeline
     }
 }
 
