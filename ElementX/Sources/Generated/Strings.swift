@@ -1136,7 +1136,7 @@ internal enum L10n {
   internal static var screenCreateRoomRoomAccessSectionKnockingOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_knocking_option_title") }
   /// Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _
   internal static var screenCreateRoomRoomAddressInvalidSymbolsErrorDescription: String { return L10n.tr("Localizable", "screen_create_room_room_address_invalid_symbols_error_description") }
-  /// This room address already exists, please try editing the room address field or change the room name
+  /// This room address already exists. Please try editing the room address field or change the room name
   internal static var screenCreateRoomRoomAddressNotAvailableErrorDescription: String { return L10n.tr("Localizable", "screen_create_room_room_address_not_available_error_description") }
   /// In order for this room to be visible in the public room directory, you will need a room address.
   internal static var screenCreateRoomRoomAddressSectionFooter: String { return L10n.tr("Localizable", "screen_create_room_room_address_section_footer") }

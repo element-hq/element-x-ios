@@ -36,8 +36,10 @@
 "action_confirm_password" = "Potwierdź hasło";
 "action_continue" = "Kontynuuj";
 "action_copy" = "Kopiuj";
+"action_copy_caption" = "Copy caption";
 "action_copy_link" = "Kopiuj link";
 "action_copy_link_to_message" = "Kopiuj link do wiadomości";
+"action_copy_text" = "Copy text";
 "action_create" = "Utwórz";
 "action_create_a_room" = "Utwórz pokój";
 "action_deactivate" = "Dezaktywuj";
@@ -84,6 +86,7 @@
 "action_reject" = "Odrzuć";
 "action_remove" = "Usuń";
 "action_remove_caption" = "Remove caption";
+"action_remove_message" = "Remove message";
 "action_reply" = "Odpowiedz";
 "action_reply_in_thread" = "Odpowiedz w wątku";
 "action_report_bug" = "Zgłoś błąd";
@@ -359,7 +362,7 @@
 "screen_create_room_room_access_section_knocking_option_description" = "Każdy może poprosić o dołączenie do pokoju, ale administrator lub moderator będzie musiał zatwierdzić prośbę";
 "screen_create_room_room_access_section_knocking_option_title" = "Poproś o dołączenie";
 "screen_create_room_room_address_invalid_symbols_error_description" = "Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
-"screen_create_room_room_address_not_available_error_description" = "This room address already exists, please try editing the room address field or change the room name";
+"screen_create_room_room_address_not_available_error_description" = "This room address already exists. Please try editing the room address field or change the room name";
 "screen_create_room_room_address_section_footer" = "Aby ten pokój był widoczny w katalogu pomieszczeń publicznych, będziesz potrzebował adres pokoju.";
 "screen_create_room_room_address_section_title" = "Adres pokoju";
 "screen_create_room_room_visibility_section_title" = "Widoczność pomieszczenia";
@@ -370,11 +373,23 @@
 "screen_join_room_knock_message_description" = "Wiadomość (opcjonalne)";
 "screen_join_room_knock_sent_description" = "Otrzymasz zaproszenie dołączenia do pokoju, jeśli prośba zostanie zaakceptowana.";
 "screen_join_room_knock_sent_title" = "Wysłano prośbę o dołączenie";
+"screen_knock_requests_list_accept_all_alert_confirm_button_title" = "Yes, accept all";
+"screen_knock_requests_list_accept_all_alert_description" = "Are you sure you want to accept all requests to join?";
+"screen_knock_requests_list_accept_all_alert_title" = "Accept all requests";
 "screen_knock_requests_list_accept_all_button_title" = "Accept all";
+"screen_knock_requests_list_ban_alert_confirm_button_title" = "Yes, decline and ban";
+"screen_knock_requests_list_ban_alert_description" = "Are you sure you want to decline and ban %1$@? This user won’t be able to request access to join this room again.";
+"screen_knock_requests_list_ban_alert_title" = "Decline and ban from accessing";
+"screen_knock_requests_list_decline_alert_confirm_button_title" = "Yes, decline";
+"screen_knock_requests_list_decline_alert_description" = "Are you sure you want to decline %1$@ request to join this room?";
+"screen_knock_requests_list_decline_alert_title" = "Decline access";
 "screen_knock_requests_list_decline_and_ban_action_title" = "Decline and ban";
 "screen_knock_requests_list_empty_state_description" = "When somebody will ask to join the room, you’ll be able to see their request here.";
 "screen_knock_requests_list_empty_state_title" = "No pending request to join";
 "screen_knock_requests_list_title" = "Requests to join";
+"screen_media_upload_preview_caption_warning" = "Captions might not be visible to people using older apps.";
+"screen_media_upload_preview_error_failed_processing" = "Przetwarzanie multimediów do przesłania nie powiodło się, spróbuj ponownie.";
+"screen_media_upload_preview_error_failed_sending" = "Przesyłanie multimediów nie powiodło się, spróbuj ponownie.";
 "screen_pinned_timeline_empty_state_description" = "Naciśnij wiadomość i wybierz “%1$@”, aby dołączyć tutaj.";
 "screen_pinned_timeline_empty_state_headline" = "Przypinaj ważne wiadomości, aby można było je łatwo znaleźć";
 "screen_reset_encryption_password_error" = "Wystąpił nieznany błąd. Sprawdź, czy hasło jest poprawne i spróbuj ponownie.";
@@ -572,8 +587,6 @@
 "screen_login_title" = "Witaj ponownie!";
 "screen_login_title_with_homeserver" = "Zaloguj się do %1$@";
 "screen_media_picker_error_failed_selection" = "Nie udało się wybrać multimediów. Spróbuj ponownie.";
-"screen_media_upload_preview_error_failed_processing" = "Przetwarzanie multimediów do przesłania nie powiodło się, spróbuj ponownie.";
-"screen_media_upload_preview_error_failed_sending" = "Przesyłanie multimediów nie powiodło się, spróbuj ponownie.";
 "screen_migration_message" = "Jest to jednorazowy proces, dziękujemy za czekanie.";
 "screen_migration_title" = "Konfigurowanie Twojego konta.";
 "screen_notification_optin_subtitle" = "Możesz zmienić ustawienia później.";
@@ -848,7 +861,7 @@
 "screen_session_verification_compare_numbers_title" = "Porównaj liczby";
 "screen_session_verification_complete_subtitle" = "Twoja nowa sesja jest teraz zweryfikowana. Ma ona dostęp do Twoich zaszyfrowanych wiadomości, a inni użytkownicy będą widzieć ją jako zaufaną.";
 "screen_session_verification_enter_recovery_key" = "Wprowadź klucz przywracania";
-"screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
+"screen_session_verification_failed_subtitle" = "Albo upłynął limit czasu żądania, albo żądanie zostało odrzucone, albo wystąpił błąd weryfikacji.";
 "screen_session_verification_open_existing_session_subtitle" = "Udowodnij, że to ty, aby uzyskać dostęp do historii zaszyfrowanych wiadomości.";
 "screen_session_verification_open_existing_session_title" = "Otwórz istniejącą sesję";
 "screen_session_verification_positive_button_canceled" = "Ponów weryfikację";
@@ -860,7 +873,7 @@
 "screen_session_verification_request_failure_title" = "Weryfikacja nie powiodła się";
 "screen_session_verification_request_footer" = "Kontynuuj tylko, jeśli to Ty zainicjowałeś tę weryfikację.";
 "screen_session_verification_request_subtitle" = "Zweryfikuj drugie urządzenie, aby zabezpieczyć historię wiadomości.";
-"screen_session_verification_request_success_subtitle" = "Now you can read or send messages securely on your other device.";
+"screen_session_verification_request_success_subtitle" = "Już możesz bezpiecznie czytać lub wysyłać wiadomości na drugim urządzeniu.";
 "screen_session_verification_request_success_title" = "Urządzenie zweryfikowane";
 "screen_session_verification_request_title" = "Zażądano weryfikacji";
 "screen_session_verification_they_dont_match" = "Nie pasują do siebie";
@@ -1081,7 +1094,7 @@
 "screen_room_timeline_reactions_show_less" = "Pokaż mniej";
 "screen_roomlist_filter_people" = "Osoby";
 "screen_server_confirmation_change_server" = "Zmień dostawcę konta";
-"screen_session_verification_request_failure_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
+"screen_session_verification_request_failure_subtitle" = "Albo upłynął limit czasu żądania, albo żądanie zostało odrzucone, albo wystąpił błąd weryfikacji.";
 "screen_signout_confirmation_dialog_submit" = "Wyloguj";
 "screen_signout_confirmation_dialog_title" = "Wyloguj";
 "screen_signout_key_backup_offline_title" = "Twoje klucze są nadal archiwizowane";
