@@ -14,6 +14,7 @@ enum AuthenticationStartScreenCoordinatorAction {
     case loginWithQR
     case register
     case reportProblem
+    case verifyInviteCode(inviteCode: String)
 }
 
 enum AuthenticationStartScreenViewModelAction {
@@ -21,11 +22,28 @@ enum AuthenticationStartScreenViewModelAction {
     case loginWithQR
     case register
     case reportProblem
+    case verifyInviteCode(inviteCode: String)
 }
 
 struct AuthenticationStartScreenViewState: BindableState {
+    let VALID_INVITE_CODE_LENGTH = 6
+    
     let isWebRegistrationEnabled: Bool
     let isQRCodeLoginEnabled: Bool
+    
+    var bindings = AuthenticationStartScreenBindings()
+    
+    var sendButtonDisabled: Bool {
+        !isInviteCodeValid
+    }
+    
+    var isInviteCodeValid: Bool {
+        bindings.inviteCode.count == VALID_INVITE_CODE_LENGTH
+    }
+}
+
+struct AuthenticationStartScreenBindings {
+    var inviteCode: String = ""
 }
 
 enum AuthenticationStartScreenViewAction {
@@ -33,4 +51,5 @@ enum AuthenticationStartScreenViewAction {
     case loginWithQR
     case register
     case reportProblem
+    case verifyInviteCode(inviteCode: String)
 }

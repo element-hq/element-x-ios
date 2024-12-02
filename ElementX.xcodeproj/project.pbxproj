@@ -199,6 +199,8 @@
 		18659CC12CFB287E000EF0A6 /* ZCreateAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CBF2CFB287E000EF0A6 /* ZCreateAccount.swift */; };
 		18659CC32CFB2D2A000EF0A6 /* ZFinaliseCreateAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CC22CFB2D2A000EF0A6 /* ZFinaliseCreateAccount.swift */; };
 		18659CC42CFB2D2A000EF0A6 /* ZFinaliseCreateAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CC22CFB2D2A000EF0A6 /* ZFinaliseCreateAccount.swift */; };
+		18659CC62CFDCD1E000EF0A6 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CC52CFDCD12000EF0A6 /* Publisher+Extensions.swift */; };
+		18659CC72CFDCD1E000EF0A6 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CC52CFDCD12000EF0A6 /* Publisher+Extensions.swift */; };
 		1868A88F2CA2181200DC382D /* ZeroFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A88E2CA2181200DC382D /* ZeroFonts.swift */; };
 		1868A8902CA2181200DC382D /* ZeroFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A88E2CA2181200DC382D /* ZeroFonts.swift */; };
 		1868A8952CA2198200DC382D /* Font+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8942CA2198200DC382D /* Font+Extensions.swift */; };
@@ -2532,6 +2534,7 @@
 		18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZNonceResponse.swift; sourceTree = "<group>"; };
 		18659CBF2CFB287E000EF0A6 /* ZCreateAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZCreateAccount.swift; path = Zero/Sources/Network/Models/ZCreateAccount.swift; sourceTree = SOURCE_ROOT; };
 		18659CC22CFB2D2A000EF0A6 /* ZFinaliseCreateAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZFinaliseCreateAccount.swift; path = Zero/Sources/Network/Models/ZFinaliseCreateAccount.swift; sourceTree = SOURCE_ROOT; };
+		18659CC52CFDCD12000EF0A6 /* Publisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extensions.swift"; sourceTree = "<group>"; };
 		1868A88E2CA2181200DC382D /* ZeroFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroFonts.swift; sourceTree = "<group>"; };
 		1868A8942CA2198200DC382D /* Font+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Extensions.swift"; sourceTree = "<group>"; };
 		1868A8972CA21A1F00DC382D /* RobotoMono.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = RobotoMono.ttf; sourceTree = "<group>"; };
@@ -4201,6 +4204,7 @@
 		1882EB8A2C90C8DC001DA2A9 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				18659CC52CFDCD12000EF0A6 /* Publisher+Extensions.swift */,
 				187112522CF75344001E8964 /* View+Extensions.swift */,
 				1882EB8B2C90C8EC001DA2A9 /* Sequence+Extensions.swift */,
 				1882EB8D2C90E9E7001DA2A9 /* RoomInfo+Extensions.swift */,
@@ -8912,6 +8916,7 @@
 				18E9A6422C9829970082DDA4 /* RoomMemberDetailsScreen.swift in Sources */,
 				18525CF52CF5E7B20055C5E8 /* InviteFriendSettingsScreen.swift in Sources */,
 				18E9A6432C9829970082DDA4 /* RoomMemberDetailsScreenCoordinator.swift in Sources */,
+				18659CC72CFDCD1E000EF0A6 /* Publisher+Extensions.swift in Sources */,
 				18E9A6442C9829970082DDA4 /* RoomMemberDetailsScreenModels.swift in Sources */,
 				18E9A6452C9829970082DDA4 /* RoomMemberDetailsScreenViewModel.swift in Sources */,
 				18E9A6462C9829970082DDA4 /* RoomMemberDetailsScreenViewModelProtocol.swift in Sources */,
@@ -10030,6 +10035,7 @@
 				18525CFF2CF5E7F20055C5E8 /* InviteFriendSettingsScreenModel.swift in Sources */,
 				F37629BAA5E8F50AAF2A131D /* SoftLogoutScreenViewModel.swift in Sources */,
 				CF4044A8EED5C41BC0ED6ABE /* SoftLogoutScreenViewModelProtocol.swift in Sources */,
+				18659CC62CFDCD1E000EF0A6 /* Publisher+Extensions.swift in Sources */,
 				DF004A5B2EABBD0574D06A04 /* SplashScreenCoordinator.swift in Sources */,
 				E1C67E5D9E22135A8FEBBD60 /* StackedAvatarsView.swift in Sources */,
 				3DAF325D8AE461F7CDB282BD /* StartChatScreen.swift in Sources */,

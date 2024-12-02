@@ -84,6 +84,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                     showServerConfirmationScreen(authenticationFlow: .register)
                 case .reportProblem:
                     showReportProblemScreen()
+                case .verifyInviteCode(let inviteCode):
+                    verifyInviteCode(inviteCode: inviteCode)
                 }
             }
             .store(in: &cancellables)
@@ -330,5 +332,25 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         default:
             userIndicatorController.alertInfo = AlertInfo(id: UUID())
         }
+    }
+    
+    private func verifyInviteCode(inviteCode: String) {
+        Task {
+            startLoading()
+            switch await authenticationService.verifyCreateAccountInviteCode(inviteCode: inviteCode) {
+            case .success:
+                stopLoading()
+                showCreateAccountScreen()
+            case .failure:
+                stopLoading()
+                userIndicatorController.alertInfo = AlertInfo(id: UUID(),
+                                                              title: L10n.commonError,
+                                                              message: "Invite code is not valid.")
+            }
+        }
+    }
+    
+    private func showCreateAccountScreen() {
+        //showLoginScreen()
     }
 }

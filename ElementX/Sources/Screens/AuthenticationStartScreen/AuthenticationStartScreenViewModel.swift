@@ -32,6 +32,8 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             actionsSubject.send(.register)
         case .reportProblem:
             actionsSubject.send(.reportProblem)
+        case .verifyInviteCode(let invite):
+            actionsSubject.send(.verifyInviteCode(inviteCode: invite))
         }
     }
 }

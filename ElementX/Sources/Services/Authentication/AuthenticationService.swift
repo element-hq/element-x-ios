@@ -198,6 +198,21 @@ class AuthenticationService: AuthenticationServiceProtocol {
         client = nil
     }
     
+    func verifyCreateAccountInviteCode(inviteCode: String) async -> Result<Void, AuthenticationServiceError> {
+        do {
+            let result = try await zeroCreateAccountApi.validateInviteCode(inviteCode: inviteCode)
+            switch result {
+            case .success:
+                return .success(())
+            case .failure(let error):
+                return .failure(.invalidInviteCode)
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.invalidInviteCode)
+        }
+    }
+    
     // MARK: - Private
     
     private func makeClientBuilder() -> AuthenticationClientBuilderProtocol {
