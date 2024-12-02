@@ -4,6 +4,8 @@ import Foundation
 protocol ZeroUsersApiProtocol {
     func fetchUsers(fromMatrixIds ids: [String]) async throws -> Result<[ZMatrixUser], any Error>
     
+    func searchUsers(_ query: String, offset: Int, limit: Int) async throws -> Result<[ZMatrixSearchedUser], any Error>
+    
     func updateUserProfile(displayName: String?, profileImage: String?, primaryZID: String?) async throws -> Result<Void, Error>
 }
 

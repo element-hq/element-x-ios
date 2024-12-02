@@ -1,11 +1,11 @@
 import Alamofire
 import Foundation
 
-protocol ZeroAttacmentApiProtocol {
+protocol ZeroAttachmentApiProtocol {
     func downloadAttachmentInfo(key: String) async throws -> Result<ZAttachmentUploadInfo, any Error>
 }
 
-class ZeroAttachmentApi: ZeroAttacmentApiProtocol {
+class ZeroAttachmentApi: ZeroAttachmentApiProtocol {
     private let appSettings: AppSettings
     
     init(appSettings: AppSettings) {

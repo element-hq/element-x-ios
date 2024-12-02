@@ -191,6 +191,14 @@
 		18525D0C2CF5EFC20055C5E8 /* ZMessengerInvite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525D032CF5EDE60055C5E8 /* ZMessengerInvite.swift */; };
 		18525D0E2CF5F1040055C5E8 /* ZeroMessengerInviteApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525D0D2CF5F0FC0055C5E8 /* ZeroMessengerInviteApi.swift */; };
 		18525D0F2CF5F1040055C5E8 /* ZeroMessengerInviteApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525D0D2CF5F0FC0055C5E8 /* ZeroMessengerInviteApi.swift */; };
+		18659CBA2CFB1BEC000EF0A6 /* ZeroCreateAccountApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */; };
+		18659CBB2CFB1BEC000EF0A6 /* ZeroCreateAccountApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */; };
+		18659CBD2CFB257C000EF0A6 /* ZNonceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */; };
+		18659CBE2CFB257C000EF0A6 /* ZNonceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */; };
+		18659CC02CFB287E000EF0A6 /* ZCreateAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CBF2CFB287E000EF0A6 /* ZCreateAccount.swift */; };
+		18659CC12CFB287E000EF0A6 /* ZCreateAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CBF2CFB287E000EF0A6 /* ZCreateAccount.swift */; };
+		18659CC32CFB2D2A000EF0A6 /* ZFinaliseCreateAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CC22CFB2D2A000EF0A6 /* ZFinaliseCreateAccount.swift */; };
+		18659CC42CFB2D2A000EF0A6 /* ZFinaliseCreateAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CC22CFB2D2A000EF0A6 /* ZFinaliseCreateAccount.swift */; };
 		1868A88F2CA2181200DC382D /* ZeroFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A88E2CA2181200DC382D /* ZeroFonts.swift */; };
 		1868A8902CA2181200DC382D /* ZeroFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A88E2CA2181200DC382D /* ZeroFonts.swift */; };
 		1868A8952CA2198200DC382D /* Font+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1868A8942CA2198200DC382D /* Font+Extensions.swift */; };
@@ -2520,6 +2528,10 @@
 		18525D032CF5EDE60055C5E8 /* ZMessengerInvite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMessengerInvite.swift; sourceTree = "<group>"; };
 		18525D062CF5EE1F0055C5E8 /* ZeroMessengerInvite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMessengerInvite.swift; sourceTree = "<group>"; };
 		18525D0D2CF5F0FC0055C5E8 /* ZeroMessengerInviteApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMessengerInviteApi.swift; sourceTree = "<group>"; };
+		18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroCreateAccountApi.swift; sourceTree = "<group>"; };
+		18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZNonceResponse.swift; sourceTree = "<group>"; };
+		18659CBF2CFB287E000EF0A6 /* ZCreateAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZCreateAccount.swift; path = Zero/Sources/Network/Models/ZCreateAccount.swift; sourceTree = SOURCE_ROOT; };
+		18659CC22CFB2D2A000EF0A6 /* ZFinaliseCreateAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZFinaliseCreateAccount.swift; path = Zero/Sources/Network/Models/ZFinaliseCreateAccount.swift; sourceTree = SOURCE_ROOT; };
 		1868A88E2CA2181200DC382D /* ZeroFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroFonts.swift; sourceTree = "<group>"; };
 		1868A8942CA2198200DC382D /* Font+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+Extensions.swift"; sourceTree = "<group>"; };
 		1868A8972CA21A1F00DC382D /* RobotoMono.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = RobotoMono.ttf; sourceTree = "<group>"; };
@@ -4085,6 +4097,7 @@
 		184D6FCB2C7D8A97006266D8 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */,
 				18525D0D2CF5F0FC0055C5E8 /* ZeroMessengerInviteApi.swift */,
 				18D5D9A62CEB576B00107940 /* ZeroRewardsApi.swift */,
 				184D6FCC2C7D8AC2006266D8 /* ZeroAuthApi.swift */,
@@ -4108,6 +4121,8 @@
 			isa = PBXGroup;
 			children = (
 				1868A8BE2CA2D91000DC382D /* ZSentMessage.swift */,
+				18659CBF2CFB287E000EF0A6 /* ZCreateAccount.swift */,
+				18659CC22CFB2D2A000EF0A6 /* ZFinaliseCreateAccount.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -4115,6 +4130,7 @@
 		184D6FD02C7D8B91006266D8 /* Response */ = {
 			isa = PBXGroup;
 			children = (
+				18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */,
 				18525D032CF5EDE60055C5E8 /* ZMessengerInvite.swift */,
 				18D5D9A32CEB56F500107940 /* ZRewards.swift */,
 				180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */,
@@ -8683,6 +8699,7 @@
 				18525D022CF5E7FF0055C5E8 /* InviteFriendSettingsScreenCoordinator.swift in Sources */,
 				18E9A57D2C9829970082DDA4 /* MediaPickerScreenCoordinator.swift in Sources */,
 				18E9A57E2C9829970082DDA4 /* (null) in Sources */,
+				18659CBD2CFB257C000EF0A6 /* ZNonceResponse.swift in Sources */,
 				18E9A57F2C9829970082DDA4 /* MediaPlayerProvider.swift in Sources */,
 				18E9A5802C9829970082DDA4 /* MediaPlayerProviderProtocol.swift in Sources */,
 				18E9A5812C9829970082DDA4 /* MediaProvider.swift in Sources */,
@@ -8883,6 +8900,7 @@
 				18ECA49C2CB53E7500938F8B /* RoomScreenFooterView.swift in Sources */,
 				18E9A6382C9829970082DDA4 /* RoomDirectorySearchView.swift in Sources */,
 				18E9A6392C9829970082DDA4 /* RoomEventStringBuilder.swift in Sources */,
+				18659CC42CFB2D2A000EF0A6 /* ZFinaliseCreateAccount.swift in Sources */,
 				18E9A63A2C9829970082DDA4 /* RoomFlowCoordinator.swift in Sources */,
 				18E9A63B2C9829970082DDA4 /* (null) in Sources */,
 				18E9A63C2C9829970082DDA4 /* RoomInviterLabel.swift in Sources */,
@@ -8902,6 +8920,7 @@
 				18E9A6492C9829970082DDA4 /* RoomMemberProxyProtocol.swift in Sources */,
 				18E9A64A2C9829970082DDA4 /* RoomMembersListManageMemberSheet.swift in Sources */,
 				18E9A64B2C9829970082DDA4 /* RoomMembersListScreen.swift in Sources */,
+				18659CBB2CFB1BEC000EF0A6 /* ZeroCreateAccountApi.swift in Sources */,
 				182D06FE2CC1A46B00BFF155 /* (null) in Sources */,
 				18E9A64C2C9829970082DDA4 /* RoomMembersListScreenCoordinator.swift in Sources */,
 				1868A8C02CA2D91000DC382D /* ZSentMessage.swift in Sources */,
@@ -9146,6 +9165,7 @@
 				18E9A71D2C9829970082DDA4 /* URLComponents.swift in Sources */,
 				18E9A71E2C9829970082DDA4 /* URLSession.swift in Sources */,
 				18E9A71F2C9829970082DDA4 /* UTType.swift in Sources */,
+				18659CC02CFB287E000EF0A6 /* ZCreateAccount.swift in Sources */,
 				18E9A7202C9829970082DDA4 /* UnitTestsAppCoordinator.swift in Sources */,
 				18E9A7212C9829970082DDA4 /* UnsupportedRoomTimelineItem.swift in Sources */,
 				18E9A7222C9829970082DDA4 /* UnsupportedRoomTimelineView.swift in Sources */,
@@ -9303,6 +9323,7 @@
 				64E541F88F35BD126C4AFCA1 /* AppLockScreenPINKeypad.swift in Sources */,
 				97969EF0B9C412CD38E5CA93 /* AppLockScreenViewModel.swift in Sources */,
 				E79D79CDAFE8BEBCC3AECA54 /* AppLockScreenViewModelProtocol.swift in Sources */,
+				18659CC32CFB2D2A000EF0A6 /* ZFinaliseCreateAccount.swift in Sources */,
 				1D623953F970D11F6F38499C /* AppLockService.swift in Sources */,
 				D2048FD56760BDABA3DB5FC2 /* AppLockServiceProtocol.swift in Sources */,
 				BB9B800C6094E34860E89DC5 /* AppLockSetupBiometricsScreen.swift in Sources */,
@@ -9404,6 +9425,7 @@
 				E14E469CD97550D0FC58F3CA /* CancellableTask.swift in Sources */,
 				DF8F1211F2B0B56F0FCCA5C2 /* CertificateValidatorHook.swift in Sources */,
 				A52090A4FE0DB826578DFC03 /* Client.swift in Sources */,
+				18659CC12CFB287E000EF0A6 /* ZCreateAccount.swift in Sources */,
 				C80E06ED97CE52704A46C148 /* ClientBuilder.swift in Sources */,
 				87CEA3E07B602705BC2D2A20 /* ClientBuilderHook.swift in Sources */,
 				18E99FF62C9450F00082DDA4 /* ZAttachmentUploadInfo.swift in Sources */,
@@ -9724,6 +9746,7 @@
 				E362924A42934C9F0F97A956 /* OIDCConfigurationProxy.swift in Sources */,
 				11A6B8E3CBDBF0A4107FF4CE /* OnboardingFlowCoordinator.swift in Sources */,
 				3CE4C5071B6D2576E2473989 /* OrderedSet.swift in Sources */,
+				18659CBA2CFB1BEC000EF0A6 /* ZeroCreateAccountApi.swift in Sources */,
 				AA5924D3B67F7ACD98BBEFDC /* OrientationManagerProtocol.swift in Sources */,
 				804C15D8ADE0EA7A5268F58A /* OverridableAvatarImage.swift in Sources */,
 				CD6A72B65D3B6076F4045C30 /* PHGPostHogConfiguration.swift in Sources */,
@@ -9912,6 +9935,7 @@
 				59C41313AED7566C3AC51163 /* RoomSummary.swift in Sources */,
 				983896D611ABF52A5C37498D /* RoomSummaryProvider.swift in Sources */,
 				B5899F18AD6C56CE08FE532B /* RoomSummaryProviderMock.swift in Sources */,
+				18659CBE2CFB257C000EF0A6 /* ZNonceResponse.swift in Sources */,
 				AA050DF4AEE54A641BA7CA22 /* RoomSummaryProviderProtocol.swift in Sources */,
 				2ABF11717C64054CEF2819A3 /* RoomTimelineController.swift in Sources */,
 				38896D54D6D675534E606195 /* RoomTimelineControllerFactory.swift in Sources */,

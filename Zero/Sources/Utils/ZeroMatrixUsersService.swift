@@ -2,7 +2,7 @@ import Foundation
 import MatrixRustSDK
 
 class ZeroMatrixUsersService {
-    private let zeroUsersApi: ZeroUsersApi
+    private let zeroUsersApi: ZeroUsersApiProtocol
     private let appSettings: AppSettings
     private let client: ClientProtocol
         
@@ -13,7 +13,7 @@ class ZeroMatrixUsersService {
         (try? client.userId()) ?? ""
     }
     
-    init(zeroUsersApi: ZeroUsersApi, appSettings: AppSettings, client: ClientProtocol) {
+    init(zeroUsersApi: ZeroUsersApiProtocol, appSettings: AppSettings, client: ClientProtocol) {
         self.zeroUsersApi = zeroUsersApi
         self.appSettings = appSettings
         self.client = client
@@ -42,7 +42,7 @@ class ZeroMatrixUsersService {
     }
     
     func searchZeroUsers(query: String) async throws -> [ZMatrixSearchedUser] {
-        let response = try await zeroUsersApi.searchUsers(query)
+        let response = try await zeroUsersApi.searchUsers(query, offset: 0, limit: 25)
         switch response {
         case .success(let zeroUsers):
             return zeroUsers

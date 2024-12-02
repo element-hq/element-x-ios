@@ -19,6 +19,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private let appSettings: AppSettings
     private let appHooks: AppHooks
     private let zeroAuthApi: ZeroAuthApiProtocol
+    private let zeroCreateAccountApi: ZeroCreateAccountApiProtocol
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
@@ -36,6 +37,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         self.appSettings = appSettings
         self.appHooks = appHooks
         zeroAuthApi = ZeroAuthApi(appSettings: appSettings)
+        zeroCreateAccountApi = ZeroCreateAccountApi(appSettings: appSettings)
         
         // When updating these, don't forget to update the reset method too.
         homeserverSubject = .init(LoginHomeserver(address: appSettings.defaultHomeserverAddress, loginMode: .unknown))

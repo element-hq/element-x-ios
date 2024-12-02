@@ -25,6 +25,25 @@ class APIManager {
         }
     }
     
+    func request(_ url: String,
+                               method: HTTPMethod,
+                               parameters: Parameters? = nil,
+                               headers: HTTPHeaders? = nil,
+                               encoding: ParameterEncoding = JSONEncoding.default) async throws -> Result<Void, Error> {
+        try await withCheckedThrowingContinuation { continuation in
+            AF.request(url, method: method, parameters: parameters, encoding: encoding, headers: headers)
+                .validate()
+                .response { response in
+                    switch response.result {
+                    case .success:
+                        continuation.resume(returning: .success(()))
+                    case .failure(let error):
+                        continuation.resume(returning: .failure(error))
+                    }
+                }
+        }
+    }
+    
     func authorisedRequest<T: Decodable>(_ url: String,
                                          method: HTTPMethod,
                                          appSettings: AppSettings,
