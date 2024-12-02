@@ -1,0 +1,133 @@
+//
+// Copyright 2024 New Vector Ltd.
+//
+// SPDX-License-Identifier: AGPL-3.0-only
+// Please see LICENSE in the repository root for full details.
+//
+
+import SwiftUI
+
+/// The screen shown at the beginning of the onboarding flow.
+struct CreateAccountScreen: View {
+    @ObservedObject var context: CreateAccountScreenViewModel.Context
+    
+    @State private var selectedSegment: ZeroAuthenticationMethod = .email
+    
+    @FocusState private var isEmailFocused: Bool
+    @FocusState private var isPasswordFocused: Bool
+    @FocusState private var isConfirmPasswordFocused: Bool
+    
+    var body: some View {
+        VStack {
+            ScrollView {
+                VStack {
+                    createAccountSegmentControl
+                    
+                    switch selectedSegment {
+                    case .web3:
+                        web3CreateAccountView
+                    case .email:
+                        createAccountForm
+                    }
+                    
+                    Spacer()
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .modifier(ZeroAuthBackgroundModifier())
+        .navigationTitle("Create Account")
+        .navigationBarTitleDisplayMode(.inline)
+        .alert(item: $context.alertInfo)
+    }
+    
+    var createAccountSegmentControl: some View {
+        Picker("Create Account Method", selection: $selectedSegment) {
+            ForEach(ZeroAuthenticationMethod.allCases, id: \.self) { option in
+                Text(option.rawValue)
+            }
+        }.pickerStyle(.segmented)
+            .padding(.horizontal, 36)
+            .padding(.top, 60)
+    }
+    
+    var web3CreateAccountView: some View {
+        Button { } label: {
+            Image(asset: Asset.Images.defaultWalletConnectButton)
+        }
+        .padding(.top, 40)
+    }
+    
+    var createAccountForm: some View {
+        VStack(alignment: .center, spacing: 0) {
+            TextField(text: $context.emailAddress) {
+                Text("Email Address").foregroundColor(.compound.textSecondary)
+            }
+            .focused($isEmailFocused)
+            .textFieldStyle(.authentication(accessibilityIdentifier: "create-account_email_address"))
+            .disableAutocorrection(true)
+            .textContentType(.emailAddress)
+            .keyboardType(.emailAddress)
+            .autocapitalization(.none)
+            .submitLabel(.next)
+            .onSubmit { isPasswordFocused = true }
+            
+            // InfoBox(text: "Please enter a valid email address", type: .error)
+            
+            Spacer().frame(height: 24)
+            
+            SecureField(text: $context.password) {
+                Text(L10n.commonPassword).foregroundColor(.compound.textSecondary)
+            }
+            .focused($isPasswordFocused)
+            .textFieldStyle(.authentication(accessibilityIdentifier: "create-account_password"))
+            .textContentType(.password)
+            .submitLabel(.next)
+            .onSubmit { isConfirmPasswordFocused = true }
+            
+            // InfoBox(text: "Must include at least 8 characters, 1 number, 1 lowercase and 1 uppercase letter", type: .general)
+            
+            Spacer().frame(height: 24)
+            
+            SecureField(text: $context.confirmPassword) {
+                Text("Confirm Password").foregroundColor(.compound.textSecondary)
+            }
+            .focused($isConfirmPasswordFocused)
+            .textFieldStyle(.authentication(accessibilityIdentifier: "create-account_confirm_password"))
+            .textContentType(.password)
+            .submitLabel(.done)
+            .onSubmit(submit)
+            
+            // InfoBox(text: "Passwords match", type: .success)
+            
+            Spacer().frame(height: 48)
+            
+            Button(action: submit) {
+                Image(asset: Asset.Images.btnCreateAccount)
+            }
+            .disabled(!context.viewState.canSubmit)
+            
+            VStack {
+                Text("Already on ZERO? ")
+                    .font(.zero.bodyMD)
+                    .foregroundColor(.compound.textSecondary)
+                + Text("Log In")
+                    .font(.zero.bodyMD)
+                    .foregroundColor(Color.zero.bgAccentRest)
+                    .underline()
+            }
+            .padding(.top, 72)
+            .onTapGesture { context.send(viewAction: .openLoginScreen) }
+        }
+        .padding(.horizontal, 36)
+        .padding(.top, 36)
+    }
+    
+    private func submit() {
+        guard context.viewState.canSubmit else { return }
+        // context.send(viewAction: .createAccount)
+        isEmailFocused = false
+        isPasswordFocused = false
+        isConfirmPasswordFocused = false
+    }
+}

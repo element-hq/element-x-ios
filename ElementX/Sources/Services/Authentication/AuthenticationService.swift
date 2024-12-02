@@ -213,6 +213,21 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
     }
     
+    func createUserAccount(email: String, password: String, inviteCode: String) async -> Result<Void, AuthenticationServiceError> {
+        do {
+            let result = try await zeroCreateAccountApi.createAccountWithEmail(email: email, password: password, invite: inviteCode)
+            switch result {
+            case .success(let session):
+                return .success(())
+            case .failure(let error):
+                return .failure(.failedCreatingUserAccount)
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.failedCreatingUserAccount)
+        }
+    }
+    
     // MARK: - Private
     
     private func makeClientBuilder() -> AuthenticationClientBuilderProtocol {

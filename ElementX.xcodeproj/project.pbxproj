@@ -191,6 +191,18 @@
 		18525D0C2CF5EFC20055C5E8 /* ZMessengerInvite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525D032CF5EDE60055C5E8 /* ZMessengerInvite.swift */; };
 		18525D0E2CF5F1040055C5E8 /* ZeroMessengerInviteApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525D0D2CF5F0FC0055C5E8 /* ZeroMessengerInviteApi.swift */; };
 		18525D0F2CF5F1040055C5E8 /* ZeroMessengerInviteApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525D0D2CF5F0FC0055C5E8 /* ZeroMessengerInviteApi.swift */; };
+		185454BD2CFDE64D003CA957 /* CreateAccountScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454BC2CFDE63E003CA957 /* CreateAccountScreenCoordinator.swift */; };
+		185454BE2CFDE64D003CA957 /* CreateAccountScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454BC2CFDE63E003CA957 /* CreateAccountScreenCoordinator.swift */; };
+		185454C02CFDE66E003CA957 /* CreateAccountScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454BF2CFDE665003CA957 /* CreateAccountScreenModels.swift */; };
+		185454C12CFDE66E003CA957 /* CreateAccountScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454BF2CFDE665003CA957 /* CreateAccountScreenModels.swift */; };
+		185454C32CFDE681003CA957 /* CreateAccountScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454C22CFDE679003CA957 /* CreateAccountScreenViewModel.swift */; };
+		185454C42CFDE681003CA957 /* CreateAccountScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454C22CFDE679003CA957 /* CreateAccountScreenViewModel.swift */; };
+		185454C62CFDE698003CA957 /* CreateAccountScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454C52CFDE68D003CA957 /* CreateAccountScreenViewModelProtocol.swift */; };
+		185454C72CFDE698003CA957 /* CreateAccountScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454C52CFDE68D003CA957 /* CreateAccountScreenViewModelProtocol.swift */; };
+		185454CA2CFDE6B3003CA957 /* CreateAccountScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454C92CFDE6AC003CA957 /* CreateAccountScreenView.swift */; };
+		185454CB2CFDE6B3003CA957 /* CreateAccountScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454C92CFDE6AC003CA957 /* CreateAccountScreenView.swift */; };
+		185454D02CFE3D2E003CA957 /* InfoBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454CF2CFE3D14003CA957 /* InfoBox.swift */; };
+		185454D12CFE3D2E003CA957 /* InfoBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454CF2CFE3D14003CA957 /* InfoBox.swift */; };
 		18659CBA2CFB1BEC000EF0A6 /* ZeroCreateAccountApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */; };
 		18659CBB2CFB1BEC000EF0A6 /* ZeroCreateAccountApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */; };
 		18659CBD2CFB257C000EF0A6 /* ZNonceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */; };
@@ -2530,6 +2542,12 @@
 		18525D032CF5EDE60055C5E8 /* ZMessengerInvite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMessengerInvite.swift; sourceTree = "<group>"; };
 		18525D062CF5EE1F0055C5E8 /* ZeroMessengerInvite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMessengerInvite.swift; sourceTree = "<group>"; };
 		18525D0D2CF5F0FC0055C5E8 /* ZeroMessengerInviteApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMessengerInviteApi.swift; sourceTree = "<group>"; };
+		185454BC2CFDE63E003CA957 /* CreateAccountScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountScreenCoordinator.swift; sourceTree = "<group>"; };
+		185454BF2CFDE665003CA957 /* CreateAccountScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountScreenModels.swift; sourceTree = "<group>"; };
+		185454C22CFDE679003CA957 /* CreateAccountScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountScreenViewModel.swift; sourceTree = "<group>"; };
+		185454C52CFDE68D003CA957 /* CreateAccountScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountScreenViewModelProtocol.swift; sourceTree = "<group>"; };
+		185454C92CFDE6AC003CA957 /* CreateAccountScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountScreenView.swift; sourceTree = "<group>"; };
+		185454CF2CFE3D14003CA957 /* InfoBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoBox.swift; sourceTree = "<group>"; };
 		18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroCreateAccountApi.swift; sourceTree = "<group>"; };
 		18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZNonceResponse.swift; sourceTree = "<group>"; };
 		18659CBF2CFB287E000EF0A6 /* ZCreateAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZCreateAccount.swift; path = Zero/Sources/Network/Models/ZCreateAccount.swift; sourceTree = SOURCE_ROOT; };
@@ -4168,6 +4186,26 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		185454BB2CFDE5E9003CA957 /* CreateAccountScreen */ = {
+			isa = PBXGroup;
+			children = (
+				185454BC2CFDE63E003CA957 /* CreateAccountScreenCoordinator.swift */,
+				185454BF2CFDE665003CA957 /* CreateAccountScreenModels.swift */,
+				185454C22CFDE679003CA957 /* CreateAccountScreenViewModel.swift */,
+				185454C52CFDE68D003CA957 /* CreateAccountScreenViewModelProtocol.swift */,
+				185454C82CFDE6A5003CA957 /* View */,
+			);
+			path = CreateAccountScreen;
+			sourceTree = "<group>";
+		};
+		185454C82CFDE6A5003CA957 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				185454C92CFDE6AC003CA957 /* CreateAccountScreenView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		1868A86B2CA2175A00DC382D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -4218,6 +4256,7 @@
 		1882EB8F2C90F0E0001DA2A9 /* CommonViews */ = {
 			isa = PBXGroup;
 			children = (
+				185454CF2CFE3D14003CA957 /* InfoBox.swift */,
 				1882EB902C90F0F5001DA2A9 /* AvatarView.swift */,
 			);
 			path = CommonViews;
@@ -7149,6 +7188,7 @@
 				2D0D49B0533C4C2EB889BF3A /* ServerSelectionScreen */,
 				5B2C520AB9863B8CBC8EB3CA /* SoftLogoutScreen */,
 				D847C12EC9B19A5FCDF2C815 /* WebRegistrationScreen */,
+				185454BB2CFDE5E9003CA957 /* CreateAccountScreen */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -8410,6 +8450,7 @@
 				18E9A4712C9829970082DDA4 /* AudioRoomTimelineView.swift in Sources */,
 				18E9A4722C9829970082DDA4 /* AudioSessionProtocol.swift in Sources */,
 				18E9A4732C9829970082DDA4 /* AuthenticationClientBuilder.swift in Sources */,
+				185454C32CFDE681003CA957 /* CreateAccountScreenViewModel.swift in Sources */,
 				18E9A4742C9829970082DDA4 /* AuthenticationFlowCoordinator.swift in Sources */,
 				18E9A4752C9829970082DDA4 /* AuthenticationService.swift in Sources */,
 				18E9A4762C9829970082DDA4 /* AuthenticationServiceProtocol.swift in Sources */,
@@ -8550,6 +8591,7 @@
 				18E9A4F12C9829970082DDA4 /* EncryptedRoomTimelineItem.swift in Sources */,
 				18E9A4F22C9829970082DDA4 /* EncryptedRoomTimelineView.swift in Sources */,
 				18E9A4F32C9829970082DDA4 /* EncryptionAuthenticity.swift in Sources */,
+				185454D02CFE3D2E003CA957 /* InfoBox.swift in Sources */,
 				18E9A4F42C9829970082DDA4 /* EncryptionKeyProvider.swift in Sources */,
 				18E9A4F52C9829970082DDA4 /* EncryptionKeyProviderProtocol.swift in Sources */,
 				18E9A4F62C9829970082DDA4 /* EncryptionResetPasswordScreen.swift in Sources */,
@@ -8585,6 +8627,7 @@
 				188207EB2CEF3FAF00856A39 /* TimelineProxyMock.swift in Sources */,
 				18E9A50D2C9829970082DDA4 /* VerifyBackupKeyScreen.swift in Sources */,
 				18E9A50E2C9829970082DDA4 /* FormattedBodyText.swift in Sources */,
+				185454C02CFDE66E003CA957 /* CreateAccountScreenModels.swift in Sources */,
 				18E9A50F2C9829970082DDA4 /* FormattingToolbar.swift in Sources */,
 				18E9A5102C9829970082DDA4 /* FullscreenDialog.swift in Sources */,
 				18E9A5112C9829970082DDA4 /* GeneratedMocks.swift in Sources */,
@@ -8792,6 +8835,7 @@
 				18E9A5CE2C9829970082DDA4 /* PaginationIndicatorRoomTimelineView.swift in Sources */,
 				18E9A5CF2C9829970082DDA4 /* PhotoLibraryPicker.swift in Sources */,
 				18E9A5D02C9829970082DDA4 /* Sequence+Extensions.swift in Sources */,
+				185454C62CFDE698003CA957 /* CreateAccountScreenViewModelProtocol.swift in Sources */,
 				18E9A5D12C9829970082DDA4 /* PillAttachmentViewProvider.swift in Sources */,
 				18F3D1F52CD41AC8002D2677 /* SessionVerificationRequestDetailsView.swift in Sources */,
 				18E9A5D22C9829970082DDA4 /* PillConstants.swift in Sources */,
@@ -8904,6 +8948,7 @@
 				18ECA49C2CB53E7500938F8B /* RoomScreenFooterView.swift in Sources */,
 				18E9A6382C9829970082DDA4 /* RoomDirectorySearchView.swift in Sources */,
 				18E9A6392C9829970082DDA4 /* RoomEventStringBuilder.swift in Sources */,
+				185454BD2CFDE64D003CA957 /* CreateAccountScreenCoordinator.swift in Sources */,
 				18659CC42CFB2D2A000EF0A6 /* ZFinaliseCreateAccount.swift in Sources */,
 				18E9A63A2C9829970082DDA4 /* RoomFlowCoordinator.swift in Sources */,
 				18E9A63B2C9829970082DDA4 /* (null) in Sources */,
@@ -8971,6 +9016,7 @@
 				18E9A6722C9829970082DDA4 /* RoomSummaryProvider.swift in Sources */,
 				18E9A6732C9829970082DDA4 /* RoomSummaryProviderMock.swift in Sources */,
 				18E9A6742C9829970082DDA4 /* RoomSummaryProviderProtocol.swift in Sources */,
+				185454CA2CFDE6B3003CA957 /* CreateAccountScreenView.swift in Sources */,
 				18E9A6752C9829970082DDA4 /* RoomTimelineController.swift in Sources */,
 				18E9A6762C9829970082DDA4 /* RoomTimelineControllerFactory.swift in Sources */,
 				18E9A6772C9829970082DDA4 /* RoomTimelineControllerFactoryMock.swift in Sources */,
@@ -9337,6 +9383,7 @@
 				37906355E207DB5703754675 /* AppLockSetupBiometricsScreenViewModel.swift in Sources */,
 				9FB41B0E8B2AA9B404E52C8B /* AppLockSetupBiometricsScreenViewModelProtocol.swift in Sources */,
 				B188D0907A4D38AAAF6FEFA8 /* AppLockSetupFlowCoordinator.swift in Sources */,
+				185454C72CFDE698003CA957 /* CreateAccountScreenViewModelProtocol.swift in Sources */,
 				733E2B19AB1FDA3B93293A28 /* AppLockSetupPINScreen.swift in Sources */,
 				9696ECAFB4F0C079C5C2A526 /* AppLockSetupPINScreenCoordinator.swift in Sources */,
 				E4B07FF075C99D04D9AF792D /* AppLockSetupPINScreenModels.swift in Sources */,
@@ -9442,6 +9489,7 @@
 				0C797CD650DFD2876BEC5173 /* CollapsibleReactionLayout.swift in Sources */,
 				78A3D84BA47DAC69B4D0A34C /* CollapsibleRoomTimelineView.swift in Sources */,
 				0DC815CA24E1BD7F408F37D3 /* CollapsibleTimelineItem.swift in Sources */,
+				185454C42CFDE681003CA957 /* CreateAccountScreenViewModel.swift in Sources */,
 				663E198678778F7426A9B27D /* Collection.swift in Sources */,
 				24B7CD41342C143117ADA768 /* Comparable.swift in Sources */,
 				19DF5600A7F547B22DD7872A /* CompletionSuggestionService.swift in Sources */,
@@ -9480,6 +9528,7 @@
 				4AD2B5426DBED97196AA4783 /* DeactivateAccountScreenViewModelProtocol.swift in Sources */,
 				EE8491AD81F47DF3C192497B /* DecorationTimelineItemProtocol.swift in Sources */,
 				5780E444F405AA1304E1C23E /* DeveloperOptionsScreen.swift in Sources */,
+				185454C12CFDE66E003CA957 /* CreateAccountScreenModels.swift in Sources */,
 				5DD85A0FE3D85AEC3C7EFE36 /* DeveloperOptionsScreenCoordinator.swift in Sources */,
 				784592335560C2E91D32D177 /* DeveloperOptionsScreenModels.swift in Sources */,
 				B3D652AA1654270742072FB3 /* DeveloperOptionsScreenViewModel.swift in Sources */,
@@ -9569,6 +9618,7 @@
 				77BB228AEA861E50FFD6A228 /* HomeScreenEmptyStateView.swift in Sources */,
 				22C5483D01EEB290B8339817 /* HomeScreenInviteCell.swift in Sources */,
 				86DFA58FBBEB0AF671D2A1E1 /* HomeScreenKnockedCell.swift in Sources */,
+				185454CB2CFDE6B3003CA957 /* CreateAccountScreenView.swift in Sources */,
 				8810A2A30A68252EBB54EE05 /* HomeScreenModels.swift in Sources */,
 				CC8F34982C7E4199002D92F9 /* LandingBackgroundView.swift in Sources */,
 				1882EB932C90FE9C001DA2A9 /* String+Extensions.swift in Sources */,
@@ -9668,6 +9718,7 @@
 				D6661A94DBD97658B2ADBD6A /* MapTilerStaticMap.swift in Sources */,
 				7B5DAB915357BE596529BF25 /* MapTilerStaticMapProtocol.swift in Sources */,
 				83A4DAB181C56987C3E804FF /* MapTilerStyle.swift in Sources */,
+				185454D12CFE3D2E003CA957 /* InfoBox.swift in Sources */,
 				14343C2F9AD2BFEA92CA28FF /* MapTilerStyleBuilder.swift in Sources */,
 				BEA646DF302711A753F0D420 /* MapTilerStyleBuilderProtocol.swift in Sources */,
 				67C05C50AD734283374605E3 /* MatrixEntityRegex.swift in Sources */,
@@ -9777,6 +9828,7 @@
 				FEC03105D1BDE0F49BD7F243 /* PinnedEventsTimelineScreenModels.swift in Sources */,
 				5F0B5797D1BFF2A51084B4C3 /* PinnedEventsTimelineScreenViewModel.swift in Sources */,
 				7B3A59786DB2F741A1743ED0 /* PinnedEventsTimelineScreenViewModelProtocol.swift in Sources */,
+				185454BE2CFDE64D003CA957 /* CreateAccountScreenCoordinator.swift in Sources */,
 				053B8BD2496207838878C6C9 /* PinnedItemsBannerView.swift in Sources */,
 				18E99FED2C9446EB0082DDA4 /* MessageContentHandler.swift in Sources */,
 				D26093BB80B69092B0E9AC7C /* PinnedItemsIndicatorView.swift in Sources */,

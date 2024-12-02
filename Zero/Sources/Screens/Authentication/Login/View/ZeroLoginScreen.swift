@@ -22,7 +22,7 @@ struct ZeroLoginScreen: View {
     /// The focus state of the password text field.
     @FocusState private var isPasswordFocused: Bool
     
-    @State private var selectedSegment: LoginMethod = .email
+    @State private var selectedSegment: ZeroAuthenticationMethod = .email
     
     @ObservedObject var context: LoginScreenViewModel.Context
     
@@ -55,7 +55,7 @@ struct ZeroLoginScreen: View {
     
     var loginSegmentControl: some View {
         Picker("Login Method", selection: $selectedSegment) {
-            ForEach(LoginMethod.allCases, id: \.self) { option in
+            ForEach(ZeroAuthenticationMethod.allCases, id: \.self) { option in
                 Text(option.rawValue)
             }
         }.pickerStyle(.segmented)
@@ -116,7 +116,7 @@ struct ZeroLoginScreen: View {
     }
 }
 
-public enum LoginMethod: String, Equatable, CaseIterable {
+public enum ZeroAuthenticationMethod: String, Equatable, CaseIterable {
     case web3 = "Web3"
     case email = "Email"
 }

@@ -340,7 +340,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             switch await authenticationService.verifyCreateAccountInviteCode(inviteCode: inviteCode) {
             case .success:
                 stopLoading()
-                showCreateAccountScreen()
+                showCreateAccountScreen(inviteCode)
             case .failure:
                 stopLoading()
                 userIndicatorController.alertInfo = AlertInfo(id: UUID(),
@@ -350,7 +350,24 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func showCreateAccountScreen() {
-        //showLoginScreen()
+    private func showCreateAccountScreen(_ inviteCode: String) {
+        let parameters = CreateAccountScreenParameters(authenticationService: authenticationService,
+                                                       userIndicatorController: userIndicatorController,
+                                                       inviteCode: inviteCode)
+        let coordinator = CreateAccountScreenCoordinator(parameters: parameters)
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+
+                switch action {
+                case .accountCreated:
+                    break
+                case .openLoginScreen:
+                    navigationStackCoordinator.pop(animated: false)
+                    showLoginScreen()
+                }
+            }
+            .store(in: &cancellables)
+        navigationStackCoordinator.push(coordinator)
     }
 }
