@@ -14,13 +14,6 @@ struct JoinRoomScreen: View {
     
     @ObservedObject var context: JoinRoomScreenViewModel.Context
     
-    private var knockMessageFooterString: String {
-        guard !context.knockMessage.isEmpty else {
-            return L10n.screenJoinRoomKnockMessageDescription
-        }
-        return "\(context.knockMessage.count)/\(maxKnockMessageLength)"
-    }
-    
     var body: some View {
         FullscreenDialog(topPadding: context.viewState.mode == .knocked ? 151 : 35, background: .bloom) {
             if context.viewState.mode == .loading {
@@ -110,6 +103,13 @@ struct JoinRoomScreen: View {
                     .multilineTextAlignment(.center)
             }
         }
+    }
+    
+    private var knockMessageFooterString: String {
+        guard !context.knockMessage.isEmpty else {
+            return L10n.screenJoinRoomKnockMessageDescription
+        }
+        return "\(context.knockMessage.count)/\(maxKnockMessageLength)"
     }
         
     @ViewBuilder
