@@ -20,9 +20,9 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
                                appSettings: ServiceLocator.shared.settings)
     }
     
-    func buildRoomPinnedTimelineController(roomProxy: JoinedRoomProxyProtocol,
-                                           timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                           mediaProvider: MediaProviderProtocol) async -> RoomTimelineControllerProtocol? {
+    func buildPinnedEventsRoomTimelineController(roomProxy: JoinedRoomProxyProtocol,
+                                                 timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                                 mediaProvider: MediaProviderProtocol) async -> RoomTimelineControllerProtocol? {
         guard let pinnedEventsTimeline = await roomProxy.pinnedEventsTimeline else {
             return nil
         }
@@ -35,9 +35,9 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
                                       appSettings: ServiceLocator.shared.settings)
     }
     
-    func buildMediaRoomTimelineController(roomProxy: JoinedRoomProxyProtocol,
-                                          timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                          mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError> {
+    func buildMediaEventsRoomTimelineController(roomProxy: JoinedRoomProxyProtocol,
+                                                timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                                mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError> {
         switch await roomProxy.mediaEventsTimeline() {
         case .success(let mediaEventsTimeline):
             return .success(RoomTimelineController(roomProxy: roomProxy,

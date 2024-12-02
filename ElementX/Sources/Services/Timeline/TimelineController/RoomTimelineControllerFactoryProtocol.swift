@@ -19,13 +19,13 @@ protocol RoomTimelineControllerFactoryProtocol {
                                      mediaProvider: MediaProviderProtocol) -> RoomTimelineControllerProtocol
     
     #warning("buildPinnedRoomTimelineController")
-    func buildRoomPinnedTimelineController(roomProxy: JoinedRoomProxyProtocol,
-                                           timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                           mediaProvider: MediaProviderProtocol) async -> RoomTimelineControllerProtocol?
+    func buildPinnedEventsRoomTimelineController(roomProxy: JoinedRoomProxyProtocol,
+                                                 timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                                 mediaProvider: MediaProviderProtocol) async -> RoomTimelineControllerProtocol?
     
-    func buildMediaRoomTimelineController(roomProxy: JoinedRoomProxyProtocol,
-                                          timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                          mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError>
+    func buildMediaEventsRoomTimelineController(roomProxy: JoinedRoomProxyProtocol,
+                                                timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                                mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError>
 }
 
 // sourcery: AutoMockable

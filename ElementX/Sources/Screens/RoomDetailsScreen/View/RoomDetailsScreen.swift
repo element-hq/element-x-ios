@@ -185,11 +185,12 @@ struct RoomDetailsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
             
-            #warning("Fix this title")
-            ListRow(label: .default(title: "Media and files", icon: \.image),
-                    kind: .navigationLink(action: {
-                        context.send(viewAction: .processTapMediaEvents)
-                    }))
+            if context.viewState.mediaBrowserEnabled {
+                ListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
+                        kind: .navigationLink(action: {
+                            context.send(viewAction: .processTapMediaEvents)
+                        }))
+            }
         }
     }
     

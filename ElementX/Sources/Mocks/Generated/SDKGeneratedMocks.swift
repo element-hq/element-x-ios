@@ -12452,16 +12452,16 @@ open class RoomSDKMock: MatrixRustSDK.Room {
 
     //MARK: - mediaEventsTimeline
 
-    open var mediaEventsTimelineThrowableError: Error?
-    var mediaEventsTimelineUnderlyingCallsCount = 0
-    open var mediaEventsTimelineCallsCount: Int {
+    open var mediaEventsTimelineFilterThrowableError: Error?
+    var mediaEventsTimelineFilterUnderlyingCallsCount = 0
+    open var mediaEventsTimelineFilterCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return mediaEventsTimelineUnderlyingCallsCount
+                return mediaEventsTimelineFilterUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = mediaEventsTimelineUnderlyingCallsCount
+                    returnValue = mediaEventsTimelineFilterUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -12469,27 +12469,29 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         set {
             if Thread.isMainThread {
-                mediaEventsTimelineUnderlyingCallsCount = newValue
+                mediaEventsTimelineFilterUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    mediaEventsTimelineUnderlyingCallsCount = newValue
+                    mediaEventsTimelineFilterUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var mediaEventsTimelineCalled: Bool {
-        return mediaEventsTimelineCallsCount > 0
+    open var mediaEventsTimelineFilterCalled: Bool {
+        return mediaEventsTimelineFilterCallsCount > 0
     }
+    open var mediaEventsTimelineFilterReceivedFilter: MediaEventsTimelineFilter?
+    open var mediaEventsTimelineFilterReceivedInvocations: [MediaEventsTimelineFilter] = []
 
-    var mediaEventsTimelineUnderlyingReturnValue: Timeline!
-    open var mediaEventsTimelineReturnValue: Timeline! {
+    var mediaEventsTimelineFilterUnderlyingReturnValue: Timeline!
+    open var mediaEventsTimelineFilterReturnValue: Timeline! {
         get {
             if Thread.isMainThread {
-                return mediaEventsTimelineUnderlyingReturnValue
+                return mediaEventsTimelineFilterUnderlyingReturnValue
             } else {
                 var returnValue: Timeline? = nil
                 DispatchQueue.main.sync {
-                    returnValue = mediaEventsTimelineUnderlyingReturnValue
+                    returnValue = mediaEventsTimelineFilterUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -12497,25 +12499,29 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         set {
             if Thread.isMainThread {
-                mediaEventsTimelineUnderlyingReturnValue = newValue
+                mediaEventsTimelineFilterUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    mediaEventsTimelineUnderlyingReturnValue = newValue
+                    mediaEventsTimelineFilterUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var mediaEventsTimelineClosure: (() async throws -> Timeline)?
+    open var mediaEventsTimelineFilterClosure: ((MediaEventsTimelineFilter) async throws -> Timeline)?
 
-    open override func mediaEventsTimeline() async throws -> Timeline {
-        if let error = mediaEventsTimelineThrowableError {
+    open override func mediaEventsTimeline(filter: MediaEventsTimelineFilter) async throws -> Timeline {
+        if let error = mediaEventsTimelineFilterThrowableError {
             throw error
         }
-        mediaEventsTimelineCallsCount += 1
-        if let mediaEventsTimelineClosure = mediaEventsTimelineClosure {
-            return try await mediaEventsTimelineClosure()
+        mediaEventsTimelineFilterCallsCount += 1
+        mediaEventsTimelineFilterReceivedFilter = filter
+        DispatchQueue.main.async {
+            self.mediaEventsTimelineFilterReceivedInvocations.append(filter)
+        }
+        if let mediaEventsTimelineFilterClosure = mediaEventsTimelineFilterClosure {
+            return try await mediaEventsTimelineFilterClosure(filter)
         } else {
-            return mediaEventsTimelineReturnValue
+            return mediaEventsTimelineFilterReturnValue
         }
     }
 

@@ -49,13 +49,17 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
-            Section("Timeline") {
+            Section("Room") {
                 Toggle(isOn: $context.hideTimelineMedia) {
                     Text("Hide image & video previews")
                 }
                 
                 Toggle(isOn: $context.createMediaCaptionsEnabled) {
                     Text("Allow creation of media captions")
+                }
+                
+                Toggle(isOn: $context.mediaBrowserEnabled) {
+                    Text("Enable the media browser")
                 }
             }
             

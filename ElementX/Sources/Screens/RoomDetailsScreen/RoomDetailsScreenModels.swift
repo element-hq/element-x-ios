@@ -49,12 +49,14 @@ struct RoomDetailsScreenViewState: BindableState {
     var notificationSettingsState: RoomDetailsNotificationSettingsState = .loading
     var canJoinCall = false
     var pinnedEventsActionState = RoomDetailsScreenPinnedEventsActionState.loading
+    
     var knockingEnabled = false
     var isKnockableRoom = false
-    
     var canSeeKnockingRequests: Bool {
         knockingEnabled && dmRecipient == nil && isKnockableRoom && (canInviteUsers || canKickUsers || canBanUsers)
     }
+    
+    var mediaBrowserEnabled = false
     
     var canEdit: Bool {
         !isDirect && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
@@ -179,7 +181,6 @@ struct LeaveRoomAlertItem: AlertProtocol {
     }
 }
 
-#warning("Isn't `process` assumed? Also, it's not an action, it's more of a request")
 enum RoomDetailsScreenViewAction {
     case processTapPeople
     case processTapInvite

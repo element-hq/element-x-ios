@@ -79,6 +79,10 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .weakAssign(to: \.state.knockingEnabled, on: self)
             .store(in: &cancellables)
         
+        appSettings.$mediaBrowserEnabled
+            .weakAssign(to: \.state.mediaBrowserEnabled, on: self)
+            .store(in: &cancellables)
+        
         appMediator.networkMonitor.reachabilityPublisher
             .filter { $0 == .reachable }
             .receive(on: DispatchQueue.main)

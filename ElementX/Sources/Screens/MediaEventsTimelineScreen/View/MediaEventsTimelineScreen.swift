@@ -18,7 +18,7 @@ struct MediaEventsTimelineScreen: View {
         content
             .navigationBarTitleDisplayMode(.inline)
             .background(.compound.bgCanvasDefault)
-            .navigationTitle("Media and files") // TODO: fix this title too
+            .navigationTitle(L10n.screenMediaBrowserTitle)
     }
     
     @ViewBuilder
@@ -88,6 +88,8 @@ struct MediaEventsTimelineScreen: View {
             } else {
                 playIcon
             }
+        case .separator(let timelineItem):
+            Text(timelineItem.text)
         default:
             EmptyView()
         }

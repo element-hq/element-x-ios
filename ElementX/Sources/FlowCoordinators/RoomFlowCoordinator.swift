@@ -149,7 +149,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         fatalError("This flow coordinator expect a route")
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
         guard stateMachine.state != .complete else {
             fatalError("This flow coordinator is `finished` ☠️")
@@ -878,9 +877,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID))
         
-        guard case let .success(timelineController) = await roomTimelineControllerFactory.buildMediaRoomTimelineController(roomProxy: roomProxy,
-                                                                                                                           timelineItemFactory: timelineItemFactory,
-                                                                                                                           mediaProvider: userSession.mediaProvider) else {
+        guard case let .success(timelineController) = await roomTimelineControllerFactory.buildMediaEventsRoomTimelineController(roomProxy: roomProxy,
+                                                                                                                                 timelineItemFactory: timelineItemFactory,
+                                                                                                                                 mediaProvider: userSession.mediaProvider) else {
             MXLog.error("Failed presenting media timeline")
             return
         }
