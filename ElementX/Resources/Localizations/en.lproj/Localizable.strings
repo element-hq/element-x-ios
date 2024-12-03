@@ -586,6 +586,11 @@
 "screen_login_form_header" = "Enter your details";
 "screen_login_title" = "Welcome back!";
 "screen_login_title_with_homeserver" = "Sign in to %1$@";
+"screen_media_browser_empty_state_subtitle" = "Images and videos uploaded to this room will be shown here.";
+"screen_media_browser_empty_state_title" = "No media uploaded yet";
+"screen_media_browser_list_mode_files" = "Files";
+"screen_media_browser_list_mode_media" = "Media";
+"screen_media_browser_title" = "Media and files";
 "screen_media_picker_error_failed_selection" = "Failed selecting media, please try again.";
 "screen_migration_message" = "This is a one time process, thanks for waiting.";
 "screen_migration_title" = "Setting up your account.";
@@ -986,6 +991,9 @@
 "state_event_room_unknown_membership_change" = "%1$@ made an unknown change to their membership";
 "test_language_identifier" = "en";
 "test_untranslated_default_language_identifier" = "en";
+"timeline_decryption_failure_historical_event_no_key_backup" = "Historical messages are not available on this device";
+"timeline_decryption_failure_unable_to_decrypt" = "Unable to decrypt message";
+"timeline_decryption_failure_withheld_unverified" = "This message was blocked either because you did not verify your device or because the sender needs to verify your identity.";
 "troubleshoot_notifications_entry_point_section" = "Troubleshoot";
 "troubleshoot_notifications_screen_action" = "Run tests";
 "troubleshoot_notifications_screen_action_again" = "Run tests again";
