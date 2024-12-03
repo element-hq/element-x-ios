@@ -218,6 +218,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
             let result = try await zeroCreateAccountApi.createAccountWithEmail(email: email, password: password, invite: inviteCode)
             switch result {
             case .success(let session):
+                // set Complete Profile Flag
+                appSettings.hasIncompleteZeroSignup = true
                 return .success(())
             case .failure(let error):
                 return .failure(.failedCreatingUserAccount)

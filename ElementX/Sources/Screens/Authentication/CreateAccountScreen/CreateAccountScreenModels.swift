@@ -23,13 +23,22 @@ struct CreateAccountScreenViewState: BindableState {
     
     var bindings = CreateAccountScreenBindings()
     
-    var hasValidInput: Bool {
-        !bindings.emailAddress.isEmpty &&
-        !bindings.password.isEmpty &&
-        !bindings.confirmPassword.isEmpty
+    var isEmailValid: Bool {
+        !bindings.emailAddress.isEmpty && ValidationUtil.shared.isValidEmail(bindings.emailAddress)
     }
     
-    /// `true` when valid credentials have been entered and a homeserver has been loaded.
+    var isValidPassword: Bool {
+        !bindings.password.isEmpty && ValidationUtil.shared.isValidPassword(bindings.password)
+    }
+    
+    var isValidConfirmPassword: Bool {
+        !bindings.confirmPassword.isEmpty && (bindings.password == bindings.confirmPassword)
+    }
+    
+    var hasValidInput: Bool {
+        isEmailValid && isValidPassword && isValidConfirmPassword
+    }
+    
     var canSubmit: Bool {
         hasValidInput
     }

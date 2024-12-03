@@ -49,6 +49,7 @@ class CreateAccountScreenViewModel: CreateAccountScreenViewModelType, CreateAcco
                 //TODO: move to complete profile screen
             case .failure(let error):
                 stopLoading()
+                handleError(error: error)
             }
         }
     }
@@ -64,5 +65,9 @@ class CreateAccountScreenViewModel: CreateAccountScreenViewModelType, CreateAcco
     
     private func stopLoading() {
         userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+    }
+    
+    private func handleError(error: AuthenticationServiceError) {
+        state.bindings.alertInfo = AlertInfo(id: .unknown)
     }
 }

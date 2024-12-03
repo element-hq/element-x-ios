@@ -203,6 +203,10 @@
 		185454CB2CFDE6B3003CA957 /* CreateAccountScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454C92CFDE6AC003CA957 /* CreateAccountScreenView.swift */; };
 		185454D02CFE3D2E003CA957 /* InfoBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454CF2CFE3D14003CA957 /* InfoBox.swift */; };
 		185454D12CFE3D2E003CA957 /* InfoBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454CF2CFE3D14003CA957 /* InfoBox.swift */; };
+		185454D42CFEF7E9003CA957 /* ZeroStyledButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454D32CFEF7DD003CA957 /* ZeroStyledButton.swift */; };
+		185454D52CFEF7E9003CA957 /* ZeroStyledButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454D32CFEF7DD003CA957 /* ZeroStyledButton.swift */; };
+		185454D72CFEFC7E003CA957 /* ValidationUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454D62CFEFC79003CA957 /* ValidationUtil.swift */; };
+		185454D82CFEFC7E003CA957 /* ValidationUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454D62CFEFC79003CA957 /* ValidationUtil.swift */; };
 		18659CBA2CFB1BEC000EF0A6 /* ZeroCreateAccountApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */; };
 		18659CBB2CFB1BEC000EF0A6 /* ZeroCreateAccountApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */; };
 		18659CBD2CFB257C000EF0A6 /* ZNonceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */; };
@@ -2548,6 +2552,8 @@
 		185454C52CFDE68D003CA957 /* CreateAccountScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		185454C92CFDE6AC003CA957 /* CreateAccountScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountScreenView.swift; sourceTree = "<group>"; };
 		185454CF2CFE3D14003CA957 /* InfoBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoBox.swift; sourceTree = "<group>"; };
+		185454D32CFEF7DD003CA957 /* ZeroStyledButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroStyledButton.swift; sourceTree = "<group>"; };
+		185454D62CFEFC79003CA957 /* ValidationUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationUtil.swift; sourceTree = "<group>"; };
 		18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroCreateAccountApi.swift; sourceTree = "<group>"; };
 		18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZNonceResponse.swift; sourceTree = "<group>"; };
 		18659CBF2CFB287E000EF0A6 /* ZCreateAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZCreateAccount.swift; path = Zero/Sources/Network/Models/ZCreateAccount.swift; sourceTree = SOURCE_ROOT; };
@@ -4206,6 +4212,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		185454D22CFEF7D4003CA957 /* Button */ = {
+			isa = PBXGroup;
+			children = (
+				185454D32CFEF7DD003CA957 /* ZeroStyledButton.swift */,
+			);
+			path = Button;
+			sourceTree = "<group>";
+		};
 		1868A86B2CA2175A00DC382D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -4265,6 +4279,7 @@
 		1882EB982C91B9F6001DA2A9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				185454D62CFEFC79003CA957 /* ValidationUtil.swift */,
 				18D5D9C02CEBB70300107940 /* ZeroRewardFAQs.swift */,
 				1882EB992C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift */,
 				18E99FEC2C9446EB0082DDA4 /* MessageContentHandler.swift */,
@@ -4276,6 +4291,7 @@
 		18AF61512CF85A6B00921644 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				185454D22CFEF7D4003CA957 /* Button */,
 				18AF61552CF85ADE00921644 /* ListRow */,
 			);
 			path = Components;
@@ -9110,6 +9126,7 @@
 				18E9A6BC2C9829970082DDA4 /* SessionVerificationScreenStateMachine.swift in Sources */,
 				184EC99C2CA5AFCC000F405E /* ClientSDKMock.swift in Sources */,
 				18E9A6BD2C9829970082DDA4 /* SessionVerificationScreenViewModel.swift in Sources */,
+				185454D82CFEFC7E003CA957 /* ValidationUtil.swift in Sources */,
 				18E9A6BE2C9829970082DDA4 /* SessionVerificationScreenViewModelProtocol.swift in Sources */,
 				18E9A6BF2C9829970082DDA4 /* SettingsFlowCoordinator.swift in Sources */,
 				18E9A6C02C9829970082DDA4 /* SettingsScreen.swift in Sources */,
@@ -9149,6 +9166,7 @@
 				18E9A6DF2C9829970082DDA4 /* Strings+Untranslated.swift in Sources */,
 				18E9A6E02C9829970082DDA4 /* Strings.swift in Sources */,
 				1827256F2C9994A000B513B5 /* Client.swift in Sources */,
+				185454D42CFEF7E9003CA957 /* ZeroStyledButton.swift in Sources */,
 				18E9A6E12C9829970082DDA4 /* SwipeRightAction.swift in Sources */,
 				18E9A6E22C9829970082DDA4 /* SwipeToReplyView.swift in Sources */,
 				18E9A6E32C9829970082DDA4 /* Task.swift in Sources */,
@@ -9715,6 +9733,7 @@
 				E2DDA49BD62F03F180A42E30 /* MapLibreStaticMapView.swift in Sources */,
 				D181AC8FF236B7F91C0A8C28 /* MapTiler.swift in Sources */,
 				FCDA202B246F75BA28E10C5F /* MapTilerAuthorization.swift in Sources */,
+				185454D52CFEF7E9003CA957 /* ZeroStyledButton.swift in Sources */,
 				D6661A94DBD97658B2ADBD6A /* MapTilerStaticMap.swift in Sources */,
 				7B5DAB915357BE596529BF25 /* MapTilerStaticMapProtocol.swift in Sources */,
 				83A4DAB181C56987C3E804FF /* MapTilerStyle.swift in Sources */,
@@ -9826,6 +9845,7 @@
 				5D52925FEB1B780C65B0529F /* PinnedEventsTimelineScreen.swift in Sources */,
 				E184FFAD32342D3D6E2F89AA /* PinnedEventsTimelineScreenCoordinator.swift in Sources */,
 				FEC03105D1BDE0F49BD7F243 /* PinnedEventsTimelineScreenModels.swift in Sources */,
+				185454D72CFEFC7E003CA957 /* ValidationUtil.swift in Sources */,
 				5F0B5797D1BFF2A51084B4C3 /* PinnedEventsTimelineScreenViewModel.swift in Sources */,
 				7B3A59786DB2F741A1743ED0 /* PinnedEventsTimelineScreenViewModelProtocol.swift in Sources */,
 				185454BE2CFDE64D003CA957 /* CreateAccountScreenCoordinator.swift in Sources */,

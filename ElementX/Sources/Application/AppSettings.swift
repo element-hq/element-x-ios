@@ -53,6 +53,7 @@ final class AppSettings {
         case zeroAccessToken
         case zeroMatrixUsers
         case zeroRewardsCredit
+        case zeroHasIncompleteSignup
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -322,6 +323,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.zeroRewardsCredit, defaultValue: ZeroRewards.empty(), storageType: .userDefaults(store))
     var zeroRewardsCredit: ZeroRewards
+    
+    @UserPreference(key: UserDefaultsKeys.zeroHasIncompleteSignup, defaultValue: false, storageType: .userDefaults(store))
+    var hasIncompleteZeroSignup: Bool
 }
 
 extension AppSettings: CommonSettingsProtocol { }

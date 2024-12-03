@@ -72,9 +72,11 @@ struct CreateAccountScreen: View {
             .submitLabel(.next)
             .onSubmit { isPasswordFocused = true }
             
-            // InfoBox(text: "Please enter a valid email address", type: .error)
+            if !context.emailAddress.isEmpty, !context.viewState.isEmailValid {
+                InfoBox(text: "Please enter a valid email address", type: .error)
+            }
             
-            Spacer().frame(height: 24)
+            Spacer().frame(height: 20)
             
             SecureField(text: $context.password) {
                 Text(L10n.commonPassword).foregroundColor(.compound.textSecondary)
@@ -85,9 +87,15 @@ struct CreateAccountScreen: View {
             .submitLabel(.next)
             .onSubmit { isConfirmPasswordFocused = true }
             
-            // InfoBox(text: "Must include at least 8 characters, 1 number, 1 lowercase and 1 uppercase letter", type: .general)
+            if !context.password.isEmpty {
+                let infoBoxType: InfoBoxType = isPasswordFocused ? .general : (context.viewState.isValidPassword ? .success : .error)
+                InfoBox(
+                    text: "Must include at least 8 characters, 1 number, 1 lowercase and 1 uppercase letter",
+                    type: infoBoxType
+                )
+            }
             
-            Spacer().frame(height: 24)
+            Spacer().frame(height: 20)
             
             SecureField(text: $context.confirmPassword) {
                 Text("Confirm Password").foregroundColor(.compound.textSecondary)
@@ -98,14 +106,21 @@ struct CreateAccountScreen: View {
             .submitLabel(.done)
             .onSubmit(submit)
             
-            // InfoBox(text: "Passwords match", type: .success)
-            
-            Spacer().frame(height: 48)
-            
-            Button(action: submit) {
-                Image(asset: Asset.Images.btnCreateAccount)
+            if !context.confirmPassword.isEmpty {
+                let infoBoxText = context.viewState.isValidConfirmPassword ? "Passwords match" : "Passwords do not match"
+                let infoBoxType: InfoBoxType = context.viewState.isValidConfirmPassword ? .success : .error
+                
+                InfoBox(text: infoBoxText, type: infoBoxType)
             }
-            .disabled(!context.viewState.canSubmit)
+            
+            Spacer().frame(height: 40)
+            
+            ZeroStyledButton(
+                buttonText: "Create account",
+                buttonImageAsset: Asset.Images.btnCreateAccount,
+                action: submit,
+                enabled: context.viewState.canSubmit
+            )
             
             VStack {
                 Text("Already on ZERO? ")
@@ -116,7 +131,7 @@ struct CreateAccountScreen: View {
                     .foregroundColor(Color.zero.bgAccentRest)
                     .underline()
             }
-            .padding(.top, 72)
+            .padding(.top, 56)
             .onTapGesture { context.send(viewAction: .openLoginScreen) }
         }
         .padding(.horizontal, 36)
@@ -125,7 +140,7 @@ struct CreateAccountScreen: View {
     
     private func submit() {
         guard context.viewState.canSubmit else { return }
-        // context.send(viewAction: .createAccount)
+        context.send(viewAction: .createAccount)
         isEmailFocused = false
         isPasswordFocused = false
         isConfirmPasswordFocused = false
