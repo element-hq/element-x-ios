@@ -374,19 +374,27 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
     static var previews: some View {
         mockTimeline
             .previewDisplayName("Mock Timeline")
+            .previewLayout(.fixed(width: 390, height: 900))
+            .padding(.bottom, 20)
         mockTimeline
             .environment(\.layoutDirection, .rightToLeft)
             .previewDisplayName("Mock Timeline RTL")
+            .previewLayout(.fixed(width: 390, height: 900))
+            .padding(.bottom, 20)
         replies
             .previewDisplayName("Replies")
         threads
             .previewDisplayName("Thread decorator")
             .snapshotPreferences(delay: 1)
+            .previewLayout(.fixed(width: 390, height: 1700))
+            .padding(.bottom, 20)
         encryptionAuthenticity
             .previewDisplayName("Encryption Indicators")
         pinned
             .previewDisplayName("Pinned messages")
             .snapshotPreferences(delay: 1)
+            .previewLayout(.fixed(width: 390, height: 1150))
+            .padding(.bottom, 20)
     }
     
     static var mockTimeline: some View {
