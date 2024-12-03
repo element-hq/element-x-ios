@@ -154,7 +154,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .sentBeforeWeJoined)
                 errorLabel = L10n.commonUnableToDecryptNoAccess
             case .historicalMessage:
-                encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .unknown)
+                encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .historicalMessage)
                 errorLabel = L10n.commonUnableToDecryptNoAccess
             }
         case .olmV1Curve25519AesSha2(let senderKey):
