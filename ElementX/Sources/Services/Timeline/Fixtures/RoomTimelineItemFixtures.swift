@@ -349,7 +349,7 @@ private extension VideoRoomTimelineItem {
                   content: .init(filename: "video.mp4",
                                  caption: caption,
                                  videoInfo: .mockVideo,
-                                 thumbnailInfo: .mockThumbnail,
+                                 thumbnailInfo: .mockVideoThumbnail,
                                  blurhash: "KtI~70X5V?yss9oyrYs:t6"))
     }
 }

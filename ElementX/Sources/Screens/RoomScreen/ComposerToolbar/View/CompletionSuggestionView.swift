@@ -118,7 +118,7 @@ struct CompletionSuggestion_Previews: PreviewProvider, TestablePreview {
         VStack(spacing: 8) {
             CompletionSuggestionView(mediaProvider: MediaProviderMock(configuration: .init()),
                                      items: [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil, range: .init())),
-                                             .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: .mockMXCAvatar, range: .init()))]) { _ in }
+                                             .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: .mockMXCUserAvatar, range: .init()))]) { _ in }
         }
         VStack(spacing: 8) {
             CompletionSuggestionView(mediaProvider: MediaProviderMock(configuration: .init()),

@@ -304,7 +304,7 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
                                                             analyticsService: ServiceLocator.shared.analytics,
                                                             composerDraftService: ComposerDraftServiceMock())
     static let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil, range: .init())),
-                                                .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: .mockMXCAvatar, range: .init()))]
+                                                .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: .mockMXCUserAvatar, range: .init()))]
     
     static var previews: some View {
         ComposerToolbar.mock(focused: true)
