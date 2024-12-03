@@ -18,7 +18,6 @@ extension MediaProviderMock {
                 return nil
             }
             
-            // At some stage it would be nice to return different images, but for now they can be the same.
             if mediaSource?.url == .mockMXCImage {
                 if let url = Bundle.main.url(forResource: "preview_image", withExtension: "jpg"),
                    let data = try? Data(contentsOf: url) {
