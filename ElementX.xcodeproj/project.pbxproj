@@ -217,6 +217,8 @@
 		185454E62CFF0EFB003CA957 /* CompleteProfileScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454E42CFF0EF1003CA957 /* CompleteProfileScreenViewModelProtocol.swift */; };
 		185454E92CFF0FA7003CA957 /* CompleteProfileScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454E82CFF0FA1003CA957 /* CompleteProfileScreenView.swift */; };
 		185454EA2CFF0FA7003CA957 /* CompleteProfileScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454E82CFF0FA1003CA957 /* CompleteProfileScreenView.swift */; };
+		185454EC2CFFAD09003CA957 /* ZInviter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454EB2CFFAD05003CA957 /* ZInviter.swift */; };
+		185454ED2CFFAD09003CA957 /* ZInviter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454EB2CFFAD05003CA957 /* ZInviter.swift */; };
 		18659CBA2CFB1BEC000EF0A6 /* ZeroCreateAccountApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */; };
 		18659CBB2CFB1BEC000EF0A6 /* ZeroCreateAccountApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */; };
 		18659CBD2CFB257C000EF0A6 /* ZNonceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */; };
@@ -2569,6 +2571,7 @@
 		185454E12CFF0EE1003CA957 /* CompleteProfileScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteProfileScreenViewModel.swift; sourceTree = "<group>"; };
 		185454E42CFF0EF1003CA957 /* CompleteProfileScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteProfileScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		185454E82CFF0FA1003CA957 /* CompleteProfileScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteProfileScreenView.swift; sourceTree = "<group>"; };
+		185454EB2CFFAD05003CA957 /* ZInviter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZInviter.swift; sourceTree = "<group>"; };
 		18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroCreateAccountApi.swift; sourceTree = "<group>"; };
 		18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZNonceResponse.swift; sourceTree = "<group>"; };
 		18659CBF2CFB287E000EF0A6 /* ZCreateAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZCreateAccount.swift; path = Zero/Sources/Network/Models/ZCreateAccount.swift; sourceTree = SOURCE_ROOT; };
@@ -4172,6 +4175,7 @@
 		184D6FD02C7D8B91006266D8 /* Response */ = {
 			isa = PBXGroup;
 			children = (
+				185454EB2CFFAD05003CA957 /* ZInviter.swift */,
 				18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */,
 				18525D032CF5EDE60055C5E8 /* ZMessengerInvite.swift */,
 				18D5D9A32CEB56F500107940 /* ZRewards.swift */,
@@ -8904,6 +8908,7 @@
 				18E9A5D92C9829970082DDA4 /* PinnedEventsTimelineScreen.swift in Sources */,
 				18E9A5DA2C9829970082DDA4 /* PinnedEventsTimelineScreenCoordinator.swift in Sources */,
 				18E9A5DB2C9829970082DDA4 /* PinnedEventsTimelineScreenModels.swift in Sources */,
+				185454ED2CFFAD09003CA957 /* ZInviter.swift in Sources */,
 				18E9A5DC2C9829970082DDA4 /* PinnedEventsTimelineScreenViewModel.swift in Sources */,
 				18E9A5DD2C9829970082DDA4 /* PinnedEventsTimelineScreenViewModelProtocol.swift in Sources */,
 				18E9A5DE2C9829970082DDA4 /* PinnedItemsBannerView.swift in Sources */,
@@ -9754,6 +9759,7 @@
 				256D76972BA3254F7CB7F88B /* LocationAnnotation.swift in Sources */,
 				B5479997ECC516C121E6625E /* LocationMarkerView.swift in Sources */,
 				D46C33F8B61B55F0C8C2D15F /* LocationRoomTimelineItem.swift in Sources */,
+				185454EC2CFFAD09003CA957 /* ZInviter.swift in Sources */,
 				854E82E064BA53CD0BC45600 /* LocationRoomTimelineItemContent.swift in Sources */,
 				18115E532CAEA4D9001A8F4A /* ZeroContants.swift in Sources */,
 				973C48F9E4EFB808F61BE401 /* LocationRoomTimelineView.swift in Sources */,

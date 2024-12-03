@@ -33,6 +33,7 @@ enum AuthenticationServiceError: Error, Equatable {
     
     case invalidInviteCode
     case failedCreatingUserAccount
+    case failedCompletingUserProfile
 }
 
 protocol AuthenticationServiceProtocol {
@@ -55,7 +56,10 @@ protocol AuthenticationServiceProtocol {
     func completeWebRegistration(using credentials: WebRegistrationCredentials) async -> Result<UserSessionProtocol, AuthenticationServiceError>
     
     func verifyCreateAccountInviteCode(inviteCode: String) async -> Result<Void, AuthenticationServiceError>
+    
     func createUserAccount(email: String, password: String, inviteCode: String) async -> Result<Void, AuthenticationServiceError>
+
+    func completeCreateAccountProfile(avatar: MediaInfo?, displayName: String, inviteCode: String) async -> Result<UserSessionProtocol, AuthenticationServiceError>
     
     /// Resets the current configuration requiring `configure(for:flow:)` to be called again.
     func reset()

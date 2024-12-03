@@ -138,7 +138,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
                 }
                 
                 return await userSession(for: client)
-            case .failure(let error):
+            case .failure(_):
                 return .failure(.failedLoggingIn)
             }
             
@@ -204,7 +204,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             switch result {
             case .success:
                 return .success(())
-            case .failure(let error):
+            case .failure(_):
                 return .failure(.invalidInviteCode)
             }
         } catch {
@@ -217,16 +217,61 @@ class AuthenticationService: AuthenticationServiceProtocol {
         do {
             let result = try await zeroCreateAccountApi.createAccountWithEmail(email: email, password: password, invite: inviteCode)
             switch result {
-            case .success(let session):
-                // set Complete Profile Flag
+            case .success(_):
                 appSettings.hasIncompleteZeroSignup = true
                 return .success(())
-            case .failure(let error):
+            case .failure(_):
                 return .failure(.failedCreatingUserAccount)
             }
         } catch {
             MXLog.error(error)
             return .failure(.failedCreatingUserAccount)
+        }
+    }
+    
+    func completeCreateAccountProfile(avatar: MediaInfo?, displayName: String, inviteCode: String) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        do {
+            await ensureHomeServerIsConfigured()
+            
+            guard let client else { return .failure(.failedLoggingIn) }
+            
+            let session = await loginNewlyCreatedUser()
+            switch session {
+            case .success(let userSession):
+                
+                let clientProxy = userSession.clientProxy
+                try await withThrowingTaskGroup(of: Void.self) { group in
+                    group.addTask {
+                        if let localMedia = avatar {
+                            try await clientProxy.setUserAvatar(media: localMedia).get()
+                        }
+                    }
+                    group.addTask {
+                        try await clientProxy.setUserDisplayName(displayName).get()
+                    }
+                    try await group.waitForAll()
+                }
+                let userId = try client.userId().matrixIdToCleanHex()
+                let avatarUrl = try await client.avatarUrl() ?? ""
+                let result = try await zeroCreateAccountApi
+                    .finaliseCreateAccount(request: ZFinaliseCreateAccount(inviteCode: inviteCode, name: displayName, userId: userId, profileImageUrl: avatarUrl))
+                
+                switch result {
+                case .success(let user):
+                    /// create a room with the user who invited
+                    let _ = await clientProxy.createDirectRoom(with: user.inviter.matrixId, expectedRoomName: user.inviter.displayName)
+                    appSettings.hasIncompleteZeroSignup = false
+                    return .success(userSession)
+                    
+                case .failure(let failure):
+                    return .failure(.failedCompletingUserProfile)
+                }
+            case .failure(let failure):
+                return .failure(.failedCompletingUserProfile)
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.failedCompletingUserProfile)
         }
     }
     
@@ -254,6 +299,37 @@ class AuthenticationService: AuthenticationServiceProtocol {
         case .success(let clientProxy):
             return .success(clientProxy)
         case .failure:
+            return .failure(.failedLoggingIn)
+        }
+    }
+    
+    private func ensureHomeServerIsConfigured() async {
+        if client == nil {
+            _ = await configure(for: appSettings.defaultHomeserverAddress, flow: .login)
+        }
+    }
+    
+    private func loginNewlyCreatedUser() async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        guard let client else { return .failure(.failedLoggingIn) }
+        do {
+            let zeroMatrixSSOResult = try await zeroAuthApi.fetchSSOToken()
+            switch zeroMatrixSSOResult {
+            case .success(let zeroSSOToken):
+                try await client.customLoginWithJwt(jwt: zeroSSOToken.token, initialDeviceName: nil, deviceId: nil)
+                
+                let refreshToken = try? client.session().refreshToken
+                if refreshToken != nil {
+                    MXLog.warning("Refresh token found for a non oidc session, can't restore session, logging out")
+                    _ = try? await client.logout()
+                    return .failure(.sessionTokenRefreshNotSupported)
+                }
+                
+                return await userSession(for: client)
+            case .failure(_):
+                return .failure(.failedLoggingIn)
+            }
+        } catch {
+            MXLog.error(error)
             return .failure(.failedLoggingIn)
         }
     }

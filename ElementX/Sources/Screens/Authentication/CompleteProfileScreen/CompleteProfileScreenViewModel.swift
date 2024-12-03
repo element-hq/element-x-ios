@@ -68,7 +68,19 @@ class CompleteProfileScreenViewModel: CompleteProfileScreenViewModelType, Comple
     }
     
     private func updateUserProfile() {
-        
+        startLoading()
+        Task {
+            switch await authenticationService.completeCreateAccountProfile(avatar: state.localMedia,
+                                                                            displayName: state.bindings.name,
+                                                                            inviteCode: state.inviteCode) {
+            case .success(let userSession):
+                stopLoading()
+                actionsSubject.send(.signedIn(userSession))
+            case .failure(let error):
+                stopLoading()
+                handleError(error: error)
+            }
+        }
     }
     
     private static let loadingIndicatorIdentifier = "\(CompleteProfileScreenCoordinatorAction.self)-Loading"

@@ -6,7 +6,7 @@ protocol ZeroCreateAccountApiProtocol {
     
     func createAccountWithEmail(email: String, password: String, invite: String) async throws -> Result<ZSessionDataResponse, Error>
     
-    func finaliseCreateAccount(request: ZFinaliseCreateAccount) async throws -> Result<ZMatrixUser, Error>
+    func finaliseCreateAccount(request: ZFinaliseCreateAccount) async throws -> Result<ZInviter, Error>
 }
 
 class ZeroCreateAccountApi: ZeroCreateAccountApiProtocol {
@@ -53,8 +53,8 @@ class ZeroCreateAccountApi: ZeroCreateAccountApiProtocol {
         }
     }
     
-    func finaliseCreateAccount(request: ZFinaliseCreateAccount) async throws -> Result<ZMatrixUser, Error> {
-        let finaliseResult: Result<ZMatrixUser, Error> = try await APIManager.shared.authorisedRequest(CreateAccountEndPoints.finaliseSignupEndPoint, method: .post, appSettings: appSettings, parameters: request.toDictionary())
+    func finaliseCreateAccount(request: ZFinaliseCreateAccount) async throws -> Result<ZInviter, Error> {
+        let finaliseResult: Result<ZInviter, Error> = try await APIManager.shared.authorisedRequest(CreateAccountEndPoints.finaliseSignupEndPoint, method: .post, appSettings: appSettings, parameters: request.toDictionary())
         switch finaliseResult {
         case .success(let inviter):
             return .success(inviter)

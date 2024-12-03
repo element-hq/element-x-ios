@@ -47,6 +47,8 @@ final class CompleteProfileScreenCoordinator: CoordinatorProtocol {
                     self.displayMediaPickerWithSource(.camera)
                 case .displayMediaPicker:
                     self.displayMediaPickerWithSource(.photoLibrary)
+                case .signedIn(let userSession):
+                    actionsSubject.send(.signedIn(userSession))
                 }
             }
             .store(in: &cancellables)

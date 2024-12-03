@@ -371,7 +371,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
 
                 switch action {
                 case .accountCreated:
-                    navigationStackCoordinator.pop(animated: false)
                     showCompleteProfileScreen(inviteCode)
                 case .openLoginScreen:
                     navigationStackCoordinator.pop(animated: false)
@@ -407,6 +406,10 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] action in
                 guard let self else { return }
                 
+                switch action {
+                case .signedIn(let userSession):
+                    userHasSignedIn(userSession: userSession)
+                }
             }
             .store(in: &cancellables)
         

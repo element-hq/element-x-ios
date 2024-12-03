@@ -5,6 +5,8 @@ protocol ZeroAuthApiProtocol {
     func login(email: String, password: String) async throws -> Result<ZMatrixSession, Error>
     
     func loginSSO(email: String, password: String) async throws -> Result<ZSSOToken, Error>
+    
+    func fetchSSOToken() async throws -> Result<ZSSOToken, Error>
 }
 
 class ZeroAuthApi: ZeroAuthApiProtocol {
@@ -73,11 +75,11 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
         }
     }
     
-    // MARK: - Private
-    
-    private func fetchSSOToken() async throws -> (Result<ZSSOToken, Error>) {
+    func fetchSSOToken() async throws -> (Result<ZSSOToken, Error>) {
         try await APIManager.shared.authorisedRequest(AuthEndPoints.ssoTokenEndPoint, method: .get, appSettings: appSettings)
     }
+    
+    // MARK: - Private
     
     private func fetchMatrixSession(ssoToken: String) async throws -> (Result<ZMatrixSession, Error>) {
         let homeAddress = appSettings.defaultHomeserverAddress
