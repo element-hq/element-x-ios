@@ -54,7 +54,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func start() {
-        showStartScreen()
+        // showStartScreen()
+        checkAndShowStartScreen()
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
@@ -66,6 +67,15 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     // MARK: - Private
+    
+    private func checkAndShowStartScreen() {
+        let hasPendingSignup = appSettings.hasIncompleteZeroSignup
+        if hasPendingSignup {
+            showCompletePendingSignupScreen()
+        } else {
+            showStartScreen()
+        }
+    }
     
     private func showStartScreen() {
         let parameters = AuthenticationStartScreenParameters(webRegistrationEnabled: appSettings.webRegistrationEnabled)
@@ -361,7 +371,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
 
                 switch action {
                 case .accountCreated:
-                    break
+                    navigationStackCoordinator.pop(animated: false)
+                    showCompleteProfileScreen(inviteCode)
                 case .openLoginScreen:
                     navigationStackCoordinator.pop(animated: false)
                     showLoginScreen()
@@ -369,5 +380,33 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func showCompletePendingSignupScreen() {
+        let coordinator = getCompleteProfileScreenCoordinator("", fromRoot: true)
+        
+        navigationStackCoordinator.setRootCoordinator(coordinator)
+        navigationRootCoordinator.setRootCoordinator(navigationStackCoordinator)
+    }
+    
+    private func showCompleteProfileScreen(_ inviteCode: String) {
+        let coordinator = getCompleteProfileScreenCoordinator(inviteCode)
+        
+        navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func getCompleteProfileScreenCoordinator(_ inviteCode: String, fromRoot: Bool = false) -> CompleteProfileScreenCoordinator {
+        let parameters = CompleteProfileScreenParameters(authenticationService: authenticationService,
+                                                       userIndicatorController: userIndicatorController,
+                                                       inviteCode: inviteCode)
+        let coordinator = CompleteProfileScreenCoordinator(parameters: parameters)
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+
+            }
+            .store(in: &cancellables)
+        
+        return coordinator
     }
 }

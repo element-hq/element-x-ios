@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-/// The screen shown at the beginning of the onboarding flow.
 struct CreateAccountScreen: View {
     @ObservedObject var context: CreateAccountScreenViewModel.Context
     

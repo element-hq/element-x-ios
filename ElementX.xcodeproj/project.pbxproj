@@ -207,6 +207,16 @@
 		185454D52CFEF7E9003CA957 /* ZeroStyledButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454D32CFEF7DD003CA957 /* ZeroStyledButton.swift */; };
 		185454D72CFEFC7E003CA957 /* ValidationUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454D62CFEFC79003CA957 /* ValidationUtil.swift */; };
 		185454D82CFEFC7E003CA957 /* ValidationUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454D62CFEFC79003CA957 /* ValidationUtil.swift */; };
+		185454DC2CFF0DDD003CA957 /* CompleteProfileScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454DB2CFF0DD5003CA957 /* CompleteProfileScreenCoordinator.swift */; };
+		185454DD2CFF0DDD003CA957 /* CompleteProfileScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454DB2CFF0DD5003CA957 /* CompleteProfileScreenCoordinator.swift */; };
+		185454DF2CFF0E74003CA957 /* CompleteProfileScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454DE2CFF0E6D003CA957 /* CompleteProfileScreenModels.swift */; };
+		185454E02CFF0E74003CA957 /* CompleteProfileScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454DE2CFF0E6D003CA957 /* CompleteProfileScreenModels.swift */; };
+		185454E22CFF0EEB003CA957 /* CompleteProfileScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454E12CFF0EE1003CA957 /* CompleteProfileScreenViewModel.swift */; };
+		185454E32CFF0EEB003CA957 /* CompleteProfileScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454E12CFF0EE1003CA957 /* CompleteProfileScreenViewModel.swift */; };
+		185454E52CFF0EFB003CA957 /* CompleteProfileScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454E42CFF0EF1003CA957 /* CompleteProfileScreenViewModelProtocol.swift */; };
+		185454E62CFF0EFB003CA957 /* CompleteProfileScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454E42CFF0EF1003CA957 /* CompleteProfileScreenViewModelProtocol.swift */; };
+		185454E92CFF0FA7003CA957 /* CompleteProfileScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454E82CFF0FA1003CA957 /* CompleteProfileScreenView.swift */; };
+		185454EA2CFF0FA7003CA957 /* CompleteProfileScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454E82CFF0FA1003CA957 /* CompleteProfileScreenView.swift */; };
 		18659CBA2CFB1BEC000EF0A6 /* ZeroCreateAccountApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */; };
 		18659CBB2CFB1BEC000EF0A6 /* ZeroCreateAccountApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */; };
 		18659CBD2CFB257C000EF0A6 /* ZNonceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */; };
@@ -2554,6 +2564,11 @@
 		185454CF2CFE3D14003CA957 /* InfoBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoBox.swift; sourceTree = "<group>"; };
 		185454D32CFEF7DD003CA957 /* ZeroStyledButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroStyledButton.swift; sourceTree = "<group>"; };
 		185454D62CFEFC79003CA957 /* ValidationUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationUtil.swift; sourceTree = "<group>"; };
+		185454DB2CFF0DD5003CA957 /* CompleteProfileScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteProfileScreenCoordinator.swift; sourceTree = "<group>"; };
+		185454DE2CFF0E6D003CA957 /* CompleteProfileScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteProfileScreenModels.swift; sourceTree = "<group>"; };
+		185454E12CFF0EE1003CA957 /* CompleteProfileScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteProfileScreenViewModel.swift; sourceTree = "<group>"; };
+		185454E42CFF0EF1003CA957 /* CompleteProfileScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteProfileScreenViewModelProtocol.swift; sourceTree = "<group>"; };
+		185454E82CFF0FA1003CA957 /* CompleteProfileScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteProfileScreenView.swift; sourceTree = "<group>"; };
 		18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroCreateAccountApi.swift; sourceTree = "<group>"; };
 		18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZNonceResponse.swift; sourceTree = "<group>"; };
 		18659CBF2CFB287E000EF0A6 /* ZCreateAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZCreateAccount.swift; path = Zero/Sources/Network/Models/ZCreateAccount.swift; sourceTree = SOURCE_ROOT; };
@@ -4218,6 +4233,26 @@
 				185454D32CFEF7DD003CA957 /* ZeroStyledButton.swift */,
 			);
 			path = Button;
+			sourceTree = "<group>";
+		};
+		185454D92CFF0D6F003CA957 /* CompleteProfileScreen */ = {
+			isa = PBXGroup;
+			children = (
+				185454DB2CFF0DD5003CA957 /* CompleteProfileScreenCoordinator.swift */,
+				185454DE2CFF0E6D003CA957 /* CompleteProfileScreenModels.swift */,
+				185454E12CFF0EE1003CA957 /* CompleteProfileScreenViewModel.swift */,
+				185454E42CFF0EF1003CA957 /* CompleteProfileScreenViewModelProtocol.swift */,
+				185454E72CFF0F9A003CA957 /* View */,
+			);
+			path = CompleteProfileScreen;
+			sourceTree = "<group>";
+		};
+		185454E72CFF0F9A003CA957 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				185454E82CFF0FA1003CA957 /* CompleteProfileScreenView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		1868A86B2CA2175A00DC382D /* Resources */ = {
@@ -7205,6 +7240,7 @@
 				5B2C520AB9863B8CBC8EB3CA /* SoftLogoutScreen */,
 				D847C12EC9B19A5FCDF2C815 /* WebRegistrationScreen */,
 				185454BB2CFDE5E9003CA957 /* CreateAccountScreen */,
+				185454D92CFF0D6F003CA957 /* CompleteProfileScreen */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -8580,6 +8616,7 @@
 				18E9A4D72C9829970082DDA4 /* EffectsView.swift in Sources */,
 				18E9A4D82C9829970082DDA4 /* ElementAnimations.swift in Sources */,
 				18E9A4D92C9829970082DDA4 /* ElementCallConfiguration.swift in Sources */,
+				185454DD2CFF0DDD003CA957 /* CompleteProfileScreenCoordinator.swift in Sources */,
 				18E9A4DA2C9829970082DDA4 /* ElementCallService.swift in Sources */,
 				18E9A4DB2C9829970082DDA4 /* ElementCallServiceConstants.swift in Sources */,
 				18E9A4DC2C9829970082DDA4 /* ElementCallServiceMock.swift in Sources */,
@@ -8600,6 +8637,7 @@
 				18DFC5CA2CD9551800462FE1 /* IdentityResetHandleSDKMock.swift in Sources */,
 				18E9A4EB2C9829970082DDA4 /* EmojiPickerScreenViewModelProtocol.swift in Sources */,
 				18E9A4EC2C9829970082DDA4 /* EmojiProvider.swift in Sources */,
+				185454E62CFF0EFB003CA957 /* CompleteProfileScreenViewModelProtocol.swift in Sources */,
 				18E9A4ED2C9829970082DDA4 /* EmoteRoomTimelineItem.swift in Sources */,
 				18E9A4EE2C9829970082DDA4 /* EmoteRoomTimelineItemContent.swift in Sources */,
 				18E9A4EF2C9829970082DDA4 /* EmoteRoomTimelineView.swift in Sources */,
@@ -8682,6 +8720,7 @@
 				18E9A5322C9829970082DDA4 /* IdentityConfirmedScreenViewModel.swift in Sources */,
 				18E9A5332C9829970082DDA4 /* IdentityConfirmedScreenViewModelProtocol.swift in Sources */,
 				18E9A5342C9829970082DDA4 /* ImageCache.swift in Sources */,
+				185454E22CFF0EEB003CA957 /* CompleteProfileScreenViewModel.swift in Sources */,
 				18E9A5352C9829970082DDA4 /* ImageRoomTimelineItem.swift in Sources */,
 				18E9A5362C9829970082DDA4 /* ImageRoomTimelineItemContent.swift in Sources */,
 				18E9A5372C9829970082DDA4 /* ImageRoomTimelineView.swift in Sources */,
@@ -8801,6 +8840,7 @@
 				18E9A5A02C9829970082DDA4 /* NavigationRootCoordinator.swift in Sources */,
 				18E9A5A12C9829970082DDA4 /* NetworkMonitor.swift in Sources */,
 				182258E62CCC3D9500BBEDC0 /* EmojiProviderProtocol.swift in Sources */,
+				185454E92CFF0FA7003CA957 /* CompleteProfileScreenView.swift in Sources */,
 				18E9A5A22C9829970082DDA4 /* NetworkMonitorMock.swift in Sources */,
 				18E9A5A32C9829970082DDA4 /* NetworkMonitorProtocol.swift in Sources */,
 				18E9A5A42C9829970082DDA4 /* NoticeRoomTimelineItem.swift in Sources */,
@@ -8923,6 +8963,7 @@
 				18E9A6112C9829970082DDA4 /* ResolveVerifiedUserSendFailureScreenModels.swift in Sources */,
 				18E9A6122C9829970082DDA4 /* ResolveVerifiedUserSendFailureScreenViewModel.swift in Sources */,
 				18E9A6132C9829970082DDA4 /* ResolveVerifiedUserSendFailureScreenViewModelProtocol.swift in Sources */,
+				185454E02CFF0E74003CA957 /* CompleteProfileScreenModels.swift in Sources */,
 				18E9A6142C9829970082DDA4 /* RestorationToken.swift in Sources */,
 				18E9A6152C9829970082DDA4 /* RoomAttachmentPicker.swift in Sources */,
 				18E9A6162C9829970082DDA4 /* RoomAvatarImage.swift in Sources */,
@@ -9573,14 +9614,17 @@
 				340D39DB87F3800D53A6A621 /* EmojiPickerScreen.swift in Sources */,
 				C1910A16BDF131FECA77BE22 /* EmojiPickerScreenCoordinator.swift in Sources */,
 				EEB9C1555C63B93CA9C372C2 /* EmojiPickerScreenHeaderView.swift in Sources */,
+				185454DC2CFF0DDD003CA957 /* CompleteProfileScreenCoordinator.swift in Sources */,
 				748F482FEF4E04D61C39AAD7 /* EmojiPickerScreenModels.swift in Sources */,
 				2C5E832434EE94E21AB3B238 /* EmojiPickerScreenViewModel.swift in Sources */,
 				1D69E31913DF66426985909B /* EmojiPickerScreenViewModelProtocol.swift in Sources */,
 				FBF09B6C900415800DDF2A21 /* EmojiProvider.swift in Sources */,
+				185454EA2CFF0FA7003CA957 /* CompleteProfileScreenView.swift in Sources */,
 				A5B455D1A6DADF7476F7B417 /* EmojiProviderProtocol.swift in Sources */,
 				5D27B6537591471A42C89027 /* EmoteRoomTimelineItem.swift in Sources */,
 				8B41D0357B91CD3B6F6A3BCA /* EmoteRoomTimelineItemContent.swift in Sources */,
 				661EF50C1F7D4B0BC8A7AAE3 /* EmoteRoomTimelineView.swift in Sources */,
+				185454E32CFF0EEB003CA957 /* CompleteProfileScreenViewModel.swift in Sources */,
 				18D5D9B52CEB742000107940 /* UserRewardsSettingsScreenViewModel.swift in Sources */,
 				8B1D5CE017EEC734CF5FE130 /* Encodable.swift in Sources */,
 				4C5A638DAA8AF64565BA4866 /* EncryptedRoomTimelineItem.swift in Sources */,
@@ -9722,6 +9766,7 @@
 				872A6457DF573AF8CEAE927A /* LoginHomeserver.swift in Sources */,
 				CEB8FB1269DE20536608B957 /* LoginMode.swift in Sources */,
 				5375902175B2FEA2949D7D74 /* LoginScreen.swift in Sources */,
+				185454E52CFF0EFB003CA957 /* CompleteProfileScreenViewModelProtocol.swift in Sources */,
 				651341E67C3514F9811A1EC1 /* LoginScreenCoordinator.swift in Sources */,
 				C5A07E2D88BE7D51DCECD166 /* LoginScreenModels.swift in Sources */,
 				BDA68E8D95B2B24B28825B8B /* LoginScreenViewModel.swift in Sources */,
@@ -10220,6 +10265,7 @@
 				40B79D20A873620F7F128A2C /* UserPreference.swift in Sources */,
 				80DEA2A4B20F9E279EAE6B2B /* UserProfile+Mock.swift in Sources */,
 				ED90A59F068FD0CA27E602ED /* UserProfileListRow.swift in Sources */,
+				185454DF2CFF0E74003CA957 /* CompleteProfileScreenModels.swift in Sources */,
 				E21FE4C5B614F311C0955859 /* UserProfileProxy.swift in Sources */,
 				1A3B073568D1DC8F76F1F3A0 /* UserProfileScreen.swift in Sources */,
 				6AEB650311F694A5702255C9 /* UserProfileScreenCoordinator.swift in Sources */,

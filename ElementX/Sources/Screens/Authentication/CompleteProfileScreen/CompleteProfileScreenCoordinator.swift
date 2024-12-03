@@ -8,24 +8,24 @@
 import Combine
 import SwiftUI
 
-struct CreateAccountScreenParameters {
+struct CompleteProfileScreenParameters {
     let authenticationService: AuthenticationServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let inviteCode: String
 }
 
-final class CreateAccountScreenCoordinator: CoordinatorProtocol {
-    private var viewModel: CreateAccountScreenViewModelProtocol
+final class CompleteProfileScreenCoordinator: CoordinatorProtocol {
+    private var viewModel: CompleteProfileScreenViewModelProtocol
         
-    private let actionsSubject: PassthroughSubject<CreateAccountScreenCoordinatorAction, Never> = .init()
+    private let actionsSubject: PassthroughSubject<CompleteProfileScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
     
-    var actions: AnyPublisher<CreateAccountScreenCoordinatorAction, Never> {
+    var actions: AnyPublisher<CompleteProfileScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(parameters: CreateAccountScreenParameters) {
-        viewModel = CreateAccountScreenViewModel(authenticationService: parameters.authenticationService,
+    init(parameters: CompleteProfileScreenParameters) {
+        viewModel = CompleteProfileScreenViewModel(authenticationService: parameters.authenticationService,
                                                  userIndicatorController: parameters.userIndicatorController,
                                                  inviteCode: parameters.inviteCode)
     }
@@ -37,17 +37,17 @@ final class CreateAccountScreenCoordinator: CoordinatorProtocol {
             .sink { [weak self] action in
                 guard let self else { return }
                 
-                switch action {
-                case .accountCreated:
-                    actionsSubject.send(.accountCreated)
-                case .openLoginScreen:
-                    actionsSubject.send(.openLoginScreen)
-                }
+//                switch action {
+//                case .accountCreated:
+//                    actionsSubject.send(.accountCreated)
+//                case .openLoginScreen:
+//                    actionsSubject.send(.openLoginScreen)
+//                }
             }
             .store(in: &cancellables)
     }
     
     func toPresentable() -> AnyView {
-        AnyView(CreateAccountScreen(context: viewModel.context))
+        AnyView(CompleteProfileScreen(context: viewModel.context))
     }
 }

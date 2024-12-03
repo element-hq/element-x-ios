@@ -46,7 +46,7 @@ class CreateAccountScreenViewModel: CreateAccountScreenViewModelType, CreateAcco
                                                                  inviteCode: state.inviteCode) {
             case .success:
                 stopLoading()
-                //TODO: move to complete profile screen
+                actionsSubject.send(.accountCreated)
             case .failure(let error):
                 stopLoading()
                 handleError(error: error)

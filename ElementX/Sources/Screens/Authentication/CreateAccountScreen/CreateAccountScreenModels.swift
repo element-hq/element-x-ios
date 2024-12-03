@@ -15,6 +15,7 @@ enum CreateAccountScreenCoordinatorAction {
 }
 
 enum CreateAccountScreenViewModelAction {
+    case accountCreated
     case openLoginScreen
 }
 
