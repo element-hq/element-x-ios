@@ -10,23 +10,41 @@ import Foundation
 // MARK: - Coordinator
 
 enum CompleteProfileScreenCoordinatorAction {
-
+    
 }
 
 enum CompleteProfileScreenViewModelAction {
-
+    case displayCameraPicker
+    case displayMediaPicker
 }
 
 struct CompleteProfileScreenViewState: BindableState {
     let inviteCode: String
     
+    var currentAvatarURL: URL?
+    var selectedAvatarURL: URL?
+    
+    var localMedia: MediaInfo?
+    
     var bindings = CompleteProfileScreenBindings()
+    
+    var hasValidInput: Bool {
+        !bindings.name.isEmpty && ValidationUtil.shared.isValidUserDisplayName(bindings.name)
+    }
+    
+    var canSubmit: Bool {
+        hasValidInput
+    }
 }
 
 struct CompleteProfileScreenBindings {
-    
+    var name = ""
+    var showMediaSheet = false
 }
 
 enum CompleteProfileScreenViewAction {
-
+    case presentMediaSource
+    case displayCameraPicker
+    case displayMediaPicker
+    case completeProfile
 }

@@ -13,6 +13,7 @@ typealias CompleteProfileScreenViewModelType = StateStoreViewModel<CompleteProfi
 class CompleteProfileScreenViewModel: CompleteProfileScreenViewModelType, CompleteProfileScreenViewModelProtocol {
     private let authenticationService: AuthenticationServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     
     private var actionsSubject: PassthroughSubject<CompleteProfileScreenViewModelAction, Never> = .init()
     
@@ -22,14 +23,51 @@ class CompleteProfileScreenViewModel: CompleteProfileScreenViewModelType, Comple
     
     init(authenticationService: AuthenticationServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
+         mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          inviteCode: String) {
         self.authenticationService = authenticationService
         self.userIndicatorController = userIndicatorController
+        self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         
         super.init(initialViewState: CompleteProfileScreenViewState(inviteCode: inviteCode))
     }
     
     override func process(viewAction: CompleteProfileScreenViewAction) {
+        switch viewAction {
+        case .presentMediaSource:
+            state.bindings.showMediaSheet = true
+        case .displayCameraPicker:
+            actionsSubject.send(.displayCameraPicker)
+        case .displayMediaPicker:
+            actionsSubject.send(.displayMediaPicker)
+        case .completeProfile:
+            updateUserProfile()
+        }
+    }
+    
+    func didSelectMediaURL(url: URL) {
+        Task {
+            let userIndicatorID = UUID().uuidString
+            defer {
+                userIndicatorController.retractIndicatorWithId(userIndicatorID)
+            }
+            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
+                                                                  type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                                  title: L10n.commonLoading,
+                                                                  persistent: true))
+            
+            let mediaResult = await mediaUploadingPreprocessor.processMedia(at: url)
+            
+            switch mediaResult {
+            case .success(.image):
+                state.localMedia = try? mediaResult.get()
+            case .failure, .success:
+                userIndicatorController.alertInfo = .init(id: .init(), title: L10n.commonError, message: L10n.errorUnknown)
+            }
+        }
+    }
+    
+    private func updateUserProfile() {
         
     }
     

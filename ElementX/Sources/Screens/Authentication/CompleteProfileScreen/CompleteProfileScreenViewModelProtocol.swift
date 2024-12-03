@@ -6,9 +6,12 @@
 //
 
 import Combine
+import Foundation
 
 @MainActor
 protocol CompleteProfileScreenViewModelProtocol {
     var actions: AnyPublisher<CompleteProfileScreenViewModelAction, Never> { get }
     var context: CompleteProfileScreenViewModelType.Context { get }
+    
+    func didSelectMediaURL(url: URL)
 }

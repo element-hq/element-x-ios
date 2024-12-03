@@ -11,12 +11,16 @@ import SwiftUI
 struct CompleteProfileScreenParameters {
     let authenticationService: AuthenticationServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    let mediaUploadingPreprocessor: MediaUploadingPreprocessor
+    let orientationManager: OrientationManagerProtocol
+    weak var navigationStackCoordinator: NavigationStackCoordinator?
     let inviteCode: String
 }
 
 final class CompleteProfileScreenCoordinator: CoordinatorProtocol {
+    private let parameters: CompleteProfileScreenParameters
     private var viewModel: CompleteProfileScreenViewModelProtocol
-        
+    
     private let actionsSubject: PassthroughSubject<CompleteProfileScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
     
@@ -25,9 +29,11 @@ final class CompleteProfileScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: CompleteProfileScreenParameters) {
+        self.parameters = parameters
         viewModel = CompleteProfileScreenViewModel(authenticationService: parameters.authenticationService,
-                                                 userIndicatorController: parameters.userIndicatorController,
-                                                 inviteCode: parameters.inviteCode)
+                                                   userIndicatorController: parameters.userIndicatorController,
+                                                   mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
+                                                   inviteCode: parameters.inviteCode)
     }
     
     // MARK: - Public
@@ -36,18 +42,37 @@ final class CompleteProfileScreenCoordinator: CoordinatorProtocol {
         viewModel.actions
             .sink { [weak self] action in
                 guard let self else { return }
-                
-//                switch action {
-//                case .accountCreated:
-//                    actionsSubject.send(.accountCreated)
-//                case .openLoginScreen:
-//                    actionsSubject.send(.openLoginScreen)
-//                }
+                switch action {
+                case .displayCameraPicker:
+                    self.displayMediaPickerWithSource(.camera)
+                case .displayMediaPicker:
+                    self.displayMediaPickerWithSource(.photoLibrary)
+                }
             }
             .store(in: &cancellables)
     }
     
     func toPresentable() -> AnyView {
         AnyView(CompleteProfileScreen(context: viewModel.context))
+    }
+    
+    // MARK: Private
+    
+    private func displayMediaPickerWithSource(_ source: MediaPickerScreenSource) {
+        let stackCoordinator = NavigationStackCoordinator()
+        
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: parameters.userIndicatorController, source: source, orientationManager: parameters.orientationManager) { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .cancel:
+                parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
+            case .selectMediaAtURL(let url):
+                parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
+                viewModel.didSelectMediaURL(url: url)
+            }
+        }
+        
+        stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
+        parameters.navigationStackCoordinator?.setSheetCoordinator(stackCoordinator)
     }
 }

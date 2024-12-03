@@ -16,4 +16,8 @@ class ValidationUtil {
         let passwordPredicate = NSPredicate(format: "SELF MATCHES %@", passwordRegex)
         return passwordPredicate.evaluate(with: password)
     }
+    
+    func isValidUserDisplayName(_ name: String) -> Bool {
+        name.count >= 3 && name.count <= 24
+    }
 }

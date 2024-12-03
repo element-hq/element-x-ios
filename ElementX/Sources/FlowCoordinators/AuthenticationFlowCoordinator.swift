@@ -397,13 +397,16 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     private func getCompleteProfileScreenCoordinator(_ inviteCode: String, fromRoot: Bool = false) -> CompleteProfileScreenCoordinator {
         let parameters = CompleteProfileScreenParameters(authenticationService: authenticationService,
-                                                       userIndicatorController: userIndicatorController,
-                                                       inviteCode: inviteCode)
+                                                         userIndicatorController: userIndicatorController,
+                                                         mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
+                                                         orientationManager: appMediator.windowManager,
+                                                         navigationStackCoordinator: navigationStackCoordinator,
+                                                         inviteCode: inviteCode)
         let coordinator = CompleteProfileScreenCoordinator(parameters: parameters)
         coordinator.actions
             .sink { [weak self] action in
                 guard let self else { return }
-
+                
             }
             .store(in: &cancellables)
         
