@@ -1,3 +1,31 @@
+## Changes in 1.9.8 (2024-12-03)
+
+### What's Changed
+
+✨ Features
+* Enable local echoes for media uploads for all builds. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3579
+
+🙌 Improvements
+* Add support for copying a caption. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3563
+* Move pinned messages button in details by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3575
+* Add a warning to the media caption composer. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3574
+* Knock a room - added a char counter for the message by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3570
+
+🐛 Bugfixes
+* Small Knock adjustments by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3568
+* Wait until the sync has stopped before marking a background task as complete. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3564
+* Handle media source validation more gracefully. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3571
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3576
+
+Others
+* Make the Unit Test media files into development assets. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3569
+* Update SDK 1.0.77 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3578
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.9.7...1.9.8
+
 ## Changes in 1.9.7 (2024-11-28)
 
 ### What's Changed
