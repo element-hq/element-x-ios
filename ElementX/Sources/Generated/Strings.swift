@@ -1356,6 +1356,16 @@ internal enum L10n {
   internal static func screenLoginTitleWithHomeserver(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_login_title_with_homeserver", String(describing: p1))
   }
+  /// Images and videos uploaded to this room will be shown here.
+  internal static var screenMediaBrowserEmptyStateSubtitle: String { return L10n.tr("Localizable", "screen_media_browser_empty_state_subtitle") }
+  /// No media uploaded yet
+  internal static var screenMediaBrowserEmptyStateTitle: String { return L10n.tr("Localizable", "screen_media_browser_empty_state_title") }
+  /// Files
+  internal static var screenMediaBrowserListModeFiles: String { return L10n.tr("Localizable", "screen_media_browser_list_mode_files") }
+  /// Media
+  internal static var screenMediaBrowserListModeMedia: String { return L10n.tr("Localizable", "screen_media_browser_list_mode_media") }
+  /// Media and files
+  internal static var screenMediaBrowserTitle: String { return L10n.tr("Localizable", "screen_media_browser_title") }
   /// Failed selecting media, please try again.
   internal static var screenMediaPickerErrorFailedSelection: String { return L10n.tr("Localizable", "screen_media_picker_error_failed_selection") }
   /// Captions might not be visible to people using older apps.
@@ -2490,6 +2500,12 @@ internal enum L10n {
   internal static var testLanguageIdentifier: String { return L10n.tr("Localizable", "test_language_identifier") }
   /// en
   internal static var testUntranslatedDefaultLanguageIdentifier: String { return L10n.tr("Localizable", "test_untranslated_default_language_identifier") }
+  /// Historical messages are not available on this device
+  internal static var timelineDecryptionFailureHistoricalEventNoKeyBackup: String { return L10n.tr("Localizable", "timeline_decryption_failure_historical_event_no_key_backup") }
+  /// Unable to decrypt message
+  internal static var timelineDecryptionFailureUnableToDecrypt: String { return L10n.tr("Localizable", "timeline_decryption_failure_unable_to_decrypt") }
+  /// This message was blocked either because you did not verify your device or because the sender needs to verify your identity.
+  internal static var timelineDecryptionFailureWithheldUnverified: String { return L10n.tr("Localizable", "timeline_decryption_failure_withheld_unverified") }
   /// Troubleshoot
   internal static var troubleshootNotificationsEntryPointSection: String { return L10n.tr("Localizable", "troubleshoot_notifications_entry_point_section") }
   /// Troubleshoot notifications
