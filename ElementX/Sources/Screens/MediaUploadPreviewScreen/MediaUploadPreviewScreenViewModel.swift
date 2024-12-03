@@ -49,13 +49,11 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         switch viewAction {
         case .send:
             Task {
-                let progressSubject = AppSettings.isDevelopmentBuild ? nil : CurrentValueSubject<Double, Never>(0.0)
-                
-                startLoading(progressPublisher: progressSubject?.asCurrentValuePublisher())
+                startLoading()
                 
                 switch await mediaUploadingPreprocessor.processMedia(at: url) {
                 case .success(let mediaInfo):
-                    switch await sendAttachment(mediaInfo: mediaInfo, caption: caption, progressSubject: progressSubject) {
+                    switch await sendAttachment(mediaInfo: mediaInfo, caption: caption) {
                     case .success:
                         actionsSubject.send(.dismiss)
                     case .failure(let error):
@@ -79,7 +77,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     
     // MARK: - Private
     
-    private func sendAttachment(mediaInfo: MediaInfo, caption: String?, progressSubject: CurrentValueSubject<Double, Never>?) async -> Result<Void, TimelineProxyError> {
+    private func sendAttachment(mediaInfo: MediaInfo, caption: String?) async -> Result<Void, TimelineProxyError> {
         let requestHandle: ((SendAttachmentJoinHandleProtocol) -> Void) = { [weak self] handle in
             self?.requestHandle = handle
         }
@@ -90,42 +88,32 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
                                                       thumbnailURL: thumbnailURL,
                                                       imageInfo: imageInfo,
                                                       caption: caption,
-                                                      progressSubject: progressSubject,
                                                       requestHandle: requestHandle)
         case let .video(videoURL, thumbnailURL, videoInfo):
             return await roomProxy.timeline.sendVideo(url: videoURL,
                                                       thumbnailURL: thumbnailURL,
                                                       videoInfo: videoInfo,
                                                       caption: caption,
-                                                      progressSubject: progressSubject,
                                                       requestHandle: requestHandle)
         case let .audio(audioURL, audioInfo):
             return await roomProxy.timeline.sendAudio(url: audioURL,
                                                       audioInfo: audioInfo,
                                                       caption: caption,
-                                                      progressSubject: progressSubject,
                                                       requestHandle: requestHandle)
         case let .file(fileURL, fileInfo):
             return await roomProxy.timeline.sendFile(url: fileURL,
                                                      fileInfo: fileInfo,
                                                      caption: caption,
-                                                     progressSubject: progressSubject,
                                                      requestHandle: requestHandle)
         }
     }
     
     private static let loadingIndicatorIdentifier = "\(MediaUploadPreviewScreenViewModel.self)-Loading"
     
-    private func startLoading(progressPublisher: CurrentValuePublisher<Double, Never>?) {
-        let progress: UserIndicator.Progress = if let progressPublisher {
-            .published(progressPublisher)
-        } else {
-            .indeterminate
-        }
-        
+    private func startLoading() {
         userIndicatorController.submitIndicator(
             UserIndicator(id: Self.loadingIndicatorIdentifier,
-                          type: .modal(progress: progress, interactiveDismissDisabled: false, allowsInteraction: true),
+                          type: .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: true),
                           title: L10n.commonSending,
                           persistent: true)
         )

@@ -352,7 +352,7 @@
 "rich_text_editor_unindent" = "Unindent";
 "rich_text_editor_url_placeholder" = "Link";
 "rich_text_editor_a11y_add_attachment" = "Add attachment";
-"rich_text_editor_composer_caption_placeholder" = "Optional caption…";
+"rich_text_editor_composer_caption_placeholder" = "Add a caption";
 "screen_advanced_settings_element_call_base_url" = "Custom Element Call base URL";
 "screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Invalid URL, please make sure you include the protocol (http/https) and the correct address.";

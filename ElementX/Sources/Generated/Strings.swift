@@ -796,7 +796,7 @@ internal enum L10n {
   internal static var richTextEditorCloseFormattingOptions: String { return L10n.tr("Localizable", "rich_text_editor_close_formatting_options") }
   /// Toggle code block
   internal static var richTextEditorCodeBlock: String { return L10n.tr("Localizable", "rich_text_editor_code_block") }
-  /// Optional caption…
+  /// Add a caption
   internal static var richTextEditorComposerCaptionPlaceholder: String { return L10n.tr("Localizable", "rich_text_editor_composer_caption_placeholder") }
   /// Message…
   internal static var richTextEditorComposerPlaceholder: String { return L10n.tr("Localizable", "rich_text_editor_composer_placeholder") }

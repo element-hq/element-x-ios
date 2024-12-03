@@ -14114,15 +14114,15 @@ class TimelineProxyMock: TimelineProxyProtocol {
     }
     //MARK: - sendAudio
 
-    var sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount = 0
-    var sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleCallsCount: Int {
+    var sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingCallsCount = 0
+    var sendAudioUrlAudioInfoCaptionRequestHandleCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount
+                return sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount
+                    returnValue = sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -14130,27 +14130,27 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount = newValue
+                sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount = newValue
+                    sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleCalled: Bool {
-        return sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleCallsCount > 0
+    var sendAudioUrlAudioInfoCaptionRequestHandleCalled: Bool {
+        return sendAudioUrlAudioInfoCaptionRequestHandleCallsCount > 0
     }
 
-    var sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue: Result<Void, TimelineProxyError>!
-    var sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleReturnValue: Result<Void, TimelineProxyError>! {
+    var sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var sendAudioUrlAudioInfoCaptionRequestHandleReturnValue: Result<Void, TimelineProxyError>! {
         get {
             if Thread.isMainThread {
-                return sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue
+                return sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, TimelineProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue
+                    returnValue = sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -14158,35 +14158,35 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue = newValue
+                sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue = newValue
+                    sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleClosure: ((URL, AudioInfo, String?, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
+    var sendAudioUrlAudioInfoCaptionRequestHandleClosure: ((URL, AudioInfo, String?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
 
-    func sendAudio(url: URL, audioInfo: AudioInfo, caption: String?, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
-        sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleCallsCount += 1
-        if let sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleClosure = sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleClosure {
-            return await sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleClosure(url, audioInfo, caption, progressSubject, requestHandle)
+    func sendAudio(url: URL, audioInfo: AudioInfo, caption: String?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendAudioUrlAudioInfoCaptionRequestHandleCallsCount += 1
+        if let sendAudioUrlAudioInfoCaptionRequestHandleClosure = sendAudioUrlAudioInfoCaptionRequestHandleClosure {
+            return await sendAudioUrlAudioInfoCaptionRequestHandleClosure(url, audioInfo, caption, requestHandle)
         } else {
-            return sendAudioUrlAudioInfoCaptionProgressSubjectRequestHandleReturnValue
+            return sendAudioUrlAudioInfoCaptionRequestHandleReturnValue
         }
     }
     //MARK: - sendFile
 
-    var sendFileUrlFileInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount = 0
-    var sendFileUrlFileInfoCaptionProgressSubjectRequestHandleCallsCount: Int {
+    var sendFileUrlFileInfoCaptionRequestHandleUnderlyingCallsCount = 0
+    var sendFileUrlFileInfoCaptionRequestHandleCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendFileUrlFileInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount
+                return sendFileUrlFileInfoCaptionRequestHandleUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendFileUrlFileInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount
+                    returnValue = sendFileUrlFileInfoCaptionRequestHandleUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -14194,27 +14194,27 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                sendFileUrlFileInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount = newValue
+                sendFileUrlFileInfoCaptionRequestHandleUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendFileUrlFileInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount = newValue
+                    sendFileUrlFileInfoCaptionRequestHandleUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var sendFileUrlFileInfoCaptionProgressSubjectRequestHandleCalled: Bool {
-        return sendFileUrlFileInfoCaptionProgressSubjectRequestHandleCallsCount > 0
+    var sendFileUrlFileInfoCaptionRequestHandleCalled: Bool {
+        return sendFileUrlFileInfoCaptionRequestHandleCallsCount > 0
     }
 
-    var sendFileUrlFileInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue: Result<Void, TimelineProxyError>!
-    var sendFileUrlFileInfoCaptionProgressSubjectRequestHandleReturnValue: Result<Void, TimelineProxyError>! {
+    var sendFileUrlFileInfoCaptionRequestHandleUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var sendFileUrlFileInfoCaptionRequestHandleReturnValue: Result<Void, TimelineProxyError>! {
         get {
             if Thread.isMainThread {
-                return sendFileUrlFileInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue
+                return sendFileUrlFileInfoCaptionRequestHandleUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, TimelineProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendFileUrlFileInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue
+                    returnValue = sendFileUrlFileInfoCaptionRequestHandleUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -14222,35 +14222,35 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                sendFileUrlFileInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue = newValue
+                sendFileUrlFileInfoCaptionRequestHandleUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendFileUrlFileInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue = newValue
+                    sendFileUrlFileInfoCaptionRequestHandleUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var sendFileUrlFileInfoCaptionProgressSubjectRequestHandleClosure: ((URL, FileInfo, String?, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
+    var sendFileUrlFileInfoCaptionRequestHandleClosure: ((URL, FileInfo, String?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
 
-    func sendFile(url: URL, fileInfo: FileInfo, caption: String?, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
-        sendFileUrlFileInfoCaptionProgressSubjectRequestHandleCallsCount += 1
-        if let sendFileUrlFileInfoCaptionProgressSubjectRequestHandleClosure = sendFileUrlFileInfoCaptionProgressSubjectRequestHandleClosure {
-            return await sendFileUrlFileInfoCaptionProgressSubjectRequestHandleClosure(url, fileInfo, caption, progressSubject, requestHandle)
+    func sendFile(url: URL, fileInfo: FileInfo, caption: String?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendFileUrlFileInfoCaptionRequestHandleCallsCount += 1
+        if let sendFileUrlFileInfoCaptionRequestHandleClosure = sendFileUrlFileInfoCaptionRequestHandleClosure {
+            return await sendFileUrlFileInfoCaptionRequestHandleClosure(url, fileInfo, caption, requestHandle)
         } else {
-            return sendFileUrlFileInfoCaptionProgressSubjectRequestHandleReturnValue
+            return sendFileUrlFileInfoCaptionRequestHandleReturnValue
         }
     }
     //MARK: - sendImage
 
-    var sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount = 0
-    var sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleCallsCount: Int {
+    var sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingCallsCount = 0
+    var sendImageUrlThumbnailURLImageInfoCaptionRequestHandleCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount
+                return sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount
+                    returnValue = sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -14258,27 +14258,27 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount = newValue
+                sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount = newValue
+                    sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleCalled: Bool {
-        return sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleCallsCount > 0
+    var sendImageUrlThumbnailURLImageInfoCaptionRequestHandleCalled: Bool {
+        return sendImageUrlThumbnailURLImageInfoCaptionRequestHandleCallsCount > 0
     }
 
-    var sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue: Result<Void, TimelineProxyError>!
-    var sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleReturnValue: Result<Void, TimelineProxyError>! {
+    var sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var sendImageUrlThumbnailURLImageInfoCaptionRequestHandleReturnValue: Result<Void, TimelineProxyError>! {
         get {
             if Thread.isMainThread {
-                return sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue
+                return sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, TimelineProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue
+                    returnValue = sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -14286,22 +14286,22 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue = newValue
+                sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue = newValue
+                    sendImageUrlThumbnailURLImageInfoCaptionRequestHandleUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleClosure: ((URL, URL, ImageInfo, String?, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
+    var sendImageUrlThumbnailURLImageInfoCaptionRequestHandleClosure: ((URL, URL, ImageInfo, String?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
 
-    func sendImage(url: URL, thumbnailURL: URL, imageInfo: ImageInfo, caption: String?, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
-        sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleCallsCount += 1
-        if let sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleClosure = sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleClosure {
-            return await sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleClosure(url, thumbnailURL, imageInfo, caption, progressSubject, requestHandle)
+    func sendImage(url: URL, thumbnailURL: URL, imageInfo: ImageInfo, caption: String?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendImageUrlThumbnailURLImageInfoCaptionRequestHandleCallsCount += 1
+        if let sendImageUrlThumbnailURLImageInfoCaptionRequestHandleClosure = sendImageUrlThumbnailURLImageInfoCaptionRequestHandleClosure {
+            return await sendImageUrlThumbnailURLImageInfoCaptionRequestHandleClosure(url, thumbnailURL, imageInfo, caption, requestHandle)
         } else {
-            return sendImageUrlThumbnailURLImageInfoCaptionProgressSubjectRequestHandleReturnValue
+            return sendImageUrlThumbnailURLImageInfoCaptionRequestHandleReturnValue
         }
     }
     //MARK: - sendLocation
@@ -14376,15 +14376,15 @@ class TimelineProxyMock: TimelineProxyProtocol {
     }
     //MARK: - sendVideo
 
-    var sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount = 0
-    var sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleCallsCount: Int {
+    var sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingCallsCount = 0
+    var sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount
+                return sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount
+                    returnValue = sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -14392,27 +14392,27 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount = newValue
+                sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleUnderlyingCallsCount = newValue
+                    sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleCalled: Bool {
-        return sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleCallsCount > 0
+    var sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleCalled: Bool {
+        return sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleCallsCount > 0
     }
 
-    var sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue: Result<Void, TimelineProxyError>!
-    var sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleReturnValue: Result<Void, TimelineProxyError>! {
+    var sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleReturnValue: Result<Void, TimelineProxyError>! {
         get {
             if Thread.isMainThread {
-                return sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue
+                return sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, TimelineProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue
+                    returnValue = sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -14420,35 +14420,35 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue = newValue
+                sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleUnderlyingReturnValue = newValue
+                    sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleClosure: ((URL, URL, VideoInfo, String?, CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
+    var sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleClosure: ((URL, URL, VideoInfo, String?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
 
-    func sendVideo(url: URL, thumbnailURL: URL, videoInfo: VideoInfo, caption: String?, progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
-        sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleCallsCount += 1
-        if let sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleClosure = sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleClosure {
-            return await sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleClosure(url, thumbnailURL, videoInfo, caption, progressSubject, requestHandle)
+    func sendVideo(url: URL, thumbnailURL: URL, videoInfo: VideoInfo, caption: String?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleCallsCount += 1
+        if let sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleClosure = sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleClosure {
+            return await sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleClosure(url, thumbnailURL, videoInfo, caption, requestHandle)
         } else {
-            return sendVideoUrlThumbnailURLVideoInfoCaptionProgressSubjectRequestHandleReturnValue
+            return sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleReturnValue
         }
     }
     //MARK: - sendVoiceMessage
 
-    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleUnderlyingCallsCount = 0
-    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCallsCount: Int {
+    var sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingCallsCount = 0
+    var sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleUnderlyingCallsCount
+                return sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleUnderlyingCallsCount
+                    returnValue = sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -14456,27 +14456,27 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleUnderlyingCallsCount = newValue
+                sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleUnderlyingCallsCount = newValue
+                    sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCalled: Bool {
-        return sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCallsCount > 0
+    var sendVoiceMessageUrlAudioInfoWaveformRequestHandleCalled: Bool {
+        return sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCount > 0
     }
 
-    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleUnderlyingReturnValue: Result<Void, TimelineProxyError>!
-    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue: Result<Void, TimelineProxyError>! {
+    var sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValue: Result<Void, TimelineProxyError>! {
         get {
             if Thread.isMainThread {
-                return sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleUnderlyingReturnValue
+                return sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, TimelineProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleUnderlyingReturnValue
+                    returnValue = sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -14484,22 +14484,22 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleUnderlyingReturnValue = newValue
+                sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleUnderlyingReturnValue = newValue
+                    sendVoiceMessageUrlAudioInfoWaveformRequestHandleUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure: ((URL, AudioInfo, [UInt16], CurrentValueSubject<Double, Never>?, @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
+    var sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure: ((URL, AudioInfo, [UInt16], @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
 
-    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [UInt16], progressSubject: CurrentValueSubject<Double, Never>?, requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
-        sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCallsCount += 1
-        if let sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure = sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure {
-            return await sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure(url, audioInfo, waveform, progressSubject, requestHandle)
+    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [UInt16], requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        sendVoiceMessageUrlAudioInfoWaveformRequestHandleCallsCount += 1
+        if let sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure = sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure {
+            return await sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure(url, audioInfo, waveform, requestHandle)
         } else {
-            return sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue
+            return sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValue
         }
     }
     //MARK: - sendReadReceipt

@@ -227,7 +227,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         let timelineProxy = TimelineProxyMock()
         let roomProxy = JoinedRoomProxyMock()
         roomProxy.timeline = timelineProxy
-        timelineProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue = .failure(.sdkError(SDKError.generic))
+        timelineProxy.sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValue = .failure(.sdkError(SDKError.generic))
         guard case .failure(.failedSendingVoiceMessage) = await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: audioConverter) else {
             XCTFail("An error is expected")
             return
@@ -248,7 +248,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         let timelineProxy = TimelineProxyMock()
         let roomProxy = JoinedRoomProxyMock()
         roomProxy.timeline = timelineProxy
-        timelineProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue = .failure(.sdkError(SDKError.generic))
+        timelineProxy.sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValue = .failure(.sdkError(SDKError.generic))
         guard case .failure(.failedSendingVoiceMessage) = await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: audioConverter) else {
             XCTFail("An error is expected")
             return
@@ -271,7 +271,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         let timelineProxy = TimelineProxyMock()
         let roomProxy = JoinedRoomProxyMock()
         roomProxy.timeline = timelineProxy
-        timelineProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleReturnValue = .failure(.sdkError(SDKError.generic))
+        timelineProxy.sendVoiceMessageUrlAudioInfoWaveformRequestHandleReturnValue = .failure(.sdkError(SDKError.generic))
         guard case .failure(.failedSendingVoiceMessage) = await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: audioConverter) else {
             XCTFail("An error is expected")
             return
@@ -307,7 +307,7 @@ class VoiceMessageRecorderTests: XCTestCase {
             XCTAssertEqual(destination.pathExtension, "ogg")
         }
         
-        timelineProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleClosure = { url, audioInfo, waveform, _, _ in
+        timelineProxy.sendVoiceMessageUrlAudioInfoWaveformRequestHandleClosure = { url, audioInfo, waveform, _ in
             XCTAssertEqual(url, convertedFileURL)
             XCTAssertEqual(audioInfo.duration, self.audioRecorder.currentTime)
             XCTAssertEqual(audioInfo.size, convertedFileSize)
@@ -323,7 +323,7 @@ class VoiceMessageRecorderTests: XCTestCase {
         }
         
         XCTAssert(audioConverter.convertToOpusOggSourceURLDestinationURLCalled)
-        XCTAssert(timelineProxy.sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleCalled)
+        XCTAssert(timelineProxy.sendVoiceMessageUrlAudioInfoWaveformRequestHandleCalled)
         
         // the converted file must have been deleted
         if let convertedFileURL {
