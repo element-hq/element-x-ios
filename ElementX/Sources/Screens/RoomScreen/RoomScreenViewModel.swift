@@ -182,14 +182,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         roomProxy.requestsToJoinPublisher
             // We only care about unseen requests
-            .map { $0.filter { !$0.isSeen } }
+            .map { $0.filter { !$0.isSeen }.map(KnockRequestInfo.init) }
             // If the requests have the same event ids we can discard the output
             .removeDuplicates(by: { Set($0.map(\.eventID)) == Set($1.map(\.eventID)) })
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] requests in
-                guard let self else { return }
-                state.unseenKnockRequests = requests.map(KnockRequestInfo.init)
-            }
+            .throttle(for: .milliseconds(100), scheduler: DispatchQueue.main, latest: true)
+            .weakAssign(to: \.state.unseenKnockRequests, on: self)
             .store(in: &cancellables)
     }
     
