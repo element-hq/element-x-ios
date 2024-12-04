@@ -23,8 +23,8 @@ protocol RequestToJoinProxyProtocol {
     var isSeen: Bool { get }
     
     func accept() async -> Result<Void, RequestToJoinProxyError>
-    func decline(reason: String?) async -> Result<Void, RequestToJoinProxyError>
-    func ban(reason: String?) async -> Result<Void, RequestToJoinProxyError>
+    func decline() async -> Result<Void, RequestToJoinProxyError>
+    func ban() async -> Result<Void, RequestToJoinProxyError>
     func markAsSeen() async -> Result<Void, RequestToJoinProxyError>
 }
 
@@ -76,9 +76,10 @@ struct RequestToJoinProxy: RequestToJoinProxyProtocol {
         }
     }
     
-    func decline(reason: String?) async -> Result<Void, RequestToJoinProxyError> {
+    func decline() async -> Result<Void, RequestToJoinProxyError> {
         do {
-            try await requestToJoin.actions.decline(reason: reason)
+            // As of right now we don't provide reasons in the app for declining
+            try await requestToJoin.actions.decline(reason: nil)
             return .success(())
         } catch {
             MXLog.error("Failed declining request with eventID: \(eventID) to join error: \(error)")
@@ -86,9 +87,10 @@ struct RequestToJoinProxy: RequestToJoinProxyProtocol {
         }
     }
     
-    func ban(reason: String?) async -> Result<Void, RequestToJoinProxyError> {
+    func ban() async -> Result<Void, RequestToJoinProxyError> {
         do {
-            try await requestToJoin.actions.declineAndBan(reason: reason)
+            // As of right now we don't provide reasons in the app for declining and banning
+            try await requestToJoin.actions.declineAndBan(reason: nil)
             return .success(())
         } catch {
             MXLog.error("Failed declining and banning user for request with eventID: \(eventID) with error: \(error)")
