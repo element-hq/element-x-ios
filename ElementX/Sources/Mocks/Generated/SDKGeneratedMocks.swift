@@ -12450,81 +12450,6 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
     }
 
-    //MARK: - mediaEventsTimeline
-
-    open var mediaEventsTimelineFilterThrowableError: Error?
-    var mediaEventsTimelineFilterUnderlyingCallsCount = 0
-    open var mediaEventsTimelineFilterCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return mediaEventsTimelineFilterUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = mediaEventsTimelineFilterUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                mediaEventsTimelineFilterUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    mediaEventsTimelineFilterUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var mediaEventsTimelineFilterCalled: Bool {
-        return mediaEventsTimelineFilterCallsCount > 0
-    }
-    open var mediaEventsTimelineFilterReceivedFilter: MediaEventsTimelineFilter?
-    open var mediaEventsTimelineFilterReceivedInvocations: [MediaEventsTimelineFilter] = []
-
-    var mediaEventsTimelineFilterUnderlyingReturnValue: Timeline!
-    open var mediaEventsTimelineFilterReturnValue: Timeline! {
-        get {
-            if Thread.isMainThread {
-                return mediaEventsTimelineFilterUnderlyingReturnValue
-            } else {
-                var returnValue: Timeline? = nil
-                DispatchQueue.main.sync {
-                    returnValue = mediaEventsTimelineFilterUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                mediaEventsTimelineFilterUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    mediaEventsTimelineFilterUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var mediaEventsTimelineFilterClosure: ((MediaEventsTimelineFilter) async throws -> Timeline)?
-
-    open override func mediaEventsTimeline(filter: MediaEventsTimelineFilter) async throws -> Timeline {
-        if let error = mediaEventsTimelineFilterThrowableError {
-            throw error
-        }
-        mediaEventsTimelineFilterCallsCount += 1
-        mediaEventsTimelineFilterReceivedFilter = filter
-        DispatchQueue.main.async {
-            self.mediaEventsTimelineFilterReceivedInvocations.append(filter)
-        }
-        if let mediaEventsTimelineFilterClosure = mediaEventsTimelineFilterClosure {
-            return try await mediaEventsTimelineFilterClosure(filter)
-        } else {
-            return mediaEventsTimelineFilterReturnValue
-        }
-    }
-
     //MARK: - member
 
     open var memberUserIdThrowableError: Error?
@@ -12950,6 +12875,81 @@ open class RoomSDKMock: MatrixRustSDK.Room {
             return membershipClosure()
         } else {
             return membershipReturnValue
+        }
+    }
+
+    //MARK: - messageFilteredTimeline
+
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesThrowableError: Error?
+    var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingCallsCount = 0
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesCalled: Bool {
+        return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesCallsCount > 0
+    }
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesReceivedArguments: (internalIdPrefix: String?, allowedMessageTypes: [RoomMessageEventMessageType])?
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesReceivedInvocations: [(internalIdPrefix: String?, allowedMessageTypes: [RoomMessageEventMessageType])] = []
+
+    var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingReturnValue: Timeline!
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesReturnValue: Timeline! {
+        get {
+            if Thread.isMainThread {
+                return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingReturnValue
+            } else {
+                var returnValue: Timeline? = nil
+                DispatchQueue.main.sync {
+                    returnValue = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesClosure: ((String?, [RoomMessageEventMessageType]) async throws -> Timeline)?
+
+    open override func messageFilteredTimeline(internalIdPrefix: String?, allowedMessageTypes: [RoomMessageEventMessageType]) async throws -> Timeline {
+        if let error = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesThrowableError {
+            throw error
+        }
+        messageFilteredTimelineInternalIdPrefixAllowedMessageTypesCallsCount += 1
+        messageFilteredTimelineInternalIdPrefixAllowedMessageTypesReceivedArguments = (internalIdPrefix: internalIdPrefix, allowedMessageTypes: allowedMessageTypes)
+        DispatchQueue.main.async {
+            self.messageFilteredTimelineInternalIdPrefixAllowedMessageTypesReceivedInvocations.append((internalIdPrefix: internalIdPrefix, allowedMessageTypes: allowedMessageTypes))
+        }
+        if let messageFilteredTimelineInternalIdPrefixAllowedMessageTypesClosure = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesClosure {
+            return try await messageFilteredTimelineInternalIdPrefixAllowedMessageTypesClosure(internalIdPrefix, allowedMessageTypes)
+        } else {
+            return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesReturnValue
         }
     }
 

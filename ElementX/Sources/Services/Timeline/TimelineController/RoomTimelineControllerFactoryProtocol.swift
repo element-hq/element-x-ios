@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
 enum RoomTimelineFactoryControllerError: Error {
     case roomProxyError(RoomProxyError)
@@ -18,14 +19,14 @@ protocol RoomTimelineControllerFactoryProtocol {
                                      timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                      mediaProvider: MediaProviderProtocol) -> RoomTimelineControllerProtocol
     
-    #warning("buildPinnedRoomTimelineController")
     func buildPinnedEventsRoomTimelineController(roomProxy: JoinedRoomProxyProtocol,
                                                  timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                                  mediaProvider: MediaProviderProtocol) async -> RoomTimelineControllerProtocol?
     
-    func buildMediaEventsRoomTimelineController(roomProxy: JoinedRoomProxyProtocol,
-                                                timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                                mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError>
+    func buildMessageFilteredRoomTimelineController(allowedMessageTypes: [RoomMessageEventMessageType],
+                                                    roomProxy: JoinedRoomProxyProtocol,
+                                                    timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                                    mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError>
 }
 
 // sourcery: AutoMockable

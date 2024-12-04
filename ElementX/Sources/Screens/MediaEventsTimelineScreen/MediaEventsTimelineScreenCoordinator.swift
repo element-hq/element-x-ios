@@ -10,7 +10,8 @@ import SwiftUI
 
 struct MediaEventsTimelineScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
-    let timelineController: RoomTimelineControllerProtocol
+    let imageAndVideoTimelineController: RoomTimelineControllerProtocol
+    let fileAndAudioTimelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
@@ -29,10 +30,9 @@ enum MediaEventsTimelineScreenCoordinatorAction {
 final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
     private let parameters: MediaEventsTimelineScreenCoordinatorParameters
     private let viewModel: MediaEventsTimelineScreenViewModelProtocol
-    private let timelineViewModel: TimelineViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
- 
+    
     private let actionsSubject: PassthroughSubject<MediaEventsTimelineScreenCoordinatorAction, Never> = .init()
     var actions: AnyPublisher<MediaEventsTimelineScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -41,17 +41,31 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
     init(parameters: MediaEventsTimelineScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = MediaEventsTimelineScreenViewModel(analyticsService: ServiceLocator.shared.analytics)
-        timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
-                                              timelineController: parameters.timelineController,
-                                              mediaProvider: parameters.mediaProvider,
-                                              mediaPlayerProvider: parameters.mediaPlayerProvider,
-                                              voiceMessageMediaManager: parameters.voiceMessageMediaManager,
-                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                              appMediator: parameters.appMediator,
-                                              appSettings: ServiceLocator.shared.settings,
-                                              analyticsService: ServiceLocator.shared.analytics,
-                                              emojiProvider: parameters.emojiProvider)
+        let imageAndVideoTimelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
+                                                               timelineController: parameters.imageAndVideoTimelineController,
+                                                               mediaProvider: parameters.mediaProvider,
+                                                               mediaPlayerProvider: parameters.mediaPlayerProvider,
+                                                               voiceMessageMediaManager: parameters.voiceMessageMediaManager,
+                                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                               appMediator: parameters.appMediator,
+                                                               appSettings: ServiceLocator.shared.settings,
+                                                               analyticsService: ServiceLocator.shared.analytics,
+                                                               emojiProvider: parameters.emojiProvider)
+        
+        let fileAndAudioTimelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
+                                                              timelineController: parameters.fileAndAudioTimelineController,
+                                                              mediaProvider: parameters.mediaProvider,
+                                                              mediaPlayerProvider: parameters.mediaPlayerProvider,
+                                                              voiceMessageMediaManager: parameters.voiceMessageMediaManager,
+                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                              appMediator: parameters.appMediator,
+                                                              appSettings: ServiceLocator.shared.settings,
+                                                              analyticsService: ServiceLocator.shared.analytics,
+                                                              emojiProvider: parameters.emojiProvider)
+        
+        viewModel = MediaEventsTimelineScreenViewModel(imageAndVideoTimelineViewModel: imageAndVideoTimelineViewModel,
+                                                       fileAndAudioTimelineViewModel: fileAndAudioTimelineViewModel,
+                                                       mediaProvider: parameters.mediaProvider)
     }
     
     func start() {
@@ -60,30 +74,7 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
-            case .dismiss:
-                self.actionsSubject.send(.dismiss)
-            }
-        }
-        .store(in: &cancellables)
-        
-        timelineViewModel.actions.sink { [weak self] action in
-            MXLog.info("Coordinator: received timeline view model action: \(action)")
-            guard let self else { return }
-            
-            switch action {
-            case .tappedOnSenderDetails(let userID):
-                actionsSubject.send(.displayUser(userID: userID))
-            case .displayMessageForwarding(let forwardingItem):
-                actionsSubject.send(.displayMessageForwarding(forwardingItem: forwardingItem))
-            case .displayLocation(_, let geoURI, let description):
-                actionsSubject.send(.presentLocationViewer(geoURI: geoURI, description: description))
-            case .viewInRoomTimeline(let eventID):
-                actionsSubject.send(.displayRoomScreenWithFocussedPin(eventID: eventID))
-            // These other actions will not be handled in this view
-            case .displayEmojiPicker, .displayReportContent, .displayCameraPicker, .displayMediaPicker,
-                 .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediaUploadPreviewScreen,
-                 .displayResolveSendFailure, .composer, .hasScrolled:
-                // These actions are not handled in this coordinator
+            default:
                 break
             }
         }
@@ -91,6 +82,6 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
     }
         
     func toPresentable() -> AnyView {
-        AnyView(MediaEventsTimelineScreen(context: viewModel.context, timelineContext: timelineViewModel.context))
+        AnyView(MediaEventsTimelineScreen(context: viewModel.context))
     }
 }

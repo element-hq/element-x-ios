@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
 struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
     func buildRoomTimelineController(roomProxy: JoinedRoomProxyProtocol,
@@ -35,10 +36,11 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
                                       appSettings: ServiceLocator.shared.settings)
     }
     
-    func buildMediaEventsRoomTimelineController(roomProxy: JoinedRoomProxyProtocol,
-                                                timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                                mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError> {
-        switch await roomProxy.mediaEventsTimeline() {
+    func buildMessageFilteredRoomTimelineController(allowedMessageTypes: [RoomMessageEventMessageType],
+                                                    roomProxy: JoinedRoomProxyProtocol,
+                                                    timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                                    mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError> {
+        switch await roomProxy.messageFilteredTimeline(allowedMessageTypes: allowedMessageTypes) {
         case .success(let mediaEventsTimeline):
             return .success(RoomTimelineController(roomProxy: roomProxy,
                                                    timelineProxy: mediaEventsTimeline,

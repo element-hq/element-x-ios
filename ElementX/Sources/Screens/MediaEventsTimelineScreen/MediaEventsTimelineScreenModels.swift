@@ -7,12 +7,26 @@
 
 import Foundation
 
-enum MediaEventsTimelineScreenViewModelAction {
-    case dismiss
+enum MediaEventsTimelineScreenViewModelAction { }
+
+enum MediaEventsTimelineScreenMode {
+    case imageAndVideo
+    case fileAndAudio
 }
 
-struct MediaEventsTimelineScreenViewState: BindableState { }
+struct MediaEventsTimelineScreenViewState: BindableState {
+    var isBackPaginating = false
+    var items = [RoomTimelineItemViewState]()
+    
+    var bindings: MediaEventsTimelineScreenViewStateBindings
+}
+
+struct MediaEventsTimelineScreenViewStateBindings {
+    var screenMode: MediaEventsTimelineScreenMode = .imageAndVideo
+    var topTimelineItemIdentifier: TimelineItemIdentifier?
+}
 
 enum MediaEventsTimelineScreenViewAction {
-    case close
+    case changedScreenMode
+    case changedTopMostVisibleItem
 }

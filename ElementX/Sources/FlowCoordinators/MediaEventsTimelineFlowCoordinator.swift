@@ -63,15 +63,25 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID))
         
-        guard case let .success(timelineController) = await roomTimelineControllerFactory.buildMediaEventsRoomTimelineController(roomProxy: roomProxy,
-                                                                                                                                 timelineItemFactory: timelineItemFactory,
-                                                                                                                                 mediaProvider: userSession.mediaProvider) else {
+        guard case let .success(imageAndVideoTimelineController) = await roomTimelineControllerFactory.buildMessageFilteredRoomTimelineController(allowedMessageTypes: [.image, .video],
+                                                                                                                                                  roomProxy: roomProxy,
+                                                                                                                                                  timelineItemFactory: timelineItemFactory,
+                                                                                                                                                  mediaProvider: userSession.mediaProvider) else {
+            MXLog.error("Failed presenting media timeline")
+            return
+        }
+        
+        guard case let .success(fileAndAudioTimelineController) = await roomTimelineControllerFactory.buildMessageFilteredRoomTimelineController(allowedMessageTypes: [.file, .audio],
+                                                                                                                                                 roomProxy: roomProxy,
+                                                                                                                                                 timelineItemFactory: timelineItemFactory,
+                                                                                                                                                 mediaProvider: userSession.mediaProvider) else {
             MXLog.error("Failed presenting media timeline")
             return
         }
         
         let parameters = MediaEventsTimelineScreenCoordinatorParameters(roomProxy: roomProxy,
-                                                                        timelineController: timelineController,
+                                                                        imageAndVideoTimelineController: imageAndVideoTimelineController,
+                                                                        fileAndAudioTimelineController: fileAndAudioTimelineController,
                                                                         mediaProvider: userSession.mediaProvider,
                                                                         mediaPlayerProvider: MediaPlayerProvider(),
                                                                         voiceMessageMediaManager: userSession.voiceMessageMediaManager,

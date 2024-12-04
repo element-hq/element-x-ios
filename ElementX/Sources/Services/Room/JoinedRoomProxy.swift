@@ -167,9 +167,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
-    func mediaEventsTimeline() async -> Result<any TimelineProxyProtocol, RoomProxyError> {
+    func messageFilteredTimeline(allowedMessageTypes: [RoomMessageEventMessageType]) async -> Result<any TimelineProxyProtocol, RoomProxyError> {
         do {
-            let timeline = try await TimelineProxy(timeline: room.mediaEventsTimeline(filter: .imageAndVideo),
+            let timeline = try await TimelineProxy(timeline: room.messageFilteredTimeline(internalIdPrefix: nil, allowedMessageTypes: allowedMessageTypes),
                                                    kind: .media)
             await timeline.subscribeForUpdates()
             
