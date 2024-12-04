@@ -79,14 +79,12 @@ struct ZeroLoginScreen: View {
             .onSubmit { isPasswordFocused = true }
             .padding(.bottom, 20)
             
-            SecureField(text: $context.password) {
-                Text(L10n.commonPassword).foregroundColor(.compound.textSecondary)
-            }
-            .focused($isPasswordFocused)
-            .textFieldStyle(.authentication(accessibilityIdentifier: A11yIdentifiers.loginScreen.password))
-            .textContentType(.password)
-            .submitLabel(.done)
-            .onSubmit(submit)
+            SecureInputField(text: $context.password,
+                             isFocused: $isPasswordFocused,
+                             placeHolder: L10n.commonPassword,
+                             accessibilityIdentifier: A11yIdentifiers.loginScreen.password,
+                             submitLabel: .done,
+                             onSubmit: submit)
             
             Spacer().frame(height: 36)
 

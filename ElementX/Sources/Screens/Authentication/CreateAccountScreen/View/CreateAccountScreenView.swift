@@ -77,17 +77,17 @@ struct CreateAccountScreen: View {
             
             Spacer().frame(height: 20)
             
-            SecureField(text: $context.password) {
-                Text(L10n.commonPassword).foregroundColor(.compound.textSecondary)
-            }
-            .focused($isPasswordFocused)
-            .textFieldStyle(.authentication(accessibilityIdentifier: "create-account_password"))
-            .textContentType(.password)
-            .submitLabel(.next)
-            .onSubmit { isConfirmPasswordFocused = true }
+            SecureInputField(text: $context.password,
+                             isFocused: $isPasswordFocused,
+                             placeHolder: L10n.commonPassword,
+                             accessibilityIdentifier: "create-account_password",
+                             submitLabel: .next,
+                             onSubmit: {
+                isConfirmPasswordFocused = true
+            })
             
             if !context.password.isEmpty {
-                let infoBoxType: InfoBoxType = isPasswordFocused ? .general : (context.viewState.isValidPassword ? .success : .error)
+                let infoBoxType: InfoBoxType = context.viewState.isValidPassword ? .success : (isPasswordFocused ? .general : .error)
                 InfoBox(
                     text: "Must include at least 8 characters, 1 number, 1 lowercase and 1 uppercase letter",
                     type: infoBoxType
@@ -96,14 +96,12 @@ struct CreateAccountScreen: View {
             
             Spacer().frame(height: 20)
             
-            SecureField(text: $context.confirmPassword) {
-                Text("Confirm Password").foregroundColor(.compound.textSecondary)
-            }
-            .focused($isConfirmPasswordFocused)
-            .textFieldStyle(.authentication(accessibilityIdentifier: "create-account_confirm_password"))
-            .textContentType(.password)
-            .submitLabel(.done)
-            .onSubmit(submit)
+            SecureInputField(text: $context.confirmPassword,
+                             isFocused: $isConfirmPasswordFocused,
+                             placeHolder: "Confirm Password",
+                             accessibilityIdentifier: "create-account_confirm_password",
+                             submitLabel: .done,
+                             onSubmit: submit)
             
             if !context.confirmPassword.isEmpty {
                 let infoBoxText = context.viewState.isValidConfirmPassword ? "Passwords match" : "Passwords do not match"

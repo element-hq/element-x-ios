@@ -219,6 +219,8 @@
 		185454EA2CFF0FA7003CA957 /* CompleteProfileScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454E82CFF0FA1003CA957 /* CompleteProfileScreenView.swift */; };
 		185454EC2CFFAD09003CA957 /* ZInviter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454EB2CFFAD05003CA957 /* ZInviter.swift */; };
 		185454ED2CFFAD09003CA957 /* ZInviter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454EB2CFFAD05003CA957 /* ZInviter.swift */; };
+		185454F02D0042F7003CA957 /* SecureInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454EF2D0042EA003CA957 /* SecureInputField.swift */; };
+		185454F12D0042F7003CA957 /* SecureInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185454EF2D0042EA003CA957 /* SecureInputField.swift */; };
 		18659CBA2CFB1BEC000EF0A6 /* ZeroCreateAccountApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */; };
 		18659CBB2CFB1BEC000EF0A6 /* ZeroCreateAccountApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */; };
 		18659CBD2CFB257C000EF0A6 /* ZNonceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */; };
@@ -2572,6 +2574,7 @@
 		185454E42CFF0EF1003CA957 /* CompleteProfileScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteProfileScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		185454E82CFF0FA1003CA957 /* CompleteProfileScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteProfileScreenView.swift; sourceTree = "<group>"; };
 		185454EB2CFFAD05003CA957 /* ZInviter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZInviter.swift; sourceTree = "<group>"; };
+		185454EF2D0042EA003CA957 /* SecureInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureInputField.swift; sourceTree = "<group>"; };
 		18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroCreateAccountApi.swift; sourceTree = "<group>"; };
 		18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZNonceResponse.swift; sourceTree = "<group>"; };
 		18659CBF2CFB287E000EF0A6 /* ZCreateAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZCreateAccount.swift; path = Zero/Sources/Network/Models/ZCreateAccount.swift; sourceTree = SOURCE_ROOT; };
@@ -4259,6 +4262,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		185454EE2D0042DE003CA957 /* SecureInputField */ = {
+			isa = PBXGroup;
+			children = (
+				185454EF2D0042EA003CA957 /* SecureInputField.swift */,
+			);
+			path = SecureInputField;
+			sourceTree = "<group>";
+		};
 		1868A86B2CA2175A00DC382D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -4330,6 +4341,7 @@
 		18AF61512CF85A6B00921644 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				185454EE2D0042DE003CA957 /* SecureInputField */,
 				185454D22CFEF7D4003CA957 /* Button */,
 				18AF61552CF85ADE00921644 /* ListRow */,
 			);
@@ -9295,6 +9307,7 @@
 				18E9A72A2C9829970082DDA4 /* ViewModifiers.swift in Sources */,
 				18E9A72B2C9829970082DDA4 /* UserDiscoveryService.swift in Sources */,
 				18E9A72C2C9829970082DDA4 /* UserDiscoveryServiceProtocol.swift in Sources */,
+				185454F12D0042F7003CA957 /* SecureInputField.swift in Sources */,
 				18E9A72D2C9829970082DDA4 /* UserIndicator.swift in Sources */,
 				18E9A72E2C9829970082DDA4 /* UserIndicatorController.swift in Sources */,
 				18E9A72F2C9829970082DDA4 /* UserIndicatorControllerMock.swift in Sources */,
@@ -9930,6 +9943,7 @@
 				4D23D41B8109E010304050F8 /* QRCodeLoginScreenCoordinator.swift in Sources */,
 				46FCD999E92D9717D24AAB94 /* QRCodeLoginScreenModels.swift in Sources */,
 				30E5628F74AD3C27A061BF25 /* QRCodeLoginScreenViewModel.swift in Sources */,
+				185454F02D0042F7003CA957 /* SecureInputField.swift in Sources */,
 				E9D2ED1C4186931E3D5FDA4E /* QRCodeLoginScreenViewModelProtocol.swift in Sources */,
 				18D5D9B12CEB733C00107940 /* UserRewardsSettingsScreenModels.swift in Sources */,
 				C8C7AF33AADF88B306CD2695 /* QRCodeLoginService.swift in Sources */,
