@@ -11,7 +11,7 @@ import SwiftUI
 typealias CompleteProfileScreenViewModelType = StateStoreViewModel<CompleteProfileScreenViewState, CompleteProfileScreenViewAction>
 
 class CompleteProfileScreenViewModel: CompleteProfileScreenViewModelType, CompleteProfileScreenViewModelProtocol {
-    private let authenticationService: AuthenticationServiceProtocol
+    private let clientProxy: ClientProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     
@@ -21,11 +21,11 @@ class CompleteProfileScreenViewModel: CompleteProfileScreenViewModelType, Comple
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(authenticationService: AuthenticationServiceProtocol,
+    init(clientProxy: ClientProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          inviteCode: String) {
-        self.authenticationService = authenticationService
+        self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         
@@ -70,12 +70,12 @@ class CompleteProfileScreenViewModel: CompleteProfileScreenViewModelType, Comple
     private func updateUserProfile() {
         startLoading()
         Task {
-            switch await authenticationService.completeCreateAccountProfile(avatar: state.localMedia,
+            switch await clientProxy.completeUserAccountProfile(avatar: state.localMedia,
                                                                             displayName: state.bindings.name,
                                                                             inviteCode: state.inviteCode) {
-            case .success(let userSession):
+            case .success:
                 stopLoading()
-                actionsSubject.send(.signedIn(userSession))
+                actionsSubject.send(.profileUpdated)
             case .failure(let error):
                 stopLoading()
                 handleError(error: error)
@@ -96,7 +96,7 @@ class CompleteProfileScreenViewModel: CompleteProfileScreenViewModelType, Comple
         userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
     
-    private func handleError(error: AuthenticationServiceError) {
+    private func handleError(error: ClientProxyError) {
         userIndicatorController.alertInfo = AlertInfo(id: UUID())
     }
 }

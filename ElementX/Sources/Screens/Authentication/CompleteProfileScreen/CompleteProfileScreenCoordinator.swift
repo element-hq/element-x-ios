@@ -9,11 +9,11 @@ import Combine
 import SwiftUI
 
 struct CompleteProfileScreenParameters {
-    let authenticationService: AuthenticationServiceProtocol
+    let clientProxy: ClientProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     let orientationManager: OrientationManagerProtocol
-    weak var navigationStackCoordinator: NavigationStackCoordinator?
+    weak var navigationCoordinator: NavigationSplitCoordinator?
     let inviteCode: String
 }
 
@@ -30,7 +30,7 @@ final class CompleteProfileScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: CompleteProfileScreenParameters) {
         self.parameters = parameters
-        viewModel = CompleteProfileScreenViewModel(authenticationService: parameters.authenticationService,
+        viewModel = CompleteProfileScreenViewModel(clientProxy: parameters.clientProxy,
                                                    userIndicatorController: parameters.userIndicatorController,
                                                    mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
                                                    inviteCode: parameters.inviteCode)
@@ -47,8 +47,8 @@ final class CompleteProfileScreenCoordinator: CoordinatorProtocol {
                     self.displayMediaPickerWithSource(.camera)
                 case .displayMediaPicker:
                     self.displayMediaPickerWithSource(.photoLibrary)
-                case .signedIn(let userSession):
-                    actionsSubject.send(.signedIn(userSession))
+                case .profileUpdated:
+                    actionsSubject.send(.profileUpdated)
                 }
             }
             .store(in: &cancellables)
@@ -67,14 +67,14 @@ final class CompleteProfileScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .cancel:
-                parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
+                parameters.navigationCoordinator?.setSheetCoordinator(nil)
             case .selectMediaAtURL(let url):
-                parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
+                parameters.navigationCoordinator?.setSheetCoordinator(nil)
                 viewModel.didSelectMediaURL(url: url)
             }
         }
         
         stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
-        parameters.navigationStackCoordinator?.setSheetCoordinator(stackCoordinator)
+        parameters.navigationCoordinator?.setSheetCoordinator(stackCoordinator)
     }
 }

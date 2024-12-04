@@ -10,13 +10,13 @@ import Foundation
 // MARK: - Coordinator
 
 enum CompleteProfileScreenCoordinatorAction {
-    case signedIn(UserSessionProtocol)
+    case profileUpdated
 }
 
 enum CompleteProfileScreenViewModelAction {
     case displayCameraPicker
     case displayMediaPicker
-    case signedIn(UserSessionProtocol)
+    case profileUpdated
 }
 
 struct CompleteProfileScreenViewState: BindableState {

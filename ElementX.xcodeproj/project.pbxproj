@@ -152,6 +152,10 @@
 		182725732C9995B400B513B5 /* WebRegistrationScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F418426410F3823F3EB0828 /* WebRegistrationScreenViewModelProtocol.swift */; };
 		182725742C9995B800B513B5 /* WebRegistrationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B065EC39C99C1303A101C1C /* WebRegistrationScreen.swift */; };
 		182725752C99990100B513B5 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		1828CE442D01010C002FF640 /* ZCurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1828CE432D010108002FF640 /* ZCurrentUser.swift */; };
+		1828CE452D01010C002FF640 /* ZCurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1828CE432D010108002FF640 /* ZCurrentUser.swift */; };
+		1828CE472D0114A2002FF640 /* CreateAccountHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1828CE462D011492002FF640 /* CreateAccountHelper.swift */; };
+		1828CE482D0114A2002FF640 /* CreateAccountHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1828CE462D011492002FF640 /* CreateAccountHelper.swift */; };
 		182D06FC2CC1A33200BFF155 /* TimelineItemIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48C91C8BE55CAE1A3DBC3BC /* TimelineItemIdentifier.swift */; };
 		182D06FD2CC1A3CF00BFF155 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		182D06FE2CC1A46B00BFF155 /* (null) in Sources */ = {isa = PBXBuildFile; };
@@ -2544,6 +2548,8 @@
 		17A8AA0DFA06012A9DAB951E /* TimelineProxyMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineProxyMock.swift; sourceTree = "<group>"; };
 		180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixSearchedUser.swift; sourceTree = "<group>"; };
 		18115E512CAEA4D4001A8F4A /* ZeroContants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroContants.swift; sourceTree = "<group>"; };
+		1828CE432D010108002FF640 /* ZCurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZCurrentUser.swift; sourceTree = "<group>"; };
+		1828CE462D011492002FF640 /* CreateAccountHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountHelper.swift; sourceTree = "<group>"; };
 		18326FD72CA53E6D00389CB2 /* ZeroColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroColors.swift; sourceTree = "<group>"; };
 		18486B87745B1811E7FBD3D2 /* AnalyticsPromptScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsPromptScreenModels.swift; sourceTree = "<group>"; };
 		184CF8C196BE143AE226628D /* DecorationTimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecorationTimelineItemProtocol.swift; sourceTree = "<group>"; };
@@ -4178,6 +4184,7 @@
 		184D6FD02C7D8B91006266D8 /* Response */ = {
 			isa = PBXGroup;
 			children = (
+				1828CE432D010108002FF640 /* ZCurrentUser.swift */,
 				185454EB2CFFAD05003CA957 /* ZInviter.swift */,
 				18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */,
 				18525D032CF5EDE60055C5E8 /* ZMessengerInvite.swift */,
@@ -4217,6 +4224,7 @@
 		185454BB2CFDE5E9003CA957 /* CreateAccountScreen */ = {
 			isa = PBXGroup;
 			children = (
+				1828CE462D011492002FF640 /* CreateAccountHelper.swift */,
 				185454BC2CFDE63E003CA957 /* CreateAccountScreenCoordinator.swift */,
 				185454BF2CFDE665003CA957 /* CreateAccountScreenModels.swift */,
 				185454C22CFDE679003CA957 /* CreateAccountScreenViewModel.swift */,
@@ -8688,6 +8696,7 @@
 				18E9A5072C9829970082DDA4 /* LandingScreen.swift in Sources */,
 				18E9A5082C9829970082DDA4 /* FileRoomTimelineItem.swift in Sources */,
 				18D5D9BE2CEB768600107940 /* UserRewardsSettingsScreen.swift in Sources */,
+				1828CE482D0114A2002FF640 /* CreateAccountHelper.swift in Sources */,
 				18E9A5092C9829970082DDA4 /* FileRoomTimelineItemContent.swift in Sources */,
 				18E9A50A2C9829970082DDA4 /* FileRoomTimelineView.swift in Sources */,
 				18E9A50B2C9829970082DDA4 /* FlowCoordinatorProtocol.swift in Sources */,
@@ -8763,6 +8772,7 @@
 				18DFC5CB2CD9552900462FE1 /* SecureBackupControllerMock.swift in Sources */,
 				18E9A54B2C9829970082DDA4 /* KeychainController.swift in Sources */,
 				18E9A54C2C9829970082DDA4 /* ZMatrixUserProfile.swift in Sources */,
+				1828CE452D01010C002FF640 /* ZCurrentUser.swift in Sources */,
 				18E9A54D2C9829970082DDA4 /* KeychainControllerMock.swift in Sources */,
 				18E9A54E2C9829970082DDA4 /* KeychainControllerProtocol.swift in Sources */,
 				18D5D9B72CEB749B00107940 /* UserRewardsSettingsScreenViewModelProtocol.swift in Sources */,
@@ -9723,6 +9733,7 @@
 				7CD16990BA843BE9ED639129 /* ImageRoomTimelineItem.swift in Sources */,
 				B796A25F282C0A340D1B9C12 /* ImageRoomTimelineItemContent.swift in Sources */,
 				E2D57361B835E4D2230960E6 /* ImageRoomTimelineView.swift in Sources */,
+				1828CE472D0114A2002FF640 /* CreateAccountHelper.swift in Sources */,
 				B6048166B4AA4CEFEA9B77A6 /* InfoPlistReader.swift in Sources */,
 				BFEB24336DFD5F196E6F3456 /* IntentionalMentions.swift in Sources */,
 				2AAB2A77F1762A2648078A30 /* InteractiveQuickLook.swift in Sources */,
@@ -10245,6 +10256,7 @@
 				98EE4259A4A49BC757BA442C /* TimelineViewModel.swift in Sources */,
 				F8B2F5CBCF2A0E0798E8D646 /* TimelineViewModelProtocol.swift in Sources */,
 				E37044401D9951D6C02C0855 /* TracingConfiguration.swift in Sources */,
+				1828CE442D01010C002FF640 /* ZCurrentUser.swift in Sources */,
 				298F9EC30E918F12AB7F1EE8 /* TypingIndicatorView.swift in Sources */,
 				36AC963F2F04069B7FF1AA0C /* UIConstants.swift in Sources */,
 				A37EED79941AD3B7140B3822 /* UIDevice.swift in Sources */,

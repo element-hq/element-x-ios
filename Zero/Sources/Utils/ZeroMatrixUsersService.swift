@@ -81,4 +81,15 @@ class ZeroMatrixUsersService {
     func getRoomAvatarFromCache(roomId: String) -> String? {
         roomAvatarsMap[roomId] ?? nil
     }
+    
+    func fetchCurrentUser() async throws -> ZCurrentUser? {
+        let result = try await zeroUsersApi.fetchCurrentUser()
+        switch result {
+        case .success(let user):
+            return user
+        case .failure(let failure):
+            MXLog.error(failure)
+            return nil
+        }
+    }
 }

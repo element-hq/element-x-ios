@@ -220,10 +220,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func attemptStartingOnboarding() {
-        if onboardingFlowCoordinator.shouldStart {
-            clearRoute(animated: false)
-            onboardingFlowCoordinator.start()
-        }
+        checkAndProceed(execute: {
+            if self.onboardingFlowCoordinator.shouldStart {
+                self.clearRoute(animated: false)
+                self.onboardingFlowCoordinator.start()
+            }
+        })
     }
     
     private func clearPresentedSheets(animated: Bool) async {
@@ -985,5 +987,39 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                                     type: .toast,
                                                                                     title: L10n.errorUnknown,
                                                                                     iconName: "xmark"))
+    }
+        
+    private func checkAndProceed(execute: @escaping () -> Void) {
+        Task {
+            let hasPendingSignup = await userSession.clientProxy.isProfileCompletionRequired()
+            if hasPendingSignup {
+                presentCompleteProfileScreen(execute)
+            } else {
+                execute()
+            }
+        }
+    }
+    
+    private func presentCompleteProfileScreen(_ execute: @escaping () -> Void) {
+        let inviteCode = CreateAccountHelper.shared.inviteCode
+        let parameters = CompleteProfileScreenParameters(clientProxy: userSession.clientProxy,
+                                                         userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                         mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
+                                                         orientationManager: appMediator.windowManager,
+                                                         navigationCoordinator: navigationSplitCoordinator,
+                                                         inviteCode: inviteCode)
+        let coordinator = CompleteProfileScreenCoordinator(parameters: parameters)
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .profileUpdated:
+                    navigationSplitCoordinator.setDetailCoordinator(nil)
+                    execute()
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationSplitCoordinator.setDetailCoordinator(coordinator)
     }
 }

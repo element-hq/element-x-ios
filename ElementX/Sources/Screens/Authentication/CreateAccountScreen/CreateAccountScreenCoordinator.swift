@@ -38,8 +38,8 @@ final class CreateAccountScreenCoordinator: CoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
-                case .accountCreated:
-                    actionsSubject.send(.accountCreated)
+                case .accountCreated(let session):
+                    actionsSubject.send(.accountCreated(userSession: session))
                 case .openLoginScreen:
                     actionsSubject.send(.openLoginScreen)
                 }

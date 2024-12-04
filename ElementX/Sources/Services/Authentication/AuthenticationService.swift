@@ -20,6 +20,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private let appHooks: AppHooks
     private let zeroAuthApi: ZeroAuthApiProtocol
     private let zeroCreateAccountApi: ZeroCreateAccountApiProtocol
+    private let zeroUsersApi: ZeroUsersApiProtocol
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
@@ -38,6 +39,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         self.appHooks = appHooks
         zeroAuthApi = ZeroAuthApi(appSettings: appSettings)
         zeroCreateAccountApi = ZeroCreateAccountApi(appSettings: appSettings)
+        zeroUsersApi = ZeroUsersApi(appSettings: appSettings)
         
         // When updating these, don't forget to update the reset method too.
         homeserverSubject = .init(LoginHomeserver(address: appSettings.defaultHomeserverAddress, loginMode: .unknown))
@@ -213,65 +215,25 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
     }
     
-    func createUserAccount(email: String, password: String, inviteCode: String) async -> Result<Void, AuthenticationServiceError> {
+    func createUserAccount(email: String, password: String, inviteCode: String) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         do {
             let result = try await zeroCreateAccountApi.createAccountWithEmail(email: email, password: password, invite: inviteCode)
             switch result {
             case .success(_):
-                appSettings.hasIncompleteZeroSignup = true
-                return .success(())
+                await ensureHomeServerIsConfigured()
+                let session = await loginNewlyCreatedUser()
+                switch session {
+                case .success(let userSession):
+                    return .success(userSession)
+                case .failure(_):
+                    return .failure(.failedCreatingUserAccount)
+                }
             case .failure(_):
                 return .failure(.failedCreatingUserAccount)
             }
         } catch {
             MXLog.error(error)
             return .failure(.failedCreatingUserAccount)
-        }
-    }
-    
-    func completeCreateAccountProfile(avatar: MediaInfo?, displayName: String, inviteCode: String) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
-        do {
-            await ensureHomeServerIsConfigured()
-            
-            guard let client else { return .failure(.failedLoggingIn) }
-            
-            let session = await loginNewlyCreatedUser()
-            switch session {
-            case .success(let userSession):
-                
-                let clientProxy = userSession.clientProxy
-                try await withThrowingTaskGroup(of: Void.self) { group in
-                    group.addTask {
-                        if let localMedia = avatar {
-                            try await clientProxy.setUserAvatar(media: localMedia).get()
-                        }
-                    }
-                    group.addTask {
-                        try await clientProxy.setUserDisplayName(displayName).get()
-                    }
-                    try await group.waitForAll()
-                }
-                let userId = try client.userId().matrixIdToCleanHex()
-                let avatarUrl = try await client.avatarUrl() ?? ""
-                let result = try await zeroCreateAccountApi
-                    .finaliseCreateAccount(request: ZFinaliseCreateAccount(inviteCode: inviteCode, name: displayName, userId: userId, profileImageUrl: avatarUrl))
-                
-                switch result {
-                case .success(let user):
-                    /// create a room with the user who invited
-                    let _ = await clientProxy.createDirectRoom(with: user.inviter.matrixId, expectedRoomName: user.inviter.displayName)
-                    appSettings.hasIncompleteZeroSignup = false
-                    return .success(userSession)
-                    
-                case .failure(let failure):
-                    return .failure(.failedCompletingUserProfile)
-                }
-            case .failure(let failure):
-                return .failure(.failedCompletingUserProfile)
-            }
-        } catch {
-            MXLog.error(error)
-            return .failure(.failedCompletingUserProfile)
         }
     }
     

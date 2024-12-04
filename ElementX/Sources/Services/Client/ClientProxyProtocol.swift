@@ -38,6 +38,8 @@ enum ClientProxyError: Error {
     case roomPreviewIsPrivate
     case failedRetrievingUserIdentity
     case failedResolvingRoomAlias
+    
+    case failedCompletingUserProfile
 }
 
 enum SlidingSyncConstants {
@@ -227,4 +229,10 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var messengerInvitePublisher: CurrentValuePublisher<ZeroMessengerInvite, Never> { get }
     
     @discardableResult func loadZeroMessengerInvite() async -> Result<Void, ClientProxyError>
+    
+    // MARK: - Zero Create Account Profile
+    
+    func isProfileCompletionRequired() async -> Bool
+    
+    func completeUserAccountProfile(avatar: MediaInfo?, displayName: String, inviteCode: String) async -> Result<Void, ClientProxyError>
 }

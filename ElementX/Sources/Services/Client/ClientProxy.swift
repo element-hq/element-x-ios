@@ -157,6 +157,7 @@ class ClientProxy: ClientProxyProtocol {
     private let zeroMatrixUsersService: ZeroMatrixUsersService
     private let zeroRewardsApi: ZeroRewardsApiProtocol
     private let zeroMessengerInviteApi: ZeroMessengerInviteApiProtocol
+    private let zeroCreateAccountApi: ZeroCreateAccountApiProtocol
     
     init(client: ClientProtocol,
          networkMonitor: NetworkMonitorProtocol,
@@ -180,6 +181,7 @@ class ClientProxy: ClientProxyProtocol {
                                                         client: client)
         zeroRewardsApi = ZeroRewardsApi(appSettings: appSettings)
         zeroMessengerInviteApi = ZeroMessengerInviteApi(appSettings: appSettings)
+        zeroCreateAccountApi = ZeroCreateAccountApi(appSettings: appSettings)
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
@@ -874,6 +876,53 @@ class ClientProxy: ClientProxyProtocol {
         } catch {
             MXLog.error(error)
             return .failure(.zeroError(error))
+        }
+    }
+    
+    func isProfileCompletionRequired() async -> Bool {
+        do {
+            let currentUser = try await zeroMatrixUsersService.fetchCurrentUser()
+            if let user = currentUser {
+                return user.displayName.isEmpty || user.displayName.stringMatchesUserIdFormatRegex()
+            } else {
+                return true
+            }
+        } catch {
+            MXLog.error(error)
+            return true
+        }
+    }
+    
+    func completeUserAccountProfile(avatar: MediaInfo?, displayName: String, inviteCode: String) async -> Result<Void, ClientProxyError> {
+        do {
+            try await withThrowingTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    if let localMedia = avatar {
+                        try await self.setUserAvatar(media: localMedia).get()
+                    }
+                }
+                group.addTask {
+                    try await self.setUserDisplayName(displayName).get()
+                }
+                try await group.waitForAll()
+            }
+            let userId = try client.userId().matrixIdToCleanHex()
+            let avatarUrl = try await client.avatarUrl() ?? ""
+            let result = try await zeroCreateAccountApi
+                .finaliseCreateAccount(request: ZFinaliseCreateAccount(inviteCode: inviteCode, name: displayName, userId: userId, profileImageUrl: avatarUrl))
+            
+            switch result {
+            case .success(let user):
+                /// create a room with the user who invited
+                _ = await self.createDirectRoom(with: user.inviter.matrixId, expectedRoomName: user.inviter.displayName)
+                return .success(())
+                
+            case .failure(let failure):
+                return .failure(.failedCompletingUserProfile)
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.failedCompletingUserProfile)
         }
     }
     

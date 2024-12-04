@@ -5037,6 +5037,140 @@ class ClientProxyMock: ClientProxyProtocol {
             return loadZeroMessengerInviteReturnValue
         }
     }
+    //MARK: - isProfileCompletionRequired
+
+    var isProfileCompletionRequiredUnderlyingCallsCount = 0
+    var isProfileCompletionRequiredCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return isProfileCompletionRequiredUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isProfileCompletionRequiredUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isProfileCompletionRequiredUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isProfileCompletionRequiredUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var isProfileCompletionRequiredCalled: Bool {
+        return isProfileCompletionRequiredCallsCount > 0
+    }
+
+    var isProfileCompletionRequiredUnderlyingReturnValue: Bool!
+    var isProfileCompletionRequiredReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return isProfileCompletionRequiredUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isProfileCompletionRequiredUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isProfileCompletionRequiredUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isProfileCompletionRequiredUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var isProfileCompletionRequiredClosure: (() async -> Bool)?
+
+    func isProfileCompletionRequired() async -> Bool {
+        isProfileCompletionRequiredCallsCount += 1
+        if let isProfileCompletionRequiredClosure = isProfileCompletionRequiredClosure {
+            return await isProfileCompletionRequiredClosure()
+        } else {
+            return isProfileCompletionRequiredReturnValue
+        }
+    }
+    //MARK: - completeUserAccountProfile
+
+    var completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingCallsCount = 0
+    var completeUserAccountProfileAvatarDisplayNameInviteCodeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var completeUserAccountProfileAvatarDisplayNameInviteCodeCalled: Bool {
+        return completeUserAccountProfileAvatarDisplayNameInviteCodeCallsCount > 0
+    }
+    var completeUserAccountProfileAvatarDisplayNameInviteCodeReceivedArguments: (avatar: MediaInfo?, displayName: String, inviteCode: String)?
+    var completeUserAccountProfileAvatarDisplayNameInviteCodeReceivedInvocations: [(avatar: MediaInfo?, displayName: String, inviteCode: String)] = []
+
+    var completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var completeUserAccountProfileAvatarDisplayNameInviteCodeReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    completeUserAccountProfileAvatarDisplayNameInviteCodeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var completeUserAccountProfileAvatarDisplayNameInviteCodeClosure: ((MediaInfo?, String, String) async -> Result<Void, ClientProxyError>)?
+
+    func completeUserAccountProfile(avatar: MediaInfo?, displayName: String, inviteCode: String) async -> Result<Void, ClientProxyError> {
+        completeUserAccountProfileAvatarDisplayNameInviteCodeCallsCount += 1
+        completeUserAccountProfileAvatarDisplayNameInviteCodeReceivedArguments = (avatar: avatar, displayName: displayName, inviteCode: inviteCode)
+        DispatchQueue.main.async {
+            self.completeUserAccountProfileAvatarDisplayNameInviteCodeReceivedInvocations.append((avatar: avatar, displayName: displayName, inviteCode: inviteCode))
+        }
+        if let completeUserAccountProfileAvatarDisplayNameInviteCodeClosure = completeUserAccountProfileAvatarDisplayNameInviteCodeClosure {
+            return await completeUserAccountProfileAvatarDisplayNameInviteCodeClosure(avatar, displayName, inviteCode)
+        } else {
+            return completeUserAccountProfileAvatarDisplayNameInviteCodeReturnValue
+        }
+    }
     //MARK: - loadMediaContentForSource
 
     var loadMediaContentForSourceThrowableError: Error?

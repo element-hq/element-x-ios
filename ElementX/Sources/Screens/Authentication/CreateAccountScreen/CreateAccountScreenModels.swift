@@ -10,12 +10,12 @@ import Foundation
 // MARK: - Coordinator
 
 enum CreateAccountScreenCoordinatorAction {
-    case accountCreated
+    case accountCreated(userSession: UserSessionProtocol)
     case openLoginScreen
 }
 
 enum CreateAccountScreenViewModelAction {
-    case accountCreated
+    case accountCreated(userSession: UserSessionProtocol)
     case openLoginScreen
 }
 

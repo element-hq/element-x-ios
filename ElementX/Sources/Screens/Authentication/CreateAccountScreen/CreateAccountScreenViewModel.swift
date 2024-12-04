@@ -44,9 +44,9 @@ class CreateAccountScreenViewModel: CreateAccountScreenViewModelType, CreateAcco
             switch await authenticationService.createUserAccount(email: state.bindings.emailAddress,
                                                                  password: state.bindings.password,
                                                                  inviteCode: state.inviteCode) {
-            case .success:
+            case .success(let userSession):
                 stopLoading()
-                actionsSubject.send(.accountCreated)
+                actionsSubject.send(.accountCreated(userSession: userSession))
             case .failure(let error):
                 stopLoading()
                 handleError(error: error)

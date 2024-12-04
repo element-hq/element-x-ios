@@ -7,6 +7,8 @@ protocol ZeroUsersApiProtocol {
     func searchUsers(_ query: String, offset: Int, limit: Int) async throws -> Result<[ZMatrixSearchedUser], any Error>
     
     func updateUserProfile(displayName: String?, profileImage: String?, primaryZID: String?) async throws -> Result<Void, Error>
+    
+    func fetchCurrentUser() async throws -> Result<ZCurrentUser, Error>
 }
 
 class ZeroUsersApi: ZeroUsersApiProtocol {
@@ -91,6 +93,21 @@ class ZeroUsersApi: ZeroUsersApiProtocol {
         }
     }
     
+    func fetchCurrentUser() async throws -> Result<ZCurrentUser, any Error> {
+        let result: Result<ZCurrentUser, Error> = try await APIManager
+            .shared
+            .authorisedRequest(UserEndPoints.currentUserProfileEndPoint,
+                               method: .get,
+                               appSettings: appSettings)
+        
+        switch result {
+        case .success(let user):
+            return .success((user))
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     // MARK: - Constants
     
     private enum UserEndPoints {
@@ -99,5 +116,6 @@ class ZeroUsersApi: ZeroUsersApiProtocol {
         static let matrixUsersEndPoint = "\(hostURL)matrix/users/zero"
         static let matrixSearchUsersEndPoint = "\(hostURL)api/v2/users/searchInNetworksByName"
         static let matrixUpdateUserProfileEndPoint = "\(hostURL)api/v2/users/profile"
+        static let currentUserProfileEndPoint = "\(hostURL)api/users/current"
     }
 }
