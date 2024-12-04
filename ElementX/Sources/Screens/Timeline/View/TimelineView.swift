@@ -16,7 +16,7 @@ struct TimelineView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> TimelineTableViewController {
         let tableViewController = TimelineTableViewController(coordinator: context.coordinator,
                                                               isScrolledToBottom: $viewModelContext.isScrolledToBottom,
-                                                              scrollToBottomPublisher: viewModelContext.viewState.timelineViewState.scrollToBottomPublisher)
+                                                              scrollToBottomPublisher: viewModelContext.viewState.timelineState.scrollToBottomPublisher)
         // Needs to be dispatched on main asynchronously otherwise we get a runtime warning
         DispatchQueue.main.async {
             viewModelContext.send(viewAction: .setOpenURLAction(openURL))
@@ -44,21 +44,21 @@ struct TimelineView: UIViewControllerRepresentable {
         
         /// Updates the specified table view's properties from the current view state.
         func update(tableViewController: TimelineTableViewController) {
-            if tableViewController.isSwitchingTimelines != context.viewState.timelineViewState.isSwitchingTimelines {
+            if tableViewController.isSwitchingTimelines != context.viewState.timelineState.isSwitchingTimelines {
                 // Must come before timelineItemsDictionary in order to disable animations.
-                tableViewController.isSwitchingTimelines = context.viewState.timelineViewState.isSwitchingTimelines
+                tableViewController.isSwitchingTimelines = context.viewState.timelineState.isSwitchingTimelines
             }
-            if tableViewController.timelineItemsDictionary != context.viewState.timelineViewState.itemsDictionary {
-                tableViewController.timelineItemsDictionary = context.viewState.timelineViewState.itemsDictionary
+            if tableViewController.timelineItemsDictionary != context.viewState.timelineState.itemsDictionary {
+                tableViewController.timelineItemsDictionary = context.viewState.timelineState.itemsDictionary
             }
-            if tableViewController.paginationState != context.viewState.timelineViewState.paginationState {
-                tableViewController.paginationState = context.viewState.timelineViewState.paginationState
+            if tableViewController.paginationState != context.viewState.timelineState.paginationState {
+                tableViewController.paginationState = context.viewState.timelineState.paginationState
             }
-            if tableViewController.isLive != context.viewState.timelineViewState.isLive {
-                tableViewController.isLive = context.viewState.timelineViewState.isLive
+            if tableViewController.isLive != context.viewState.timelineState.isLive {
+                tableViewController.isLive = context.viewState.timelineState.isLive
             }
-            if tableViewController.focussedEvent != context.viewState.timelineViewState.focussedEvent {
-                tableViewController.focussedEvent = context.viewState.timelineViewState.focussedEvent
+            if tableViewController.focussedEvent != context.viewState.timelineState.focussedEvent {
+                tableViewController.focussedEvent = context.viewState.timelineState.focussedEvent
             }
             if tableViewController.hideTimelineMedia != context.viewState.hideTimelineMedia {
                 tableViewController.hideTimelineMedia = context.viewState.hideTimelineMedia

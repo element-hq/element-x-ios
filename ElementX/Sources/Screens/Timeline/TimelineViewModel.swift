@@ -78,7 +78,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         super.init(initialViewState: TimelineViewState(isPinnedEventsTimeline: timelineController.timelineKind == .pinned,
                                                        roomID: roomProxy.id,
                                                        isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
-                                                       timelineViewState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
+                                                       timelineState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                        ownUserID: roomProxy.ownUserID,
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,
                                                        isCreateMediaCaptionsEnabled: appSettings.createMediaCaptionsEnabled,
@@ -174,7 +174,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .scrolledToFocussedItem:
             didScrollToFocussedItem()
         case .hasSwitchedTimeline:
-            Task { state.timelineViewState.isSwitchingTimelines = false }
+            Task { state.timelineState.isSwitchingTimelines = false }
         case let .hasScrolled(direction):
             actionsSubject.send(.hasScrolled(direction: direction))
         case .setOpenURLAction(let action):
@@ -215,8 +215,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     func focusOnEvent(eventID: String) async {
-        if state.timelineViewState.hasLoadedItem(with: eventID) {
-            state.timelineViewState.focussedEvent = .init(eventID: eventID, appearance: .animated)
+        if state.timelineState.hasLoadedItem(with: eventID) {
+            state.timelineState.focussedEvent = .init(eventID: eventID, appearance: .animated)
             return
         }
         
@@ -225,7 +225,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         
         switch await timelineController.focusOnEvent(eventID, timelineSize: Constants.detachedTimelineSize) {
         case .success:
-            state.timelineViewState.focussedEvent = .init(eventID: eventID, appearance: .immediate)
+            state.timelineState.focussedEvent = .init(eventID: eventID, appearance: .immediate)
         case .failure(let error):
             MXLog.error("Failed to focus on event \(eventID)")
             
@@ -244,9 +244,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     private func didScrollToFocussedItem() {
-        if var focussedEvent = state.timelineViewState.focussedEvent {
+        if var focussedEvent = state.timelineState.focussedEvent {
             focussedEvent.appearance = .hasAppeared
-            state.timelineViewState.focussedEvent = focussedEvent
+            state.timelineState.focussedEvent = focussedEvent
             hideFocusLoadingIndicator()
         }
     }
@@ -362,16 +362,16 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 case .updatedTimelineItems(let updatedItems, let isSwitchingTimelines):
                     buildTimelineViews(timelineItems: updatedItems, isSwitchingTimelines: isSwitchingTimelines)
                 case .paginationState(let paginationState):
-                    if state.timelineViewState.paginationState != paginationState {
-                        state.timelineViewState.paginationState = paginationState
+                    if state.timelineState.paginationState != paginationState {
+                        state.timelineState.paginationState = paginationState
                     }
                 case .isLive(let isLive):
-                    if state.timelineViewState.isLive != isLive {
-                        state.timelineViewState.isLive = isLive
+                    if state.timelineState.isLive != isLive {
+                        state.timelineState.isLive = isLive
                         
                         // Remove the event highlight *only* when transitioning from non-live to live.
-                        if isLive, state.timelineViewState.focussedEvent != nil {
-                            state.timelineViewState.focussedEvent = nil
+                        if isLive, state.timelineState.focussedEvent != nil {
+                            state.timelineState.focussedEvent = nil
                         }
                     }
                 }
@@ -516,7 +516,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 break
             }
             
-            if state.timelineViewState.paginationState.forward == .timelineEndReached {
+            if state.timelineState.paginationState.forward == .timelineEndReached {
                 focusLive()
             }
             
@@ -525,8 +525,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     private func scrollToBottom() {
-        if state.timelineViewState.isLive {
-            state.timelineViewState.scrollToBottomPublisher.send(())
+        if state.timelineState.isLive {
+            state.timelineState.scrollToBottomPublisher.send(())
         } else {
             focusLive()
         }
@@ -703,14 +703,14 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
         
         if isSwitchingTimelines {
-            state.timelineViewState.isSwitchingTimelines = true
+            state.timelineState.isSwitchingTimelines = true
         }
         
-        state.timelineViewState.itemsDictionary = timelineItemsDictionary
+        state.timelineState.itemsDictionary = timelineItemsDictionary
     }
 
     private func updateViewState(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) -> RoomTimelineItemViewState {
-        if let timelineItemViewState = state.timelineViewState.itemsDictionary[item.id.uniqueID] {
+        if let timelineItemViewState = state.timelineState.itemsDictionary[item.id.uniqueID] {
             timelineItemViewState.groupStyle = groupStyle
             timelineItemViewState.type = .init(item: item)
             return timelineItemViewState

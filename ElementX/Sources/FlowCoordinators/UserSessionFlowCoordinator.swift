@@ -391,7 +391,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedSentByInsecureDevice, timeToDecryptMillis: timeToDecryptMs)
                 case .verificationViolation:
                     analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedVerificationViolation, timeToDecryptMillis: timeToDecryptMs)
-                case .sentBeforeWeJoined, .historicalMessage:
+                case .sentBeforeWeJoined:
                     analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedDueToMembership, timeToDecryptMillis: timeToDecryptMs)
                 case .historicalMessage:
                     analytics.trackError(context: nil, domain: .E2EE, name: .HistoricalMessage, timeToDecryptMillis: timeToDecryptMs)

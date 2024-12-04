@@ -14,7 +14,7 @@ struct TimelineItemStatusView: View {
     @EnvironmentObject private var context: TimelineViewModel.Context
 
     private var isLastOutgoingMessage: Bool {
-        timelineItem.isOutgoing && context.viewState.timelineViewState.uniqueIDs.last == timelineItem.id.uniqueID
+        timelineItem.isOutgoing && context.viewState.timelineState.uniqueIDs.last == timelineItem.id.uniqueID
     }
 
     var body: some View {

@@ -53,9 +53,8 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     private func updateFromTimelineViewState() {
         let timelineViewState = activeTimelineViewModel.context.viewState
         
-        #warning("This is some funky naming right here")
-        state.items = timelineViewState.timelineViewState.itemViewStates
-        state.isBackPaginating = (timelineViewState.timelineViewState.paginationState.backward == .paginating)
+        state.items = timelineViewState.timelineState.itemViewStates
+        state.isBackPaginating = (timelineViewState.timelineState.paginationState.backward == .paginating)
     }
     
     private var activeTimelineViewModel: TimelineViewModelProtocol {
