@@ -14,6 +14,17 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     private let imageAndVideoTimelineViewModel: TimelineViewModelProtocol
     private let fileAndAudioTimelineViewModel: TimelineViewModelProtocol
     
+    private var isTopVisible = false
+    
+    private var activeTimelineViewModel: TimelineViewModelProtocol {
+        switch state.bindings.screenMode {
+        case .imageAndVideo:
+            imageAndVideoTimelineViewModel
+        case .fileAndAudio:
+            fileAndAudioTimelineViewModel
+        }
+    }
+    
     private let actionsSubject: PassthroughSubject<MediaEventsTimelineScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<MediaEventsTimelineScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -27,12 +38,25 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         
         super.init(initialViewState: .init(bindings: .init()), mediaProvider: mediaProvider)
         
-        imageAndVideoTimelineViewModel.context.$viewState.sink { [weak self] _ in
-            self?.updateFromTimelineViewState()
+        imageAndVideoTimelineViewModel.context.$viewState.sink { [weak self] timelineViewState in
+            guard let self, state.bindings.screenMode == .imageAndVideo else {
+                return
+            }
+            
+            updateWithTimelineViewState(timelineViewState)
         }
         .store(in: &cancellables)
         
-        updateFromTimelineViewState()
+        fileAndAudioTimelineViewModel.context.$viewState.sink { [weak self] timelineViewState in
+            guard let self, state.bindings.screenMode == .fileAndAudio else {
+                return
+            }
+            
+            updateWithTimelineViewState(timelineViewState)
+        }
+        .store(in: &cancellables)
+        
+        updateWithTimelineViewState(activeTimelineViewModel.context.viewState)
     }
     
     // MARK: - Public
@@ -42,27 +66,38 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         
         switch viewAction {
         case .changedScreenMode:
-            updateFromTimelineViewState()
-        case .changedTopMostVisibleItem:
-            break
+            updateWithTimelineViewState(activeTimelineViewModel.context.viewState)
+        case .topBecameVisible:
+            isTopVisible = true
+            backpaginateIfNecessary(paginationStatus: activeTimelineViewModel.context.viewState.timelineState.paginationState.backward)
+        case .topBecameHidden:
+            isTopVisible = false
         }
     }
     
     // MARK: - Private
     
-    private func updateFromTimelineViewState() {
-        let timelineViewState = activeTimelineViewModel.context.viewState
+    private func updateWithTimelineViewState(_ timelineViewState: TimelineViewState) {
+        state.items = timelineViewState.timelineState.itemViewStates.filter { state in
+            switch state.type {
+            case .audio, .file, .image, .video:
+                true
+            case .paginationIndicator:
+                false
+            case .timelineStart:
+                false
+            default:
+                false
+            }
+        }.reversed()
         
-        state.items = timelineViewState.timelineState.itemViewStates
         state.isBackPaginating = (timelineViewState.timelineState.paginationState.backward == .paginating)
+        backpaginateIfNecessary(paginationStatus: timelineViewState.timelineState.paginationState.backward)
     }
     
-    private var activeTimelineViewModel: TimelineViewModelProtocol {
-        switch state.bindings.screenMode {
-        case .imageAndVideo:
-            imageAndVideoTimelineViewModel
-        case .fileAndAudio:
-            fileAndAudioTimelineViewModel
+    private func backpaginateIfNecessary(paginationStatus: PaginationStatus) {
+        if paginationStatus == .idle, isTopVisible {
+            activeTimelineViewModel.context.send(viewAction: .paginateBackwards)
         }
     }
 }

@@ -13,8 +13,10 @@ struct MediaEventsTimelineScreen: View {
     
     var body: some View {
         content
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .background(.compound.bgCanvasDefault)
+            // Doesn't play well with the transformed scrollView
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Picker("", selection: $context.screenMode) {
@@ -28,42 +30,56 @@ struct MediaEventsTimelineScreen: View {
                     .pickerStyle(.segmented)
                 }
             }
+            .colorScheme(.dark)
+            .toolbarColorScheme(.dark)
     }
     
     @ViewBuilder
     private var content: some View {
         ScrollView {
-            if context.viewState.isBackPaginating {
-                ProgressView()
-            }
-            
-            let columns = [GridItem(.adaptive(minimum: 80, maximum: 150), spacing: 1)]
-            LazyVGrid(columns: columns, alignment: .center, spacing: 1) {
-                ForEach(context.viewState.items) { item in
-                    Color.clear // Let the image aspect fill in place
-                        .aspectRatio(1, contentMode: .fill)
-                        .overlay {
-                            viewForTimelineItem(item)
+            Group {
+                let columns = [GridItem(.adaptive(minimum: 80, maximum: 150), spacing: 1)]
+                LazyVGrid(columns: columns, alignment: .center, spacing: 1) {
+                    ForEach(context.viewState.items) { item in
+                        Color.clear // Let the image aspect fill in place
+                            .aspectRatio(1, contentMode: .fill)
+                            .overlay {
+                                viewForTimelineItem(item)
+                            }
+                            .clipped()
+                            .scaleEffect(.init(width: 1, height: -1))
+                    }
+                }
+                
+                // Needs to be wrapped in a LazyStack otherwise appearance calls don't trigger
+                LazyVStack(spacing: 0) {
+                    Rectangle()
+                        .frame(height: 44)
+                        .foregroundStyle(.compound.bgCanvasDefault)
+                        .overlay(content: {
+                            if context.viewState.isBackPaginating {
+                                ProgressView()
+                            }
+                        })
+                        .onAppear {
+                            context.send(viewAction: .topBecameVisible)
                         }
-                        .clipped()
-                        .id(item.identifier)
+                        .onDisappear {
+                            context.send(viewAction: .topBecameHidden)
+                        }
                 }
             }
-            .scrollTargetLayout()
         }
-        .scrollPosition(id: $context.topTimelineItemIdentifier, anchor: .topLeading)
-        .scrollAnchor
+        .scaleEffect(.init(width: 1, height: -1))
         .onChange(of: context.screenMode) { _, _ in
             context.send(viewAction: .changedScreenMode)
-        }
-        .onChange(of: context.topTimelineItemIdentifier) { _, _ in
-            context.send(viewAction: .changedTopMostVisibleItem)
         }
     }
     
     @ViewBuilder func viewForTimelineItem(_ item: RoomTimelineItemViewState) -> some View {
         switch item.type {
         case .image(let timelineItem):
+            #warning("Make this work for gifs")
             LoadableImage(mediaSource: timelineItem.content.thumbnailInfo?.source ?? timelineItem.content.imageInfo.source,
                           mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
                           blurhash: timelineItem.content.blurhash,
@@ -95,7 +111,7 @@ struct MediaEventsTimelineScreen: View {
         }
     }
     
-    var playIcon: some View {
+    private var playIcon: some View {
         Image(systemName: "play.circle.fill")
             .resizable()
             .frame(width: 50, height: 50)
@@ -103,7 +119,7 @@ struct MediaEventsTimelineScreen: View {
             .foregroundColor(.white)
     }
     
-    var placeholder: some View {
+    private var placeholder: some View {
         Rectangle()
             .foregroundColor(.compound._bgBubbleIncoming)
             .opacity(0.3)
@@ -111,17 +127,6 @@ struct MediaEventsTimelineScreen: View {
 }
 
 extension View {
-    @ViewBuilder
-    var scrollAnchor: some View {
-        if #available(iOS 18.0, *) {
-            defaultScrollAnchor(.bottom, for: .sizeChanges)
-                .defaultScrollAnchor(.bottom, for: .alignment)
-                .defaultScrollAnchor(.bottom, for: .initialOffset)
-        } else {
-            defaultScrollAnchor(.bottom)
-        }
-    }
-    
     /// Constrains the max height of a media item in the timeline, whilst preserving its aspect ratio.
     @ViewBuilder
     func mediaItemAspectRatio(imageInfo: ImageInfoProxy?) -> some View {

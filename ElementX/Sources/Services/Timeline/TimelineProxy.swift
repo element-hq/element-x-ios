@@ -90,9 +90,9 @@ final class TimelineProxy: TimelineProxyProtocol {
         // can be shared between multiple instances of the same room on the stack, it is
         // safer to still use the subscription logic for back pagination when live.
         switch kind {
-        case .live, .media:
+        case .live:
             return await paginateBackwardsOnLive(requestSize: requestSize)
-        case .detached:
+        case .detached, .media:
             return await focussedPaginate(.backwards, requestSize: requestSize)
         case .pinned:
             return .success(())
@@ -319,7 +319,6 @@ final class TimelineProxy: TimelineProxyProtocol {
         return .success(())
     }
     
-    // swiftlint:disable:next function_parameter_count
     func sendVideo(url: URL,
                    thumbnailURL: URL,
                    videoInfo: VideoInfo,
@@ -560,7 +559,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     private func subscribeToPagination() async {
         switch kind {
-        case .live, .media:
+        case .live:
             let backPaginationListener = RoomPaginationStatusListener { [weak self] status in
                 guard let self else {
                     return
@@ -580,7 +579,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                 MXLog.error("Failed to subscribe to back pagination status with error: \(error)")
             }
             forwardPaginationStatusSubject.send(.timelineEndReached)
-        case .detached:
+        case .detached, .media:
             // Detached timelines don't support observation, set the initial state ourself.
             backPaginationStatusSubject.send(.idle)
             forwardPaginationStatusSubject.send(.idle)

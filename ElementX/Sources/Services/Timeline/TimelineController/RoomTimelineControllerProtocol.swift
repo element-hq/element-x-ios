@@ -32,6 +32,8 @@ protocol RoomTimelineControllerProtocol {
     var timelineKind: TimelineKind { get }
     
     var timelineItems: [RoomTimelineItemProtocol] { get }
+    var paginationState: PaginationState { get }
+    
     var callbacks: PassthroughSubject<RoomTimelineControllerCallback, Never> { get }
     
     func processItemAppearance(_ itemID: TimelineItemIdentifier) async

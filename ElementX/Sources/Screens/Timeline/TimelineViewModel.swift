@@ -107,6 +107,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             return self.timelineInteractionHandler.audioPlayerState(for: itemID)
         }
         
+        state.timelineState.paginationState = timelineController.paginationState
         buildTimelineViews(timelineItems: timelineController.timelineItems)
         
         updateMembers(roomProxy.membersPublisher.value)

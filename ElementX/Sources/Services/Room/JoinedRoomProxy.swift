@@ -16,7 +16,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private let room: RoomProtocol
     let timeline: TimelineProxyProtocol
     
-    #warning("why is this an optional? Is all of this even necessary?")
     private var innerPinnedEventsTimeline: TimelineProxyProtocol?
     private var innerPinnedEventsTimelineTask: Task<TimelineProxyProtocol?, Never>?
     var pinnedEventsTimeline: TimelineProxyProtocol? {

@@ -232,7 +232,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     
     private func finalizeRecording() async -> Result<Void, VoiceMessageRecorderError> {
         MXLog.info("finalize audio recording")
-        guard let url = audioRecorder.audioFileURL, audioRecorder.currentTime > 0 else {
+        guard audioRecorder.audioFileURL != nil, audioRecorder.currentTime > 0 else {
             return .failure(.previewNotAvailable)
         }
 

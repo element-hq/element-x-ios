@@ -41,9 +41,9 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
                                                     timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                                     mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError> {
         switch await roomProxy.messageFilteredTimeline(allowedMessageTypes: allowedMessageTypes) {
-        case .success(let mediaEventsTimeline):
+        case .success(let timelineProxy):
             return .success(RoomTimelineController(roomProxy: roomProxy,
-                                                   timelineProxy: mediaEventsTimeline,
+                                                   timelineProxy: timelineProxy,
                                                    initialFocussedEventID: nil,
                                                    timelineItemFactory: timelineItemFactory,
                                                    mediaProvider: mediaProvider,

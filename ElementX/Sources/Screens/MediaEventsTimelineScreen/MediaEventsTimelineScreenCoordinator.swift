@@ -68,19 +68,6 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        mediaProvider: parameters.mediaProvider)
     }
     
-    func start() {
-        viewModel.actionsPublisher.sink { [weak self] action in
-            MXLog.info("Coordinator: received view model action: \(action)")
-            
-            guard let self else { return }
-            switch action {
-            default:
-                break
-            }
-        }
-        .store(in: &cancellables)
-    }
-        
     func toPresentable() -> AnyView {
         AnyView(MediaEventsTimelineScreen(context: viewModel.context))
     }
