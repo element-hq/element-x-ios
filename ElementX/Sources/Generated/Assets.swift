@@ -59,6 +59,7 @@ internal enum Asset {
     internal static let backgroundLevel2 = ImageAsset(name: "images/background-level-2")
     internal static let backgroundLevel3 = ImageAsset(name: "images/background-level-3")
     internal static let btnCopyInviteCode = ImageAsset(name: "images/btn-copy-invite-code")
+    internal static let btnCreateAccount = ImageAsset(name: "images/btn_create_account")
     internal static let checkIcon = ImageAsset(name: "images/check-icon")
     internal static let conversationsListHeader = ImageAsset(name: "images/conversations-list-header")
     internal static let crossIcon = ImageAsset(name: "images/cross-icon")

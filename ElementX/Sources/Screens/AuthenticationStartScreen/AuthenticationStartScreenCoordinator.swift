@@ -41,6 +41,8 @@ final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.register)
                 case .reportProblem:
                     actionsSubject.send(.reportProblem)
+                case .verifyInviteCode(let invite):
+                    actionsSubject.send(.verifyInviteCode(inviteCode: invite))
                 }
             }
             .store(in: &cancellables)

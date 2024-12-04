@@ -21,7 +21,7 @@ enum LoadableImageMediaType: Equatable {
 }
 
 struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
-    private let mediaSource: MediaSourceProxy
+    private let mediaSource: MediaSourceProxy?
     private let mediaType: LoadableImageMediaType
     private let blurhash: String?
     private let size: CGSize?
@@ -60,27 +60,31 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
          mediaProvider: MediaProviderProtocol?,
          transformer: @escaping (AnyView) -> TransformerView = { $0 },
          placeholder: @escaping () -> PlaceholderView) {
-        self.init(mediaSource: MediaSourceProxy(url: url, mimeType: nil),
-                  mediaType: mediaType,
-                  blurhash: blurhash,
-                  size: size,
-                  mediaProvider: mediaProvider,
-                  transformer: transformer,
-                  placeholder: placeholder)
+        mediaSource = try? MediaSourceProxy(url: url, mimeType: nil)
+        self.mediaType = mediaType
+        self.blurhash = blurhash
+        self.size = size
+        self.mediaProvider = mediaProvider
+        self.transformer = transformer
+        self.placeholder = placeholder
     }
     
     var body: some View {
-        LoadableImageContent(mediaSource: mediaSource,
-                             mediaType: mediaType,
-                             blurhash: blurhash,
-                             size: size,
-                             mediaProvider: mediaProvider,
-                             transformer: transformer,
-                             placeholder: placeholder)
-            .id(stableMediaIdentifier)
+        if let mediaSource {
+            LoadableImageContent(mediaSource: mediaSource,
+                                 mediaType: mediaType,
+                                 blurhash: blurhash,
+                                 size: size,
+                                 mediaProvider: mediaProvider,
+                                 transformer: transformer,
+                                 placeholder: placeholder)
+                .id(stableMediaIdentifier)
+        } else {
+            placeholder()
+        }
     }
     
-    private var stableMediaIdentifier: String {
+    private var stableMediaIdentifier: String? {
         switch mediaType {
         case .timelineItem(let uniqueID):
             // Consider media for the same item to be the same view
@@ -88,7 +92,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
         default:
             // Binds the lifecycle of the LoadableImage to the associated URL.
             // This fixes the problem of the cache returning old values after a change in the URL.
-            mediaSource.url.absoluteString
+            mediaSource?.url.absoluteString
         }
     }
 }

@@ -16,17 +16,19 @@ class ZeroChatApi: ZeroChatApiProtocol {
     
     func notifyAboutMessage(roomId: String) async throws -> Result<Void, any Error> {
         let time = Int64(Date().timeIntervalSince1970 * 1000)
-        let parameters: Parameters = [
-            "roomId": roomId,
-            "sentAt": time
-        ]
+//        let parameters: Parameters = [
+//            "roomId": roomId,
+//            "sentAt": time
+//        ]
+        let request = ZSentMessage(roomId: roomId, sentAt: time)
         
         let result: Result<Void, Error> = try await APIManager
             .shared
             .authorisedRequest(ChatEndPoints.matrixMessageEndPoint,
                                method: .post,
                                appSettings: appSettings,
-                               parameters: parameters)
+                               //parameters: parameters)
+                               parameters: request.toDictionary())
         
         switch result {
         case .success:

@@ -46,7 +46,7 @@ struct GlobalSearchScreenListRow_Previews: PreviewProvider, TestablePreview {
                                                   description: "The best place in the whole wide world",
                                                   avatar: .room(id: "123",
                                                                 name: "Tech central",
-                                                                avatarURL: .picturesDirectory)),
+                                                                avatarURL: .mockMXCAvatar)),
                                       context: viewModel.context)
         }
     }

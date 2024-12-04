@@ -61,7 +61,7 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
     var senderAvatarMediaSource: MediaSourceProxy? {
         if let senderAvatarURLString = notificationSenderDisplayInfo?.avatarUrl ?? notificationItem.senderInfo.avatarUrl,
            let senderAvatarURL = URL(string: senderAvatarURLString) {
-            return MediaSourceProxy(url: senderAvatarURL, mimeType: nil)
+            return try? MediaSourceProxy(url: senderAvatarURL, mimeType: nil)
         }
         return nil
     }
@@ -69,7 +69,7 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
     var roomAvatarMediaSource: MediaSourceProxy? {
         if let roomAvatarURLString = isRoomOneToOne ? (notificationSenderDisplayInfo?.avatarUrl ?? notificationItem.roomInfo.avatarUrl) : notificationItem.roomInfo.avatarUrl,
            let roomAvatarURL = URL(string: roomAvatarURLString) {
-            return MediaSourceProxy(url: roomAvatarURL, mimeType: nil)
+            return try? MediaSourceProxy(url: roomAvatarURL, mimeType: nil)
         }
         return nil
     }

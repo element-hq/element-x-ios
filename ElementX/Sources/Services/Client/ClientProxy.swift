@@ -339,7 +339,7 @@ class ClientProxy: ClientProxyProtocol {
         stopSync(completion: nil)
     }
     
-    private func stopSync(completion: (() -> Void)?) {
+    func stopSync(completion: (() -> Void)?) {
         MXLog.info("Stopping sync")
         
         if restartTask != nil {

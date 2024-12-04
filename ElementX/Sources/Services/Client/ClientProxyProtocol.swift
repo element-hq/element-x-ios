@@ -69,7 +69,7 @@ struct RoomPreviewDetails {
     let topic: String?
     let avatarURL: URL?
     let memberCount: UInt
-    let isHistoryWorldReadable: Bool
+    let isHistoryWorldReadable: Bool?
     let isJoined: Bool
     let isInvited: Bool
     let isPublic: Bool
@@ -124,6 +124,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func startSync()
 
     func stopSync()
+    func stopSync(completion: (() -> Void)?) // Hopefully this will become async once we get SE-0371.
     
     func accountURL(action: AccountManagementAction) async -> URL?
     

@@ -13,11 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-
+import Combine
+import Compound
 import SwiftUI
 
 struct LandingScreen: View {
     @ObservedObject var context: AuthenticationStartScreenViewModel.Context
+    
+    @State private var keyboardHeight: CGFloat = 0
     
     var body: some View {
         LandingBackgroundView {
@@ -26,9 +29,17 @@ struct LandingScreen: View {
                 
                 actionButton
                 
-//                Spacer()
+                Spacer()
+                
+                createAccountSection
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .safeAreaInset(edge: .bottom) {
+                Color.clear.frame(height: keyboardHeight / 2)
+            }
+        }
+        .onReceive(Publishers.keyboardHeight) { height in
+            keyboardHeight = height
         }
     }
     
@@ -46,6 +57,52 @@ struct LandingScreen: View {
             Image(asset: Asset.Images.conversationsListHeader)
                 .frame(width: 358, height: 65)
         })
+    }
+    
+    var createAccountSection: some View {
+        VStack(alignment: .center) {
+            Text("Create Account")
+                .font(.zero.bodyLG)
+                .foregroundColor(.compound.textPrimary)
+                .padding(.vertical, 8)
+            
+            HStack(alignment: .center) {
+                TextField(text: $context.inviteCode) {
+                    Text("Invite Code")
+                        .foregroundColor(.compound.textSecondary)
+                }
+                .limitInputLength(context.viewState.VALID_INVITE_CODE_LENGTH, text: $context.inviteCode)
+                .frame(maxWidth: 200)
+                .textFieldStyle(.authentication(accessibilityIdentifier: "create-account_invite_code"))
+                .disableAutocorrection(true)
+                .autocapitalization(.allCharacters)
+                .submitLabel(.next)
+                .onSubmit {
+                    if context.viewState.isInviteCodeValid {
+                        context.send(viewAction: .verifyInviteCode(inviteCode: context.inviteCode))
+                    }
+                }
+                
+                Button {
+                    if context.viewState.isInviteCodeValid {
+                        context.send(viewAction: .verifyInviteCode(inviteCode: context.inviteCode))
+                    }
+                } label: {
+                    CompoundIcon(\.sendSolid)
+                        .padding(6)
+                        .foregroundColor(context.viewState.sendButtonDisabled ? .compound.iconDisabled : .zero.iconAccentTertiary)
+                        .background {
+                            Circle()
+                                .foregroundColor(context.viewState.sendButtonDisabled ? .clear : Asset.Colors.zeroDarkGrey.swiftUIColor)
+                        }
+                }
+                .disabled(context.viewState.sendButtonDisabled)
+                .animation(.linear(duration: 0.1).disabledDuringTests(), value: context.viewState.sendButtonDisabled)
+                .keyboardShortcut(.return, modifiers: [.command])
+                .padding(.horizontal, 6)
+            }
+        }
+        .padding(.bottom, 100)
     }
 }
 

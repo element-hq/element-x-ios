@@ -2,7 +2,7 @@ import CryptoSwift
 import Foundation
 
 class ZeroAttachmentService {
-    private let zeroAttachmentApi: ZeroAttachmentApi
+    private let zeroAttachmentApi: ZeroAttachmentApiProtocol
     private let appSettings: AppSettings
     
     private var isRoomEncrypted: Bool

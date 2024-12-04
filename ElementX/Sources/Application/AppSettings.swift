@@ -53,6 +53,7 @@ final class AppSettings {
         case zeroAccessToken
         case zeroMatrixUsers
         case zeroRewardsCredit
+        case zeroHasIncompleteSignup
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -246,6 +247,10 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.optimizeMediaUploads, defaultValue: true, storageType: .userDefaults(store))
     var optimizeMediaUploads
+    
+    /// Whether or not to show a warning on the media caption composer so the user knows
+    /// that captions might not be visible to users who are using other Matrix clients.
+    let shouldShowMediaCaptionWarning = true
 
     // MARK: - Element Call
     
@@ -318,6 +323,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.zeroRewardsCredit, defaultValue: ZeroRewards.empty(), storageType: .userDefaults(store))
     var zeroRewardsCredit: ZeroRewards
+    
+    @UserPreference(key: UserDefaultsKeys.zeroHasIncompleteSignup, defaultValue: false, storageType: .userDefaults(store))
+    var hasIncompleteZeroSignup: Bool
 }
 
 extension AppSettings: CommonSettingsProtocol { }

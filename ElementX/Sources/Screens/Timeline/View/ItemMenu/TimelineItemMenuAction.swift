@@ -13,18 +13,18 @@ import SwiftUI
 struct TimelineItemMenuActions {
     let reactions: [TimelineItemMenuReaction]
     let actions: [TimelineItemMenuAction]
-    let debugActions: [TimelineItemMenuAction]
+    let secondaryActions: [TimelineItemMenuAction]
     
     init?(isReactable: Bool,
           actions: [TimelineItemMenuAction],
-          debugActions: [TimelineItemMenuAction],
+          secondaryActions: [TimelineItemMenuAction],
           emojiProvider: EmojiProviderProtocol) {
-        if !isReactable, actions.isEmpty, debugActions.isEmpty {
+        if !isReactable, actions.isEmpty, secondaryActions.isEmpty {
             return nil
         }
         
         self.actions = actions
-        self.debugActions = debugActions
+        self.secondaryActions = secondaryActions
         
         var frequentlyUsed: OrderedSet<TimelineItemMenuReaction> = [
             .init(key: "👍️", symbol: .handThumbsup),
@@ -56,10 +56,12 @@ struct TimelineItemMenuReaction: Hashable {
 
 enum TimelineItemMenuAction: Identifiable, Hashable {
     case copy
+    case copyCaption
     case edit
     case addCaption
     case editCaption
     case removeCaption
+    case editPoll
     case copyPermalink
     case redact
     case reply(isThread: Bool)
@@ -79,7 +81,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     /// Whether the item should cancel a reply/edit occurring in the composer.
     var switchToDefaultComposer: Bool {
         switch self {
-        case .reply, .edit, .addCaption, .editCaption:
+        case .reply, .edit, .addCaption, .editCaption, .editPoll:
             return false
         default:
             return true
@@ -89,7 +91,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     /// Whether the action should be shown for an item that failed to send.
     var canAppearInFailedEcho: Bool {
         switch self {
-        case .copy, .edit, .redact, .viewSource:
+        case .copy, .edit, .redact, .viewSource, .editPoll:
             return true
         default:
             return false
@@ -130,7 +132,9 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     var label: some View {
         switch self {
         case .copy:
-            Label(L10n.actionCopy, icon: \.copy)
+            Label(L10n.actionCopyText, icon: \.copy)
+        case .copyCaption:
+            Label(L10n.actionCopyCaption, icon: \.copy)
         case .edit:
             Label(L10n.actionEdit, icon: \.edit)
         case .addCaption:
@@ -138,7 +142,9 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         case .editCaption:
             Label(L10n.actionEditCaption, icon: \.edit)
         case .removeCaption:
-            Label(L10n.actionRemoveCaption, icon: \.delete)
+            Label(L10n.actionRemoveCaption, icon: \.close)
+        case .editPoll:
+            Label(L10n.actionEditPoll, icon: \.edit)
         case .copyPermalink:
             Label(L10n.actionCopyLinkToMessage, icon: \.link)
         case .reply(let isThread):
@@ -146,7 +152,8 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         case .forward:
             Label(L10n.actionForward, icon: \.forward)
         case .redact:
-            Label(L10n.actionRemove, icon: \.delete)
+            //Label(L10n.actionRemoveMessage, icon: \.delete)
+            Label("Delete message", icon: \.delete)
         case .viewSource:
             Label(L10n.actionViewSource, icon: \.code)
         case .retryDecryption:

@@ -58,7 +58,7 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
     }
     
     func testAvatarDidChange() {
-        setupViewModel(roomProxyConfiguration: .init(name: "Some room", avatarURL: .picturesDirectory, members: [.mockMeAdmin]))
+        setupViewModel(roomProxyConfiguration: .init(name: "Some room", avatarURL: .mockMXCAvatar, members: [.mockMeAdmin]))
         context.send(viewAction: .removeImage)
         XCTAssertTrue(context.viewState.avatarDidChange)
         XCTAssertTrue(context.viewState.canSave)
@@ -100,7 +100,7 @@ class RoomDetailsEditScreenViewModelTests: XCTestCase {
     }
     
     func testDeleteAvatar() {
-        setupViewModel(roomProxyConfiguration: .init(name: "Some room", avatarURL: .picturesDirectory, members: [.mockMeAdmin]))
+        setupViewModel(roomProxyConfiguration: .init(name: "Some room", avatarURL: .mockMXCAvatar, members: [.mockMeAdmin]))
         XCTAssertNotNil(context.viewState.avatarURL)
         context.send(viewAction: .removeImage)
         XCTAssertNil(context.viewState.avatarURL)

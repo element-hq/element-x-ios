@@ -48,9 +48,7 @@ struct TimelineItemMenu: View {
                             .background(Color.compound.bgSubtlePrimary)
                     }
                     
-                    if !actions.debugActions.isEmpty {
-                        viewsForActions(actions.debugActions)
-                    }
+                    viewsForActions(actions.secondaryActions)
                 }
             }
         }
@@ -182,8 +180,8 @@ struct TimelineItemMenu: View {
                 send(action)
             } label: {
                 action.label
-                    .labelStyle(.menuSheet)
             }
+            .buttonStyle(.menuSheet)
         }
     }
     
@@ -264,21 +262,28 @@ private extension View {
 // MARK: - Previews
 
 struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
+    enum ItemType { case incomingText, outgoingMedia, outgoingMediaWithCaption }
+    
     static let viewModel = TimelineViewModel.mock
-    static let (item, actions) = makeItem()
-    static let (backupItem, _) = makeItem(authenticity: .notGuaranteed(color: .gray))
-    static let (unsignedItem, _) = makeItem(authenticity: .unsignedDevice(color: .red))
-    static let (unencryptedItem, _) = makeItem(authenticity: .sentInClear(color: .red))
-    static let (unknownFailureItem, _) = makeItem(deliveryStatus: .sendingFailed(.unknown))
-    static let (identityChangedItem, _) = makeItem(deliveryStatus: .sendingFailed(.verifiedUser(.changedIdentity(users: [
+    static let (item, actions) = makeActions()
+    static let (backupItem, _) = makeActions(authenticity: .notGuaranteed(color: .gray))
+    static let (unsignedItem, _) = makeActions(authenticity: .unsignedDevice(color: .red))
+    static let (unencryptedItem, _) = makeActions(authenticity: .sentInClear(color: .red))
+    static let (unknownFailureItem, _) = makeActions(deliveryStatus: .sendingFailed(.unknown))
+    static let (identityChangedItem, _) = makeActions(deliveryStatus: .sendingFailed(.verifiedUser(.changedIdentity(users: [
         "@alice:matrix.org"
     ]))))
-    static let (unsignedDevicesItem, _) = makeItem(deliveryStatus: .sendingFailed(.verifiedUser(.hasUnsignedDevice(devices: [
+    static let (unsignedDevicesItem, _) = makeActions(deliveryStatus: .sendingFailed(.verifiedUser(.hasUnsignedDevice(devices: [
         "@alice:matrix.org": ["DEVICE1", "DEVICE2"]
     ]))))
-    static let (ownUnsignedDevicesItem, _) = makeItem(deliveryStatus: .sendingFailed(.verifiedUser(.hasUnsignedDevice(devices: [
+    static let (ownUnsignedDevicesItem, _) = makeActions(deliveryStatus: .sendingFailed(.verifiedUser(.hasUnsignedDevice(devices: [
         RoomMemberProxyMock.mockMe.userID: ["DEVICE1"]
     ]))))
+    
+    // Media
+    
+    static let (mediaItem, mediaItemActions) = makeActions(itemType: .outgoingMedia)
+    static let (mediaItemWithCaption, mediaItemWithCaptionActions) = makeActions(itemType: .outgoingMediaWithCaption)
 
     static var previews: some View {
         TimelineItemMenu(item: item, actions: actions)
@@ -317,26 +322,56 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
         TimelineItemMenu(item: identityChangedItem, actions: actions)
             .environmentObject(viewModel.context)
             .previewDisplayName("Identity Changed")
+        
+        // Media
+        
+        TimelineItemMenu(item: mediaItem, actions: mediaItemActions)
+            .environmentObject(viewModel.context)
+            .previewDisplayName("Media")
+        
+        TimelineItemMenu(item: mediaItemWithCaption, actions: mediaItemWithCaptionActions)
+            .environmentObject(viewModel.context)
+            .previewDisplayName("Media with Caption")
     }
     
-    static func makeItem(authenticity: EncryptionAuthenticity? = nil,
-                         deliveryStatus: TimelineItemDeliveryStatus? = nil) -> (TextRoomTimelineItem, TimelineItemMenuActions)! {
-        guard var item = RoomTimelineItemFixtures.singleMessageChunk.first as? TextRoomTimelineItem,
-              let actions = TimelineItemMenuActions(isReactable: true,
-                                                    actions: [.copy, .edit, .reply(isThread: false), .pin, .redact],
-                                                    debugActions: [.viewSource],
-                                                    emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings)) else {
-            return nil
-        }
+    static func makeActions(itemType: ItemType = .incomingText,
+                            authenticity: EncryptionAuthenticity? = nil,
+                            deliveryStatus: TimelineItemDeliveryStatus? = nil) -> (EventBasedTimelineItemProtocol, TimelineItemMenuActions)! {
+        guard var item = makeItem(itemType: itemType) else { return nil }
+        let provider = TimelineItemMenuActionProvider(timelineItem: item,
+                                                      canCurrentUserRedactSelf: true,
+                                                      canCurrentUserRedactOthers: false,
+                                                      canCurrentUserPin: true,
+                                                      pinnedEventIDs: [],
+                                                      isDM: true,
+                                                      isViewSourceEnabled: true,
+                                                      isCreateMediaCaptionsEnabled: true,
+                                                      isPinnedEventsTimeline: false,
+                                                      emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+        guard let actions = provider.makeActions() else { return nil }
         
-        if let authenticity {
-            item.properties.encryptionAuthenticity = authenticity
-        }
-        
-        if let deliveryStatus {
-            item.properties.deliveryStatus = deliveryStatus
+        if var textItem = item as? TextRoomTimelineItem {
+            if let authenticity {
+                textItem.properties.encryptionAuthenticity = authenticity
+            }
+            
+            if let deliveryStatus {
+                textItem.properties.deliveryStatus = deliveryStatus
+            }
+            item = textItem
         }
         
         return (item, actions)
+    }
+    
+    static func makeItem(itemType: ItemType) -> EventBasedTimelineItemProtocol? {
+        switch itemType {
+        case .incomingText:
+            RoomTimelineItemFixtures.singleMessageChunk.first as? EventBasedTimelineItemProtocol
+        case .outgoingMedia:
+            RoomTimelineItemFixtures.mediaChunk[1] as? EventBasedTimelineItemProtocol
+        case .outgoingMediaWithCaption:
+            RoomTimelineItemFixtures.mediaChunk[5] as? EventBasedTimelineItemProtocol
+        }
     }
 }

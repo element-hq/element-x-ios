@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "btn_create_account.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

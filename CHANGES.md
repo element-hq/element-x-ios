@@ -1,3 +1,50 @@
+## Changes in 1.9.7 (2024-11-28)
+
+### What's Changed
+
+✨ Features
+* Support adding a caption to media uploads. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3531
+* Show both defaults and frequent emojis in the timeline item menu, make the list scrollable by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3534
+* Enable inline replies for push notifications. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3542
+
+🙌 Improvements
+* using `roomPreview` API for invited rooms by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3530
+* Add support for sharing URLs and text. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3546
+* Add support for adding/editing/removing media captions. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3547
+* Update how file captions are rendered by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3554
+
+🐛 Bugfixes
+* Handle NSItemProvider public.image data types. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3541
+* Fix the media upload preview screen on macOS. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3543
+* Delay handling inline notification replies until the user session is established by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3544
+* Put the share extension Info.plist updates in the xcodegen yaml 🤦‍♂️ by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3549
+* Fix the presentation of QuickLook when viewing logs on macOS. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3556
+* Stop delaying ElementCall until the next sync loop and only notify other participants when presumed to already be up to date. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3559
+* Add back missing send button when media captions are disabled. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3561
+* Fix a bug on iOS 17 where you couldn't long press on a message. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3567
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3552
+
+🧱 Build
+* Link the MatrixRustSDK dynamically and only embed it in the main target by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3539
+
+🚧 In development 🚧
+* Knock Requests List Screen by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3533
+* Knock Requests banner display logic by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3550
+* Knock Requests navigation flows by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3555
+
+Others
+* Fix UI tests, update compound to roll back snapshot testing and avoid the requirement for Swift Testing. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3540
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3545
+* Move timeline item tap gestures to the items themselves instead of the bubbled styler by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3553
+* Bump the RustSDK to v1.0.75 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3557
+* Move the media caption composer (and Add Caption action) behind a feature flag for now. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3560
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3565
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.9.6...1.9.7
+
 ## Changes in 1.9.6 (2024-11-19)
 
 ### What's Changed

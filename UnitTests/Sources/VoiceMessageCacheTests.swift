@@ -16,7 +16,7 @@ class VoiceMessageCacheTests: XCTestCase {
     private var mediaSource: MediaSourceProxy!
     private var fileManager: FileManager!
     
-    private let someURL = URL("/some/url")
+    private let someURL = URL.mockMXCAudio
     private let testFilename = "test-file"
     private let mpeg4aacFileExtension = "m4a"
     private let testTemporaryDirectory = URL.temporaryDirectory.appendingPathComponent("test-voice-messsage-cache")
@@ -26,7 +26,7 @@ class VoiceMessageCacheTests: XCTestCase {
         voiceMessageCache.clearCache()
         
         fileManager = FileManager.default
-        mediaSource = MediaSourceProxy(url: someURL, mimeType: "audio/ogg")
+        mediaSource = try MediaSourceProxy(url: someURL, mimeType: "audio/ogg")
         
         // Create the temporary directory we will use
         try fileManager.createDirectory(at: testTemporaryDirectory, withIntermediateDirectories: true)

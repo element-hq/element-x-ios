@@ -54,7 +54,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func start() {
-        showStartScreen()
+        // showStartScreen()
+        checkAndShowStartScreen()
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
@@ -66,6 +67,15 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     // MARK: - Private
+    
+    private func checkAndShowStartScreen() {
+        let hasPendingSignup = appSettings.hasIncompleteZeroSignup
+        if hasPendingSignup {
+            showCompletePendingSignupScreen()
+        } else {
+            showStartScreen()
+        }
+    }
     
     private func showStartScreen() {
         let parameters = AuthenticationStartScreenParameters(webRegistrationEnabled: appSettings.webRegistrationEnabled)
@@ -84,6 +94,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                     showServerConfirmationScreen(authenticationFlow: .register)
                 case .reportProblem:
                     showReportProblemScreen()
+                case .verifyInviteCode(let inviteCode):
+                    verifyInviteCode(inviteCode: inviteCode)
                 }
             }
             .store(in: &cancellables)
@@ -330,5 +342,77 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         default:
             userIndicatorController.alertInfo = AlertInfo(id: UUID())
         }
+    }
+    
+    private func verifyInviteCode(inviteCode: String) {
+        Task {
+            startLoading()
+            switch await authenticationService.verifyCreateAccountInviteCode(inviteCode: inviteCode) {
+            case .success:
+                stopLoading()
+                showCreateAccountScreen(inviteCode)
+            case .failure:
+                stopLoading()
+                userIndicatorController.alertInfo = AlertInfo(id: UUID(),
+                                                              title: L10n.commonError,
+                                                              message: "Invite code is not valid.")
+            }
+        }
+    }
+    
+    private func showCreateAccountScreen(_ inviteCode: String) {
+        let parameters = CreateAccountScreenParameters(authenticationService: authenticationService,
+                                                       userIndicatorController: userIndicatorController,
+                                                       inviteCode: inviteCode)
+        let coordinator = CreateAccountScreenCoordinator(parameters: parameters)
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+
+                switch action {
+                case .accountCreated:
+                    showCompleteProfileScreen(inviteCode)
+                case .openLoginScreen:
+                    navigationStackCoordinator.pop(animated: false)
+                    showLoginScreen()
+                }
+            }
+            .store(in: &cancellables)
+        navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func showCompletePendingSignupScreen() {
+        let coordinator = getCompleteProfileScreenCoordinator("", fromRoot: true)
+        
+        navigationStackCoordinator.setRootCoordinator(coordinator)
+        navigationRootCoordinator.setRootCoordinator(navigationStackCoordinator)
+    }
+    
+    private func showCompleteProfileScreen(_ inviteCode: String) {
+        let coordinator = getCompleteProfileScreenCoordinator(inviteCode)
+        
+        navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func getCompleteProfileScreenCoordinator(_ inviteCode: String, fromRoot: Bool = false) -> CompleteProfileScreenCoordinator {
+        let parameters = CompleteProfileScreenParameters(authenticationService: authenticationService,
+                                                         userIndicatorController: userIndicatorController,
+                                                         mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
+                                                         orientationManager: appMediator.windowManager,
+                                                         navigationStackCoordinator: navigationStackCoordinator,
+                                                         inviteCode: inviteCode)
+        let coordinator = CompleteProfileScreenCoordinator(parameters: parameters)
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .signedIn(let userSession):
+                    userHasSignedIn(userSession: userSession)
+                }
+            }
+            .store(in: &cancellables)
+        
+        return coordinator
     }
 }
