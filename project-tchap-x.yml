@@ -30,9 +30,12 @@ settings:
 include:
 - path: project.yml
 - path: TchapX/SupportingFiles/target-production.yml
-- path: TchapX/production/SupportingFiles/NSE/target.yml
 - path: TchapX/SupportingFiles/target-staging.yml
-- path: TchapX/staging/SupportingFiles/NSE/target.yml
 - path: TchapX/SupportingFiles/target-development.yml
-- path: TchapX/development/SupportingFiles/NSE/target.yml
+- path: TchapX-NSE/production/SupportingFiles/target.yml
+- path: TchapX-NSE/staging/SupportingFiles/target.yml
+- path: TchapX-NSE/development/SupportingFiles/target.yml
+- path: TchapX-ShareExtension/production/SupportingFiles/target.yml
+- path: TchapX-ShareExtension/staging/SupportingFiles/target.yml
+- path: TchapX-ShareExtension/development/SupportingFiles/target.yml
 - path: TchapX/SupportingFiles/target-unitTests.yml
