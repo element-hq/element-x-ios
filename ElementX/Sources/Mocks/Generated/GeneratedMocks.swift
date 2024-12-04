@@ -12357,15 +12357,15 @@ class RequestToJoinProxyMock: RequestToJoinProxyProtocol {
     }
     //MARK: - decline
 
-    var declineReasonUnderlyingCallsCount = 0
-    var declineReasonCallsCount: Int {
+    var declineUnderlyingCallsCount = 0
+    var declineCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return declineReasonUnderlyingCallsCount
+                return declineUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = declineReasonUnderlyingCallsCount
+                    returnValue = declineUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -12373,29 +12373,27 @@ class RequestToJoinProxyMock: RequestToJoinProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                declineReasonUnderlyingCallsCount = newValue
+                declineUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    declineReasonUnderlyingCallsCount = newValue
+                    declineUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var declineReasonCalled: Bool {
-        return declineReasonCallsCount > 0
+    var declineCalled: Bool {
+        return declineCallsCount > 0
     }
-    var declineReasonReceivedReason: String?
-    var declineReasonReceivedInvocations: [String?] = []
 
-    var declineReasonUnderlyingReturnValue: Result<Void, RequestToJoinProxyError>!
-    var declineReasonReturnValue: Result<Void, RequestToJoinProxyError>! {
+    var declineUnderlyingReturnValue: Result<Void, RequestToJoinProxyError>!
+    var declineReturnValue: Result<Void, RequestToJoinProxyError>! {
         get {
             if Thread.isMainThread {
-                return declineReasonUnderlyingReturnValue
+                return declineUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, RequestToJoinProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = declineReasonUnderlyingReturnValue
+                    returnValue = declineUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -12403,39 +12401,35 @@ class RequestToJoinProxyMock: RequestToJoinProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                declineReasonUnderlyingReturnValue = newValue
+                declineUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    declineReasonUnderlyingReturnValue = newValue
+                    declineUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var declineReasonClosure: ((String?) async -> Result<Void, RequestToJoinProxyError>)?
+    var declineClosure: (() async -> Result<Void, RequestToJoinProxyError>)?
 
-    func decline(reason: String?) async -> Result<Void, RequestToJoinProxyError> {
-        declineReasonCallsCount += 1
-        declineReasonReceivedReason = reason
-        DispatchQueue.main.async {
-            self.declineReasonReceivedInvocations.append(reason)
-        }
-        if let declineReasonClosure = declineReasonClosure {
-            return await declineReasonClosure(reason)
+    func decline() async -> Result<Void, RequestToJoinProxyError> {
+        declineCallsCount += 1
+        if let declineClosure = declineClosure {
+            return await declineClosure()
         } else {
-            return declineReasonReturnValue
+            return declineReturnValue
         }
     }
     //MARK: - ban
 
-    var banReasonUnderlyingCallsCount = 0
-    var banReasonCallsCount: Int {
+    var banUnderlyingCallsCount = 0
+    var banCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return banReasonUnderlyingCallsCount
+                return banUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = banReasonUnderlyingCallsCount
+                    returnValue = banUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -12443,29 +12437,27 @@ class RequestToJoinProxyMock: RequestToJoinProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                banReasonUnderlyingCallsCount = newValue
+                banUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    banReasonUnderlyingCallsCount = newValue
+                    banUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var banReasonCalled: Bool {
-        return banReasonCallsCount > 0
+    var banCalled: Bool {
+        return banCallsCount > 0
     }
-    var banReasonReceivedReason: String?
-    var banReasonReceivedInvocations: [String?] = []
 
-    var banReasonUnderlyingReturnValue: Result<Void, RequestToJoinProxyError>!
-    var banReasonReturnValue: Result<Void, RequestToJoinProxyError>! {
+    var banUnderlyingReturnValue: Result<Void, RequestToJoinProxyError>!
+    var banReturnValue: Result<Void, RequestToJoinProxyError>! {
         get {
             if Thread.isMainThread {
-                return banReasonUnderlyingReturnValue
+                return banUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, RequestToJoinProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = banReasonUnderlyingReturnValue
+                    returnValue = banUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -12473,26 +12465,22 @@ class RequestToJoinProxyMock: RequestToJoinProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                banReasonUnderlyingReturnValue = newValue
+                banUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    banReasonUnderlyingReturnValue = newValue
+                    banUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var banReasonClosure: ((String?) async -> Result<Void, RequestToJoinProxyError>)?
+    var banClosure: (() async -> Result<Void, RequestToJoinProxyError>)?
 
-    func ban(reason: String?) async -> Result<Void, RequestToJoinProxyError> {
-        banReasonCallsCount += 1
-        banReasonReceivedReason = reason
-        DispatchQueue.main.async {
-            self.banReasonReceivedInvocations.append(reason)
-        }
-        if let banReasonClosure = banReasonClosure {
-            return await banReasonClosure(reason)
+    func ban() async -> Result<Void, RequestToJoinProxyError> {
+        banCallsCount += 1
+        if let banClosure = banClosure {
+            return await banClosure()
         } else {
-            return banReasonReturnValue
+            return banReturnValue
         }
     }
     //MARK: - markAsSeen
