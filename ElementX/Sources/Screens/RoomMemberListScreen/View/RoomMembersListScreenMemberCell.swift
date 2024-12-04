@@ -91,13 +91,13 @@ struct RoomMembersListMemberCell_Previews: PreviewProvider, TestablePreview {
         .mockAdmin,
         .mockModerator,
         .init(with: .init(userID: "@nodisplayname:matrix.org", membership: .join)),
-        .init(with: .init(userID: "@avatar:matrix.org", displayName: "Avatar", avatarURL: .picturesDirectory, membership: .join))
+        .init(with: .init(userID: "@avatar:matrix.org", displayName: "Avatar", avatarURL: .mockMXCAvatar, membership: .join))
     ]
     
     static let bannedMembers: [RoomMemberProxyMock] = [
         .init(with: .init(userID: "@nodisplayname:matrix.org", membership: .ban)),
         .init(with: .init(userID: "@fake:matrix.org", displayName: "President", membership: .ban)),
-        .init(with: .init(userID: "@badavatar:matrix.org", avatarURL: .picturesDirectory, membership: .ban))
+        .init(with: .init(userID: "@badavatar:matrix.org", avatarURL: .mockMXCAvatar, membership: .ban))
     ]
     
     static let viewModel = RoomMembersListScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Some room",

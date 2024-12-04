@@ -13,11 +13,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d введена цифра</string>
+			<string>Введена %1$d цифра</string>
 			<key>few</key>
-			<string>%1$d введено цифри</string>
+			<string>Введено %1$d цифри</string>
 			<key>many</key>
-			<string>%1$d введено цифри</string>
+			<string>Введено %1$d цифр</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -141,7 +141,7 @@
 			<key>one</key>
 			<string>%d нове повідомлення</string>
 			<key>few</key>
-			<string>%d нових повідомлень</string>
+			<string>%d нові повідомлення</string>
 			<key>many</key>
 			<string>%d нових повідомлень</string>
 		</dict>
@@ -159,7 +159,7 @@
 			<key>one</key>
 			<string>%d непрочитане сповіщення</string>
 			<key>few</key>
-			<string>%d непрочитаних сповіщень</string>
+			<string>%d непрочитані сповіщення</string>
 			<key>many</key>
 			<string>%d непрочитаних сповіщень</string>
 		</dict>
@@ -229,9 +229,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Pinned message</string>
-			<key>other</key>
-			<string>%1$d Pinned messages</string>
+			<string>%1$d Закріплене повідомлення</string>
+			<key>few</key>
+			<string>%1$d Закріплених повідомлення</string>
+			<key>many</key>
+			<string>%1$d Закріплених повідомлення</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -250,6 +252,22 @@
 			<string>%1$d особи</string>
 			<key>many</key>
 			<string>%1$d осіб</string>
+		</dict>
+	</dict>
+	<key>screen_room_multiple_knock_requests_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ +%2$d other want to join this room</string>
+			<key>other</key>
+			<string>%1$@ +%2$d others want to join this room</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>
@@ -285,7 +303,7 @@
 			<key>few</key>
 			<string>%1$@%2$@ та %3$d інші</string>
 			<key>many</key>
-			<string>%1$@%2$@ та %3$d інші</string>
+			<string>%1$@%2$@ та %3$d інших</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members_second_component_ios</key>
@@ -337,7 +355,7 @@
 			<key>one</key>
 			<string>Виявлено %1$d постачальника: %2$@</string>
 			<key>few</key>
-			<string>Виявлено %1$d постачальників: %2$@</string>
+			<string>Виявлено %1$d постачальники: %2$@</string>
 			<key>many</key>
 			<string>Виявлено %1$d постачальників: %2$@</string>
 		</dict>
@@ -353,11 +371,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d дистриб'ютора знайдено: %2$@.</string>
+			<string>Знайдений %1$d дистриб'ютор: %2$@.</string>
 			<key>few</key>
-			<string>%1$d дистриб'юторів знайдено: %2$@.</string>
+			<string>Знайдено %1$d дистриб'ютори: %2$@.</string>
 			<key>many</key>
-			<string>%1$d дистриб'юторів знайдено: %2$@.</string>
+			<string>Знайдено %1$d дистриб'юторів: %2$@.</string>
 		</dict>
 	</dict>
 </dict>

@@ -284,9 +284,11 @@ extension FormatType {
 }
 
 enum ComposerMode: Equatable {
+    enum EditType { case `default`, addCaption, editCaption }
+    
     case `default`
     case reply(eventID: String, replyDetails: TimelineItemReplyDetails, isThread: Bool)
-    case edit(originalEventOrTransactionID: EventOrTransactionId)
+    case edit(originalEventOrTransactionID: EventOrTransactionId, type: EditType)
     case recordVoiceMessage(state: AudioRecorderState)
     case previewVoiceMessage(state: AudioPlayerState, waveform: WaveformSource, isUploading: Bool)
 

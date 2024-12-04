@@ -218,6 +218,56 @@ class RoomFlowCoordinatorTests: XCTestCase {
         XCTAssert(navigationStackCoordinator.stackCoordinators.first is RoomScreenCoordinator)
     }
     
+    func testShareMediaRoute() async throws {
+        await setupRoomFlowCoordinator()
+        
+        try await process(route: .room(roomID: "1", via: []))
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        
+        let sharePayload: ShareExtensionPayload = .mediaFile(roomID: "1", mediaFile: .init(url: .picturesDirectory, suggestedName: nil))
+        try await process(route: .share(sharePayload))
+        
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        
+        XCTAssertTrue((navigationStackCoordinator.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is MediaUploadPreviewScreenCoordinator)
+        
+        try await process(route: .childRoom(roomID: "2", via: []))
+        XCTAssertNil(navigationStackCoordinator.sheetCoordinator)
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
+        
+        try await process(route: .share(sharePayload))
+        
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        XCTAssertTrue((navigationStackCoordinator.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is MediaUploadPreviewScreenCoordinator)
+    }
+    
+    func testShareTextRoute() async throws {
+        await setupRoomFlowCoordinator()
+        
+        try await process(route: .room(roomID: "1", via: []))
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        
+        let sharePayload: ShareExtensionPayload = .text(roomID: "1", text: "Important text")
+        try await process(route: .share(sharePayload))
+        
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        
+        XCTAssertNil(navigationStackCoordinator.sheetCoordinator, "The media upload sheet shouldn't be shown when sharing text.")
+        
+        try await process(route: .childRoom(roomID: "2", via: []))
+        XCTAssertNil(navigationStackCoordinator.sheetCoordinator)
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 1)
+        
+        try await process(route: .share(sharePayload))
+        
+        XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
+        XCTAssertNil(navigationStackCoordinator.sheetCoordinator, "The media upload sheet shouldn't be shown when sharing text.")
+    }
+    
     // MARK: - Private
     
     private func process(route: AppRoute) async throws {

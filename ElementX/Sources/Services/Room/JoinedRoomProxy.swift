@@ -315,47 +315,22 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
-    func resend(itemID: TimelineItemIdentifier) async -> Result<Void, RoomProxyError> {
-        guard let transactionID = itemID.transactionID else {
-            MXLog.error("Attempting to resend an item that has no transaction ID: \(itemID)")
-            return .failure(.missingTransactionID)
-        }
-        
+    func ignoreDeviceTrustAndResend(devices: [String: [String]], sendHandle: SendHandleProxy) async -> Result<Void, RoomProxyError> {
         do {
-            try await room.tryResend(transactionId: transactionID)
+            try await room.ignoreDeviceTrustAndResend(devices: devices, sendHandle: sendHandle.underlyingHandle)
             return .success(())
         } catch {
-            MXLog.error("Failed resending \(transactionID) with error: \(error)")
+            MXLog.error("Failed trusting devices \(devices) and resending \(sendHandle.itemID) with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
     
-    func ignoreDeviceTrustAndResend(devices: [String: [String]], itemID: TimelineItemIdentifier) async -> Result<Void, RoomProxyError> {
-        guard let transactionID = itemID.transactionID else {
-            MXLog.error("Attempting to resend an item that has no transaction ID: \(itemID)")
-            return .failure(.missingTransactionID)
-        }
-        
+    func withdrawVerificationAndResend(userIDs: [String], sendHandle: SendHandleProxy) async -> Result<Void, RoomProxyError> {
         do {
-            try await room.ignoreDeviceTrustAndResend(devices: devices, transactionId: transactionID)
+            try await room.withdrawVerificationAndResend(userIds: userIDs, sendHandle: sendHandle.underlyingHandle)
             return .success(())
         } catch {
-            MXLog.error("Failed trusting devices \(devices) and resending \(transactionID) with error: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
-    
-    func withdrawVerificationAndResend(userIDs: [String], itemID: TimelineItemIdentifier) async -> Result<Void, RoomProxyError> {
-        guard let transactionID = itemID.transactionID else {
-            MXLog.error("Attempting to resend an item that has no transaction ID: \(itemID)")
-            return .failure(.missingTransactionID)
-        }
-        
-        do {
-            try await room.withdrawVerificationAndResend(userIds: userIDs, transactionId: transactionID)
-            return .success(())
-        } catch {
-            MXLog.error("Failed withdrawing verification of \(userIDs) and resending \(transactionID) with error: \(error)")
+            MXLog.error("Failed withdrawing verification of \(userIDs) and resending \(sendHandle.itemID) with error: \(error)")
             return .failure(.sdkError(error))
         }
     }

@@ -134,7 +134,7 @@ class AudioPlayerState: ObservableObject, Identifiable {
                 MXLog.info("updating duration: \(duration) -> \(audioPlayerDuration)")
                 duration = audioPlayerDuration
             }
-            fileURL = audioPlayer?.url
+            fileURL = audioPlayer?.playbackURL
             playbackState = .readyToPlay
         case .didStartPlaying:
             if let audioPlayer {

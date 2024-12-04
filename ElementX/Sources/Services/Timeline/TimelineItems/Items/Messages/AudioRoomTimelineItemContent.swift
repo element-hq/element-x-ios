@@ -17,5 +17,6 @@ struct AudioRoomTimelineItemContent: Hashable {
     let duration: TimeInterval
     let waveform: EstimatedWaveform?
     let source: MediaSourceProxy?
+    let fileSize: UInt?
     let contentType: UTType?
 }

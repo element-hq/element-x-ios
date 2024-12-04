@@ -69,7 +69,7 @@ struct ReadReceiptCell_Previews: PreviewProvider, TestablePreview {
         ReadReceiptCell(readReceipt: .init(userID: "@test:matrix.org",
                                            formattedTimestamp: "10:00"),
                         memberState: .init(displayName: "Test",
-                                           avatarURL: URL.documentsDirectory),
+                                           avatarURL: .mockMXCAvatar),
                         mediaProvider: MediaProviderMock(configuration: .init()))
             .previewDisplayName("With Image")
         ReadReceiptCell(readReceipt: .init(userID: "@test:matrix.org",

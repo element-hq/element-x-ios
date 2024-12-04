@@ -1,13 +1,13 @@
 name: Open Translations PR
 on:
   schedule:
-    # At 00:00 on every Monday UTC
-    - cron: '0 0 * * 1'
+    # At 03:00 on every Monday UTC
+    - cron: '0 3 * * 1'
   workflow_dispatch:
 
 jobs:
   open-translations-pr:
-    runs-on: macos-14
+    runs-on: macos-15
     # Skip in forks
     if: github.repository == 'element-hq/element-x-ios'
     steps:

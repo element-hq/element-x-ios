@@ -19,6 +19,7 @@ struct EncryptedRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
         case verificationViolation
         case insecureDevice
         case unknown
+        case historicalMessage
     }
     
     let id: TimelineItemIdentifier

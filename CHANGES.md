@@ -1,3 +1,174 @@
+## Changes in 1.9.7 (2024-11-28)
+
+### What's Changed
+
+✨ Features
+* Support adding a caption to media uploads. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3531
+* Show both defaults and frequent emojis in the timeline item menu, make the list scrollable by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3534
+* Enable inline replies for push notifications. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3542
+
+🙌 Improvements
+* using `roomPreview` API for invited rooms by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3530
+* Add support for sharing URLs and text. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3546
+* Add support for adding/editing/removing media captions. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3547
+* Update how file captions are rendered by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3554
+
+🐛 Bugfixes
+* Handle NSItemProvider public.image data types. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3541
+* Fix the media upload preview screen on macOS. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3543
+* Delay handling inline notification replies until the user session is established by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3544
+* Put the share extension Info.plist updates in the xcodegen yaml 🤦‍♂️ by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3549
+* Fix the presentation of QuickLook when viewing logs on macOS. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3556
+* Stop delaying ElementCall until the next sync loop and only notify other participants when presumed to already be up to date. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3559
+* Add back missing send button when media captions are disabled. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3561
+* Fix a bug on iOS 17 where you couldn't long press on a message. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3567
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3552
+
+🧱 Build
+* Link the MatrixRustSDK dynamically and only embed it in the main target by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3539
+
+🚧 In development 🚧
+* Knock Requests List Screen by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3533
+* Knock Requests banner display logic by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3550
+* Knock Requests navigation flows by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3555
+
+Others
+* Fix UI tests, update compound to roll back snapshot testing and avoid the requirement for Swift Testing. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3540
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3545
+* Move timeline item tap gestures to the items themselves instead of the bubbled styler by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3553
+* Bump the RustSDK to v1.0.75 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3557
+* Move the media caption composer (and Add Caption action) behind a feature flag for now. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3560
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3565
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.9.6...1.9.7
+
+## Changes in 1.9.6 (2024-11-19)
+
+### What's Changed
+
+✨ Features
+* Share extension by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3506
+* Enable local echoes for media uploads on development builds. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3514
+
+🙌 Improvements
+* Stacked Avatars View by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3504
+
+🐛 Bugfixes
+* Regenerate thumbnails to see if it helps with phantom avatar switching. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3503
+* Fix #1947 - Check expected files are still present before restoring a session. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3507
+* Fix Rooms that user has knocked not displaying the request sent screen by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3513
+* Fix share extension app group so it works for nightlies too by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3520
+* Fix toolbar icons disappearing on the iPad after backgrounding the app by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3521
+* Fix a bug where the security banner has the wrong state when out of sync. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3511
+* Fix image animations / remove fading when switching between local and remote echoes. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3525
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3523
+
+🧱 Build
+* Update the project to use Xcode 16.1 by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3505
+
+🚧 In development 🚧
+* Knock requests banner by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3510
+* Knocking Request Cell by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3516
+
+Others
+* Update the strings for unsupported calls. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3502
+* Bump the RustSDK to v1.0.67 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3512
+* UI test fixes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3515
+* Group image and video metadata in specialised structs by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3518
+* Update compound by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3519
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3524
+* Update compound iOS by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3532
+* Expose the public search feature flag in the developer settings and disable it by default. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3528
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3535
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.9.5...1.9.6
+
+## Changes in 1.9.5 (2024-11-11)
+
+### What's Changed
+
+🐛 Bugfixes
+* Stop setting up CallKit sessions when joining calls by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3496
+* Fix for creating a knocking room by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3499
+* Make stopSync more aware of background usage. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3501
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3500
+
+🚧 In development 🚧
+* Add alias to public room creation by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3450
+
+Others
+* Fix incorrect analytics mapping for UTDs. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3497
+* Update compound. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3498
+* Tweak the session verification icons and copy. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3495
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.9.4...1.9.5
+
+## Changes in 1.9.4 (2024-11-07)
+
+### What's Changed
+
+✨ Features
+* Hook reaction pickers into the system's recently used keyboard emojis by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3453
+* Incoming session verification support by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3428
+* Enable the Optimised Media Uploads feature. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3467
+
+🙌 Improvements
+* Enable identity pinning violation notifications unconditionally by @andybalaam in https://github.com/element-hq/element-x-ios/pull/3457
+* Tweak the flow for changing a recovery key. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3452
+* Replace individual RoomProxy properties with a stored RoomInfo. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3445
+* Use an https callback for OIDC once again. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3461
+* Tweak the flow for setting up a recovery key. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3463
+* Tweak the flow for disabling key storage. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3464
+* Directly show Recovery Key and Encryption Reset screens from the home screen banner. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3482
+
+🐛 Bugfixes
+* Fix the order of the frequently used emojis when showing them in the full reaction picker by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3455
+* Stop the sync loop after each background app refresh. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3481
+* Fix the Setup Recovery flow from the home screen banner. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3483
+* Fix race condition when setting up session verification controller subscriptions by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3486
+* Fix a couple of race conditions when observing room info updates for calls. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3487
+* Syncing fixes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3488
+* Start syncing when receiving a background VoIP call for the cases in which the app was suspended but not terminated by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3491
+* Update SDK 1.0.65 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3494
+
+🗣 Translations
+* Update translations and some snapshots. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3459
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3477
+
+🧱 Build
+* remove iOS 16 support by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3443
+* min macos support by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3451
+* Revert "min macos support" by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3458
+
+📄 Documentation
+* Update the README. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3480
+
+🚧 In development 🚧
+* Knocked Preview implementation by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3426
+* Switch optimised video uploads to use 720p by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3462
+
+Others
+* Update verify identity button title. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3466
+* Update the strings for out of sync Key Storage. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3468
+* Update SDK 1.0.63 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3479
+* Encryption Flow Coordinators. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3471
+* Update SDK 1.0.64 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3490
+* Fastlane fails resetting the right simulator, use `device` instead of `destination`. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3493
+
+### New Contributors
+* @andybalaam made their first contribution in https://github.com/element-hq/element-x-ios/pull/3457
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.9.3...1.9.4
+
 ## Changes in 1.9.3 (2024-10-24)
 
 ### What's Changed

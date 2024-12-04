@@ -9,6 +9,7 @@ import Compound
 import SwiftUI
 
 struct JoinRoomScreen: View {
+    private let maxKnockMessageLength = 500
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     
     @ObservedObject var context: JoinRoomScreenViewModel.Context
@@ -103,6 +104,13 @@ struct JoinRoomScreen: View {
             }
         }
     }
+    
+    private var knockMessageFooterString: String {
+        guard !context.knockMessage.isEmpty else {
+            return L10n.screenJoinRoomKnockMessageDescription
+        }
+        return "\(context.knockMessage.count)/\(maxKnockMessageLength)"
+    }
         
     @ViewBuilder
     private var knockMessage: some View {
@@ -110,7 +118,7 @@ struct JoinRoomScreen: View {
             HStack(spacing: 0) {
                 TextField("", text: $context.knockMessage, axis: .vertical)
                     .onChange(of: context.knockMessage) { _, newValue in
-                        context.knockMessage = String(newValue.prefix(1000))
+                        context.knockMessage = String(newValue.prefix(maxKnockMessageLength))
                     }
                     .lineLimit(4, reservesSpace: true)
                     .font(.compound.bodyMD)
@@ -125,8 +133,8 @@ struct JoinRoomScreen: View {
                     .stroke(.compound.borderInteractivePrimary)
             }
             
-            Text(L10n.screenJoinRoomKnockMessageDescription)
-                .font(.compound.bodyMD)
+            Text(knockMessageFooterString)
+                .font(.compound.bodySM)
                 .foregroundStyle(.compound.textSecondary)
         }
     }
@@ -237,11 +245,11 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
             switch mode {
             case .knocked:
                 clientProxy.roomForIdentifierClosure = { _ in
-                    .knocked(KnockedRoomProxyMock(.init(avatarURL: URL.homeDirectory)))
+                    .knocked(KnockedRoomProxyMock(.init(avatarURL: .mockMXCAvatar)))
                 }
             case .invited:
                 clientProxy.roomForIdentifierClosure = { _ in
-                    .invited(InvitedRoomProxyMock(.init(avatarURL: URL.homeDirectory)))
+                    .invited(InvitedRoomProxyMock(.init(avatarURL: .mockMXCAvatar)))
                 }
             default:
                 break
@@ -251,7 +259,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
                                                                                 canonicalAlias: "#3🌞problem:matrix.org",
                                                                                 // swiftlint:disable:next line_length
                                                                                 topic: "“Science and technology were the only keys to opening the door to the future, and people approached science with the faith and sincerity of elementary school students.”",
-                                                                                avatarURL: URL.homeDirectory,
+                                                                                avatarURL: .mockMXCAvatar,
                                                                                 memberCount: UInt(100),
                                                                                 isHistoryWorldReadable: false,
                                                                                 isJoined: membership.isJoined,

@@ -56,6 +56,13 @@ protocol RoomTimelineControllerProtocol {
               html: String?,
               intentionalMentions: IntentionalMentions) async
     
+    func editCaption(_ eventOrTransactionID: EventOrTransactionId,
+                     message: String,
+                     html: String?,
+                     intentionalMentions: IntentionalMentions) async
+    
+    func removeCaption(_ eventOrTransactionID: EventOrTransactionId) async
+    
     func toggleReaction(_ reaction: String, to eventOrTransactionID: EventOrTransactionId) async
 
     func redact(_ eventOrTransactionID: EventOrTransactionId) async
@@ -67,6 +74,8 @@ protocol RoomTimelineControllerProtocol {
     func messageEventContent(for itemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation?
     
     func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo
+    
+    func sendHandle(for itemID: TimelineItemIdentifier) -> SendHandleProxy?
     
     func retryDecryption(for sessionID: String) async
     

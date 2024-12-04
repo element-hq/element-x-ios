@@ -15,6 +15,7 @@ import WysiwygComposer
 typealias ComposerToolbarViewModelType = StateStoreViewModel<ComposerToolbarViewState, ComposerToolbarViewAction>
 
 final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerToolbarViewModelProtocol {
+    private var initialText: String?
     private let wysiwygViewModel: WysiwygComposerViewModel
     private let completionSuggestionService: CompletionSuggestionServiceProtocol
     private let analyticsService: AnalyticsService
@@ -41,12 +42,14 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     
     private var replyLoadingTask: Task<Void, Never>?
 
-    init(wysiwygViewModel: WysiwygComposerViewModel,
+    init(initialText: String? = nil,
+         wysiwygViewModel: WysiwygComposerViewModel,
          completionSuggestionService: CompletionSuggestionServiceProtocol,
          mediaProvider: MediaProviderProtocol,
          mentionDisplayHelper: MentionDisplayHelper,
          analyticsService: AnalyticsService,
          composerDraftService: ComposerDraftServiceProtocol) {
+        self.initialText = initialText
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
         self.analyticsService = analyticsService
@@ -206,6 +209,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             } else {
                 set(text: plainText)
             }
+        case .setFocus:
+            state.bindings.composerFocused = true
         case .removeFocus:
             state.bindings.composerFocused = false
         case .clear:
@@ -219,8 +224,12 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         }
     }
     
-    func loadDraft() {
-        Task {
+    func loadDraft() async {
+        if let initialText {
+            set(text: initialText)
+            set(mode: .default)
+            state.bindings.composerFocused = true
+        } else {
             guard case let .success(draft) = await draftService.loadDraft(),
                   let draft else {
                 return
@@ -258,7 +267,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .newMessage:
             set(mode: .default)
         case .edit(let eventID):
-            set(mode: .edit(originalEventOrTransactionID: .eventId(eventId: eventID)))
+            set(mode: .edit(originalEventOrTransactionID: .eventId(eventId: eventID), type: .default))
         case .reply(let eventID):
             set(mode: .reply(eventID: eventID, replyDetails: .loading(eventID: eventID), isThread: false))
             replyLoadingTask = Task {
@@ -314,7 +323,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         switch state.composerMode {
         case .default:
             type = .newMessage
-        case .edit(.eventId(let originalEventID)):
+        case .edit(.eventId(let originalEventID), .default):
             type = .edit(eventID: originalEventID)
         case .reply(let eventID, _, _):
             type = .reply(eventID: eventID)

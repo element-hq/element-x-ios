@@ -22,7 +22,7 @@ enum RoomAvatar: Equatable {
 struct RoomAvatarImage: View {
     let avatar: RoomAvatar
     
-    let avatarSize: AvatarSize
+    let avatarSize: Avatars.Size
     let mediaProvider: MediaProviderProtocol?
     
     private(set) var onAvatarTap: ((URL) -> Void)?
@@ -97,7 +97,7 @@ struct RoomAvatarImage_Previews: PreviewProvider, TestablePreview {
             
             RoomAvatarImage(avatar: .room(id: "!2:server.com",
                                           name: "Room",
-                                          avatarURL: .picturesDirectory),
+                                          avatarURL: .mockMXCAvatar),
                             avatarSize: .room(on: .home),
                             mediaProvider: MediaProviderMock(configuration: .init()))
             
@@ -109,7 +109,7 @@ struct RoomAvatarImage_Previews: PreviewProvider, TestablePreview {
             
             RoomAvatarImage(avatar: .heroes([.init(userID: "@user:server.com",
                                                    displayName: "User",
-                                                   avatarURL: .picturesDirectory)]),
+                                                   avatarURL: .mockMXCAvatar)]),
             avatarSize: .room(on: .home),
             mediaProvider: MediaProviderMock(configuration: .init()))
             

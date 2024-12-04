@@ -152,12 +152,20 @@ private extension TimelineItemSendInfo {
         layoutType = switch timelineItem {
         case is TextBasedRoomTimelineItem:
             .overlay(capsuleStyle: false)
-        case let message as EventBasedMessageTimelineItemProtocol where message is ImageRoomTimelineItem || message is VideoRoomTimelineItem:
-            .overlay(capsuleStyle: !message.hasMediaCaption)
+        case let message as EventBasedMessageTimelineItemProtocol:
+            switch message {
+            case is ImageRoomTimelineItem, is VideoRoomTimelineItem:
+                .overlay(capsuleStyle: !message.hasMediaCaption)
+            case is AudioRoomTimelineItem, is FileRoomTimelineItem:
+                // swiftlint:disable:next void_function_in_ternary
+                message.hasMediaCaption ? .overlay(capsuleStyle: false) : .horizontal(spacing: 0) // No spacing as the content already contains it.
+            case let locationTimelineItem as LocationRoomTimelineItem:
+                .overlay(capsuleStyle: locationTimelineItem.content.geoURI != nil)
+            default:
+                .horizontal()
+            }
         case is StickerRoomTimelineItem:
             .overlay(capsuleStyle: true)
-        case let locationTimelineItem as LocationRoomTimelineItem:
-            .overlay(capsuleStyle: locationTimelineItem.content.geoURI != nil)
         case is PollRoomTimelineItem:
             .vertical(spacing: 16)
         default:

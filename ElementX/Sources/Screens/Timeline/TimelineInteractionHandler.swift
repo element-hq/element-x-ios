@@ -100,12 +100,15 @@ class TimelineInteractionHandler {
         
         switch action {
         case .copy:
-            guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else {
+            guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else { return }
+            UIPasteboard.general.string = messageTimelineItem.body
+        case .copyCaption:
+            guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol,
+                  let caption = messageTimelineItem.mediaCaption else {
                 return
             }
-            
-            UIPasteboard.general.string = messageTimelineItem.body
-        case .edit:
+            UIPasteboard.general.string = caption
+        case .edit, .addCaption, .editCaption, .editPoll:
             switch timelineItem {
             case let messageTimelineItem as EventBasedMessageTimelineItemProtocol:
                 processEditMessageEvent(messageTimelineItem)
@@ -118,6 +121,12 @@ class TimelineInteractionHandler {
             default:
                 MXLog.error("Cannot edit item with id: \(timelineItem.id)")
             }
+        case .removeCaption:
+            guard case let .event(_, eventOrTransactionID) = timelineItem.id else {
+                MXLog.error("Failed removing caption, missing event ID")
+                return
+            }
+            Task { await timelineController.removeCaption(eventOrTransactionID) }
         case .copyPermalink:
             guard let eventID = eventTimelineItem.id.eventID else {
                 actionsSubject.send(.displayErrorToast(L10n.errorFailedCreatingThePermalink))
@@ -133,17 +142,10 @@ class TimelineInteractionHandler {
                 UIPasteboard.general.url = permalinkURL
             }
         case .redact:
-            guard case let .event(_, eventOrTransactionID) = itemID else {
-                fatalError()
-            }
-            
-            Task {
-                await timelineController.redact(eventOrTransactionID)
-            }
+            guard case let .event(_, eventOrTransactionID) = itemID else { fatalError() }
+            Task { await timelineController.redact(eventOrTransactionID) }
         case .reply:
-            guard let eventID = eventTimelineItem.id.eventID else {
-                return
-            }
+            guard let eventID = eventTimelineItem.id.eventID else { return }
             
             let replyInfo = buildReplyInfo(for: eventTimelineItem)
             let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, eventID: eventID, eventContent: replyInfo.type)
@@ -156,21 +158,14 @@ class TimelineInteractionHandler {
             MXLog.info("Showing debug info for \(eventTimelineItem.id)")
             actionsSubject.send(.showDebugInfo(debugInfo))
         case .retryDecryption(let sessionID):
-            Task {
-                await timelineController.retryDecryption(for: sessionID)
-            }
+            Task { await timelineController.retryDecryption(for: sessionID) }
         case .report:
             actionsSubject.send(.displayReportContent(itemID: itemID, senderID: eventTimelineItem.sender.id))
         case .react:
             displayEmojiPicker(for: itemID)
         case .toggleReaction(let key):
-            Task {
-                guard case let .event(_, eventOrTransactionID) = itemID else {
-                    fatalError()
-                }
-                
-                await timelineController.toggleReaction(key, to: eventOrTransactionID)
-            }
+            guard case let .event(_, eventOrTransactionID) = itemID else { fatalError() }
+            Task { await timelineController.toggleReaction(key, to: eventOrTransactionID) }
         case .endPoll(let pollStartID):
             endPoll(pollStartID: pollStartID)
         case .pin:
@@ -202,18 +197,35 @@ class TimelineInteractionHandler {
         
         let text: String
         var htmlText: String?
+        var editType = ComposerMode.EditType.default
         switch messageTimelineItem.contentType {
         case .text(let content):
             text = content.body
             htmlText = content.formattedBodyHTMLString
         case .emote(let content):
             text = "/me " + content.body
+        case .audio(let content):
+            text = content.caption ?? ""
+            htmlText = content.formattedCaptionHTMLString
+            editType = text.isEmpty ? .addCaption : .editCaption
+        case .file(let content):
+            text = content.caption ?? ""
+            htmlText = content.formattedCaptionHTMLString
+            editType = text.isEmpty ? .addCaption : .editCaption
+        case .image(let content):
+            text = content.caption ?? ""
+            htmlText = content.formattedCaptionHTMLString
+            editType = text.isEmpty ? .addCaption : .editCaption
+        case .video(let content):
+            text = content.caption ?? ""
+            htmlText = content.formattedCaptionHTMLString
+            editType = text.isEmpty ? .addCaption : .editCaption
         default:
             text = messageTimelineItem.body
         }
         
         // Always update the mode first and then the text so that the composer has time to save the text draft
-        actionsSubject.send(.composer(action: .setMode(mode: .edit(originalEventOrTransactionID: eventOrTransactionID))))
+        actionsSubject.send(.composer(action: .setMode(mode: .edit(originalEventOrTransactionID: eventOrTransactionID, type: editType))))
         actionsSubject.send(.composer(action: .setText(plainText: text, htmlText: htmlText)))
     }
     
@@ -248,54 +260,20 @@ class TimelineInteractionHandler {
     // MARK: Pasting and dropping
     
     func handlePasteOrDrop(_ provider: NSItemProvider) {
-        guard let contentType = provider.preferredContentType,
-              let preferredExtension = contentType.preferredFilenameExtension else {
-            MXLog.error("Invalid NSItemProvider: \(provider)")
-            actionsSubject.send(.displayErrorToast(L10n.screenRoomErrorFailedProcessingMedia))
-            return
-        }
-        
-        let providerSuggestedName = provider.suggestedName
-        let providerDescription = provider.description
-        
-        _ = provider.loadDataRepresentation(for: contentType) { data, error in
-            Task { @MainActor in
-                let loadingIndicatorIdentifier = UUID().uuidString
-                self.userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
-                defer {
-                    self.userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
-                }
-
-                if let error {
-                    self.actionsSubject.send(.displayErrorToast(L10n.screenRoomErrorFailedProcessingMedia))
-                    MXLog.error("Failed processing NSItemProvider: \(providerDescription) with error: \(error)")
-                    return
-                }
-
-                guard let data else {
-                    self.actionsSubject.send(.displayErrorToast(L10n.screenRoomErrorFailedProcessingMedia))
-                    MXLog.error("Invalid NSItemProvider data: \(providerDescription)")
-                    return
-                }
-
-                do {
-                    let url = try await Task.detached {
-                        if let filename = providerSuggestedName {
-                            let hasExtension = !(filename as NSString).pathExtension.isEmpty
-                            let filename = hasExtension ? filename : "\(filename).\(preferredExtension)"
-                            return try FileManager.default.writeDataToTemporaryDirectory(data: data, fileName: filename)
-                        } else {
-                            let filename = "\(UUID().uuidString).\(preferredExtension)"
-                            return try FileManager.default.writeDataToTemporaryDirectory(data: data, fileName: filename)
-                        }
-                    }.value
-
-                    self.actionsSubject.send(.displayMediaUploadPreviewScreen(url: url))
-                } catch {
-                    self.actionsSubject.send(.displayErrorToast(L10n.screenRoomErrorFailedProcessingMedia))
-                    MXLog.error("Failed storing NSItemProvider data \(providerDescription) with error: \(error)")
-                }
+        Task {
+            let loadingIndicatorIdentifier = UUID().uuidString
+            self.userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+            defer {
+                self.userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
             }
+            
+            guard let fileURL = await provider.storeData() else {
+                MXLog.error("Failed storing NSItemProvider data \(provider)")
+                self.actionsSubject.send(.displayErrorToast(L10n.screenRoomErrorFailedProcessingMedia))
+                return
+            }
+            
+            self.actionsSubject.send(.displayMediaUploadPreviewScreen(url: fileURL))
         }
     }
     
@@ -429,10 +407,7 @@ class TimelineInteractionHandler {
             return
         }
         
-        guard case .success(let mediaPlayer) = mediaPlayerProvider.player(for: source), let audioPlayer = mediaPlayer as? AudioPlayerProtocol else {
-            MXLog.error("Cannot play a voice message without an audio player")
-            return
-        }
+        let audioPlayer = mediaPlayerProvider.player
 
         // Stop any recording in progress
         if voiceMessageRecorder.isRecording {
@@ -451,7 +426,7 @@ class TimelineInteractionHandler {
         // Detach all other states
         await mediaPlayerProvider.detachAllStates(except: audioPlayerState)
 
-        guard audioPlayer.mediaSource == source, audioPlayer.state != .error else {
+        guard audioPlayer.sourceURL == source.url, audioPlayer.state != .error else {
             // Load content
             do {
                 MXLog.info("Loading voice message audio content from source for itemID \(itemID)")
@@ -459,7 +434,7 @@ class TimelineInteractionHandler {
 
                 // Make sure that the player is still attached, as it may have been detached while waiting for the voice message to be loaded.
                 if audioPlayerState.isAttached {
-                    audioPlayer.load(mediaSource: source, using: url, autoplay: true)
+                    audioPlayer.load(sourceURL: source.url, playbackURL: url, autoplay: true)
                 }
             } catch {
                 MXLog.error("Failed to load voice message: \(error)")
@@ -553,11 +528,11 @@ class TimelineInteractionHandler {
         
         switch timelineItem {
         case let item as ImageRoomTimelineItem:
-            source = item.content.source
+            source = item.content.imageInfo.source
             filename = item.content.filename
             caption = item.content.caption
         case let item as VideoRoomTimelineItem:
-            source = item.content.source
+            source = item.content.videoInfo.source
             filename = item.content.filename
             caption = item.content.caption
         case let item as FileRoomTimelineItem:

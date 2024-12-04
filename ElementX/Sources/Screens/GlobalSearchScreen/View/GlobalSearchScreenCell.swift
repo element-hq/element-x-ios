@@ -16,8 +16,8 @@ struct GlobalSearchScreenListRow: View {
     
     var body: some View {
         ZStack { // The list row swallows listRowBackgrounds for some reason
-            ListRow(label: .avatar(title: room.name,
-                                   description: room.alias ?? room.id,
+            ListRow(label: .avatar(title: room.title,
+                                   description: room.description,
                                    icon: avatar),
                     kind: .label)
         }
@@ -42,11 +42,11 @@ struct GlobalSearchScreenListRow_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         List {
             GlobalSearchScreenListRow(room: .init(id: "123",
-                                                  name: "Tech central",
-                                                  alias: "The best place in the whole wide world",
+                                                  title: "Tech central",
+                                                  description: "The best place in the whole wide world",
                                                   avatar: .room(id: "123",
                                                                 name: "Tech central",
-                                                                avatarURL: .picturesDirectory)),
+                                                                avatarURL: .mockMXCAvatar)),
                                       context: viewModel.context)
         }
     }

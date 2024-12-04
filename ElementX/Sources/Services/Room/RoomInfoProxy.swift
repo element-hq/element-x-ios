@@ -8,7 +8,19 @@
 import Foundation
 import MatrixRustSDK
 
-struct RoomInfoProxy {
+protocol BaseRoomInfoProxyProtocol {
+    var id: String { get }
+    var displayName: String? { get }
+    var avatar: RoomAvatar { get }
+    var topic: String? { get }
+    var canonicalAlias: String? { get }
+    var avatarURL: URL? { get }
+    var activeMembersCount: Int { get }
+    var isDirect: Bool { get }
+    var isSpace: Bool { get }
+}
+
+struct RoomInfoProxy: BaseRoomInfoProxyProtocol {
     let roomInfo: RoomInfo
     
     var id: String { roomInfo.id }
@@ -53,4 +65,30 @@ struct RoomInfoProxy {
     var unreadNotificationsCount: UInt { UInt(roomInfo.numUnreadNotifications) }
     var unreadMentionsCount: UInt { UInt(roomInfo.numUnreadMentions) }
     var pinnedEventIDs: Set<String> { Set(roomInfo.pinnedEventIds) }
+    var joinRule: JoinRule? { roomInfo.joinRule }
+}
+
+struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
+    let roomPreviewInfo: RoomPreviewInfo
+    
+    var id: String { roomPreviewInfo.roomId }
+    var displayName: String? { roomPreviewInfo.name }
+    var heroes: [RoomHero] { roomPreviewInfo.heroes ?? [] }
+    var topic: String? { roomPreviewInfo.topic }
+    var canonicalAlias: String? { roomPreviewInfo.canonicalAlias }
+    var avatarURL: URL? { roomPreviewInfo.avatarUrl.flatMap(URL.init) }
+    var isDirect: Bool { roomPreviewInfo.isDirect ?? false }
+    var isSpace: Bool { roomPreviewInfo.roomType == .space }
+    var activeMembersCount: Int { Int(roomPreviewInfo.numActiveMembers ?? roomPreviewInfo.numJoinedMembers) }
+    
+    /// The room's avatar info for use in a ``RoomAvatarImage``.
+    var avatar: RoomAvatar {
+        if isDirect, avatarURL == nil {
+            if heroes.count == 1 {
+                return .heroes(heroes.map(UserProfileProxy.init))
+            }
+        }
+        
+        return .room(id: id, name: displayName, avatarURL: avatarURL)
+    }
 }

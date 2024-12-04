@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct VideoRoomTimelineView: View {
-    @EnvironmentObject private var context: TimelineViewModel.Context
+    @Environment(\.timelineContext) private var context
     let timelineItem: VideoRoomTimelineItem
     
     private var hasMediaCaption: Bool { timelineItem.content.caption != nil }
@@ -18,13 +18,15 @@ struct VideoRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             VStack(alignment: .leading, spacing: 4) {
                 thumbnail
-                    .timelineMediaFrame(height: timelineItem.content.height,
-                                        aspectRatio: timelineItem.content.aspectRatio)
+                    .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo)
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel(L10n.commonVideo)
                     // This clip shape is distinct from the one in the styler as that one
                     // operates on the entire message so wouldn't round the bottom corners.
                     .clipShape(RoundedRectangle(cornerRadius: hasMediaCaption ? 6 : 0))
+                    .onTapGesture {
+                        context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
+                    }
                 
                 if let attributedCaption = timelineItem.content.formattedCaption {
                     FormattedBodyText(attributedString: attributedCaption,
@@ -41,11 +43,12 @@ struct VideoRoomTimelineView: View {
     
     @ViewBuilder
     var thumbnail: some View {
-        if let thumbnailSource = timelineItem.content.thumbnailSource {
+        if let thumbnailSource = timelineItem.content.thumbnailInfo?.source {
             LoadableImage(mediaSource: thumbnailSource,
-                          mediaType: .timelineItem,
+                          mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
                           blurhash: timelineItem.content.blurhash,
-                          mediaProvider: context.mediaProvider) { imageView in
+                          size: timelineItem.content.thumbnailInfo?.size,
+                          mediaProvider: context?.mediaProvider) { imageView in
                 imageView
                     .overlay { playIcon }
             } placeholder: {
@@ -88,9 +91,8 @@ struct VideoRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(filename: "video.mp4",
-                                                                                     duration: 21,
-                                                                                     source: nil,
-                                                                                     thumbnailSource: nil)))
+                                                                                     videoInfo: .mockVideo,
+                                                                                     thumbnailInfo: nil)))
 
             VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: .randomEvent,
                                                                       timestamp: "Now",
@@ -100,9 +102,8 @@ struct VideoRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(filename: "other.mp4",
-                                                                                     duration: 22,
-                                                                                     source: nil,
-                                                                                     thumbnailSource: nil)))
+                                                                                     videoInfo: .mockVideo,
+                                                                                     thumbnailInfo: nil)))
             
             VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: .randomEvent,
                                                                       timestamp: "Now",
@@ -112,10 +113,8 @@ struct VideoRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(filename: "Blurhashed.mp4",
-                                                                                     duration: 23,
-                                                                                     source: nil,
-                                                                                     thumbnailSource: nil,
-                                                                                     aspectRatio: 0.7,
+                                                                                     videoInfo: .mockVideo,
+                                                                                     thumbnailInfo: nil,
                                                                                      blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW")))
             
             VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: .randomEvent,
@@ -127,9 +126,8 @@ struct VideoRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(filename: "video.mp4",
                                                                                      caption: "This is a caption",
-                                                                                     duration: 21,
-                                                                                     source: nil,
-                                                                                     thumbnailSource: nil)))
+                                                                                     videoInfo: .mockVideo,
+                                                                                     thumbnailInfo: nil)))
         }
     }
 }

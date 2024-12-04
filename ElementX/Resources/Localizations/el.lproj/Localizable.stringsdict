@@ -226,6 +226,22 @@
 			<string>%1$d άτομα</string>
 		</dict>
 	</dict>
+	<key>screen_room_multiple_knock_requests_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Οι χρήστες %1$@ +%2$d ακόμη θέλουν να συμμετάσχουν σε αυτό το δωμάτιο</string>
+			<key>other</key>
+			<string>Οι χρήστες %1$@ +%2$d ακόμη θέλουν να συμμετάσχουν σε αυτό το δωμάτιο</string>
+		</dict>
+	</dict>
 	<key>screen_room_timeline_state_changes</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>

@@ -91,6 +91,13 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
               html: String?,
               intentionalMentions: IntentionalMentions) async { }
     
+    func editCaption(_ eventOrTransactionID: EventOrTransactionId,
+                     message: String,
+                     html: String?,
+                     intentionalMentions: IntentionalMentions) async { }
+    
+    func removeCaption(_ eventOrTransactionID: EventOrTransactionId) async { }
+    
     func redact(_ eventOrTransactionID: EventOrTransactionId) async { }
     
     func pin(eventID: String) async { }
@@ -103,6 +110,10 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo {
         .init(model: "Mock debug description", originalJSON: nil, latestEditJSON: nil)
+    }
+    
+    func sendHandle(for itemID: TimelineItemIdentifier) -> SendHandleProxy? {
+        nil
     }
         
     func retryDecryption(for sessionID: String) async { }

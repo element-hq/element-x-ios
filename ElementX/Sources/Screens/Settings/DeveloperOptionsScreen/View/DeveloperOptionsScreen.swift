@@ -36,6 +36,10 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section("Room List") {
+                Toggle(isOn: $context.publicSearchEnabled) {
+                    Text("Public search")
+                }
+                
                 Toggle(isOn: $context.hideUnreadMessagesBadge) {
                     Text("Hide grey dots")
                 }
@@ -50,8 +54,8 @@ struct DeveloperOptionsScreen: View {
                     Text("Hide image & video previews")
                 }
                 
-                Toggle(isOn: $context.frequentEmojisEnabled) {
-                    Text("Show frequently used emojis")
+                Toggle(isOn: $context.createMediaCaptionsEnabled) {
+                    Text("Allow creation of media captions")
                 }
             }
             

@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import IntentsUI
 import MatrixRustSDK
 import UIKit
 
@@ -14,7 +15,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
     private let liveTimelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
+    private let mediaProvider: MediaProviderProtocol
     private let appSettings: AppSettings
+    
     private let serialDispatchQueue: DispatchQueue
     
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
@@ -40,11 +43,14 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
          timelineProxy: TimelineProxyProtocol,
          initialFocussedEventID: String?,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
+         mediaProvider: MediaProviderProtocol,
          appSettings: AppSettings) {
         self.roomProxy = roomProxy
         liveTimelineProvider = timelineProxy.timelineProvider
         self.timelineItemFactory = timelineItemFactory
+        self.mediaProvider = mediaProvider
         self.appSettings = appSettings
+        
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         
         activeTimeline = timelineProxy
@@ -153,8 +159,58 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                                                 intentionalMentions: intentionalMentions) {
         case .success:
             MXLog.info("Finished sending message")
+            await donateSendMessageIntent()
         case .failure(let error):
             MXLog.error("Failed sending message with error: \(error)")
+        }
+    }
+    
+    private func donateSendMessageIntent() async {
+        guard let displayName = roomProxy.details.name ?? roomProxy.details.canonicalAlias, !displayName.isEmpty else {
+            MXLog.error("Failed donating send message intent, room missing name or alias.")
+            return
+        }
+        
+        let groupName = INSpeakableString(spokenPhrase: displayName)
+        
+        let sendMessageIntent = INSendMessageIntent(recipients: nil,
+                                                    outgoingMessageType: .outgoingMessageText,
+                                                    content: nil,
+                                                    speakableGroupName: groupName,
+                                                    conversationIdentifier: roomProxy.id,
+                                                    serviceName: nil,
+                                                    sender: nil,
+                                                    attachments: nil)
+        
+        let avatarURL = switch roomProxy.details.avatar {
+        case .room(_, _, let avatarURL):
+            avatarURL
+        case .heroes(let userProfiles):
+            userProfiles.first?.avatarURL
+        }
+        
+        func addPlacehoder() {
+            if let imageData = Avatars.generatePlaceholderAvatarImageData(name: displayName, id: roomProxy.id, size: .init(width: 100, height: 100)) {
+                sendMessageIntent.setImage(INImage(imageData: imageData), forParameterNamed: \.speakableGroupName)
+            }
+        }
+        
+        if let avatarURL, let mediaSource = try? MediaSourceProxy(url: avatarURL, mimeType: nil) {
+            if case let .success(avatarData) = await mediaProvider.loadThumbnailForSource(source: mediaSource, size: .init(width: 100, height: 100)) {
+                sendMessageIntent.setImage(INImage(imageData: avatarData), forParameterNamed: \.speakableGroupName)
+            } else {
+                addPlacehoder()
+            }
+        } else {
+            addPlacehoder()
+        }
+        
+        let interaction = INInteraction(intent: sendMessageIntent, response: nil)
+        
+        do {
+            try await interaction.donate()
+        } catch {
+            MXLog.error("Failed donating send message intent with error: \(error)")
         }
     }
     
@@ -180,11 +236,39 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                                                                    html: html,
                                                                    intentionalMentions: intentionalMentions.toRustMentions())
         
-        switch await activeTimeline.edit(eventOrTransactionID, newContent: messageContent) {
+        switch await activeTimeline.edit(eventOrTransactionID, newContent: .roomMessage(content: messageContent)) {
         case .success:
             MXLog.info("Finished editing message by event")
         case let .failure(error):
             MXLog.error("Failed editing message by event with error: \(error)")
+        }
+    }
+    
+    func editCaption(_ eventOrTransactionID: EventOrTransactionId,
+                     message: String,
+                     html: String?,
+                     intentionalMentions: IntentionalMentions) async {
+        // We're waiting on an API for including mentions: https://github.com/matrix-org/matrix-rust-sdk/issues/4302
+        MXLog.info("Editing timeline item caption: \(eventOrTransactionID) in \(roomID)")
+        
+        // When formattedCaption is nil, caption will be parsed as markdown and generate the HTML for us.
+        let newContent = createCaptionEdit(caption: message, formattedCaption: html.map { .init(format: .html, body: $0) })
+        switch await activeTimeline.edit(eventOrTransactionID, newContent: newContent) {
+        case .success:
+            MXLog.info("Finished editing caption")
+        case let .failure(error):
+            MXLog.error("Failed editing caption with error: \(error)")
+        }
+    }
+    
+    func removeCaption(_ eventOrTransactionID: EventOrTransactionId) async {
+        // Set a `nil` caption to remove it from the event.
+        let newContent = createCaptionEdit(caption: nil, formattedCaption: nil)
+        switch await activeTimeline.edit(eventOrTransactionID, newContent: newContent) {
+        case .success:
+            MXLog.info("Finished removing caption.")
+        case let .failure(error):
+            MXLog.error("Failed removing caption with error: \(error)")
         }
     }
     
@@ -248,6 +332,21 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         return .init(model: "Unknown item", originalJSON: nil, latestEditJSON: nil)
+    }
+    
+    func sendHandle(for itemID: TimelineItemIdentifier) -> SendHandleProxy? {
+        for timelineItemProxy in activeTimelineProvider.itemProxies {
+            switch timelineItemProxy {
+            case .event(let item):
+                if item.id == itemID {
+                    return item.sendHandle.map { .init(itemID: itemID, underlyingHandle: $0) }
+                }
+            default:
+                continue
+            }
+        }
+        
+        return nil
     }
     
     func retryDecryption(for sessionID: String) async {

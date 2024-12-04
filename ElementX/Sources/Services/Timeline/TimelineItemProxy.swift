@@ -135,6 +135,8 @@ class EventTimelineItemProxy {
     
     lazy var shieldState = item.lazyProvider.getShields(strict: false)
     
+    lazy var sendHandle = item.lazyProvider.getSendHandle()
+    
     lazy var readReceipts = item.readReceipts
 }
 
@@ -179,11 +181,153 @@ struct TimelineItemDebugInfo: Identifiable, CustomStringConvertible {
     }
 }
 
-extension Receipt {
-    var dateTimestamp: Date? {
-        guard let timestamp else {
+struct SendHandleProxy: Hashable {
+    enum Error: Swift.Error {
+        case sdkError(Swift.Error)
+    }
+    
+    let itemID: TimelineItemIdentifier
+    let underlyingHandle: SendHandle
+    
+    func resend() async -> Result<Void, Error> {
+        do {
+            try await underlyingHandle.tryResend()
+            return .success(())
+        } catch {
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    // MARK: - Hashable
+
+    static func == (lhs: SendHandleProxy, rhs: SendHandleProxy) -> Bool {
+        lhs.itemID == rhs.itemID
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(itemID)
+    }
+    
+    static var mock: SendHandleProxy {
+        .init(itemID: .event(uniqueID: .init(id: UUID().uuidString),
+                             eventOrTransactionID: .eventId(eventId: UUID().uuidString)),
+              underlyingHandle: .init(noPointer: .init()))
+    }
+}
+
+struct VideoInfoProxy: Hashable {
+    let source: MediaSourceProxy
+    private(set) var duration: TimeInterval
+    private(set) var size: CGSize?
+    private(set) var aspectRatio: CGFloat?
+    private(set) var mimeType: String?
+    
+    init(source: MediaSource, duration: TimeInterval, width: UInt64?, height: UInt64?, mimeType: String?) {
+        self.source = MediaSourceProxy(source: source, mimeType: mimeType)
+        self.duration = duration
+        
+        let mediaInfo = MediaInfoProxy(width: width, height: height, mimeType: mimeType)
+        size = mediaInfo.size
+        aspectRatio = mediaInfo.aspectRatio
+        self.mimeType = mediaInfo.mimeType
+    }
+    
+    // MARK: - Mocks
+    
+    private init(source: MediaSourceProxy, duration: TimeInterval, size: CGSize?, aspectRatio: CGFloat?, mimeType: String?) {
+        self.source = source
+        self.duration = duration
+        self.size = size
+        self.aspectRatio = aspectRatio
+        self.mimeType = mimeType
+    }
+    
+    static var mockVideo: VideoInfoProxy {
+        guard let mediaSource = try? MediaSourceProxy(url: .mockMXCVideo, mimeType: nil) else {
+            fatalError("Invalid mock media source URL")
+        }
+        
+        return .init(source: mediaSource,
+                     duration: 100,
+                     size: .init(width: 1920, height: 1080),
+                     aspectRatio: 1.78,
+                     mimeType: nil)
+    }
+}
+
+struct ImageInfoProxy: Hashable {
+    let source: MediaSourceProxy
+    private(set) var size: CGSize?
+    private(set) var aspectRatio: CGFloat?
+    private(set) var mimeType: String?
+    
+    init?(source: MediaSource?, width: UInt64?, height: UInt64?, mimeType: String?) {
+        guard let source else {
             return nil
         }
-        return Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
+        
+        self.init(source: .init(source: source, mimeType: mimeType), width: width, height: height, mimeType: mimeType)
+    }
+    
+    init(source: MediaSource, width: UInt64?, height: UInt64?, mimeType: String?) {
+        self.init(source: .init(source: source, mimeType: mimeType), width: width, height: height, mimeType: mimeType)
+    }
+    
+    init(source: MediaSourceProxy, width: UInt64?, height: UInt64?, mimeType: String?) {
+        self.source = source
+        
+        let mediaInfo = MediaInfoProxy(width: width, height: height, mimeType: mimeType)
+        size = mediaInfo.size
+        aspectRatio = mediaInfo.aspectRatio
+        self.mimeType = mediaInfo.mimeType
+    }
+    
+    // MARK: - Mocks
+    
+    private init(source: MediaSourceProxy, size: CGSize?, aspectRatio: CGFloat?, mimeType: String?) {
+        self.source = source
+        self.size = size
+        self.aspectRatio = aspectRatio
+        self.mimeType = mimeType
+    }
+    
+    static var mockImage: ImageInfoProxy {
+        guard let mediaSource = try? MediaSourceProxy(url: .mockMXCImage, mimeType: "image/png") else {
+            fatalError("Invalid mock media source URL")
+        }
+        
+        return .init(source: mediaSource,
+                     size: .init(width: 100, height: 100),
+                     aspectRatio: 1,
+                     mimeType: "image/png")
+    }
+    
+    static var mockThumbnail: ImageInfoProxy {
+        guard let mediaSource = try? MediaSourceProxy(url: .mockMXCImage, mimeType: "image/png") else {
+            fatalError("Invalid mock media source URL")
+        }
+        
+        return .init(source: mediaSource,
+                     size: nil,
+                     aspectRatio: nil,
+                     mimeType: nil)
+    }
+}
+
+struct MediaInfoProxy: Hashable {
+    private(set) var size: CGSize?
+    private(set) var mimeType: String?
+    private(set) var aspectRatio: CGFloat?
+    
+    init(width: UInt64?, height: UInt64?, mimeType: String?) {
+        if let width, let height {
+            size = .init(width: CGFloat(width), height: CGFloat(height))
+            
+            if width > 0, height > 0 {
+                aspectRatio = CGFloat(width) / CGFloat(height)
+            }
+        }
+        
+        self.mimeType = mimeType
     }
 }

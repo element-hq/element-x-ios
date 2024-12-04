@@ -35,7 +35,7 @@ struct RoomEventStringBuilder {
         case .redactedMessage:
             return prefix(L10n.commonMessageRemoved, with: displayName)
         case .sticker:
-            if messageEventStringBuilder.prefix == .messageType {
+            if messageEventStringBuilder.destination == .pinnedEvent {
                 var string = AttributedString(L10n.commonSticker)
                 string.bold()
                 return string
@@ -49,7 +49,7 @@ struct RoomEventStringBuilder {
             return stateEventStringBuilder
                 .buildString(for: state, sender: sender, isOutgoing: isOutgoing)
                 .map(AttributedString.init)
-        case .roomMembership(let userID, let displayName, let change):
+        case .roomMembership(let userID, let displayName, let change, _):
             return stateEventStringBuilder
                 .buildString(for: change, memberUserID: userID, memberDisplayName: displayName, sender: sender, isOutgoing: isOutgoing)
                 .map(AttributedString.init)
@@ -63,7 +63,7 @@ struct RoomEventStringBuilder {
                                           memberIsYou: isOutgoing)
                 .map(AttributedString.init)
         case .poll(let question, _, _, _, _, _, _):
-            if messageEventStringBuilder.prefix == .messageType {
+            if messageEventStringBuilder.destination == .pinnedEvent {
                 let questionPlaceholder = "{question}"
                 var finalString = AttributedString(L10n.commonPollSummary(questionPlaceholder))
                 finalString.bold()
@@ -73,7 +73,7 @@ struct RoomEventStringBuilder {
             }
             return prefix(L10n.commonPollSummary(question), with: displayName)
         case .callInvite:
-            return prefix(L10n.commonCallInvite, with: displayName)
+            return prefix(L10n.commonUnsupportedCall, with: displayName)
         case .callNotify:
             return prefix(L10n.commonCallStarted, with: displayName)
         }
@@ -96,7 +96,7 @@ struct RoomEventStringBuilder {
         RoomEventStringBuilder(stateEventStringBuilder: .init(userID: userID,
                                                               shouldDisambiguateDisplayNames: false),
                                messageEventStringBuilder: .init(attributedStringBuilder: AttributedStringBuilder(cacheKey: "pinnedEvents", mentionBuilder: PlainMentionBuilder()),
-                                                                prefix: .messageType),
+                                                                destination: .pinnedEvent),
                                shouldDisambiguateDisplayNames: false,
                                shouldPrefixSenderName: false)
     }

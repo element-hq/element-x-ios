@@ -51,6 +51,14 @@ struct SessionDirectories: Hashable, Codable {
         }
     }
     
+    /// Check that mission critical files (the crypto db) are still in the right place when restoring a session
+    /// iOS might decide to move the app with its user defaults and keychain but without
+    /// some of the files stored in the shared container e.g. after a device transfer, offloading etc.
+    /// If that happens we should fail the session restoration.
+    func isNonTransientUserDataValid() -> Bool {
+        FileManager.default.fileExists(atPath: dataPath.appending("/matrix-sdk-crypto.sqlite3"))
+    }
+    
     private func deleteFiles(at url: URL, with prefix: String) throws {
         let sessionDirectoryContents = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)
         for url in sessionDirectoryContents where url.lastPathComponent.hasPrefix(prefix) {
@@ -64,19 +72,19 @@ extension SessionDirectories {
     init() {
         let sessionDirectoryName = UUID().uuidString
         dataDirectory = .sessionsBaseDirectory.appending(component: sessionDirectoryName)
-        cacheDirectory = .cachesBaseDirectory.appending(component: sessionDirectoryName)
+        cacheDirectory = .sessionCachesBaseDirectory.appending(component: sessionDirectoryName)
     }
     
     /// Creates the session directories for a user who signed in before the data directory was stored.
     init(userID: String) {
         dataDirectory = .legacySessionDirectory(for: userID)
-        cacheDirectory = .cachesBaseDirectory.appending(component: dataDirectory.lastPathComponent)
+        cacheDirectory = .sessionCachesBaseDirectory.appending(component: dataDirectory.lastPathComponent)
     }
     
     /// Creates the session directories for a user who has a single session directory stored without a separate caches directory.
     init(dataDirectory: URL) {
         self.dataDirectory = dataDirectory
-        cacheDirectory = .cachesBaseDirectory.appending(component: dataDirectory.lastPathComponent)
+        cacheDirectory = .sessionCachesBaseDirectory.appending(component: dataDirectory.lastPathComponent)
     }
 }
 

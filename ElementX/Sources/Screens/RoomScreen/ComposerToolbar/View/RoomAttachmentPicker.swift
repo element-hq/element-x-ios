@@ -18,8 +18,8 @@ struct RoomAttachmentPicker: View {
         Menu {
             menuContent
         } label: {
-            CompoundIcon(asset: Asset.Images.composerAttachment, size: .custom(30), relativeTo: .title)
-                .scaledPadding(7, relativeTo: .title)
+            CompoundIcon(asset: Asset.Images.composerAttachment, size: .custom(30), relativeTo: .compound.headingLG)
+                .scaledPadding(7, relativeTo: .compound.headingLG)
         }
         .buttonStyle(RoomAttachmentPickerButtonStyle())
         .accessibilityLabel(L10n.actionAddToTimeline)
@@ -32,7 +32,6 @@ struct RoomAttachmentPicker: View {
                 context.send(viewAction: .enableTextFormatting)
             } label: {
                 Label(L10n.screenRoomAttachmentTextFormatting, icon: \.textFormatting)
-                    .labelStyle(.menuSheet)
             }
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)
             
@@ -40,7 +39,6 @@ struct RoomAttachmentPicker: View {
                 context.send(viewAction: .attach(.poll))
             } label: {
                 Label(L10n.screenRoomAttachmentSourcePoll, icon: \.polls)
-                    .labelStyle(.menuSheet)
             }
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)
             
@@ -48,7 +46,6 @@ struct RoomAttachmentPicker: View {
                 context.send(viewAction: .attach(.location))
             } label: {
                 Label(L10n.screenRoomAttachmentSourceLocation, icon: \.locationPin)
-                    .labelStyle(.menuSheet)
             }
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerLocation)
             
@@ -56,7 +53,6 @@ struct RoomAttachmentPicker: View {
                 context.send(viewAction: .attach(.file))
             } label: {
                 Label(L10n.screenRoomAttachmentSourceFiles, icon: \.attachment)
-                    .labelStyle(.menuSheet)
             }
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerDocuments)
             
@@ -64,7 +60,6 @@ struct RoomAttachmentPicker: View {
                 context.send(viewAction: .attach(.photoLibrary))
             } label: {
                 Label(L10n.screenRoomAttachmentSourceGallery, icon: \.image)
-                    .labelStyle(.menuSheet)
             }
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary)
             
@@ -72,7 +67,6 @@ struct RoomAttachmentPicker: View {
                 context.send(viewAction: .attach(.camera))
             } label: {
                 Label(L10n.screenRoomAttachmentSourceCamera, icon: \.takePhoto)
-                    .labelStyle(.menuSheet)
             }
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerCamera)
         }

@@ -288,9 +288,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = SecureBackupRecoveryKeyScreenCoordinator(parameters: parameters)
         
         coordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                
+            .sink { action in
                 switch action {
                 case .complete:
                     break // Moving to next state is Handled by the global session verification listener

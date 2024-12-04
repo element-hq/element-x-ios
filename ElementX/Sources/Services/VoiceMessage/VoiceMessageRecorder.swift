@@ -101,13 +101,12 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
             await previewAudioPlayerState.attachAudioPlayer(audioPlayer)
         }
         
-        if audioPlayer.url == url {
+        if audioPlayer.playbackURL == url {
             audioPlayer.play()
             return .success(())
         }
         
-        let pendingMediaSource = MediaSourceProxy(url: url, mimeType: mp4accMimeType)
-        audioPlayer.load(mediaSource: pendingMediaSource, using: url, autoplay: true)
+        audioPlayer.load(sourceURL: url, playbackURL: url, autoplay: true)
         return .success(())
     }
     
@@ -179,8 +178,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         
         let result = await roomProxy.timeline.sendVoiceMessage(url: oggFile,
                                                                audioInfo: audioInfo,
-                                                               waveform: waveform,
-                                                               progressSubject: nil) { _ in }
+                                                               waveform: waveform) { _ in }
         
         if case .failure(let error) = result {
             MXLog.error("Failed to send the voice message. \(error)")
@@ -242,10 +240,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         previewAudioPlayerState = await AudioPlayerState(id: .recorderPreview, title: L10n.commonVoiceMessage, duration: recordingDuration, waveform: EstimatedWaveform(data: []))
 
         // Build the preview audio player
-        let mediaSource = MediaSourceProxy(url: url, mimeType: mp4accMimeType)
-        guard case .success(let mediaPlayer) = await mediaPlayerProvider.player(for: mediaSource), let audioPlayer = mediaPlayer as? AudioPlayerProtocol else {
-            return .failure(.previewNotAvailable)
-        }
+        let audioPlayer = await mediaPlayerProvider.player
         previewAudioPlayer = audioPlayer
         
         return .success(())

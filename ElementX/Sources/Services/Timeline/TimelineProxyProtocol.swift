@@ -38,7 +38,7 @@ protocol TimelineProxyProtocol {
     func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError>
     
     func edit(_ eventOrTransactionID: EventOrTransactionId,
-              newContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError>
+              newContent: EditedContent) async -> Result<Void, TimelineProxyError>
     
     func redact(_ eventOrTransactionID: EventOrTransactionId,
                 reason: String?) async -> Result<Void, TimelineProxyError>
@@ -51,18 +51,18 @@ protocol TimelineProxyProtocol {
     
     func sendAudio(url: URL,
                    audioInfo: AudioInfo,
-                   progressSubject: CurrentValueSubject<Double, Never>?,
+                   caption: String?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
     func sendFile(url: URL,
                   fileInfo: FileInfo,
-                  progressSubject: CurrentValueSubject<Double, Never>?,
+                  caption: String?,
                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
     func sendImage(url: URL,
                    thumbnailURL: URL,
                    imageInfo: ImageInfo,
-                   progressSubject: CurrentValueSubject<Double, Never>?,
+                   caption: String?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
     func sendLocation(body: String,
@@ -74,13 +74,12 @@ protocol TimelineProxyProtocol {
     func sendVideo(url: URL,
                    thumbnailURL: URL,
                    videoInfo: VideoInfo,
-                   progressSubject: CurrentValueSubject<Double, Never>?,
+                   caption: String?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
     func sendVoiceMessage(url: URL,
                           audioInfo: AudioInfo,
                           waveform: [UInt16],
-                          progressSubject: CurrentValueSubject<Double, Never>?,
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
     func sendReadReceipt(for eventID: String, type: ReceiptType) async -> Result<Void, TimelineProxyError>

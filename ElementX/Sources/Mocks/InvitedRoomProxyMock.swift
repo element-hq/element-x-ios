@@ -23,6 +23,7 @@ extension InvitedRoomProxyMock {
     convenience init(_ configuration: InvitedRoomProxyMockConfiguration) {
         self.init()
         id = configuration.id
+        inviter = configuration.inviter
         info = RoomInfoProxy(roomInfo: .init(configuration))
     }
 }
@@ -58,7 +59,8 @@ extension RoomInfo {
                   numUnreadMessages: 0,
                   numUnreadNotifications: 0,
                   numUnreadMentions: 0,
-                  pinnedEventIds: [])
+                  pinnedEventIds: [],
+                  joinRule: .invite)
     }
 }
 

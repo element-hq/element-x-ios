@@ -66,7 +66,7 @@ targets:
             CFBundleTypeRole: Editor,
             CFBundleURLName: "Application",
             CFBundleURLSchemes: [
-              io.element
+              $(BASE_BUNDLE_IDENTIFIER)
             ]
           }
         ]
@@ -124,6 +124,7 @@ targets:
         SWIFT_OBJC_BRIDGING_HEADER: ElementX/SupportingFiles/ElementX-Bridging-Header.h
         SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
         PILLS_UT_TYPE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER).pills
+        DEVELOPMENT_ASSET_PATHS: DevelopmentAssets/Media
         OTHER_SWIFT_FLAGS:
         - "-DIS_MAIN_APP"
 
@@ -189,9 +190,11 @@ targets:
 
     dependencies:
     - target: NSE
+    - target: ShareExtension
     # not used yet
     # - target: NCE
     - package: MatrixRustSDK
+      embed: true
     - package: Compound
     - package: Algorithms
     - package: AnalyticsEvents
@@ -225,3 +228,4 @@ targets:
     - path: ../Resources
     - path: ../SupportingFiles
     - path: ../../Tools/Scripts/Templates/SimpleScreenExample/ElementX
+    - path: ../../DevelopmentAssets/Media

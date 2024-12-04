@@ -103,6 +103,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             case .resolvePinViolation(let userID):
                 Task { await resolveIdentityPinningViolation(userID) }
             }
+        case .acceptKnock(userID: let userID):
+            // TODO: API to accept a knock required
+            break
+        case .dismissKnockRequests:
+            // TODO: API to mark knocks as seen required
+            break
+        case .viewKnockRequests:
+            actionsSubject.send(.displayKnockRequests)
         }
     }
     
@@ -117,6 +125,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Private
     
     private func setupSubscriptions(ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>) {
+        appSettings.$knockingEnabled
+            .weakAssign(to: \.state.isKnockingEnabled, on: self)
+            .store(in: &cancellables)
+        
         let roomInfoSubscription = roomProxy
             .infoPublisher
         
@@ -236,10 +248,18 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.pinnedEventsBannerState = .loading(numbersOfEvents: pinnedEventIDs.count)
         }
         
-        let userID = roomProxy.ownUserID
-        if case let .success(permission) = await roomProxy.canUserJoinCall(userID: userID) {
-            state.canJoinCall = permission
+        switch (roomProxy.isEncryptedOneToOneRoom, roomInfo.joinRule) {
+        case (false, .knock), (false, .knockRestricted):
+            state.isKnockableRoom = true
+        default:
+            state.isKnockableRoom = false
         }
+        
+        let ownUserID = roomProxy.ownUserID
+        state.canJoinCall = await (try? roomProxy.canUserJoinCall(userID: ownUserID).get()) == true
+        state.canAcceptKnocks = await (try? roomProxy.canUserInvite(userID: ownUserID).get()) == true
+        state.canDeclineKnocks = await (try? roomProxy.canUserKick(userID: ownUserID).get()) == true
+        state.canBan = await (try? roomProxy.canUserBan(userID: ownUserID).get()) == true
     }
     
     private func setupPinnedEventsTimelineProviderIfNeeded() {

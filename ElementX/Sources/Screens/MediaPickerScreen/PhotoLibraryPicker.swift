@@ -69,7 +69,7 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
                 photoLibraryPicker.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
             }
             
-            provider.loadFileRepresentation(forTypeIdentifier: contentType.identifier) { [weak self] url, error in
+            provider.loadFileRepresentation(forTypeIdentifier: contentType.type.identifier) { [weak self] url, error in
                 guard let url else {
                     Task { @MainActor in
                         self?.photoLibraryPicker.callback(.error(.failedLoadingFileRepresentation(error)))

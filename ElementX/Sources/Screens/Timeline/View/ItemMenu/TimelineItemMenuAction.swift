@@ -5,6 +5,7 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import OrderedCollections
 import SFSafeSymbols
 import SwiftUI
 
@@ -12,48 +13,55 @@ import SwiftUI
 struct TimelineItemMenuActions {
     let reactions: [TimelineItemMenuReaction]
     let actions: [TimelineItemMenuAction]
-    let debugActions: [TimelineItemMenuAction]
+    let secondaryActions: [TimelineItemMenuAction]
     
     init?(isReactable: Bool,
           actions: [TimelineItemMenuAction],
-          debugActions: [TimelineItemMenuAction],
+          secondaryActions: [TimelineItemMenuAction],
           emojiProvider: EmojiProviderProtocol) {
-        if !isReactable, actions.isEmpty, debugActions.isEmpty {
+        if !isReactable, actions.isEmpty, secondaryActions.isEmpty {
             return nil
         }
         
         self.actions = actions
-        self.debugActions = debugActions
+        self.secondaryActions = secondaryActions
         
-        // Only process 5 of the most frequently used emojis instead of all of them
-        var frequentlyUsed = emojiProvider.frequentlyUsedSystemEmojis().prefix(5).map { TimelineItemMenuReaction(key: $0, symbol: .heart) }
-        
-        frequentlyUsed += [
+        var frequentlyUsed: OrderedSet<TimelineItemMenuReaction> = [
             .init(key: "👍️", symbol: .handThumbsup),
             .init(key: "👎️", symbol: .handThumbsdown),
-            .init(key: "🔥", symbol: .flame),
-            .init(key: "❤️", symbol: .heart),
-            .init(key: "👏", symbol: .handsClap)
+            .init(key: "🎉", symbol: .partyPopper),
+            .init(key: "❤️", symbol: .heart)
         ]
         
-        frequentlyUsed = Array(frequentlyUsed.prefix(5))
+        frequentlyUsed.append(contentsOf: emojiProvider.frequentlyUsedSystemEmojis().map { TimelineItemMenuReaction(key: $0, symbol: .heart) })
         
         reactions = if isReactable {
-            frequentlyUsed
+            Array(frequentlyUsed.elements.prefix(10))
         } else {
             []
         }
     }
 }
 
-struct TimelineItemMenuReaction {
+struct TimelineItemMenuReaction: Hashable {
     let key: String
     let symbol: SFSymbol
+    
+    // Frequently used emojis on the all use the same .heart SFSymbol.
+    // Override equatable so we can remove duplicates.
+    static func == (lhs: TimelineItemMenuReaction, rhs: TimelineItemMenuReaction) -> Bool {
+        lhs.key == rhs.key
+    }
 }
 
 enum TimelineItemMenuAction: Identifiable, Hashable {
     case copy
+    case copyCaption
     case edit
+    case addCaption
+    case editCaption
+    case removeCaption
+    case editPoll
     case copyPermalink
     case redact
     case reply(isThread: Bool)
@@ -73,7 +81,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     /// Whether the item should cancel a reply/edit occurring in the composer.
     var switchToDefaultComposer: Bool {
         switch self {
-        case .reply, .edit:
+        case .reply, .edit, .addCaption, .editCaption, .editPoll:
             return false
         default:
             return true
@@ -83,7 +91,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     /// Whether the action should be shown for an item that failed to send.
     var canAppearInFailedEcho: Bool {
         switch self {
-        case .copy, .edit, .redact, .viewSource:
+        case .copy, .edit, .redact, .viewSource, .editPoll:
             return true
         default:
             return false
@@ -103,7 +111,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     /// Whether or not the action is destructive.
     var isDestructive: Bool {
         switch self {
-        case .redact, .report:
+        case .redact, .report, .removeCaption:
             return true
         default:
             return false
@@ -124,9 +132,19 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     var label: some View {
         switch self {
         case .copy:
-            Label(L10n.actionCopy, icon: \.copy)
+            Label(L10n.actionCopyText, icon: \.copy)
+        case .copyCaption:
+            Label(L10n.actionCopyCaption, icon: \.copy)
         case .edit:
             Label(L10n.actionEdit, icon: \.edit)
+        case .addCaption:
+            Label(L10n.actionAddCaption, icon: \.edit)
+        case .editCaption:
+            Label(L10n.actionEditCaption, icon: \.edit)
+        case .removeCaption:
+            Label(L10n.actionRemoveCaption, icon: \.close)
+        case .editPoll:
+            Label(L10n.actionEditPoll, icon: \.edit)
         case .copyPermalink:
             Label(L10n.actionCopyLinkToMessage, icon: \.link)
         case .reply(let isThread):
@@ -134,7 +152,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
         case .forward:
             Label(L10n.actionForward, icon: \.forward)
         case .redact:
-            Label(L10n.actionRemove, icon: \.delete)
+            Label(L10n.actionRemoveMessage, icon: \.delete)
         case .viewSource:
             Label(L10n.actionViewSource, icon: \.code)
         case .retryDecryption:

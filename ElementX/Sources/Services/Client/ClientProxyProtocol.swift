@@ -68,7 +68,7 @@ struct RoomPreviewDetails {
     let topic: String?
     let avatarURL: URL?
     let memberCount: UInt
-    let isHistoryWorldReadable: Bool
+    let isHistoryWorldReadable: Bool?
     let isJoined: Bool
     let isInvited: Bool
     let isPublic: Bool
@@ -88,7 +88,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var deviceID: String? { get }
 
     var homeserver: String { get }
-    
+
     var slidingSyncVersion: SlidingSyncVersion { get }
     var availableSlidingSyncVersions: [SlidingSyncVersion] { get async }
     
@@ -123,6 +123,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func startSync()
 
     func stopSync()
+    func stopSync(completion: (() -> Void)?) // Hopefully this will become async once we get SE-0371.
     
     func accountURL(action: AccountManagementAction) async -> URL?
     
@@ -133,7 +134,13 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func createDirectRoom(with userID: String, expectedRoomName: String?) async -> Result<String, ClientProxyError>
     
     // swiftlint:disable:next function_parameter_count
-    func createRoom(name: String, topic: String?, isRoomPrivate: Bool, isKnockingOnly: Bool, userIDs: [String], avatarURL: URL?) async -> Result<String, ClientProxyError>
+    func createRoom(name: String,
+                    topic: String?,
+                    isRoomPrivate: Bool,
+                    isKnockingOnly: Bool,
+                    userIDs: [String],
+                    avatarURL: URL?,
+                    aliasLocalPart: String?) async -> Result<String, ClientProxyError>
     
     func joinRoom(_ roomID: String, via: [String]) async -> Result<Void, ClientProxyError>
     
@@ -172,6 +179,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func roomDirectorySearchProxy() -> RoomDirectorySearchProxyProtocol
     
     func resolveRoomAlias(_ alias: String) async -> Result<ResolvedRoomAlias, ClientProxyError>
+    
+    func isAliasAvailable(_ alias: String) async -> Result<Bool, ClientProxyError>
     
     func getElementWellKnown() async -> Result<ElementWellKnown?, ClientProxyError>
 

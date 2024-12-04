@@ -32,26 +32,28 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
          roomProxy: JoinedRoomProxyProtocol,
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          title: String?,
-         url: URL) {
+         url: URL,
+         shouldShowCaptionWarning: Bool) {
         self.userIndicatorController = userIndicatorController
         self.roomProxy = roomProxy
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.url = url
         
-        super.init(initialViewState: MediaUploadPreviewScreenViewState(url: url, title: title))
+        super.init(initialViewState: MediaUploadPreviewScreenViewState(url: url, title: title, shouldShowCaptionWarning: shouldShowCaptionWarning))
     }
     
     override func process(viewAction: MediaUploadPreviewScreenViewAction) {
+        // Get the current caption before all the processing starts.
+        let caption = state.bindings.caption.nonBlankString
+        
         switch viewAction {
         case .send:
             Task {
-                let progressSubject = CurrentValueSubject<Double, Never>(0.0)
-                
-                startLoading(progressPublisher: progressSubject.asCurrentValuePublisher())
+                startLoading()
                 
                 switch await mediaUploadingPreprocessor.processMedia(at: url) {
                 case .success(let mediaInfo):
-                    switch await sendAttachment(mediaInfo: mediaInfo, progressSubject: progressSubject) {
+                    switch await sendAttachment(mediaInfo: mediaInfo, caption: caption) {
                     case .success:
                         actionsSubject.send(.dismiss)
                     case .failure(let error):
@@ -75,29 +77,43 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     
     // MARK: - Private
     
-    private func sendAttachment(mediaInfo: MediaInfo, progressSubject: CurrentValueSubject<Double, Never>) async -> Result<Void, TimelineProxyError> {
+    private func sendAttachment(mediaInfo: MediaInfo, caption: String?) async -> Result<Void, TimelineProxyError> {
         let requestHandle: ((SendAttachmentJoinHandleProtocol) -> Void) = { [weak self] handle in
             self?.requestHandle = handle
         }
         
         switch mediaInfo {
         case let .image(imageURL, thumbnailURL, imageInfo):
-            return await roomProxy.timeline.sendImage(url: imageURL, thumbnailURL: thumbnailURL, imageInfo: imageInfo, progressSubject: progressSubject, requestHandle: requestHandle)
+            return await roomProxy.timeline.sendImage(url: imageURL,
+                                                      thumbnailURL: thumbnailURL,
+                                                      imageInfo: imageInfo,
+                                                      caption: caption,
+                                                      requestHandle: requestHandle)
         case let .video(videoURL, thumbnailURL, videoInfo):
-            return await roomProxy.timeline.sendVideo(url: videoURL, thumbnailURL: thumbnailURL, videoInfo: videoInfo, progressSubject: progressSubject, requestHandle: requestHandle)
+            return await roomProxy.timeline.sendVideo(url: videoURL,
+                                                      thumbnailURL: thumbnailURL,
+                                                      videoInfo: videoInfo,
+                                                      caption: caption,
+                                                      requestHandle: requestHandle)
         case let .audio(audioURL, audioInfo):
-            return await roomProxy.timeline.sendAudio(url: audioURL, audioInfo: audioInfo, progressSubject: progressSubject, requestHandle: requestHandle)
+            return await roomProxy.timeline.sendAudio(url: audioURL,
+                                                      audioInfo: audioInfo,
+                                                      caption: caption,
+                                                      requestHandle: requestHandle)
         case let .file(fileURL, fileInfo):
-            return await roomProxy.timeline.sendFile(url: fileURL, fileInfo: fileInfo, progressSubject: progressSubject, requestHandle: requestHandle)
+            return await roomProxy.timeline.sendFile(url: fileURL,
+                                                     fileInfo: fileInfo,
+                                                     caption: caption,
+                                                     requestHandle: requestHandle)
         }
     }
     
     private static let loadingIndicatorIdentifier = "\(MediaUploadPreviewScreenViewModel.self)-Loading"
     
-    private func startLoading(progressPublisher: CurrentValuePublisher<Double, Never>) {
+    private func startLoading() {
         userIndicatorController.submitIndicator(
             UserIndicator(id: Self.loadingIndicatorIdentifier,
-                          type: .modal(progress: .published(progressPublisher), interactiveDismissDisabled: false, allowsInteraction: true),
+                          type: .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: true),
                           title: L10n.commonSending,
                           persistent: true)
         )
@@ -110,5 +126,12 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     
     private func showError(label: String) {
         userIndicatorController.submitIndicator(UserIndicator(title: label))
+    }
+}
+
+extension NSAttributedString {
+    var nonBlankString: String? {
+        guard !string.isBlank else { return nil }
+        return string
     }
 }

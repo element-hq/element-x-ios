@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct TimelineSenderAvatarView: View {
-    @EnvironmentObject private var context: TimelineViewModel.Context
+    @Environment(\.timelineContext) private var context
 
     let timelineItem: EventBasedTimelineItemProtocol
         
@@ -18,7 +18,7 @@ struct TimelineSenderAvatarView: View {
                             name: timelineItem.sender.displayName,
                             contentID: timelineItem.sender.id,
                             avatarSize: .user(on: .timeline),
-                            mediaProvider: context.mediaProvider)
+                            mediaProvider: context?.mediaProvider)
             .overlay {
                 Circle().stroke(Color.compound.bgCanvasDefault, lineWidth: 3)
             }

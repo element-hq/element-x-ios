@@ -31,6 +31,7 @@ targets:
 
     dependencies:
     - target: ElementX
+    - package: MatrixRustSDK
 
     info:
       path: ../SupportingFiles/Info.plist
@@ -47,4 +48,4 @@ targets:
     - path: ../SupportingFiles
     - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
     - path: ../../Tools/Scripts/Templates/SimpleScreenExample/Tests/Unit
-    - path: ../Resources
+    - path: ../../DevelopmentAssets

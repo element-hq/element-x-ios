@@ -125,10 +125,11 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     var messageBubbleWithActions: some View {
         messageBubble
             .onTapGesture {
-                context.send(viewAction: .itemTapped(itemID: timelineItem.id))
+                // We need a tap gesture before the long press gesture below, otherwise something
+                // on iOS 17 hijacks the long press and you can't bring up the context menu. This
+                // is no longer an issue on iOS 18. Note: it's fine for this to be empty, we handle
+                // specific taps within the timeline views themselves.
             }
-            // We need a tap gesture before this long one so that it doesn't
-            // steal away the gestures from the scroll view
             .longPressWithFeedback {
                 context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
             }
@@ -148,6 +149,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                                                               pinnedEventIDs: context.viewState.pinnedEventIDs,
                                                               isDM: context.viewState.isEncryptedOneToOneRoom,
                                                               isViewSourceEnabled: context.viewState.isViewSourceEnabled,
+                                                              isCreateMediaCaptionsEnabled: context.viewState.isCreateMediaCaptionsEnabled,
                                                               isPinnedEventsTimeline: context.viewState.isPinnedEventsTimeline,
                                                               emojiProvider: context.viewState.emojiProvider)
                 TimelineItemMacContextMenu(item: timelineItem, actionProvider: provider) { action in
@@ -396,6 +398,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             }
         }
         .environmentObject(viewModel.context)
+        .environment(\.timelineContext, viewModel.context)
     }
     
     static var replies: some View {
@@ -427,6 +430,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                   groupStyle: .single))
         }
         .environmentObject(viewModel.context)
+        .environment(\.timelineContext, viewModel.context)
     }
     
     static var threads: some View {
@@ -434,6 +438,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             MockTimelineContent(isThreaded: true)
         }
         .environmentObject(viewModel.context)
+        .environment(\.timelineContext, viewModel.context)
     }
       
     static var pinned: some View {
@@ -441,6 +446,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             MockTimelineContent(isPinned: true)
         }
         .environmentObject(viewModelWithPins.context)
+        .environment(\.timelineContext, viewModel.context)
     }
     
     static var encryptionAuthenticity: some View {
@@ -498,8 +504,8 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                       isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(filename: "other.png",
-                                                                                     source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"),
-                                                                                     thumbnailSource: nil),
+                                                                                     imageInfo: .mockImage,
+                                                                                     thumbnailInfo: nil),
                                                                       
                                                                       properties: RoomTimelineItemProperties(encryptionAuthenticity: .notGuaranteed(color: .gray))))
             
@@ -514,6 +520,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                             duration: 100,
                                                                             waveform: EstimatedWaveform.mockWaveform,
                                                                             source: nil,
+                                                                            fileSize: nil,
                                                                             contentType: nil),
                                                              properties: RoomTimelineItemProperties(encryptionAuthenticity: .notGuaranteed(color: .gray))),
                                          playerState: AudioPlayerState(id: .timelineItemIdentifier(.randomEvent),
@@ -522,6 +529,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                        waveform: EstimatedWaveform.mockWaveform))
         }
         .environmentObject(viewModel.context)
+        .environment(\.timelineContext, viewModel.context)
     }
 }
 
@@ -552,6 +560,7 @@ private struct MockTimelineContent: View {
                                                                  duration: 100,
                                                                  waveform: EstimatedWaveform.mockWaveform,
                                                                  source: nil,
+                                                                 fileSize: nil,
                                                                  contentType: nil),
                                                   replyDetails: replyDetails))
         
@@ -565,6 +574,7 @@ private struct MockTimelineContent: View {
                                                  content: .init(filename: "file.txt",
                                                                 caption: "File",
                                                                 source: nil,
+                                                                fileSize: nil,
                                                                 thumbnailSource: nil,
                                                                 contentType: nil),
                                                  replyDetails: replyDetails))
@@ -577,8 +587,8 @@ private struct MockTimelineContent: View {
                                                   isThreaded: isThreaded,
                                                   sender: .init(id: ""),
                                                   content: .init(filename: "image.jpg",
-                                                                 source: MediaSourceProxy(url: .picturesDirectory, mimeType: "image/png"),
-                                                                 thumbnailSource: nil),
+                                                                 imageInfo: .mockImage,
+                                                                 thumbnailInfo: nil),
                                                   replyDetails: replyDetails))
         
         LocationRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
@@ -616,6 +626,7 @@ private struct MockTimelineContent: View {
                                                                         duration: 100,
                                                                         waveform: EstimatedWaveform.mockWaveform,
                                                                         source: nil,
+                                                                        fileSize: nil,
                                                                         contentType: nil),
                                                          replyDetails: replyDetails),
                                      playerState: AudioPlayerState(id: .timelineItemIdentifier(.randomEvent),

@@ -198,11 +198,20 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         case .userProfile(let userID):
             stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
         case .call(let roomID):
-            Task { await presentCallScreen(roomID: roomID) }
+            Task { await presentCallScreen(roomID: roomID, notifyOtherParticipants: false) }
         case .genericCallLink(let url):
             presentCallScreen(genericCallLink: url)
         case .settings, .chatBackupSettings:
             settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+        case .share(let payload):
+            if let roomID = payload.roomID {
+                stateMachine.processEvent(.selectRoom(roomID: roomID,
+                                                      via: [],
+                                                      entryPoint: .share(payload)),
+                                          userInfo: .init(animated: animated))
+            } else {
+                stateMachine.processEvent(.showShareExtensionRoomList(sharePayload: payload), userInfo: .init(animated: animated))
+            }
         }
     }
     
@@ -240,6 +249,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     case .room: .room(roomID: roomID, via: via)
                     case .roomDetails: .roomDetails(roomID: roomID)
                     case .eventID(let eventID): .event(eventID: eventID, roomID: roomID, via: via) // ignored.
+                    case .share(let payload): .share(payload)
                     }
                     roomFlowCoordinator.handleAppRoute(route, animated: animated)
                 } else {
@@ -284,6 +294,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 presentUserProfileScreen(userID: userID, animated: animated)
             case (.userProfileScreen, .dismissedUserProfileScreen, .roomList):
                 break
+            case (.roomList, .showShareExtensionRoomList, .shareExtensionRoomList(let sharePayload)):
+                clearRoute(animated: animated)
+                presentRoomSelectionScreen(sharePayload: sharePayload, animated: animated)
+            case (.shareExtensionRoomList, .dismissedShareExtensionRoomList, .roomList):
+                dismissRoomSelectionScreen()
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -356,7 +371,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch info.cause {
                 case .unknown:
-                    analytics.trackError(context: nil, domain: .E2EE, name: .UnknownError, timeToDecryptMillis: timeToDecryptMs)
+                    analytics.trackError(context: nil, domain: .E2EE, name: .OlmKeysNotSentError, timeToDecryptMillis: timeToDecryptMs)
                 case .unknownDevice:
                     analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedSentByInsecureDevice, timeToDecryptMillis: timeToDecryptMs)
                 case .unsignedDevice:
@@ -365,6 +380,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedVerificationViolation, timeToDecryptMillis: timeToDecryptMs)
                 case .sentBeforeWeJoined:
                     analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedDueToMembership, timeToDecryptMillis: timeToDecryptMs)
+                case .historicalMessage:
+                    analytics.trackError(context: nil, domain: .E2EE, name: .HistoricalMessage, timeToDecryptMillis: timeToDecryptMs)
                 }
             }
             .store(in: &cancellables)
@@ -551,7 +568,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             
             switch action {
             case .presentCallScreen(let roomProxy):
-                presentCallScreen(roomProxy: roomProxy)
+                // Here we assume that the app is running and the call state is already up to date
+                presentCallScreen(roomProxy: roomProxy, notifyOtherParticipants: !roomProxy.infoPublisher.value.hasRoomCall)
             case .finished:
                 stateMachine.processEvent(.deselectRoom)
             }
@@ -571,6 +589,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             coordinator.handleAppRoute(.event(eventID: eventID, roomID: roomID, via: via), animated: animated)
         case .roomDetails:
             coordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: animated)
+        case .share(let payload):
+            coordinator.handleAppRoute(.share(payload), animated: animated)
         }
                 
         Task {
@@ -627,22 +647,23 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         presentCallScreen(configuration: .init(genericCallLink: url))
     }
     
-    private func presentCallScreen(roomID: String) async {
+    private func presentCallScreen(roomID: String, notifyOtherParticipants: Bool) async {
         guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             return
         }
         
-        presentCallScreen(roomProxy: roomProxy)
+        presentCallScreen(roomProxy: roomProxy, notifyOtherParticipants: notifyOtherParticipants)
     }
     
-    private func presentCallScreen(roomProxy: JoinedRoomProxyProtocol) {
+    private func presentCallScreen(roomProxy: JoinedRoomProxyProtocol, notifyOtherParticipants: Bool) {
         let colorScheme: ColorScheme = appMediator.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
         presentCallScreen(configuration: .init(roomProxy: roomProxy,
                                                clientProxy: userSession.clientProxy,
                                                clientID: InfoPlistReader.main.bundleIdentifier,
                                                elementCallBaseURL: appSettings.elementCallBaseURL,
                                                elementCallBaseURLOverride: appSettings.elementCallBaseURLOverride,
-                                               colorScheme: colorScheme))
+                                               colorScheme: colorScheme,
+                                               notifyOtherParticipants: notifyOtherParticipants))
     }
     
     private var callScreenPictureInPictureController: AVPictureInPictureController?
@@ -869,7 +890,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 navigationSplitCoordinator.setSheetCoordinator(nil)
                 stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
             case .startCall(let roomID):
-                Task { await self.presentCallScreen(roomID: roomID) }
+                Task { await self.presentCallScreen(roomID: roomID, notifyOtherParticipants: false) }
             case .dismiss:
                 navigationSplitCoordinator.setSheetCoordinator(nil)
             }
@@ -880,6 +901,54 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedUserProfileScreen)
         }
+    }
+    
+    // MARK: Sharing
+    
+    private func presentRoomSelectionScreen(sharePayload: ShareExtensionPayload, animated: Bool) {
+        guard let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider else {
+            fatalError()
+        }
+        
+        let stackCoordinator = NavigationStackCoordinator()
+        
+        let coordinator = RoomSelectionScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
+                                                                           roomSummaryProvider: roomSummaryProvider,
+                                                                           mediaProvider: userSession.mediaProvider))
+        
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .dismiss:
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            case .confirm(let roomID):
+                let sharePayload = switch sharePayload {
+                case .mediaFile(_, let mediaFile):
+                    ShareExtensionPayload.mediaFile(roomID: roomID, mediaFile: mediaFile)
+                case .text(_, let text):
+                    ShareExtensionPayload.text(roomID: roomID, text: text)
+                }
+                
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+                
+                stateMachine.processEvent(.selectRoom(roomID: roomID,
+                                                      via: [],
+                                                      entryPoint: .share(sharePayload)),
+                                          userInfo: .init(animated: animated))
+            }
+        }
+        .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationSplitCoordinator.setSheetCoordinator(stackCoordinator, animated: animated) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedShareExtensionRoomList)
+        }
+    }
+    
+    private func dismissRoomSelectionScreen() {
+        navigationSplitCoordinator.setSheetCoordinator(nil)
     }
     
     // MARK: Toasts and loading indicators

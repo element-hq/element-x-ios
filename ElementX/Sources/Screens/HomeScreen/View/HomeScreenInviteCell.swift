@@ -73,7 +73,7 @@ struct HomeScreenInviteCell: View {
            !room.isDirect {
             RoomInviterLabel(inviter: inviter, mediaProvider: context.mediaProvider)
                 .font(.compound.bodyMD)
-                .foregroundStyle(.compound.textPlaceholder)
+                .foregroundStyle(.compound.textSecondary)
         }
     }
     
@@ -90,7 +90,7 @@ struct HomeScreenInviteCell: View {
             if let subtitle {
                 Text(subtitle)
                     .font(.compound.bodyMD)
-                    .foregroundColor(.compound.textPlaceholder)
+                    .foregroundColor(.compound.textSecondary)
             }
             #endif
         }
@@ -148,7 +148,7 @@ struct HomeScreenInviteCell_Previews: PreviewProvider, TestablePreview {
                 HomeScreenInviteCell(room: .roomInvite(),
                                      context: viewModel().context)
                 
-                HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org", avatarURL: .picturesDirectory),
+                HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org", avatarURL: .mockMXCAvatar),
                                      context: viewModel().context)
                 
                 HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org"),

@@ -11,22 +11,10 @@ class MediaPlayerProvider: MediaPlayerProviderProtocol {
     private lazy var audioPlayer = AudioPlayer()
     private var audioPlayerStates: [String: AudioPlayerState] = [:]
     
+    var player: AudioPlayerProtocol { audioPlayer }
+    
     deinit {
         audioPlayerStates = [:]
-    }
-    
-    func player(for mediaSource: MediaSourceProxy) -> Result<MediaPlayerProtocol, MediaPlayerProviderError> {
-        guard let mimeType = mediaSource.mimeType else {
-            MXLog.error("Unknown mime type")
-            return .failure(.unsupportedMediaType)
-        }
-        
-        if mimeType.starts(with: "audio/") {
-            return .success(audioPlayer)
-        } else {
-            MXLog.error("Unsupported media type: \(mediaSource.mimeType ?? "unknown")")
-            return .failure(.unsupportedMediaType)
-        }
     }
     
     // MARK: - AudioPlayer

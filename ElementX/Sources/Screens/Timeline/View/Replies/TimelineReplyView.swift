@@ -42,7 +42,7 @@ struct TimelineReplyView: View {
                         ReplyView(sender: sender,
                                   plainBody: content.caption ?? content.filename,
                                   formattedBody: content.formattedCaption,
-                                  icon: .init(kind: .mediaSource(content.thumbnailSource ?? content.source), cornerRadii: iconCornerRadii))
+                                  icon: .init(kind: .mediaSource(content.thumbnailInfo?.source ?? content.imageInfo.source), cornerRadii: iconCornerRadii))
                     case .notice(let content):
                         ReplyView(sender: sender,
                                   plainBody: content.body,
@@ -55,7 +55,7 @@ struct TimelineReplyView: View {
                         ReplyView(sender: sender,
                                   plainBody: content.caption ?? content.filename,
                                   formattedBody: content.formattedCaption,
-                                  icon: content.thumbnailSource.map { .init(kind: .mediaSource($0), cornerRadii: iconCornerRadii) })
+                                  icon: content.thumbnailInfo.map { .init(kind: .mediaSource($0.source), cornerRadii: iconCornerRadii) })
                     case .voice:
                         ReplyView(sender: sender,
                                   plainBody: L10n.commonVoiceMessage,
@@ -222,9 +222,7 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
     }()
     
     static var previewItems: [TimelineReplyView] {
-        let imageSource = MediaSourceProxy(url: "https://mock.com", mimeType: "image/png")
-        
-        return [
+        [
             TimelineReplyView(placement: .timeline, timelineItemReplyDetails: .notLoaded(eventID: "")),
             
             TimelineReplyView(placement: .timeline, timelineItemReplyDetails: .loading(eventID: "")),
@@ -252,6 +250,7 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
                                                                                                     duration: 0,
                                                                                                     waveform: nil,
                                                                                                     source: nil,
+                                                                                                    fileSize: nil,
                                                                                                     contentType: nil))))),
             
             TimelineReplyView(placement: .timeline,
@@ -260,6 +259,7 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
                                                                 eventContent: .message(.file(.init(filename: "file.txt",
                                                                                                    caption: "Some file",
                                                                                                    source: nil,
+                                                                                                   fileSize: nil,
                                                                                                    thumbnailSource: nil,
                                                                                                    contentType: nil))))),
             
@@ -268,17 +268,16 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
                                                                 eventID: "123",
                                                                 eventContent: .message(.image(.init(filename: "image.jpg",
                                                                                                     caption: "Some image",
-                                                                                                    source: imageSource,
-                                                                                                    thumbnailSource: imageSource))))),
+                                                                                                    imageInfo: .mockImage,
+                                                                                                    thumbnailInfo: .mockThumbnail))))),
             
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                 eventID: "123",
                                                                 eventContent: .message(.video(.init(filename: "video.mp4",
                                                                                                     caption: "Some video",
-                                                                                                    duration: 0,
-                                                                                                    source: nil,
-                                                                                                    thumbnailSource: imageSource))))),
+                                                                                                    videoInfo: .mockVideo,
+                                                                                                    thumbnailInfo: .mockThumbnail))))),
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
                                                                 eventID: "123",
@@ -292,6 +291,7 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
                                                                                                     duration: 0,
                                                                                                     waveform: nil,
                                                                                                     source: nil,
+                                                                                                    fileSize: nil,
                                                                                                     contentType: nil))))),
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
@@ -321,7 +321,7 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
         }
         .padding()
         .environmentObject(viewModel.context)
-        // Allow member names to load. Reduce precission as the `imageSource` randomly renders slightly differently
+        // Allow member names to load. Reduce precission as the `mockThumbnail` randomly renders slightly differently
         .snapshotPreferences(delay: 0.2, precision: 0.98)
         .previewLayout(.sizeThatFits)
     }

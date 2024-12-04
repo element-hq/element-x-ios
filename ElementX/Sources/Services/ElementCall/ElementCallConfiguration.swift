@@ -21,7 +21,8 @@ struct ElementCallConfiguration {
                       clientID: String,
                       elementCallBaseURL: URL,
                       elementCallBaseURLOverride: URL?,
-                      colorScheme: ColorScheme)
+                      colorScheme: ColorScheme,
+                      notifyOtherParticipants: Bool)
     }
     
     /// The type of call being configured i.e. whether it's an external URL or an internal room call.
@@ -58,13 +59,15 @@ struct ElementCallConfiguration {
          clientID: String,
          elementCallBaseURL: URL,
          elementCallBaseURLOverride: URL?,
-         colorScheme: ColorScheme) {
+         colorScheme: ColorScheme,
+         notifyOtherParticipants: Bool) {
         kind = .roomCall(roomProxy: roomProxy,
                          clientProxy: clientProxy,
                          clientID: clientID,
                          elementCallBaseURL: elementCallBaseURL,
                          elementCallBaseURLOverride: elementCallBaseURLOverride,
-                         colorScheme: colorScheme)
+                         colorScheme: colorScheme,
+                         notifyOtherParticipants: notifyOtherParticipants)
     }
     
     /// A string representing the call being configured.
@@ -72,7 +75,7 @@ struct ElementCallConfiguration {
         switch kind {
         case .genericCallLink(let url):
             url.absoluteString
-        case .roomCall(let roomProxy, _, _, _, _, _):
+        case .roomCall(let roomProxy, _, _, _, _, _, _):
             roomProxy.id
         }
     }

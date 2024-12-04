@@ -25,13 +25,13 @@ struct AvatarHeaderView<Footer: View>: View {
     private let subtitle: String?
     private let badges: [Badge]
     
-    private let avatarSize: AvatarSize
+    private let avatarSize: Avatars.Size
     private let mediaProvider: MediaProviderProtocol?
     private var onAvatarTap: ((URL) -> Void)?
     @ViewBuilder private var footer: () -> Footer
     
     init(room: RoomDetails,
-         avatarSize: AvatarSize,
+         avatarSize: Avatars.Size,
          mediaProvider: MediaProviderProtocol? = nil,
          onAvatarTap: ((URL) -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
@@ -72,7 +72,7 @@ struct AvatarHeaderView<Footer: View>: View {
     
     init(member: RoomMemberDetails,
          isVerified: Bool = false,
-         avatarSize: AvatarSize,
+         avatarSize: Avatars.Size,
          mediaProvider: MediaProviderProtocol? = nil,
          onAvatarTap: ((URL) -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
@@ -88,7 +88,7 @@ struct AvatarHeaderView<Footer: View>: View {
     
     init(user: UserProfileProxy,
          isVerified: Bool,
-         avatarSize: AvatarSize,
+         avatarSize: Avatars.Size,
          mediaProvider: MediaProviderProtocol? = nil,
          onAvatarTap: ((URL) -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
@@ -193,7 +193,7 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
                                          name: "Test Room",
                                          avatar: .room(id: "@test:matrix.org",
                                                        name: "Test Room",
-                                                       avatarURL: .picturesDirectory),
+                                                       avatarURL: .mockMXCAvatar),
                                          canonicalAlias: "#test:matrix.org",
                                          isEncrypted: true,
                                          isPublic: true),

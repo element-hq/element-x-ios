@@ -16,7 +16,23 @@ struct CreateRoomScreen: View {
         case name
         case topic
     }
-
+    
+    private var aliasBinding: Binding<String> {
+        .init(get: {
+            context.viewState.aliasLocalPart
+        }, set: {
+            context.send(viewAction: .updateAliasLocalPart($0))
+        })
+    }
+    
+    private var roomNameBinding: Binding<String> {
+        .init(get: {
+            context.viewState.roomName
+        }, set: {
+            context.send(viewAction: .updateRoomName($0))
+        })
+    }
+    
     var body: some View {
         Form {
             roomSection
@@ -25,6 +41,7 @@ struct CreateRoomScreen: View {
             if context.viewState.isKnockingFeatureEnabled,
                !context.isRoomPrivate {
                 roomAccessSection
+                roomAliasSection
             }
         }
         .compoundList()
@@ -48,8 +65,8 @@ struct CreateRoomScreen: View {
                         .compoundListSectionHeader()
                     
                     TextField(L10n.screenCreateRoomRoomNameLabel,
-                              text: $context.roomName,
-                              prompt: Text(L10n.commonRoomNamePlaceholder).foregroundColor(.compound.textPlaceholder),
+                              text: roomNameBinding,
+                              prompt: Text(L10n.commonRoomNamePlaceholder).foregroundColor(.compound.textSecondary),
                               axis: .horizontal)
                         .focused($focus, equals: .name)
                         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)
@@ -150,22 +167,62 @@ struct CreateRoomScreen: View {
                                     iconAlignment: .top),
                     kind: .selection(isSelected: !context.isRoomPrivate) { context.isRoomPrivate = false })
         } header: {
-            Text(L10n.commonSecurity.uppercased())
+            Text(L10n.screenCreateRoomRoomVisibilitySectionTitle)
                 .compoundListSectionHeader()
         }
     }
     
     private var roomAccessSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenCreateRoomAccessSectionAnyoneOptionTitle,
-                                  description: L10n.screenCreateRoomAccessSectionAnyoneOptionDescription),
+            ListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionTitle,
+                                  description: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionDescription),
                     kind: .selection(isSelected: !context.isKnockingOnly) { context.isKnockingOnly = false })
-            ListRow(label: .plain(title: L10n.screenCreateRoomAccessSectionKnockingOptionTitle,
-                                  description: L10n.screenCreateRoomAccessSectionKnockingOptionDescription),
+            ListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionKnockingOptionTitle,
+                                  description: L10n.screenCreateRoomRoomAccessSectionKnockingOptionDescription),
                     kind: .selection(isSelected: context.isKnockingOnly) { context.isKnockingOnly = true })
         } header: {
-            Text(L10n.screenCreateRoomAccessSectionHeader.uppercased())
+            Text(L10n.screenCreateRoomRoomAccessSectionHeader)
                 .compoundListSectionHeader()
+        }
+    }
+    
+    private var roomAliasSection: some View {
+        Section {
+            ListRow(kind: .custom {
+                HStack(spacing: 0) {
+                    Text("#")
+                        .font(.compound.bodyLG)
+                        .foregroundStyle(.compound.textSecondary)
+                    
+                    TextField("", text: aliasBinding)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        .tint(.compound.iconAccentTertiary)
+                        .font(.compound.bodyLG)
+                        .foregroundStyle(.compound.textPrimary)
+                        .padding(.horizontal, 8)
+                    Text(":\(context.viewState.serverName)")
+                        .font(.compound.bodyLG)
+                        .foregroundStyle(.compound.textSecondary)
+                }
+                .padding(ListRowPadding.textFieldInsets)
+                .environment(\.layoutDirection, .leftToRight)
+                .errorBackground(!context.viewState.aliasErrors.isEmpty)
+            })
+        } header: {
+            Text(L10n.screenCreateRoomRoomAddressSectionTitle)
+                .compoundListSectionHeader()
+        } footer: {
+            VStack(alignment: .leading, spacing: 12) {
+                if let errorDescription = context.viewState.aliasErrorDescription {
+                    Label(errorDescription, icon: \.error, iconSize: .xSmall, relativeTo: .compound.bodySM)
+                        .foregroundStyle(.compound.textCriticalPrimary)
+                        .font(.compound.bodySM)
+                }
+                Text(L10n.screenCreateRoomRoomAddressSectionFooter)
+                    .compoundListSectionFooter()
+                    .font(.compound.bodySM)
+            }
         }
     }
     
@@ -177,6 +234,15 @@ struct CreateRoomScreen: View {
             }
             .disabled(!context.viewState.canCreateRoom)
         }
+    }
+}
+
+private extension View {
+    func errorBackground(_ shouldDisplay: Bool) -> some View {
+        listRowBackground(shouldDisplay ? AnyView(RoundedRectangle(cornerRadius: 10)
+                .inset(by: 1)
+                .fill(.compound.bgCriticalSubtleHovered)
+                .stroke(Color.compound.borderCriticalPrimary)) : AnyView(Color.compound.bgCanvasDefaultLevel1))
     }
 }
 
@@ -208,7 +274,7 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let publicRoomViewModel = {
-        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
         let parameters = CreateRoomFlowParameters(isRoomPrivate: false)
         let selectedUsers: [UserProfileProxy] = [.mockAlice, .mockBob, .mockCharlie]
         ServiceLocator.shared.settings.knockingEnabled = true
@@ -220,6 +286,32 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
                                    appSettings: ServiceLocator.shared.settings)
     }()
     
+    static let publicRoomInvalidAliasViewModel = {
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
+        let parameters = CreateRoomFlowParameters(isRoomPrivate: false, aliasLocalPart: "#:")
+        ServiceLocator.shared.settings.knockingEnabled = true
+        return CreateRoomViewModel(userSession: userSession,
+                                   createRoomParameters: .init(parameters),
+                                   selectedUsers: .init([]),
+                                   analytics: ServiceLocator.shared.analytics,
+                                   userIndicatorController: UserIndicatorControllerMock(),
+                                   appSettings: ServiceLocator.shared.settings)
+    }()
+    
+    static let publicRoomExistingAliasViewModel = {
+        let clientProxy = ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))
+        clientProxy.isAliasAvailableReturnValue = .success(false)
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+        let parameters = CreateRoomFlowParameters(isRoomPrivate: false, aliasLocalPart: "existing")
+        ServiceLocator.shared.settings.knockingEnabled = true
+        return CreateRoomViewModel(userSession: userSession,
+                                   createRoomParameters: .init(parameters),
+                                   selectedUsers: .init([]),
+                                   analytics: ServiceLocator.shared.analytics,
+                                   userIndicatorController: UserIndicatorControllerMock(),
+                                   appSettings: ServiceLocator.shared.settings)
+    }()
+
     static var previews: some View {
         NavigationStack {
             CreateRoomScreen(context: viewModel.context)
@@ -233,5 +325,15 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
             CreateRoomScreen(context: publicRoomViewModel.context)
         }
         .previewDisplayName("Create Public Room")
+        NavigationStack {
+            CreateRoomScreen(context: publicRoomInvalidAliasViewModel.context)
+        }
+        .snapshotPreferences(delay: 1.5)
+        .previewDisplayName("Create Public Room, invalid alias")
+        NavigationStack {
+            CreateRoomScreen(context: publicRoomExistingAliasViewModel.context)
+        }
+        .snapshotPreferences(delay: 1.5)
+        .previewDisplayName("Create Public Room, existing alias")
     }
 }

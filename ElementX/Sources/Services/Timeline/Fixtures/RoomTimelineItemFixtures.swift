@@ -250,35 +250,16 @@ enum RoomTimelineItemFixtures {
     
     static var mediaChunk: [RoomTimelineItemProtocol] {
         [
-            VideoRoomTimelineItem(id: .randomEvent,
-                                  timestamp: "10:47 am",
-                                  isOutgoing: false,
-                                  isEditable: false,
-                                  canBeRepliedTo: true,
-                                  isThreaded: false,
-                                  sender: .init(id: ""),
-                                  content: .init(filename: "video.mp4",
-                                                 duration: 100,
-                                                 source: .init(url: .picturesDirectory, mimeType: nil),
-                                                 thumbnailSource: .init(url: .picturesDirectory, mimeType: nil),
-                                                 width: 1920,
-                                                 height: 1080,
-                                                 aspectRatio: 1.78,
-                                                 blurhash: "KtI~70X5V?yss9oyrYs:t6")),
-            ImageRoomTimelineItem(id: .randomEvent,
-                                  timestamp: "10:47 am",
-                                  isOutgoing: false,
-                                  isEditable: false,
-                                  canBeRepliedTo: true,
-                                  isThreaded: false,
-                                  sender: .init(id: ""),
-                                  content: .init(filename: "image.jpg",
-                                                 source: .init(url: .picturesDirectory, mimeType: nil),
-                                                 thumbnailSource: nil,
-                                                 width: 5120,
-                                                 height: 3412,
-                                                 aspectRatio: 1.5,
-                                                 blurhash: "KpE4oyayR5|GbHb];3j@of"))
+            AudioRoomTimelineItem(isOutgoing: false, caption: "Listen to this!"),
+            AudioRoomTimelineItem(isOutgoing: true),
+            FileRoomTimelineItem(isOutgoing: false),
+            FileRoomTimelineItem(isOutgoing: true, caption: "Please check this ASAP!"),
+            ImageRoomTimelineItem(isOutgoing: false),
+            ImageRoomTimelineItem(isOutgoing: true, caption: "Isn't this pretty!"),
+            VideoRoomTimelineItem(isOutgoing: false, caption: "Woah, it was incredible!"),
+            VideoRoomTimelineItem(isOutgoing: true),
+            VoiceMessageRoomTimelineItem(isOutgoing: false),
+            VoiceMessageRoomTimelineItem(isOutgoing: true)
         ]
     }
 }
@@ -299,5 +280,94 @@ private extension TextRoomTimelineItem {
         var newSelf = self
         newSelf.properties.orderedReadReceipts = receipts
         return newSelf
+    }
+}
+
+private extension AudioRoomTimelineItem {
+    init(isOutgoing: Bool, caption: String? = nil) {
+        self.init(id: .randomEvent,
+                  timestamp: "10:47 am",
+                  isOutgoing: isOutgoing,
+                  isEditable: isOutgoing,
+                  canBeRepliedTo: true,
+                  isThreaded: false,
+                  sender: .init(id: isOutgoing ? "@alice:matrix.org" : "@bob:matrix.org"),
+                  content: .init(filename: "audio.mp3",
+                                 caption: caption,
+                                 duration: 60,
+                                 waveform: nil,
+                                 source: try? .init(url: .mockMXCAudio, mimeType: nil),
+                                 fileSize: nil,
+                                 contentType: .mp3))
+    }
+}
+
+private extension FileRoomTimelineItem {
+    init(isOutgoing: Bool, caption: String? = nil) {
+        self.init(id: .randomEvent,
+                  timestamp: "10:47 am",
+                  isOutgoing: isOutgoing,
+                  isEditable: isOutgoing,
+                  canBeRepliedTo: true,
+                  isThreaded: false,
+                  sender: .init(id: isOutgoing ? "@alice:matrix.org" : "@bob:matrix.org"),
+                  content: .init(filename: "file.pdf",
+                                 caption: caption,
+                                 source: try? .init(url: .mockMXCFile, mimeType: nil),
+                                 fileSize: nil,
+                                 thumbnailSource: nil,
+                                 contentType: .pdf))
+    }
+}
+
+private extension ImageRoomTimelineItem {
+    init(isOutgoing: Bool, caption: String? = nil) {
+        self.init(id: .randomEvent,
+                  timestamp: "10:47 am",
+                  isOutgoing: isOutgoing,
+                  isEditable: isOutgoing,
+                  canBeRepliedTo: true,
+                  isThreaded: false,
+                  sender: .init(id: isOutgoing ? "@alice:matrix.org" : "@bob:matrix.org"),
+                  content: .init(filename: "image.jpg",
+                                 caption: caption,
+                                 imageInfo: .mockImage,
+                                 thumbnailInfo: nil,
+                                 blurhash: "KpE4oyayR5|GbHb];3j@of"))
+    }
+}
+
+private extension VideoRoomTimelineItem {
+    init(isOutgoing: Bool, caption: String? = nil) {
+        self.init(id: .randomEvent,
+                  timestamp: "10:47 am",
+                  isOutgoing: isOutgoing,
+                  isEditable: isOutgoing,
+                  canBeRepliedTo: true,
+                  isThreaded: false,
+                  sender: .init(id: isOutgoing ? "@alice:matrix.org" : "@bob:matrix.org"),
+                  content: .init(filename: "video.mp4",
+                                 caption: caption,
+                                 videoInfo: .mockVideo,
+                                 thumbnailInfo: .mockThumbnail,
+                                 blurhash: "KtI~70X5V?yss9oyrYs:t6"))
+    }
+}
+
+private extension VoiceMessageRoomTimelineItem {
+    init(isOutgoing: Bool) {
+        self.init(id: .randomEvent,
+                  timestamp: "10:47 am",
+                  isOutgoing: isOutgoing,
+                  isEditable: isOutgoing,
+                  canBeRepliedTo: true,
+                  isThreaded: false,
+                  sender: .init(id: isOutgoing ? "@alice:matrix.org" : "@bob:matrix.org"),
+                  content: .init(filename: "message.ogg",
+                                 duration: 10,
+                                 waveform: .mockWaveform,
+                                 source: try? .init(url: .mockMXCAudio, mimeType: nil),
+                                 fileSize: nil,
+                                 contentType: .audio))
     }
 }

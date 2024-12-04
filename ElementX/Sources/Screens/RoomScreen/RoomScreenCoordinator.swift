@@ -15,6 +15,7 @@ struct RoomScreenCoordinatorParameters {
     let clientProxy: ClientProxyProtocol
     let roomProxy: JoinedRoomProxyProtocol
     var focussedEvent: FocusEvent?
+    var sharedText: String?
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
@@ -40,7 +41,8 @@ enum RoomScreenCoordinatorAction {
     case presentMessageForwarding(forwardingItem: MessageForwardingItem)
     case presentCallScreen
     case presentPinnedEventsTimeline
-    case presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, itemID: TimelineItemIdentifier)
+    case presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
+    case presentKnockRequestsList
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
@@ -88,7 +90,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                                     maxCompressedHeight: ComposerConstant.maxHeight,
                                                     maxExpandedHeight: ComposerConstant.maxHeight,
                                                     parserStyle: .elementX)
-        let composerViewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+        let composerViewModel = ComposerToolbarViewModel(initialText: parameters.sharedText,
+                                                         wysiwygViewModel: wysiwygViewModel,
                                                          completionSuggestionService: parameters.completionSuggestionService,
                                                          mediaProvider: parameters.mediaProvider,
                                                          mentionDisplayHelper: ComposerMentionDisplayHelper(timelineContext: timelineViewModel.context),
@@ -132,8 +135,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentMessageForwarding(forwardingItem: forwardingItem))
                 case .displayLocation(let body, let geoURI, let description):
                     actionsSubject.send(.presentLocationViewer(body: body, geoURI: geoURI, description: description))
-                case .displayResolveSendFailure(let failure, let itemID):
-                    actionsSubject.send(.presentResolveSendFailure(failure: failure, itemID: itemID))
+                case .displayResolveSendFailure(let failure, let sendHandle):
+                    actionsSubject.send(.presentResolveSendFailure(failure: failure, sendHandle: sendHandle))
                 case .composer(let action):
                     composerViewModel.process(timelineAction: action)
                 case .hasScrolled(direction: let direction):
@@ -167,12 +170,14 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentCallScreen)
                 case .removeComposerFocus:
                     composerViewModel.process(timelineAction: .removeFocus)
+                case .displayKnockRequests:
+                    actionsSubject.send(.presentKnockRequestsList)
                 }
             }
             .store(in: &cancellables)
         
         // Loading the draft requires the subscriptions to be set up first otherwise the room won't be be able to propagate the information to the composer.
-        composerViewModel.loadDraft()
+        Task { await composerViewModel.loadDraft() }
     }
     
     func focusOnEvent(_ focussedEvent: FocusEvent) {
@@ -181,6 +186,12 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             roomViewModel.setSelectedPinnedEventID(eventID)
         }
         Task { await timelineViewModel.focusOnEvent(eventID: eventID) }
+    }
+    
+    func shareText(_ string: String) {
+        composerViewModel.process(timelineAction: .setMode(mode: .default)) // Make sure we're not e.g. replying.
+        composerViewModel.process(timelineAction: .setText(plainText: string, htmlText: nil))
+        composerViewModel.process(timelineAction: .setFocus)
     }
     
     func stop() {

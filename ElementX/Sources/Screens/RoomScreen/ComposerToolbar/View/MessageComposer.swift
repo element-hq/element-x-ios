@@ -35,17 +35,8 @@ struct MessageComposer: View {
                 resizeGrabber
             }
             
-            mainContent
-                .padding(.horizontal, 12.0)
-                .clipShape(composerShape)
-                .background {
-                    ZStack {
-                        composerShape
-                            .fill(Color.compound.bgSubtleSecondary)
-                        composerShape
-                            .stroke(Color.compound._borderTextFieldFocused, lineWidth: 0.5)
-                    }
-                }
+            composerTextField
+                .messageComposerStyle(header: header)
                 // Explicitly disable all animations to fix weirdness with the header immediately
                 // appearing whilst the text field and keyboard are still animating up to it.
                 .animation(.noAnimation, value: mode)
@@ -57,34 +48,27 @@ struct MessageComposer: View {
     
     @State private var composerFrame = CGRect.zero
     
-    private var mainContent: some View {
-        VStack(alignment: .leading, spacing: -6) {
-            header
-            
-            if composerFormattingEnabled {
-                Color.clear
-                    .overlay(alignment: .top) {
-                        composerView
-                            .clipped()
-                            .readFrame($composerFrame)
-                    }
-                    .frame(minHeight: ComposerConstant.minHeight, maxHeight: max(composerHeight, composerFrame.height),
-                           alignment: .top)
-                    .tint(.compound.iconAccentTertiary)
-                    .padding(.vertical, 10)
-                    .onAppear {
-                        onAppearAction()
-                    }
-            } else {
-                MessageComposerTextField(placeholder: L10n.richTextEditorComposerPlaceholder,
-                                         text: $plainComposerText,
-                                         presendCallback: $presendCallback,
-                                         maxHeight: ComposerConstant.maxHeight,
-                                         keyHandler: { handleKeyPress($0) },
-                                         pasteHandler: pasteAction)
-                    .tint(.compound.iconAccentTertiary)
-                    .padding(.vertical, 10)
-            }
+    @ViewBuilder
+    private var composerTextField: some View {
+        if composerFormattingEnabled {
+            Color.clear
+                .overlay(alignment: .top) {
+                    composerView
+                        .clipped()
+                        .readFrame($composerFrame)
+                }
+                .frame(minHeight: ComposerConstant.minHeight, maxHeight: max(composerHeight, composerFrame.height),
+                       alignment: .top)
+                .onAppear {
+                    onAppearAction()
+                }
+        } else {
+            MessageComposerTextField(placeholder: L10n.richTextEditorComposerPlaceholder,
+                                     text: $plainComposerText,
+                                     presendCallback: $presendCallback,
+                                     maxHeight: ComposerConstant.maxHeight,
+                                     keyHandler: { handleKeyPress($0) },
+                                     pasteHandler: pasteAction)
         }
     }
 
@@ -98,8 +82,8 @@ struct MessageComposer: View {
         switch mode {
         case .reply(_, let replyDetails, _):
             MessageComposerReplyHeader(replyDetails: replyDetails, action: cancellationAction)
-        case .edit:
-            MessageComposerEditHeader(action: cancellationAction)
+        case .edit(_, let editType):
+            MessageComposerEditHeader(editType: editType, action: cancellationAction)
         case .recordVoiceMessage, .previewVoiceMessage, .default:
             EmptyView()
         }
@@ -168,14 +152,20 @@ private struct MessageComposerReplyHeader: View {
 }
 
 private struct MessageComposerEditHeader: View {
+    let editType: ComposerMode.EditType
     let action: () -> Void
+    
+    private var title: String {
+        switch editType {
+        case .default: L10n.commonEditing
+        case .addCaption: L10n.commonAddingCaption
+        case .editCaption: L10n.commonEditingCaption
+        }
+    }
     
     var body: some View {
         HStack(alignment: .center, spacing: 8) {
-            Label(L10n.commonEditing,
-                  icon: \.editSolid,
-                  iconSize: .xSmall,
-                  relativeTo: .compound.bodySMSemibold)
+            Label(title, icon: \.editSolid, iconSize: .xSmall, relativeTo: .compound.bodySMSemibold)
                 .labelStyle(MessageComposerHeaderLabelStyle())
             Spacer()
             Button(action: action) {
@@ -200,6 +190,42 @@ private struct MessageComposerHeaderLabelStyle: LabelStyle {
     }
 }
 
+// MARK: - Style
+
+extension View {
+    func messageComposerStyle(header: some View = EmptyView()) -> some View {
+        modifier(MessageComposerStyleModifier(header: header))
+    }
+}
+
+private struct MessageComposerStyleModifier<Header: View>: ViewModifier {
+    private let composerShape = RoundedRectangle(cornerRadius: 21, style: .circular)
+    
+    let header: Header
+    
+    func body(content: Content) -> some View {
+        VStack(alignment: .leading, spacing: -6) {
+            header
+            
+            content
+                .tint(.compound.iconAccentTertiary)
+                .padding(.vertical, 10)
+        }
+        .padding(.horizontal, 12.0)
+        .clipShape(composerShape)
+        .background {
+            ZStack {
+                composerShape
+                    .fill(Color.compound.bgSubtleSecondary)
+                composerShape
+                    .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
+            }
+        }
+    }
+}
+
+// MARK: - Previews
+
 struct MessageComposer_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
     
@@ -211,6 +237,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                                                     duration: 100,
                                                     waveform: nil,
                                                     source: nil,
+                                                    fileSize: nil,
                                                     contentType: nil)))),
         .loaded(sender: .init(id: "James"),
                 eventID: "123",
@@ -220,14 +247,15 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                 eventContent: .message(.file(.init(filename: "brain-surgery.pdf",
                                                    caption: "File: Crash course in brain surgery",
                                                    source: nil,
+                                                   fileSize: nil,
                                                    thumbnailSource: nil,
                                                    contentType: nil)))),
         .loaded(sender: .init(id: "Cliff"),
                 eventID: "123",
                 eventContent: .message(.image(.init(filename: "head.png",
                                                     caption: "Image: Pushead",
-                                                    source: .init(url: .picturesDirectory, mimeType: nil),
-                                                    thumbnailSource: .init(url: .picturesDirectory, mimeType: nil))))),
+                                                    imageInfo: .mockImage,
+                                                    thumbnailInfo: .mockThumbnail)))),
         .loaded(sender: .init(id: "Jason"),
                 eventID: "123",
                 eventContent: .message(.notice(.init(body: "Notice: Too far gone?")))),
@@ -238,9 +266,8 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                 eventID: "123",
                 eventContent: .message(.video(.init(filename: "never.mov",
                                                     caption: "Video: Through the never",
-                                                    duration: 100,
-                                                    source: nil,
-                                                    thumbnailSource: .init(url: .picturesDirectory, mimeType: nil))))),
+                                                    videoInfo: .mockVideo,
+                                                    thumbnailInfo: .mockThumbnail)))),
         .loading(eventID: "")
     ]
     
@@ -275,13 +302,20 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
             messageComposer()
             
             messageComposer(.init(string: "Some message"),
-                            mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString)))
+                            mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString), type: .default))
             
             messageComposer(mode: .reply(eventID: UUID().uuidString,
                                          replyDetails: .loaded(sender: .init(id: "Kirk"),
                                                                eventID: "123",
                                                                eventContent: .message(.text(.init(body: "Text: Where the wild things are")))),
                                          isThread: false))
+            
+            Color.clear.frame(height: 20)
+            
+            messageComposer(.init(string: "Some new caption"),
+                            mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString), type: .addCaption))
+            messageComposer(.init(string: "Some updated caption"),
+                            mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString), type: .editCaption))
         }
         .padding(.horizontal)
         

@@ -14,7 +14,17 @@ enum MediaUploadPreviewScreenViewModelAction {
 struct MediaUploadPreviewScreenViewState: BindableState {
     let url: URL
     let title: String?
+    let shouldShowCaptionWarning: Bool
     var shouldDisableInteraction = false
+    
+    var bindings = MediaUploadPreviewScreenBindings()
+}
+
+struct MediaUploadPreviewScreenBindings: BindableState {
+    var caption = NSAttributedString()
+    var presendCallback: (() -> Void)?
+    
+    var isPresentingMediaCaptionWarning = false
 }
 
 enum MediaUploadPreviewScreenViewAction {

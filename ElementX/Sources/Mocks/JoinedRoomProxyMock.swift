@@ -39,6 +39,7 @@ struct JoinedRoomProxyMockConfiguration {
     var canUserPin = true
     
     var shouldUseAutoUpdatingTimeline = false
+    var joinRule: JoinRule?
 }
 
 extension JoinedRoomProxyMock {
@@ -49,22 +50,8 @@ extension JoinedRoomProxyMock {
         id = configuration.id
         isEncrypted = configuration.isEncrypted
         
-        let timeline = TimelineProxyMock()
-        timeline.sendMessageEventContentReturnValue = .success(())
-        timeline.paginateBackwardsRequestSizeReturnValue = .success(())
-        timeline.paginateForwardsRequestSizeReturnValue = .success(())
-        timeline.sendReadReceiptForTypeReturnValue = .success(())
-        
-        if configuration.shouldUseAutoUpdatingTimeline {
-            timeline.underlyingTimelineProvider = AutoUpdatingRoomTimelineProviderMock()
-        } else {
-            let timelineProvider = RoomTimelineProviderMock()
-            timelineProvider.paginationState = .init(backward: configuration.timelineStartReached ? .timelineEndReached : .idle, forward: .timelineEndReached)
-            timelineProvider.underlyingMembershipChangePublisher = PassthroughSubject().eraseToAnyPublisher()
-            timeline.underlyingTimelineProvider = timelineProvider
-        }
-        
-        self.timeline = timeline
+        timeline = TimelineProxyMock(.init(isAutoUpdating: configuration.shouldUseAutoUpdatingTimeline,
+                                           timelineStartReached: configuration.timelineStartReached))
 
         ownUserID = configuration.ownUserID
         
@@ -83,9 +70,8 @@ extension JoinedRoomProxyMock {
             return .success(member)
         }
         
-        resendItemIDReturnValue = .success(())
-        ignoreDeviceTrustAndResendDevicesItemIDReturnValue = .success(())
-        withdrawVerificationAndResendUserIDsItemIDReturnValue = .success(())
+        ignoreDeviceTrustAndResendDevicesSendHandleReturnValue = .success(())
+        withdrawVerificationAndResendUserIDsSendHandleReturnValue = .success(())
 
         flagAsUnreadReturnValue = .success(())
         markAsReadReceiptTypeReturnValue = .success(())
@@ -138,6 +124,7 @@ extension JoinedRoomProxyMock {
         matrixToEventPermalinkReturnValue = .success(.homeDirectory)
         loadDraftReturnValue = .success(nil)
         clearDraftReturnValue = .success(())
+        sendTypingNotificationIsTypingReturnValue = .success(())
     }
 }
 
@@ -180,6 +167,7 @@ extension RoomInfo {
                   numUnreadMessages: 0,
                   numUnreadNotifications: 0,
                   numUnreadMentions: 0,
-                  pinnedEventIds: Array(configuration.pinnedEventIDs))
+                  pinnedEventIds: Array(configuration.pinnedEventIDs),
+                  joinRule: configuration.joinRule)
     }
 }

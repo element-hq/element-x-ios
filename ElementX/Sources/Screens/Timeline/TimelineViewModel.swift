@@ -81,6 +81,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        timelineViewState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                        ownUserID: roomProxy.ownUserID,
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,
+                                                       isCreateMediaCaptionsEnabled: appSettings.createMediaCaptionsEnabled,
                                                        hideTimelineMedia: appSettings.hideTimelineMedia,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
                                                        bindings: .init(reactionsCollapsed: [:]),
@@ -128,8 +129,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             Task { await timelineController.processItemAppearance(id) }
         case .itemDisappeared(let id):
             Task { await timelineController.processItemDisappearance(id) }
-        case .itemTapped(let id):
-            Task { await handleItemTapped(with: id) }
+        case .mediaTapped(let id):
+            Task { await handleMediaTapped(with: id) }
         case .itemSendInfoTapped(let itemID):
             handleItemSendInfoTapped(itemID: itemID)
         case .toggleReaction(let emoji, let itemID):
@@ -447,6 +448,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             .weakAssign(to: \.state.isViewSourceEnabled, on: self)
             .store(in: &cancellables)
         
+        appSettings.$createMediaCaptionsEnabled
+            .weakAssign(to: \.state.isCreateMediaCaptionsEnabled, on: self)
+            .store(in: &cancellables)
+        
         appSettings.$hideTimelineMedia
             .weakAssign(to: \.state.hideTimelineMedia, on: self)
             .store(in: &cancellables)
@@ -533,7 +538,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         await timelineController.sendReadReceipt(for: lastVisibleItemID)
     }
 
-    private func handleItemTapped(with itemID: TimelineItemIdentifier) async {
+    private func handleMediaTapped(with itemID: TimelineItemIdentifier) async {
         state.showLoading = true
         let action = await timelineInteractionHandler.processItemTap(itemID)
 
@@ -562,7 +567,14 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         if case .sendingFailed(.unknown) = eventTimelineItem.properties.deliveryStatus {
             displayAlert(.sendingFailed)
         } else if case let .sendingFailed(.verifiedUser(failure)) = eventTimelineItem.properties.deliveryStatus {
-            actionsSubject.send(.displayResolveSendFailure(failure: failure, itemID: itemID))
+            guard let sendHandle = timelineController.sendHandle(for: itemID) else {
+                MXLog.error("Cannot find send handle for \(itemID).")
+                return
+            }
+            
+            actionsSubject.send(.displayResolveSendFailure(failure: failure,
+                                                           sendHandle: sendHandle))
+            
         } else if let authenticityMessage = eventTimelineItem.properties.encryptionAuthenticity?.message {
             displayAlert(.encryptionAuthenticity(authenticityMessage))
         }
@@ -599,11 +611,17 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                  html: html,
                                                  inReplyToEventID: eventID,
                                                  intentionalMentions: intentionalMentions)
-        case .edit(let originalEventOrTransactionID):
+        case .edit(let originalEventOrTransactionID, .default):
             await timelineController.edit(originalEventOrTransactionID,
                                           message: message,
                                           html: html,
                                           intentionalMentions: intentionalMentions)
+        case .edit(let originalEventOrTransactionID, .addCaption),
+             .edit(let originalEventOrTransactionID, .editCaption):
+            await timelineController.editCaption(originalEventOrTransactionID,
+                                                 message: message,
+                                                 html: html,
+                                                 intentionalMentions: intentionalMentions)
         case .default:
             switch slashCommand(message: message) {
             case .join:

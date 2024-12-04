@@ -102,27 +102,27 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     }
     
     private func updateRoomDetails() {
-        var roomInfo: RoomInfoProxy?
+        var roomPreviewInfo: BaseRoomInfoProxyProtocol?
         var inviter: RoomInviterDetails?
         
         switch room {
         case .joined(let joinedRoomProxy):
-            roomInfo = joinedRoomProxy.infoPublisher.value
+            roomPreviewInfo = joinedRoomProxy.infoPublisher.value
         case .invited(let invitedRoomProxy):
-            inviter = invitedRoomProxy.info.inviter.flatMap(RoomInviterDetails.init)
-            roomInfo = invitedRoomProxy.info
+            inviter = invitedRoomProxy.inviter.map(RoomInviterDetails.init)
+            roomPreviewInfo = invitedRoomProxy.info
         case .knocked(let knockedRoomProxy):
-            roomInfo = knockedRoomProxy.info
+            roomPreviewInfo = knockedRoomProxy.info
         default:
             break
         }
         
-        let name = roomInfo?.displayName ?? roomPreviewDetails?.name
+        let name = roomPreviewInfo?.displayName ?? roomPreviewDetails?.name
         state.roomDetails = JoinRoomScreenRoomDetails(name: name,
-                                                      topic: roomInfo?.topic ?? roomPreviewDetails?.topic,
-                                                      canonicalAlias: roomInfo?.canonicalAlias ?? roomPreviewDetails?.canonicalAlias,
-                                                      avatar: roomInfo?.avatar ?? .room(id: roomID, name: name ?? "", avatarURL: roomPreviewDetails?.avatarURL),
-                                                      memberCount: UInt(roomInfo?.activeMembersCount ?? Int(roomPreviewDetails?.memberCount ?? 0)),
+                                                      topic: roomPreviewInfo?.topic ?? roomPreviewDetails?.topic,
+                                                      canonicalAlias: roomPreviewInfo?.canonicalAlias ?? roomPreviewDetails?.canonicalAlias,
+                                                      avatar: roomPreviewInfo?.avatar ?? .room(id: roomID, name: name ?? "", avatarURL: roomPreviewDetails?.avatarURL),
+                                                      memberCount: UInt(roomPreviewInfo?.activeMembersCount ?? Int(roomPreviewDetails?.memberCount ?? 0)),
                                                       inviter: inviter)
         
         updateMode()
