@@ -179,7 +179,7 @@ targets:
         fi
 
     dependencies:
-    - target: NSE-Staging
+    - target: TchapX-NSE-Staging
     # not used yet
     # - target: NCE
     - package: MatrixRustSDK
