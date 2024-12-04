@@ -15,7 +15,7 @@
 import Compound
 import SwiftUI
 
-struct KnockRequestCellInfo: Identifiable {
+struct KnockRequestCellInfo: Identifiable, Equatable {
     /// event ID of the request
     let id: String
     let userID: String
@@ -86,14 +86,14 @@ struct KnockRequestCell: View {
                 HStack(spacing: 16) {
                     if let onDecline {
                         Button(L10n.actionDecline) {
-                            onDecline(cellInfo.userID)
+                            onDecline(cellInfo.id)
                         }
                         .buttonStyle(.compound(.secondary, size: .medium))
                     }
                     
                     if let onAccept {
                         Button(L10n.actionAccept) {
-                            onAccept(cellInfo.userID)
+                            onAccept(cellInfo.id)
                         }
                         .buttonStyle(.compound(.primary, size: .medium))
                     }
@@ -102,7 +102,7 @@ struct KnockRequestCell: View {
             
             if let onDeclineAndBan {
                 Button(role: .destructive) {
-                    onDeclineAndBan(cellInfo.userID)
+                    onDeclineAndBan(cellInfo.id)
                 } label: {
                     Text(L10n.screenKnockRequestsListDeclineAndBanActionTitle)
                         .padding(.top, 8)

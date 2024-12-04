@@ -34,7 +34,7 @@ struct KnockRequestsListScreen: View {
         ScrollView {
             LazyVStack(spacing: 0) {
                 if context.viewState.shouldDisplayRequests {
-                    ForEach(context.viewState.requests) { requestInfo in
+                    ForEach(context.viewState.displayedRequests) { requestInfo in
                         ListRow(kind: .custom {
                             KnockRequestCell(cellInfo: requestInfo,
                                              mediaProvider: context.mediaProvider,
@@ -60,16 +60,16 @@ struct KnockRequestsListScreen: View {
         .background(.compound.bgCanvasDefault)
     }
     
-    private func onAccept(userID: String) {
-        context.send(viewAction: .acceptRequest(userID: userID))
+    private func onAccept(eventID: String) {
+        context.send(viewAction: .acceptRequest(eventID: eventID))
     }
     
-    private func onDecline(userID: String) {
-        context.send(viewAction: .declineRequest(userID: userID))
+    private func onDecline(eventID: String) {
+        context.send(viewAction: .declineRequest(eventID: eventID))
     }
     
-    private func onDeclineAndBan(userID: String) {
-        context.send(viewAction: .ban(userID: userID))
+    private func onDeclineAndBan(eventID: String) {
+        context.send(viewAction: .ban(eventID: eventID))
     }
 }
 

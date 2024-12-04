@@ -13,6 +13,7 @@ import SwiftUI
 struct KnockRequestsListScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum KnockRequestsListScreenCoordinatorAction { }
@@ -29,7 +30,8 @@ final class KnockRequestsListScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: KnockRequestsListScreenCoordinatorParameters) {
         viewModel = KnockRequestsListScreenViewModel(roomProxy: parameters.roomProxy,
-                                                     mediaProvider: parameters.mediaProvider)
+                                                     mediaProvider: parameters.mediaProvider,
+                                                     userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() { }
