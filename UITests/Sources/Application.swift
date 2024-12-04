@@ -47,6 +47,9 @@ enum Application {
         guard deviceModel == requirediPhoneSimulator || deviceModel == requirediPadSimulator else {
             fatalError("Running on \(deviceModel) but we only support \(requirediPhoneSimulator) and \(requirediPadSimulator).")
         }
+        guard UIDevice.current.snapshotName == "iPhone-18.1" || UIDevice.current.snapshotName == "iPad-18.1" else {
+            fatalError("Running on a simulator that hasn't been renamed to match the expected snapshot filenames.")
+        }
     }
 }
 
@@ -91,15 +94,7 @@ extension XCUIApplication {
     }
     
     private var deviceName: String {
-        var name = UIDevice.current.name
-        
-        // When running with parallel execution simulators are named "Clone 2 of iPhone 14" etc.
-        // Tidy this prefix out of the name to generate snapshots with the correct name.
-        if name.starts(with: "Clone "), let range = name.range(of: " of ") {
-            name = String(name[range.upperBound...])
-        }
-        
-        return name
+        UIDevice.current.snapshotName
     }
     
     private var localeCode: String {
@@ -115,6 +110,20 @@ extension XCUIApplication {
 
     private var regionCode: String {
         Locale.current.language.region?.identifier ?? ""
+    }
+}
+
+private extension UIDevice {
+    var snapshotName: String {
+        var name = name
+        
+        // When running with parallel execution simulators are named "Clone 2 of iPhone 14" etc.
+        // Tidy this prefix out of the name to generate snapshots with the correct name.
+        if name.starts(with: "Clone "), let range = name.range(of: " of ") {
+            name = String(name[range.upperBound...])
+        }
+        
+        return name
     }
 }
 
