@@ -172,8 +172,7 @@ struct RoomDetailsScreen: View {
             if context.viewState.canSeeKnockingRequests {
                 ListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
                                         icon: \.askToJoin),
-                        // TODO: Display count if requests > 0 when an API for them is available
-                        details: .counter(1),
+                        details: context.viewState.knockRequestsCount > 0 ? .counter(context.viewState.knockRequestsCount) : nil,
                         kind: .navigationLink {
                             context.send(viewAction: .processTapRequestsToJoin)
                         })
@@ -305,6 +304,7 @@ struct RoomDetailsScreen: View {
 struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static let genericRoomViewModel = {
         ServiceLocator.shared.settings.knockingEnabled = true
+        let knockRequests: [RequestToJoinProxyMock] = [.init()]
         let members: [RoomMemberProxyMock] = [
             .mockMeAdmin,
             .mockAlice,
@@ -325,6 +325,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                                   isEncrypted: true,
                                                   canonicalAlias: "#alias:domain.com",
                                                   members: members,
+                                                  knockRequests: knockRequests,
                                                   joinRule: .knock))
         
         var notificationSettingsProxyMockConfiguration = NotificationSettingsProxyMockConfiguration()
@@ -369,6 +370,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let simpleRoomViewModel = {
+        let knockRequests: [RequestToJoinProxyMock] = [.init()]
         ServiceLocator.shared.settings.knockingEnabled = true
         let members: [RoomMemberProxyMock] = [
             .mockMeAdmin,
@@ -381,6 +383,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                                   isDirect: false,
                                                   isEncrypted: false,
                                                   members: members,
+                                                  knockRequests: knockRequests,
                                                   joinRule: .knock))
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         

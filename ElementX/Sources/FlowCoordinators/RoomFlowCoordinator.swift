@@ -895,7 +895,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentKnockRequestsList() {
-        let parameters = KnockRequestsListScreenCoordinatorParameters(roomProxy: roomProxy, mediaProvider: userSession.mediaProvider)
+        let parameters = KnockRequestsListScreenCoordinatorParameters(roomProxy: roomProxy,
+                                                                      mediaProvider: userSession.mediaProvider,
+                                                                      userIndicatorController: userIndicatorController)
         let coordinator = KnockRequestsListScreenCoordinator(parameters: parameters)
         
         navigationStackCoordinator.push(coordinator) { [weak self] in
@@ -1649,16 +1651,5 @@ private extension RoomFlowCoordinator {
         
         case presentKnockRequestsListScreen
         case dismissKnockRequestsListScreen
-    }
-}
-
-private extension Result {
-    var isFailure: Bool {
-        switch self {
-        case .success:
-            return false
-        case .failure:
-            return true
-        }
     }
 }
