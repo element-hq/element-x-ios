@@ -322,7 +322,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: Loading indicators
     
     private static let loadingIndicatorIdentifier = "\(RoomScreenViewModel.self)-Loading"
-    private static let errorIndicatorIdentifier = "\(RoomScreenViewModel.self)-Loading"
+    private static let errorIndicatorIdentifier = "\(RoomScreenViewModel.self)-Error"
     
     private func showLoadingIndicator() {
         userIndicatorController.submitIndicator(.init(id: Self.loadingIndicatorIdentifier, type: .toast, title: L10n.commonLoading))
