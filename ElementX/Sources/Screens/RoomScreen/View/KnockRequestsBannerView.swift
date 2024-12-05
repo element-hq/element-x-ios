@@ -124,7 +124,6 @@ private struct MultipleKnockRequestsBannerContent: View {
         requests
             .prefix(3)
             .map { .init(url: $0.avatarURL, name: $0.displayName, contentID: $0.userID) }
-            .reversed()
     }
     
     private var multipleKnockRequestsTitle: String {
@@ -139,7 +138,7 @@ private struct MultipleKnockRequestsBannerContent: View {
     var body: some View {
         VStack(spacing: 14) {
             HStack(spacing: 10) {
-                StackedAvatarsView(overlap: 16, lineWidth: 2, shouldStackFromLast: true, avatars: avatars, avatarSize: .user(on: .knockingUsersBannerStack), mediaProvider: mediaProvider)
+                StackedAvatarsView(overlap: 16, lineWidth: 2, avatars: avatars, avatarSize: .user(on: .knockingUsersBannerStack), mediaProvider: mediaProvider)
                 HStack(alignment: .top, spacing: 0) {
                     Text(multipleKnockRequestsTitle)
                         .lineLimit(2)
@@ -176,7 +175,11 @@ private struct KnockRequestsBannerDismissButton: View {
 struct KnockRequestsBannerView_Previews: PreviewProvider, TestablePreview {
     static let singleRequest: [KnockRequestInfo] = [.init(displayName: "Alice", avatarURL: nil, userID: "@alice:matrix.org", reason: nil, eventID: "1")]
     
-    static let singleRequestWithReason: [KnockRequestInfo] = [.init(displayName: "Alice", avatarURL: nil, userID: "@alice:matrix.org", reason: "Hey, I’d like to join this room because of xyz topic and I’d like to participate in the room.", eventID: "1")]
+    static let singleRequestWithReason: [KnockRequestInfo] = [.init(displayName: "Alice",
+                                                                    avatarURL: nil,
+                                                                    userID: "@alice:matrix.org",
+                                                                    reason: "Hey, I’d like to join this room because of xyz topic and I’d like to participate in the room.",
+                                                                    eventID: "1")]
     
     static let singleRequestNoDisplayName: [KnockRequestInfo] = [.init(displayName: nil, avatarURL: nil, userID: "@alice:matrix.org", reason: nil, eventID: "1")]
     
