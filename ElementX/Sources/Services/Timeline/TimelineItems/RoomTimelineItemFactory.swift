@@ -156,6 +156,12 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             case .historicalMessage:
                 encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .historicalMessage)
                 errorLabel = L10n.timelineDecryptionFailureHistoricalEventNoKeyBackup
+            case .withheldForUnverifiedOrInsecureDevice:
+                encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .withheldForUnverifiedOrInsecureDevice)
+                errorLabel = L10n.timelineDecryptionFailureWithheldUnverified
+            case .withheldBySender:
+                encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .witheldBySender)
+                errorLabel = L10n.timelineDecryptionFailureUnableToDecrypt
             }
         case .olmV1Curve25519AesSha2(let senderKey):
             encryptionType = .olmV1Curve25519AesSha2(senderKey: senderKey)

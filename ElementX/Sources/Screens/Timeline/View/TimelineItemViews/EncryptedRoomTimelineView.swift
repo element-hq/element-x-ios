@@ -20,7 +20,9 @@ struct EncryptedRoomTimelineView: View {
             case .sentBeforeWeJoined,
                  .historicalMessage,
                  .verificationViolation,
-                 .insecureDevice:
+                 .insecureDevice,
+                 .witheldBySender,
+                 .withheldForUnverifiedOrInsecureDevice:
                 return \.block
             }
         default:
