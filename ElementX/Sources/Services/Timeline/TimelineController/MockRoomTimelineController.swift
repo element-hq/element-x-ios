@@ -41,7 +41,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         
         switch timelineKind {
         case .media:
-            timelineItems = (0..<50).reduce([]) { partialResult, _ in
+            timelineItems = (0..<5).reduce([]) { partialResult, _ in
                 partialResult + RoomTimelineItemFixtures.mediaChunk
             }
         default:

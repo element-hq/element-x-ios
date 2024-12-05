@@ -137,7 +137,7 @@ extension View {
 // MARK: - Previews
 
 struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
-    static let emptyTimelineViewModel: TimelineViewModel = {
+    static let timelineViewModel: TimelineViewModel = {
         let timelineController = MockRoomTimelineController(timelineKind: .media)
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                  timelineController: timelineController,
@@ -151,13 +151,25 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                  emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
     }()
     
-    static let viewModel = MediaEventsTimelineScreenViewModel(imageAndVideoTimelineViewModel: emptyTimelineViewModel,
-                                                              fileAndAudioTimelineViewModel: emptyTimelineViewModel,
-                                                              mediaProvider: MediaProviderMock(configuration: .init()))
+    static let mediaViewModel = MediaEventsTimelineScreenViewModel(imageAndVideoTimelineViewModel: timelineViewModel,
+                                                                   fileAndAudioTimelineViewModel: timelineViewModel,
+                                                                   mediaProvider: MediaProviderMock(configuration: .init()),
+                                                                   screenMode: .imageAndVideo)
+    
+    static let filesViewModel = MediaEventsTimelineScreenViewModel(imageAndVideoTimelineViewModel: timelineViewModel,
+                                                                   fileAndAudioTimelineViewModel: timelineViewModel,
+                                                                   mediaProvider: MediaProviderMock(configuration: .init()),
+                                                                   screenMode: .fileAndAudio)
     
     static var previews: some View {
         NavigationStack {
-            MediaEventsTimelineScreen(context: viewModel.context)
+            MediaEventsTimelineScreen(context: mediaViewModel.context)
+                .previewDisplayName("Media")
+        }
+        
+        NavigationStack {
+            MediaEventsTimelineScreen(context: filesViewModel.context)
+                .previewDisplayName("Files")
         }
     }
 }

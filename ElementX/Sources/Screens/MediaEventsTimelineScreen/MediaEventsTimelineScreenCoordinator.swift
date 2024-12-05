@@ -19,13 +19,7 @@ struct MediaEventsTimelineScreenCoordinatorParameters {
     let emojiProvider: EmojiProviderProtocol
 }
 
-enum MediaEventsTimelineScreenCoordinatorAction {
-    case dismiss
-    case displayUser(userID: String)
-    case presentLocationViewer(geoURI: GeoURI, description: String?)
-    case displayMessageForwarding(forwardingItem: MessageForwardingItem)
-    case displayRoomScreenWithFocussedPin(eventID: String)
-}
+enum MediaEventsTimelineScreenCoordinatorAction { }
 
 final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
     private let parameters: MediaEventsTimelineScreenCoordinatorParameters

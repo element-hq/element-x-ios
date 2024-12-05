@@ -22,7 +22,7 @@ struct MediaEventsTimelineScreenViewState: BindableState {
 }
 
 struct MediaEventsTimelineScreenViewStateBindings {
-    var screenMode: MediaEventsTimelineScreenMode = .imageAndVideo
+    var screenMode: MediaEventsTimelineScreenMode
 }
 
 enum MediaEventsTimelineScreenViewAction {

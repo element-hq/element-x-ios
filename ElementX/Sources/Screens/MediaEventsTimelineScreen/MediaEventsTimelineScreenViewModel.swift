@@ -32,11 +32,12 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     
     init(imageAndVideoTimelineViewModel: TimelineViewModelProtocol,
          fileAndAudioTimelineViewModel: TimelineViewModelProtocol,
-         mediaProvider: MediaProviderProtocol) {
+         mediaProvider: MediaProviderProtocol,
+         screenMode: MediaEventsTimelineScreenMode = .imageAndVideo) {
         self.imageAndVideoTimelineViewModel = imageAndVideoTimelineViewModel
         self.fileAndAudioTimelineViewModel = fileAndAudioTimelineViewModel
         
-        super.init(initialViewState: .init(bindings: .init()), mediaProvider: mediaProvider)
+        super.init(initialViewState: .init(bindings: .init(screenMode: screenMode)), mediaProvider: mediaProvider)
         
         imageAndVideoTimelineViewModel.context.$viewState.sink { [weak self] timelineViewState in
             guard let self, state.bindings.screenMode == .imageAndVideo else {
@@ -78,14 +79,12 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     // MARK: - Private
     
     private func updateWithTimelineViewState(_ timelineViewState: TimelineViewState) {
-        state.items = timelineViewState.timelineState.itemViewStates.filter { state in
-            switch state.type {
-            case .audio, .file, .image, .video:
-                true
-            case .paginationIndicator:
-                false
-            case .timelineStart:
-                false
+        state.items = timelineViewState.timelineState.itemViewStates.filter { itemViewState in
+            switch itemViewState.type {
+            case .image, .video:
+                state.bindings.screenMode == .imageAndVideo
+            case .audio, .file:
+                state.bindings.screenMode == .fileAndAudio
             default:
                 false
             }
