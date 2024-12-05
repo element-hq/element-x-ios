@@ -1,3 +1,24 @@
+## Changes in 1.9.9 (2024-12-05)
+
+### What's Changed
+
+🙌 Improvements
+* Added historical message error label string by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3580
+* increase ringing timeout from 15 seconds to 90 seconds by @fkwp in https://github.com/element-hq/element-x-ios/pull/3584
+* Compound SendButton v2 by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3589
+
+🧱 Build
+* Add new development assets and use in mocks/previews. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3581
+* Fix UI snapshots. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3585
+
+Others
+* Update sdk to 1.0.78 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3586
+
+### New Contributors
+* @fkwp made their first contribution in https://github.com/element-hq/element-x-ios/pull/3584
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.9.8...1.9.9
+
 ## Changes in 1.9.8 (2024-12-03)
 
 ### What's Changed
