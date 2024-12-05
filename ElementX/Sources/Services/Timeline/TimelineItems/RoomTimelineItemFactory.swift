@@ -161,7 +161,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 errorLabel = L10n.timelineDecryptionFailureWithheldUnverified
             case .withheldBySender:
                 encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .witheldBySender)
-                errorLabel = L10n.timelineDecryptionFailureWithheldUnverified
+                errorLabel = L10n.timelineDecryptionFailureUnableToDecrypt
             }
         case .olmV1Curve25519AesSha2(let senderKey):
             encryptionType = .olmV1Curve25519AesSha2(senderKey: senderKey)
