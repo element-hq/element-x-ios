@@ -398,7 +398,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 case .withheldForUnverifiedOrInsecureDevice:
                     analytics.trackError(context: nil, domain: .E2EE, name: .RoomKeysWithheldForUnverifiedDevice, timeToDecryptMillis: timeToDecryptMs)
                 case .withheldBySender:
-                    analytics.trackError(context: nil, domain: .E2EE, name: .UnknownError, timeToDecryptMillis: timeToDecryptMs)
+                    analytics.trackError(context: nil, domain: .E2EE, name: .OlmKeysNotSentError, timeToDecryptMillis: timeToDecryptMs)
                 }
             }
             .store(in: &cancellables)
