@@ -77,6 +77,8 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
         guard let request = roomProxy.requestsToJoinPublisher.value.first(where: { $0.eventID == eventID }) else {
             return
         }
+        showLoadingIndicator()
+        defer { hideLoadingIndicator() }
         state.handledEventIDs.insert(eventID)
         Task {
             switch await request.accept() {
@@ -90,6 +92,8 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     }
     
     private func decline(request: RequestToJoinProxyProtocol) {
+        showLoadingIndicator()
+        defer { hideLoadingIndicator() }
         let eventID = request.eventID
         state.handledEventIDs.insert(eventID)
         Task {
@@ -104,6 +108,8 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     }
     
     private func declineAndBan(request: RequestToJoinProxyProtocol) {
+        showLoadingIndicator()
+        defer { hideLoadingIndicator() }
         let eventID = request.eventID
         state.handledEventIDs.insert(eventID)
         Task {
@@ -118,6 +124,8 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     }
     
     private func acceptAll() {
+        showLoadingIndicator()
+        defer { hideLoadingIndicator() }
         let requests = roomProxy.requestsToJoinPublisher.value
         state.handledEventIDs.formUnion(Set(requests.map(\.eventID)))
         Task {
@@ -168,6 +176,22 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
         state.canAccept = await (try? roomProxy.canUserInvite(userID: roomProxy.ownUserID).get()) == true
         state.canDecline = await (try? roomProxy.canUserKick(userID: roomProxy.ownUserID).get()) == true
         state.canBan = await (try? roomProxy.canUserBan(userID: roomProxy.ownUserID).get()) == true
+    }
+    
+    private static let loadingIndicatorIdentifier = "\(KnockRequestsListScreenViewModel.self)-Loading"
+    
+    private func showLoadingIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                              type: .modal(progress: .indeterminate,
+                                                                           interactiveDismissDisabled: false,
+                                                                           allowsInteraction: false),
+                                                              title: L10n.commonLoading,
+                                                              persistent: true),
+                                                delay: .seconds(0.25))
+    }
+    
+    private func hideLoadingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
     
     // For testing purposes
