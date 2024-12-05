@@ -15,9 +15,8 @@
 import Compound
 import SwiftUI
 
-struct KnockRequestCellInfo: Identifiable, Equatable {
-    /// event ID of the request
-    let id: String
+struct KnockRequestCellInfo: Equatable {
+    let eventID: String
     let userID: String
     let displayName: String?
     let avatarURL: URL?
@@ -86,14 +85,14 @@ struct KnockRequestCell: View {
                 HStack(spacing: 16) {
                     if let onDecline {
                         Button(L10n.actionDecline) {
-                            onDecline(cellInfo.id)
+                            onDecline(cellInfo.eventID)
                         }
                         .buttonStyle(.compound(.secondary, size: .medium))
                     }
                     
                     if let onAccept {
                         Button(L10n.actionAccept) {
-                            onAccept(cellInfo.id)
+                            onAccept(cellInfo.eventID)
                         }
                         .buttonStyle(.compound(.primary, size: .medium))
                     }
@@ -102,7 +101,7 @@ struct KnockRequestCell: View {
             
             if let onDeclineAndBan {
                 Button(role: .destructive) {
-                    onDeclineAndBan(cellInfo.id)
+                    onDeclineAndBan(cellInfo.eventID)
                 } label: {
                     Text(L10n.screenKnockRequestsListDeclineAndBanActionTitle)
                         .padding(.top, 8)
@@ -167,15 +166,19 @@ private struct DisclosableText: View {
     }
 }
 
+extension KnockRequestCellInfo: Identifiable {
+    var id: String { eventID }
+}
+
 struct KnockRequestCell_Previews: PreviewProvider, TestablePreview {
     // swiftlint:disable:next line_length
-    static let aliceWithLongReason = KnockRequestCellInfo(id: "1", userID: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "20 Nov 2024", reason: "Hello would like to join this room, also this is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long reason")
+    static let aliceWithLongReason = KnockRequestCellInfo(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "20 Nov 2024", reason: "Hello would like to join this room, also this is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long reason")
     
-    static let aliceWithShortReason = KnockRequestCellInfo(id: "1", userID: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "20 Nov 2024", reason: "Hello, I am Alice and would like to join this room, please")
+    static let aliceWithShortReason = KnockRequestCellInfo(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "20 Nov 2024", reason: "Hello, I am Alice and would like to join this room, please")
     
-    static let aliceWithNoReason = KnockRequestCellInfo(id: "1", userID: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "20 Nov 2024", reason: nil)
+    static let aliceWithNoReason = KnockRequestCellInfo(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "20 Nov 2024", reason: nil)
     
-    static let aliceWithNoName = KnockRequestCellInfo(id: "1", userID: "@alice:matrix.org", displayName: nil, avatarURL: nil, timestamp: "20 Nov 2024", reason: nil)
+    static let aliceWithNoName = KnockRequestCellInfo(eventID: "1", userID: "@alice:matrix.org", displayName: nil, avatarURL: nil, timestamp: "20 Nov 2024", reason: nil)
     
     static var previews: some View {
         KnockRequestCell(cellInfo: aliceWithLongReason) { _ in } onDecline: { _ in } onDeclineAndBan: { _ in }

@@ -77,9 +77,12 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
         guard let request = roomProxy.requestsToJoinPublisher.value.first(where: { $0.eventID == eventID }) else {
             return
         }
+        
         showLoadingIndicator()
         defer { hideLoadingIndicator() }
+        
         state.handledEventIDs.insert(eventID)
+        
         Task {
             switch await request.accept() {
             case .success:
@@ -94,8 +97,10 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     private func decline(request: RequestToJoinProxyProtocol) {
         showLoadingIndicator()
         defer { hideLoadingIndicator() }
+        
         let eventID = request.eventID
         state.handledEventIDs.insert(eventID)
+        
         Task {
             switch await request.decline() {
             case .success:
@@ -110,8 +115,10 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     private func declineAndBan(request: RequestToJoinProxyProtocol) {
         showLoadingIndicator()
         defer { hideLoadingIndicator() }
+        
         let eventID = request.eventID
         state.handledEventIDs.insert(eventID)
+        
         Task {
             switch await request.ban() {
             case .success:
@@ -126,6 +133,7 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     private func acceptAll() {
         showLoadingIndicator()
         defer { hideLoadingIndicator() }
+        
         let requests = roomProxy.requestsToJoinPublisher.value
         state.handledEventIDs.formUnion(Set(requests.map(\.eventID)))
         Task {
@@ -142,6 +150,7 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
                 }
                 return failedIDs
             }
+            
             state.handledEventIDs.subtract(failedIDs)
         }
     }
@@ -210,7 +219,7 @@ extension KnockRequestsListScreenViewModel {
 
 extension KnockRequestCellInfo {
     init(from proxy: RequestToJoinProxyProtocol) {
-        self.init(id: proxy.eventID,
+        self.init(eventID: proxy.eventID,
                   userID: proxy.userID,
                   displayName: proxy.displayName,
                   avatarURL: proxy.avatarURL,
