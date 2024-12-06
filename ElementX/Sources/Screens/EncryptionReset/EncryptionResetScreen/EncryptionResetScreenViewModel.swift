@@ -38,10 +38,10 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
             state.bindings.alertInfo = .init(id: UUID(),
                                              title: L10n.screenResetEncryptionConfirmationAlertTitle,
                                              message: L10n.screenResetEncryptionConfirmationAlertSubtitle,
-                                             primaryButton: .init(title: L10n.screenResetEncryptionConfirmationAlertAction, role: .destructive, action: { [weak self] in
+                                             primaryButton: .init(title: L10n.screenResetEncryptionConfirmationAlertAction, role: .destructive) { [weak self] in
                                                  guard let self else { return }
                                                  Task { await self.startResetFlow() }
-                                             }))
+                                             })
         case .cancel:
             actionsSubject.send(.cancel)
         }

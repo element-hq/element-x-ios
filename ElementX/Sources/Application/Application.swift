@@ -42,11 +42,11 @@ struct Application: App {
                         openURLInSystemBrowser($0)
                     }
                 }
-                .onContinueUserActivity("INStartVideoCallIntent", perform: { userActivity in
+                .onContinueUserActivity("INStartVideoCallIntent") { userActivity in
                     // `INStartVideoCallIntent` is to be replaced with `INStartCallIntent`
                     // but calls from Recents still send it ¯\_(ツ)_/¯
                     appCoordinator.handleUserActivity(userActivity)
-                })
+                }
                 .task {
                     appCoordinator.start()
                 }

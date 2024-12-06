@@ -322,7 +322,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
                                       topic: nil,
                                       avatarURL: nil,
                                       memberCount: 0,
-                                      isHistoryWorldReadable: false,
+                                      isHistoryWorldReadable: nil,
                                       isJoined: false,
                                       isInvited: true,
                                       isPublic: false,

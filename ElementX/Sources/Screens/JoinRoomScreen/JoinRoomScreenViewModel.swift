@@ -221,7 +221,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                                          title: L10n.screenInvitesDeclineChatTitle,
                                          message: L10n.screenInvitesDeclineChatMessage(roomName),
                                          primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                         secondaryButton: .init(title: L10n.actionDecline, role: .destructive, action: { Task { await self.declineInvite() } }))
+                                         secondaryButton: .init(title: L10n.actionDecline, role: .destructive) { Task { await self.declineInvite() } })
     }
     
     private func showCancelKnockConfirmationAlert() {
@@ -229,7 +229,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                                          title: L10n.screenJoinRoomCancelKnockAlertTitle,
                                          message: L10n.screenJoinRoomCancelKnockAlertDescription,
                                          primaryButton: .init(title: L10n.actionNo, role: .cancel, action: nil),
-                                         secondaryButton: .init(title: L10n.screenJoinRoomCancelKnockAlertConfirmation, role: .destructive, action: { Task { await self.cancelKnock() } }))
+                                         secondaryButton: .init(title: L10n.screenJoinRoomCancelKnockAlertConfirmation, role: .destructive) { Task { await self.cancelKnock() } })
     }
     
     private func declineInvite() async {

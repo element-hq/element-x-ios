@@ -298,11 +298,11 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             .infoPublisher
             .compactMap { ($0.hasRoomCall, $0.activeRoomCallParticipants) }
             .removeDuplicates { $0 == $1 }
-            .drop(while: { hasRoomCall, _ in
+            .drop { hasRoomCall, _ in
                 // Filter all updates before hasRoomCall becomes `true`. Then we can correctly
                 // detect its change to `false` to stop ringing when the caller hangs up.
                 !hasRoomCall
-            })
+            }
             .sink { [weak self] hasOngoingCall, activeRoomCallParticipants in
                 guard let self else { return }
                 

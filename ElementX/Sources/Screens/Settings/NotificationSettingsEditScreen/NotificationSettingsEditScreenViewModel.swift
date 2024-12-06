@@ -123,7 +123,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
             guard !Task.isCancelled else { return }
             
             let filteredRoomsSummary = roomSummaryProvider.roomListPublisher.value.filter { summary in
-                roomsWithUserDefinedRules.contains(where: { summary.id == $0 })
+                roomsWithUserDefinedRules.contains { summary.id == $0 }
             }
             
             var roomsWithUserDefinedMode: [NotificationSettingsEditScreenRoom] = []
@@ -142,7 +142,7 @@ class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenVie
             }
             
             // Sort the room list
-            roomsWithUserDefinedMode.sort(by: { $0.name.localizedCompare($1.name) == .orderedAscending })
+            roomsWithUserDefinedMode.sort { $0.name.localizedCompare($1.name) == .orderedAscending }
             
             state.roomsWithUserDefinedMode = roomsWithUserDefinedMode
         }

@@ -102,9 +102,9 @@ private struct SingleKnockRequestBannerContent: View {
             Button(L10n.screenRoomSingleKnockRequestViewButtonTitle, action: onViewAll)
                 .buttonStyle(.compound(.secondary, size: .medium))
             if let onAccept {
-                Button(L10n.screenRoomSingleKnockRequestAcceptButtonTitle, action: {
+                Button(L10n.screenRoomSingleKnockRequestAcceptButtonTitle) {
                     onAccept(request.userID)
-                })
+                }
                 .buttonStyle(.compound(.primary, size: .medium))
             }
         }
@@ -166,9 +166,9 @@ private struct KnockRequestsBannerDismissButton: View {
             CompoundIcon(\.close, size: .medium, relativeTo: .compound.bodySMSemibold)
                 .foregroundColor(.compound.iconTertiary)
         }
-        .alignmentGuide(.top, computeValue: { _ in
+        .alignmentGuide(.top) { _ in
             3
-        })
+        }
     }
 }
 
@@ -188,15 +188,16 @@ struct KnockRequestsBannerView_Previews: PreviewProvider, TestablePreview {
     ]
     
     static var previews: some View {
-        KnockRequestsBannerView(requests: singleRequest, onDismiss: { }, onAccept: { _ in }, onViewAll: { })
+        KnockRequestsBannerView(requests: singleRequest) { } onAccept: { _ in } onViewAll: { }
             .previewDisplayName("Single Request")
+        // swiftlint:disable:next trailing_closure
         KnockRequestsBannerView(requests: singleRequest, onDismiss: { }, onAccept: nil, onViewAll: { })
             .previewDisplayName("Single Request, no accept action")
-        KnockRequestsBannerView(requests: singleRequestWithReason, onDismiss: { }, onAccept: { _ in }, onViewAll: { })
+        KnockRequestsBannerView(requests: singleRequestWithReason) { } onAccept: { _ in } onViewAll: { }
             .previewDisplayName("Single Request with reason")
-        KnockRequestsBannerView(requests: singleRequestNoDisplayName, onDismiss: { }, onAccept: { _ in }, onViewAll: { })
+        KnockRequestsBannerView(requests: singleRequestNoDisplayName) { } onAccept: { _ in } onViewAll: { }
             .previewDisplayName("Single Request, No Display Name")
-        KnockRequestsBannerView(requests: multipleRequests, onDismiss: { }, onAccept: { _ in }, onViewAll: { })
+        KnockRequestsBannerView(requests: multipleRequests) { } onAccept: { _ in } onViewAll: { }
             .previewDisplayName("Multiple Requests")
     }
 }

@@ -30,6 +30,12 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     private(set) var timelineItems = [RoomTimelineItemProtocol]()
+    
+    private(set) var paginationState: PaginationState = .initial {
+        didSet {
+            callbacks.send(.paginationState(paginationState))
+        }
+    }
 
     var roomID: String {
         roomProxy.id
@@ -64,7 +70,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         Task {
-            callbacks.send(.paginationState(PaginationState(backward: .paginating, forward: .paginating)))
+            paginationState = PaginationState(backward: .paginating, forward: .paginating)
+            
             switch await focusOnEvent(initialFocussedEventID, timelineSize: 100) {
             case .success:
                 break
@@ -368,7 +375,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         isSwitchingTimelines = true
         
         // Inform the world that the initial items are loading from the store
-        callbacks.send(.paginationState(.init(backward: .paginating, forward: .paginating)))
+        paginationState = PaginationState(backward: .paginating, forward: .paginating)
         callbacks.send(.isLive(activeTimelineProvider.kind == .live))
         
         updateTimelineItemsCancellable = activeTimelineProvider
@@ -446,7 +453,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         callbacks.send(.updatedTimelineItems(timelineItems: newTimelineItems, isSwitchingTimelines: isNewTimeline))
-        callbacks.send(.paginationState(paginationState))
+        self.paginationState = paginationState
     }
     
     private func buildTimelineItem(for itemProxy: TimelineItemProxy) -> RoomTimelineItemProtocol? {

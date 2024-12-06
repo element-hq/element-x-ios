@@ -43,8 +43,7 @@ struct UserProfileScreen: View {
             AvatarHeaderView(user: UserProfileProxy(userID: context.viewState.userID),
                              isVerified: context.viewState.showVerifiedBadge,
                              avatarSize: .user(on: .memberDetails),
-                             mediaProvider: context.mediaProvider,
-                             footer: { })
+                             mediaProvider: context.mediaProvider) { }
         }
     }
     

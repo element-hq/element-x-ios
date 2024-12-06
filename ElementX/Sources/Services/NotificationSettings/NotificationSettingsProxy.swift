@@ -120,7 +120,7 @@ final class NotificationSettingsProxy: NotificationSettingsProxyProtocol {
         // as in this case no API call is made by the RustSDK and the push rules are therefore not updated.
         _ = await callbacks
             .timeout(.seconds(2.0), scheduler: DispatchQueue.main, options: nil, customError: nil)
-            .values.first(where: { $0 == .settingsDidChange })
+            .values.first { $0 == .settingsDidChange }
     }
     
     @MainActor

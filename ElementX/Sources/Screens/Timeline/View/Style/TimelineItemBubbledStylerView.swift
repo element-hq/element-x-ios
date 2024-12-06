@@ -400,7 +400,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
     static var mockTimeline: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                ForEach(viewModel.state.timelineViewState.itemViewStates) { viewState in
+                ForEach(viewModel.state.timelineState.itemViewStates) { viewState in
                     RoomTimelineItemView(viewState: viewState)
                 }
             }

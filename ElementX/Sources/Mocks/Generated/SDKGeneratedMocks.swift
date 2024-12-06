@@ -8248,6 +8248,71 @@ open class MediaSourceSDKMock: MatrixRustSDK.MediaSource {
     {
     }
 
+    //MARK: - toJson
+
+    var toJsonUnderlyingCallsCount = 0
+    open var toJsonCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return toJsonUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = toJsonUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                toJsonUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    toJsonUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var toJsonCalled: Bool {
+        return toJsonCallsCount > 0
+    }
+
+    var toJsonUnderlyingReturnValue: String!
+    open var toJsonReturnValue: String! {
+        get {
+            if Thread.isMainThread {
+                return toJsonUnderlyingReturnValue
+            } else {
+                var returnValue: String? = nil
+                DispatchQueue.main.sync {
+                    returnValue = toJsonUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                toJsonUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    toJsonUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var toJsonClosure: (() -> String)?
+
+    open override func toJson() -> String {
+        toJsonCallsCount += 1
+        if let toJsonClosure = toJsonClosure {
+            return toJsonClosure()
+        } else {
+            return toJsonReturnValue
+        }
+    }
+
     //MARK: - url
 
     var urlUnderlyingCallsCount = 0
@@ -12810,6 +12875,81 @@ open class RoomSDKMock: MatrixRustSDK.Room {
             return membershipClosure()
         } else {
             return membershipReturnValue
+        }
+    }
+
+    //MARK: - messageFilteredTimeline
+
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesThrowableError: Error?
+    var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingCallsCount = 0
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesCalled: Bool {
+        return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesCallsCount > 0
+    }
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesReceivedArguments: (internalIdPrefix: String?, allowedMessageTypes: [RoomMessageEventMessageType])?
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesReceivedInvocations: [(internalIdPrefix: String?, allowedMessageTypes: [RoomMessageEventMessageType])] = []
+
+    var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingReturnValue: Timeline!
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesReturnValue: Timeline! {
+        get {
+            if Thread.isMainThread {
+                return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingReturnValue
+            } else {
+                var returnValue: Timeline? = nil
+                DispatchQueue.main.sync {
+                    returnValue = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesClosure: ((String?, [RoomMessageEventMessageType]) async throws -> Timeline)?
+
+    open override func messageFilteredTimeline(internalIdPrefix: String?, allowedMessageTypes: [RoomMessageEventMessageType]) async throws -> Timeline {
+        if let error = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesThrowableError {
+            throw error
+        }
+        messageFilteredTimelineInternalIdPrefixAllowedMessageTypesCallsCount += 1
+        messageFilteredTimelineInternalIdPrefixAllowedMessageTypesReceivedArguments = (internalIdPrefix: internalIdPrefix, allowedMessageTypes: allowedMessageTypes)
+        DispatchQueue.main.async {
+            self.messageFilteredTimelineInternalIdPrefixAllowedMessageTypesReceivedInvocations.append((internalIdPrefix: internalIdPrefix, allowedMessageTypes: allowedMessageTypes))
+        }
+        if let messageFilteredTimelineInternalIdPrefixAllowedMessageTypesClosure = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesClosure {
+            return try await messageFilteredTimelineInternalIdPrefixAllowedMessageTypesClosure(internalIdPrefix, allowedMessageTypes)
+        } else {
+            return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesReturnValue
         }
     }
 

@@ -34,14 +34,14 @@ class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewMo
                                              title: L10n.screenEditPollDeleteConfirmationTitle,
                                              message: L10n.screenEditPollDeleteConfirmation,
                                              primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                             secondaryButton: .init(title: L10n.actionOk, action: { self.actionsSubject.send(.delete) }))
+                                             secondaryButton: .init(title: L10n.actionOk) { self.actionsSubject.send(.delete) })
         case .cancel:
             if state.formContentHasChanged {
                 state.bindings.alertInfo = .init(id: .init(),
                                                  title: L10n.screenCreatePollCancelConfirmationTitleIos,
                                                  message: L10n.screenCreatePollCancelConfirmationContentIos,
                                                  primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                                 secondaryButton: .init(title: L10n.actionOk, action: { self.actionsSubject.send(.cancel) }))
+                                                 secondaryButton: .init(title: L10n.actionOk) { self.actionsSubject.send(.cancel) })
             } else {
                 actionsSubject.send(.cancel)
             }

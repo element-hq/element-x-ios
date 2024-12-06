@@ -113,7 +113,7 @@ struct RoomScreen: View {
         TimelineView()
             .id(timelineContext.viewState.roomID)
             .environmentObject(timelineContext)
-            .environment(\.focussedEventID, timelineContext.viewState.timelineViewState.focussedEvent?.eventID)
+            .environment(\.focussedEventID, timelineContext.viewState.timelineState.focussedEvent?.eventID)
             .overlay(alignment: .bottomTrailing) {
                 scrollToBottomButton
             }
@@ -183,7 +183,7 @@ struct RoomScreen: View {
     }
     
     private var isAtBottomAndLive: Bool {
-        timelineContext.isScrolledToBottom && timelineContext.viewState.timelineViewState.isLive
+        timelineContext.isScrolledToBottom && timelineContext.viewState.timelineState.isLive
     }
     
     @ViewBuilder

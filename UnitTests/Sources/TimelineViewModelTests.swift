@@ -45,9 +45,9 @@ class TimelineViewModelTests: XCTestCase {
         let viewModel = makeViewModel(timelineController: timelineController)
         
         // Then the messages should be grouped together.
-        XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[0].groupStyle, .first, "Nothing should prevent the first message from being grouped.")
-        XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[1].groupStyle, .middle, "Nothing should prevent the middle message from being grouped.")
-        XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[2].groupStyle, .last, "Nothing should prevent the last message from being grouped.")
+        XCTAssertEqual(viewModel.state.timelineState.itemViewStates[0].groupStyle, .first, "Nothing should prevent the first message from being grouped.")
+        XCTAssertEqual(viewModel.state.timelineState.itemViewStates[1].groupStyle, .middle, "Nothing should prevent the middle message from being grouped.")
+        XCTAssertEqual(viewModel.state.timelineState.itemViewStates[2].groupStyle, .last, "Nothing should prevent the last message from being grouped.")
     }
     
     func testMessageGroupingMultipleSenders() {
@@ -73,12 +73,12 @@ class TimelineViewModelTests: XCTestCase {
         let viewModel = makeViewModel(timelineController: timelineController)
         
         // Then the messages should be grouped by sender.
-        XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[0].groupStyle, .single, "A message should not be grouped when the sender changes.")
-        XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[1].groupStyle, .single, "A message should not be grouped when the sender changes.")
-        XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[2].groupStyle, .first, "A group should start with a new sender if there are more messages from that sender.")
-        XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[3].groupStyle, .last, "A group should be ended when the sender changes in the next message.")
-        XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[4].groupStyle, .first, "A group should start with a new sender if there are more messages from that sender.")
-        XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[5].groupStyle, .last, "A group should be ended when the sender changes in the next message.")
+        XCTAssertEqual(viewModel.state.timelineState.itemViewStates[0].groupStyle, .single, "A message should not be grouped when the sender changes.")
+        XCTAssertEqual(viewModel.state.timelineState.itemViewStates[1].groupStyle, .single, "A message should not be grouped when the sender changes.")
+        XCTAssertEqual(viewModel.state.timelineState.itemViewStates[2].groupStyle, .first, "A group should start with a new sender if there are more messages from that sender.")
+        XCTAssertEqual(viewModel.state.timelineState.itemViewStates[3].groupStyle, .last, "A group should be ended when the sender changes in the next message.")
+        XCTAssertEqual(viewModel.state.timelineState.itemViewStates[4].groupStyle, .first, "A group should start with a new sender if there are more messages from that sender.")
+        XCTAssertEqual(viewModel.state.timelineState.itemViewStates[5].groupStyle, .last, "A group should be ended when the sender changes in the next message.")
     }
     
     func testMessageGroupingWithLeadingReactions() {
@@ -99,9 +99,9 @@ class TimelineViewModelTests: XCTestCase {
         let viewModel = makeViewModel(timelineController: timelineController)
         
         // Then the first message should not be grouped but the other two should.
-        XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[0].groupStyle, .single, "When the first message has reactions it should not be grouped.")
-        XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[1].groupStyle, .first, "A new group should be made when the preceding message has reactions.")
-        XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[2].groupStyle, .last, "Nothing should prevent the last message from being grouped.")
+        XCTAssertEqual(viewModel.state.timelineState.itemViewStates[0].groupStyle, .single, "When the first message has reactions it should not be grouped.")
+        XCTAssertEqual(viewModel.state.timelineState.itemViewStates[1].groupStyle, .first, "A new group should be made when the preceding message has reactions.")
+        XCTAssertEqual(viewModel.state.timelineState.itemViewStates[2].groupStyle, .last, "Nothing should prevent the last message from being grouped.")
     }
     
     func testMessageGroupingWithInnerReactions() {
@@ -122,9 +122,9 @@ class TimelineViewModelTests: XCTestCase {
         let viewModel = makeViewModel(timelineController: timelineController)
         
         // Then the first and second messages should be grouped and the last one should not.
-        XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[0].groupStyle, .first, "Nothing should prevent the first message from being grouped.")
-        XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[1].groupStyle, .last, "When the message has reactions, the group should end here.")
-        XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[2].groupStyle, .single, "The last message should not be grouped when the preceding message has reactions.")
+        XCTAssertEqual(viewModel.state.timelineState.itemViewStates[0].groupStyle, .first, "Nothing should prevent the first message from being grouped.")
+        XCTAssertEqual(viewModel.state.timelineState.itemViewStates[1].groupStyle, .last, "When the message has reactions, the group should end here.")
+        XCTAssertEqual(viewModel.state.timelineState.itemViewStates[2].groupStyle, .single, "The last message should not be grouped when the preceding message has reactions.")
     }
     
     func testMessageGroupingWithTrailingReactions() {
@@ -145,9 +145,9 @@ class TimelineViewModelTests: XCTestCase {
         let viewModel = makeViewModel(timelineController: timelineController)
         
         // Then the messages should be grouped together.
-        XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[0].groupStyle, .first, "Nothing should prevent the first message from being grouped.")
-        XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[1].groupStyle, .middle, "Nothing should prevent the second message from being grouped.")
-        XCTAssertEqual(viewModel.state.timelineViewState.itemViewStates[2].groupStyle, .last, "Reactions on the last message should not prevent it from being grouped.")
+        XCTAssertEqual(viewModel.state.timelineState.itemViewStates[0].groupStyle, .first, "Nothing should prevent the first message from being grouped.")
+        XCTAssertEqual(viewModel.state.timelineState.itemViewStates[1].groupStyle, .middle, "Nothing should prevent the second message from being grouped.")
+        XCTAssertEqual(viewModel.state.timelineState.itemViewStates[2].groupStyle, .last, "Reactions on the last message should not prevent it from being grouped.")
     }
     
     // MARK: - Focussing
@@ -162,18 +162,18 @@ class TimelineViewModelTests: XCTestCase {
         
         let viewModel = makeViewModel(timelineController: timelineController)
         XCTAssertEqual(timelineController.focusOnEventCallCount, 0)
-        XCTAssertTrue(viewModel.context.viewState.timelineViewState.isLive)
-        XCTAssertNil(viewModel.context.viewState.timelineViewState.focussedEvent)
+        XCTAssertTrue(viewModel.context.viewState.timelineState.isLive)
+        XCTAssertNil(viewModel.context.viewState.timelineState.focussedEvent)
         
         // When focussing on an item that isn't loaded.
-        let deferred = deferFulfillment(viewModel.context.$viewState) { !$0.timelineViewState.isLive }
+        let deferred = deferFulfillment(viewModel.context.$viewState) { !$0.timelineState.isLive }
         await viewModel.focusOnEvent(eventID: "t4")
         try await deferred.fulfill()
         
         // Then a new timeline should be loaded and the room focussed on that event.
         XCTAssertEqual(timelineController.focusOnEventCallCount, 1)
-        XCTAssertFalse(viewModel.context.viewState.timelineViewState.isLive)
-        XCTAssertEqual(viewModel.context.viewState.timelineViewState.focussedEvent, .init(eventID: "t4", appearance: .immediate))
+        XCTAssertFalse(viewModel.context.viewState.timelineState.isLive)
+        XCTAssertEqual(viewModel.context.viewState.timelineState.focussedEvent, .init(eventID: "t4", appearance: .immediate))
     }
     
     func testFocusLoadedItem() async throws {
@@ -186,18 +186,18 @@ class TimelineViewModelTests: XCTestCase {
         
         let viewModel = makeViewModel(timelineController: timelineController)
         XCTAssertEqual(timelineController.focusOnEventCallCount, 0)
-        XCTAssertTrue(viewModel.context.viewState.timelineViewState.isLive)
-        XCTAssertNil(viewModel.context.viewState.timelineViewState.focussedEvent)
+        XCTAssertTrue(viewModel.context.viewState.timelineState.isLive)
+        XCTAssertNil(viewModel.context.viewState.timelineState.focussedEvent)
         
         // When focussing on a loaded item.
-        let deferred = deferFailure(viewModel.context.$viewState, timeout: 1) { !$0.timelineViewState.isLive }
+        let deferred = deferFailure(viewModel.context.$viewState, timeout: 1) { !$0.timelineState.isLive }
         await viewModel.focusOnEvent(eventID: "t1")
         try await deferred.fulfill()
         
         // Then the timeline should remain live and the item should be focussed.
         XCTAssertEqual(timelineController.focusOnEventCallCount, 0)
-        XCTAssertTrue(viewModel.context.viewState.timelineViewState.isLive)
-        XCTAssertEqual(viewModel.context.viewState.timelineViewState.focussedEvent, .init(eventID: "t1", appearance: .animated))
+        XCTAssertTrue(viewModel.context.viewState.timelineState.isLive)
+        XCTAssertEqual(viewModel.context.viewState.timelineState.focussedEvent, .init(eventID: "t1", appearance: .animated))
     }
     
     func testFocusLive() async throws {
@@ -210,30 +210,30 @@ class TimelineViewModelTests: XCTestCase {
         
         let viewModel = makeViewModel(timelineController: timelineController)
         
-        var deferred = deferFulfillment(viewModel.context.$viewState) { !$0.timelineViewState.isLive }
+        var deferred = deferFulfillment(viewModel.context.$viewState) { !$0.timelineState.isLive }
         await viewModel.focusOnEvent(eventID: "t4")
         try await deferred.fulfill()
         
         XCTAssertEqual(timelineController.focusLiveCallCount, 0)
-        XCTAssertFalse(viewModel.context.viewState.timelineViewState.isLive)
-        XCTAssertEqual(viewModel.context.viewState.timelineViewState.focussedEvent, .init(eventID: "t4", appearance: .immediate))
+        XCTAssertFalse(viewModel.context.viewState.timelineState.isLive)
+        XCTAssertEqual(viewModel.context.viewState.timelineState.focussedEvent, .init(eventID: "t4", appearance: .immediate))
         
         // When switching back to a live timeline.
-        deferred = deferFulfillment(viewModel.context.$viewState) { $0.timelineViewState.isLive }
+        deferred = deferFulfillment(viewModel.context.$viewState) { $0.timelineState.isLive }
         viewModel.context.send(viewAction: .focusLive)
         try await deferred.fulfill()
         
         // Then the timeline should switch back to being live and the event focus should be removed.
         XCTAssertEqual(timelineController.focusLiveCallCount, 1)
-        XCTAssertTrue(viewModel.context.viewState.timelineViewState.isLive)
-        XCTAssertNil(viewModel.context.viewState.timelineViewState.focussedEvent)
+        XCTAssertTrue(viewModel.context.viewState.timelineState.isLive)
+        XCTAssertNil(viewModel.context.viewState.timelineState.focussedEvent)
     }
     
     func testInitialFocusViewState() async throws {
         let timelineController = MockRoomTimelineController()
         
         let viewModel = makeViewModel(focussedEventID: "t10", timelineController: timelineController)
-        XCTAssertEqual(viewModel.context.viewState.timelineViewState.focussedEvent, .init(eventID: "t10", appearance: .immediate))
+        XCTAssertEqual(viewModel.context.viewState.timelineState.focussedEvent, .init(eventID: "t10", appearance: .immediate))
     }
     
     // MARK: - Read Receipts

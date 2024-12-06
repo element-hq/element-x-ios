@@ -164,9 +164,9 @@ struct RoomDetailsScreen: View {
             ListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
                                     icon: \.pin),
                     details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
-                    kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink(action: {
+                    kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink {
                         context.send(viewAction: .processTapPinnedEvents)
-                    }))
+                    })
                     .disabled(context.viewState.pinnedEventsActionState.isLoading)
             
             if context.viewState.canSeeKnockingRequests {
@@ -184,6 +184,13 @@ struct RoomDetailsScreen: View {
                         context.send(viewAction: .processTapPolls)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
+            
+            if context.viewState.mediaBrowserEnabled {
+                ListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
+                        kind: .navigationLink {
+                            context.send(viewAction: .processTapMediaEvents)
+                        })
+            }
         }
     }
     

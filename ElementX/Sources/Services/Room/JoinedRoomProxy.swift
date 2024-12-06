@@ -166,6 +166,19 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
+    func messageFilteredTimeline(allowedMessageTypes: [RoomMessageEventMessageType]) async -> Result<any TimelineProxyProtocol, RoomProxyError> {
+        do {
+            let timeline = try await TimelineProxy(timeline: room.messageFilteredTimeline(internalIdPrefix: nil, allowedMessageTypes: allowedMessageTypes),
+                                                   kind: .media)
+            await timeline.subscribeForUpdates()
+            
+            return .success(timeline)
+        } catch {
+            MXLog.error("Failed retrieving media events timeline with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
         do {
             try await room.redact(eventId: eventID, reason: nil)

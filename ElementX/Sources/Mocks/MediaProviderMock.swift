@@ -10,6 +10,7 @@ import SwiftUI
 extension MediaProviderMock {
     struct Configuration { }
     
+    // swiftlint:disable:next cyclomatic_complexity
     convenience init(configuration: Configuration) {
         self.init()
         

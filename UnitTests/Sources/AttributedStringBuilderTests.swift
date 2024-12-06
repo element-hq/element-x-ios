@@ -79,7 +79,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 3)
         
-        let link = attributedString.runs.first(where: { $0.link != nil })?.link
+        let link = attributedString.runs.first { $0.link != nil }?.link
         
         XCTAssertEqual(link?.host, "www.matrix.org")
     }
@@ -96,7 +96,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 3)
         
-        let link = attributedString.runs.first(where: { $0.link != nil })?.link
+        let link = attributedString.runs.first { $0.link != nil }?.link
         
         XCTAssertEqual(link?.host, "www.matrix.org")
     }
@@ -113,7 +113,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 3)
         
-        let link = attributedString.runs.first(where: { $0.link != nil })?.link
+        let link = attributedString.runs.first { $0.link != nil }?.link
         
         XCTAssertEqual(link?.host, "www.matrix.org")
     }
@@ -130,7 +130,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 3)
         
-        let link = attributedString.runs.first(where: { $0.link != nil })?.link
+        let link = attributedString.runs.first { $0.link != nil }?.link
         
         XCTAssertEqual(link, "https://matrix.org")
     }

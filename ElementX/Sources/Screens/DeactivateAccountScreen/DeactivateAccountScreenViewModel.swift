@@ -43,9 +43,9 @@ class DeactivateAccountScreenViewModel: DeactivateAccountScreenViewModelType, De
         state.bindings.alertInfo = .init(id: .confirmation,
                                          title: L10n.screenDeactivateAccountTitle,
                                          message: L10n.screenDeactivateAccountConfirmationDialogContent,
-                                         primaryButton: .init(title: L10n.actionDeactivate, action: {
+                                         primaryButton: .init(title: L10n.actionDeactivate) {
                                              Task { await self.deactivateAccount() }
-                                         }),
+                                         },
                                          secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
     }
 

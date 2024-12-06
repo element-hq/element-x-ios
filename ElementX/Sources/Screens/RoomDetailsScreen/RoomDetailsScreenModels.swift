@@ -22,6 +22,7 @@ enum RoomDetailsScreenViewModelAction {
     case requestRolesAndPermissionsPresentation
     case startCall
     case displayPinnedEventsTimeline
+    case displayMediaEventsTimeline
     case displayKnockingRequests
 }
 
@@ -48,12 +49,14 @@ struct RoomDetailsScreenViewState: BindableState {
     var notificationSettingsState: RoomDetailsNotificationSettingsState = .loading
     var canJoinCall = false
     var pinnedEventsActionState = RoomDetailsScreenPinnedEventsActionState.loading
+    
     var knockingEnabled = false
     var isKnockableRoom = false
-    
     var canSeeKnockingRequests: Bool {
         knockingEnabled && dmRecipient == nil && isKnockableRoom && (canInviteUsers || canKickUsers || canBanUsers)
     }
+    
+    var mediaBrowserEnabled = false
     
     var canEdit: Bool {
         !isDirect && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
@@ -197,6 +200,7 @@ enum RoomDetailsScreenViewAction {
     case processTapRolesAndPermissions
     case processTapCall
     case processTapPinnedEvents
+    case processTapMediaEvents
     case processTapRequestsToJoin
 }
 

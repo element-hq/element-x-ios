@@ -69,7 +69,7 @@ struct PinnedEventsTimelineScreen: View {
             TimelineView()
                 .id(timelineContext.viewState.roomID)
                 .environmentObject(timelineContext)
-                .environment(\.focussedEventID, timelineContext.viewState.timelineViewState.focussedEvent?.eventID)
+                .environment(\.focussedEventID, timelineContext.viewState.timelineState.focussedEvent?.eventID)
         }
     }
     
