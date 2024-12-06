@@ -22,10 +22,10 @@ struct MediaEventsTimelineScreen: View {
                     Picker("", selection: $context.screenMode) {
                         Text(L10n.screenMediaBrowserListModeMedia)
                             .padding()
-                            .tag(MediaEventsTimelineScreenMode.imageAndVideo)
+                            .tag(MediaEventsTimelineScreenMode.media)
                         Text(L10n.screenMediaBrowserListModeFiles)
                             .padding()
-                            .tag(MediaEventsTimelineScreenMode.fileAndAudio)
+                            .tag(MediaEventsTimelineScreenMode.files)
                     }
                     .pickerStyle(.segmented)
                 }
@@ -151,15 +151,15 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                  emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
     }()
     
-    static let mediaViewModel = MediaEventsTimelineScreenViewModel(imageAndVideoTimelineViewModel: timelineViewModel,
-                                                                   fileAndAudioTimelineViewModel: timelineViewModel,
+    static let mediaViewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: timelineViewModel,
+                                                                   filesTimelineViewModel: timelineViewModel,
                                                                    mediaProvider: MediaProviderMock(configuration: .init()),
-                                                                   screenMode: .imageAndVideo)
+                                                                   screenMode: .media)
     
-    static let filesViewModel = MediaEventsTimelineScreenViewModel(imageAndVideoTimelineViewModel: timelineViewModel,
-                                                                   fileAndAudioTimelineViewModel: timelineViewModel,
+    static let filesViewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: timelineViewModel,
+                                                                   filesTimelineViewModel: timelineViewModel,
                                                                    mediaProvider: MediaProviderMock(configuration: .init()),
-                                                                   screenMode: .fileAndAudio)
+                                                                   screenMode: .files)
     
     static var previews: some View {
         NavigationStack {

@@ -10,8 +10,8 @@ import Foundation
 enum MediaEventsTimelineScreenViewModelAction { }
 
 enum MediaEventsTimelineScreenMode {
-    case imageAndVideo
-    case fileAndAudio
+    case media
+    case files
 }
 
 struct MediaEventsTimelineScreenViewState: BindableState {

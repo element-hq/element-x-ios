@@ -10,8 +10,8 @@ import SwiftUI
 
 struct MediaEventsTimelineScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
-    let imageAndVideoTimelineController: RoomTimelineControllerProtocol
-    let fileAndAudioTimelineController: RoomTimelineControllerProtocol
+    let mediaTimelineController: RoomTimelineControllerProtocol
+    let filesTimelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
@@ -35,30 +35,30 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
     init(parameters: MediaEventsTimelineScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        let imageAndVideoTimelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
-                                                               timelineController: parameters.imageAndVideoTimelineController,
-                                                               mediaProvider: parameters.mediaProvider,
-                                                               mediaPlayerProvider: parameters.mediaPlayerProvider,
-                                                               voiceMessageMediaManager: parameters.voiceMessageMediaManager,
-                                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                               appMediator: parameters.appMediator,
-                                                               appSettings: ServiceLocator.shared.settings,
-                                                               analyticsService: ServiceLocator.shared.analytics,
-                                                               emojiProvider: parameters.emojiProvider)
+        let mediaTimelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
+                                                       timelineController: parameters.mediaTimelineController,
+                                                       mediaProvider: parameters.mediaProvider,
+                                                       mediaPlayerProvider: parameters.mediaPlayerProvider,
+                                                       voiceMessageMediaManager: parameters.voiceMessageMediaManager,
+                                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                       appMediator: parameters.appMediator,
+                                                       appSettings: ServiceLocator.shared.settings,
+                                                       analyticsService: ServiceLocator.shared.analytics,
+                                                       emojiProvider: parameters.emojiProvider)
         
-        let fileAndAudioTimelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
-                                                              timelineController: parameters.fileAndAudioTimelineController,
-                                                              mediaProvider: parameters.mediaProvider,
-                                                              mediaPlayerProvider: parameters.mediaPlayerProvider,
-                                                              voiceMessageMediaManager: parameters.voiceMessageMediaManager,
-                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                              appMediator: parameters.appMediator,
-                                                              appSettings: ServiceLocator.shared.settings,
-                                                              analyticsService: ServiceLocator.shared.analytics,
-                                                              emojiProvider: parameters.emojiProvider)
+        let filesTimelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
+                                                       timelineController: parameters.filesTimelineController,
+                                                       mediaProvider: parameters.mediaProvider,
+                                                       mediaPlayerProvider: parameters.mediaPlayerProvider,
+                                                       voiceMessageMediaManager: parameters.voiceMessageMediaManager,
+                                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                       appMediator: parameters.appMediator,
+                                                       appSettings: ServiceLocator.shared.settings,
+                                                       analyticsService: ServiceLocator.shared.analytics,
+                                                       emojiProvider: parameters.emojiProvider)
         
-        viewModel = MediaEventsTimelineScreenViewModel(imageAndVideoTimelineViewModel: imageAndVideoTimelineViewModel,
-                                                       fileAndAudioTimelineViewModel: fileAndAudioTimelineViewModel,
+        viewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: mediaTimelineViewModel,
+                                                       filesTimelineViewModel: filesTimelineViewModel,
                                                        mediaProvider: parameters.mediaProvider)
     }
     

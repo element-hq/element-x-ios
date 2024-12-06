@@ -57,31 +57,31 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     // MARK: - Private
-
+    
     private func presentMediaEventsTimeline() async {
         let timelineItemFactory = RoomTimelineItemFactory(userID: userSession.clientProxy.userID,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID))
         
-        guard case let .success(imageAndVideoTimelineController) = await roomTimelineControllerFactory.buildMessageFilteredRoomTimelineController(allowedMessageTypes: [.image, .video],
-                                                                                                                                                  roomProxy: roomProxy,
-                                                                                                                                                  timelineItemFactory: timelineItemFactory,
-                                                                                                                                                  mediaProvider: userSession.mediaProvider) else {
+        guard case let .success(mediaTimelineController) = await roomTimelineControllerFactory.buildMessageFilteredRoomTimelineController(allowedMessageTypes: [.image, .video],
+                                                                                                                                          roomProxy: roomProxy,
+                                                                                                                                          timelineItemFactory: timelineItemFactory,
+                                                                                                                                          mediaProvider: userSession.mediaProvider) else {
             MXLog.error("Failed presenting media timeline")
             return
         }
         
-        guard case let .success(fileAndAudioTimelineController) = await roomTimelineControllerFactory.buildMessageFilteredRoomTimelineController(allowedMessageTypes: [.file, .audio],
-                                                                                                                                                 roomProxy: roomProxy,
-                                                                                                                                                 timelineItemFactory: timelineItemFactory,
-                                                                                                                                                 mediaProvider: userSession.mediaProvider) else {
+        guard case let .success(filesTimelineController) = await roomTimelineControllerFactory.buildMessageFilteredRoomTimelineController(allowedMessageTypes: [.file, .audio],
+                                                                                                                                          roomProxy: roomProxy,
+                                                                                                                                          timelineItemFactory: timelineItemFactory,
+                                                                                                                                          mediaProvider: userSession.mediaProvider) else {
             MXLog.error("Failed presenting media timeline")
             return
         }
         
         let parameters = MediaEventsTimelineScreenCoordinatorParameters(roomProxy: roomProxy,
-                                                                        imageAndVideoTimelineController: imageAndVideoTimelineController,
-                                                                        fileAndAudioTimelineController: fileAndAudioTimelineController,
+                                                                        mediaTimelineController: mediaTimelineController,
+                                                                        filesTimelineController: filesTimelineController,
                                                                         mediaProvider: userSession.mediaProvider,
                                                                         mediaPlayerProvider: MediaPlayerProvider(),
                                                                         voiceMessageMediaManager: userSession.voiceMessageMediaManager,

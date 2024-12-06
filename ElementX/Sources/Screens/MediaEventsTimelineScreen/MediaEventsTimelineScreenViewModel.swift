@@ -11,17 +11,17 @@ import SwiftUI
 typealias MediaEventsTimelineScreenViewModelType = StateStoreViewModel<MediaEventsTimelineScreenViewState, MediaEventsTimelineScreenViewAction>
 
 class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType, MediaEventsTimelineScreenViewModelProtocol {
-    private let imageAndVideoTimelineViewModel: TimelineViewModelProtocol
-    private let fileAndAudioTimelineViewModel: TimelineViewModelProtocol
+    private let mediaTimelineViewModel: TimelineViewModelProtocol
+    private let filesTimelineViewModel: TimelineViewModelProtocol
     
     private var isTopVisible = false
     
     private var activeTimelineViewModel: TimelineViewModelProtocol {
         switch state.bindings.screenMode {
-        case .imageAndVideo:
-            imageAndVideoTimelineViewModel
-        case .fileAndAudio:
-            fileAndAudioTimelineViewModel
+        case .media:
+            mediaTimelineViewModel
+        case .files:
+            filesTimelineViewModel
         }
     }
     
@@ -30,17 +30,17 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(imageAndVideoTimelineViewModel: TimelineViewModelProtocol,
-         fileAndAudioTimelineViewModel: TimelineViewModelProtocol,
+    init(mediaTimelineViewModel: TimelineViewModelProtocol,
+         filesTimelineViewModel: TimelineViewModelProtocol,
          mediaProvider: MediaProviderProtocol,
-         screenMode: MediaEventsTimelineScreenMode = .imageAndVideo) {
-        self.imageAndVideoTimelineViewModel = imageAndVideoTimelineViewModel
-        self.fileAndAudioTimelineViewModel = fileAndAudioTimelineViewModel
+         screenMode: MediaEventsTimelineScreenMode = .media) {
+        self.mediaTimelineViewModel = mediaTimelineViewModel
+        self.filesTimelineViewModel = filesTimelineViewModel
         
         super.init(initialViewState: .init(bindings: .init(screenMode: screenMode)), mediaProvider: mediaProvider)
         
-        imageAndVideoTimelineViewModel.context.$viewState.sink { [weak self] timelineViewState in
-            guard let self, state.bindings.screenMode == .imageAndVideo else {
+        mediaTimelineViewModel.context.$viewState.sink { [weak self] timelineViewState in
+            guard let self, state.bindings.screenMode == .media else {
                 return
             }
             
@@ -48,8 +48,8 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         }
         .store(in: &cancellables)
         
-        fileAndAudioTimelineViewModel.context.$viewState.sink { [weak self] timelineViewState in
-            guard let self, state.bindings.screenMode == .fileAndAudio else {
+        filesTimelineViewModel.context.$viewState.sink { [weak self] timelineViewState in
+            guard let self, state.bindings.screenMode == .files else {
                 return
             }
             
@@ -82,9 +82,9 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         state.items = timelineViewState.timelineState.itemViewStates.filter { itemViewState in
             switch itemViewState.type {
             case .image, .video:
-                state.bindings.screenMode == .imageAndVideo
+                state.bindings.screenMode == .media
             case .audio, .file:
-                state.bindings.screenMode == .fileAndAudio
+                state.bindings.screenMode == .files
             default:
                 false
             }
