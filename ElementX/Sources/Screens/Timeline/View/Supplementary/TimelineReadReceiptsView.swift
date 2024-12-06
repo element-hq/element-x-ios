@@ -102,7 +102,7 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
 
     static func mockTimelineItem(with receipts: [ReadReceipt]) -> TextRoomTimelineItem {
         TextRoomTimelineItem(id: .randomEvent,
-                             timestamp: "Now",
+                             timestamp: .mock,
                              isOutgoing: true,
                              isEditable: false,
                              canBeRepliedTo: true,

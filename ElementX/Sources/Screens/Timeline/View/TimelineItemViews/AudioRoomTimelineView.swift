@@ -42,7 +42,7 @@ struct AudioRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     static func makeItem(filename: String, fileSize: UInt, caption: String? = nil) -> AudioRoomTimelineItem {
         .init(id: .randomEvent,
-              timestamp: "Now",
+              timestamp: .mock,
               isOutgoing: false,
               isEditable: false,
               canBeRepliedTo: true,

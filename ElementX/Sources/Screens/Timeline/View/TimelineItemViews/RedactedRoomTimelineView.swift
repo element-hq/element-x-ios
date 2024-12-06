@@ -26,13 +26,13 @@ struct RedactedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(alignment: .leading, spacing: 20.0) {
             RedactedRoomTimelineView(timelineItem: itemWith(text: L10n.commonMessageRemoved,
-                                                            timestamp: "Later",
+                                                            timestamp: .mock,
                                                             senderId: "Anne"))
         }
         .environmentObject(viewModel.context)
     }
     
-    private static func itemWith(text: String, timestamp: String, senderId: String) -> RedactedRoomTimelineItem {
+    private static func itemWith(text: String, timestamp: Date, senderId: String) -> RedactedRoomTimelineItem {
         RedactedRoomTimelineItem(id: .randomEvent,
                                  body: text,
                                  timestamp: timestamp,

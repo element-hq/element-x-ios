@@ -85,7 +85,7 @@ struct TimelineItemMenu: View {
                 
                 Spacer(minLength: 16.0)
                 
-                Text(item.timestamp)
+                Text(item.timestamp.formattedTime())
                     .font(.compound.bodyXS)
                     .foregroundColor(.compound.textSecondary)
             }

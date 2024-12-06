@@ -94,7 +94,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     private static func makeTimelineItem(caption: String? = nil, isEdited: Bool = false) -> ImageRoomTimelineItem {
         ImageRoomTimelineItem(id: .randomEvent,
-                              timestamp: "Now",
+                              timestamp: .mock,
                               isOutgoing: false,
                               isEditable: false,
                               canBeRepliedTo: true,

@@ -9,7 +9,7 @@ import Foundation
 
 struct CallNotificationRoomTimelineItem: RoomTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
-    let timestamp: String
+    let timestamp: Date
     let isEditable: Bool
     let canBeRepliedTo: Bool
     

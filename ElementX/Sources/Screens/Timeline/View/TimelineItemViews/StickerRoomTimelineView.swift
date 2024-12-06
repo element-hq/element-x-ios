@@ -44,7 +44,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
         VStack(spacing: 20.0) {
             StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .randomEvent,
                                                                           body: "Some image",
-                                                                          timestamp: "Now",
+                                                                          timestamp: .mock,
                                                                           isOutgoing: false,
                                                                           isEditable: false,
                                                                           canBeRepliedTo: true,
@@ -53,7 +53,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
             
             StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: .randomEvent,
                                                                           body: "Blurhashed image",
-                                                                          timestamp: "Now",
+                                                                          timestamp: .mock,
                                                                           isOutgoing: false,
                                                                           isEditable: false,
                                                                           canBeRepliedTo: true,

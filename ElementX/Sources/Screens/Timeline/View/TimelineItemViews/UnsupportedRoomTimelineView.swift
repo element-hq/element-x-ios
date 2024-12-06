@@ -40,18 +40,18 @@ struct UnsupportedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static var body: some View {
         VStack(alignment: .leading, spacing: 20.0) {
             UnsupportedRoomTimelineView(timelineItem: itemWith(text: "Text",
-                                                               timestamp: "Now",
+                                                               timestamp: .mock,
                                                                isOutgoing: false,
                                                                senderId: "Bob"))
             
             UnsupportedRoomTimelineView(timelineItem: itemWith(text: "Some other text",
-                                                               timestamp: "Later",
+                                                               timestamp: .mock,
                                                                isOutgoing: true,
                                                                senderId: "Anne"))
         }
     }
     
-    private static func itemWith(text: String, timestamp: String, isOutgoing: Bool, senderId: String) -> UnsupportedRoomTimelineItem {
+    private static func itemWith(text: String, timestamp: Date, isOutgoing: Bool, senderId: String) -> UnsupportedRoomTimelineItem {
         UnsupportedRoomTimelineItem(id: .randomEvent,
                                     body: text,
                                     eventType: "Some Event Type",

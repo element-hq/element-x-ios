@@ -112,7 +112,7 @@ struct FileRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                          caption: String? = nil,
                          formattedCaption: AttributedString? = nil) -> FileRoomTimelineItem {
         .init(id: .randomEvent,
-              timestamp: "Now",
+              timestamp: .mock,
               isOutgoing: false,
               isEditable: false,
               canBeRepliedTo: true,

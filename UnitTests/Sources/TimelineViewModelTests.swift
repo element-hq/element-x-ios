@@ -428,7 +428,7 @@ private extension TextRoomTimelineItem {
     init(text: String, sender: String, addReactions: Bool = false, addReadReceipts: [ReadReceipt] = []) {
         let reactions = addReactions ? [AggregatedReaction(accountOwnerID: "bob", key: "🦄", senders: [ReactionSender(id: sender, timestamp: Date())])] : []
         self.init(id: .randomEvent,
-                  timestamp: "10:47 am",
+                  timestamp: .mock,
                   isOutgoing: sender == "bob",
                   isEditable: sender == "bob",
                   canBeRepliedTo: true,
@@ -448,7 +448,7 @@ private extension SeparatorRoomTimelineItem {
 private extension TextRoomTimelineItem {
     init(eventID: String) {
         self.init(id: .event(uniqueID: .init(id: UUID().uuidString), eventOrTransactionID: .eventId(eventId: eventID)),
-                  timestamp: "",
+                  timestamp: .mock,
                   isOutgoing: false,
                   isEditable: false,
                   canBeRepliedTo: true,

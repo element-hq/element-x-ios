@@ -91,7 +91,7 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     @ViewBuilder
     static var states: some View {
         LocationRoomTimelineView(timelineItem: .init(id: .randomEvent,
-                                                     timestamp: "Now",
+                                                     timestamp: .mock,
                                                      isOutgoing: false,
                                                      isEditable: false,
                                                      canBeRepliedTo: true,
@@ -100,7 +100,7 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                      content: .init(body: "Fallback geo uri description")))
 
         LocationRoomTimelineView(timelineItem: .init(id: .randomEvent,
-                                                     timestamp: "Now",
+                                                     timestamp: .mock,
                                                      isOutgoing: false,
                                                      isEditable: false,
                                                      canBeRepliedTo: true,
@@ -109,7 +109,7 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                      content: .init(body: "Fallback geo uri description",
                                                                     geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description")))
         LocationRoomTimelineView(timelineItem: .init(id: .randomEvent,
-                                                     timestamp: "Now",
+                                                     timestamp: .mock,
                                                      isOutgoing: false,
                                                      isEditable: false,
                                                      canBeRepliedTo: true,
