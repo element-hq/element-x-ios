@@ -586,14 +586,14 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private func makeCreateWithTextAlertInfo(urlBinding: Binding<String>, textBinding: Binding<String>) -> AlertInfo<UUID> {
         AlertInfo(id: UUID(),
                   title: L10n.richTextEditorCreateLink,
-                  primaryButton: AlertInfo<UUID>.AlertButton(title: L10n.actionCancel, action: {
+                  primaryButton: AlertInfo<UUID>.AlertButton(title: L10n.actionCancel) {
                       self.restoreComposerSelectedRange()
-                  }),
-                  secondaryButton: AlertInfo<UUID>.AlertButton(title: L10n.actionSave, action: {
+                  },
+                  secondaryButton: AlertInfo<UUID>.AlertButton(title: L10n.actionSave) {
                       self.restoreComposerSelectedRange()
                       self.createLinkWithText()
 
-                  }),
+                  },
                   textFields: [AlertInfo<UUID>.AlertTextField(placeholder: L10n.commonText,
                                                               text: textBinding,
                                                               autoCapitalization: .never,
@@ -607,14 +607,14 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private func makeSetUrlAlertInfo(urlBinding: Binding<String>, isEdit: Bool) -> AlertInfo<UUID> {
         AlertInfo(id: UUID(),
                   title: isEdit ? L10n.richTextEditorEditLink : L10n.richTextEditorCreateLink,
-                  primaryButton: AlertInfo<UUID>.AlertButton(title: L10n.actionCancel, action: {
+                  primaryButton: AlertInfo<UUID>.AlertButton(title: L10n.actionCancel) {
                       self.restoreComposerSelectedRange()
-                  }),
-                  secondaryButton: AlertInfo<UUID>.AlertButton(title: L10n.actionSave, action: {
+                  },
+                  secondaryButton: AlertInfo<UUID>.AlertButton(title: L10n.actionSave) {
                       self.restoreComposerSelectedRange()
                       self.setLink()
 
-                  }),
+                  },
                   textFields: [AlertInfo<UUID>.AlertTextField(placeholder: L10n.richTextEditorUrlPlaceholder,
                                                               text: urlBinding,
                                                               autoCapitalization: .never,
@@ -624,16 +624,16 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private func makeEditChoiceAlertInfo(urlBinding: Binding<String>) -> AlertInfo<UUID> {
         AlertInfo(id: UUID(),
                   title: L10n.richTextEditorEditLink,
-                  primaryButton: AlertInfo<UUID>.AlertButton(title: L10n.actionRemove, role: .destructive, action: {
+                  primaryButton: AlertInfo<UUID>.AlertButton(title: L10n.actionRemove, role: .destructive) {
                       self.restoreComposerSelectedRange()
                       self.removeLinks()
-                  }),
-                  verticalButtons: [AlertInfo<UUID>.AlertButton(title: L10n.actionEdit, action: {
+                  },
+                  verticalButtons: [AlertInfo<UUID>.AlertButton(title: L10n.actionEdit) {
                       self.state.bindings.alertInfo = nil
                       DispatchQueue.main.async {
                           self.state.bindings.alertInfo = self.makeSetUrlAlertInfo(urlBinding: urlBinding, isEdit: true)
                       }
-                  })])
+                  }])
     }
 
     private func restoreComposerSelectedRange() {

@@ -56,11 +56,11 @@ struct MediaEventsTimelineScreen: View {
                     Rectangle()
                         .frame(height: 44)
                         .foregroundStyle(.compound.bgCanvasDefault)
-                        .overlay(content: {
+                        .overlay {
                             if context.viewState.isBackPaginating {
                                 ProgressView()
                             }
-                        })
+                        }
                         .onAppear {
                             context.send(viewAction: .topBecameVisible)
                         }

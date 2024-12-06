@@ -326,11 +326,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.state.bindings.alertInfo = AlertInfo(id: UUID(),
                                                           title: L10n.bannerMigrateToNativeSlidingSyncForceLogoutTitle,
-                                                          primaryButton: .init(title: L10n.bannerMigrateToNativeSlidingSyncAction,
-                                                                               action: { [weak self] in
-                                                                                   self?.appSettings.slidingSyncDiscovery = .native
-                                                                                   self?.actionsSubject.send(.logoutWithoutConfirmation)
-                                                                               }))
+                                                          primaryButton: .init(title: L10n.bannerMigrateToNativeSlidingSyncAction) { [weak self] in
+                                                              self?.appSettings.slidingSyncDiscovery = .native
+                                                              self?.actionsSubject.send(.logoutWithoutConfirmation)
+                                                          })
             }
         }
     }
@@ -433,7 +432,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                                          title: title,
                                          message: message,
                                          primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                         secondaryButton: .init(title: L10n.actionDecline, role: .destructive, action: { Task { await self.declineInvite(roomID: room.id) } }))
+                                         secondaryButton: .init(title: L10n.actionDecline, role: .destructive) { Task { await self.declineInvite(roomID: room.id) } })
     }
     
     private func declineInvite(roomID: String) async {

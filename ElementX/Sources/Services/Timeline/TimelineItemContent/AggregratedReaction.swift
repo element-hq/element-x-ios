@@ -42,7 +42,7 @@ extension AggregatedReaction {
     
     /// Whether to highlight the reaction, indicating that the current user sent this reaction.
     var isHighlighted: Bool {
-        senders.contains(where: { $0.id == accountOwnerID })
+        senders.contains { $0.id == accountOwnerID }
     }
     
     /// The key to be displayed on screen. See `maxDisplayChars`.

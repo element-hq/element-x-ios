@@ -54,10 +54,10 @@ class ComposerToolbarViewModelTests: XCTestCase {
             .map(\.composerMode)
             .removeDuplicates()
             .dropFirst()
-            .sink(receiveValue: { composerMode in
+            .sink { composerMode in
                 XCTAssertEqual(composerMode, mode)
                 expectation.fulfill()
-            })
+            }
 
         viewModel.process(timelineAction: .setMode(mode: mode))
 
