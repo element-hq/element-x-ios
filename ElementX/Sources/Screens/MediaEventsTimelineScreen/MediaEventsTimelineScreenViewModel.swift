@@ -14,7 +14,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     private let mediaTimelineViewModel: TimelineViewModelProtocol
     private let filesTimelineViewModel: TimelineViewModelProtocol
     
-    private var isTopVisible = false
+    private var isOldestItemVisible = false
     
     private var activeTimelineViewModel: TimelineViewModelProtocol {
         switch state.bindings.screenMode {
@@ -68,11 +68,11 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         switch viewAction {
         case .changedScreenMode:
             updateWithTimelineViewState(activeTimelineViewModel.context.viewState)
-        case .topBecameVisible:
-            isTopVisible = true
-            backpaginateIfNecessary(paginationStatus: activeTimelineViewModel.context.viewState.timelineState.paginationState.backward)
-        case .topBecameHidden:
-            isTopVisible = false
+        case .oldestItemDidAppear:
+            isOldestItemVisible = true
+            backPaginateIfNecessary(paginationStatus: activeTimelineViewModel.context.viewState.timelineState.paginationState.backward)
+        case .oldestItemDidDisappear:
+            isOldestItemVisible = false
         }
     }
     
@@ -91,11 +91,11 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         }.reversed()
         
         state.isBackPaginating = (timelineViewState.timelineState.paginationState.backward == .paginating)
-        backpaginateIfNecessary(paginationStatus: timelineViewState.timelineState.paginationState.backward)
+        backPaginateIfNecessary(paginationStatus: timelineViewState.timelineState.paginationState.backward)
     }
     
-    private func backpaginateIfNecessary(paginationStatus: PaginationStatus) {
-        if paginationStatus == .idle, isTopVisible {
+    private func backPaginateIfNecessary(paginationStatus: PaginationStatus) {
+        if paginationStatus == .idle, isOldestItemVisible {
             activeTimelineViewModel.context.send(viewAction: .paginateBackwards)
         }
     }

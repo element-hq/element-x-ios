@@ -261,7 +261,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
                                                                                 topic: "“Science and technology were the only keys to opening the door to the future, and people approached science with the faith and sincerity of elementary school students.”",
                                                                                 avatarURL: .mockMXCAvatar,
                                                                                 memberCount: UInt(100),
-                                                                                isHistoryWorldReadable: false,
+                                                                                isHistoryWorldReadable: nil,
                                                                                 isJoined: membership.isJoined,
                                                                                 isInvited: membership.isInvited,
                                                                                 isPublic: membership.isPublic,

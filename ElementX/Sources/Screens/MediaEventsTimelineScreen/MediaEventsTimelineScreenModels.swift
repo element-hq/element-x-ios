@@ -27,6 +27,6 @@ struct MediaEventsTimelineScreenViewStateBindings {
 
 enum MediaEventsTimelineScreenViewAction {
     case changedScreenMode
-    case topBecameVisible
-    case topBecameHidden
+    case oldestItemDidAppear
+    case oldestItemDidDisappear
 }

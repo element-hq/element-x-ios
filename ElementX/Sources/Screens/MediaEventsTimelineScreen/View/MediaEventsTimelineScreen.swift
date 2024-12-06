@@ -30,8 +30,6 @@ struct MediaEventsTimelineScreen: View {
                     .pickerStyle(.segmented)
                 }
             }
-            .colorScheme(.dark)
-            .toolbarColorScheme(.dark)
     }
     
     @ViewBuilder
@@ -62,10 +60,10 @@ struct MediaEventsTimelineScreen: View {
                             }
                         }
                         .onAppear {
-                            context.send(viewAction: .topBecameVisible)
+                            context.send(viewAction: .oldestItemDidAppear)
                         }
                         .onDisappear {
-                            context.send(viewAction: .topBecameHidden)
+                            context.send(viewAction: .oldestItemDidDisappear)
                         }
                 }
             }
