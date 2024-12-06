@@ -42,44 +42,44 @@ struct TextRoomTimelineView_Previews: PreviewProvider, TestablePreview {
         ScrollView {
             VStack(alignment: .leading, spacing: 20.0) {
                 TextRoomTimelineView(timelineItem: itemWith(text: "Short loin ground round tongue hamburger, fatback salami shoulder. Beef turkey sausage kielbasa strip steak. Alcatra capicola pig tail pancetta chislic.",
-                                                            timestamp: "Now",
+                                                            timestamp: .mock,
                                                             isOutgoing: false,
                                                             senderId: "Bob"))
                 
                 TextRoomTimelineView(timelineItem: itemWith(text: "Some other text",
-                                                            timestamp: "Later",
+                                                            timestamp: .mock,
                                                             isOutgoing: true,
                                                             senderId: "Anne"))
                 
                 TextRoomTimelineView(timelineItem: itemWith(text: "Short loin ground round tongue hamburger, fatback salami shoulder. Beef turkey sausage kielbasa strip steak. Alcatra capicola pig tail pancetta chislic.",
-                                                            timestamp: "Now",
+                                                            timestamp: .mock,
                                                             isOutgoing: false,
                                                             senderId: "Bob"))
                 
                 TextRoomTimelineView(timelineItem: itemWith(text: "Some other text",
-                                                            timestamp: "Later",
+                                                            timestamp: .mock,
                                                             isOutgoing: true,
                                                             senderId: "Anne"))
                 
                 TextRoomTimelineView(timelineItem: itemWith(text: "טקסט אחר",
-                                                            timestamp: "Later",
+                                                            timestamp: .mock,
                                                             isOutgoing: true,
                                                             senderId: "Anne"))
                 
                 TextRoomTimelineView(timelineItem: itemWith(html: "<ol><li>First item</li><li>Second item</li><li>Third item</li></ol>",
-                                                            timestamp: "Later",
+                                                            timestamp: .mock,
                                                             isOutgoing: true,
                                                             senderId: "Anne"))
                 
                 TextRoomTimelineView(timelineItem: itemWith(html: "<ol><li>פריט ראשון</li><li>הפריט השני</li><li>פריט שלישי</li></ol>",
-                                                            timestamp: "Later",
+                                                            timestamp: .mock,
                                                             isOutgoing: true,
                                                             senderId: "Anne"))
             }
         }
     }
     
-    private static func itemWith(text: String, timestamp: String, isOutgoing: Bool, senderId: String) -> TextRoomTimelineItem {
+    private static func itemWith(text: String, timestamp: Date, isOutgoing: Bool, senderId: String) -> TextRoomTimelineItem {
         TextRoomTimelineItem(id: .randomEvent,
                              timestamp: timestamp,
                              isOutgoing: isOutgoing,
@@ -90,7 +90,7 @@ struct TextRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                              content: .init(body: text))
     }
     
-    private static func itemWith(html: String, timestamp: String, isOutgoing: Bool, senderId: String) -> TextRoomTimelineItem {
+    private static func itemWith(html: String, timestamp: Date, isOutgoing: Bool, senderId: String) -> TextRoomTimelineItem {
         let builder = AttributedStringBuilder(cacheKey: "preview", mentionBuilder: MentionBuilder())
         let attributedString = builder.fromHTML(html)
         

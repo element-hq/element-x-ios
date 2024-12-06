@@ -10,7 +10,7 @@ import XCTest
 
 final class TextBasedRoomTimelineTests: XCTestCase {
     func testTextRoomTimelineItemWhitespaceEnd() {
-        let timestamp = "Now"
+        let timestamp = Calendar.current.startOfDay(for: .now).addingTimeInterval(60 * 60) // 1:00 am
         let timelineItem = TextRoomTimelineItem(id: .randomEvent,
                                                 timestamp: timestamp,
                                                 isOutgoing: true,
@@ -19,11 +19,11 @@ final class TextBasedRoomTimelineTests: XCTestCase {
                                                 isThreaded: false,
                                                 sender: .init(id: UUID().uuidString),
                                                 content: .init(body: "Test"))
-        XCTAssertEqual(timelineItem.additionalWhitespaces(), timestamp.count + 1)
+        XCTAssertEqual(timelineItem.additionalWhitespaces(), timestamp.formattedTime().count + 1)
     }
 
     func testTextRoomTimelineItemWhitespaceEndLonger() {
-        let timestamp = "10:00 AM"
+        let timestamp = Calendar.current.startOfDay(for: .now).addingTimeInterval(-60) // 11:59 pm
         let timelineItem = TextRoomTimelineItem(id: .randomEvent,
                                                 timestamp: timestamp,
                                                 isOutgoing: true,
@@ -32,11 +32,11 @@ final class TextBasedRoomTimelineTests: XCTestCase {
                                                 isThreaded: false,
                                                 sender: .init(id: UUID().uuidString),
                                                 content: .init(body: "Test"))
-        XCTAssertEqual(timelineItem.additionalWhitespaces(), timestamp.count + 1)
+        XCTAssertEqual(timelineItem.additionalWhitespaces(), timestamp.formattedTime().count + 1)
     }
 
     func testTextRoomTimelineItemWhitespaceEndWithEdit() {
-        let timestamp = "Now"
+        let timestamp = Date.mock
         var timelineItem = TextRoomTimelineItem(id: .randomEvent,
                                                 timestamp: timestamp,
                                                 isOutgoing: true,
@@ -47,11 +47,11 @@ final class TextBasedRoomTimelineTests: XCTestCase {
                                                 content: .init(body: "Test"))
         timelineItem.properties.isEdited = true
         let editedCount = L10n.commonEditedSuffix.count
-        XCTAssertEqual(timelineItem.additionalWhitespaces(), timestamp.count + editedCount + 2)
+        XCTAssertEqual(timelineItem.additionalWhitespaces(), timestamp.formattedTime().count + editedCount + 2)
     }
 
     func testTextRoomTimelineItemWhitespaceEndWithEditAndAlert() {
-        let timestamp = "Now"
+        let timestamp = Date.mock
         var timelineItem = TextRoomTimelineItem(id: .randomEvent,
                                                 timestamp: timestamp,
                                                 isOutgoing: true,
@@ -63,6 +63,6 @@ final class TextBasedRoomTimelineTests: XCTestCase {
         timelineItem.properties.isEdited = true
         timelineItem.properties.deliveryStatus = .sendingFailed(.unknown)
         let editedCount = L10n.commonEditedSuffix.count
-        XCTAssertEqual(timelineItem.additionalWhitespaces(), timestamp.count + editedCount + 5)
+        XCTAssertEqual(timelineItem.additionalWhitespaces(), timestamp.formattedTime().count + editedCount + 5)
     }
 }

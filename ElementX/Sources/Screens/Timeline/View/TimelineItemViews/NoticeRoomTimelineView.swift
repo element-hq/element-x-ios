@@ -44,16 +44,16 @@ struct NoticeRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static var body: some View {
         VStack(alignment: .leading, spacing: 20.0) {
             NoticeRoomTimelineView(timelineItem: itemWith(text: "Short loin ground round tongue hamburger, fatback salami shoulder. Beef turkey sausage kielbasa strip steak. Alcatra capicola pig tail pancetta chislic.",
-                                                          timestamp: "Now",
+                                                          timestamp: .mock,
                                                           senderId: "Bob"))
             
             NoticeRoomTimelineView(timelineItem: itemWith(text: "Some other text",
-                                                          timestamp: "Later",
+                                                          timestamp: .mock,
                                                           senderId: "Anne"))
         }
     }
     
-    private static func itemWith(text: String, timestamp: String, senderId: String) -> NoticeRoomTimelineItem {
+    private static func itemWith(text: String, timestamp: Date, senderId: String) -> NoticeRoomTimelineItem {
         NoticeRoomTimelineItem(id: .randomEvent,
                                timestamp: timestamp,
                                isOutgoing: false,

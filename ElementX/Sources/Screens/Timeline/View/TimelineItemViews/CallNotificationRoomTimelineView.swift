@@ -39,7 +39,7 @@ struct CallNotificationRoomTimelineView: View {
             
             Spacer()
             
-            Text(timelineItem.timestamp)
+            Text(timelineItem.timestamp.formattedTime())
                 .font(.compound.bodyXS)
                 .foregroundColor(.compound.textSecondary)
         }
@@ -61,7 +61,7 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
     
     static var body: some View {
         CallNotificationRoomTimelineView(timelineItem: .init(id: .randomEvent,
-                                                             timestamp: "Now",
+                                                             timestamp: .mock,
                                                              isEditable: false,
                                                              canBeRepliedTo: false,
                                                              sender: .init(id: "Bob")))

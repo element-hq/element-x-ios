@@ -13,7 +13,7 @@ enum RoomTimelineItemFixtures {
         SeparatorRoomTimelineItem(id: .virtual(uniqueID: .init(id: "Yesterday")), text: "Yesterday"),
         TextRoomTimelineItem(id: .event(uniqueID: .init(id: ".RoomTimelineItemFixtures.default.0"),
                                         eventOrTransactionID: .eventId(eventId: "RoomTimelineItemFixtures.default.0")),
-                             timestamp: "10:10 AM",
+                             timestamp: .mock,
                              isOutgoing: false,
                              isEditable: false,
                              canBeRepliedTo: true,
@@ -23,7 +23,7 @@ enum RoomTimelineItemFixtures {
                              properties: RoomTimelineItemProperties(isEdited: true)),
         TextRoomTimelineItem(id: .event(uniqueID: .init(id: "RoomTimelineItemFixtures.default.1"),
                                         eventOrTransactionID: .eventId(eventId: "RoomTimelineItemFixtures.default.1")),
-                             timestamp: "10:11 AM",
+                             timestamp: .mock,
                              isOutgoing: false,
                              isEditable: false,
                              canBeRepliedTo: true,
@@ -35,7 +35,7 @@ enum RoomTimelineItemFixtures {
                              ])),
         TextRoomTimelineItem(id: .event(uniqueID: .init(id: "RoomTimelineItemFixtures.default.2"),
                                         eventOrTransactionID: .eventId(eventId: "RoomTimelineItemFixtures.default.2")),
-                             timestamp: "10:11 AM",
+                             timestamp: .mock,
                              isOutgoing: false,
                              isEditable: false,
                              canBeRepliedTo: true,
@@ -55,7 +55,7 @@ enum RoomTimelineItemFixtures {
         SeparatorRoomTimelineItem(id: .virtual(uniqueID: .init(id: "Today")), text: "Today"),
         TextRoomTimelineItem(id: .event(uniqueID: .init(id: "RoomTimelineItemFixtures.default.3"),
                                         eventOrTransactionID: .eventId(eventId: "RoomTimelineItemFixtures.default.3")),
-                             timestamp: "5 PM",
+                             timestamp: .mock,
                              isOutgoing: false,
                              isEditable: false,
                              canBeRepliedTo: true,
@@ -65,7 +65,7 @@ enum RoomTimelineItemFixtures {
                              properties: RoomTimelineItemProperties(orderedReadReceipts: [ReadReceipt(userID: "alice", formattedTimestamp: nil)])),
         TextRoomTimelineItem(id: .event(uniqueID: .init(id: "RoomTimelineItemFixtures.default.4"),
                                         eventOrTransactionID: .eventId(eventId: "RoomTimelineItemFixtures.default.4")),
-                             timestamp: "5 PM",
+                             timestamp: .mock,
                              isOutgoing: true,
                              isEditable: true,
                              canBeRepliedTo: true,
@@ -74,7 +74,7 @@ enum RoomTimelineItemFixtures {
                              content: .init(body: "And John's speech was amazing!")),
         TextRoomTimelineItem(id: .event(uniqueID: .init(id: "RoomTimelineItemFixtures.default.5"),
                                         eventOrTransactionID: .eventId(eventId: "RoomTimelineItemFixtures.default.5")),
-                             timestamp: "5 PM",
+                             timestamp: .mock,
                              isOutgoing: true,
                              isEditable: true,
                              canBeRepliedTo: true,
@@ -88,7 +88,7 @@ enum RoomTimelineItemFixtures {
                                                                                           ReadReceipt(userID: "dan", formattedTimestamp: nil)])),
         TextRoomTimelineItem(id: .event(uniqueID: .init(id: "RoomTimelineItemFixtures.default.6"),
                                         eventOrTransactionID: .eventId(eventId: "RoomTimelineItemFixtures.default.6")),
-                             timestamp: "5 PM",
+                             timestamp: .mock,
                              isOutgoing: false,
                              isEditable: false,
                              canBeRepliedTo: true,
@@ -267,7 +267,7 @@ enum RoomTimelineItemFixtures {
 private extension TextRoomTimelineItem {
     init(id: TimelineItemIdentifier? = nil, text: String, senderDisplayName: String) {
         self.init(id: id ?? .randomEvent,
-                  timestamp: "10:47 am",
+                  timestamp: .mock,
                   isOutgoing: senderDisplayName == "Alice",
                   isEditable: false,
                   canBeRepliedTo: true,
@@ -286,7 +286,7 @@ private extension TextRoomTimelineItem {
 private extension AudioRoomTimelineItem {
     init(isOutgoing: Bool, caption: String? = nil) {
         self.init(id: .randomEvent,
-                  timestamp: "10:47 am",
+                  timestamp: .mock,
                   isOutgoing: isOutgoing,
                   isEditable: isOutgoing,
                   canBeRepliedTo: true,
@@ -305,7 +305,7 @@ private extension AudioRoomTimelineItem {
 private extension FileRoomTimelineItem {
     init(isOutgoing: Bool, caption: String? = nil) {
         self.init(id: .randomEvent,
-                  timestamp: "10:47 am",
+                  timestamp: .mock,
                   isOutgoing: isOutgoing,
                   isEditable: isOutgoing,
                   canBeRepliedTo: true,
@@ -323,7 +323,7 @@ private extension FileRoomTimelineItem {
 private extension ImageRoomTimelineItem {
     init(isOutgoing: Bool, caption: String? = nil) {
         self.init(id: .randomEvent,
-                  timestamp: "10:47 am",
+                  timestamp: .mock,
                   isOutgoing: isOutgoing,
                   isEditable: isOutgoing,
                   canBeRepliedTo: true,
@@ -340,7 +340,7 @@ private extension ImageRoomTimelineItem {
 private extension VideoRoomTimelineItem {
     init(isOutgoing: Bool, caption: String? = nil) {
         self.init(id: .randomEvent,
-                  timestamp: "10:47 am",
+                  timestamp: .mock,
                   isOutgoing: isOutgoing,
                   isEditable: isOutgoing,
                   canBeRepliedTo: true,
@@ -357,7 +357,7 @@ private extension VideoRoomTimelineItem {
 private extension VoiceMessageRoomTimelineItem {
     init(isOutgoing: Bool) {
         self.init(id: .randomEvent,
-                  timestamp: "10:47 am",
+                  timestamp: .mock,
                   isOutgoing: isOutgoing,
                   isEditable: isOutgoing,
                   canBeRepliedTo: true,

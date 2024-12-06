@@ -11,7 +11,7 @@ struct PollRoomTimelineItem: Equatable, EventBasedTimelineItemProtocol {
     let id: TimelineItemIdentifier
     let poll: Poll
     let body: String
-    let timestamp: String
+    let timestamp: Date
     let isOutgoing: Bool
     let isEditable: Bool
     let canBeRepliedTo: Bool
