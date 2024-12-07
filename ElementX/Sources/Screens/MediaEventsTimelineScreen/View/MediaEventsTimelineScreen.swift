@@ -33,6 +33,12 @@ struct MediaEventsTimelineScreen: View {
             .timelineMediaQuickLook(viewModel: $context.mediaPreviewViewModel)
     }
     
+    // The scale effects do the following:
+    // * flip the scrollView vertically to keep the items
+    // at the bottom and have pagination working properly
+    // * flip the grid vertically to counteract the scroll view
+    // but also horizontally to preserve the corect item order
+    // * flip the items on both axes have them render correctly
     @ViewBuilder
     private var content: some View {
         ScrollView {
@@ -49,10 +55,11 @@ struct MediaEventsTimelineScreen: View {
                                     viewForTimelineItem(item)
                                 }
                                 .clipped()
-                                .scaleEffect(.init(width: 1, height: -1))
+                                .scaleEffect(.init(width: -1, height: -1))
                         }
                     }
                 }
+                .scaleEffect(.init(width: -1, height: 1))
                 
                 // Needs to be wrapped in a LazyStack otherwise appearance calls don't trigger
                 LazyVStack(spacing: 0) {
