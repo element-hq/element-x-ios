@@ -387,6 +387,10 @@
 "screen_knock_requests_list_empty_state_description" = "Όταν κάποιος θα ζητήσει να συμμετάσχει στο δωμάτιο, θα μπορείς να δεις το αίτημά του εδώ.";
 "screen_knock_requests_list_empty_state_title" = "Δεν υπάρχει εκκρεμές αίτημα συμμετοχής";
 "screen_knock_requests_list_title" = "Αιτήματα συμμετοχής";
+"screen_media_details_file_format" = "File format";
+"screen_media_details_filename" = "File name";
+"screen_media_details_uploaded_by" = "Uploaded by";
+"screen_media_details_uploaded_on" = "Uploaded on";
 "screen_media_upload_preview_caption_warning" = "Οι λεζάντες ενδέχεται να μην είναι ορατές σε άτομα που χρησιμοποιούν παλαιότερες εφαρμογές.";
 "screen_media_upload_preview_error_failed_processing" = "Αποτυχία μεταφόρτωσης μέσου, δοκίμασε ξανά.";
 "screen_media_upload_preview_error_failed_sending" = "Αποτυχία μεταφόρτωσης πολυμέσων, δοκίμασε ξανά.";
@@ -586,6 +590,15 @@
 "screen_login_form_header" = "Εισήγαγε τα στοιχεία σου";
 "screen_login_title" = "Καλωσόρισες ξανά!";
 "screen_login_title_with_homeserver" = "Συνδέσου στο %1$@";
+"screen_media_browser_delete_confirmation_subtitle" = "This file will be removed from the room and members won’t have access to it.";
+"screen_media_browser_delete_confirmation_title" = "Delete file?";
+"screen_media_browser_empty_state_subtitle" = "Images and videos uploaded to this room will be shown here.";
+"screen_media_browser_empty_state_title" = "No media uploaded yet";
+"screen_media_browser_list_loading_files" = "Loading files…";
+"screen_media_browser_list_loading_media" = "Loading media…";
+"screen_media_browser_list_mode_files" = "Files";
+"screen_media_browser_list_mode_media" = "Media";
+"screen_media_browser_title" = "Media and files";
 "screen_media_picker_error_failed_selection" = "Αποτυχία επιλογής πολυμέσου, δοκίμασε ξανά.";
 "screen_migration_message" = "Αυτή είναι μια εφάπαξ διαδικασία, ευχαριστώ που περίμενες.";
 "screen_migration_title" = "Ρύθμιση του λογαριασμού σου.";
@@ -743,6 +756,7 @@
 "screen_room_details_error_loading_notification_settings" = "Παρουσιάστηκε σφάλμα κατά τη φόρτωση των ρυθμίσεων ειδοποίησης.";
 "screen_room_details_error_muting" = "Αποτυχία σίγασης αυτού του δωματίου, δοκίμασε ξανά.";
 "screen_room_details_error_unmuting" = "Αποτυχία κατάργησης σίγασης αυτού του δωματίου, δοκίμασε ξανά.";
+"screen_room_details_media_gallery_title" = "Media and files";
 "screen_room_details_notification_mode_custom" = "Προσαρμοσμένο";
 "screen_room_details_notification_mode_default" = "Προεπιλογή";
 "screen_room_details_share_room_title" = "Κοινή χρήση δωματίου";
@@ -986,6 +1000,9 @@
 "state_event_room_unknown_membership_change" = "Ο χρήστης %1$@ έκανε μια άγνωστη αλλαγή στην ιδιότητα μέλους του.";
 "test_language_identifier" = "el";
 "test_untranslated_default_language_identifier" = "en";
+"timeline_decryption_failure_historical_event_no_key_backup" = "Historical messages are not available on this device";
+"timeline_decryption_failure_unable_to_decrypt" = "Unable to decrypt message";
+"timeline_decryption_failure_withheld_unverified" = "This message was blocked either because you did not verify your device or because the sender needs to verify your identity.";
 "troubleshoot_notifications_entry_point_section" = "Αντιμετώπιση προβλημάτων";
 "troubleshoot_notifications_screen_action" = "Εκτέλεση δοκιμών";
 "troubleshoot_notifications_screen_action_again" = "Επανεκτέλεση δοκιμών";

@@ -387,6 +387,10 @@
 "screen_knock_requests_list_empty_state_description" = "Keď niekto požiada, aby sa pripojil k miestnosti, jeho žiadosť si môžete pozrieť tu.";
 "screen_knock_requests_list_empty_state_title" = "Žiadna čakajúca žiadosť o pripojenie";
 "screen_knock_requests_list_title" = "Žiadosti o pripojenie";
+"screen_media_details_file_format" = "File format";
+"screen_media_details_filename" = "File name";
+"screen_media_details_uploaded_by" = "Uploaded by";
+"screen_media_details_uploaded_on" = "Uploaded on";
 "screen_media_upload_preview_caption_warning" = "Captions might not be visible to people using older apps.";
 "screen_media_upload_preview_error_failed_processing" = "Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova.";
 "screen_media_upload_preview_error_failed_sending" = "Nepodarilo sa nahrať médiá, skúste to prosím znova.";
@@ -586,6 +590,15 @@
 "screen_login_form_header" = "Zadajte svoje údaje";
 "screen_login_title" = "Vitajte späť!";
 "screen_login_title_with_homeserver" = "Prihlásiť sa do %1$@";
+"screen_media_browser_delete_confirmation_subtitle" = "This file will be removed from the room and members won’t have access to it.";
+"screen_media_browser_delete_confirmation_title" = "Delete file?";
+"screen_media_browser_empty_state_subtitle" = "Images and videos uploaded to this room will be shown here.";
+"screen_media_browser_empty_state_title" = "No media uploaded yet";
+"screen_media_browser_list_loading_files" = "Loading files…";
+"screen_media_browser_list_loading_media" = "Loading media…";
+"screen_media_browser_list_mode_files" = "Files";
+"screen_media_browser_list_mode_media" = "Media";
+"screen_media_browser_title" = "Media and files";
 "screen_media_picker_error_failed_selection" = "Nepodarilo sa vybrať médium, skúste to prosím znova.";
 "screen_migration_message" = "Ide o jednorazový proces, ďakujeme za trpezlivosť.";
 "screen_migration_title" = "Nastavenie vášho účtu.";
@@ -743,6 +756,7 @@
 "screen_room_details_error_loading_notification_settings" = "Pri načítaní nastavení oznámení došlo k chybe.";
 "screen_room_details_error_muting" = "Nepodarilo sa stlmiť túto miestnosť, skúste to prosím znova.";
 "screen_room_details_error_unmuting" = "Nepodarilo sa zrušiť stlmenie tejto miestnosti, skúste to prosím znova.";
+"screen_room_details_media_gallery_title" = "Media and files";
 "screen_room_details_notification_mode_custom" = "Vlastné";
 "screen_room_details_notification_mode_default" = "Predvolené";
 "screen_room_details_share_room_title" = "Zdieľať miestnosť";
@@ -986,6 +1000,9 @@
 "state_event_room_unknown_membership_change" = "%1$@ urobil/a neznámu zmenu svojho členstva";
 "test_language_identifier" = "sk";
 "test_untranslated_default_language_identifier" = "en";
+"timeline_decryption_failure_historical_event_no_key_backup" = "Historical messages are not available on this device";
+"timeline_decryption_failure_unable_to_decrypt" = "Unable to decrypt message";
+"timeline_decryption_failure_withheld_unverified" = "This message was blocked either because you did not verify your device or because the sender needs to verify your identity.";
 "troubleshoot_notifications_entry_point_section" = "Riešenie problémov";
 "troubleshoot_notifications_screen_action" = "Spustiť testy";
 "troubleshoot_notifications_screen_action_again" = "Spustiť testy znova";
