@@ -61,7 +61,13 @@ extension MediaProviderMock {
             return .success(data)
         }
         
-        loadFileFromSourceFilenameReturnValue = .failure(.failedRetrievingFile)
+        loadFileFromSourceFilenameClosure = { _, _ in
+            guard let url = Bundle.main.url(forResource: "preview_image", withExtension: "jpg") else {
+                return .failure(.failedRetrievingFile)
+            }
+            
+            return .success(.unmanaged(url: url))
+        }
         
         loadImageRetryingOnReconnectionSizeClosure = { _, _ in
             Task {

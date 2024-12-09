@@ -911,6 +911,18 @@ extension PreviewTests {
         }
     }
 
+    func test_timelineMediaPreviewDetailsView() {
+        for preview in TimelineMediaPreviewDetailsView_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_timelineMediaPreviewRedactConfirmationView() {
+        for preview in TimelineMediaPreviewRedactConfirmationView_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_timelineReactionView() {
         for preview in TimelineReactionView_Previews._allPreviews {
             assertSnapshots(matching: preview)

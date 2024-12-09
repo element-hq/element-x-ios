@@ -322,6 +322,8 @@ internal enum L10n {
   internal static var commonDeviceId: String { return L10n.tr("Localizable", "common_device_id") }
   /// Direct chat
   internal static var commonDirectChat: String { return L10n.tr("Localizable", "common_direct_chat") }
+  /// Downloading
+  internal static var commonDownloading: String { return L10n.tr("Localizable", "common_downloading") }
   /// (edited)
   internal static var commonEditedSuffix: String { return L10n.tr("Localizable", "common_edited_suffix") }
   /// Editing
@@ -1378,6 +1380,10 @@ internal enum L10n {
   internal static var screenMediaDetailsFileFormat: String { return L10n.tr("Localizable", "screen_media_details_file_format") }
   /// File name
   internal static var screenMediaDetailsFilename: String { return L10n.tr("Localizable", "screen_media_details_filename") }
+  /// This file will be removed from the room and members won’t have access to it.
+  internal static var screenMediaDetailsRedactConfirmationMessage: String { return L10n.tr("Localizable", "screen_media_details_redact_confirmation_message") }
+  /// Delete file?
+  internal static var screenMediaDetailsRedactConfirmationTitle: String { return L10n.tr("Localizable", "screen_media_details_redact_confirmation_title") }
   /// Uploaded by
   internal static var screenMediaDetailsUploadedBy: String { return L10n.tr("Localizable", "screen_media_details_uploaded_by") }
   /// Uploaded on

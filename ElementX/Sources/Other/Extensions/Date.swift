@@ -40,6 +40,6 @@ extension Date {
     
     /// A fixed date used for mocks, previews etc.
     static var mock: Date {
-        Calendar.current.startOfDay(for: .now).addingTimeInterval((9 * 60 * 60) + (41 * 60)) // 9:41 am
+        DateComponents(calendar: .current, year: 2007, month: 1, day: 9, hour: 9, minute: 41).date ?? .now
     }
 }
