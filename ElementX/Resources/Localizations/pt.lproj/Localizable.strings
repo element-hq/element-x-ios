@@ -387,6 +387,10 @@
 "screen_knock_requests_list_empty_state_description" = "When somebody will ask to join the room, you’ll be able to see their request here.";
 "screen_knock_requests_list_empty_state_title" = "No pending request to join";
 "screen_knock_requests_list_title" = "Requests to join";
+"screen_media_details_file_format" = "File format";
+"screen_media_details_filename" = "File name";
+"screen_media_details_uploaded_by" = "Uploaded by";
+"screen_media_details_uploaded_on" = "Uploaded on";
 "screen_media_upload_preview_caption_warning" = "Captions might not be visible to people using older apps.";
 "screen_media_upload_preview_error_failed_processing" = "Falha ao processar multimédia para carregamento, por favor tente novamente.";
 "screen_media_upload_preview_error_failed_sending" = "Falhar ao carregar multimédia, por favor tente novamente.";
@@ -586,6 +590,15 @@
 "screen_login_form_header" = "Insere o teus detalhes";
 "screen_login_title" = "Bem-vindo(a) de volta!";
 "screen_login_title_with_homeserver" = "Iniciar sessão em %1$@";
+"screen_media_browser_delete_confirmation_subtitle" = "This file will be removed from the room and members won’t have access to it.";
+"screen_media_browser_delete_confirmation_title" = "Delete file?";
+"screen_media_browser_empty_state_subtitle" = "Images and videos uploaded to this room will be shown here.";
+"screen_media_browser_empty_state_title" = "No media uploaded yet";
+"screen_media_browser_list_loading_files" = "Loading files…";
+"screen_media_browser_list_loading_media" = "Loading media…";
+"screen_media_browser_list_mode_files" = "Files";
+"screen_media_browser_list_mode_media" = "Media";
+"screen_media_browser_title" = "Media and files";
 "screen_media_picker_error_failed_selection" = "Falha ao selecionar multimédia, por favor tente novamente.";
 "screen_migration_message" = "Este processo só acontece uma única vez, obrigado por esperares.";
 "screen_migration_title" = "A configurar a tua conta…";
@@ -743,6 +756,7 @@
 "screen_room_details_error_loading_notification_settings" = "Erro ao carregar as configurações de notificação.";
 "screen_room_details_error_muting" = "Não foi possível silenciar esta sala, por favor tenta novamente.";
 "screen_room_details_error_unmuting" = "Não foi possível dessilenciar esta sala, por favor tenta novamente.";
+"screen_room_details_media_gallery_title" = "Media and files";
 "screen_room_details_notification_mode_custom" = "Personalizado";
 "screen_room_details_notification_mode_default" = "Predefinição";
 "screen_room_details_share_room_title" = "Partilhar sala";
@@ -986,6 +1000,9 @@
 "state_event_room_unknown_membership_change" = "%1$@ efetuou uma alteração desconhecida à sua participação na sala";
 "test_language_identifier" = "pt";
 "test_untranslated_default_language_identifier" = "en";
+"timeline_decryption_failure_historical_event_no_key_backup" = "Historical messages are not available on this device";
+"timeline_decryption_failure_unable_to_decrypt" = "Unable to decrypt message";
+"timeline_decryption_failure_withheld_unverified" = "This message was blocked either because you did not verify your device or because the sender needs to verify your identity.";
 "troubleshoot_notifications_entry_point_section" = "Resolução de problemas";
 "troubleshoot_notifications_screen_action" = "Correr testes";
 "troubleshoot_notifications_screen_action_again" = "Correr testes novamente";

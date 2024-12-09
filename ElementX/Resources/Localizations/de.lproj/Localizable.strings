@@ -387,6 +387,10 @@
 "screen_knock_requests_list_empty_state_description" = "Falls jemand um Aufnahme in den Raum bittet, können Sie dessen Anfrage hier sehen.";
 "screen_knock_requests_list_empty_state_title" = "Keine ausstehende Beitrittsanfrage";
 "screen_knock_requests_list_title" = "Beitrittsanfragen";
+"screen_media_details_file_format" = "Dateiformat";
+"screen_media_details_filename" = "Dateiname";
+"screen_media_details_uploaded_by" = "Hochgeladen von";
+"screen_media_details_uploaded_on" = "Hochgeladen am";
 "screen_media_upload_preview_caption_warning" = "Bildunterschriften sind für Nutzer älterer Apps möglicherweise nicht sichtbar.";
 "screen_media_upload_preview_error_failed_processing" = "Fehler beim Verarbeiten des hochgeladenen Mediums. Bitte versuche es erneut.";
 "screen_media_upload_preview_error_failed_sending" = "Das Hochladen der Medien ist fehlgeschlagen. Bitte versuche es erneut.";
@@ -586,6 +590,15 @@
 "screen_login_form_header" = "Gebe deine Daten ein";
 "screen_login_title" = "Willkommen zurück!";
 "screen_login_title_with_homeserver" = "Anmelden bei %1$@";
+"screen_media_browser_delete_confirmation_subtitle" = "This file will be removed from the room and members won’t have access to it.";
+"screen_media_browser_delete_confirmation_title" = "Delete file?";
+"screen_media_browser_empty_state_subtitle" = "In diesen Chatroom hochgeladene Bilder und Videos werden hier angezeigt.";
+"screen_media_browser_empty_state_title" = "Noch keine Medien hochgeladen";
+"screen_media_browser_list_loading_files" = "Dateien werden geladen…";
+"screen_media_browser_list_loading_media" = "Medien werden geladen…";
+"screen_media_browser_list_mode_files" = "Dateien";
+"screen_media_browser_list_mode_media" = "Medien";
+"screen_media_browser_title" = "Medien und Dateien";
 "screen_media_picker_error_failed_selection" = "Medienauswahl fehlgeschlagen, bitte versuche es erneut.";
 "screen_migration_message" = "Dies ist ein einmaliger Vorgang, danke fürs Warten.";
 "screen_migration_title" = "Dein Konto wird eingerichtet.";
@@ -620,7 +633,7 @@
 "screen_onboarding_sign_up" = "Konto erstellen";
 "screen_onboarding_welcome_message" = "Willkommen beim schnellsten %1$@ aller Zeiten. Optimiert für Geschwindigkeit und Einfachheit.";
 "screen_onboarding_welcome_subtitle" = "Willkommen zu %1$@. Aufgeladen, für Geschwindigkeit und Einfachheit.";
-"screen_onboarding_welcome_title" = "Sei in deinem Element";
+"screen_onboarding_welcome_title" = "Sei in Deinem Element";
 "screen_polls_history_empty_ongoing" = "Keine laufenden Umfragen vorhanden.";
 "screen_polls_history_empty_past" = "Keine vergangenen Umfragen vorhanden.";
 "screen_polls_history_filter_ongoing" = "Aktuell";
@@ -743,6 +756,7 @@
 "screen_room_details_error_loading_notification_settings" = "Beim Laden der Benachrichtigungseinstellungen ist ein Fehler aufgetreten.";
 "screen_room_details_error_muting" = "Die Stummschaltung ist fehlgeschlagen, bitte versuche es erneut.";
 "screen_room_details_error_unmuting" = "Die Deaktivierung der Stummschaltung ist fehlgeschlagen, bitte versuche es erneut.";
+"screen_room_details_media_gallery_title" = "Medien und Dateien";
 "screen_room_details_notification_mode_custom" = "Benutzerdefiniert";
 "screen_room_details_notification_mode_default" = "Standard";
 "screen_room_details_share_room_title" = "Teilen";
@@ -986,6 +1000,9 @@
 "state_event_room_unknown_membership_change" = "%1$@ hat eine unbekannte Änderung vorgenommen";
 "test_language_identifier" = "en";
 "test_untranslated_default_language_identifier" = "en";
+"timeline_decryption_failure_historical_event_no_key_backup" = "Der Nachrichtenverlauf ist auf diesem Gerät nicht verfügbar";
+"timeline_decryption_failure_unable_to_decrypt" = "Nachricht kann nicht entschlüsselt werden";
+"timeline_decryption_failure_withheld_unverified" = "Diese Nachricht wurde entweder blockiert, weil Ihr Gerät nicht verifiziert ist oder weil der Absender Ihre Identität überprüfen muss.";
 "troubleshoot_notifications_entry_point_section" = "Fehlerbehebung";
 "troubleshoot_notifications_screen_action" = "Tests durchführen";
 "troubleshoot_notifications_screen_action_again" = "Tests erneut durchführen";

@@ -387,6 +387,10 @@
 "screen_knock_requests_list_empty_state_description" = "Kui keegi soovib jututoaga liituda, siis need päringud on kuvatud siin.";
 "screen_knock_requests_list_empty_state_title" = "Pole ühtegi liitumispalvet";
 "screen_knock_requests_list_title" = "Liitumispalved";
+"screen_media_details_file_format" = "File format";
+"screen_media_details_filename" = "File name";
+"screen_media_details_uploaded_by" = "Uploaded by";
+"screen_media_details_uploaded_on" = "Uploaded on";
 "screen_media_upload_preview_caption_warning" = "Selgitused ja alapealkirjad ei pruugi olla nähtavad vanemate rakenduste kasutajatele.";
 "screen_media_upload_preview_error_failed_processing" = "Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti.";
 "screen_media_upload_preview_error_failed_sending" = "Meediafaili üleslaadimine ei õnnestunud. Palun proovi uuesti.";
@@ -586,6 +590,15 @@
 "screen_login_form_header" = "Sisesta oma andmed";
 "screen_login_title" = "Tere tulemast tagasi!";
 "screen_login_title_with_homeserver" = "Logi sisse serverisse %1$@";
+"screen_media_browser_delete_confirmation_subtitle" = "This file will be removed from the room and members won’t have access to it.";
+"screen_media_browser_delete_confirmation_title" = "Delete file?";
+"screen_media_browser_empty_state_subtitle" = "Antud jututuppa üleslaaditud pildid ja videod kuvatakse siin.";
+"screen_media_browser_empty_state_title" = "Mitte keegi pole veel meediat üles laadinud";
+"screen_media_browser_list_loading_files" = "Laadime faile…";
+"screen_media_browser_list_loading_media" = "Laadime meediat…";
+"screen_media_browser_list_mode_files" = "Failid";
+"screen_media_browser_list_mode_media" = "Meedia";
+"screen_media_browser_title" = "Meedia ja failid";
 "screen_media_picker_error_failed_selection" = "Meediafaili valimine ei õnnestunud. Palun proovi uuesti.";
 "screen_migration_message" = "Tänud, et ootad - seda toimingut on vaja teha vaid üks kord.";
 "screen_migration_title" = "Seadistame sinu kasutajakontot.";
@@ -743,6 +756,7 @@
 "screen_room_details_error_loading_notification_settings" = "Teavituste seadistuste laadimisel tekkis viga.";
 "screen_room_details_error_muting" = "Selle jututoa summutamine ei õnnestunud. Palun proovi uuesti.";
 "screen_room_details_error_unmuting" = "Selle jututoa summutamise eemaldamine ei õnnestunud. Palun proovi uuesti.";
+"screen_room_details_media_gallery_title" = "Meedia ja failid";
 "screen_room_details_notification_mode_custom" = "Kohandatud";
 "screen_room_details_notification_mode_default" = "Vaikimisi";
 "screen_room_details_share_room_title" = "Jaga jututuba";
@@ -986,6 +1000,9 @@
 "state_event_room_unknown_membership_change" = "%1$@ tegi oma liikmelisuses teadmata muutatuse";
 "test_language_identifier" = "et";
 "test_untranslated_default_language_identifier" = "en";
+"timeline_decryption_failure_historical_event_no_key_backup" = "Vanu sõnumeid ei saa selles seadmes näha";
+"timeline_decryption_failure_unable_to_decrypt" = "Sõnumi dekrüptimine ei õnnestu";
+"timeline_decryption_failure_withheld_unverified" = "Kuna seade on verifitseerimata või saatja pole sind verifitseerinud, siis sõnumi näitamine on blokeeritud.";
 "troubleshoot_notifications_entry_point_section" = "Veaotsing";
 "troubleshoot_notifications_screen_action" = "Käivita testid";
 "troubleshoot_notifications_screen_action_again" = "Käivita testid uuesti";

@@ -352,7 +352,7 @@
 "rich_text_editor_unindent" = "減少縮排";
 "rich_text_editor_url_placeholder" = "連結";
 "rich_text_editor_a11y_add_attachment" = "新增附件";
-"rich_text_editor_composer_caption_placeholder" = "Optional caption…";
+"rich_text_editor_composer_caption_placeholder" = "Add a caption";
 "screen_advanced_settings_element_call_base_url" = "Custom Element Call base URL";
 "screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Invalid URL, please make sure you include the protocol (http/https) and the correct address.";
@@ -387,6 +387,10 @@
 "screen_knock_requests_list_empty_state_description" = "When somebody will ask to join the room, you’ll be able to see their request here.";
 "screen_knock_requests_list_empty_state_title" = "No pending request to join";
 "screen_knock_requests_list_title" = "Requests to join";
+"screen_media_details_file_format" = "File format";
+"screen_media_details_filename" = "File name";
+"screen_media_details_uploaded_by" = "Uploaded by";
+"screen_media_details_uploaded_on" = "Uploaded on";
 "screen_media_upload_preview_caption_warning" = "Captions might not be visible to people using older apps.";
 "screen_media_upload_preview_error_failed_processing" = "Failed processing media to upload, please try again.";
 "screen_media_upload_preview_error_failed_sending" = "無法上傳媒體檔案，請稍後再試。";
@@ -586,6 +590,15 @@
 "screen_login_form_header" = "輸入您的詳細資料";
 "screen_login_title" = "歡迎回來！";
 "screen_login_title_with_homeserver" = "登入 %1$@";
+"screen_media_browser_delete_confirmation_subtitle" = "This file will be removed from the room and members won’t have access to it.";
+"screen_media_browser_delete_confirmation_title" = "Delete file?";
+"screen_media_browser_empty_state_subtitle" = "Images and videos uploaded to this room will be shown here.";
+"screen_media_browser_empty_state_title" = "No media uploaded yet";
+"screen_media_browser_list_loading_files" = "Loading files…";
+"screen_media_browser_list_loading_media" = "Loading media…";
+"screen_media_browser_list_mode_files" = "Files";
+"screen_media_browser_list_mode_media" = "Media";
+"screen_media_browser_title" = "Media and files";
 "screen_media_picker_error_failed_selection" = "Failed selecting media, please try again.";
 "screen_migration_message" = "這是一次性的程序，感謝您耐心等候。";
 "screen_migration_title" = "正在設定您的帳號。";
@@ -743,6 +756,7 @@
 "screen_room_details_error_loading_notification_settings" = "載入通知設定時發生錯誤。";
 "screen_room_details_error_muting" = "無法關閉聊天室通知，請再試一次。";
 "screen_room_details_error_unmuting" = "無法開啟聊天室通知，請再試一次。";
+"screen_room_details_media_gallery_title" = "Media and files";
 "screen_room_details_notification_mode_custom" = "自訂";
 "screen_room_details_notification_mode_default" = "預設";
 "screen_room_details_share_room_title" = "分享聊天室";
@@ -986,6 +1000,9 @@
 "state_event_room_unknown_membership_change" = "%1$@ made an unknown change to their membership";
 "test_language_identifier" = "zh-tw";
 "test_untranslated_default_language_identifier" = "en";
+"timeline_decryption_failure_historical_event_no_key_backup" = "Historical messages are not available on this device";
+"timeline_decryption_failure_unable_to_decrypt" = "Unable to decrypt message";
+"timeline_decryption_failure_withheld_unverified" = "This message was blocked either because you did not verify your device or because the sender needs to verify your identity.";
 "troubleshoot_notifications_entry_point_section" = "Troubleshoot";
 "troubleshoot_notifications_screen_action" = "Run tests";
 "troubleshoot_notifications_screen_action_again" = "Run tests again";

@@ -387,6 +387,10 @@
 "screen_knock_requests_list_empty_state_description" = "Вы сможете увидеть запрос, когда кто-то попросит присоединиться к комнате.";
 "screen_knock_requests_list_empty_state_title" = "Нет ожидающих запросов на присоединение";
 "screen_knock_requests_list_title" = "Запросы на присоединение";
+"screen_media_details_file_format" = "File format";
+"screen_media_details_filename" = "File name";
+"screen_media_details_uploaded_by" = "Uploaded by";
+"screen_media_details_uploaded_on" = "Uploaded on";
 "screen_media_upload_preview_caption_warning" = "Подпись может быть не видна пользователям старых приложений.";
 "screen_media_upload_preview_error_failed_processing" = "Не удалось обработать медиафайл для загрузки, попробуйте еще раз.";
 "screen_media_upload_preview_error_failed_sending" = "Не удалось загрузить медиафайлы, попробуйте еще раз.";
@@ -586,6 +590,15 @@
 "screen_login_form_header" = "Введите свои данные";
 "screen_login_title" = "Рады видеть вас снова!";
 "screen_login_title_with_homeserver" = "Войти в %1$@";
+"screen_media_browser_delete_confirmation_subtitle" = "This file will be removed from the room and members won’t have access to it.";
+"screen_media_browser_delete_confirmation_title" = "Delete file?";
+"screen_media_browser_empty_state_subtitle" = "Здесь будут показаны изображения и видео, загруженные в данную комнату.";
+"screen_media_browser_empty_state_title" = "Пока что нет загруженных медиафайлов";
+"screen_media_browser_list_loading_files" = "Загрузка файлов...";
+"screen_media_browser_list_loading_media" = "Загрузка медиа…";
+"screen_media_browser_list_mode_files" = "Файлы";
+"screen_media_browser_list_mode_media" = "Медиа";
+"screen_media_browser_title" = "Медиа и файлы";
 "screen_media_picker_error_failed_selection" = "Не удалось выбрать носитель, попробуйте еще раз.";
 "screen_migration_message" = "Это одноразовый процесс, спасибо, что подождали.";
 "screen_migration_title" = "Настройка учетной записи.";
@@ -743,6 +756,7 @@
 "screen_room_details_error_loading_notification_settings" = "Произошла ошибка при загрузке настроек уведомлений.";
 "screen_room_details_error_muting" = "Не удалось отключить звук в этой комнате, попробуйте еще раз.";
 "screen_room_details_error_unmuting" = "Не удалось включить звук в эту комнату, попробуйте еще раз.";
+"screen_room_details_media_gallery_title" = "Медиа и файлы";
 "screen_room_details_notification_mode_custom" = "Пользовательский";
 "screen_room_details_notification_mode_default" = "По умолчанию";
 "screen_room_details_share_room_title" = "Поделиться комнатой";
@@ -986,6 +1000,9 @@
 "state_event_room_unknown_membership_change" = "%1$@ внес неизвестное изменение для своих участников";
 "test_language_identifier" = "ru";
 "test_untranslated_default_language_identifier" = "en";
+"timeline_decryption_failure_historical_event_no_key_backup" = "На этом устройстве недоступна история сообщений";
+"timeline_decryption_failure_unable_to_decrypt" = "Не удалось расшифровать сообщение";
+"timeline_decryption_failure_withheld_unverified" = "Это сообщение было заблокировано по причине того, что вы не подтвердили свое устройство, либо отправителю необходимо подтвердить вашу личность.";
 "troubleshoot_notifications_entry_point_section" = "Устранение неполадок";
 "troubleshoot_notifications_screen_action" = "Выполнение тестов";
 "troubleshoot_notifications_screen_action_again" = "Повторное выполнение тестов";

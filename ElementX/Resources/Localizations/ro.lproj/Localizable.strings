@@ -352,7 +352,7 @@
 "rich_text_editor_unindent" = "Dez-identare";
 "rich_text_editor_url_placeholder" = "Link";
 "rich_text_editor_a11y_add_attachment" = "Adăugați un atașament";
-"rich_text_editor_composer_caption_placeholder" = "Optional caption…";
+"rich_text_editor_composer_caption_placeholder" = "Add a caption";
 "screen_advanced_settings_element_call_base_url" = "Adresa URL de bază Element Call";
 "screen_advanced_settings_element_call_base_url_description" = "Setați o adresă URL de bază personalizată pentru Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL invalid, vă rugăm să vă asigurați că includeți protocolul (http/https) și adresa corectă.";
@@ -387,6 +387,10 @@
 "screen_knock_requests_list_empty_state_description" = "When somebody will ask to join the room, you’ll be able to see their request here.";
 "screen_knock_requests_list_empty_state_title" = "No pending request to join";
 "screen_knock_requests_list_title" = "Requests to join";
+"screen_media_details_file_format" = "File format";
+"screen_media_details_filename" = "File name";
+"screen_media_details_uploaded_by" = "Uploaded by";
+"screen_media_details_uploaded_on" = "Uploaded on";
 "screen_media_upload_preview_caption_warning" = "Captions might not be visible to people using older apps.";
 "screen_media_upload_preview_error_failed_processing" = "Procesarea datelor media a eșuat, vă rugăm să încercați din nou.";
 "screen_media_upload_preview_error_failed_sending" = "Încărcarea fișierelor media a eșuat, încercați din nou.";
@@ -586,6 +590,15 @@
 "screen_login_form_header" = "Introduceți detaliile";
 "screen_login_title" = "Bine ați revenit!";
 "screen_login_title_with_homeserver" = "Conectați-vă la %1$@";
+"screen_media_browser_delete_confirmation_subtitle" = "This file will be removed from the room and members won’t have access to it.";
+"screen_media_browser_delete_confirmation_title" = "Delete file?";
+"screen_media_browser_empty_state_subtitle" = "Images and videos uploaded to this room will be shown here.";
+"screen_media_browser_empty_state_title" = "No media uploaded yet";
+"screen_media_browser_list_loading_files" = "Loading files…";
+"screen_media_browser_list_loading_media" = "Loading media…";
+"screen_media_browser_list_mode_files" = "Files";
+"screen_media_browser_list_mode_media" = "Media";
+"screen_media_browser_title" = "Media and files";
 "screen_media_picker_error_failed_selection" = "Selectarea fișierelor media a eșuat, încercați din nou.";
 "screen_migration_message" = "Acesta este un proces care se desfășoară o singură dată, vă mulțumim pentru așteptare.";
 "screen_migration_title" = "Contul dumneavoastră se configurează";
@@ -743,6 +756,7 @@
 "screen_room_details_error_loading_notification_settings" = "A apărut o eroare la încărcarea setărilor pentru notificari.";
 "screen_room_details_error_muting" = "Dezactivarea notificarilor pentru această cameră a eșuat, încercați din nou.";
 "screen_room_details_error_unmuting" = "Activarea notificarilor pentru această cameră a eșuat, încercați din nou.";
+"screen_room_details_media_gallery_title" = "Media and files";
 "screen_room_details_notification_mode_custom" = "Personalizat";
 "screen_room_details_notification_mode_default" = "Implicit";
 "screen_room_details_share_room_title" = "Partajați camera";
@@ -986,6 +1000,9 @@
 "state_event_room_unknown_membership_change" = "%1$@ a făcut o modificare necunoscută asupra calității sale de membru";
 "test_language_identifier" = "ro";
 "test_untranslated_default_language_identifier" = "en";
+"timeline_decryption_failure_historical_event_no_key_backup" = "Historical messages are not available on this device";
+"timeline_decryption_failure_unable_to_decrypt" = "Unable to decrypt message";
+"timeline_decryption_failure_withheld_unverified" = "This message was blocked either because you did not verify your device or because the sender needs to verify your identity.";
 "troubleshoot_notifications_entry_point_section" = "Depanare";
 "troubleshoot_notifications_screen_action" = "Rulați testele";
 "troubleshoot_notifications_screen_action_again" = "Rulați din nou testele";
