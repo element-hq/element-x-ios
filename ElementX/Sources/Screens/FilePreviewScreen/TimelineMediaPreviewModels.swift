@@ -105,7 +105,24 @@ class TimelineMediaPreviewItem: NSObject, QLPreviewItem {
     }
     
     var fileSize: Double? {
-        previewItemURL.flatMap { try? FileManager.default.sizeForItem(at: $0) }
+        previewItemURL.flatMap { try? FileManager.default.sizeForItem(at: $0) } ?? expectedFileSize
+    }
+    
+    private var expectedFileSize: Double? {
+        let fileSize: UInt? = switch timelineItem {
+        case let audioItem as AudioRoomTimelineItem:
+            audioItem.content.fileSize
+        case let fileItem as FileRoomTimelineItem:
+            fileItem.content.fileSize
+        case let imageItem as ImageRoomTimelineItem:
+            imageItem.content.imageInfo.fileSize
+        case let videoItem as VideoRoomTimelineItem:
+            videoItem.content.videoInfo.fileSize
+        default:
+            nil
+        }
+        
+        return fileSize.map(Double.init)
     }
     
     var caption: String? {

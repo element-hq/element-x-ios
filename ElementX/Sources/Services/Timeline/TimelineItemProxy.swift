@@ -221,8 +221,9 @@ struct VideoInfoProxy: Hashable {
     private(set) var size: CGSize?
     private(set) var aspectRatio: CGFloat?
     private(set) var mimeType: String?
+    private(set) var fileSize: UInt?
     
-    init(source: MediaSource, duration: TimeInterval, width: UInt64?, height: UInt64?, mimeType: String?) {
+    init(source: MediaSource, duration: TimeInterval, width: UInt64?, height: UInt64?, mimeType: String?, fileSize: UInt?) {
         self.source = MediaSourceProxy(source: source, mimeType: mimeType)
         self.duration = duration
         
@@ -230,16 +231,18 @@ struct VideoInfoProxy: Hashable {
         size = mediaInfo.size
         aspectRatio = mediaInfo.aspectRatio
         self.mimeType = mediaInfo.mimeType
+        self.fileSize = fileSize
     }
     
     // MARK: - Mocks
     
-    private init(source: MediaSourceProxy, duration: TimeInterval, size: CGSize?, aspectRatio: CGFloat?, mimeType: String?) {
+    private init(source: MediaSourceProxy, duration: TimeInterval, size: CGSize?, aspectRatio: CGFloat?, mimeType: String?, fileSize: UInt?) {
         self.source = source
         self.duration = duration
         self.size = size
         self.aspectRatio = aspectRatio
         self.mimeType = mimeType
+        self.fileSize = fileSize
     }
     
     static var mockVideo: VideoInfoProxy {
@@ -251,7 +254,8 @@ struct VideoInfoProxy: Hashable {
                      duration: 100,
                      size: .init(width: 1920, height: 1080),
                      aspectRatio: 1.78,
-                     mimeType: nil)
+                     mimeType: nil,
+                     fileSize: 45_167_000)
     }
 }
 
@@ -260,35 +264,38 @@ struct ImageInfoProxy: Hashable {
     private(set) var size: CGSize?
     private(set) var aspectRatio: CGFloat?
     private(set) var mimeType: String?
+    private(set) var fileSize: UInt?
     
-    init?(source: MediaSource?, width: UInt64?, height: UInt64?, mimeType: String?) {
+    init?(source: MediaSource?, width: UInt64?, height: UInt64?, mimeType: String?, fileSize: UInt?) {
         guard let source else {
             return nil
         }
         
-        self.init(source: .init(source: source, mimeType: mimeType), width: width, height: height, mimeType: mimeType)
+        self.init(source: .init(source: source, mimeType: mimeType), width: width, height: height, mimeType: mimeType, fileSize: fileSize)
     }
     
-    init(source: MediaSource, width: UInt64?, height: UInt64?, mimeType: String?) {
-        self.init(source: .init(source: source, mimeType: mimeType), width: width, height: height, mimeType: mimeType)
+    init(source: MediaSource, width: UInt64?, height: UInt64?, mimeType: String?, fileSize: UInt?) {
+        self.init(source: .init(source: source, mimeType: mimeType), width: width, height: height, mimeType: mimeType, fileSize: fileSize)
     }
     
-    init(source: MediaSourceProxy, width: UInt64?, height: UInt64?, mimeType: String?) {
+    init(source: MediaSourceProxy, width: UInt64?, height: UInt64?, mimeType: String?, fileSize: UInt?) {
         self.source = source
         
         let mediaInfo = MediaInfoProxy(width: width, height: height, mimeType: mimeType)
         size = mediaInfo.size
         aspectRatio = mediaInfo.aspectRatio
         self.mimeType = mediaInfo.mimeType
+        self.fileSize = fileSize
     }
     
     // MARK: - Mocks
     
-    private init(source: MediaSourceProxy, size: CGSize?, aspectRatio: CGFloat?) {
+    private init(source: MediaSourceProxy, size: CGSize?, aspectRatio: CGFloat?, fileSize: UInt?) {
         self.source = source
         self.size = size
         self.aspectRatio = aspectRatio
         mimeType = source.mimeType
+        self.fileSize = fileSize
     }
     
     static var mockImage: ImageInfoProxy {
@@ -296,7 +303,7 @@ struct ImageInfoProxy: Hashable {
             fatalError("Invalid mock media source URL")
         }
         
-        return .init(source: mediaSource, size: .init(width: 2730, height: 2048), aspectRatio: 4 / 3)
+        return .init(source: mediaSource, size: .init(width: 2730, height: 2048), aspectRatio: 4 / 3, fileSize: 717_000)
     }
     
     static var mockThumbnail: ImageInfoProxy {
@@ -304,7 +311,7 @@ struct ImageInfoProxy: Hashable {
             fatalError("Invalid mock media source URL")
         }
         
-        return .init(source: mediaSource, size: .init(width: 800, height: 600), aspectRatio: 4 / 3)
+        return .init(source: mediaSource, size: .init(width: 800, height: 600), aspectRatio: 4 / 3, fileSize: 84000)
     }
     
     static var mockVideoThumbnail: ImageInfoProxy {
@@ -312,11 +319,11 @@ struct ImageInfoProxy: Hashable {
             fatalError("Invalid mock media source URL")
         }
         
-        return .init(source: mediaSource, size: .init(width: 800, height: 450), aspectRatio: 16 / 9)
+        return .init(source: mediaSource, size: .init(width: 800, height: 450), aspectRatio: 16 / 9, fileSize: 98000)
     }
 }
 
-struct MediaInfoProxy: Hashable {
+private struct MediaInfoProxy: Hashable {
     private(set) var size: CGSize?
     private(set) var mimeType: String?
     private(set) var aspectRatio: CGFloat?

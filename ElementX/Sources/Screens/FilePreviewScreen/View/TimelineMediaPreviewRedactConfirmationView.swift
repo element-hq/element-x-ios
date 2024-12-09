@@ -28,7 +28,7 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
         .preferredColorScheme(.dark)
     }
     
-    var header: some View {
+    private var header: some View {
         VStack(spacing: 16) {
             BigIcon(icon: \.delete, style: .alertSolid)
             
@@ -50,7 +50,7 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
     }
     
     @ViewBuilder
-    var preview: some View {
+    private var preview: some View {
         if let currentItem = context.viewState.currentItem {
             HStack(spacing: 12) {
                 if let mediaSource = currentItem.thumbnailMediaSource {
@@ -92,7 +92,7 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
         }
     }
     
-    var buttons: some View {
+    private var buttons: some View {
         VStack(spacing: 16) {
             Button(L10n.actionRemove, role: .destructive) {
                 context.send(viewAction: .redact)

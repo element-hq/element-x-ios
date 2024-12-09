@@ -108,7 +108,7 @@ struct TimelineMediaPreviewDetailsView: View {
         }
     }
     
-    struct DetailsRow<Content: View>: View {
+    private struct DetailsRow<Content: View>: View {
         let title: String
         let content: () -> Content
         

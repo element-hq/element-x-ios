@@ -19,8 +19,8 @@ class TimelineMediaPreviewController: QLPreviewController, QLPreviewControllerDa
     private let captionHostingController: UIHostingController<CaptionView>
     private let detailsHostingController: UIHostingController<TimelineMediaPreviewDetailsView>
     
-    private var navigationBar: UINavigationBar? { view.subviews.first?.subviews.first(where: { $0 is UINavigationBar }) as? UINavigationBar }
-    private var toolbar: UIToolbar? { view.subviews.first?.subviews.last(where: { $0 is UIToolbar }) as? UIToolbar }
+    private var navigationBar: UINavigationBar? { view.subviews.first?.subviews.first { $0 is UINavigationBar } as? UINavigationBar }
+    private var toolbar: UIToolbar? { view.subviews.first?.subviews.last { $0 is UIToolbar } as? UIToolbar }
     private var captionView: UIView { captionHostingController.view }
     
     init(viewModel: TimelineMediaPreviewViewModel) {
