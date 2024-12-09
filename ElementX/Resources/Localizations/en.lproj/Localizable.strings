@@ -142,6 +142,7 @@
 "common_developer_options" = "Developer options";
 "common_device_id" = "Device ID";
 "common_direct_chat" = "Direct chat";
+"common_downloading" = "Downloading";
 "common_edited_suffix" = "(edited)";
 "common_editing" = "Editing";
 "common_editing_caption" = "Editing caption";
@@ -389,6 +390,8 @@
 "screen_knock_requests_list_title" = "Requests to join";
 "screen_media_details_file_format" = "File format";
 "screen_media_details_filename" = "File name";
+"screen_media_details_redact_confirmation_message" = "This file will be removed from the room and members won’t have access to it.";
+"screen_media_details_redact_confirmation_title" = "Delete file?";
 "screen_media_details_uploaded_by" = "Uploaded by";
 "screen_media_details_uploaded_on" = "Uploaded on";
 "screen_media_upload_preview_caption_warning" = "Captions might not be visible to people using older apps.";

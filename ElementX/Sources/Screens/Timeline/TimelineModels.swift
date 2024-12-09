@@ -127,6 +127,8 @@ struct TimelineViewStateBindings {
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: MediaPreviewItem?
     
+    var mediaPreviewViewModel: TimelineMediaPreviewViewModel?
+    
     var alertInfo: AlertInfo<RoomScreenAlertInfoType>?
     
     var debugInfo: TimelineItemDebugInfo?
