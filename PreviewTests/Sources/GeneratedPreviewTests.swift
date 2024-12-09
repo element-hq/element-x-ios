@@ -383,6 +383,12 @@ extension PreviewTests {
         }
     }
 
+    func test_mediaEventsTimelineScreen() {
+        for preview in MediaEventsTimelineScreen_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_mediaUploadPreviewScreen() {
         for preview in MediaUploadPreviewScreen_Previews._allPreviews {
             assertSnapshots(matching: preview)

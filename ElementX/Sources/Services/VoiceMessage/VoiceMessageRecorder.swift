@@ -178,8 +178,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         
         let result = await roomProxy.timeline.sendVoiceMessage(url: oggFile,
                                                                audioInfo: audioInfo,
-                                                               waveform: waveform,
-                                                               progressSubject: nil) { _ in }
+                                                               waveform: waveform) { _ in }
         
         if case .failure(let error) = result {
             MXLog.error("Failed to send the voice message. \(error)")
@@ -233,7 +232,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     
     private func finalizeRecording() async -> Result<Void, VoiceMessageRecorderError> {
         MXLog.info("finalize audio recording")
-        guard let url = audioRecorder.audioFileURL, audioRecorder.currentTime > 0 else {
+        guard audioRecorder.audioFileURL != nil, audioRecorder.currentTime > 0 else {
             return .failure(.previewNotAvailable)
         }
 

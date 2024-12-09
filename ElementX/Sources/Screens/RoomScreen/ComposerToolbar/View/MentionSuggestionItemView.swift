@@ -38,7 +38,7 @@ struct MentionSuggestionItemView_Previews: PreviewProvider, TestablePreview {
     static let mockMediaProvider = MediaProviderMock(configuration: .init())
     
     static var previews: some View {
-        MentionSuggestionItemView(mediaProvider: mockMediaProvider, item: .init(id: "test", displayName: "Test", avatarURL: .mockMXCAvatar, range: .init()))
+        MentionSuggestionItemView(mediaProvider: mockMediaProvider, item: .init(id: "test", displayName: "Test", avatarURL: .mockMXCUserAvatar, range: .init()))
         MentionSuggestionItemView(mediaProvider: mockMediaProvider, item: .init(id: "test2", displayName: nil, avatarURL: nil, range: .init()))
     }
 }

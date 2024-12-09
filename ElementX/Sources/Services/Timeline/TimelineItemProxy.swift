@@ -284,33 +284,35 @@ struct ImageInfoProxy: Hashable {
     
     // MARK: - Mocks
     
-    private init(source: MediaSourceProxy, size: CGSize?, aspectRatio: CGFloat?, mimeType: String?) {
+    private init(source: MediaSourceProxy, size: CGSize?, aspectRatio: CGFloat?) {
         self.source = source
         self.size = size
         self.aspectRatio = aspectRatio
-        self.mimeType = mimeType
+        mimeType = source.mimeType
     }
     
     static var mockImage: ImageInfoProxy {
-        guard let mediaSource = try? MediaSourceProxy(url: .mockMXCImage, mimeType: "image/png") else {
+        guard let mediaSource = try? MediaSourceProxy(url: .mockMXCImage, mimeType: "image/jpg") else {
             fatalError("Invalid mock media source URL")
         }
         
-        return .init(source: mediaSource,
-                     size: .init(width: 100, height: 100),
-                     aspectRatio: 1,
-                     mimeType: "image/png")
+        return .init(source: mediaSource, size: .init(width: 2730, height: 2048), aspectRatio: 4 / 3)
     }
     
     static var mockThumbnail: ImageInfoProxy {
-        guard let mediaSource = try? MediaSourceProxy(url: .mockMXCImage, mimeType: "image/png") else {
+        guard let mediaSource = try? MediaSourceProxy(url: .mockMXCImage, mimeType: "image/jpg") else {
             fatalError("Invalid mock media source URL")
         }
         
-        return .init(source: mediaSource,
-                     size: nil,
-                     aspectRatio: nil,
-                     mimeType: nil)
+        return .init(source: mediaSource, size: .init(width: 800, height: 600), aspectRatio: 4 / 3)
+    }
+    
+    static var mockVideoThumbnail: ImageInfoProxy {
+        guard let mediaSource = try? MediaSourceProxy(url: .mockMXCVideo, mimeType: "image/jpg") else {
+            fatalError("Invalid mock media source URL")
+        }
+        
+        return .init(source: mediaSource, size: .init(width: 800, height: 450), aspectRatio: 16 / 9)
     }
 }
 

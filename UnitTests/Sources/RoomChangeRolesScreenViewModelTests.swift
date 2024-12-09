@@ -161,8 +161,8 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
         // Then no warning should be shown, and the call to update the users should be made straight away.
         XCTAssertTrue(roomProxy.updatePowerLevelsForUsersCalled)
         XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.count, 2)
-        XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains(where: { $0.userID == existingModerator.id && $0.powerLevel == 0 }), true)
-        XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains(where: { $0.userID == firstUser.id && $0.powerLevel == 50 }), true)
+        XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains { $0.userID == existingModerator.id && $0.powerLevel == 0 }, true)
+        XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains { $0.userID == firstUser.id && $0.powerLevel == 50 }, true)
     }
     
     func testSavePromotedAdministrator() async throws {
@@ -189,7 +189,7 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
         // Then the user should be made into an administrator.
         XCTAssertTrue(roomProxy.updatePowerLevelsForUsersCalled)
         XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.count, 1)
-        XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains(where: { $0.userID == firstUser.id && $0.powerLevel == 100 }), true)
+        XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains { $0.userID == firstUser.id && $0.powerLevel == 100 }, true)
     }
     
     private func setupViewModel(mode: RoomMemberDetails.Role) {

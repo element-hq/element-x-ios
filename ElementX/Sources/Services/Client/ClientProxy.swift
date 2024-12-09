@@ -545,7 +545,7 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         if !roomSummaryProvider.statePublisher.value.isLoaded {
-            _ = await roomSummaryProvider.statePublisher.values.first(where: { $0.isLoaded })
+            _ = await roomSummaryProvider.statePublisher.values.first { $0.isLoaded }
         }
         
         if shouldAwait {

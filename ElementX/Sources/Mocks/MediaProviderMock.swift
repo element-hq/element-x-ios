@@ -10,6 +10,7 @@ import SwiftUI
 extension MediaProviderMock {
     struct Configuration { }
     
+    // swiftlint:disable:next cyclomatic_complexity
     convenience init(configuration: Configuration) {
         self.init()
         
@@ -18,9 +19,26 @@ extension MediaProviderMock {
                 return nil
             }
             
-            // At some stage it would be nice to return different images, but for now they can be the same.
-            if mediaSource?.url == .mockMXCImage || mediaSource?.url == .mockMXCAvatar {
-                return Asset.Images.appLogo.image
+            if mediaSource?.url == .mockMXCImage {
+                if let url = Bundle.main.url(forResource: "preview_image", withExtension: "jpg"),
+                   let data = try? Data(contentsOf: url) {
+                    return UIImage(data: data)
+                }
+            } else if mediaSource?.url == .mockMXCVideo {
+                if let url = Bundle.main.url(forResource: "preview_video", withExtension: "jpg"),
+                   let data = try? Data(contentsOf: url) {
+                    return UIImage(data: data)
+                }
+            } else if mediaSource?.url == .mockMXCAvatar {
+                if let url = Bundle.main.url(forResource: "preview_avatar_room", withExtension: "jpg"),
+                   let data = try? Data(contentsOf: url) {
+                    return UIImage(data: data)
+                }
+            } else if mediaSource?.url == .mockMXCUserAvatar {
+                if let url = Bundle.main.url(forResource: "preview_avatar_user", withExtension: "jpg"),
+                   let data = try? Data(contentsOf: url) {
+                    return UIImage(data: data)
+                }
             }
             
             return UIImage(systemName: "photo")

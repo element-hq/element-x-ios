@@ -85,7 +85,7 @@ extension PollRoomTimelineItem {
         .init(id: .randomEvent,
               poll: poll,
               body: "poll",
-              timestamp: "Now",
+              timestamp: .mock,
               isOutgoing: isOutgoing,
               isEditable: isEditable,
               canBeRepliedTo: true,

@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol, CustomStringConvertible {
-    var timestamp: String { get }
+    var timestamp: Date { get }
     var isOutgoing: Bool { get }
     var isEditable: Bool { get }
     var canBeRepliedTo: Bool { get }
@@ -84,7 +84,7 @@ extension EventBasedTimelineItemProtocol {
         if properties.isEdited {
             start = "\(L10n.commonEditedSuffix) "
         }
-        return start + timestamp
+        return start + timestamp.formattedTime()
     }
 
     var isCopyable: Bool {

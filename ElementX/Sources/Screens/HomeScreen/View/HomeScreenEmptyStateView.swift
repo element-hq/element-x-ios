@@ -63,7 +63,7 @@ struct HomeScreenEmptyStateLayout: Layout {
     }
     
     func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-        let mainView = subviews.first(where: { $0.priority > 0 })
+        let mainView = subviews.first { $0.priority > 0 }
         let topViews = subviews.filter { $0 != mainView }
         
         var y: CGFloat = bounds.minY

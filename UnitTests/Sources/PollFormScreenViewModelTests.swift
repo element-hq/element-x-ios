@@ -29,7 +29,7 @@ class PollFormScreenViewModelTests: XCTestCase {
         XCTAssertFalse(context.viewState.bindings.isUndisclosed)
         
         // Cancellation should work without confirmation
-        let deferred = deferFulfillment(viewModel.actions, until: { _ in true })
+        let deferred = deferFulfillment(viewModel.actions) { _ in true }
         context.send(viewAction: .cancel)
         let action = try await deferred.fulfill()
         XCTAssertNil(context.alertInfo)
@@ -45,7 +45,7 @@ class PollFormScreenViewModelTests: XCTestCase {
         XCTAssertFalse(context.viewState.bindings.isUndisclosed)
         
         // Cancellation should work without confirmation
-        let deferred = deferFulfillment(viewModel.actions, until: { _ in true })
+        let deferred = deferFulfillment(viewModel.actions) { _ in true }
         context.send(viewAction: .cancel)
         let action = try await deferred.fulfill()
         XCTAssertNil(context.alertInfo)

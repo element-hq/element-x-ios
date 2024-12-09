@@ -177,19 +177,19 @@ struct KnockRequestCell_Previews: PreviewProvider, TestablePreview {
     static let aliceWithNoName = KnockRequestCellInfo(id: "@alice:matrix.org", displayName: nil, avatarURL: nil, timestamp: "20 Nov 2024", reason: nil)
     
     static var previews: some View {
-        KnockRequestCell(cellInfo: aliceWithLongReason, onAccept: { _ in }, onDecline: { _ in }, onDeclineAndBan: { _ in })
+        KnockRequestCell(cellInfo: aliceWithLongReason) { _ in } onDecline: { _ in } onDeclineAndBan: { _ in }
             .previewDisplayName("Long reason")
-        KnockRequestCell(cellInfo: aliceWithShortReason, onAccept: { _ in }, onDecline: { _ in }, onDeclineAndBan: { _ in })
+        KnockRequestCell(cellInfo: aliceWithShortReason) { _ in } onDecline: { _ in } onDeclineAndBan: { _ in }
             .previewDisplayName("Short reason")
-        KnockRequestCell(cellInfo: aliceWithNoReason, onAccept: { _ in }, onDecline: { _ in }, onDeclineAndBan: { _ in })
+        KnockRequestCell(cellInfo: aliceWithNoReason) { _ in } onDecline: { _ in } onDeclineAndBan: { _ in }
             .previewDisplayName("No reason")
-        KnockRequestCell(cellInfo: aliceWithNoName, onAccept: { _ in }, onDecline: { _ in }, onDeclineAndBan: { _ in })
+        KnockRequestCell(cellInfo: aliceWithNoName) { _ in } onDecline: { _ in } onDeclineAndBan: { _ in }
             .previewDisplayName("No name")
-        KnockRequestCell(cellInfo: aliceWithShortReason, onAccept: nil, onDecline: { _ in }, onDeclineAndBan: { _ in })
-            .previewDisplayName("No Accept")
-        KnockRequestCell(cellInfo: aliceWithShortReason, onAccept: nil, onDecline: nil, onDeclineAndBan: { _ in })
-            .previewDisplayName("No Accept and Decline")
-        KnockRequestCell(cellInfo: aliceWithShortReason, onAccept: { _ in }, onDecline: { _ in }, onDeclineAndBan: nil)
-            .previewDisplayName("No Ban")
+//        KnockRequestCell(cellInfo: aliceWithShortReason, onAccept: nil) onDecline: { _ in } onDeclineAndBan: { _ in }
+//            .previewDisplayName("No Accept")
+//        KnockRequestCell(cellInfo: aliceWithShortReason) onDeclineAndBan: { _ in }
+//            .previewDisplayName("No Accept and Decline")
+//        KnockRequestCell(cellInfo: aliceWithShortReason) { _ in } onDecline: { _ in })
+//            .previewDisplayName("No Ban")
     }
 }

@@ -20,7 +20,7 @@ struct SwipeToReplyView: View {
 
 struct SwipeToReplyView_Previews: PreviewProvider, TestablePreview {
     static let timelineItem = TextRoomTimelineItem(id: .randomEvent,
-                                                   timestamp: "",
+                                                   timestamp: .mock,
                                                    isOutgoing: true,
                                                    isEditable: true,
                                                    canBeRepliedTo: true,

@@ -79,6 +79,10 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .weakAssign(to: \.state.knockingEnabled, on: self)
             .store(in: &cancellables)
         
+        appSettings.$mediaBrowserEnabled
+            .weakAssign(to: \.state.mediaBrowserEnabled, on: self)
+            .store(in: &cancellables)
+        
         appMediator.networkMonitor.reachabilityPublisher
             .filter { $0 == .reachable }
             .receive(on: DispatchQueue.main)
@@ -164,6 +168,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .processTapPinnedEvents:
             analyticsService.trackInteraction(name: .PinnedMessageRoomInfoButton)
             actionsSubject.send(.displayPinnedEventsTimeline)
+        case .processTapMediaEvents:
+            actionsSubject.send(.displayMediaEventsTimeline)
         case .processTapRequestsToJoin:
             actionsSubject.send(.displayKnockingRequests)
         }
@@ -207,8 +213,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .receive(on: DispatchQueue.main)
             .sink { [weak self, ownUserID = roomProxy.ownUserID] members in
                 guard let self else { return }
-                let accountOwner = members.first(where: { $0.userID == ownUserID })
-                let dmRecipient = members.first(where: { $0.userID != ownUserID })
+                let accountOwner = members.first { $0.userID == ownUserID }
+                let dmRecipient = members.first { $0.userID != ownUserID }
                 self.dmRecipient = dmRecipient
                 self.state.dmRecipient = dmRecipient.map(RoomMemberDetails.init(withProxy:))
                 self.state.accountOwner = accountOwner.map(RoomMemberDetails.init(withProxy:))

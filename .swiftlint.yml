@@ -9,6 +9,7 @@ opt_in_rules:
   - private_action
   - explicit_init
   - shorthand_optional_binding
+  - trailing_closure
 
 included:
   - ElementX

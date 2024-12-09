@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
 struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
     func buildRoomTimelineController(roomProxy: JoinedRoomProxyProtocol,
@@ -20,17 +21,35 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
                                appSettings: ServiceLocator.shared.settings)
     }
     
-    func buildRoomPinnedTimelineController(roomProxy: JoinedRoomProxyProtocol,
-                                           timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                           mediaProvider: MediaProviderProtocol) async -> RoomTimelineControllerProtocol? {
+    func buildPinnedEventsRoomTimelineController(roomProxy: JoinedRoomProxyProtocol,
+                                                 timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                                 mediaProvider: MediaProviderProtocol) async -> RoomTimelineControllerProtocol? {
         guard let pinnedEventsTimeline = await roomProxy.pinnedEventsTimeline else {
             return nil
         }
+        
         return RoomTimelineController(roomProxy: roomProxy,
                                       timelineProxy: pinnedEventsTimeline,
                                       initialFocussedEventID: nil,
                                       timelineItemFactory: timelineItemFactory,
                                       mediaProvider: mediaProvider,
                                       appSettings: ServiceLocator.shared.settings)
+    }
+    
+    func buildMessageFilteredRoomTimelineController(allowedMessageTypes: [RoomMessageEventMessageType],
+                                                    roomProxy: JoinedRoomProxyProtocol,
+                                                    timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                                    mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError> {
+        switch await roomProxy.messageFilteredTimeline(allowedMessageTypes: allowedMessageTypes) {
+        case .success(let timelineProxy):
+            return .success(RoomTimelineController(roomProxy: roomProxy,
+                                                   timelineProxy: timelineProxy,
+                                                   initialFocussedEventID: nil,
+                                                   timelineItemFactory: timelineItemFactory,
+                                                   mediaProvider: mediaProvider,
+                                                   appSettings: ServiceLocator.shared.settings))
+        case .failure(let error):
+            return .failure(.roomProxyError(error))
+        }
     }
 }

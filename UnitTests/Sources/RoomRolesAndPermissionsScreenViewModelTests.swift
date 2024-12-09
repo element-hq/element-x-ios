@@ -49,7 +49,7 @@ class RoomRolesAndPermissionsScreenViewModelTests: XCTestCase {
         context.send(viewAction: .editOwnUserRole)
         XCTAssertNotNil(context.alertInfo)
         
-        context.alertInfo?.verticalButtons?.first(where: { $0.title.localizedStandardContains("moderator") })?.action?()
+        context.alertInfo?.verticalButtons?.first { $0.title.localizedStandardContains("moderator") }?.action?()
         
         try await Task.sleep(for: .milliseconds(100))
         
@@ -64,7 +64,7 @@ class RoomRolesAndPermissionsScreenViewModelTests: XCTestCase {
         context.send(viewAction: .editOwnUserRole)
         XCTAssertNotNil(context.alertInfo)
         
-        context.alertInfo?.verticalButtons?.first(where: { $0.title.localizedStandardContains("member") })?.action?()
+        context.alertInfo?.verticalButtons?.first { $0.title.localizedStandardContains("member") }?.action?()
         
         try await Task.sleep(for: .milliseconds(100))
         

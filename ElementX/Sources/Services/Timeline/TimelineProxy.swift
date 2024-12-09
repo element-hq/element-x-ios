@@ -100,7 +100,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         switch kind {
         case .live:
             return await paginateBackwardsOnLive(requestSize: requestSize)
-        case .detached:
+        case .detached, .media:
             return await focussedPaginate(.backwards, requestSize: requestSize)
         case .pinned:
             return .success(())
@@ -232,18 +232,15 @@ final class TimelineProxy: TimelineProxyProtocol {
     func sendAudio(url: URL,
                    audioInfo: AudioInfo,
                    caption: String?,
-                   progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending audio")
         
         let handle = timeline.sendAudio(url: url.path(percentEncoded: false),
                                         audioInfo: audioInfo,
                                         caption: caption,
-                                        formattedCaption: nil,
-                                        progressWatcher: UploadProgressListener { progress in
-                                            progressSubject?.send(progress)
-                                        },
-                                        useSendQueue: AppSettings.isDevelopmentBuild)
+                                        formattedCaption: nil, // Rust will build this from the caption's markdown.
+                                        progressWatcher: nil,
+                                        useSendQueue: true)
         
         await requestHandle(handle)
         
@@ -262,18 +259,15 @@ final class TimelineProxy: TimelineProxyProtocol {
     func sendFile(url: URL,
                   fileInfo: FileInfo,
                   caption: String?,
-                  progressSubject: CurrentValueSubject<Double, Never>?,
                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending file")
         
         let handle = timeline.sendFile(url: url.path(percentEncoded: false),
                                        fileInfo: fileInfo,
                                        caption: caption,
-                                       formattedCaption: nil,
-                                       progressWatcher: UploadProgressListener { progress in
-                                           progressSubject?.send(progress)
-                                       },
-                                       useSendQueue: AppSettings.isDevelopmentBuild)
+                                       formattedCaption: nil, // Rust will build this from the caption's markdown.
+                                       progressWatcher: nil,
+                                       useSendQueue: true)
         
         await requestHandle(handle)
         
@@ -289,12 +283,10 @@ final class TimelineProxy: TimelineProxyProtocol {
         return .success(())
     }
     
-    // swiftlint:disable:next function_parameter_count
     func sendImage(url: URL,
                    thumbnailURL: URL,
                    imageInfo: ImageInfo,
                    caption: String?,
-                   progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending image")
         
@@ -302,11 +294,9 @@ final class TimelineProxy: TimelineProxyProtocol {
                                         thumbnailUrl: thumbnailURL.path(percentEncoded: false),
                                         imageInfo: imageInfo,
                                         caption: caption,
-                                        formattedCaption: nil,
-                                        progressWatcher: UploadProgressListener { progress in
-                                            progressSubject?.send(progress)
-                                        },
-                                        useSendQueue: AppSettings.isDevelopmentBuild)
+                                        formattedCaption: nil, // Rust will build this from the caption's markdown.
+                                        progressWatcher: nil,
+                                        useSendQueue: true)
         
         await requestHandle(handle)
         
@@ -344,12 +334,10 @@ final class TimelineProxy: TimelineProxyProtocol {
         return .success(())
     }
     
-    // swiftlint:disable:next function_parameter_count
     func sendVideo(url: URL,
                    thumbnailURL: URL,
                    videoInfo: VideoInfo,
                    caption: String?,
-                   progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending video")
         
@@ -357,11 +345,9 @@ final class TimelineProxy: TimelineProxyProtocol {
                                         thumbnailUrl: thumbnailURL.path(percentEncoded: false),
                                         videoInfo: videoInfo,
                                         caption: caption,
-                                        formattedCaption: nil,
-                                        progressWatcher: UploadProgressListener { progress in
-                                            progressSubject?.send(progress)
-                                        },
-                                        useSendQueue: AppSettings.isDevelopmentBuild)
+                                        formattedCaption: nil, // Rust will build this from the caption's markdown.
+                                        progressWatcher: nil,
+                                        useSendQueue: true)
         
         await requestHandle(handle)
         
@@ -380,7 +366,6 @@ final class TimelineProxy: TimelineProxyProtocol {
     func sendVoiceMessage(url: URL,
                           audioInfo: AudioInfo,
                           waveform: [UInt16],
-                          progressSubject: CurrentValueSubject<Double, Never>?,
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending voice message")
         
@@ -389,10 +374,8 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                waveform: waveform,
                                                caption: nil,
                                                formattedCaption: nil,
-                                               progressWatcher: UploadProgressListener { progress in
-                                                   progressSubject?.send(progress)
-                                               },
-                                               useSendQueue: AppSettings.isDevelopmentBuild)
+                                               progressWatcher: nil,
+                                               useSendQueue: true)
         
         await requestHandle(handle)
         
@@ -615,7 +598,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                 MXLog.error("Failed to subscribe to back pagination status with error: \(error)")
             }
             forwardPaginationStatusSubject.send(.timelineEndReached)
-        case .detached:
+        case .detached, .media:
             // Detached timelines don't support observation, set the initial state ourself.
             backPaginationStatusSubject.send(.idle)
             forwardPaginationStatusSubject.send(.idle)

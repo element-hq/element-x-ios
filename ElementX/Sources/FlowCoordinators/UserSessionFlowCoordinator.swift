@@ -396,6 +396,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedVerificationViolation, timeToDecryptMillis: timeToDecryptMs)
                 case .sentBeforeWeJoined:
                     analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedDueToMembership, timeToDecryptMillis: timeToDecryptMs)
+                case .historicalMessage:
+                    analytics.trackError(context: nil, domain: .E2EE, name: .HistoricalMessage, timeToDecryptMillis: timeToDecryptMs)
+                case .withheldForUnverifiedOrInsecureDevice:
+                    analytics.trackError(context: nil, domain: .E2EE, name: .RoomKeysWithheldForUnverifiedDevice, timeToDecryptMillis: timeToDecryptMs)
+                case .withheldBySender:
+                    analytics.trackError(context: nil, domain: .E2EE, name: .OlmKeysNotSentError, timeToDecryptMillis: timeToDecryptMs)
                 }
             }
             .store(in: &cancellables)

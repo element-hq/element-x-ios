@@ -35,7 +35,7 @@ struct ReadMarkerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
         VStack(alignment: .leading, spacing: 0) {
             RoomTimelineItemView(viewState: .init(type: .separator(.init(id: .virtual(uniqueID: .init(id: "Separator")), text: "Today")), groupStyle: .single))
             RoomTimelineItemView(viewState: .init(type: .text(.init(id: .randomEvent,
-                                                                    timestamp: "",
+                                                                    timestamp: .mock,
                                                                     isOutgoing: true,
                                                                     isEditable: false,
                                                                     canBeRepliedTo: true,
@@ -47,7 +47,7 @@ struct ReadMarkerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
 
             RoomTimelineItemView(viewState: .init(type: .separator(.init(id: .virtual(uniqueID: .init(id: "Separator")), text: "Today")), groupStyle: .single))
             RoomTimelineItemView(viewState: .init(type: .text(.init(id: .randomEvent,
-                                                                    timestamp: "",
+                                                                    timestamp: .mock,
                                                                     isOutgoing: false,
                                                                     isEditable: false,
                                                                     canBeRepliedTo: true,

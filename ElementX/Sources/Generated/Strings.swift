@@ -796,7 +796,7 @@ internal enum L10n {
   internal static var richTextEditorCloseFormattingOptions: String { return L10n.tr("Localizable", "rich_text_editor_close_formatting_options") }
   /// Toggle code block
   internal static var richTextEditorCodeBlock: String { return L10n.tr("Localizable", "rich_text_editor_code_block") }
-  /// Optional caption…
+  /// Add a caption
   internal static var richTextEditorComposerCaptionPlaceholder: String { return L10n.tr("Localizable", "rich_text_editor_composer_caption_placeholder") }
   /// Message…
   internal static var richTextEditorComposerPlaceholder: String { return L10n.tr("Localizable", "rich_text_editor_composer_placeholder") }
@@ -1136,7 +1136,7 @@ internal enum L10n {
   internal static var screenCreateRoomRoomAccessSectionKnockingOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_knocking_option_title") }
   /// Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _
   internal static var screenCreateRoomRoomAddressInvalidSymbolsErrorDescription: String { return L10n.tr("Localizable", "screen_create_room_room_address_invalid_symbols_error_description") }
-  /// This room address already exists, please try editing the room address field or change the room name
+  /// This room address already exists. Please try editing the room address field or change the room name
   internal static var screenCreateRoomRoomAddressNotAvailableErrorDescription: String { return L10n.tr("Localizable", "screen_create_room_room_address_not_available_error_description") }
   /// In order for this room to be visible in the public room directory, you will need a room address.
   internal static var screenCreateRoomRoomAddressSectionFooter: String { return L10n.tr("Localizable", "screen_create_room_room_address_section_footer") }
@@ -1356,6 +1356,32 @@ internal enum L10n {
   internal static func screenLoginTitleWithHomeserver(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_login_title_with_homeserver", String(describing: p1))
   }
+  /// This file will be removed from the room and members won’t have access to it.
+  internal static var screenMediaBrowserDeleteConfirmationSubtitle: String { return L10n.tr("Localizable", "screen_media_browser_delete_confirmation_subtitle") }
+  /// Delete file?
+  internal static var screenMediaBrowserDeleteConfirmationTitle: String { return L10n.tr("Localizable", "screen_media_browser_delete_confirmation_title") }
+  /// Images and videos uploaded to this room will be shown here.
+  internal static var screenMediaBrowserEmptyStateSubtitle: String { return L10n.tr("Localizable", "screen_media_browser_empty_state_subtitle") }
+  /// No media uploaded yet
+  internal static var screenMediaBrowserEmptyStateTitle: String { return L10n.tr("Localizable", "screen_media_browser_empty_state_title") }
+  /// Loading files…
+  internal static var screenMediaBrowserListLoadingFiles: String { return L10n.tr("Localizable", "screen_media_browser_list_loading_files") }
+  /// Loading media…
+  internal static var screenMediaBrowserListLoadingMedia: String { return L10n.tr("Localizable", "screen_media_browser_list_loading_media") }
+  /// Files
+  internal static var screenMediaBrowserListModeFiles: String { return L10n.tr("Localizable", "screen_media_browser_list_mode_files") }
+  /// Media
+  internal static var screenMediaBrowserListModeMedia: String { return L10n.tr("Localizable", "screen_media_browser_list_mode_media") }
+  /// Media and files
+  internal static var screenMediaBrowserTitle: String { return L10n.tr("Localizable", "screen_media_browser_title") }
+  /// File format
+  internal static var screenMediaDetailsFileFormat: String { return L10n.tr("Localizable", "screen_media_details_file_format") }
+  /// File name
+  internal static var screenMediaDetailsFilename: String { return L10n.tr("Localizable", "screen_media_details_filename") }
+  /// Uploaded by
+  internal static var screenMediaDetailsUploadedBy: String { return L10n.tr("Localizable", "screen_media_details_uploaded_by") }
+  /// Uploaded on
+  internal static var screenMediaDetailsUploadedOn: String { return L10n.tr("Localizable", "screen_media_details_uploaded_on") }
   /// Failed selecting media, please try again.
   internal static var screenMediaPickerErrorFailedSelection: String { return L10n.tr("Localizable", "screen_media_picker_error_failed_selection") }
   /// Captions might not be visible to people using older apps.
@@ -1778,6 +1804,8 @@ internal enum L10n {
   internal static var screenRoomDetailsLeaveConversationTitle: String { return L10n.tr("Localizable", "screen_room_details_leave_conversation_title") }
   /// Leave room
   internal static var screenRoomDetailsLeaveRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_leave_room_title") }
+  /// Media and files
+  internal static var screenRoomDetailsMediaGalleryTitle: String { return L10n.tr("Localizable", "screen_room_details_media_gallery_title") }
   /// Custom
   internal static var screenRoomDetailsNotificationModeCustom: String { return L10n.tr("Localizable", "screen_room_details_notification_mode_custom") }
   /// Default
@@ -2490,6 +2518,12 @@ internal enum L10n {
   internal static var testLanguageIdentifier: String { return L10n.tr("Localizable", "test_language_identifier") }
   /// en
   internal static var testUntranslatedDefaultLanguageIdentifier: String { return L10n.tr("Localizable", "test_untranslated_default_language_identifier") }
+  /// Historical messages are not available on this device
+  internal static var timelineDecryptionFailureHistoricalEventNoKeyBackup: String { return L10n.tr("Localizable", "timeline_decryption_failure_historical_event_no_key_backup") }
+  /// Unable to decrypt message
+  internal static var timelineDecryptionFailureUnableToDecrypt: String { return L10n.tr("Localizable", "timeline_decryption_failure_unable_to_decrypt") }
+  /// This message was blocked either because you did not verify your device or because the sender needs to verify your identity.
+  internal static var timelineDecryptionFailureWithheldUnverified: String { return L10n.tr("Localizable", "timeline_decryption_failure_withheld_unverified") }
   /// Troubleshoot
   internal static var troubleshootNotificationsEntryPointSection: String { return L10n.tr("Localizable", "troubleshoot_notifications_entry_point_section") }
   /// Troubleshoot notifications

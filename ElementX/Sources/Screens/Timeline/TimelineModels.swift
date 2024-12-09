@@ -92,7 +92,7 @@ struct TimelineViewState: BindableState {
     var showLoading = false
     var showReadReceipts = false
     var isEncryptedOneToOneRoom = false
-    var timelineViewState: TimelineState // check the doc before changing this
+    var timelineState: TimelineState // check the doc before changing this
 
     var ownUserID: String
     var canCurrentUserRedactOthers = false

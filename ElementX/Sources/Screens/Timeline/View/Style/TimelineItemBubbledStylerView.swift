@@ -415,25 +415,33 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
     static var previews: some View {
         mockTimeline
             .previewDisplayName("Mock Timeline")
+            .previewLayout(.fixed(width: 390, height: 900))
+            .padding(.bottom, 20)
         mockTimeline
             .environment(\.layoutDirection, .rightToLeft)
             .previewDisplayName("Mock Timeline RTL")
+            .previewLayout(.fixed(width: 390, height: 900))
+            .padding(.bottom, 20)
         replies
             .previewDisplayName("Replies")
         threads
             .previewDisplayName("Thread decorator")
             .snapshotPreferences(delay: 1)
+            .previewLayout(.fixed(width: 390, height: 1700))
+            .padding(.bottom, 20)
         encryptionAuthenticity
             .previewDisplayName("Encryption Indicators")
         pinned
             .previewDisplayName("Pinned messages")
             .snapshotPreferences(delay: 1)
+            .previewLayout(.fixed(width: 390, height: 1150))
+            .padding(.bottom, 20)
     }
     
     static var mockTimeline: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                ForEach(viewModel.state.timelineViewState.itemViewStates) { viewState in
+                ForEach(viewModel.state.timelineState.itemViewStates) { viewState in
                     RoomTimelineItemView(viewState: viewState)
                 }
             }
@@ -445,7 +453,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
     static var replies: some View {
         VStack(spacing: 0) {
             RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
-                                                                             timestamp: "10:42",
+                                                                             timestamp: .mock,
                                                                              isOutgoing: true,
                                                                              isEditable: false,
                                                                              canBeRepliedTo: true,
@@ -458,7 +466,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                   groupStyle: .single))
 
             RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
-                                                                             timestamp: "10:42",
+                                                                             timestamp: .mock,
                                                                              isOutgoing: true,
                                                                              isEditable: false,
                                                                              canBeRepliedTo: true,
@@ -493,7 +501,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
     static var encryptionAuthenticity: some View {
         VStack(spacing: 0) {
             RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
-                                                                             timestamp: "10:42",
+                                                                             timestamp: .mock,
                                                                              isOutgoing: true,
                                                                              isEditable: false,
                                                                              canBeRepliedTo: true,
@@ -504,7 +512,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                   groupStyle: .single))
             
             RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
-                                                                             timestamp: "10:42",
+                                                                             timestamp: .mock,
                                                                              isOutgoing: true,
                                                                              isEditable: false,
                                                                              canBeRepliedTo: true,
@@ -516,7 +524,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                   groupStyle: .single))
             
             RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
-                                                                             timestamp: "10:42",
+                                                                             timestamp: .mock,
                                                                              isOutgoing: false,
                                                                              isEditable: false,
                                                                              canBeRepliedTo: true,
@@ -527,7 +535,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                   groupStyle: .first))
             
             RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
-                                                                             timestamp: "10:42",
+                                                                             timestamp: .mock,
                                                                              isOutgoing: false,
                                                                              isEditable: false,
                                                                              canBeRepliedTo: true,
@@ -538,7 +546,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                   groupStyle: .last))
             
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: .randomEvent,
-                                                                      timestamp: "Now",
+                                                                      timestamp: .mock,
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       canBeRepliedTo: true,
@@ -551,7 +559,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                       properties: RoomTimelineItemProperties(encryptionAuthenticity: .notGuaranteed(color: .gray))))
             
             VoiceMessageRoomTimelineView(timelineItem: .init(id: .randomEvent,
-                                                             timestamp: "10:42",
+                                                             timestamp: .mock,
                                                              isOutgoing: true,
                                                              isEditable: false,
                                                              canBeRepliedTo: true,
@@ -580,7 +588,7 @@ private struct MockTimelineContent: View {
     
     var body: some View {
         RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: makeItemIdentifier(),
-                                                                         timestamp: "10:42",
+                                                                         timestamp: .mock,
                                                                          isOutgoing: true,
                                                                          isEditable: false,
                                                                          canBeRepliedTo: true,
@@ -591,7 +599,7 @@ private struct MockTimelineContent: View {
                                               groupStyle: .single))
 
         AudioRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
-                                                  timestamp: "10:42",
+                                                  timestamp: .mock,
                                                   isOutgoing: true,
                                                   isEditable: false,
                                                   canBeRepliedTo: true,
@@ -606,7 +614,7 @@ private struct MockTimelineContent: View {
                                                   replyDetails: replyDetails))
         
         FileRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
-                                                 timestamp: "10:42",
+                                                 timestamp: .mock,
                                                  isOutgoing: false,
                                                  isEditable: false,
                                                  canBeRepliedTo: true,
@@ -621,7 +629,7 @@ private struct MockTimelineContent: View {
                                                  replyDetails: replyDetails))
         
         ImageRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
-                                                  timestamp: "10:42",
+                                                  timestamp: .mock,
                                                   isOutgoing: true,
                                                   isEditable: true,
                                                   canBeRepliedTo: true,
@@ -633,7 +641,7 @@ private struct MockTimelineContent: View {
                                                   replyDetails: replyDetails))
         
         LocationRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
-                                                     timestamp: "Now",
+                                                     timestamp: .mock,
                                                      isOutgoing: false,
                                                      isEditable: false,
                                                      canBeRepliedTo: true,
@@ -646,7 +654,7 @@ private struct MockTimelineContent: View {
                                                      replyDetails: replyDetails))
         
         LocationRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
-                                                     timestamp: "Now",
+                                                     timestamp: .mock,
                                                      isOutgoing: false,
                                                      isEditable: false,
                                                      canBeRepliedTo: true,
@@ -657,7 +665,7 @@ private struct MockTimelineContent: View {
                                                      replyDetails: replyDetails))
         
         VoiceMessageRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
-                                                         timestamp: "10:42",
+                                                         timestamp: .mock,
                                                          isOutgoing: true,
                                                          isEditable: false,
                                                          canBeRepliedTo: true,

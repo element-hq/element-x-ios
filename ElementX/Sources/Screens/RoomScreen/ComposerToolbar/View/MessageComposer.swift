@@ -268,7 +268,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                 eventContent: .message(.video(.init(filename: "never.mov",
                                                     caption: "Video: Through the never",
                                                     videoInfo: .mockVideo,
-                                                    thumbnailInfo: .mockThumbnail)))),
+                                                    thumbnailInfo: .mockVideoThumbnail)))),
         .loading(eventID: "")
     ]
     

@@ -14,7 +14,7 @@ struct UnsupportedRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
     let eventType: String
     let error: String
     
-    let timestamp: String
+    let timestamp: Date
     let isOutgoing: Bool
     let isEditable: Bool
     let canBeRepliedTo: Bool

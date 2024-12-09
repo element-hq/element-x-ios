@@ -32,7 +32,7 @@ struct StateRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     static let item = StateRoomTimelineItem(id: .randomVirtual,
                                             body: "Alice joined",
-                                            timestamp: "Now",
+                                            timestamp: .mock,
                                             isOutgoing: false,
                                             isEditable: false,
                                             canBeRepliedTo: true,
