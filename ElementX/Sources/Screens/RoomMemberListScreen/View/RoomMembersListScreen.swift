@@ -51,7 +51,7 @@ struct RoomMembersListScreen: View {
             RoomMembersListManageMemberSheet(member: $0.member, actions: $0.actions, context: context)
         }
         .alert(item: $context.alertInfo)
-//        .toolbar { toolbar }
+        .toolbar { toolbar }
         .track(screen: .RoomMembers)
     }
     

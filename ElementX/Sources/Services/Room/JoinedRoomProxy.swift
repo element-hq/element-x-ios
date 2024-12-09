@@ -187,7 +187,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     func messageFilteredTimeline(allowedMessageTypes: [RoomMessageEventMessageType]) async -> Result<any TimelineProxyProtocol, RoomProxyError> {
         do {
             let timeline = try await TimelineProxy(timeline: room.messageFilteredTimeline(internalIdPrefix: nil, allowedMessageTypes: allowedMessageTypes),
-                                                   kind: .media)
+                                                   roomId: room.id(),
+                                                   kind: .media,
+                                                   zeroChatApi: zeroChatApi)
             await timeline.subscribeForUpdates()
             
             return .success(timeline)

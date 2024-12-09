@@ -18,8 +18,10 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
     private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let appSettings: AppSettings
     private let appMediator: AppMediatorProtocol
     private let emojiProvider: EmojiProviderProtocol
+    private let zeroAttachmentService: ZeroAttachmentService
     
     private let actionsSubject: PassthroughSubject<MediaEventsTimelineFlowCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<MediaEventsTimelineFlowCoordinatorAction, Never> {
@@ -33,6 +35,7 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
          roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
          roomProxy: JoinedRoomProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
+         appSettings: AppSettings,
          appMediator: AppMediatorProtocol,
          emojiProvider: EmojiProviderProtocol) {
         self.navigationStackCoordinator = navigationStackCoordinator
@@ -40,8 +43,10 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         self.roomTimelineControllerFactory = roomTimelineControllerFactory
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
+        self.appSettings = appSettings
         self.appMediator = appMediator
         self.emojiProvider = emojiProvider
+        zeroAttachmentService = ZeroAttachmentService(appSettings: appSettings, isRoomEncrypted: roomProxy.isEncrypted)
     }
     
     func start() {
@@ -61,7 +66,8 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     private func presentMediaEventsTimeline() async {
         let timelineItemFactory = RoomTimelineItemFactory(userID: userSession.clientProxy.userID,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID))
+                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID),
+                                                          zeroAttachmentService: zeroAttachmentService)
         
         guard case let .success(mediaTimelineController) = await roomTimelineControllerFactory.buildMessageFilteredRoomTimelineController(allowedMessageTypes: [.image, .video],
                                                                                                                                           roomProxy: roomProxy,

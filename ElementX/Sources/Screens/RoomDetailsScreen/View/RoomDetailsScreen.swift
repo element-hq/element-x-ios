@@ -164,36 +164,36 @@ struct RoomDetailsScreen: View {
                         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
             }
             
-            ListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
-                                    icon: \.pin),
-                    details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
-                    kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink {
-                        context.send(viewAction: .processTapPinnedEvents)
-                    })
-                    .disabled(context.viewState.pinnedEventsActionState.isLoading)
-            
-            if context.viewState.canSeeKnockingRequests {
-                ListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
-                                        icon: \.askToJoin),
-                        // TODO: Display count if requests > 0 when an API for them is available
-                        details: .counter(1),
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapRequestsToJoin)
-                        })
-            }
-            ListRow(label: .default(title: L10n.screenPollsHistoryTitle,
-                                    icon: \.polls),
-                    kind: .navigationLink {
-                        context.send(viewAction: .processTapPolls)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
-            
-            if context.viewState.mediaBrowserEnabled {
-                ListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapMediaEvents)
-                        })
-            }
+//            ZeroListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
+//                                    icon: \.pin),
+//                    details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
+//                    kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink {
+//                        context.send(viewAction: .processTapPinnedEvents)
+//                    })
+//                    .disabled(context.viewState.pinnedEventsActionState.isLoading)
+//            
+//            if context.viewState.canSeeKnockingRequests {
+//                ZeroListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
+//                                        icon: \.askToJoin),
+//                        // TODO: Display count if requests > 0 when an API for them is available
+//                        details: .counter(1),
+//                        kind: .navigationLink {
+//                            context.send(viewAction: .processTapRequestsToJoin)
+//                        })
+//            }
+//            ZeroListRow(label: .default(title: L10n.screenPollsHistoryTitle,
+//                                    icon: \.polls),
+//                    kind: .navigationLink {
+//                        context.send(viewAction: .processTapPolls)
+//                    })
+//                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
+//            
+//            if context.viewState.mediaBrowserEnabled {
+//                ZeroListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
+//                        kind: .navigationLink {
+//                            context.send(viewAction: .processTapMediaEvents)
+//                        })
+//            }
         }
     }
     

@@ -1520,6 +1520,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                   roomTimelineControllerFactory: roomTimelineControllerFactory,
                                                                   roomProxy: roomProxy,
                                                                   userIndicatorController: userIndicatorController,
+                                                                  appSettings: appSettings,
                                                                   appMediator: appMediator,
                                                                   emojiProvider: emojiProvider)
         
@@ -1559,6 +1560,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                  roomTimelineControllerFactory: roomTimelineControllerFactory,
                                                                  roomProxy: roomProxy,
                                                                  userIndicatorController: userIndicatorController,
+                                                                 appSettings: appSettings,
                                                                  appMediator: appMediator,
                                                                  emojiProvider: emojiProvider)
         

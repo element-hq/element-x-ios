@@ -240,7 +240,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                               _ messageContent: MessageContent,
                                               _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
         ImageRoomTimelineItem(id: eventItemProxy.id,
-                              timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
+                              timestamp: eventItemProxy.timestamp,
                               isOutgoing: isOutgoing,
                               isEditable: eventItemProxy.isEditable,
                               canBeRepliedTo: eventItemProxy.canBeRepliedTo,

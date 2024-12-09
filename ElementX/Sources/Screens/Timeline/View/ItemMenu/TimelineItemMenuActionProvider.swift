@@ -67,11 +67,11 @@ struct TimelineItemMenuActionProvider {
                     actions.append(.addCaption)
                 }
             }
-//            else if item is PollRoomTimelineItem {
-//                actions.append(.editPoll)
-//            } else if !(item is VoiceMessageRoomTimelineItem) {
-//                actions.append(.edit)
-//            }
+            else if item is PollRoomTimelineItem {
+                // actions.append(.editPoll)
+            } else if !(item is VoiceMessageRoomTimelineItem) {
+                actions.append(.edit)
+            }
         }
 
         if item.isCopyable {

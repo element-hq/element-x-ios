@@ -995,13 +995,19 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                                     iconName: "xmark"))
     }
         
+    private var isProfileCheckInProgress: Bool = false
+    
     private func checkAndProceed(execute: @escaping () -> Void) {
-        Task {
-            let hasPendingSignup = await userSession.clientProxy.isProfileCompletionRequired()
-            if hasPendingSignup {
-                presentCompleteProfileScreen(execute)
-            } else {
-                execute()
+        if !isProfileCheckInProgress {
+            isProfileCheckInProgress = true
+            Task {
+                let hasPendingSignup = await userSession.clientProxy.isProfileCompletionRequired()
+                if hasPendingSignup {
+                    presentCompleteProfileScreen(execute)
+                } else {
+                    execute()
+                }
+                self.isProfileCheckInProgress = false
             }
         }
     }
