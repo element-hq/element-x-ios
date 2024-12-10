@@ -405,6 +405,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .mediaEventsTimeline(previousState: fromState)
             case (.mediaEventsTimeline(let previousState), .dismissMediaEventsTimeline):
                 return previousState
+                
+            case (.roomDetails, .presentSecurityAndPrivacyScreen):
+                return .securityAndPrivacy(previousState: fromState)
+            case (.securityAndPrivacy(let previousState), .dismissSecurityAndPrivacyScreen):
+                return previousState
             
             default:
                 return nil
@@ -570,6 +575,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomDetails, .presentMediaEventsTimeline, .mediaEventsTimeline):
                 Task { await self.startMediaEventsTimelineFlow() }
             case (.mediaEventsTimeline, .dismissMediaEventsTimeline, .roomDetails):
+                break
+                
+            case (.roomDetails, .presentSecurityAndPrivacyScreen, .securityAndPrivacy):
+                presentSecurityAndPrivacyScreen()
+            case (.securityAndPrivacy, .dismissSecurityAndPrivacyScreen, .roomDetails):
                 break
             
             // Child flow
@@ -849,6 +859,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentKnockRequestsListScreen)
             case .presentMediaEventsTimeline:
                 stateMachine.tryEvent(.presentMediaEventsTimeline)
+            case .presentSecurityAndPrivacyScreen:
+                stateMachine.tryEvent(.presentSecurityAndPrivacyScreen)
             }
         }
         .store(in: &cancellables)
@@ -1453,6 +1465,24 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
+    private func presentSecurityAndPrivacyScreen() {
+        let coordinator = SecurityAndPrivacyScreenCoordinator(parameters: .init())
+        
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .done:
+                break
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissSecurityAndPrivacyScreen)
+        }
+    }
+    
     // MARK: - Other flows
     
     private func startChildFlow(for roomID: String, via: [String], entryPoint: RoomFlowCoordinatorEntryPoint) async {
@@ -1604,6 +1634,7 @@ private extension RoomFlowCoordinator {
         case resolveSendFailure
         case knockRequestsList(previousState: State)
         case mediaEventsTimeline(previousState: State)
+        case securityAndPrivacy(previousState: State)
         
         /// A child flow is in progress.
         case presentingChild(childRoomID: String, previousState: State)
@@ -1687,6 +1718,9 @@ private extension RoomFlowCoordinator {
         
         case presentMediaEventsTimeline
         case dismissMediaEventsTimeline
+        
+        case presentSecurityAndPrivacyScreen
+        case dismissSecurityAndPrivacyScreen
     }
 }
 
