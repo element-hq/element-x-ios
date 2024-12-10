@@ -86,7 +86,8 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                         mediaPlayerProvider: MediaPlayerProvider(),
                                                                         voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                                         appMediator: appMediator,
-                                                                        emojiProvider: emojiProvider)
+                                                                        emojiProvider: emojiProvider,
+                                                                        userIndicatorController: userIndicatorController)
         
         let coordinator = MediaEventsTimelineScreenCoordinator(parameters: parameters)
         

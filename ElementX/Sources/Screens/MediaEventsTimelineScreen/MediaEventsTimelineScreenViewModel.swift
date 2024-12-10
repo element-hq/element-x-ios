@@ -13,6 +13,7 @@ typealias MediaEventsTimelineScreenViewModelType = StateStoreViewModel<MediaEven
 class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType, MediaEventsTimelineScreenViewModelProtocol {
     private let mediaTimelineViewModel: TimelineViewModelProtocol
     private let filesTimelineViewModel: TimelineViewModelProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var isOldestItemVisible = false
     
@@ -33,9 +34,11 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     init(mediaTimelineViewModel: TimelineViewModelProtocol,
          filesTimelineViewModel: TimelineViewModelProtocol,
          mediaProvider: MediaProviderProtocol,
-         screenMode: MediaEventsTimelineScreenMode = .media) {
+         screenMode: MediaEventsTimelineScreenMode = .media,
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.mediaTimelineViewModel = mediaTimelineViewModel
         self.filesTimelineViewModel = filesTimelineViewModel
+        self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: .init(bindings: .init(screenMode: screenMode)), mediaProvider: mediaProvider)
         
@@ -73,6 +76,8 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             backPaginateIfNecessary(paginationStatus: activeTimelineViewModel.context.viewState.timelineState.paginationState.backward)
         case .oldestItemDidDisappear:
             isOldestItemVisible = false
+        case .tappedItem(let item):
+            handleItemTapped(item)
         }
     }
     
@@ -98,5 +103,25 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         if paginationStatus == .idle, isOldestItemVisible {
             activeTimelineViewModel.context.send(viewAction: .paginateBackwards)
         }
+    }
+    
+    private func handleItemTapped(_ item: RoomTimelineItemViewState) {
+        let item: EventBasedMessageTimelineItemProtocol? = switch item.type {
+        case .audio(let audioItem): audioItem
+        case .file(let fileItem): fileItem
+        case .image(let imageItem): imageItem
+        case .video(let videoItem): videoItem
+        default: nil
+        }
+        
+        guard let item, let mediaProvider = context.mediaProvider else {
+            MXLog.error("Unexpected item type (or the media provider is missing).")
+            return
+        }
+        
+        let viewModel = TimelineMediaPreviewViewModel(previewItems: [item],
+                                                      mediaProvider: mediaProvider,
+                                                      userIndicatorController: userIndicatorController)
+        state.bindings.mediaPreviewViewModel = viewModel
     }
 }

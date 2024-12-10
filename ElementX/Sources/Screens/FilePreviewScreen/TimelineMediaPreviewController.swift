@@ -28,8 +28,10 @@ class TimelineMediaPreviewController: QLPreviewController, QLPreviewControllerDa
         
         headerHostingController = UIHostingController(rootView: HeaderView(context: viewModel.context))
         headerHostingController.view.backgroundColor = .clear
+        headerHostingController.sizingOptions = .intrinsicContentSize
         captionHostingController = UIHostingController(rootView: CaptionView(context: viewModel.context))
         captionHostingController.view.backgroundColor = .clear
+        captionHostingController.sizingOptions = .intrinsicContentSize
         detailsHostingController = UIHostingController(rootView: TimelineMediaPreviewDetailsView(context: viewModel.context))
         detailsHostingController.view.backgroundColor = .compound.bgCanvasDefault
         
@@ -87,9 +89,7 @@ class TimelineMediaPreviewController: QLPreviewController, QLPreviewControllerDa
         
         navigationBar?.topItem?.titleView = headerHostingController.view
         
-        if navigationBar?.topItem?.rightBarButtonItems?.count == 1 {
-            navigationBar?.topItem?.rightBarButtonItems?.append(UIBarButtonItem(image: UIImage(systemSymbol: .infoCircle), style: .plain, target: self, action: #selector(presentMediaDetails)))
-        }
+        updateBarButtons()
     }
     
     // MARK: QLPreviewControllerDataSource
@@ -110,6 +110,21 @@ class TimelineMediaPreviewController: QLPreviewController, QLPreviewControllerDa
         detailsHostingController.sheetPresentationController?.prefersGrabberVisible = true
         
         present(detailsHostingController, animated: true)
+    }
+    
+    private var detailsButtonIcon: UIImage {
+        guard let bundle = Bundle(url: Bundle.main.bundleURL.appending(path: "CompoundDesignTokens_CompoundDesignTokens.bundle")) else {
+            return UIImage(systemSymbol: .infoCircle)
+        }
+        
+        return UIImage(named: "info", in: bundle, compatibleWith: nil) ?? UIImage(systemSymbol: .infoCircle)
+    }
+    
+    private func updateBarButtons() {
+        if navigationBar?.topItem?.rightBarButtonItems?.count == 1 {
+            let button = UIBarButtonItem(image: detailsButtonIcon, style: .plain, target: self, action: #selector(presentMediaDetails))
+            navigationBar?.topItem?.rightBarButtonItems?.append(button)
+        }
     }
 }
 
@@ -143,7 +158,21 @@ private struct CaptionView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(16)
-                .background(.ultraThinMaterial)
+                .background {
+                    BlurView(style: .systemChromeMaterial) // Darkest material available, matches the bottom bar when content is beneath.
+                }
         }
+    }
+}
+
+private struct BlurView: UIViewRepresentable {
+    var style: UIBlurEffect.Style
+    
+    func makeUIView(context: Context) -> UIVisualEffectView {
+        UIVisualEffectView(effect: UIBlurEffect(style: style))
+    }
+    
+    func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
+        uiView.effect = UIBlurEffect(style: style)
     }
 }

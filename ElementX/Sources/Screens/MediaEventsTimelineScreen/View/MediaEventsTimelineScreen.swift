@@ -30,6 +30,7 @@ struct MediaEventsTimelineScreen: View {
                     .pickerStyle(.segmented)
                 }
             }
+            .timelineMediaQuickLook(viewModel: $context.mediaPreviewViewModel)
     }
     
     @ViewBuilder
@@ -39,13 +40,17 @@ struct MediaEventsTimelineScreen: View {
                 let columns = [GridItem(.adaptive(minimum: 80, maximum: 150), spacing: 1)]
                 LazyVGrid(columns: columns, alignment: .center, spacing: 1) {
                     ForEach(context.viewState.items) { item in
-                        Color.clear // Let the image aspect fill in place
-                            .aspectRatio(1, contentMode: .fill)
-                            .overlay {
-                                viewForTimelineItem(item)
-                            }
-                            .clipped()
-                            .scaleEffect(.init(width: 1, height: -1))
+                        Button {
+                            context.send(viewAction: .tappedItem(item))
+                        } label: {
+                            Color.clear // Let the image aspect fill in place
+                                .aspectRatio(1, contentMode: .fill)
+                                .overlay {
+                                    viewForTimelineItem(item)
+                                }
+                                .clipped()
+                                .scaleEffect(.init(width: 1, height: -1))
+                        }
                     }
                 }
                 
@@ -152,12 +157,14 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     static let mediaViewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: timelineViewModel,
                                                                    filesTimelineViewModel: timelineViewModel,
                                                                    mediaProvider: MediaProviderMock(configuration: .init()),
-                                                                   screenMode: .media)
+                                                                   screenMode: .media,
+                                                                   userIndicatorController: UserIndicatorControllerMock())
     
     static let filesViewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: timelineViewModel,
                                                                    filesTimelineViewModel: timelineViewModel,
                                                                    mediaProvider: MediaProviderMock(configuration: .init()),
-                                                                   screenMode: .files)
+                                                                   screenMode: .files,
+                                                                   userIndicatorController: UserIndicatorControllerMock())
     
     static var previews: some View {
         NavigationStack {

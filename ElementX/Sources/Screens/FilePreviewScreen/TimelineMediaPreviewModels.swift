@@ -31,7 +31,9 @@ class TimelineMediaPreviewItem: NSObject, QLPreviewItem {
     // MARK: QLPreviewItem
     
     var previewItemURL: URL? {
-        fileHandle?.url
+        // Falling back to a clear image allows the presentation animation to work when
+        // the item is in the event cache and just needs to be loaded from the store.
+        fileHandle?.url ?? Bundle.main.url(forResource: "clear", withExtension: "png")
     }
     
     var previewItemTitle: String? {
