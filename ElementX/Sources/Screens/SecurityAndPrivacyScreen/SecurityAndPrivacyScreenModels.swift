@@ -30,6 +30,7 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
 
 struct SecurityAndPrivacyScreenViewStateBindings {
     var desiredSettings: SecurityAndPrivacySettings
+    var alertInfo: AlertInfo<SecurityAndPrivacyAlertType>?
 }
 
 struct SecurityAndPrivacySettings: Equatable {
@@ -41,6 +42,10 @@ enum SecurityAndPrivacyRoomAccessType {
     case inviteOnly
     case askToJoin
     case anyone
+}
+
+enum SecurityAndPrivacyAlertType {
+    case enableEncryption
 }
 
 enum SecurityAndPrivacyScreenViewAction {
