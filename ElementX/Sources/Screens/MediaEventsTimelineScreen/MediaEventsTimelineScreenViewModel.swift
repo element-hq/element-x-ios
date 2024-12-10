@@ -102,7 +102,9 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         
         for item in filteredItems.reversed() {
             if case .separator(let content) = item.type {
-                let group = MediaEventsTimelineGroup(id: content.id.uniqueID.id, title: content.text, items: currentItems)
+                let group = MediaEventsTimelineGroup(id: content.id.uniqueID.id,
+                                                     title: content.timestamp.formatted(date: .complete, time: .omitted),
+                                                     items: currentItems)
                 currentItems = []
                 newGroups.append(group)
             } else {

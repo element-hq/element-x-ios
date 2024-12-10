@@ -132,8 +132,6 @@ struct MediaEventsTimelineScreen: View {
             } else {
                 playIcon
             }
-        case .separator(let timelineItem):
-            Text(timelineItem.text)
         default:
             EmptyView()
         }
