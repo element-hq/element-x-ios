@@ -11,15 +11,17 @@ import SwiftUI
 typealias SecurityAndPrivacyScreenViewModelType = StateStoreViewModel<SecurityAndPrivacyScreenViewState, SecurityAndPrivacyScreenViewAction>
 
 class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, SecurityAndPrivacyScreenViewModelProtocol {
+    private let roomProxy: JoinedRoomProxyProtocol
+    
     private let actionsSubject: PassthroughSubject<SecurityAndPrivacyScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<SecurityAndPrivacyScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init() {
-        super.init(initialViewState: SecurityAndPrivacyScreenViewState(title: "SecurityAndPrivacy title",
-                                                                       placeholder: "Enter something here",
-                                                                       bindings: .init(composerText: "Initial composer text")))
+    init(roomProxy: JoinedRoomProxyProtocol) {
+        self.roomProxy = roomProxy
+        super.init(initialViewState: SecurityAndPrivacyScreenViewState(accessType: roomProxy.infoPublisher.value.roomAcessType,
+                                                                       isEncryptionEnabled: roomProxy.isEncrypted))
     }
     
     // MARK: - Public
@@ -28,10 +30,27 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
-        case .done:
+        case .save:
             actionsSubject.send(.done)
-        case .textChanged:
-            MXLog.info("View model: composer text changed to: \(state.bindings.composerText)")
+        case .tryUpdatingEncryption(let updatedValue):
+            // Once the room is encrypted it can never be turned off
+            guard !roomProxy.isEncrypted else {
+                return
+            }
+            // TODO: We probably want to display an alert in some cases?
+        }
+    }
+}
+
+private extension RoomInfoProxy {
+    var roomAcessType: SecurityAndPrivacyRoomAccessType {
+        switch joinRule {
+        case .invite, .restricted:
+            return .inviteOnly
+        case .knock, .knockRestricted:
+            return .askToJoin
+        default:
+            return .anyone
         }
     }
 }

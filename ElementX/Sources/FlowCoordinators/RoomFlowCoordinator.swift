@@ -1466,7 +1466,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentSecurityAndPrivacyScreen() {
-        let coordinator = SecurityAndPrivacyScreenCoordinator(parameters: .init())
+        let coordinator = SecurityAndPrivacyScreenCoordinator(parameters: .init(roomProxy: roomProxy))
         
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
