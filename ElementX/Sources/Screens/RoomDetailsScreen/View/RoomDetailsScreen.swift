@@ -311,7 +311,7 @@ struct RoomDetailsScreen: View {
 struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static let genericRoomViewModel = {
         ServiceLocator.shared.settings.knockingEnabled = true
-        let knockRequests: [RequestToJoinProxyMock] = [.init()]
+        let knockRequests: [JoinRequestProxyMock] = [.init()]
         let members: [RoomMemberProxyMock] = [
             .mockMeAdmin,
             .mockAlice,
@@ -377,7 +377,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let simpleRoomViewModel = {
-        let knockRequests: [RequestToJoinProxyMock] = [.init()]
+        let knockRequests: [JoinRequestProxyMock] = [.init()]
         ServiceLocator.shared.settings.knockingEnabled = true
         let members: [RoomMemberProxyMock] = [
             .mockMeAdmin,
