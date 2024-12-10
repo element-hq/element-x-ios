@@ -17,6 +17,7 @@ struct MediaEventsTimelineScreenCoordinatorParameters {
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let appMediator: AppMediatorProtocol
     let emojiProvider: EmojiProviderProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum MediaEventsTimelineScreenCoordinatorAction { }
@@ -59,7 +60,8 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
         
         viewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: mediaTimelineViewModel,
                                                        filesTimelineViewModel: filesTimelineViewModel,
-                                                       mediaProvider: parameters.mediaProvider)
+                                                       mediaProvider: parameters.mediaProvider,
+                                                       userIndicatorController: parameters.userIndicatorController)
     }
     
     func toPresentable() -> AnyView {

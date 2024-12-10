@@ -23,10 +23,12 @@ struct MediaEventsTimelineScreenViewState: BindableState {
 
 struct MediaEventsTimelineScreenViewStateBindings {
     var screenMode: MediaEventsTimelineScreenMode
+    var mediaPreviewViewModel: TimelineMediaPreviewViewModel?
 }
 
 enum MediaEventsTimelineScreenViewAction {
     case changedScreenMode
     case oldestItemDidAppear
     case oldestItemDidDisappear
+    case tappedItem(RoomTimelineItemViewState)
 }
