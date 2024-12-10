@@ -14,9 +14,15 @@ enum MediaEventsTimelineScreenMode {
     case files
 }
 
+struct MediaEventsTimelineGroup: Identifiable {
+    var id: String
+    var title: String
+    var items: [RoomTimelineItemViewState]
+}
+
 struct MediaEventsTimelineScreenViewState: BindableState {
     var isBackPaginating = false
-    var items = [RoomTimelineItemViewState]()
+    var groups = [MediaEventsTimelineGroup]()
     
     var bindings: MediaEventsTimelineScreenViewStateBindings
 }

@@ -45,39 +45,27 @@ struct MediaEventsTimelineScreen: View {
             Group {
                 let columns = [GridItem(.adaptive(minimum: 80, maximum: 150), spacing: 1)]
                 LazyVGrid(columns: columns, alignment: .center, spacing: 1) {
-                    ForEach(context.viewState.items) { item in
-                        Button {
-                            context.send(viewAction: .tappedItem(item))
-                        } label: {
-                            Color.clear // Let the image aspect fill in place
-                                .aspectRatio(1, contentMode: .fill)
-                                .overlay {
-                                    viewForTimelineItem(item)
+                    ForEach(context.viewState.groups) { group in
+                        Section(footer: sectionFooterForGroup(group)) {
+                            ForEach(group.items) { item in
+                                Button {
+                                    context.send(viewAction: .tappedItem(item))
+                                } label: {
+                                    Color.clear // Let the image aspect fill in place
+                                        .aspectRatio(1, contentMode: .fill)
+                                        .overlay {
+                                            viewForTimelineItem(item)
+                                        }
+                                        .clipped()
+                                        .scaleEffect(.init(width: -1, height: -1))
                                 }
-                                .clipped()
-                                .scaleEffect(.init(width: -1, height: -1))
+                            }
                         }
                     }
                 }
                 .scaleEffect(.init(width: -1, height: 1))
                 
-                // Needs to be wrapped in a LazyStack otherwise appearance calls don't trigger
-                LazyVStack(spacing: 0) {
-                    Rectangle()
-                        .frame(height: 44)
-                        .foregroundStyle(.compound.bgCanvasDefault)
-                        .overlay {
-                            if context.viewState.isBackPaginating {
-                                ProgressView()
-                            }
-                        }
-                        .onAppear {
-                            context.send(viewAction: .oldestItemDidAppear)
-                        }
-                        .onDisappear {
-                            context.send(viewAction: .oldestItemDidDisappear)
-                        }
-                }
+                header
             }
         }
         .scaleEffect(.init(width: 1, height: -1))
@@ -86,7 +74,37 @@ struct MediaEventsTimelineScreen: View {
         }
     }
     
-    @ViewBuilder func viewForTimelineItem(_ item: RoomTimelineItemViewState) -> some View {
+    private var header: some View {
+        // Needs to be wrapped in a LazyStack otherwise appearance calls don't trigger
+        LazyVStack(spacing: 0) {
+            ProgressView()
+                .padding()
+                .opacity(context.viewState.isBackPaginating ? 1 : 0)
+            
+            Rectangle()
+                .frame(height: 1)
+                .foregroundStyle(.compound.bgCanvasDefault)
+                .onAppear {
+                    context.send(viewAction: .oldestItemDidAppear)
+                }
+                .onDisappear {
+                    context.send(viewAction: .oldestItemDidDisappear)
+                }
+        }
+    }
+    
+    @ViewBuilder
+    func sectionFooterForGroup(_ group: MediaEventsTimelineGroup) -> some View {
+        Text(group.title)
+            .font(.compound.bodySM)
+            .foregroundColor(.compound.textPrimary)
+            .frame(alignment: .center)
+            .scaleEffect(.init(width: -1, height: -1))
+            .padding(.vertical, 16)
+    }
+    
+    @ViewBuilder
+    func viewForTimelineItem(_ item: RoomTimelineItemViewState) -> some View {
         switch item.type {
         case .image(let timelineItem):
             #warning("Make this work for gifs")

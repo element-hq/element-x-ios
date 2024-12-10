@@ -84,16 +84,33 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     // MARK: - Private
     
     private func updateWithTimelineViewState(_ timelineViewState: TimelineViewState) {
-        state.items = timelineViewState.timelineState.itemViewStates.filter { itemViewState in
+        let filteredItems = timelineViewState.timelineState.itemViewStates.filter { itemViewState in
             switch itemViewState.type {
             case .image, .video:
                 state.bindings.screenMode == .media
-            case .audio, .file:
+            case .audio, .file, .voice:
                 state.bindings.screenMode == .files
+            case .separator:
+                true
             default:
                 false
             }
-        }.reversed()
+        }
+        
+        var newGroups = [MediaEventsTimelineGroup]()
+        var currentItems = [RoomTimelineItemViewState]()
+        
+        for item in filteredItems.reversed() {
+            if case .separator(let content) = item.type {
+                let group = MediaEventsTimelineGroup(id: content.id.uniqueID.id, title: content.text, items: currentItems)
+                currentItems = []
+                newGroups.append(group)
+            } else {
+                currentItems.append(item)
+            }
+        }
+        
+        state.groups = newGroups
         
         state.isBackPaginating = (timelineViewState.timelineState.paginationState.backward == .paginating)
         backPaginateIfNecessary(paginationStatus: timelineViewState.timelineState.paginationState.backward)
