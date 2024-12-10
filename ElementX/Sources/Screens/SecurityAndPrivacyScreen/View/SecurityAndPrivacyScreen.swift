@@ -13,19 +13,59 @@ struct SecurityAndPrivacyScreen: View {
     
     var body: some View {
         Form {
-            Section {
-                ListRow(label: .plain(title: context.viewState.placeholder),
-                        kind: .textField(text: $context.composerText))
-                
-                ListRow(label: .centeredAction(title: L10n.actionDone,
-                                               systemIcon: .doorLeftHandClosed),
-                        kind: .button { context.send(viewAction: .done) })
-            }
+            roomAccessSection
+            encryptionSection
         }
         .compoundList()
-        .navigationTitle(context.viewState.title)
-        .onChange(of: context.composerText) {
-            context.send(viewAction: .textChanged)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(L10n.screenSecurityAndPrivacyTitle)
+        .toolbar { toolbar }
+    }
+    
+    private var roomAccessSection: some View {
+        Section {
+            ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomAccessInviteOnlyOptionTitle,
+                                  description: L10n.screenSecurityAndPrivacyRoomAccessInviteOnlyOptionDescription),
+                    kind: .selection(isSelected: context.desiredSettings.accessType == .inviteOnly) { context.desiredSettings.accessType = .inviteOnly })
+            ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyAskToJoinOptionTitle,
+                                  description: L10n.screenSecurityAndPrivacyAskToJoinOptionDescription),
+                    kind: .selection(isSelected: context.desiredSettings.accessType == .askToJoin) { context.desiredSettings.accessType = .askToJoin })
+            ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomAccessAnyoneOptionTitle,
+                                  description: L10n.screenSecurityAndPrivacyRoomAccessAnyoneOptionDescription),
+                    kind: .selection(isSelected: context.desiredSettings.accessType == .anyone) { context.desiredSettings.accessType = .anyone })
+        } header: {
+            Text(L10n.screenSecurityAndPrivacyRoomAccessSectionTitle)
+                .compoundListSectionHeader()
+        }
+    }
+    
+    @ViewBuilder
+    private var encryptionSection: some View {
+        let encryptionBinding = Binding<Bool>(get: {
+            context.desiredSettings.isEncryptionEnabled
+        }, set: { newValue in
+            context.send(viewAction: .tryUpdatingEncryption(newValue))
+        })
+        
+        Section {
+            ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyEncryptionToggleTitle),
+                    kind: .toggle(encryptionBinding))
+        } header: {
+            Text(L10n.screenSecurityAndPrivacyEncryptionSectionTitle)
+                .compoundListSectionHeader()
+        } footer: {
+            Text(L10n.screenSecurityAndPrivacyEncryptionSectionFooter)
+                .compoundListSectionFooter()
+        }
+    }
+    
+    @ToolbarContentBuilder
+    var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .confirmationAction) {
+            Button(L10n.actionSave) {
+                context.send(viewAction: .save)
+            }
+            .disabled(!context.viewState.hasChanges)
         }
     }
 }
@@ -33,10 +73,10 @@ struct SecurityAndPrivacyScreen: View {
 // MARK: - Previews
 
 struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = SecurityAndPrivacyScreenViewModel()
+    static let inviteOnlyViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(joinRule: .invite)))
     static var previews: some View {
         NavigationStack {
-            SecurityAndPrivacyScreen(context: viewModel.context)
+            SecurityAndPrivacyScreen(context: inviteOnlyViewModel.context)
         }
     }
 }

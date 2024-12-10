@@ -2128,6 +2128,28 @@ internal enum L10n {
   internal static var screenRoomlistMarkAsUnread: String { return L10n.tr("Localizable", "screen_roomlist_mark_as_unread") }
   /// Browse all rooms
   internal static var screenRoomlistRoomDirectoryButtonTitle: String { return L10n.tr("Localizable", "screen_roomlist_room_directory_button_title") }
+  /// Anyone can ask to join the room but an administrator or moderator will have to accept the request.
+  internal static var screenSecurityAndPrivacyAskToJoinOptionDescription: String { return L10n.tr("Localizable", "screen_security_and_privacy_ask_to_join_option_description") }
+  /// Ask to join
+  internal static var screenSecurityAndPrivacyAskToJoinOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_ask_to_join_option_title") }
+  /// Once enabled, encryption cannot be disabled.
+  internal static var screenSecurityAndPrivacyEncryptionSectionFooter: String { return L10n.tr("Localizable", "screen_security_and_privacy_encryption_section_footer") }
+  /// Encryption
+  internal static var screenSecurityAndPrivacyEncryptionSectionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_encryption_section_title") }
+  /// Enable end-to-end encryption
+  internal static var screenSecurityAndPrivacyEncryptionToggleTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_encryption_toggle_title") }
+  /// Anyone can find and join
+  internal static var screenSecurityAndPrivacyRoomAccessAnyoneOptionDescription: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_anyone_option_description") }
+  /// Anyone
+  internal static var screenSecurityAndPrivacyRoomAccessAnyoneOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_anyone_option_title") }
+  /// People can only join if they are invited
+  internal static var screenSecurityAndPrivacyRoomAccessInviteOnlyOptionDescription: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_invite_only_option_description") }
+  /// Invite only
+  internal static var screenSecurityAndPrivacyRoomAccessInviteOnlyOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_invite_only_option_title") }
+  /// Room access
+  internal static var screenSecurityAndPrivacyRoomAccessSectionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_section_title") }
+  /// Security & privacy
+  internal static var screenSecurityAndPrivacyTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_title") }
   /// Change account provider
   internal static var screenServerConfirmationChangeServer: String { return L10n.tr("Localizable", "screen_server_confirmation_change_server") }
   /// A private server for Element employees.

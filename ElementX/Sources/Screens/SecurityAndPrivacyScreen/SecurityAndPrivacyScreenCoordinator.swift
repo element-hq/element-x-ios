@@ -10,7 +10,9 @@
 import Combine
 import SwiftUI
 
-struct SecurityAndPrivacyScreenCoordinatorParameters { }
+struct SecurityAndPrivacyScreenCoordinatorParameters {
+    let roomProxy: JoinedRoomProxyProtocol
+}
 
 enum SecurityAndPrivacyScreenCoordinatorAction {
     case done
@@ -32,7 +34,7 @@ final class SecurityAndPrivacyScreenCoordinator: CoordinatorProtocol {
     init(parameters: SecurityAndPrivacyScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = SecurityAndPrivacyScreenViewModel()
+        viewModel = SecurityAndPrivacyScreenViewModel(roomProxy: parameters.roomProxy)
     }
     
     func start() {

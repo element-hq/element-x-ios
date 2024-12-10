@@ -16,19 +16,4 @@ class SecurityAndPrivacyScreenViewModelTests: XCTestCase {
     var context: SecurityAndPrivacyScreenViewModelType.Context {
         viewModel.context
     }
-    
-    override func setUpWithError() throws {
-        viewModel = SecurityAndPrivacyScreenViewModel()
-    }
-
-    func testInitialState() {
-        XCTAssertFalse(context.viewState.placeholder.isEmpty)
-        XCTAssertFalse(context.composerText.isEmpty)
-    }
-
-    func testCounter() async throws {
-        context.composerText = "123"
-        context.send(viewAction: .textChanged)
-        XCTAssertEqual(context.composerText, "123")
-    }
 }

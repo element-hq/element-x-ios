@@ -9,23 +9,41 @@ import Foundation
 
 enum SecurityAndPrivacyScreenViewModelAction {
     case done
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
 }
 
 struct SecurityAndPrivacyScreenViewState: BindableState {
-    var title: String
-    var placeholder: String
     var bindings: SecurityAndPrivacyScreenViewStateBindings
+    
+    var currentSettings: SecurityAndPrivacySettings
+    
+    var hasChanges: Bool {
+        currentSettings != bindings.desiredSettings
+    }
+    
+    init(accessType: SecurityAndPrivacyRoomAccessType,
+         isEncryptionEnabled: Bool) {
+        let settings = SecurityAndPrivacySettings(accessType: accessType, isEncryptionEnabled: isEncryptionEnabled)
+        currentSettings = settings
+        bindings = SecurityAndPrivacyScreenViewStateBindings(desiredSettings: settings)
+    }
 }
 
 struct SecurityAndPrivacyScreenViewStateBindings {
-    var composerText: String
+    var desiredSettings: SecurityAndPrivacySettings
+}
+
+struct SecurityAndPrivacySettings: Equatable {
+    var accessType: SecurityAndPrivacyRoomAccessType
+    var isEncryptionEnabled: Bool
+}
+
+enum SecurityAndPrivacyRoomAccessType {
+    case inviteOnly
+    case askToJoin
+    case anyone
 }
 
 enum SecurityAndPrivacyScreenViewAction {
-    case done
-    case textChanged
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
+    case save
+    case tryUpdatingEncryption(Bool)
 }
