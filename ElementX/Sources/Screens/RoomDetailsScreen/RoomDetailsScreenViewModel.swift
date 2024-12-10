@@ -188,7 +188,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
             .store(in: &cancellables)
         
-        roomProxy.requestsToJoinPublisher
+        roomProxy.joinRequestsPublisher
             .map(\.count)
             .removeDuplicates()
             .throttle(for: .milliseconds(100), scheduler: DispatchQueue.main, latest: true)

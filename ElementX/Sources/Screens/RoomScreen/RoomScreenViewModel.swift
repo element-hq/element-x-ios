@@ -180,7 +180,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        roomProxy.requestsToJoinPublisher
+        roomProxy.joinRequestsPublisher
             // We only care about unseen requests
             .map { $0.filter { !$0.isSeen }.map(KnockRequestInfo.init) }
             // If the requests have the same event ids we can discard the output
@@ -286,7 +286,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func acceptKnock(eventID: String) async {
-        guard let knockRequest = roomProxy.requestsToJoinPublisher.value.first(where: { $0.eventID == eventID }) else {
+        guard let knockRequest = roomProxy.joinRequestsPublisher.value.first(where: { $0.eventID == eventID }) else {
             return
         }
         
@@ -301,9 +301,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func markAllKnocksAsSeen() async {
-        let requests = roomProxy.requestsToJoinPublisher.value
+        let requests = roomProxy.joinRequestsPublisher.value
         state.handledEventIDs.formUnion(Set(requests.map(\.eventID)))
-        let failedIDs = await withTaskGroup(of: (String, Result<Void, RequestToJoinProxyError>).self) { group in
+        let failedIDs = await withTaskGroup(of: (String, Result<Void, JoinRequestProxyError>).self) { group in
             for request in requests {
                 group.addTask {
                     await (request.eventID, request.markAsSeen())
@@ -348,7 +348,7 @@ extension RoomScreenViewModel {
 }
 
 private extension KnockRequestInfo {
-    init(from proxy: RequestToJoinProxyProtocol) {
+    init(from proxy: JoinRequestProxyProtocol) {
         self.init(displayName: proxy.displayName,
                   avatarURL: proxy.avatarURL,
                   userID: proxy.userID,

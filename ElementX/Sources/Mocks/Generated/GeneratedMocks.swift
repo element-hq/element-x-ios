@@ -5948,6 +5948,284 @@ class InvitedRoomProxyMock: InvitedRoomProxyProtocol {
         }
     }
 }
+class JoinRequestProxyMock: JoinRequestProxyProtocol {
+    var eventID: String {
+        get { return underlyingEventID }
+        set(value) { underlyingEventID = value }
+    }
+    var underlyingEventID: String!
+    var userID: String {
+        get { return underlyingUserID }
+        set(value) { underlyingUserID = value }
+    }
+    var underlyingUserID: String!
+    var displayName: String?
+    var avatarURL: URL?
+    var reason: String?
+    var formattedTimestamp: String?
+    var isSeen: Bool {
+        get { return underlyingIsSeen }
+        set(value) { underlyingIsSeen = value }
+    }
+    var underlyingIsSeen: Bool!
+
+    //MARK: - accept
+
+    var acceptUnderlyingCallsCount = 0
+    var acceptCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return acceptUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = acceptUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                acceptUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    acceptUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var acceptCalled: Bool {
+        return acceptCallsCount > 0
+    }
+
+    var acceptUnderlyingReturnValue: Result<Void, JoinRequestProxyError>!
+    var acceptReturnValue: Result<Void, JoinRequestProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return acceptUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, JoinRequestProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = acceptUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                acceptUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    acceptUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var acceptClosure: (() async -> Result<Void, JoinRequestProxyError>)?
+
+    func accept() async -> Result<Void, JoinRequestProxyError> {
+        acceptCallsCount += 1
+        if let acceptClosure = acceptClosure {
+            return await acceptClosure()
+        } else {
+            return acceptReturnValue
+        }
+    }
+    //MARK: - decline
+
+    var declineUnderlyingCallsCount = 0
+    var declineCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return declineUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = declineUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                declineUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    declineUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var declineCalled: Bool {
+        return declineCallsCount > 0
+    }
+
+    var declineUnderlyingReturnValue: Result<Void, JoinRequestProxyError>!
+    var declineReturnValue: Result<Void, JoinRequestProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return declineUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, JoinRequestProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = declineUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                declineUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    declineUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var declineClosure: (() async -> Result<Void, JoinRequestProxyError>)?
+
+    func decline() async -> Result<Void, JoinRequestProxyError> {
+        declineCallsCount += 1
+        if let declineClosure = declineClosure {
+            return await declineClosure()
+        } else {
+            return declineReturnValue
+        }
+    }
+    //MARK: - ban
+
+    var banUnderlyingCallsCount = 0
+    var banCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return banUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = banUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                banUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    banUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var banCalled: Bool {
+        return banCallsCount > 0
+    }
+
+    var banUnderlyingReturnValue: Result<Void, JoinRequestProxyError>!
+    var banReturnValue: Result<Void, JoinRequestProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return banUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, JoinRequestProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = banUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                banUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    banUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var banClosure: (() async -> Result<Void, JoinRequestProxyError>)?
+
+    func ban() async -> Result<Void, JoinRequestProxyError> {
+        banCallsCount += 1
+        if let banClosure = banClosure {
+            return await banClosure()
+        } else {
+            return banReturnValue
+        }
+    }
+    //MARK: - markAsSeen
+
+    var markAsSeenUnderlyingCallsCount = 0
+    var markAsSeenCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return markAsSeenUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = markAsSeenUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                markAsSeenUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    markAsSeenUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var markAsSeenCalled: Bool {
+        return markAsSeenCallsCount > 0
+    }
+
+    var markAsSeenUnderlyingReturnValue: Result<Void, JoinRequestProxyError>!
+    var markAsSeenReturnValue: Result<Void, JoinRequestProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return markAsSeenUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, JoinRequestProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = markAsSeenUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                markAsSeenUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    markAsSeenUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var markAsSeenClosure: (() async -> Result<Void, JoinRequestProxyError>)?
+
+    func markAsSeen() async -> Result<Void, JoinRequestProxyError> {
+        markAsSeenCallsCount += 1
+        if let markAsSeenClosure = markAsSeenClosure {
+            return await markAsSeenClosure()
+        } else {
+            return markAsSeenReturnValue
+        }
+    }
+}
 class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
     var isEncrypted: Bool {
         get { return underlyingIsEncrypted }
@@ -5974,11 +6252,11 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
         set(value) { underlyingIdentityStatusChangesPublisher = value }
     }
     var underlyingIdentityStatusChangesPublisher: CurrentValuePublisher<[IdentityStatusChange], Never>!
-    var requestsToJoinPublisher: CurrentValuePublisher<[RequestToJoinProxyProtocol], Never> {
-        get { return underlyingRequestsToJoinPublisher }
-        set(value) { underlyingRequestsToJoinPublisher = value }
+    var joinRequestsPublisher: CurrentValuePublisher<[JoinRequestProxyProtocol], Never> {
+        get { return underlyingJoinRequestsPublisher }
+        set(value) { underlyingJoinRequestsPublisher = value }
     }
-    var underlyingRequestsToJoinPublisher: CurrentValuePublisher<[RequestToJoinProxyProtocol], Never>!
+    var underlyingJoinRequestsPublisher: CurrentValuePublisher<[JoinRequestProxyProtocol], Never>!
     var timeline: TimelineProxyProtocol {
         get { return underlyingTimeline }
         set(value) { underlyingTimeline = value }
@@ -12267,284 +12545,6 @@ class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol {
             return await loginWithQRCodeDataClosure(data)
         } else {
             return loginWithQRCodeDataReturnValue
-        }
-    }
-}
-class RequestToJoinProxyMock: RequestToJoinProxyProtocol {
-    var eventID: String {
-        get { return underlyingEventID }
-        set(value) { underlyingEventID = value }
-    }
-    var underlyingEventID: String!
-    var userID: String {
-        get { return underlyingUserID }
-        set(value) { underlyingUserID = value }
-    }
-    var underlyingUserID: String!
-    var displayName: String?
-    var avatarURL: URL?
-    var reason: String?
-    var formattedTimestamp: String?
-    var isSeen: Bool {
-        get { return underlyingIsSeen }
-        set(value) { underlyingIsSeen = value }
-    }
-    var underlyingIsSeen: Bool!
-
-    //MARK: - accept
-
-    var acceptUnderlyingCallsCount = 0
-    var acceptCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return acceptUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = acceptUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                acceptUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    acceptUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var acceptCalled: Bool {
-        return acceptCallsCount > 0
-    }
-
-    var acceptUnderlyingReturnValue: Result<Void, RequestToJoinProxyError>!
-    var acceptReturnValue: Result<Void, RequestToJoinProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return acceptUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, RequestToJoinProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = acceptUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                acceptUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    acceptUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var acceptClosure: (() async -> Result<Void, RequestToJoinProxyError>)?
-
-    func accept() async -> Result<Void, RequestToJoinProxyError> {
-        acceptCallsCount += 1
-        if let acceptClosure = acceptClosure {
-            return await acceptClosure()
-        } else {
-            return acceptReturnValue
-        }
-    }
-    //MARK: - decline
-
-    var declineUnderlyingCallsCount = 0
-    var declineCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return declineUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = declineUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                declineUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    declineUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var declineCalled: Bool {
-        return declineCallsCount > 0
-    }
-
-    var declineUnderlyingReturnValue: Result<Void, RequestToJoinProxyError>!
-    var declineReturnValue: Result<Void, RequestToJoinProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return declineUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, RequestToJoinProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = declineUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                declineUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    declineUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var declineClosure: (() async -> Result<Void, RequestToJoinProxyError>)?
-
-    func decline() async -> Result<Void, RequestToJoinProxyError> {
-        declineCallsCount += 1
-        if let declineClosure = declineClosure {
-            return await declineClosure()
-        } else {
-            return declineReturnValue
-        }
-    }
-    //MARK: - ban
-
-    var banUnderlyingCallsCount = 0
-    var banCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return banUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = banUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                banUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    banUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var banCalled: Bool {
-        return banCallsCount > 0
-    }
-
-    var banUnderlyingReturnValue: Result<Void, RequestToJoinProxyError>!
-    var banReturnValue: Result<Void, RequestToJoinProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return banUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, RequestToJoinProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = banUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                banUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    banUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var banClosure: (() async -> Result<Void, RequestToJoinProxyError>)?
-
-    func ban() async -> Result<Void, RequestToJoinProxyError> {
-        banCallsCount += 1
-        if let banClosure = banClosure {
-            return await banClosure()
-        } else {
-            return banReturnValue
-        }
-    }
-    //MARK: - markAsSeen
-
-    var markAsSeenUnderlyingCallsCount = 0
-    var markAsSeenCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return markAsSeenUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = markAsSeenUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                markAsSeenUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    markAsSeenUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var markAsSeenCalled: Bool {
-        return markAsSeenCallsCount > 0
-    }
-
-    var markAsSeenUnderlyingReturnValue: Result<Void, RequestToJoinProxyError>!
-    var markAsSeenReturnValue: Result<Void, RequestToJoinProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return markAsSeenUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, RequestToJoinProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = markAsSeenUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                markAsSeenUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    markAsSeenUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var markAsSeenClosure: (() async -> Result<Void, RequestToJoinProxyError>)?
-
-    func markAsSeen() async -> Result<Void, RequestToJoinProxyError> {
-        markAsSeenCallsCount += 1
-        if let markAsSeenClosure = markAsSeenClosure {
-            return await markAsSeenClosure()
-        } else {
-            return markAsSeenReturnValue
         }
     }
 }
