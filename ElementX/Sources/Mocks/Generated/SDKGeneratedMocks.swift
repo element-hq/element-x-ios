@@ -5832,6 +5832,77 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
     }
 
+    //MARK: - useEventCachePersistentStorage
+
+    var useEventCachePersistentStorageValueUnderlyingCallsCount = 0
+    open var useEventCachePersistentStorageValueCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return useEventCachePersistentStorageValueUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = useEventCachePersistentStorageValueUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                useEventCachePersistentStorageValueUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    useEventCachePersistentStorageValueUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var useEventCachePersistentStorageValueCalled: Bool {
+        return useEventCachePersistentStorageValueCallsCount > 0
+    }
+    open var useEventCachePersistentStorageValueReceivedValue: Bool?
+    open var useEventCachePersistentStorageValueReceivedInvocations: [Bool] = []
+
+    var useEventCachePersistentStorageValueUnderlyingReturnValue: ClientBuilder!
+    open var useEventCachePersistentStorageValueReturnValue: ClientBuilder! {
+        get {
+            if Thread.isMainThread {
+                return useEventCachePersistentStorageValueUnderlyingReturnValue
+            } else {
+                var returnValue: ClientBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = useEventCachePersistentStorageValueUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                useEventCachePersistentStorageValueUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    useEventCachePersistentStorageValueUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var useEventCachePersistentStorageValueClosure: ((Bool) -> ClientBuilder)?
+
+    open override func useEventCachePersistentStorage(value: Bool) -> ClientBuilder {
+        useEventCachePersistentStorageValueCallsCount += 1
+        useEventCachePersistentStorageValueReceivedValue = value
+        DispatchQueue.main.async {
+            self.useEventCachePersistentStorageValueReceivedInvocations.append(value)
+        }
+        if let useEventCachePersistentStorageValueClosure = useEventCachePersistentStorageValueClosure {
+            return useEventCachePersistentStorageValueClosure(value)
+        } else {
+            return useEventCachePersistentStorageValueReturnValue
+        }
+    }
+
     //MARK: - userAgent
 
     var userAgentUserAgentUnderlyingCallsCount = 0
@@ -10881,6 +10952,46 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         try await clearComposerDraftClosure?()
     }
 
+    //MARK: - clearEventCacheStorage
+
+    open var clearEventCacheStorageThrowableError: Error?
+    var clearEventCacheStorageUnderlyingCallsCount = 0
+    open var clearEventCacheStorageCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return clearEventCacheStorageUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = clearEventCacheStorageUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                clearEventCacheStorageUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    clearEventCacheStorageUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var clearEventCacheStorageCalled: Bool {
+        return clearEventCacheStorageCallsCount > 0
+    }
+    open var clearEventCacheStorageClosure: (() async throws -> Void)?
+
+    open override func clearEventCacheStorage() async throws {
+        if let error = clearEventCacheStorageThrowableError {
+            throw error
+        }
+        clearEventCacheStorageCallsCount += 1
+        try await clearEventCacheStorageClosure?()
+    }
+
     //MARK: - discardRoomKey
 
     open var discardRoomKeyThrowableError: Error?
@@ -12880,16 +12991,16 @@ open class RoomSDKMock: MatrixRustSDK.Room {
 
     //MARK: - messageFilteredTimeline
 
-    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesThrowableError: Error?
-    var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingCallsCount = 0
-    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesCallsCount: Int {
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeThrowableError: Error?
+    var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingCallsCount = 0
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingCallsCount
+                return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingCallsCount
+                    returnValue = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -12897,29 +13008,29 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         set {
             if Thread.isMainThread {
-                messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingCallsCount = newValue
+                messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingCallsCount = newValue
+                    messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesCalled: Bool {
-        return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesCallsCount > 0
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeCalled: Bool {
+        return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeCallsCount > 0
     }
-    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesReceivedArguments: (internalIdPrefix: String?, allowedMessageTypes: [RoomMessageEventMessageType])?
-    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesReceivedInvocations: [(internalIdPrefix: String?, allowedMessageTypes: [RoomMessageEventMessageType])] = []
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeReceivedArguments: (internalIdPrefix: String?, allowedMessageTypes: [RoomMessageEventMessageType], dateDividerMode: DateDividerMode)?
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeReceivedInvocations: [(internalIdPrefix: String?, allowedMessageTypes: [RoomMessageEventMessageType], dateDividerMode: DateDividerMode)] = []
 
-    var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingReturnValue: Timeline!
-    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesReturnValue: Timeline! {
+    var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingReturnValue: Timeline!
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeReturnValue: Timeline! {
         get {
             if Thread.isMainThread {
-                return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingReturnValue
+                return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingReturnValue
             } else {
                 var returnValue: Timeline? = nil
                 DispatchQueue.main.sync {
-                    returnValue = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingReturnValue
+                    returnValue = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -12927,29 +13038,29 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         set {
             if Thread.isMainThread {
-                messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingReturnValue = newValue
+                messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    messageFilteredTimelineInternalIdPrefixAllowedMessageTypesUnderlyingReturnValue = newValue
+                    messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesClosure: ((String?, [RoomMessageEventMessageType]) async throws -> Timeline)?
+    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeClosure: ((String?, [RoomMessageEventMessageType], DateDividerMode) async throws -> Timeline)?
 
-    open override func messageFilteredTimeline(internalIdPrefix: String?, allowedMessageTypes: [RoomMessageEventMessageType]) async throws -> Timeline {
-        if let error = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesThrowableError {
+    open override func messageFilteredTimeline(internalIdPrefix: String?, allowedMessageTypes: [RoomMessageEventMessageType], dateDividerMode: DateDividerMode) async throws -> Timeline {
+        if let error = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeThrowableError {
             throw error
         }
-        messageFilteredTimelineInternalIdPrefixAllowedMessageTypesCallsCount += 1
-        messageFilteredTimelineInternalIdPrefixAllowedMessageTypesReceivedArguments = (internalIdPrefix: internalIdPrefix, allowedMessageTypes: allowedMessageTypes)
+        messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeCallsCount += 1
+        messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeReceivedArguments = (internalIdPrefix: internalIdPrefix, allowedMessageTypes: allowedMessageTypes, dateDividerMode: dateDividerMode)
         DispatchQueue.main.async {
-            self.messageFilteredTimelineInternalIdPrefixAllowedMessageTypesReceivedInvocations.append((internalIdPrefix: internalIdPrefix, allowedMessageTypes: allowedMessageTypes))
+            self.messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeReceivedInvocations.append((internalIdPrefix: internalIdPrefix, allowedMessageTypes: allowedMessageTypes, dateDividerMode: dateDividerMode))
         }
-        if let messageFilteredTimelineInternalIdPrefixAllowedMessageTypesClosure = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesClosure {
-            return try await messageFilteredTimelineInternalIdPrefixAllowedMessageTypesClosure(internalIdPrefix, allowedMessageTypes)
+        if let messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeClosure = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeClosure {
+            return try await messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeClosure(internalIdPrefix, allowedMessageTypes, dateDividerMode)
         } else {
-            return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesReturnValue
+            return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeReturnValue
         }
     }
 
@@ -13558,6 +13669,52 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         sendCallNotificationIfNeededCallsCount += 1
         try await sendCallNotificationIfNeededClosure?()
+    }
+
+    //MARK: - sendRaw
+
+    open var sendRawEventTypeContentThrowableError: Error?
+    var sendRawEventTypeContentUnderlyingCallsCount = 0
+    open var sendRawEventTypeContentCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendRawEventTypeContentUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendRawEventTypeContentUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendRawEventTypeContentUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendRawEventTypeContentUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var sendRawEventTypeContentCalled: Bool {
+        return sendRawEventTypeContentCallsCount > 0
+    }
+    open var sendRawEventTypeContentReceivedArguments: (eventType: String, content: String)?
+    open var sendRawEventTypeContentReceivedInvocations: [(eventType: String, content: String)] = []
+    open var sendRawEventTypeContentClosure: ((String, String) async throws -> Void)?
+
+    open override func sendRaw(eventType: String, content: String) async throws {
+        if let error = sendRawEventTypeContentThrowableError {
+            throw error
+        }
+        sendRawEventTypeContentCallsCount += 1
+        sendRawEventTypeContentReceivedArguments = (eventType: eventType, content: content)
+        DispatchQueue.main.async {
+            self.sendRawEventTypeContentReceivedInvocations.append((eventType: eventType, content: content))
+        }
+        try await sendRawEventTypeContentClosure?(eventType, content)
     }
 
     //MARK: - setIsFavourite

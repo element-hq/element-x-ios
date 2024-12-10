@@ -23,6 +23,15 @@ struct DeveloperOptionsScreen: View {
                 LogLevelConfigurationView(logLevel: $context.logLevel)
             }
             
+            Section("General") {
+                Toggle(isOn: $context.eventCacheEnabled) {
+                    Text("Event cache")
+                }
+                .onChange(of: context.eventCacheEnabled) {
+                    context.send(viewAction: .clearCache)
+                }
+            }
+            
             Section {
                 Picker("Discovery", selection: $context.slidingSyncDiscovery) {
                     Text("Proxy only").tag(AppSettings.SlidingSyncDiscovery.proxy)
