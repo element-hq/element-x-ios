@@ -103,12 +103,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             case .resolvePinViolation(let userID):
                 Task { await resolveIdentityPinningViolation(userID) }
             }
-        case .acceptKnock(userID: let userID):
-            // TODO: API to accept a knock required
-            break
+        case .acceptKnock(let eventID):
+            Task { await acceptKnock(eventID: eventID) }
         case .dismissKnockRequests:
-            // TODO: API to mark knocks as seen required
-            break
+            Task { await markAllKnocksAsSeen() }
         case .viewKnockRequests:
             actionsSubject.send(.displayKnockRequests)
         }
@@ -180,6 +178,15 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 guard let self else { return }
                 state.shouldShowCallButton = ongoingCallRoomID != roomProxy.id
             }
+            .store(in: &cancellables)
+        
+        roomProxy.joinRequestsPublisher
+            // We only care about unseen requests
+            .map { $0.filter { !$0.isSeen }.map(KnockRequestInfo.init) }
+            // If the requests have the same event ids we can discard the output
+            .removeDuplicates(by: { Set($0.map(\.eventID)) == Set($1.map(\.eventID)) })
+            .throttle(for: .milliseconds(100), scheduler: DispatchQueue.main, latest: true)
+            .weakAssign(to: \.state.unseenKnockRequests, on: self)
             .store(in: &cancellables)
     }
     
@@ -278,9 +285,44 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
+    private func acceptKnock(eventID: String) async {
+        guard let knockRequest = roomProxy.joinRequestsPublisher.value.first(where: { $0.eventID == eventID }) else {
+            return
+        }
+        
+        state.handledEventIDs.insert(eventID)
+        switch await knockRequest.accept() {
+        case .success:
+            break
+        case .failure:
+            userIndicatorController.submitIndicator(.init(id: Self.errorIndicatorIdentifier, type: .toast, title: L10n.errorUnknown))
+            state.handledEventIDs.remove(eventID)
+        }
+    }
+    
+    private func markAllKnocksAsSeen() async {
+        let requests = roomProxy.joinRequestsPublisher.value
+        state.handledEventIDs.formUnion(Set(requests.map(\.eventID)))
+        let failedIDs = await withTaskGroup(of: (String, Result<Void, JoinRequestProxyError>).self) { group in
+            for request in requests {
+                group.addTask {
+                    await (request.eventID, request.markAsSeen())
+                }
+            }
+            
+            var failedIDs = [String]()
+            for await result in group where result.1.isFailure {
+                failedIDs.append(result.0)
+            }
+            return failedIDs
+        }
+        state.handledEventIDs.subtract(failedIDs)
+    }
+    
     // MARK: Loading indicators
     
     private static let loadingIndicatorIdentifier = "\(RoomScreenViewModel.self)-Loading"
+    private static let errorIndicatorIdentifier = "\(RoomScreenViewModel.self)-Error"
     
     private func showLoadingIndicator() {
         userIndicatorController.submitIndicator(.init(id: Self.loadingIndicatorIdentifier, type: .toast, title: L10n.commonLoading))
@@ -302,5 +344,15 @@ extension RoomScreenViewModel {
                             appSettings: ServiceLocator.shared.settings,
                             analyticsService: ServiceLocator.shared.analytics,
                             userIndicatorController: ServiceLocator.shared.userIndicatorController)
+    }
+}
+
+private extension KnockRequestInfo {
+    init(from proxy: JoinRequestProxyProtocol) {
+        self.init(displayName: proxy.displayName,
+                  avatarURL: proxy.avatarURL,
+                  userID: proxy.userID,
+                  reason: proxy.reason,
+                  eventID: proxy.eventID)
     }
 }

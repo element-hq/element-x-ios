@@ -7867,6 +7867,189 @@ open class InReplyToDetailsSDKMock: MatrixRustSDK.InReplyToDetails {
         }
     }
 }
+open class JoinRequestActionsSDKMock: MatrixRustSDK.JoinRequestActions {
+    init() {
+        super.init(noPointer: .init())
+    }
+
+    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    }
+
+    fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - accept
+
+    open var acceptThrowableError: Error?
+    var acceptUnderlyingCallsCount = 0
+    open var acceptCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return acceptUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = acceptUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                acceptUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    acceptUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var acceptCalled: Bool {
+        return acceptCallsCount > 0
+    }
+    open var acceptClosure: (() async throws -> Void)?
+
+    open override func accept() async throws {
+        if let error = acceptThrowableError {
+            throw error
+        }
+        acceptCallsCount += 1
+        try await acceptClosure?()
+    }
+
+    //MARK: - decline
+
+    open var declineReasonThrowableError: Error?
+    var declineReasonUnderlyingCallsCount = 0
+    open var declineReasonCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return declineReasonUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = declineReasonUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                declineReasonUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    declineReasonUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var declineReasonCalled: Bool {
+        return declineReasonCallsCount > 0
+    }
+    open var declineReasonReceivedReason: String?
+    open var declineReasonReceivedInvocations: [String?] = []
+    open var declineReasonClosure: ((String?) async throws -> Void)?
+
+    open override func decline(reason: String?) async throws {
+        if let error = declineReasonThrowableError {
+            throw error
+        }
+        declineReasonCallsCount += 1
+        declineReasonReceivedReason = reason
+        DispatchQueue.main.async {
+            self.declineReasonReceivedInvocations.append(reason)
+        }
+        try await declineReasonClosure?(reason)
+    }
+
+    //MARK: - declineAndBan
+
+    open var declineAndBanReasonThrowableError: Error?
+    var declineAndBanReasonUnderlyingCallsCount = 0
+    open var declineAndBanReasonCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return declineAndBanReasonUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = declineAndBanReasonUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                declineAndBanReasonUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    declineAndBanReasonUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var declineAndBanReasonCalled: Bool {
+        return declineAndBanReasonCallsCount > 0
+    }
+    open var declineAndBanReasonReceivedReason: String?
+    open var declineAndBanReasonReceivedInvocations: [String?] = []
+    open var declineAndBanReasonClosure: ((String?) async throws -> Void)?
+
+    open override func declineAndBan(reason: String?) async throws {
+        if let error = declineAndBanReasonThrowableError {
+            throw error
+        }
+        declineAndBanReasonCallsCount += 1
+        declineAndBanReasonReceivedReason = reason
+        DispatchQueue.main.async {
+            self.declineAndBanReasonReceivedInvocations.append(reason)
+        }
+        try await declineAndBanReasonClosure?(reason)
+    }
+
+    //MARK: - markAsSeen
+
+    open var markAsSeenThrowableError: Error?
+    var markAsSeenUnderlyingCallsCount = 0
+    open var markAsSeenCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return markAsSeenUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = markAsSeenUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                markAsSeenUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    markAsSeenUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var markAsSeenCalled: Bool {
+        return markAsSeenCallsCount > 0
+    }
+    open var markAsSeenClosure: (() async throws -> Void)?
+
+    open override func markAsSeen() async throws {
+        if let error = markAsSeenThrowableError {
+            throw error
+        }
+        markAsSeenCallsCount += 1
+        try await markAsSeenClosure?()
+    }
+}
 open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvider {
     init() {
         super.init(noPointer: .init())
@@ -13858,6 +14041,81 @@ open class RoomSDKMock: MatrixRustSDK.Room {
             return subscribeToIdentityStatusChangesListenerClosure(listener)
         } else {
             return subscribeToIdentityStatusChangesListenerReturnValue
+        }
+    }
+
+    //MARK: - subscribeToJoinRequests
+
+    open var subscribeToJoinRequestsListenerThrowableError: Error?
+    var subscribeToJoinRequestsListenerUnderlyingCallsCount = 0
+    open var subscribeToJoinRequestsListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeToJoinRequestsListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToJoinRequestsListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToJoinRequestsListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToJoinRequestsListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToJoinRequestsListenerCalled: Bool {
+        return subscribeToJoinRequestsListenerCallsCount > 0
+    }
+    open var subscribeToJoinRequestsListenerReceivedListener: RequestsToJoinListener?
+    open var subscribeToJoinRequestsListenerReceivedInvocations: [RequestsToJoinListener] = []
+
+    var subscribeToJoinRequestsListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToJoinRequestsListenerReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return subscribeToJoinRequestsListenerUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToJoinRequestsListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToJoinRequestsListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToJoinRequestsListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToJoinRequestsListenerClosure: ((RequestsToJoinListener) async throws -> TaskHandle)?
+
+    open override func subscribeToJoinRequests(listener: RequestsToJoinListener) async throws -> TaskHandle {
+        if let error = subscribeToJoinRequestsListenerThrowableError {
+            throw error
+        }
+        subscribeToJoinRequestsListenerCallsCount += 1
+        subscribeToJoinRequestsListenerReceivedListener = listener
+        DispatchQueue.main.async {
+            self.subscribeToJoinRequestsListenerReceivedInvocations.append(listener)
+        }
+        if let subscribeToJoinRequestsListenerClosure = subscribeToJoinRequestsListenerClosure {
+            return try await subscribeToJoinRequestsListenerClosure(listener)
+        } else {
+            return subscribeToJoinRequestsListenerReturnValue
         }
     }
 

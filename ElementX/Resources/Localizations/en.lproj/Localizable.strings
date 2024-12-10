@@ -378,13 +378,17 @@
 "screen_knock_requests_list_accept_all_alert_description" = "Are you sure you want to accept all requests to join?";
 "screen_knock_requests_list_accept_all_alert_title" = "Accept all requests";
 "screen_knock_requests_list_accept_all_button_title" = "Accept all";
+"screen_knock_requests_list_accept_all_loading_title" = "Accepting all requests to join";
+"screen_knock_requests_list_accept_loading_title" = "Accepting request to join";
 "screen_knock_requests_list_ban_alert_confirm_button_title" = "Yes, decline and ban";
 "screen_knock_requests_list_ban_alert_description" = "Are you sure you want to decline and ban %1$@? This user won’t be able to request access to join this room again.";
 "screen_knock_requests_list_ban_alert_title" = "Decline and ban from accessing";
+"screen_knock_requests_list_ban_loading_title" = "Declining and banning access";
 "screen_knock_requests_list_decline_alert_confirm_button_title" = "Yes, decline";
 "screen_knock_requests_list_decline_alert_description" = "Are you sure you want to decline %1$@ request to join this room?";
 "screen_knock_requests_list_decline_alert_title" = "Decline access";
 "screen_knock_requests_list_decline_and_ban_action_title" = "Decline and ban";
+"screen_knock_requests_list_decline_loading_title" = "Declining request to join";
 "screen_knock_requests_list_empty_state_description" = "When somebody will ask to join the room, you’ll be able to see their request here.";
 "screen_knock_requests_list_empty_state_title" = "No pending request to join";
 "screen_knock_requests_list_title" = "Requests to join";
@@ -1004,6 +1008,7 @@
 "test_language_identifier" = "en";
 "test_untranslated_default_language_identifier" = "en";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Historical messages are not available on this device";
+"timeline_decryption_failure_historical_event_user_not_joined" = "You don't have access to this message";
 "timeline_decryption_failure_unable_to_decrypt" = "Unable to decrypt message";
 "timeline_decryption_failure_withheld_unverified" = "This message was blocked either because you did not verify your device or because the sender needs to verify your identity.";
 "troubleshoot_notifications_entry_point_section" = "Troubleshoot";

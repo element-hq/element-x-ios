@@ -60,6 +60,8 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     var identityStatusChangesPublisher: CurrentValuePublisher<[IdentityStatusChange], Never> { get }
     
+    var joinRequestsPublisher: CurrentValuePublisher<[JoinRequestProxyProtocol], Never> { get }
+    
     var timeline: TimelineProxyProtocol { get }
     
     var pinnedEventsTimeline: TimelineProxyProtocol? { get async }

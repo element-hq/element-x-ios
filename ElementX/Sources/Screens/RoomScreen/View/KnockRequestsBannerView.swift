@@ -13,6 +13,7 @@ struct KnockRequestInfo {
     let avatarURL: URL?
     let userID: String
     let reason: String?
+    let eventID: String
 }
 
 struct KnockRequestsBannerView: View {
@@ -102,9 +103,9 @@ private struct SingleKnockRequestBannerContent: View {
             Button(L10n.screenRoomSingleKnockRequestViewButtonTitle, action: onViewAll)
                 .buttonStyle(.compound(.secondary, size: .medium))
             if let onAccept {
-                Button(L10n.screenRoomSingleKnockRequestAcceptButtonTitle) {
-                    onAccept(request.userID)
-                }
+                Button(L10n.screenRoomSingleKnockRequestAcceptButtonTitle, action: {
+                    onAccept(request.eventID)
+                })
                 .buttonStyle(.compound(.primary, size: .medium))
             }
         }
@@ -123,7 +124,6 @@ private struct MultipleKnockRequestsBannerContent: View {
         requests
             .prefix(3)
             .map { .init(url: $0.avatarURL, name: $0.displayName, contentID: $0.userID) }
-            .reversed()
     }
     
     private var multipleKnockRequestsTitle: String {
@@ -138,7 +138,7 @@ private struct MultipleKnockRequestsBannerContent: View {
     var body: some View {
         VStack(spacing: 14) {
             HStack(spacing: 10) {
-                StackedAvatarsView(overlap: 16, lineWidth: 2, shouldStackFromLast: true, avatars: avatars, avatarSize: .user(on: .knockingUsersBannerStack), mediaProvider: mediaProvider)
+                StackedAvatarsView(overlap: 16, lineWidth: 2, avatars: avatars, avatarSize: .user(on: .knockingUsersBannerStack), mediaProvider: mediaProvider)
                 HStack(alignment: .top, spacing: 0) {
                     Text(multipleKnockRequestsTitle)
                         .lineLimit(2)
@@ -173,18 +173,22 @@ private struct KnockRequestsBannerDismissButton: View {
 }
 
 struct KnockRequestsBannerView_Previews: PreviewProvider, TestablePreview {
-    static let singleRequest: [KnockRequestInfo] = [.init(displayName: "Alice", avatarURL: nil, userID: "@alice:matrix.org", reason: nil)]
+    static let singleRequest: [KnockRequestInfo] = [.init(displayName: "Alice", avatarURL: nil, userID: "@alice:matrix.org", reason: nil, eventID: "1")]
     
-    static let singleRequestWithReason: [KnockRequestInfo] = [.init(displayName: "Alice", avatarURL: nil, userID: "@alice:matrix.org", reason: "Hey, I’d like to join this room because of xyz topic and I’d like to participate in the room.")]
+    static let singleRequestWithReason: [KnockRequestInfo] = [.init(displayName: "Alice",
+                                                                    avatarURL: nil,
+                                                                    userID: "@alice:matrix.org",
+                                                                    reason: "Hey, I’d like to join this room because of xyz topic and I’d like to participate in the room.",
+                                                                    eventID: "1")]
     
-    static let singleRequestNoDisplayName: [KnockRequestInfo] = [.init(displayName: nil, avatarURL: nil, userID: "@alice:matrix.org", reason: nil)]
+    static let singleRequestNoDisplayName: [KnockRequestInfo] = [.init(displayName: nil, avatarURL: nil, userID: "@alice:matrix.org", reason: nil, eventID: "1")]
     
     static let multipleRequests: [KnockRequestInfo] = [
-        .init(displayName: "Alice", avatarURL: nil, userID: "@alice:matrix.org", reason: nil),
-        .init(displayName: "Bob", avatarURL: nil, userID: "@bob:matrix.org", reason: nil),
-        .init(displayName: "Charlie", avatarURL: nil, userID: "@charlie:matrix.org", reason: nil),
-        .init(displayName: "Dan", avatarURL: nil, userID: "@dan:matrix.org", reason: nil),
-        .init(displayName: "Test", avatarURL: nil, userID: "@dan:matrix.org", reason: nil)
+        .init(displayName: "Alice", avatarURL: nil, userID: "@alice:matrix.org", reason: nil, eventID: "1"),
+        .init(displayName: "Bob", avatarURL: nil, userID: "@bob:matrix.org", reason: nil, eventID: "2"),
+        .init(displayName: "Charlie", avatarURL: nil, userID: "@charlie:matrix.org", reason: nil, eventID: "3"),
+        .init(displayName: "Dan", avatarURL: nil, userID: "@dan:matrix.org", reason: nil, eventID: "4"),
+        .init(displayName: "Test", avatarURL: nil, userID: "@dan:matrix.org", reason: nil, eventID: "5")
     ]
     
     static var previews: some View {

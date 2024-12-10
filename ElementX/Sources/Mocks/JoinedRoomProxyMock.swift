@@ -30,6 +30,7 @@ struct JoinedRoomProxyMockConfiguration {
     var timelineStartReached = false
     
     var members: [RoomMemberProxyMock] = .allMembers
+    var knockRequests: [JoinRequestProxyMock] = []
     var ownUserID = RoomMemberProxyMock.mockMe.userID
     var inviter: RoomMemberProxyProtocol?
     
@@ -57,6 +58,7 @@ extension JoinedRoomProxyMock {
         
         infoPublisher = CurrentValueSubject(.init(roomInfo: .init(configuration))).asCurrentValuePublisher()
         membersPublisher = CurrentValueSubject(configuration.members).asCurrentValuePublisher()
+        joinRequestsPublisher = CurrentValueSubject(configuration.knockRequests).asCurrentValuePublisher()
         typingMembersPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
         identityStatusChangesPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
 
