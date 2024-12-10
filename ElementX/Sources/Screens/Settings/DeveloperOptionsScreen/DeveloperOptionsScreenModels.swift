@@ -52,6 +52,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var knockingEnabled: Bool { get set }
     var createMediaCaptionsEnabled: Bool { get set }
     var mediaBrowserEnabled: Bool { get set }
+    var eventCacheEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

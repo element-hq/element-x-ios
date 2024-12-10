@@ -13,6 +13,7 @@ protocol CommonSettingsProtocol {
     var logLevel: TracingConfiguration.LogLevel { get }
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var hideTimelineMedia: Bool { get }
+    var eventCacheEnabled: Bool { get }
 }
 
 /// Store Element specific app settings.
@@ -49,6 +50,7 @@ final class AppSettings {
         case knockingEnabled
         case createMediaCaptionsEnabled
         case mediaBrowserEnabled
+        case eventCacheEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -305,6 +307,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.hideTimelineMedia, defaultValue: false, storageType: .userDefaults(store))
     var hideTimelineMedia
+    
+    @UserPreference(key: UserDefaultsKeys.eventCacheEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var eventCacheEnabled
 }
 
 extension AppSettings: CommonSettingsProtocol { }

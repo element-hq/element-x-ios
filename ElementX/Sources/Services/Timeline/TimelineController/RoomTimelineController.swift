@@ -470,7 +470,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return timelineItem
         case .virtual(let virtualItem, let uniqueID):
             switch virtualItem {
-            case .dayDivider(let timestamp):
+            case .dateDivider(let timestamp):
                 let date = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
                 let dateString = date.formatted(date: .complete, time: .omitted)
                 
