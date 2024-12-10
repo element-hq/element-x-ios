@@ -37,7 +37,16 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             guard !roomProxy.isEncrypted else {
                 return
             }
-            // TODO: We probably want to display an alert in some cases?
+            if updatedValue {
+                state.bindings.alertInfo = .init(id: .enableEncryption,
+                                                 title: L10n.screenSecurityAndPrivacyEnableEncryptionAlertTitle,
+                                                 message: L10n.screenSecurityAndPrivacyEnableEncryptionAlertDescription,
+                                                 primaryButton: .init(title: L10n.screenSecurityAndPrivacyEnableEncryptionAlertConfirmButtonTitle,
+                                                                      action: { [weak self] in self?.state.bindings.desiredSettings.isEncryptionEnabled = true }),
+                                                 secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+            } else {
+                state.bindings.desiredSettings.isEncryptionEnabled = false
+            }
         }
     }
 }

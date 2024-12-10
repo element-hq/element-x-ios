@@ -20,6 +20,7 @@ struct SecurityAndPrivacyScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(L10n.screenSecurityAndPrivacyTitle)
         .toolbar { toolbar }
+        .alert(item: $context.alertInfo)
     }
     
     private var roomAccessSection: some View {
