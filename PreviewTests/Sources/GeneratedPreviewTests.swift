@@ -767,6 +767,12 @@ extension PreviewTests {
         }
     }
 
+    func test_securityAndPrivacyScreen() {
+        for preview in SecurityAndPrivacyScreen_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_separatorRoomTimelineView() {
         for preview in SeparatorRoomTimelineView_Previews._allPreviews {
             assertSnapshots(matching: preview)

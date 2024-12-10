@@ -220,6 +220,13 @@ struct RoomDetailsScreen: View {
                         kind: .navigationLink {
                             context.send(viewAction: .processTapRolesAndPermissions)
                         })
+                if context.viewState.knockingEnabled {
+                    ListRow(label: .default(title: L10n.screenRoomDetailsSecurityAndPrivacyTitle,
+                                            icon: \.lock),
+                            kind: .navigationLink {
+                                context.send(viewAction: .processTapSecurityAndPrivacy)
+                            })
+                }
             }
         }
         .disabled(context.viewState.notificationSettingsState.isLoading)

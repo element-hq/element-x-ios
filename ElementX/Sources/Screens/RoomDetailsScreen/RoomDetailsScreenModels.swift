@@ -24,6 +24,7 @@ enum RoomDetailsScreenViewModelAction {
     case displayPinnedEventsTimeline
     case displayMediaEventsTimeline
     case displayKnockingRequests
+    case displaySecurityAndPrivacy
 }
 
 // MARK: View
@@ -198,6 +199,7 @@ enum RoomDetailsScreenViewAction {
     case processTapPolls
     case toggleFavourite(isFavourite: Bool)
     case processTapRolesAndPermissions
+    case processTapSecurityAndPrivacy
     case processTapCall
     case processTapPinnedEvents
     case processTapMediaEvents
