@@ -53,6 +53,12 @@ extension PreviewTests {
         }
     }
 
+    func test_audioMediaEventsTimelineView() {
+        for preview in AudioMediaEventsTimelineView_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_audioRoomTimelineView() {
         for preview in AudioRoomTimelineView_Previews._allPreviews {
             assertSnapshots(matching: preview)
@@ -179,6 +185,12 @@ extension PreviewTests {
         }
     }
 
+    func test_fileMediaEventsTimelineView() {
+        for preview in FileMediaEventsTimelineView_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_fileRoomTimelineView() {
         for preview in FileRoomTimelineView_Previews._allPreviews {
             assertSnapshots(matching: preview)
@@ -277,6 +289,12 @@ extension PreviewTests {
 
     func test_identityConfirmedScreen() {
         for preview in IdentityConfirmedScreen_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_imageMediaEventsTimelineView() {
+        for preview in ImageMediaEventsTimelineView_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }
@@ -767,6 +785,12 @@ extension PreviewTests {
         }
     }
 
+    func test_separatorMediaEventsTimelineView() {
+        for preview in SeparatorMediaEventsTimelineView_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_separatorRoomTimelineView() {
         for preview in SeparatorRoomTimelineView_Previews._allPreviews {
             assertSnapshots(matching: preview)
@@ -995,6 +1019,12 @@ extension PreviewTests {
         }
     }
 
+    func test_videoMediaEventsTimelineView() {
+        for preview in VideoMediaEventsTimelineView_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_videoRoomTimelineView() {
         for preview in VideoRoomTimelineView_Previews._allPreviews {
             assertSnapshots(matching: preview)
@@ -1009,6 +1039,12 @@ extension PreviewTests {
 
     func test_voiceMessageButton() {
         for preview in VoiceMessageButton_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_voiceMessageMediaEventsTimelineView() {
+        for preview in VoiceMessageMediaEventsTimelineView_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }
