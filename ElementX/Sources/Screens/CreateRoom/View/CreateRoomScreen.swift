@@ -15,6 +15,7 @@ struct CreateRoomScreen: View {
     private enum Focus {
         case name
         case topic
+        case alias
     }
     
     private var aliasBinding: Binding<String> {
@@ -52,6 +53,7 @@ struct CreateRoomScreen: View {
         .toolbar { toolbar }
         .readFrame($frame)
         .alert(item: $context.alertInfo)
+        .shouldScrollOnKeyboardDidShow(focus == .alias, to: Focus.alias)
     }
     
     private var roomSection: some View {
@@ -197,6 +199,8 @@ struct CreateRoomScreen: View {
                     TextField("", text: aliasBinding)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
+                        .textContentType(.URL)
+                        .focused($focus, equals: .alias)
                         .tint(.compound.iconAccentTertiary)
                         .font(.compound.bodyLG)
                         .foregroundStyle(.compound.textPrimary)
@@ -209,6 +213,7 @@ struct CreateRoomScreen: View {
                 .environment(\.layoutDirection, .leftToRight)
                 .errorBackground(!context.viewState.aliasErrors.isEmpty)
             })
+            .id(Focus.alias)
         } header: {
             Text(L10n.screenCreateRoomRoomAddressSectionTitle)
                 .compoundListSectionHeader()
