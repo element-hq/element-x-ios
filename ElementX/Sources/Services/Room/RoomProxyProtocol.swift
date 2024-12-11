@@ -160,8 +160,8 @@ extension JoinedRoomProxyProtocol {
                     isPublic: infoPublisher.value.isPublic)
     }
     
-    var isEncryptedOneToOneRoom: Bool {
-        infoPublisher.value.isDirect && isEncrypted && infoPublisher.value.activeMembersCount <= 2
+    var isDirectOneToOneRoom: Bool {
+        infoPublisher.value.isDirect && infoPublisher.value.activeMembersCount <= 2
     }
 
     func members() async -> [RoomMemberProxyProtocol]? {

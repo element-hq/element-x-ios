@@ -26,6 +26,10 @@ struct RoomDetailsScreen: View {
             topicSection
             
             configurationSection
+            
+            if context.viewState.dmRecipient == nil {
+                peopleSection
+            }
 
             aboutSection
 
@@ -151,16 +155,6 @@ struct RoomDetailsScreen: View {
 
     private var aboutSection: some View {
         Section {
-            if context.viewState.dmRecipient == nil {
-                ListRow(label: .default(title: L10n.commonPeople,
-                                        icon: \.user),
-                        details: .title(String(context.viewState.joinedMembersCount)),
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapPeople)
-                        })
-                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
-            }
-            
             ListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
                                     icon: \.pin),
                     details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
@@ -213,7 +207,19 @@ struct RoomDetailsScreen: View {
                 .onChange(of: context.isFavourite) { _, newValue in
                     context.send(viewAction: .toggleFavourite(isFavourite: newValue))
                 }
-            
+        }
+        .disabled(context.viewState.notificationSettingsState.isLoading)
+    }
+    
+    private var peopleSection: some View {
+        Section {
+            ListRow(label: .default(title: L10n.commonPeople,
+                                    icon: \.user),
+                    details: .title(String(context.viewState.joinedMembersCount)),
+                    kind: .navigationLink {
+                        context.send(viewAction: .processTapPeople)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
             if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
                 ListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
                                         icon: \.admin),
@@ -222,7 +228,6 @@ struct RoomDetailsScreen: View {
                         })
             }
         }
-        .disabled(context.viewState.notificationSettingsState.isLoading)
     }
     
     private var toggleMuteButton: some View {

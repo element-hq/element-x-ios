@@ -363,12 +363,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             
             if roomProxy.infoPublisher.value.isPublic {
-                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isEncryptedOneToOneRoom, state: .public)
+                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isDirectOneToOneRoom, state: .public)
             } else {
                 state.bindings.leaveRoomAlertItem = if roomProxy.infoPublisher.value.joinedMembersCount > 1 {
-                    LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isEncryptedOneToOneRoom, state: .private)
+                    LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isDirectOneToOneRoom, state: .private)
                 } else {
-                    LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isEncryptedOneToOneRoom, state: .empty)
+                    LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isDirectOneToOneRoom, state: .empty)
                 }
             }
         }

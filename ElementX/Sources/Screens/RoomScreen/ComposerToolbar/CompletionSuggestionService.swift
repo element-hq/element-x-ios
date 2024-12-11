@@ -46,7 +46,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                         }
                     
                     if self.canMentionAllUsers,
-                       !self.roomProxy.isEncryptedOneToOneRoom,
+                       !self.roomProxy.isDirectOneToOneRoom,
                        Self.shouldIncludeMember(userID: PillConstants.atRoom, displayName: PillConstants.everyone, searchText: suggestionTrigger.text) {
                         membersSuggestion
                             .insert(SuggestionItem.allUsers(item: .init(id: PillConstants.atRoom,

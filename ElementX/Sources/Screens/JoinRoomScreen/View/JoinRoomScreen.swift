@@ -20,7 +20,7 @@ struct JoinRoomScreen: View {
     }
 
     var body: some View {
-        FullscreenDialog(topPadding: context.viewState.mode == .knocked ? 151 : 35, background: .bloom) {
+        FullscreenDialog(topPadding: context.viewState.mode == .knocked ? 151 : 35) {
             if context.viewState.mode == .loading {
                 EmptyView()
             } else {
@@ -30,7 +30,6 @@ struct JoinRoomScreen: View {
             buttons
         }
         .alert(item: $context.alertInfo)
-        .background()
         .backgroundStyle(.compound.bgCanvasDefault)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
