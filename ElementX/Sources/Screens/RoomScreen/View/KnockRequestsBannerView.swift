@@ -25,7 +25,7 @@ struct KnockRequestsBannerView: View {
     var body: some View {
         mainContent
             .padding(16)
-            .background(.compound.bgCanvasDefault, in: RoundedRectangle(cornerRadius: 12))
+            .background(.compound.bgCanvasDefaultLevel1, in: RoundedRectangle(cornerRadius: 12))
             .compositingGroup()
             .shadow(color: Color(red: 0.11, green: 0.11, blue: 0.13).opacity(0.1), radius: 12, x: 0, y: 4)
             .padding(.horizontal, 16)

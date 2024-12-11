@@ -248,7 +248,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.pinnedEventsBannerState = .loading(numbersOfEvents: pinnedEventIDs.count)
         }
         
-        switch (roomProxy.isEncryptedOneToOneRoom, roomInfo.joinRule) {
+        switch (roomProxy.isDirectOneToOneRoom, roomInfo.joinRule) {
         case (false, .knock), (false, .knockRestricted):
             state.isKnockableRoom = true
         default:

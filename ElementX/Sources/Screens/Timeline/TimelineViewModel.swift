@@ -77,7 +77,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         
         super.init(initialViewState: TimelineViewState(timelineKind: timelineController.timelineKind,
                                                        roomID: roomProxy.id,
-                                                       isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
+                                                       isEncryptedOneToOneRoom: roomProxy.isDirectOneToOneRoom,
                                                        timelineState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                        ownUserID: roomProxy.ownUserID,
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,

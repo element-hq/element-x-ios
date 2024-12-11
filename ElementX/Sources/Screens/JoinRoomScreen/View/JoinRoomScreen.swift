@@ -20,7 +20,7 @@ struct JoinRoomScreen: View {
     }
 
     var body: some View {
-        FullscreenDialog(topPadding: context.viewState.mode == .knocked ? 151 : 35, background: .bloom) {
+        FullscreenDialog(topPadding: context.viewState.mode == .knocked ? 151 : 35) {
             if context.viewState.mode == .loading {
                 EmptyView()
             } else {

@@ -431,7 +431,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         // Check if we need to add anything to the top of the timeline.
         switch paginationState.backward {
         case .timelineEndReached:
-            if timelineKind != .pinned, !roomProxy.isEncryptedOneToOneRoom {
+            if timelineKind != .pinned, !roomProxy.isDirectOneToOneRoom {
                 let timelineStart = TimelineStartRoomTimelineItem(name: roomProxy.infoPublisher.value.displayName)
                 newTimelineItems.insert(timelineStart, at: 0)
             }
@@ -459,7 +459,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private func buildTimelineItem(for itemProxy: TimelineItemProxy) -> RoomTimelineItemProtocol? {
         switch itemProxy {
         case .event(let eventTimelineItem):
-            let timelineItem = timelineItemFactory.buildTimelineItem(for: eventTimelineItem, isDM: roomProxy.isEncryptedOneToOneRoom)
+            let timelineItem = timelineItemFactory.buildTimelineItem(for: eventTimelineItem, isDM: roomProxy.isDirectOneToOneRoom)
                         
             if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
                 // Avoid fetching this over and over again as it changes states if it keeps failing to load

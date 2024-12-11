@@ -129,11 +129,11 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             actionsSubject.send(.requestInvitePeoplePresentation)
         case .processTapLeave:
             guard state.joinedMembersCount > 1 else {
-                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomProxy.id, isDM: roomProxy.isEncryptedOneToOneRoom, state: .empty)
+                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomProxy.id, isDM: roomProxy.isDirectOneToOneRoom, state: .empty)
                 return
             }
             state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomProxy.id,
-                                                                   isDM: roomProxy.isEncryptedOneToOneRoom,
+                                                                   isDM: roomProxy.isDirectOneToOneRoom,
                                                                    state: roomProxy.infoPublisher.value.isPublic ? .public : .private)
         case .confirmLeave:
             Task { await leaveRoom() }
@@ -205,7 +205,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     private func fetchMembersIfNeeded() async {
         // We need to fetch members just in 1-to-1 chat to get the member object for the other person
-        guard roomProxy.isEncryptedOneToOneRoom else {
+        guard roomProxy.isDirectOneToOneRoom else {
             return
         }
         
