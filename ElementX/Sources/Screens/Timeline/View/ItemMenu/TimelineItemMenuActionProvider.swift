@@ -83,7 +83,7 @@ struct TimelineItemMenuActionProvider {
             actions.append(.copyCaption)
         }
         
-        if item.hasMediaCaption {
+        if item.isEditable, item.hasMediaCaption {
             actions.append(.removeCaption)
         }
         
