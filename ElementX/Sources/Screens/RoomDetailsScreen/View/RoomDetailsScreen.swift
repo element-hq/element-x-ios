@@ -208,7 +208,6 @@ struct RoomDetailsScreen: View {
                     context.send(viewAction: .toggleFavourite(isFavourite: newValue))
                 }
         }
-        .disabled(context.viewState.notificationSettingsState.isLoading)
     }
     
     private var peopleSection: some View {
