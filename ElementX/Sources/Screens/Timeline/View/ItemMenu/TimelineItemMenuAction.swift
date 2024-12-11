@@ -82,9 +82,9 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     var switchToDefaultComposer: Bool {
         switch self {
         case .reply, .edit, .addCaption, .editCaption, .editPoll:
-            return false
+            false
         default:
-            return true
+            true
         }
     }
     
@@ -92,9 +92,9 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     var canAppearInFailedEcho: Bool {
         switch self {
         case .copy, .edit, .redact, .viewSource, .editPoll:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
     
@@ -102,9 +102,9 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     var canAppearInRedacted: Bool {
         switch self {
         case .viewSource, .unpin, .viewInRoomTimeline:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
     
@@ -112,18 +112,27 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     var isDestructive: Bool {
         switch self {
         case .redact, .report, .removeCaption:
-            return true
+            true
         default:
-            return false
+            false
         }
     }
     
     var canAppearInPinnedEventsTimeline: Bool {
         switch self {
         case .viewInRoomTimeline, .pin, .unpin, .forward:
-            return true
+            true
         default:
-            return false
+            false
+        }
+    }
+    
+    var canAppearInMediaDetails: Bool {
+        switch self {
+        case .viewInRoomTimeline, .redact:
+            true
+        default:
+            false
         }
     }
     

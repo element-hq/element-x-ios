@@ -171,7 +171,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             let timeline = try await TimelineProxy(timeline: room.messageFilteredTimeline(internalIdPrefix: nil,
                                                                                           allowedMessageTypes: allowedMessageTypes,
                                                                                           dateDividerMode: .monthly),
-                                                   kind: .media)
+                                                   kind: .media(.mediaFilesScreen))
             await timeline.subscribeForUpdates()
             
             return .success(timeline)

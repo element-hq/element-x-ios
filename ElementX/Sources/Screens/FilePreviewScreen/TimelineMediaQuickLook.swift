@@ -134,21 +134,22 @@ struct TimelineMediaQuickLook_Previews: PreviewProvider {
     }
     
     static func makeViewModel() -> TimelineMediaPreviewViewModel {
-        let previewItem = FileRoomTimelineItem(id: .randomEvent,
-                                               timestamp: .mock,
-                                               isOutgoing: false,
-                                               isEditable: false,
-                                               canBeRepliedTo: true,
-                                               isThreaded: false,
-                                               sender: .init(id: "", displayName: "Sally Sanderson"),
-                                               content: .init(filename: "Important document.pdf",
-                                                              caption: "A caption goes right here.",
-                                                              source: try? .init(url: .mockMXCFile, mimeType: nil),
-                                                              fileSize: 3 * 1024 * 1024,
-                                                              thumbnailSource: nil,
-                                                              contentType: .pdf))
+        let item = FileRoomTimelineItem(id: .randomEvent,
+                                        timestamp: .mock,
+                                        isOutgoing: false,
+                                        isEditable: false,
+                                        canBeRepliedTo: true,
+                                        isThreaded: false,
+                                        sender: .init(id: "", displayName: "Sally Sanderson"),
+                                        content: .init(filename: "Important document.pdf",
+                                                       caption: "A caption goes right here.",
+                                                       source: try? .init(url: .mockMXCFile, mimeType: nil),
+                                                       fileSize: 3 * 1024 * 1024,
+                                                       thumbnailSource: nil,
+                                                       contentType: .pdf))
         
-        return TimelineMediaPreviewViewModel(previewItems: [previewItem],
+        return TimelineMediaPreviewViewModel(initialItem: item,
+                                             timelineViewModel: TimelineViewModel.mock,
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              userIndicatorController: UserIndicatorControllerMock())
     }

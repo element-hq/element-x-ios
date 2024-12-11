@@ -345,7 +345,7 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
                                                       isDM: true,
                                                       isViewSourceEnabled: true,
                                                       isCreateMediaCaptionsEnabled: true,
-                                                      isPinnedEventsTimeline: false,
+                                                      timelineKind: .live,
                                                       emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
         guard let actions = provider.makeActions() else { return nil }
         

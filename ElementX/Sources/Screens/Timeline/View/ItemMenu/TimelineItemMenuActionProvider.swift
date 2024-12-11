@@ -17,7 +17,7 @@ struct TimelineItemMenuActionProvider {
     let isDM: Bool
     let isViewSourceEnabled: Bool
     let isCreateMediaCaptionsEnabled: Bool
-    let isPinnedEventsTimeline: Bool
+    let timelineKind: TimelineKind
     let emojiProvider: EmojiProviderProtocol
     
     // swiftlint:disable:next cyclomatic_complexity
@@ -38,6 +38,10 @@ struct TimelineItemMenuActionProvider {
         
         var actions: [TimelineItemMenuAction] = []
         var secondaryActions: [TimelineItemMenuAction] = []
+        
+        if timelineKind == .pinned || timelineKind == .media(.mediaFilesScreen) {
+            actions.append(.viewInRoomTimeline)
+        }
 
         if item.canBeRepliedTo {
             if let messageItem = item as? EventBasedMessageTimelineItemProtocol {
@@ -99,10 +103,15 @@ struct TimelineItemMenuActionProvider {
             secondaryActions.append(.redact)
         }
         
-        if isPinnedEventsTimeline {
-            actions.insert(.viewInRoomTimeline, at: 0)
+        switch timelineKind {
+        case .pinned:
             actions = actions.filter(\.canAppearInPinnedEventsTimeline)
             secondaryActions = secondaryActions.filter(\.canAppearInPinnedEventsTimeline)
+        case .media:
+            actions = actions.filter(\.canAppearInMediaDetails)
+            secondaryActions = secondaryActions.filter(\.canAppearInMediaDetails)
+        case .live, .detached:
+            break // viewInRoomTimeline is the only non-room item and was added conditionally.
         }
         
         if item.hasFailedToSend {
@@ -114,11 +123,10 @@ struct TimelineItemMenuActionProvider {
             actions = actions.filter(\.canAppearInRedacted)
             secondaryActions = secondaryActions.filter(\.canAppearInRedacted)
         }
+        
+        let isReactable = timelineKind == .live || timelineKind == .detached ? item.isReactable : false
 
-        return .init(isReactable: isPinnedEventsTimeline ? false : item.isReactable,
-                     actions: actions,
-                     secondaryActions: secondaryActions,
-                     emojiProvider: emojiProvider)
+        return .init(isReactable: isReactable, actions: actions, secondaryActions: secondaryActions, emojiProvider: emojiProvider)
     }
     
     private func makeEncryptedItemActions(_ encryptedItem: EncryptedRoomTimelineItem) -> TimelineItemMenuActions? {

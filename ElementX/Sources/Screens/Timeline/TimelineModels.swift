@@ -85,7 +85,7 @@ enum TimelineComposerAction {
 }
 
 struct TimelineViewState: BindableState {
-    let isPinnedEventsTimeline: Bool
+    let timelineKind: TimelineKind
     var roomID: String
     var members: [String: RoomMemberState] = [:]
     var typingMembers: [String] = []

@@ -20,7 +20,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     private var isEncryptedOneToOneRoom: Bool { context.viewState.isEncryptedOneToOneRoom }
     private var isFocussed: Bool { focussedEventID != nil && timelineItem.id.eventID == focussedEventID }
     private var isPinned: Bool {
-        guard !context.viewState.isPinnedEventsTimeline,
+        guard context.viewState.timelineKind != .pinned,
               let eventID = timelineItem.id.eventID else {
             return false
         }
@@ -110,7 +110,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 }
             
             // Do not display reactions in the pinned events timeline
-            if !context.viewState.isPinnedEventsTimeline,
+            if context.viewState.timelineKind != .pinned,
                !timelineItem.properties.reactions.isEmpty {
                 TimelineReactionsView(context: context,
                                       itemID: timelineItem.id,
@@ -150,7 +150,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                                                               isDM: context.viewState.isEncryptedOneToOneRoom,
                                                               isViewSourceEnabled: context.viewState.isViewSourceEnabled,
                                                               isCreateMediaCaptionsEnabled: context.viewState.isCreateMediaCaptionsEnabled,
-                                                              isPinnedEventsTimeline: context.viewState.isPinnedEventsTimeline,
+                                                              timelineKind: context.viewState.timelineKind,
                                                               emojiProvider: context.viewState.emojiProvider)
                 TimelineItemMacContextMenu(item: timelineItem, actionProvider: provider) { action in
                     context.send(viewAction: .handleTimelineItemMenuAction(itemID: timelineItem.id, action: action))

@@ -164,7 +164,7 @@ extension View {
 
 struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     static let timelineViewModel: TimelineViewModel = {
-        let timelineController = MockRoomTimelineController(timelineKind: .media)
+        let timelineController = MockRoomTimelineController(timelineKind: .media(.mediaFilesScreen))
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                  timelineController: timelineController,
                                  mediaProvider: MediaProviderMock(configuration: .init()),

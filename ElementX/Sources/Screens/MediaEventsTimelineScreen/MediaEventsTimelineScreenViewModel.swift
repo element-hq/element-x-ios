@@ -144,7 +144,8 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             return
         }
         
-        let viewModel = TimelineMediaPreviewViewModel(previewItems: [item],
+        let viewModel = TimelineMediaPreviewViewModel(initialItem: item,
+                                                      timelineViewModel: activeTimelineViewModel,
                                                       mediaProvider: mediaProvider,
                                                       userIndicatorController: userIndicatorController)
         state.bindings.mediaPreviewViewModel = viewModel

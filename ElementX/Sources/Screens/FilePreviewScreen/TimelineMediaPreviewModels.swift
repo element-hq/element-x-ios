@@ -14,12 +14,19 @@ enum TimelineMediaPreviewViewModelAction {
 
 struct TimelineMediaPreviewViewState: BindableState {
     var previewItems: [TimelineMediaPreviewItem]
-    var currentItem: TimelineMediaPreviewItem?
+    var currentItem: TimelineMediaPreviewItem
+    var currentItemActions: TimelineItemMenuActions?
+    
+    var bindings = TimelineMediaPreviewViewStateBindings()
+}
+
+struct TimelineMediaPreviewViewStateBindings {
+    var isPresentingRedactConfirmation = false
 }
 
 /// Wraps a media file and title to be previewed with QuickLook.
 class TimelineMediaPreviewItem: NSObject, QLPreviewItem {
-    private let timelineItem: EventBasedMessageTimelineItemProtocol
+    let timelineItem: EventBasedMessageTimelineItemProtocol
     var fileHandle: MediaFileHandleProxy?
     
     init(timelineItem: EventBasedMessageTimelineItemProtocol) {
@@ -159,6 +166,6 @@ class TimelineMediaPreviewItem: NSObject, QLPreviewItem {
 }
 
 enum TimelineMediaPreviewViewAction {
-    case viewInTimeline
-    case redact
+    case menuAction(TimelineItemMenuAction)
+    case redactConfirmation
 }
