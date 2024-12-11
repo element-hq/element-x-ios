@@ -10,7 +10,7 @@ import Foundation
 enum RoomTimelineItemFixtures {
     /// The default timeline items used in Xcode previews etc.
     static var `default`: [RoomTimelineItemProtocol] = [
-        SeparatorRoomTimelineItem(id: .virtual(uniqueID: .init(id: "Yesterday")), text: "Yesterday"),
+        SeparatorRoomTimelineItem(id: .virtual(uniqueID: .init(id: "Yesterday")), timestamp: .mock),
         TextRoomTimelineItem(id: .event(uniqueID: .init(id: ".RoomTimelineItemFixtures.default.0"),
                                         eventOrTransactionID: .eventId(eventId: "RoomTimelineItemFixtures.default.0")),
                              timestamp: .mock,
@@ -52,7 +52,7 @@ enum RoomTimelineItemFixtures {
                                                         ReactionSender(id: "jacob", timestamp: Date())
                                                     ])
                              ])),
-        SeparatorRoomTimelineItem(id: .virtual(uniqueID: .init(id: "Today")), text: "Today"),
+        SeparatorRoomTimelineItem(id: .virtual(uniqueID: .init(id: "Today")), timestamp: .mock),
         TextRoomTimelineItem(id: .event(uniqueID: .init(id: "RoomTimelineItemFixtures.default.3"),
                                         eventOrTransactionID: .eventId(eventId: "RoomTimelineItemFixtures.default.3")),
                              timestamp: .mock,
@@ -261,6 +261,11 @@ enum RoomTimelineItemFixtures {
             VoiceMessageRoomTimelineItem(isOutgoing: false),
             VoiceMessageRoomTimelineItem(isOutgoing: true)
         ]
+    }
+    
+    static var separator: SeparatorRoomTimelineItem {
+        SeparatorRoomTimelineItem(id: .virtual(uniqueID: .init(id: UUID().uuidString)),
+                                  timestamp: .now)
     }
 }
 

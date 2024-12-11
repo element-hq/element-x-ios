@@ -441,7 +441,7 @@ private extension TextRoomTimelineItem {
 
 private extension SeparatorRoomTimelineItem {
     init(uniqueID: TimelineUniqueId) {
-        self.init(id: .virtual(uniqueID: uniqueID), text: "")
+        self.init(id: .virtual(uniqueID: uniqueID), timestamp: .mock)
     }
 }
 

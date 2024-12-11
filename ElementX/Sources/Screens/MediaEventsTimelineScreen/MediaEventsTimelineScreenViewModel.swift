@@ -84,16 +84,41 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     // MARK: - Private
     
     private func updateWithTimelineViewState(_ timelineViewState: TimelineViewState) {
-        state.items = timelineViewState.timelineState.itemViewStates.filter { itemViewState in
+        var newGroups = [MediaEventsTimelineGroup]()
+        var currentItems = [RoomTimelineItemViewState]()
+        
+        timelineViewState.timelineState.itemViewStates.filter { itemViewState in
             switch itemViewState.type {
             case .image, .video:
                 state.bindings.screenMode == .media
-            case .audio, .file:
+            case .audio, .file, .voice:
                 state.bindings.screenMode == .files
+            case .separator:
+                true
             default:
                 false
             }
-        }.reversed()
+        }.reversed().forEach { item in
+            if case .separator(let item) = item.type {
+                let group = MediaEventsTimelineGroup(id: item.id.uniqueID.id,
+                                                     title: titleForDate(item.timestamp),
+                                                     items: currentItems)
+                currentItems = []
+                newGroups.append(group)
+            } else {
+                currentItems.append(item)
+            }
+        }
+        
+        if !currentItems.isEmpty {
+            MXLog.warning("Found ungrouped timeline items, appending them at end.")
+            let group = MediaEventsTimelineGroup(id: UUID().uuidString,
+                                                 title: titleForDate(.now),
+                                                 items: currentItems)
+            newGroups.append(group)
+        }
+
+        state.groups = newGroups
         
         state.isBackPaginating = (timelineViewState.timelineState.paginationState.backward == .paginating)
         backPaginateIfNecessary(paginationStatus: timelineViewState.timelineState.paginationState.backward)
@@ -123,5 +148,13 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
                                                       mediaProvider: mediaProvider,
                                                       userIndicatorController: userIndicatorController)
         state.bindings.mediaPreviewViewModel = viewModel
+    }
+    
+    private func titleForDate(_ date: Date) -> String {
+        if Calendar.current.isDate(date, equalTo: .now, toGranularity: .month) {
+            L10n.commonDateSeparatorThisMonth
+        } else {
+            date.formatted(.dateTime.month(.wide).year())
+        }
     }
 }

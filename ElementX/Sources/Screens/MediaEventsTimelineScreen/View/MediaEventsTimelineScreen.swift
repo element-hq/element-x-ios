@@ -33,44 +33,39 @@ struct MediaEventsTimelineScreen: View {
             .timelineMediaQuickLook(viewModel: $context.mediaPreviewViewModel)
     }
     
+    // The scale effects do the following:
+    // * flip the scrollView vertically to keep the items
+    // at the bottom and have pagination working properly
+    // * flip the grid vertically to counteract the scroll view
+    // but also horizontally to preserve the corect item order
+    // * flip the items on both axes have them render correctly
     @ViewBuilder
     private var content: some View {
         ScrollView {
             Group {
                 let columns = [GridItem(.adaptive(minimum: 80, maximum: 150), spacing: 1)]
                 LazyVGrid(columns: columns, alignment: .center, spacing: 1) {
-                    ForEach(context.viewState.items) { item in
-                        Button {
-                            context.send(viewAction: .tappedItem(item))
-                        } label: {
-                            Color.clear // Let the image aspect fill in place
-                                .aspectRatio(1, contentMode: .fill)
-                                .overlay {
-                                    viewForTimelineItem(item)
+                    ForEach(context.viewState.groups) { group in
+                        Section(footer: sectionFooterForGroup(group)) {
+                            ForEach(group.items) { item in
+                                Button {
+                                    context.send(viewAction: .tappedItem(item))
+                                } label: {
+                                    Color.clear // Let the image aspect fill in place
+                                        .aspectRatio(1, contentMode: .fill)
+                                        .overlay {
+                                            viewForTimelineItem(item)
+                                        }
+                                        .clipped()
+                                        .scaleEffect(.init(width: -1, height: -1))
                                 }
-                                .clipped()
-                                .scaleEffect(.init(width: 1, height: -1))
+                            }
                         }
                     }
                 }
+                .scaleEffect(.init(width: -1, height: 1))
                 
-                // Needs to be wrapped in a LazyStack otherwise appearance calls don't trigger
-                LazyVStack(spacing: 0) {
-                    Rectangle()
-                        .frame(height: 44)
-                        .foregroundStyle(.compound.bgCanvasDefault)
-                        .overlay {
-                            if context.viewState.isBackPaginating {
-                                ProgressView()
-                            }
-                        }
-                        .onAppear {
-                            context.send(viewAction: .oldestItemDidAppear)
-                        }
-                        .onDisappear {
-                            context.send(viewAction: .oldestItemDidDisappear)
-                        }
-                }
+                header
             }
         }
         .scaleEffect(.init(width: 1, height: -1))
@@ -79,7 +74,37 @@ struct MediaEventsTimelineScreen: View {
         }
     }
     
-    @ViewBuilder func viewForTimelineItem(_ item: RoomTimelineItemViewState) -> some View {
+    private var header: some View {
+        // Needs to be wrapped in a LazyStack otherwise appearance calls don't trigger
+        LazyVStack(spacing: 0) {
+            ProgressView()
+                .padding()
+                .opacity(context.viewState.isBackPaginating ? 1 : 0)
+            
+            Rectangle()
+                .frame(height: 1)
+                .foregroundStyle(.compound.bgCanvasDefault)
+                .onAppear {
+                    context.send(viewAction: .oldestItemDidAppear)
+                }
+                .onDisappear {
+                    context.send(viewAction: .oldestItemDidDisappear)
+                }
+        }
+    }
+    
+    @ViewBuilder
+    func sectionFooterForGroup(_ group: MediaEventsTimelineGroup) -> some View {
+        Text(group.title)
+            .font(.compound.bodySMSemibold)
+            .foregroundColor(.compound.textPrimary)
+            .frame(alignment: .center)
+            .scaleEffect(.init(width: -1, height: -1))
+            .padding(.vertical, 16)
+    }
+    
+    @ViewBuilder
+    func viewForTimelineItem(_ item: RoomTimelineItemViewState) -> some View {
         switch item.type {
         case .image(let timelineItem):
             #warning("Make this work for gifs")
@@ -107,8 +132,6 @@ struct MediaEventsTimelineScreen: View {
             } else {
                 playIcon
             }
-        case .separator(let timelineItem):
-            Text(timelineItem.text)
         default:
             EmptyView()
         }
@@ -169,12 +192,12 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         NavigationStack {
             MediaEventsTimelineScreen(context: mediaViewModel.context)
-                .previewDisplayName("Media")
         }
+        .previewDisplayName("Media")
         
         NavigationStack {
             MediaEventsTimelineScreen(context: filesViewModel.context)
-                .previewDisplayName("Files")
         }
+        .previewDisplayName("Files")
     }
 }

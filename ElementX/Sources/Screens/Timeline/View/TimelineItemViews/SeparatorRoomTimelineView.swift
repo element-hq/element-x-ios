@@ -11,7 +11,7 @@ struct SeparatorRoomTimelineView: View {
     let timelineItem: SeparatorRoomTimelineItem
     
     var body: some View {
-        Text(timelineItem.text)
+        Text(timelineItem.timestamp.formatted(date: .complete, time: .omitted))
             .font(.compound.bodySMSemibold)
             .foregroundColor(.compound.textPrimary)
             .frame(maxWidth: .infinity)
@@ -24,7 +24,7 @@ struct SeparatorRoomTimelineView: View {
 struct SeparatorRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         let item = SeparatorRoomTimelineItem(id: .virtual(uniqueID: .init(id: "Separator")),
-                                             text: "This is a separator")
+                                             timestamp: .mock)
         SeparatorRoomTimelineView(timelineItem: item)
     }
 }

@@ -472,9 +472,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             switch virtualItem {
             case .dateDivider(let timestamp):
                 let date = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
-                let dateString = date.formatted(date: .complete, time: .omitted)
-                
-                return SeparatorRoomTimelineItem(id: .virtual(uniqueID: uniqueID), text: dateString)
+                return SeparatorRoomTimelineItem(id: .virtual(uniqueID: uniqueID), timestamp: date)
             case .readMarker:
                 return ReadMarkerRoomTimelineItem(id: .virtual(uniqueID: uniqueID))
             }
