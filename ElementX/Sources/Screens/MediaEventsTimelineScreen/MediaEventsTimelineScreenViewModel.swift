@@ -14,6 +14,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     private let mediaTimelineViewModel: TimelineViewModelProtocol
     private let filesTimelineViewModel: TimelineViewModelProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let dateFormatter: DateFormatter
     
     private var isOldestItemVisible = false
     
@@ -39,6 +40,9 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         self.mediaTimelineViewModel = mediaTimelineViewModel
         self.filesTimelineViewModel = filesTimelineViewModel
         self.userIndicatorController = userIndicatorController
+        
+        dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM yyyy"
         
         super.init(initialViewState: .init(bindings: .init(screenMode: screenMode)), mediaProvider: mediaProvider)
         
@@ -101,9 +105,9 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         var currentItems = [RoomTimelineItemViewState]()
         
         for item in filteredItems.reversed() {
-            if case .separator(let content) = item.type {
-                let group = MediaEventsTimelineGroup(id: content.id.uniqueID.id,
-                                                     title: content.timestamp.formatted(date: .complete, time: .omitted),
+            if case .separator(let item) = item.type {
+                let group = MediaEventsTimelineGroup(id: item.id.uniqueID.id,
+                                                     title: titleForDate(item.timestamp),
                                                      items: currentItems)
                 currentItems = []
                 newGroups.append(group)
@@ -142,5 +146,13 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
                                                       mediaProvider: mediaProvider,
                                                       userIndicatorController: userIndicatorController)
         state.bindings.mediaPreviewViewModel = viewModel
+    }
+    
+    private func titleForDate(_ date: Date) -> String {
+        if Calendar.current.isDate(date, equalTo: .now, toGranularity: .month) {
+            L10n.commonDateSeparatorThisMonth
+        } else {
+            dateFormatter.string(from: date)
+        }
     }
 }

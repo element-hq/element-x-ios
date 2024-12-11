@@ -96,7 +96,7 @@ struct MediaEventsTimelineScreen: View {
     @ViewBuilder
     func sectionFooterForGroup(_ group: MediaEventsTimelineGroup) -> some View {
         Text(group.title)
-            .font(.compound.bodySM)
+            .font(.compound.bodySMSemibold)
             .foregroundColor(.compound.textPrimary)
             .frame(alignment: .center)
             .scaleEffect(.init(width: -1, height: -1))
