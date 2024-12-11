@@ -30,6 +30,7 @@ struct JoinRoomScreen: View {
             buttons
         }
         .alert(item: $context.alertInfo)
+        .background()
         .backgroundStyle(.compound.bgCanvasDefault)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
