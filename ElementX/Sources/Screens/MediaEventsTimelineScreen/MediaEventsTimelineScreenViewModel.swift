@@ -26,6 +26,8 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         }
     }
     
+    private var mediaPreviewCancellable: AnyCancellable?
+    
     private let actionsSubject: PassthroughSubject<MediaEventsTimelineScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<MediaEventsTimelineScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -148,6 +150,21 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
                                                       timelineViewModel: activeTimelineViewModel,
                                                       mediaProvider: mediaProvider,
                                                       userIndicatorController: userIndicatorController)
+        
+        mediaPreviewCancellable = viewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .viewInRoomTimeline(let itemID):
+                    state.bindings.mediaPreviewViewModel = nil
+                    actionsSubject.send(.viewInRoomTimeline(itemID))
+                case .dismiss:
+                    state.bindings.mediaPreviewViewModel = nil
+                case .loadedMediaFile:
+                    break // Handled by the preview controller
+                }
+            }
+        
         state.bindings.mediaPreviewViewModel = viewModel
     }
     

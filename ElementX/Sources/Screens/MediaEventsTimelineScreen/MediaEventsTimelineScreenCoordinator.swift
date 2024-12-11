@@ -20,7 +20,9 @@ struct MediaEventsTimelineScreenCoordinatorParameters {
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
-enum MediaEventsTimelineScreenCoordinatorAction { }
+enum MediaEventsTimelineScreenCoordinatorAction {
+    case viewInRoomTimeline(TimelineItemIdentifier)
+}
 
 final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
     private let parameters: MediaEventsTimelineScreenCoordinatorParameters
@@ -62,6 +64,15 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        filesTimelineViewModel: filesTimelineViewModel,
                                                        mediaProvider: parameters.mediaProvider,
                                                        userIndicatorController: parameters.userIndicatorController)
+        
+        viewModel.actionsPublisher
+            .sink { [weak self] action in
+                switch action {
+                case .viewInRoomTimeline(let itemID):
+                    self?.actionsSubject.send(.viewInRoomTimeline(itemID))
+                }
+            }
+            .store(in: &cancellables)
     }
     
     func toPresentable() -> AnyView {

@@ -870,10 +870,10 @@ private extension RoomInfoProxy {
 extension TimelineViewModel {
     static let mock = mock(timelineKind: .live)
     
-    static func mock(timelineKind: TimelineKind = .live) -> TimelineViewModel {
+    static func mock(timelineKind: TimelineKind = .live, timelineController: MockRoomTimelineController? = nil) -> TimelineViewModel {
         TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                           focussedEventID: nil,
-                          timelineController: MockRoomTimelineController(timelineKind: timelineKind),
+                          timelineController: timelineController ?? MockRoomTimelineController(timelineKind: timelineKind),
                           mediaProvider: MediaProviderMock(configuration: .init()),
                           mediaPlayerProvider: MediaPlayerProviderMock(),
                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),

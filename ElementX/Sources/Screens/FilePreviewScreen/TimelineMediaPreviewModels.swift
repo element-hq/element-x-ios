@@ -7,9 +7,10 @@
 
 import QuickLook
 
-enum TimelineMediaPreviewViewModelAction {
+enum TimelineMediaPreviewViewModelAction: Equatable {
     case loadedMediaFile
-    case viewInTimeline
+    case viewInRoomTimeline(TimelineItemIdentifier)
+    case dismiss
 }
 
 struct TimelineMediaPreviewViewState: BindableState {

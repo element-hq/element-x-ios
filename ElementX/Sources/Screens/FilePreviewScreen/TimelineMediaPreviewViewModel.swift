@@ -51,14 +51,16 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         case .menuAction(let action):
             switch action {
             case .viewInRoomTimeline:
-                actionsSubject.send(.viewInTimeline)
+                actionsSubject.send(.viewInRoomTimeline(state.currentItem.id))
             case .redact:
                 state.bindings.isPresentingRedactConfirmation = true
             default:
                 MXLog.error("Received unexpected action: \(action)")
             }
         case .redactConfirmation:
-            break // Do it here??
+            timelineViewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: state.currentItem.id, action: .redact))
+            state.bindings.isPresentingRedactConfirmation = false
+            actionsSubject.send(.dismiss) // Will dismiss the details sheet and the QuickLook view.
         }
     }
     

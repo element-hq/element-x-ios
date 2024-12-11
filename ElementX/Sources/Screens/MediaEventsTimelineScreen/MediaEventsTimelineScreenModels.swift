@@ -7,7 +7,9 @@
 
 import Foundation
 
-enum MediaEventsTimelineScreenViewModelAction { }
+enum MediaEventsTimelineScreenViewModelAction {
+    case viewInRoomTimeline(TimelineItemIdentifier)
+}
 
 enum MediaEventsTimelineScreenMode {
     case media
