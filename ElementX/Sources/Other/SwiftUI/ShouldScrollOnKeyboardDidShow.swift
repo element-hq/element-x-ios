@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension View {
-    /// Adds a scroll view read to the view and scrolls to the provided id if the condition is true, so far it only works properly if the item is the last in the scroll view.
+    /// Adds a scroll view reader to the view and scrolls to the provided id if the condition is true, so far it only works properly if the item is the last in the scroll view.
     func shouldScrollOnKeyboardDidShow(_ shouldScroll: Bool, to id: any Hashable) -> some View {
         ScrollViewReader { scrollView in
             onReceive(NotificationCenter.default.publisher(for: UIApplication.keyboardDidShowNotification)) { _ in
