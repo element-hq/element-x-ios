@@ -21,9 +21,9 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         // Given a fresh view model.
         setupViewModel()
         XCTAssertFalse(mediaProvider.loadFileFromSourceFilenameCalled)
-        XCTAssertNil(context.viewState.currentItem)
+        XCTAssertEqual(context.viewState.currentItem, context.viewState.previewItems[0])
         
-        // When setting the current item.
+        // When the preview controller sets the current item.
         await viewModel.updateCurrentItem(context.viewState.previewItems[0])
         
         // Then the view model should load the item and update its view state.
@@ -34,22 +34,22 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
     // MARK: - Helpers
     
     private func setupViewModel() {
-        let previewItems = [
-            ImageRoomTimelineItem(id: .randomEvent,
-                                  timestamp: .mock,
-                                  isOutgoing: false,
-                                  isEditable: false,
-                                  canBeRepliedTo: true,
-                                  isThreaded: false,
-                                  sender: .init(id: "", displayName: "Sally Sanderson"),
-                                  content: .init(filename: "Amazing image.jpeg",
-                                                 caption: "A caption goes right here.",
-                                                 imageInfo: .mockImage,
-                                                 thumbnailInfo: .mockThumbnail))
-        ]
+        let item = ImageRoomTimelineItem(id: .randomEvent,
+                                         timestamp: .mock,
+                                         isOutgoing: false,
+                                         isEditable: false,
+                                         canBeRepliedTo: true,
+                                         isThreaded: false,
+                                         sender: .init(id: "", displayName: "Sally Sanderson"),
+                                         content: .init(filename: "Amazing image.jpeg",
+                                                        caption: "A caption goes right here.",
+                                                        imageInfo: .mockImage,
+                                                        thumbnailInfo: .mockThumbnail))
         
         mediaProvider = MediaProviderMock(configuration: .init())
-        viewModel = TimelineMediaPreviewViewModel(previewItems: previewItems,
+        viewModel = TimelineMediaPreviewViewModel(initialItem: item,
+                                                  isFromRoomScreen: false,
+                                                  timelineViewModel: TimelineViewModel.mock,
                                                   mediaProvider: mediaProvider,
                                                   userIndicatorController: UserIndicatorControllerMock())
     }

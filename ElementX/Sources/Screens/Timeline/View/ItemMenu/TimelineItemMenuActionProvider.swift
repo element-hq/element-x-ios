@@ -9,6 +9,8 @@ import Foundation
 
 @MainActor
 struct TimelineItemMenuActionProvider {
+    enum PresentationContext { case room, pinnedEvents, mediaDetailsOnBrowser, mediaDetailsOnRoom }
+    
     let timelineItem: RoomTimelineItemProtocol
     let canCurrentUserRedactSelf: Bool
     let canCurrentUserRedactOthers: Bool
@@ -17,7 +19,7 @@ struct TimelineItemMenuActionProvider {
     let isDM: Bool
     let isViewSourceEnabled: Bool
     let isCreateMediaCaptionsEnabled: Bool
-    let isPinnedEventsTimeline: Bool
+    let presentationContext: PresentationContext
     let emojiProvider: EmojiProviderProtocol
     
     // swiftlint:disable:next cyclomatic_complexity
@@ -38,6 +40,10 @@ struct TimelineItemMenuActionProvider {
         
         var actions: [TimelineItemMenuAction] = []
         var secondaryActions: [TimelineItemMenuAction] = []
+        
+        if presentationContext == .pinnedEvents || presentationContext == .mediaDetailsOnBrowser {
+            actions.append(.viewInRoomTimeline)
+        }
 
         if item.canBeRepliedTo {
             if let messageItem = item as? EventBasedMessageTimelineItemProtocol {
@@ -99,10 +105,15 @@ struct TimelineItemMenuActionProvider {
             secondaryActions.append(.redact)
         }
         
-        if isPinnedEventsTimeline {
-            actions.insert(.viewInRoomTimeline, at: 0)
+        switch presentationContext {
+        case .room:
+            break // viewInRoomTimeline is added conditionally so we don't need to filter.
+        case .pinnedEvents:
             actions = actions.filter(\.canAppearInPinnedEventsTimeline)
             secondaryActions = secondaryActions.filter(\.canAppearInPinnedEventsTimeline)
+        case .mediaDetailsOnBrowser, .mediaDetailsOnRoom:
+            actions = actions.filter(\.canAppearInMediaDetails)
+            secondaryActions = secondaryActions.filter(\.canAppearInMediaDetails)
         }
         
         if item.hasFailedToSend {
@@ -115,7 +126,7 @@ struct TimelineItemMenuActionProvider {
             secondaryActions = secondaryActions.filter(\.canAppearInRedacted)
         }
 
-        return .init(isReactable: isPinnedEventsTimeline ? false : item.isReactable,
+        return .init(isReactable: presentationContext == .room ? item.isReactable : false,
                      actions: actions,
                      secondaryActions: secondaryActions,
                      emojiProvider: emojiProvider)

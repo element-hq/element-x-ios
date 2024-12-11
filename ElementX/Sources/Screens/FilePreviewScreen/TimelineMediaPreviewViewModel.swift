@@ -11,6 +11,8 @@ import Foundation
 typealias TimelineMediaPreviewViewModelType = StateStoreViewModel<TimelineMediaPreviewViewState, TimelineMediaPreviewViewAction>
 
 class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
+    private let isFromRoomScreen: Bool
+    private let timelineViewModel: TimelineViewModelProtocol
     private let mediaProvider: MediaProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -19,26 +21,53 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(previewItems: [EventBasedMessageTimelineItemProtocol], mediaProvider: MediaProviderProtocol, userIndicatorController: UserIndicatorControllerProtocol) {
+    init(initialItem: EventBasedMessageTimelineItemProtocol,
+         isFromRoomScreen: Bool,
+         timelineViewModel: TimelineViewModelProtocol,
+         mediaProvider: MediaProviderProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol) {
+        self.isFromRoomScreen = true
+        self.timelineViewModel = timelineViewModel
         self.mediaProvider = mediaProvider
         
         // We might not want to inject this, instead creating a new instance with a custom position and colour scheme 🤔
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: TimelineMediaPreviewViewState(previewItems: previewItems.map(TimelineMediaPreviewItem.init)), mediaProvider: mediaProvider)
+        let currentItem = TimelineMediaPreviewItem(timelineItem: initialItem)
+        
+        super.init(initialViewState: TimelineMediaPreviewViewState(previewItems: [currentItem],
+                                                                   currentItem: currentItem),
+                   mediaProvider: mediaProvider)
+        
+        rebuildCurrentItemActions()
+        
+        timelineViewModel.context.$viewState.map(\.canCurrentUserRedactSelf)
+            .merge(with: timelineViewModel.context.$viewState.map(\.canCurrentUserRedactOthers))
+            .sink { [weak self] _ in
+                self?.rebuildCurrentItemActions()
+            }
+            .store(in: &cancellables)
     }
     
     override func process(viewAction: TimelineMediaPreviewViewAction) {
         switch viewAction {
-        case .viewInTimeline:
-            actionsSubject.send(.viewInTimeline)
-        case .redact:
+        case .menuAction(let action):
+            switch action {
+            case .viewInRoomTimeline:
+                actionsSubject.send(.viewInTimeline)
+            case .redact:
+                state.bindings.isPresentingRedactConfirmation = true
+            default:
+                MXLog.error("Received unexpected action: \(action)")
+            }
+        case .redactConfirmation:
             break // Do it here??
         }
     }
     
     func updateCurrentItem(_ previewItem: TimelineMediaPreviewItem) async {
         state.currentItem = previewItem
+        rebuildCurrentItemActions()
         
         if previewItem.fileHandle == nil, let source = previewItem.mediaSource {
             showDownloadingIndicator(itemID: previewItem.id)
@@ -50,9 +79,24 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                 actionsSubject.send(.loadedMediaFile)
             case .failure(let error):
                 MXLog.error("Failed loading media: \(error)")
-                #warning("Show the error!")
+                showDownloadErrorIndicator()
             }
         }
+    }
+    
+    func rebuildCurrentItemActions() {
+        let timelineContext = timelineViewModel.context
+        let provider = TimelineItemMenuActionProvider(timelineItem: state.currentItem.timelineItem,
+                                                      canCurrentUserRedactSelf: timelineContext.viewState.canCurrentUserRedactSelf,
+                                                      canCurrentUserRedactOthers: timelineContext.viewState.canCurrentUserRedactOthers,
+                                                      canCurrentUserPin: timelineContext.viewState.canCurrentUserPin,
+                                                      pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
+                                                      isDM: timelineContext.viewState.isEncryptedOneToOneRoom,
+                                                      isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
+                                                      isCreateMediaCaptionsEnabled: timelineContext.viewState.isCreateMediaCaptionsEnabled,
+                                                      presentationContext: isFromRoomScreen ? .mediaDetailsOnRoom : .mediaDetailsOnBrowser,
+                                                      emojiProvider: timelineContext.viewState.emojiProvider)
+        state.currentItemActions = provider.makeActions()
     }
     
     private func showDownloadingIndicator(itemID: TimelineItemIdentifier) {
@@ -69,7 +113,16 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         userIndicatorController.retractIndicatorWithId(indicatorID)
     }
     
+    private func showDownloadErrorIndicator() {
+        // FIXME: Add the correct string and indicator type??
+        userIndicatorController.submitIndicator(UserIndicator(id: downloadErrorIndicatorID,
+                                                              type: .modal,
+                                                              title: L10n.errorUnknown,
+                                                              iconName: "exclamationmark.circle.fill"))
+    }
+    
+    private var downloadErrorIndicatorID: String { "\(Self.self)-DownloadError" }
     private func makeDownloadIndicatorID(itemID: TimelineItemIdentifier) -> String {
-        "\(TimelineMediaPreviewViewModel.self)-Download-\(itemID.uniqueID.id)"
+        "\(Self.self)-Download-\(itemID.uniqueID.id)"
     }
 }

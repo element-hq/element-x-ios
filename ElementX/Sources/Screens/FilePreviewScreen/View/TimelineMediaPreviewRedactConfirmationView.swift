@@ -13,6 +13,8 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
     
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
     
+    private var currentItem: TimelineMediaPreviewItem { context.viewState.currentItem }
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
@@ -51,51 +53,49 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
     
     @ViewBuilder
     private var preview: some View {
-        if let currentItem = context.viewState.currentItem {
-            HStack(spacing: 12) {
-                if let mediaSource = currentItem.thumbnailMediaSource {
-                    Color.clear
-                        .scaledFrame(size: 40)
-                        .background {
-                            LoadableImage(mediaSource: mediaSource,
-                                          mediaType: .timelineItem(uniqueID: currentItem.id.uniqueID.id),
-                                          blurhash: currentItem.blurhash,
-                                          mediaProvider: context.mediaProvider) {
-                                Color.compound.bgSubtleSecondary
-                            }
-                            .aspectRatio(contentMode: .fill)
+        HStack(spacing: 12) {
+            if let mediaSource = currentItem.thumbnailMediaSource {
+                Color.clear
+                    .scaledFrame(size: 40)
+                    .background {
+                        LoadableImage(mediaSource: mediaSource,
+                                      mediaType: .timelineItem(uniqueID: currentItem.id.uniqueID.id),
+                                      blurhash: currentItem.blurhash,
+                                      mediaProvider: context.mediaProvider) {
+                            Color.compound.bgSubtleSecondary
                         }
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                }
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(currentItem.filename ?? "")
-                        .font(.compound.bodyMD)
-                        .foregroundStyle(.compound.textPrimary)
-                    
-                    if let contentType = currentItem.contentType {
-                        Group {
-                            if let fileSize = currentItem.fileSize {
-                                Text(contentType) + Text(" – ") + Text(UInt(fileSize).formatted(.byteCount(style: .file)))
-                            } else {
-                                Text(contentType)
-                            }
-                        }
-                        .font(.compound.bodySM)
-                        .foregroundStyle(.compound.textSecondary)
+                        .aspectRatio(contentMode: .fill)
                     }
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+            }
+                
+            VStack(alignment: .leading, spacing: 4) {
+                Text(currentItem.filename ?? "")
+                    .font(.compound.bodyMD)
+                    .foregroundStyle(.compound.textPrimary)
+                    
+                if let contentType = currentItem.contentType {
+                    Group {
+                        if let fileSize = currentItem.fileSize {
+                            Text(contentType) + Text(" – ") + Text(UInt(fileSize).formatted(.byteCount(style: .file)))
+                        } else {
+                            Text(contentType)
+                        }
+                    }
+                    .font(.compound.bodySM)
+                    .foregroundStyle(.compound.textSecondary)
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 24)
-            .padding(.bottom, 40)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, 24)
+        .padding(.bottom, 40)
     }
     
     private var buttons: some View {
         VStack(spacing: 16) {
             Button(L10n.actionRemove, role: .destructive) {
-                context.send(viewAction: .redact)
+                context.send(viewAction: .redactConfirmation)
             }
             .buttonStyle(.compound(.primary))
             
@@ -124,27 +124,24 @@ struct TimelineMediaPreviewRedactConfirmationView_Previews: PreviewProvider, Tes
     }
     
     static func makeViewModel(contentType: UTType? = nil) -> TimelineMediaPreviewViewModel {
-        let previewItems = [
-            ImageRoomTimelineItem(id: .randomEvent,
-                                  timestamp: .mock,
-                                  isOutgoing: false,
-                                  isEditable: true,
-                                  canBeRepliedTo: true,
-                                  isThreaded: false,
-                                  sender: .init(id: "@alice:matrix.org",
-                                                displayName: "Alice",
-                                                avatarURL: .mockMXCUserAvatar),
-                                  content: .init(filename: "Amazing Image.jpeg",
-                                                 imageInfo: .mockImage,
-                                                 thumbnailInfo: .mockThumbnail,
-                                                 contentType: contentType))
-        ]
+        let item = ImageRoomTimelineItem(id: .randomEvent,
+                                         timestamp: .mock,
+                                         isOutgoing: false,
+                                         isEditable: true,
+                                         canBeRepliedTo: true,
+                                         isThreaded: false,
+                                         sender: .init(id: "@alice:matrix.org",
+                                                       displayName: "Alice",
+                                                       avatarURL: .mockMXCUserAvatar),
+                                         content: .init(filename: "Amazing Image.jpeg",
+                                                        imageInfo: .mockImage,
+                                                        thumbnailInfo: .mockThumbnail,
+                                                        contentType: contentType))
         
-        let viewModel = TimelineMediaPreviewViewModel(previewItems: previewItems,
-                                                      mediaProvider: MediaProviderMock(configuration: .init()),
-                                                      userIndicatorController: UserIndicatorControllerMock())
-        viewModel.state.currentItem = viewModel.state.previewItems.first
-        
-        return viewModel
+        return TimelineMediaPreviewViewModel(initialItem: item,
+                                             isFromRoomScreen: false,
+                                             timelineViewModel: TimelineViewModel.mock,
+                                             mediaProvider: MediaProviderMock(configuration: .init()),
+                                             userIndicatorController: UserIndicatorControllerMock())
     }
 }

@@ -132,13 +132,14 @@ class TimelineMediaPreviewController: QLPreviewController, QLPreviewControllerDa
 
 private struct HeaderView: View {
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
+    private var currentItem: TimelineMediaPreviewItem { context.viewState.currentItem }
     
     var body: some View {
         VStack(spacing: 0) {
-            Text(context.viewState.currentItem?.sender.displayName ?? context.viewState.currentItem?.sender.id ?? L10n.commonLoading)
+            Text(currentItem.sender.displayName ?? currentItem.sender.id)
                 .font(.compound.bodySMSemibold)
                 .foregroundStyle(.compound.textPrimary)
-            Text(context.viewState.currentItem?.timestamp.formatted(date: .abbreviated, time: .omitted) ?? "")
+            Text(currentItem.timestamp.formatted(date: .abbreviated, time: .omitted))
                 .font(.compound.bodyXS)
                 .foregroundStyle(.compound.textPrimary)
                 .textCase(.uppercase)
@@ -148,9 +149,10 @@ private struct HeaderView: View {
 
 private struct CaptionView: View {
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
+    private var currentItem: TimelineMediaPreviewItem { context.viewState.currentItem }
     
     var body: some View {
-        if let caption = context.viewState.currentItem?.caption {
+        if let caption = currentItem.caption {
             Text(caption)
                 .font(.compound.bodyLG)
                 .foregroundStyle(.compound.textPrimary)
