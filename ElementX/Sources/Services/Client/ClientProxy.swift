@@ -644,7 +644,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func roomDirectorySearchProxy() -> RoomDirectorySearchProxyProtocol {
-        RoomDirectorySearchProxy(roomDirectorySearch: client.roomDirectorySearch())
+        RoomDirectorySearchProxy(roomDirectorySearch: client.roomDirectorySearch(), appSettings: appSettings)
     }
     
     func resolveRoomAlias(_ alias: String) async -> Result<ResolvedRoomAlias, ClientProxyError> {
