@@ -48,7 +48,6 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         
         mediaProvider = MediaProviderMock(configuration: .init())
         viewModel = TimelineMediaPreviewViewModel(initialItem: item,
-                                                  isFromRoomScreen: false,
                                                   timelineViewModel: TimelineViewModel.mock,
                                                   mediaProvider: mediaProvider,
                                                   userIndicatorController: UserIndicatorControllerMock())

@@ -149,7 +149,6 @@ struct TimelineMediaQuickLook_Previews: PreviewProvider {
                                                        contentType: .pdf))
         
         return TimelineMediaPreviewViewModel(initialItem: item,
-                                             isFromRoomScreen: false,
                                              timelineViewModel: TimelineViewModel.mock,
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              userIndicatorController: UserIndicatorControllerMock())

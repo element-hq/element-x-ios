@@ -9,8 +9,6 @@ import Foundation
 
 @MainActor
 struct TimelineItemMenuActionProvider {
-    enum PresentationContext { case room, pinnedEvents, mediaDetailsOnBrowser, mediaDetailsOnRoom }
-    
     let timelineItem: RoomTimelineItemProtocol
     let canCurrentUserRedactSelf: Bool
     let canCurrentUserRedactOthers: Bool
@@ -19,7 +17,7 @@ struct TimelineItemMenuActionProvider {
     let isDM: Bool
     let isViewSourceEnabled: Bool
     let isCreateMediaCaptionsEnabled: Bool
-    let presentationContext: PresentationContext
+    let timelineKind: TimelineKind
     let emojiProvider: EmojiProviderProtocol
     
     // swiftlint:disable:next cyclomatic_complexity
@@ -41,7 +39,7 @@ struct TimelineItemMenuActionProvider {
         var actions: [TimelineItemMenuAction] = []
         var secondaryActions: [TimelineItemMenuAction] = []
         
-        if presentationContext == .pinnedEvents || presentationContext == .mediaDetailsOnBrowser {
+        if timelineKind == .pinned || timelineKind == .media(.mediaFilesScreen) {
             actions.append(.viewInRoomTimeline)
         }
 
@@ -105,15 +103,15 @@ struct TimelineItemMenuActionProvider {
             secondaryActions.append(.redact)
         }
         
-        switch presentationContext {
-        case .room:
-            break // viewInRoomTimeline is added conditionally so we don't need to filter.
-        case .pinnedEvents:
+        switch timelineKind {
+        case .pinned:
             actions = actions.filter(\.canAppearInPinnedEventsTimeline)
             secondaryActions = secondaryActions.filter(\.canAppearInPinnedEventsTimeline)
-        case .mediaDetailsOnBrowser, .mediaDetailsOnRoom:
+        case .media:
             actions = actions.filter(\.canAppearInMediaDetails)
             secondaryActions = secondaryActions.filter(\.canAppearInMediaDetails)
+        case .live, .detached:
+            break // viewInRoomTimeline is the only non-room item and was added conditionally.
         }
         
         if item.hasFailedToSend {
@@ -125,11 +123,10 @@ struct TimelineItemMenuActionProvider {
             actions = actions.filter(\.canAppearInRedacted)
             secondaryActions = secondaryActions.filter(\.canAppearInRedacted)
         }
+        
+        let isReactable = timelineKind == .live || timelineKind == .detached ? item.isReactable : false
 
-        return .init(isReactable: presentationContext == .room ? item.isReactable : false,
-                     actions: actions,
-                     secondaryActions: secondaryActions,
-                     emojiProvider: emojiProvider)
+        return .init(isReactable: isReactable, actions: actions, secondaryActions: secondaryActions, emojiProvider: emojiProvider)
     }
     
     private func makeEncryptedItemActions(_ encryptedItem: EncryptedRoomTimelineItem) -> TimelineItemMenuActions? {

@@ -11,7 +11,6 @@ import Foundation
 typealias TimelineMediaPreviewViewModelType = StateStoreViewModel<TimelineMediaPreviewViewState, TimelineMediaPreviewViewAction>
 
 class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
-    private let isFromRoomScreen: Bool
     private let timelineViewModel: TimelineViewModelProtocol
     private let mediaProvider: MediaProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -22,11 +21,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     }
     
     init(initialItem: EventBasedMessageTimelineItemProtocol,
-         isFromRoomScreen: Bool,
          timelineViewModel: TimelineViewModelProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
-        self.isFromRoomScreen = true
         self.timelineViewModel = timelineViewModel
         self.mediaProvider = mediaProvider
         
@@ -94,7 +91,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                                                       isDM: timelineContext.viewState.isEncryptedOneToOneRoom,
                                                       isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
                                                       isCreateMediaCaptionsEnabled: timelineContext.viewState.isCreateMediaCaptionsEnabled,
-                                                      presentationContext: isFromRoomScreen ? .mediaDetailsOnRoom : .mediaDetailsOnBrowser,
+                                                      timelineKind: timelineContext.viewState.timelineKind,
                                                       emojiProvider: timelineContext.viewState.emojiProvider)
         state.currentItemActions = provider.makeActions()
     }

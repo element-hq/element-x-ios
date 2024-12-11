@@ -139,7 +139,6 @@ struct TimelineMediaPreviewRedactConfirmationView_Previews: PreviewProvider, Tes
                                                         contentType: contentType))
         
         return TimelineMediaPreviewViewModel(initialItem: item,
-                                             isFromRoomScreen: false,
                                              timelineViewModel: TimelineViewModel.mock,
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              userIndicatorController: UserIndicatorControllerMock())

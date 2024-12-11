@@ -9,11 +9,13 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-enum TimelineKind {
+enum TimelineKind: Equatable {
     case live
     case detached
     case pinned
-    case media
+    
+    enum MediaPresentation { case roomScreen, mediaFilesScreen }
+    case media(MediaPresentation)
 }
 
 enum TimelineProxyError: Error {

@@ -75,7 +75,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                                 appSettings: appSettings,
                                                                 analyticsService: analyticsService)
         
-        super.init(initialViewState: TimelineViewState(isPinnedEventsTimeline: timelineController.timelineKind == .pinned,
+        super.init(initialViewState: TimelineViewState(timelineKind: timelineController.timelineKind,
                                                        roomID: roomProxy.id,
                                                        isEncryptedOneToOneRoom: roomProxy.isEncryptedOneToOneRoom,
                                                        timelineState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
@@ -690,13 +690,13 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             } else {
                 for (index, item) in itemGroup.enumerated() {
                     if index == 0 {
-                        timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: state.isPinnedEventsTimeline ? .single : .first),
+                        timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: state.timelineKind == .pinned ? .single : .first),
                                                             forKey: item.id.uniqueID)
                     } else if index == itemGroup.count - 1 {
-                        timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: state.isPinnedEventsTimeline ? .single : .last),
+                        timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: state.timelineKind == .pinned ? .single : .last),
                                                             forKey: item.id.uniqueID)
                     } else {
-                        timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: state.isPinnedEventsTimeline ? .single : .middle),
+                        timelineItemsDictionary.updateValue(updateViewState(item: item, groupStyle: state.timelineKind == .pinned ? .single : .middle),
                                                             forKey: item.id.uniqueID)
                     }
                 }
@@ -868,29 +868,21 @@ private extension RoomInfoProxy {
 // MARK: - Mocks
 
 extension TimelineViewModel {
-    static let mock = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
-                                        focussedEventID: nil,
-                                        timelineController: MockRoomTimelineController(),
-                                        mediaProvider: MediaProviderMock(configuration: .init()),
-                                        mediaPlayerProvider: MediaPlayerProviderMock(),
-                                        voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                        appMediator: AppMediatorMock.default,
-                                        appSettings: ServiceLocator.shared.settings,
-                                        analyticsService: ServiceLocator.shared.analytics,
-                                        emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+    static let mock = mock(timelineKind: .live)
     
-    static let pinnedEventsTimelineMock = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
-                                                            focussedEventID: nil,
-                                                            timelineController: MockRoomTimelineController(timelineKind: .pinned),
-                                                            mediaProvider: MediaProviderMock(configuration: .init()),
-                                                            mediaPlayerProvider: MediaPlayerProviderMock(),
-                                                            voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                                            userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                            appMediator: AppMediatorMock.default,
-                                                            appSettings: ServiceLocator.shared.settings,
-                                                            analyticsService: ServiceLocator.shared.analytics,
-                                                            emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+    static func mock(timelineKind: TimelineKind = .live) -> TimelineViewModel {
+        TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
+                          focussedEventID: nil,
+                          timelineController: MockRoomTimelineController(timelineKind: timelineKind),
+                          mediaProvider: MediaProviderMock(configuration: .init()),
+                          mediaPlayerProvider: MediaPlayerProviderMock(),
+                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                          appMediator: AppMediatorMock.default,
+                          appSettings: ServiceLocator.shared.settings,
+                          analyticsService: ServiceLocator.shared.analytics,
+                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+    }
 }
 
 extension EnvironmentValues {

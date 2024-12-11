@@ -141,7 +141,7 @@ import UniformTypeIdentifiers
 struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel(contentType: .jpeg, isOutgoing: true)
     static let unknownTypeViewModel = makeViewModel()
-    static let fromRoomViewModel = makeViewModel(isFromRoomScreen: true)
+    static let presentedOnRoomViewModel = makeViewModel(isPresentedOnRoomScreen: true)
     
     static var previews: some View {
         TimelineMediaPreviewDetailsView(context: viewModel.context)
@@ -151,12 +151,12 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
             .previewDisplayName("Unknown type")
             .snapshotPreferences(delay: 0.1)
         
-        TimelineMediaPreviewDetailsView(context: fromRoomViewModel.context)
+        TimelineMediaPreviewDetailsView(context: presentedOnRoomViewModel.context)
             .previewDisplayName("Incoming on Room")
             .snapshotPreferences(delay: 0.1)
     }
     
-    static func makeViewModel(contentType: UTType? = nil, isOutgoing: Bool = false, isFromRoomScreen: Bool = false) -> TimelineMediaPreviewViewModel {
+    static func makeViewModel(contentType: UTType? = nil, isOutgoing: Bool = false, isPresentedOnRoomScreen: Bool = false) -> TimelineMediaPreviewViewModel {
         let item = ImageRoomTimelineItem(id: .randomEvent,
                                          timestamp: .mock,
                                          isOutgoing: isOutgoing,
@@ -171,9 +171,9 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
                                                         thumbnailInfo: .mockThumbnail,
                                                         contentType: contentType))
         
+        let timelineKind = TimelineKind.media(isPresentedOnRoomScreen ? .roomScreen : .mediaFilesScreen)
         return TimelineMediaPreviewViewModel(initialItem: item,
-                                             isFromRoomScreen: isFromRoomScreen,
-                                             timelineViewModel: TimelineViewModel.mock,
+                                             timelineViewModel: TimelineViewModel.mock(timelineKind: timelineKind),
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              userIndicatorController: UserIndicatorControllerMock())
     }
