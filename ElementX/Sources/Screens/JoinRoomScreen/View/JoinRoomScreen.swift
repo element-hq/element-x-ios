@@ -13,7 +13,12 @@ struct JoinRoomScreen: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     
     @ObservedObject var context: JoinRoomScreenViewModel.Context
+    @FocusState private var focus: Focus?
     
+    private enum Focus {
+        case knockMessage
+    }
+
     var body: some View {
         FullscreenDialog(topPadding: context.viewState.mode == .knocked ? 151 : 35, background: .bloom) {
             if context.viewState.mode == .loading {
@@ -29,6 +34,7 @@ struct JoinRoomScreen: View {
         .backgroundStyle(.compound.bgCanvasDefault)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
+        .shouldScrollOnKeyboardDidShow(focus == .knockMessage, to: Focus.knockMessage)
     }
     
     @ViewBuilder
@@ -117,6 +123,7 @@ struct JoinRoomScreen: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 0) {
                 TextField("", text: $context.knockMessage, axis: .vertical)
+                    .focused($focus, equals: .knockMessage)
                     .onChange(of: context.knockMessage) { _, newValue in
                         context.knockMessage = String(newValue.prefix(maxKnockMessageLength))
                     }
@@ -124,6 +131,7 @@ struct JoinRoomScreen: View {
                     .font(.compound.bodyMD)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
+                    .id(Focus.knockMessage)
             }
             .background(.compound.bgCanvasDefault)
             .cornerRadius(8)

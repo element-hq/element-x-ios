@@ -12,6 +12,7 @@ import MatrixRustSDK
 
 final class RoomDirectorySearchProxy: RoomDirectorySearchProxyProtocol {
     private let roomDirectorySearch: RoomDirectorySearchProtocol
+    private let appSettings: AppSettings
     private let serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomdirectorysearch", qos: .default)
     
     private let resultsSubject = CurrentValueSubject<[RoomDirectorySearchResult], Never>([])
@@ -31,8 +32,10 @@ final class RoomDirectorySearchProxy: RoomDirectorySearchProxyProtocol {
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(roomDirectorySearch: RoomDirectorySearchProtocol) {
+    init(roomDirectorySearch: RoomDirectorySearchProtocol,
+         appSettings: AppSettings) {
         self.roomDirectorySearch = roomDirectorySearch
+        self.appSettings = appSettings
         diffsPublisher
             .receive(on: serialDispatchQueue)
             .sink { [weak self] in self?.updateResultsWithDiffs($0) }
@@ -146,7 +149,7 @@ final class RoomDirectorySearchProxy: RoomDirectorySearchProxyProtocol {
                                   name: value.name,
                                   topic: value.topic,
                                   avatar: .room(id: value.roomId, name: value.name, avatarURL: value.avatarUrl.flatMap(URL.init(string:))),
-                                  canBeJoined: value.joinRule == .public)
+                                  canBeJoined: value.joinRule == .public || (appSettings.knockingEnabled && value.joinRule == .knock))
     }
 }
 
