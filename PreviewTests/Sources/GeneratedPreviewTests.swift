@@ -53,12 +53,6 @@ extension PreviewTests {
         }
     }
 
-    func test_audioMediaEventsTimelineView() {
-        for preview in AudioMediaEventsTimelineView_Previews._allPreviews {
-            assertSnapshots(matching: preview)
-        }
-    }
-
     func test_audioRoomTimelineView() {
         for preview in AudioRoomTimelineView_Previews._allPreviews {
             assertSnapshots(matching: preview)
@@ -181,12 +175,6 @@ extension PreviewTests {
 
     func test_estimatedWaveformView() {
         for preview in EstimatedWaveformView_Previews._allPreviews {
-            assertSnapshots(matching: preview)
-        }
-    }
-
-    func test_fileMediaEventsTimelineView() {
-        for preview in FileMediaEventsTimelineView_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }
@@ -1039,12 +1027,6 @@ extension PreviewTests {
 
     func test_voiceMessageButton() {
         for preview in VoiceMessageButton_Previews._allPreviews {
-            assertSnapshots(matching: preview)
-        }
-    }
-
-    func test_voiceMessageMediaEventsTimelineView() {
-        for preview in VoiceMessageMediaEventsTimelineView_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }

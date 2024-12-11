@@ -5,39 +5,17 @@
 // Please see LICENSE in the repository root for full details.
 //
 
-import Foundation
+import Compound
 import SwiftUI
 
 struct ImageMediaEventsTimelineView: View {
     @Environment(\.timelineContext) private var context
     let timelineItem: ImageRoomTimelineItem
     
-    var hasMediaCaption: Bool { timelineItem.content.caption != nil }
-    
     var body: some View {
-        TimelineStyler(timelineItem: timelineItem) {
-            VStack(alignment: .leading, spacing: 4) {
-                loadableImage
-                    .accessibilityElement(children: .ignore)
-                    .accessibilityLabel(L10n.commonImage)
-                    // This clip shape is distinct from the one in the styler as that one
-                    // operates on the entire message so wouldn't round the bottom corners.
-                    .clipShape(RoundedRectangle(cornerRadius: hasMediaCaption ? 6 : 0))
-                    .onTapGesture {
-                        context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
-                    }
-                
-                if let attributedCaption = timelineItem.content.formattedCaption {
-                    FormattedBodyText(attributedString: attributedCaption,
-                                      additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
-                                      boostEmojiSize: true)
-                } else if let caption = timelineItem.content.caption {
-                    FormattedBodyText(text: caption,
-                                      additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
-                                      boostEmojiSize: true)
-                }
-            }
-        }
+        loadableImage
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(L10n.commonImage)
     }
     
     @ViewBuilder
@@ -50,7 +28,7 @@ struct ImageMediaEventsTimelineView: View {
                           mediaProvider: context?.mediaProvider) {
                 placeholder
             }
-            .timelineMediaFrame(imageInfo: timelineItem.content.imageInfo)
+            .mediaGalleryTimelineAspectRatio(imageInfo: timelineItem.content.imageInfo)
         } else {
             LoadableImage(mediaSource: timelineItem.content.thumbnailInfo?.source ?? timelineItem.content.imageInfo.source,
                           mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
@@ -59,13 +37,13 @@ struct ImageMediaEventsTimelineView: View {
                           mediaProvider: context?.mediaProvider) {
                 placeholder
             }
-            .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo ?? timelineItem.content.imageInfo)
+            .mediaGalleryTimelineAspectRatio(imageInfo: timelineItem.content.thumbnailInfo ?? timelineItem.content.imageInfo)
         }
     }
         
     private var placeholder: some View {
         Rectangle()
-            .foregroundColor(timelineItem.isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming)
+            .foregroundColor(.compound._bgBubbleIncoming)
             .opacity(0.3)
     }
 }
@@ -77,19 +55,11 @@ struct ImageMediaEventsTimelineView_Previews: PreviewProvider, TestablePreview {
         ScrollView {
             VStack(spacing: 20.0) {
                 ImageMediaEventsTimelineView(timelineItem: makeTimelineItem())
-                ImageMediaEventsTimelineView(timelineItem: makeTimelineItem(isEdited: true))
-                
-                // Blur hashed item?
-                
-                ImageMediaEventsTimelineView(timelineItem: makeTimelineItem(caption: "This is a great image 😎"))
-                ImageMediaEventsTimelineView(timelineItem: makeTimelineItem(caption: "This is a great image with a really long multiline caption.",
-                                                                            isEdited: true))
             }
         }
         .environmentObject(viewModel.context)
         .environment(\.timelineContext, viewModel.context)
         .previewLayout(.fixed(width: 390, height: 1200))
-        .padding(.bottom, 20)
     }
     
     private static func makeTimelineItem(caption: String? = nil, isEdited: Bool = false) -> ImageRoomTimelineItem {

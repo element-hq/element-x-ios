@@ -24,6 +24,8 @@ struct MediaEventsTimelineScreenViewState: BindableState {
     var isBackPaginating = false
     var groups = [MediaEventsTimelineGroup]()
     
+    var activeTimelineContextProvider: (() -> TimelineViewModel.Context)!
+    
     var bindings: MediaEventsTimelineScreenViewStateBindings
 }
 

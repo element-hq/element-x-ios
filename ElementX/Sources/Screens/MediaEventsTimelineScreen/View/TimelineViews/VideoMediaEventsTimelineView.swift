@@ -12,33 +12,11 @@ struct VideoMediaEventsTimelineView: View {
     @Environment(\.timelineContext) private var context
     let timelineItem: VideoRoomTimelineItem
     
-    private var hasMediaCaption: Bool { timelineItem.content.caption != nil }
-    
     var body: some View {
-        TimelineStyler(timelineItem: timelineItem) {
-            VStack(alignment: .leading, spacing: 4) {
-                thumbnail
-                    .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo)
-                    .accessibilityElement(children: .ignore)
-                    .accessibilityLabel(L10n.commonVideo)
-                    // This clip shape is distinct from the one in the styler as that one
-                    // operates on the entire message so wouldn't round the bottom corners.
-                    .clipShape(RoundedRectangle(cornerRadius: hasMediaCaption ? 6 : 0))
-                    .onTapGesture {
-                        context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
-                    }
-                
-                if let attributedCaption = timelineItem.content.formattedCaption {
-                    FormattedBodyText(attributedString: attributedCaption,
-                                      additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
-                                      boostEmojiSize: true)
-                } else if let caption = timelineItem.content.caption {
-                    FormattedBodyText(text: caption,
-                                      additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
-                                      boostEmojiSize: true)
-                }
-            }
-        }
+        thumbnail
+            .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(L10n.commonVideo)
     }
     
     @ViewBuilder
@@ -54,6 +32,7 @@ struct VideoMediaEventsTimelineView: View {
             } placeholder: {
                 placeholder
             }
+            .mediaGalleryTimelineAspectRatio(imageInfo: timelineItem.content.thumbnailInfo)
         } else {
             playIcon
         }
@@ -69,7 +48,7 @@ struct VideoMediaEventsTimelineView: View {
     
     var placeholder: some View {
         Rectangle()
-            .foregroundColor(timelineItem.isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming)
+            .foregroundColor(.compound._bgBubbleIncoming)
             .opacity(0.3)
     }
 }

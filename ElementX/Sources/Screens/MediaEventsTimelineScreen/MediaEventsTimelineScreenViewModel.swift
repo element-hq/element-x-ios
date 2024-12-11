@@ -42,6 +42,12 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         
         super.init(initialViewState: .init(bindings: .init(screenMode: screenMode)), mediaProvider: mediaProvider)
         
+        state.activeTimelineContextProvider = { [weak self] in
+            guard let self else { fatalError() }
+            
+            return activeTimelineViewModel.context
+        }
+        
         mediaTimelineViewModel.context.$viewState.sink { [weak self] timelineViewState in
             guard let self, state.bindings.screenMode == .media else {
                 return
