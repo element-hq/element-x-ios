@@ -14,7 +14,6 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     private let mediaTimelineViewModel: TimelineViewModelProtocol
     private let filesTimelineViewModel: TimelineViewModelProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let dateFormatter: DateFormatter
     
     private var isOldestItemVisible = false
     
@@ -40,9 +39,6 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         self.mediaTimelineViewModel = mediaTimelineViewModel
         self.filesTimelineViewModel = filesTimelineViewModel
         self.userIndicatorController = userIndicatorController
-        
-        dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMMM yyyy"
         
         super.init(initialViewState: .init(bindings: .init(screenMode: screenMode)), mediaProvider: mediaProvider)
         
@@ -88,7 +84,10 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     // MARK: - Private
     
     private func updateWithTimelineViewState(_ timelineViewState: TimelineViewState) {
-        let filteredItems = timelineViewState.timelineState.itemViewStates.filter { itemViewState in
+        var newGroups = [MediaEventsTimelineGroup]()
+        var currentItems = [RoomTimelineItemViewState]()
+        
+        timelineViewState.timelineState.itemViewStates.filter { itemViewState in
             switch itemViewState.type {
             case .image, .video:
                 state.bindings.screenMode == .media
@@ -99,12 +98,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             default:
                 false
             }
-        }
-        
-        var newGroups = [MediaEventsTimelineGroup]()
-        var currentItems = [RoomTimelineItemViewState]()
-        
-        for item in filteredItems.reversed() {
+        }.reversed().forEach { item in
             if case .separator(let item) = item.type {
                 let group = MediaEventsTimelineGroup(id: item.id.uniqueID.id,
                                                      title: titleForDate(item.timestamp),
@@ -116,6 +110,14 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             }
         }
         
+        if !currentItems.isEmpty {
+            MXLog.warning("Found ungrouped timeline items, appending them at end.")
+            let group = MediaEventsTimelineGroup(id: UUID().uuidString,
+                                                 title: titleForDate(.now),
+                                                 items: currentItems)
+            newGroups.append(group)
+        }
+
         state.groups = newGroups
         
         state.isBackPaginating = (timelineViewState.timelineState.paginationState.backward == .paginating)
@@ -152,7 +154,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         if Calendar.current.isDate(date, equalTo: .now, toGranularity: .month) {
             L10n.commonDateSeparatorThisMonth
         } else {
-            dateFormatter.string(from: date)
+            date.formatted(.dateTime.month(.wide).year())
         }
     }
 }

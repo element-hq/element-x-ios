@@ -262,6 +262,11 @@ enum RoomTimelineItemFixtures {
             VoiceMessageRoomTimelineItem(isOutgoing: true)
         ]
     }
+    
+    static var separator: SeparatorRoomTimelineItem {
+        SeparatorRoomTimelineItem(id: .virtual(uniqueID: .init(id: UUID().uuidString)),
+                                  timestamp: .now)
+    }
 }
 
 private extension TextRoomTimelineItem {

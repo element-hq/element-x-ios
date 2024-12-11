@@ -192,12 +192,12 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         NavigationStack {
             MediaEventsTimelineScreen(context: mediaViewModel.context)
-                .previewDisplayName("Media")
         }
+        .previewDisplayName("Media")
         
         NavigationStack {
             MediaEventsTimelineScreen(context: filesViewModel.context)
-                .previewDisplayName("Files")
         }
+        .previewDisplayName("Files")
     }
 }
