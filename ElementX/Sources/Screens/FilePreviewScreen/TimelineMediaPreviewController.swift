@@ -55,9 +55,9 @@ class TimelineMediaPreviewController: QLPreviewController, QLPreviewControllerDa
                 switch action {
                 case .loadedMediaFile:
                     self?.refreshCurrentPreviewItem()
-                case .viewInTimeline:
+                case .viewInRoomTimeline, .dismiss:
                     self?.dismiss(animated: true) // Dismiss the details sheet.
-                    // Errrr, hmmmmm, do something else here.
+                    // And let the view model handle the rest.
                 }
             }
             .store(in: &cancellables)

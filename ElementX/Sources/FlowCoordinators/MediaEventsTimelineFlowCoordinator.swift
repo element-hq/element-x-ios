@@ -9,6 +9,7 @@ import Combine
 import Foundation
 
 enum MediaEventsTimelineFlowCoordinatorAction {
+    case viewInRoomTimeline(TimelineItemIdentifier)
     case finished
 }
 
@@ -90,6 +91,15 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                         userIndicatorController: userIndicatorController)
         
         let coordinator = MediaEventsTimelineScreenCoordinator(parameters: parameters)
+        
+        coordinator.actions
+            .sink { [weak self] action in
+                switch action {
+                case .viewInRoomTimeline(let itemID):
+                    self?.actionsSubject.send(.viewInRoomTimeline(itemID))
+                }
+            }
+            .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator) { [weak self] in
             self?.actionsSubject.send(.finished)

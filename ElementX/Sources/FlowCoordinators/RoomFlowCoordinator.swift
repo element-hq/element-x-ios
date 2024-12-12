@@ -1546,6 +1546,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             
             switch action {
+            case .viewInRoomTimeline(let itemID):
+                guard let eventID = itemID.eventID else {
+                    MXLog.error("Unable to present room timeline for event \(itemID)")
+                    return
+                }
+                stateMachine.tryEvent(.dismissMediaEventsTimeline)
+                stateMachine.tryEvent(.presentRoom(presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: false))))
             case .finished:
                 stateMachine.tryEvent(.dismissMediaEventsTimeline)
             }

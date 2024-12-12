@@ -121,6 +121,7 @@ struct MediaEventsTimelineScreen: View {
             ProgressView()
                 .padding()
                 .opacity(context.viewState.isBackPaginating ? 1 : 0)
+                .scaleEffect(.init(width: 1, height: -1)) // Make sure it spins the right way around 🙃
             
             Rectangle()
                 .frame(height: 1)
