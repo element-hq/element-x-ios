@@ -16,6 +16,8 @@ struct VoiceMessageRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             VoiceMessageRoomTimelineContent(timelineItem: timelineItem,
                                             playerState: playerState)
+                .accessibilityLabel(L10n.commonVoiceMessage)
+                .frame(maxWidth: 400)
         }
     }
 }
@@ -83,7 +85,6 @@ struct VoiceMessageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         body.environmentObject(viewModel.context)
-            .previewDisplayName("Bubble")
     }
     
     static var body: some View {
