@@ -281,6 +281,12 @@ extension PreviewTests {
         }
     }
 
+    func test_imageMediaEventsTimelineView() {
+        for preview in ImageMediaEventsTimelineView_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_imageRoomTimelineView() {
         for preview in ImageRoomTimelineView_Previews._allPreviews {
             assertSnapshots(matching: preview)
@@ -767,6 +773,12 @@ extension PreviewTests {
         }
     }
 
+    func test_separatorMediaEventsTimelineView() {
+        for preview in SeparatorMediaEventsTimelineView_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_separatorRoomTimelineView() {
         for preview in SeparatorRoomTimelineView_Previews._allPreviews {
             assertSnapshots(matching: preview)
@@ -991,6 +1003,12 @@ extension PreviewTests {
 
     func test_userProfileScreen() {
         for preview in UserProfileScreen_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_videoMediaEventsTimelineView() {
+        for preview in VideoMediaEventsTimelineView_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }
