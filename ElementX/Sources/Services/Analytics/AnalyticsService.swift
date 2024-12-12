@@ -122,19 +122,26 @@ extension AnalyticsService {
     /// - Parameter name: The name of the error
     /// - Parameter timeToDecryptMillis: The time it took to decrypt the event in milliseconds, needs to be used only to track UTD errors, otherwise if the error is nort related to UTD it should be nil.
     /// Can be found in `UnableToDecryptInfo`. In case the `UnableToDecryptInfo` contains the value as nil, pass it as `-1`
-    func trackError(context: String?, domain: AnalyticsEvent.Error.Domain, name: AnalyticsEvent.Error.Name, timeToDecryptMillis: Int? = nil) {
+    func trackError(context: String?, domain: AnalyticsEvent.Error.Domain,
+                    name: AnalyticsEvent.Error.Name,
+                    timeToDecryptMillis: Int? = nil,
+                    eventLocalAgeMillis: Int? = nil,
+                    isFederated: Bool? = nil,
+                    isMatrixDotOrg: Bool? = nil,
+                    userTrustsOwnIdentity: Bool? = nil,
+                    wasVisibleToUser: Bool? = nil) {
         // CryptoModule is deprecated
         capture(event: AnalyticsEvent.Error(context: context,
                                             cryptoModule: .Rust,
                                             cryptoSDK: .Rust,
                                             domain: domain,
-                                            eventLocalAgeMillis: nil,
-                                            isFederated: nil,
-                                            isMatrixDotOrg: nil,
+                                            eventLocalAgeMillis: eventLocalAgeMillis,
+                                            isFederated: isFederated,
+                                            isMatrixDotOrg: isMatrixDotOrg,
                                             name: name,
                                             timeToDecryptMillis: timeToDecryptMillis,
-                                            userTrustsOwnIdentity: nil,
-                                            wasVisibleToUser: nil))
+                                            userTrustsOwnIdentity: userTrustsOwnIdentity,
+                                            wasVisibleToUser: wasVisibleToUser))
     }
     
     /// Track the creation of a room
