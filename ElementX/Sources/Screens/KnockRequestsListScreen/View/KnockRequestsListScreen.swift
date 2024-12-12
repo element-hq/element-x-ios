@@ -88,7 +88,10 @@ struct KnockRequestsListScreen_Previews: PreviewProvider, TestablePreview {
     
     static let emptyViewModel = KnockRequestsListScreenViewModel.mockWithRequestsState(.loaded([]))
     
+    static let singleRequestViewModel = KnockRequestsListScreenViewModel.mockWithRequestsState(.loaded([JoinRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "Now", reason: "Hello"))]))
+    
     static let viewModel = KnockRequestsListScreenViewModel.mockWithRequestsState(.loaded([JoinRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "Now", reason: "Hello")),
+                                                                                           // swiftlint:disable:next line_length
                                                                                            JoinRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org", displayName: "Bob", avatarURL: nil, timestamp: "Now", reason: "Hello this one is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long reason")),
                                                                                            JoinRequestProxyMock(.init(eventID: "3", userID: "@charlie:matrix.org", displayName: "Charlie", avatarURL: nil, timestamp: "Now", reason: nil)),
                                                                                            JoinRequestProxyMock(.init(eventID: "4", userID: "@dan:matrix.org", displayName: "Dan", avatarURL: nil, timestamp: "Now", reason: "Hello! It's a me! Dan!"))]))
@@ -97,10 +100,20 @@ struct KnockRequestsListScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             KnockRequestsListScreen(context: viewModel.context)
         }
+        .snapshotPreferences(delay: 0.2)
+        
+        NavigationStack {
+            KnockRequestsListScreen(context: singleRequestViewModel.context)
+        }
+        .previewDisplayName("Single Request")
+        .snapshotPreferences(delay: 0.2)
+
         NavigationStack {
             KnockRequestsListScreen(context: emptyViewModel.context)
         }
         .previewDisplayName("Empty state")
+        .snapshotPreferences(delay: 0.2)
+        
         NavigationStack {
             KnockRequestsListScreen(context: loadingViewModel.context)
         }

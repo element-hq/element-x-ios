@@ -103,10 +103,8 @@ private struct SingleKnockRequestBannerContent: View {
             Button(L10n.screenRoomSingleKnockRequestViewButtonTitle, action: onViewAll)
                 .buttonStyle(.compound(.secondary, size: .medium))
             if let onAccept {
-                Button(L10n.screenRoomSingleKnockRequestAcceptButtonTitle, action: {
-                    onAccept(request.eventID)
-                })
-                .buttonStyle(.compound(.primary, size: .medium))
+                Button(L10n.screenRoomSingleKnockRequestAcceptButtonTitle) { onAccept(request.eventID) }
+                    .buttonStyle(.compound(.primary, size: .medium))
             }
         }
         .padding(.top, request.reason == nil ? 0 : 2)

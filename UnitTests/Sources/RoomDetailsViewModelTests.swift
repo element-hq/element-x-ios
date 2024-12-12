@@ -691,8 +691,11 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         let deferred = deferFulfillment(context.$viewState) { state in
             state.knockRequestsCount == 2 && state.canSeeKnockingRequests
         }
-        
         try await deferred.fulfill()
+        
+        let deferredAction = deferFulfillment(viewModel.actions) { $0 == .displayKnockingRequests }
+        context.send(viewAction: .processTapRequestsToJoin)
+        try await deferredAction.fulfill()
     }
     
     func testKnockRequestsCounterIsLoading() async throws {

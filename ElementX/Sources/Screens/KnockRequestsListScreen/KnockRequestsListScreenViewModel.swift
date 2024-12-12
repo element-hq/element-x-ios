@@ -56,8 +56,7 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
                                              title: L10n.screenKnockRequestsListDeclineAlertTitle,
                                              message: L10n.screenKnockRequestsListDeclineAlertDescription(request.userID),
                                              primaryButton: .init(title: L10n.screenKnockRequestsListDeclineAlertConfirmButtonTitle,
-                                                                  role: .destructive,
-                                                                  action: { [weak self] in self?.decline(request: request) }),
+                                                                  role: .destructive) { [weak self] in self?.decline(request: request) },
                                              secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
         case .ban(let eventID):
             guard let request = getRequest(eventID: eventID) else {
@@ -67,8 +66,7 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
             state.bindings.alertInfo = .init(id: .declineAndBan,
                                              title: L10n.screenKnockRequestsListBanAlertTitle,
                                              primaryButton: .init(title: L10n.screenKnockRequestsListBanAlertConfirmButtonTitle,
-                                                                  role: .destructive,
-                                                                  action: { [weak self] in self?.declineAndBan(request: request) }),
+                                                                  role: .destructive) { [weak self] in self?.declineAndBan(request: request) },
                                              secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
         }
     }
