@@ -65,7 +65,7 @@ struct MediaEventsTimelineScreen: View {
         let columns = [GridItem(.adaptive(minimum: 80, maximum: 150), spacing: 1)]
         LazyVGrid(columns: columns, alignment: .center, spacing: 1) {
             ForEach(context.viewState.groups) { group in
-                Section(footer: SeparatorMediaEventsTimelineView(group: group)) {
+                Section {
                     ForEach(group.items) { item in
                         Button {
                             context.send(viewAction: .tappedItem(item))
@@ -79,6 +79,10 @@ struct MediaEventsTimelineScreen: View {
                                 .scaleEffect(.init(width: -1, height: -1))
                         }
                     }
+                } footer: {
+                    // Use a footer as the header because the scrollView is flipped
+                    SeparatorMediaEventsTimelineView(group: group)
+                        .scaleEffect(.init(width: -1, height: -1))
                 }
             }
         }
@@ -89,7 +93,7 @@ struct MediaEventsTimelineScreen: View {
     private var filesContent: some View {
         LazyVStack(alignment: .center, spacing: 16) {
             ForEach(context.viewState.groups) { group in
-                Section(footer: SeparatorMediaEventsTimelineView(group: group)) {
+                Section {
                     ForEach(group.items) { item in
                         viewForTimelineItem(item)
                             .scaleEffect(.init(width: 1, height: -1))
@@ -102,6 +106,10 @@ struct MediaEventsTimelineScreen: View {
                                 }
                             }
                     }
+                } footer: {
+                    // Use a footer as the header because the scrollView is flipped
+                    SeparatorMediaEventsTimelineView(group: group)
+                        .scaleEffect(.init(width: 1, height: -1))
                 }
             }
         }

@@ -17,8 +17,6 @@ struct SeparatorMediaEventsTimelineView: View {
             .foregroundColor(.compound.textPrimary)
             .frame(alignment: .center)
             .padding(.vertical, 16)
-            // Couldn't figure out how to flip it where it's used instead.
-            .scaleEffect(.init(width: -1, height: -1))
     }
 }
 
@@ -30,6 +28,5 @@ struct SeparatorMediaEventsTimelineView_Previews: PreviewProvider, TestablePrevi
         SeparatorMediaEventsTimelineView(group: .init(id: item.id.uniqueID.id,
                                                       title: "Group",
                                                       items: []))
-            .scaleEffect(.init(width: -1, height: -1))
     }
 }

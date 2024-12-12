@@ -43,8 +43,15 @@ struct ImageMediaEventsTimelineView: View {
         
     private var placeholder: some View {
         Rectangle()
-            .foregroundColor(.compound._bgBubbleIncoming)
+            .foregroundColor(.compound.bgSubtleSecondary)
             .opacity(0.3)
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func mediaGalleryTimelineAspectRatio(imageInfo: ImageInfoProxy?) -> some View {
+        aspectRatio(imageInfo?.aspectRatio, contentMode: .fill)
     }
 }
 
@@ -52,17 +59,15 @@ struct ImageMediaEventsTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
     
     static var previews: some View {
-        ScrollView {
-            VStack(spacing: 20.0) {
-                ImageMediaEventsTimelineView(timelineItem: makeTimelineItem())
-            }
-        }
-        .environmentObject(viewModel.context)
-        .environment(\.timelineContext, viewModel.context)
-        .previewLayout(.fixed(width: 390, height: 1200))
+        ImageMediaEventsTimelineView(timelineItem: makeTimelineItem())
+            .frame(width: 100, height: 100)
+            .environmentObject(viewModel.context)
+            .environment(\.timelineContext, viewModel.context)
+            .previewLayout(.sizeThatFits)
+            .background(.black)
     }
     
-    private static func makeTimelineItem(caption: String? = nil, isEdited: Bool = false) -> ImageRoomTimelineItem {
+    private static func makeTimelineItem() -> ImageRoomTimelineItem {
         ImageRoomTimelineItem(id: .randomEvent,
                               timestamp: .mock,
                               isOutgoing: false,
@@ -71,11 +76,8 @@ struct ImageMediaEventsTimelineView_Previews: PreviewProvider, TestablePreview {
                               isThreaded: false,
                               sender: .init(id: "Bob"),
                               content: .init(filename: "image.jpg",
-                                             caption: caption,
                                              imageInfo: .mockImage,
                                              thumbnailInfo: .mockThumbnail,
-                                             blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW",
-                                             contentType: .jpeg),
-                              properties: .init(isEdited: isEdited))
+                                             contentType: .jpeg))
     }
 }

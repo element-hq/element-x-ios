@@ -14,7 +14,6 @@ struct VideoMediaEventsTimelineView: View {
     
     var body: some View {
         thumbnail
-            .timelineMediaFrame(imageInfo: timelineItem.content.thumbnailInfo)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(L10n.commonVideo)
     }
@@ -32,7 +31,6 @@ struct VideoMediaEventsTimelineView: View {
             } placeholder: {
                 placeholder
             }
-            .mediaGalleryTimelineAspectRatio(imageInfo: timelineItem.content.thumbnailInfo)
         } else {
             playIcon
         }
@@ -48,7 +46,7 @@ struct VideoMediaEventsTimelineView: View {
     
     var placeholder: some View {
         Rectangle()
-            .foregroundColor(.compound._bgBubbleIncoming)
+            .foregroundColor(.compound.bgSubtleSecondary)
             .opacity(0.3)
     }
 }
@@ -57,22 +55,12 @@ struct VideoMediaEventsTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
     
     static var previews: some View {
-        ScrollView {
-            VStack(spacing: 20.0) {
-                VideoMediaEventsTimelineView(timelineItem: makeTimelineItem())
-                VideoMediaEventsTimelineView(timelineItem: makeTimelineItem(isEdited: true))
-                
-                // Blurhash item?
-                
-                VideoMediaEventsTimelineView(timelineItem: makeTimelineItem(caption: "This is a great image 😎"))
-                VideoMediaEventsTimelineView(timelineItem: makeTimelineItem(caption: "This is a great image with a really long multiline caption",
-                                                                            isEdited: true))
-            }
-        }
-        .environmentObject(viewModel.context)
-        .environment(\.timelineContext, viewModel.context)
-        .previewLayout(.fixed(width: 390, height: 975))
-        .padding(.bottom, 20)
+        VideoMediaEventsTimelineView(timelineItem: makeTimelineItem())
+            .frame(width: 100, height: 100)
+            .environmentObject(viewModel.context)
+            .environment(\.timelineContext, viewModel.context)
+            .previewLayout(.sizeThatFits)
+            .background(.black)
     }
     
     private static func makeTimelineItem(caption: String? = nil, isEdited: Bool = false) -> VideoRoomTimelineItem {
@@ -84,10 +72,7 @@ struct VideoMediaEventsTimelineView_Previews: PreviewProvider, TestablePreview {
                               isThreaded: false,
                               sender: .init(id: "Bob"),
                               content: .init(filename: "video.mp4",
-                                             caption: caption,
                                              videoInfo: .mockVideo,
-                                             thumbnailInfo: .mockVideoThumbnail,
-                                             blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW"),
-                              properties: .init(isEdited: isEdited))
+                                             thumbnailInfo: .mockVideoThumbnail))
     }
 }
