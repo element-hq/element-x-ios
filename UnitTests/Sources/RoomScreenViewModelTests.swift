@@ -240,6 +240,8 @@ class RoomScreenViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.state.shouldShowCallButton)
     }
     
+    // MARK: - Knock Requests
+    
     func testKnockRequestBanner() async throws {
         ServiceLocator.shared.settings.knockingEnabled = true
         let roomProxyMock = JoinedRoomProxyMock(.init(joinRequestsState: .loaded([JoinRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!")),
@@ -257,20 +259,22 @@ class RoomScreenViewModelTests: XCTestCase {
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController)
         self.viewModel = viewModel
         
-        var deferred = deferFulfillment(viewModel.context.$viewState) { $0.shouldSeeKnockRequests }
+        var deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.shouldSeeKnockRequests &&
+                state.unseenKnockRequests == [.init(displayName: "Alice", avatarURL: nil, userID: "@alice:matrix.org", reason: "Hello World!", eventID: "1")]
+        }
         try await deferred.fulfill()
-                
-        XCTAssert(viewModel.context.viewState.unseenKnockRequests == [.init(displayName: "Alice", avatarURL: nil, userID: "@alice:matrix.org", reason: "Hello World!", eventID: "1")])
                 
         let deferredAction = deferFulfillment(viewModel.actions) { $0 == .displayKnockRequests }
         viewModel.context.send(viewAction: .viewKnockRequests)
         try await deferredAction.fulfill()
         
-        deferred = deferFulfillment(viewModel.context.$viewState) { $0.handledEventIDs == ["1"] }
+        deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.handledEventIDs == ["1"] &&
+                !state.shouldSeeKnockRequests
+        }
         viewModel.context.send(viewAction: .acceptKnock(eventID: "1"))
         try await deferred.fulfill()
-        
-        XCTAssertFalse(viewModel.context.viewState.shouldSeeKnockRequests)
     }
     
     func testKnockRequestBannerMarkAsSeen() async throws {
@@ -290,17 +294,19 @@ class RoomScreenViewModelTests: XCTestCase {
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController)
         self.viewModel = viewModel
         
-        var deferred = deferFulfillment(viewModel.context.$viewState) { $0.shouldSeeKnockRequests }
+        var deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.shouldSeeKnockRequests &&
+                state.unseenKnockRequests == [.init(displayName: "Alice", avatarURL: nil, userID: "@alice:matrix.org", reason: "Hello World!", eventID: "1"),
+                                              .init(displayName: nil, avatarURL: nil, userID: "@bob:matrix.org", reason: nil, eventID: "2")]
+        }
         try await deferred.fulfill()
         
-        XCTAssert(viewModel.context.viewState.unseenKnockRequests == [.init(displayName: "Alice", avatarURL: nil, userID: "@alice:matrix.org", reason: "Hello World!", eventID: "1"),
-                                                                      .init(displayName: nil, avatarURL: nil, userID: "@bob:matrix.org", reason: nil, eventID: "2")])
-        
-        deferred = deferFulfillment(viewModel.context.$viewState) { $0.handledEventIDs == ["1", "2"] }
+        deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.handledEventIDs == ["1", "2"] &&
+                !state.shouldSeeKnockRequests
+        }
         viewModel.context.send(viewAction: .dismissKnockRequests)
         try await deferred.fulfill()
-        
-        XCTAssertFalse(viewModel.context.viewState.shouldSeeKnockRequests)
     }
     
     func testLoadingKnockRequests() async throws {
@@ -319,7 +325,30 @@ class RoomScreenViewModelTests: XCTestCase {
         self.viewModel = viewModel
         
         // Loading state just does not appear at all
-        var deferred = deferFulfillment(viewModel.context.$viewState) { !$0.shouldSeeKnockRequests }
+        let deferred = deferFulfillment(viewModel.context.$viewState) { !$0.shouldSeeKnockRequests }
+        try await deferred.fulfill()
+    }
+    
+    func testKnockRequestsBannerDoesNotAppearIfUserHasNoPermission() async throws {
+        ServiceLocator.shared.settings.knockingEnabled = true
+        let roomProxyMock = JoinedRoomProxyMock(.init(joinRequestsState: .loaded([JoinRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!"))]),
+                                                      canUserInvite: false,
+                                                      joinRule: .knock))
+        let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
+                                            roomProxy: roomProxyMock,
+                                            initialSelectedPinnedEventID: nil,
+                                            mediaProvider: MediaProviderMock(configuration: .init()),
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
+                                            appMediator: AppMediatorMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        self.viewModel = viewModel
+        
+        var deferred = deferFulfillment(viewModel.context.$viewState) { state in
+            state.unseenKnockRequests == [.init(displayName: "Alice", avatarURL: nil, userID: "@alice:matrix.org", reason: "Hello World!", eventID: "1")] &&
+                !state.shouldSeeKnockRequests
+        }
         try await deferred.fulfill()
     }
 }

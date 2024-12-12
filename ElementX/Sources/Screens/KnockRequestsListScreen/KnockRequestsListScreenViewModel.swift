@@ -221,7 +221,8 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
                                                                            interactiveDismissDisabled: false,
                                                                            allowsInteraction: true),
                                                               title: L10n.screenKnockRequestsListInitialLoadingTitle,
-                                                              persistent: true))
+                                                              persistent: true),
+                                                delay: .milliseconds(100))
     }
     
     private func showLoadingIndicator(title: String) {
@@ -231,7 +232,7 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
                                                                            allowsInteraction: false),
                                                               title: title,
                                                               persistent: true),
-                                                delay: .seconds(0.25))
+                                                delay: .milliseconds(250))
     }
     
     private func hideLoadingIndicator() {
