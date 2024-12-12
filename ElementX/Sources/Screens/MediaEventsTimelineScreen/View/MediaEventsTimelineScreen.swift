@@ -95,16 +95,17 @@ struct MediaEventsTimelineScreen: View {
             ForEach(context.viewState.groups) { group in
                 Section {
                     ForEach(group.items) { item in
-                        viewForTimelineItem(item)
-                            .scaleEffect(.init(width: 1, height: -1))
-                            .onTapGesture {
+                        VStack(spacing: 20) {
+                            Divider()
+                            
+                            Button {
                                 context.send(viewAction: .tappedItem(item))
+                            } label: {
+                                viewForTimelineItem(item)
+                                    .scaleEffect(.init(width: 1, height: -1))
                             }
-                            .accessibilityActions {
-                                Button(L10n.actionShow) {
-                                    context.send(viewAction: .tappedItem(item))
-                                }
-                            }
+                        }
+                        .padding(.horizontal, 16)
                     }
                 } footer: {
                     // Use a footer as the header because the scrollView is flipped
@@ -143,13 +144,13 @@ struct MediaEventsTimelineScreen: View {
         case .video(let timelineItem):
             VideoMediaEventsTimelineView(timelineItem: timelineItem)
         case .file(let timelineItem):
-            FileRoomTimelineView(timelineItem: timelineItem)
+            FileMediaEventsTimelineView(timelineItem: timelineItem)
         case .audio(let timelineItem):
-            AudioRoomTimelineView(timelineItem: timelineItem)
+            AudioMediaEventsTimelineView(timelineItem: timelineItem)
         case .voice(let timelineItem):
             let defaultPlayerState = AudioPlayerState(id: .timelineItemIdentifier(timelineItem.id), title: L10n.commonVoiceMessage, duration: 0)
             let playerState = context.viewState.activeTimelineContextProvider().viewState.audioPlayerStateProvider?(timelineItem.id) ?? defaultPlayerState
-            VoiceMessageRoomTimelineView(timelineItem: timelineItem, playerState: playerState)
+            VoiceMessageMediaEventsTimelineView(timelineItem: timelineItem, playerState: playerState)
         default:
             EmptyView()
         }
