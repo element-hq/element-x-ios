@@ -186,7 +186,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 guard case let .loaded(requests) = joinRequestsState else {
                     return []
                 }
-                return requests.filter { !$0.isSeen }.map(KnockRequestInfo.init)
+                
+                return requests
+                    .filter { !$0.isSeen }
+                    .map(KnockRequestInfo.init)
             }
             // If the requests have the same event ids we can discard the output
             .removeDuplicates { Set($0.map(\.eventID)) == Set($1.map(\.eventID)) }
