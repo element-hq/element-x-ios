@@ -163,9 +163,9 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     var messageBubble: some View {
         contentWithReply
             .timelineItemSendInfo(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, context: context)
-            .bubbleStyle(insets: timelineItem.bubbleInsets,
-                         color: timelineItem.bubbleBackgroundColor,
-                         corners: roundedCorners)
+            .bubbleBackground(timelineItem: timelineItem,
+                              insets: timelineItem.bubbleInsets,
+                              color: timelineItem.bubbleBackgroundColor)
     }
     
     @ViewBuilder
@@ -217,37 +217,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         timelineItem.isOutgoing ? .trailing : .leading
     }
     
-    private var roundedCorners: UIRectCorner {
-        switch timelineGroupStyle {
-        case .single:
-            return .allCorners
-        case .first:
-            if timelineItem.isOutgoing {
-                return [.topLeft, .topRight, .bottomLeft]
-            } else {
-                return [.topLeft, .topRight, .bottomRight]
-            }
-        case .middle:
-            return timelineItem.isOutgoing ? [.topLeft, .bottomLeft] : [.topRight, .bottomRight]
-        case .last:
-            if timelineItem.isOutgoing {
-                return [.topLeft, .bottomLeft, .bottomRight]
-            } else {
-                return [.topRight, .bottomLeft, .bottomRight]
-            }
-        }
-    }
-    
     private var shouldShowSenderDetails: Bool {
         timelineGroupStyle.shouldShowSenderDetails
-    }
-}
-
-private extension View {
-    func bubbleStyle(insets: EdgeInsets, color: Color? = nil, cornerRadius: CGFloat = 12, corners: UIRectCorner) -> some View {
-        padding(insets)
-            .background(color)
-            .cornerRadius(cornerRadius, corners: corners)
     }
 }
 
