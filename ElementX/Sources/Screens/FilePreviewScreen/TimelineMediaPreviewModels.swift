@@ -5,10 +5,11 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import Combine
 import QuickLook
+import SwiftUI
 
 enum TimelineMediaPreviewViewModelAction: Equatable {
-    case loadedMediaFile
     case viewInRoomTimeline(TimelineItemIdentifier)
     case dismiss
 }
@@ -18,21 +19,27 @@ struct TimelineMediaPreviewViewState: BindableState {
     var currentItem: TimelineMediaPreviewItem
     var currentItemActions: TimelineItemMenuActions?
     
+    let transitionNamespace: Namespace.ID
+    let fileLoadedPublisher = PassthroughSubject<TimelineItemIdentifier, Never>()
+    
     var bindings = TimelineMediaPreviewViewStateBindings()
 }
 
 struct TimelineMediaPreviewViewStateBindings {
-    var isPresentingRedactConfirmation = false
+    var mediaDetailsItem: TimelineMediaPreviewItem?
+    var redactConfirmationItem: TimelineMediaPreviewItem?
 }
 
 /// Wraps a media file and title to be previewed with QuickLook.
-class TimelineMediaPreviewItem: NSObject, QLPreviewItem {
+class TimelineMediaPreviewItem: NSObject, QLPreviewItem, Identifiable {
     let timelineItem: EventBasedMessageTimelineItemProtocol
     var fileHandle: MediaFileHandleProxy?
     
     init(timelineItem: EventBasedMessageTimelineItemProtocol) {
         self.timelineItem = timelineItem
     }
+    
+    // MARK: Identifiable
     
     var id: TimelineItemIdentifier { timelineItem.id }
     
@@ -167,6 +174,9 @@ class TimelineMediaPreviewItem: NSObject, QLPreviewItem {
 }
 
 enum TimelineMediaPreviewViewAction {
-    case menuAction(TimelineItemMenuAction)
-    case redactConfirmation
+    case updateCurrentItem(TimelineMediaPreviewItem)
+    case showCurrentItemDetails
+    case menuAction(TimelineItemMenuAction, item: TimelineMediaPreviewItem)
+    case redactConfirmation(item: TimelineMediaPreviewItem)
+    case dismiss
 }

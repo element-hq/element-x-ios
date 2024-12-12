@@ -96,7 +96,6 @@ struct RoomScreen: View {
                     .environmentObject(timelineContext)
             }
             .interactiveQuickLook(item: $timelineContext.mediaPreviewItem)
-            .timelineMediaQuickLook(viewModel: $timelineContext.mediaPreviewViewModel)
             .track(screen: .Room)
             .onDrop(of: ["public.item", "public.file-url"], isTargeted: $dragOver) { providers -> Bool in
                 guard let provider = providers.first,

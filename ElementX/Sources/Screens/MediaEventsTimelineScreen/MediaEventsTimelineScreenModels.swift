@@ -5,10 +5,10 @@
 // Please see LICENSE in the repository root for full details.
 //
 
-import Foundation
+import SwiftUI
 
 enum MediaEventsTimelineScreenViewModelAction {
-    case viewInRoomTimeline(TimelineItemIdentifier)
+    case viewItem(TimelineMediaPreviewContext)
 }
 
 enum MediaEventsTimelineScreenMode {
@@ -33,12 +33,11 @@ struct MediaEventsTimelineScreenViewState: BindableState {
 
 struct MediaEventsTimelineScreenViewStateBindings {
     var screenMode: MediaEventsTimelineScreenMode
-    var mediaPreviewViewModel: TimelineMediaPreviewViewModel?
 }
 
 enum MediaEventsTimelineScreenViewAction {
     case changedScreenMode
     case oldestItemDidAppear
     case oldestItemDidDisappear
-    case tappedItem(RoomTimelineItemViewState)
+    case tappedItem(item: RoomTimelineItemViewState, namespace: Namespace.ID)
 }

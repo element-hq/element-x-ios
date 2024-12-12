@@ -9,6 +9,7 @@
 
 import Combine
 import MatrixRustSDK
+import SwiftUI
 import XCTest
 
 @MainActor
@@ -18,7 +19,7 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
     var mediaProvider: MediaProviderMock!
     var timelineController: MockRoomTimelineController!
     
-    func testLoadingItem() async {
+    func testLoadingItem() async throws {
         // Given a fresh view model.
         setupViewModel()
         XCTAssertFalse(mediaProvider.loadFileFromSourceFilenameCalled)
@@ -26,7 +27,9 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         XCTAssertNotNil(context.viewState.currentItemActions)
         
         // When the preview controller sets the current item.
-        await viewModel.updateCurrentItem(context.viewState.previewItems[0])
+        let deferred = deferFulfillment(viewModel.state.fileLoadedPublisher) { _ in true }
+        context.send(viewAction: .updateCurrentItem(context.viewState.previewItems[0]))
+        try await deferred.fulfill()
         
         // Then the view model should load the item and update its view state.
         XCTAssertTrue(mediaProvider.loadFileFromSourceFilenameCalled)
@@ -36,12 +39,12 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
     
     func testViewInRoomTimeline() async throws {
         // Given a view model with a loaded item.
-        await testLoadingItem()
+        try await testLoadingItem()
         
         // When choosing to view the current item in the timeline.
-        let currentItemID = context.viewState.currentItem.id
-        let deferred = deferFulfillment(viewModel.actions) { $0 == .viewInRoomTimeline(currentItemID) }
-        context.send(viewAction: .menuAction(.viewInRoomTimeline))
+        let item = context.viewState.currentItem
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .viewInRoomTimeline(item.id) }
+        context.send(viewAction: .menuAction(.viewInRoomTimeline, item: item))
         
         // Then the action should be sent upwards to make this happen.
         try await deferred.fulfill()
@@ -49,27 +52,51 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
     
     func testRedactConfirmation() async throws {
         // Given a view model with a loaded item.
-        await testLoadingItem()
-        XCTAssertFalse(context.isPresentingRedactConfirmation)
+        try await testLoadingItem()
+        XCTAssertNil(context.redactConfirmationItem)
         XCTAssertFalse(timelineController.redactCalled)
         
-        // When choosing to redact the current item.
-        context.send(viewAction: .menuAction(.redact))
+        // When choosing to show the item details.
+        context.send(viewAction: .showCurrentItemDetails)
+        
+        // Then the details sheet should be presented.
+        guard let item = context.mediaDetailsItem else {
+            XCTFail("The default of the current item should be presented")
+            return
+        }
+        XCTAssertEqual(context.mediaDetailsItem, context.viewState.currentItem)
+        
+        // When choosing to redact the item.
+        context.send(viewAction: .menuAction(.redact, item: item))
         
         // Then the confirmation sheet should be presented.
-        XCTAssertTrue(context.isPresentingRedactConfirmation)
+        XCTAssertEqual(context.redactConfirmationItem, item)
         XCTAssertFalse(timelineController.redactCalled)
         
         // When confirming the redaction.
         let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
-        context.send(viewAction: .redactConfirmation)
+        context.send(viewAction: .redactConfirmation(item: item))
         
         // Then the item should be redacted and the view should be dismissed.
         try await deferred.fulfill()
         XCTAssertTrue(timelineController.redactCalled)
     }
     
+    func testDismiss() async throws {
+        // Given a view model with a loaded item.
+        try await testLoadingItem()
+        
+        // When requesting to dismiss the view.
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
+        context.send(viewAction: .dismiss)
+        
+        // Then the action should be sent upwards to make this happen.
+        try await deferred.fulfill()
+    }
+    
     // MARK: - Helpers
+    
+    @Namespace private var testNamespace
     
     private func setupViewModel() {
         let item = ImageRoomTimelineItem(id: .randomEvent,
@@ -88,9 +115,10 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         timelineController.timelineItems = [item]
         
         mediaProvider = MediaProviderMock(configuration: .init())
-        viewModel = TimelineMediaPreviewViewModel(initialItem: item,
-                                                  timelineViewModel: TimelineViewModel.mock(timelineKind: .media(.mediaFilesScreen),
-                                                                                            timelineController: timelineController),
+        viewModel = TimelineMediaPreviewViewModel(context: .init(item: item,
+                                                                 viewModel: TimelineViewModel.mock(timelineKind: .media(.mediaFilesScreen),
+                                                                                                   timelineController: timelineController),
+                                                                 namespace: testNamespace),
                                                   mediaProvider: mediaProvider,
                                                   userIndicatorController: UserIndicatorControllerMock())
     }

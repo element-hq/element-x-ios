@@ -11,9 +11,8 @@ import SwiftUI
 struct TimelineMediaPreviewRedactConfirmationView: View {
     @Environment(\.dismiss) private var dismiss
     
+    let item: TimelineMediaPreviewItem
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
-    
-    private var currentItem: TimelineMediaPreviewItem { context.viewState.currentItem }
     
     var body: some View {
         ScrollView {
@@ -54,13 +53,13 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
     @ViewBuilder
     private var preview: some View {
         HStack(spacing: 12) {
-            if let mediaSource = currentItem.thumbnailMediaSource {
+            if let mediaSource = item.thumbnailMediaSource {
                 Color.clear
                     .scaledFrame(size: 40)
                     .background {
                         LoadableImage(mediaSource: mediaSource,
-                                      mediaType: .timelineItem(uniqueID: currentItem.id.uniqueID.id),
-                                      blurhash: currentItem.blurhash,
+                                      mediaType: .timelineItem(uniqueID: item.id.uniqueID.id),
+                                      blurhash: item.blurhash,
                                       mediaProvider: context.mediaProvider) {
                             Color.compound.bgSubtleSecondary
                         }
@@ -70,13 +69,13 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
             }
                 
             VStack(alignment: .leading, spacing: 4) {
-                Text(currentItem.filename ?? "")
+                Text(item.filename ?? "")
                     .font(.compound.bodyMD)
                     .foregroundStyle(.compound.textPrimary)
                     
-                if let contentType = currentItem.contentType {
+                if let contentType = item.contentType {
                     Group {
-                        if let fileSize = currentItem.fileSize {
+                        if let fileSize = item.fileSize {
                             Text(contentType) + Text(" – ") + Text(UInt(fileSize).formatted(.byteCount(style: .file)))
                         } else {
                             Text(contentType)
@@ -95,7 +94,7 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
     private var buttons: some View {
         VStack(spacing: 16) {
             Button(L10n.actionRemove, role: .destructive) {
-                context.send(viewAction: .redactConfirmation)
+                context.send(viewAction: .redactConfirmation(item: item))
             }
             .buttonStyle(.compound(.primary))
             
@@ -117,10 +116,11 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
 import UniformTypeIdentifiers
 
 struct TimelineMediaPreviewRedactConfirmationView_Previews: PreviewProvider, TestablePreview {
+    @Namespace private static var previewNamespace
     static let viewModel = makeViewModel(contentType: .jpeg)
     
     static var previews: some View {
-        TimelineMediaPreviewRedactConfirmationView(context: viewModel.context)
+        TimelineMediaPreviewRedactConfirmationView(item: viewModel.state.currentItem, context: viewModel.context)
     }
     
     static func makeViewModel(contentType: UTType? = nil) -> TimelineMediaPreviewViewModel {
@@ -138,8 +138,9 @@ struct TimelineMediaPreviewRedactConfirmationView_Previews: PreviewProvider, Tes
                                                         thumbnailInfo: .mockThumbnail,
                                                         contentType: contentType))
         
-        return TimelineMediaPreviewViewModel(initialItem: item,
-                                             timelineViewModel: TimelineViewModel.mock,
+        return TimelineMediaPreviewViewModel(context: .init(item: item,
+                                                            viewModel: TimelineViewModel.mock,
+                                                            namespace: previewNamespace),
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              userIndicatorController: UserIndicatorControllerMock())
     }

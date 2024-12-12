@@ -11,6 +11,8 @@ import SwiftUI
 struct MediaEventsTimelineScreen: View {
     @ObservedObject var context: MediaEventsTimelineScreenViewModel.Context
     
+    @Namespace private var zoomTransition
+    
     var body: some View {
         mainContent
             .navigationBarTitleDisplayMode(.inline)
@@ -30,7 +32,6 @@ struct MediaEventsTimelineScreen: View {
                     .pickerStyle(.segmented)
                 }
             }
-            .timelineMediaQuickLook(viewModel: $context.mediaPreviewViewModel)
             .environmentObject(context.viewState.activeTimelineContextProvider())
             .environment(\.timelineContext, context.viewState.activeTimelineContextProvider())
     }
@@ -39,7 +40,7 @@ struct MediaEventsTimelineScreen: View {
     // * flip the scrollView vertically to keep the items
     // at the bottom and have pagination working properly
     // * flip the grid vertically to counteract the scroll view
-    // but also horizontally to preserve the corect item order
+    // but also horizontally to preserve the correct item order
     // * flip the items on both axes have them render correctly
     @ViewBuilder
     private var mainContent: some View {
@@ -73,7 +74,7 @@ struct MediaEventsTimelineScreen: View {
                 Section {
                     ForEach(group.items) { item in
                         Button {
-                            context.send(viewAction: .tappedItem(item))
+                            tappedItem(item)
                         } label: {
                             Color.clear // Let the image aspect fill in place
                                 .aspectRatio(1, contentMode: .fill)
@@ -83,6 +84,7 @@ struct MediaEventsTimelineScreen: View {
                                 .clipped()
                                 .scaleEffect(.init(width: -1, height: -1))
                         }
+                        .zoomTransitionSource(id: item.identifier, in: zoomTransition)
                     }
                 } footer: {
                     // Use a footer as the header because the scrollView is flipped
@@ -104,11 +106,12 @@ struct MediaEventsTimelineScreen: View {
                             Divider()
                             
                             Button {
-                                context.send(viewAction: .tappedItem(item))
+                                tappedItem(item)
                             } label: {
                                 viewForTimelineItem(item)
                                     .scaleEffect(.init(width: 1, height: -1))
                             }
+                            .zoomTransitionSource(id: item.identifier, in: zoomTransition)
                         }
                         .padding(.horizontal, 16)
                     }
@@ -206,6 +209,10 @@ struct MediaEventsTimelineScreen: View {
                 .font(.compound.bodyMD)
                 .multilineTextAlignment(.center)
         }
+    }
+    
+    func tappedItem(_ item: RoomTimelineItemViewState) {
+        context.send(viewAction: .tappedItem(item: item, namespace: zoomTransition))
     }
 }
 

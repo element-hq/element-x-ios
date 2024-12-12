@@ -84,8 +84,8 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             backPaginateIfNecessary(paginationStatus: activeTimelineViewModel.context.viewState.timelineState.paginationState.backward)
         case .oldestItemDidDisappear:
             isOldestItemVisible = false
-        case .tappedItem(let item):
-            handleItemTapped(item)
+        case .tappedItem(let item, let namespace):
+            handleItemTapped(item, namespace: namespace)
         }
     }
     
@@ -140,7 +140,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         }
     }
     
-    private func handleItemTapped(_ item: RoomTimelineItemViewState) {
+    private func handleItemTapped(_ item: RoomTimelineItemViewState, namespace: Namespace.ID) {
         let item: EventBasedMessageTimelineItemProtocol? = switch item.type {
         case .audio(let audioItem): audioItem
         case .file(let fileItem): fileItem
@@ -149,31 +149,12 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         default: nil
         }
         
-        guard let item, let mediaProvider = context.mediaProvider else {
-            MXLog.error("Unexpected item type (or the media provider is missing).")
+        guard let item else {
+            MXLog.error("Unexpected item type tapped.")
             return
         }
         
-        let viewModel = TimelineMediaPreviewViewModel(initialItem: item,
-                                                      timelineViewModel: activeTimelineViewModel,
-                                                      mediaProvider: mediaProvider,
-                                                      userIndicatorController: userIndicatorController)
-        
-        mediaPreviewCancellable = viewModel.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                switch action {
-                case .viewInRoomTimeline(let itemID):
-                    state.bindings.mediaPreviewViewModel = nil
-                    actionsSubject.send(.viewInRoomTimeline(itemID))
-                case .dismiss:
-                    state.bindings.mediaPreviewViewModel = nil
-                case .loadedMediaFile:
-                    break // Handled by the preview controller
-                }
-            }
-        
-        state.bindings.mediaPreviewViewModel = viewModel
+        actionsSubject.send(.viewItem(.init(item: item, viewModel: activeTimelineViewModel, namespace: namespace)))
     }
     
     private func titleForDate(_ date: Date) -> String {
