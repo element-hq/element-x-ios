@@ -8,7 +8,7 @@
 import Compound
 import SwiftUI
 
-struct KnockRequestInfo {
+struct KnockRequestInfo: Equatable {
     let displayName: String?
     let avatarURL: URL?
     let userID: String

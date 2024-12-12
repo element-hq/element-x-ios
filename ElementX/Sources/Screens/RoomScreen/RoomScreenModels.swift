@@ -8,7 +8,7 @@
 import Foundation
 import OrderedCollections
 
-enum RoomScreenViewModelAction {
+enum RoomScreenViewModelAction: Equatable {
     case focusEvent(eventID: String)
     case displayPinnedEventsTimeline
     case displayRoomDetails

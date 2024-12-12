@@ -239,4 +239,87 @@ class RoomScreenViewModelTests: XCTestCase {
         // Then the call button should remain visible shown.
         XCTAssertTrue(viewModel.state.shouldShowCallButton)
     }
+    
+    func testKnockRequestBanner() async throws {
+        ServiceLocator.shared.settings.knockingEnabled = true
+        let roomProxyMock = JoinedRoomProxyMock(.init(joinRequestsState: .loaded([JoinRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!")),
+                                                                                  // This one should be filtered
+                                                                                  JoinRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org", isSeen: true))]),
+                                                      joinRule: .knock))
+        let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
+                                            roomProxy: roomProxyMock,
+                                            initialSelectedPinnedEventID: nil,
+                                            mediaProvider: MediaProviderMock(configuration: .init()),
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
+                                            appMediator: AppMediatorMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        self.viewModel = viewModel
+        
+        var deferred = deferFulfillment(viewModel.context.$viewState) { $0.shouldSeeKnockRequests }
+        try await deferred.fulfill()
+                
+        XCTAssert(viewModel.context.viewState.unseenKnockRequests == [.init(displayName: "Alice", avatarURL: nil, userID: "@alice:matrix.org", reason: "Hello World!", eventID: "1")])
+                
+        let deferredAction = deferFulfillment(viewModel.actions) { $0 == .displayKnockRequests }
+        viewModel.context.send(viewAction: .viewKnockRequests)
+        try await deferredAction.fulfill()
+        
+        deferred = deferFulfillment(viewModel.context.$viewState) { $0.handledEventIDs == ["1"] }
+        viewModel.context.send(viewAction: .acceptKnock(eventID: "1"))
+        try await deferred.fulfill()
+        
+        XCTAssertFalse(viewModel.context.viewState.shouldSeeKnockRequests)
+    }
+    
+    func testKnockRequestBannerMarkAsSeen() async throws {
+        ServiceLocator.shared.settings.knockingEnabled = true
+        let roomProxyMock = JoinedRoomProxyMock(.init(joinRequestsState: .loaded([JoinRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!")),
+                                                                                  // This one should be filtered
+                                                                                  JoinRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org"))]),
+                                                      joinRule: .knock))
+        let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
+                                            roomProxy: roomProxyMock,
+                                            initialSelectedPinnedEventID: nil,
+                                            mediaProvider: MediaProviderMock(configuration: .init()),
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
+                                            appMediator: AppMediatorMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        self.viewModel = viewModel
+        
+        var deferred = deferFulfillment(viewModel.context.$viewState) { $0.shouldSeeKnockRequests }
+        try await deferred.fulfill()
+        
+        XCTAssert(viewModel.context.viewState.unseenKnockRequests == [.init(displayName: "Alice", avatarURL: nil, userID: "@alice:matrix.org", reason: "Hello World!", eventID: "1"),
+                                                                      .init(displayName: nil, avatarURL: nil, userID: "@bob:matrix.org", reason: nil, eventID: "2")])
+        
+        deferred = deferFulfillment(viewModel.context.$viewState) { $0.handledEventIDs == ["1", "2"] }
+        viewModel.context.send(viewAction: .dismissKnockRequests)
+        try await deferred.fulfill()
+        
+        XCTAssertFalse(viewModel.context.viewState.shouldSeeKnockRequests)
+    }
+    
+    func testLoadingKnockRequests() async throws {
+        ServiceLocator.shared.settings.knockingEnabled = true
+        let roomProxyMock = JoinedRoomProxyMock(.init(joinRequestsState: .loading,
+                                                      joinRule: .knock))
+        let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
+                                            roomProxy: roomProxyMock,
+                                            initialSelectedPinnedEventID: nil,
+                                            mediaProvider: MediaProviderMock(configuration: .init()),
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
+                                            appMediator: AppMediatorMock.default,
+                                            appSettings: ServiceLocator.shared.settings,
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        self.viewModel = viewModel
+        
+        // Loading state just does not appear at all
+        var deferred = deferFulfillment(viewModel.context.$viewState) { !$0.shouldSeeKnockRequests }
+        try await deferred.fulfill()
+    }
 }

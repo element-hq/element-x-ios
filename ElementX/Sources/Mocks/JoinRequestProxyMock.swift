@@ -14,7 +14,7 @@ struct JoinRequestProxyMockConfiguration {
     var avatarURL: URL?
     var timestamp: String?
     var reason: String?
-    var isSeen = true
+    var isSeen = false
 }
 
 extension JoinRequestProxyMock {
@@ -27,5 +27,9 @@ extension JoinRequestProxyMock {
         reason = configuration.reason
         formattedTimestamp = configuration.timestamp
         isSeen = configuration.isSeen
+        acceptReturnValue = .success(())
+        declineReturnValue = .success(())
+        banReturnValue = .success(())
+        markAsSeenReturnValue = .success(())
     }
 }
