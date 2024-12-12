@@ -85,9 +85,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         identityStatusChangesSubject.asCurrentValuePublisher()
     }
     
-    private let joinRequestsSubject = CurrentValueSubject<[JoinRequestProxyProtocol], Never>([])
-    var joinRequestsPublisher: CurrentValuePublisher<[JoinRequestProxyProtocol], Never> {
-        joinRequestsSubject.asCurrentValuePublisher()
+    private let joinRequestsStateSubject = CurrentValueSubject<JoinRequestsState, Never>(.loading)
+    var joinRequestsStatePublisher: CurrentValuePublisher<JoinRequestsState, Never> {
+        joinRequestsStateSubject.asCurrentValuePublisher()
     }
     
     // A room identifier is constant and lazy stops it from being fetched
@@ -661,7 +661,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                 guard let self else { return }
                 
                 MXLog.info("Received requests to join update, requests id: \(requests.map(\.eventId))")
-                joinRequestsSubject.send(requests.map(JoinRequestProxy.init))
+                joinRequestsStateSubject.send(.loaded(requests.map(JoinRequestProxy.init)))
             })
         } catch {
             MXLog.error("Failed observing requests to join with error: \(error)")
@@ -705,7 +705,7 @@ private final class RoomIdentityStatusChangeListener: IdentityStatusChangeListen
     }
 }
 
-private final class RoomJoinRequestsListener: RequestsToJoinListener {
+private final class RoomJoinRequestsListener: JoinRequestsListener {
     private let onUpdateClosure: ([JoinRequest]) -> Void
     
     init(_ onUpdateClosure: @escaping ([JoinRequest]) -> Void) {

@@ -180,11 +180,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        roomProxy.joinRequestsPublisher
+        roomProxy.joinRequestsStatePublisher
             // We only care about unseen requests
-            .map { $0.filter { !$0.isSeen }.map(KnockRequestInfo.init) }
+            .map { joinRequestsState in
+                guard case let .loaded(requests) = joinRequestsState else {
+                    return []
+                }
+                return requests.filter { !$0.isSeen }.map(KnockRequestInfo.init)
+            }
             // If the requests have the same event ids we can discard the output
-            .removeDuplicates(by: { Set($0.map(\.eventID)) == Set($1.map(\.eventID)) })
+            .removeDuplicates { Set($0.map(\.eventID)) == Set($1.map(\.eventID)) }
             .throttle(for: .milliseconds(100), scheduler: DispatchQueue.main, latest: true)
             .weakAssign(to: \.state.unseenKnockRequests, on: self)
             .store(in: &cancellables)
@@ -284,14 +289,15 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         }
     }
-    
+        
     private func acceptKnock(eventID: String) async {
-        guard let knockRequest = roomProxy.joinRequestsPublisher.value.first(where: { $0.eventID == eventID }) else {
+        guard case let .loaded(requests) = roomProxy.joinRequestsStatePublisher.value,
+              let request = requests.first(where: { $0.eventID == eventID }) else {
             return
         }
         
         state.handledEventIDs.insert(eventID)
-        switch await knockRequest.accept() {
+        switch await request.accept() {
         case .success:
             break
         case .failure:
@@ -301,8 +307,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func markAllKnocksAsSeen() async {
-        let requests = roomProxy.joinRequestsPublisher.value
+        guard case let .loaded(requests) = roomProxy.joinRequestsStatePublisher.value else {
+            return
+        }
         state.handledEventIDs.formUnion(Set(requests.map(\.eventID)))
+        
         let failedIDs = await withTaskGroup(of: (String, Result<Void, JoinRequestProxyError>).self) { group in
             for request in requests {
                 group.addTask {

@@ -10,9 +10,22 @@ import Foundation
 enum KnockRequestsListScreenViewModelAction { }
 
 struct KnockRequestsListScreenViewState: BindableState {
-    var requests: [KnockRequestCellInfo] = []
+    var requestsState: KnockRequestsState = .loading
+    
     var displayedRequests: [KnockRequestCellInfo] {
-        requests.filter { !handledEventIDs.contains($0.id) }
+        guard case let .loaded(requests) = requestsState else {
+            return []
+        }
+        return requests.filter { !handledEventIDs.contains($0.id) }
+    }
+    
+    var isLoading: Bool {
+        switch requestsState {
+        case .loading:
+            true
+        default:
+            false
+        }
     }
 
     // If you are in this view one of these must have been true so by default we assume all of them to be true
@@ -26,6 +39,14 @@ struct KnockRequestsListScreenViewState: BindableState {
     // we want to stop displaying any request
     var shouldDisplayRequests: Bool {
         !displayedRequests.isEmpty && isKnockableRoom && (canAccept || canDecline || canBan)
+    }
+    
+    var shouldDisplayAcceptAllButton: Bool {
+        !isLoading && shouldDisplayRequests && displayedRequests.count > 1
+    }
+    
+    var shouldDisplayEmptyView: Bool {
+        !isLoading && !shouldDisplayRequests
     }
     
     var bindings = KnockRequestsListStateBindings()
@@ -46,4 +67,29 @@ enum KnockRequestsListScreenViewAction {
     case acceptRequest(eventID: String)
     case declineRequest(eventID: String)
     case ban(eventID: String)
+}
+
+enum KnockRequestsState: Equatable {
+    case loading
+    case loaded([KnockRequestCellInfo])
+    
+    init(from state: JoinRequestsState) {
+        switch state {
+        case .loading:
+            self = .loading
+        case .loaded(let requests):
+            self = .loaded(requests.map(KnockRequestCellInfo.init))
+        }
+    }
+}
+
+private extension KnockRequestCellInfo {
+    init(from proxy: JoinRequestProxyProtocol) {
+        self.init(eventID: proxy.eventID,
+                  userID: proxy.userID,
+                  displayName: proxy.displayName,
+                  avatarURL: proxy.avatarURL,
+                  timestamp: proxy.formattedTimestamp,
+                  reason: proxy.reason)
+    }
 }

@@ -14231,8 +14231,8 @@ open class RoomSDKMock: MatrixRustSDK.Room {
     open var subscribeToJoinRequestsListenerCalled: Bool {
         return subscribeToJoinRequestsListenerCallsCount > 0
     }
-    open var subscribeToJoinRequestsListenerReceivedListener: RequestsToJoinListener?
-    open var subscribeToJoinRequestsListenerReceivedInvocations: [RequestsToJoinListener] = []
+    open var subscribeToJoinRequestsListenerReceivedListener: JoinRequestsListener?
+    open var subscribeToJoinRequestsListenerReceivedInvocations: [JoinRequestsListener] = []
 
     var subscribeToJoinRequestsListenerUnderlyingReturnValue: TaskHandle!
     open var subscribeToJoinRequestsListenerReturnValue: TaskHandle! {
@@ -14258,9 +14258,9 @@ open class RoomSDKMock: MatrixRustSDK.Room {
             }
         }
     }
-    open var subscribeToJoinRequestsListenerClosure: ((RequestsToJoinListener) async throws -> TaskHandle)?
+    open var subscribeToJoinRequestsListenerClosure: ((JoinRequestsListener) async throws -> TaskHandle)?
 
-    open override func subscribeToJoinRequests(listener: RequestsToJoinListener) async throws -> TaskHandle {
+    open override func subscribeToJoinRequests(listener: JoinRequestsListener) async throws -> TaskHandle {
         if let error = subscribeToJoinRequestsListenerThrowableError {
             throw error
         }

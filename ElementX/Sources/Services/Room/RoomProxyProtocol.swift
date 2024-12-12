@@ -48,6 +48,11 @@ enum JoinedRoomProxyAction: Equatable {
     case roomInfoUpdate
 }
 
+enum JoinRequestsState {
+    case loading
+    case loaded([JoinRequestProxyProtocol])
+}
+
 // sourcery: AutoMockable
 protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     var isEncrypted: Bool { get }
@@ -60,7 +65,7 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     var identityStatusChangesPublisher: CurrentValuePublisher<[IdentityStatusChange], Never> { get }
     
-    var joinRequestsPublisher: CurrentValuePublisher<[JoinRequestProxyProtocol], Never> { get }
+    var joinRequestsStatePublisher: CurrentValuePublisher<JoinRequestsState, Never> { get }
     
     var timeline: TimelineProxyProtocol { get }
     

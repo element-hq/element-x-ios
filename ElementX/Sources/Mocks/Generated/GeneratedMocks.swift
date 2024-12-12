@@ -6252,11 +6252,11 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
         set(value) { underlyingIdentityStatusChangesPublisher = value }
     }
     var underlyingIdentityStatusChangesPublisher: CurrentValuePublisher<[IdentityStatusChange], Never>!
-    var joinRequestsPublisher: CurrentValuePublisher<[JoinRequestProxyProtocol], Never> {
+    var joinRequestsStatePublisher: CurrentValuePublisher<JoinRequestsState, Never> {
         get { return underlyingJoinRequestsPublisher }
         set(value) { underlyingJoinRequestsPublisher = value }
     }
-    var underlyingJoinRequestsPublisher: CurrentValuePublisher<[JoinRequestProxyProtocol], Never>!
+    var underlyingJoinRequestsPublisher: CurrentValuePublisher<JoinRequestsState, Never>!
     var timeline: TimelineProxyProtocol {
         get { return underlyingTimeline }
         set(value) { underlyingTimeline = value }

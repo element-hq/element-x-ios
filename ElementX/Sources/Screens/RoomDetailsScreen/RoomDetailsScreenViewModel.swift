@@ -188,8 +188,13 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
             .store(in: &cancellables)
         
-        roomProxy.joinRequestsPublisher
-            .map(\.count)
+        roomProxy.joinRequestsStatePublisher
+            .map { requestsState in
+                guard case let .loaded(requests) = requestsState else {
+                    return 0
+                }
+                return requests.count
+            }
             .removeDuplicates()
             .throttle(for: .milliseconds(100), scheduler: DispatchQueue.main, latest: true)
             .weakAssign(to: \.state.knockRequestsCount, on: self)

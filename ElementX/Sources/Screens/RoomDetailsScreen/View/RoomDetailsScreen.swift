@@ -344,7 +344,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                                   isEncrypted: true,
                                                   canonicalAlias: "#alias:domain.com",
                                                   members: members,
-                                                  knockRequests: knockRequests,
+                                                  joinRequestsState: .loaded(knockRequests),
                                                   joinRule: .knock))
         
         var notificationSettingsProxyMockConfiguration = NotificationSettingsProxyMockConfiguration()
@@ -402,7 +402,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                                   isDirect: false,
                                                   isEncrypted: false,
                                                   members: members,
-                                                  knockRequests: knockRequests,
+                                                  joinRequestsState: .loaded(knockRequests),
                                                   joinRule: .knock))
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         

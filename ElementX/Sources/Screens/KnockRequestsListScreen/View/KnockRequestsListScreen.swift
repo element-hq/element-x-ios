@@ -17,12 +17,12 @@ struct KnockRequestsListScreen: View {
             .navigationTitle(L10n.screenKnockRequestsListTitle)
             .background(.compound.bgCanvasDefault)
             .overlay {
-                if !context.viewState.shouldDisplayRequests {
+                if context.viewState.shouldDisplayEmptyView {
                     KnockRequestsListEmptyStateView()
                 }
             }
             .safeAreaInset(edge: .bottom) {
-                if context.viewState.shouldDisplayRequests {
+                if context.viewState.shouldDisplayAcceptAllButton {
                     acceptAllButton
                 }
             }
@@ -31,6 +31,14 @@ struct KnockRequestsListScreen: View {
     
     @ViewBuilder
     private var mainContent: some View {
+        if context.viewState.isLoading {
+            EmptyView()
+        } else {
+            list
+        }
+    }
+    
+    private var list: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
                 if context.viewState.shouldDisplayRequests {
@@ -76,14 +84,15 @@ struct KnockRequestsListScreen: View {
 // MARK: - Previews
 
 struct KnockRequestsListScreen_Previews: PreviewProvider, TestablePreview {
-    static let emptyViewModel = KnockRequestsListScreenViewModel.mockWithInitialState(.init(requests: []))
+    static let loadingViewModel = KnockRequestsListScreenViewModel.mockWithRequestsState(.loading)
     
-    static let viewModel = KnockRequestsListScreenViewModel.mockWithInitialState(.init(requests: [.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "Now", reason: "Hello"),
-                                                                                                  // swiftlint:disable:next line_length
-                                                                                                  .init(eventID: "2", userID: "@bob:matrix.org", displayName: "Bob", avatarURL: nil, timestamp: "Now", reason: "Hello this one is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long reason"),
-                                                                                                  .init(eventID: "3", userID: "@charlie:matrix.org", displayName: "Charlie", avatarURL: nil, timestamp: "Now", reason: nil),
-                                                                                                  .init(eventID: "4", userID: "@dan:matrix.org", displayName: "Dan", avatarURL: nil, timestamp: "Now", reason: "Hello! It's a me! Dan!")]))
-                                                                                      
+    static let emptyViewModel = KnockRequestsListScreenViewModel.mockWithRequestsState(.loaded([]))
+    
+    static let viewModel = KnockRequestsListScreenViewModel.mockWithRequestsState(.loaded([JoinRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "Now", reason: "Hello")),
+                                                                                           JoinRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org", displayName: "Bob", avatarURL: nil, timestamp: "Now", reason: "Hello this one is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long reason")),
+                                                                                           JoinRequestProxyMock(.init(eventID: "3", userID: "@charlie:matrix.org", displayName: "Charlie", avatarURL: nil, timestamp: "Now", reason: nil)),
+                                                                                           JoinRequestProxyMock(.init(eventID: "4", userID: "@dan:matrix.org", displayName: "Dan", avatarURL: nil, timestamp: "Now", reason: "Hello! It's a me! Dan!"))]))
+    
     static var previews: some View {
         NavigationStack {
             KnockRequestsListScreen(context: viewModel.context)
@@ -92,5 +101,20 @@ struct KnockRequestsListScreen_Previews: PreviewProvider, TestablePreview {
             KnockRequestsListScreen(context: emptyViewModel.context)
         }
         .previewDisplayName("Empty state")
+        NavigationStack {
+            KnockRequestsListScreen(context: loadingViewModel.context)
+        }
+        .previewDisplayName("Loading state")
+    }
+}
+
+extension KnockRequestsListScreenViewModel {
+    static func mockWithRequestsState(_ requestsState: JoinRequestsState) -> KnockRequestsListScreenViewModel {
+        .init(roomProxy: JoinedRoomProxyMock(.init(members: [.mockAdmin],
+                                                   joinRequestsState: requestsState,
+                                                   ownUserID: RoomMemberProxyMock.mockAdmin.userID,
+                                                   joinRule: .knock)),
+              mediaProvider: MediaProviderMock(),
+              userIndicatorController: UserIndicatorControllerMock())
     }
 }

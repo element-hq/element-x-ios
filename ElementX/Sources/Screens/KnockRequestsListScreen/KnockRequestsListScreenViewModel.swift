@@ -48,9 +48,10 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
         case .acceptRequest(let eventID):
             acceptRequest(eventID: eventID)
         case .declineRequest(let eventID):
-            guard let request = roomProxy.joinRequestsPublisher.value.first(where: { $0.eventID == eventID }) else {
+            guard let request = getRequest(eventID: eventID) else {
                 return
             }
+            
             state.bindings.alertInfo = .init(id: .declineRequest,
                                              title: L10n.screenKnockRequestsListDeclineAlertTitle,
                                              message: L10n.screenKnockRequestsListDeclineAlertDescription(request.userID),
@@ -59,9 +60,10 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
                                                                   action: { [weak self] in self?.decline(request: request) }),
                                              secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
         case .ban(let eventID):
-            guard let request = roomProxy.joinRequestsPublisher.value.first(where: { $0.eventID == eventID }) else {
+            guard let request = getRequest(eventID: eventID) else {
                 return
             }
+            
             state.bindings.alertInfo = .init(id: .declineAndBan,
                                              title: L10n.screenKnockRequestsListBanAlertTitle,
                                              primaryButton: .init(title: L10n.screenKnockRequestsListBanAlertConfirmButtonTitle,
@@ -73,8 +75,16 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     
     // MARK: - Private
     
+    private func getRequest(eventID: String) -> JoinRequestProxyProtocol? {
+        guard case let .loaded(requests) = roomProxy.joinRequestsStatePublisher.value,
+              let request = requests.first(where: { $0.eventID == eventID }) else {
+            return nil
+        }
+        return request
+    }
+    
     private func acceptRequest(eventID: String) {
-        guard let request = roomProxy.joinRequestsPublisher.value.first(where: { $0.eventID == eventID }) else {
+        guard let request = getRequest(eventID: eventID) else {
             return
         }
         
@@ -134,8 +144,11 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
         showLoadingIndicator(title: L10n.screenKnockRequestsListAcceptAllLoadingTitle)
         defer { hideLoadingIndicator() }
         
-        let requests = roomProxy.joinRequestsPublisher.value
+        guard case let .loaded(requests) = roomProxy.joinRequestsStatePublisher.value else {
+            return
+        }
         state.handledEventIDs.formUnion(Set(requests.map(\.eventID)))
+        
         Task {
             let failedIDs = await withTaskGroup(of: (String, Result<Void, JoinRequestProxyError>).self) { group in
                 for request in requests {
@@ -164,11 +177,24 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
             }
             .store(in: &cancellables)
         
-        roomProxy.joinRequestsPublisher
-            .map { $0.map(KnockRequestCellInfo.init) }
+        roomProxy.joinRequestsStatePublisher
+            .map(KnockRequestsState.init)
             .removeDuplicates()
             .throttle(for: .milliseconds(100), scheduler: DispatchQueue.main, latest: true)
-            .weakAssign(to: \.state.requests, on: self)
+            .weakAssign(to: \.state.requestsState, on: self)
+            .store(in: &cancellables)
+        
+        context.$viewState
+            .map(\.isLoading)
+            .removeDuplicates()
+            .sink { [weak self] isLoading in
+                guard let self else { return }
+                if isLoading {
+                    showInitialLoadingIndicator()
+                } else {
+                    hideLoadingIndicator()
+                }
+            }
             .store(in: &cancellables)
     }
     
@@ -189,6 +215,15 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     
     private static let loadingIndicatorIdentifier = "\(KnockRequestsListScreenViewModel.self)-Loading"
     
+    private func showInitialLoadingIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                              type: .modal(progress: .indeterminate,
+                                                                           interactiveDismissDisabled: false,
+                                                                           allowsInteraction: true),
+                                                              title: L10n.screenKnockRequestsListInitialLoadingTitle,
+                                                              persistent: true))
+    }
+    
     private func showLoadingIndicator(title: String) {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
                                                               type: .modal(progress: .indeterminate,
@@ -201,29 +236,5 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     
     private func hideLoadingIndicator() {
         userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
-    }
-    
-    // For testing purposes
-    private init(initialViewState: KnockRequestsListScreenViewState) {
-        roomProxy = JoinedRoomProxyMock(.init())
-        userIndicatorController = UserIndicatorControllerMock()
-        super.init(initialViewState: initialViewState)
-    }
-}
-
-extension KnockRequestsListScreenViewModel {
-    static func mockWithInitialState(_ initialViewState: KnockRequestsListScreenViewState) -> KnockRequestsListScreenViewModel {
-        .init(initialViewState: initialViewState)
-    }
-}
-
-extension KnockRequestCellInfo {
-    init(from proxy: JoinRequestProxyProtocol) {
-        self.init(eventID: proxy.eventID,
-                  userID: proxy.userID,
-                  displayName: proxy.displayName,
-                  avatarURL: proxy.avatarURL,
-                  timestamp: proxy.formattedTimestamp,
-                  reason: proxy.reason)
     }
 }
