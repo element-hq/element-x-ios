@@ -7938,7 +7938,7 @@ open class InReplyToDetailsSDKMock: MatrixRustSDK.InReplyToDetails {
         }
     }
 }
-open class JoinRequestActionsSDKMock: MatrixRustSDK.JoinRequestActions {
+open class KnockRequestActionsSDKMock: MatrixRustSDK.KnockRequestActions {
     init() {
         super.init(noPointer: .init())
     }
@@ -14201,18 +14201,18 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
     }
 
-    //MARK: - subscribeToJoinRequests
+    //MARK: - subscribeToKnockRequests
 
-    open var subscribeToJoinRequestsListenerThrowableError: Error?
-    var subscribeToJoinRequestsListenerUnderlyingCallsCount = 0
-    open var subscribeToJoinRequestsListenerCallsCount: Int {
+    open var subscribeToKnockRequestsListenerThrowableError: Error?
+    var subscribeToKnockRequestsListenerUnderlyingCallsCount = 0
+    open var subscribeToKnockRequestsListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return subscribeToJoinRequestsListenerUnderlyingCallsCount
+                return subscribeToKnockRequestsListenerUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = subscribeToJoinRequestsListenerUnderlyingCallsCount
+                    returnValue = subscribeToKnockRequestsListenerUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -14220,29 +14220,29 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         set {
             if Thread.isMainThread {
-                subscribeToJoinRequestsListenerUnderlyingCallsCount = newValue
+                subscribeToKnockRequestsListenerUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    subscribeToJoinRequestsListenerUnderlyingCallsCount = newValue
+                    subscribeToKnockRequestsListenerUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var subscribeToJoinRequestsListenerCalled: Bool {
-        return subscribeToJoinRequestsListenerCallsCount > 0
+    open var subscribeToKnockRequestsListenerCalled: Bool {
+        return subscribeToKnockRequestsListenerCallsCount > 0
     }
-    open var subscribeToJoinRequestsListenerReceivedListener: JoinRequestsListener?
-    open var subscribeToJoinRequestsListenerReceivedInvocations: [JoinRequestsListener] = []
+    open var subscribeToKnockRequestsListenerReceivedListener: KnockRequestsListener?
+    open var subscribeToKnockRequestsListenerReceivedInvocations: [KnockRequestsListener] = []
 
-    var subscribeToJoinRequestsListenerUnderlyingReturnValue: TaskHandle!
-    open var subscribeToJoinRequestsListenerReturnValue: TaskHandle! {
+    var subscribeToKnockRequestsListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToKnockRequestsListenerReturnValue: TaskHandle! {
         get {
             if Thread.isMainThread {
-                return subscribeToJoinRequestsListenerUnderlyingReturnValue
+                return subscribeToKnockRequestsListenerUnderlyingReturnValue
             } else {
                 var returnValue: TaskHandle? = nil
                 DispatchQueue.main.sync {
-                    returnValue = subscribeToJoinRequestsListenerUnderlyingReturnValue
+                    returnValue = subscribeToKnockRequestsListenerUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -14250,29 +14250,29 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         set {
             if Thread.isMainThread {
-                subscribeToJoinRequestsListenerUnderlyingReturnValue = newValue
+                subscribeToKnockRequestsListenerUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    subscribeToJoinRequestsListenerUnderlyingReturnValue = newValue
+                    subscribeToKnockRequestsListenerUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var subscribeToJoinRequestsListenerClosure: ((JoinRequestsListener) async throws -> TaskHandle)?
+    open var subscribeToKnockRequestsListenerClosure: ((KnockRequestsListener) async throws -> TaskHandle)?
 
-    open override func subscribeToJoinRequests(listener: JoinRequestsListener) async throws -> TaskHandle {
-        if let error = subscribeToJoinRequestsListenerThrowableError {
+    open override func subscribeToKnockRequests(listener: KnockRequestsListener) async throws -> TaskHandle {
+        if let error = subscribeToKnockRequestsListenerThrowableError {
             throw error
         }
-        subscribeToJoinRequestsListenerCallsCount += 1
-        subscribeToJoinRequestsListenerReceivedListener = listener
+        subscribeToKnockRequestsListenerCallsCount += 1
+        subscribeToKnockRequestsListenerReceivedListener = listener
         DispatchQueue.main.async {
-            self.subscribeToJoinRequestsListenerReceivedInvocations.append(listener)
+            self.subscribeToKnockRequestsListenerReceivedInvocations.append(listener)
         }
-        if let subscribeToJoinRequestsListenerClosure = subscribeToJoinRequestsListenerClosure {
-            return try await subscribeToJoinRequestsListenerClosure(listener)
+        if let subscribeToKnockRequestsListenerClosure = subscribeToKnockRequestsListenerClosure {
+            return try await subscribeToKnockRequestsListenerClosure(listener)
         } else {
-            return subscribeToJoinRequestsListenerReturnValue
+            return subscribeToKnockRequestsListenerReturnValue
         }
     }
 

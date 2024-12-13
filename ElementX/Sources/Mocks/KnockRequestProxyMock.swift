@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct JoinRequestProxyMockConfiguration {
+struct KnockRequestProxyMockConfiguration {
     let eventID: String
     let userID: String
     var displayName: String?
@@ -17,8 +17,8 @@ struct JoinRequestProxyMockConfiguration {
     var isSeen = false
 }
 
-extension JoinRequestProxyMock {
-    convenience init(_ configuration: JoinRequestProxyMockConfiguration) {
+extension KnockRequestProxyMock {
+    convenience init(_ configuration: KnockRequestProxyMockConfiguration) {
         self.init()
         eventID = configuration.eventID
         userID = configuration.userID

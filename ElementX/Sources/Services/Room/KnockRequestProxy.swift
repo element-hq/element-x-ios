@@ -8,47 +8,47 @@
 import Foundation
 import MatrixRustSDK
 
-struct JoinRequestProxy: JoinRequestProxyProtocol {
-    private let joinRequest: JoinRequest
+struct KnockRequestProxy: KnockRequestProxyProtocol {
+    private let knockRequest: KnockRequest
     
-    init(joinRequest: JoinRequest) {
-        self.joinRequest = joinRequest
+    init(knockRequest: KnockRequest) {
+        self.knockRequest = knockRequest
     }
     
     var eventID: String {
-        joinRequest.eventId
+        knockRequest.eventId
     }
     
     var userID: String {
-        joinRequest.userId
+        knockRequest.userId
     }
     
     var displayName: String? {
-        joinRequest.displayName
+        knockRequest.displayName
     }
     
     var avatarURL: URL? {
-        joinRequest.avatarUrl.flatMap(URL.init)
+        knockRequest.avatarUrl.flatMap(URL.init)
     }
     
     var reason: String? {
-        joinRequest.reason
+        knockRequest.reason
     }
     
     var formattedTimestamp: String? {
-        guard let timestamp = joinRequest.timestamp else {
+        guard let timestamp = knockRequest.timestamp else {
             return nil
         }
         return Date(timeIntervalSince1970: TimeInterval(timestamp / 1000)).formattedMinimal()
     }
     
     var isSeen: Bool {
-        joinRequest.isSeen
+        knockRequest.isSeen
     }
     
-    func accept() async -> Result<Void, JoinRequestProxyError> {
+    func accept() async -> Result<Void, KnockRequestProxyError> {
         do {
-            try await joinRequest.actions.accept()
+            try await knockRequest.actions.accept()
             return .success(())
         } catch {
             MXLog.error("Failed accepting request with eventID: \(eventID) to join error: \(error)")
@@ -56,10 +56,10 @@ struct JoinRequestProxy: JoinRequestProxyProtocol {
         }
     }
     
-    func decline() async -> Result<Void, JoinRequestProxyError> {
+    func decline() async -> Result<Void, KnockRequestProxyError> {
         do {
             // As of right now we don't provide reasons in the app for declining
-            try await joinRequest.actions.decline(reason: nil)
+            try await knockRequest.actions.decline(reason: nil)
             return .success(())
         } catch {
             MXLog.error("Failed declining request with eventID: \(eventID) to join error: \(error)")
@@ -67,10 +67,10 @@ struct JoinRequestProxy: JoinRequestProxyProtocol {
         }
     }
     
-    func ban() async -> Result<Void, JoinRequestProxyError> {
+    func ban() async -> Result<Void, KnockRequestProxyError> {
         do {
             // As of right now we don't provide reasons in the app for declining and banning
-            try await joinRequest.actions.declineAndBan(reason: nil)
+            try await knockRequest.actions.declineAndBan(reason: nil)
             return .success(())
         } catch {
             MXLog.error("Failed declining and banning user for request with eventID: \(eventID) with error: \(error)")
@@ -78,9 +78,9 @@ struct JoinRequestProxy: JoinRequestProxyProtocol {
         }
     }
     
-    func markAsSeen() async -> Result<Void, JoinRequestProxyError> {
+    func markAsSeen() async -> Result<Void, KnockRequestProxyError> {
         do {
-            try await joinRequest.actions.markAsSeen()
+            try await knockRequest.actions.markAsSeen()
             return .success(())
         } catch {
             MXLog.error("Failed marking request with eventID: \(eventID) to join as seen error: \(error)")

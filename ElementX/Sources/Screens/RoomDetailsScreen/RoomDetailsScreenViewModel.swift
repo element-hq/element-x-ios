@@ -188,7 +188,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
             .store(in: &cancellables)
         
-        roomProxy.joinRequestsStatePublisher
+        roomProxy.knockRequestsStatePublisher
             .map { requestsState in
                 guard case let .loaded(requests) = requestsState else {
                     return 0

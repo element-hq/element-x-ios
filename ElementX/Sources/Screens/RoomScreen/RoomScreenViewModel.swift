@@ -180,10 +180,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        roomProxy.joinRequestsStatePublisher
+        roomProxy.knockRequestsStatePublisher
             // We only care about unseen requests
-            .map { joinRequestsState in
-                guard case let .loaded(requests) = joinRequestsState else {
+            .map { knockRequestsState in
+                guard case let .loaded(requests) = knockRequestsState else {
                     return []
                 }
                 
@@ -294,7 +294,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
         
     private func acceptKnock(eventID: String) async {
-        guard case let .loaded(requests) = roomProxy.joinRequestsStatePublisher.value,
+        guard case let .loaded(requests) = roomProxy.knockRequestsStatePublisher.value,
               let request = requests.first(where: { $0.eventID == eventID }) else {
             return
         }
@@ -310,12 +310,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func markAllKnocksAsSeen() async {
-        guard case let .loaded(requests) = roomProxy.joinRequestsStatePublisher.value else {
+        guard case let .loaded(requests) = roomProxy.knockRequestsStatePublisher.value else {
             return
         }
         state.handledEventIDs.formUnion(Set(requests.map(\.eventID)))
         
-        let failedIDs = await withTaskGroup(of: (String, Result<Void, JoinRequestProxyError>).self) { group in
+        let failedIDs = await withTaskGroup(of: (String, Result<Void, KnockRequestProxyError>).self) { group in
             for request in requests {
                 group.addTask {
                     await (request.eventID, request.markAsSeen())
@@ -360,7 +360,7 @@ extension RoomScreenViewModel {
 }
 
 private extension KnockRequestInfo {
-    init(from proxy: JoinRequestProxyProtocol) {
+    init(from proxy: KnockRequestProxyProtocol) {
         self.init(displayName: proxy.displayName,
                   avatarURL: proxy.avatarURL,
                   userID: proxy.userID,

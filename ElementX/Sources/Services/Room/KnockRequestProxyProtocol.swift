@@ -7,12 +7,12 @@
 
 import Foundation
 
-enum JoinRequestProxyError: Error {
+enum KnockRequestProxyError: Error {
     case sdkError(Error)
 }
 
 // sourcery: AutoMockable
-protocol JoinRequestProxyProtocol {
+protocol KnockRequestProxyProtocol {
     var eventID: String { get }
     var userID: String { get }
     var displayName: String? { get }
@@ -21,8 +21,8 @@ protocol JoinRequestProxyProtocol {
     var formattedTimestamp: String? { get }
     var isSeen: Bool { get }
     
-    func accept() async -> Result<Void, JoinRequestProxyError>
-    func decline() async -> Result<Void, JoinRequestProxyError>
-    func ban() async -> Result<Void, JoinRequestProxyError>
-    func markAsSeen() async -> Result<Void, JoinRequestProxyError>
+    func accept() async -> Result<Void, KnockRequestProxyError>
+    func decline() async -> Result<Void, KnockRequestProxyError>
+    func ban() async -> Result<Void, KnockRequestProxyError>
+    func markAsSeen() async -> Result<Void, KnockRequestProxyError>
 }

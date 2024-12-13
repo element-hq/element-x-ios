@@ -48,9 +48,9 @@ enum JoinedRoomProxyAction: Equatable {
     case roomInfoUpdate
 }
 
-enum JoinRequestsState {
+enum KnockRequestsState {
     case loading
-    case loaded([JoinRequestProxyProtocol])
+    case loaded([KnockRequestProxyProtocol])
 }
 
 // sourcery: AutoMockable
@@ -65,7 +65,7 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     var identityStatusChangesPublisher: CurrentValuePublisher<[IdentityStatusChange], Never> { get }
     
-    var joinRequestsStatePublisher: CurrentValuePublisher<JoinRequestsState, Never> { get }
+    var knockRequestsStatePublisher: CurrentValuePublisher<KnockRequestsState, Never> { get }
     
     var timeline: TimelineProxyProtocol { get }
     

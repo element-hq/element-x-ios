@@ -10,7 +10,7 @@ import Foundation
 enum KnockRequestsListScreenViewModelAction { }
 
 struct KnockRequestsListScreenViewState: BindableState {
-    var requestsState: KnockRequestsState = .loading
+    var requestsState: KnockRequestsListState = .loading
     
     var displayedRequests: [KnockRequestCellInfo] {
         guard case let .loaded(requests) = requestsState else {
@@ -72,11 +72,11 @@ enum KnockRequestsListScreenViewAction {
     case ban(eventID: String)
 }
 
-enum KnockRequestsState: Equatable {
+enum KnockRequestsListState: Equatable {
     case loading
     case loaded([KnockRequestCellInfo])
     
-    init(from state: JoinRequestsState) {
+    init(from state: KnockRequestsState) {
         switch state {
         case .loading:
             self = .loading
@@ -87,7 +87,7 @@ enum KnockRequestsState: Equatable {
 }
 
 private extension KnockRequestCellInfo {
-    init(from proxy: JoinRequestProxyProtocol) {
+    init(from proxy: KnockRequestProxyProtocol) {
         self.init(eventID: proxy.eventID,
                   userID: proxy.userID,
                   displayName: proxy.displayName,

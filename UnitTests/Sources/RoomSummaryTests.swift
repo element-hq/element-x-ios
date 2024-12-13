@@ -56,7 +56,7 @@ class RoomSummaryTests: XCTestCase {
     func makeSummary(isDirect: Bool, hasRoomAvatar: Bool) -> RoomSummary {
         RoomSummary(roomListItem: .init(noPointer: .init()),
                     id: roomDetails.id,
-                    joinRequestType: nil,
+                    knockRequestType: nil,
                     name: roomDetails.name,
                     isDirect: isDirect,
                     avatarURL: hasRoomAvatar ? roomDetails.avatarURL : nil,

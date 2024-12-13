@@ -9,7 +9,7 @@ import Foundation
 import MatrixRustSDK
 
 struct RoomSummary {
-    enum JoinRequestType {
+    enum KnockRequestType {
         case invite(inviter: RoomMemberProxyProtocol?)
         case knock
         
@@ -34,7 +34,7 @@ struct RoomSummary {
     
     let id: String
     
-    let joinRequestType: JoinRequestType?
+    let knockRequestType: KnockRequestType?
     
     let name: String
     let isDirect: Bool
@@ -103,7 +103,7 @@ extension RoomSummary {
         canonicalAlias = nil
         hasOngoingCall = false
         
-        joinRequestType = nil
+        knockRequestType = nil
         isMarkedUnread = false
         isFavourite = false
     }

@@ -323,7 +323,7 @@ struct RoomDetailsScreen: View {
 struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static let genericRoomViewModel = {
         ServiceLocator.shared.settings.knockingEnabled = true
-        let knockRequests: [JoinRequestProxyMock] = [.init()]
+        let knockRequests: [KnockRequestProxyMock] = [.init()]
         let members: [RoomMemberProxyMock] = [
             .mockMeAdmin,
             .mockAlice,
@@ -344,7 +344,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                                   isEncrypted: true,
                                                   canonicalAlias: "#alias:domain.com",
                                                   members: members,
-                                                  joinRequestsState: .loaded(knockRequests),
+                                                  knockRequestsState: .loaded(knockRequests),
                                                   joinRule: .knock))
         
         var notificationSettingsProxyMockConfiguration = NotificationSettingsProxyMockConfiguration()
@@ -389,7 +389,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let simpleRoomViewModel = {
-        let knockRequests: [JoinRequestProxyMock] = [.init()]
+        let knockRequests: [KnockRequestProxyMock] = [.init()]
         ServiceLocator.shared.settings.knockingEnabled = true
         let members: [RoomMemberProxyMock] = [
             .mockMeAdmin,
@@ -402,7 +402,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
                                                   isDirect: false,
                                                   isEncrypted: false,
                                                   members: members,
-                                                  joinRequestsState: .loaded(knockRequests),
+                                                  knockRequestsState: .loaded(knockRequests),
                                                   joinRule: .knock))
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         

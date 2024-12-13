@@ -76,15 +76,15 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     
     // MARK: - Private
     
-    private func getRequest(eventID: String) -> JoinRequestProxyProtocol? {
-        guard case let .loaded(requests) = roomProxy.joinRequestsStatePublisher.value,
+    private func getRequest(eventID: String) -> KnockRequestProxyProtocol? {
+        guard case let .loaded(requests) = roomProxy.knockRequestsStatePublisher.value,
               let request = requests.first(where: { $0.eventID == eventID }) else {
             return nil
         }
         return request
     }
     
-    private func accept(request: JoinRequestProxyProtocol) {
+    private func accept(request: KnockRequestProxyProtocol) {
         showLoadingIndicator(title: L10n.screenKnockRequestsListAcceptLoadingTitle)
         
         let eventID = request.eventID
@@ -106,7 +106,7 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
         }
     }
     
-    private func decline(request: JoinRequestProxyProtocol) {
+    private func decline(request: KnockRequestProxyProtocol) {
         showLoadingIndicator(title: L10n.screenKnockRequestsListDeclineLoadingTitle)
         
         let eventID = request.eventID
@@ -128,7 +128,7 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
         }
     }
     
-    private func declineAndBan(request: JoinRequestProxyProtocol) {
+    private func declineAndBan(request: KnockRequestProxyProtocol) {
         showLoadingIndicator(title: L10n.screenKnockRequestsListBanLoadingTitle)
         
         let eventID = request.eventID
@@ -151,14 +151,14 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     }
     
     private func acceptAll() {
-        guard case let .loaded(requests) = roomProxy.joinRequestsStatePublisher.value else {
+        guard case let .loaded(requests) = roomProxy.knockRequestsStatePublisher.value else {
             return
         }
         showLoadingIndicator(title: L10n.screenKnockRequestsListAcceptAllLoadingTitle)
         state.handledEventIDs.formUnion(Set(requests.map(\.eventID)))
         
         Task {
-            let failedIDs = await withTaskGroup(of: (String, Result<Void, JoinRequestProxyError>).self) { group in
+            let failedIDs = await withTaskGroup(of: (String, Result<Void, KnockRequestProxyError>).self) { group in
                 for request in requests {
                     group.addTask {
                         await (request.eventID, request.accept())
@@ -193,8 +193,8 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
             }
             .store(in: &cancellables)
         
-        roomProxy.joinRequestsStatePublisher
-            .map(KnockRequestsState.init)
+        roomProxy.knockRequestsStatePublisher
+            .map(KnockRequestsListState.init)
             .removeDuplicates()
             .throttle(for: .milliseconds(100), scheduler: DispatchQueue.main, latest: true)
             .weakAssign(to: \.state.requestsState, on: self)

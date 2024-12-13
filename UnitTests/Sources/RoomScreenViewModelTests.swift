@@ -244,9 +244,9 @@ class RoomScreenViewModelTests: XCTestCase {
     
     func testKnockRequestBanner() async throws {
         ServiceLocator.shared.settings.knockingEnabled = true
-        let roomProxyMock = JoinedRoomProxyMock(.init(joinRequestsState: .loaded([JoinRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!")),
-                                                                                  // This one should be filtered
-                                                                                  JoinRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org", isSeen: true))]),
+        let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!")),
+                                                                                   // This one should be filtered
+                                                                                   KnockRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org", isSeen: true))]),
                                                       joinRule: .knock))
         let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
                                             roomProxy: roomProxyMock,
@@ -279,9 +279,9 @@ class RoomScreenViewModelTests: XCTestCase {
     
     func testKnockRequestBannerMarkAsSeen() async throws {
         ServiceLocator.shared.settings.knockingEnabled = true
-        let roomProxyMock = JoinedRoomProxyMock(.init(joinRequestsState: .loaded([JoinRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!")),
-                                                                                  // This one should be filtered
-                                                                                  JoinRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org"))]),
+        let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!")),
+                                                                                   // This one should be filtered
+                                                                                   KnockRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org"))]),
                                                       joinRule: .knock))
         let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
                                             roomProxy: roomProxyMock,
@@ -311,7 +311,7 @@ class RoomScreenViewModelTests: XCTestCase {
     
     func testLoadingKnockRequests() async throws {
         ServiceLocator.shared.settings.knockingEnabled = true
-        let roomProxyMock = JoinedRoomProxyMock(.init(joinRequestsState: .loading,
+        let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loading,
                                                       joinRule: .knock))
         let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
                                             roomProxy: roomProxyMock,
@@ -331,7 +331,7 @@ class RoomScreenViewModelTests: XCTestCase {
     
     func testKnockRequestsBannerDoesNotAppearIfUserHasNoPermission() async throws {
         ServiceLocator.shared.settings.knockingEnabled = true
-        let roomProxyMock = JoinedRoomProxyMock(.init(joinRequestsState: .loaded([JoinRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!"))]),
+        let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!"))]),
                                                       canUserInvite: false,
                                                       joinRule: .knock))
         let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
