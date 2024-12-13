@@ -270,6 +270,8 @@ internal enum L10n {
   internal static var actionViewSource: String { return L10n.tr("Localizable", "action_view_source") }
   /// Yes
   internal static var actionYes: String { return L10n.tr("Localizable", "action_yes") }
+  /// Yes, try again
+  internal static var actionYesTryAgain: String { return L10n.tr("Localizable", "action_yes_try_again") }
   /// Log Out & Upgrade
   internal static var bannerMigrateToNativeSlidingSyncAction: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_action") }
   /// Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.
@@ -314,8 +316,12 @@ internal enum L10n {
   internal static var commonCurrentUserLeftRoom: String { return L10n.tr("Localizable", "common_current_user_left_room") }
   /// Dark
   internal static var commonDark: String { return L10n.tr("Localizable", "common_dark") }
+  /// %1$@ at %2$@
+  internal static func commonDateDateAtTime(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "common_date_date_at_time", String(describing: p1), String(describing: p2))
+  }
   /// This month
-  internal static var commonDateSeparatorThisMonth: String { return L10n.tr("Localizable", "common_date_separator_this_month") }
+  internal static var commonDateThisMonth: String { return L10n.tr("Localizable", "common_date_this_month") }
   /// Decryption error
   internal static var commonDecryptionError: String { return L10n.tr("Localizable", "common_decryption_error") }
   /// Developer options
@@ -1316,8 +1322,16 @@ internal enum L10n {
   internal static var screenKnockRequestsListAcceptAllAlertTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_all_alert_title") }
   /// Accept all
   internal static var screenKnockRequestsListAcceptAllButtonTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_all_button_title") }
+  /// We couldn’t accept all requests. Would you like to try again?
+  internal static var screenKnockRequestsListAcceptAllFailedAlertDescription: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_all_failed_alert_description") }
+  /// Failed to accept all requests
+  internal static var screenKnockRequestsListAcceptAllFailedAlertTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_all_failed_alert_title") }
   /// Accepting all requests to join
   internal static var screenKnockRequestsListAcceptAllLoadingTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_all_loading_title") }
+  /// We couldn’t accept this request. Would you like to try again?
+  internal static var screenKnockRequestsListAcceptFailedAlertDescription: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_failed_alert_description") }
+  /// Failed to accept request
+  internal static var screenKnockRequestsListAcceptFailedAlertTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_failed_alert_title") }
   /// Accepting request to join
   internal static var screenKnockRequestsListAcceptLoadingTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_loading_title") }
   /// Yes, decline and ban
@@ -1340,12 +1354,18 @@ internal enum L10n {
   internal static var screenKnockRequestsListDeclineAlertTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_decline_alert_title") }
   /// Decline and ban
   internal static var screenKnockRequestsListDeclineAndBanActionTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_decline_and_ban_action_title") }
+  /// We couldn’t decline this request. Would you like to try again?
+  internal static var screenKnockRequestsListDeclineFailedAlertDescription: String { return L10n.tr("Localizable", "screen_knock_requests_list_decline_failed_alert_description") }
+  /// Failed to decline request
+  internal static var screenKnockRequestsListDeclineFailedAlertTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_decline_failed_alert_title") }
   /// Declining request to join
   internal static var screenKnockRequestsListDeclineLoadingTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_decline_loading_title") }
   /// When somebody will ask to join the room, you’ll be able to see their request here.
   internal static var screenKnockRequestsListEmptyStateDescription: String { return L10n.tr("Localizable", "screen_knock_requests_list_empty_state_description") }
   /// No pending request to join
   internal static var screenKnockRequestsListEmptyStateTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_empty_state_title") }
+  /// Loading requests to join…
+  internal static var screenKnockRequestsListInitialLoadingTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_initial_loading_title") }
   /// Requests to join
   internal static var screenKnockRequestsListTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_title") }
   /// This account has been deactivated.
@@ -1372,10 +1392,10 @@ internal enum L10n {
   internal static var screenMediaBrowserDeleteConfirmationSubtitle: String { return L10n.tr("Localizable", "screen_media_browser_delete_confirmation_subtitle") }
   /// Delete file?
   internal static var screenMediaBrowserDeleteConfirmationTitle: String { return L10n.tr("Localizable", "screen_media_browser_delete_confirmation_title") }
-  /// Images and videos uploaded to this room will be shown here.
-  internal static var screenMediaBrowserEmptyStateSubtitle: String { return L10n.tr("Localizable", "screen_media_browser_empty_state_subtitle") }
-  /// No media uploaded yet
-  internal static var screenMediaBrowserEmptyStateTitle: String { return L10n.tr("Localizable", "screen_media_browser_empty_state_title") }
+  /// Documents, audio files, and voice messages uploaded to this room will be shown here.
+  internal static var screenMediaBrowserFilesEmptyStateSubtitle: String { return L10n.tr("Localizable", "screen_media_browser_files_empty_state_subtitle") }
+  /// No files uploaded yet
+  internal static var screenMediaBrowserFilesEmptyStateTitle: String { return L10n.tr("Localizable", "screen_media_browser_files_empty_state_title") }
   /// Loading files…
   internal static var screenMediaBrowserListLoadingFiles: String { return L10n.tr("Localizable", "screen_media_browser_list_loading_files") }
   /// Loading media…
@@ -1384,6 +1404,10 @@ internal enum L10n {
   internal static var screenMediaBrowserListModeFiles: String { return L10n.tr("Localizable", "screen_media_browser_list_mode_files") }
   /// Media
   internal static var screenMediaBrowserListModeMedia: String { return L10n.tr("Localizable", "screen_media_browser_list_mode_media") }
+  /// Images and videos uploaded to this room will be shown here.
+  internal static var screenMediaBrowserMediaEmptyStateSubtitle: String { return L10n.tr("Localizable", "screen_media_browser_media_empty_state_subtitle") }
+  /// No media uploaded yet
+  internal static var screenMediaBrowserMediaEmptyStateTitle: String { return L10n.tr("Localizable", "screen_media_browser_media_empty_state_title") }
   /// Media and files
   internal static var screenMediaBrowserTitle: String { return L10n.tr("Localizable", "screen_media_browser_title") }
   /// File format
