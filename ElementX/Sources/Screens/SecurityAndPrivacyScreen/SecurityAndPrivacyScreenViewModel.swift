@@ -20,7 +20,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
 
     init(roomProxy: JoinedRoomProxyProtocol) {
         self.roomProxy = roomProxy
-        super.init(initialViewState: SecurityAndPrivacyScreenViewState(accessType: roomProxy.infoPublisher.value.roomAcessType,
+        super.init(initialViewState: SecurityAndPrivacyScreenViewState(accessType: roomProxy.infoPublisher.value.roomAccessType,
                                                                        isEncryptionEnabled: roomProxy.isEncrypted))
     }
     
@@ -48,7 +48,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
 }
 
 private extension RoomInfoProxy {
-    var roomAcessType: SecurityAndPrivacyRoomAccessType {
+    var roomAccessType: SecurityAndPrivacyRoomAccessType {
         switch joinRule {
         case .invite, .restricted:
             return .inviteOnly
