@@ -60,6 +60,9 @@ enum KnockRequestsListAlertType {
     case acceptAllRequests
     case declineRequest
     case declineAndBan
+    case acceptAllFailed
+    case acceptFailed
+    case declineFailed
 }
 
 enum KnockRequestsListScreenViewAction {

@@ -46,7 +46,10 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
                                                                   action: acceptAll),
                                              secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
         case .acceptRequest(let eventID):
-            acceptRequest(eventID: eventID)
+            guard let request = getRequest(eventID: eventID) else {
+                return
+            }
+            accept(request: request)
         case .declineRequest(let eventID):
             guard let request = getRequest(eventID: eventID) else {
                 return
@@ -81,30 +84,30 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
         return request
     }
     
-    private func acceptRequest(eventID: String) {
-        guard let request = getRequest(eventID: eventID) else {
-            return
-        }
-        
+    private func accept(request: JoinRequestProxyProtocol) {
         showLoadingIndicator(title: L10n.screenKnockRequestsListAcceptLoadingTitle)
-        defer { hideLoadingIndicator() }
         
+        let eventID = request.eventID
         state.handledEventIDs.insert(eventID)
         
         Task {
             switch await request.accept() {
             case .success:
-                break
+                hideLoadingIndicator()
             case .failure:
+                hideLoadingIndicator()
                 state.handledEventIDs.remove(eventID)
-                userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                state.bindings.alertInfo = .init(id: .acceptFailed,
+                                                 title: L10n.screenKnockRequestsListAcceptFailedAlertTitle,
+                                                 message: L10n.screenKnockRequestsListAcceptFailedAlertDescription,
+                                                 primaryButton: .init(title: L10n.actionYesTryAgain) { [weak self] in self?.accept(request: request) },
+                                                 secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
             }
         }
     }
     
     private func decline(request: JoinRequestProxyProtocol) {
         showLoadingIndicator(title: L10n.screenKnockRequestsListDeclineLoadingTitle)
-        defer { hideLoadingIndicator() }
         
         let eventID = request.eventID
         state.handledEventIDs.insert(eventID)
@@ -112,17 +115,21 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
         Task {
             switch await request.decline() {
             case .success:
-                break
+                hideLoadingIndicator()
             case .failure:
+                hideLoadingIndicator()
                 state.handledEventIDs.remove(eventID)
-                userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                state.bindings.alertInfo = .init(id: .declineFailed,
+                                                 title: L10n.screenKnockRequestsListDeclineFailedAlertTitle,
+                                                 message: L10n.screenKnockRequestsListDeclineFailedAlertDescription,
+                                                 primaryButton: .init(title: L10n.actionYesTryAgain) { [weak self] in self?.decline(request: request) },
+                                                 secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
             }
         }
     }
     
     private func declineAndBan(request: JoinRequestProxyProtocol) {
         showLoadingIndicator(title: L10n.screenKnockRequestsListBanLoadingTitle)
-        defer { hideLoadingIndicator() }
         
         let eventID = request.eventID
         state.handledEventIDs.insert(eventID)
@@ -130,21 +137,24 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
         Task {
             switch await request.ban() {
             case .success:
-                break
+                hideLoadingIndicator()
             case .failure:
+                hideLoadingIndicator()
                 state.handledEventIDs.remove(eventID)
-                userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                state.bindings.alertInfo = .init(id: .declineFailed,
+                                                 title: L10n.screenKnockRequestsListDeclineFailedAlertTitle,
+                                                 message: L10n.screenKnockRequestsListDeclineFailedAlertDescription,
+                                                 primaryButton: .init(title: L10n.actionYesTryAgain) { [weak self] in self?.declineAndBan(request: request) },
+                                                 secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
             }
         }
     }
     
     private func acceptAll() {
-        showLoadingIndicator(title: L10n.screenKnockRequestsListAcceptAllLoadingTitle)
-        defer { hideLoadingIndicator() }
-        
         guard case let .loaded(requests) = roomProxy.joinRequestsStatePublisher.value else {
             return
         }
+        showLoadingIndicator(title: L10n.screenKnockRequestsListAcceptAllLoadingTitle)
         state.handledEventIDs.formUnion(Set(requests.map(\.eventID)))
         
         Task {
@@ -161,8 +171,16 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
                 }
                 return failedIDs
             }
+            hideLoadingIndicator()
             
-            state.handledEventIDs.subtract(failedIDs)
+            if !failedIDs.isEmpty {
+                state.handledEventIDs.subtract(failedIDs)
+                state.bindings.alertInfo = .init(id: .acceptAllFailed,
+                                                 title: L10n.screenKnockRequestsListAcceptAllFailedAlertTitle,
+                                                 message: L10n.screenKnockRequestsListAcceptAllFailedAlertDescription,
+                                                 primaryButton: .init(title: L10n.actionYesTryAgain) { [weak self] in self?.acceptAll() },
+                                                 secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+            }
         }
     }
     
@@ -230,7 +248,7 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
                                                                            allowsInteraction: false),
                                                               title: title,
                                                               persistent: true),
-                                                delay: .milliseconds(250))
+                                                delay: .milliseconds(200))
     }
     
     private func hideLoadingIndicator() {
