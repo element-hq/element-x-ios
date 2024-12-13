@@ -189,38 +189,22 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
                 ForEach(htmlStrings, id: \.self) { htmlString in
                     if let attributedString = attributedStringBuilder.fromHTML(htmlString) {
                         FormattedBodyText(attributedString: attributedString)
-                            .previewBubble()
+                            .bubbleBackground()
                     }
                 }
                 FormattedBodyText(attributedString: AttributedString("Some plain text wrapped in an AttributedString."))
-                    .previewBubble()
+                    .bubbleBackground()
                 FormattedBodyText(text: "Some plain text that's not an attributed component.")
-                    .previewBubble()
+                    .bubbleBackground()
                 FormattedBodyText(text: "Some plain text that's not an attributed component. This one is really long.")
-                    .previewBubble()
+                    .bubbleBackground()
                 
                 FormattedBodyText(text: "❤️", boostEmojiSize: true)
-                    .previewBubble()
+                    .bubbleBackground()
             }
             .padding()
         }
         .previewLayout(.sizeThatFits)
         .snapshotPreferences(delay: 0.25)
-    }
-}
-
-private struct PreviewBubbleModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .padding(8)
-            .background(Color.compound._bgBubbleOutgoing)
-            .cornerRadius(12)
-            .environmentObject(TimelineViewModel.mock.context)
-    }
-}
-
-private extension View {
-    func previewBubble() -> some View {
-        modifier(PreviewBubbleModifier())
     }
 }

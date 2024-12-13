@@ -137,7 +137,8 @@ struct SwipeRightAction_Previews: PreviewProvider, TestablePreview {
             NavigationStack {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 2) {
-                        mockBubble("This is a message from somebody with a couple of lines of text.")
+                        Text("This is a message from somebody with a couple of lines of text.")
+                            .bubbleBackground()
                             .swipeRightAction {
                                 Image(systemName: "flame")
                             } shouldStartAction: {
@@ -155,13 +156,6 @@ struct SwipeRightAction_Previews: PreviewProvider, TestablePreview {
                 Text("Action triggered!")
                     .presentationDetents([.medium])
             }
-        }
-        
-        func mockBubble(_ body: String) -> some View {
-            Text(body)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 4)
-                .background(Color.compound._bgBubbleOutgoing, in: RoundedRectangle(cornerRadius: 12))
         }
     }
 }
