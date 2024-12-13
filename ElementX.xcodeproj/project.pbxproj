@@ -624,7 +624,6 @@
 		18E9A51F2C9829970082DDA4 /* HomeScreenEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0FEA560929DD73FFEF8C3DF /* HomeScreenEmptyStateView.swift */; };
 		18E9A5202C9829970082DDA4 /* HomeScreenInviteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FC33C3F6BF597E095CE9FA /* HomeScreenInviteCell.swift */; };
 		18E9A5212C9829970082DDA4 /* HomeScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BC7CA1BC1041E93077BBA1 /* HomeScreenModels.swift */; };
-		18E9A5222C9829970082DDA4 /* LandingBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8F34972C7E4199002D92F9 /* LandingBackgroundView.swift */; };
 		18E9A5232C9829970082DDA4 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB922C90FE9C001DA2A9 /* String+Extensions.swift */; };
 		18E9A5242C9829970082DDA4 /* HomeScreenRecoveryKeyConfirmationBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05512FB13987D221B7205DE0 /* HomeScreenRecoveryKeyConfirmationBanner.swift */; };
 		18E9A5252C9829970082DDA4 /* HomeScreenRoomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED044D00F2176681CC02CD54 /* HomeScreenRoomCell.swift */; };
@@ -2104,7 +2103,6 @@
 		CC0D088F505F33A20DC5590F /* RoomStateEventStringBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEEAFB646E583655652C3D04 /* RoomStateEventStringBuilderTests.swift */; };
 		CC1C948F67A5510A340FD7F0 /* SessionDirectoriesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0825EAFD47332DD459DE893F /* SessionDirectoriesTests.swift */; };
 		CC8F34952C7DE3EA002D92F9 /* LandingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8F34942C7DE3EA002D92F9 /* LandingScreen.swift */; };
-		CC8F34982C7E4199002D92F9 /* LandingBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8F34972C7E4199002D92F9 /* LandingBackgroundView.swift */; };
 		CC961529F9F1854BEC3272C9 /* LayoutMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8AA23D4F37CC26564F63C5 /* LayoutMocks.swift */; };
 		CCBEC2100CAF2EEBE9DB4156 /* TemplateScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA40B98B098B6F0371B750B3 /* TemplateScreenModels.swift */; };
 		CCFDEC8F2C81139500C17FC3 /* VerifyLoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFDEC8E2C81139500C17FC3 /* VerifyLoginScreen.swift */; };
@@ -3502,7 +3500,6 @@
 		CC680E0E79D818706CB28CF8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CC743C7A85E3171BCBF0A653 /* AvatarHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarHeaderView.swift; sourceTree = "<group>"; };
 		CC8F34942C7DE3EA002D92F9 /* LandingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingScreen.swift; sourceTree = "<group>"; };
-		CC8F34972C7E4199002D92F9 /* LandingBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingBackgroundView.swift; sourceTree = "<group>"; };
 		CCACD75595C40EACD6AD4A74 /* AuthenticationTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationTextFieldStyle.swift; sourceTree = "<group>"; };
 		CCF71646898A2F720C5BFDF5 /* RoomDirectorySearchScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDirectorySearchScreenViewModel.swift; sourceTree = "<group>"; };
 		CCFDEC8E2C81139500C17FC3 /* VerifyLoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyLoginScreen.swift; sourceTree = "<group>"; };
@@ -6968,7 +6965,6 @@
 			isa = PBXGroup;
 			children = (
 				CC8F34942C7DE3EA002D92F9 /* LandingScreen.swift */,
-				CC8F34972C7E4199002D92F9 /* LandingBackgroundView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -8796,7 +8792,6 @@
 				18E9A51F2C9829970082DDA4 /* HomeScreenEmptyStateView.swift in Sources */,
 				18E9A5202C9829970082DDA4 /* HomeScreenInviteCell.swift in Sources */,
 				18E9A5212C9829970082DDA4 /* HomeScreenModels.swift in Sources */,
-				18E9A5222C9829970082DDA4 /* LandingBackgroundView.swift in Sources */,
 				18E9A5232C9829970082DDA4 /* String+Extensions.swift in Sources */,
 				18E9A5242C9829970082DDA4 /* HomeScreenRecoveryKeyConfirmationBanner.swift in Sources */,
 				18E9A5252C9829970082DDA4 /* HomeScreenRoomCell.swift in Sources */,
@@ -9786,7 +9781,6 @@
 				86DFA58FBBEB0AF671D2A1E1 /* HomeScreenKnockedCell.swift in Sources */,
 				185454CB2CFDE6B3003CA957 /* CreateAccountScreenView.swift in Sources */,
 				8810A2A30A68252EBB54EE05 /* HomeScreenModels.swift in Sources */,
-				CC8F34982C7E4199002D92F9 /* LandingBackgroundView.swift in Sources */,
 				1882EB932C90FE9C001DA2A9 /* String+Extensions.swift in Sources */,
 				B04E9EB589CE99C3929E817A /* HomeScreenRecoveryKeyConfirmationBanner.swift in Sources */,
 				0AE0AB1952F186EB86719B4F /* HomeScreenRoomCell.swift in Sources */,

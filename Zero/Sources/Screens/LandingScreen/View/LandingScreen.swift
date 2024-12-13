@@ -23,11 +23,13 @@ struct LandingScreen: View {
     @State private var keyboardHeight: CGFloat = 0
     
     var body: some View {
-        LandingBackgroundView {
+        HStack {
             VStack(alignment: .center) {
-                content
-                
-                actionButton
+                if keyboardHeight <= 0 {
+                    content
+                    
+                    actionButton
+                }
                 
                 Spacer()
                 
@@ -38,9 +40,17 @@ struct LandingScreen: View {
                 Color.clear.frame(height: keyboardHeight / 2)
             }
         }
+        .background { landingViewBackground }
         .onReceive(Publishers.keyboardHeight) { height in
             keyboardHeight = height
         }
+    }
+    
+    var landingViewBackground: some View {
+        Image(asset: Asset.Images.landingBackground)
+            .resizable()
+            .scaledToFill()
+            .ignoresSafeArea()
     }
     
     var content: some View {
@@ -102,7 +112,7 @@ struct LandingScreen: View {
                 .padding(.horizontal, 6)
             }
         }
-        .padding(.bottom, 100)
+        .padding(.bottom, 32)
     }
 }
 
