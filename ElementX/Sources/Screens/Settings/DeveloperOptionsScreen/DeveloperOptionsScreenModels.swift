@@ -9,6 +9,7 @@ import Foundation
 
 enum DeveloperOptionsScreenViewModelAction {
     case clearCache
+    case deleteAccount
 }
 
 struct DeveloperOptionsScreenViewState: BindableState {
@@ -38,6 +39,8 @@ struct DeveloperOptionsScreenViewStateBindings {
 
 enum DeveloperOptionsScreenViewAction {
     case clearCache
+    /// Delete zero user account
+    case deleteAccount
 }
 
 protocol DeveloperOptionsProtocol: AnyObject {

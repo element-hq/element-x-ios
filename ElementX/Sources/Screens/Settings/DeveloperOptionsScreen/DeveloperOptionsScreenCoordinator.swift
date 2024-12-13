@@ -10,6 +10,7 @@ import SwiftUI
 
 enum DeveloperOptionsScreenCoordinatorAction {
     case clearCache
+    case deleteAccount
 }
 
 final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
@@ -34,6 +35,8 @@ final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
                 switch action {
                 case .clearCache:
                     actionsSubject.send(.clearCache)
+                case .deleteAccount:
+                    actionsSubject.send(.deleteAccount)
                 }
             }
             .store(in: &cancellables)

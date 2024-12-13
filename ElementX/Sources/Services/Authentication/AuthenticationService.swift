@@ -18,6 +18,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private let userSessionStore: UserSessionStoreProtocol
     private let appSettings: AppSettings
     private let appHooks: AppHooks
+    
     private let zeroAuthApi: ZeroAuthApiProtocol
     private let zeroCreateAccountApi: ZeroCreateAccountApiProtocol
     private let zeroUsersApi: ZeroUsersApiProtocol
@@ -37,6 +38,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         self.userSessionStore = userSessionStore
         self.appSettings = appSettings
         self.appHooks = appHooks
+        
         zeroAuthApi = ZeroAuthApi(appSettings: appSettings)
         zeroCreateAccountApi = ZeroCreateAccountApi(appSettings: appSettings)
         zeroUsersApi = ZeroUsersApi(appSettings: appSettings)

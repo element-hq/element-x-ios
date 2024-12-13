@@ -5171,6 +5171,70 @@ class ClientProxyMock: ClientProxyProtocol {
             return completeUserAccountProfileAvatarDisplayNameInviteCodeReturnValue
         }
     }
+    //MARK: - deleteUserAccount
+
+    var deleteUserAccountUnderlyingCallsCount = 0
+    var deleteUserAccountCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return deleteUserAccountUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = deleteUserAccountUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                deleteUserAccountUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    deleteUserAccountUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var deleteUserAccountCalled: Bool {
+        return deleteUserAccountCallsCount > 0
+    }
+
+    var deleteUserAccountUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var deleteUserAccountReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return deleteUserAccountUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = deleteUserAccountUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                deleteUserAccountUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    deleteUserAccountUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var deleteUserAccountClosure: (() async -> Result<Void, ClientProxyError>)?
+
+    func deleteUserAccount() async -> Result<Void, ClientProxyError> {
+        deleteUserAccountCallsCount += 1
+        if let deleteUserAccountClosure = deleteUserAccountClosure {
+            return await deleteUserAccountClosure()
+        } else {
+            return deleteUserAccountReturnValue
+        }
+    }
     //MARK: - loadMediaContentForSource
 
     var loadMediaContentForSourceThrowableError: Error?

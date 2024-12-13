@@ -235,4 +235,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func isProfileCompletionRequired() async -> Bool
     
     func completeUserAccountProfile(avatar: MediaInfo?, displayName: String, inviteCode: String) async -> Result<Void, ClientProxyError>
+    
+    func deleteUserAccount() async -> Result<Void, ClientProxyError>
 }

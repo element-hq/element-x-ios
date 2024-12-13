@@ -158,6 +158,7 @@ class ClientProxy: ClientProxyProtocol {
     private let zeroRewardsApi: ZeroRewardsApiProtocol
     private let zeroMessengerInviteApi: ZeroMessengerInviteApiProtocol
     private let zeroCreateAccountApi: ZeroCreateAccountApiProtocol
+    private let zeroUserAccountApi: ZeroAccountApiProtocol
     
     init(client: ClientProtocol,
          networkMonitor: NetworkMonitorProtocol,
@@ -182,6 +183,7 @@ class ClientProxy: ClientProxyProtocol {
         zeroRewardsApi = ZeroRewardsApi(appSettings: appSettings)
         zeroMessengerInviteApi = ZeroMessengerInviteApi(appSettings: appSettings)
         zeroCreateAccountApi = ZeroCreateAccountApi(appSettings: appSettings)
+        zeroUserAccountApi = ZeroAccountApi(appSettings: appSettings)
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
@@ -923,6 +925,21 @@ class ClientProxy: ClientProxyProtocol {
         } catch {
             MXLog.error(error)
             return .failure(.failedCompletingUserProfile)
+        }
+    }
+    
+    func deleteUserAccount() async -> Result<Void, ClientProxyError> {
+        do {
+            let deleteAccountResult = try await zeroUserAccountApi.deleteAccount()
+            switch deleteAccountResult {
+            case .success(let success):
+                return .success(())
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
         }
     }
     
