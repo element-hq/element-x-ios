@@ -51,6 +51,8 @@ struct SecurityAndPrivacyScreen: View {
         Section {
             ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyEncryptionToggleTitle),
                     kind: .toggle(encryptionBinding))
+                // We don't allow editing the encryption state if the current setting on the server is `enabled`
+                .disabled(context.viewState.currentSettings.isEncryptionEnabled)
         } header: {
             Text(L10n.screenSecurityAndPrivacyEncryptionSectionTitle)
                 .compoundListSectionHeader()
@@ -73,8 +75,10 @@ struct SecurityAndPrivacyScreen: View {
 
 // MARK: - Previews
 
-struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
+// TODO: Add back TestablePreview, this is WIP so running preview tests for it is not necessary
+struct SecurityAndPrivacyScreen_Previews: PreviewProvider {
     static let inviteOnlyViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(joinRule: .invite)))
+    
     static var previews: some View {
         NavigationStack {
             SecurityAndPrivacyScreen(context: inviteOnlyViewModel.context)

@@ -33,10 +33,6 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         case .save:
             actionsSubject.send(.done)
         case .tryUpdatingEncryption(let updatedValue):
-            // Once the room is encrypted it can never be turned off
-            guard !roomProxy.isEncrypted else {
-                return
-            }
             if updatedValue {
                 state.bindings.alertInfo = .init(id: .enableEncryption,
                                                  title: L10n.screenSecurityAndPrivacyEnableEncryptionAlertTitle,
