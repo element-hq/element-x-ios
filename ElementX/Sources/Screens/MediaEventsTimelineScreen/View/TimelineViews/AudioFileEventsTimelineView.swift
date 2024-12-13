@@ -12,8 +12,7 @@ struct AudioMediaEventsTimelineView: View {
     let timelineItem: AudioRoomTimelineItem
     
     var body: some View {
-        MediaFileRoomTimelineContent(timelineItemID: timelineItem.id,
-                                     filename: timelineItem.content.filename,
+        MediaFileRoomTimelineContent(filename: timelineItem.content.filename,
                                      fileSize: timelineItem.content.fileSize,
                                      caption: timelineItem.content.caption,
                                      formattedCaption: timelineItem.content.formattedCaption,

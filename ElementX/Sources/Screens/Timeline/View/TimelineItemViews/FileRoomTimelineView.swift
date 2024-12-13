@@ -9,17 +9,19 @@ import Compound
 import SwiftUI
 
 struct FileRoomTimelineView: View {
+    @Environment(\.timelineContext) private var context
     let timelineItem: FileRoomTimelineItem
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            MediaFileRoomTimelineContent(timelineItemID: timelineItem.id,
-                                         filename: timelineItem.content.filename,
+            MediaFileRoomTimelineContent(filename: timelineItem.content.filename,
                                          fileSize: timelineItem.content.fileSize,
                                          caption: timelineItem.content.caption,
                                          formattedCaption: timelineItem.content.formattedCaption,
-                                         additionalWhitespaces: timelineItem.additionalWhitespaces())
-                .accessibilityLabel(L10n.commonFile)
+                                         additionalWhitespaces: timelineItem.additionalWhitespaces()) {
+                context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
+            }
+            .accessibilityLabel(L10n.commonFile)
         }
     }
 }
@@ -27,9 +29,6 @@ struct FileRoomTimelineView: View {
 // MARK: Content
 
 struct MediaFileRoomTimelineContent: View {
-    @Environment(\.timelineContext) private var context
-    
-    let timelineItemID: TimelineItemIdentifier
     let filename: String
     let fileSize: UInt?
     let caption: String?
@@ -37,16 +36,22 @@ struct MediaFileRoomTimelineContent: View {
     let additionalWhitespaces: Int
     var isAudioFile = false
     
-    var icon: KeyPath<CompoundIcons, Image> {
+    var onMediaTap: (() -> Void)? = nil
+    
+    private var icon: KeyPath<CompoundIcons, Image> {
         isAudioFile ? \.audio : \.attachment
     }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            filePreview
-                .onTapGesture {
-                    context?.send(viewAction: .mediaTapped(itemID: timelineItemID))
-                }
+            if let onMediaTap {
+                filePreview
+                    .onTapGesture {
+                        onMediaTap()
+                    }
+            } else {
+                filePreview
+            }
             
             if let formattedCaption {
                 FormattedBodyText(attributedString: formattedCaption,
