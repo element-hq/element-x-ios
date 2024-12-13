@@ -9,6 +9,10 @@ import Compound
 import SwiftUI
 
 extension View {
+    /// - Parameters:
+    ///   - isOutgoing: rounds the corners according to the side it shows on, defaults to true
+    ///   - insets: defaults to what we use for file timeline items, text uses custom values
+    ///   - color: self explanatory, defaults to subtle secondary
     func bubbleBackground(isOutgoing: Bool = true,
                           insets: EdgeInsets = .init(top: 8, leading: 12, bottom: 8, trailing: 12),
                           color: Color? = .compound.bgSubtleSecondary) -> some View {
