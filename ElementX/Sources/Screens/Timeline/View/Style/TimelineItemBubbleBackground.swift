@@ -5,12 +5,13 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 extension View {
-    func bubbleBackground(isOutgoing: Bool,
-                          insets: EdgeInsets,
-                          color: Color? = nil) -> some View {
+    func bubbleBackground(isOutgoing: Bool = true,
+                          insets: EdgeInsets = .init(top: 8, leading: 12, bottom: 8, trailing: 12),
+                          color: Color? = .compound.bgSubtleSecondary) -> some View {
         modifier(TimelineItemBubbleBackgroundModifier(isOutgoing: isOutgoing,
                                                       insets: insets,
                                                       color: color))

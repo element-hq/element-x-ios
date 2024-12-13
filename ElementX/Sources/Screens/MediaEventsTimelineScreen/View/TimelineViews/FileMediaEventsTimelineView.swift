@@ -20,9 +20,7 @@ struct FileMediaEventsTimelineView: View {
                                      additionalWhitespaces: timelineItem.additionalWhitespaces())
             .accessibilityLabel(L10n.commonFile)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .bubbleBackground(isOutgoing: timelineItem.isOutgoing,
-                              insets: .init(top: 8, leading: 12, bottom: 8, trailing: 12),
-                              color: .compound.bgSubtleSecondary)
+            .bubbleBackground(isOutgoing: timelineItem.isOutgoing)
     }
 }
 
