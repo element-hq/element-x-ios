@@ -41,22 +41,27 @@ struct MediaEventsTimelineScreen: View {
     // * flip the grid vertically to counteract the scroll view
     // but also horizontally to preserve the corect item order
     // * flip the items on both axes have them render correctly
+    @ViewBuilder
     private var mainContent: some View {
-        ScrollView {
-            Group {
-                switch context.viewState.bindings.screenMode {
-                case .media:
-                    mediaContent
-                case .files:
-                    filesContent
+        if context.viewState.groups.isEmpty, !context.viewState.isBackPaginating {
+            emptyState
+        } else {
+            ScrollView {
+                Group {
+                    switch context.viewState.bindings.screenMode {
+                    case .media:
+                        mediaContent
+                    case .files:
+                        filesContent
+                    }
+                    
+                    header
                 }
-            
-                header
             }
-        }
-        .scaleEffect(.init(width: 1, height: -1))
-        .onChange(of: context.screenMode) { _, _ in
-            context.send(viewAction: .changedScreenMode)
+            .scaleEffect(.init(width: 1, height: -1))
+            .onChange(of: context.screenMode) { _, _ in
+                context.send(viewAction: .changedScreenMode)
+            }
         }
     }
     
@@ -137,7 +142,7 @@ struct MediaEventsTimelineScreen: View {
     }
     
     @ViewBuilder
-    func viewForTimelineItem(_ item: RoomTimelineItemViewState) -> some View {
+    private func viewForTimelineItem(_ item: RoomTimelineItemViewState) -> some View {
         switch item.type {
         case .image(let timelineItem):
             ImageMediaEventsTimelineView(timelineItem: timelineItem)
@@ -155,36 +160,62 @@ struct MediaEventsTimelineScreen: View {
             EmptyView()
         }
     }
+    
+    @ViewBuilder
+    private var emptyState: some View {
+        FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar, background: .gradient) {
+            VStack(spacing: 16) {
+                switch context.screenMode {
+                case .media:
+                    emptyMedia
+                case .files:
+                    emptyFiles
+                }
+            }
+            .padding(16)
+        } bottomContent: { EmptyView() }
+    }
+    
+    private var emptyMedia: some View {
+        Group {
+            BigIcon(icon: \.image)
+            
+            Text(L10n.screenMediaBrowserMediaEmptyStateTitle)
+                .foregroundColor(.compound.textPrimary)
+                .font(.compound.headingMDBold)
+                .multilineTextAlignment(.center)
+            
+            Text(L10n.screenMediaBrowserMediaEmptyStateSubtitle)
+                .foregroundColor(.compound.textSecondary)
+                .font(.compound.bodyMD)
+                .multilineTextAlignment(.center)
+        }
+    }
+    
+    private var emptyFiles: some View {
+        Group {
+            BigIcon(icon: \.document)
+            
+            Text(L10n.screenMediaBrowserFilesEmptyStateTitle)
+                .foregroundColor(.compound.textPrimary)
+                .font(.compound.headingMDBold)
+                .multilineTextAlignment(.center)
+            
+            Text(L10n.screenMediaBrowserFilesEmptyStateSubtitle)
+                .foregroundColor(.compound.textSecondary)
+                .font(.compound.bodyMD)
+                .multilineTextAlignment(.center)
+        }
+    }
 }
 
 // MARK: - Previews
 
 struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
-    static let timelineViewModel: TimelineViewModel = {
-        let timelineController = MockRoomTimelineController(timelineKind: .media(.mediaFilesScreen))
-        return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
-                                 timelineController: timelineController,
-                                 mediaProvider: MediaProviderMock(configuration: .init()),
-                                 mediaPlayerProvider: MediaPlayerProviderMock(),
-                                 voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                 userIndicatorController: UserIndicatorControllerMock(),
-                                 appMediator: AppMediatorMock.default,
-                                 appSettings: ServiceLocator.shared.settings,
-                                 analyticsService: ServiceLocator.shared.analytics,
-                                 emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
-    }()
-    
-    static let mediaViewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: timelineViewModel,
-                                                                   filesTimelineViewModel: timelineViewModel,
-                                                                   mediaProvider: MediaProviderMock(configuration: .init()),
-                                                                   screenMode: .media,
-                                                                   userIndicatorController: UserIndicatorControllerMock())
-    
-    static let filesViewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: timelineViewModel,
-                                                                   filesTimelineViewModel: timelineViewModel,
-                                                                   mediaProvider: MediaProviderMock(configuration: .init()),
-                                                                   screenMode: .files,
-                                                                   userIndicatorController: UserIndicatorControllerMock())
+    static let mediaViewModel = makeViewModel(screenMode: .media)
+    static let filesViewModel = makeViewModel(screenMode: .files)
+    static let emptyMediaViewModel = makeViewModel(timelineKind: .detached, screenMode: .media)
+    static let emptyFilesViewModel = makeViewModel(timelineKind: .detached, screenMode: .files)
     
     static var previews: some View {
         NavigationStack {
@@ -196,5 +227,38 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
             MediaEventsTimelineScreen(context: filesViewModel.context)
         }
         .previewDisplayName("Files")
+        
+        NavigationStack {
+            MediaEventsTimelineScreen(context: emptyMediaViewModel.context)
+        }
+        .previewDisplayName("Empty Media")
+        
+        NavigationStack {
+            MediaEventsTimelineScreen(context: emptyFilesViewModel.context)
+        }
+        .previewDisplayName("Empty Files")
+    }
+    
+    private static func makeViewModel(timelineKind: TimelineKind = .media(.mediaFilesScreen),
+                                      screenMode: MediaEventsTimelineScreenMode) -> MediaEventsTimelineScreenViewModel {
+        MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: makeTimelineViewModel(timelineKind: timelineKind),
+                                           filesTimelineViewModel: makeTimelineViewModel(timelineKind: timelineKind),
+                                           mediaProvider: MediaProviderMock(configuration: .init()),
+                                           screenMode: screenMode,
+                                           userIndicatorController: UserIndicatorControllerMock())
+    }
+    
+    private static func makeTimelineViewModel(timelineKind: TimelineKind) -> TimelineViewModel {
+        let timelineController = MockRoomTimelineController(timelineKind: timelineKind)
+        return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
+                                 timelineController: timelineController,
+                                 mediaProvider: MediaProviderMock(configuration: .init()),
+                                 mediaPlayerProvider: MediaPlayerProviderMock(),
+                                 voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                 userIndicatorController: UserIndicatorControllerMock(),
+                                 appMediator: AppMediatorMock.default,
+                                 appSettings: ServiceLocator.shared.settings,
+                                 analyticsService: ServiceLocator.shared.analytics,
+                                 emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
     }
 }

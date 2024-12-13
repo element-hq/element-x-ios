@@ -178,7 +178,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     
     private func titleForDate(_ date: Date) -> String {
         if Calendar.current.isDate(date, equalTo: .now, toGranularity: .month) {
-            L10n.commonDateSeparatorThisMonth
+            L10n.commonDateThisMonth
         } else {
             date.formatted(.dateTime.month(.wide).year())
         }
