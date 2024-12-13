@@ -111,8 +111,10 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
                 let group = MediaEventsTimelineGroup(id: item.id.uniqueID.id,
                                                      title: titleForDate(item.timestamp),
                                                      items: currentItems)
-                currentItems = []
-                newGroups.append(group)
+                if !currentItems.isEmpty {
+                    newGroups.append(group)
+                    currentItems = []
+                }
             } else {
                 currentItems.append(item)
             }
