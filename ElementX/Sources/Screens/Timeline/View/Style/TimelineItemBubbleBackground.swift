@@ -8,10 +8,10 @@
 import SwiftUI
 
 extension View {
-    func bubbleBackground(timelineItem: EventBasedTimelineItemProtocol,
+    func bubbleBackground(isOutgoing: Bool,
                           insets: EdgeInsets,
                           color: Color? = nil) -> some View {
-        modifier(TimelineItemBubbleBackgroundModifier(timelineItem: timelineItem,
+        modifier(TimelineItemBubbleBackgroundModifier(isOutgoing: isOutgoing,
                                                       insets: insets,
                                                       color: color))
     }
@@ -20,7 +20,7 @@ extension View {
 private struct TimelineItemBubbleBackgroundModifier: ViewModifier {
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
     
-    let timelineItem: EventBasedTimelineItemProtocol
+    let isOutgoing: Bool
     let insets: EdgeInsets
     var color: Color?
     
@@ -36,15 +36,15 @@ private struct TimelineItemBubbleBackgroundModifier: ViewModifier {
         case .single:
             return .allCorners
         case .first:
-            if timelineItem.isOutgoing {
+            if isOutgoing {
                 return [.topLeft, .topRight, .bottomLeft]
             } else {
                 return [.topLeft, .topRight, .bottomRight]
             }
         case .middle:
-            return timelineItem.isOutgoing ? [.topLeft, .bottomLeft] : [.topRight, .bottomRight]
+            return isOutgoing ? [.topLeft, .bottomLeft] : [.topRight, .bottomRight]
         case .last:
-            if timelineItem.isOutgoing {
+            if isOutgoing {
                 return [.topLeft, .bottomLeft, .bottomRight]
             } else {
                 return [.topRight, .bottomLeft, .bottomRight]
