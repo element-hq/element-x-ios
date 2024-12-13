@@ -50,6 +50,8 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         switch viewAction {
         case .updateCurrentItem(let item):
             Task { await updateCurrentItem(item) }
+        case .saveCurrentItem:
+            Task { await saveCurrentItem() }
         case .showCurrentItemDetails:
             state.bindings.mediaDetailsItem = state.currentItem
         case .menuAction(let action, let item):
@@ -90,7 +92,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
     }
     
-    func rebuildCurrentItemActions() {
+    private func rebuildCurrentItemActions() {
         let timelineContext = timelineViewModel.context
         let provider = TimelineItemMenuActionProvider(timelineItem: state.currentItem.timelineItem,
                                                       canCurrentUserRedactSelf: timelineContext.viewState.canCurrentUserRedactSelf,
@@ -104,6 +106,17 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                                                       emojiProvider: timelineContext.viewState.emojiProvider)
         state.currentItemActions = provider.makeActions()
     }
+    
+    private func saveCurrentItem() async {
+        guard let url = state.currentItem.fileHandle?.url else {
+            MXLog.error("Unable to save an item without a URL, the button shouldn't be visible.")
+            return
+        }
+        
+        showErrorIndicator()
+    }
+    
+    // MARK: - Indicators
     
     private func showDownloadingIndicator(itemID: TimelineItemIdentifier) {
         let indicatorID = makeDownloadIndicatorID(itemID: itemID)
@@ -127,6 +140,14 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                                                               iconName: "exclamationmark.circle.fill"))
     }
     
+    private func showErrorIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: errorIndicatorID,
+                                                              type: .modal,
+                                                              title: L10n.errorUnknown,
+                                                              iconName: "xmark"))
+    }
+    
+    private var errorIndicatorID: String { "\(Self.self)-Error" }
     private var downloadErrorIndicatorID: String { "\(Self.self)-DownloadError" }
     private func makeDownloadIndicatorID(itemID: TimelineItemIdentifier) -> String {
         "\(Self.self)-Download-\(itemID.uniqueID.id)"

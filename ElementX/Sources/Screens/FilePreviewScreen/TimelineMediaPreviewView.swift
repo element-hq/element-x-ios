@@ -5,7 +5,9 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import Combine
 import Compound
+import QuickLook
 import SwiftUI
 
 struct TimelineMediaPreviewView: View {
@@ -16,8 +18,10 @@ struct TimelineMediaPreviewView: View {
     var body: some View {
         NavigationStack {
             Color.clear
-                .overlay { QuickLookView(viewModelContext: context) } // Overlay to stop QL hijacking the toolbar.
+                .overlay { QuickLookView(viewModelContext: context).ignoresSafeArea() } // Overlay to stop QL hijacking the toolbar.
                 .toolbar { toolbar }
+                .toolbarBackground(.visible, for: .navigationBar)
+                .toolbarBackground(.visible, for: .bottomBar)
                 .navigationBarTitleDisplayMode(.inline)
                 .safeAreaInset(edge: .bottom, spacing: 0) { caption }
         }
@@ -39,7 +43,7 @@ struct TimelineMediaPreviewView: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(16)
                 .background {
-                    BlurView(style: .systemChromeMaterial) // Darkest material available, matches the bottom bar when content is beneath.
+                    BlurEffectView(style: .systemChromeMaterial) // Darkest material available, matches the bottom bar when content is beneath.
                 }
         }
     }
@@ -89,37 +93,83 @@ struct TimelineMediaPreviewView: View {
                 ShareLink(item: url, subject: nil, message: currentItem.caption.map(Text.init)) {
                     CompoundIcon(\.shareIos)
                 }
-            }
-            
-            Spacer()
-            
-            Button { } label: {
-                CompoundIcon(\.download)
+                
+                Spacer()
+                
+                Button { context.send(viewAction: .saveCurrentItem) } label: {
+                    CompoundIcon(\.download)
+                }
             }
         }
-    }
-}
-
-private struct BlurView: UIViewRepresentable {
-    var style: UIBlurEffect.Style
-    
-    func makeUIView(context: Context) -> UIVisualEffectView {
-        UIVisualEffectView(effect: UIBlurEffect(style: style))
-    }
-    
-    func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
-        uiView.effect = UIBlurEffect(style: style)
     }
 }
 
 private struct QuickLookView: UIViewControllerRepresentable {
     let viewModelContext: TimelineMediaPreviewViewModel.Context
 
-    func makeUIViewController(context: Context) -> TimelineMediaPreviewController {
-        TimelineMediaPreviewController(viewModelContext: viewModelContext)
+    func makeUIViewController(context: Context) -> PreviewController {
+        PreviewController(coordinator: context.coordinator,
+                          fileLoadedPublisher: viewModelContext.viewState.fileLoadedPublisher.eraseToAnyPublisher())
     }
 
-    func updateUIViewController(_ uiViewController: TimelineMediaPreviewController, context: Context) { }
+    func updateUIViewController(_ uiViewController: PreviewController, context: Context) { }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(viewModelContext: viewModelContext)
+    }
+    
+    class Coordinator: NSObject, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
+        private let viewModelContext: TimelineMediaPreviewViewModel.Context
+        
+        init(viewModelContext: TimelineMediaPreviewViewModel.Context) {
+            self.viewModelContext = viewModelContext
+        }
+        
+        func updateCurrentItem(_ item: TimelineMediaPreviewItem) {
+            viewModelContext.send(viewAction: .updateCurrentItem(item))
+        }
+        
+        func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
+            viewModelContext.viewState.previewItems.count
+        }
+
+        func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
+            viewModelContext.viewState.previewItems[index]
+        }
+    }
+    
+    class PreviewController: QLPreviewController {
+        let coordinator: Coordinator
+        
+        private var cancellables: Set<AnyCancellable> = []
+        
+        init(coordinator: Coordinator, fileLoadedPublisher: AnyPublisher<TimelineItemIdentifier, Never>) {
+            self.coordinator = coordinator
+            
+            super.init(nibName: nil, bundle: nil)
+            
+            dataSource = coordinator
+            delegate = coordinator
+            
+            // Observation of currentPreviewItem doesn't work, so use the index instead.
+            publisher(for: \.currentPreviewItemIndex)
+                .sink { [weak self] _ in
+                    guard let self, let currentPreviewItem = currentPreviewItem as? TimelineMediaPreviewItem else { return }
+                    coordinator.updateCurrentItem(currentPreviewItem)
+                }
+                .store(in: &cancellables)
+            
+            fileLoadedPublisher
+                .sink { [weak self] itemID in
+                    guard let self, (currentPreviewItem as? TimelineMediaPreviewItem)?.id == itemID else { return }
+                    refreshCurrentPreviewItem()
+                }
+                .store(in: &cancellables)
+        }
+        
+        @available(*, unavailable)
+        required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    }
 }
 
 // MARK: - Previews

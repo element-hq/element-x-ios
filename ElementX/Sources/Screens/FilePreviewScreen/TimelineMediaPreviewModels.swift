@@ -52,18 +52,7 @@ class TimelineMediaPreviewItem: NSObject, QLPreviewItem, Identifiable {
     }
     
     var previewItemTitle: String? {
-        switch timelineItem {
-        case let audioItem as AudioRoomTimelineItem:
-            audioItem.content.filename
-        case let fileItem as FileRoomTimelineItem:
-            fileItem.content.filename
-        case let imageItem as ImageRoomTimelineItem:
-            imageItem.content.filename
-        case let videoItem as VideoRoomTimelineItem:
-            videoItem.content.filename
-        default:
-            nil
-        }
+        filename
     }
     
     // MARK: Event details
@@ -175,6 +164,7 @@ class TimelineMediaPreviewItem: NSObject, QLPreviewItem, Identifiable {
 
 enum TimelineMediaPreviewViewAction {
     case updateCurrentItem(TimelineMediaPreviewItem)
+    case saveCurrentItem
     case showCurrentItemDetails
     case menuAction(TimelineItemMenuAction, item: TimelineMediaPreviewItem)
     case redactConfirmation(item: TimelineMediaPreviewItem)
