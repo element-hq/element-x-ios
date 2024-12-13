@@ -21,7 +21,7 @@ struct AudioMediaEventsTimelineView: View {
                                      isAudioFile: true)
             .accessibilityLabel(L10n.commonAudio)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .bubbleBackground(timelineItem: timelineItem,
+            .bubbleBackground(isOutgoing: timelineItem.isOutgoing,
                               insets: .init(top: 8, leading: 12, bottom: 8, trailing: 12),
                               color: .compound.bgSubtleSecondary)
     }
