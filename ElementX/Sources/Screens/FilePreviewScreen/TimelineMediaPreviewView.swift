@@ -20,10 +20,15 @@ struct TimelineMediaPreviewView: View {
             Color.clear
                 .overlay { QuickLookView(viewModelContext: context).ignoresSafeArea() } // Overlay to stop QL hijacking the toolbar.
                 .toolbar { toolbar }
-                .toolbarBackground(.visible, for: .navigationBar)
+                .toolbarBackground(.visible, for: .navigationBar) // The toolbar's scrollEdgeAppearance isn't aware of the quicklook view 🤷‍♂️
                 .toolbarBackground(.visible, for: .bottomBar)
                 .navigationBarTitleDisplayMode(.inline)
                 .safeAreaInset(edge: .bottom, spacing: 0) { caption }
+        }
+        .introspect(.navigationStack, on: .supportedVersions) {
+            // Fixes a bug where the QuickLook view overrides the .toolbarBackground(.visible) after it loads the real item.
+            $0.navigationBar.scrollEdgeAppearance = $0.navigationBar.standardAppearance
+            $0.toolbar.scrollEdgeAppearance = $0.toolbar.standardAppearance
         }
         .sheet(item: $context.mediaDetailsItem) { item in
             TimelineMediaPreviewDetailsView(item: item, context: context)
