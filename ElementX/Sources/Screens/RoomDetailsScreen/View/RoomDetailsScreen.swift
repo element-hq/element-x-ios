@@ -207,6 +207,14 @@ struct RoomDetailsScreen: View {
                 .onChange(of: context.isFavourite) { _, newValue in
                     context.send(viewAction: .toggleFavourite(isFavourite: newValue))
                 }
+            
+            if context.viewState.canSeeSecurityAndPrivacy {
+                ListRow(label: .default(title: L10n.screenRoomDetailsSecurityAndPrivacyTitle,
+                                        icon: \.lock),
+                        kind: .navigationLink {
+                            context.send(viewAction: .processTapSecurityAndPrivacy)
+                        })
+            }
         }
     }
     
