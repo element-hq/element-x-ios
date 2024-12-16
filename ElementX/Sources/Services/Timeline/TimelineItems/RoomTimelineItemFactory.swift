@@ -606,7 +606,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         let imageInfo = ImageInfoProxy(source: source ?? MediaSourceProxy.empty(),
                                        width: (width != nil) ? UInt64(max(0, floor(width!))) : nil,
                                        height: (height != nil) ? UInt64(max(0, floor(height!))) : nil,
-                                       mimeType: messageContent.info?.mimeType)
+                                       mimeType: messageContent.info?.mimeType,
+                                       fileSize: UInt(messageContent.info?.size ?? 0))
         
         return .init(filename: messageContent.info?.name ?? "",
                      imageInfo: imageInfo,

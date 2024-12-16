@@ -1420,7 +1420,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 }
                 
                 return await group.first { inviteResult in
-                    inviteResult.isFailure
+                    if case .failure = inviteResult {
+                        return true
+                    }
+                    return false
                 } ?? .success(())
             }
             

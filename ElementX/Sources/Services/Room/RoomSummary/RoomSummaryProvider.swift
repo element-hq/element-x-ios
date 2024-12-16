@@ -279,14 +279,14 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         let notificationMode = roomInfo.cachedUserDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
         
         let knockRequestType: RoomSummary.KnockRequestType? = switch roomInfo.membership {
-        let displayName: String? = roomInfo.displayName ?? roomDetails.directUserProfile?.displayName ?? roomInfo.rawName
-        let roomAvatar: String? = roomInfo.avatarUrl ?? roomDetails.directUserProfile?.avatarUrl
-        zeroUsersService.setRoomAvatarInCache(roomId: roomInfo.id, avatarUrl: roomAvatar)
-        
         case .invited: .invite(inviter: inviterProxy)
         case .knocked: .knock
         default: nil
         }
+        
+        let displayName: String? = roomInfo.displayName ?? roomDetails.directUserProfile?.displayName ?? roomInfo.rawName
+        let roomAvatar: String? = roomInfo.avatarUrl ?? roomDetails.directUserProfile?.avatarUrl
+        zeroUsersService.setRoomAvatarInCache(roomId: roomInfo.id, avatarUrl: roomAvatar)
         
         return RoomSummary(roomListItem: roomListItem,
                            id: roomInfo.id,

@@ -336,6 +336,33 @@
 		18CB80212C7F310E003BC289 /* ViewModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CB80202C7F310E003BC289 /* ViewModifiers.swift */; };
 		18D1EE272CAE99B9007BEB15 /* ZeroInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18D1EE262CAE99B9007BEB15 /* ZeroInfo.plist */; };
 		18D1EE282CAE99B9007BEB15 /* ZeroInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18D1EE262CAE99B9007BEB15 /* ZeroInfo.plist */; };
+		18D4679B2D109ACA00861AA6 /* KnockRequestProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07851F4EA81AA3339806A7B /* KnockRequestProxyProtocol.swift */; };
+		18D4679C2D109AD000861AA6 /* KnockRequestProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F062DD2CCD95DC33528A16F /* KnockRequestProxy.swift */; };
+		18D4679D2D109B0C00861AA6 /* ShouldScrollOnKeyboardDidShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832397B5C3D00A4BF52C5F0B /* ShouldScrollOnKeyboardDidShow.swift */; };
+		18D4679E2D109B4A00861AA6 /* MediaFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3615FD6460BC9C1DEF8659 /* MediaFileManager.swift */; };
+		18D4679F2D109B4F00861AA6 /* TimelineMediaPreviewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A62FBD3007312311C14DD8 /* TimelineMediaPreviewCoordinator.swift */; };
+		18D467A02D109B5400861AA6 /* TimelineMediaPreviewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2BB38DF61F5100B8723112 /* TimelineMediaPreviewModels.swift */; };
+		18D467A12D109B5900861AA6 /* TimelineMediaPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76B92984638A9B3104840D /* TimelineMediaPreviewView.swift */; };
+		18D467A22D109B5C00861AA6 /* TimelineMediaPreviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F41CEAAE2BB4E74CDC2278 /* TimelineMediaPreviewViewModel.swift */; };
+		18D467A32D109B6200861AA6 /* TimelineMediaPreviewDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 467498BEA681758BE2F80826 /* TimelineMediaPreviewDetailsView.swift */; };
+		18D467A42D109B6700861AA6 /* TimelineMediaPreviewRedactConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75FE3F524B575D53787868C /* TimelineMediaPreviewRedactConfirmationView.swift */; };
+		18D467A52D109B8F00861AA6 /* AudioFileEventsTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9044BE0E4A66F5B963E834 /* AudioFileEventsTimelineView.swift */; };
+		18D467A62D109B9300861AA6 /* FileMediaEventsTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430C73079A84654BF46A7FF5 /* FileMediaEventsTimelineView.swift */; };
+		18D467A72D109B9700861AA6 /* ImageMediaEventsTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FF584D757E768EA7776A532 /* ImageMediaEventsTimelineView.swift */; };
+		18D467A82D109B9B00861AA6 /* SeparatorMediaEventsTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F354AD441E2FD83DED89AF /* SeparatorMediaEventsTimelineView.swift */; };
+		18D467A92D109B9F00861AA6 /* VideoMediaEventsTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1FB56520A847DD2532D5C8 /* VideoMediaEventsTimelineView.swift */; };
+		18D467AA2D109BA300861AA6 /* VoiceMessageMediaEventsTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3521DF92391551E02004D8 /* VoiceMessageMediaEventsTimelineView.swift */; };
+		18D467AB2D109BD200861AA6 /* VoiceMessageRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A293D06BAB2B7A17D9314B /* VoiceMessageRoomTimelineView.swift */; };
+		18D467AC2D109BFE00861AA6 /* VoiceMessageRoomPlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E3B41C36800DD4558D7BDA7 /* VoiceMessageRoomPlaybackView.swift */; };
+		18D467AD2D109C3900861AA6 /* TimelineItemBubbleBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE739A6836E86E3780748477 /* TimelineItemBubbleBackground.swift */; };
+		18D467AE2D109C6F00861AA6 /* ZoomTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 018194CAFBE80720FECCEDEE /* ZoomTransition.swift */; };
+		18D467AF2D109C7B00861AA6 /* BlurEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07934EF08BB39353E4A94272 /* BlurEffectView.swift */; };
+		18D467B02D109CAC00861AA6 /* KnockRequestProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F957320D0EB7D7B4E30C79D /* KnockRequestProxyMock.swift */; };
+		18D467B12D10A0AC00861AA6 /* SecurityAndPrivacyScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97F2F6B6E56055EF173A2DD3 /* SecurityAndPrivacyScreenCoordinator.swift */; };
+		18D467B22D10A0B000861AA6 /* SecurityAndPrivacyScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBADF8010C813D905C172CE /* SecurityAndPrivacyScreenModels.swift */; };
+		18D467B32D10A0B400861AA6 /* SecurityAndPrivacyScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 978092B01BEAB39F2C4389AE /* SecurityAndPrivacyScreenViewModel.swift */; };
+		18D467B42D10A0B800861AA6 /* SecurityAndPrivacyScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D046ABB22E680F7C5054441B /* SecurityAndPrivacyScreenViewModelProtocol.swift */; };
+		18D467B52D10A0BD00861AA6 /* SecurityAndPrivacyScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AE42C19EDE64B7CB7BE4D0 /* SecurityAndPrivacyScreen.swift */; };
 		18D5D9A42CEB56FE00107940 /* ZRewards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9A32CEB56F500107940 /* ZRewards.swift */; };
 		18D5D9A52CEB56FE00107940 /* ZRewards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9A32CEB56F500107940 /* ZRewards.swift */; };
 		18D5D9A72CEB577300107940 /* ZeroRewardsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9A62CEB576B00107940 /* ZeroRewardsApi.swift */; };
@@ -1190,9 +1217,9 @@
 		18E9A7522C9829970082DDA4 /* VoiceMessageRecordingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A2AD86F7E618F468F6FAF5 /* VoiceMessageRecordingButton.swift */; };
 		18E9A7532C9829970082DDA4 /* VoiceMessageRecordingComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A5C3F7C9C1DA10CAEC6A98 /* VoiceMessageRecordingComposer.swift */; };
 		18E9A7542C9829970082DDA4 /* VoiceMessageRecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E9CBF577B9711CFBB4FA40D /* VoiceMessageRecordingView.swift */; };
-		18E9A7552C9829970082DDA4 /* VoiceMessageRoomPlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCD41CD67DB5DA0D436BFE9 /* VoiceMessageRoomPlaybackView.swift */; };
+		18E9A7552C9829970082DDA4 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		18E9A7562C9829970082DDA4 /* VoiceMessageRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D529B976F8B2AA654D923422 /* VoiceMessageRoomTimelineItem.swift */; };
-		18E9A7572C9829970082DDA4 /* VoiceMessageRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70A50C41C5871B4DB905E7E /* VoiceMessageRoomTimelineView.swift */; };
+		18E9A7572C9829970082DDA4 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		18E9A7582C9829970082DDA4 /* WaveformCursorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9EABCA9348DFA27439A809 /* WaveformCursorView.swift */; };
 		18E9A7592C9829970082DDA4 /* WaveformInteractionModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFEE91FB8ABB5F5884B6D940 /* WaveformInteractionModifier.swift */; };
 		18E9A75A2C9829970082DDA4 /* WaveformSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94028A227645FA880B966211 /* WaveformSource.swift */; };
@@ -8607,6 +8634,7 @@
 				18525D0F2CF5F1040055C5E8 /* ZeroMessengerInviteApi.swift in Sources */,
 				189334A62D071C0900CC87B9 /* MediaEventsTimelineScreenViewModelProtocol.swift in Sources */,
 				18E9A41D2C9829970082DDA4 /* APNSPayload.swift in Sources */,
+				18D467A92D109B9F00861AA6 /* VideoMediaEventsTimelineView.swift in Sources */,
 				18E9A41E2C9829970082DDA4 /* AVMetadataMachineReadableCodeObject.swift in Sources */,
 				18E9A41F2C9829970082DDA4 /* AccessibilityIdentifiers.swift in Sources */,
 				180EE5D82CB01D5800891BBC /* MediaProviderMock.swift in Sources */,
@@ -8624,6 +8652,7 @@
 				18E9A42A2C9829970082DDA4 /* AnalyticsConfiguration.swift in Sources */,
 				18E9A42B2C9829970082DDA4 /* AnalyticsConsentState.swift in Sources */,
 				18E9A42C2C9829970082DDA4 /* AnalyticsPromptScreen.swift in Sources */,
+				18D467B42D10A0B800861AA6 /* SecurityAndPrivacyScreenViewModelProtocol.swift in Sources */,
 				18E9A42D2C9829970082DDA4 /* AnalyticsPromptScreenCoordinator.swift in Sources */,
 				18E9A42E2C9829970082DDA4 /* ZeroUsersApi.swift in Sources */,
 				18E9A42F2C9829970082DDA4 /* AnalyticsPromptScreenModels.swift in Sources */,
@@ -8633,6 +8662,7 @@
 				18E9A4322C9829970082DDA4 /* AnalyticsService.swift in Sources */,
 				18E9A4332C9829970082DDA4 /* AnalyticsSettingsScreen.swift in Sources */,
 				18E9A4342C9829970082DDA4 /* AnalyticsSettingsScreenCoordinator.swift in Sources */,
+				18D4679B2D109ACA00861AA6 /* KnockRequestProxyProtocol.swift in Sources */,
 				18E9A4352C9829970082DDA4 /* AnalyticsSettingsScreenModels.swift in Sources */,
 				18E9A4362C9829970082DDA4 /* AnalyticsSettingsScreenViewModel.swift in Sources */,
 				18525D042CF5EDED0055C5E8 /* ZMessengerInvite.swift in Sources */,
@@ -8686,6 +8716,7 @@
 				18E9A45E2C9829970082DDA4 /* AppSettings.swift in Sources */,
 				18E9A45F2C9829970082DDA4 /* AppSettingsHook.swift in Sources */,
 				18E9A4602C9829970082DDA4 /* Application.swift in Sources */,
+				18D467A52D109B8F00861AA6 /* AudioFileEventsTimelineView.swift in Sources */,
 				18E9A4612C9829970082DDA4 /* Array.swift in Sources */,
 				18E9A4622C9829970082DDA4 /* Assets.swift in Sources */,
 				18E9A4632C9829970082DDA4 /* AsyncSequence.swift in Sources */,
@@ -8743,6 +8774,7 @@
 				18E9A4932C9829970082DDA4 /* BugReportScreenViewModel.swift in Sources */,
 				18E9A4942C9829970082DDA4 /* BugReportScreenViewModelProtocol.swift in Sources */,
 				18E9A4952C9829970082DDA4 /* BugReportService.swift in Sources */,
+				18D467A22D109B5C00861AA6 /* TimelineMediaPreviewViewModel.swift in Sources */,
 				18E9A4962C9829970082DDA4 /* BugReportServiceProtocol.swift in Sources */,
 				18E9A4972C9829970082DDA4 /* Bundle.swift in Sources */,
 				18FFCED62CEC8F77002F2647 /* RoomSelectionScreenViewModelProtocol.swift in Sources */,
@@ -8775,6 +8807,8 @@
 				18E9A4B22C9829970082DDA4 /* CompletionSuggestionServiceProtocol.swift in Sources */,
 				18E9A4B32C9829970082DDA4 /* CompletionSuggestionView.swift in Sources */,
 				182725702C99952900B513B5 /* WebRegistrationScreenModels.swift in Sources */,
+				18D467A42D109B6700861AA6 /* TimelineMediaPreviewRedactConfirmationView.swift in Sources */,
+				18D467AF2D109C7B00861AA6 /* BlurEffectView.swift in Sources */,
 				18E9A4B42C9829970082DDA4 /* ComposerDraftService.swift in Sources */,
 				18E9A4B52C9829970082DDA4 /* ComposerDraftServiceMock.swift in Sources */,
 				18E9A4B62C9829970082DDA4 /* ComposerDraftServiceProtocol.swift in Sources */,
@@ -8847,6 +8881,7 @@
 				18E9A4F02C9829970082DDA4 /* Encodable.swift in Sources */,
 				18E9A4F12C9829970082DDA4 /* EncryptedRoomTimelineItem.swift in Sources */,
 				18E9A4F22C9829970082DDA4 /* EncryptedRoomTimelineView.swift in Sources */,
+				18D467B52D10A0BD00861AA6 /* SecurityAndPrivacyScreen.swift in Sources */,
 				18E9A4F32C9829970082DDA4 /* EncryptionAuthenticity.swift in Sources */,
 				185454D02CFE3D2E003CA957 /* InfoBox.swift in Sources */,
 				18E9A4F42C9829970082DDA4 /* EncryptionKeyProvider.swift in Sources */,
@@ -8857,8 +8892,10 @@
 				18E9A4F82C9829970082DDA4 /* EncryptionResetPasswordScreenModels.swift in Sources */,
 				18E9A4F92C9829970082DDA4 /* EncryptionResetPasswordScreenViewModel.swift in Sources */,
 				18E9A4FA2C9829970082DDA4 /* EncryptionResetPasswordScreenViewModelProtocol.swift in Sources */,
+				18D4679D2D109B0C00861AA6 /* ShouldScrollOnKeyboardDidShow.swift in Sources */,
 				18C4540C2CF09A5E00F25539 /* KnockRequestsListScreen.swift in Sources */,
 				18E9A4FB2C9829970082DDA4 /* EncryptionResetScreen.swift in Sources */,
+				18D467A12D109B5900861AA6 /* TimelineMediaPreviewView.swift in Sources */,
 				18E9A4FC2C9829970082DDA4 /* EncryptionResetScreenCoordinator.swift in Sources */,
 				18793DE82CF5052F00F1C85D /* KnockRequestsBannerView.swift in Sources */,
 				18E9A4FD2C9829970082DDA4 /* EncryptionResetScreenModels.swift in Sources */,
@@ -8866,8 +8903,10 @@
 				18E9A4FF2C9829970082DDA4 /* EncryptionResetScreenViewModelProtocol.swift in Sources */,
 				18E9A5002C9829970082DDA4 /* EstimatedWaveformView.swift in Sources */,
 				18E9A5012C9829970082DDA4 /* EventBasedMessageTimelineItemProtocol.swift in Sources */,
+				18D467AA2D109BA300861AA6 /* VoiceMessageMediaEventsTimelineView.swift in Sources */,
 				18E9A5022C9829970082DDA4 /* ZSessionDataResponse.swift in Sources */,
 				18E9A5032C9829970082DDA4 /* EventBasedTimelineItemProtocol.swift in Sources */,
+				18D467B12D10A0AC00861AA6 /* SecurityAndPrivacyScreenCoordinator.swift in Sources */,
 				18E9A5042C9829970082DDA4 /* (null) in Sources */,
 				18E9A5052C9829970082DDA4 /* ExpiringTaskRunner.swift in Sources */,
 				18AF615D2CF85E3200921644 /* ZeroListRowButtonStyle.swift in Sources */,
@@ -8907,6 +8946,7 @@
 				18E9A5202C9829970082DDA4 /* HomeScreenInviteCell.swift in Sources */,
 				18E9A5212C9829970082DDA4 /* HomeScreenModels.swift in Sources */,
 				18E9A5232C9829970082DDA4 /* String+Extensions.swift in Sources */,
+				18D467A02D109B5400861AA6 /* TimelineMediaPreviewModels.swift in Sources */,
 				18E9A5242C9829970082DDA4 /* HomeScreenRecoveryKeyConfirmationBanner.swift in Sources */,
 				18E9A5252C9829970082DDA4 /* HomeScreenRoomCell.swift in Sources */,
 				18E9A5262C9829970082DDA4 /* HomeScreenRoomList.swift in Sources */,
@@ -8952,6 +8992,7 @@
 				18E9A54B2C9829970082DDA4 /* KeychainController.swift in Sources */,
 				18E9A54C2C9829970082DDA4 /* ZMatrixUserProfile.swift in Sources */,
 				1828CE452D01010C002FF640 /* ZCurrentUser.swift in Sources */,
+				18D467B32D10A0B400861AA6 /* SecurityAndPrivacyScreenViewModel.swift in Sources */,
 				18E9A54D2C9829970082DDA4 /* KeychainControllerMock.swift in Sources */,
 				18E9A54E2C9829970082DDA4 /* KeychainControllerProtocol.swift in Sources */,
 				18D5D9B72CEB749B00107940 /* UserRewardsSettingsScreenViewModelProtocol.swift in Sources */,
@@ -8982,6 +9023,7 @@
 				18E9A5652C9829970082DDA4 /* LoginHomeserver.swift in Sources */,
 				18E9A5662C9829970082DDA4 /* LoginMode.swift in Sources */,
 				18E9A5672C9829970082DDA4 /* LoginScreen.swift in Sources */,
+				18D467AC2D109BFE00861AA6 /* VoiceMessageRoomPlaybackView.swift in Sources */,
 				18E9A5682C9829970082DDA4 /* LoginScreenCoordinator.swift in Sources */,
 				18E9A5692C9829970082DDA4 /* LoginScreenModels.swift in Sources */,
 				18E9A56A2C9829970082DDA4 /* LoginScreenViewModel.swift in Sources */,
@@ -9072,6 +9114,8 @@
 				18E9A5B52C9829970082DDA4 /* NotificationSettingsEditScreenCoordinator.swift in Sources */,
 				18E9A5B62C9829970082DDA4 /* NotificationSettingsEditScreenModels.swift in Sources */,
 				18E9A5B72C9829970082DDA4 /* NotificationSettingsEditScreenRoomCell.swift in Sources */,
+				18D4679C2D109AD000861AA6 /* KnockRequestProxy.swift in Sources */,
+				18D467A32D109B6200861AA6 /* TimelineMediaPreviewDetailsView.swift in Sources */,
 				18E9A5B82C9829970082DDA4 /* NotificationSettingsEditScreenViewModel.swift in Sources */,
 				18E9A5B92C9829970082DDA4 /* NotificationSettingsEditScreenViewModelProtocol.swift in Sources */,
 				18E9A5BA2C9829970082DDA4 /* NotificationSettingsProxy.swift in Sources */,
@@ -9103,6 +9147,7 @@
 				18E9A5D12C9829970082DDA4 /* PillAttachmentViewProvider.swift in Sources */,
 				18F3D1F52CD41AC8002D2677 /* SessionVerificationRequestDetailsView.swift in Sources */,
 				18E9A5D22C9829970082DDA4 /* PillConstants.swift in Sources */,
+				18D467AD2D109C3900861AA6 /* TimelineItemBubbleBackground.swift in Sources */,
 				18E9A5D32C9829970082DDA4 /* PillContext.swift in Sources */,
 				18E9A5D42C9829970082DDA4 /* PillTextAttachment.swift in Sources */,
 				18E9A5D52C9829970082DDA4 /* PillTextAttachmentData.swift in Sources */,
@@ -9126,6 +9171,8 @@
 				18E9A5E52C9829970082DDA4 /* ZeroAuthApi.swift in Sources */,
 				18E9A5E62C9829970082DDA4 /* PollFormScreen.swift in Sources */,
 				18E9A5E72C9829970082DDA4 /* PollFormScreenCoordinator.swift in Sources */,
+				18D467A82D109B9B00861AA6 /* SeparatorMediaEventsTimelineView.swift in Sources */,
+				18D4679F2D109B4F00861AA6 /* TimelineMediaPreviewCoordinator.swift in Sources */,
 				18E9A5E82C9829970082DDA4 /* PollFormScreenModels.swift in Sources */,
 				18E9A5E92C9829970082DDA4 /* PollFormScreenViewModel.swift in Sources */,
 				18E9A5EA2C9829970082DDA4 /* PollFormScreenViewModelProtocol.swift in Sources */,
@@ -9146,6 +9193,7 @@
 				18E9A5F92C9829970082DDA4 /* QRCodeLoginScreen.swift in Sources */,
 				18E9A5FA2C9829970082DDA4 /* QRCodeLoginScreenCoordinator.swift in Sources */,
 				18E9A5FB2C9829970082DDA4 /* QRCodeLoginScreenModels.swift in Sources */,
+				18D467AB2D109BD200861AA6 /* VoiceMessageRoomTimelineView.swift in Sources */,
 				18E9A5FC2C9829970082DDA4 /* QRCodeLoginScreenViewModel.swift in Sources */,
 				18115E522CAEA4D9001A8F4A /* ZeroContants.swift in Sources */,
 				18E9A5FD2C9829970082DDA4 /* QRCodeLoginScreenViewModelProtocol.swift in Sources */,
@@ -9219,6 +9267,7 @@
 				18E9A63A2C9829970082DDA4 /* RoomFlowCoordinator.swift in Sources */,
 				18E9A63B2C9829970082DDA4 /* (null) in Sources */,
 				18E9A63C2C9829970082DDA4 /* RoomInviterLabel.swift in Sources */,
+				18D467B02D109CAC00861AA6 /* KnockRequestProxyMock.swift in Sources */,
 				18E9A63D2C9829970082DDA4 /* RoomListFilterModels.swift in Sources */,
 				18E9A63E2C9829970082DDA4 /* RoomListFilterView.swift in Sources */,
 				18E9A63F2C9829970082DDA4 /* RoomListFiltersEmptyStateView.swift in Sources */,
@@ -9301,6 +9350,7 @@
 				18E9A67F2C9829970082DDA4 /* RoomTimelineItemProtocol.swift in Sources */,
 				18E9A6802C9829970082DDA4 /* RoomTimelineItemView.swift in Sources */,
 				18E9A6812C9829970082DDA4 /* RoomTimelineItemViewState.swift in Sources */,
+				18D467A72D109B9700861AA6 /* ImageMediaEventsTimelineView.swift in Sources */,
 				18E9A6822C9829970082DDA4 /* RoomTimelineProvider.swift in Sources */,
 				18E9A6832C9829970082DDA4 /* RoomTimelineProviderMock.swift in Sources */,
 				18D5D9A52CEB56FE00107940 /* ZRewards.swift in Sources */,
@@ -9360,6 +9410,7 @@
 				18E9A6AD2C9829970082DDA4 /* ServerConfirmationScreenViewModel.swift in Sources */,
 				18E9A6AE2C9829970082DDA4 /* ServerConfirmationScreenViewModelProtocol.swift in Sources */,
 				18E9A6AF2C9829970082DDA4 /* ServerSelectionScreen.swift in Sources */,
+				18D467A62D109B9300861AA6 /* FileMediaEventsTimelineView.swift in Sources */,
 				182258E42CCC3D5B00BBEDC0 /* BigIcon.swift in Sources */,
 				18E9A6B02C9829970082DDA4 /* ServerSelectionScreenCoordinator.swift in Sources */,
 				18E9A6B12C9829970082DDA4 /* ServerSelectionScreenModels.swift in Sources */,
@@ -9411,6 +9462,7 @@
 				18E9A6DA2C9829970082DDA4 /* StaticLocationScreenViewModelProtocol.swift in Sources */,
 				18E9A6DB2C9829970082DDA4 /* StickerRoomTimelineItem.swift in Sources */,
 				182725752C99990100B513B5 /* (null) in Sources */,
+				18D467B22D10A0B000861AA6 /* SecurityAndPrivacyScreenModels.swift in Sources */,
 				18E9A6DC2C9829970082DDA4 /* StickerRoomTimelineView.swift in Sources */,
 				18E9A6DD2C9829970082DDA4 /* String.swift in Sources */,
 				18E9A6DE2C9829970082DDA4 /* Strings+SAS.swift in Sources */,
@@ -9419,6 +9471,7 @@
 				1827256F2C9994A000B513B5 /* Client.swift in Sources */,
 				185454D42CFEF7E9003CA957 /* ZeroStyledButton.swift in Sources */,
 				18E9A6E12C9829970082DDA4 /* SwipeRightAction.swift in Sources */,
+				18D4679E2D109B4A00861AA6 /* MediaFileManager.swift in Sources */,
 				18E9A6E22C9829970082DDA4 /* SwipeToReplyView.swift in Sources */,
 				18E9A6E32C9829970082DDA4 /* Task.swift in Sources */,
 				18E9A6E42C9829970082DDA4 /* TemplateScreen.swift in Sources */,
@@ -9481,6 +9534,7 @@
 				18E9A7182C9829970082DDA4 /* UITestsScreenIdentifier.swift in Sources */,
 				18E9A7192C9829970082DDA4 /* UITestsSignalling.swift in Sources */,
 				18E9A71A2C9829970082DDA4 /* UIView.swift in Sources */,
+				18D467AE2D109C6F00861AA6 /* ZoomTransition.swift in Sources */,
 				18E9A71B2C9829970082DDA4 /* UNNotificationContent.swift in Sources */,
 				18E9A71C2C9829970082DDA4 /* URL.swift in Sources */,
 				18E9A71D2C9829970082DDA4 /* URLComponents.swift in Sources */,
@@ -9547,9 +9601,9 @@
 				18E9A7532C9829970082DDA4 /* VoiceMessageRecordingComposer.swift in Sources */,
 				18DFC5C92CD954FF00462FE1 /* EncryptionSettingsFlowCoordinator.swift in Sources */,
 				18E9A7542C9829970082DDA4 /* VoiceMessageRecordingView.swift in Sources */,
-				18E9A7552C9829970082DDA4 /* VoiceMessageRoomPlaybackView.swift in Sources */,
+				18E9A7552C9829970082DDA4 /* (null) in Sources */,
 				18E9A7562C9829970082DDA4 /* VoiceMessageRoomTimelineItem.swift in Sources */,
-				18E9A7572C9829970082DDA4 /* VoiceMessageRoomTimelineView.swift in Sources */,
+				18E9A7572C9829970082DDA4 /* (null) in Sources */,
 				18E9A7582C9829970082DDA4 /* WaveformCursorView.swift in Sources */,
 				18E9A7592C9829970082DDA4 /* WaveformInteractionModifier.swift in Sources */,
 				18E9A75A2C9829970082DDA4 /* WaveformSource.swift in Sources */,

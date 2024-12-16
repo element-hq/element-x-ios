@@ -32,7 +32,7 @@ struct RoomDetailsScreen: View {
                 peopleSection
             }
 
-            aboutSection
+//            aboutSection
 
 //            securitySection
 
@@ -158,7 +158,7 @@ struct RoomDetailsScreen: View {
 
     private var aboutSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
+            ZeroListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
                                     icon: \.pin),
                     details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
                     kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink {
@@ -167,14 +167,14 @@ struct RoomDetailsScreen: View {
                     .disabled(context.viewState.pinnedEventsActionState.isLoading)
             
             if context.viewState.canSeeKnockingRequests {
-                ListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
+                ZeroListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
                                         icon: \.askToJoin),
                         details: context.viewState.knockRequestsCount > 0 ? .counter(context.viewState.knockRequestsCount) : nil,
                         kind: .navigationLink {
                             context.send(viewAction: .processTapRequestsToJoin)
                         })
             }
-            ListRow(label: .default(title: L10n.screenPollsHistoryTitle,
+            ZeroListRow(label: .default(title: L10n.screenPollsHistoryTitle,
                                     icon: \.polls),
                     kind: .navigationLink {
                         context.send(viewAction: .processTapPolls)
@@ -182,7 +182,7 @@ struct RoomDetailsScreen: View {
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
             
             if context.viewState.mediaBrowserEnabled {
-                ListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
+                ZeroListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
                         kind: .navigationLink {
                             context.send(viewAction: .processTapMediaEvents)
                         })
@@ -203,39 +203,39 @@ struct RoomDetailsScreen: View {
                     .disabled(context.viewState.notificationSettingsState.isLoading)
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
             
-            ListRow(label: .default(title: L10n.commonFavourite, icon: \.favourite),
+            ZeroListRow(label: .default(title: L10n.commonFavourite, icon: \.favourite),
                     kind: .toggle($context.isFavourite))
                 .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.favourite)
                 .onChange(of: context.isFavourite) { _, newValue in
                     context.send(viewAction: .toggleFavourite(isFavourite: newValue))
                 }
             
-            if context.viewState.canSeeSecurityAndPrivacy {
-                ListRow(label: .default(title: L10n.screenRoomDetailsSecurityAndPrivacyTitle,
-                                        icon: \.lock),
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapSecurityAndPrivacy)
-                        })
-            }
+//            if context.viewState.canSeeSecurityAndPrivacy {
+//                ZeroListRow(label: .default(title: L10n.screenRoomDetailsSecurityAndPrivacyTitle,
+//                                        icon: \.lock),
+//                        kind: .navigationLink {
+//                            context.send(viewAction: .processTapSecurityAndPrivacy)
+//                        })
+//            }
         }
     }
     
     private var peopleSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.commonPeople,
+            ZeroListRow(label: .default(title: L10n.commonPeople,
                                     icon: \.user),
                     details: .title(String(context.viewState.joinedMembersCount)),
                     kind: .navigationLink {
                         context.send(viewAction: .processTapPeople)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
-            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
-                ListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
-                                        icon: \.admin),
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapRolesAndPermissions)
-                        })
-            }
+//            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
+//                ZeroListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
+//                                        icon: \.admin),
+//                        kind: .navigationLink {
+//                            context.send(viewAction: .processTapRolesAndPermissions)
+//                        })
+//            }
         }
     }
     

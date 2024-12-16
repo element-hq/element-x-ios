@@ -94,6 +94,11 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         knockRequestsStateSubject.asCurrentValuePublisher()
     }
     
+    private let roomMemberProxySubject = CurrentValueSubject<RoomMemberProxyProtocol?, Never>(nil)
+    var roomMemberPublisher: CurrentValuePublisher<RoomMemberProxyProtocol?, Never> {
+        roomMemberProxySubject.asCurrentValuePublisher()
+    }
+    
     // A room identifier is constant and lazy stops it from being fetched
     // multiple times over FFI
     lazy var id: String = room.id()
@@ -194,7 +199,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                           allowedMessageTypes: allowedMessageTypes,
                                                                                           dateDividerMode: .monthly),
                                                    roomId: room.id(),
-                                                   kind: .media(.mediaFilesScreen))
+                                                   kind: .media(.mediaFilesScreen),
                                                    zeroChatApi: zeroChatApi)
             await timeline.subscribeForUpdates()
             

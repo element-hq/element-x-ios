@@ -106,8 +106,9 @@ struct TimelineItemMenuActionProvider {
         
         switch timelineKind {
         case .pinned:
-            actions = actions.filter(\.canAppearInPinnedEventsTimeline)
-            secondaryActions = secondaryActions.filter(\.canAppearInPinnedEventsTimeline)
+//            actions = actions.filter(\.canAppearInPinnedEventsTimeline)
+//            secondaryActions = secondaryActions.filter(\.canAppearInPinnedEventsTimeline)
+            break
         case .media:
             actions = actions.filter(\.canAppearInMediaDetails)
             secondaryActions = secondaryActions.filter(\.canAppearInMediaDetails)
@@ -131,7 +132,7 @@ struct TimelineItemMenuActionProvider {
 //                     actions: actions,
 //                     debugActions: debugActions,
 //                     emojiProvider: emojiProvider)
-        return .init(isReactable: item.isReactable,
+        return .init(isReactable: isReactable,
                      actions: actions,
                      secondaryActions: secondaryActions,
                      emojiProvider: emojiProvider)

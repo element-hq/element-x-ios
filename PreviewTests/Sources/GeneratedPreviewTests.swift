@@ -1025,14 +1025,14 @@ extension PreviewTests {
         }
     }
 
-    func test_videoMediaEventsTimelineView() {
-        for preview in VideoMediaEventsTimelineView_Previews._allPreviews {
+    func test_userRewardsSettingsScreen() {
+        for preview in UserRewardsSettingsScreen_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }
 
-    func test_userRewardsSettingsScreen() {
-        for preview in UserRewardsSettingsScreen_Previews._allPreviews {
+    func test_videoMediaEventsTimelineView() {
+        for preview in VideoMediaEventsTimelineView_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }

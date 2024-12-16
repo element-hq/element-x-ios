@@ -166,8 +166,10 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
                 }
                 
                 var failedIDs = [String]()
-                for await result in group where result.1.isFailure {
-                    failedIDs.append(result.0)
+                for await result in group {
+                    if case .failure = result.1 {
+                        failedIDs.append(result.0)
+                    }
                 }
                 return failedIDs
             }
