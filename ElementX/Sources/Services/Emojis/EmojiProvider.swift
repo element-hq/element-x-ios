@@ -61,14 +61,7 @@ class EmojiProvider: EmojiProviderProtocol {
             return []
         }
         
-        guard let preferences = UserDefaults(suiteName: "com.apple.EmojiPreferences"),
-              let defaults = preferences.dictionary(forKey: "EMFDefaultsKey"),
-              let recents = defaults["EMFRecentsKey"] as? [String]
-        else {
-            return []
-        }
-        
-        return recents
+        return appSettings.frequentlyUsedSystemEmojis
     }
     
     func markEmojiAsFrequentlyUsed(_ emoji: String) {
@@ -76,16 +69,10 @@ class EmojiProvider: EmojiProviderProtocol {
             return
         }
         
-        guard let preferences = UserDefaults(suiteName: "com.apple.EmojiPreferences"),
-              let defaults = preferences.dictionary(forKey: "EMFDefaultsKey"),
-              let recents = defaults["EMFRecentsKey"] as? [String] else {
-            return
-        }
-        
-        var uniqueOrderedRecents = OrderedSet(recents)
+        var uniqueOrderedRecents = OrderedSet(appSettings.frequentlyUsedSystemEmojis)
         uniqueOrderedRecents.insert(emoji, at: 0)
         
-        preferences.setValue(["EMFRecentsKey": Array(uniqueOrderedRecents)], forKey: "EMFDefaultsKey")
+        appSettings.frequentlyUsedSystemEmojis = Array(uniqueOrderedRecents)
     }
     
     // MARK: - Private
