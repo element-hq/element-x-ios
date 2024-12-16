@@ -44,7 +44,7 @@ struct VideoMediaEventsTimelineView: View {
         HStack(spacing: 0) {
             CompoundIcon(\.videoCallSolid)
             Spacer()
-            Text(Date(timeIntervalSince1970: timelineItem.content.videoInfo.duration).formattedTime())
+            Text(Duration.seconds(timelineItem.content.videoInfo.duration).formatted(.time(pattern: .minuteSecond)))
         }
         .padding(8)
         .background {
