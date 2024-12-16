@@ -82,7 +82,7 @@ struct MediaEventsTimelineScreen: View {
                                     viewForTimelineItem(item)
                                 }
                                 .clipped()
-                                .scaleEffect(.init(width: -1, height: -1))
+                                .scaleEffect(scale(for: item, isGridLayout: true))
                         }
                         .zoomTransitionSource(id: item.identifier, in: zoomTransition)
                     }
@@ -109,7 +109,7 @@ struct MediaEventsTimelineScreen: View {
                                 tappedItem(item)
                             } label: {
                                 viewForTimelineItem(item)
-                                    .scaleEffect(.init(width: 1, height: -1))
+                                    .scaleEffect(scale(for: item, isGridLayout: false))
                             }
                             .zoomTransitionSource(id: item.identifier, in: zoomTransition)
                         }
@@ -213,6 +213,15 @@ struct MediaEventsTimelineScreen: View {
     
     func tappedItem(_ item: RoomTimelineItemViewState) {
         context.send(viewAction: .tappedItem(item: item, namespace: zoomTransition))
+    }
+    
+    func scale(for item: RoomTimelineItemViewState, isGridLayout: Bool) -> CGSize {
+        guard item.identifier != context.viewState.currentPreviewItemID else {
+            // Remove the flip when presenting a preview so that the zoom transition is the right way up 🙃
+            return CGSize(width: 1, height: 1)
+        }
+        
+        return CGSize(width: isGridLayout ? -1 : 1, height: -1)
     }
 }
 

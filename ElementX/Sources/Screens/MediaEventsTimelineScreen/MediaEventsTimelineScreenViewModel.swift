@@ -154,7 +154,15 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             return
         }
         
-        actionsSubject.send(.viewItem(.init(item: item, viewModel: activeTimelineViewModel, namespace: namespace)))
+        actionsSubject.send(.viewItem(.init(item: item,
+                                            viewModel: activeTimelineViewModel,
+                                            namespace: namespace,
+                                            completion: { [weak self] in
+                                                self?.state.currentPreviewItemID = nil
+                                            })))
+        
+        // Set the current item in the next run loop so that (hopefully) the presentation will be ready before we flip the thumbnail.
+        Task { state.currentPreviewItemID = item.id }
     }
     
     private func titleForDate(_ date: Date) -> String {

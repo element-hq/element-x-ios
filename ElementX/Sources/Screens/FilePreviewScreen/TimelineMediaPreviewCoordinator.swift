@@ -16,6 +16,11 @@ struct TimelineMediaPreviewContext {
     let viewModel: TimelineViewModelProtocol
     /// The namespace that the navigation transition's `sourceID` should be defined in.
     let namespace: Namespace.ID
+    /// A completion to be called immediately *after* the preview has been dismissed.
+    ///
+    /// This helps work around a bug caused by the flipped scrollview where the zoomed
+    /// thumbnail starts off upside down while loading the preview screen.
+    var completion: (() -> Void)?
 }
 
 struct TimelineMediaPreviewCoordinatorParameters {

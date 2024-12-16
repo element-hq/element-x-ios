@@ -29,6 +29,8 @@ struct MediaEventsTimelineScreenViewState: BindableState {
     var activeTimelineContextProvider: (() -> TimelineViewModel.Context)!
     
     var bindings: MediaEventsTimelineScreenViewStateBindings
+    
+    var currentPreviewItemID: TimelineItemIdentifier?
 }
 
 struct MediaEventsTimelineScreenViewStateBindings {
