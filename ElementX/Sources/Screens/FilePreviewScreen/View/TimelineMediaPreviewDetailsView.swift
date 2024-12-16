@@ -149,14 +149,17 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
     static let presentedOnRoomViewModel = makeViewModel(isPresentedOnRoomScreen: true)
     
     static var previews: some View {
-        TimelineMediaPreviewDetailsView(item: viewModel.state.currentItem, context: viewModel.context)
+        TimelineMediaPreviewDetailsView(item: viewModel.state.currentItem,
+                                        context: viewModel.context)
             .previewDisplayName("Image")
             .snapshotPreferences(delay: 0.1)
-        TimelineMediaPreviewDetailsView(item: viewModel.state.currentItem, context: unknownTypeViewModel.context)
+        TimelineMediaPreviewDetailsView(item: unknownTypeViewModel.state.currentItem,
+                                        context: unknownTypeViewModel.context)
             .previewDisplayName("Unknown type")
             .snapshotPreferences(delay: 0.1)
         
-        TimelineMediaPreviewDetailsView(item: viewModel.state.currentItem, context: presentedOnRoomViewModel.context)
+        TimelineMediaPreviewDetailsView(item: presentedOnRoomViewModel.state.currentItem,
+                                        context: presentedOnRoomViewModel.context)
             .previewDisplayName("Incoming on Room")
             .snapshotPreferences(delay: 0.1)
     }
