@@ -7,7 +7,6 @@
 
 import Emojibase
 import Foundation
-import OrderedCollections
 
 class EmojiProvider: EmojiProviderProtocol {
     private let maxFrequentEmojis = 20
@@ -61,7 +60,7 @@ class EmojiProvider: EmojiProviderProtocol {
             return []
         }
         
-        return appSettings.frequentlyUsedSystemEmojis
+        return appSettings.frequentlyUsedSystemEmojis.map(\.key)
     }
     
     func markEmojiAsFrequentlyUsed(_ emoji: String) {
@@ -69,10 +68,19 @@ class EmojiProvider: EmojiProviderProtocol {
             return
         }
         
-        var uniqueOrderedRecents = OrderedSet(appSettings.frequentlyUsedSystemEmojis)
-        uniqueOrderedRecents.insert(emoji, at: 0)
+        let frequentlyUsed = if !frequentlyUsedSystemEmojis().contains(emoji) {
+            appSettings.frequentlyUsedSystemEmojis + [.init(count: 0, key: emoji)]
+        } else {
+            appSettings.frequentlyUsedSystemEmojis.map { frequentlyUsedEmoji in
+                if frequentlyUsedEmoji.key == emoji {
+                    return FrequentlyUsedEmoji(count: frequentlyUsedEmoji.count + 1, key: emoji)
+                }
+                
+                return frequentlyUsedEmoji
+            }
+        }
         
-        appSettings.frequentlyUsedSystemEmojis = Array(uniqueOrderedRecents)
+        appSettings.frequentlyUsedSystemEmojis = frequentlyUsed.sorted { $0.count > $1.count }
     }
     
     // MARK: - Private

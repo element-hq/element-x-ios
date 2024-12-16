@@ -232,7 +232,7 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding, defaultValue: false, storageType: .userDefaults(store))
     var hasRunIdentityConfirmationOnboarding
     
-    @UserPreference(key: UserDefaultsKeys.frequentlyUsedSystemEmojis, defaultValue: [String](), storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.frequentlyUsedSystemEmojis, defaultValue: [FrequentlyUsedEmoji](), storageType: .userDefaults(store))
     var frequentlyUsedSystemEmojis
     
     // MARK: - Home Screen
