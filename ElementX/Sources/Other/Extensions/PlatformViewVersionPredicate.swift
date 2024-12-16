@@ -10,18 +10,24 @@ import SwiftUIIntrospect
 
 extension PlatformViewVersionPredicate<TextFieldType, UITextField> {
     static var supportedVersions: Self {
-        .iOS(.v16, .v17, .v18)
+        .iOS(.v17, .v18)
     }
 }
 
 extension PlatformViewVersionPredicate<ScrollViewType, UIScrollView> {
     static var supportedVersions: Self {
-        .iOS(.v16, .v17, .v18)
+        .iOS(.v17, .v18)
     }
 }
 
 extension PlatformViewVersionPredicate<ViewControllerType, UIViewController> {
     static var supportedVersions: Self {
-        .iOS(.v16, .v17, .v18)
+        .iOS(.v17, .v18)
+    }
+}
+
+extension PlatformViewVersionPredicate<NavigationStackType, UINavigationController> {
+    static var supportedVersions: Self {
+        .iOS(.v17, .v18)
     }
 }

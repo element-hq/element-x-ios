@@ -9,9 +9,8 @@ import Compound
 import SwiftUI
 
 struct TimelineMediaPreviewDetailsView: View {
+    let item: TimelineMediaPreviewItem
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
-    
-    private var currentItem: TimelineMediaPreviewItem { context.viewState.currentItem }
     
     var body: some View {
         ScrollView {
@@ -21,9 +20,13 @@ struct TimelineMediaPreviewDetailsView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .presentationDetents([.medium])
+        .presentationDragIndicator(.visible)
         .padding(.top, 19) // For the drag indicator
-        .sheet(isPresented: $context.isPresentingRedactConfirmation) {
-            TimelineMediaPreviewRedactConfirmationView(context: context)
+        .presentationBackground(.compound.bgCanvasDefault)
+        .preferredColorScheme(.dark)
+        .sheet(item: $context.redactConfirmationItem) { item in
+            TimelineMediaPreviewRedactConfirmationView(item: item, context: context)
         }
     }
     
@@ -31,20 +34,20 @@ struct TimelineMediaPreviewDetailsView: View {
         VStack(alignment: .leading, spacing: 24) {
             DetailsRow(title: L10n.screenMediaDetailsUploadedBy) {
                 HStack(spacing: 8) {
-                    LoadableAvatarImage(url: currentItem.sender.avatarURL,
-                                        name: currentItem.sender.displayName,
-                                        contentID: currentItem.sender.id,
+                    LoadableAvatarImage(url: item.sender.avatarURL,
+                                        name: item.sender.displayName,
+                                        contentID: item.sender.id,
                                         avatarSize: .user(on: .mediaPreviewDetails),
                                         mediaProvider: context.mediaProvider)
                     
                     VStack(alignment: .leading, spacing: 0) {
-                        if let displayName = currentItem.sender.displayName {
+                        if let displayName = item.sender.displayName {
                             Text(displayName)
                                 .font(.compound.bodyMDSemibold)
-                                .foregroundStyle(.compound.decorativeColor(for: currentItem.sender.id).text)
+                                .foregroundStyle(.compound.decorativeColor(for: item.sender.id).text)
                         }
                         
-                        Text(currentItem.sender.id)
+                        Text(item.sender.id)
                             .font(.compound.bodySM)
                             .foregroundStyle(.compound.textSecondary)
                     }
@@ -52,21 +55,21 @@ struct TimelineMediaPreviewDetailsView: View {
             }
             
             DetailsRow(title: L10n.screenMediaDetailsUploadedOn) {
-                Text(currentItem.timestamp.formatted(date: .abbreviated, time: .shortened))
+                Text(item.timestamp.formatted(date: .abbreviated, time: .shortened))
                     .font(.compound.bodyMD)
                     .foregroundStyle(.compound.textPrimary)
             }
             
             DetailsRow(title: L10n.screenMediaDetailsFilename) {
-                Text(currentItem.filename ?? "")
+                Text(item.filename ?? "")
                     .font(.compound.bodyMD)
                     .foregroundStyle(.compound.textPrimary)
             }
             
-            if let contentType = currentItem.contentType {
+            if let contentType = item.contentType {
                 DetailsRow(title: L10n.screenMediaDetailsFileFormat) {
                     Group {
-                        if let fileSize = currentItem.fileSize {
+                        if let fileSize = item.fileSize {
                             Text(contentType) + Text(" – ") + Text(UInt(fileSize).formatted(.byteCount(style: .file)))
                         } else {
                             Text(contentType)
@@ -93,7 +96,7 @@ struct TimelineMediaPreviewDetailsView: View {
                 
                 ForEach(actions.actions, id: \.self) { action in
                     Button(role: action.isDestructive ? .destructive : nil) {
-                        context.send(viewAction: .menuAction(action))
+                        context.send(viewAction: .menuAction(action, item: item))
                     } label: {
                         action.label
                     }
@@ -107,7 +110,7 @@ struct TimelineMediaPreviewDetailsView: View {
                 
                 ForEach(actions.secondaryActions, id: \.self) { action in
                     Button(role: action.isDestructive ? .destructive : nil) {
-                        context.send(viewAction: .menuAction(action))
+                        context.send(viewAction: .menuAction(action, item: item))
                     } label: {
                         action.label
                     }
@@ -139,19 +142,24 @@ struct TimelineMediaPreviewDetailsView: View {
 import UniformTypeIdentifiers
 
 struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePreview {
+    @Namespace private static var previewNamespace
+    
     static let viewModel = makeViewModel(contentType: .jpeg, isOutgoing: true)
     static let unknownTypeViewModel = makeViewModel()
     static let presentedOnRoomViewModel = makeViewModel(isPresentedOnRoomScreen: true)
     
     static var previews: some View {
-        TimelineMediaPreviewDetailsView(context: viewModel.context)
+        TimelineMediaPreviewDetailsView(item: viewModel.state.currentItem,
+                                        context: viewModel.context)
             .previewDisplayName("Image")
             .snapshotPreferences(delay: 0.1)
-        TimelineMediaPreviewDetailsView(context: unknownTypeViewModel.context)
+        TimelineMediaPreviewDetailsView(item: unknownTypeViewModel.state.currentItem,
+                                        context: unknownTypeViewModel.context)
             .previewDisplayName("Unknown type")
             .snapshotPreferences(delay: 0.1)
         
-        TimelineMediaPreviewDetailsView(context: presentedOnRoomViewModel.context)
+        TimelineMediaPreviewDetailsView(item: presentedOnRoomViewModel.state.currentItem,
+                                        context: presentedOnRoomViewModel.context)
             .previewDisplayName("Incoming on Room")
             .snapshotPreferences(delay: 0.1)
     }
@@ -172,8 +180,9 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
                                                         contentType: contentType))
         
         let timelineKind = TimelineKind.media(isPresentedOnRoomScreen ? .roomScreen : .mediaFilesScreen)
-        return TimelineMediaPreviewViewModel(initialItem: item,
-                                             timelineViewModel: TimelineViewModel.mock(timelineKind: timelineKind),
+        return TimelineMediaPreviewViewModel(context: .init(item: item,
+                                                            viewModel: TimelineViewModel.mock(timelineKind: timelineKind),
+                                                            namespace: previewNamespace),
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              userIndicatorController: UserIndicatorControllerMock())
     }

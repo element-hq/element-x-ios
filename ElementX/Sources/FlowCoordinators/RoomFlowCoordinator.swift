@@ -1583,8 +1583,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     MXLog.error("Unable to present room timeline for event \(itemID)")
                     return
                 }
-                stateMachine.tryEvent(.dismissMediaEventsTimeline)
-                stateMachine.tryEvent(.presentRoom(presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: false))))
+                stateMachine.tryEvent(.presentRoom(presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: false))),
+                                      userInfo: EventUserInfo(animated: false)) // No animation so the timeline visible when the preview animates away.
             case .finished:
                 stateMachine.tryEvent(.dismissMediaEventsTimeline)
             }

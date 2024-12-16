@@ -20,20 +20,20 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(initialItem: EventBasedMessageTimelineItemProtocol,
-         timelineViewModel: TimelineViewModelProtocol,
+    init(context: TimelineMediaPreviewContext,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
-        self.timelineViewModel = timelineViewModel
+        timelineViewModel = context.viewModel
         self.mediaProvider = mediaProvider
         
         // We might not want to inject this, instead creating a new instance with a custom position and colour scheme 🤔
         self.userIndicatorController = userIndicatorController
         
-        let currentItem = TimelineMediaPreviewItem(timelineItem: initialItem)
+        let currentItem = TimelineMediaPreviewItem(timelineItem: context.item)
         
         super.init(initialViewState: TimelineMediaPreviewViewState(previewItems: [currentItem],
-                                                                   currentItem: currentItem),
+                                                                   currentItem: currentItem,
+                                                                   transitionNamespace: context.namespace),
                    mediaProvider: mediaProvider)
         
         rebuildCurrentItemActions()
@@ -48,23 +48,32 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     
     override func process(viewAction: TimelineMediaPreviewViewAction) {
         switch viewAction {
-        case .menuAction(let action):
+        case .updateCurrentItem(let item):
+            Task { await updateCurrentItem(item) }
+        case .saveCurrentItem:
+            Task { await saveCurrentItem() }
+        case .showCurrentItemDetails:
+            state.bindings.mediaDetailsItem = state.currentItem
+        case .menuAction(let action, let item):
             switch action {
             case .viewInRoomTimeline:
-                actionsSubject.send(.viewInRoomTimeline(state.currentItem.id))
+                actionsSubject.send(.viewInRoomTimeline(item.id))
             case .redact:
-                state.bindings.isPresentingRedactConfirmation = true
+                state.bindings.redactConfirmationItem = item
             default:
                 MXLog.error("Received unexpected action: \(action)")
             }
-        case .redactConfirmation:
-            timelineViewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: state.currentItem.id, action: .redact))
-            state.bindings.isPresentingRedactConfirmation = false
-            actionsSubject.send(.dismiss) // Will dismiss the details sheet and the QuickLook view.
+        case .redactConfirmation(let item):
+            timelineViewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.id, action: .redact))
+            state.bindings.redactConfirmationItem = nil
+            state.bindings.mediaDetailsItem = nil
+            actionsSubject.send(.dismiss)
+        case .dismiss:
+            actionsSubject.send(.dismiss)
         }
     }
     
-    func updateCurrentItem(_ previewItem: TimelineMediaPreviewItem) async {
+    private func updateCurrentItem(_ previewItem: TimelineMediaPreviewItem) async {
         state.currentItem = previewItem
         rebuildCurrentItemActions()
         
@@ -72,10 +81,10 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             showDownloadingIndicator(itemID: previewItem.id)
             defer { hideDownloadingIndicator(itemID: previewItem.id) }
             
-            switch await mediaProvider.loadFileFromSource(source) {
+            switch await mediaProvider.loadFileFromSource(source, filename: previewItem.filename) {
             case .success(let handle):
                 previewItem.fileHandle = handle
-                actionsSubject.send(.loadedMediaFile)
+                state.fileLoadedPublisher.send(previewItem.id)
             case .failure(let error):
                 MXLog.error("Failed loading media: \(error)")
                 showDownloadErrorIndicator()
@@ -83,7 +92,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
     }
     
-    func rebuildCurrentItemActions() {
+    private func rebuildCurrentItemActions() {
         let timelineContext = timelineViewModel.context
         let provider = TimelineItemMenuActionProvider(timelineItem: state.currentItem.timelineItem,
                                                       canCurrentUserRedactSelf: timelineContext.viewState.canCurrentUserRedactSelf,
@@ -97,6 +106,17 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                                                       emojiProvider: timelineContext.viewState.emojiProvider)
         state.currentItemActions = provider.makeActions()
     }
+    
+    private func saveCurrentItem() async {
+        guard let url = state.currentItem.fileHandle?.url else {
+            MXLog.error("Unable to save an item without a URL, the button shouldn't be visible.")
+            return
+        }
+        
+        showErrorIndicator()
+    }
+    
+    // MARK: - Indicators
     
     private func showDownloadingIndicator(itemID: TimelineItemIdentifier) {
         let indicatorID = makeDownloadIndicatorID(itemID: itemID)
@@ -120,6 +140,14 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                                                               iconName: "exclamationmark.circle.fill"))
     }
     
+    private func showErrorIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: errorIndicatorID,
+                                                              type: .modal,
+                                                              title: L10n.errorUnknown,
+                                                              iconName: "xmark"))
+    }
+    
+    private var errorIndicatorID: String { "\(Self.self)-Error" }
     private var downloadErrorIndicatorID: String { "\(Self.self)-DownloadError" }
     private func makeDownloadIndicatorID(itemID: TimelineItemIdentifier) -> String {
         "\(Self.self)-Download-\(itemID.uniqueID.id)"

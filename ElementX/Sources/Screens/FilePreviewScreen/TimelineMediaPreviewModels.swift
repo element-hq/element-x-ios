@@ -5,10 +5,11 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import Combine
 import QuickLook
+import SwiftUI
 
 enum TimelineMediaPreviewViewModelAction: Equatable {
-    case loadedMediaFile
     case viewInRoomTimeline(TimelineItemIdentifier)
     case dismiss
 }
@@ -18,21 +19,27 @@ struct TimelineMediaPreviewViewState: BindableState {
     var currentItem: TimelineMediaPreviewItem
     var currentItemActions: TimelineItemMenuActions?
     
+    let transitionNamespace: Namespace.ID
+    let fileLoadedPublisher = PassthroughSubject<TimelineItemIdentifier, Never>()
+    
     var bindings = TimelineMediaPreviewViewStateBindings()
 }
 
 struct TimelineMediaPreviewViewStateBindings {
-    var isPresentingRedactConfirmation = false
+    var mediaDetailsItem: TimelineMediaPreviewItem?
+    var redactConfirmationItem: TimelineMediaPreviewItem?
 }
 
 /// Wraps a media file and title to be previewed with QuickLook.
-class TimelineMediaPreviewItem: NSObject, QLPreviewItem {
+class TimelineMediaPreviewItem: NSObject, QLPreviewItem, Identifiable {
     let timelineItem: EventBasedMessageTimelineItemProtocol
     var fileHandle: MediaFileHandleProxy?
     
     init(timelineItem: EventBasedMessageTimelineItemProtocol) {
         self.timelineItem = timelineItem
     }
+    
+    // MARK: Identifiable
     
     var id: TimelineItemIdentifier { timelineItem.id }
     
@@ -45,18 +52,7 @@ class TimelineMediaPreviewItem: NSObject, QLPreviewItem {
     }
     
     var previewItemTitle: String? {
-        switch timelineItem {
-        case let audioItem as AudioRoomTimelineItem:
-            audioItem.content.filename
-        case let fileItem as FileRoomTimelineItem:
-            fileItem.content.filename
-        case let imageItem as ImageRoomTimelineItem:
-            imageItem.content.filename
-        case let videoItem as VideoRoomTimelineItem:
-            videoItem.content.filename
-        default:
-            nil
-        }
+        filename
     }
     
     // MARK: Event details
@@ -167,6 +163,10 @@ class TimelineMediaPreviewItem: NSObject, QLPreviewItem {
 }
 
 enum TimelineMediaPreviewViewAction {
-    case menuAction(TimelineItemMenuAction)
-    case redactConfirmation
+    case updateCurrentItem(TimelineMediaPreviewItem)
+    case saveCurrentItem
+    case showCurrentItemDetails
+    case menuAction(TimelineItemMenuAction, item: TimelineMediaPreviewItem)
+    case redactConfirmation(item: TimelineMediaPreviewItem)
+    case dismiss
 }
