@@ -296,6 +296,8 @@
 		1896C50C2CC7DAC000142C49 /* UserIdentitySDKMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DE9D0D480D087D0F676B52 /* UserIdentitySDKMock.swift */; };
 		1896C50D2CC7DB0200142C49 /* KnockedRoomProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8F4D7D61B80EBD5CB92F8A /* KnockedRoomProxyMock.swift */; };
 		18978C9438206828C1D5AF2A /* test_animated_image.gif in Resources */ = {isa = PBXBuildFile; fileRef = 53FD6D3D38F556CEAA280C58 /* test_animated_image.gif */; };
+		189E88522D0CA77A002FA063 /* ZeroAccountApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 189E88512D0CA773002FA063 /* ZeroAccountApi.swift */; };
+		189E88532D0CA77A002FA063 /* ZeroAccountApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 189E88512D0CA773002FA063 /* ZeroAccountApi.swift */; };
 		18A042152C9AB5F100727739 /* DeactivateAccountScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1009E4A78F86DA42E1EAF0 /* DeactivateAccountScreenCoordinator.swift */; };
 		18A042162C9AB5F600727739 /* DeactivateAccountScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE78CAD0B964C66FD06EF83E /* DeactivateAccountScreenModels.swift */; };
 		18A042172C9AB5FA00727739 /* DeactivateAccountScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AC3FDB58F57386741A4FC7F /* DeactivateAccountScreenViewModel.swift */; };
@@ -622,7 +624,6 @@
 		18E9A51F2C9829970082DDA4 /* HomeScreenEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0FEA560929DD73FFEF8C3DF /* HomeScreenEmptyStateView.swift */; };
 		18E9A5202C9829970082DDA4 /* HomeScreenInviteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FC33C3F6BF597E095CE9FA /* HomeScreenInviteCell.swift */; };
 		18E9A5212C9829970082DDA4 /* HomeScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71BC7CA1BC1041E93077BBA1 /* HomeScreenModels.swift */; };
-		18E9A5222C9829970082DDA4 /* LandingBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8F34972C7E4199002D92F9 /* LandingBackgroundView.swift */; };
 		18E9A5232C9829970082DDA4 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB922C90FE9C001DA2A9 /* String+Extensions.swift */; };
 		18E9A5242C9829970082DDA4 /* HomeScreenRecoveryKeyConfirmationBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05512FB13987D221B7205DE0 /* HomeScreenRecoveryKeyConfirmationBanner.swift */; };
 		18E9A5252C9829970082DDA4 /* HomeScreenRoomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED044D00F2176681CC02CD54 /* HomeScreenRoomCell.swift */; };
@@ -2102,7 +2103,6 @@
 		CC0D088F505F33A20DC5590F /* RoomStateEventStringBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEEAFB646E583655652C3D04 /* RoomStateEventStringBuilderTests.swift */; };
 		CC1C948F67A5510A340FD7F0 /* SessionDirectoriesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0825EAFD47332DD459DE893F /* SessionDirectoriesTests.swift */; };
 		CC8F34952C7DE3EA002D92F9 /* LandingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8F34942C7DE3EA002D92F9 /* LandingScreen.swift */; };
-		CC8F34982C7E4199002D92F9 /* LandingBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8F34972C7E4199002D92F9 /* LandingBackgroundView.swift */; };
 		CC961529F9F1854BEC3272C9 /* LayoutMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC8AA23D4F37CC26564F63C5 /* LayoutMocks.swift */; };
 		CCBEC2100CAF2EEBE9DB4156 /* TemplateScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA40B98B098B6F0371B750B3 /* TemplateScreenModels.swift */; };
 		CCFDEC8F2C81139500C17FC3 /* VerifyLoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCFDEC8E2C81139500C17FC3 /* VerifyLoginScreen.swift */; };
@@ -2632,6 +2632,7 @@
 		1882EB902C90F0F5001DA2A9 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		1882EB922C90FE9C001DA2A9 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		1882EB992C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMatrixUsersService.swift; sourceTree = "<group>"; };
+		189E88512D0CA773002FA063 /* ZeroAccountApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroAccountApi.swift; sourceTree = "<group>"; };
 		18AF61522CF85A7E00921644 /* ZeroListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroListRow.swift; sourceTree = "<group>"; };
 		18AF61562CF85AE600921644 /* ZeroListRowDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroListRowDetails.swift; sourceTree = "<group>"; };
 		18AF61592CF85B7100921644 /* ZeroListRowLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroListRowLabelStyle.swift; sourceTree = "<group>"; };
@@ -3499,7 +3500,6 @@
 		CC680E0E79D818706CB28CF8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CC743C7A85E3171BCBF0A653 /* AvatarHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarHeaderView.swift; sourceTree = "<group>"; };
 		CC8F34942C7DE3EA002D92F9 /* LandingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingScreen.swift; sourceTree = "<group>"; };
-		CC8F34972C7E4199002D92F9 /* LandingBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingBackgroundView.swift; sourceTree = "<group>"; };
 		CCACD75595C40EACD6AD4A74 /* AuthenticationTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationTextFieldStyle.swift; sourceTree = "<group>"; };
 		CCF71646898A2F720C5BFDF5 /* RoomDirectorySearchScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDirectorySearchScreenViewModel.swift; sourceTree = "<group>"; };
 		CCFDEC8E2C81139500C17FC3 /* VerifyLoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyLoginScreen.swift; sourceTree = "<group>"; };
@@ -4181,6 +4181,7 @@
 		184D6FCB2C7D8A97006266D8 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				189E88512D0CA773002FA063 /* ZeroAccountApi.swift */,
 				18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */,
 				18525D0D2CF5F0FC0055C5E8 /* ZeroMessengerInviteApi.swift */,
 				18D5D9A62CEB576B00107940 /* ZeroRewardsApi.swift */,
@@ -6964,7 +6965,6 @@
 			isa = PBXGroup;
 			children = (
 				CC8F34942C7DE3EA002D92F9 /* LandingScreen.swift */,
-				CC8F34972C7E4199002D92F9 /* LandingBackgroundView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -8792,7 +8792,6 @@
 				18E9A51F2C9829970082DDA4 /* HomeScreenEmptyStateView.swift in Sources */,
 				18E9A5202C9829970082DDA4 /* HomeScreenInviteCell.swift in Sources */,
 				18E9A5212C9829970082DDA4 /* HomeScreenModels.swift in Sources */,
-				18E9A5222C9829970082DDA4 /* LandingBackgroundView.swift in Sources */,
 				18E9A5232C9829970082DDA4 /* String+Extensions.swift in Sources */,
 				18E9A5242C9829970082DDA4 /* HomeScreenRecoveryKeyConfirmationBanner.swift in Sources */,
 				18E9A5252C9829970082DDA4 /* HomeScreenRoomCell.swift in Sources */,
@@ -9312,6 +9311,7 @@
 				18E9A6E52C9829970082DDA4 /* TemplateScreenCoordinator.swift in Sources */,
 				18E9A6E62C9829970082DDA4 /* TemplateScreenModels.swift in Sources */,
 				18E9A6E72C9829970082DDA4 /* TemplateScreenViewModel.swift in Sources */,
+				189E88532D0CA77A002FA063 /* ZeroAccountApi.swift in Sources */,
 				18E9A6E82C9829970082DDA4 /* TemplateScreenViewModelProtocol.swift in Sources */,
 				18E9A6E92C9829970082DDA4 /* TestablePreview.swift in Sources */,
 				18E9A6EA2C9829970082DDA4 /* TextBasedRoomTimelineItem.swift in Sources */,
@@ -9726,6 +9726,7 @@
 				18D5D9B52CEB742000107940 /* UserRewardsSettingsScreenViewModel.swift in Sources */,
 				8B1D5CE017EEC734CF5FE130 /* Encodable.swift in Sources */,
 				4C5A638DAA8AF64565BA4866 /* EncryptedRoomTimelineItem.swift in Sources */,
+				189E88522D0CA77A002FA063 /* ZeroAccountApi.swift in Sources */,
 				709A9B52FC26B4CB86B8B020 /* EncryptedRoomTimelineView.swift in Sources */,
 				03CDCA6243F89B194E3FAD17 /* EncryptionAuthenticity.swift in Sources */,
 				FBD402E3170EB1ED0D1AA672 /* EncryptionKeyProvider.swift in Sources */,
@@ -9780,7 +9781,6 @@
 				86DFA58FBBEB0AF671D2A1E1 /* HomeScreenKnockedCell.swift in Sources */,
 				185454CB2CFDE6B3003CA957 /* CreateAccountScreenView.swift in Sources */,
 				8810A2A30A68252EBB54EE05 /* HomeScreenModels.swift in Sources */,
-				CC8F34982C7E4199002D92F9 /* LandingBackgroundView.swift in Sources */,
 				1882EB932C90FE9C001DA2A9 /* String+Extensions.swift in Sources */,
 				B04E9EB589CE99C3929E817A /* HomeScreenRecoveryKeyConfirmationBanner.swift in Sources */,
 				0AE0AB1952F186EB86719B4F /* HomeScreenRoomCell.swift in Sources */,

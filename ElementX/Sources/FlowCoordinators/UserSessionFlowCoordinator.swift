@@ -367,6 +367,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 actionsSubject.send(.clearCache)
             case .forceLogout:
                 actionsSubject.send(.forceLogout)
+            case .runDeleteAccountFlow:
+                self.runDeleteAccountFlow()
             }
         }
         .store(in: &cancellables)
@@ -1033,5 +1035,19 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         navigationSplitCoordinator.setDetailCoordinator(coordinator)
+    }
+    
+    private func runDeleteAccountFlow() {
+        showLoadingIndicator()
+        Task {
+            let deleteAccountResult = await userSession.clientProxy.deleteUserAccount()
+            switch deleteAccountResult {
+            case .success:
+                self.hideLoadingIndicator()
+                self.actionsSubject.send(.logout)
+            case .failure:
+                showFailureIndicator()
+            }
+        }
     }
 }

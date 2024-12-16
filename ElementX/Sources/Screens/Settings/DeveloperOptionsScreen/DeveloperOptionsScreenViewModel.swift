@@ -28,6 +28,8 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
         switch viewAction {
         case .clearCache:
             actionsSubject.send(.clearCache)
+        case .deleteAccount:
+            actionsSubject.send(.deleteAccount)
         }
     }
 }

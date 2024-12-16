@@ -89,6 +89,15 @@ struct DeveloperOptionsScreen: View {
                         .frame(maxWidth: .infinity)
                 }
             }
+            
+            Section {
+                Button(role: .destructive) {
+                    context.send(viewAction: .deleteAccount)
+                } label: {
+                    Text("Delete Account")
+                        .frame(maxWidth: .infinity)
+                }
+            }
         }
         .overlay(effectsView)
         .zeroList()

@@ -15,6 +15,8 @@ enum SettingsFlowCoordinatorAction {
     case clearCache
     /// Logout without a confirmation. The user forgot their PIN.
     case forceLogout
+    
+    case runDeleteAccountFlow
 }
 
 struct SettingsFlowCoordinatorParameters {
@@ -243,6 +245,12 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .clearCache:
                     actionsSubject.send(.clearCache)
+                case .deleteAccount:
+                    parameters.navigationSplitCoordinator.setSheetCoordinator(nil)
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        self.showDeleteZeroAccountConfirmation()
+                    }
                 }
             }
             .store(in: &cancellables)
@@ -290,4 +298,16 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: url, presentationAnchor: parameters.windowManager.mainWindow)
         accountSettingsPresenter?.start()
     }
+    
+    // MARK: ZERO Account Management
+    
+    private func showDeleteZeroAccountConfirmation() {
+        ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                        title: "Delete Account",
+                                                                        message: "Are you sure you want to delete your account? You won't be able to recover your account later!",
+                                                                        primaryButton: .init(title: L10n.actionConfirm, role: .destructive) { [weak self] in
+            self?.actionsSubject.send(.runDeleteAccountFlow)
+        })
+    }
+    
 }
