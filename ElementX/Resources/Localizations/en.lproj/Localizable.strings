@@ -1035,6 +1035,7 @@
 "test_language_identifier" = "en";
 "test_untranslated_default_language_identifier" = "en";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Historical messages are not available on this device";
+"timeline_decryption_failure_historical_event_unverified_device" = "You need to verify this device for access to historical messages";
 "timeline_decryption_failure_historical_event_user_not_joined" = "You don't have access to this message";
 "timeline_decryption_failure_unable_to_decrypt" = "Unable to decrypt message";
 "timeline_decryption_failure_withheld_unverified" = "This message was blocked either because you did not verify your device or because the sender needs to verify your identity.";

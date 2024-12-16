@@ -18,7 +18,8 @@ struct EncryptedRoomTimelineView: View {
             case .unknown:
                 return \.time
             case .sentBeforeWeJoined,
-                 .historicalMessage,
+                 .historicalMessageAndBackupDisabled,
+                 .historicalMessageAndDeviceIsUnverified,
                  .verificationViolation,
                  .insecureDevice,
                  .witheldBySender,
