@@ -187,6 +187,18 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                 Task { await self?.updatePowerLevelPermissions() }
             }
             .store(in: &cancellables)
+        
+        roomProxy.knockRequestsStatePublisher
+            .map { requestsState in
+                guard case let .loaded(requests) = requestsState else {
+                    return 0
+                }
+                return requests.count
+            }
+            .removeDuplicates()
+            .throttle(for: .milliseconds(100), scheduler: DispatchQueue.main, latest: true)
+            .weakAssign(to: \.state.knockRequestsCount, on: self)
+            .store(in: &cancellables)
     }
     
     private func updateRoomInfo(_ roomInfo: RoomInfoProxy) {

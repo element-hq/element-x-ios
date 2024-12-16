@@ -388,7 +388,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 case .unknownDevice, .unsignedDevice: .ExpectedSentByInsecureDevice
                 case .verificationViolation: .ExpectedVerificationViolation
                 case .sentBeforeWeJoined: .ExpectedDueToMembership
-                case .historicalMessage: .HistoricalMessage
+                case .historicalMessageAndBackupIsDisabled, .historicalMessageAndDeviceIsUnverified: .HistoricalMessage
                 case .withheldForUnverifiedOrInsecureDevice: .RoomKeysWithheldForUnverifiedDevice
                 case .withheldBySender: .OlmKeysNotSentError
                 }

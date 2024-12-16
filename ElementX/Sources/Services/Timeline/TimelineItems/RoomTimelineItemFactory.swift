@@ -153,7 +153,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             case .sentBeforeWeJoined:
                 encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .sentBeforeWeJoined)
                 errorLabel = L10n.commonUnableToDecryptNoAccess
-            case .historicalMessage:
+            case .historicalMessageAndBackupIsDisabled, .historicalMessageAndDeviceIsUnverified:
                 encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .historicalMessage)
                 errorLabel = L10n.timelineDecryptionFailureHistoricalEventNoKeyBackup
             case .withheldForUnverifiedOrInsecureDevice:
