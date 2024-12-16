@@ -8,8 +8,8 @@
 import SwiftUI
 
 extension View {
-    @ViewBuilder
     /// A convenience modifier to conditionally apply `.navigationTransition(.zoom(…))` when available.
+    @ViewBuilder
     func zoomTransition(sourceID: some Hashable, in namespace: Namespace.ID) -> some View {
         if #available(iOS 18.0, *) {
             navigationTransition(.zoom(sourceID: sourceID, in: namespace))
@@ -18,8 +18,8 @@ extension View {
         }
     }
     
-    @ViewBuilder
     /// A convenience modifier to conditionally apply `.matchedTransitionSource(…)` when available.
+    @ViewBuilder
     func zoomTransitionSource(id: some Hashable, in namespace: Namespace.ID) -> some View {
         if #available(iOS 18.0, *) {
             matchedTransitionSource(id: id, in: namespace)
