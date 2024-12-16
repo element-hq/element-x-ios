@@ -13,7 +13,13 @@ struct VideoMediaEventsTimelineView: View {
     let timelineItem: VideoRoomTimelineItem
     
     var body: some View {
-        thumbnail
+        Color.clear // Let the image aspect fill in place
+            .aspectRatio(1, contentMode: .fill)
+            .overlay {
+                thumbnail
+            }
+            .clipped()
+            .overlay(alignment: .bottom) { overlay }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(L10n.commonVideo)
     }
@@ -25,23 +31,30 @@ struct VideoMediaEventsTimelineView: View {
                           mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
                           blurhash: timelineItem.content.blurhash,
                           size: timelineItem.content.thumbnailInfo?.size,
-                          mediaProvider: context?.mediaProvider) { imageView in
-                imageView
-                    .overlay { playIcon }
-            } placeholder: {
+                          mediaProvider: context?.mediaProvider) {
                 placeholder
             }
+            .mediaGalleryTimelineAspectRatio(imageInfo: timelineItem.content.thumbnailInfo)
         } else {
-            playIcon
+            overlay
         }
     }
     
-    var playIcon: some View {
-        Image(systemName: "play.circle.fill")
-            .resizable()
-            .frame(width: 50, height: 50)
-            .background(.ultraThinMaterial, in: Circle())
-            .foregroundColor(.white)
+    var overlay: some View {
+        HStack(spacing: 0) {
+            CompoundIcon(\.videoCallSolid)
+            Spacer()
+            Text(Date(timeIntervalSince1970: timelineItem.content.videoInfo.duration).formattedTime())
+        }
+        .padding(8)
+        .background {
+            LinearGradient(stops: [.init(color: .clear, location: 0.0),
+                                   .init(color: .compound.bgCanvasDefault, location: 1.0)],
+                           startPoint: .top,
+                           endPoint: .bottom)
+        }
+        .font(.compound.bodyXSSemibold)
+        .foregroundStyle(.compound.textPrimary)
     }
     
     var placeholder: some View {
