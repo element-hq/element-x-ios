@@ -278,11 +278,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         let notificationMode = roomInfo.cachedUserDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
         
+        let knockRequestType: RoomSummary.KnockRequestType? = switch roomInfo.membership {
         let displayName: String? = roomInfo.displayName ?? roomDetails.directUserProfile?.displayName ?? roomInfo.rawName
         let roomAvatar: String? = roomInfo.avatarUrl ?? roomDetails.directUserProfile?.avatarUrl
         zeroUsersService.setRoomAvatarInCache(roomId: roomInfo.id, avatarUrl: roomAvatar)
         
-        let joinRequestType: RoomSummary.JoinRequestType? = switch roomInfo.membership {
         case .invited: .invite(inviter: inviterProxy)
         case .knocked: .knock
         default: nil
@@ -290,7 +290,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         return RoomSummary(roomListItem: roomListItem,
                            id: roomInfo.id,
-                           joinRequestType: joinRequestType,
+                           knockRequestType: knockRequestType,
                            name: displayName ?? "",
                            isDirect: roomInfo.isDirect,
                            avatarURL: roomAvatar.flatMap(URL.init(string:)),

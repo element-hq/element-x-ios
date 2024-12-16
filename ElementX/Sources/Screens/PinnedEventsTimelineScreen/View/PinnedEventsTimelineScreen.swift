@@ -38,7 +38,7 @@ struct PinnedEventsTimelineScreen: View {
                                                              isDM: timelineContext.viewState.isEncryptedOneToOneRoom,
                                                              isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
                                                              isCreateMediaCaptionsEnabled: timelineContext.viewState.isCreateMediaCaptionsEnabled,
-                                                             isPinnedEventsTimeline: timelineContext.viewState.isPinnedEventsTimeline,
+                                                             timelineKind: timelineContext.viewState.timelineKind,
                                                              emojiProvider: timelineContext.viewState.emojiProvider)
                     .makeActions()
                 if let actions {

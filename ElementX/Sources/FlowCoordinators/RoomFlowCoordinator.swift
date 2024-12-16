@@ -408,6 +408,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .mediaEventsTimeline(previousState: fromState)
             case (.mediaEventsTimeline(let previousState), .dismissMediaEventsTimeline):
                 return previousState
+                
+            case (.roomDetails, .presentSecurityAndPrivacyScreen):
+                return .securityAndPrivacy(previousState: fromState)
+            case (.securityAndPrivacy(let previousState), .dismissSecurityAndPrivacyScreen):
+                return previousState
             
             default:
                 return nil
@@ -573,6 +578,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomDetails, .presentMediaEventsTimeline, .mediaEventsTimeline):
                 Task { await self.startMediaEventsTimelineFlow() }
             case (.mediaEventsTimeline, .dismissMediaEventsTimeline, .roomDetails):
+                break
+                
+            case (.roomDetails, .presentSecurityAndPrivacyScreen, .securityAndPrivacy):
+                presentSecurityAndPrivacyScreen()
+            case (.securityAndPrivacy, .dismissSecurityAndPrivacyScreen, .roomDetails):
                 break
             
             // Child flow
@@ -854,6 +864,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentKnockRequestsListScreen)
             case .presentMediaEventsTimeline:
                 stateMachine.tryEvent(.presentMediaEventsTimeline)
+            case .presentSecurityAndPrivacyScreen:
+                stateMachine.tryEvent(.presentSecurityAndPrivacyScreen)
             }
         }
         .store(in: &cancellables)
@@ -901,7 +913,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentKnockRequestsList() {
-        let parameters = KnockRequestsListScreenCoordinatorParameters(roomProxy: roomProxy, mediaProvider: userSession.mediaProvider)
+        let parameters = KnockRequestsListScreenCoordinatorParameters(roomProxy: roomProxy,
+                                                                      mediaProvider: userSession.mediaProvider,
+                                                                      userIndicatorController: userIndicatorController)
         let coordinator = KnockRequestsListScreenCoordinator(parameters: parameters)
         
         navigationStackCoordinator.push(coordinator) { [weak self] in
@@ -1473,6 +1487,24 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
+    private func presentSecurityAndPrivacyScreen() {
+        let coordinator = SecurityAndPrivacyScreenCoordinator(parameters: .init(roomProxy: roomProxy))
+        
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .done:
+                break
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissSecurityAndPrivacyScreen)
+        }
+    }
+    
     // MARK: - Other flows
     
     private func startChildFlow(for roomID: String, via: [String], entryPoint: RoomFlowCoordinatorEntryPoint) async {
@@ -1568,6 +1600,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             
             switch action {
+            case .viewInRoomTimeline(let itemID):
+                guard let eventID = itemID.eventID else {
+                    MXLog.error("Unable to present room timeline for event \(itemID)")
+                    return
+                }
+                stateMachine.tryEvent(.presentRoom(presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: false))),
+                                      userInfo: EventUserInfo(animated: false)) // No animation so the timeline visible when the preview animates away.
             case .finished:
                 stateMachine.tryEvent(.dismissMediaEventsTimeline)
             }
@@ -1619,6 +1658,7 @@ private extension RoomFlowCoordinator {
         case resolveSendFailure
         case knockRequestsList(previousState: State)
         case mediaEventsTimeline(previousState: State)
+        case securityAndPrivacy(previousState: State)
         
         /// A child flow is in progress.
         case presentingChild(childRoomID: String, previousState: State)
@@ -1702,16 +1742,8 @@ private extension RoomFlowCoordinator {
         
         case presentMediaEventsTimeline
         case dismissMediaEventsTimeline
-    }
-}
-
-private extension Result {
-    var isFailure: Bool {
-        switch self {
-        case .success:
-            return false
-        case .failure:
-            return true
-        }
+        
+        case presentSecurityAndPrivacyScreen
+        case dismissSecurityAndPrivacyScreen
     }
 }

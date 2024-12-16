@@ -13,6 +13,7 @@ protocol CommonSettingsProtocol {
     var logLevel: TracingConfiguration.LogLevel { get }
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var hideTimelineMedia: Bool { get }
+    var eventCacheEnabled: Bool { get }
     
     var zeroMatrixUsers: [ZMatrixUser]? { get }
 }
@@ -51,6 +52,7 @@ final class AppSettings {
         case knockingEnabled
         case createMediaCaptionsEnabled
         case mediaBrowserEnabled
+        case eventCacheEnabled
         case zeroAccessToken
         case zeroMatrixUsers
         case zeroRewardsCredit
@@ -311,6 +313,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.hideTimelineMedia, defaultValue: false, storageType: .userDefaults(store))
     var hideTimelineMedia
+    
+    @UserPreference(key: UserDefaultsKeys.eventCacheEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var eventCacheEnabled
     
     // MARK: - ZERO Access Token
     

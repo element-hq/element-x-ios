@@ -130,7 +130,8 @@ class UserSessionStore: UserSessionStoreProtocol {
                          slidingSync: .restored,
                          sessionDelegate: keychainController,
                          appHooks: appHooks,
-                         enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode)
+                         enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
+                         eventCacheEnabled: appSettings.eventCacheEnabled)
             .sessionPaths(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                           cachePath: credentials.restorationToken.sessionDirectories.cachePath)
             .username(username: credentials.userID)

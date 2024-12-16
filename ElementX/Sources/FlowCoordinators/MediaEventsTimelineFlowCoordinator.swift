@@ -9,6 +9,7 @@ import Combine
 import Foundation
 
 enum MediaEventsTimelineFlowCoordinatorAction {
+    case viewInRoomTimeline(TimelineItemIdentifier)
     case finished
 }
 
@@ -92,12 +93,46 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                         mediaPlayerProvider: MediaPlayerProvider(),
                                                                         voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                                         appMediator: appMediator,
-                                                                        emojiProvider: emojiProvider)
+                                                                        emojiProvider: emojiProvider,
+                                                                        userIndicatorController: userIndicatorController)
         
         let coordinator = MediaEventsTimelineScreenCoordinator(parameters: parameters)
         
+        coordinator.actions
+            .sink { [weak self] action in
+                switch action {
+                case .viewItem(let previewContext):
+                    self?.presentMediaPreview(for: previewContext)
+                }
+            }
+            .store(in: &cancellables)
+        
         navigationStackCoordinator.push(coordinator) { [weak self] in
             self?.actionsSubject.send(.finished)
+        }
+    }
+    
+    private func presentMediaPreview(for previewContext: TimelineMediaPreviewContext) {
+        let parameters = TimelineMediaPreviewCoordinatorParameters(context: previewContext,
+                                                                   mediaProvider: userSession.mediaProvider,
+                                                                   userIndicatorController: userIndicatorController)
+        
+        let coordinator = TimelineMediaPreviewCoordinator(parameters: parameters)
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                switch action {
+                case .viewInRoomTimeline(let itemID):
+                    self?.navigationStackCoordinator.pop(animated: false)
+                    self?.actionsSubject.send(.viewInRoomTimeline(itemID))
+                    self?.navigationStackCoordinator.setFullScreenCoverCoordinator(nil)
+                case .dismiss:
+                    self?.navigationStackCoordinator.setFullScreenCoverCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationStackCoordinator.setFullScreenCoverCoordinator(coordinator) {
+            previewContext.completion?()
         }
     }
 }

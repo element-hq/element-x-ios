@@ -12,7 +12,7 @@ struct PollRoomTimelineView: View {
     @EnvironmentObject private var context: TimelineViewModel.Context
     
     private var state: PollViewState {
-        if context.viewState.isPinnedEventsTimeline {
+        if context.viewState.timelineKind == .pinned {
             return .preview
         } else {
             return .full(isEditable: timelineItem.isEditable)
@@ -51,7 +51,7 @@ struct PollRoomTimelineView: View {
 
 struct PollRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
-    static let pinnedEventsTimelineViewModel = TimelineViewModel.pinnedEventsTimelineMock
+    static let pinnedEventsTimelineViewModel = TimelineViewModel.mock(timelineKind: .pinned)
 
     static var previews: some View {
         PollRoomTimelineView(timelineItem: .mock(poll: .disclosed(), isOutgoing: false))

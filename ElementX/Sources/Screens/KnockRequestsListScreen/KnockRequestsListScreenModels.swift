@@ -10,18 +10,43 @@ import Foundation
 enum KnockRequestsListScreenViewModelAction { }
 
 struct KnockRequestsListScreenViewState: BindableState {
-    // TODO: Not sure yet how we will fetch this, this is just for testing purposes
-    var requests: [KnockRequestCellInfo] = [.init(id: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "Now", reason: "Hello")]
+    var requestsState: KnockRequestsListState = .loading
+    
+    var displayedRequests: [KnockRequestCellInfo] {
+        guard case let .loaded(requests) = requestsState else {
+            return []
+        }
+        return requests.filter { !handledEventIDs.contains($0.id) }
+    }
+    
+    var isLoading: Bool {
+        switch requestsState {
+        case .loading:
+            true
+        default:
+            false
+        }
+    }
+
     // If you are in this view one of these must have been true so by default we assume all of them to be true
     var canAccept = true
     var canDecline = true
     var canBan = true
     var isKnockableRoom = true
+    var handledEventIDs: Set<String> = []
     
     // If all the permissions are denied or the join rule changes while we are in the view
     // we want to stop displaying any request
     var shouldDisplayRequests: Bool {
-        !requests.isEmpty && isKnockableRoom && (canAccept || canDecline || canBan)
+        !displayedRequests.isEmpty && isKnockableRoom && (canAccept || canDecline || canBan)
+    }
+    
+    var shouldDisplayAcceptAllButton: Bool {
+        !isLoading && shouldDisplayRequests && displayedRequests.count > 1
+    }
+    
+    var shouldDisplayEmptyView: Bool {
+        !isLoading && !shouldDisplayRequests
     }
     
     var bindings = KnockRequestsListStateBindings()
@@ -35,11 +60,39 @@ enum KnockRequestsListAlertType {
     case acceptAllRequests
     case declineRequest
     case declineAndBan
+    case acceptAllFailed
+    case acceptFailed
+    case declineFailed
 }
 
 enum KnockRequestsListScreenViewAction {
     case acceptAllRequests
-    case acceptRequest(userID: String)
-    case declineRequest(userID: String)
-    case ban(userID: String)
+    case acceptRequest(eventID: String)
+    case declineRequest(eventID: String)
+    case ban(eventID: String)
+}
+
+enum KnockRequestsListState: Equatable {
+    case loading
+    case loaded([KnockRequestCellInfo])
+    
+    init(from state: KnockRequestsState) {
+        switch state {
+        case .loading:
+            self = .loading
+        case .loaded(let requests):
+            self = .loaded(requests.map(KnockRequestCellInfo.init))
+        }
+    }
+}
+
+private extension KnockRequestCellInfo {
+    init(from proxy: KnockRequestProxyProtocol) {
+        self.init(eventID: proxy.eventID,
+                  userID: proxy.userID,
+                  displayName: proxy.displayName,
+                  avatarURL: proxy.avatarURL,
+                  timestamp: proxy.formattedTimestamp,
+                  reason: proxy.reason)
+    }
 }

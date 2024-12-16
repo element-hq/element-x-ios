@@ -5,55 +5,25 @@
 // Please see LICENSE in the repository root for full details.
 //
 
-import Foundation
+import Compound
 import SwiftUI
 
-struct VoiceMessageRoomTimelineView: View {
-    @Environment(\.timelineContext) private var context
-    private let timelineItem: VoiceMessageRoomTimelineItem
-    private let playerState: AudioPlayerState
-    @State private var resumePlaybackAfterScrubbing = false
-    
-    init(timelineItem: VoiceMessageRoomTimelineItem, playerState: AudioPlayerState) {
-        self.timelineItem = timelineItem
-        self.playerState = playerState
-    }
+struct VoiceMessageMediaEventsTimelineView: View {
+    let timelineItem: VoiceMessageRoomTimelineItem
+    let playerState: AudioPlayerState
     
     var body: some View {
-        TimelineStyler(timelineItem: timelineItem) {
-            VoiceMessageRoomPlaybackView(playerState: playerState,
-                                         onPlayPause: onPlaybackPlayPause,
-                                         onSeek: { onPlaybackSeek($0) },
-                                         onScrubbing: { onPlaybackScrubbing($0) })
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: 400)
-        }
-    }
-    
-    private func onPlaybackPlayPause() {
-        context?.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
-    }
-    
-    private func onPlaybackSeek(_ progress: Double) {
-        context?.send(viewAction: .handleAudioPlayerAction(.seek(itemID: timelineItem.id, progress: progress)))
-    }
-    
-    private func onPlaybackScrubbing(_ dragging: Bool) {
-        if dragging {
-            if playerState.playbackState == .playing {
-                resumePlaybackAfterScrubbing = true
-                context?.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
-            }
-        } else {
-            if resumePlaybackAfterScrubbing {
-                context?.send(viewAction: .handleAudioPlayerAction(.playPause(itemID: timelineItem.id)))
-                resumePlaybackAfterScrubbing = false
-            }
-        }
+        VoiceMessageRoomTimelineContent(timelineItem: timelineItem,
+                                        playerState: playerState)
+            .accessibilityLabel(L10n.commonVoiceMessage)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .bubbleBackground(isOutgoing: timelineItem.isOutgoing)
     }
 }
 
-struct VoiceMessageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
+// MARK: - Content
+
+struct VoiceMessageMediaEventsTimelineView_Previews: PreviewProvider, TestablePreview {
     static let viewModel = TimelineViewModel.mock
     static let timelineItemIdentifier = TimelineItemIdentifier.randomEvent
     static let voiceRoomTimelineItem = VoiceMessageRoomTimelineItem(id: timelineItemIdentifier,
@@ -77,12 +47,12 @@ struct VoiceMessageRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                               progress: 0.4)
     
     static var previews: some View {
-        body.environmentObject(viewModel.context)
-            .previewDisplayName("Bubble")
+        body
+            .environmentObject(viewModel.context)
     }
     
     static var body: some View {
-        VoiceMessageRoomTimelineView(timelineItem: voiceRoomTimelineItem, playerState: playerState)
+        VoiceMessageMediaEventsTimelineView(timelineItem: voiceRoomTimelineItem, playerState: playerState)
             .fixedSize(horizontal: false, vertical: true)
     }
 }

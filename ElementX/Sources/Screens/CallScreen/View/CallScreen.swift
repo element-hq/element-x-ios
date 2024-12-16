@@ -26,7 +26,6 @@ struct CallScreen: View {
                             Image(systemSymbol: .chevronBackward)
                                 .fontWeight(.semibold)
                         }
-                        // .padding(.leading, -8) // Fixes the button alignment, but harder to tap.
                     }
                 }
         }

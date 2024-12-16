@@ -6397,6 +6397,11 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
         set(value) { underlyingIdentityStatusChangesPublisher = value }
     }
     var underlyingIdentityStatusChangesPublisher: CurrentValuePublisher<[IdentityStatusChange], Never>!
+    var knockRequestsStatePublisher: CurrentValuePublisher<KnockRequestsState, Never> {
+        get { return underlyingKnockRequestsStatePublisher }
+        set(value) { underlyingKnockRequestsStatePublisher = value }
+    }
+    var underlyingKnockRequestsStatePublisher: CurrentValuePublisher<KnockRequestsState, Never>!
     var timeline: TimelineProxyProtocol {
         get { return underlyingTimeline }
         set(value) { underlyingTimeline = value }
@@ -10036,6 +10041,284 @@ class KeychainControllerMock: KeychainControllerProtocol {
     func removePINCodeBiometricState() {
         removePINCodeBiometricStateCallsCount += 1
         removePINCodeBiometricStateClosure?()
+    }
+}
+class KnockRequestProxyMock: KnockRequestProxyProtocol {
+    var eventID: String {
+        get { return underlyingEventID }
+        set(value) { underlyingEventID = value }
+    }
+    var underlyingEventID: String!
+    var userID: String {
+        get { return underlyingUserID }
+        set(value) { underlyingUserID = value }
+    }
+    var underlyingUserID: String!
+    var displayName: String?
+    var avatarURL: URL?
+    var reason: String?
+    var formattedTimestamp: String?
+    var isSeen: Bool {
+        get { return underlyingIsSeen }
+        set(value) { underlyingIsSeen = value }
+    }
+    var underlyingIsSeen: Bool!
+
+    //MARK: - accept
+
+    var acceptUnderlyingCallsCount = 0
+    var acceptCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return acceptUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = acceptUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                acceptUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    acceptUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var acceptCalled: Bool {
+        return acceptCallsCount > 0
+    }
+
+    var acceptUnderlyingReturnValue: Result<Void, KnockRequestProxyError>!
+    var acceptReturnValue: Result<Void, KnockRequestProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return acceptUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, KnockRequestProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = acceptUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                acceptUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    acceptUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var acceptClosure: (() async -> Result<Void, KnockRequestProxyError>)?
+
+    func accept() async -> Result<Void, KnockRequestProxyError> {
+        acceptCallsCount += 1
+        if let acceptClosure = acceptClosure {
+            return await acceptClosure()
+        } else {
+            return acceptReturnValue
+        }
+    }
+    //MARK: - decline
+
+    var declineUnderlyingCallsCount = 0
+    var declineCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return declineUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = declineUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                declineUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    declineUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var declineCalled: Bool {
+        return declineCallsCount > 0
+    }
+
+    var declineUnderlyingReturnValue: Result<Void, KnockRequestProxyError>!
+    var declineReturnValue: Result<Void, KnockRequestProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return declineUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, KnockRequestProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = declineUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                declineUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    declineUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var declineClosure: (() async -> Result<Void, KnockRequestProxyError>)?
+
+    func decline() async -> Result<Void, KnockRequestProxyError> {
+        declineCallsCount += 1
+        if let declineClosure = declineClosure {
+            return await declineClosure()
+        } else {
+            return declineReturnValue
+        }
+    }
+    //MARK: - ban
+
+    var banUnderlyingCallsCount = 0
+    var banCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return banUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = banUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                banUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    banUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var banCalled: Bool {
+        return banCallsCount > 0
+    }
+
+    var banUnderlyingReturnValue: Result<Void, KnockRequestProxyError>!
+    var banReturnValue: Result<Void, KnockRequestProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return banUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, KnockRequestProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = banUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                banUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    banUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var banClosure: (() async -> Result<Void, KnockRequestProxyError>)?
+
+    func ban() async -> Result<Void, KnockRequestProxyError> {
+        banCallsCount += 1
+        if let banClosure = banClosure {
+            return await banClosure()
+        } else {
+            return banReturnValue
+        }
+    }
+    //MARK: - markAsSeen
+
+    var markAsSeenUnderlyingCallsCount = 0
+    var markAsSeenCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return markAsSeenUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = markAsSeenUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                markAsSeenUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    markAsSeenUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var markAsSeenCalled: Bool {
+        return markAsSeenCallsCount > 0
+    }
+
+    var markAsSeenUnderlyingReturnValue: Result<Void, KnockRequestProxyError>!
+    var markAsSeenReturnValue: Result<Void, KnockRequestProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return markAsSeenUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, KnockRequestProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = markAsSeenUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                markAsSeenUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    markAsSeenUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var markAsSeenClosure: (() async -> Result<Void, KnockRequestProxyError>)?
+
+    func markAsSeen() async -> Result<Void, KnockRequestProxyError> {
+        markAsSeenCallsCount += 1
+        if let markAsSeenClosure = markAsSeenClosure {
+            return await markAsSeenClosure()
+        } else {
+            return markAsSeenReturnValue
+        }
     }
 }
 class KnockedRoomProxyMock: KnockedRoomProxyProtocol {

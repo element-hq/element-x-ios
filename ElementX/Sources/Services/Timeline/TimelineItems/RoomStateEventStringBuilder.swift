@@ -59,7 +59,7 @@ struct RoomStateEventStringBuilder {
         case .knocked:
             return memberIsYou ? L10n.stateEventRoomKnockByYou : L10n.stateEventRoomKnock(member)
         case .knockAccepted:
-            return senderIsYou ? L10n.stateEventRoomKnockAcceptedByYou(senderDisplayName) : L10n.stateEventRoomKnockAccepted(senderDisplayName, member)
+            return senderIsYou ? L10n.stateEventRoomKnockAcceptedByYou(member) : L10n.stateEventRoomKnockAccepted(senderDisplayName, member)
         case .knockRetracted:
             return memberIsYou ? L10n.stateEventRoomKnockRetractedByYou : L10n.stateEventRoomKnockRetracted(member)
         case .knockDenied:

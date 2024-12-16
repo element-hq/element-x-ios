@@ -11,8 +11,10 @@ import SwiftUI
 struct MediaEventsTimelineScreen: View {
     @ObservedObject var context: MediaEventsTimelineScreenViewModel.Context
     
+    @Namespace private var zoomTransition
+    
     var body: some View {
-        content
+        mainContent
             .navigationBarTitleDisplayMode(.inline)
             .background(.compound.bgCanvasDefault)
             // Doesn't play well with the transformed scrollView
@@ -30,113 +32,240 @@ struct MediaEventsTimelineScreen: View {
                     .pickerStyle(.segmented)
                 }
             }
+            .environmentObject(context.viewState.activeTimelineContextProvider())
+            .environment(\.timelineContext, context.viewState.activeTimelineContextProvider())
+    }
+    
+    // The scale effects do the following:
+    // * flip the scrollView vertically to keep the items
+    // at the bottom and have pagination working properly
+    // * flip the grid vertically to counteract the scroll view
+    // but also horizontally to preserve the correct item order
+    // * flip the items on both axes have them render correctly
+    @ViewBuilder
+    private var mainContent: some View {
+        if context.viewState.groups.isEmpty, !context.viewState.isBackPaginating {
+            emptyState
+        } else {
+            ScrollView {
+                Group {
+                    switch context.viewState.bindings.screenMode {
+                    case .media:
+                        mediaContent
+                    case .files:
+                        filesContent
+                    }
+                    
+                    header
+                }
+            }
+            .scaleEffect(.init(width: 1, height: -1))
+            .onChange(of: context.screenMode) { _, _ in
+                context.send(viewAction: .changedScreenMode)
+            }
+        }
     }
     
     @ViewBuilder
-    private var content: some View {
-        ScrollView {
-            Group {
-                let columns = [GridItem(.adaptive(minimum: 80, maximum: 150), spacing: 1)]
-                LazyVGrid(columns: columns, alignment: .center, spacing: 1) {
-                    ForEach(context.viewState.items) { item in
-                        Color.clear // Let the image aspect fill in place
-                            .aspectRatio(1, contentMode: .fill)
-                            .overlay {
-                                viewForTimelineItem(item)
-                            }
-                            .clipped()
-                            .scaleEffect(.init(width: 1, height: -1))
+    private var mediaContent: some View {
+        let columns = [GridItem(.adaptive(minimum: 80, maximum: 150), spacing: 1)]
+        LazyVGrid(columns: columns, alignment: .center, spacing: 1) {
+            ForEach(context.viewState.groups) { group in
+                Section {
+                    ForEach(group.items) { item in
+                        Button {
+                            tappedItem(item)
+                        } label: {
+                            Color.clear // Let the image aspect fill in place
+                                .aspectRatio(1, contentMode: .fill)
+                                .overlay {
+                                    viewForTimelineItem(item)
+                                }
+                                .clipped()
+                                .scaleEffect(scale(for: item, isGridLayout: true))
+                        }
+                        .zoomTransitionSource(id: item.identifier, in: zoomTransition)
                     }
-                }
-                
-                // Needs to be wrapped in a LazyStack otherwise appearance calls don't trigger
-                LazyVStack(spacing: 0) {
-                    Rectangle()
-                        .frame(height: 44)
-                        .foregroundStyle(.compound.bgCanvasDefault)
-                        .overlay {
-                            if context.viewState.isBackPaginating {
-                                ProgressView()
-                            }
-                        }
-                        .onAppear {
-                            context.send(viewAction: .oldestItemDidAppear)
-                        }
-                        .onDisappear {
-                            context.send(viewAction: .oldestItemDidDisappear)
-                        }
+                } footer: {
+                    // Use a footer as the header because the scrollView is flipped
+                    SeparatorMediaEventsTimelineView(group: group)
+                        .scaleEffect(.init(width: -1, height: -1))
                 }
             }
         }
-        .scaleEffect(.init(width: 1, height: -1))
-        .onChange(of: context.screenMode) { _, _ in
-            context.send(viewAction: .changedScreenMode)
+        .scaleEffect(.init(width: -1, height: 1))
+    }
+    
+    @ViewBuilder
+    private var filesContent: some View {
+        LazyVStack(alignment: .center, spacing: 16) {
+            ForEach(context.viewState.groups) { group in
+                Section {
+                    ForEach(group.items) { item in
+                        VStack(spacing: 20) {
+                            Divider()
+                            
+                            Button {
+                                tappedItem(item)
+                            } label: {
+                                viewForTimelineItem(item)
+                                    .scaleEffect(scale(for: item, isGridLayout: false))
+                            }
+                            .zoomTransitionSource(id: item.identifier, in: zoomTransition)
+                        }
+                        .padding(.horizontal, 16)
+                    }
+                } footer: {
+                    // Use a footer as the header because the scrollView is flipped
+                    SeparatorMediaEventsTimelineView(group: group)
+                        .scaleEffect(.init(width: 1, height: -1))
+                }
+            }
         }
     }
     
-    @ViewBuilder func viewForTimelineItem(_ item: RoomTimelineItemViewState) -> some View {
+    private var header: some View {
+        // Needs to be wrapped in a LazyStack otherwise appearance calls don't trigger
+        LazyVStack(spacing: 0) {
+            ProgressView()
+                .padding()
+                .opacity(context.viewState.isBackPaginating ? 1 : 0)
+                .scaleEffect(.init(width: 1, height: -1)) // Make sure it spins the right way around 🙃
+            
+            Rectangle()
+                .frame(height: 1)
+                .foregroundStyle(.compound.bgCanvasDefault)
+                .onAppear {
+                    context.send(viewAction: .oldestItemDidAppear)
+                }
+                .onDisappear {
+                    context.send(viewAction: .oldestItemDidDisappear)
+                }
+        }
+    }
+    
+    @ViewBuilder
+    private func viewForTimelineItem(_ item: RoomTimelineItemViewState) -> some View {
         switch item.type {
         case .image(let timelineItem):
-            #warning("Make this work for gifs")
-            LoadableImage(mediaSource: timelineItem.content.thumbnailInfo?.source ?? timelineItem.content.imageInfo.source,
-                          mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
-                          blurhash: timelineItem.content.blurhash,
-                          size: timelineItem.content.thumbnailInfo?.size ?? timelineItem.content.imageInfo.size,
-                          mediaProvider: context.mediaProvider) {
-                placeholder
-            }
-            .mediaItemAspectRatio(imageInfo: timelineItem.content.thumbnailInfo ?? timelineItem.content.imageInfo)
+            ImageMediaEventsTimelineView(timelineItem: timelineItem)
         case .video(let timelineItem):
-            if let thumbnailSource = timelineItem.content.thumbnailInfo?.source {
-                LoadableImage(mediaSource: thumbnailSource,
-                              mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
-                              blurhash: timelineItem.content.blurhash,
-                              size: timelineItem.content.thumbnailInfo?.size,
-                              mediaProvider: context.mediaProvider) { imageView in
-                    imageView
-                        .overlay { playIcon }
-                } placeholder: {
-                    placeholder
-                }
-                .mediaItemAspectRatio(imageInfo: timelineItem.content.thumbnailInfo)
-            } else {
-                playIcon
-            }
-        case .separator(let timelineItem):
-            Text(timelineItem.text)
+            VideoMediaEventsTimelineView(timelineItem: timelineItem)
+        case .file(let timelineItem):
+            FileMediaEventsTimelineView(timelineItem: timelineItem)
+        case .audio(let timelineItem):
+            AudioMediaEventsTimelineView(timelineItem: timelineItem)
+        case .voice(let timelineItem):
+            let defaultPlayerState = AudioPlayerState(id: .timelineItemIdentifier(timelineItem.id), title: L10n.commonVoiceMessage, duration: 0)
+            let playerState = context.viewState.activeTimelineContextProvider().viewState.audioPlayerStateProvider?(timelineItem.id) ?? defaultPlayerState
+            VoiceMessageMediaEventsTimelineView(timelineItem: timelineItem, playerState: playerState)
         default:
             EmptyView()
         }
     }
     
-    private var playIcon: some View {
-        Image(systemName: "play.circle.fill")
-            .resizable()
-            .frame(width: 50, height: 50)
-            .background(.ultraThinMaterial, in: Circle())
-            .foregroundColor(.white)
+    @ViewBuilder
+    private var emptyState: some View {
+        FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar, background: .gradient) {
+            VStack(spacing: 16) {
+                switch context.screenMode {
+                case .media:
+                    emptyMedia
+                case .files:
+                    emptyFiles
+                }
+            }
+            .padding(16)
+        } bottomContent: { EmptyView() }
     }
     
-    private var placeholder: some View {
-        Rectangle()
-            .foregroundColor(.compound._bgBubbleIncoming)
-            .opacity(0.3)
+    private var emptyMedia: some View {
+        Group {
+            BigIcon(icon: \.image)
+            
+            Text(L10n.screenMediaBrowserMediaEmptyStateTitle)
+                .foregroundColor(.compound.textPrimary)
+                .font(.compound.headingMDBold)
+                .multilineTextAlignment(.center)
+            
+            Text(L10n.screenMediaBrowserMediaEmptyStateSubtitle)
+                .foregroundColor(.compound.textSecondary)
+                .font(.compound.bodyMD)
+                .multilineTextAlignment(.center)
+        }
     }
-}
-
-extension View {
-    /// Constrains the max height of a media item in the timeline, whilst preserving its aspect ratio.
-    @ViewBuilder
-    func mediaItemAspectRatio(imageInfo: ImageInfoProxy?) -> some View {
-        aspectRatio(imageInfo?.aspectRatio, contentMode: .fill)
+    
+    private var emptyFiles: some View {
+        Group {
+            BigIcon(icon: \.document)
+            
+            Text(L10n.screenMediaBrowserFilesEmptyStateTitle)
+                .foregroundColor(.compound.textPrimary)
+                .font(.compound.headingMDBold)
+                .multilineTextAlignment(.center)
+            
+            Text(L10n.screenMediaBrowserFilesEmptyStateSubtitle)
+                .foregroundColor(.compound.textSecondary)
+                .font(.compound.bodyMD)
+                .multilineTextAlignment(.center)
+        }
+    }
+    
+    func tappedItem(_ item: RoomTimelineItemViewState) {
+        context.send(viewAction: .tappedItem(item: item, namespace: zoomTransition))
+    }
+    
+    func scale(for item: RoomTimelineItemViewState, isGridLayout: Bool) -> CGSize {
+        guard item.identifier != context.viewState.currentPreviewItemID else {
+            // Remove the flip when presenting a preview so that the zoom transition is the right way up 🙃
+            return CGSize(width: 1, height: 1)
+        }
+        
+        return CGSize(width: isGridLayout ? -1 : 1, height: -1)
     }
 }
 
 // MARK: - Previews
 
 struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
-    static let timelineViewModel: TimelineViewModel = {
-        let timelineController = MockRoomTimelineController(timelineKind: .media)
+    static let mediaViewModel = makeViewModel(screenMode: .media)
+    static let filesViewModel = makeViewModel(screenMode: .files)
+    static let emptyMediaViewModel = makeViewModel(timelineKind: .detached, screenMode: .media)
+    static let emptyFilesViewModel = makeViewModel(timelineKind: .detached, screenMode: .files)
+    
+    static var previews: some View {
+        NavigationStack {
+            MediaEventsTimelineScreen(context: mediaViewModel.context)
+        }
+        .previewDisplayName("Media")
+        
+        NavigationStack {
+            MediaEventsTimelineScreen(context: filesViewModel.context)
+        }
+        .previewDisplayName("Files")
+        
+        NavigationStack {
+            MediaEventsTimelineScreen(context: emptyMediaViewModel.context)
+        }
+        .previewDisplayName("Empty Media")
+        
+        NavigationStack {
+            MediaEventsTimelineScreen(context: emptyFilesViewModel.context)
+        }
+        .previewDisplayName("Empty Files")
+    }
+    
+    private static func makeViewModel(timelineKind: TimelineKind = .media(.mediaFilesScreen),
+                                      screenMode: MediaEventsTimelineScreenMode) -> MediaEventsTimelineScreenViewModel {
+        MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: makeTimelineViewModel(timelineKind: timelineKind),
+                                           filesTimelineViewModel: makeTimelineViewModel(timelineKind: timelineKind),
+                                           mediaProvider: MediaProviderMock(configuration: .init()),
+                                           screenMode: screenMode,
+                                           userIndicatorController: UserIndicatorControllerMock())
+    }
+    
+    private static func makeTimelineViewModel(timelineKind: TimelineKind) -> TimelineViewModel {
+        let timelineController = MockRoomTimelineController(timelineKind: timelineKind)
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                  timelineController: timelineController,
                                  mediaProvider: MediaProviderMock(configuration: .init()),
@@ -147,27 +276,5 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                  appSettings: ServiceLocator.shared.settings,
                                  analyticsService: ServiceLocator.shared.analytics,
                                  emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
-    }()
-    
-    static let mediaViewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: timelineViewModel,
-                                                                   filesTimelineViewModel: timelineViewModel,
-                                                                   mediaProvider: MediaProviderMock(configuration: .init()),
-                                                                   screenMode: .media)
-    
-    static let filesViewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: timelineViewModel,
-                                                                   filesTimelineViewModel: timelineViewModel,
-                                                                   mediaProvider: MediaProviderMock(configuration: .init()),
-                                                                   screenMode: .files)
-    
-    static var previews: some View {
-        NavigationStack {
-            MediaEventsTimelineScreen(context: mediaViewModel.context)
-                .previewDisplayName("Media")
-        }
-        
-        NavigationStack {
-            MediaEventsTimelineScreen(context: filesViewModel.context)
-                .previewDisplayName("Files")
-        }
     }
 }

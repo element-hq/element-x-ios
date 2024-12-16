@@ -20,7 +20,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     private var isEncryptedOneToOneRoom: Bool { context.viewState.isEncryptedOneToOneRoom }
     private var isFocussed: Bool { focussedEventID != nil && timelineItem.id.eventID == focussedEventID }
     private var isPinned: Bool {
-        guard !context.viewState.isPinnedEventsTimeline,
+        guard context.viewState.timelineKind != .pinned,
               let eventID = timelineItem.id.eventID else {
             return false
         }
@@ -132,7 +132,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 }
             
             // Do not display reactions in the pinned events timeline
-            if !context.viewState.isPinnedEventsTimeline,
+            if context.viewState.timelineKind != .pinned,
                !timelineItem.properties.reactions.isEmpty {
                 TimelineReactionsView(context: context,
                                       itemID: timelineItem.id,
@@ -179,7 +179,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                                                               isDM: context.viewState.isEncryptedOneToOneRoom,
                                                               isViewSourceEnabled: context.viewState.isViewSourceEnabled,
                                                               isCreateMediaCaptionsEnabled: context.viewState.isCreateMediaCaptionsEnabled,
-                                                              isPinnedEventsTimeline: context.viewState.isPinnedEventsTimeline,
+                                                              timelineKind: context.viewState.timelineKind,
                                                               emojiProvider: context.viewState.emojiProvider)
                 TimelineItemMacContextMenu(item: timelineItem, actionProvider: provider) { action in
                     context.send(viewAction: .handleTimelineItemMenuAction(itemID: timelineItem.id, action: action))
@@ -192,9 +192,9 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     var messageBubble: some View {
         contentWithReply
             .timelineItemSendInfo(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, context: context)
-            .bubbleStyle(insets: timelineItem.bubbleInsets,
-                         color: timelineItem.bubbleBackgroundColor,
-                         corners: roundedCorners)
+            .bubbleBackground(isOutgoing: timelineItem.isOutgoing,
+                              insets: timelineItem.bubbleInsets,
+                              color: timelineItem.bubbleBackgroundColor)
     }
     
     @ViewBuilder
@@ -258,37 +258,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         timelineItem.isOutgoing ? .trailing : .leading
     }
     
-    private var roundedCorners: UIRectCorner {
-        switch timelineGroupStyle {
-        case .single:
-            return .allCorners
-        case .first:
-            if timelineItem.isOutgoing {
-                return [.topLeft, .topRight, .bottomLeft]
-            } else {
-                return [.topLeft, .topRight, .bottomRight]
-            }
-        case .middle:
-            return timelineItem.isOutgoing ? [.topLeft, .bottomLeft] : [.topRight, .bottomRight]
-        case .last:
-            if timelineItem.isOutgoing {
-                return [.topLeft, .bottomLeft, .bottomRight]
-            } else {
-                return [.topRight, .bottomLeft, .bottomRight]
-            }
-        }
-    }
-    
     private var shouldShowSenderDetails: Bool {
         timelineGroupStyle.shouldShowSenderDetails
-    }
-}
-
-private extension View {
-    func bubbleStyle(insets: EdgeInsets, color: Color? = nil, cornerRadius: CGFloat = 12, corners: UIRectCorner) -> some View {
-        padding(insets)
-            .background(color)
-            .cornerRadius(cornerRadius, corners: corners)
     }
 }
 

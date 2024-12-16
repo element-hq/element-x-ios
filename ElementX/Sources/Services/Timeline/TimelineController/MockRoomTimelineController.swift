@@ -42,7 +42,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         switch timelineKind {
         case .media:
             timelineItems = (0..<5).reduce([]) { partialResult, _ in
-                partialResult + RoomTimelineItemFixtures.mediaChunk
+                partialResult + [RoomTimelineItemFixtures.separator] + RoomTimelineItemFixtures.mediaChunk
             }
         default:
             break
@@ -113,7 +113,10 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     func removeCaption(_ eventOrTransactionID: EventOrTransactionId) async { }
     
-    func redact(_ eventOrTransactionID: EventOrTransactionId) async { }
+    private(set) var redactCalled = false
+    func redact(_ eventOrTransactionID: EventOrTransactionId) async {
+        redactCalled = true
+    }
     
     func pin(eventID: String) async { }
     

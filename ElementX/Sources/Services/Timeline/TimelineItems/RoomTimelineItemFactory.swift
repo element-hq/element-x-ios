@@ -140,7 +140,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                           _ info: MatrixRustSDK.ImageInfo,
                                           _ mediaSource: MediaSource,
                                           _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
-        let imageInfo = ImageInfoProxy(source: mediaSource, width: info.width, height: info.height, mimeType: info.mimetype)
+        let imageInfo = ImageInfoProxy(source: mediaSource, width: info.width, height: info.height, mimeType: info.mimetype, fileSize: info.size.map(UInt.init))
         
         return StickerRoomTimelineItem(id: eventItemProxy.id,
                                        body: body,
@@ -177,7 +177,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             case .sentBeforeWeJoined:
                 encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .sentBeforeWeJoined)
                 errorLabel = L10n.commonUnableToDecryptNoAccess
-            case .historicalMessage:
+            case .historicalMessageAndBackupIsDisabled, .historicalMessageAndDeviceIsUnverified:
                 encryptionType = .megolmV1AesSha2(sessionID: sessionID, cause: .historicalMessage)
                 errorLabel = L10n.timelineDecryptionFailureHistoricalEventNoKeyBackup
             case .withheldForUnverifiedOrInsecureDevice:
@@ -625,12 +625,14 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         let thumbnailInfo = ImageInfoProxy(source: messageContent.info?.thumbnailSource,
                                            width: messageContent.info?.thumbnailInfo?.width,
                                            height: messageContent.info?.thumbnailInfo?.height,
-                                           mimeType: messageContent.info?.thumbnailInfo?.mimetype)
+                                           mimeType: messageContent.info?.thumbnailInfo?.mimetype,
+                                           fileSize: messageContent.info?.size.map(UInt.init))
         
         let imageInfo = ImageInfoProxy(source: messageContent.source,
                                        width: messageContent.info?.width,
                                        height: messageContent.info?.height,
-                                       mimeType: messageContent.info?.mimetype)
+                                       mimeType: messageContent.info?.mimetype,
+                                       fileSize: messageContent.info?.size.map(UInt.init))
         
         return .init(filename: messageContent.filename,
                      caption: messageContent.caption,
@@ -649,13 +651,15 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         let thumbnailInfo = ImageInfoProxy(source: messageContent.info?.thumbnailSource,
                                            width: messageContent.info?.thumbnailInfo?.width,
                                            height: messageContent.info?.thumbnailInfo?.height,
-                                           mimeType: messageContent.info?.thumbnailInfo?.mimetype)
+                                           mimeType: messageContent.info?.thumbnailInfo?.mimetype,
+                                           fileSize: messageContent.info?.size.map(UInt.init))
         
         let videoInfo = VideoInfoProxy(source: messageContent.source,
                                        duration: messageContent.info?.duration ?? 0,
                                        width: messageContent.info?.width,
                                        height: messageContent.info?.height,
-                                       mimeType: messageContent.info?.mimetype)
+                                       mimeType: messageContent.info?.mimetype,
+                                       fileSize: messageContent.info?.size.map(UInt.init))
         
         return .init(filename: messageContent.filename,
                      caption: messageContent.caption,

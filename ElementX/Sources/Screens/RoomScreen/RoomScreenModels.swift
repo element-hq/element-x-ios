@@ -8,7 +8,7 @@
 import Foundation
 import OrderedCollections
 
-enum RoomScreenViewModelAction {
+enum RoomScreenViewModelAction: Equatable {
     case focusEvent(eventID: String)
     case displayPinnedEventsTimeline
     case displayRoomDetails
@@ -23,7 +23,7 @@ enum RoomScreenViewAction {
     case displayRoomDetails
     case displayCall
     case footerViewAction(RoomScreenFooterViewAction)
-    case acceptKnock(userID: String)
+    case acceptKnock(eventID: String)
     case dismissKnockRequests
     case viewKnockRequests
 }
@@ -48,11 +48,18 @@ struct RoomScreenViewState: BindableState {
     var canAcceptKnocks = false
     var canDeclineKnocks = false
     var canBan = false
-    // TODO: We still don't know how to get these, but these will be the non already seen knock requests of the room, for now we are using this as a mock for testing purposes
-    var unseenKnockRequests: [KnockRequestInfo] = [.init(displayName: "Alice", avatarURL: nil, userID: "@alice:matrix.org", reason: "Helloooo")]
+    var unseenKnockRequests: [KnockRequestInfo] = []
+    var handledEventIDs: Set<String> = []
+    
+    var displayedKnockRequests: [KnockRequestInfo] {
+        unseenKnockRequests.filter { !handledEventIDs.contains($0.eventID) }
+    }
     
     var shouldSeeKnockRequests: Bool {
-        isKnockingEnabled && isKnockableRoom && !unseenKnockRequests.isEmpty && (canAcceptKnocks || canDeclineKnocks || canBan)
+        isKnockingEnabled &&
+            isKnockableRoom &&
+            !displayedKnockRequests.isEmpty &&
+            (canAcceptKnocks || canDeclineKnocks || canBan)
     }
     
     var footerDetails: RoomScreenFooterViewDetails?

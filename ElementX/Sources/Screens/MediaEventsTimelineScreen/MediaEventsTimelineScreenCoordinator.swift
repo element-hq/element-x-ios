@@ -17,9 +17,12 @@ struct MediaEventsTimelineScreenCoordinatorParameters {
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let appMediator: AppMediatorProtocol
     let emojiProvider: EmojiProviderProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
-enum MediaEventsTimelineScreenCoordinatorAction { }
+enum MediaEventsTimelineScreenCoordinatorAction {
+    case viewItem(TimelineMediaPreviewContext)
+}
 
 final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
     private let parameters: MediaEventsTimelineScreenCoordinatorParameters
@@ -59,7 +62,17 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
         
         viewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: mediaTimelineViewModel,
                                                        filesTimelineViewModel: filesTimelineViewModel,
-                                                       mediaProvider: parameters.mediaProvider)
+                                                       mediaProvider: parameters.mediaProvider,
+                                                       userIndicatorController: parameters.userIndicatorController)
+        
+        viewModel.actionsPublisher
+            .sink { [weak self] action in
+                switch action {
+                case .viewItem(let previewContext):
+                    self?.actionsSubject.send(.viewItem(previewContext))
+                }
+            }
+            .store(in: &cancellables)
     }
     
     func toPresentable() -> AnyView {

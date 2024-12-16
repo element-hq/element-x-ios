@@ -203,7 +203,7 @@ private extension TimelineItemProxy {
 private extension VirtualTimelineItem {
     var description: String {
         switch self {
-        case .dayDivider(let timestamp):
+        case .dateDivider(let timestamp):
             return "DayDiviver(\(timestamp))"
         case .readMarker:
             return "ReadMarker"

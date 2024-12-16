@@ -19,67 +19,76 @@ struct DeveloperOptionsScreen: View {
     
     var body: some View {
         Form {
-//            Section("Logging") {
-//                LogLevelConfigurationView(logLevel: $context.logLevel)
-//            }
-//            
-//            Section {
-//                Picker("Discovery", selection: $context.slidingSyncDiscovery) {
-//                    Text("Proxy only").tag(AppSettings.SlidingSyncDiscovery.proxy)
-//                    Text("Automatic").tag(AppSettings.SlidingSyncDiscovery.native)
-//                    Text("Force Native ⚠️").tag(AppSettings.SlidingSyncDiscovery.forceNative)
-//                }
-//            } header: {
-//                Text("Sliding Sync")
-//            } footer: {
-//                Text(context.viewState.slidingSyncFooter)
-//            }
-//            
-//            Section("Room List") {
-//                Toggle(isOn: $context.publicSearchEnabled) {
-//                    Text("Public search")
-//                }
-//                
-//                Toggle(isOn: $context.hideUnreadMessagesBadge) {
-//                    Text("Hide grey dots")
-//                }
-//                
-//                Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
-//                    Text("Fuzzy searching")
-//                }
-//            }
-//            
-//            Section("Room") {
-//                Toggle(isOn: $context.hideTimelineMedia) {
-//                    Text("Hide image & video previews")
-//                }
-//                
-//                Toggle(isOn: $context.createMediaCaptionsEnabled) {
-//                    Text("Allow creation of media captions")
-//                }
-//                
-//                Toggle(isOn: $context.mediaBrowserEnabled) {
-//                    Text("Enable the media browser")
-//                }
-//            }
-//            
-//            Section("Join rules") {
-//                Toggle(isOn: $context.knockingEnabled) {
-//                    Text("Knocking")
-//                    Text("Experimental, still using mocked data")
-//                }
-//            }
-//            
-//            Section {
-//                Toggle(isOn: $context.enableOnlySignedDeviceIsolationMode) {
-//                    Text("Exclude insecure devices when sending/receiving messages")
-//                    Text("Requires app reboot")
-//                }
-//            } header: {
-//                Text("Trust and Decoration")
-//            } footer: {
-//                Text("This setting controls how end-to-end encryption (E2EE) keys are exchanged. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
-//            }
+            Section("Logging") {
+                LogLevelConfigurationView(logLevel: $context.logLevel)
+            }
+            
+            Section("General") {
+                Toggle(isOn: $context.eventCacheEnabled) {
+                    Text("Event cache")
+                }
+                .onChange(of: context.eventCacheEnabled) {
+                    context.send(viewAction: .clearCache)
+                }
+            }
+            
+            Section {
+                Picker("Discovery", selection: $context.slidingSyncDiscovery) {
+                    Text("Proxy only").tag(AppSettings.SlidingSyncDiscovery.proxy)
+                    Text("Automatic").tag(AppSettings.SlidingSyncDiscovery.native)
+                    Text("Force Native ⚠️").tag(AppSettings.SlidingSyncDiscovery.forceNative)
+                }
+            } header: {
+                Text("Sliding Sync")
+            } footer: {
+                Text(context.viewState.slidingSyncFooter)
+            }
+            
+            Section("Room List") {
+                Toggle(isOn: $context.publicSearchEnabled) {
+                    Text("Public search")
+                }
+                
+                Toggle(isOn: $context.hideUnreadMessagesBadge) {
+                    Text("Hide grey dots")
+                }
+                
+                Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
+                    Text("Fuzzy searching")
+                }
+            }
+            
+            Section("Room") {
+                Toggle(isOn: $context.hideTimelineMedia) {
+                    Text("Hide image & video previews")
+                }
+                
+                Toggle(isOn: $context.createMediaCaptionsEnabled) {
+                    Text("Allow creation of media captions")
+                }
+                
+                Toggle(isOn: $context.mediaBrowserEnabled) {
+                    Text("Enable the media browser")
+                }
+            }
+            
+            Section("Join rules") {
+                Toggle(isOn: $context.knockingEnabled) {
+                    Text("Knocking")
+                    Text("Experimental, still using mocked data")
+                }
+            }
+            
+            Section {
+                Toggle(isOn: $context.enableOnlySignedDeviceIsolationMode) {
+                    Text("Exclude insecure devices when sending/receiving messages")
+                    Text("Requires app reboot")
+                }
+            } header: {
+                Text("Trust and Decoration")
+            } footer: {
+                Text("This setting controls how end-to-end encryption (E2EE) keys are exchanged. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
+            }
 
             Section {
                 Button(role: .destructive) {

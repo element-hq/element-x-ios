@@ -30,6 +30,7 @@ struct JoinedRoomProxyMockConfiguration {
     var timelineStartReached = false
     
     var members: [RoomMemberProxyMock] = .allMembers
+    var knockRequestsState: KnockRequestsState = .loaded([])
     var ownUserID = RoomMemberProxyMock.mockMe.userID
     var inviter: RoomMemberProxyProtocol?
     
@@ -57,6 +58,7 @@ extension JoinedRoomProxyMock {
         
         infoPublisher = CurrentValueSubject(.init(roomInfo: .init(configuration), roomAvatarCached: nil)).asCurrentValuePublisher()
         membersPublisher = CurrentValueSubject(configuration.members).asCurrentValuePublisher()
+        knockRequestsStatePublisher = CurrentValueSubject(configuration.knockRequestsState).asCurrentValuePublisher()
         typingMembersPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
         identityStatusChangesPublisher = CurrentValueSubject([]).asCurrentValuePublisher()
 
@@ -92,7 +94,7 @@ extension JoinedRoomProxyMock {
         }
         canUserInviteUserIDReturnValue = .success(configuration.canUserInvite)
         canUserRedactOtherUserIDReturnValue = .success(false)
-        canUserRedactOwnUserIDReturnValue = .success(false)
+        canUserRedactOwnUserIDReturnValue = .success(true)
         canUserKickUserIDClosure = { [weak self] userID in
             .success(self?.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
         }

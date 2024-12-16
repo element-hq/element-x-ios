@@ -178,7 +178,7 @@ private extension HomeScreenRoom {
         
         let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
                                   id: "@someone:somewhere.com",
-                                  joinRequestType: .invite(inviter: inviter),
+                                  knockRequestType: .invite(inviter: inviter),
                                   name: "Some Guy",
                                   isDirect: true,
                                   avatarURL: nil,
@@ -205,7 +205,7 @@ private extension HomeScreenRoom {
         
         let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
                                   id: "@someone:somewhere.com",
-                                  joinRequestType: .invite(inviter: inviter),
+                                  knockRequestType: .invite(inviter: inviter),
                                   name: "Awesome Room",
                                   isDirect: false,
                                   avatarURL: avatarURL,

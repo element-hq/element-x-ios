@@ -21,6 +21,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     var cancellables = Set<AnyCancellable>()
     
     override func setUp() {
+        AppSettings.resetAllSettings()
         cancellables.removeAll()
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test"))
         notificationSettingsProxyMock = NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration())
@@ -33,8 +34,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
-        
-        AppSettings.resetAllSettings()
     }
     
     func testLeaveRoomTappedWhenPublic() async throws {
@@ -671,5 +670,100 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         } else {
             XCTFail("invalid state")
         }
+    }
+    
+    // MARK: - Knock Requests
+    
+    func testKnockRequestsCounter() async throws {
+        ServiceLocator.shared.settings.knockingEnabled = true
+        let mockedRequests: [KnockRequestProxyMock] = [.init(), .init()]
+        roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, isPublic: false, knockRequestsState: .loaded(mockedRequests), joinRule: .knock))
+        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                               clientProxy: ClientProxyMock(.init()),
+                                               mediaProvider: MediaProviderMock(configuration: .init()),
+                                               analyticsService: ServiceLocator.shared.analytics,
+                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                               notificationSettingsProxy: notificationSettingsProxyMock,
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                               appMediator: AppMediatorMock.default,
+                                               appSettings: ServiceLocator.shared.settings)
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.knockRequestsCount == 2 && state.canSeeKnockingRequests
+        }
+        try await deferred.fulfill()
+        
+        let deferredAction = deferFulfillment(viewModel.actions) { $0 == .displayKnockingRequests }
+        context.send(viewAction: .processTapRequestsToJoin)
+        try await deferredAction.fulfill()
+    }
+    
+    func testKnockRequestsCounterIsLoading() async throws {
+        ServiceLocator.shared.settings.knockingEnabled = true
+        roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, isPublic: false, knockRequestsState: .loading, joinRule: .knock))
+        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                               clientProxy: ClientProxyMock(.init()),
+                                               mediaProvider: MediaProviderMock(configuration: .init()),
+                                               analyticsService: ServiceLocator.shared.analytics,
+                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                               notificationSettingsProxy: notificationSettingsProxyMock,
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                               appMediator: AppMediatorMock.default,
+                                               appSettings: ServiceLocator.shared.settings)
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.knockRequestsCount == 0 && state.canSeeKnockingRequests
+        }
+        
+        try await deferred.fulfill()
+    }
+    
+    func testKnockRequestsCounterIsNotShownIfNoPermissions() async throws {
+        ServiceLocator.shared.settings.knockingEnabled = true
+        let mockedRequests: [KnockRequestProxyMock] = [.init(), .init()]
+        roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, isPublic: false, knockRequestsState: .loaded(mockedRequests), canUserInvite: false, joinRule: .knock))
+        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                               clientProxy: ClientProxyMock(.init()),
+                                               mediaProvider: MediaProviderMock(configuration: .init()),
+                                               analyticsService: ServiceLocator.shared.analytics,
+                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                               notificationSettingsProxy: notificationSettingsProxyMock,
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                               appMediator: AppMediatorMock.default,
+                                               appSettings: ServiceLocator.shared.settings)
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.knockRequestsCount == 2 &&
+                state.dmRecipient == nil &&
+                !state.canSeeKnockingRequests &&
+                !state.canInviteUsers
+        }
+        
+        try await deferred.fulfill()
+    }
+    
+    func testKnockRequestsCounterIsNotShownIfDM() async throws {
+        ServiceLocator.shared.settings.knockingEnabled = true
+        let mockedRequests: [KnockRequestProxyMock] = [.init(), .init()]
+        let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockAlice]
+        roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: true, isPublic: false, members: mockedMembers, knockRequestsState: .loaded(mockedRequests), joinRule: .knock))
+        viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
+                                               clientProxy: ClientProxyMock(.init()),
+                                               mediaProvider: MediaProviderMock(configuration: .init()),
+                                               analyticsService: ServiceLocator.shared.analytics,
+                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                               notificationSettingsProxy: notificationSettingsProxyMock,
+                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                               appMediator: AppMediatorMock.default,
+                                               appSettings: ServiceLocator.shared.settings)
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.knockRequestsCount == 2 &&
+                !state.canSeeKnockingRequests &&
+                state.dmRecipient != nil &&
+                state.canInviteUsers
+        }
+        
+        try await deferred.fulfill()
     }
 }

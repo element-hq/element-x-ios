@@ -5,6 +5,7 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import AnalyticsEvents
 import AVKit
 import Combine
 import MatrixRustSDK
@@ -387,24 +388,25 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     timeToDecryptMs = -1
                 }
                 
-                switch info.cause {
-                case .unknown:
-                    analytics.trackError(context: nil, domain: .E2EE, name: .OlmKeysNotSentError, timeToDecryptMillis: timeToDecryptMs)
-                case .unknownDevice:
-                    analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedSentByInsecureDevice, timeToDecryptMillis: timeToDecryptMs)
-                case .unsignedDevice:
-                    analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedSentByInsecureDevice, timeToDecryptMillis: timeToDecryptMs)
-                case .verificationViolation:
-                    analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedVerificationViolation, timeToDecryptMillis: timeToDecryptMs)
-                case .sentBeforeWeJoined:
-                    analytics.trackError(context: nil, domain: .E2EE, name: .ExpectedDueToMembership, timeToDecryptMillis: timeToDecryptMs)
-                case .historicalMessage:
-                    analytics.trackError(context: nil, domain: .E2EE, name: .HistoricalMessage, timeToDecryptMillis: timeToDecryptMs)
-                case .withheldForUnverifiedOrInsecureDevice:
-                    analytics.trackError(context: nil, domain: .E2EE, name: .RoomKeysWithheldForUnverifiedDevice, timeToDecryptMillis: timeToDecryptMs)
-                case .withheldBySender:
-                    analytics.trackError(context: nil, domain: .E2EE, name: .OlmKeysNotSentError, timeToDecryptMillis: timeToDecryptMs)
+                let errorName: AnalyticsEvent.Error.Name = switch info.cause {
+                case .unknown: .OlmKeysNotSentError
+                case .unknownDevice, .unsignedDevice: .ExpectedSentByInsecureDevice
+                case .verificationViolation: .ExpectedVerificationViolation
+                case .sentBeforeWeJoined: .ExpectedDueToMembership
+                case .historicalMessageAndBackupIsDisabled, .historicalMessageAndDeviceIsUnverified: .HistoricalMessage
+                case .withheldForUnverifiedOrInsecureDevice: .RoomKeysWithheldForUnverifiedDevice
+                case .withheldBySender: .OlmKeysNotSentError
                 }
+                
+                analytics.trackError(context: nil,
+                                     domain: .E2EE,
+                                     name: errorName,
+                                     timeToDecryptMillis: timeToDecryptMs,
+                                     eventLocalAgeMillis: Int(truncatingIfNeeded: info.eventLocalAgeMillis),
+                                     isFederated: info.ownHomeserver != info.senderHomeserver,
+                                     isMatrixDotOrg: info.ownHomeserver == "matrix.org",
+                                     userTrustsOwnIdentity: info.userTrustsOwnIdentity,
+                                     wasVisibleToUser: nil)
             }
             .store(in: &cancellables)
                 

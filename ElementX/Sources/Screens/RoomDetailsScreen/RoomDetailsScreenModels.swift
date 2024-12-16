@@ -24,6 +24,7 @@ enum RoomDetailsScreenViewModelAction {
     case displayPinnedEventsTimeline
     case displayMediaEventsTimeline
     case displayKnockingRequests
+    case displaySecurityAndPrivacy
 }
 
 // MARK: View
@@ -52,8 +53,14 @@ struct RoomDetailsScreenViewState: BindableState {
     
     var knockingEnabled = false
     var isKnockableRoom = false
+    var knockRequestsCount = 0
+    
     var canSeeKnockingRequests: Bool {
         knockingEnabled && dmRecipient == nil && isKnockableRoom && (canInviteUsers || canKickUsers || canBanUsers)
+    }
+    
+    var canSeeSecurityAndPrivacy: Bool {
+        knockingEnabled && dmRecipient == nil && canEditRolesOrPermissions
     }
     
     var mediaBrowserEnabled = false
@@ -198,6 +205,7 @@ enum RoomDetailsScreenViewAction {
     case processTapPolls
     case toggleFavourite(isFavourite: Bool)
     case processTapRolesAndPermissions
+    case processTapSecurityAndPrivacy
     case processTapCall
     case processTapPinnedEvents
     case processTapMediaEvents
