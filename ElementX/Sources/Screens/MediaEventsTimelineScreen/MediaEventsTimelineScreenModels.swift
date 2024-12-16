@@ -23,6 +23,7 @@ struct MediaEventsTimelineGroup: Identifiable {
 }
 
 struct MediaEventsTimelineScreenViewState: BindableState {
+    var hasReachedTimelineStart = false
     var isBackPaginating = false
     var groups = [MediaEventsTimelineGroup]()
     
@@ -31,6 +32,10 @@ struct MediaEventsTimelineScreenViewState: BindableState {
     var bindings: MediaEventsTimelineScreenViewStateBindings
     
     var currentPreviewItemID: TimelineItemIdentifier?
+    
+    var shouldShowEmptyState: Bool {
+        groups.isEmpty && hasReachedTimelineStart
+    }
 }
 
 struct MediaEventsTimelineScreenViewStateBindings {

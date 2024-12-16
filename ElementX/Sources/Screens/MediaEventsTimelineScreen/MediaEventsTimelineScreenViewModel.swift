@@ -36,13 +36,13 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     init(mediaTimelineViewModel: TimelineViewModelProtocol,
          filesTimelineViewModel: TimelineViewModelProtocol,
          mediaProvider: MediaProviderProtocol,
-         screenMode: MediaEventsTimelineScreenMode = .media,
+         initialViewState: MediaEventsTimelineScreenViewState = .init(bindings: .init(screenMode: .media)),
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.mediaTimelineViewModel = mediaTimelineViewModel
         self.filesTimelineViewModel = filesTimelineViewModel
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: .init(bindings: .init(screenMode: screenMode)), mediaProvider: mediaProvider)
+        super.init(initialViewState: initialViewState, mediaProvider: mediaProvider)
         
         state.activeTimelineContextProvider = { [weak self] in
             guard let self else { fatalError() }
@@ -131,6 +131,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         state.groups = newGroups
         
         state.isBackPaginating = (timelineViewState.timelineState.paginationState.backward == .paginating)
+//        state.hasReachedTimelineStart = (timelineViewState.timelineState.paginationState.backward == .timelineEndReached)
         backPaginateIfNecessary(paginationStatus: timelineViewState.timelineState.paginationState.backward)
     }
     
