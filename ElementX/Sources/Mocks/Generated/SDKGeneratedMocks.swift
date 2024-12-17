@@ -625,52 +625,6 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
     }
 
-    //MARK: - createRoomAlias
-
-    open var createRoomAliasRoomAliasRoomIdThrowableError: Error?
-    var createRoomAliasRoomAliasRoomIdUnderlyingCallsCount = 0
-    open var createRoomAliasRoomAliasRoomIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return createRoomAliasRoomAliasRoomIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = createRoomAliasRoomAliasRoomIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                createRoomAliasRoomAliasRoomIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    createRoomAliasRoomAliasRoomIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var createRoomAliasRoomAliasRoomIdCalled: Bool {
-        return createRoomAliasRoomAliasRoomIdCallsCount > 0
-    }
-    open var createRoomAliasRoomAliasRoomIdReceivedArguments: (roomAlias: String, roomId: String)?
-    open var createRoomAliasRoomAliasRoomIdReceivedInvocations: [(roomAlias: String, roomId: String)] = []
-    open var createRoomAliasRoomAliasRoomIdClosure: ((String, String) async throws -> Void)?
-
-    open override func createRoomAlias(roomAlias: String, roomId: String) async throws {
-        if let error = createRoomAliasRoomAliasRoomIdThrowableError {
-            throw error
-        }
-        createRoomAliasRoomAliasRoomIdCallsCount += 1
-        createRoomAliasRoomAliasRoomIdReceivedArguments = (roomAlias: roomAlias, roomId: roomId)
-        DispatchQueue.main.async {
-            self.createRoomAliasRoomAliasRoomIdReceivedInvocations.append((roomAlias: roomAlias, roomId: roomId))
-        }
-        try await createRoomAliasRoomAliasRoomIdClosure?(roomAlias, roomId)
-    }
-
     //MARK: - customLoginWithJwt
 
     open var customLoginWithJwtJwtInitialDeviceNameDeviceIdThrowableError: Error?
@@ -11326,6 +11280,46 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         try await editEventIdNewContentClosure?(eventId, newContent)
     }
 
+    //MARK: - enableEncryption
+
+    open var enableEncryptionThrowableError: Error?
+    var enableEncryptionUnderlyingCallsCount = 0
+    open var enableEncryptionCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return enableEncryptionUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = enableEncryptionUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                enableEncryptionUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    enableEncryptionUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var enableEncryptionCalled: Bool {
+        return enableEncryptionCallsCount > 0
+    }
+    open var enableEncryptionClosure: (() async throws -> Void)?
+
+    open override func enableEncryption() async throws {
+        if let error = enableEncryptionThrowableError {
+            throw error
+        }
+        enableEncryptionCallsCount += 1
+        try await enableEncryptionClosure?()
+    }
+
     //MARK: - enableSendQueue
 
     var enableSendQueueEnableUnderlyingCallsCount = 0
@@ -11434,6 +11428,75 @@ open class RoomSDKMock: MatrixRustSDK.Room {
             return try await getPowerLevelsClosure()
         } else {
             return getPowerLevelsReturnValue
+        }
+    }
+
+    //MARK: - getRoomVisibility
+
+    open var getRoomVisibilityThrowableError: Error?
+    var getRoomVisibilityUnderlyingCallsCount = 0
+    open var getRoomVisibilityCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getRoomVisibilityUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRoomVisibilityUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRoomVisibilityUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRoomVisibilityUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var getRoomVisibilityCalled: Bool {
+        return getRoomVisibilityCallsCount > 0
+    }
+
+    var getRoomVisibilityUnderlyingReturnValue: RoomVisibility!
+    open var getRoomVisibilityReturnValue: RoomVisibility! {
+        get {
+            if Thread.isMainThread {
+                return getRoomVisibilityUnderlyingReturnValue
+            } else {
+                var returnValue: RoomVisibility? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRoomVisibilityUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRoomVisibilityUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRoomVisibilityUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var getRoomVisibilityClosure: (() async throws -> RoomVisibility)?
+
+    open override func getRoomVisibility() async throws -> RoomVisibility {
+        if let error = getRoomVisibilityThrowableError {
+            throw error
+        }
+        getRoomVisibilityCallsCount += 1
+        if let getRoomVisibilityClosure = getRoomVisibilityClosure {
+            return try await getRoomVisibilityClosure()
+        } else {
+            return getRoomVisibilityReturnValue
         }
     }
 
@@ -14863,6 +14926,144 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         try await unbanUserUserIdReasonClosure?(userId, reason)
     }
 
+    //MARK: - updateCanonicalAlias
+
+    open var updateCanonicalAliasNewAliasThrowableError: Error?
+    var updateCanonicalAliasNewAliasUnderlyingCallsCount = 0
+    open var updateCanonicalAliasNewAliasCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateCanonicalAliasNewAliasUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateCanonicalAliasNewAliasUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateCanonicalAliasNewAliasUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateCanonicalAliasNewAliasUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var updateCanonicalAliasNewAliasCalled: Bool {
+        return updateCanonicalAliasNewAliasCallsCount > 0
+    }
+    open var updateCanonicalAliasNewAliasReceivedNewAlias: String?
+    open var updateCanonicalAliasNewAliasReceivedInvocations: [String?] = []
+    open var updateCanonicalAliasNewAliasClosure: ((String?) async throws -> Void)?
+
+    open override func updateCanonicalAlias(newAlias: String?) async throws {
+        if let error = updateCanonicalAliasNewAliasThrowableError {
+            throw error
+        }
+        updateCanonicalAliasNewAliasCallsCount += 1
+        updateCanonicalAliasNewAliasReceivedNewAlias = newAlias
+        DispatchQueue.main.async {
+            self.updateCanonicalAliasNewAliasReceivedInvocations.append(newAlias)
+        }
+        try await updateCanonicalAliasNewAliasClosure?(newAlias)
+    }
+
+    //MARK: - updateHistoryVisibility
+
+    open var updateHistoryVisibilityVisibilityThrowableError: Error?
+    var updateHistoryVisibilityVisibilityUnderlyingCallsCount = 0
+    open var updateHistoryVisibilityVisibilityCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateHistoryVisibilityVisibilityUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateHistoryVisibilityVisibilityUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateHistoryVisibilityVisibilityUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateHistoryVisibilityVisibilityUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var updateHistoryVisibilityVisibilityCalled: Bool {
+        return updateHistoryVisibilityVisibilityCallsCount > 0
+    }
+    open var updateHistoryVisibilityVisibilityReceivedVisibility: RoomHistoryVisibility?
+    open var updateHistoryVisibilityVisibilityReceivedInvocations: [RoomHistoryVisibility] = []
+    open var updateHistoryVisibilityVisibilityClosure: ((RoomHistoryVisibility) async throws -> Void)?
+
+    open override func updateHistoryVisibility(visibility: RoomHistoryVisibility) async throws {
+        if let error = updateHistoryVisibilityVisibilityThrowableError {
+            throw error
+        }
+        updateHistoryVisibilityVisibilityCallsCount += 1
+        updateHistoryVisibilityVisibilityReceivedVisibility = visibility
+        DispatchQueue.main.async {
+            self.updateHistoryVisibilityVisibilityReceivedInvocations.append(visibility)
+        }
+        try await updateHistoryVisibilityVisibilityClosure?(visibility)
+    }
+
+    //MARK: - updateJoinRules
+
+    open var updateJoinRulesNewRuleThrowableError: Error?
+    var updateJoinRulesNewRuleUnderlyingCallsCount = 0
+    open var updateJoinRulesNewRuleCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateJoinRulesNewRuleUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateJoinRulesNewRuleUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateJoinRulesNewRuleUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateJoinRulesNewRuleUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var updateJoinRulesNewRuleCalled: Bool {
+        return updateJoinRulesNewRuleCallsCount > 0
+    }
+    open var updateJoinRulesNewRuleReceivedNewRule: JoinRule?
+    open var updateJoinRulesNewRuleReceivedInvocations: [JoinRule] = []
+    open var updateJoinRulesNewRuleClosure: ((JoinRule) async throws -> Void)?
+
+    open override func updateJoinRules(newRule: JoinRule) async throws {
+        if let error = updateJoinRulesNewRuleThrowableError {
+            throw error
+        }
+        updateJoinRulesNewRuleCallsCount += 1
+        updateJoinRulesNewRuleReceivedNewRule = newRule
+        DispatchQueue.main.async {
+            self.updateJoinRulesNewRuleReceivedInvocations.append(newRule)
+        }
+        try await updateJoinRulesNewRuleClosure?(newRule)
+    }
+
     //MARK: - updatePowerLevelsForUsers
 
     open var updatePowerLevelsForUsersUpdatesThrowableError: Error?
@@ -14907,6 +15108,52 @@ open class RoomSDKMock: MatrixRustSDK.Room {
             self.updatePowerLevelsForUsersUpdatesReceivedInvocations.append(updates)
         }
         try await updatePowerLevelsForUsersUpdatesClosure?(updates)
+    }
+
+    //MARK: - updateRoomVisibility
+
+    open var updateRoomVisibilityVisibilityThrowableError: Error?
+    var updateRoomVisibilityVisibilityUnderlyingCallsCount = 0
+    open var updateRoomVisibilityVisibilityCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateRoomVisibilityVisibilityUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateRoomVisibilityVisibilityUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateRoomVisibilityVisibilityUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateRoomVisibilityVisibilityUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var updateRoomVisibilityVisibilityCalled: Bool {
+        return updateRoomVisibilityVisibilityCallsCount > 0
+    }
+    open var updateRoomVisibilityVisibilityReceivedVisibility: RoomVisibility?
+    open var updateRoomVisibilityVisibilityReceivedInvocations: [RoomVisibility] = []
+    open var updateRoomVisibilityVisibilityClosure: ((RoomVisibility) async throws -> Void)?
+
+    open override func updateRoomVisibility(visibility: RoomVisibility) async throws {
+        if let error = updateRoomVisibilityVisibilityThrowableError {
+            throw error
+        }
+        updateRoomVisibilityVisibilityCallsCount += 1
+        updateRoomVisibilityVisibilityReceivedVisibility = visibility
+        DispatchQueue.main.async {
+            self.updateRoomVisibilityVisibilityReceivedInvocations.append(visibility)
+        }
+        try await updateRoomVisibilityVisibilityClosure?(visibility)
     }
 
     //MARK: - uploadAvatar
