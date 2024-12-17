@@ -163,14 +163,6 @@ struct RoomDetailsScreen: View {
                     })
                     .disabled(context.viewState.pinnedEventsActionState.isLoading)
             
-            if context.viewState.canSeeKnockingRequests {
-                ListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
-                                        icon: \.askToJoin),
-                        details: context.viewState.knockRequestsCount > 0 ? .counter(context.viewState.knockRequestsCount) : nil,
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapRequestsToJoin)
-                        })
-            }
             ListRow(label: .default(title: L10n.screenPollsHistoryTitle,
                                     icon: \.polls),
                     kind: .navigationLink {
@@ -226,6 +218,16 @@ struct RoomDetailsScreen: View {
                         context.send(viewAction: .processTapPeople)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
+            
+            if context.viewState.canSeeKnockingRequests {
+                ListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
+                                        icon: \.askToJoin),
+                        details: context.viewState.knockRequestsCount > 0 ? .counter(context.viewState.knockRequestsCount) : nil,
+                        kind: .navigationLink {
+                            context.send(viewAction: .processTapRequestsToJoin)
+                        })
+            }
+            
             if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
                 ListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
                                         icon: \.admin),

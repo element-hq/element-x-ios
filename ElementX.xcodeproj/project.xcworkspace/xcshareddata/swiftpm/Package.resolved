@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-design-tokens",
       "state" : {
-        "revision" : "31b236f02c811704b68e8aae429865fe8eb8d8ba",
-        "version" : "2.1.1"
+        "revision" : "f79e05011ec3402c29ded19bcff95b5ead180991",
+        "version" : "2.1.2"
       }
     },
     {
@@ -15,7 +15,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-ios",
       "state" : {
-        "revision" : "78e1290d2a9f903f929806221331d8b4e898f4fe"
+        "revision" : "1a70bc7f3420647843b9c18748982c61ef7d2245"
       }
     },
     {
@@ -185,8 +185,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/BarredEwe/Prefire",
       "state" : {
-        "revision" : "0b7b6e6fe98af7e12b1440ca8fe81b3033ecf873",
-        "version" : "2.9.0"
+        "revision" : "172a7f0a95f99f6656f6b2d0531b648c08d26c56",
+        "version" : "2.10.0"
       }
     },
     {
