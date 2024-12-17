@@ -184,6 +184,7 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
                                                             viewModel: TimelineViewModel.mock(timelineKind: timelineKind),
                                                             namespace: previewNamespace),
                                              mediaProvider: MediaProviderMock(configuration: .init()),
-                                             userIndicatorController: UserIndicatorControllerMock())
+                                             userIndicatorController: UserIndicatorControllerMock(),
+                                             appMediator: AppMediatorMock())
     }
 }

@@ -27,6 +27,7 @@ struct TimelineMediaPreviewCoordinatorParameters {
     let context: TimelineMediaPreviewContext
     let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    let appMediator: AppMediatorProtocol
 }
 
 enum TimelineMediaPreviewCoordinatorAction {
@@ -50,7 +51,8 @@ final class TimelineMediaPreviewCoordinator: CoordinatorProtocol {
         
         viewModel = TimelineMediaPreviewViewModel(context: parameters.context,
                                                   mediaProvider: parameters.mediaProvider,
-                                                  userIndicatorController: parameters.userIndicatorController)
+                                                  userIndicatorController: parameters.userIndicatorController,
+                                                  appMediator: parameters.appMediator)
     }
     
     func start() {
@@ -69,6 +71,6 @@ final class TimelineMediaPreviewCoordinator: CoordinatorProtocol {
     }
         
     func toPresentable() -> AnyView {
-        AnyView(TimelineMediaPreviewView(context: viewModel.context))
+        AnyView(TimelineMediaPreviewScreen(context: viewModel.context))
     }
 }

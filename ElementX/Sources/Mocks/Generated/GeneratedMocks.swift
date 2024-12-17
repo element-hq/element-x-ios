@@ -8,6 +8,7 @@ import Combine
 import Foundation
 import LocalAuthentication
 import MatrixRustSDK
+import Photos
 import SwiftUI
 class AnalyticsClientMock: AnalyticsClientProtocol {
     var isRunning: Bool {
@@ -12325,6 +12326,79 @@ class PHGPostHogMock: PHGPostHogProtocol {
             self.screenPropertiesReceivedInvocations.append((screenTitle: screenTitle, properties: properties))
         }
         screenPropertiesClosure?(screenTitle, properties)
+    }
+}
+class PhotoLibraryManagerMock: PhotoLibraryManagerProtocol {
+
+    //MARK: - add
+
+    var addAtUnderlyingCallsCount = 0
+    var addAtCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return addAtUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addAtUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addAtUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addAtUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var addAtCalled: Bool {
+        return addAtCallsCount > 0
+    }
+    var addAtReceivedArguments: (type: PHAssetResourceType, url: URL)?
+    var addAtReceivedInvocations: [(type: PHAssetResourceType, url: URL)] = []
+
+    var addAtUnderlyingReturnValue: Result<Void, PhotoLibraryError>!
+    var addAtReturnValue: Result<Void, PhotoLibraryError>! {
+        get {
+            if Thread.isMainThread {
+                return addAtUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, PhotoLibraryError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addAtUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addAtUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addAtUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var addAtClosure: ((PHAssetResourceType, URL) async -> Result<Void, PhotoLibraryError>)?
+
+    func add(_ type: PHAssetResourceType, at url: URL) async -> Result<Void, PhotoLibraryError> {
+        addAtCallsCount += 1
+        addAtReceivedArguments = (type: type, url: url)
+        DispatchQueue.main.async {
+            self.addAtReceivedInvocations.append((type: type, url: url))
+        }
+        if let addAtClosure = addAtClosure {
+            return await addAtClosure(type, url)
+        } else {
+            return addAtReturnValue
+        }
     }
 }
 class PollInteractionHandlerMock: PollInteractionHandlerProtocol {

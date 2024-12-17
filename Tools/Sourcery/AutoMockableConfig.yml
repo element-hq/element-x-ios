@@ -9,4 +9,4 @@ output:
   ../../ElementX/Sources/Mocks/Generated/GeneratedMocks.swift
 args:
   automMockableTestableImports: []
-  autoMockableImports: [AnalyticsEvents, AVFoundation, Combine, Foundation, LocalAuthentication, MatrixRustSDK, SwiftUI]
+  autoMockableImports: [AnalyticsEvents, AVFoundation, Combine, Foundation, LocalAuthentication, MatrixRustSDK, Photos, SwiftUI]
