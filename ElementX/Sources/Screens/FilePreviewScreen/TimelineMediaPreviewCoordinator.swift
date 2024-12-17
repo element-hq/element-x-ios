@@ -51,6 +51,7 @@ final class TimelineMediaPreviewCoordinator: CoordinatorProtocol {
         
         viewModel = TimelineMediaPreviewViewModel(context: parameters.context,
                                                   mediaProvider: parameters.mediaProvider,
+                                                  photoLibraryManager: PhotoLibraryManager(),
                                                   userIndicatorController: parameters.userIndicatorController,
                                                   appMediator: parameters.appMediator)
     }

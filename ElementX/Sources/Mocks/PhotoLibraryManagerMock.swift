@@ -9,13 +9,13 @@ import Foundation
 
 extension PhotoLibraryManagerMock {
     struct Configuration {
-        let authorizationDenied: Bool
+        var authorizationDenied = false
     }
     
     // swiftlint:disable:next cyclomatic_complexity
     convenience init(_ configuration: Configuration) {
         self.init()
         
-        addAtReturnValue = configuration.authorizationDenied ? .failure(PhotoLibraryError.notAuthorized) : .success(())
+        addResourceAtReturnValue = configuration.authorizationDenied ? .failure(PhotoLibraryManagerError.notAuthorized) : .success(())
     }
 }

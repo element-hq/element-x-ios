@@ -212,6 +212,7 @@ struct TimelineMediaPreviewScreen_Previews: PreviewProvider {
                                                             viewModel: TimelineViewModel.mock(timelineKind: .media(.mediaFilesScreen)),
                                                             namespace: namespace),
                                              mediaProvider: MediaProviderMock(configuration: .init()),
+                                             photoLibraryManager: PhotoLibraryManagerMock(.init()),
                                              userIndicatorController: UserIndicatorControllerMock(),
                                              appMediator: AppMediatorMock())
     }

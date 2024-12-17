@@ -12330,17 +12330,17 @@ class PHGPostHogMock: PHGPostHogProtocol {
 }
 class PhotoLibraryManagerMock: PhotoLibraryManagerProtocol {
 
-    //MARK: - add
+    //MARK: - addResource
 
-    var addAtUnderlyingCallsCount = 0
-    var addAtCallsCount: Int {
+    var addResourceAtUnderlyingCallsCount = 0
+    var addResourceAtCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return addAtUnderlyingCallsCount
+                return addResourceAtUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = addAtUnderlyingCallsCount
+                    returnValue = addResourceAtUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -12348,29 +12348,29 @@ class PhotoLibraryManagerMock: PhotoLibraryManagerProtocol {
         }
         set {
             if Thread.isMainThread {
-                addAtUnderlyingCallsCount = newValue
+                addResourceAtUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    addAtUnderlyingCallsCount = newValue
+                    addResourceAtUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var addAtCalled: Bool {
-        return addAtCallsCount > 0
+    var addResourceAtCalled: Bool {
+        return addResourceAtCallsCount > 0
     }
-    var addAtReceivedArguments: (type: PHAssetResourceType, url: URL)?
-    var addAtReceivedInvocations: [(type: PHAssetResourceType, url: URL)] = []
+    var addResourceAtReceivedArguments: (type: PHAssetResourceType, url: URL)?
+    var addResourceAtReceivedInvocations: [(type: PHAssetResourceType, url: URL)] = []
 
-    var addAtUnderlyingReturnValue: Result<Void, PhotoLibraryError>!
-    var addAtReturnValue: Result<Void, PhotoLibraryError>! {
+    var addResourceAtUnderlyingReturnValue: Result<Void, PhotoLibraryManagerError>!
+    var addResourceAtReturnValue: Result<Void, PhotoLibraryManagerError>! {
         get {
             if Thread.isMainThread {
-                return addAtUnderlyingReturnValue
+                return addResourceAtUnderlyingReturnValue
             } else {
-                var returnValue: Result<Void, PhotoLibraryError>? = nil
+                var returnValue: Result<Void, PhotoLibraryManagerError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = addAtUnderlyingReturnValue
+                    returnValue = addResourceAtUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -12378,26 +12378,26 @@ class PhotoLibraryManagerMock: PhotoLibraryManagerProtocol {
         }
         set {
             if Thread.isMainThread {
-                addAtUnderlyingReturnValue = newValue
+                addResourceAtUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    addAtUnderlyingReturnValue = newValue
+                    addResourceAtUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var addAtClosure: ((PHAssetResourceType, URL) async -> Result<Void, PhotoLibraryError>)?
+    var addResourceAtClosure: ((PHAssetResourceType, URL) async -> Result<Void, PhotoLibraryManagerError>)?
 
-    func add(_ type: PHAssetResourceType, at url: URL) async -> Result<Void, PhotoLibraryError> {
-        addAtCallsCount += 1
-        addAtReceivedArguments = (type: type, url: url)
+    func addResource(_ type: PHAssetResourceType, at url: URL) async -> Result<Void, PhotoLibraryManagerError> {
+        addResourceAtCallsCount += 1
+        addResourceAtReceivedArguments = (type: type, url: url)
         DispatchQueue.main.async {
-            self.addAtReceivedInvocations.append((type: type, url: url))
+            self.addResourceAtReceivedInvocations.append((type: type, url: url))
         }
-        if let addAtClosure = addAtClosure {
-            return await addAtClosure(type, url)
+        if let addResourceAtClosure = addResourceAtClosure {
+            return await addResourceAtClosure(type, url)
         } else {
-            return addAtReturnValue
+            return addResourceAtReturnValue
         }
     }
 }

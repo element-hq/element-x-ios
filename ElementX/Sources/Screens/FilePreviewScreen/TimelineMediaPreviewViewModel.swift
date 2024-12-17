@@ -24,7 +24,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     
     init(context: TimelineMediaPreviewContext,
          mediaProvider: MediaProviderProtocol,
-         photoLibraryManager: PhotoLibraryManagerProtocol = PhotoLibraryManager(),
+         photoLibraryManager: PhotoLibraryManagerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          appMediator: AppMediatorProtocol) {
         timelineViewModel = context.viewModel
@@ -120,15 +120,15 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                 state.bindings.fileToExport = .init(url: fileURL)
                 return // Don't show the indicator.
             case is ImageRoomTimelineItem:
-                try await photoLibraryManager.add(.photo, at: fileURL).get()
+                try await photoLibraryManager.addResource(.photo, at: fileURL).get()
             case is VideoRoomTimelineItem:
-                try await photoLibraryManager.add(.video, at: fileURL).get()
+                try await photoLibraryManager.addResource(.video, at: fileURL).get()
             default:
                 break
             }
             
             showSavedIndicator()
-        } catch PhotoLibraryError.notAuthorized {
+        } catch PhotoLibraryManagerError.notAuthorized {
             MXLog.error("Not authorised to save item to photo library")
             state.bindings.alertInfo = .init(id: .authorizationRequired,
                                              title: L10n.dialogPermissionPhotoLibraryTitleIos(InfoPlistReader.main.bundleDisplayName),

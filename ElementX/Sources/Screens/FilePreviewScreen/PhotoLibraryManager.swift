@@ -7,18 +7,18 @@
 
 import Photos
 
-enum PhotoLibraryError: Error {
+enum PhotoLibraryManagerError: Error {
     case notAuthorized
     case unknown(Error)
 }
 
 // sourcery: AutoMockable
 protocol PhotoLibraryManagerProtocol {
-    func add(_ type: PHAssetResourceType, at url: URL) async -> Result<Void, PhotoLibraryError>
+    func addResource(_ type: PHAssetResourceType, at url: URL) async -> Result<Void, PhotoLibraryManagerError>
 }
 
 struct PhotoLibraryManager: PhotoLibraryManagerProtocol {
-    func add(_ type: PHAssetResourceType, at url: URL) async -> Result<Void, PhotoLibraryError> {
+    func addResource(_ type: PHAssetResourceType, at url: URL) async -> Result<Void, PhotoLibraryManagerError> {
         do {
             try await PHPhotoLibrary.shared().performChanges {
                 let request = PHAssetCreationRequest.forAsset()

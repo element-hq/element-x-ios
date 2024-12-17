@@ -92,9 +92,9 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         try await Task.sleep(for: .seconds(0.5))
         
         // Then the image should be saved as a photo to the user's photo library.
-        XCTAssertTrue(photoLibraryManager.addAtCalled)
-        XCTAssertEqual(photoLibraryManager.addAtReceivedArguments?.type, .photo)
-        XCTAssertEqual(photoLibraryManager.addAtReceivedArguments?.url, item.fileHandle?.url)
+        XCTAssertTrue(photoLibraryManager.addResourceAtCalled)
+        XCTAssertEqual(photoLibraryManager.addResourceAtReceivedArguments?.type, .photo)
+        XCTAssertEqual(photoLibraryManager.addResourceAtReceivedArguments?.url, item.fileHandle?.url)
     }
     
     func testSaveImageWithoutAuthorization() async throws {
@@ -110,7 +110,7 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then the user should be prompted to allow access.
-        XCTAssertTrue(photoLibraryManager.addAtCalled)
+        XCTAssertTrue(photoLibraryManager.addResourceAtCalled)
         XCTAssertEqual(context.alertInfo?.id, .authorizationRequired)
     }
     
@@ -126,9 +126,9 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         try await Task.sleep(for: .seconds(0.5))
         
         // Then the video should be saved as a video in the user's photo library.
-        XCTAssertTrue(photoLibraryManager.addAtCalled)
-        XCTAssertEqual(photoLibraryManager.addAtReceivedArguments?.type, .video)
-        XCTAssertEqual(photoLibraryManager.addAtReceivedArguments?.url, item.fileHandle?.url)
+        XCTAssertTrue(photoLibraryManager.addResourceAtCalled)
+        XCTAssertEqual(photoLibraryManager.addResourceAtReceivedArguments?.type, .video)
+        XCTAssertEqual(photoLibraryManager.addResourceAtReceivedArguments?.url, item.fileHandle?.url)
     }
     
     func testSaveFile() async throws {
@@ -143,7 +143,7 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         try await Task.sleep(for: .seconds(0.5))
         
         // Then the binding should be set for the user to export the file to their specified location.
-        XCTAssertFalse(photoLibraryManager.addAtCalled)
+        XCTAssertFalse(photoLibraryManager.addResourceAtCalled)
         XCTAssertNotNil(context.fileToExport)
         XCTAssertEqual(context.fileToExport?.url, item.fileHandle?.url)
     }
