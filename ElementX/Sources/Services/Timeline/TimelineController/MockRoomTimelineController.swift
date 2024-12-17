@@ -36,17 +36,19 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     init(timelineKind: TimelineKind = .live, listenForSignals: Bool = false) {
         self.timelineKind = timelineKind
-        paginationState = PaginationState(backward: .idle, forward: .timelineEndReached)
-        callbacks.send(.isLive(true))
         
         switch timelineKind {
         case .media:
+            paginationState = PaginationState(backward: .timelineEndReached, forward: .timelineEndReached)
             timelineItems = (0..<5).reduce([]) { partialResult, _ in
                 partialResult + [RoomTimelineItemFixtures.separator] + RoomTimelineItemFixtures.mediaChunk
             }
         default:
-            break
+            paginationState = PaginationState(backward: .idle, forward: .timelineEndReached)
         }
+        
+        callbacks.send(.paginationState(paginationState))
+        callbacks.send(.isLive(true))
         
         guard listenForSignals else { return }
         

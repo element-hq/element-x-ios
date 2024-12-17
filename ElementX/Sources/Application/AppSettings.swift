@@ -30,6 +30,8 @@ final class AppSettings {
         case hasRunNotificationPermissionsOnboarding
         case hasRunIdentityConfirmationOnboarding
         
+        case frequentlyUsedSystemEmojis
+        
         case enableNotifications
         case enableInAppNotifications
         case pusherProfileTag
@@ -42,7 +44,6 @@ final class AppSettings {
         case hideTimelineMedia
         
         case elementCallBaseURLOverride
-        case elementCallEncryptionEnabled
         
         // Feature flags
         case slidingSyncDiscovery
@@ -236,6 +237,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding, defaultValue: false, storageType: .userDefaults(store))
     var hasRunIdentityConfirmationOnboarding
+    
+    @UserPreference(key: UserDefaultsKeys.frequentlyUsedSystemEmojis, defaultValue: [FrequentlyUsedEmoji](), storageType: .userDefaults(store))
+    var frequentlyUsedSystemEmojis
     
     // MARK: - Home Screen
     

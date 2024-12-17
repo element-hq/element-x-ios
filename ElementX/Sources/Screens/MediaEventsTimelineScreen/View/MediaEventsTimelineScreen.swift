@@ -34,6 +34,9 @@ struct MediaEventsTimelineScreen: View {
             }
             .environmentObject(context.viewState.activeTimelineContextProvider())
             .environment(\.timelineContext, context.viewState.activeTimelineContextProvider())
+            .onChange(of: context.screenMode) { _, _ in
+                context.send(viewAction: .changedScreenMode)
+            }
     }
     
     // The scale effects do the following:
@@ -44,7 +47,7 @@ struct MediaEventsTimelineScreen: View {
     // * flip the items on both axes have them render correctly
     @ViewBuilder
     private var mainContent: some View {
-        if context.viewState.groups.isEmpty, !context.viewState.isBackPaginating {
+        if context.viewState.shouldShowEmptyState {
             emptyState
         } else {
             ScrollView {
@@ -60,9 +63,6 @@ struct MediaEventsTimelineScreen: View {
                 }
             }
             .scaleEffect(.init(width: 1, height: -1))
-            .onChange(of: context.screenMode) { _, _ in
-                context.send(viewAction: .changedScreenMode)
-            }
         }
     }
     
@@ -76,12 +76,7 @@ struct MediaEventsTimelineScreen: View {
                         Button {
                             tappedItem(item)
                         } label: {
-                            Color.clear // Let the image aspect fill in place
-                                .aspectRatio(1, contentMode: .fill)
-                                .overlay {
-                                    viewForTimelineItem(item)
-                                }
-                                .clipped()
+                            viewForTimelineItem(item)
                                 .scaleEffect(scale(for: item, isGridLayout: true))
                         }
                         .zoomTransitionSource(id: item.identifier, in: zoomTransition)
@@ -260,7 +255,8 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
         MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: makeTimelineViewModel(timelineKind: timelineKind),
                                            filesTimelineViewModel: makeTimelineViewModel(timelineKind: timelineKind),
                                            mediaProvider: MediaProviderMock(configuration: .init()),
-                                           screenMode: screenMode,
+                                           initialViewState: .init(hasReachedTimelineStart: true,
+                                                                   bindings: .init(screenMode: screenMode)),
                                            userIndicatorController: UserIndicatorControllerMock())
     }
     
