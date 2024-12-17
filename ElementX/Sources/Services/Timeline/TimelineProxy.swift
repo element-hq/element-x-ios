@@ -155,12 +155,14 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func retryDecryption(for sessionID: String) async {
-        MXLog.info("Retrying decryption for sessionID: \(sessionID)")
+    func retryDecryption(sessionIDs: [String]?) async {
+        let sessionIDs = sessionIDs ?? []
+        
+        MXLog.info("Retrying decryption for sessionIDs: \(sessionIDs)")
         
         await Task.dispatch(on: .global()) { [weak self] in
-            self?.timeline.retryDecryption(sessionIds: [sessionID])
-            MXLog.info("Finished retrying decryption for sessionID: \(sessionID)")
+            self?.timeline.retryDecryption(sessionIds: sessionIDs)
+            MXLog.info("Finished retrying decryption for sessionID: \(sessionIDs)")
         }
     }
     
