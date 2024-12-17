@@ -15,6 +15,7 @@ struct SecurityAndPrivacyScreen: View {
         Form {
             roomAccessSection
             encryptionSection
+            historySection
         }
         .compoundList()
         .navigationBarTitleDisplayMode(.inline)
@@ -62,6 +63,23 @@ struct SecurityAndPrivacyScreen: View {
         }
     }
     
+    private var historySection: some View {
+        Section {
+            ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomHistorySinceSelectingOptionTitle),
+                    kind: .selection(isSelected: context.desiredSettings.historyVisibility == .sinceSelection) { context.desiredSettings.historyVisibility = .sinceSelection })
+            if context.desiredSettings.accessType == .anyone, !context.desiredSettings.isEncryptionEnabled {
+                ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomHistoryAnyoneOptionTitle),
+                        kind: .selection(isSelected: context.desiredSettings.historyVisibility == .anyone) { context.desiredSettings.historyVisibility = .anyone })
+            } else {
+                ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomHistorySinceInviteOptionTitle),
+                        kind: .selection(isSelected: context.desiredSettings.historyVisibility == .sinceInvite) { context.desiredSettings.historyVisibility = .sinceInvite })
+            }
+        } header: {
+            Text(L10n.screenSecurityAndPrivacyRoomHistorySectionHeader)
+                .compoundListSectionHeader()
+        }
+    }
+    
     @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
         ToolbarItem(placement: .confirmationAction) {
@@ -79,9 +97,17 @@ struct SecurityAndPrivacyScreen: View {
 struct SecurityAndPrivacyScreen_Previews: PreviewProvider {
     static let inviteOnlyViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(joinRule: .invite)))
     
+    static let publicViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false, joinRule: .public)))
+    
     static var previews: some View {
         NavigationStack {
             SecurityAndPrivacyScreen(context: inviteOnlyViewModel.context)
         }
+        .previewDisplayName("Private invite only room")
+        
+        NavigationStack {
+            SecurityAndPrivacyScreen(context: publicViewModel.context)
+        }
+        .previewDisplayName("Public room")
     }
 }

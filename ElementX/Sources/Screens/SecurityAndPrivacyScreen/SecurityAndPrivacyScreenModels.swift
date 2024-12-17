@@ -21,8 +21,11 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     }
     
     init(accessType: SecurityAndPrivacyRoomAccessType,
-         isEncryptionEnabled: Bool) {
-        let settings = SecurityAndPrivacySettings(accessType: accessType, isEncryptionEnabled: isEncryptionEnabled)
+         isEncryptionEnabled: Bool,
+         historyVisibility: SecurityAndPrivacyHistoryVisibility) {
+        let settings = SecurityAndPrivacySettings(accessType: accessType,
+                                                  isEncryptionEnabled: isEncryptionEnabled,
+                                                  historyVisibility: historyVisibility)
         currentSettings = settings
         bindings = SecurityAndPrivacyScreenViewStateBindings(desiredSettings: settings)
     }
@@ -36,6 +39,7 @@ struct SecurityAndPrivacyScreenViewStateBindings {
 struct SecurityAndPrivacySettings: Equatable {
     var accessType: SecurityAndPrivacyRoomAccessType
     var isEncryptionEnabled: Bool
+    var historyVisibility: SecurityAndPrivacyHistoryVisibility
 }
 
 enum SecurityAndPrivacyRoomAccessType {
@@ -51,4 +55,19 @@ enum SecurityAndPrivacyAlertType {
 enum SecurityAndPrivacyScreenViewAction {
     case save
     case tryUpdatingEncryption(Bool)
+}
+
+enum SecurityAndPrivacyHistoryVisibility {
+    case sinceSelection
+    case sinceInvite
+    case anyone
+    
+    var isAllowedInPublicRoom: Bool {
+        switch self {
+        case .anyone, .sinceSelection:
+            true
+        default:
+            false
+        }
+    }
 }

@@ -170,6 +170,7 @@ extension RoomInfo {
                   numUnreadNotifications: 0,
                   numUnreadMentions: 0,
                   pinnedEventIds: Array(configuration.pinnedEventIDs),
-                  joinRule: configuration.joinRule)
+                  joinRule: configuration.joinRule,
+                  historyVisibility: nil)
     }
 }

@@ -274,6 +274,7 @@
 "dialog_permission_microphone_description_ios" = "Grant access so you can record and send messages with audio.";
 "dialog_permission_microphone_title_ios" = "%1$@ needs permission to access your microphone.";
 "dialog_permission_notification" = "In order to let the application display notifications, please grant the permission in the system settings.";
+"dialog_permission_photo_library_title_ios" = "%1$@ does not have access to your photo library.";
 "dialog_title_confirmation" = "Confirmation";
 "dialog_title_warning" = "Warning";
 "dialog_unsaved_changes_description_ios" = "Your changes won’t be saved";
@@ -448,6 +449,10 @@
 "screen_security_and_privacy_room_access_invite_only_option_description" = "People can only join if they are invited";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Invite only";
 "screen_security_and_privacy_room_access_section_title" = "Room access";
+"screen_security_and_privacy_room_history_anyone_option_title" = "Anyone";
+"screen_security_and_privacy_room_history_section_header" = "Who can read history";
+"screen_security_and_privacy_room_history_since_invite_option_title" = "Members only since they were invited";
+"screen_security_and_privacy_room_history_since_selecting_option_title" = "Members only since selecting this option";
 "screen_security_and_privacy_title" = "Security & privacy";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
