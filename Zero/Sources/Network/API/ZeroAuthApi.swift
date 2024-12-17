@@ -7,6 +7,8 @@ protocol ZeroAuthApiProtocol {
     func loginSSO(email: String, password: String) async throws -> Result<ZSSOToken, Error>
     
     func fetchSSOToken() async throws -> Result<ZSSOToken, Error>
+    
+    func loginWithWeb3(web3Token: String) async throws -> Result<ZSSOToken, Error>
 }
 
 class ZeroAuthApi: ZeroAuthApiProtocol {
@@ -79,6 +81,30 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
         try await APIManager.shared.authorisedRequest(AuthEndPoints.ssoTokenEndPoint, method: .get, appSettings: appSettings)
     }
     
+    func loginWithWeb3(web3Token: String) async throws -> Result<ZSSOToken, any Error> {
+        let headers: HTTPHeaders = [
+            AuthConstants.web3AuthHeaderKey : "\(AuthConstants.web3AuthTokenPrefix) \(web3Token)"
+        ]
+        // login user
+        let authResult: Result<ZSessionDataResponse, Error> = try await APIManager.shared.request(AuthEndPoints.nonceOrAuthoriseEndpoint, method: .post, headers: headers)
+        switch authResult {
+        case .success(let sessionData):
+            // save Access Token
+            appSettings.zeroAccessToken = sessionData.accessToken
+            // fetch SSO Token
+            let ssoResult: Result<ZSSOToken, Error> = try await fetchSSOToken()
+            switch ssoResult {
+            case .success(let ssoToken):
+                return .success(ssoToken)
+            case .failure(let error):
+                return .failure(error)
+            }
+            
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     // MARK: - Private
     
     private func fetchMatrixSession(ssoToken: String) async throws -> (Result<ZMatrixSession, Error>) {
@@ -109,10 +135,15 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
         static let loginEndPoint = "\(hostURL)api/v2/accounts/login"
         static let ssoTokenEndPoint = "\(hostURL)accounts/ssoToken"
         static let matrixSessionEndPoint = "_matrix/client/r0/login"
+        
+        static let nonceOrAuthoriseEndpoint = "\(hostURL)authentication/nonceOrAuthorize"
     }
     
     private enum AuthConstants {
         static let ssoTokenType = "org.matrix.login.jwt"
         static let origin = "https://zos.zero.tech"
+        
+        static let web3AuthHeaderKey = "Authorization"
+        static let web3AuthTokenPrefix = "Web3"
     }
 }

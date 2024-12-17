@@ -1,10 +1,10 @@
 import Foundation
 
 public struct ZCreateAccount: Encodable {
-    let user: ZCreateAccountProfile
+    let user: ZCreateAccountProfile?
     let inviteSlug: String
 
-    public init(user: ZCreateAccountProfile, inviteSlug: String) {
+    public init(user: ZCreateAccountProfile?, inviteSlug: String) {
         self.user = user
         self.inviteSlug = inviteSlug
     }
@@ -14,6 +14,13 @@ public struct ZCreateAccount: Encodable {
             user: ZCreateAccountProfile(
                 email: email, password: password, handle: email
             ),
+            inviteSlug: invite
+        )
+    }
+    
+    static func newRequest(invite: String) -> ZCreateAccount {
+        ZCreateAccount(
+            user: nil,
             inviteSlug: invite
         )
     }
