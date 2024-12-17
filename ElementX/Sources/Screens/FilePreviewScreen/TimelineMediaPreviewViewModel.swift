@@ -13,7 +13,9 @@ typealias TimelineMediaPreviewViewModelType = StateStoreViewModel<TimelineMediaP
 class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     private let timelineViewModel: TimelineViewModelProtocol
     private let mediaProvider: MediaProviderProtocol
+    private let photoLibraryManager: PhotoLibraryManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let appMediator: AppMediatorProtocol
     
     private let actionsSubject: PassthroughSubject<TimelineMediaPreviewViewModelAction, Never> = .init()
     var actions: AnyPublisher<TimelineMediaPreviewViewModelAction, Never> {
@@ -22,12 +24,14 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     
     init(context: TimelineMediaPreviewContext,
          mediaProvider: MediaProviderProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         photoLibraryManager: PhotoLibraryManagerProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol,
+         appMediator: AppMediatorProtocol) {
         timelineViewModel = context.viewModel
         self.mediaProvider = mediaProvider
-        
-        // We might not want to inject this, instead creating a new instance with a custom position and colour scheme 🤔
+        self.photoLibraryManager = photoLibraryManager
         self.userIndicatorController = userIndicatorController
+        self.appMediator = appMediator
         
         let currentItem = TimelineMediaPreviewItem(timelineItem: context.item)
         
@@ -64,10 +68,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                 MXLog.error("Received unexpected action: \(action)")
             }
         case .redactConfirmation(let item):
-            timelineViewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.id, action: .redact))
-            state.bindings.redactConfirmationItem = nil
-            state.bindings.mediaDetailsItem = nil
-            actionsSubject.send(.dismiss)
+            redactItem(item)
         case .dismiss:
             actionsSubject.send(.dismiss)
         }
@@ -108,12 +109,43 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     }
     
     private func saveCurrentItem() async {
-        guard let url = state.currentItem.fileHandle?.url else {
+        guard let fileURL = state.currentItem.fileHandle?.url else {
             MXLog.error("Unable to save an item without a URL, the button shouldn't be visible.")
             return
         }
         
-        showErrorIndicator()
+        do {
+            switch state.currentItem.timelineItem {
+            case is AudioRoomTimelineItem, is FileRoomTimelineItem:
+                state.bindings.fileToExport = .init(url: fileURL)
+                return // Don't show the indicator.
+            case is ImageRoomTimelineItem:
+                try await photoLibraryManager.addResource(.photo, at: fileURL).get()
+            case is VideoRoomTimelineItem:
+                try await photoLibraryManager.addResource(.video, at: fileURL).get()
+            default:
+                break
+            }
+            
+            showSavedIndicator()
+        } catch PhotoLibraryManagerError.notAuthorized {
+            MXLog.error("Not authorised to save item to photo library")
+            state.bindings.alertInfo = .init(id: .authorizationRequired,
+                                             title: L10n.dialogPermissionPhotoLibraryTitleIos(InfoPlistReader.main.bundleDisplayName),
+                                             primaryButton: .init(title: L10n.commonSettings) { self.appMediator.openAppSettings() },
+                                             secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+        } catch {
+            MXLog.error("Failed saving item: \(error)")
+            showErrorIndicator()
+        }
+    }
+    
+    private func redactItem(_ item: TimelineMediaPreviewItem) {
+        timelineViewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.id, action: .redact))
+        state.bindings.redactConfirmationItem = nil
+        state.bindings.mediaDetailsItem = nil
+        actionsSubject.send(.dismiss)
+        showRedactedIndicator()
     }
     
     // MARK: - Indicators
@@ -132,22 +164,38 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         userIndicatorController.retractIndicatorWithId(indicatorID)
     }
     
+    // FIXME: Add the strings and correct indicator types
     private func showDownloadErrorIndicator() {
-        // FIXME: Add the correct string and indicator type??
         userIndicatorController.submitIndicator(UserIndicator(id: downloadErrorIndicatorID,
                                                               type: .modal,
                                                               title: L10n.errorUnknown,
                                                               iconName: "exclamationmark.circle.fill"))
     }
     
+    private func showRedactedIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: statusIndicatorID,
+                                                              type: .toast,
+                                                              title: "File deleted",
+                                                              iconName: "checkmark"))
+    }
+    
+    private func showSavedIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: statusIndicatorID,
+                                                              type: .toast,
+                                                              title: "File saved",
+                                                              iconName: "checkmark"))
+    }
+    
     private func showErrorIndicator() {
-        userIndicatorController.submitIndicator(UserIndicator(id: errorIndicatorID,
-                                                              type: .modal,
+        userIndicatorController.submitIndicator(UserIndicator(id: statusIndicatorID,
+                                                              type: .toast,
                                                               title: L10n.errorUnknown,
                                                               iconName: "xmark"))
     }
     
-    private var errorIndicatorID: String { "\(Self.self)-Error" }
+    private var statusIndicatorID: String { "\(Self.self)-Status" }
+    
+    // Separate indicator IDs for downloads as these can be triggered in the background when swiping between items
     private var downloadErrorIndicatorID: String { "\(Self.self)-DownloadError" }
     private func makeDownloadIndicatorID(itemID: TimelineItemIdentifier) -> String {
         "\(Self.self)-Download-\(itemID.uniqueID.id)"

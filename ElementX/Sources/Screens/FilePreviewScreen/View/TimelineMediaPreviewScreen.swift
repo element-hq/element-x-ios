@@ -10,7 +10,7 @@ import Compound
 import QuickLook
 import SwiftUI
 
-struct TimelineMediaPreviewView: View {
+struct TimelineMediaPreviewScreen: View {
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
     
     private var currentItem: TimelineMediaPreviewItem { context.viewState.currentItem }
@@ -33,6 +33,11 @@ struct TimelineMediaPreviewView: View {
         .sheet(item: $context.mediaDetailsItem) { item in
             TimelineMediaPreviewDetailsView(item: item, context: context)
         }
+        .sheet(item: $context.fileToExport) { file in
+            TimelineMediaPreviewFileExportPicker(file: file)
+                .preferredColorScheme(.dark)
+        }
+        .alert(item: $context.alertInfo)
         .preferredColorScheme(.dark)
         .zoomTransition(sourceID: currentItem.id, in: context.viewState.transitionNamespace)
     }
@@ -102,7 +107,7 @@ struct TimelineMediaPreviewView: View {
                 Spacer()
                 
                 Button { context.send(viewAction: .saveCurrentItem) } label: {
-                    CompoundIcon(\.download)
+                    CompoundIcon(\.downloadIos)
                 }
             }
         }
@@ -179,13 +184,13 @@ private struct QuickLookView: UIViewControllerRepresentable {
 
 // MARK: - Previews
 
-struct TimelineMediaPreviewView_Previews: PreviewProvider {
+struct TimelineMediaPreviewScreen_Previews: PreviewProvider {
     @Namespace private static var namespace
     
     static let viewModel = makeViewModel()
     
     static var previews: some View {
-        QuickLookView(viewModelContext: viewModel.context)
+        TimelineMediaPreviewScreen(context: viewModel.context)
     }
     
     static func makeViewModel() -> TimelineMediaPreviewViewModel {
@@ -207,6 +212,8 @@ struct TimelineMediaPreviewView_Previews: PreviewProvider {
                                                             viewModel: TimelineViewModel.mock(timelineKind: .media(.mediaFilesScreen)),
                                                             namespace: namespace),
                                              mediaProvider: MediaProviderMock(configuration: .init()),
-                                             userIndicatorController: UserIndicatorControllerMock())
+                                             photoLibraryManager: PhotoLibraryManagerMock(.init()),
+                                             userIndicatorController: UserIndicatorControllerMock(),
+                                             appMediator: AppMediatorMock())
     }
 }

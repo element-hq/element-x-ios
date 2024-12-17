@@ -606,6 +606,10 @@ internal enum L10n {
   }
   /// In order to let the application display notifications, please grant the permission in the system settings.
   internal static var dialogPermissionNotification: String { return L10n.tr("Localizable", "dialog_permission_notification") }
+  /// %1$@ does not have access to your photo library.
+  internal static func dialogPermissionPhotoLibraryTitleIos(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "dialog_permission_photo_library_title_ios", String(describing: p1))
+  }
   /// Confirmation
   internal static var dialogTitleConfirmation: String { return L10n.tr("Localizable", "dialog_title_confirmation") }
   /// Error
