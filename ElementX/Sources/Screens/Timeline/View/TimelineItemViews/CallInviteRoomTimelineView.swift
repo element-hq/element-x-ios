@@ -16,7 +16,7 @@ struct CallInviteRoomTimelineView: View {
         Label {
             Text(L10n.screenRoomTimelineLegacyCall)
         } icon: {
-            CompoundIcon(\.voiceCall, size: .medium, relativeTo: .compound.bodyMD)
+            CompoundIcon(\.voiceCallSolid, size: .medium, relativeTo: .compound.bodyMD)
         }
         .font(.compound.bodyMD)
         .foregroundColor(.compound.textSecondary)

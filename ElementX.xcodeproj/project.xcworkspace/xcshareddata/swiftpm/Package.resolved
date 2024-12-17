@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-design-tokens",
       "state" : {
-        "revision" : "f79e05011ec3402c29ded19bcff95b5ead180991",
-        "version" : "2.1.2"
+        "revision" : "a6e96fb4436a4945423a8c068001093af4b7b315",
+        "version" : "3.0.1"
       }
     },
     {
@@ -15,7 +15,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-ios",
       "state" : {
-        "revision" : "1a70bc7f3420647843b9c18748982c61ef7d2245"
+        "revision" : "9325643cb4d22150881c5bf79e1e6e3c5a87ea89"
       }
     },
     {

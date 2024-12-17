@@ -107,7 +107,7 @@ struct TimelineMediaPreviewScreen: View {
                 Spacer()
                 
                 Button { context.send(viewAction: .saveCurrentItem) } label: {
-                    CompoundIcon(\.download)
+                    CompoundIcon(\.downloadIos)
                 }
             }
         }
@@ -184,13 +184,13 @@ private struct QuickLookView: UIViewControllerRepresentable {
 
 // MARK: - Previews
 
-struct TimelineMediaPreviewView_Previews: PreviewProvider {
+struct TimelineMediaPreviewScreen_Previews: PreviewProvider {
     @Namespace private static var namespace
     
     static let viewModel = makeViewModel()
     
     static var previews: some View {
-        QuickLookView(viewModelContext: viewModel.context)
+        TimelineMediaPreviewScreen(context: viewModel.context)
     }
     
     static func makeViewModel() -> TimelineMediaPreviewViewModel {
