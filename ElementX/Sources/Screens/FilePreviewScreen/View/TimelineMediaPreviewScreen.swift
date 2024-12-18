@@ -240,8 +240,12 @@ struct TimelineMediaPreviewScreen_Previews: PreviewProvider {
                                                        thumbnailSource: nil,
                                                        contentType: .pdf))
         
+        let timelineController = MockRoomTimelineController(timelineKind: .media(.mediaFilesScreen))
+        timelineController.timelineItems = [item]
+        
         return TimelineMediaPreviewViewModel(context: .init(item: item,
-                                                            viewModel: TimelineViewModel.mock(timelineKind: .media(.mediaFilesScreen)),
+                                                            viewModel: TimelineViewModel.mock(timelineKind: timelineController.timelineKind,
+                                                                                              timelineController: timelineController),
                                                             namespace: namespace),
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              photoLibraryManager: PhotoLibraryManagerMock(.init()),
