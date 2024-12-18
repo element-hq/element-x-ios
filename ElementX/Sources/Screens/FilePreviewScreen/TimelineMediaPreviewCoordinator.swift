@@ -72,6 +72,9 @@ final class TimelineMediaPreviewCoordinator: CoordinatorProtocol {
     }
         
     func toPresentable() -> AnyView {
-        AnyView(TimelineMediaPreviewScreen(context: viewModel.context))
+        // Calling the completion onDisappear isn't ideal, but we don't push away from the screen so it should be
+        // a good enough approximation of didDismiss, given that the only other option is our navigation callbacks
+        // which are essentially willDismiss callbacks and happen too early for this particular completion handler.
+        AnyView(TimelineMediaPreviewScreen(context: viewModel.context, onDisappear: parameters.context.completion))
     }
 }
