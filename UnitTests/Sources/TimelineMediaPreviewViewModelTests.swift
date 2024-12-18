@@ -104,7 +104,6 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.state.currentItem.contentType, "JPEG image")
         
         // When choosing to save the image.
-        let item = context.viewState.currentItem
         let deferred = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
         context.send(viewAction: .saveCurrentItem)
         try await deferred.fulfill()
@@ -164,7 +163,7 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
     
     private func loadInitialItem() async throws {
         let deferred = deferFulfillment(viewModel.state.fileLoadedPublisher) { _ in true }
-        context.send(viewAction: .updateCurrentItem(context.viewState.previewItems[0]))
+        context.send(viewAction: .updateCurrentItem(context.viewState.previewItems[context.viewState.initialItemIndex]))
         try await deferred.fulfill()
     }
     
