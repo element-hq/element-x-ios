@@ -211,12 +211,12 @@ struct MediaEventsTimelineScreen: View {
     }
     
     func scale(for item: RoomTimelineItemViewState, isGridLayout: Bool) -> CGSize {
-        guard item.identifier != context.viewState.currentPreviewItemID else {
+        if item.identifier == context.viewState.currentPreviewItemID, #available(iOS 18.0, *) {
             // Remove the flip when presenting a preview so that the zoom transition is the right way up 🙃
-            return CGSize(width: 1, height: 1)
+            CGSize(width: 1, height: 1)
+        } else {
+            CGSize(width: isGridLayout ? -1 : 1, height: -1)
         }
-        
-        return CGSize(width: isGridLayout ? -1 : 1, height: -1)
     }
 }
 

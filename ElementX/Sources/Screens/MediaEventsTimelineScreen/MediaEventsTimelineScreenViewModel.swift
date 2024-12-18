@@ -157,8 +157,8 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         
         actionsSubject.send(.viewItem(.init(item: item,
                                             viewModel: activeTimelineViewModel,
-                                            namespace: namespace) { [weak self] in
-                self?.state.currentPreviewItemID = nil
+                                            namespace: namespace) { [weak self] itemID in
+                self?.state.currentPreviewItemID = itemID
             }))
         
         // Set the current item in the next run loop so that (hopefully) the presentation will be ready before we flip the thumbnail.
