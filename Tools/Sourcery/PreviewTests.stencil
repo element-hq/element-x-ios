@@ -26,9 +26,9 @@ extension PreviewTests {
     // MARK: - PreviewProvider
 
     {% for type in types.types where (type.implements.TestablePreview or type.based.TestablePreview or type|annotated:"TestablePreview") and type.name != "TestablePreview" %}
-    func test_{{ type.name|lowerFirstLetter|replace:"_Previews", "" }}() {
+    func test_{{ type.name|lowerFirstLetter|replace:"_Previews", "" }}() async throws {
         for preview in {{ type.name }}._allPreviews {
-            assertSnapshots(matching: preview)
+            try await assertSnapshots(matching: preview)
         }
     }
     {%- if not forloop.last %}
