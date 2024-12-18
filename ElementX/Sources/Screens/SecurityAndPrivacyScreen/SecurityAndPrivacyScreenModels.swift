@@ -20,6 +20,16 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
         currentSettings != bindings.desiredSettings
     }
     
+    var availableVisibilityOptions: [SecurityAndPrivacyHistoryVisibility] {
+        var options = [SecurityAndPrivacyHistoryVisibility.sinceSelection]
+        if !bindings.desiredSettings.isEncryptionEnabled, bindings.desiredSettings.accessType == .anyone {
+            options.append(.anyone)
+        } else {
+            options.append(.sinceInvite)
+        }
+        return options
+    }
+    
     init(accessType: SecurityAndPrivacyRoomAccessType,
          isEncryptionEnabled: Bool,
          historyVisibility: SecurityAndPrivacyHistoryVisibility) {
