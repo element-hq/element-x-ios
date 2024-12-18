@@ -1,5 +1,5 @@
 {
-  "originHash" : "f9011692b20e61e6f0df94b6e0946a4c8f4d58429a88998f249712bb1fee47f1",
+  "originHash" : "3be869cc9d2c70d5f48c5d223cb058fead2b4e3d1ef5d7a4d7f9905beed66c43",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -52,6 +52,15 @@
       "state" : {
         "revision" : "76062513434421cb6c8a1ae1d4f8368a7ebc2da3",
         "version" : "1.7.18"
+      }
+    },
+    {
+      "identity" : "embeddedwebapp",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/stefanceriu/EmbeddedWebApp",
+      "state" : {
+        "branch" : "main",
+        "revision" : "5566ed5e196c16669f8e5c664dd0e795278cecaf"
       }
     },
     {

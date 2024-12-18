@@ -195,6 +195,7 @@ targets:
     # - target: NCE
     - package: MatrixRustSDK
       embed: true
+    - package: EmbeddedWebApp
     - package: Compound
     - package: Algorithms
     - package: AnalyticsEvents

@@ -63,6 +63,9 @@ packages:
     url: https://github.com/element-hq/matrix-rust-components-swift
     exactVersion: 1.0.82
     # path: ../matrix-rust-sdk
+  EmbeddedWebApp:
+    url: https://github.com/stefanceriu/EmbeddedWebApp
+    branch: main
   Compound:
     url: https://github.com/element-hq/compound-ios
     revision: 9325643cb4d22150881c5bf79e1e6e3c5a87ea89

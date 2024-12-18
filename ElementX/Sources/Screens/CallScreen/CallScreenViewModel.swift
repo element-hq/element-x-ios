@@ -10,6 +10,8 @@ import CallKit
 import Combine
 import SwiftUI
 
+import EmbeddedWebApp
+
 typealias CallScreenViewModelType = StateStoreViewModel<CallScreenViewState, CallScreenViewAction>
 
 class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol {
@@ -132,10 +134,13 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     
     private func setupCall() {
         switch configuration.kind {
-        case .genericCallLink(let url):
-            state.url = url
-            // We need widget messaging to work before enabling CallKit, otherwise mute, hangup etc do nothing.
+        case .genericCallLink:
+            guard let url = EmbeddedWebApp.appURL else {
+                fatalError("Something is wrong in the embedded web app module")
+            }
             
+            state.url = url
+        // We need widget messaging to work before enabling CallKit, otherwise mute, hangup etc do nothing.
         case .roomCall(let roomProxy, let clientProxy, let clientID, let elementCallBaseURL, let elementCallBaseURLOverride, let colorScheme, let notifyOtherParticipants):
             Task { [weak self] in
                 guard let self else { return }
