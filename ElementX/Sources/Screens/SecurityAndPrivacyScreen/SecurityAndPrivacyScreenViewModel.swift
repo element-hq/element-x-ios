@@ -53,29 +53,13 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     
     private func setupSubscriptions() {
         context.$viewState
-            .map(\.bindings.desiredSettings.accessType)
+            .map(\.availableVisibilityOptions)
+            .dropFirst()
             .removeDuplicates()
-            // Use this otherwise the value won't update properly in the view
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] desiredAcessType in
-                guard let self else { return }
-                if (desiredAcessType == .anyone && !state.bindings.desiredSettings.historyVisibility.isAllowedInPublicRoom) ||
-                    (desiredAcessType != .anyone && state.bindings.desiredSettings.historyVisibility == .anyone) {
-                    self.state.bindings.desiredSettings.historyVisibility = .sinceSelection
-                }
-            }
-            .store(in: &cancellables)
-        
-        context.$viewState
-            .map(\.bindings.desiredSettings.isEncryptionEnabled)
-            .removeDuplicates()
-            // Use this otherwise the value won't update properly in the view
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] desiredIsEncryptionEnabled in
-                guard let self else { return }
-                if desiredIsEncryptionEnabled, state.bindings.desiredSettings.historyVisibility == .anyone {
-                    self.state.bindings.desiredSettings.historyVisibility = .sinceSelection
-                }
+            // When the available options changes always default to `sinceSelection`
+            .sink { [weak self] _ in
+                self?.state.bindings.desiredSettings.historyVisibility = .sinceSelection
             }
             .store(in: &cancellables)
     }
