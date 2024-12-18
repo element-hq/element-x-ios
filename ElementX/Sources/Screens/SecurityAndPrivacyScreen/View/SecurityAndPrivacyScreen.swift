@@ -14,6 +14,11 @@ struct SecurityAndPrivacyScreen: View {
     var body: some View {
         Form {
             roomAccessSection
+            if context.desiredSettings.accessType != .inviteOnly {
+                visibilitySection
+                addressSection
+                roomDirectoryVisibilitySection
+            }
             encryptionSection
             historySection
         }
@@ -43,7 +48,7 @@ struct SecurityAndPrivacyScreen: View {
     
     @ViewBuilder
     private var encryptionSection: some View {
-        let encryptionBinding = Binding<Bool>(get: {
+        let binding = Binding<Bool>(get: {
             context.desiredSettings.isEncryptionEnabled
         }, set: { newValue in
             context.send(viewAction: .tryUpdatingEncryption(newValue))
@@ -51,7 +56,7 @@ struct SecurityAndPrivacyScreen: View {
         
         Section {
             ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyEncryptionToggleTitle),
-                    kind: .toggle(encryptionBinding))
+                    kind: .toggle(binding))
                 // We don't allow editing the encryption state if the current setting on the server is `enabled`
                 .disabled(context.viewState.currentSettings.isEncryptionEnabled)
         } header: {
@@ -84,6 +89,48 @@ struct SecurityAndPrivacyScreen: View {
         }
     }
     
+    private var visibilitySection: some View {
+        Section {
+            EmptyView()
+        } header: {
+            Text(L10n.screenSecurityAndPrivacyRoomVisibilitySectionTitle)
+                .compoundListSectionHeader()
+        } footer: {
+            Text(L10n.screenSecurityAndPrivacyRoomVisibilitySectionDescription)
+                .compoundListSectionFooter()
+        }
+    }
+    
+    private var addressSection: some View {
+        Section {
+            EmptyView()
+        } header: {
+            Text(L10n.screenSecurityAndPrivacyRoomAddressSectionTitle)
+                .compoundListSectionHeader()
+        } footer: {
+            Text(L10n.screenSecurityAndPrivacyRoomAddressSectionFooter)
+                .compoundListSectionFooter()
+        }
+    }
+    
+    @ViewBuilder
+    private var roomDirectoryVisibilitySection: some View {
+        let binding = Binding<Bool>(get: {
+            context.desiredSettings.isVisibileInRoomDirectory ?? false
+        }, set: { newValue in
+            context.desiredSettings.isVisibileInRoomDirectory = newValue
+        })
+        
+        Section {
+            ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomDirectoryVisibilityToggleTitle),
+                    details: .isWaiting(context.desiredSettings.isVisibileInRoomDirectory == nil),
+                    kind: context.desiredSettings.isVisibileInRoomDirectory == nil ? .label : .toggle(binding))
+        } footer: {
+            Text(L10n.screenSecurityAndPrivacyRoomDirectoryVisibilitySectionFooter)
+                .compoundListSectionFooter()
+        }
+    }
+    
     @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
         ToolbarItem(placement: .confirmationAction) {
@@ -101,7 +148,7 @@ struct SecurityAndPrivacyScreen: View {
 struct SecurityAndPrivacyScreen_Previews: PreviewProvider {
     static let inviteOnlyViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(joinRule: .invite)))
     
-    static let publicViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false, joinRule: .public)))
+    static let publicViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false, joinRule: .public, isVisibleInPublicDirectory: true)))
     
     static var previews: some View {
         NavigationStack {
@@ -112,6 +159,7 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider {
         NavigationStack {
             SecurityAndPrivacyScreen(context: publicViewModel.context)
         }
+        .snapshotPreferences(delay: 0.1)
         .previewDisplayName("Public room")
     }
 }

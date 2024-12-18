@@ -61,7 +61,7 @@ extension RoomInfo {
                   numUnreadMentions: 0,
                   pinnedEventIds: [],
                   joinRule: .invite,
-                  historyVisibility: nil)
+                  historyVisibility: .shared)
     }
 }
 

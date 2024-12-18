@@ -110,6 +110,8 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     func withdrawVerificationAndResend(userIDs: [String], sendHandle: SendHandleProxy) async -> Result<Void, RoomProxyError>
     
+    func isVisibleInRoomDirectory() async -> Result<Bool, RoomProxyError>
+    
     // MARK: - Room Flags
     
     func flagAsUnread(_ isUnread: Bool) async -> Result<Void, RoomProxyError>

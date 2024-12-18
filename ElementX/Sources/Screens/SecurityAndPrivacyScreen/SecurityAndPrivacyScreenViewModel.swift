@@ -24,6 +24,17 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         super.init(initialViewState: SecurityAndPrivacyScreenViewState(accessType: roomProxy.infoPublisher.value.roomAccessType,
                                                                        isEncryptionEnabled: roomProxy.isEncrypted,
                                                                        historyVisibility: roomProxy.infoPublisher.value.historyVisibility.toSecurityAndPrivacyHistoryVisibility))
+        Task {
+            switch await roomProxy.isVisibleInRoomDirectory() {
+            case .success(let value):
+                state.bindings.desiredSettings.isVisibileInRoomDirectory = value
+                state.currentSettings.isVisibileInRoomDirectory = value
+            case .failure:
+                // TODO: Ask design, maybe we should present an alert or display some kind of error?
+                state.bindings.desiredSettings.isVisibileInRoomDirectory = false
+                state.currentSettings.isVisibileInRoomDirectory = false
+            }
+        }
         
         setupSubscriptions()
     }
@@ -81,12 +92,12 @@ private extension RoomInfoProxy {
     }
 }
 
-private extension RoomHistoryVisibility? {
+private extension RoomHistoryVisibility {
     var toSecurityAndPrivacyHistoryVisibility: SecurityAndPrivacyHistoryVisibility {
         switch self {
         case .joined, .invited:
             return .sinceInvite
-        case .shared, .custom, .none:
+        case .shared, .custom:
             return .sinceSelection
         case .worldReadable:
             return .anyone

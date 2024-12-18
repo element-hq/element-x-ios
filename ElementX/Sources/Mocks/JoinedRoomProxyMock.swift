@@ -41,6 +41,7 @@ struct JoinedRoomProxyMockConfiguration {
     
     var shouldUseAutoUpdatingTimeline = false
     var joinRule: JoinRule?
+    var isVisibleInPublicDirectory = false
 }
 
 extension JoinedRoomProxyMock {
@@ -127,6 +128,7 @@ extension JoinedRoomProxyMock {
         loadDraftReturnValue = .success(nil)
         clearDraftReturnValue = .success(())
         sendTypingNotificationIsTypingReturnValue = .success(())
+        isVisibleInRoomDirectoryReturnValue = .success(configuration.isVisibleInPublicDirectory)
     }
 }
 
@@ -171,6 +173,6 @@ extension RoomInfo {
                   numUnreadMentions: 0,
                   pinnedEventIds: Array(configuration.pinnedEventIDs),
                   joinRule: configuration.joinRule,
-                  historyVisibility: nil)
+                  historyVisibility: .shared)
     }
 }
