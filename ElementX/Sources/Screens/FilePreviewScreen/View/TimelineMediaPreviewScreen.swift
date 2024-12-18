@@ -12,7 +12,7 @@ import SwiftUI
 
 struct TimelineMediaPreviewScreen: View {
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
-    var onDisappear: (() -> Void)?
+    var itemIDHandler: ((TimelineItemIdentifier?) -> Void)?
     
     @State private var isFullScreen = false
     private var toolbarVisibility: Visibility { isFullScreen ? .hidden : .visible }
@@ -38,7 +38,7 @@ struct TimelineMediaPreviewScreen: View {
         .alert(item: $context.alertInfo)
         .preferredColorScheme(.dark)
         .onDisappear {
-            onDisappear?()
+            itemIDHandler?(nil)
         }
         .zoomTransition(sourceID: currentItem.id, in: context.viewState.transitionNamespace)
     }
@@ -148,8 +148,10 @@ private struct QuickLookView: UIViewControllerRepresentable {
     let viewModelContext: TimelineMediaPreviewViewModel.Context
 
     func makeUIViewController(context: Context) -> PreviewController {
-        PreviewController(coordinator: context.coordinator,
-                          fileLoadedPublisher: viewModelContext.viewState.fileLoadedPublisher.eraseToAnyPublisher())
+        let fileLoadedPublisher = viewModelContext.viewState.fileLoadedPublisher.eraseToAnyPublisher()
+        let controller = PreviewController(coordinator: context.coordinator, fileLoadedPublisher: fileLoadedPublisher)
+        controller.currentPreviewItemIndex = viewModelContext.viewState.initialItemIndex
+        return controller
     }
 
     func updateUIViewController(_ uiViewController: PreviewController, context: Context) { }
@@ -183,13 +185,9 @@ private struct QuickLookView: UIViewControllerRepresentable {
     // MARK: UIKit
     
     class PreviewController: QLPreviewController {
-        let coordinator: Coordinator
-        
         private var cancellables: Set<AnyCancellable> = []
         
         init(coordinator: Coordinator, fileLoadedPublisher: AnyPublisher<TimelineItemIdentifier, Never>) {
-            self.coordinator = coordinator
-            
             super.init(nibName: nil, bundle: nil)
             
             dataSource = coordinator

@@ -12,6 +12,7 @@ typealias TimelineMediaPreviewViewModelType = StateStoreViewModel<TimelineMediaP
 
 class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     private let timelineViewModel: TimelineViewModelProtocol
+    private let currentItemIDHandler: ((TimelineItemIdentifier?) -> Void)?
     private let mediaProvider: MediaProviderProtocol
     private let photoLibraryManager: PhotoLibraryManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -28,14 +29,18 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
          userIndicatorController: UserIndicatorControllerProtocol,
          appMediator: AppMediatorProtocol) {
         timelineViewModel = context.viewModel
+        currentItemIDHandler = context.itemIDHandler
         self.mediaProvider = mediaProvider
         self.photoLibraryManager = photoLibraryManager
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
         
-        let currentItem = TimelineMediaPreviewItem(timelineItem: context.item)
+        let previewItems = timelineViewModel.context.viewState.timelineState.itemViewStates.compactMap(TimelineMediaPreviewItem.init)
+        let initialItemIndex = previewItems.firstIndex { $0.id == context.item.id } ?? 0
+        let currentItem = previewItems[initialItemIndex]
         
-        super.init(initialViewState: TimelineMediaPreviewViewState(previewItems: [currentItem],
+        super.init(initialViewState: TimelineMediaPreviewViewState(previewItems: previewItems,
+                                                                   initialItemIndex: initialItemIndex,
                                                                    currentItem: currentItem,
                                                                    transitionNamespace: context.namespace),
                    mediaProvider: mediaProvider)
@@ -76,6 +81,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     
     private func updateCurrentItem(_ previewItem: TimelineMediaPreviewItem) async {
         state.currentItem = previewItem
+        currentItemIDHandler?(previewItem.id)
         rebuildCurrentItemActions()
         
         if previewItem.fileHandle == nil, let source = previewItem.mediaSource {
