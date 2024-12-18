@@ -14150,15 +14150,15 @@ class TimelineProxyMock: TimelineProxyProtocol {
     }
     //MARK: - retryDecryption
 
-    var retryDecryptionForUnderlyingCallsCount = 0
-    var retryDecryptionForCallsCount: Int {
+    var retryDecryptionSessionIDsUnderlyingCallsCount = 0
+    var retryDecryptionSessionIDsCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return retryDecryptionForUnderlyingCallsCount
+                return retryDecryptionSessionIDsUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = retryDecryptionForUnderlyingCallsCount
+                    returnValue = retryDecryptionSessionIDsUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -14166,28 +14166,28 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                retryDecryptionForUnderlyingCallsCount = newValue
+                retryDecryptionSessionIDsUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    retryDecryptionForUnderlyingCallsCount = newValue
+                    retryDecryptionSessionIDsUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var retryDecryptionForCalled: Bool {
-        return retryDecryptionForCallsCount > 0
+    var retryDecryptionSessionIDsCalled: Bool {
+        return retryDecryptionSessionIDsCallsCount > 0
     }
-    var retryDecryptionForReceivedSessionID: String?
-    var retryDecryptionForReceivedInvocations: [String] = []
-    var retryDecryptionForClosure: ((String) async -> Void)?
+    var retryDecryptionSessionIDsReceivedSessionIDs: [String]?
+    var retryDecryptionSessionIDsReceivedInvocations: [[String]?] = []
+    var retryDecryptionSessionIDsClosure: (([String]?) async -> Void)?
 
-    func retryDecryption(for sessionID: String) async {
-        retryDecryptionForCallsCount += 1
-        retryDecryptionForReceivedSessionID = sessionID
+    func retryDecryption(sessionIDs: [String]?) async {
+        retryDecryptionSessionIDsCallsCount += 1
+        retryDecryptionSessionIDsReceivedSessionIDs = sessionIDs
         DispatchQueue.main.async {
-            self.retryDecryptionForReceivedInvocations.append(sessionID)
+            self.retryDecryptionSessionIDsReceivedInvocations.append(sessionIDs)
         }
-        await retryDecryptionForClosure?(sessionID)
+        await retryDecryptionSessionIDsClosure?(sessionIDs)
     }
     //MARK: - paginateBackwards
 
