@@ -12,12 +12,17 @@ enum SecurityAndPrivacyScreenViewModelAction {
 }
 
 struct SecurityAndPrivacyScreenViewState: BindableState {
-    var bindings: SecurityAndPrivacyScreenViewStateBindings
-    
+    let serverName: String
     var currentSettings: SecurityAndPrivacySettings
+    var bindings: SecurityAndPrivacyScreenViewStateBindings
+    var canonicalAlias: String?
     
-    var hasChanges: Bool {
+    private var hasChanges: Bool {
         currentSettings != bindings.desiredSettings
+    }
+    
+    var isSaveDisabled: Bool {
+        !hasChanges || currentSettings.isVisibileInRoomDirectory == nil
     }
     
     var availableVisibilityOptions: [SecurityAndPrivacyHistoryVisibility] {
@@ -29,15 +34,19 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
         }
         return options
     }
-    
-    init(accessType: SecurityAndPrivacyRoomAccessType,
+        
+    init(serverName: String,
+         accessType: SecurityAndPrivacyRoomAccessType,
          isEncryptionEnabled: Bool,
-         historyVisibility: SecurityAndPrivacyHistoryVisibility) {
+         historyVisibility: SecurityAndPrivacyHistoryVisibility,
+         canonicalAlias: String?) {
+        self.serverName = serverName
         let settings = SecurityAndPrivacySettings(accessType: accessType,
                                                   isEncryptionEnabled: isEncryptionEnabled,
                                                   historyVisibility: historyVisibility)
         currentSettings = settings
         bindings = SecurityAndPrivacyScreenViewStateBindings(desiredSettings: settings)
+        self.canonicalAlias = canonicalAlias
     }
 }
 
@@ -66,6 +75,7 @@ enum SecurityAndPrivacyAlertType {
 enum SecurityAndPrivacyScreenViewAction {
     case save
     case tryUpdatingEncryption(Bool)
+    case editAddress
 }
 
 enum SecurityAndPrivacyHistoryVisibility {
