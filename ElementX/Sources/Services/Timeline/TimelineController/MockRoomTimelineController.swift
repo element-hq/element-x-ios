@@ -139,8 +139,6 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         nil
     }
         
-    func retryDecryption(sessionIDs: [String]?) async { }
-        
     func eventTimestamp(for itemID: TimelineItemIdentifier) -> Date? {
         timelineItemsTimestamp[itemID] ?? .now
     }

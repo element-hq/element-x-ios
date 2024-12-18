@@ -82,7 +82,5 @@ protocol RoomTimelineControllerProtocol {
     
     func sendHandle(for itemID: TimelineItemIdentifier) -> SendHandleProxy?
     
-    func retryDecryption(sessionIDs: [String]?) async
-    
     func eventTimestamp(for itemID: TimelineItemIdentifier) -> Date?
 }

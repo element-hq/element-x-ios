@@ -356,10 +356,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         return nil
     }
     
-    func retryDecryption(sessionIDs: [String]?) async {
-        await activeTimeline.retryDecryption(sessionIDs: sessionIDs)
-    }
-    
     // MARK: - Private
     
     /// The cancellable used to update the timeline items.

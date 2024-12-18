@@ -67,7 +67,6 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     case reply(isThread: Bool)
     case forward(itemID: TimelineItemIdentifier)
     case viewSource
-    case retryDecryption(sessionID: String)
     case report
     case react
     case toggleReaction(key: String)
@@ -164,8 +163,6 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             Label(L10n.actionRemoveMessage, icon: \.delete)
         case .viewSource:
             Label(L10n.actionViewSource, icon: \.code)
-        case .retryDecryption:
-            Label(L10n.actionRetryDecryption, systemImage: "arrow.down.message")
         case .report:
             Label(L10n.actionReportContent, icon: \.chatProblem)
         case .react:

@@ -136,14 +136,7 @@ struct TimelineItemMenuActionProvider {
         if isViewSourceEnabled {
             actions.append(.viewSource)
         }
-        
-        switch encryptedItem.encryptionType {
-        case .megolmV1AesSha2(let sessionID, _):
-            secondaryActions.append(.retryDecryption(sessionID: sessionID))
-        default:
-            break
-        }
-        
+                
         return .init(isReactable: false,
                      actions: actions,
                      secondaryActions: secondaryActions,
