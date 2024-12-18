@@ -15,9 +15,14 @@ struct SecurityAndPrivacyScreen: View {
         Form {
             roomAccessSection
             if context.desiredSettings.accessType != .inviteOnly {
-                visibilitySection
-                addressSection
-                roomDirectoryVisibilitySection
+                if let canonicalAlias = context.viewState.canonicalAlias {
+                    visibilitySection
+                    addressSection(canonicalAlias: canonicalAlias)
+                    roomDirectoryVisibilitySection
+                } else {
+                    publishingSection
+                    addAddressSection
+                }
             }
             encryptionSection
             historySection
@@ -93,23 +98,45 @@ struct SecurityAndPrivacyScreen: View {
         Section {
             EmptyView()
         } header: {
-            Text(L10n.screenSecurityAndPrivacyRoomVisibilitySectionTitle)
+            Text(L10n.screenSecurityAndPrivacyRoomVisibilitySectionHeader)
                 .compoundListSectionHeader()
         } footer: {
-            Text(L10n.screenSecurityAndPrivacyRoomVisibilitySectionDescription)
+            Text(L10n.screenSecurityAndPrivacyRoomVisibilitySectionFooter(context.viewState.serverName))
                 .compoundListSectionFooter()
         }
     }
     
-    private var addressSection: some View {
+    private func addressSection(canonicalAlias: String) -> some View {
         Section {
-            EmptyView()
+            ListRow(label: .plain(title: canonicalAlias), kind: .navigationLink { context.send(viewAction: .editAddress) })
         } header: {
-            Text(L10n.screenSecurityAndPrivacyRoomAddressSectionTitle)
+            Text(L10n.screenSecurityAndPrivacyRoomAddressSectionHeader)
                 .compoundListSectionHeader()
         } footer: {
             Text(L10n.screenSecurityAndPrivacyRoomAddressSectionFooter)
                 .compoundListSectionFooter()
+        }
+    }
+    
+    private var publishingSection: some View {
+        Section {
+            EmptyView()
+        } header: {
+            Text(L10n.screenSecurityAndPrivacyRoomPublishingSectionHeader)
+                .compoundListSectionHeader()
+        } footer: {
+            Text(L10n.screenSecurityAndPrivacyRoomPublishingSectionFooter)
+                .compoundListSectionFooter()
+        }
+    }
+    
+    private var addAddressSection: some View {
+        Section {
+            ListRow(kind: .custom {
+                Button(L10n.screenSecurityAndPrivacyAddRoomAddressAction) { context.send(viewAction: .editAddress) }
+                    .foregroundColor(.compound.textActionAccent)
+                    .padding(ListRowPadding.insets)
+            })
         }
     }
     
@@ -126,7 +153,7 @@ struct SecurityAndPrivacyScreen: View {
                     details: .isWaiting(context.desiredSettings.isVisibileInRoomDirectory == nil),
                     kind: context.desiredSettings.isVisibileInRoomDirectory == nil ? .label : .toggle(binding))
         } footer: {
-            Text(L10n.screenSecurityAndPrivacyRoomDirectoryVisibilitySectionFooter)
+            Text(L10n.screenSecurityAndPrivacyRoomDirectoryVisibilitySectionFooter(context.viewState.serverName))
                 .compoundListSectionFooter()
         }
     }
@@ -137,18 +164,25 @@ struct SecurityAndPrivacyScreen: View {
             Button(L10n.actionSave) {
                 context.send(viewAction: .save)
             }
-            .disabled(!context.viewState.hasChanges)
+            .disabled(context.viewState.isSaveDisabled)
         }
     }
 }
 
 // MARK: - Previews
 
-// TODO: Add back TestablePreview, this is WIP so running preview tests for it is not necessary
-struct SecurityAndPrivacyScreen_Previews: PreviewProvider {
-    static let inviteOnlyViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(joinRule: .invite)))
+struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
+    static let inviteOnlyViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(joinRule: .invite)), clientProxy: ClientProxyMock(.init()))
     
-    static let publicViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false, joinRule: .public, isVisibleInPublicDirectory: true)))
+    static let publicViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
+                                                                                                        canonicalAlias: "#room:matrix.org",
+                                                                                                        joinRule: .public,
+                                                                                                        isVisibleInPublicDirectory: true)),
+                                                                   clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")))
+    
+    static let publicNoAddressViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
+                                                                                                                 joinRule: .public)),
+                                                                            clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")))
     
     static var previews: some View {
         NavigationStack {
@@ -161,5 +195,10 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider {
         }
         .snapshotPreferences(delay: 0.1)
         .previewDisplayName("Public room")
+        
+        NavigationStack {
+            SecurityAndPrivacyScreen(context: publicNoAddressViewModel.context)
+        }
+        .previewDisplayName("Public room without address")
     }
 }

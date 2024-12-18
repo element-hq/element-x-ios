@@ -13,29 +13,24 @@ typealias SecurityAndPrivacyScreenViewModelType = StateStoreViewModel<SecurityAn
 
 class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, SecurityAndPrivacyScreenViewModelProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
+    private let clientProxy: ClientProxyProtocol
     
     private let actionsSubject: PassthroughSubject<SecurityAndPrivacyScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<SecurityAndPrivacyScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(roomProxy: JoinedRoomProxyProtocol) {
+    init(roomProxy: JoinedRoomProxyProtocol, clientProxy: ClientProxyProtocol) {
         self.roomProxy = roomProxy
-        super.init(initialViewState: SecurityAndPrivacyScreenViewState(accessType: roomProxy.infoPublisher.value.roomAccessType,
+        self.clientProxy = clientProxy
+        let canonicalAlias = roomProxy.infoPublisher.value.canonicalAlias
+        super.init(initialViewState: SecurityAndPrivacyScreenViewState(serverName: clientProxy.userIDServerName ?? "",
+                                                                       accessType: roomProxy.infoPublisher.value.roomAccessType,
                                                                        isEncryptionEnabled: roomProxy.isEncrypted,
-                                                                       historyVisibility: roomProxy.infoPublisher.value.historyVisibility.toSecurityAndPrivacyHistoryVisibility))
-        Task {
-            switch await roomProxy.isVisibleInRoomDirectory() {
-            case .success(let value):
-                state.bindings.desiredSettings.isVisibileInRoomDirectory = value
-                state.currentSettings.isVisibileInRoomDirectory = value
-            case .failure:
-                // TODO: Ask design, maybe we should present an alert or display some kind of error?
-                state.bindings.desiredSettings.isVisibileInRoomDirectory = false
-                state.currentSettings.isVisibileInRoomDirectory = false
-            }
-        }
+                                                                       historyVisibility: roomProxy.infoPublisher.value.historyVisibility.toSecurityAndPrivacyHistoryVisibility,
+                                                                       canonicalAlias: canonicalAlias))
         
+        setupRoomDirectoryVisibility()
         setupSubscriptions()
     }
     
@@ -57,6 +52,9 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             } else {
                 state.bindings.desiredSettings.isEncryptionEnabled = false
             }
+        case .editAddress:
+            // TODO: Implement navigation to a view that allows editing or adding an address
+            break
         }
     }
     
@@ -76,6 +74,25 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    private func setupRoomDirectoryVisibility() {
+        if state.canonicalAlias != nil {
+            Task {
+                switch await roomProxy.isVisibleInRoomDirectory() {
+                case .success(let value):
+                    state.bindings.desiredSettings.isVisibileInRoomDirectory = value
+                    state.currentSettings.isVisibileInRoomDirectory = value
+                case .failure:
+                    // TODO: Ask design, maybe we should present an alert or display some kind of error?
+                    state.bindings.desiredSettings.isVisibileInRoomDirectory = false
+                    state.bindings.desiredSettings.isVisibileInRoomDirectory = false
+                }
+            }
+        } else {
+            state.bindings.desiredSettings.isVisibileInRoomDirectory = false
+            state.bindings.desiredSettings.isVisibileInRoomDirectory = false
+        }
     }
 }
 
