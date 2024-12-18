@@ -2186,6 +2186,14 @@ internal enum L10n {
   internal static var screenSecurityAndPrivacyRoomAccessInviteOnlyOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_invite_only_option_title") }
   /// Room access
   internal static var screenSecurityAndPrivacyRoomAccessSectionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_section_title") }
+  /// You’ll need a room address in order to make it visible in the room directory.
+  internal static var screenSecurityAndPrivacyRoomAddressSectionFooter: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_address_section_footer") }
+  /// Room address
+  internal static var screenSecurityAndPrivacyRoomAddressSectionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_address_section_title") }
+  /// Allow for this room to be found by searching myserver.org public room directory
+  internal static var screenSecurityAndPrivacyRoomDirectoryVisibilitySectionFooter: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_directory_visibility_section_footer") }
+  /// Visible in public room directory
+  internal static var screenSecurityAndPrivacyRoomDirectoryVisibilityToggleTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_directory_visibility_toggle_title") }
   /// Anyone
   internal static var screenSecurityAndPrivacyRoomHistoryAnyoneOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_history_anyone_option_title") }
   /// Who can read history
@@ -2194,6 +2202,11 @@ internal enum L10n {
   internal static var screenSecurityAndPrivacyRoomHistorySinceInviteOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_history_since_invite_option_title") }
   /// Members only since selecting this option
   internal static var screenSecurityAndPrivacyRoomHistorySinceSelectingOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_history_since_selecting_option_title") }
+  /// Room addresses are ways to find and access rooms. This also ensures you can easily share your room with others.
+  /// The address is also required to make the room visible in myserver.org public room directory.
+  internal static var screenSecurityAndPrivacyRoomVisibilitySectionDescription: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_visibility_section_description") }
+  /// Room visibility
+  internal static var screenSecurityAndPrivacyRoomVisibilitySectionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_visibility_section_title") }
   /// Security & privacy
   internal static var screenSecurityAndPrivacyTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_title") }
   /// Change account provider

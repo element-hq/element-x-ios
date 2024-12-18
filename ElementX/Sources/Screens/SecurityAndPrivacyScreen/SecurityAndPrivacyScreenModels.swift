@@ -50,6 +50,7 @@ struct SecurityAndPrivacySettings: Equatable {
     var accessType: SecurityAndPrivacyRoomAccessType
     var isEncryptionEnabled: Bool
     var historyVisibility: SecurityAndPrivacyHistoryVisibility
+    var isVisibileInRoomDirectory: Bool?
 }
 
 enum SecurityAndPrivacyRoomAccessType {
@@ -71,13 +72,4 @@ enum SecurityAndPrivacyHistoryVisibility {
     case sinceSelection
     case sinceInvite
     case anyone
-    
-    var isAllowedInPublicRoom: Bool {
-        switch self {
-        case .anyone, .sinceSelection:
-            true
-        default:
-            false
-        }
-    }
 }

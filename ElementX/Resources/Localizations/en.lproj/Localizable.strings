@@ -449,10 +449,16 @@
 "screen_security_and_privacy_room_access_invite_only_option_description" = "People can only join if they are invited";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Invite only";
 "screen_security_and_privacy_room_access_section_title" = "Room access";
+"screen_security_and_privacy_room_address_section_footer" = "You’ll need a room address in order to make it visible in the room directory.";
+"screen_security_and_privacy_room_address_section_title" = "Room address";
+"screen_security_and_privacy_room_directory_visibility_section_footer" = "Allow for this room to be found by searching myserver.org public room directory";
+"screen_security_and_privacy_room_directory_visibility_toggle_title" = "Visible in public room directory";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Anyone";
 "screen_security_and_privacy_room_history_section_header" = "Who can read history";
 "screen_security_and_privacy_room_history_since_invite_option_title" = "Members only since they were invited";
 "screen_security_and_privacy_room_history_since_selecting_option_title" = "Members only since selecting this option";
+"screen_security_and_privacy_room_visibility_section_description" = "Room addresses are ways to find and access rooms. This also ensures you can easily share your room with others.\nThe address is also required to make the room visible in myserver.org public room directory.";
+"screen_security_and_privacy_room_visibility_section_title" = "Room visibility";
 "screen_security_and_privacy_title" = "Security & privacy";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
