@@ -126,8 +126,6 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        navigationStackCoordinator.setFullScreenCoverCoordinator(coordinator) {
-            previewContext.completion?()
-        }
+        navigationStackCoordinator.setFullScreenCoverCoordinator(coordinator)
     }
 }

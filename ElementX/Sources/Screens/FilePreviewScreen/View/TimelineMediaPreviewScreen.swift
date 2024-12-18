@@ -12,13 +12,15 @@ import SwiftUI
 
 struct TimelineMediaPreviewScreen: View {
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
+    var onDisappear: (() -> Void)?
     
     private var currentItem: TimelineMediaPreviewItem { context.viewState.currentItem }
     
     var body: some View {
         NavigationStack {
-            Color.clear
-                .overlay { QuickLookView(viewModelContext: context).ignoresSafeArea() } // Overlay to stop QL hijacking the toolbar.
+            Color.black
+                .opacity(0.01) // A completely clear view breaks any SwiftUI gestures (such as drag to dismiss).
+                .background { QuickLookView(viewModelContext: context).ignoresSafeArea() } // Not the root view to stop QL hijacking the toolbar.
                 .toolbar { toolbar }
                 .toolbarBackground(.visible, for: .navigationBar) // The toolbar's scrollEdgeAppearance isn't aware of the quicklook view 🤷‍♂️
                 .toolbarBackground(.visible, for: .bottomBar)
@@ -39,6 +41,9 @@ struct TimelineMediaPreviewScreen: View {
         }
         .alert(item: $context.alertInfo)
         .preferredColorScheme(.dark)
+        .onDisappear {
+            onDisappear?()
+        }
         .zoomTransition(sourceID: currentItem.id, in: context.viewState.transitionNamespace)
     }
     
@@ -114,6 +119,8 @@ struct TimelineMediaPreviewScreen: View {
     }
 }
 
+// MARK: - QuickLook
+
 private struct QuickLookView: UIViewControllerRepresentable {
     let viewModelContext: TimelineMediaPreviewViewModel.Context
 
@@ -127,6 +134,8 @@ private struct QuickLookView: UIViewControllerRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator(viewModelContext: viewModelContext)
     }
+    
+    // MARK: Coordinator
     
     class Coordinator: NSObject, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
         private let viewModelContext: TimelineMediaPreviewViewModel.Context
@@ -147,6 +156,8 @@ private struct QuickLookView: UIViewControllerRepresentable {
             viewModelContext.viewState.previewItems[index]
         }
     }
+    
+    // MARK: UIKit
     
     class PreviewController: QLPreviewController {
         let coordinator: Coordinator
