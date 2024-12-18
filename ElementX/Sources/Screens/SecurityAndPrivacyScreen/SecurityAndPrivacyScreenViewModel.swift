@@ -54,12 +54,15 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     private func setupSubscriptions() {
         context.$viewState
             .map(\.availableVisibilityOptions)
-            .dropFirst()
             .removeDuplicates()
+            // To allow the view to update properly
             .receive(on: DispatchQueue.main)
-            // When the available options changes always default to `sinceSelection`
-            .sink { [weak self] _ in
-                self?.state.bindings.desiredSettings.historyVisibility = .sinceSelection
+            // When the available options changes always default to `sinceSelection` if the currently selected option is not available
+            .sink { [weak self] availableVisibilityOptions in
+                guard let self else { return }
+                if !availableVisibilityOptions.contains(state.bindings.desiredSettings.historyVisibility) {
+                    state.bindings.desiredSettings.historyVisibility = .sinceSelection
+                }
             }
             .store(in: &cancellables)
     }
