@@ -13,17 +13,14 @@ import SwiftUI
 struct TimelineMediaPreviewScreen: View {
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
     
+    @State private var isFullScreen = false
+    private var toolbarVisibility: Visibility { isFullScreen ? .hidden : .visible }
+    
     private var currentItem: TimelineMediaPreviewItem { context.viewState.currentItem }
     
     var body: some View {
         NavigationStack {
-            Color.clear
-                .overlay { QuickLookView(viewModelContext: context).ignoresSafeArea() } // Overlay to stop QL hijacking the toolbar.
-                .toolbar { toolbar }
-                .toolbarBackground(.visible, for: .navigationBar) // The toolbar's scrollEdgeAppearance isn't aware of the quicklook view 🤷‍♂️
-                .toolbarBackground(.visible, for: .bottomBar)
-                .navigationBarTitleDisplayMode(.inline)
-                .safeAreaInset(edge: .bottom, spacing: 0) { caption }
+            quickLookPreview
         }
         .introspect(.navigationStack, on: .supportedVersions) {
             // Fixes a bug where the QuickLook view overrides the .toolbarBackground(.visible) after it loads the real item.
@@ -42,9 +39,35 @@ struct TimelineMediaPreviewScreen: View {
         .zoomTransition(sourceID: currentItem.id, in: context.viewState.transitionNamespace)
     }
     
+    var quickLookPreview: some View {
+        Color.clear // A completely clear view breaks any SwiftUI gestures (such as drag to dismiss).
+            .background { QuickLookView(viewModelContext: context).ignoresSafeArea() } // Not the root view to stop QL hijacking the toolbar.
+            .overlay(alignment: .topTrailing) { fullScreenButton }
+            .toolbar { toolbar }
+            .toolbar(toolbarVisibility, for: .navigationBar)
+            .toolbar(toolbarVisibility, for: .bottomBar)
+            .toolbarBackground(.visible, for: .navigationBar) // The toolbar's scrollEdgeAppearance isn't aware of the quicklook view 🤷‍♂️
+            .toolbarBackground(.visible, for: .bottomBar)
+            .navigationBarTitleDisplayMode(.inline)
+            .safeAreaInset(edge: .bottom, spacing: 0) { caption }
+    }
+    
+    private var fullScreenButton: some View {
+        Button {
+            withAnimation { isFullScreen.toggle() }
+        } label: {
+            CompoundIcon(isFullScreen ? \.collapse : \.expand, size: .xSmall, relativeTo: .compound.bodyLG)
+                .padding(6)
+                .background(.thinMaterial, in: Circle())
+        }
+        .tint(.compound.textActionPrimary)
+        .padding(.top, 12)
+        .padding(.trailing, 14)
+    }
+    
     @ViewBuilder
     private var caption: some View {
-        if let caption = currentItem.caption {
+        if let caption = currentItem.caption, !isFullScreen {
             Text(caption)
                 .font(.compound.bodyLG)
                 .foregroundStyle(.compound.textPrimary)
@@ -55,6 +78,7 @@ struct TimelineMediaPreviewScreen: View {
                 .background {
                     BlurEffectView(style: .systemChromeMaterial) // Darkest material available, matches the bottom bar when content is beneath.
                 }
+                .transition(.move(edge: .bottom).combined(with: .opacity))
         }
     }
     
