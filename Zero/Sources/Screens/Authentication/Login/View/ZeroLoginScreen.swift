@@ -47,7 +47,9 @@ struct ZeroLoginScreen: View {
     }
     
     var web3LoginView: some View {
-        Button { } label: {
+        Button {
+            context.send(viewAction: .openWalletConnectModal)
+        } label: {
             Image(asset: Asset.Images.defaultWalletConnectButton)
         }
         .padding(.top, 40)

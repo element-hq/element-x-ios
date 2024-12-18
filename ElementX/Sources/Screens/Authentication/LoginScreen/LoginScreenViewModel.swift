@@ -6,6 +6,7 @@
 //
 
 import Combine
+import ReownAppKit
 import SwiftUI
 
 typealias LoginScreenViewModelType = StateStoreViewModel<LoginScreenViewState, LoginScreenViewAction>
@@ -38,6 +39,19 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.homeserver, on: self)
             .store(in: &cancellables)
+        
+        AppKit.instance.sessionResponsePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] response in
+                switch response.result {
+                case let .response(value):
+                    self?.loginWithWallet(token: value.stringRepresentation.replacingOccurrences(of: "\"", with: ""))
+                case let .error(error):
+                    MXLog.error("Session error: \(error)")
+                    self?.state.bindings.alertInfo = AlertInfo(id: .unknown)
+                }
+            }
+            .store(in: &cancellables)
     }
 
     override func process(viewAction: LoginScreenViewAction) {
@@ -46,6 +60,8 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
             parseUsername()
         case .next:
             login()
+        case .openWalletConnectModal:
+            presentWalletConnectModal()
         }
     }
     
@@ -149,6 +165,29 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
                                                  message: L10n.screenLoginErrorRefreshTokens)
         default:
             state.bindings.alertInfo = AlertInfo(id: .unknown)
+        }
+    }
+    
+    private func presentWalletConnectModal() {
+        WalletConnectService.shared.presentWalletConnectModal()
+    }
+    
+    private func loginWithWallet(token: String) {
+        startLoading(isInteractionBlocking: true)
+        
+        Task {
+            switch await authenticationService.loginWithWeb3(web3Token: token,
+                                                             initialDeviceName: UIDevice.current.initialDeviceName,
+                                                             deviceID: nil) {
+            case .success(let userSession):
+                actionsSubject.send(.signedIn(userSession))
+                analytics.signpost.endLogin()
+                stopLoading()
+            case .failure(let error):
+                stopLoading()
+                analytics.signpost.endLogin()
+                handleError(error)
+            }
         }
     }
 }

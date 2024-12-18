@@ -57,6 +57,8 @@ enum LoginScreenViewAction {
     case parseUsername
     /// Continue using the input username and password.
     case next
+    /// Open wallet connect modal
+    case openWalletConnectModal
 }
 
 enum LoginScreenErrorType: Hashable {

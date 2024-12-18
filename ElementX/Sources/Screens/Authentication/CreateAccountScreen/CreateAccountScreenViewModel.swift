@@ -6,6 +6,7 @@
 //
 
 import Combine
+import ReownAppKit
 import SwiftUI
 
 typealias CreateAccountScreenViewModelType = StateStoreViewModel<CreateAccountScreenViewState, CreateAccountScreenViewAction>
@@ -27,6 +28,19 @@ class CreateAccountScreenViewModel: CreateAccountScreenViewModelType, CreateAcco
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: CreateAccountScreenViewState(inviteCode: inviteCode))
+        
+        AppKit.instance.sessionResponsePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] response in
+                switch response.result {
+                case let .response(value):
+                    self?.createUserAccountWithWallet(token: value.stringRepresentation.replacingOccurrences(of: "\"", with: ""))
+                case let .error(error):
+                    MXLog.error("Session error: \(error)")
+                    self?.state.bindings.alertInfo = AlertInfo(id: .unknown)
+                }
+            }
+            .store(in: &cancellables)
     }
     
     override func process(viewAction: CreateAccountScreenViewAction) {
@@ -35,6 +49,8 @@ class CreateAccountScreenViewModel: CreateAccountScreenViewModelType, CreateAcco
             actionsSubject.send(.openLoginScreen)
         case .createAccount:
             createUserAccount()
+        case .openWalletConnectModal:
+            presentWalletConnectModal()
         }
     }
     
@@ -69,5 +85,23 @@ class CreateAccountScreenViewModel: CreateAccountScreenViewModelType, CreateAcco
     
     private func handleError(error: AuthenticationServiceError) {
         state.bindings.alertInfo = AlertInfo(id: .unknown)
+    }
+    
+    private func presentWalletConnectModal() {
+        WalletConnectService.shared.presentWalletConnectModal()
+    }
+    
+    private func createUserAccountWithWallet(token: String) {
+        startLoading()
+        Task {
+            switch await authenticationService.createUserAccountWithWeb3(web3Token: token, inviteCode: state.inviteCode) {
+            case .success(let userSession):
+                stopLoading()
+                actionsSubject.send(.accountCreated(userSession: userSession))
+            case .failure(let error):
+                stopLoading()
+                handleError(error: error)
+            }
+        }
     }
 }

@@ -24,6 +24,8 @@ struct Application: App {
         }
         
         SceneDelegate.windowManager = appCoordinator.windowManager
+        
+        WalletConnectService.shared.configureWalletConnect()
     }
 
     var body: some Scene {
