@@ -166,7 +166,7 @@ struct RoomDetailsScreen: View {
                     })
                     .disabled(context.viewState.pinnedEventsActionState.isLoading)
             
-            ListRow(label: .default(title: L10n.screenPollsHistoryTitle,
+            ZeroListRow(label: .default(title: L10n.screenPollsHistoryTitle,
                                     icon: \.polls),
                     kind: .navigationLink {
                         context.send(viewAction: .processTapPolls)
@@ -222,22 +222,22 @@ struct RoomDetailsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
             
-            if context.viewState.canSeeKnockingRequests {
-                ListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
-                                        icon: \.askToJoin),
-                        details: context.viewState.knockRequestsCount > 0 ? .counter(context.viewState.knockRequestsCount) : nil,
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapRequestsToJoin)
-                        })
-            }
-            
-            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
-                ListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
-                                        icon: \.admin),
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapRolesAndPermissions)
-                        })
-            }
+//            if context.viewState.canSeeKnockingRequests {
+//                ZeroListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
+//                                        icon: \.askToJoin),
+//                        details: context.viewState.knockRequestsCount > 0 ? .counter(context.viewState.knockRequestsCount) : nil,
+//                        kind: .navigationLink {
+//                            context.send(viewAction: .processTapRequestsToJoin)
+//                        })
+//            }
+//            
+//            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
+//                ZeroListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
+//                                        icon: \.admin),
+//                        kind: .navigationLink {
+//                            context.send(viewAction: .processTapRolesAndPermissions)
+//                        })
+//            }
         }
     }
     

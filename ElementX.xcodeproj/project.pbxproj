@@ -290,6 +290,10 @@
 		1882EB912C90F0F5001DA2A9 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB902C90F0F5001DA2A9 /* AvatarView.swift */; };
 		1882EB932C90FE9C001DA2A9 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB922C90FE9C001DA2A9 /* String+Extensions.swift */; };
 		1882EB9A2C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB992C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift */; };
+		1885A5C52D140A61003F7B3B /* TimelineMediaPreviewFileExportPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30856520F3263D0E195710D7 /* TimelineMediaPreviewFileExportPicker.swift */; };
+		1885A5C62D140A80003F7B3B /* PhotoLibraryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7495E1119753B06FF2C2279 /* PhotoLibraryManager.swift */; };
+		1885A5C72D140A95003F7B3B /* PhotoLibraryManagerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD955A0380C287C418F1A74D /* PhotoLibraryManagerMock.swift */; };
+		1885A5C82D140ACB003F7B3B /* TimelineMediaPreviewScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA57E8563C346B13DDE4A6F4 /* TimelineMediaPreviewScreen.swift */; };
 		18867F4F1C8991EEC56EA932 /* UTType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897DF5E9A70CE05A632FC8AF /* UTType.swift */; };
 		189334A22D071BEE00CC87B9 /* MediaEventsTimelineFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2178B951602AA921A5FD9DC8 /* MediaEventsTimelineFlowCoordinator.swift */; };
 		189334A32D071BFB00CC87B9 /* MediaEventsTimelineScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8512B82404B1751D0BCC82D2 /* MediaEventsTimelineScreenCoordinator.swift */; };
@@ -349,10 +353,10 @@
 		18D4679B2D109ACA00861AA6 /* KnockRequestProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07851F4EA81AA3339806A7B /* KnockRequestProxyProtocol.swift */; };
 		18D4679C2D109AD000861AA6 /* KnockRequestProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F062DD2CCD95DC33528A16F /* KnockRequestProxy.swift */; };
 		18D4679D2D109B0C00861AA6 /* ShouldScrollOnKeyboardDidShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832397B5C3D00A4BF52C5F0B /* ShouldScrollOnKeyboardDidShow.swift */; };
-		18D4679E2D109B4A00861AA6 /* MediaFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3615FD6460BC9C1DEF8659 /* MediaFileManager.swift */; };
+		18D4679E2D109B4A00861AA6 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		18D4679F2D109B4F00861AA6 /* TimelineMediaPreviewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A62FBD3007312311C14DD8 /* TimelineMediaPreviewCoordinator.swift */; };
 		18D467A02D109B5400861AA6 /* TimelineMediaPreviewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A2BB38DF61F5100B8723112 /* TimelineMediaPreviewModels.swift */; };
-		18D467A12D109B5900861AA6 /* TimelineMediaPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A76B92984638A9B3104840D /* TimelineMediaPreviewView.swift */; };
+		18D467A12D109B5900861AA6 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		18D467A22D109B5C00861AA6 /* TimelineMediaPreviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F41CEAAE2BB4E74CDC2278 /* TimelineMediaPreviewViewModel.swift */; };
 		18D467A32D109B6200861AA6 /* TimelineMediaPreviewDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 467498BEA681758BE2F80826 /* TimelineMediaPreviewDetailsView.swift */; };
 		18D467A42D109B6700861AA6 /* TimelineMediaPreviewRedactConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75FE3F524B575D53787868C /* TimelineMediaPreviewRedactConfirmationView.swift */; };
@@ -8947,7 +8951,7 @@
 				18D4679D2D109B0C00861AA6 /* ShouldScrollOnKeyboardDidShow.swift in Sources */,
 				18C4540C2CF09A5E00F25539 /* KnockRequestsListScreen.swift in Sources */,
 				18E9A4FB2C9829970082DDA4 /* EncryptionResetScreen.swift in Sources */,
-				18D467A12D109B5900861AA6 /* TimelineMediaPreviewView.swift in Sources */,
+				18D467A12D109B5900861AA6 /* (null) in Sources */,
 				18E9A4FC2C9829970082DDA4 /* EncryptionResetScreenCoordinator.swift in Sources */,
 				18793DE82CF5052F00F1C85D /* KnockRequestsBannerView.swift in Sources */,
 				18E9A4FD2C9829970082DDA4 /* EncryptionResetScreenModels.swift in Sources */,
@@ -9318,6 +9322,7 @@
 				18659CC42CFB2D2A000EF0A6 /* ZFinaliseCreateAccount.swift in Sources */,
 				18E9A63A2C9829970082DDA4 /* RoomFlowCoordinator.swift in Sources */,
 				18E9A63B2C9829970082DDA4 /* (null) in Sources */,
+				1885A5C72D140A95003F7B3B /* PhotoLibraryManagerMock.swift in Sources */,
 				18E9A63C2C9829970082DDA4 /* RoomInviterLabel.swift in Sources */,
 				18D467B02D109CAC00861AA6 /* KnockRequestProxyMock.swift in Sources */,
 				18E9A63D2C9829970082DDA4 /* RoomListFilterModels.swift in Sources */,
@@ -9373,6 +9378,7 @@
 				18E9A6682C9829970082DDA4 /* RoomRolesAndPermissionsScreenModels.swift in Sources */,
 				18E9A6692C9829970082DDA4 /* RoomRolesAndPermissionsScreenViewModel.swift in Sources */,
 				18E9A66A2C9829970082DDA4 /* RoomRolesAndPermissionsScreenViewModelProtocol.swift in Sources */,
+				1885A5C82D140ACB003F7B3B /* TimelineMediaPreviewScreen.swift in Sources */,
 				18E9A66B2C9829970082DDA4 /* RoomScreen.swift in Sources */,
 				18D5D9B22CEB733C00107940 /* UserRewardsSettingsScreenModels.swift in Sources */,
 				18E9A66C2C9829970082DDA4 /* RoomScreenCoordinator.swift in Sources */,
@@ -9523,7 +9529,7 @@
 				1827256F2C9994A000B513B5 /* Client.swift in Sources */,
 				185454D42CFEF7E9003CA957 /* ZeroStyledButton.swift in Sources */,
 				18E9A6E12C9829970082DDA4 /* SwipeRightAction.swift in Sources */,
-				18D4679E2D109B4A00861AA6 /* MediaFileManager.swift in Sources */,
+				18D4679E2D109B4A00861AA6 /* (null) in Sources */,
 				18E9A6E22C9829970082DDA4 /* SwipeToReplyView.swift in Sources */,
 				18E9A6E32C9829970082DDA4 /* Task.swift in Sources */,
 				18E9A6E42C9829970082DDA4 /* TemplateScreen.swift in Sources */,
@@ -9620,6 +9626,7 @@
 				18E9A7342C9829970082DDA4 /* UserNotificationCenterProtocol.swift in Sources */,
 				18E9A7352C9829970082DDA4 /* UserPreference.swift in Sources */,
 				18E9A7362C9829970082DDA4 /* UserProfile+Mock.swift in Sources */,
+				1885A5C52D140A61003F7B3B /* TimelineMediaPreviewFileExportPicker.swift in Sources */,
 				18E9A7372C9829970082DDA4 /* UserProfileListRow.swift in Sources */,
 				18E9A7382C9829970082DDA4 /* UserProfileProxy.swift in Sources */,
 				18E9A7392C9829970082DDA4 /* UserProfileScreen.swift in Sources */,
@@ -9649,6 +9656,7 @@
 				18E9A74F2C9829970082DDA4 /* VoiceMessagePreviewComposer.swift in Sources */,
 				18E9A7502C9829970082DDA4 /* VoiceMessageRecorder.swift in Sources */,
 				18E9A7512C9829970082DDA4 /* VoiceMessageRecorderProtocol.swift in Sources */,
+				1885A5C62D140A80003F7B3B /* PhotoLibraryManager.swift in Sources */,
 				18E9A7522C9829970082DDA4 /* VoiceMessageRecordingButton.swift in Sources */,
 				18E9A7532C9829970082DDA4 /* VoiceMessageRecordingComposer.swift in Sources */,
 				18DFC5C92CD954FF00462FE1 /* EncryptionSettingsFlowCoordinator.swift in Sources */,
