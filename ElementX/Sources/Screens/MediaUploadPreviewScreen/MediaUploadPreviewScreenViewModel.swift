@@ -16,11 +16,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     private let roomProxy: JoinedRoomProxyProtocol
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     private let url: URL
-    private var requestHandle: SendAttachmentJoinHandleProtocol? {
-        didSet {
-            state.shouldDisableInteraction = requestHandle != nil
-        }
-    }
+    private var requestHandle: SendAttachmentJoinHandleProtocol?
     
     private var actionsSubject: PassthroughSubject<MediaUploadPreviewScreenViewModelAction, Never> = .init()
     
@@ -48,9 +44,9 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         
         switch viewAction {
         case .send:
+            startLoading()
+            
             Task {
-                startLoading()
-                
                 switch await mediaUploadingPreprocessor.processMedia(at: url) {
                 case .success(let mediaInfo):
                     switch await sendAttachment(mediaInfo: mediaInfo, caption: caption) {
@@ -111,16 +107,17 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     private static let loadingIndicatorIdentifier = "\(MediaUploadPreviewScreenViewModel.self)-Loading"
     
     private func startLoading() {
-        userIndicatorController.submitIndicator(
-            UserIndicator(id: Self.loadingIndicatorIdentifier,
-                          type: .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: true),
-                          title: L10n.commonSending,
-                          persistent: true)
-        )
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: true),
+                                                              title: L10n.commonSending,
+                                                              persistent: true))
+        
+        state.shouldDisableInteraction = true
     }
     
     private func stopLoading() {
         userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+        state.shouldDisableInteraction = false
         requestHandle = nil
     }
     
