@@ -14,15 +14,19 @@ typealias SecurityAndPrivacyScreenViewModelType = StateStoreViewModel<SecurityAn
 class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, SecurityAndPrivacyScreenViewModelProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
     private let clientProxy: ClientProxyProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let actionsSubject: PassthroughSubject<SecurityAndPrivacyScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<SecurityAndPrivacyScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(roomProxy: JoinedRoomProxyProtocol, clientProxy: ClientProxyProtocol) {
+    init(roomProxy: JoinedRoomProxyProtocol,
+         clientProxy: ClientProxyProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
         self.clientProxy = clientProxy
+        self.userIndicatorController = userIndicatorController
         let canonicalAlias = roomProxy.infoPublisher.value.canonicalAlias
         super.init(initialViewState: SecurityAndPrivacyScreenViewState(serverName: clientProxy.userIDServerName ?? "",
                                                                        accessType: roomProxy.infoPublisher.value.roomAccessType,
@@ -69,8 +73,9 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             // When the available options changes always default to `sinceSelection` if the currently selected option is not available
             .sink { [weak self] availableVisibilityOptions in
                 guard let self else { return }
-                if !availableVisibilityOptions.contains(state.bindings.desiredSettings.historyVisibility) {
-                    state.bindings.desiredSettings.historyVisibility = .sinceSelection
+                let desiredHistoryVisbility = state.bindings.desiredSettings.historyVisibility
+                if !availableVisibilityOptions.contains(desiredHistoryVisbility) {
+                    state.bindings.desiredSettings.historyVisibility = desiredHistoryVisbility.fallbackOption
                 }
             }
             .store(in: &cancellables)
@@ -83,7 +88,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                 state.bindings.desiredSettings.isVisibileInRoomDirectory = value
                 state.currentSettings.isVisibileInRoomDirectory = value
             case .failure:
-                // TODO: Ask design, maybe we should present an alert or display some kind of error?
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
                 state.bindings.desiredSettings.isVisibileInRoomDirectory = false
                 state.bindings.desiredSettings.isVisibileInRoomDirectory = false
             }
@@ -94,10 +99,12 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
 private extension RoomInfoProxy {
     var roomAccessType: SecurityAndPrivacyRoomAccessType {
         switch joinRule {
-        case .invite, .restricted:
+        case .invite:
             return .inviteOnly
         case .knock, .knockRestricted:
             return .askToJoin
+        case .restricted:
+            return .spaceUsers
         default:
             return .anyone
         }

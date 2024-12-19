@@ -23,7 +23,7 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     
     var isSaveDisabled: Bool {
         !hasChanges ||
-            (bindings.desiredSettings.isVisibileInRoomDirectory == nil &&
+            (currentSettings.isVisibileInRoomDirectory == nil &&
                 bindings.desiredSettings.accessType != .inviteOnly &&
                 canonicalAlias != nil)
     }
@@ -69,6 +69,7 @@ enum SecurityAndPrivacyRoomAccessType {
     case inviteOnly
     case askToJoin
     case anyone
+    case spaceUsers
 }
 
 enum SecurityAndPrivacyAlertType {
@@ -85,4 +86,13 @@ enum SecurityAndPrivacyHistoryVisibility {
     case sinceSelection
     case sinceInvite
     case anyone
+    
+    var fallbackOption: Self {
+        switch self {
+        case .sinceInvite, .sinceSelection:
+            return .sinceSelection
+        case .anyone:
+            return .sinceInvite
+        }
+    }
 }
