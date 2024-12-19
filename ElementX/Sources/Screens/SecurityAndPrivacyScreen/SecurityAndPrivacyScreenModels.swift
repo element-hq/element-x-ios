@@ -22,7 +22,10 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     }
     
     var isSaveDisabled: Bool {
-        !hasChanges || currentSettings.isVisibileInRoomDirectory == nil
+        !hasChanges ||
+            (bindings.desiredSettings.isVisibileInRoomDirectory == nil &&
+                bindings.desiredSettings.accessType != .inviteOnly &&
+                canonicalAlias != nil)
     }
     
     var availableVisibilityOptions: [SecurityAndPrivacyHistoryVisibility] {
