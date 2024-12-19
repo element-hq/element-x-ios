@@ -224,6 +224,7 @@ targets:
     sources:
     - path: ../Sources
       excludes:
+        - Other/Extensions/XCTestCase.swift
         - Other/Extensions/XCUIElement.swift
     - path: ../Resources
     - path: ../SupportingFiles
