@@ -15,13 +15,10 @@ struct SecurityAndPrivacyScreenCoordinatorParameters {
 }
 
 enum SecurityAndPrivacyScreenCoordinatorAction {
-    case done
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
+    case displayEditAddressScreen
 }
 
 final class SecurityAndPrivacyScreenCoordinator: CoordinatorProtocol {
-    private let parameters: SecurityAndPrivacyScreenCoordinatorParameters
     private let viewModel: SecurityAndPrivacyScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
@@ -32,7 +29,6 @@ final class SecurityAndPrivacyScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: SecurityAndPrivacyScreenCoordinatorParameters) {
-        self.parameters = parameters
         viewModel = SecurityAndPrivacyScreenViewModel(roomProxy: parameters.roomProxy,
                                                       clientProxy: parameters.clientProxy,
                                                       userIndicatorController: parameters.userIndicatorController)
@@ -44,8 +40,8 @@ final class SecurityAndPrivacyScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
-            case .done:
-                actionsSubject.send(.done)
+            case .displayEditAddressScreen:
+                actionsSubject.send(.displayEditAddressScreen)
             }
         }
         .store(in: &cancellables)
