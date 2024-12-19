@@ -142,6 +142,8 @@ struct TimelineMediaPreviewRedactConfirmationView_Previews: PreviewProvider, Tes
                                                             viewModel: TimelineViewModel.mock,
                                                             namespace: previewNamespace),
                                              mediaProvider: MediaProviderMock(configuration: .init()),
-                                             userIndicatorController: UserIndicatorControllerMock())
+                                             photoLibraryManager: PhotoLibraryManagerMock(.init()),
+                                             userIndicatorController: UserIndicatorControllerMock(),
+                                             appMediator: AppMediatorMock())
     }
 }

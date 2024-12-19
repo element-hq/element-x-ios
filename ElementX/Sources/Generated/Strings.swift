@@ -606,6 +606,10 @@ internal enum L10n {
   }
   /// In order to let the application display notifications, please grant the permission in the system settings.
   internal static var dialogPermissionNotification: String { return L10n.tr("Localizable", "dialog_permission_notification") }
+  /// %1$@ does not have access to your photo library.
+  internal static func dialogPermissionPhotoLibraryTitleIos(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "dialog_permission_photo_library_title_ios", String(describing: p1))
+  }
   /// Confirmation
   internal static var dialogTitleConfirmation: String { return L10n.tr("Localizable", "dialog_title_confirmation") }
   /// Error
@@ -2592,6 +2596,8 @@ internal enum L10n {
   internal static var testUntranslatedDefaultLanguageIdentifier: String { return L10n.tr("Localizable", "test_untranslated_default_language_identifier") }
   /// Historical messages are not available on this device
   internal static var timelineDecryptionFailureHistoricalEventNoKeyBackup: String { return L10n.tr("Localizable", "timeline_decryption_failure_historical_event_no_key_backup") }
+  /// You need to verify this device for access to historical messages
+  internal static var timelineDecryptionFailureHistoricalEventUnverifiedDevice: String { return L10n.tr("Localizable", "timeline_decryption_failure_historical_event_unverified_device") }
   /// You don't have access to this message
   internal static var timelineDecryptionFailureHistoricalEventUserNotJoined: String { return L10n.tr("Localizable", "timeline_decryption_failure_historical_event_user_not_joined") }
   /// Unable to decrypt message

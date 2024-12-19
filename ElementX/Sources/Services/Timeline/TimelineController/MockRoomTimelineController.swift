@@ -34,18 +34,21 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     private var client: UITestsSignalling.Client?
     
-    init(timelineKind: TimelineKind = .live, listenForSignals: Bool = false) {
+    static var mediaGallery: MockRoomTimelineController {
+        MockRoomTimelineController(timelineKind: .media(.mediaFilesScreen), timelineItems: (0..<5).reduce([]) { partialResult, _ in
+            partialResult + [RoomTimelineItemFixtures.separator] + RoomTimelineItemFixtures.mediaChunk
+        })
+    }
+    
+    static var emptyMediaGallery: MockRoomTimelineController {
+        let mock = MockRoomTimelineController(timelineKind: .media(.mediaFilesScreen))
+        mock.paginationState = PaginationState(backward: .timelineEndReached, forward: .timelineEndReached)
+        return mock
+    }
+    
+    init(timelineKind: TimelineKind = .live, listenForSignals: Bool = false, timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default) {
         self.timelineKind = timelineKind
-        
-        switch timelineKind {
-        case .media:
-            paginationState = PaginationState(backward: .timelineEndReached, forward: .timelineEndReached)
-            timelineItems = (0..<5).reduce([]) { partialResult, _ in
-                partialResult + [RoomTimelineItemFixtures.separator] + RoomTimelineItemFixtures.mediaChunk
-            }
-        default:
-            paginationState = PaginationState(backward: .idle, forward: .timelineEndReached)
-        }
+        self.timelineItems = timelineItems
         
         callbacks.send(.paginationState(paginationState))
         callbacks.send(.isLive(true))

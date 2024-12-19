@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-design-tokens",
       "state" : {
-        "revision" : "31b236f02c811704b68e8aae429865fe8eb8d8ba",
-        "version" : "2.1.1"
+        "revision" : "a6e96fb4436a4945423a8c068001093af4b7b315",
+        "version" : "3.0.1"
       }
     },
     {
@@ -33,7 +33,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-ios",
       "state" : {
-        "revision" : "78e1290d2a9f903f929806221331d8b4e898f4fe"
+        "revision" : "9325643cb4d22150881c5bf79e1e6e3c5a87ea89"
       }
     },
     {
@@ -176,8 +176,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "7c3d3abd370bd416c435790dc0c76999e018529b",
-        "version" : "1.0.81"
+        "revision" : "043fcb8c80bbb6257f3f2075f2a72b8c9fdcbed2",
+        "version" : "1.0.82"
       }
     },
     {
@@ -212,8 +212,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/BarredEwe/Prefire",
       "state" : {
-        "revision" : "0b7b6e6fe98af7e12b1440ca8fe81b3033ecf873",
-        "version" : "2.9.0"
+        "revision" : "172a7f0a95f99f6656f6b2d0531b648c08d26c56",
+        "version" : "2.10.0"
       }
     },
     {

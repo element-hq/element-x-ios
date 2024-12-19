@@ -225,8 +225,8 @@ struct MediaEventsTimelineScreen: View {
 struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     static let mediaViewModel = makeViewModel(screenMode: .media)
     static let filesViewModel = makeViewModel(screenMode: .files)
-    static let emptyMediaViewModel = makeViewModel(timelineKind: .detached, screenMode: .media)
-    static let emptyFilesViewModel = makeViewModel(timelineKind: .detached, screenMode: .files)
+    static let emptyMediaViewModel = makeViewModel(empty: true, screenMode: .media)
+    static let emptyFilesViewModel = makeViewModel(empty: true, screenMode: .files)
     
     static var previews: some View {
         NavigationStack {
@@ -250,18 +250,22 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Empty Files")
     }
     
-    private static func makeViewModel(timelineKind: TimelineKind = .media(.mediaFilesScreen),
+    private static func makeViewModel(empty: Bool = false,
                                       screenMode: MediaEventsTimelineScreenMode) -> MediaEventsTimelineScreenViewModel {
-        MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: makeTimelineViewModel(timelineKind: timelineKind),
-                                           filesTimelineViewModel: makeTimelineViewModel(timelineKind: timelineKind),
+        MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: makeTimelineViewModel(empty: empty),
+                                           filesTimelineViewModel: makeTimelineViewModel(empty: empty),
+                                           initialViewState: .init(bindings: .init(screenMode: screenMode)),
                                            mediaProvider: MediaProviderMock(configuration: .init()),
-                                           initialViewState: .init(hasReachedTimelineStart: true,
-                                                                   bindings: .init(screenMode: screenMode)),
                                            userIndicatorController: UserIndicatorControllerMock())
     }
     
-    private static func makeTimelineViewModel(timelineKind: TimelineKind) -> TimelineViewModel {
-        let timelineController = MockRoomTimelineController(timelineKind: timelineKind)
+    private static func makeTimelineViewModel(empty: Bool) -> TimelineViewModel {
+        let timelineController = if empty {
+            MockRoomTimelineController.emptyMediaGallery
+        } else {
+            MockRoomTimelineController.mediaGallery
+        }
+        
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                  timelineController: timelineController,
                                  mediaProvider: MediaProviderMock(configuration: .init()),

@@ -37,8 +37,9 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                 state.bindings.alertInfo = .init(id: .enableEncryption,
                                                  title: L10n.screenSecurityAndPrivacyEnableEncryptionAlertTitle,
                                                  message: L10n.screenSecurityAndPrivacyEnableEncryptionAlertDescription,
-                                                 primaryButton: .init(title: L10n.screenSecurityAndPrivacyEnableEncryptionAlertConfirmButtonTitle,
-                                                                      action: { [weak self] in self?.state.bindings.desiredSettings.isEncryptionEnabled = true }),
+                                                 primaryButton: .init(title: L10n.screenSecurityAndPrivacyEnableEncryptionAlertConfirmButtonTitle) { [weak self] in
+                                                     self?.state.bindings.desiredSettings.isEncryptionEnabled = true
+                                                 },
                                                  secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
             } else {
                 state.bindings.desiredSettings.isEncryptionEnabled = false

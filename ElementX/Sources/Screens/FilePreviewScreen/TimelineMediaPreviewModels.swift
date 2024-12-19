@@ -26,8 +26,18 @@ struct TimelineMediaPreviewViewState: BindableState {
 }
 
 struct TimelineMediaPreviewViewStateBindings {
+    /// A binding that will present the Details view for the specified item.
     var mediaDetailsItem: TimelineMediaPreviewItem?
+    /// A binding that will present a confirmation to redact the specified item.
     var redactConfirmationItem: TimelineMediaPreviewItem?
+    /// A binding that will present a document picker to export the specified file.
+    var fileToExport: TimelineMediaPreviewFileExportPicker.File?
+    
+    var alertInfo: AlertInfo<TimelineMediaPreviewAlertType>?
+}
+
+enum TimelineMediaPreviewAlertType {
+    case authorizationRequired
 }
 
 /// Wraps a media file and title to be previewed with QuickLook.

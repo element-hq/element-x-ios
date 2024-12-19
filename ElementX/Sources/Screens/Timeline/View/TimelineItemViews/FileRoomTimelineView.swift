@@ -36,7 +36,7 @@ struct MediaFileRoomTimelineContent: View {
     let additionalWhitespaces: Int
     var isAudioFile = false
     
-    var onMediaTap: (() -> Void)? = nil
+    var onMediaTap: (() -> Void)?
     
     private var icon: KeyPath<CompoundIcons, Image> {
         isAudioFile ? \.audio : \.attachment

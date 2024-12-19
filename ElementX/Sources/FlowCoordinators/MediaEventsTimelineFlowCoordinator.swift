@@ -115,7 +115,8 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     private func presentMediaPreview(for previewContext: TimelineMediaPreviewContext) {
         let parameters = TimelineMediaPreviewCoordinatorParameters(context: previewContext,
                                                                    mediaProvider: userSession.mediaProvider,
-                                                                   userIndicatorController: userIndicatorController)
+                                                                   userIndicatorController: userIndicatorController,
+                                                                   appMediator: appMediator)
         
         let coordinator = TimelineMediaPreviewCoordinator(parameters: parameters)
         coordinator.actionsPublisher
