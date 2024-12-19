@@ -42,6 +42,10 @@ struct TimelineItemMenuActionProvider {
         if timelineKind == .pinned || timelineKind == .media(.mediaFilesScreen) {
             actions.append(.viewInRoomTimeline)
         }
+        
+        if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded, let eventID = item.id.eventID {
+            actions.append(.endPoll(pollStartID: eventID))
+        }
 
         if item.canBeRepliedTo {
             if let messageItem = item as? EventBasedMessageTimelineItemProtocol {
@@ -53,14 +57,6 @@ struct TimelineItemMenuActionProvider {
         
         if item.isForwardable {
             actions.append(.forward(itemID: item.id))
-        }
-        
-        if canCurrentUserPin, let eventID = item.id.eventID {
-            actions.append(pinnedEventIDs.contains(eventID) ? .unpin : .pin)
-        }
-        
-        if item.isRemoteMessage {
-            actions.append(.copyPermalink)
         }
         
         if item.isEditable {
@@ -76,6 +72,14 @@ struct TimelineItemMenuActionProvider {
                 actions.append(.edit)
             }
         }
+        
+        if item.isRemoteMessage {
+            actions.append(.copyPermalink)
+        }
+        
+        if canCurrentUserPin, let eventID = item.id.eventID {
+            actions.append(pinnedEventIDs.contains(eventID) ? .unpin : .pin)
+        }
 
         if item.isCopyable {
             actions.append(.copy)
@@ -85,10 +89,6 @@ struct TimelineItemMenuActionProvider {
         
         if item.isEditable, item.hasMediaCaption {
             actions.append(.removeCaption)
-        }
-        
-        if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded, let eventID = item.id.eventID {
-            actions.append(.endPoll(pollStartID: eventID))
         }
         
         if isViewSourceEnabled {
@@ -131,15 +131,14 @@ struct TimelineItemMenuActionProvider {
     
     private func makeEncryptedItemActions(_ encryptedItem: EncryptedRoomTimelineItem) -> TimelineItemMenuActions? {
         var actions: [TimelineItemMenuAction] = [.copyPermalink]
-        var secondaryActions: [TimelineItemMenuAction] = []
-        
+
         if isViewSourceEnabled {
             actions.append(.viewSource)
         }
                 
         return .init(isReactable: false,
                      actions: actions,
-                     secondaryActions: secondaryActions,
+                     secondaryActions: [],
                      emojiProvider: emojiProvider)
     }
     
