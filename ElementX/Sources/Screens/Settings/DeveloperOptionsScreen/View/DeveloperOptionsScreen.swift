@@ -66,10 +66,6 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.createMediaCaptionsEnabled) {
                     Text("Allow creation of media captions")
                 }
-                
-                Toggle(isOn: $context.mediaBrowserEnabled) {
-                    Text("Enable the media browser")
-                }
             }
             
             Section("Join rules") {

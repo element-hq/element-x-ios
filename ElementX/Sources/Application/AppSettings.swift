@@ -50,7 +50,6 @@ final class AppSettings {
         case enableOnlySignedDeviceIsolationMode
         case knockingEnabled
         case createMediaCaptionsEnabled
-        case mediaBrowserEnabled
         case eventCacheEnabled
     }
     
@@ -294,9 +293,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.createMediaCaptionsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var createMediaCaptionsEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.mediaBrowserEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var mediaBrowserEnabled
     
     #endif
     
