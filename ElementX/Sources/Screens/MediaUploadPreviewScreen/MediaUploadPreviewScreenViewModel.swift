@@ -16,6 +16,8 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     private let roomProxy: JoinedRoomProxyProtocol
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     private let url: URL
+    
+    private var processingTask: Task<Result<MediaInfo, MediaUploadingPreprocessorError>, Never>
     private var requestHandle: SendAttachmentJoinHandleProtocol?
     
     private var actionsSubject: PassthroughSubject<MediaUploadPreviewScreenViewModelAction, Never> = .init()
@@ -35,6 +37,9 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.url = url
         
+        // Start processing the media whilst the user is reviewing it/adding a caption.
+        processingTask = Task { await mediaUploadingPreprocessor.processMedia(at: url) }
+        
         super.init(initialViewState: MediaUploadPreviewScreenViewState(url: url, title: title, shouldShowCaptionWarning: shouldShowCaptionWarning))
     }
     
@@ -47,7 +52,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
             startLoading()
             
             Task {
-                switch await mediaUploadingPreprocessor.processMedia(at: url) {
+                switch await processingTask.value {
                 case .success(let mediaInfo):
                     switch await sendAttachment(mediaInfo: mediaInfo, caption: caption) {
                     case .success:
@@ -69,6 +74,10 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
             requestHandle?.cancel()
             actionsSubject.send(.dismiss)
         }
+    }
+    
+    func stopProcessing() {
+        processingTask.cancel()
     }
     
     // MARK: - Private
