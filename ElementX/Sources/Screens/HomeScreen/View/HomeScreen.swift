@@ -196,19 +196,26 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             HomeScreen(context: loadingViewModel.context)
         }
+        .snapshotPreferences(expect: loadedViewModel.context.$viewState.map { state in
+            state.roomListMode == .skeletons
+        })
         .previewDisplayName("Loading")
         
         NavigationStack {
             HomeScreen(context: emptyViewModel.context)
         }
+        .snapshotPreferences(expect: emptyViewModel.context.$viewState.map { state in
+            state.roomListMode == .empty
+        })
         .previewDisplayName("Empty")
-        .snapshotPreferences(delay: 4.0)
         
         NavigationStack {
             HomeScreen(context: loadedViewModel.context)
         }
+        .snapshotPreferences(expect: loadedViewModel.context.$viewState.map { state in
+            state.roomListMode == .rooms
+        })
         .previewDisplayName("Loaded")
-        .snapshotPreferences(delay: 4.0)
     }
     
     static func viewModel(_ mode: HomeScreenRoomListMode) -> HomeScreenViewModel {
