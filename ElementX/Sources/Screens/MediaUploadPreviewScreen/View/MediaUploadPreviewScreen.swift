@@ -6,6 +6,7 @@
 //
 
 import Compound
+import GameController
 import QuickLook
 import SwiftUI
 
@@ -15,6 +16,7 @@ struct MediaUploadPreviewScreen: View {
     @ObservedObject var context: MediaUploadPreviewScreenViewModel.Context
     
     @State private var captionWarningFrame: CGRect = .zero
+    @FocusState private var isComposerFocussed
     
     private var title: String { ProcessInfo.processInfo.isiOSAppOnMac ? context.viewState.title ?? "" : "" }
     private var colorSchemeOverride: ColorScheme { ProcessInfo.processInfo.isiOSAppOnMac ? colorScheme : .dark }
@@ -36,6 +38,7 @@ struct MediaUploadPreviewScreen: View {
             .interactiveDismissDisabled()
             .presentationBackground(.background) // Fix a bug introduced by the caption warning.
             .preferredColorScheme(colorSchemeOverride)
+            .onAppear(perform: focusComposerIfHardwareKeyboardConnected)
     }
     
     @ViewBuilder
@@ -58,8 +61,8 @@ struct MediaUploadPreviewScreen: View {
                                          text: $context.caption,
                                          presendCallback: $context.presendCallback,
                                          maxHeight: ComposerConstant.maxHeight,
-                                         keyHandler: { _ in },
-                                         pasteHandler: { _ in })
+                                         keyHandler: handleKeyPress) { _ in }
+                    .focused($isComposerFocussed)
                 
                 if context.viewState.shouldShowCaptionWarning {
                     captionWarningButton
@@ -124,6 +127,27 @@ struct MediaUploadPreviewScreen: View {
             // follow the dark colour scheme on devices running with dark mode disabled.
             .tint(.compound.textActionPrimary)
         }
+    }
+    
+    private func handleKeyPress(_ key: UIKeyboardHIDUsage) {
+        switch key {
+        case .keyboardReturnOrEnter:
+            context.send(viewAction: .send)
+        case .keyboardEscape:
+            context.send(viewAction: .cancel)
+        default:
+            break
+        }
+    }
+    
+    private func focusComposerIfHardwareKeyboardConnected() {
+        // The simulator always detects the hardware keyboard as connected
+        #if !targetEnvironment(simulator)
+        if GCKeyboard.coalesced != nil {
+            MXLog.info("Hardware keyboard is connected")
+            isComposerFocussed = true
+        }
+        #endif
     }
 }
 
