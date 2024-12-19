@@ -138,8 +138,13 @@ class MediaUploadPreviewScreenViewModelTests: XCTestCase {
     }
     
     private func send() async throws {
+        XCTAssertFalse(context.viewState.shouldDisableInteraction, "Attempting to send when interaction is disabled.")
+        
         let deferred = deferFulfillment(viewModel.actions) { $0 == .dismiss }
         context.send(viewAction: .send)
+        
+        XCTAssertTrue(context.viewState.shouldDisableInteraction, "The interaction should be disabled while sending.")
+        
         try await deferred.fulfill()
     }
 }

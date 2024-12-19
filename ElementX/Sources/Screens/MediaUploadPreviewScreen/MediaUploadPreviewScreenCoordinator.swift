@@ -52,6 +52,10 @@ final class MediaUploadPreviewScreenCoordinator: CoordinatorProtocol {
             .store(in: &cancellables)
     }
     
+    func stop() {
+        viewModel.stopProcessing()
+    }
+    
     func toPresentable() -> AnyView {
         AnyView(MediaUploadPreviewScreen(context: viewModel.context))
     }
