@@ -359,6 +359,15 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
+    func isVisibleInRoomDirectory() async -> Result<Bool, RoomProxyError> {
+        do {
+            return try await .success(room.getRoomVisibility() == .public)
+        } catch {
+            MXLog.error("Failed checking if room is visible in room directory with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     // MARK: - Room flags
     
     func flagAsUnread(_ isUnread: Bool) async -> Result<Void, RoomProxyError> {
