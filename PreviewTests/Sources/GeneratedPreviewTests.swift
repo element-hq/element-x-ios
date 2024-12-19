@@ -143,6 +143,12 @@ extension PreviewTests {
         }
     }
 
+    func test_editRoomAddressScreen() {
+        for preview in EditRoomAddressScreen_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_emojiPickerScreenHeaderView() {
         for preview in EmojiPickerScreenHeaderView_Previews._allPreviews {
             assertSnapshots(matching: preview)
@@ -781,6 +787,12 @@ extension PreviewTests {
 
     func test_secureBackupScreen() {
         for preview in SecureBackupScreen_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_securityAndPrivacyScreen() {
+        for preview in SecurityAndPrivacyScreen_Previews._allPreviews {
             assertSnapshots(matching: preview)
         }
     }
