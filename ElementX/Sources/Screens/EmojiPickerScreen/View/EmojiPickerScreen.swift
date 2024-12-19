@@ -51,6 +51,8 @@ struct EmojiPickerScreen: View {
             .toolbar { toolbar }
             .isSearching($isSearching)
             .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always))
+            .focusSearchIfHardwareKeyboardAvailable()
+            .onSubmit(of: .search, sendFirstEmojiOnMac)
             .compoundSearchField()
         }
         .presentationDetents([.medium, .large])
@@ -74,6 +76,15 @@ struct EmojiPickerScreen: View {
             Button { context.send(viewAction: .dismiss) } label: {
                 Text(L10n.actionCancel)
             }
+        }
+    }
+    
+    func sendFirstEmojiOnMac() {
+        // No sure-fire way to detect that the submit came from a h/w keyboard on iOS/iPadOS.
+        guard ProcessInfo.processInfo.isiOSAppOnMac else { return }
+        
+        if let emoji = context.viewState.categories.first?.emojis.first {
+            context.send(viewAction: .emojiTapped(emoji: emoji))
         }
     }
 }

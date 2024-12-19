@@ -5,6 +5,7 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import GameController
 import SwiftUI
 import SwiftUIIntrospect
 
@@ -165,7 +166,18 @@ private struct SearchController: UIViewControllerRepresentable {
 
 // MARK: - Searchable Extensions
 
-struct IsSearchingModifier: ViewModifier {
+extension View {
+    func isSearching(_ isSearching: Binding<Bool>) -> some View {
+        modifier(IsSearchingModifier(isSearching: isSearching))
+    }
+    
+    /// Automatically focusses the view's search field if a hardware keyboard is connected.
+    func focusSearchIfHardwareKeyboardAvailable() -> some View {
+        modifier(FocusSearchIfHardwareKeyboardAvailableModifier())
+    }
+}
+
+private struct IsSearchingModifier: ViewModifier {
     @Environment(\.isSearching) private var isSearchingEnv
     @Binding var isSearching: Bool
     
@@ -175,8 +187,26 @@ struct IsSearchingModifier: ViewModifier {
     }
 }
 
-extension View {
-    func isSearching(_ isSearching: Binding<Bool>) -> some View {
-        modifier(IsSearchingModifier(isSearching: isSearching))
+private struct FocusSearchIfHardwareKeyboardAvailableModifier: ViewModifier {
+    @FocusState private var isFocused
+    
+    func body(content: Content) -> some View {
+        if #available(iOS 18.0, *) {
+            content
+                .searchFocused($isFocused)
+                .onAppear(perform: focusIfHardwareKeyboardAvailable)
+        } else {
+            content
+        }
+    }
+    
+    func focusIfHardwareKeyboardAvailable() {
+        // The simulator always detects the hardware keyboard as connected
+        #if !targetEnvironment(simulator)
+        if GCKeyboard.coalesced != nil {
+            MXLog.info("Hardware keyboard is connected")
+            isFocused = true
+        }
+        #endif
     }
 }
