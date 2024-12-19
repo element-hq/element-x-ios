@@ -108,7 +108,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                                                       pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
                                                       isDM: timelineContext.viewState.isEncryptedOneToOneRoom,
                                                       isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
-                                                      isCreateMediaCaptionsEnabled: timelineContext.viewState.isCreateMediaCaptionsEnabled,
                                                       timelineKind: timelineContext.viewState.timelineKind,
                                                       emojiProvider: timelineContext.viewState.emojiProvider)
         state.currentItemActions = provider.makeActions()
