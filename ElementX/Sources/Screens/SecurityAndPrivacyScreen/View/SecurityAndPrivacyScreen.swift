@@ -45,6 +45,14 @@ struct SecurityAndPrivacyScreen: View {
             ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomAccessAnyoneOptionTitle,
                                   description: L10n.screenSecurityAndPrivacyRoomAccessAnyoneOptionDescription),
                     kind: .selection(isSelected: context.desiredSettings.accessType == .anyone) { context.desiredSettings.accessType = .anyone })
+            
+            if context.viewState.currentSettings.accessType == .spaceUsers {
+                ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionTitle,
+                                      description: L10n.screenSecurityAndPrivacyRoomAccessSpaceMembersOptionDescription),
+                        kind: .selection(isSelected: context.desiredSettings.accessType == .spaceUsers) { })
+                    // This is not supported so it will always be disabled and has no handler
+                    .disabled(true)
+            }
         } header: {
             Text(L10n.screenSecurityAndPrivacyRoomAccessSectionHeader)
                 .compoundListSectionHeader()
@@ -172,17 +180,28 @@ struct SecurityAndPrivacyScreen: View {
 // MARK: - Previews
 
 struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
-    static let inviteOnlyViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(joinRule: .invite)), clientProxy: ClientProxyMock(.init()))
+    static let inviteOnlyViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(joinRule: .invite)),
+                                                                       clientProxy: ClientProxyMock(.init()),
+                                                                       userIndicatorController: UserIndicatorControllerMock())
     
     static let publicViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
                                                                                                         canonicalAlias: "#room:matrix.org",
                                                                                                         joinRule: .public,
                                                                                                         isVisibleInPublicDirectory: true)),
-                                                                   clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")))
+                                                                   clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")),
+                                                                   userIndicatorController: UserIndicatorControllerMock())
     
     static let publicNoAddressViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
                                                                                                                  joinRule: .public)),
-                                                                            clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")))
+                                                                            clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")),
+                                                                            userIndicatorController: UserIndicatorControllerMock())
+    
+    static let restrictedViewModel = SecurityAndPrivacyScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(isEncrypted: false,
+                                                                                                            canonicalAlias: "#room:matrix.org",
+                                                                                                            joinRule: .restricted(rules: []),
+                                                                                                            isVisibleInPublicDirectory: true)),
+                                                                       clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")),
+                                                                       userIndicatorController: UserIndicatorControllerMock())
     
     static var previews: some View {
         NavigationStack {
@@ -200,5 +219,11 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
             SecurityAndPrivacyScreen(context: publicNoAddressViewModel.context)
         }
         .previewDisplayName("Public room without address")
+        
+        NavigationStack {
+            SecurityAndPrivacyScreen(context: restrictedViewModel.context)
+        }
+        .snapshotPreferences(delay: 0.1)
+        .previewDisplayName("Restricted room")
     }
 }
