@@ -174,12 +174,13 @@ struct RoomDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
             RoomDetailsEditScreen(context: readOnlyViewModel.context)
         }
         .previewDisplayName("Read only")
-        .snapshotPreferences(delay: 0.25)
         
         NavigationStack {
             RoomDetailsEditScreen(context: editableViewModel.context)
         }
+        .snapshotPreferences(expect: editableViewModel.context.$viewState.map { state in
+            state.canEditTopic == true
+        })
         .previewDisplayName("Editable")
-        .snapshotPreferences(delay: 0.25)
     }
 }
