@@ -52,6 +52,7 @@ enum TimelineMediaPreviewAlertType {
 class TimelineMediaPreviewItem: NSObject, QLPreviewItem, Identifiable {
     let timelineItem: EventBasedMessageTimelineItemProtocol
     var fileHandle: MediaFileHandleProxy?
+    var downloadError: Error?
     
     init(timelineItem: EventBasedMessageTimelineItemProtocol) {
         self.timelineItem = timelineItem

@@ -149,8 +149,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "043fcb8c80bbb6257f3f2075f2a72b8c9fdcbed2",
-        "version" : "1.0.82"
+        "revision" : "0d20974d1c44225596b24af1ec1f36716dd6e512",
+        "version" : "1.0.83"
       }
     },
     {

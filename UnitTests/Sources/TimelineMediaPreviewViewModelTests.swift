@@ -36,6 +36,48 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         XCTAssertNotNil(context.viewState.currentItemActions)
     }
     
+    func testLoadingItemFailure() async throws {
+        // Given a fresh view model.
+        setupViewModel()
+        XCTAssertFalse(mediaProvider.loadFileFromSourceFilenameCalled)
+        XCTAssertEqual(context.viewState.currentItem, context.viewState.previewItems[0])
+        XCTAssertNil(context.viewState.currentItem.downloadError)
+        
+        // When the preview controller sets an item that fails to load.
+        mediaProvider.loadFileFromSourceFilenameClosure = { _, _ in .failure(.failedRetrievingFile) }
+        let failure = deferFailure(viewModel.state.fileLoadedPublisher, timeout: 1) { _ in true }
+        context.send(viewAction: .updateCurrentItem(context.viewState.previewItems[0]))
+        try await failure.fulfill()
+        
+        // Then the view model should load the item and update its view state.
+        XCTAssertTrue(mediaProvider.loadFileFromSourceFilenameCalled)
+        XCTAssertEqual(context.viewState.currentItem, context.viewState.previewItems[0])
+        XCTAssertNotNil(context.viewState.currentItem.downloadError)
+    }
+    
+    func testSwipingBetweenItems() async throws {
+        // Given a view model with a loaded item.
+        try await testLoadingItem()
+        
+        // When swiping to another item.
+        let deferred = deferFulfillment(viewModel.state.fileLoadedPublisher) { _ in true }
+        context.send(viewAction: .updateCurrentItem(context.viewState.previewItems[1]))
+        try await deferred.fulfill()
+        
+        // Then the view model should load the item and update its view state.
+        XCTAssertEqual(mediaProvider.loadFileFromSourceFilenameCallsCount, 2)
+        XCTAssertEqual(context.viewState.currentItem, context.viewState.previewItems[1])
+        
+        // When swiping back to the first item.
+        let failure = deferFailure(viewModel.state.fileLoadedPublisher, timeout: 1) { _ in true }
+        context.send(viewAction: .updateCurrentItem(context.viewState.previewItems[0]))
+        try await failure.fulfill()
+        
+        // Then the view model should not need to load the item, but should still update its view state.
+        XCTAssertEqual(mediaProvider.loadFileFromSourceFilenameCallsCount, 2)
+        XCTAssertEqual(context.viewState.currentItem, context.viewState.previewItems[0])
+    }
+    
     func testViewInRoomTimeline() async throws {
         // Given a view model with a loaded item.
         try await testLoadingItem()

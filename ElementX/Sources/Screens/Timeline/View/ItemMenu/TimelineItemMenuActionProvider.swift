@@ -16,7 +16,6 @@ struct TimelineItemMenuActionProvider {
     let pinnedEventIDs: Set<String>
     let isDM: Bool
     let isViewSourceEnabled: Bool
-    let isCreateMediaCaptionsEnabled: Bool
     let timelineKind: TimelineKind
     let emojiProvider: EmojiProviderProtocol
     
@@ -63,7 +62,7 @@ struct TimelineItemMenuActionProvider {
             if item.supportsMediaCaption {
                 if item.hasMediaCaption {
                     actions.append(.editCaption)
-                } else if isCreateMediaCaptionsEnabled {
+                } else {
                     actions.append(.addCaption)
                 }
             } else if item is PollRoomTimelineItem {

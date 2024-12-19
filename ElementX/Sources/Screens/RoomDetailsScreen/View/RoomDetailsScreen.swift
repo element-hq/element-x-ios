@@ -170,12 +170,10 @@ struct RoomDetailsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
             
-            if context.viewState.mediaBrowserEnabled {
-                ListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapMediaEvents)
-                        })
-            }
+            ListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
+                    kind: .navigationLink {
+                        context.send(viewAction: .processTapMediaEvents)
+                    })
         }
     }
     

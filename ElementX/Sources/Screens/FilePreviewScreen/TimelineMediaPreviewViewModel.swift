@@ -80,21 +80,21 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     }
     
     private func updateCurrentItem(_ previewItem: TimelineMediaPreviewItem) async {
+        previewItem.downloadError = nil // Clear any existing error.
         state.currentItem = previewItem
         currentItemIDHandler?(previewItem.id)
+        
         rebuildCurrentItemActions()
         
         if previewItem.fileHandle == nil, let source = previewItem.mediaSource {
-            showDownloadingIndicator(itemID: previewItem.id)
-            defer { hideDownloadingIndicator(itemID: previewItem.id) }
-            
             switch await mediaProvider.loadFileFromSource(source, filename: previewItem.filename) {
             case .success(let handle):
                 previewItem.fileHandle = handle
                 state.fileLoadedPublisher.send(previewItem.id)
             case .failure(let error):
                 MXLog.error("Failed loading media: \(error)")
-                showDownloadErrorIndicator()
+                context.objectWillChange.send() // Manually trigger the SwiftUI view update.
+                previewItem.downloadError = error
             }
         }
     }
@@ -108,7 +108,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                                                       pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
                                                       isDM: timelineContext.viewState.isEncryptedOneToOneRoom,
                                                       isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
-                                                      isCreateMediaCaptionsEnabled: timelineContext.viewState.isCreateMediaCaptionsEnabled,
                                                       timelineKind: timelineContext.viewState.timelineKind,
                                                       emojiProvider: timelineContext.viewState.emojiProvider)
         state.currentItemActions = provider.makeActions()
@@ -156,39 +155,17 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     
     // MARK: - Indicators
     
-    private func showDownloadingIndicator(itemID: TimelineItemIdentifier) {
-        let indicatorID = makeDownloadIndicatorID(itemID: itemID)
-        userIndicatorController.submitIndicator(UserIndicator(id: indicatorID,
-                                                              type: .toast(progress: .indeterminate),
-                                                              title: L10n.commonDownloading,
-                                                              persistent: true),
-                                                delay: .seconds(0.1)) // Don't show the indicator when the SDK loads the file from the store.
-    }
-    
-    private func hideDownloadingIndicator(itemID: TimelineItemIdentifier) {
-        let indicatorID = makeDownloadIndicatorID(itemID: itemID)
-        userIndicatorController.retractIndicatorWithId(indicatorID)
-    }
-    
-    // FIXME: Add the strings and correct indicator types
-    private func showDownloadErrorIndicator() {
-        userIndicatorController.submitIndicator(UserIndicator(id: downloadErrorIndicatorID,
-                                                              type: .modal,
-                                                              title: L10n.errorUnknown,
-                                                              iconName: "exclamationmark.circle.fill"))
-    }
-    
     private func showRedactedIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: statusIndicatorID,
                                                               type: .toast,
-                                                              title: "File deleted",
+                                                              title: L10n.commonFileDeleted,
                                                               iconName: "checkmark"))
     }
     
     private func showSavedIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: statusIndicatorID,
                                                               type: .toast,
-                                                              title: "File saved",
+                                                              title: L10n.commonFileSaved,
                                                               iconName: "checkmark"))
     }
     
@@ -200,10 +177,4 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     }
     
     private var statusIndicatorID: String { "\(Self.self)-Status" }
-    
-    // Separate indicator IDs for downloads as these can be triggered in the background when swiping between items
-    private var downloadErrorIndicatorID: String { "\(Self.self)-DownloadError" }
-    private func makeDownloadIndicatorID(itemID: TimelineItemIdentifier) -> String {
-        "\(Self.self)-Download-\(itemID.uniqueID.id)"
-    }
 }
