@@ -77,21 +77,16 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     }
     
     private func setupRoomDirectoryVisibility() {
-        if state.canonicalAlias != nil {
-            Task {
-                switch await roomProxy.isVisibleInRoomDirectory() {
-                case .success(let value):
-                    state.bindings.desiredSettings.isVisibileInRoomDirectory = value
-                    state.currentSettings.isVisibileInRoomDirectory = value
-                case .failure:
-                    // TODO: Ask design, maybe we should present an alert or display some kind of error?
-                    state.bindings.desiredSettings.isVisibileInRoomDirectory = false
-                    state.bindings.desiredSettings.isVisibileInRoomDirectory = false
-                }
+        Task {
+            switch await roomProxy.isVisibleInRoomDirectory() {
+            case .success(let value):
+                state.bindings.desiredSettings.isVisibileInRoomDirectory = value
+                state.currentSettings.isVisibileInRoomDirectory = value
+            case .failure:
+                // TODO: Ask design, maybe we should present an alert or display some kind of error?
+                state.bindings.desiredSettings.isVisibileInRoomDirectory = false
+                state.bindings.desiredSettings.isVisibileInRoomDirectory = false
             }
-        } else {
-            state.bindings.desiredSettings.isVisibileInRoomDirectory = false
-            state.bindings.desiredSettings.isVisibileInRoomDirectory = false
         }
     }
 }
