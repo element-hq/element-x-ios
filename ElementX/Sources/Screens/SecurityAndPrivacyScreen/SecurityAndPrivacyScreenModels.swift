@@ -8,7 +8,7 @@
 import Foundation
 
 enum SecurityAndPrivacyScreenViewModelAction {
-    case done
+    case displayEditAddressScreen
 }
 
 struct SecurityAndPrivacyScreenViewState: BindableState {
@@ -41,15 +41,13 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     init(serverName: String,
          accessType: SecurityAndPrivacyRoomAccessType,
          isEncryptionEnabled: Bool,
-         historyVisibility: SecurityAndPrivacyHistoryVisibility,
-         canonicalAlias: String?) {
+         historyVisibility: SecurityAndPrivacyHistoryVisibility) {
         self.serverName = serverName
         let settings = SecurityAndPrivacySettings(accessType: accessType,
                                                   isEncryptionEnabled: isEncryptionEnabled,
                                                   historyVisibility: historyVisibility)
         currentSettings = settings
         bindings = SecurityAndPrivacyScreenViewStateBindings(desiredSettings: settings)
-        self.canonicalAlias = canonicalAlias
     }
 }
 

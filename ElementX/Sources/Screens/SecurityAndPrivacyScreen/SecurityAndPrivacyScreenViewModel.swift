@@ -31,8 +31,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         super.init(initialViewState: SecurityAndPrivacyScreenViewState(serverName: clientProxy.userIDServerName ?? "",
                                                                        accessType: roomProxy.infoPublisher.value.roomAccessType,
                                                                        isEncryptionEnabled: roomProxy.isEncrypted,
-                                                                       historyVisibility: roomProxy.infoPublisher.value.historyVisibility.toSecurityAndPrivacyHistoryVisibility,
-                                                                       canonicalAlias: canonicalAlias))
+                                                                       historyVisibility: roomProxy.infoPublisher.value.historyVisibility.toSecurityAndPrivacyHistoryVisibility))
         
         setupRoomDirectoryVisibility()
         setupSubscriptions()
@@ -45,7 +44,8 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         
         switch viewAction {
         case .save:
-            actionsSubject.send(.done)
+            // TODO: Implement save action
+            break
         case .tryUpdatingEncryption(let updatedValue):
             if updatedValue {
                 state.bindings.alertInfo = .init(id: .enableEncryption,
@@ -57,8 +57,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                 state.bindings.desiredSettings.isEncryptionEnabled = false
             }
         case .editAddress:
-            // TODO: Implement navigation to a view that allows editing or adding an address
-            break
+            actionsSubject.send(.displayEditAddressScreen)
         }
     }
     
@@ -78,6 +77,13 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
                     state.bindings.desiredSettings.historyVisibility = desiredHistoryVisbility.fallbackOption
                 }
             }
+            .store(in: &cancellables)
+        
+        roomProxy.infoPublisher
+            .map(\.canonicalAlias)
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.canonicalAlias, on: self)
             .store(in: &cancellables)
     }
     

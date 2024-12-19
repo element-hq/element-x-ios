@@ -1476,8 +1476,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .done:
-                break
+            case .displayEditAddressScreen:
+                presentEditAddressScreen()
             }
         }
         .store(in: &cancellables)
@@ -1485,6 +1485,24 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.push(coordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissSecurityAndPrivacyScreen)
         }
+    }
+    
+    private func presentEditAddressScreen() {
+        let stackCoordinator = NavigationStackCoordinator()
+        let coordinator = EditRoomAddressScreenCoordinator(parameters: .init(roomProxy: roomProxy,
+                                                                             clientProxy: userSession.clientProxy,
+                                                                             userIndicatorController: userIndicatorController))
+        
+        coordinator.actionsPublisher.sink { [weak self] action in
+            switch action {
+            case .done:
+                self?.navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator)
     }
     
     // MARK: - Other flows

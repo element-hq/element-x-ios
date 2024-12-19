@@ -143,6 +143,12 @@ extension PreviewTests {
         }
     }
 
+    func test_editRoomAddressScreen() {
+        for preview in EditRoomAddressScreen_Previews._allPreviews {
+            assertSnapshots(matching: preview)
+        }
+    }
+
     func test_emojiPickerScreenHeaderView() {
         for preview in EmojiPickerScreenHeaderView_Previews._allPreviews {
             assertSnapshots(matching: preview)
