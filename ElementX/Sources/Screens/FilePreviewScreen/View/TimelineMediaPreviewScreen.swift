@@ -47,6 +47,7 @@ struct TimelineMediaPreviewScreen: View {
         Color.clear // A completely clear view breaks any SwiftUI gestures (such as drag to dismiss).
             .background { QuickLookView(viewModelContext: context).ignoresSafeArea() } // Not the root view to stop QL hijacking the toolbar.
             .overlay(alignment: .topTrailing) { fullScreenButton }
+            .overlay { downloadStatusIndicator }
             .toolbar { toolbar }
             .toolbar(toolbarVisibility, for: .navigationBar)
             .toolbar(toolbarVisibility, for: .bottomBar)
@@ -67,6 +68,36 @@ struct TimelineMediaPreviewScreen: View {
         .tint(.compound.textActionPrimary)
         .padding(.top, 12)
         .padding(.trailing, 14)
+    }
+    
+    @ViewBuilder
+    private var downloadStatusIndicator: some View {
+        if currentItem.downloadError != nil {
+            VStack(spacing: 24) {
+                CompoundIcon(\.error, size: .custom(48), relativeTo: .compound.headingLG)
+                    .foregroundStyle(.compound.iconCriticalPrimary)
+                    .padding(.vertical, 24.5)
+                    .padding(.horizontal, 28.5)
+                
+                VStack(spacing: 2) {
+                    Text(L10n.commonDownloadFailed)
+                        .font(.compound.headingMDBold)
+                        .foregroundStyle(.compound.textPrimary)
+                        .multilineTextAlignment(.center)
+                    Text(L10n.screenMediaBrowserDownloadErrorMessage)
+                        .font(.compound.bodyMD)
+                        .foregroundStyle(.compound.textPrimary)
+                        .multilineTextAlignment(.center)
+                }
+            }
+            .padding(.horizontal, 24)
+            .padding(.vertical, 40)
+            .background(.compound.bgSubtlePrimary, in: RoundedRectangle(cornerRadius: 14))
+        } else if currentItem.fileHandle == nil {
+            ProgressView()
+                .controlSize(.large)
+                .tint(.compound.iconPrimary)
+        }
     }
     
     @ViewBuilder
@@ -220,12 +251,19 @@ struct TimelineMediaPreviewScreen_Previews: PreviewProvider {
     @Namespace private static var namespace
     
     static let viewModel = makeViewModel()
+    static let downloadingViewModel = makeViewModel(isDownloading: true)
+    static let downloadErrorViewModel = makeViewModel(isDownloadError: true)
     
     static var previews: some View {
         TimelineMediaPreviewScreen(context: viewModel.context)
+            .previewDisplayName("Normal")
+        TimelineMediaPreviewScreen(context: downloadingViewModel.context)
+            .previewDisplayName("Downloading")
+        TimelineMediaPreviewScreen(context: downloadErrorViewModel.context)
+            .previewDisplayName("Download Error")
     }
     
-    static func makeViewModel() -> TimelineMediaPreviewViewModel {
+    static func makeViewModel(isDownloading: Bool = false, isDownloadError: Bool = false) -> TimelineMediaPreviewViewModel {
         let item = FileRoomTimelineItem(id: .randomEvent,
                                         timestamp: .mock,
                                         isOutgoing: false,
@@ -243,11 +281,22 @@ struct TimelineMediaPreviewScreen_Previews: PreviewProvider {
         let timelineController = MockRoomTimelineController(timelineKind: .media(.mediaFilesScreen))
         timelineController.timelineItems = [item]
         
+        let mediaProvider = MediaProviderMock(configuration: .init())
+        
+        if isDownloading {
+            mediaProvider.loadFileFromSourceFilenameClosure = { _, _ in
+                try? await Task.sleep(for: .seconds(3600))
+                return .failure(.failedRetrievingFile)
+            }
+        } else if isDownloadError {
+            mediaProvider.loadFileFromSourceFilenameClosure = { _, _ in .failure(.failedRetrievingFile) }
+        }
+        
         return TimelineMediaPreviewViewModel(context: .init(item: item,
                                                             viewModel: TimelineViewModel.mock(timelineKind: timelineController.timelineKind,
                                                                                               timelineController: timelineController),
                                                             namespace: namespace),
-                                             mediaProvider: MediaProviderMock(configuration: .init()),
+                                             mediaProvider: mediaProvider,
                                              photoLibraryManager: PhotoLibraryManagerMock(.init()),
                                              userIndicatorController: UserIndicatorControllerMock(),
                                              appMediator: AppMediatorMock())
