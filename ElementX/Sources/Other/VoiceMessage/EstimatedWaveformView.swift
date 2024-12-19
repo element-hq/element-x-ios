@@ -26,7 +26,7 @@ extension EstimatedWaveform {
             result = (0..<maxSamplesCount)
                 .map { index in
                     let targetIndex = Int((Double(index) * (Double(data.count) / Double(maxSamplesCount))).rounded())
-                    return UInt16(data[targetIndex])
+                    return try! UInt16(data[targetIndex])
                 }
         } else {
             result = data

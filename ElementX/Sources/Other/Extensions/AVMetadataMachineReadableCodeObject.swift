@@ -67,9 +67,9 @@ extension AVMetadataMachineReadableCodeObject {
         case 0x04: // Binary
             let charactersCount: UInt16
             if characterCountLength == 8 {
-                charactersCount = UInt16(input.takeUInt8())
+                charactersCount = try! UInt16(input.takeUInt8())
             } else {
-                charactersCount = UInt16(input.takeUInt16())
+                charactersCount = try! UInt16(input.takeUInt16())
             }
             for _ in 0..<charactersCount {
                 output.append(input.takeUInt8())
@@ -119,17 +119,17 @@ private extension UInt8 {
     }
 
     init(_ left: HalfByte, _ right: HalfByte) {
-        self.init((left.value << 4) + (right.value & 0x0F))
+        try! self.init((left.value << 4) + (right.value & 0x0F))
     }
 }
 
 private extension UInt16 {
     init(_ first: HalfByte, _ second: HalfByte, _ third: HalfByte, _ fourth: HalfByte) {
-        let first = UInt16(first.value) << 12
-        let second = UInt16(second.value) << 8
-        let third = UInt16(third.value) << 4
-        let fourth = UInt16(fourth.value) & 0x0F
+        let first = try! UInt16(first.value) << 12
+        let second = try! UInt16(second.value) << 8
+        let third = try! UInt16(third.value) << 4
+        let fourth = try! UInt16(fourth.value) & 0x0F
         let result = first + second + third + fourth
-        self.init(result)
+        try! self.init(result)
     }
 }
