@@ -173,12 +173,10 @@ struct RoomDetailsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
             
-            if context.viewState.mediaBrowserEnabled {
-                ZeroListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapMediaEvents)
-                        })
-            }
+            ZeroListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
+                    kind: .navigationLink {
+                        context.send(viewAction: .processTapMediaEvents)
+                    })
         }
     }
     

@@ -35,7 +35,7 @@ protocol TimelineProxyProtocol {
     
     func messageEventContent(for timelineItemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation?
     
-    func retryDecryption(for sessionID: String) async
+    func retryDecryption(sessionIDs: [String]?) async
     
     func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError>
     func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError>
@@ -112,4 +112,10 @@ protocol TimelineProxyProtocol {
     func buildMessageContentFor(_ message: String,
                                 html: String?,
                                 intentionalMentions: Mentions) -> RoomMessageEventContentWithoutRelation
+}
+
+extension TimelineProxyProtocol {
+    func retryDecryption() async {
+        await retryDecryption(sessionIDs: nil)
+    }
 }

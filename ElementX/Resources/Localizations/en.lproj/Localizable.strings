@@ -145,6 +145,7 @@
 "common_developer_options" = "Developer options";
 "common_device_id" = "Device ID";
 "common_direct_chat" = "Direct chat";
+"common_download_failed" = "Download failed";
 "common_downloading" = "Downloading";
 "common_edited_suffix" = "(edited)";
 "common_editing" = "Editing";
@@ -160,6 +161,8 @@
 "common_favourite" = "Favourite";
 "common_favourited" = "Favourited";
 "common_file" = "File";
+"common_file_deleted" = "File deleted";
+"common_file_saved" = "File saved";
 "common_forward_message" = "Forward message";
 "common_frequently_used" = "Frequently used";
 "common_gif" = "GIF";
@@ -625,6 +628,7 @@
 "screen_login_title_with_homeserver" = "Sign in to %1$@";
 "screen_media_browser_delete_confirmation_subtitle" = "This file will be removed from the room and members won’t have access to it.";
 "screen_media_browser_delete_confirmation_title" = "Delete file?";
+"screen_media_browser_download_error_message" = "Check your internet connection and try again.";
 "screen_media_browser_files_empty_state_subtitle" = "Documents, audio files, and voice messages uploaded to this room will be shown here.";
 "screen_media_browser_files_empty_state_title" = "No files uploaded yet";
 "screen_media_browser_list_loading_files" = "Loading files…";

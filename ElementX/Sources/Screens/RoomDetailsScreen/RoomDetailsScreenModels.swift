@@ -63,8 +63,6 @@ struct RoomDetailsScreenViewState: BindableState {
         knockingEnabled && dmRecipient == nil && canEditRolesOrPermissions
     }
     
-    var mediaBrowserEnabled = false
-    
     var canEdit: Bool {
         !isDirect && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
     }

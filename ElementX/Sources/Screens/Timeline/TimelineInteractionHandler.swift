@@ -158,8 +158,6 @@ class TimelineInteractionHandler {
             let debugInfo = timelineController.debugInfo(for: eventTimelineItem.id)
             MXLog.info("Showing debug info for \(eventTimelineItem.id)")
             actionsSubject.send(.showDebugInfo(debugInfo))
-        case .retryDecryption(let sessionID):
-            Task { await timelineController.retryDecryption(for: sessionID) }
         case .report:
             actionsSubject.send(.displayReportContent(itemID: itemID, senderID: eventTimelineItem.sender.id))
         case .react:

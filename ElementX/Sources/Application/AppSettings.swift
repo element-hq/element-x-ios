@@ -51,8 +51,6 @@ final class AppSettings {
         case fuzzyRoomListSearchEnabled
         case enableOnlySignedDeviceIsolationMode
         case knockingEnabled
-        case createMediaCaptionsEnabled
-        case mediaBrowserEnabled
         case eventCacheEnabled
         case zeroAccessToken
         case zeroMatrixUsers
@@ -297,12 +295,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var knockingEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.createMediaCaptionsEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var createMediaCaptionsEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.mediaBrowserEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var mediaBrowserEnabled
     
     #endif
     
