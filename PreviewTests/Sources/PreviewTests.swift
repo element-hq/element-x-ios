@@ -55,7 +55,6 @@ class PreviewTests: XCTestCase {
         let preferences = SnapshotPreferences()
         
         let preferenceReadingView = preview.content
-            .onPreferenceChange(SnapshotDelayPreferenceKey.self) { preferences.delay = $0 }
             .onPreferenceChange(SnapshotPrecisionPreferenceKey.self) { preferences.precision = $0 }
             .onPreferenceChange(SnapshotPerceptualPrecisionPreferenceKey.self) { preferences.perceptualPrecision = $0 }
             .onPreferenceChange(SnapshotFulfillmentPublisherPreferenceKey.self) { preferences.fulfillmentPublisher = $0?.publisher }
@@ -64,11 +63,6 @@ class PreviewTests: XCTestCase {
         let imageRenderer = ImageRenderer(content: preferenceReadingView)
         _ = imageRenderer.uiImage
         
-        // Delay the test now - a delay after creating the `snapshotView` results in the underlying view not getting updated for snapshotting.
-        if preferences.delay != .zero {
-            wait(for: preferences.delay)
-        }
-
         if let fulfillmentPublisher = preferences.fulfillmentPublisher {
             let deferred = deferFulfillment(fulfillmentPublisher) { $0 == true }
             try await deferred.fulfill()
@@ -141,7 +135,6 @@ class PreviewTests: XCTestCase {
 }
 
 private class SnapshotPreferences: @unchecked Sendable {
-    var delay: TimeInterval = 0
     var precision: Float = 1
     var perceptualPrecision: Float = 1
     var fulfillmentPublisher: AnyPublisher<Bool, Never>?

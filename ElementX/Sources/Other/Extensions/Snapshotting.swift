@@ -17,14 +17,6 @@
 import Combine
 import SwiftUI
 
-struct SnapshotDelayPreferenceKey: PreferenceKey {
-    static var defaultValue: TimeInterval = 0.0
-
-    static func reduce(value: inout TimeInterval, nextValue: () -> TimeInterval) {
-        value = nextValue()
-    }
-}
-
 struct SnapshotPrecisionPreferenceKey: PreferenceKey {
     static var defaultValue: Float = 1.0
 
@@ -73,14 +65,5 @@ extension SwiftUI.View {
         preference(key: SnapshotPrecisionPreferenceKey.self, value: precision)
             .preference(key: SnapshotPerceptualPrecisionPreferenceKey.self, value: perceptualPrecision)
             .preference(key: SnapshotFulfillmentPublisherPreferenceKey.self, value: FulfillmentPublisherEquatableWrapper(publisher: fulfillmentPublisher?.eraseToAnyPublisher()))
-    }
-    
-    @available(*, deprecated, message: "Use the fulfillment variant instead")
-    func snapshotPreferences(delay: TimeInterval = .zero,
-                             precision: Float = 1.0,
-                             perceptualPrecision: Float = 0.98) -> some SwiftUI.View {
-        preference(key: SnapshotDelayPreferenceKey.self, value: delay)
-            .preference(key: SnapshotPrecisionPreferenceKey.self, value: precision)
-            .preference(key: SnapshotPerceptualPrecisionPreferenceKey.self, value: perceptualPrecision)
     }
 }
