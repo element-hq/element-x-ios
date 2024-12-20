@@ -212,7 +212,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         if state.isKnockingFeatureEnabled, !createRoomParameters.isRoomPrivate {
             guard let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: createRoomParameters.aliasLocalPart,
                                                                  serverName: state.serverName),
-                  isRoomAliasFormatValid(alias: canonicalAlias) else {
+                isRoomAliasFormatValid(alias: canonicalAlias) else {
                 state.aliasErrors = [.invalidSymbols]
                 return
             }

@@ -71,9 +71,9 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             // When the available options changes always default to `sinceSelection` if the currently selected option is not available
             .sink { [weak self] availableVisibilityOptions in
                 guard let self else { return }
-                let desiredHistoryVisbility = state.bindings.desiredSettings.historyVisibility
-                if !availableVisibilityOptions.contains(desiredHistoryVisbility) {
-                    state.bindings.desiredSettings.historyVisibility = desiredHistoryVisbility.fallbackOption
+                let desiredHistoryVisibility = state.bindings.desiredSettings.historyVisibility
+                if !availableVisibilityOptions.contains(desiredHistoryVisibility) {
+                    state.bindings.desiredSettings.historyVisibility = desiredHistoryVisibility.fallbackOption
                 }
             }
             .store(in: &cancellables)
