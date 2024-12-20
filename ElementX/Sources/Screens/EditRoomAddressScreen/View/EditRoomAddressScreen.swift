@@ -91,11 +91,13 @@ struct EditRoomAddressScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             EditRoomAddressScreen(context: invalidSymbolsViewModel.context)
         }
+        .snapshotPreferences(delay: 1.2)
         .previewDisplayName("Invalid symbols")
         
         NavigationStack {
             EditRoomAddressScreen(context: alreadyExistingViewModel.context)
         }
+        .snapshotPreferences(delay: 1.2)
         .previewDisplayName("Already existing")
     }
 }

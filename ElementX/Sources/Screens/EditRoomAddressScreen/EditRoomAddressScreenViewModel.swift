@@ -65,7 +65,8 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
                     return
                 }
                 
-                guard let canonicalAlias = canonicalAlias(aliasLocalPart: aliasLocalPart) else {
+                guard let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: aliasLocalPart,
+                                                                     serverName: state.serverName) else {
                     // While is empty don't display the errors, since the save button is already disabled
                     state.aliasErrors.removeAll()
                     return
@@ -81,6 +82,12 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
                 
                 state.aliasErrors.remove(.invalidSymbols)
                 
+                guard aliasLocalPart != state.currentAliasLocalPart else {
+                    // Doesn't make sense to check the availability and display an error if the alias didn't change, the save button should also be disabled
+                    state.aliasErrors.remove(.alreadyExists)
+                    checkAliasAvailabilityTask = nil
+                    return
+                }
                 checkAliasAvailabilityTask = Task { [weak self] in
                     guard let self else {
                         return
@@ -99,8 +106,9 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
     }
     
     private func save() async {
-        guard let canonicalAlias = canonicalAlias(aliasLocalPart: state.bindings.desiredAliasLocalPart),
-              isRoomAliasFormatValid(alias: canonicalAlias) else {
+        guard let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: state.bindings.desiredAliasLocalPart,
+                                                             serverName: state.serverName),
+            isRoomAliasFormatValid(alias: canonicalAlias) else {
             state.aliasErrors = [.invalidSymbols]
             return
         }
@@ -117,12 +125,5 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
         }
         
         // TODO: API calls to edit/add the alias and maybe also dismiss the view? (check with design)
-    }
-    
-    private func canonicalAlias(aliasLocalPart: String) -> String? {
-        guard !aliasLocalPart.isEmpty else {
-            return nil
-        }
-        return "#\(aliasLocalPart):\(state.serverName)"
     }
 }
