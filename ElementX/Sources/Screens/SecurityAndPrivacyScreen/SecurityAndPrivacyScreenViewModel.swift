@@ -27,7 +27,6 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         self.roomProxy = roomProxy
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
-        let canonicalAlias = roomProxy.infoPublisher.value.canonicalAlias
         super.init(initialViewState: SecurityAndPrivacyScreenViewState(serverName: clientProxy.userIDServerName ?? "",
                                                                        accessType: roomProxy.infoPublisher.value.roomAccessType,
                                                                        isEncryptionEnabled: roomProxy.isEncrypted,

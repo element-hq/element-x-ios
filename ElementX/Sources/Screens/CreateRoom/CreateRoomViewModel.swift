@@ -271,7 +271,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         }
     }
     
-    func canonicalAlias(aliasLocalPart: String?) -> String? {
+    private func canonicalAlias(aliasLocalPart: String?) -> String? {
         guard let aliasLocalPart,
               !aliasLocalPart.isEmpty else {
             return nil

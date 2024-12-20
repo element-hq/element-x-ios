@@ -20,6 +20,8 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
     var actionsPublisher: AnyPublisher<EditRoomAddressScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
+    
+    @CancellableTask private var checkAliasAvailabilityTask: Task<Void, Never>?
 
     init(roomProxy: JoinedRoomProxyProtocol,
          clientProxy: ClientProxyProtocol,
@@ -36,7 +38,8 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
         }
         
         super.init(initialViewState: EditRoomAddressScreenViewState(serverName: clientProxy.userIDServerName ?? "",
-                                                                    desiredAliasLocalPart: aliasLocalPart))
+                                                                    bindings: .init(desiredAliasLocalPart: aliasLocalPart)))
+        setupSubscriptions()
     }
     
     // MARK: - Public
@@ -46,12 +49,80 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
         
         switch viewAction {
         case .save:
-            // TODO: Handle the save action
-            break
+            Task { await save() }
         case .cancel:
             actionsSubject.send(.cancel)
-        case .updateAliasLocalPart(let updatedValue):
-            break
         }
+    }
+    
+    private func setupSubscriptions() {
+        context.$viewState
+            .map(\.bindings.desiredAliasLocalPart)
+            .removeDuplicates()
+            .debounce(for: 1, scheduler: DispatchQueue.main)
+            .sink { [weak self] aliasLocalPart in
+                guard let self else {
+                    return
+                }
+                
+                guard let canonicalAlias = canonicalAlias(aliasLocalPart: aliasLocalPart) else {
+                    // While is empty don't display the errors, since the save button is already disabled
+                    state.aliasErrors.removeAll()
+                    return
+                }
+                
+                if !isRoomAliasFormatValid(alias: canonicalAlias) {
+                    state.aliasErrors.insert(.invalidSymbols)
+                    // If the alias is invalid we don't need to check for availability
+                    state.aliasErrors.remove(.alreadyExists)
+                    checkAliasAvailabilityTask = nil
+                    return
+                }
+                
+                state.aliasErrors.remove(.invalidSymbols)
+                
+                checkAliasAvailabilityTask = Task { [weak self] in
+                    guard let self else {
+                        return
+                    }
+                    
+                    if case .success(false) = await self.clientProxy.isAliasAvailable(canonicalAlias) {
+                        guard !Task.isCancelled else { return }
+                        state.aliasErrors.insert(.alreadyExists)
+                    } else {
+                        guard !Task.isCancelled else { return }
+                        state.aliasErrors.remove(.alreadyExists)
+                    }
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func save() async {
+        guard let canonicalAlias = canonicalAlias(aliasLocalPart: state.bindings.desiredAliasLocalPart),
+              isRoomAliasFormatValid(alias: canonicalAlias) else {
+            state.aliasErrors = [.invalidSymbols]
+            return
+        }
+        
+        switch await clientProxy.isAliasAvailable(canonicalAlias) {
+        case .success(true):
+            break
+        case .success(false):
+            state.aliasErrors = [.alreadyExists]
+            return
+        case .failure:
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            return
+        }
+        
+        // TODO: API calls to edit/add the alias and maybe also dismiss the view? (check with design)
+    }
+    
+    private func canonicalAlias(aliasLocalPart: String) -> String? {
+        guard !aliasLocalPart.isEmpty else {
+            return nil
+        }
+        return "#\(aliasLocalPart):\(state.serverName)"
     }
 }

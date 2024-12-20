@@ -11,19 +11,14 @@ import SwiftUI
 struct EditRoomAddressScreen: View {
     @ObservedObject var context: EditRoomAddressScreenViewModel.Context
     
-    private var aliasBinding: Binding<String> {
-        .init(get: {
-            context.viewState.desiredAliasLocalPart
-        }, set: {
-            context.send(viewAction: .updateAliasLocalPart($0))
-        })
-    }
-    
     var body: some View {
         Form {
             Section {
-                EditRoomAddressListRow(aliasLocalPart: aliasBinding,
+                EditRoomAddressListRow(aliasLocalPart: $context.desiredAliasLocalPart,
                                        serverName: context.viewState.serverName, shouldDisplayError: context.viewState.aliasErrors.errorDescription != nil)
+                    .onChange(of: context.desiredAliasLocalPart) { _, newAliasLocalPart in
+                        context.desiredAliasLocalPart = newAliasLocalPart.lowercased()
+                    }
             } footer: {
                 VStack(alignment: .leading, spacing: 12) {
                     if let errorDescription = context.viewState.aliasErrors.errorDescription {
@@ -70,6 +65,18 @@ struct EditRoomAddressScreen_Previews: PreviewProvider, TestablePreview {
                                                                clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")),
                                                                userIndicatorController: UserIndicatorControllerMock())
     
+    static let invalidSymbolsViewModel = EditRoomAddressScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Room Name", canonicalAlias: "#room#-alias:matrix.org")),
+                                                                        clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")),
+                                                                        userIndicatorController: UserIndicatorControllerMock())
+    
+    static let alreadyExistingViewModel = {
+        let clientProxy = ClientProxyMock(.init(userIDServerName: "matrix.org"))
+        clientProxy.isAliasAvailableReturnValue = .success(false)
+        return EditRoomAddressScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Room Name")),
+                                              clientProxy: clientProxy,
+                                              userIndicatorController: UserIndicatorControllerMock())
+    }()
+    
     static var previews: some View {
         NavigationStack {
             EditRoomAddressScreen(context: noAliasviewModel.context)
@@ -80,5 +87,15 @@ struct EditRoomAddressScreen_Previews: PreviewProvider, TestablePreview {
             EditRoomAddressScreen(context: aliasviewModel.context)
         }
         .previewDisplayName("With alias")
+        
+        NavigationStack {
+            EditRoomAddressScreen(context: invalidSymbolsViewModel.context)
+        }
+        .previewDisplayName("Invalid symbols")
+        
+        NavigationStack {
+            EditRoomAddressScreen(context: alreadyExistingViewModel.context)
+        }
+        .previewDisplayName("Already existing")
     }
 }
