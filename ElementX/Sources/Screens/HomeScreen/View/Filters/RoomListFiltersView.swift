@@ -12,6 +12,10 @@ struct RoomListFiltersView: View {
     @Binding var state: RoomListFiltersState
     @Namespace private var namespace
     
+    /// When you connect a mouse on macOS the scrollbars aren't hidden. This is some extra padding
+    /// applied to the scroll view content to make sure the bars don't overlap the filters.
+    private var macScrollBarPadding: CGFloat { ProcessInfo.processInfo.isiOSAppOnMac ? 16 : 0 }
+    
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView(.horizontal) {
@@ -39,11 +43,13 @@ struct RoomListFiltersView: View {
                                 .matchedGeometryEffect(id: filter.id, in: namespace)
                         }
                     }
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, macScrollBarPadding)
                 }
             }
             .scrollIndicators(.hidden)
-            .padding(.leading, 16)
             .padding(.vertical, 12)
+            .padding(.bottom, -macScrollBarPadding)
         }
     }
     
