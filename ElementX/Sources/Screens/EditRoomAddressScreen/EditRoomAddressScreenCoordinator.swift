@@ -17,7 +17,7 @@ struct EditRoomAddressScreenCoordinatorParameters {
 }
 
 enum EditRoomAddressScreenCoordinatorAction {
-    case done
+    case dismiss
 }
 
 final class EditRoomAddressScreenCoordinator: CoordinatorProtocol {
@@ -42,8 +42,8 @@ final class EditRoomAddressScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
-            case .done:
-                actionsSubject.send(.done)
+            case .cancel:
+                actionsSubject.send(.dismiss)
             }
         }
         .store(in: &cancellables)

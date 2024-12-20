@@ -36,7 +36,7 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
         }
         
         super.init(initialViewState: EditRoomAddressScreenViewState(serverName: clientProxy.userIDServerName ?? "",
-                                                                    bindings: .init(aliasLocalPart: aliasLocalPart)))
+                                                                    desiredAliasLocalPart: aliasLocalPart))
     }
     
     // MARK: - Public
@@ -45,8 +45,13 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
-        case .done:
-            actionsSubject.send(.done)
+        case .save:
+            // TODO: Handle the save action
+            break
+        case .cancel:
+            actionsSubject.send(.cancel)
+        case .updateAliasLocalPart(let updatedValue):
+            break
         }
     }
 }

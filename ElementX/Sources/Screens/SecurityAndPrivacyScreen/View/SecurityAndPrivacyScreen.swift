@@ -167,7 +167,7 @@ struct SecurityAndPrivacyScreen: View {
     }
     
     @ToolbarContentBuilder
-    var toolbar: some ToolbarContent {
+    private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .confirmationAction) {
             Button(L10n.actionSave) {
                 context.send(viewAction: .save)

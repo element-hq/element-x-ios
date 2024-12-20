@@ -8,18 +8,24 @@
 import Foundation
 
 enum EditRoomAddressScreenViewModelAction {
-    case done
+    case cancel
 }
 
 struct EditRoomAddressScreenViewState: BindableState {
     let serverName: String
-    var bindings: EditRoomAddressScreenViewStateBindings
-}
-
-struct EditRoomAddressScreenViewStateBindings {
-    var aliasLocalPart: String
+    var currentAliasLocalPart: String?
+    var desiredAliasLocalPart: String
+    var aliasErrors: Set<EditRoomAddressErrorState> = []
+    
+    var canSave: Bool {
+        currentAliasLocalPart != desiredAliasLocalPart &&
+            !aliasErrors.isEmpty &&
+            !desiredAliasLocalPart.isEmpty
+    }
 }
 
 enum EditRoomAddressScreenViewAction {
-    case done
+    case save
+    case cancel
+    case updateAliasLocalPart(String)
 }

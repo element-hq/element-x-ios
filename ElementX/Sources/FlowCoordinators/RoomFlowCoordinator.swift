@@ -1495,7 +1495,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         coordinator.actionsPublisher.sink { [weak self] action in
             switch action {
-            case .done:
+            case .dismiss:
                 self?.navigationStackCoordinator.setSheetCoordinator(nil)
             }
         }
