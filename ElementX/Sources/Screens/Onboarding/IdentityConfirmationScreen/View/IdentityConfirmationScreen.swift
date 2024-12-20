@@ -108,7 +108,9 @@ struct IdentityConfirmationScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             IdentityConfirmationScreen(context: viewModel.context)
         }
-        .snapshotPreferences(delay: 1)
+        .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
+            state.availableActions.contains([.interactiveVerification, .recovery])
+        })
     }
     
     private static var viewModel: IdentityConfirmationScreenViewModel {

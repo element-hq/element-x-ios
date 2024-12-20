@@ -151,12 +151,10 @@ struct RoomPollsHistoryScreen_Previews: PreviewProvider, TestablePreview {
             RoomPollsHistoryScreen(context: viewModelEmpty.context)
         }
         .previewDisplayName("No polls")
-        .snapshotPreferences(delay: 1.0)
 
         NavigationStack {
             RoomPollsHistoryScreen(context: viewModel.context)
         }
         .previewDisplayName("polls")
-        .snapshotPreferences(delay: 1.0)
     }
 }

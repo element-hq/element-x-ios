@@ -117,31 +117,41 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             RoomMembersListScreen(context: viewModel.context)
         }
-        .snapshotPreferences(delay: 1.0)
+        .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
+            !state.visibleJoinedMembers.isEmpty
+        })
         .previewDisplayName("Member")
         
         NavigationStack {
             RoomMembersListScreen(context: invitesViewModel.context)
         }
-        .snapshotPreferences(delay: 1.0)
+        .snapshotPreferences(expect: invitesViewModel.context.$viewState.map { state in
+            !state.visibleJoinedMembers.isEmpty
+        })
         .previewDisplayName("Invites")
         
         NavigationStack {
             RoomMembersListScreen(context: adminViewModel.context)
         }
-        .snapshotPreferences(delay: 1.0)
+        .snapshotPreferences(expect: adminViewModel.context.$viewState.map { state in
+            state.canBanUsers == true
+        })
         .previewDisplayName("Admin: Members")
         
         NavigationStack {
             RoomMembersListScreen(context: bannedViewModel.context)
         }
-        .snapshotPreferences(delay: 1.0)
+        .snapshotPreferences(expect: bannedViewModel.context.$viewState.map { state in
+            state.canBanUsers == true
+        })
         .previewDisplayName("Admin: Banned")
         
         NavigationStack {
             RoomMembersListScreen(context: emptyBannedViewModel.context)
         }
-        .snapshotPreferences(delay: 1.0)
+        .snapshotPreferences(expect: emptyBannedViewModel.context.$viewState.map { state in
+            state.canBanUsers == true
+        })
         .previewDisplayName("Admin: Empty Banned")
     }
     

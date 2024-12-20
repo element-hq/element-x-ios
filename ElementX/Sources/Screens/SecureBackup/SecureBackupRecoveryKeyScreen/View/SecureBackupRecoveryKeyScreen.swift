@@ -224,7 +224,7 @@ struct SecureBackupRecoveryKeyScreen: View {
 struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview {
     static let key = "EsTM njec uHYA yHmh dQdW Nj4o bNRU 9jMN XGMc KUNM UFr5 R8GY"
     static let notSetUpViewModel = viewModel(recoveryState: .disabled)
-    static let generatingViewModel = viewModel(recoveryState: .disabled, generateKey: true)
+    static let generatingViewModel = viewModel(recoveryState: .disabled, generateKey: true, key: key)
     static let setupViewModel = viewModel(recoveryState: .enabled, generateKey: true, key: key)
     static let incompleteViewModel = viewModel(recoveryState: .incomplete)
     static let unknownViewModel = viewModel(recoveryState: .unknown)
@@ -239,14 +239,15 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
             SecureBackupRecoveryKeyScreen(context: generatingViewModel.context)
         }
         .previewDisplayName("Generating")
-        .snapshotPreferences(delay: 0.25)
         
         NavigationStack {
             SecureBackupRecoveryKeyScreen(context: setupViewModel.context)
         }
+        .snapshotPreferences(expect: setupViewModel.context.$viewState.map { state in
+            state.recoveryKey != nil
+        })
         .previewDisplayName("Set up")
-        .snapshotPreferences(delay: 0.25)
-
+        
         NavigationStack {
             SecureBackupRecoveryKeyScreen(context: incompleteViewModel.context)
         }

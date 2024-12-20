@@ -98,6 +98,5 @@ struct RoomDirectorySearchScreen_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         RoomDirectorySearchScreen(context: viewModel.context)
-            .snapshotPreferences(delay: 1.0)
     }
 }

@@ -321,8 +321,6 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
         }
         .padding()
         .environmentObject(viewModel.context)
-        // Allow member names to load. Reduce precission as the `mockThumbnail` randomly renders slightly differently
-        .snapshotPreferences(delay: 0.2, precision: 0.98)
         .previewLayout(.sizeThatFits)
     }
 }
