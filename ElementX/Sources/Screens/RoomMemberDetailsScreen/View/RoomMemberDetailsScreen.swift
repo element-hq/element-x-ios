@@ -139,17 +139,28 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         RoomMemberDetailsScreen(context: verifiedUserViewModel.context)
+            .snapshotPreferences(expect: verifiedUserViewModel.context.$viewState.map { state in
+                state.isVerified == true
+            })
             .previewDisplayName("Verified User")
-            .snapshotPreferences(delay: 0.25)
+            
         RoomMemberDetailsScreen(context: otherUserViewModel.context)
+            .snapshotPreferences(expect: otherUserViewModel.context.$viewState.map { state in
+                state.memberDetails?.role == .user
+            })
             .previewDisplayName("Other User")
-            .snapshotPreferences(delay: 0.25)
+            
         RoomMemberDetailsScreen(context: accountOwnerViewModel.context)
+            .snapshotPreferences(expect: accountOwnerViewModel.context.$viewState.map { state in
+                state.isOwnMemberDetails == true
+            })
             .previewDisplayName("Account Owner")
-            .snapshotPreferences(delay: 0.25)
+            
         RoomMemberDetailsScreen(context: ignoredUserViewModel.context)
+            .snapshotPreferences(expect: ignoredUserViewModel.context.$viewState.map { state in
+                state.memberDetails?.isIgnored ?? false
+            })
             .previewDisplayName("Ignored User")
-            .snapshotPreferences(delay: 0.25)
     }
     
     static func makeViewModel(member: RoomMemberProxyMock) -> RoomMemberDetailsScreenViewModel {

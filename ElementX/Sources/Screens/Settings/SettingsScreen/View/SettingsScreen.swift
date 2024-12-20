@@ -239,7 +239,9 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         NavigationStack {
             SettingsScreen(context: viewModel.context)
-                .snapshotPreferences(delay: 1.0)
+                .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
+                    state.accountSessionsListURL != nil
+                })
         }
     }
 }
