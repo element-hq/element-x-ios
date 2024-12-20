@@ -63,14 +63,12 @@ struct SecureBackupKeyBackupScreen: View {
                     CompoundIcon(\.close, size: .small, relativeTo: .body)
                         .foregroundColor(.compound.iconCriticalPrimary)
                 }
-                .backgroundStyle(.compound.bgActionSecondaryHovered)
                 
                 VisualListItem(title: L10n.screenKeyBackupDisableDescriptionPoint2(InfoPlistReader.main.productionAppName),
                                position: .bottom) {
                     CompoundIcon(\.close, size: .small, relativeTo: .body)
                         .foregroundColor(.compound.iconCriticalPrimary)
                 }
-                .backgroundStyle(.compound.bgActionSecondaryHovered)
             }
         }
     }

@@ -134,14 +134,15 @@ struct SecureBackupRecoveryKeyScreen: View {
                 .font(.compound.bodySMSemibold)
                 .padding(.leading, 16)
             
-            Group {
+            ZStack {
+                RecoveryKeyView(recoveryKey: "", isInvisibleForLayout: true) { }
+                
                 if context.viewState.recoveryKey == nil {
                     if !context.viewState.isGeneratingKey {
                         Button(generateButtonTitle) {
                             context.send(viewAction: .generateKey)
                         }
                         .font(.compound.bodyLGSemibold)
-                        .padding(.vertical, 11)
                         .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.generateRecoveryKey)
                     } else {
                         HStack(spacing: 8) {
@@ -150,23 +151,10 @@ struct SecureBackupRecoveryKeyScreen: View {
                         }
                         .font(.compound.bodyLGSemibold)
                         .foregroundStyle(.compound.textPrimary)
-                        .padding(.vertical, 11)
                     }
                 } else {
-                    HStack(spacing: 8) {
-                        Text(context.viewState.recoveryKey ?? "")
-                            .foregroundColor(.compound.textPrimary)
-                            .font(.compound.bodyLG)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        Button {
-                            context.send(viewAction: .copyKey)
-                        } label: {
-                            CompoundIcon(\.copy)
-                        }
-                        .tint(.compound.iconSecondary)
-                        .accessibilityLabel(L10n.actionCopy)
-                        .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.copyRecoveryKey)
+                    RecoveryKeyView(recoveryKey: context.viewState.recoveryKey ?? "") {
+                        context.send(viewAction: .copyKey)
                     }
                 }
             }
@@ -216,6 +204,35 @@ struct SecureBackupRecoveryKeyScreen: View {
                     .font(.compound.bodySM)
             }
         }
+    }
+}
+
+private struct RecoveryKeyView: View {
+    /// The recovery key to show. This can be blank if `isInvisibleForLayout` is `true.`
+    let recoveryKey: String
+    /// Hides the view, laying it out with the expected key size so that the superview can have a consistent size.
+    var isInvisibleForLayout = false
+    /// The action performed when tapping the copy button.
+    let copyAction: () -> Void
+    
+    private let placeholderRecoveryKey = Array(repeating: "XXXX", count: 12).joined(separator: " ")
+    
+    var body: some View {
+        HStack(spacing: 8) {
+            Text(isInvisibleForLayout ? placeholderRecoveryKey : recoveryKey)
+                .foregroundColor(.compound.textSecondary)
+                .font(.compound.bodyLG.monospaced())
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Button(action: copyAction) {
+                CompoundIcon(\.copy)
+            }
+            .tint(.compound.iconSecondary)
+            .accessibilityLabel(L10n.actionCopy)
+            .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.copyRecoveryKey)
+        }
+        .opacity(isInvisibleForLayout ? 0 : 1)
+        .accessibilityHidden(isInvisibleForLayout)
     }
 }
 

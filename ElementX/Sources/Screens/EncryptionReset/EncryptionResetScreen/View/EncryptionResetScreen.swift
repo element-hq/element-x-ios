@@ -22,7 +22,7 @@ struct EncryptionResetScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.encryptionResetScreen.continueReset)
         }
         .background()
-        .backgroundStyle(.compound.bgSubtleSecondary)
+        .backgroundStyle(.compound.bgCanvasDefault)
         .interactiveDismissDisabled()
         .toolbar { toolbar }
         .toolbar(.visible, for: .navigationBar)
@@ -40,7 +40,7 @@ struct EncryptionResetScreen: View {
     
     private var header: some View {
         VStack(spacing: 8) {
-            BigIcon(icon: \.error, style: .alert)
+            BigIcon(icon: \.error, style: .alertSolid)
                 .padding(.bottom, 8)
             
             Text(L10n.screenEncryptionResetTitle)
@@ -76,7 +76,6 @@ struct EncryptionResetScreen: View {
                 .foregroundColor(positive ? .compound.iconAccentPrimary : .compound.iconSecondary)
                 .alignmentGuide(.top) { _ in 2 }
         }
-        .backgroundStyle(.compound.bgCanvasDefault)
     }
     
     @ToolbarContentBuilder
