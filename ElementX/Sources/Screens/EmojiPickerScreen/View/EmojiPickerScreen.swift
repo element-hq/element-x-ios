@@ -83,7 +83,7 @@ struct EmojiPickerScreen: View {
         // No sure-fire way to detect that the submit came from a h/w keyboard on iOS/iPadOS.
         guard ProcessInfo.processInfo.isiOSAppOnMac else { return }
         
-        if let emoji = context.viewState.categories.first?.emojis.first {
+        if !searchString.isBlank, let emoji = context.viewState.categories.first?.emojis.first {
             context.send(viewAction: .emojiTapped(emoji: emoji))
         }
     }
