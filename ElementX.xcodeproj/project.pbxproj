@@ -400,6 +400,12 @@
 		18D5D9BF2CEB768600107940 /* UserRewardsSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9BD2CEB768300107940 /* UserRewardsSettingsScreen.swift */; };
 		18D5D9C12CEBB70E00107940 /* ZeroRewardFAQs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9C02CEBB70300107940 /* ZeroRewardFAQs.swift */; };
 		18D5D9C22CEBB70E00107940 /* ZeroRewardFAQs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9C02CEBB70300107940 /* ZeroRewardFAQs.swift */; };
+		18DDDF942D15714900CBB04E /* zero_secrets.json in Resources */ = {isa = PBXBuildFile; fileRef = 18DDDF932D15714900CBB04E /* zero_secrets.json */; };
+		18DDDF952D15714900CBB04E /* zero_secrets.json in Resources */ = {isa = PBXBuildFile; fileRef = 18DDDF932D15714900CBB04E /* zero_secrets.json */; };
+		18DDDF972D15736300CBB04E /* ZeroSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DDDF962D15735E00CBB04E /* ZeroSecrets.swift */; };
+		18DDDF982D15736300CBB04E /* ZeroSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DDDF962D15735E00CBB04E /* ZeroSecrets.swift */; };
+		18DDDF992D1573F500CBB04E /* ZeroSecrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DDDF962D15735E00CBB04E /* ZeroSecrets.swift */; };
+		18DDDF9A2D1573FC00CBB04E /* zero_secrets.json in Resources */ = {isa = PBXBuildFile; fileRef = 18DDDF932D15714900CBB04E /* zero_secrets.json */; };
 		18DFC5C82CD954EF00462FE1 /* EncryptionResetFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B011547B201A836C03052 /* EncryptionResetFlowCoordinator.swift */; };
 		18DFC5C92CD954FF00462FE1 /* EncryptionSettingsFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECB836DD8BE31931F51B8AC9 /* EncryptionSettingsFlowCoordinator.swift */; };
 		18DFC5CA2CD9551800462FE1 /* IdentityResetHandleSDKMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EFB1D29B0870AFB6A56E9B8 /* IdentityResetHandleSDKMock.swift */; };
@@ -2734,6 +2740,8 @@
 		18D5D9B92CEB762400107940 /* UserRewardsSettingsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRewardsSettingsScreenCoordinator.swift; sourceTree = "<group>"; };
 		18D5D9BD2CEB768300107940 /* UserRewardsSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRewardsSettingsScreen.swift; sourceTree = "<group>"; };
 		18D5D9C02CEBB70300107940 /* ZeroRewardFAQs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroRewardFAQs.swift; sourceTree = "<group>"; };
+		18DDDF932D15714900CBB04E /* zero_secrets.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = zero_secrets.json; sourceTree = "<group>"; };
+		18DDDF962D15735E00CBB04E /* ZeroSecrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroSecrets.swift; sourceTree = "<group>"; };
 		18E99FEC2C9446EB0082DDA4 /* MessageContentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContentHandler.swift; sourceTree = "<group>"; };
 		18E99FEF2C9447740082DDA4 /* MessageContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContent.swift; sourceTree = "<group>"; };
 		18E99FF12C944F350082DDA4 /* ZeroAttachmentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroAttachmentService.swift; sourceTree = "<group>"; };
@@ -4570,8 +4578,10 @@
 		18D1EE242CAE998A007BEB15 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
+				18DDDF962D15735E00CBB04E /* ZeroSecrets.swift */,
 				18D1EE262CAE99B9007BEB15 /* ZeroInfo.plist */,
 				18D1EE252CAE99AC007BEB15 /* Zero.entitlements */,
+				18DDDF932D15714900CBB04E /* zero_secrets.json */,
 			);
 			path = SupportingFiles;
 			sourceTree = "<group>";
@@ -8139,6 +8149,7 @@
 				18E9A7622C9829970082DDA4 /* Localizable.stringsdict in Resources */,
 				18D1EE272CAE99B9007BEB15 /* ZeroInfo.plist in Resources */,
 				1868A8AF2CA21A2200DC382D /* Inter-Medium.ttf in Resources */,
+				18DDDF952D15714900CBB04E /* zero_secrets.json in Resources */,
 				18E9A7632C9829970082DDA4 /* MapAssets.xcassets in Resources */,
 				18E9A7642C9829970082DDA4 /* PrivacyInfo.xcprivacy in Resources */,
 				1868A8AB2CA21A2200DC382D /* Inter-ExtraBold.ttf in Resources */,
@@ -8194,6 +8205,7 @@
 				18BF59CF2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard in Resources */,
 				DFF7D6A6C26DDD40D00AE579 /* target.yml in Resources */,
 				18978C9438206828C1D5AF2A /* test_animated_image.gif in Resources */,
+				18DDDF942D15714900CBB04E /* zero_secrets.json in Resources */,
 				01373C1AC4839604C4FDA404 /* test_apple_image.heic in Resources */,
 				6B61F5B27412ED4BC2F9769C /* test_audio.mp3 in Resources */,
 				DF40CDBEFE1D02B5F9C4ACB1 /* test_image.png in Resources */,
@@ -8207,6 +8219,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18DDDF9A2D1573FC00CBB04E /* zero_secrets.json in Resources */,
 				7FED77802940EA7DF4D0D3A2 /* PrivacyInfo.xcprivacy in Resources */,
 				D2D70B5DB1A5E4AF0CD88330 /* target.yml in Resources */,
 			);
@@ -8535,6 +8548,7 @@
 				E0FB26262689F04D66A949D7 /* TestablePreview.swift in Sources */,
 				24DF253C18D3E2C56DD0E597 /* TracingConfiguration.swift in Sources */,
 				18525D072CF5EE240055C5E8 /* ZeroMessengerInvite.swift in Sources */,
+				18DDDF992D1573F500CBB04E /* ZeroSecrets.swift in Sources */,
 				DDB47D29C6865669288BF87C /* UIFont+AttributedStringBuilder.m in Sources */,
 				45D6DC594816288983627484 /* UITestsScreenIdentifier.swift in Sources */,
 				18D5D9AD2CEB6E4000107940 /* ZRewards.swift in Sources */,
@@ -8915,6 +8929,7 @@
 				18E9A4DC2C9829970082DDA4 /* ElementCallServiceMock.swift in Sources */,
 				18E9A4DD2C9829970082DDA4 /* ElementCallServiceProtocol.swift in Sources */,
 				18E9A4DE2C9829970082DDA4 /* ElementCallWidgetDriver.swift in Sources */,
+				18DDDF982D15736300CBB04E /* ZeroSecrets.swift in Sources */,
 				18E9A4DF2C9829970082DDA4 /* ElementCallWidgetDriverProtocol.swift in Sources */,
 				18E9A4E02C9829970082DDA4 /* ElementWellKnown.swift in Sources */,
 				18E9A4E12C9829970082DDA4 /* ElementXAttributeScope.swift in Sources */,
@@ -9832,6 +9847,7 @@
 				38546A6010A2CF240EC9AF73 /* BindableState.swift in Sources */,
 				EB9F4688006B52E69DF5358F /* BlankFormCoordinator.swift in Sources */,
 				369BF960E52BBEE61F8A5BD1 /* BlockedUsersScreen.swift in Sources */,
+				18DDDF972D15736300CBB04E /* ZeroSecrets.swift in Sources */,
 				95E7B236F7116CACE05A6BC9 /* BlockedUsersScreenCoordinator.swift in Sources */,
 				8C91D242BEEC657FABCC0B95 /* BlockedUsersScreenModels.swift in Sources */,
 				934051B17A884AB0635DF81B /* BlockedUsersScreenViewModel.swift in Sources */,
