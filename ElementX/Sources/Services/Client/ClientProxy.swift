@@ -887,11 +887,11 @@ class ClientProxy: ClientProxyProtocol {
             if let user = currentUser {
                 return user.displayName.isEmpty || user.displayName.stringMatchesUserIdFormatRegex()
             } else {
-                return true
+                return false
             }
         } catch {
             MXLog.error(error)
-            return true
+            return false
         }
     }
     
