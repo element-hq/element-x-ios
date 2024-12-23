@@ -52,6 +52,6 @@ class ZeroRewardsApi: ZeroRewardsApiProtocol {
         private static let hostURL = ZeroContants.appServer.zeroRootUrl
 
         static let myRewardsEndPoint = "\(hostURL)rewards/mine"
-        static let zeroCurrenyEndPoint = "\(hostURL)api/tokens/zero"
+        static let zeroCurrenyEndPoint = "\(hostURL)api/tokens/meow"
     }
 }
