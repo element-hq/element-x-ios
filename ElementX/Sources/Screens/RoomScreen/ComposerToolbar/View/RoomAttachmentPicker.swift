@@ -50,13 +50,13 @@ struct RoomAttachmentPicker: View {
 //                Label(L10n.screenRoomAttachmentSourceLocation, icon: \.locationPin)
 //            }
 //            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerLocation)
-//            
-//            Button {
-//                context.send(viewAction: .attach(.file))
-//            } label: {
-//                Label(L10n.screenRoomAttachmentSourceFiles, icon: \.attachment)
-//            }
-//            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerDocuments)
+            
+            Button {
+                context.send(viewAction: .attach(.file))
+            } label: {
+                Label(L10n.screenRoomAttachmentSourceFiles, icon: \.attachment)
+            }
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerDocuments)
             
             Button {
                 context.send(viewAction: .attach(.photoLibrary))
