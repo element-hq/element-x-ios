@@ -134,14 +134,15 @@ struct SecureBackupRecoveryKeyScreen: View {
                 .font(.zero.bodySMSemibold)
                 .padding(.leading, 16)
             
-            Group {
+            ZStack {
+                RecoveryKeyView(recoveryKey: "", isInvisibleForLayout: true) { }
+                
                 if context.viewState.recoveryKey == nil {
                     if !context.viewState.isGeneratingKey {
                         Button(generateButtonTitle) {
                             context.send(viewAction: .generateKey)
                         }
                         .font(.compound.bodyLGSemibold)
-                        .padding(.vertical, 11)
                         .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.generateRecoveryKey)
                     } else {
                         HStack(spacing: 8) {
@@ -150,23 +151,10 @@ struct SecureBackupRecoveryKeyScreen: View {
                         }
                         .font(.compound.bodyLGSemibold)
                         .foregroundStyle(.compound.textPrimary)
-                        .padding(.vertical, 11)
                     }
                 } else {
-                    HStack(spacing: 8) {
-                        Text(context.viewState.recoveryKey ?? "")
-                            .foregroundColor(.compound.textPrimary)
-                            .font(.zero.bodyLG)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        Button {
-                            context.send(viewAction: .copyKey)
-                        } label: {
-                            CompoundIcon(\.copy)
-                        }
-                        .tint(.compound.iconSecondary)
-                        .accessibilityLabel(L10n.actionCopy)
-                        .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.copyRecoveryKey)
+                    RecoveryKeyView(recoveryKey: context.viewState.recoveryKey ?? "") {
+                        context.send(viewAction: .copyKey)
                     }
                 }
             }
@@ -219,12 +207,41 @@ struct SecureBackupRecoveryKeyScreen: View {
     }
 }
 
+private struct RecoveryKeyView: View {
+    /// The recovery key to show. This can be blank if `isInvisibleForLayout` is `true.`
+    let recoveryKey: String
+    /// Hides the view, laying it out with the expected key size so that the superview can have a consistent size.
+    var isInvisibleForLayout = false
+    /// The action performed when tapping the copy button.
+    let copyAction: () -> Void
+    
+    private let placeholderRecoveryKey = Array(repeating: "XXXX", count: 12).joined(separator: " ")
+    
+    var body: some View {
+        HStack(spacing: 8) {
+            Text(isInvisibleForLayout ? placeholderRecoveryKey : recoveryKey)
+                .foregroundColor(.compound.textSecondary)
+                .font(.compound.bodyLG.monospaced())
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Button(action: copyAction) {
+                CompoundIcon(\.copy)
+            }
+            .tint(.compound.iconSecondary)
+            .accessibilityLabel(L10n.actionCopy)
+            .accessibilityIdentifier(A11yIdentifiers.secureBackupRecoveryKeyScreen.copyRecoveryKey)
+        }
+        .opacity(isInvisibleForLayout ? 0 : 1)
+        .accessibilityHidden(isInvisibleForLayout)
+    }
+}
+
 // MARK: - Previews
 
 struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview {
     static let key = "EsTM njec uHYA yHmh dQdW Nj4o bNRU 9jMN XGMc KUNM UFr5 R8GY"
     static let notSetUpViewModel = viewModel(recoveryState: .disabled)
-    static let generatingViewModel = viewModel(recoveryState: .disabled, generateKey: true)
+    static let generatingViewModel = viewModel(recoveryState: .disabled, generateKey: true, key: key)
     static let setupViewModel = viewModel(recoveryState: .enabled, generateKey: true, key: key)
     static let incompleteViewModel = viewModel(recoveryState: .incomplete)
     static let unknownViewModel = viewModel(recoveryState: .unknown)
@@ -239,14 +256,15 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
             SecureBackupRecoveryKeyScreen(context: generatingViewModel.context)
         }
         .previewDisplayName("Generating")
-        .snapshotPreferences(delay: 0.25)
         
         NavigationStack {
             SecureBackupRecoveryKeyScreen(context: setupViewModel.context)
         }
+        .snapshotPreferences(expect: setupViewModel.context.$viewState.map { state in
+            state.recoveryKey != nil
+        })
         .previewDisplayName("Set up")
-        .snapshotPreferences(delay: 0.25)
-
+        
         NavigationStack {
             SecureBackupRecoveryKeyScreen(context: incompleteViewModel.context)
         }

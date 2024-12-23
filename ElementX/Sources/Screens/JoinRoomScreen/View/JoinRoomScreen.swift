@@ -202,32 +202,42 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             JoinRoomScreen(context: unknownViewModel.context)
         }
+        .snapshotPreferences(expect: unknownViewModel.context.$viewState.map { state in
+            state.roomDetails != nil
+        })
         .previewDisplayName("Unknown")
-        .snapshotPreferences(delay: 0.25)
         
         NavigationStack {
             JoinRoomScreen(context: knockViewModel.context)
         }
+        .snapshotPreferences(expect: knockViewModel.context.$viewState.map { state in
+            state.roomDetails != nil
+        })
         .previewDisplayName("Knock")
-        .snapshotPreferences(delay: 0.25)
         
         NavigationStack {
             JoinRoomScreen(context: joinViewModel.context)
         }
+        .snapshotPreferences(expect: joinViewModel.context.$viewState.map { state in
+            state.roomDetails != nil
+        })
         .previewDisplayName("Join")
-        .snapshotPreferences(delay: 0.25)
         
         NavigationStack {
             JoinRoomScreen(context: inviteViewModel.context)
         }
+        .snapshotPreferences(expect: inviteViewModel.context.$viewState.map { state in
+            state.roomDetails != nil
+        })
         .previewDisplayName("Invite")
-        .snapshotPreferences(delay: 0.25)
         
         NavigationStack {
             JoinRoomScreen(context: knockedViewModel.context)
         }
+        .snapshotPreferences(expect: knockedViewModel.context.$viewState.map { state in
+            state.roomDetails != nil
+        })
         .previewDisplayName("Knocked")
-        .snapshotPreferences(delay: 0.25)
     }
     
     static func makeViewModel(mode: JoinRoomScreenInteractionMode) -> JoinRoomScreenViewModel {

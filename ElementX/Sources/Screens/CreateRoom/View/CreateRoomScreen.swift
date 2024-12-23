@@ -332,12 +332,16 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             CreateRoomScreen(context: publicRoomInvalidAliasViewModel.context)
         }
-        .snapshotPreferences(delay: 1.5)
+        .snapshotPreferences(expect: publicRoomExistingAliasViewModel.context.$viewState.map { state in
+            !state.aliasErrors.isEmpty
+        })
         .previewDisplayName("Create Public Room, invalid alias")
         NavigationStack {
             CreateRoomScreen(context: publicRoomExistingAliasViewModel.context)
         }
-        .snapshotPreferences(delay: 1.5)
+        .snapshotPreferences(expect: publicRoomExistingAliasViewModel.context.$viewState.map { state in
+            !state.aliasErrors.isEmpty
+        })
         .previewDisplayName("Create Public Room, existing alias")
     }
 }

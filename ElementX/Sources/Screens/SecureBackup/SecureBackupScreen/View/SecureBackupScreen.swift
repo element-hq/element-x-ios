@@ -125,28 +125,37 @@ struct SecureBackupScreen_Previews: PreviewProvider, TestablePreview {
     static let recoveryIncompleteViewModel = viewModel(keyBackupState: .enabled, recoveryState: .incomplete)
     
     static var previews: some View {
-        Group {
-            NavigationStack {
-                SecureBackupScreen(context: bothSetupViewModel.context)
-            }
-            .previewDisplayName("Both setup")
-            
-            NavigationStack {
-                SecureBackupScreen(context: onlyKeyBackupSetUpViewModel.context)
-            }
-            .previewDisplayName("Only key backup setup")
-            
-            NavigationStack {
-                SecureBackupScreen(context: keyBackupDisabledViewModel.context)
-            }
-            .previewDisplayName("Key backup disabled")
-            
-            NavigationStack {
-                SecureBackupScreen(context: recoveryIncompleteViewModel.context)
-            }
-            .previewDisplayName("Recovery incomplete")
+        NavigationStack {
+            SecureBackupScreen(context: bothSetupViewModel.context)
         }
-        .snapshotPreferences(delay: 1.0)
+        .snapshotPreferences(expect: bothSetupViewModel.context.$viewState.map { state in
+            state.keyBackupState == .enabled
+        })
+        .previewDisplayName("Both setup")
+        
+        NavigationStack {
+            SecureBackupScreen(context: onlyKeyBackupSetUpViewModel.context)
+        }
+        .snapshotPreferences(expect: onlyKeyBackupSetUpViewModel.context.$viewState.map { state in
+            state.keyBackupState == .enabled
+        })
+        .previewDisplayName("Only key backup setup")
+        
+        NavigationStack {
+            SecureBackupScreen(context: keyBackupDisabledViewModel.context)
+        }
+        .snapshotPreferences(expect: keyBackupDisabledViewModel.context.$viewState.map { state in
+            state.keyBackupState == .unknown
+        })
+        .previewDisplayName("Key backup disabled")
+        
+        NavigationStack {
+            SecureBackupScreen(context: recoveryIncompleteViewModel.context)
+        }
+        .snapshotPreferences(expect: recoveryIncompleteViewModel.context.$viewState.map { state in
+            state.recoveryState == .incomplete
+        })
+        .previewDisplayName("Recovery incomplete")
     }
     
     static func viewModel(keyBackupState: SecureBackupKeyBackupState,

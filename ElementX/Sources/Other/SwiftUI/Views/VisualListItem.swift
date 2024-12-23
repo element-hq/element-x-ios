@@ -25,15 +25,9 @@ enum ListPosition {
 }
 
 struct VisualListItem<Icon: View>: View {
-    @Environment(\.backgroundStyle) private var backgroundStyle
-    
     let title: String
     let position: ListPosition
     let iconContent: () -> Icon
-    
-    private var backgroundColor: AnyShapeStyle {
-        backgroundStyle ?? AnyShapeStyle(.compound.bgSubtleSecondary)
-    }
     
     var body: some View {
         Label { Text(title) } icon: {
@@ -43,7 +37,7 @@ struct VisualListItem<Icon: View>: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(backgroundColor, in: RoundedCornerShape(radius: 14, corners: position.roundedCorners))
+        .background(.compound.bgSubtleSecondary, in: RoundedCornerShape(radius: 14, corners: position.roundedCorners))
     }
 }
 
