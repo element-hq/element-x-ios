@@ -60,11 +60,11 @@ struct TimelineItemMenuActionProvider {
         
         if item.isEditable {
             if item.supportsMediaCaption {
-                if item.hasMediaCaption {
-                    actions.append(.editCaption)
-                } else {
-                    actions.append(.addCaption)
-                }
+//                if item.hasMediaCaption {
+//                    actions.append(.editCaption)
+//                } else {
+//                    actions.append(.addCaption)
+//                }
             }
             else if item is PollRoomTimelineItem {
                 // actions.append(.editPoll)
@@ -73,22 +73,22 @@ struct TimelineItemMenuActionProvider {
             }
         }
         
-        if item.isRemoteMessage {
-            actions.append(.copyPermalink)
-        }
+//        if item.isRemoteMessage {
+//            actions.append(.copyPermalink)
+//        }
         
-        if canCurrentUserPin, let eventID = item.id.eventID {
-            actions.append(pinnedEventIDs.contains(eventID) ? .unpin : .pin)
-        }
+//        if canCurrentUserPin, let eventID = item.id.eventID {
+//            actions.append(pinnedEventIDs.contains(eventID) ? .unpin : .pin)
+//        }
 
         if item.isCopyable {
             actions.append(.copy)
         } else if item.hasMediaCaption {
-            actions.append(.copyCaption)
+            //actions.append(.copyCaption)
         }
         
         if item.isEditable, item.hasMediaCaption {
-            actions.append(.removeCaption)
+            //actions.append(.removeCaption)
         }
 
 //        if isViewSourceEnabled {
