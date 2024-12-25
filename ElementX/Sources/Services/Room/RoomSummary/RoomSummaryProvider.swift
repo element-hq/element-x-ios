@@ -51,6 +51,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
+    private var onJoinRoomExplicitly: (String) async -> Void
+    
     /// Build a new summary provider with the given parameters
     /// - Parameters:
     ///   - shouldUpdateVisibleRange: whether this summary provider should forward visible ranges
@@ -62,7 +64,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
          shouldUpdateVisibleRange: Bool = false,
          notificationSettings: NotificationSettingsProxyProtocol,
          appSettings: AppSettings,
-         zeroUsersService: ZeroMatrixUsersService) {
+         zeroUsersService: ZeroMatrixUsersService,
+         onJoinRoomExplicitly: @escaping (String) async -> Void = { _ in }) {
         self.roomListService = roomListService
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .default)
         self.eventStringBuilder = eventStringBuilder
@@ -71,6 +74,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.notificationSettings = notificationSettings
         self.appSettings = appSettings
         self.zeroUsersService = zeroUsersService
+        self.onJoinRoomExplicitly = onJoinRoomExplicitly
         
         diffsPublisher
             .receive(on: serialDispatchQueue)
@@ -226,6 +230,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         Task {
             do {
+                await joinRoomIfRequired(roomListItem)
+                
                 roomDetails.latestEvent = await roomListItem.latestEvent()
                 let roomInfo = try await roomListItem.roomInfo()
                 roomDetails.roomInfo = roomInfo
@@ -305,6 +311,15 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            hasOngoingCall: roomInfo.hasRoomCall,
                            isMarkedUnread: roomInfo.isMarkedUnread,
                            isFavourite: roomInfo.isFavourite)
+    }
+    
+    private func joinRoomIfRequired(_ roomListItem: RoomListItem) async {
+        switch roomListItem.membership() {
+        case .invited:
+            await onJoinRoomExplicitly(roomListItem.id())
+        default:
+            break
+        }
     }
     
     private func buildDiff(from diff: RoomListEntriesUpdate, on rooms: [RoomSummary]) -> CollectionDifference<RoomSummary>? {
