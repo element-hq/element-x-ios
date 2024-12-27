@@ -1,5 +1,5 @@
-import CompoundDesignTokens
 import Compound
+import CompoundDesignTokens
 import SFSafeSymbols
 import SwiftUI
 
@@ -19,9 +19,9 @@ public struct ZeroListRowDetails<Icon: View> {
                              counter: Int? = nil,
                              isWaiting: Bool = false) -> Self {
         ZeroListRowDetails(title: title,
-                       icon: icon,
-                       counter: counter,
-                       isWaiting: isWaiting)
+                           icon: icon,
+                           counter: counter,
+                           isWaiting: isWaiting)
     }
     
     public static func label(title: String,
@@ -29,9 +29,9 @@ public struct ZeroListRowDetails<Icon: View> {
                              counter: Int? = nil,
                              isWaiting: Bool = false) -> Self where Icon == CompoundIcon {
         ZeroListRowDetails(title: title,
-                       icon: CompoundIcon(icon),
-                       counter: counter,
-                       isWaiting: isWaiting)
+                           icon: CompoundIcon(icon),
+                           counter: counter,
+                           isWaiting: isWaiting)
     }
     
     public static func label(title: String,
@@ -39,33 +39,33 @@ public struct ZeroListRowDetails<Icon: View> {
                              counter: Int? = nil,
                              isWaiting: Bool = false) -> Self where Icon == Image {
         ZeroListRowDetails(title: title,
-                       icon: Image(systemSymbol: systemIcon),
-                       counter: counter,
-                       isWaiting: isWaiting)
+                           icon: Image(systemSymbol: systemIcon),
+                           counter: counter,
+                           isWaiting: isWaiting)
     }
     
     public static func icon(_ icon: Icon,
                             counter: Int? = nil,
                             isWaiting: Bool = false) -> Self {
         ZeroListRowDetails(icon: icon,
-                       counter: counter,
-                       isWaiting: isWaiting)
+                           counter: counter,
+                           isWaiting: isWaiting)
     }
     
     public static func icon(_ icon: KeyPath<CompoundIcons, Image>,
                             counter: Int? = nil,
                             isWaiting: Bool = false) -> Self where Icon == CompoundIcon {
-        ZeroListRowDetails(icon:CompoundIcon(icon),
-                       counter: counter,
-                       isWaiting: isWaiting)
+        ZeroListRowDetails(icon: CompoundIcon(icon),
+                           counter: counter,
+                           isWaiting: isWaiting)
     }
     
     public static func systemIcon(_ systemIcon: SFSymbol,
                                   counter: Int? = nil,
                                   isWaiting: Bool = false) -> Self where Icon == Image {
         ZeroListRowDetails(icon: Image(systemSymbol: systemIcon),
-                       counter: counter,
-                       isWaiting: isWaiting)
+                           counter: counter,
+                           isWaiting: isWaiting)
     }
 }
 
@@ -74,8 +74,8 @@ public extension ZeroListRowDetails where Icon == Image {
                       counter: Int? = nil,
                       isWaiting: Bool = false) -> Self {
         ZeroListRowDetails(title: title,
-                       counter: counter,
-                       isWaiting: isWaiting)
+                           counter: counter,
+                           isWaiting: isWaiting)
     }
     
     static func counter(_ counter: Int, isWaiting: Bool = false) -> Self {

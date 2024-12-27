@@ -260,7 +260,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     func getMember(userID: String) async -> Result<RoomMemberProxyProtocol, RoomProxyError> {
         if let member = membersPublisher.value.filter({ $0.userID == userID }).first {
             roomMemberProxySubject.send(member)
-            //return .success(member)
+            // return .success(member)
         }
         
         do {

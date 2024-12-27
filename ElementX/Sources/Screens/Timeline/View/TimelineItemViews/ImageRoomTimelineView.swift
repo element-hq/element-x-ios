@@ -27,12 +27,12 @@ struct ImageRoomTimelineView: View {
                             .startLoadingBeforeViewAppear(false)
                     } else {
                         LoadableImage(mediaSource: timelineItem.content.imageInfo.source,
-                                                  mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
-                                                  blurhash: timelineItem.content.blurhash,
-                                                  size: timelineItem.content.imageInfo.size,
-                                                  mediaProvider: context?.mediaProvider) {
-                                        placeholder
-                                    }
+                                      mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
+                                      blurhash: timelineItem.content.blurhash,
+                                      size: timelineItem.content.imageInfo.size,
+                                      mediaProvider: context?.mediaProvider) {
+                            placeholder
+                        }
                     }
                 }
                 .timelineMediaFrame(imageInfo: timelineItem.content.imageInfo)

@@ -1,5 +1,5 @@
-import CompoundDesignTokens
 import Compound
+import CompoundDesignTokens
 import SFSafeSymbols
 import SwiftUI
 
@@ -62,7 +62,7 @@ public struct ZeroListRowLabel<Icon: View>: View {
     }
     
     var iconAlignment: VerticalAlignment = .center
-    var hideIconBackground: Bool = false
+    var hideIconBackground = false
     
     enum Layout { case `default`, centered, avatar }
     var layout: Layout = .default
@@ -71,6 +71,7 @@ public struct ZeroListRowLabel<Icon: View>: View {
         guard isEnabled else { return .compound.textDisabled }
         return role == .destructive ? .compound.textCriticalPrimary : .compound.textPrimary
     }
+
     var titleLineLimit: Int? { layout == .avatar ? 1 : lineLimit }
     
     var statusColor: Color {
@@ -80,6 +81,7 @@ public struct ZeroListRowLabel<Icon: View>: View {
     var descriptionColor: Color {
         isEnabled ? .compound.textSecondary : .compound.textDisabled
     }
+
     var descriptionLineLimit: Int? {
         guard layout == .avatar else { return lineLimit }
         return role != .error ? 1 : lineLimit
@@ -198,10 +200,10 @@ public struct ZeroListRowLabel<Icon: View>: View {
                                  role: ZeroListRowLabel.Role? = nil,
                                  iconAlignment: VerticalAlignment = .center) -> ZeroListRowLabel {
         ZeroListRowLabel(title: title,
-                     description: description,
-                     icon: icon,
-                     role: role,
-                     iconAlignment: iconAlignment)
+                         description: description,
+                         icon: icon,
+                         role: role,
+                         iconAlignment: iconAlignment)
     }
     
     public static func `default`(title: String,
@@ -232,9 +234,9 @@ public struct ZeroListRowLabel<Icon: View>: View {
                               icon: Icon,
                               role: ZeroListRowLabel.Role? = nil) -> ZeroListRowLabel {
         ZeroListRowLabel(title: title,
-                     icon: icon,
-                     role: role,
-                     hideIconBackground: true)
+                         icon: icon,
+                         role: role,
+                         hideIconBackground: true)
     }
     
     public static func action(title: String,
@@ -253,10 +255,10 @@ public struct ZeroListRowLabel<Icon: View>: View {
                                       icon: Icon,
                                       role: ZeroListRowLabel.Role? = nil) -> ZeroListRowLabel {
         ZeroListRowLabel(title: title,
-                     icon: icon,
-                     role: role,
-                     hideIconBackground: true,
-                     layout: .centered)
+                         icon: icon,
+                         role: role,
+                         hideIconBackground: true,
+                         layout: .centered)
     }
     
     public static func centeredAction(title: String,
@@ -288,10 +290,10 @@ public struct ZeroListRowLabel<Icon: View>: View {
                               icon: Icon,
                               role: ZeroListRowLabel.Role? = nil) -> ZeroListRowLabel {
         ZeroListRowLabel(title: title,
-                     status: status,
-                     description: description,
-                     icon: icon,
-                     role: role,
-                     layout: .avatar)
+                         status: status,
+                         description: description,
+                         icon: icon,
+                         role: role,
+                         layout: .avatar)
     }
 }

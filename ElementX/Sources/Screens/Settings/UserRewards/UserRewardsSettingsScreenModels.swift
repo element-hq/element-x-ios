@@ -6,9 +6,7 @@ struct UserRewardsSettingsScreenViewState: BindableState {
 }
 
 struct UserRewardsSettingsScreenViewStateBindings {
-    var userRewards: ZeroRewards = ZeroRewards.empty()
+    var userRewards = ZeroRewards.empty()
 }
 
-enum UserRewardsSettingsScreenViewAction {
-    
-}
+enum UserRewardsSettingsScreenViewAction { }

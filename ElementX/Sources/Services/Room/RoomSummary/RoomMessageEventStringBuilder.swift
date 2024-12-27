@@ -24,18 +24,14 @@ struct RoomMessageEventStringBuilder {
     let attributedStringBuilder: AttributedStringBuilderProtocol
     let destination: Destination
 
-    func buildAttributedString(
-        for messageType: MessageType, senderDisplayName: String
-    ) -> AttributedString {
+    func buildAttributedString(for messageType: MessageType, senderDisplayName: String) -> AttributedString {
         let message: AttributedString
         switch messageType {
         case .emote(let content):
             if let attributedMessage = attributedMessageFrom(
-                formattedBody: content.formatted)
-            {
+                formattedBody: content.formatted) {
                 return AttributedString(
-                    L10n.commonEmote(
-                        senderDisplayName, String(attributedMessage.characters))
+                    L10n.commonEmote(senderDisplayName, String(attributedMessage.characters))
                 )
             } else {
                 return AttributedString(
@@ -50,17 +46,14 @@ struct RoomMessageEventStringBuilder {
             }
             message = content
         case .image(let content):
-            message = buildMessage(
-                for: destination, caption: content.caption,
-                type: L10n.commonImage)
+            message = buildMessage(for: destination, caption: content.caption,
+                                   type: L10n.commonImage)
         case .video(let content):
-            message = buildMessage(
-                for: destination, caption: content.caption,
-                type: L10n.commonVideo)
+            message = buildMessage(for: destination, caption: content.caption,
+                                   type: L10n.commonVideo)
         case .file(let content):
-            message = buildMessage(
-                for: destination, caption: content.caption,
-                type: L10n.commonFile)
+            message = buildMessage(for: destination, caption: content.caption,
+                                   type: L10n.commonFile)
         case .location:
             var content = AttributedString(L10n.commonSharedLocation)
             if destination == .pinnedEvent {
@@ -69,12 +62,10 @@ struct RoomMessageEventStringBuilder {
             message = content
         case .notice(let content):
             if let attributedMessage = attributedMessageFrom(
-                formattedBody: content.formatted)
-            {
+                formattedBody: content.formatted) {
                 message = attributedMessage
             } else if let attributedMessage = attributedStringBuilder.fromPlain(
-                content.body)
-            {
+                content.body) {
                 message = attributedMessage
             } else {
                 message = AttributedString(content.body)
@@ -82,12 +73,10 @@ struct RoomMessageEventStringBuilder {
         case .text(let content):
             let simplifiedPlainText = simplifyPlainText(plainText: content.body)
             if let attributedMessage = attributedMessageFrom(
-                formattedBody: content.formatted)
-            {
+                formattedBody: content.formatted) {
                 message = attributedMessage
             } else if let attributedMessage = attributedStringBuilder.fromPlain(
-                simplifiedPlainText)
-            {
+                simplifiedPlainText) {
                 message = attributedMessage
             } else {
                 message = AttributedString(content.body)
@@ -107,19 +96,16 @@ struct RoomMessageEventStringBuilder {
         let pattern = #"@\[(.+?)\]\(user:[0-9a-fA-F\-]+\)"#
         do {
             let regex = try NSRegularExpression(pattern: pattern)
-            let newText = regex.stringByReplacingMatches(
-                in: plainText,
-                range: NSRange(plainText.startIndex..., in: plainText),
-                withTemplate: "@$1")
+            let newText = regex.stringByReplacingMatches(in: plainText,
+                                                         range: NSRange(plainText.startIndex..., in: plainText),
+                                                         withTemplate: "@$1")
             return newText
         } catch {
             return plainText
         }
     }
 
-    private func buildMessage(
-        for destination: Destination, caption: String?, type: String
-    ) -> AttributedString {
+    private func buildMessage(for destination: Destination, caption: String?, type: String) -> AttributedString {
         guard let caption else {
             return AttributedString(type)
         }
@@ -131,9 +117,7 @@ struct RoomMessageEventStringBuilder {
         }
     }
 
-    private func prefix(
-        _ eventSummary: AttributedString, with textToBold: String
-    ) -> AttributedString {
+    private func prefix(_ eventSummary: AttributedString, with textToBold: String) -> AttributedString {
         let attributedEventSummary = AttributedString(
             eventSummary.string.trimmingCharacters(in: .whitespacesAndNewlines))
 
@@ -145,8 +129,7 @@ struct RoomMessageEventStringBuilder {
     }
 
     private func attributedMessageFrom(formattedBody: FormattedBody?)
-        -> AttributedString?
-    {
+        -> AttributedString? {
         formattedBody.flatMap { attributedStringBuilder.fromHTML($0.body) }
     }
 }

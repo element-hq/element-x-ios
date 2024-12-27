@@ -6,8 +6,8 @@ struct InviteFriendSettingsScreenViewState: BindableState {
 }
 
 struct InviteFriendSettingsScreenViewStateBindings {
-    var messengerInvite: ZeroMessengerInvite = ZeroMessengerInvite.empty()
-    var inviteCopied: Bool = false
+    var messengerInvite = ZeroMessengerInvite.empty()
+    var inviteCopied = false
 }
 
 enum InviteFriendSettingsScreenViewAction {

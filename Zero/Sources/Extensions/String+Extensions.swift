@@ -33,8 +33,8 @@ public extension String {
     ///   - offset: Starting index fo substring
     ///   - length: Length of desired substring
     /// - Returns: String representing the substring if passed indexes are in bounds
-    func substr(_ offset: Int,  _ length: Int) -> String? {
-        guard offset + length <= self.count else { return nil }
+    func substr(_ offset: Int, _ length: Int) -> String? {
+        guard offset + length <= count else { return nil }
         let start = index(startIndex, offsetBy: offset)
         let end = index(start, offsetBy: length)
         return String(self[start..<end])

@@ -10,6 +10,6 @@ public struct ZFinaliseCreateAccount: Encodable {
         self.inviteCode = inviteCode
         self.name = name
         self.userId = userId
-        self.profileImage = profileImageUrl
+        profileImage = profileImageUrl
     }
 }

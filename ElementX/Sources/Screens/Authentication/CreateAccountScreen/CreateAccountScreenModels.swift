@@ -46,9 +46,9 @@ struct CreateAccountScreenViewState: BindableState {
 }
 
 struct CreateAccountScreenBindings {
-    var emailAddress: String = ""
-    var password: String = ""
-    var confirmPassword: String = ""
+    var emailAddress = ""
+    var password = ""
+    var confirmPassword = ""
     
     var alertInfo: AlertInfo<CreateAccountScreenErrorType>?
 }

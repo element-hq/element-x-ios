@@ -3,7 +3,7 @@ import Foundation
 class CreateAccountHelper {
     static let shared = CreateAccountHelper()
     
-    private init() {}
+    private init() { }
     
-    var inviteCode: String = ""
+    var inviteCode = ""
 }

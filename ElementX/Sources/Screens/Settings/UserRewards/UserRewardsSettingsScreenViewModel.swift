@@ -1,15 +1,11 @@
 import Combine
 import SwiftUI
 
-typealias UserRewardsSettingsScreenViewModelType = StateStoreViewModel<
-    UserRewardsSettingsScreenViewState, UserRewardsSettingsScreenViewAction
->
+typealias UserRewardsSettingsScreenViewModelType = StateStoreViewModel<UserRewardsSettingsScreenViewState, UserRewardsSettingsScreenViewAction>
 
 class UserRewardsSettingsScreenViewModel:
     UserRewardsSettingsScreenViewModelType,
-    UserRewardsSettingsScreenViewModelProtocol
-{
-
+    UserRewardsSettingsScreenViewModelProtocol {
     init(userSession: UserSessionProtocol) {
         super.init(
             initialViewState: .init(

@@ -83,15 +83,13 @@ struct CreateAccountScreen: View {
                              accessibilityIdentifier: "create-account_password",
                              submitLabel: .next,
                              onSubmit: {
-                isConfirmPasswordFocused = true
-            })
+                                 isConfirmPasswordFocused = true
+                             })
             
             if !context.password.isEmpty {
                 let infoBoxType: InfoBoxType = context.viewState.isValidPassword ? .success : (isPasswordFocused ? .general : .error)
-                InfoBox(
-                    text: "Must include at least 8 characters, 1 number, 1 lowercase and 1 uppercase letter",
-                    type: infoBoxType
-                )
+                InfoBox(text: "Must include at least 8 characters, 1 number, 1 lowercase and 1 uppercase letter",
+                        type: infoBoxType)
             }
             
             Spacer().frame(height: 20)
@@ -112,18 +110,16 @@ struct CreateAccountScreen: View {
             
             Spacer().frame(height: 40)
             
-            ZeroStyledButton(
-                buttonText: "Create account",
-                buttonImageAsset: Asset.Images.btnCreateAccount,
-                action: submit,
-                enabled: context.viewState.canSubmit
-            )
+            ZeroStyledButton(buttonText: "Create account",
+                             buttonImageAsset: Asset.Images.btnCreateAccount,
+                             action: submit,
+                             enabled: context.viewState.canSubmit)
             
             VStack {
                 Text("Already on ZERO? ")
                     .font(.zero.bodyMD)
                     .foregroundColor(.compound.textSecondary)
-                + Text("Log In")
+                    + Text("Log In")
                     .font(.zero.bodyMD)
                     .foregroundColor(Color.zero.bgAccentRest)
                     .underline()

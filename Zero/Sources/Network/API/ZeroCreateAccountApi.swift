@@ -58,7 +58,7 @@ class ZeroCreateAccountApi: ZeroCreateAccountApiProtocol {
         switch finaliseResult {
         case .success(let inviter):
             return .success(inviter)
-        case.failure(let error):
+        case .failure(let error):
             return .failure(error)
         }
     }

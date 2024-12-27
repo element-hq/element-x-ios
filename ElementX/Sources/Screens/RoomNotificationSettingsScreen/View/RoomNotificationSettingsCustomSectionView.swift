@@ -15,12 +15,12 @@ struct RoomNotificationSettingsCustomSectionView: View {
         Section {
             ForEach(context.viewState.availableCustomRoomNotificationModes, id: \.self) { mode in
                 ZeroListRow(label: .plain(title: context.viewState.strings.string(for: mode),
-                                      description: context.viewState.description(mode: mode)),
-                        details: (context.viewState.pendingCustomMode == mode) ? .isWaiting(true) : nil,
-                        kind: .selection(isSelected: context.viewState.isSelected(mode: mode)) {
-                            context.send(viewAction: .setCustomMode(mode))
-                        })
-                        .disabled(context.viewState.pendingCustomMode != nil)
+                                          description: context.viewState.description(mode: mode)),
+                            details: (context.viewState.pendingCustomMode == mode) ? .isWaiting(true) : nil,
+                            kind: .selection(isSelected: context.viewState.isSelected(mode: mode)) {
+                                context.send(viewAction: .setCustomMode(mode))
+                            })
+                            .disabled(context.viewState.pendingCustomMode != nil)
             }
         } header: {
             Text(context.viewState.customSettingsSectionHeader)

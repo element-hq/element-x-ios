@@ -26,10 +26,10 @@ class APIManager {
     }
     
     func request(_ url: String,
-                               method: HTTPMethod,
-                               parameters: Parameters? = nil,
-                               headers: HTTPHeaders? = nil,
-                               encoding: ParameterEncoding = JSONEncoding.default) async throws -> Result<Void, Error> {
+                 method: HTTPMethod,
+                 parameters: Parameters? = nil,
+                 headers: HTTPHeaders? = nil,
+                 encoding: ParameterEncoding = JSONEncoding.default) async throws -> Result<Void, Error> {
         try await withCheckedThrowingContinuation { continuation in
             AF.request(url, method: method, parameters: parameters, encoding: encoding, headers: headers)
                 .validate()

@@ -85,7 +85,7 @@ struct NotificationSettingsScreen: View {
     private var enableNotificationSection: some View {
         Section {
             ZeroListRow(label: .plain(title: L10n.screenNotificationSettingsEnableNotifications),
-                    kind: .toggle($context.enableNotifications))
+                        kind: .toggle($context.enableNotifications))
                 .onChange(of: context.enableNotifications) {
                     context.send(viewAction: .changedEnableNotifications)
                 }
@@ -96,25 +96,25 @@ struct NotificationSettingsScreen: View {
         Section {
             // Group chats
             ZeroListRow(label: .plain(title: L10n.screenNotificationSettingsGroupChats),
-                    details: context.viewState.settings.map {
-                        .title(context.viewState.strings.string(for: $0.groupChatsMode))
-                    } ?? .isWaiting(true),
-                    kind: .navigationLink {
-                        context.send(viewAction: .groupChatsTapped)
-                    })
-                    .disabled(context.viewState.settings == nil)
-                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
+                        details: context.viewState.settings.map {
+                            .title(context.viewState.strings.string(for: $0.groupChatsMode))
+                        } ?? .isWaiting(true),
+                        kind: .navigationLink {
+                            context.send(viewAction: .groupChatsTapped)
+                        })
+                        .disabled(context.viewState.settings == nil)
+                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
             
             // Direct chats
             ZeroListRow(label: .plain(title: L10n.screenNotificationSettingsDirectChats),
-                    details: context.viewState.settings.map {
-                        .title(context.viewState.strings.string(for: $0.directChatsMode))
-                    } ?? .isWaiting(true),
-                    kind: .navigationLink {
-                        context.send(viewAction: .directChatsTapped)
-                    })
-                    .disabled(context.viewState.settings == nil)
-                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
+                        details: context.viewState.settings.map {
+                            .title(context.viewState.strings.string(for: $0.directChatsMode))
+                        } ?? .isWaiting(true),
+                        kind: .navigationLink {
+                            context.send(viewAction: .directChatsTapped)
+                        })
+                        .disabled(context.viewState.settings == nil)
+                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
             
         } header: {
             Text(L10n.screenNotificationSettingsNotificationSectionTitle)
@@ -125,7 +125,7 @@ struct NotificationSettingsScreen: View {
     private var mentionsSection: some View {
         Section {
             ZeroListRow(label: .plain(title: L10n.screenNotificationSettingsRoomMentionLabel),
-                    kind: .toggle($context.roomMentionsEnabled))
+                        kind: .toggle($context.roomMentionsEnabled))
                 .disabled(context.viewState.settings?.roomMentionsEnabled == nil)
                 .allowsHitTesting(!context.viewState.applyingChange)
                 .onChange(of: context.roomMentionsEnabled) {
@@ -140,7 +140,7 @@ struct NotificationSettingsScreen: View {
     private var callsSection: some View {
         Section {
             ZeroListRow(label: .plain(title: L10n.screenNotificationSettingsCallsLabel),
-                    kind: .toggle($context.callsEnabled))
+                        kind: .toggle($context.callsEnabled))
                 .disabled(context.viewState.settings?.callsEnabled == nil)
                 .allowsHitTesting(!context.viewState.applyingChange)
                 .onChange(of: context.callsEnabled) {
@@ -155,7 +155,7 @@ struct NotificationSettingsScreen: View {
     private var additionalSettingsSection: some View {
         Section {
             ZeroListRow(label: .plain(title: L10n.screenNotificationSettingsInviteForMeLabel),
-                    kind: .toggle($context.invitationsEnabled))
+                        kind: .toggle($context.invitationsEnabled))
                 .disabled(context.viewState.settings?.invitationsEnabled == nil)
                 .allowsHitTesting(!context.viewState.applyingChange)
                 .onChange(of: context.invitationsEnabled) {

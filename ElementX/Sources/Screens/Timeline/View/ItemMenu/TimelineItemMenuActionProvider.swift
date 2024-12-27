@@ -58,7 +58,7 @@ struct TimelineItemMenuActionProvider {
 //        if canCurrentUserPin, let eventID = item.id.eventID {
 //            actions.append(pinnedEventIDs.contains(eventID) ? .unpin : .pin)
 //        }
-//        
+//
 //        if item.isRemoteMessage {
 //            actions.append(.copyPermalink)
 //        }
@@ -70,8 +70,7 @@ struct TimelineItemMenuActionProvider {
                 } else if isCreateMediaCaptionsEnabled {
                     actions.append(.addCaption)
                 }
-            }
-            else if item is PollRoomTimelineItem {
+            } else if item is PollRoomTimelineItem {
                 // actions.append(.editPoll)
             } else if !(item is VoiceMessageRoomTimelineItem) {
                 actions.append(.edit)
@@ -91,11 +90,11 @@ struct TimelineItemMenuActionProvider {
 //        if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded, let eventID = item.id.eventID {
 //            actions.append(.endPoll(pollStartID: eventID))
 //        }
-//        
+//
 //        if isViewSourceEnabled {
 //            actions.append(.viewSource)
 //        }
-//        
+//
 //        if !item.isOutgoing {
 //            secondaryActions.append(.report)
 //        }

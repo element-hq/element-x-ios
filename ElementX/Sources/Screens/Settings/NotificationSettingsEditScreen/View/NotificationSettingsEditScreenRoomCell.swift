@@ -16,15 +16,15 @@ struct NotificationSettingsEditScreenRoomCell: View {
     
     var body: some View {
         ZeroListRow(label: .action(title: room.name,
-                               icon: avatar),
-                details: roomDetailsLabel,
-                kind: .navigationLink {
-                    if let roomId = room.roomId {
-                        context.send(viewAction: .selectRoom(roomIdentifier: roomId))
-                    }
-                })
-                .lineLimit(1)
-                .accessibilityIdentifier(A11yIdentifiers.notificationSettingsEditScreen.roomName(room.name))
+                                   icon: avatar),
+                    details: roomDetailsLabel,
+                    kind: .navigationLink {
+                        if let roomId = room.roomId {
+                            context.send(viewAction: .selectRoom(roomIdentifier: roomId))
+                        }
+                    })
+                    .lineLimit(1)
+                    .accessibilityIdentifier(A11yIdentifiers.notificationSettingsEditScreen.roomName(room.name))
     }
     
     @ViewBuilder @MainActor

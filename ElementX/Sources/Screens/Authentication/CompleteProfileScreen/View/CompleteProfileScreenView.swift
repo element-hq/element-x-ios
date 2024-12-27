@@ -38,12 +38,12 @@ struct CompleteProfileScreen: View {
                                    contentID: nil,
                                    avatarSize: .user(on: .editUserDetails),
                                    mediaProvider: context.mediaProvider)
-            .overlay(alignment: .bottomTrailing) {
-                avatarOverlayIcon
-            }
-            .confirmationDialog("", isPresented: $context.showMediaSheet) {
-                mediaActionSheet
-            }
+                .overlay(alignment: .bottomTrailing) {
+                    avatarOverlayIcon
+                }
+                .confirmationDialog("", isPresented: $context.showMediaSheet) {
+                    mediaActionSheet
+                }
         }
         .buttonStyle(.plain)
         .frame(maxWidth: .infinity)
@@ -72,15 +72,13 @@ struct CompleteProfileScreen: View {
     }
     
     private var submitButton: some View {
-        ZeroStyledButton(
-            buttonText: "Create account",
-            buttonImageAsset: Asset.Images.btnCreateAccount,
-            action: submit,
-            enabled: context.viewState.canSubmit
-        )
-        .padding(.top, 32)
-        .frame(maxWidth: .infinity)
-        .listRowBackground(Color.clear)
+        ZeroStyledButton(buttonText: "Create account",
+                         buttonImageAsset: Asset.Images.btnCreateAccount,
+                         action: submit,
+                         enabled: context.viewState.canSubmit)
+            .padding(.top, 32)
+            .frame(maxWidth: .infinity)
+            .listRowBackground(Color.clear)
     }
     
     private var avatarOverlayIcon: some View {

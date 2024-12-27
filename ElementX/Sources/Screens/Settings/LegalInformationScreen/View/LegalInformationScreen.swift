@@ -16,11 +16,11 @@ struct LegalInformationScreen: View {
         Form {
             Section {
                 ZeroListRow(label: .plain(title: L10n.commonCopyright),
-                        kind: .button { openURL(context.viewState.copyrightURL) })
+                            kind: .button { openURL(context.viewState.copyrightURL) })
                 ZeroListRow(label: .plain(title: L10n.commonAcceptableUsePolicy),
-                        kind: .button { openURL(context.viewState.acceptableUseURL) })
+                            kind: .button { openURL(context.viewState.acceptableUseURL) })
                 ZeroListRow(label: .plain(title: L10n.commonPrivacyPolicy),
-                        kind: .button { openURL(context.viewState.privacyURL) })
+                            kind: .button { openURL(context.viewState.privacyURL) })
             }
         }
         .zeroList()

@@ -15,20 +15,20 @@ struct AdvancedSettingsScreen: View {
         Form {
             Section {
                 ZeroListRow(label: .plain(title: L10n.commonAppearance),
-                        kind: .picker(selection: $context.appAppearance,
-                                      items: AppAppearance.allCases.map { (title: $0.name, tag: $0) }))
+                            kind: .picker(selection: $context.appAppearance,
+                                          items: AppAppearance.allCases.map { (title: $0.name, tag: $0) }))
                 
                 ZeroListRow(label: .plain(title: L10n.actionViewSource,
-                                      description: L10n.screenAdvancedSettingsViewSourceDescription),
-                        kind: .toggle($context.viewSourceEnabled))
+                                          description: L10n.screenAdvancedSettingsViewSourceDescription),
+                            kind: .toggle($context.viewSourceEnabled))
                 
                 ZeroListRow(label: .plain(title: L10n.screenAdvancedSettingsSharePresence,
-                                      description: L10n.screenAdvancedSettingsSharePresenceDescription),
-                        kind: .toggle($context.sharePresence))
+                                          description: L10n.screenAdvancedSettingsSharePresenceDescription),
+                            kind: .toggle($context.sharePresence))
                 
                 ZeroListRow(label: .plain(title: L10n.screenAdvancedSettingsMediaCompressionTitle,
-                                      description: L10n.screenAdvancedSettingsMediaCompressionDescription),
-                        kind: .toggle($context.optimizeMediaUploads))
+                                          description: L10n.screenAdvancedSettingsMediaCompressionDescription),
+                            kind: .toggle($context.optimizeMediaUploads))
                     .onChange(of: context.optimizeMediaUploads) {
                         context.send(viewAction: .optimizeMediaUploadsChanged)
                     }

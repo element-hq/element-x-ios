@@ -602,7 +602,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         let fallbackName: String = messageContent.info?.name ?? "Image"
         
         let source = try? MediaSourceProxy(url: URL(string: messageContent.url ?? "") ?? URL("about:blank"),
-                                      mimeType: messageContent.info?.mimeType)
+                                           mimeType: messageContent.info?.mimeType)
         let imageInfo = ImageInfoProxy(source: source ?? MediaSourceProxy.empty(),
                                        width: (width != nil) ? UInt64(max(0, floor(width!))) : nil,
                                        height: (height != nil) ? UInt64(max(0, floor(height!))) : nil,

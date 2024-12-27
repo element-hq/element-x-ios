@@ -90,8 +90,8 @@ public struct ZeroListRow<Icon: View, DetailsIcon: View, CustomContent: View, Se
             .padding(.trailing, ZeroListRowPadding.horizontal)
         case .inlinePicker(let selection, let items):
             ZeroListInlinePicker(title: label.title ?? "",
-                             selection: selection,
-                             items: items)
+                                 selection: selection,
+                                 items: items)
         case .selection(let isSelected, let action):
             Button(action: action) {
                 ZeroRowContent(details: details, accessory: .selection(isSelected)) { label }
@@ -178,14 +178,14 @@ public extension ZeroListRow where DetailsIcon == EmptyView, CustomContent == Em
 // Custom row without a label or details label.
 public extension ZeroListRow where Icon == EmptyView, DetailsIcon == EmptyView {
     init(kind: Kind<CustomContent, SelectionValue>) {
-        self.label = ZeroListRowLabel()
-        self.details = nil
+        label = ZeroListRowLabel()
+        details = nil
         self.kind = kind
     }
     
     init(kind: Kind<CustomContent, SelectionValue>) where SelectionValue == String {
-        self.label = ZeroListRowLabel()
-        self.details = nil
+        label = ZeroListRowLabel()
+        details = nil
         self.kind = kind
     }
 }

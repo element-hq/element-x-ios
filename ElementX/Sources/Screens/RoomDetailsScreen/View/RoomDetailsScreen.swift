@@ -146,7 +146,7 @@ struct RoomDetailsScreen: View {
                     }
                 } else {
                     ZeroListRow(label: .plain(title: L10n.screenRoomDetailsAddTopicTitle),
-                            kind: .button { context.send(viewAction: .processTapAddTopic) })
+                                kind: .button { context.send(viewAction: .processTapAddTopic) })
                         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.addTopic)
                 }
             } header: {
@@ -159,33 +159,33 @@ struct RoomDetailsScreen: View {
     private var aboutSection: some View {
         Section {
             ZeroListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
-                                    icon: \.pin),
-                    details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
-                    kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink {
-                        context.send(viewAction: .processTapPinnedEvents)
-                    })
-                    .disabled(context.viewState.pinnedEventsActionState.isLoading)
+                                        icon: \.pin),
+                        details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
+                        kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink {
+                            context.send(viewAction: .processTapPinnedEvents)
+                        })
+                        .disabled(context.viewState.pinnedEventsActionState.isLoading)
             
             if context.viewState.canSeeKnockingRequests {
                 ZeroListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
-                                        icon: \.askToJoin),
-                        details: context.viewState.knockRequestsCount > 0 ? .counter(context.viewState.knockRequestsCount) : nil,
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapRequestsToJoin)
-                        })
+                                            icon: \.askToJoin),
+                            details: context.viewState.knockRequestsCount > 0 ? .counter(context.viewState.knockRequestsCount) : nil,
+                            kind: .navigationLink {
+                                context.send(viewAction: .processTapRequestsToJoin)
+                            })
             }
             ZeroListRow(label: .default(title: L10n.screenPollsHistoryTitle,
-                                    icon: \.polls),
-                    kind: .navigationLink {
-                        context.send(viewAction: .processTapPolls)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
+                                        icon: \.polls),
+                        kind: .navigationLink {
+                            context.send(viewAction: .processTapPolls)
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
             
             if context.viewState.mediaBrowserEnabled {
                 ZeroListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapMediaEvents)
-                        })
+                            kind: .navigationLink {
+                                context.send(viewAction: .processTapMediaEvents)
+                            })
             }
         }
     }
@@ -193,18 +193,18 @@ struct RoomDetailsScreen: View {
     private var configurationSection: some View {
         Section {
             ZeroListRow(label: .default(title: L10n.screenRoomDetailsNotificationTitle,
-                                    icon: \.notifications),
-                    details: context.viewState.notificationSettingsState.isLoading ? .isWaiting(true)
-                        : context.viewState.notificationSettingsState.isError ? .systemIcon(.exclamationmarkCircle)
-                        : .title(context.viewState.notificationSettingsState.label),
-                    kind: .navigationLink {
-                        context.send(viewAction: .processTapNotifications)
-                    })
-                    .disabled(context.viewState.notificationSettingsState.isLoading)
-                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
+                                        icon: \.notifications),
+                        details: context.viewState.notificationSettingsState.isLoading ? .isWaiting(true)
+                            : context.viewState.notificationSettingsState.isError ? .systemIcon(.exclamationmarkCircle)
+                            : .title(context.viewState.notificationSettingsState.label),
+                        kind: .navigationLink {
+                            context.send(viewAction: .processTapNotifications)
+                        })
+                        .disabled(context.viewState.notificationSettingsState.isLoading)
+                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
             
             ZeroListRow(label: .default(title: L10n.commonFavourite, icon: \.favourite),
-                    kind: .toggle($context.isFavourite))
+                        kind: .toggle($context.isFavourite))
                 .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.favourite)
                 .onChange(of: context.isFavourite) { _, newValue in
                     context.send(viewAction: .toggleFavourite(isFavourite: newValue))
@@ -223,12 +223,12 @@ struct RoomDetailsScreen: View {
     private var peopleSection: some View {
         Section {
             ZeroListRow(label: .default(title: L10n.commonPeople,
-                                    icon: \.user),
-                    details: .title(String(context.viewState.joinedMembersCount)),
-                    kind: .navigationLink {
-                        context.send(viewAction: .processTapPeople)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
+                                        icon: \.user),
+                        details: .title(String(context.viewState.joinedMembersCount)),
+                        kind: .navigationLink {
+                            context.send(viewAction: .processTapPeople)
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
 //            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
 //                ZeroListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
 //                                        icon: \.admin),
@@ -258,10 +258,10 @@ struct RoomDetailsScreen: View {
         if context.viewState.isEncrypted {
             Section {
                 ZeroListRow(label: .default(title: L10n.screenRoomDetailsEncryptionEnabledTitle,
-                                        description: L10n.screenRoomDetailsEncryptionEnabledSubtitle,
-                                        icon: \.lock,
-                                        iconAlignment: .top),
-                        kind: .label)
+                                            description: L10n.screenRoomDetailsEncryptionEnabledSubtitle,
+                                            icon: \.lock,
+                                            iconAlignment: .top),
+                            kind: .label)
             } header: {
                 Text(L10n.commonSecurity)
                     .compoundListSectionHeader()
@@ -276,22 +276,22 @@ struct RoomDetailsScreen: View {
     private var leaveRoomSection: some View {
         Section {
             ZeroListRow(label: .action(title: leaveRoomTitle,
-                                   icon: \.leave,
-                                   role: .destructive),
-                    kind: .button { context.send(viewAction: .processTapLeave) })
+                                       icon: \.leave,
+                                       role: .destructive),
+                        kind: .button { context.send(viewAction: .processTapLeave) })
         }
     }
     
     private func ignoreUserSection(user: RoomMemberDetails) -> some View {
         Section {
             ZeroListRow(label: .default(title: user.isIgnored ? L10n.screenDmDetailsUnblockUser : L10n.screenDmDetailsBlockUser,
-                                    icon: \.block,
-                                    role: user.isIgnored ? nil : .destructive),
-                    details: .isWaiting(context.viewState.isProcessingIgnoreRequest),
-                    kind: .button {
-                        context.send(viewAction: user.isIgnored ? .processTapUnignore : .processTapIgnore)
-                    })
-                    .disabled(context.viewState.isProcessingIgnoreRequest)
+                                        icon: \.block,
+                                        role: user.isIgnored ? nil : .destructive),
+                        details: .isWaiting(context.viewState.isProcessingIgnoreRequest),
+                        kind: .button {
+                            context.send(viewAction: user.isIgnored ? .processTapUnignore : .processTapIgnore)
+                        })
+                        .disabled(context.viewState.isProcessingIgnoreRequest)
         }
     }
 

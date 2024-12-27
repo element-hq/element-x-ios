@@ -27,7 +27,7 @@ class ZeroChatApi: ZeroChatApiProtocol {
             .authorisedRequest(ChatEndPoints.matrixMessageEndPoint,
                                method: .post,
                                appSettings: appSettings,
-                               //parameters: parameters)
+                               // parameters: parameters)
                                parameters: request.toDictionary())
         
         switch result {
