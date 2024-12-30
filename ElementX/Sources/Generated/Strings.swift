@@ -330,6 +330,8 @@ internal enum L10n {
   internal static var commonDeviceId: String { return L10n.tr("Localizable", "common_device_id") }
   /// Direct chat
   internal static var commonDirectChat: String { return L10n.tr("Localizable", "common_direct_chat") }
+  /// Download failed
+  internal static var commonDownloadFailed: String { return L10n.tr("Localizable", "common_download_failed") }
   /// Downloading
   internal static var commonDownloading: String { return L10n.tr("Localizable", "common_downloading") }
   /// (edited)
@@ -362,6 +364,10 @@ internal enum L10n {
   internal static var commonFavourited: String { return L10n.tr("Localizable", "common_favourited") }
   /// File
   internal static var commonFile: String { return L10n.tr("Localizable", "common_file") }
+  /// File deleted
+  internal static var commonFileDeleted: String { return L10n.tr("Localizable", "common_file_deleted") }
+  /// File saved
+  internal static var commonFileSaved: String { return L10n.tr("Localizable", "common_file_saved") }
   /// Forward message
   internal static var commonForwardMessage: String { return L10n.tr("Localizable", "common_forward_message") }
   /// Frequently used
@@ -606,6 +612,10 @@ internal enum L10n {
   }
   /// In order to let the application display notifications, please grant the permission in the system settings.
   internal static var dialogPermissionNotification: String { return L10n.tr("Localizable", "dialog_permission_notification") }
+  /// %1$@ does not have access to your photo library.
+  internal static func dialogPermissionPhotoLibraryTitleIos(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "dialog_permission_photo_library_title_ios", String(describing: p1))
+  }
   /// Confirmation
   internal static var dialogTitleConfirmation: String { return L10n.tr("Localizable", "dialog_title_confirmation") }
   /// Error
@@ -1392,6 +1402,8 @@ internal enum L10n {
   internal static var screenMediaBrowserDeleteConfirmationSubtitle: String { return L10n.tr("Localizable", "screen_media_browser_delete_confirmation_subtitle") }
   /// Delete file?
   internal static var screenMediaBrowserDeleteConfirmationTitle: String { return L10n.tr("Localizable", "screen_media_browser_delete_confirmation_title") }
+  /// Check your internet connection and try again.
+  internal static var screenMediaBrowserDownloadErrorMessage: String { return L10n.tr("Localizable", "screen_media_browser_download_error_message") }
   /// Documents, audio files, and voice messages uploaded to this room will be shown here.
   internal static var screenMediaBrowserFilesEmptyStateSubtitle: String { return L10n.tr("Localizable", "screen_media_browser_files_empty_state_subtitle") }
   /// No files uploaded yet
@@ -2592,6 +2604,8 @@ internal enum L10n {
   internal static var testUntranslatedDefaultLanguageIdentifier: String { return L10n.tr("Localizable", "test_untranslated_default_language_identifier") }
   /// Historical messages are not available on this device
   internal static var timelineDecryptionFailureHistoricalEventNoKeyBackup: String { return L10n.tr("Localizable", "timeline_decryption_failure_historical_event_no_key_backup") }
+  /// You need to verify this device for access to historical messages
+  internal static var timelineDecryptionFailureHistoricalEventUnverifiedDevice: String { return L10n.tr("Localizable", "timeline_decryption_failure_historical_event_unverified_device") }
   /// You don't have access to this message
   internal static var timelineDecryptionFailureHistoricalEventUserNotJoined: String { return L10n.tr("Localizable", "timeline_decryption_failure_historical_event_user_not_joined") }
   /// Unable to decrypt message

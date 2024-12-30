@@ -39,8 +39,10 @@ if hasPngs {
 }
 
 // Check for nice PR titles
+let prTitle = danger.github.pullRequest.title
 let fixesRegex = try! Regex("(Fixes|Fix) #\\d+")
-if danger.github.pullRequest.title.hasSuffix("…") || danger.github.pullRequest.title.starts(with: fixesRegex) {
+let semanticRegex = try! Regex("\\w+\\(\\w+\\):")
+if prTitle.hasSuffix("…") || prTitle.starts(with: fixesRegex) || prTitle.starts(with: semanticRegex) {
     fail("Please provide a complete title that can be used as a changelog entry.")
 }
 

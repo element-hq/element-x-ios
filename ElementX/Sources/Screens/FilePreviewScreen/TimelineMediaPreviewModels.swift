@@ -15,28 +15,62 @@ enum TimelineMediaPreviewViewModelAction: Equatable {
 }
 
 struct TimelineMediaPreviewViewState: BindableState {
+    /// All of the items in the timeline that can be previewed.
     var previewItems: [TimelineMediaPreviewItem]
+    /// The index of the initial item inside of `previewItems` that is to be shown.
+    let initialItemIndex: Int
+    
+    /// The media item that is currently being previewed.
     var currentItem: TimelineMediaPreviewItem
+    /// All of the available actions for the current item.
     var currentItemActions: TimelineItemMenuActions?
     
+    /// The namespace used for the zoom transition.
     let transitionNamespace: Namespace.ID
+    /// A publisher that the view model uses to signal to the QLPreviewController when the current item has been loaded.
     let fileLoadedPublisher = PassthroughSubject<TimelineItemIdentifier, Never>()
     
     var bindings = TimelineMediaPreviewViewStateBindings()
 }
 
 struct TimelineMediaPreviewViewStateBindings {
+    /// A binding that will present the Details view for the specified item.
     var mediaDetailsItem: TimelineMediaPreviewItem?
+    /// A binding that will present a confirmation to redact the specified item.
     var redactConfirmationItem: TimelineMediaPreviewItem?
+    /// A binding that will present a document picker to export the specified file.
+    var fileToExport: TimelineMediaPreviewFileExportPicker.File?
+    
+    var alertInfo: AlertInfo<TimelineMediaPreviewAlertType>?
+}
+
+enum TimelineMediaPreviewAlertType {
+    case authorizationRequired
 }
 
 /// Wraps a media file and title to be previewed with QuickLook.
 class TimelineMediaPreviewItem: NSObject, QLPreviewItem, Identifiable {
     let timelineItem: EventBasedMessageTimelineItemProtocol
     var fileHandle: MediaFileHandleProxy?
+    var downloadError: Error?
     
     init(timelineItem: EventBasedMessageTimelineItemProtocol) {
         self.timelineItem = timelineItem
+    }
+    
+    init?(roomTimelineItemViewState: RoomTimelineItemViewState) {
+        switch roomTimelineItemViewState.type {
+        case .audio(let audioRoomTimelineItem):
+            timelineItem = audioRoomTimelineItem
+        case .file(let fileRoomTimelineItem):
+            timelineItem = fileRoomTimelineItem
+        case .image(let imageRoomTimelineItem):
+            timelineItem = imageRoomTimelineItem
+        case .video(let videoRoomTimelineItem):
+            timelineItem = videoRoomTimelineItem
+        default:
+            return nil
+        }
     }
     
     // MARK: Identifiable

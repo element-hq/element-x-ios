@@ -894,7 +894,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func startSync() {
         guard let userSession else { return }
         
-        let serverName = String(userSession.clientProxy.userIDServerName ?? "Unknown")
+        let serverName = (userSession.clientProxy.userIDServerName) ?? "Unknown"
         
         ServiceLocator.shared.analytics.signpost.beginFirstSync(serverName: serverName)
         userSession.clientProxy.startSync()

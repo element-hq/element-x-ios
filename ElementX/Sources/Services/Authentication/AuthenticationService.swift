@@ -177,6 +177,41 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
     }
     
+    func loginWithWeb3(web3Token: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        guard let client else { return .failure(.failedLoggingIn) }
+        do {
+            let zeroMatrixSSOResult = try await zeroAuthApi.loginWithWeb3(web3Token: web3Token)
+            switch zeroMatrixSSOResult {
+            case .success(let zeroSSOToken):
+                try await client.customLoginWithJwt(jwt: zeroSSOToken.token, initialDeviceName: initialDeviceName, deviceId: deviceID)
+                
+                let refreshToken = try? client.session().refreshToken
+                if refreshToken != nil {
+                    MXLog.warning("Refresh token found for a non oidc session, can't restore session, logging out")
+                    _ = try? await client.logout()
+                    return .failure(.sessionTokenRefreshNotSupported)
+                }
+                
+                return await userSession(for: client)
+            case .failure(_):
+                return .failure(.failedLoggingIn)
+            }
+        } catch {
+            MXLog.error("Failed logging in with error: \(error)")
+            // FIXME: How about we make a proper type in the FFI? 😅
+            guard let error = error as? ClientError else { return .failure(.failedLoggingIn) }
+            
+            switch error.code {
+            case .forbidden:
+                return .failure(.invalidCredentials)
+            case .userDeactivated:
+                return .failure(.accountDeactivated)
+            default:
+                return .failure(.failedLoggingIn)
+            }
+        }
+    }
+    
     func completeWebRegistration(using credentials: WebRegistrationCredentials) async -> Result<any UserSessionProtocol, AuthenticationServiceError> {
         guard let client else { return .failure(.failedLoggingIn) }
         let session = Session(accessToken: credentials.accessToken,
@@ -231,6 +266,28 @@ class AuthenticationService: AuthenticationServiceProtocol {
                     return .failure(.failedCreatingUserAccount)
                 }
             case .failure:
+                return .failure(.failedCreatingUserAccount)
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.failedCreatingUserAccount)
+        }
+    }
+    
+    func createUserAccountWithWeb3(web3Token: String, inviteCode: String) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        do {
+            let result = try await zeroCreateAccountApi.createAccountWithWeb3(web3Token: web3Token, invite: inviteCode)
+            switch result {
+            case .success(_):
+                await ensureHomeServerIsConfigured()
+                let session = await loginNewlyCreatedUser()
+                switch session {
+                case .success(let userSession):
+                    return .success(userSession)
+                case .failure(_):
+                    return .failure(.failedCreatingUserAccount)
+                }
+            case .failure(_):
                 return .failure(.failedCreatingUserAccount)
             }
         } catch {

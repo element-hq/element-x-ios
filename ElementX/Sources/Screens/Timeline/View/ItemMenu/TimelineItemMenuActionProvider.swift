@@ -16,7 +16,6 @@ struct TimelineItemMenuActionProvider {
     let pinnedEventIDs: Set<String>
     let isDM: Bool
     let isViewSourceEnabled: Bool
-    let isCreateMediaCaptionsEnabled: Bool
     let timelineKind: TimelineKind
     let emojiProvider: EmojiProviderProtocol
     
@@ -42,6 +41,10 @@ struct TimelineItemMenuActionProvider {
         if timelineKind == .pinned || timelineKind == .media(.mediaFilesScreen) {
             actions.append(.viewInRoomTimeline)
         }
+        
+        if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded, let eventID = item.id.eventID {
+            actions.append(.endPoll(pollStartID: eventID))
+        }
 
         if item.canBeRepliedTo {
             if let messageItem = item as? EventBasedMessageTimelineItemProtocol {
@@ -65,26 +68,35 @@ struct TimelineItemMenuActionProvider {
         
         if item.isEditable {
             if item.supportsMediaCaption {
-                if item.hasMediaCaption {
-                    actions.append(.editCaption)
-                } else if isCreateMediaCaptionsEnabled {
-                    actions.append(.addCaption)
-                }
-            } else if item is PollRoomTimelineItem {
+//                if item.hasMediaCaption {
+//                    actions.append(.editCaption)
+//                } else {
+//                    actions.append(.addCaption)
+//                }
+            }
+            else if item is PollRoomTimelineItem {
                 // actions.append(.editPoll)
             } else if !(item is VoiceMessageRoomTimelineItem) {
                 actions.append(.edit)
             }
         }
+        
+//        if item.isRemoteMessage {
+//            actions.append(.copyPermalink)
+//        }
+        
+//        if canCurrentUserPin, let eventID = item.id.eventID {
+//            actions.append(pinnedEventIDs.contains(eventID) ? .unpin : .pin)
+//        }
 
         if item.isCopyable {
             actions.append(.copy)
         } else if item.hasMediaCaption {
-            actions.append(.copyCaption)
+            //actions.append(.copyCaption)
         }
         
         if item.isEditable, item.hasMediaCaption {
-            actions.append(.removeCaption)
+            //actions.append(.removeCaption)
         }
         
 //        if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded, let eventID = item.id.eventID {
@@ -139,22 +151,14 @@ struct TimelineItemMenuActionProvider {
     
     private func makeEncryptedItemActions(_ encryptedItem: EncryptedRoomTimelineItem) -> TimelineItemMenuActions? {
         var actions: [TimelineItemMenuAction] = [.copyPermalink]
-        var secondaryActions: [TimelineItemMenuAction] = []
-        
+
         if isViewSourceEnabled {
             actions.append(.viewSource)
         }
-        
-        switch encryptedItem.encryptionType {
-        case .megolmV1AesSha2(let sessionID, _):
-            secondaryActions.append(.retryDecryption(sessionID: sessionID))
-        default:
-            break
-        }
-        
+                
         return .init(isReactable: false,
                      actions: actions,
-                     secondaryActions: secondaryActions,
+                     secondaryActions: [],
                      emojiProvider: emojiProvider)
     }
     

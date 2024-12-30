@@ -178,7 +178,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                                                               pinnedEventIDs: context.viewState.pinnedEventIDs,
                                                               isDM: context.viewState.isEncryptedOneToOneRoom,
                                                               isViewSourceEnabled: context.viewState.isViewSourceEnabled,
-                                                              isCreateMediaCaptionsEnabled: context.viewState.isCreateMediaCaptionsEnabled,
                                                               timelineKind: context.viewState.timelineKind,
                                                               emojiProvider: context.viewState.emojiProvider)
                 TimelineItemMacContextMenu(item: timelineItem, actionProvider: provider) { action in
@@ -397,14 +396,12 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             .previewDisplayName("Replies")
         threads
             .previewDisplayName("Thread decorator")
-            .snapshotPreferences(delay: 1)
             .previewLayout(.fixed(width: 390, height: 1700))
             .padding(.bottom, 20)
         encryptionAuthenticity
             .previewDisplayName("Encryption Indicators")
         pinned
             .previewDisplayName("Pinned messages")
-            .snapshotPreferences(delay: 1)
             .previewLayout(.fixed(width: 390, height: 1150))
             .padding(.bottom, 20)
     }

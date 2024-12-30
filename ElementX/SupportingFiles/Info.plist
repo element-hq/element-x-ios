@@ -73,7 +73,7 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>To record and send messages with audio, $(APP_DISPLAY_NAME) needs to access the microphone.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Allows saving photos and videos to your library.</string>
+	<string>This lets you save images and videos to your photo library.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
 		<string>INSendMessageIntent</string>

@@ -88,35 +88,71 @@ struct KnockRequestsListScreen_Previews: PreviewProvider, TestablePreview {
     
     static let emptyViewModel = KnockRequestsListScreenViewModel.mockWithRequestsState(.loaded([]))
     
-    static let singleRequestViewModel = KnockRequestsListScreenViewModel.mockWithRequestsState(.loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "Now", reason: "Hello"))]))
+    static let singleRequestViewModel = KnockRequestsListScreenViewModel.mockWithRequestsState(.loaded([KnockRequestProxyMock(.init(eventID: "1",
+                                                                                                                                    userID: "@alice:matrix.org",
+                                                                                                                                    displayName: "Alice",
+                                                                                                                                    avatarURL: nil,
+                                                                                                                                    timestamp: "Now",
+                                                                                                                                    reason: "Hello"))]))
     
-    static let viewModel = KnockRequestsListScreenViewModel.mockWithRequestsState(.loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", avatarURL: nil, timestamp: "Now", reason: "Hello")),
-                                                                                           // swiftlint:disable:next line_length
-                                                                                           KnockRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org", displayName: "Bob", avatarURL: nil, timestamp: "Now", reason: "Hello this one is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long reason")),
-                                                                                           KnockRequestProxyMock(.init(eventID: "3", userID: "@charlie:matrix.org", displayName: "Charlie", avatarURL: nil, timestamp: "Now", reason: nil)),
-                                                                                           KnockRequestProxyMock(.init(eventID: "4", userID: "@dan:matrix.org", displayName: "Dan", avatarURL: nil, timestamp: "Now", reason: "Hello! It's a me! Dan!"))]))
+    static let viewModel = KnockRequestsListScreenViewModel.mockWithRequestsState(.loaded([
+        KnockRequestProxyMock(.init(eventID: "1",
+                                    userID: "@alice:matrix.org",
+                                    displayName: "Alice",
+                                    avatarURL: nil,
+                                    timestamp: "Now",
+                                    reason: "Hello")),
+        KnockRequestProxyMock(.init(eventID: "2",
+                                    userID: "@bob:matrix.org",
+                                    displayName: "Bob",
+                                    avatarURL: nil,
+                                    timestamp: "Now",
+                                    // swiftlint:disable:next line_length
+                                    reason: "Hello this one is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long reason")),
+        KnockRequestProxyMock(.init(eventID: "3",
+                                    userID: "@charlie:matrix.org",
+                                    displayName: "Charlie",
+                                    avatarURL: nil,
+                                    timestamp: "Now",
+                                    reason: nil)),
+        KnockRequestProxyMock(.init(eventID: "4",
+                                    userID: "@dan:matrix.org",
+                                    displayName: "Dan",
+                                    avatarURL: nil,
+                                    timestamp: "Now",
+                                    reason: "Hello! It's a me! Dan!"))
+    ]))
     
     static var previews: some View {
         NavigationStack {
             KnockRequestsListScreen(context: viewModel.context)
         }
-        .snapshotPreferences(delay: 0.2)
+        .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
+            state.shouldDisplayRequests == true
+        })
         
         NavigationStack {
             KnockRequestsListScreen(context: singleRequestViewModel.context)
         }
+        .snapshotPreferences(expect: singleRequestViewModel.context.$viewState.map { state in
+            state.shouldDisplayRequests == true
+        })
         .previewDisplayName("Single Request")
-        .snapshotPreferences(delay: 0.2)
-
+        
         NavigationStack {
             KnockRequestsListScreen(context: emptyViewModel.context)
         }
+        .snapshotPreferences(expect: emptyViewModel.context.$viewState.map { state in
+            state.shouldDisplayEmptyView == true
+        })
         .previewDisplayName("Empty state")
-        .snapshotPreferences(delay: 0.2)
         
         NavigationStack {
             KnockRequestsListScreen(context: loadingViewModel.context)
         }
+        .snapshotPreferences(expect: loadingViewModel.context.$viewState.map { state in
+            state.isLoading == true
+        })
         .previewDisplayName("Loading state")
     }
 }

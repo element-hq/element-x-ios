@@ -17,6 +17,7 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
     var viewModel: TimelineMediaPreviewViewModel!
     var context: TimelineMediaPreviewViewModel.Context { viewModel.context }
     var mediaProvider: MediaProviderMock!
+    var photoLibraryManager: PhotoLibraryManagerMock!
     var timelineController: MockRoomTimelineController!
     
     func testLoadingItem() async throws {
@@ -27,14 +28,54 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         XCTAssertNotNil(context.viewState.currentItemActions)
         
         // When the preview controller sets the current item.
-        let deferred = deferFulfillment(viewModel.state.fileLoadedPublisher) { _ in true }
-        context.send(viewAction: .updateCurrentItem(context.viewState.previewItems[0]))
-        try await deferred.fulfill()
+        try await loadInitialItem()
         
         // Then the view model should load the item and update its view state.
         XCTAssertTrue(mediaProvider.loadFileFromSourceFilenameCalled)
         XCTAssertEqual(context.viewState.currentItem, context.viewState.previewItems[0])
         XCTAssertNotNil(context.viewState.currentItemActions)
+    }
+    
+    func testLoadingItemFailure() async throws {
+        // Given a fresh view model.
+        setupViewModel()
+        XCTAssertFalse(mediaProvider.loadFileFromSourceFilenameCalled)
+        XCTAssertEqual(context.viewState.currentItem, context.viewState.previewItems[0])
+        XCTAssertNil(context.viewState.currentItem.downloadError)
+        
+        // When the preview controller sets an item that fails to load.
+        mediaProvider.loadFileFromSourceFilenameClosure = { _, _ in .failure(.failedRetrievingFile) }
+        let failure = deferFailure(viewModel.state.fileLoadedPublisher, timeout: 1) { _ in true }
+        context.send(viewAction: .updateCurrentItem(context.viewState.previewItems[0]))
+        try await failure.fulfill()
+        
+        // Then the view model should load the item and update its view state.
+        XCTAssertTrue(mediaProvider.loadFileFromSourceFilenameCalled)
+        XCTAssertEqual(context.viewState.currentItem, context.viewState.previewItems[0])
+        XCTAssertNotNil(context.viewState.currentItem.downloadError)
+    }
+    
+    func testSwipingBetweenItems() async throws {
+        // Given a view model with a loaded item.
+        try await testLoadingItem()
+        
+        // When swiping to another item.
+        let deferred = deferFulfillment(viewModel.state.fileLoadedPublisher) { _ in true }
+        context.send(viewAction: .updateCurrentItem(context.viewState.previewItems[1]))
+        try await deferred.fulfill()
+        
+        // Then the view model should load the item and update its view state.
+        XCTAssertEqual(mediaProvider.loadFileFromSourceFilenameCallsCount, 2)
+        XCTAssertEqual(context.viewState.currentItem, context.viewState.previewItems[1])
+        
+        // When swiping back to the first item.
+        let failure = deferFailure(viewModel.state.fileLoadedPublisher, timeout: 1) { _ in true }
+        context.send(viewAction: .updateCurrentItem(context.viewState.previewItems[0]))
+        try await failure.fulfill()
+        
+        // Then the view model should not need to load the item, but should still update its view state.
+        XCTAssertEqual(mediaProvider.loadFileFromSourceFilenameCallsCount, 2)
+        XCTAssertEqual(context.viewState.currentItem, context.viewState.previewItems[0])
     }
     
     func testViewInRoomTimeline() async throws {
@@ -82,6 +123,72 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         XCTAssertTrue(timelineController.redactCalled)
     }
     
+    func testSaveImage() async throws {
+        // Given a view model with a loaded image.
+        try await testLoadingItem()
+        XCTAssertEqual(viewModel.state.currentItem.contentType, "JPEG image")
+        
+        // When choosing to save the image.
+        let item = context.viewState.currentItem
+        context.send(viewAction: .saveCurrentItem)
+        try await Task.sleep(for: .seconds(0.5))
+        
+        // Then the image should be saved as a photo to the user's photo library.
+        XCTAssertTrue(photoLibraryManager.addResourceAtCalled)
+        XCTAssertEqual(photoLibraryManager.addResourceAtReceivedArguments?.type, .photo)
+        XCTAssertEqual(photoLibraryManager.addResourceAtReceivedArguments?.url, item.fileHandle?.url)
+    }
+    
+    func testSaveImageWithoutAuthorization() async throws {
+        // Given a view model with a loaded image where the user has denied access to the photo library.
+        setupViewModel(photoLibraryAuthorizationDenied: true)
+        try await loadInitialItem()
+        XCTAssertEqual(viewModel.state.currentItem.contentType, "JPEG image")
+        
+        // When choosing to save the image.
+        let deferred = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
+        context.send(viewAction: .saveCurrentItem)
+        try await deferred.fulfill()
+        
+        // Then the user should be prompted to allow access.
+        XCTAssertTrue(photoLibraryManager.addResourceAtCalled)
+        XCTAssertEqual(context.alertInfo?.id, .authorizationRequired)
+    }
+    
+    func testSaveVideo() async throws {
+        // Given a view model with a loaded video.
+        setupViewModel(initialItemIndex: 1)
+        try await loadInitialItem()
+        XCTAssertEqual(viewModel.state.currentItem.contentType, "MPEG-4 movie")
+        
+        // When choosing to save the video.
+        let item = context.viewState.currentItem
+        context.send(viewAction: .saveCurrentItem)
+        try await Task.sleep(for: .seconds(0.5))
+        
+        // Then the video should be saved as a video in the user's photo library.
+        XCTAssertTrue(photoLibraryManager.addResourceAtCalled)
+        XCTAssertEqual(photoLibraryManager.addResourceAtReceivedArguments?.type, .video)
+        XCTAssertEqual(photoLibraryManager.addResourceAtReceivedArguments?.url, item.fileHandle?.url)
+    }
+    
+    func testSaveFile() async throws {
+        // Given a view model with a loaded file.
+        setupViewModel(initialItemIndex: 2)
+        try await loadInitialItem()
+        XCTAssertEqual(viewModel.state.currentItem.contentType, "PDF document")
+        
+        // When choosing to save the file.
+        let item = context.viewState.currentItem
+        context.send(viewAction: .saveCurrentItem)
+        try await Task.sleep(for: .seconds(0.5))
+        
+        // Then the binding should be set for the user to export the file to their specified location.
+        XCTAssertFalse(photoLibraryManager.addResourceAtCalled)
+        XCTAssertNotNil(context.fileToExport)
+        XCTAssertEqual(context.fileToExport?.url, item.fileHandle?.url)
+    }
+    
     func testDismiss() async throws {
         // Given a view model with a loaded item.
         try await testLoadingItem()
@@ -96,30 +203,66 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
     
     // MARK: - Helpers
     
+    private func loadInitialItem() async throws {
+        let deferred = deferFulfillment(viewModel.state.fileLoadedPublisher) { _ in true }
+        context.send(viewAction: .updateCurrentItem(context.viewState.previewItems[context.viewState.initialItemIndex]))
+        try await deferred.fulfill()
+    }
+    
     @Namespace private var testNamespace
     
-    private func setupViewModel() {
-        let item = ImageRoomTimelineItem(id: .randomEvent,
-                                         timestamp: .mock,
-                                         isOutgoing: false,
-                                         isEditable: false,
-                                         canBeRepliedTo: true,
-                                         isThreaded: false,
-                                         sender: .init(id: "", displayName: "Sally Sanderson"),
-                                         content: .init(filename: "Amazing image.jpeg",
-                                                        caption: "A caption goes right here.",
-                                                        imageInfo: .mockImage,
-                                                        thumbnailInfo: .mockThumbnail))
-        
+    private func setupViewModel(initialItemIndex: Int = 0, photoLibraryAuthorizationDenied: Bool = false) {
         timelineController = MockRoomTimelineController(timelineKind: .media(.mediaFilesScreen))
-        timelineController.timelineItems = [item]
+        timelineController.timelineItems = items
         
         mediaProvider = MediaProviderMock(configuration: .init())
-        viewModel = TimelineMediaPreviewViewModel(context: .init(item: item,
+        photoLibraryManager = PhotoLibraryManagerMock(.init(authorizationDenied: photoLibraryAuthorizationDenied))
+        
+        viewModel = TimelineMediaPreviewViewModel(context: .init(item: items[initialItemIndex],
                                                                  viewModel: TimelineViewModel.mock(timelineKind: .media(.mediaFilesScreen),
                                                                                                    timelineController: timelineController),
                                                                  namespace: testNamespace),
                                                   mediaProvider: mediaProvider,
-                                                  userIndicatorController: UserIndicatorControllerMock())
+                                                  photoLibraryManager: photoLibraryManager,
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  appMediator: AppMediatorMock())
     }
+    
+    private let items: [EventBasedMessageTimelineItemProtocol] = [
+        ImageRoomTimelineItem(id: .randomEvent,
+                              timestamp: .mock,
+                              isOutgoing: false,
+                              isEditable: false,
+                              canBeRepliedTo: true,
+                              isThreaded: false,
+                              sender: .init(id: "", displayName: "Sally Sanderson"),
+                              content: .init(filename: "Amazing image.jpeg",
+                                             caption: "A caption goes right here.",
+                                             imageInfo: .mockImage,
+                                             thumbnailInfo: .mockThumbnail,
+                                             contentType: .jpeg)),
+        VideoRoomTimelineItem(id: .randomEvent,
+                              timestamp: .mock,
+                              isOutgoing: false,
+                              isEditable: false,
+                              canBeRepliedTo: true,
+                              isThreaded: false,
+                              sender: .init(id: ""),
+                              content: .init(filename: "Super video.mp4",
+                                             videoInfo: .mockVideo,
+                                             thumbnailInfo: .mockThumbnail,
+                                             contentType: .mpeg4Movie)),
+        FileRoomTimelineItem(id: .randomEvent,
+                             timestamp: .mock,
+                             isOutgoing: false,
+                             isEditable: false,
+                             canBeRepliedTo: true,
+                             isThreaded: false,
+                             sender: .init(id: ""),
+                             content: .init(filename: "Important file.pdf",
+                                            source: try? .init(url: .mockMXCFile, mimeType: "document/pdf"),
+                                            fileSize: 2453,
+                                            thumbnailSource: nil,
+                                            contentType: .pdf))
+    ]
 }

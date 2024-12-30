@@ -7,6 +7,8 @@ protocol ZeroCreateAccountApiProtocol {
     func createAccountWithEmail(email: String, password: String, invite: String) async throws -> Result<ZSessionDataResponse, Error>
     
     func finaliseCreateAccount(request: ZFinaliseCreateAccount) async throws -> Result<ZInviter, Error>
+    
+    func createAccountWithWeb3(web3Token: String, invite: String) async throws -> Result<ZSessionDataResponse, Error>
 }
 
 class ZeroCreateAccountApi: ZeroCreateAccountApiProtocol {
@@ -36,7 +38,7 @@ class ZeroCreateAccountApi: ZeroCreateAccountApiProtocol {
         case .success(let nonceResponse):
             /// Call create account api
             let headers: HTTPHeaders = [
-                "Authorization": nonceResponse.nonceHeaderToken
+                CreateAccountConstants.auth_header_key: nonceResponse.nonceHeaderToken
             ]
             let request = ZCreateAccount.newRequest(email: email, password: password, invite: invite)
             let createAccountResult: Result<ZSessionDataResponse, Error> = try await APIManager.shared.request(CreateAccountEndPoints.createAccountEndPoint, method: .post, parameters: request.toDictionary(), headers: headers)
@@ -63,6 +65,22 @@ class ZeroCreateAccountApi: ZeroCreateAccountApiProtocol {
         }
     }
     
+    func createAccountWithWeb3(web3Token: String, invite: String) async throws -> Result<ZSessionDataResponse, any Error> {
+        let headers: HTTPHeaders = [
+            CreateAccountConstants.auth_header_key: "\(CreateAccountConstants.web3_auth_token_prefix) \(web3Token)"
+        ]
+        let request = ZCreateAccount.newRequest(invite: invite)
+        let createAccountResult: Result<ZSessionDataResponse, Error> = try await APIManager.shared.request(CreateAccountEndPoints.createAccountEndPoint, method: .post, parameters: request.toDictionary(), headers: headers)
+        switch createAccountResult {
+        case .success(let sessionData):
+            // save Access Token
+            appSettings.zeroAccessToken = sessionData.accessToken
+            return .success(sessionData)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     // MARK: - Constants
     
     private enum CreateAccountEndPoints {
@@ -76,6 +94,9 @@ class ZeroCreateAccountApi: ZeroCreateAccountApiProtocol {
     }
     
     private enum CreateAccountConstants {
+        static let auth_header_key = "Authorization"
         static let invite_code_path_param = "{invite_code}"
+        
+        static let web3_auth_token_prefix = "Web3"
     }
 }

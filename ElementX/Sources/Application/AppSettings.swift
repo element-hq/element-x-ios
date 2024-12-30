@@ -30,6 +30,8 @@ final class AppSettings {
         case hasRunNotificationPermissionsOnboarding
         case hasRunIdentityConfirmationOnboarding
         
+        case frequentlyUsedSystemEmojis
+        
         case enableNotifications
         case enableInAppNotifications
         case pusherProfileTag
@@ -42,7 +44,6 @@ final class AppSettings {
         case hideTimelineMedia
         
         case elementCallBaseURLOverride
-        case elementCallEncryptionEnabled
         
         // Feature flags
         case slidingSyncDiscovery
@@ -50,8 +51,6 @@ final class AppSettings {
         case fuzzyRoomListSearchEnabled
         case enableOnlySignedDeviceIsolationMode
         case knockingEnabled
-        case createMediaCaptionsEnabled
-        case mediaBrowserEnabled
         case eventCacheEnabled
         case zeroAccessToken
         case zeroMatrixUsers
@@ -237,6 +236,9 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.hasRunIdentityConfirmationOnboarding, defaultValue: false, storageType: .userDefaults(store))
     var hasRunIdentityConfirmationOnboarding
     
+    @UserPreference(key: UserDefaultsKeys.frequentlyUsedSystemEmojis, defaultValue: [FrequentlyUsedEmoji](), storageType: .userDefaults(store))
+    var frequentlyUsedSystemEmojis
+    
     // MARK: - Home Screen
     
     @UserPreference(key: UserDefaultsKeys.hideUnreadMessagesBadge, defaultValue: false, storageType: .userDefaults(store))
@@ -293,12 +295,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var knockingEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.createMediaCaptionsEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var createMediaCaptionsEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.mediaBrowserEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var mediaBrowserEnabled
     
     #endif
     

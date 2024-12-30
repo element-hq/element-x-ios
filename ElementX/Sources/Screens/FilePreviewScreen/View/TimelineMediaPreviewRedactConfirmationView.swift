@@ -138,10 +138,15 @@ struct TimelineMediaPreviewRedactConfirmationView_Previews: PreviewProvider, Tes
                                                         thumbnailInfo: .mockThumbnail,
                                                         contentType: contentType))
         
+        let timelineController = MockRoomTimelineController(timelineKind: .media(.mediaFilesScreen))
+        timelineController.timelineItems = [item]
         return TimelineMediaPreviewViewModel(context: .init(item: item,
-                                                            viewModel: TimelineViewModel.mock,
+                                                            viewModel: TimelineViewModel.mock(timelineKind: timelineController.timelineKind,
+                                                                                              timelineController: timelineController),
                                                             namespace: previewNamespace),
                                              mediaProvider: MediaProviderMock(configuration: .init()),
-                                             userIndicatorController: UserIndicatorControllerMock())
+                                             photoLibraryManager: PhotoLibraryManagerMock(.init()),
+                                             userIndicatorController: UserIndicatorControllerMock(),
+                                             appMediator: AppMediatorMock())
     }
 }

@@ -47,7 +47,9 @@ struct ZeroLoginScreen: View {
     }
     
     var web3LoginView: some View {
-        Button { } label: {
+        Button {
+            context.send(viewAction: .openWalletConnectModal)
+        } label: {
             Image(asset: Asset.Images.defaultWalletConnectButton)
         }
         .padding(.top, 40)
@@ -130,20 +132,23 @@ struct ZeroLoginScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             ZeroLoginScreen(context: viewModel.context)
         }
+        .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
+            state.homeserver.loginMode == .password
+        })
         .previewDisplayName("matrix.org")
-        .snapshotPreferences(delay: 0.1)
         
         NavigationStack {
             ZeroLoginScreen(context: credentialsViewModel.context)
         }
+        .snapshotPreferences(expect: credentialsViewModel.context.$viewState.map { state in
+            state.homeserver.loginMode == .password
+        })
         .previewDisplayName("Credentials Entered")
-        .snapshotPreferences(delay: 0.1)
         
         NavigationStack {
             ZeroLoginScreen(context: unconfiguredViewModel.context)
         }
         .previewDisplayName("Unsupported")
-        .snapshotPreferences(delay: 0.1)
     }
     
     static func makeViewModel(homeserverAddress: String = "matrix.org", withCredentials: Bool = false) -> LoginScreenViewModel {

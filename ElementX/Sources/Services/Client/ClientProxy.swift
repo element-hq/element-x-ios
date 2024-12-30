@@ -1020,7 +1020,10 @@ class ClientProxy: ClientProxyProtocol {
                                                       shouldUpdateVisibleRange: true,
                                                       notificationSettings: notificationSettings,
                                                       appSettings: appSettings,
-                                                      zeroUsersService: zeroMatrixUsersService)
+                                                      zeroUsersService: zeroMatrixUsersService,
+                                                      onJoinRoomExplicitly: { [weak self] roomId in
+                await self?.joinRoomExplicitly(roomId)
+            })
             try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
             
             alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
@@ -1028,7 +1031,10 @@ class ClientProxy: ClientProxyProtocol {
                                                                name: "AlternateAllRooms",
                                                                notificationSettings: notificationSettings,
                                                                appSettings: appSettings,
-                                                               zeroUsersService: zeroMatrixUsersService)
+                                                               zeroUsersService: zeroMatrixUsersService,
+                                                               onJoinRoomExplicitly: { [weak self] roomId in
+                await self?.joinRoomExplicitly(roomId)
+            })
             try await alternateRoomSummaryProvider?.setRoomList(roomListService.allRooms())
                         
             self.syncService = syncService
@@ -1147,6 +1153,9 @@ class ClientProxy: ClientProxyProtocol {
                 return .joined(roomProxy)
             case .left:
                 return .left
+            case .banned:
+                // TODO: Implement a `bannedRoomProxy` and/or `.banned` case
+                return .left
             }
         } catch {
             MXLog.error("Failed retrieving room: \(roomID), with error: \(error)")
@@ -1213,6 +1222,14 @@ class ClientProxy: ClientProxyProtocol {
         } catch {
             MXLog.error("Failed retrieving user identity: \(error)")
             return .failure(.sdkError(error))
+        }
+    }
+    
+    private func joinRoomExplicitly(_ roomId: String) async {
+        do {
+            _ = try await client.joinRoomById(roomId: roomId)
+        } catch {
+            MXLog.error("Failed to join invited room: \(roomId) with error: \(error)")
         }
     }
 }

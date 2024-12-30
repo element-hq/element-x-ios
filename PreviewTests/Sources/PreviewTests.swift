@@ -5,6 +5,7 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import Combine
 import SwiftUI
 import XCTest
 
@@ -50,21 +51,21 @@ class PreviewTests: XCTestCase {
     
     // MARK: - Snapshots
 
-    func assertSnapshots(matching preview: _Preview, testName: String = #function) {
+    func assertSnapshots(matching preview: _Preview, testName: String = #function) async throws {
         let preferences = SnapshotPreferences()
-
+        
         let preferenceReadingView = preview.content
-            .onPreferenceChange(SnapshotDelayPreferenceKey.self) { preferences.delay = $0 }
             .onPreferenceChange(SnapshotPrecisionPreferenceKey.self) { preferences.precision = $0 }
             .onPreferenceChange(SnapshotPerceptualPrecisionPreferenceKey.self) { preferences.perceptualPrecision = $0 }
+            .onPreferenceChange(SnapshotFulfillmentPublisherPreferenceKey.self) { preferences.fulfillmentPublisher = $0?.publisher }
         
         // Render an image of the view in order to trigger the preference updates to occur.
         let imageRenderer = ImageRenderer(content: preferenceReadingView)
         _ = imageRenderer.uiImage
         
-        // Delay the test now - a delay after creating the `snapshotView` results in the underlying view not getting updated for snapshotting.
-        if preferences.delay != .zero {
-            wait(for: preferences.delay)
+        if let fulfillmentPublisher = preferences.fulfillmentPublisher {
+            let deferred = deferFulfillment(fulfillmentPublisher) { $0 == true }
+            try await deferred.fulfill()
         }
         
         for deviceName in snapshotDevices {
@@ -133,10 +134,10 @@ class PreviewTests: XCTestCase {
     }
 }
 
-private class SnapshotPreferences {
-    var delay: TimeInterval = 0
+private class SnapshotPreferences: @unchecked Sendable {
     var precision: Float = 1
     var perceptualPrecision: Float = 1
+    var fulfillmentPublisher: AnyPublisher<Bool, Never>?
 }
 
 // MARK: - SnapshotTesting + Extensions

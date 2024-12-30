@@ -115,7 +115,8 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     private func presentMediaPreview(for previewContext: TimelineMediaPreviewContext) {
         let parameters = TimelineMediaPreviewCoordinatorParameters(context: previewContext,
                                                                    mediaProvider: userSession.mediaProvider,
-                                                                   userIndicatorController: userIndicatorController)
+                                                                   userIndicatorController: userIndicatorController,
+                                                                   appMediator: appMediator)
         
         let coordinator = TimelineMediaPreviewCoordinator(parameters: parameters)
         coordinator.actionsPublisher
@@ -131,8 +132,6 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        navigationStackCoordinator.setFullScreenCoverCoordinator(coordinator) {
-            previewContext.completion?()
-        }
+        navigationStackCoordinator.setFullScreenCoverCoordinator(coordinator)
     }
 }

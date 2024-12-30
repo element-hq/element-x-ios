@@ -34,19 +34,24 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     private var client: UITestsSignalling.Client?
     
-    init(timelineKind: TimelineKind = .live, listenForSignals: Bool = false) {
+    static var mediaGallery: MockRoomTimelineController {
+        MockRoomTimelineController(timelineKind: .media(.mediaFilesScreen), timelineItems: (0..<5).reduce([]) { partialResult, _ in
+            partialResult + [RoomTimelineItemFixtures.separator] + RoomTimelineItemFixtures.mediaChunk
+        })
+    }
+    
+    static var emptyMediaGallery: MockRoomTimelineController {
+        let mock = MockRoomTimelineController(timelineKind: .media(.mediaFilesScreen))
+        mock.paginationState = PaginationState(backward: .timelineEndReached, forward: .timelineEndReached)
+        return mock
+    }
+    
+    init(timelineKind: TimelineKind = .live, listenForSignals: Bool = false, timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default) {
         self.timelineKind = timelineKind
-        paginationState = PaginationState(backward: .idle, forward: .timelineEndReached)
-        callbacks.send(.isLive(true))
+        self.timelineItems = timelineItems
         
-        switch timelineKind {
-        case .media:
-            timelineItems = (0..<5).reduce([]) { partialResult, _ in
-                partialResult + [RoomTimelineItemFixtures.separator] + RoomTimelineItemFixtures.mediaChunk
-            }
-        default:
-            break
-        }
+        callbacks.send(.paginationState(paginationState))
+        callbacks.send(.isLive(true))
         
         guard listenForSignals else { return }
         
@@ -133,8 +138,6 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     func sendHandle(for itemID: TimelineItemIdentifier) -> SendHandleProxy? {
         nil
     }
-        
-    func retryDecryption(for sessionID: String) async { }
         
     func eventTimestamp(for itemID: TimelineItemIdentifier) -> Date? {
         timelineItemsTimestamp[itemID] ?? .now

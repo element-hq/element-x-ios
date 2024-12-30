@@ -35,14 +35,14 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     
     init(mediaTimelineViewModel: TimelineViewModelProtocol,
          filesTimelineViewModel: TimelineViewModelProtocol,
+         initialViewState: MediaEventsTimelineScreenViewState = .init(bindings: .init(screenMode: .media)),
          mediaProvider: MediaProviderProtocol,
-         screenMode: MediaEventsTimelineScreenMode = .media,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.mediaTimelineViewModel = mediaTimelineViewModel
         self.filesTimelineViewModel = filesTimelineViewModel
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: .init(bindings: .init(screenMode: screenMode)), mediaProvider: mediaProvider)
+        super.init(initialViewState: initialViewState, mediaProvider: mediaProvider)
         
         state.activeTimelineContextProvider = { [weak self] in
             guard let self else { fatalError() }
@@ -130,7 +130,8 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
 
         state.groups = newGroups
         
-        state.isBackPaginating = (timelineViewState.timelineState.paginationState.backward == .paginating)
+        state.isBackPaginating = timelineViewState.timelineState.paginationState.backward == .paginating
+        state.shouldShowEmptyState = newGroups.isEmpty && timelineViewState.timelineState.paginationState.backward == .timelineEndReached
         backPaginateIfNecessary(paginationStatus: timelineViewState.timelineState.paginationState.backward)
     }
     
@@ -156,10 +157,9 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         
         actionsSubject.send(.viewItem(.init(item: item,
                                             viewModel: activeTimelineViewModel,
-                                            namespace: namespace,
-                                            completion: { [weak self] in
-                                                self?.state.currentPreviewItemID = nil
-                                            })))
+                                            namespace: namespace) { [weak self] itemID in
+                self?.state.currentPreviewItemID = itemID
+            }))
         
         // Set the current item in the next run loop so that (hopefully) the presentation will be ready before we flip the thumbnail.
         Task { state.currentPreviewItemID = item.id }

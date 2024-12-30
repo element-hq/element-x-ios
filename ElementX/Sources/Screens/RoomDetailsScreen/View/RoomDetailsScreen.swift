@@ -32,7 +32,7 @@ struct RoomDetailsScreen: View {
                 peopleSection
             }
 
-//            aboutSection
+            aboutSection
 
 //            securitySection
 
@@ -158,35 +158,33 @@ struct RoomDetailsScreen: View {
 
     private var aboutSection: some View {
         Section {
-            ZeroListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
-                                        icon: \.pin),
-                        details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
-                        kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink {
-                            context.send(viewAction: .processTapPinnedEvents)
-                        })
-                        .disabled(context.viewState.pinnedEventsActionState.isLoading)
+//            ZeroListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
+//                                        icon: \.pin),
+//                        details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
+//                        kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink {
+//                            context.send(viewAction: .processTapPinnedEvents)
+//                        })
+//                        .disabled(context.viewState.pinnedEventsActionState.isLoading)
+//            
+//            if context.viewState.canSeeKnockingRequests {
+//                ZeroListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
+//                                            icon: \.askToJoin),
+//                            details: context.viewState.knockRequestsCount > 0 ? .counter(context.viewState.knockRequestsCount) : nil,
+//                            kind: .navigationLink {
+//                                context.send(viewAction: .processTapRequestsToJoin)
+//                            })
+//            }
+//            ZeroListRow(label: .default(title: L10n.screenPollsHistoryTitle,
+//                                        icon: \.polls),
+//                        kind: .navigationLink {
+//                            context.send(viewAction: .processTapPolls)
+//                        })
+//                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
             
-            if context.viewState.canSeeKnockingRequests {
-                ZeroListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
-                                            icon: \.askToJoin),
-                            details: context.viewState.knockRequestsCount > 0 ? .counter(context.viewState.knockRequestsCount) : nil,
-                            kind: .navigationLink {
-                                context.send(viewAction: .processTapRequestsToJoin)
-                            })
-            }
-            ZeroListRow(label: .default(title: L10n.screenPollsHistoryTitle,
-                                        icon: \.polls),
+            ZeroListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
                         kind: .navigationLink {
-                            context.send(viewAction: .processTapPolls)
+                            context.send(viewAction: .processTapMediaEvents)
                         })
-                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
-            
-            if context.viewState.mediaBrowserEnabled {
-                ZeroListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
-                            kind: .navigationLink {
-                                context.send(viewAction: .processTapMediaEvents)
-                            })
-            }
         }
     }
     
@@ -422,13 +420,21 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         RoomDetailsScreen(context: simpleRoomViewModel.context)
+            .snapshotPreferences(expect: simpleRoomViewModel.context.$viewState.map { state in
+                state.shortcuts.contains(.invite)
+            })
             .previewDisplayName("Simple Room")
-            .snapshotPreferences(delay: 2)
+        
         RoomDetailsScreen(context: dmRoomViewModel.context)
+            .snapshotPreferences(expect: dmRoomViewModel.context.$viewState.map { state in
+                state.accountOwner != nil
+            })
             .previewDisplayName("DM Room")
-            .snapshotPreferences(delay: 0.25)
+
         RoomDetailsScreen(context: genericRoomViewModel.context)
+            .snapshotPreferences(expect: genericRoomViewModel.context.$viewState.map { state in
+                state.shortcuts.contains(.invite)
+            })
             .previewDisplayName("Generic Room")
-            .snapshotPreferences(delay: 0.25)
     }
 }

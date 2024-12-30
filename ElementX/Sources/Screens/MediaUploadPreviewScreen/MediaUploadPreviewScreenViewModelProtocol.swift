@@ -11,4 +11,7 @@ import Combine
 protocol MediaUploadPreviewScreenViewModelProtocol {
     var actions: AnyPublisher<MediaUploadPreviewScreenViewModelAction, Never> { get }
     var context: MediaUploadPreviewScreenViewModelType.Context { get }
+    
+    /// Stops any ongoing media processing tasks.
+    func stopProcessing()
 }

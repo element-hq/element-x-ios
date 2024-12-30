@@ -41,7 +41,7 @@ settings:
   APP_GROUP_IDENTIFIER: group.$(BASE_APP_GROUP_IDENTIFIER)
   APP_NAME: ZERO
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: "$(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)"
-  MARKETING_VERSION: 1.9.10
+  MARKETING_VERSION: 1.9.11
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
 
@@ -61,11 +61,11 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 1.0.81
+    exactVersion: 24.12.20
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
-    revision: 78e1290d2a9f903f929806221331d8b4e898f4fe
+    revision: 9325643cb4d22150881c5bf79e1e6e3c5a87ea89
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events

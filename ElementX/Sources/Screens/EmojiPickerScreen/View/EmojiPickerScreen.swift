@@ -51,6 +51,8 @@ struct EmojiPickerScreen: View {
             .toolbar { toolbar }
             .isSearching($isSearching)
             .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always))
+            .focusSearchIfHardwareKeyboardAvailable()
+            .onSubmit(of: .search, sendFirstEmojiOnMac)
             .compoundSearchField()
         }
         .presentationDetents([.medium, .large])
@@ -76,6 +78,15 @@ struct EmojiPickerScreen: View {
             }
         }
     }
+    
+    func sendFirstEmojiOnMac() {
+        // No sure-fire way to detect that the submit came from a h/w keyboard on iOS/iPadOS.
+        guard ProcessInfo.processInfo.isiOSAppOnMac else { return }
+        
+        if !searchString.isBlank, let emoji = context.viewState.categories.first?.emojis.first {
+            context.send(viewAction: .emojiTapped(emoji: emoji))
+        }
+    }
 }
 
 // MARK: - Previews
@@ -86,7 +97,9 @@ struct EmojiPickerScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         EmojiPickerScreen(context: viewModel.context, selectedEmojis: ["😀", "😄"])
             .previewDisplayName("Screen")
-            .snapshotPreferences(delay: 0.5)
+            .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
+                !state.categories.isEmpty
+            })
     }
 }
 

@@ -34,6 +34,9 @@ struct MediaEventsTimelineScreen: View {
             }
             .environmentObject(context.viewState.activeTimelineContextProvider())
             .environment(\.timelineContext, context.viewState.activeTimelineContextProvider())
+            .onChange(of: context.screenMode) { _, _ in
+                context.send(viewAction: .changedScreenMode)
+            }
     }
     
     // The scale effects do the following:
@@ -44,7 +47,7 @@ struct MediaEventsTimelineScreen: View {
     // * flip the items on both axes have them render correctly
     @ViewBuilder
     private var mainContent: some View {
-        if context.viewState.groups.isEmpty, !context.viewState.isBackPaginating {
+        if context.viewState.shouldShowEmptyState {
             emptyState
         } else {
             ScrollView {
@@ -60,9 +63,6 @@ struct MediaEventsTimelineScreen: View {
                 }
             }
             .scaleEffect(.init(width: 1, height: -1))
-            .onChange(of: context.screenMode) { _, _ in
-                context.send(viewAction: .changedScreenMode)
-            }
         }
     }
     
@@ -76,12 +76,7 @@ struct MediaEventsTimelineScreen: View {
                         Button {
                             tappedItem(item)
                         } label: {
-                            Color.clear // Let the image aspect fill in place
-                                .aspectRatio(1, contentMode: .fill)
-                                .overlay {
-                                    viewForTimelineItem(item)
-                                }
-                                .clipped()
+                            viewForTimelineItem(item)
                                 .scaleEffect(scale(for: item, isGridLayout: true))
                         }
                         .zoomTransitionSource(id: item.identifier, in: zoomTransition)
@@ -216,12 +211,12 @@ struct MediaEventsTimelineScreen: View {
     }
     
     func scale(for item: RoomTimelineItemViewState, isGridLayout: Bool) -> CGSize {
-        guard item.identifier != context.viewState.currentPreviewItemID else {
+        if item.identifier == context.viewState.currentPreviewItemID, #available(iOS 18.0, *) {
             // Remove the flip when presenting a preview so that the zoom transition is the right way up 🙃
-            return CGSize(width: 1, height: 1)
+            CGSize(width: 1, height: 1)
+        } else {
+            CGSize(width: isGridLayout ? -1 : 1, height: -1)
         }
-        
-        return CGSize(width: isGridLayout ? -1 : 1, height: -1)
     }
 }
 
@@ -230,8 +225,8 @@ struct MediaEventsTimelineScreen: View {
 struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     static let mediaViewModel = makeViewModel(screenMode: .media)
     static let filesViewModel = makeViewModel(screenMode: .files)
-    static let emptyMediaViewModel = makeViewModel(timelineKind: .detached, screenMode: .media)
-    static let emptyFilesViewModel = makeViewModel(timelineKind: .detached, screenMode: .files)
+    static let emptyMediaViewModel = makeViewModel(empty: true, screenMode: .media)
+    static let emptyFilesViewModel = makeViewModel(empty: true, screenMode: .files)
     
     static var previews: some View {
         NavigationStack {
@@ -255,17 +250,22 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Empty Files")
     }
     
-    private static func makeViewModel(timelineKind: TimelineKind = .media(.mediaFilesScreen),
+    private static func makeViewModel(empty: Bool = false,
                                       screenMode: MediaEventsTimelineScreenMode) -> MediaEventsTimelineScreenViewModel {
-        MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: makeTimelineViewModel(timelineKind: timelineKind),
-                                           filesTimelineViewModel: makeTimelineViewModel(timelineKind: timelineKind),
+        MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: makeTimelineViewModel(empty: empty),
+                                           filesTimelineViewModel: makeTimelineViewModel(empty: empty),
+                                           initialViewState: .init(bindings: .init(screenMode: screenMode)),
                                            mediaProvider: MediaProviderMock(configuration: .init()),
-                                           screenMode: screenMode,
                                            userIndicatorController: UserIndicatorControllerMock())
     }
     
-    private static func makeTimelineViewModel(timelineKind: TimelineKind) -> TimelineViewModel {
-        let timelineController = MockRoomTimelineController(timelineKind: timelineKind)
+    private static func makeTimelineViewModel(empty: Bool) -> TimelineViewModel {
+        let timelineController = if empty {
+            MockRoomTimelineController.emptyMediaGallery
+        } else {
+            MockRoomTimelineController.mediaGallery
+        }
+        
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                  timelineController: timelineController,
                                  mediaProvider: MediaProviderMock(configuration: .init()),

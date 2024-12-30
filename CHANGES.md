@@ -1,3 +1,62 @@
+## Changes in 1.9.10 (2024-12-19)
+
+### What's Changed
+
+✨ Features
+* Enable the media browser feature 🖼️ by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3642
+
+🙌 Improvements
+* Design Tweaks by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3606
+* Updated room details design by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3626
+* Reorder timeline item menu options by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3640
+
+🐛 Bugfixes
+* Fix tap knockable room and custom keyboard did show scrolling by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3603
+* Fix a bug where you're shown the remove caption action when it isn't available. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3608
+* Fix recently used emojis by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3624
+* Fix state change commented by mistake and simplify snapshot test setup by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3627
+
+⚠️ API Changes
+* Support for new UtdCause for historical messages by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/3625
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3592
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3623
+
+🚧 In development 🚧
+* Media gallery by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3588
+* Update the timeline media QuickLook modifier. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3593
+* Use TimelineMediaQuickLook in the MediaEventsTimelineScreen. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3598
+* Monthly media gallery separators by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3601
+* Configure the media preview screen based on the event and presentation. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3604
+* Media gallery - support for files and voice messages by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3605
+* Hook up the actions in the media details sheet. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3607
+* Custom media gallery views for files and voice messages by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3610
+* Security and privacy part 1 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3617
+* Various media gallery related tweaks by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3616
+* Implement Knock Logic by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3573
+* Rework the presentation of the media browser quick look view to use SwiftUI. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3619
+* Implement the save action when previewing media. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3630
+* Add a fullscreen button to TimelineMediaPreviewScreen and hook up swiping through the timeline. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3638
+
+Others
+* Use a `Date` for the timestamp in all timeline items. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3590
+* UI test snapshot fixes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3597
+* Bump the RustSDK to v1.0.79; add a feature flag for the new rust side `ClientBuilder::useEventCachePersistentStorage` by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3599
+* Update dependency fastlane to v2.226.0 by @renovate in https://github.com/element-hq/element-x-ios/pull/3600
+* Update dependency fastlane to v2.226.0 by @renovate in https://github.com/element-hq/element-x-ios/pull/3602
+* Update dependency fastlane to v2.226.0 by @renovate in https://github.com/element-hq/element-x-ios/pull/3609
+* Update dependency fastlane to v2.226.0 by @renovate in https://github.com/element-hq/element-x-ios/pull/3613
+* Report extra UTD error properties to PostHog by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/3612
+* Various danger swift rule tweaks by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3615
+* chore(deps): update dependency fastlane to v2.226.0 by @renovate in https://github.com/element-hq/element-x-ios/pull/3621
+* Disable semantic commits from Renovate by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3629
+* Updated sdk to 1.0.82 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3631
+* Automatically retry decryptions in the active room when the app becomes active again just in case the NSE received keys we're not aware of by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3628
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/1.9.9...1.9.10
+
 ## Changes in 1.9.9 (2024-12-05)
 
 ### What's Changed

@@ -19,7 +19,8 @@ struct EncryptedRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
         case verificationViolation
         case insecureDevice
         case unknown
-        case historicalMessage
+        case historicalMessageAndBackupDisabled
+        case historicalMessageAndDeviceIsUnverified
         case witheldBySender
         case withheldForUnverifiedOrInsecureDevice
     }

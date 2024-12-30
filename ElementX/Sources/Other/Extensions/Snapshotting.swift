@@ -14,33 +14,43 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
-public struct SnapshotDelayPreferenceKey: PreferenceKey {
-    public static var defaultValue: TimeInterval = 0.0
+struct SnapshotPrecisionPreferenceKey: PreferenceKey {
+    static var defaultValue: Float = 1.0
 
-    public static func reduce(value: inout TimeInterval, nextValue: () -> TimeInterval) {
+    static func reduce(value: inout Float, nextValue: () -> Float) {
         value = nextValue()
     }
 }
 
-public struct SnapshotPrecisionPreferenceKey: PreferenceKey {
-    public static var defaultValue: Float = 1.0
+struct SnapshotPerceptualPrecisionPreferenceKey: PreferenceKey {
+    static var defaultValue: Float = 0.98
 
-    public static func reduce(value: inout Float, nextValue: () -> Float) {
+    static func reduce(value: inout Float, nextValue: () -> Float) {
         value = nextValue()
     }
 }
 
-public struct SnapshotPerceptualPrecisionPreferenceKey: PreferenceKey {
-    public static var defaultValue: Float = 0.98
+struct FulfillmentPublisherEquatableWrapper: Equatable {
+    let publisher: AnyPublisher<Bool, Never>?
+    
+    // Publisher equatability complicates things but, luckily, we're only interesting in them changing from nil
+    static func == (lhs: FulfillmentPublisherEquatableWrapper, rhs: FulfillmentPublisherEquatableWrapper) -> Bool {
+        lhs.publisher != nil && rhs.publisher != nil
+    }
+}
 
-    public static func reduce(value: inout Float, nextValue: () -> Float) {
+struct SnapshotFulfillmentPublisherPreferenceKey: PreferenceKey {
+    static var defaultValue: FulfillmentPublisherEquatableWrapper?
+
+    static func reduce(value: inout FulfillmentPublisherEquatableWrapper?, nextValue: () -> FulfillmentPublisherEquatableWrapper?) {
         value = nextValue()
     }
 }
 
-public extension SwiftUI.View {
+extension SwiftUI.View {
     /// Use this modifier when you want to apply snapshot-specific preferences,
     /// like delay and precision, to the view.
     /// These preferences can then be retrieved and used elsewhere in your view hierarchy.
@@ -49,10 +59,11 @@ public extension SwiftUI.View {
     ///   - delay: The delay time in seconds that you want to set as a preference to the View.
     ///   - precision: The percentage of pixels that must match.
     ///   - perceptualPrecision: The percentage a pixel must match the source pixel to be considered a match. 98-99% mimics the precision of the human eye.
-    @inlinable
-    func snapshotPreferences(delay: TimeInterval = .zero, precision: Float = 1.0, perceptualPrecision: Float = 0.98) -> some SwiftUI.View {
-        preference(key: SnapshotDelayPreferenceKey.self, value: delay)
-            .preference(key: SnapshotPrecisionPreferenceKey.self, value: precision)
+    func snapshotPreferences(expect fulfillmentPublisher: (any Publisher<Bool, Never>)? = nil,
+                             precision: Float = 1.0,
+                             perceptualPrecision: Float = 0.98) -> some SwiftUI.View {
+        preference(key: SnapshotPrecisionPreferenceKey.self, value: precision)
             .preference(key: SnapshotPerceptualPrecisionPreferenceKey.self, value: perceptualPrecision)
+            .preference(key: SnapshotFulfillmentPublisherPreferenceKey.self, value: FulfillmentPublisherEquatableWrapper(publisher: fulfillmentPublisher?.eraseToAnyPublisher()))
     }
 }

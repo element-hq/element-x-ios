@@ -196,6 +196,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .throttle(for: .milliseconds(100), scheduler: DispatchQueue.main, latest: true)
             .weakAssign(to: \.state.unseenKnockRequests, on: self)
             .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
+            .sink { [weak self] _ in
+                Task {
+                    await self?.roomProxy.timeline.retryDecryption()
+                }
+            }
+            .store(in: &cancellables)
     }
     
     private func processIdentityStatusChanges(_ changes: [IdentityStatusChange]) async {

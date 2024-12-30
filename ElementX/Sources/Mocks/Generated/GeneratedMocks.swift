@@ -8,6 +8,7 @@ import Combine
 import Foundation
 import LocalAuthentication
 import MatrixRustSDK
+import Photos
 import SwiftUI
 class AnalyticsClientMock: AnalyticsClientProtocol {
     var isRunning: Bool {
@@ -12755,6 +12756,79 @@ class PHGPostHogMock: PHGPostHogProtocol {
         screenPropertiesClosure?(screenTitle, properties)
     }
 }
+class PhotoLibraryManagerMock: PhotoLibraryManagerProtocol {
+
+    //MARK: - addResource
+
+    var addResourceAtUnderlyingCallsCount = 0
+    var addResourceAtCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return addResourceAtUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addResourceAtUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addResourceAtUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addResourceAtUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var addResourceAtCalled: Bool {
+        return addResourceAtCallsCount > 0
+    }
+    var addResourceAtReceivedArguments: (type: PHAssetResourceType, url: URL)?
+    var addResourceAtReceivedInvocations: [(type: PHAssetResourceType, url: URL)] = []
+
+    var addResourceAtUnderlyingReturnValue: Result<Void, PhotoLibraryManagerError>!
+    var addResourceAtReturnValue: Result<Void, PhotoLibraryManagerError>! {
+        get {
+            if Thread.isMainThread {
+                return addResourceAtUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, PhotoLibraryManagerError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addResourceAtUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addResourceAtUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addResourceAtUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var addResourceAtClosure: ((PHAssetResourceType, URL) async -> Result<Void, PhotoLibraryManagerError>)?
+
+    func addResource(_ type: PHAssetResourceType, at url: URL) async -> Result<Void, PhotoLibraryManagerError> {
+        addResourceAtCallsCount += 1
+        addResourceAtReceivedArguments = (type: type, url: url)
+        DispatchQueue.main.async {
+            self.addResourceAtReceivedInvocations.append((type: type, url: url))
+        }
+        if let addResourceAtClosure = addResourceAtClosure {
+            return await addResourceAtClosure(type, url)
+        } else {
+            return addResourceAtReturnValue
+        }
+    }
+}
 class PollInteractionHandlerMock: PollInteractionHandlerProtocol {
 
     //MARK: - sendPollResponse
@@ -14505,15 +14579,15 @@ class TimelineProxyMock: TimelineProxyProtocol {
     }
     //MARK: - retryDecryption
 
-    var retryDecryptionForUnderlyingCallsCount = 0
-    var retryDecryptionForCallsCount: Int {
+    var retryDecryptionSessionIDsUnderlyingCallsCount = 0
+    var retryDecryptionSessionIDsCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return retryDecryptionForUnderlyingCallsCount
+                return retryDecryptionSessionIDsUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = retryDecryptionForUnderlyingCallsCount
+                    returnValue = retryDecryptionSessionIDsUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -14521,28 +14595,28 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                retryDecryptionForUnderlyingCallsCount = newValue
+                retryDecryptionSessionIDsUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    retryDecryptionForUnderlyingCallsCount = newValue
+                    retryDecryptionSessionIDsUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var retryDecryptionForCalled: Bool {
-        return retryDecryptionForCallsCount > 0
+    var retryDecryptionSessionIDsCalled: Bool {
+        return retryDecryptionSessionIDsCallsCount > 0
     }
-    var retryDecryptionForReceivedSessionID: String?
-    var retryDecryptionForReceivedInvocations: [String] = []
-    var retryDecryptionForClosure: ((String) async -> Void)?
+    var retryDecryptionSessionIDsReceivedSessionIDs: [String]?
+    var retryDecryptionSessionIDsReceivedInvocations: [[String]?] = []
+    var retryDecryptionSessionIDsClosure: (([String]?) async -> Void)?
 
-    func retryDecryption(for sessionID: String) async {
-        retryDecryptionForCallsCount += 1
-        retryDecryptionForReceivedSessionID = sessionID
+    func retryDecryption(sessionIDs: [String]?) async {
+        retryDecryptionSessionIDsCallsCount += 1
+        retryDecryptionSessionIDsReceivedSessionIDs = sessionIDs
         DispatchQueue.main.async {
-            self.retryDecryptionForReceivedInvocations.append(sessionID)
+            self.retryDecryptionSessionIDsReceivedInvocations.append(sessionIDs)
         }
-        await retryDecryptionForClosure?(sessionID)
+        await retryDecryptionSessionIDsClosure?(sessionIDs)
     }
     //MARK: - paginateBackwards
 

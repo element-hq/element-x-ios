@@ -65,4 +65,5 @@ enum CreateAccountScreenErrorType: Hashable {
 enum CreateAccountScreenViewAction {
     case openLoginScreen
     case createAccount
+    case openWalletConnectModal
 }

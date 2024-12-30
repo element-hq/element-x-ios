@@ -13,7 +13,12 @@ struct ImageMediaEventsTimelineView: View {
     let timelineItem: ImageRoomTimelineItem
     
     var body: some View {
-        loadableImage
+        Color.clear // Let the image aspect fill in place
+            .aspectRatio(1, contentMode: .fill)
+            .overlay {
+                loadableImage
+            }
+            .clipped()
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(L10n.commonImage)
     }
@@ -45,13 +50,6 @@ struct ImageMediaEventsTimelineView: View {
         Rectangle()
             .foregroundColor(.compound.bgSubtleSecondary)
             .opacity(0.3)
-    }
-}
-
-private extension View {
-    @ViewBuilder
-    func mediaGalleryTimelineAspectRatio(imageInfo: ImageInfoProxy?) -> some View {
-        aspectRatio(imageInfo?.aspectRatio, contentMode: .fill)
     }
 }
 

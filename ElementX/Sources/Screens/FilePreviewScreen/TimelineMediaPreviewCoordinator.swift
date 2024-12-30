@@ -16,17 +16,19 @@ struct TimelineMediaPreviewContext {
     let viewModel: TimelineViewModelProtocol
     /// The namespace that the navigation transition's `sourceID` should be defined in.
     let namespace: Namespace.ID
-    /// A completion to be called immediately *after* the preview has been dismissed.
+    /// A closure to be called whenever a different preview item is shown. It should also
+    /// be called *after* the preview has been dismissed, with an ID of `nil`.
     ///
     /// This helps work around a bug caused by the flipped scrollview where the zoomed
     /// thumbnail starts off upside down while loading the preview screen.
-    var completion: (() -> Void)?
+    var itemIDHandler: ((TimelineItemIdentifier?) -> Void)?
 }
 
 struct TimelineMediaPreviewCoordinatorParameters {
     let context: TimelineMediaPreviewContext
     let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    let appMediator: AppMediatorProtocol
 }
 
 enum TimelineMediaPreviewCoordinatorAction {
@@ -50,7 +52,9 @@ final class TimelineMediaPreviewCoordinator: CoordinatorProtocol {
         
         viewModel = TimelineMediaPreviewViewModel(context: parameters.context,
                                                   mediaProvider: parameters.mediaProvider,
-                                                  userIndicatorController: parameters.userIndicatorController)
+                                                  photoLibraryManager: PhotoLibraryManager(),
+                                                  userIndicatorController: parameters.userIndicatorController,
+                                                  appMediator: parameters.appMediator)
     }
     
     func start() {
@@ -69,6 +73,9 @@ final class TimelineMediaPreviewCoordinator: CoordinatorProtocol {
     }
         
     func toPresentable() -> AnyView {
-        AnyView(TimelineMediaPreviewView(context: viewModel.context))
+        // Calling the completion onDisappear isn't ideal, but we don't push away from the screen so it should be
+        // a good enough approximation of didDismiss, given that the only other option is our navigation callbacks
+        // which are essentially willDismiss callbacks and happen too early for this particular completion handler.
+        AnyView(TimelineMediaPreviewScreen(context: viewModel.context, itemIDHandler: parameters.context.itemIDHandler))
     }
 }

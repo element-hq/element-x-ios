@@ -152,16 +152,17 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
         TimelineMediaPreviewDetailsView(item: viewModel.state.currentItem,
                                         context: viewModel.context)
             .previewDisplayName("Image")
-            .snapshotPreferences(delay: 0.1)
+            .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
+                state.currentItemActions?.secondaryActions.contains(.redact) ?? false
+            })
+        
         TimelineMediaPreviewDetailsView(item: unknownTypeViewModel.state.currentItem,
                                         context: unknownTypeViewModel.context)
             .previewDisplayName("Unknown type")
-            .snapshotPreferences(delay: 0.1)
         
         TimelineMediaPreviewDetailsView(item: presentedOnRoomViewModel.state.currentItem,
                                         context: presentedOnRoomViewModel.context)
             .previewDisplayName("Incoming on Room")
-            .snapshotPreferences(delay: 0.1)
     }
     
     static func makeViewModel(contentType: UTType? = nil, isOutgoing: Bool = false, isPresentedOnRoomScreen: Bool = false) -> TimelineMediaPreviewViewModel {
@@ -180,10 +181,15 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
                                                         contentType: contentType))
         
         let timelineKind = TimelineKind.media(isPresentedOnRoomScreen ? .roomScreen : .mediaFilesScreen)
+        let timelineController = MockRoomTimelineController(timelineKind: timelineKind)
+        timelineController.timelineItems = [item]
         return TimelineMediaPreviewViewModel(context: .init(item: item,
-                                                            viewModel: TimelineViewModel.mock(timelineKind: timelineKind),
+                                                            viewModel: TimelineViewModel.mock(timelineKind: timelineKind,
+                                                                                              timelineController: timelineController),
                                                             namespace: previewNamespace),
                                              mediaProvider: MediaProviderMock(configuration: .init()),
-                                             userIndicatorController: UserIndicatorControllerMock())
+                                             photoLibraryManager: PhotoLibraryManagerMock(.init()),
+                                             userIndicatorController: UserIndicatorControllerMock(),
+                                             appMediator: AppMediatorMock())
     }
 }
