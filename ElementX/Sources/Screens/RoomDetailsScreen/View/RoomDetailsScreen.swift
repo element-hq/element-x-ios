@@ -158,35 +158,33 @@ struct RoomDetailsScreen: View {
 
     private var aboutSection: some View {
         Section {
-            ZeroListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
-                                        icon: \.pin),
-                        details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
-                        kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink {
-                            context.send(viewAction: .processTapPinnedEvents)
-                        })
-                        .disabled(context.viewState.pinnedEventsActionState.isLoading)
+//            ZeroListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
+//                                        icon: \.pin),
+//                        details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
+//                        kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink {
+//                            context.send(viewAction: .processTapPinnedEvents)
+//                        })
+//                        .disabled(context.viewState.pinnedEventsActionState.isLoading)
+//            
+//            if context.viewState.canSeeKnockingRequests {
+//                ZeroListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
+//                                            icon: \.askToJoin),
+//                            details: context.viewState.knockRequestsCount > 0 ? .counter(context.viewState.knockRequestsCount) : nil,
+//                            kind: .navigationLink {
+//                                context.send(viewAction: .processTapRequestsToJoin)
+//                            })
+//            }
+//            ZeroListRow(label: .default(title: L10n.screenPollsHistoryTitle,
+//                                        icon: \.polls),
+//                        kind: .navigationLink {
+//                            context.send(viewAction: .processTapPolls)
+//                        })
+//                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
             
-            if context.viewState.canSeeKnockingRequests {
-                ZeroListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
-                                            icon: \.askToJoin),
-                            details: context.viewState.knockRequestsCount > 0 ? .counter(context.viewState.knockRequestsCount) : nil,
-                            kind: .navigationLink {
-                                context.send(viewAction: .processTapRequestsToJoin)
-                            })
-            }
-            ZeroListRow(label: .default(title: L10n.screenPollsHistoryTitle,
-                                        icon: \.polls),
+            ZeroListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
                         kind: .navigationLink {
-                            context.send(viewAction: .processTapPolls)
+                            context.send(viewAction: .processTapMediaEvents)
                         })
-                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
-            
-            if context.viewState.mediaBrowserEnabled {
-                ZeroListRow(label: .default(title: L10n.screenMediaBrowserTitle, icon: \.image),
-                            kind: .navigationLink {
-                                context.send(viewAction: .processTapMediaEvents)
-                            })
-            }
         }
     }
     
