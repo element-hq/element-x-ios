@@ -69,11 +69,11 @@ private struct MessageForwardingListRow: View {
     
     var body: some View {
         ZeroListRow(label: .avatar(title: room.title,
-                               description: room.description,
-                               icon: avatar),
-                kind: .selection(isSelected: isSelected) {
-                    context.send(viewAction: .selectRoom(roomID: room.id))
-                })
+                                   description: room.description,
+                                   icon: avatar),
+                    kind: .selection(isSelected: isSelected) {
+                        context.send(viewAction: .selectRoom(roomID: room.id))
+                    })
     }
     
     @ViewBuilder @MainActor

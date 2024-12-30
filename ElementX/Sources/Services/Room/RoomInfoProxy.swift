@@ -34,6 +34,7 @@ struct RoomInfoProxy: BaseRoomInfoProxyProtocol {
         // roomInfo.avatarUrl.flatMap(URL.init)
         roomAvatarCached.flatMap(URL.init) ?? roomInfo.avatarUrl.flatMap(URL.init)
     }
+
     /// The room's avatar info for use in a ``RoomAvatarImage``.
     var avatar: RoomAvatar {
         if isDirect, avatarURL == nil {
@@ -82,9 +83,10 @@ struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
     var topic: String? { roomPreviewInfo.topic }
     var canonicalAlias: String? { roomPreviewInfo.canonicalAlias }
     var avatarURL: URL? {
-        //roomPreviewInfo.avatarUrl.flatMap(URL.init)
+        // roomPreviewInfo.avatarUrl.flatMap(URL.init)
         roomAvatarCached.flatMap(URL.init) ?? roomPreviewInfo.avatarUrl.flatMap(URL.init)
     }
+
     var isDirect: Bool { roomPreviewInfo.isDirect ?? false }
     var isSpace: Bool { roomPreviewInfo.roomType == .space }
     var activeMembersCount: Int { Int(roomPreviewInfo.numActiveMembers ?? roomPreviewInfo.numJoinedMembers) }

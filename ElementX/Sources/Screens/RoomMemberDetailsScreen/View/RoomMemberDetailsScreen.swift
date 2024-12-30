@@ -86,9 +86,9 @@ struct RoomMemberDetailsScreen: View {
         if context.viewState.showVerificationSection {
             Section {
                 ZeroListRow(label: .default(title: L10n.commonVerifyIdentity,
-                                        description: L10n.screenRoomMemberDetailsVerifyButtonSubtitle,
-                                        icon: \.lock),
-                        kind: .button { })
+                                            description: L10n.screenRoomMemberDetailsVerifyButtonSubtitle,
+                                            icon: \.lock),
+                            kind: .button { })
                     .disabled(true)
             }
         }
@@ -103,14 +103,14 @@ struct RoomMemberDetailsScreen: View {
             
             Section {
                 ZeroListRow(label: .default(title: title,
-                                        icon: \.block,
-                                        role: memberDetails.isIgnored ? nil : .destructive),
-                        details: .isWaiting(context.viewState.isProcessingIgnoreRequest),
-                        kind: .button {
-                            context.send(viewAction: action)
-                        })
-                        .accessibilityIdentifier(accessibilityIdentifier)
-                        .disabled(context.viewState.isProcessingIgnoreRequest)
+                                            icon: \.block,
+                                            role: memberDetails.isIgnored ? nil : .destructive),
+                            details: .isWaiting(context.viewState.isProcessingIgnoreRequest),
+                            kind: .button {
+                                context.send(viewAction: action)
+                            })
+                            .accessibilityIdentifier(accessibilityIdentifier)
+                            .disabled(context.viewState.isProcessingIgnoreRequest)
             }
         }
     }

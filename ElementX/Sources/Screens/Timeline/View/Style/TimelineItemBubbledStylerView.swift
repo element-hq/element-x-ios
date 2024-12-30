@@ -144,7 +144,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             
             if adjustedDeliveryStatus?.shouldAutomaticRetryMessageSending == true {
                 /// Calling auto resend once for message in case message delivery is failed due to device verification issue
-                VStack {}.onAppear {
+                VStack { }.onAppear {
                     context.send(viewAction: .itemSendInfoTapped(itemID: timelineItem.id))
                 }
             }

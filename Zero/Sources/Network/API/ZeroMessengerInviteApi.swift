@@ -15,11 +15,10 @@ class ZeroMessengerInviteApi: ZeroMessengerInviteApiProtocol {
     func fetchMessengerInvite() async throws -> Result<ZMessengerInvite, any Error> {
         let result: Result<ZMessengerInvite, Error> =
             try await APIManager
-            .shared
-            .authorisedRequest(
-                MessengerInviteEndPoints.invite,
-                method: .post,
-                appSettings: appSettings)
+                .shared
+                .authorisedRequest(MessengerInviteEndPoints.invite,
+                                   method: .post,
+                                   appSettings: appSettings)
         switch result {
         case .success(let invite):
             return .success(invite)

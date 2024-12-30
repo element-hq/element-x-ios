@@ -15,11 +15,11 @@ struct TemplateScreen: View {
         Form {
             Section {
                 ZeroListRow(label: .plain(title: context.viewState.placeholder),
-                        kind: .textField(text: $context.composerText))
+                            kind: .textField(text: $context.composerText))
                 
                 ZeroListRow(label: .centeredAction(title: L10n.actionDone,
-                                               systemIcon: .doorLeftHandClosed),
-                        kind: .button { context.send(viewAction: .done) })
+                                                   systemIcon: .doorLeftHandClosed),
+                            kind: .button { context.send(viewAction: .done) })
             }
         }
         .zeroList()

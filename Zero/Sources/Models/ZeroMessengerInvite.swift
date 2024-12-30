@@ -19,6 +19,6 @@ public struct ZeroMessengerInvite: Codable, Equatable {
     }
     
     static func empty() -> ZeroMessengerInvite {
-        return ZeroMessengerInvite()
+        ZeroMessengerInvite()
     }
 }

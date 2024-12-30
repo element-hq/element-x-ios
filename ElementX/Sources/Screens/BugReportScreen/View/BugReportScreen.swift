@@ -45,7 +45,7 @@ struct BugReportScreen: View {
     private var textFieldSection: some View {
         Section {
             ZeroListRow(label: .plain(title: L10n.screenBugReportEditorPlaceholder),
-                    kind: .textField(text: $context.reportText, axis: .vertical))
+                        kind: .textField(text: $context.reportText, axis: .vertical))
                 .lineLimit(4, reservesSpace: true)
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.report)
         } footer: {
@@ -57,10 +57,10 @@ struct BugReportScreen: View {
     private var sendLogsSection: some View {
         Section {
             ZeroListRow(label: .plain(title: L10n.screenBugReportIncludeLogs),
-                    kind: .toggle($context.sendingLogsEnabled))
+                        kind: .toggle($context.sendingLogsEnabled))
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.sendLogs)
             ZeroListRow(label: .plain(title: L10n.screenBugReportViewLogs),
-                    kind: .navigationLink { context.send(viewAction: .viewLogs) })
+                        kind: .navigationLink { context.send(viewAction: .viewLogs) })
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.sendLogs)
         } footer: {
             Text(L10n.screenBugReportLogsDescription)
@@ -71,7 +71,7 @@ struct BugReportScreen: View {
     private var canContactSection: some View {
         Section {
             ZeroListRow(label: .plain(title: L10n.screenBugReportContactMeTitle),
-                    kind: .toggle($context.canContact))
+                        kind: .toggle($context.canContact))
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.canContact)
         } footer: {
             Text(L10n.screenBugReportContactMe)

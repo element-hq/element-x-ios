@@ -31,12 +31,12 @@ struct NotificationSettingsEditScreen: View {
         Section {
             ForEach(context.viewState.availableDefaultModes, id: \.self) { mode in
                 ZeroListRow(label: .plain(title: context.viewState.strings.string(for: mode),
-                                      description: context.viewState.description(for: mode)),
-                        details: (context.viewState.pendingMode == mode) ? .isWaiting(true) : nil,
-                        kind: .selection(isSelected: context.viewState.isSelected(mode: mode)) {
-                            context.send(viewAction: .setMode(mode))
-                        })
-                        .disabled(context.viewState.pendingMode != nil)
+                                          description: context.viewState.description(for: mode)),
+                            details: (context.viewState.pendingMode == mode) ? .isWaiting(true) : nil,
+                            kind: .selection(isSelected: context.viewState.isSelected(mode: mode)) {
+                                context.send(viewAction: .setMode(mode))
+                            })
+                            .disabled(context.viewState.pendingMode != nil)
             }
         } header: {
             Text(context.viewState.strings.modeSectionTitle)

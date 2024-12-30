@@ -16,7 +16,7 @@ public struct SecureInputField: View {
     var submitLabel: SubmitLabel
     var onSubmit: () -> Void
     
-    @State private var isSecured: Bool = true
+    @State private var isSecured = true
     
     public var body: some View {
         HStack {

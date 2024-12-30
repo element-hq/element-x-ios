@@ -35,7 +35,7 @@ struct RoomAttachmentPicker: View {
 //                Label(L10n.screenRoomAttachmentTextFormatting, icon: \.textFormatting)
 //            }
 //            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)
-//            
+//
 //            Button {
 //                context.send(viewAction: .attach(.poll))
 //            } label: {
@@ -43,7 +43,7 @@ struct RoomAttachmentPicker: View {
 //            }
 //            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)
 //            /// Hiding `menu item` which are not needed for `zero`
-//            
+//
 //            Button {
 //                context.send(viewAction: .attach(.location))
 //            } label: {

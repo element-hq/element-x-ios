@@ -8,14 +8,14 @@ struct ZeroListInlinePicker<SelectedValue: Hashable>: View {
     var body: some View {
         ForEach(items, id: \.tag) { item in
             ZeroListRow(label: .plain(title: item.title),
-                    kind: .selection(isSelected: selection == item.tag) {
-                var transaction = Transaction()
-                transaction.disablesAnimations = true
+                        kind: .selection(isSelected: selection == item.tag) {
+                            var transaction = Transaction()
+                            transaction.disablesAnimations = true
 
-                withTransaction(transaction) {
-                    selection = item.tag
-                }
-            })
+                            withTransaction(transaction) {
+                                selection = item.tag
+                            }
+                        })
         }
     }
 }

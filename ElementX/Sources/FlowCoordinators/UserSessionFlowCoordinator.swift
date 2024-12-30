@@ -999,7 +999,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                                     iconName: "xmark"))
     }
         
-    private var isProfileCheckInProgress: Bool = false
+    private var isProfileCheckInProgress = false
     
     private func checkAndProceed(execute: @escaping () -> Void) {
         if !isProfileCheckInProgress {

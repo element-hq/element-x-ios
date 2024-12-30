@@ -71,8 +71,8 @@ class CompleteProfileScreenViewModel: CompleteProfileScreenViewModelType, Comple
         startLoading()
         Task {
             switch await clientProxy.completeUserAccountProfile(avatar: state.localMedia,
-                                                                            displayName: state.bindings.name,
-                                                                            inviteCode: state.inviteCode) {
+                                                                displayName: state.bindings.name,
+                                                                inviteCode: state.inviteCode) {
             case .success:
                 stopLoading()
                 actionsSubject.send(.profileUpdated)

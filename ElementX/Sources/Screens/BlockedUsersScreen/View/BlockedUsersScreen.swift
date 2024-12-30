@@ -33,8 +33,8 @@ struct BlockedUsersScreen: View {
             Form {
                 ForEach(context.viewState.blockedUsers, id: \.self) { user in
                     ZeroListRow(label: .avatar(title: user.displayName ?? user.userID, icon: avatar(for: user)),
-                            details: .isWaiting(context.viewState.processingUserID == user.userID),
-                            kind: .button { context.send(viewAction: .unblockUser(user)) })
+                                details: .isWaiting(context.viewState.processingUserID == user.userID),
+                                kind: .button { context.send(viewAction: .unblockUser(user)) })
                 }
             }
         }

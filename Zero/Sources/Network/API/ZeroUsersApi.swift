@@ -102,7 +102,7 @@ class ZeroUsersApi: ZeroUsersApiProtocol {
         
         switch result {
         case .success(let user):
-            return .success((user))
+            return .success(user)
         case .failure(let error):
             return .failure(error)
         }

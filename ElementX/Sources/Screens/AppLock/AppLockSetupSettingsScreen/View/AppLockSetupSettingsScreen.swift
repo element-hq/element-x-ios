@@ -15,12 +15,12 @@ struct AppLockSetupSettingsScreen: View {
         Form {
             Section {
                 ZeroListRow(label: .plain(title: L10n.screenAppLockSettingsChangePin),
-                        kind: .button { context.send(viewAction: .changePINCode) })
+                            kind: .button { context.send(viewAction: .changePINCode) })
                     .accessibilityIdentifier(A11yIdentifiers.appLockSetupSettingsScreen.changePIN)
                 
                 if !context.viewState.isMandatory {
                     ZeroListRow(label: .plain(title: L10n.screenAppLockSettingsRemovePin, role: .destructive),
-                            kind: .button { context.send(viewAction: .disable) })
+                                kind: .button { context.send(viewAction: .disable) })
                         .accessibilityIdentifier(A11yIdentifiers.appLockSetupSettingsScreen.removePIN)
                 }
             }
@@ -28,7 +28,7 @@ struct AppLockSetupSettingsScreen: View {
             if context.viewState.supportsBiometrics {
                 Section {
                     ZeroListRow(label: .plain(title: context.viewState.enableBiometricsTitle),
-                            kind: .toggle($context.enableBiometrics))
+                                kind: .toggle($context.enableBiometrics))
                         .onChange(of: context.enableBiometrics) {
                             context.send(viewAction: .enableBiometricsChanged)
                         }

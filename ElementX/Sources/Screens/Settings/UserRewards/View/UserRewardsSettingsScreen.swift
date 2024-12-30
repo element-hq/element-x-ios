@@ -71,9 +71,9 @@ struct UserRewardsSettingsScreen: View {
                 )
                 .font(.zero.bodyMD)
                 .foregroundColor(.compound.textSecondary)
-                    + Text("More ->")
-                    .font(.zero.bodyMD)
-                    .foregroundColor(Color.zero.bgAccentRest)
+                + Text("More ->")
+                .font(.zero.bodyMD)
+                .foregroundColor(Color.zero.bgAccentRest)
             }
             .padding(.horizontal, 24)
             .padding(.top, 200)
@@ -114,7 +114,7 @@ struct UserRewardsSettingsScreen: View {
                         if isExpanded {
                             let attributedString = faq.getAttributedString()
                             Text(attributedString)
-                                .onOpenURL { url in
+                                .onOpenURL { _ in
                                     openURL(ZeroRewardFaqProvider.uniswapURL)
                                 }
                                 .padding(.top, 6)
@@ -136,9 +136,8 @@ struct UserRewardsSettingsScreen_Previews: PreviewProvider, TestablePreview {
         let userSession = UserSessionMock(
             .init(
                 clientProxy: ClientProxyMock(
-                    .init(
-                        userID: "@userid:example.com",
-                        deviceID: "AAAAAAAAAAA"))))
+                    .init(userID: "@userid:example.com",
+                          deviceID: "AAAAAAAAAAA"))))
         return UserRewardsSettingsScreenViewModel(userSession: userSession)
     }()
 

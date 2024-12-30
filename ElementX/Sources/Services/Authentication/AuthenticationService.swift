@@ -142,7 +142,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
                 }
                 
                 return await userSession(for: client)
-            case .failure(_):
+            case .failure:
                 return .failure(.failedLoggingIn)
             }
             
@@ -243,7 +243,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             switch result {
             case .success:
                 return .success(())
-            case .failure(_):
+            case .failure:
                 return .failure(.invalidInviteCode)
             }
         } catch {
@@ -256,16 +256,16 @@ class AuthenticationService: AuthenticationServiceProtocol {
         do {
             let result = try await zeroCreateAccountApi.createAccountWithEmail(email: email, password: password, invite: inviteCode)
             switch result {
-            case .success(_):
+            case .success:
                 await ensureHomeServerIsConfigured()
                 let session = await loginNewlyCreatedUser()
                 switch session {
                 case .success(let userSession):
                     return .success(userSession)
-                case .failure(_):
+                case .failure:
                     return .failure(.failedCreatingUserAccount)
                 }
-            case .failure(_):
+            case .failure:
                 return .failure(.failedCreatingUserAccount)
             }
         } catch {
@@ -346,7 +346,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
                 }
                 
                 return await userSession(for: client)
-            case .failure(_):
+            case .failure:
                 return .failure(.failedLoggingIn)
             }
         } catch {

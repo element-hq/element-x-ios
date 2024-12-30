@@ -58,6 +58,14 @@ struct TimelineItemMenuActionProvider {
             actions.append(.forward(itemID: item.id))
         }
         
+//        if canCurrentUserPin, let eventID = item.id.eventID {
+//            actions.append(pinnedEventIDs.contains(eventID) ? .unpin : .pin)
+//        }
+//
+//        if item.isRemoteMessage {
+//            actions.append(.copyPermalink)
+//        }
+        
         if item.isEditable {
             if item.supportsMediaCaption {
 //                if item.hasMediaCaption {
@@ -90,11 +98,15 @@ struct TimelineItemMenuActionProvider {
         if item.isEditable, item.hasMediaCaption {
             //actions.append(.removeCaption)
         }
-
+        
+//        if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded, let eventID = item.id.eventID {
+//            actions.append(.endPoll(pollStartID: eventID))
+//        }
+//
 //        if isViewSourceEnabled {
 //            actions.append(.viewSource)
 //        }
-//        
+//
 //        if !item.isOutgoing {
 //            secondaryActions.append(.report)
 //        }

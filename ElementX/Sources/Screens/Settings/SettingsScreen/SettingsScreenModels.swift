@@ -48,8 +48,8 @@ struct SettingsScreenViewState: BindableState {
     
     var showBlockedUsers = false
     
-    var userRewards: ZeroRewards = ZeroRewards.empty()
-    var showNewUserRewardsIntimation: Bool = false
+    var userRewards = ZeroRewards.empty()
+    var showNewUserRewardsIntimation = false
     
     var bindings = SettingsScreenViewStateBindings()
 }

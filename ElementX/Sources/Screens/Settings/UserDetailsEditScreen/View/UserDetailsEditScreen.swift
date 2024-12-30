@@ -71,7 +71,7 @@ struct UserDetailsEditScreen: View {
     private var nameSection: some View {
         Section {
             ZeroListRow(label: .plain(title: L10n.screenEditProfileDisplayNamePlaceholder),
-                    kind: .textField(text: $context.name, axis: .horizontal))
+                        kind: .textField(text: $context.name, axis: .horizontal))
                 .focused($focus)
         } header: {
             Text(L10n.screenEditProfileDisplayName)

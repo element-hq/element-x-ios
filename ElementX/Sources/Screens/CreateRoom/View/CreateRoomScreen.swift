@@ -123,7 +123,7 @@ struct CreateRoomScreen: View {
     private var topicSection: some View {
         Section {
             ZeroListRow(label: .plain(title: L10n.commonTopicPlaceholder),
-                    kind: .textField(text: $context.roomTopic, axis: .vertical))
+                        kind: .textField(text: $context.roomTopic, axis: .vertical))
                 .lineLimit(3, reservesSpace: false)
                 .focused($focus, equals: .topic)
                 .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomTopic)
@@ -159,15 +159,15 @@ struct CreateRoomScreen: View {
     private var securitySection: some View {
         Section {
             ZeroListRow(label: .default(title: "Encrypted Group",
-                                    description: "Encrypted Groups are ideal for more focused, intimate conversations and are encrypted by default. Check this box if you are creating a room intended for smaller groups.",
-                                    icon: \.lock,
-                                    iconAlignment: .top),
-                    kind: .selection(isSelected: context.isRoomPrivate) { context.isRoomPrivate = true })
+                                        description: "Encrypted Groups are ideal for more focused, intimate conversations and are encrypted by default. Check this box if you are creating a room intended for smaller groups.",
+                                        icon: \.lock,
+                                        iconAlignment: .top),
+                        kind: .selection(isSelected: context.isRoomPrivate) { context.isRoomPrivate = true })
             ZeroListRow(label: .default(title: "Super Group",
-                                    description: "Super Groups are designed to accommodate larger communities and are not encrypted by default. Check this box if you are creating a room intended for larger groups (10+ people).",
-                                    icon: \.public,
-                                    iconAlignment: .top),
-                    kind: .selection(isSelected: !context.isRoomPrivate) { context.isRoomPrivate = false })
+                                        description: "Super Groups are designed to accommodate larger communities and are not encrypted by default. Check this box if you are creating a room intended for larger groups (10+ people).",
+                                        icon: \.public,
+                                        iconAlignment: .top),
+                        kind: .selection(isSelected: !context.isRoomPrivate) { context.isRoomPrivate = false })
         } header: {
             Text("Group Type")
                 .compoundListSectionHeader()
@@ -177,11 +177,11 @@ struct CreateRoomScreen: View {
     private var roomAccessSection: some View {
         Section {
             ZeroListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionTitle,
-                                  description: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionDescription),
-                    kind: .selection(isSelected: !context.isKnockingOnly) { context.isKnockingOnly = false })
+                                      description: L10n.screenCreateRoomRoomAccessSectionAnyoneOptionDescription),
+                        kind: .selection(isSelected: !context.isKnockingOnly) { context.isKnockingOnly = false })
             ZeroListRow(label: .plain(title: L10n.screenCreateRoomRoomAccessSectionKnockingOptionTitle,
-                                  description: L10n.screenCreateRoomRoomAccessSectionKnockingOptionDescription),
-                    kind: .selection(isSelected: context.isKnockingOnly) { context.isKnockingOnly = true })
+                                      description: L10n.screenCreateRoomRoomAccessSectionKnockingOptionDescription),
+                        kind: .selection(isSelected: context.isKnockingOnly) { context.isKnockingOnly = true })
         } header: {
             Text(L10n.screenCreateRoomRoomAccessSectionHeader)
                 .compoundListSectionHeader()

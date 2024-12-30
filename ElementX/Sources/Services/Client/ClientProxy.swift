@@ -887,11 +887,11 @@ class ClientProxy: ClientProxyProtocol {
             if let user = currentUser {
                 return user.displayName.isEmpty || user.displayName.stringMatchesUserIdFormatRegex()
             } else {
-                return true
+                return false
             }
         } catch {
             MXLog.error(error)
-            return true
+            return false
         }
     }
     
@@ -916,7 +916,7 @@ class ClientProxy: ClientProxyProtocol {
             switch result {
             case .success(let user):
                 /// create a room with the user who invited
-                _ = await self.createDirectRoom(with: user.inviter.matrixId, expectedRoomName: user.inviter.displayName)
+                _ = await createDirectRoom(with: user.inviter.matrixId, expectedRoomName: user.inviter.displayName)
                 return .success(())
                 
             case .failure(let failure):

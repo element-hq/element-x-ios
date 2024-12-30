@@ -306,8 +306,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                         title: "Delete Account",
                                                                         message: "Are you sure you want to delete your account? You won't be able to recover your account later!",
                                                                         primaryButton: .init(title: L10n.actionConfirm, role: .destructive) { [weak self] in
-            self?.actionsSubject.send(.runDeleteAccountFlow)
-        })
+                                                                            self?.actionsSubject.send(.runDeleteAccountFlow)
+                                                                        })
     }
-    
 }

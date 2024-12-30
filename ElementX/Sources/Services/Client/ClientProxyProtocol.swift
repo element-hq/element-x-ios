@@ -220,6 +220,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func dismissRewardsIntimation()
     
     // MARK: - ZERO Primary Id
+
     func loadUserPrimaryZeroId()
     
     var primaryZeroId: CurrentValuePublisher<String?, Never> { get }

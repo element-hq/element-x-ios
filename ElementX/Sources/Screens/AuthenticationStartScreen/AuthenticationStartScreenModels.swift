@@ -43,7 +43,7 @@ struct AuthenticationStartScreenViewState: BindableState {
 }
 
 struct AuthenticationStartScreenBindings {
-    var inviteCode: String = ""
+    var inviteCode = ""
 }
 
 enum AuthenticationStartScreenViewAction {

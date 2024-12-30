@@ -28,7 +28,7 @@ struct ReportContentScreen: View {
     private var reasonSection: some View {
         Section {
             ZeroListRow(label: .plain(title: L10n.screenReportContentHint),
-                    kind: .textField(text: $context.reasonText, axis: .vertical))
+                        kind: .textField(text: $context.reasonText, axis: .vertical))
                 .lineLimit(4, reservesSpace: true)
         } footer: {
             Text(L10n.screenReportContentExplanation)
@@ -39,7 +39,7 @@ struct ReportContentScreen: View {
     private var ignoreUserSection: some View {
         Section {
             ZeroListRow(label: .plain(title: L10n.screenReportContentBlockUser),
-                    kind: .toggle($context.ignoreUser))
+                        kind: .toggle($context.ignoreUser))
                 .accessibilityIdentifier(A11yIdentifiers.reportContent.ignoreUser)
         } footer: {
             Text(L10n.screenReportContentBlockUserHint)

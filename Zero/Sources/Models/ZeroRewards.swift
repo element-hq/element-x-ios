@@ -24,30 +24,30 @@ public struct ZeroRewards: Codable, Equatable {
     }
     
     static func empty() -> ZeroRewards {
-        return ZeroRewards()
+        ZeroRewards()
     }
 }
 
 extension ZeroRewards {
     func hasEarnedRewards() -> Bool {
-        let current = parseCredits(credits: self.zero, decimals: self.decimals)
-        let previous = parseCredits(credits: self.zeroPreviousDay, decimals: self.decimals)
+        let current = parseCredits(credits: zero, decimals: decimals)
+        let previous = parseCredits(credits: zeroPreviousDay, decimals: decimals)
         return Int((current - previous).rounded()) > 0
     }
     
     func getZeroCredits() -> Double {
-        let credits = parseCredits(credits: self.zero, decimals: self.decimals)
+        let credits = parseCredits(credits: zero, decimals: decimals)
         return credits
     }
     
     func getZeroCreditsFormatted() -> String {
-        return getZeroCredits().formatToThousandSeparatedString()
+        getZeroCredits().formatToThousandSeparatedString()
     }
     
     func getRefPrice() -> Double {
-        let refPrice = self.price
+        let refPrice = price
         do {
-            let credits = parseCredits(credits: self.zero, decimals: self.decimals)
+            let credits = parseCredits(credits: zero, decimals: decimals)
             if refPrice > 0 {
                 return credits * refPrice
             } else {
@@ -59,7 +59,7 @@ extension ZeroRewards {
     }
     
     func getRefPriceFormatted() -> String {
-        return getRefPrice().formatToSuffix()
+        getRefPrice().formatToSuffix()
     }
 }
 
@@ -87,7 +87,7 @@ private extension Double {
         var value = self
         var index = 0
 
-        while value >= 1000 && index < suffixes.count - 1 {
+        while value >= 1000, index < suffixes.count - 1 {
             value /= 1000
             index += 1
         }

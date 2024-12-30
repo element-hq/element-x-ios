@@ -10,12 +10,8 @@ public struct ZCreateAccount: Encodable {
     }
     
     static func newRequest(email: String, password: String, invite: String) -> ZCreateAccount {
-        ZCreateAccount(
-            user: ZCreateAccountProfile(
-                email: email, password: password, handle: email
-            ),
-            inviteSlug: invite
-        )
+        ZCreateAccount(user: ZCreateAccountProfile(email: email, password: password, handle: email),
+                       inviteSlug: invite)
     }
     
     static func newRequest(invite: String) -> ZCreateAccount {

@@ -79,7 +79,7 @@ struct RoomDetailsEditScreen: View {
         Section {
             if context.viewState.canEditName {
                 ZeroListRow(label: .plain(title: L10n.commonRoomNamePlaceholder),
-                        kind: .textField(text: $context.name, axis: .horizontal))
+                            kind: .textField(text: $context.name, axis: .horizontal))
                     .focused($focus, equals: .name)
             } else {
                 ZeroListRow(kind: .custom {
@@ -97,7 +97,7 @@ struct RoomDetailsEditScreen: View {
         Section {
             if context.viewState.canEditTopic {
                 ZeroListRow(label: .plain(title: L10n.commonTopicPlaceholder),
-                        kind: .textField(text: $context.topic, axis: .vertical))
+                            kind: .textField(text: $context.topic, axis: .vertical))
                     .focused($focus, equals: .topic)
                     .lineLimit(3...)
             } else {

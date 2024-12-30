@@ -27,26 +27,26 @@ struct RoomRolesAndPermissionsScreen: View {
     private var rolesSection: some View {
         Section {
             ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsAdmins,
-                                    icon: \.admin),
-                    details: administratorDetails,
-                    kind: .navigationLink {
-                        context.send(viewAction: .editRoles(.administrators))
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.administrators)
+                                        icon: \.admin),
+                        details: administratorDetails,
+                        kind: .navigationLink {
+                            context.send(viewAction: .editRoles(.administrators))
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.administrators)
             
             ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsModerators,
-                                    icon: \.chatProblem),
-                    details: moderatorDetails,
-                    kind: .navigationLink {
-                        context.send(viewAction: .editRoles(.moderators))
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.moderators)
+                                        icon: \.chatProblem),
+                        details: moderatorDetails,
+                        kind: .navigationLink {
+                            context.send(viewAction: .editRoles(.moderators))
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.moderators)
             
             ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsChangeMyRole,
-                                    icon: \.edit),
-                    kind: .button {
-                        context.send(viewAction: .editOwnUserRole)
-                    })
+                                        icon: \.edit),
+                        kind: .button {
+                            context.send(viewAction: .editOwnUserRole)
+                        })
         } header: {
             Text(L10n.screenRoomRolesAndPermissionsRolesHeader)
                 .compoundListSectionHeader()
@@ -72,31 +72,31 @@ struct RoomRolesAndPermissionsScreen: View {
     private var permissionsSection: some View {
         Section {
             ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsRoomDetails,
-                                    icon: \.info),
-                    details: .isWaiting(context.viewState.permissions == nil),
-                    kind: .navigationLink {
-                        context.send(viewAction: .editPermissions(.roomDetails))
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.roomDetails)
-                    .disabled(context.viewState.permissions == nil)
+                                        icon: \.info),
+                        details: .isWaiting(context.viewState.permissions == nil),
+                        kind: .navigationLink {
+                            context.send(viewAction: .editPermissions(.roomDetails))
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.roomDetails)
+                        .disabled(context.viewState.permissions == nil)
             
             ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsMessagesAndContent,
-                                    icon: \.chat),
-                    details: .isWaiting(context.viewState.permissions == nil),
-                    kind: .navigationLink {
-                        context.send(viewAction: .editPermissions(.messagesAndContent))
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.messagesAndContent)
-                    .disabled(context.viewState.permissions == nil)
+                                        icon: \.chat),
+                        details: .isWaiting(context.viewState.permissions == nil),
+                        kind: .navigationLink {
+                            context.send(viewAction: .editPermissions(.messagesAndContent))
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.messagesAndContent)
+                        .disabled(context.viewState.permissions == nil)
             
             ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsMemberModeration,
-                                    icon: \.user),
-                    details: .isWaiting(context.viewState.permissions == nil),
-                    kind: .navigationLink {
-                        context.send(viewAction: .editPermissions(.memberModeration))
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.memberModeration)
-                    .disabled(context.viewState.permissions == nil)
+                                        icon: \.user),
+                        details: .isWaiting(context.viewState.permissions == nil),
+                        kind: .navigationLink {
+                            context.send(viewAction: .editPermissions(.memberModeration))
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.memberModeration)
+                        .disabled(context.viewState.permissions == nil)
         } header: {
             Text(L10n.screenRoomRolesAndPermissionsPermissionsHeader)
                 .compoundListSectionHeader()
@@ -106,10 +106,10 @@ struct RoomRolesAndPermissionsScreen: View {
     private var resetSection: some View {
         Section {
             ZeroListRow(label: .plain(title: L10n.screenRoomRolesAndPermissionsReset,
-                                  role: .destructive),
-                    kind: .button {
-                        context.send(viewAction: .reset)
-                    })
+                                      role: .destructive),
+                        kind: .button {
+                            context.send(viewAction: .reset)
+                        })
         }
     }
 }

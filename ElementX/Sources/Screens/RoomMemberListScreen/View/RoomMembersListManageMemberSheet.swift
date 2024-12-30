@@ -26,17 +26,17 @@ struct RoomMembersListManageMemberSheet: View {
             
             Section {
                 ZeroListRow(label: .default(title: L10n.screenRoomMemberListManageMemberUserInfo,
-                                        icon: \.userProfileSolid),
-                        kind: .button {
-                            context.send(viewAction: .showMemberDetails(member))
-                        })
+                                            icon: \.userProfileSolid),
+                            kind: .button {
+                                context.send(viewAction: .showMemberDetails(member))
+                            })
                 
                 if actions.contains(.kick) {
                     ZeroListRow(label: .default(title: L10n.screenRoomMemberListManageMemberRemove,
-                                            icon: \.close),
-                            kind: .button {
-                                context.send(viewAction: .kickMember(member))
-                            })
+                                                icon: \.close),
+                                kind: .button {
+                                    context.send(viewAction: .kickMember(member))
+                                })
                 }
                 
 //                if actions.contains(.ban) {

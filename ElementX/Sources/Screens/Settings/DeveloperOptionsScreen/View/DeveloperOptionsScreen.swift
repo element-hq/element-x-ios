@@ -22,7 +22,7 @@ struct DeveloperOptionsScreen: View {
 //            Section("Logging") {
 //                LogLevelConfigurationView(logLevel: $context.logLevel)
 //            }
-//            
+//
 //            Section("General") {
 //                Toggle(isOn: $context.eventCacheEnabled) {
 //                    Text("Event cache")
@@ -31,7 +31,7 @@ struct DeveloperOptionsScreen: View {
 //                    context.send(viewAction: .clearCache)
 //                }
 //            }
-//            
+//
 //            Section {
 //                Picker("Discovery", selection: $context.slidingSyncDiscovery) {
 //                    Text("Proxy only").tag(AppSettings.SlidingSyncDiscovery.proxy)
@@ -43,34 +43,42 @@ struct DeveloperOptionsScreen: View {
 //            } footer: {
 //                Text(context.viewState.slidingSyncFooter)
 //            }
-//            
+//
 //            Section("Room List") {
 //                Toggle(isOn: $context.publicSearchEnabled) {
 //                    Text("Public search")
 //                }
-//                
+//
 //                Toggle(isOn: $context.hideUnreadMessagesBadge) {
 //                    Text("Hide grey dots")
 //                }
-//                
+//
 //                Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
 //                    Text("Fuzzy searching")
 //                }
 //            }
-//            
+//
 //            Section("Room") {
 //                Toggle(isOn: $context.hideTimelineMedia) {
 //                    Text("Hide image & video previews")
 //                }
+//
+//                Toggle(isOn: $context.createMediaCaptionsEnabled) {
+//                    Text("Allow creation of media captions")
+//                }
+//
+//                Toggle(isOn: $context.mediaBrowserEnabled) {
+//                    Text("Enable the media browser")
+//                }
 //            }
-//            
+//
 //            Section("Join rules") {
 //                Toggle(isOn: $context.knockingEnabled) {
 //                    Text("Knocking")
 //                    Text("Experimental, still using mocked data")
 //                }
 //            }
-//            
+//
 //            Section {
 //                Toggle(isOn: $context.enableOnlySignedDeviceIsolationMode) {
 //                    Text("Exclude insecure devices when sending/receiving messages")

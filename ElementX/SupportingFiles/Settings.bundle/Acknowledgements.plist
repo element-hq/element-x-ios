@@ -20,9 +20,9 @@
 		</dict>
 		<dict>
 			<key>File</key>
-			<string>Packages/CompoundDesignTokens</string>
+			<string>Packages/compound-design-tokens</string>
 			<key>Title</key>
-			<string>CompoundDesignTokens</string>
+			<string>compound-design-tokens</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
@@ -140,9 +140,9 @@
 		</dict>
 		<dict>
 			<key>File</key>
-			<string>Packages/AnalyticsEvents</string>
+			<string>Packages/matrix-analytics-events</string>
 			<key>Title</key>
-			<string>AnalyticsEvents</string>
+			<string>matrix-analytics-events</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>

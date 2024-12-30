@@ -1,15 +1,11 @@
 import Combine
 import SwiftUI
 
-typealias InviteFriendSettingsScreenViewModelType = StateStoreViewModel<
-    InviteFriendSettingsScreenViewState, InviteFriendSettingsScreenViewAction
->
+typealias InviteFriendSettingsScreenViewModelType = StateStoreViewModel<InviteFriendSettingsScreenViewState, InviteFriendSettingsScreenViewAction>
 
 class InviteFriendSettingsScreenViewModel:
     InviteFriendSettingsScreenViewModelType,
-    InviteFriendSettingsScreenViewModelProtocol
-{
-    
+    InviteFriendSettingsScreenViewModelProtocol {
     init(userSession: UserSessionProtocol) {
         super.init(
             initialViewState: .init(

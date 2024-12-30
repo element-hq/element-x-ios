@@ -83,9 +83,9 @@ struct UserProfileScreen: View {
         if context.viewState.showVerificationSection {
             Section {
                 ZeroListRow(label: .default(title: L10n.commonVerifyIdentity,
-                                        description: L10n.screenRoomMemberDetailsVerifyButtonSubtitle,
-                                        icon: \.lock),
-                        kind: .button { })
+                                            description: L10n.screenRoomMemberDetailsVerifyButtonSubtitle,
+                                            icon: \.lock),
+                            kind: .button { })
                     .disabled(true)
             }
         }

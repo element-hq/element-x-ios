@@ -6,7 +6,7 @@ public struct ZeroStyledButton: View {
     let buttonImageAsset: ImageAsset
     let action: () -> Void
     
-    var enabled: Bool = true
+    var enabled = true
     
     public var body: some View {
         if enabled {

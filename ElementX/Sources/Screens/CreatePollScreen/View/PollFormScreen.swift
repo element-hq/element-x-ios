@@ -41,7 +41,7 @@ struct PollFormScreen: View {
     private var questionSection: some View {
         Section {
             ZeroListRow(label: .plain(title: L10n.screenCreatePollQuestionHint),
-                    kind: .textField(text: $context.question, axis: .vertical))
+                        kind: .textField(text: $context.question, axis: .vertical))
                 .focused($focus, equals: .question)
                 .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.question)
         } header: {
@@ -85,11 +85,11 @@ struct PollFormScreen: View {
             
             if context.options.count < context.viewState.maxNumberOfOptions {
                 ZeroListRow(label: .plain(title: L10n.screenCreatePollAddOptionBtn),
-                        kind: .button {
-                            context.send(viewAction: .addOption)
-                            focus = context.options.indices.last.map { .option(index: $0) }
-                        })
-                        .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.addOption)
+                            kind: .button {
+                                context.send(viewAction: .addOption)
+                                focus = context.options.indices.last.map { .option(index: $0) }
+                            })
+                            .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.addOption)
             }
         }
         // Disables animations when the text view resizes for multiline
@@ -104,7 +104,7 @@ struct PollFormScreen: View {
     private var showResultsSection: some View {
         Section {
             ZeroListRow(label: .plain(title: L10n.screenCreatePollAnonymousDesc),
-                    kind: .toggle($context.isUndisclosed))
+                        kind: .toggle($context.isUndisclosed))
                 .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.pollKind)
         }
     }
@@ -115,7 +115,7 @@ struct PollFormScreen: View {
         case .edit:
             Section {
                 ZeroListRow(label: .plain(title: L10n.actionDeletePoll, role: .destructive),
-                        kind: .button { context.send(viewAction: .delete) })
+                            kind: .button { context.send(viewAction: .delete) })
             }
         case .new:
             EmptyView()

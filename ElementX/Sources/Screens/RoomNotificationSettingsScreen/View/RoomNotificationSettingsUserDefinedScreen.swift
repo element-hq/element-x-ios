@@ -27,13 +27,13 @@ struct RoomNotificationSettingsUserDefinedScreen: View {
     
     private var deleteButton: some View {
         ZeroListRow(label: .action(title: L10n.screenRoomNotificationSettingsEditRemoveSetting,
-                               icon: \.delete,
-                               role: .destructive),
-                details: context.viewState.deletingCustomSetting ? .isWaiting(true) : nil,
-                kind: .button {
-                    context.send(viewAction: .deleteCustomSettingTapped)
-                })
-                .disabled(context.viewState.deletingCustomSetting)
+                                   icon: \.delete,
+                                   role: .destructive),
+                    details: context.viewState.deletingCustomSetting ? .isWaiting(true) : nil,
+                    kind: .button {
+                        context.send(viewAction: .deleteCustomSettingTapped)
+                    })
+                    .disabled(context.viewState.deletingCustomSetting)
     }
 }
 

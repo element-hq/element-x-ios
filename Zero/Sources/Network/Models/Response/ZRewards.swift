@@ -11,6 +11,7 @@ public struct ZRewards: Codable {
 }
 
 // MARK: - ZeroCurrency
+
 public struct ZeroCurrency: Codable {
     public let reference: String?
     public let price, diff: Double?
