@@ -30,6 +30,9 @@ struct ZeroLoginScreen: View {
         VStack {
             loginSegmentControl
             
+            Text(ZeroContants.appServer.walletConnectProjectId)
+                .padding(.vertical, 12)
+            
             switch selectedSegment {
             case .web3:
                 web3LoginView
