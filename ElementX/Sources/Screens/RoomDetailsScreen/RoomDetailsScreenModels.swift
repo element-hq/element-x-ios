@@ -108,6 +108,8 @@ struct RoomDetailsScreenViewState: BindableState {
     var notificationShortcutButtonIcon: KeyPath<CompoundIcons, Image> {
         areNotificationsMuted ? \.notificationsOff : \.notifications
     }
+    
+    var roomSubtitle: String? = nil
 }
 
 struct RoomDetailsScreenViewStateBindings {

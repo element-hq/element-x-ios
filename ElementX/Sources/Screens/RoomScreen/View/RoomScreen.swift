@@ -64,6 +64,7 @@ struct RoomScreen: View {
             .navigationBarHidden(isNavigationBarHidden)
             .toolbar { toolbar }
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
+            .toolbarRole(.editor)
             .overlay { loadingIndicator }
             .alert(item: $timelineContext.alertInfo)
 //            .sheet(item: $timelineContext.debugInfo) { TimelineItemDebugView(info: $0) }
@@ -203,7 +204,7 @@ struct RoomScreen: View {
         // as the latter disables interaction in the action button for rooms with long names
         ToolbarItem(placement: .principal) {
             RoomHeaderView(roomName: roomContext.viewState.roomTitle,
-                           roomAvatar: roomContext.viewState.roomAvatar,
+                           roomSubtitle: roomContext.viewState.roomSubtitle, roomAvatar: roomContext.viewState.roomAvatar,
                            mediaProvider: roomContext.mediaProvider)
                 // Using a button stops it from getting truncated in the navigation bar
                 .contentShape(.rect)

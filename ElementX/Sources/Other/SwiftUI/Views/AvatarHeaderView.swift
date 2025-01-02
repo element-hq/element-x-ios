@@ -31,6 +31,7 @@ struct AvatarHeaderView<Footer: View>: View {
     @ViewBuilder private var footer: () -> Footer
     
     init(room: RoomDetails,
+         roomSubtitle: String?,
          avatarSize: Avatars.Size,
          mediaProvider: MediaProviderProtocol? = nil,
          onAvatarTap: ((URL) -> Void)? = nil,
@@ -38,7 +39,7 @@ struct AvatarHeaderView<Footer: View>: View {
         avatarInfo = .room(room.avatar)
         title = room.name ?? room.id
         // subtitle = room.canonicalAlias
-        subtitle = nil
+        subtitle = roomSubtitle
         
         self.avatarSize = avatarSize
         self.mediaProvider = mediaProvider
@@ -194,7 +195,7 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
                                                        avatarURL: .mockMXCAvatar),
                                          canonicalAlias: "#test:matrix.org",
                                          isEncrypted: true,
-                                         isPublic: true),
+                                         isPublic: true), roomSubtitle: nil,
                              avatarSize: .room(on: .details),
                              mediaProvider: MediaProviderMock(configuration: .init())) {
                 HStack(spacing: 32) {

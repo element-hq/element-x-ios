@@ -71,6 +71,7 @@ struct RoomDetailsScreen: View {
     
     private var normalRoomHeaderSection: some View {
         AvatarHeaderView(room: context.viewState.details,
+                         roomSubtitle: context.viewState.roomSubtitle,
                          avatarSize: .room(on: .details),
                          mediaProvider: context.mediaProvider) { url in
             context.send(viewAction: .displayAvatar(url))

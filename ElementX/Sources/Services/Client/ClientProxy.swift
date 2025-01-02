@@ -150,6 +150,11 @@ class ClientProxy: ClientProxyProtocol {
         verificationStateSubject.asCurrentValuePublisher()
     }
     
+    private let directMemberZeroProfileSubject = CurrentValueSubject<ZMatrixUser?, Never>(nil)
+    var directMemberZeroProfilePublisher: CurrentValuePublisher<ZMatrixUser?, Never> {
+        directMemberZeroProfileSubject.asCurrentValuePublisher()
+    }
+    
     var roomsToAwait: Set<String> = []
     
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
@@ -708,6 +713,15 @@ class ClientProxy: ClientProxyProtocol {
         } catch {
             MXLog.error("Failed retrieving profile for userID: \(userID) with error: \(error)")
             return .failure(.sdkError(error))
+        }
+    }
+    
+    func zeroProfile(userId: String) async {
+        do {
+            let zeroProfile = try await zeroMatrixUsersService.fetchZeroUser(userId: userId)
+            directMemberZeroProfileSubject.send(zeroProfile)
+        } catch {
+            MXLog.error("Failed retrieving zero profile for userID: \(userID) with error: \(error)")
         }
     }
     

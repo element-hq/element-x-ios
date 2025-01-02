@@ -79,6 +79,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         setupSubscriptions(ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher)
+        
+        fetchZeroUserProfile()
     }
 
     override func process(viewAction: RoomScreenViewAction) {
@@ -352,6 +354,31 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private func hideLoadingIndicator() {
         userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+    }
+    
+    // MARK: Zero
+    
+    private func fetchZeroUserProfile() {
+        guard roomProxy.isDirectOneToOneRoom else { return }
+        
+        Task {
+            let roomMembers = await roomProxy.members()
+            guard let otherMemberId = (roomMembers?.first(where: { $0.userID != roomProxy.ownUserID })?.userID) else {
+                return
+            }
+            
+            clientProxy.directMemberZeroProfilePublisher
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] directMember in
+                    guard let self else { return }
+                    guard (directMember?.matrixId == otherMemberId) else { return }
+                    
+                    state.roomSubtitle = directMember?.primaryZIdOrWalletAddress
+                }
+                .store(in: &cancellables)
+            
+            await clientProxy.zeroProfile(userId: otherMemberId)
+        }
     }
 }
 
