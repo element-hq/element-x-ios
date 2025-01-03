@@ -1293,6 +1293,9 @@
 		18ECA49C2CB53E7500938F8B /* RoomScreenFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4137900E28201C314C835C11 /* RoomScreenFooterView.swift */; };
 		18F3D1F42CD41A77002D2677 /* VisualListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD529C89924EE32CE307F36F /* VisualListItem.swift */; };
 		18F3D1F52CD41AC8002D2677 /* SessionVerificationRequestDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A1265FAF2C0AF1C30605BE7 /* SessionVerificationRequestDetailsView.swift */; };
+		18FD9F842D27EB80004225EA /* ZLinkMatrixUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FD9F832D27EB80004225EA /* ZLinkMatrixUser.swift */; };
+		18FD9F852D27EB80004225EA /* ZLinkMatrixUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FD9F832D27EB80004225EA /* ZLinkMatrixUser.swift */; };
+		18FD9F862D27EB80004225EA /* ZLinkMatrixUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FD9F832D27EB80004225EA /* ZLinkMatrixUser.swift */; };
 		18FDE4ED6D83B0771452B43D /* RoomSelectionScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F104596B0620CEFE5DFD31B1 /* RoomSelectionScreenCoordinator.swift */; };
 		18FFCECA2CEC86F9002F2647 /* ZMatrixUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB7A2C8F8542001DA2A9 /* ZMatrixUser.swift */; };
 		18FFCECB2CEC8721002F2647 /* ZeroRewards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9A92CEB5A9000107940 /* ZeroRewards.swift */; };
@@ -2750,6 +2753,7 @@
 		18E99FF52C9450F00082DDA4 /* ZAttachmentUploadInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZAttachmentUploadInfo.swift; sourceTree = "<group>"; };
 		18E9A7922C9829970082DDA4 /* Zero.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zero.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18F2958E6D247AE2516BEEE8 /* ClientProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientProxy.swift; sourceTree = "<group>"; };
+		18FD9F832D27EB80004225EA /* ZLinkMatrixUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZLinkMatrixUser.swift; path = Zero/Sources/Network/Models/ZLinkMatrixUser.swift; sourceTree = SOURCE_ROOT; };
 		18FE0CDF1FFA92EA7EE17B0B /* RoomTimelineControllerFactoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineControllerFactoryProtocol.swift; sourceTree = "<group>"; };
 		190EC7285D3CFEF0D3011BCF /* GeoURI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoURI.swift; sourceTree = "<group>"; };
 		196004E7695FBA292A7944AF /* ScreenTrackerViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTrackerViewModifier.swift; sourceTree = "<group>"; };
@@ -4334,6 +4338,7 @@
 				1868A8BE2CA2D91000DC382D /* ZSentMessage.swift */,
 				18659CBF2CFB287E000EF0A6 /* ZCreateAccount.swift */,
 				18659CC22CFB2D2A000EF0A6 /* ZFinaliseCreateAccount.swift */,
+				18FD9F832D27EB80004225EA /* ZLinkMatrixUser.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -8524,6 +8529,7 @@
 				B89990DD875B0B603D4D4332 /* NotificationItemProxyProtocol.swift in Sources */,
 				B14BC354E56616B6B7D9A3D7 /* NotificationServiceExtension.swift in Sources */,
 				18D5D9AE2CEB6E6100107940 /* String+Extensions.swift in Sources */,
+				18FD9F862D27EB80004225EA /* ZLinkMatrixUser.swift in Sources */,
 				62418EA4E3EB597AD184AEB6 /* PillConstants.swift in Sources */,
 				55CDD3968D95D1A820B5491E /* PlaceholderAvatarImage.swift in Sources */,
 				F12F6BED7B6D7EE4BEE55039 /* PlainMentionBuilder.swift in Sources */,
@@ -9355,6 +9361,7 @@
 				1868A8C02CA2D91000DC382D /* ZSentMessage.swift in Sources */,
 				18E9A64D2C9829970082DDA4 /* RoomMembersListScreenMemberCell.swift in Sources */,
 				18E9A64E2C9829970082DDA4 /* RoomMembersListScreenModels.swift in Sources */,
+				18FD9F852D27EB80004225EA /* ZLinkMatrixUser.swift in Sources */,
 				18E9A64F2C9829970082DDA4 /* RoomMembersListScreenViewModel.swift in Sources */,
 				18E9A6502C9829970082DDA4 /* RoomMembersListScreenViewModelProtocol.swift in Sources */,
 				18E9A6512C9829970082DDA4 /* RoomMessageEventStringBuilder.swift in Sources */,
@@ -9967,6 +9974,7 @@
 				189E88522D0CA77A002FA063 /* ZeroAccountApi.swift in Sources */,
 				709A9B52FC26B4CB86B8B020 /* EncryptedRoomTimelineView.swift in Sources */,
 				03CDCA6243F89B194E3FAD17 /* EncryptionAuthenticity.swift in Sources */,
+				18FD9F842D27EB80004225EA /* ZLinkMatrixUser.swift in Sources */,
 				FBD402E3170EB1ED0D1AA672 /* EncryptionKeyProvider.swift in Sources */,
 				46A6DB0F78FB399BD59E2D41 /* EncryptionKeyProviderProtocol.swift in Sources */,
 				64F8590F4BEE4DA231F97D83 /* EncryptionResetFlowCoordinator.swift in Sources */,

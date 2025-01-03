@@ -133,6 +133,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
             switch zeroMatrixSSOResult {
             case .success(let zeroSSOToken):
                 try await client.customLoginWithJwt(jwt: zeroSSOToken.token, initialDeviceName: initialDeviceName, deviceId: deviceID)
+                
+                try await checkAndLinkMatrixUser(client.userId())
             
                 let refreshToken = try? client.session().refreshToken
                 if refreshToken != nil {
@@ -184,6 +186,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
             switch zeroMatrixSSOResult {
             case .success(let zeroSSOToken):
                 try await client.customLoginWithJwt(jwt: zeroSSOToken.token, initialDeviceName: initialDeviceName, deviceId: deviceID)
+                
+                try await checkAndLinkMatrixUser(client.userId())
                 
                 let refreshToken = try? client.session().refreshToken
                 if refreshToken != nil {
@@ -259,6 +263,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
             case .success:
                 await ensureHomeServerIsConfigured()
                 let session = await loginNewlyCreatedUser()
+                
+                try await checkAndLinkMatrixUser(client?.userId(), fromCreateAccountFlow: true)
+                
                 switch session {
                 case .success(let userSession):
                     return .success(userSession)
@@ -281,6 +288,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
             case .success(_):
                 await ensureHomeServerIsConfigured()
                 let session = await loginNewlyCreatedUser()
+                
+                try await checkAndLinkMatrixUser(client?.userId(), fromCreateAccountFlow: true)
+                
                 switch session {
                 case .success(let userSession):
                     return .success(userSession)
@@ -352,6 +362,20 @@ class AuthenticationService: AuthenticationServiceProtocol {
         } catch {
             MXLog.error(error)
             return .failure(.failedLoggingIn)
+        }
+    }
+    
+    private func checkAndLinkMatrixUser(_ userId: String?, fromCreateAccountFlow: Bool = false) async throws {
+        guard let userId else { return }
+        
+        let currentUserResult = try await zeroUsersApi.fetchCurrentUser()
+        switch currentUserResult {
+        case .success(let currentUser):
+            if fromCreateAccountFlow || currentUser.matrixId == nil {
+                _ = try await zeroAuthApi.linkMatrixUserToZero(matrixUserId: userId)
+            }
+        case .failure(let failure):
+            MXLog.failure("Failed to fetch current zero user. Error: \(failure)")
         }
     }
 }
