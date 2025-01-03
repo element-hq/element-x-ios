@@ -59,7 +59,7 @@ struct RoomScreen: View {
                         .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
                 }
             }
-            .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
+            // .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(isNavigationBarHidden)
             .toolbar { toolbar }
@@ -202,7 +202,7 @@ struct RoomScreen: View {
     private var toolbar: some ToolbarContent {
         // .principal + .primaryAction works better than .navigation leading + trailing
         // as the latter disables interaction in the action button for rooms with long names
-        ToolbarItem(placement: .principal) {
+        ToolbarItem(placement: .topBarLeading) {
             RoomHeaderView(roomName: roomContext.viewState.roomTitle,
                            roomSubtitle: roomContext.viewState.roomSubtitle, roomAvatar: roomContext.viewState.roomAvatar,
                            mediaProvider: roomContext.mediaProvider)
