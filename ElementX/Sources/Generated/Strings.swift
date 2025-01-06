@@ -664,6 +664,10 @@ internal enum L10n {
   internal static var errorMessageNotFound: String { return L10n.tr("Localizable", "error_message_not_found") }
   /// No compatible app was found to handle this action.
   internal static var errorNoCompatibleAppFound: String { return L10n.tr("Localizable", "error_no_compatible_app_found") }
+  /// This room address already exists. Please try editing the room address field or change the room name
+  internal static var errorRoomAddressAlreadyExists: String { return L10n.tr("Localizable", "error_room_address_already_exists") }
+  /// Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _
+  internal static var errorRoomAddressInvalidSymbols: String { return L10n.tr("Localizable", "error_room_address_invalid_symbols") }
   /// Some messages have not been sent
   internal static var errorSomeMessagesHaveNotBeenSent: String { return L10n.tr("Localizable", "error_some_messages_have_not_been_sent") }
   /// Sorry, an error occurred
@@ -1154,10 +1158,6 @@ internal enum L10n {
   internal static var screenCreateRoomRoomAccessSectionKnockingOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_knocking_option_description") }
   /// Ask to join
   internal static var screenCreateRoomRoomAccessSectionKnockingOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_knocking_option_title") }
-  /// Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _
-  internal static var screenCreateRoomRoomAddressInvalidSymbolsErrorDescription: String { return L10n.tr("Localizable", "screen_create_room_room_address_invalid_symbols_error_description") }
-  /// This room address already exists. Please try editing the room address field or change the room name
-  internal static var screenCreateRoomRoomAddressNotAvailableErrorDescription: String { return L10n.tr("Localizable", "screen_create_room_room_address_not_available_error_description") }
   /// In order for this room to be visible in the public room directory, you will need a room address.
   internal static var screenCreateRoomRoomAddressSectionFooter: String { return L10n.tr("Localizable", "screen_create_room_room_address_section_footer") }
   /// Room address
@@ -1226,6 +1226,10 @@ internal enum L10n {
   internal static var screenEditProfileTitle: String { return L10n.tr("Localizable", "screen_edit_profile_title") }
   /// Updating profile…
   internal static var screenEditProfileUpdatingDetails: String { return L10n.tr("Localizable", "screen_edit_profile_updating_details") }
+  /// You’ll need a room address in order to make it visible in the directory.
+  internal static var screenEditRoomAddressRoomAddressSectionFooter: String { return L10n.tr("Localizable", "screen_edit_room_address_room_address_section_footer") }
+  /// Room address
+  internal static var screenEditRoomAddressTitle: String { return L10n.tr("Localizable", "screen_edit_room_address_title") }
   /// Continue reset
   internal static var screenEncryptionResetActionContinueReset: String { return L10n.tr("Localizable", "screen_encryption_reset_action_continue_reset") }
   /// Your account details, contacts, preferences, and chat list will be kept
@@ -2166,6 +2170,8 @@ internal enum L10n {
   internal static var screenRoomlistMarkAsUnread: String { return L10n.tr("Localizable", "screen_roomlist_mark_as_unread") }
   /// Browse all rooms
   internal static var screenRoomlistRoomDirectoryButtonTitle: String { return L10n.tr("Localizable", "screen_roomlist_room_directory_button_title") }
+  /// Add room address
+  internal static var screenSecurityAndPrivacyAddRoomAddressAction: String { return L10n.tr("Localizable", "screen_security_and_privacy_add_room_address_action") }
   /// Anyone can ask to join the room but an administrator or moderator will have to accept the request.
   internal static var screenSecurityAndPrivacyAskToJoinOptionDescription: String { return L10n.tr("Localizable", "screen_security_and_privacy_ask_to_join_option_description") }
   /// Ask to join
@@ -2181,7 +2187,7 @@ internal enum L10n {
   /// Once enabled, encryption cannot be disabled.
   internal static var screenSecurityAndPrivacyEncryptionSectionFooter: String { return L10n.tr("Localizable", "screen_security_and_privacy_encryption_section_footer") }
   /// Encryption
-  internal static var screenSecurityAndPrivacyEncryptionSectionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_encryption_section_title") }
+  internal static var screenSecurityAndPrivacyEncryptionSectionHeader: String { return L10n.tr("Localizable", "screen_security_and_privacy_encryption_section_header") }
   /// Enable end-to-end encryption
   internal static var screenSecurityAndPrivacyEncryptionToggleTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_encryption_toggle_title") }
   /// Anyone can find and join
@@ -2193,7 +2199,41 @@ internal enum L10n {
   /// Invite only
   internal static var screenSecurityAndPrivacyRoomAccessInviteOnlyOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_invite_only_option_title") }
   /// Room access
-  internal static var screenSecurityAndPrivacyRoomAccessSectionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_section_title") }
+  internal static var screenSecurityAndPrivacyRoomAccessSectionHeader: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_section_header") }
+  /// Spaces are not currently supported
+  internal static var screenSecurityAndPrivacyRoomAccessSpaceMembersOptionDescription: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_space_members_option_description") }
+  /// Space members
+  internal static var screenSecurityAndPrivacyRoomAccessSpaceMembersOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_space_members_option_title") }
+  /// You’ll need a room address in order to make it visible in the room directory.
+  internal static var screenSecurityAndPrivacyRoomAddressSectionFooter: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_address_section_footer") }
+  /// Room address
+  internal static var screenSecurityAndPrivacyRoomAddressSectionHeader: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_address_section_header") }
+  /// Allow for this room to be found by searching %1$@ public room directory
+  internal static func screenSecurityAndPrivacyRoomDirectoryVisibilitySectionFooter(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_security_and_privacy_room_directory_visibility_section_footer", String(describing: p1))
+  }
+  /// Visible in public room directory
+  internal static var screenSecurityAndPrivacyRoomDirectoryVisibilityToggleTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_directory_visibility_toggle_title") }
+  /// Anyone
+  internal static var screenSecurityAndPrivacyRoomHistoryAnyoneOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_history_anyone_option_title") }
+  /// Who can read history
+  internal static var screenSecurityAndPrivacyRoomHistorySectionHeader: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_history_section_header") }
+  /// Members only since they were invited
+  internal static var screenSecurityAndPrivacyRoomHistorySinceInviteOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_history_since_invite_option_title") }
+  /// Members only since selecting this option
+  internal static var screenSecurityAndPrivacyRoomHistorySinceSelectingOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_history_since_selecting_option_title") }
+  /// Room addresses are ways to find and access rooms. This also ensures you can easily share your room with others.
+  /// You can choose to publish your room in your homeserver public room directory.
+  internal static var screenSecurityAndPrivacyRoomPublishingSectionFooter: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_publishing_section_footer") }
+  /// Room publishing
+  internal static var screenSecurityAndPrivacyRoomPublishingSectionHeader: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_publishing_section_header") }
+  /// Room addresses are ways to find and access rooms. This also ensures you can easily share your room with others.
+  /// The address is also required to make the room visible in %1$@ public room directory.
+  internal static func screenSecurityAndPrivacyRoomVisibilitySectionFooter(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_security_and_privacy_room_visibility_section_footer", String(describing: p1))
+  }
+  /// Room visibility
+  internal static var screenSecurityAndPrivacyRoomVisibilitySectionHeader: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_visibility_section_header") }
   /// Security & privacy
   internal static var screenSecurityAndPrivacyTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_title") }
   /// Change account provider

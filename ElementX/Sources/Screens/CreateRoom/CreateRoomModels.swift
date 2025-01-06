@@ -39,11 +39,12 @@ struct CreateRoomViewState: BindableState {
     var aliasErrors: Set<CreateRoomAliasErrorState> = []
     var aliasErrorDescription: String? {
         if aliasErrors.contains(.alreadyExists) {
-            return L10n.screenCreateRoomRoomAddressNotAvailableErrorDescription
+            L10n.errorRoomAddressAlreadyExists
         } else if aliasErrors.contains(.invalidSymbols) {
-            return L10n.screenCreateRoomRoomAddressInvalidSymbolsErrorDescription
+            L10n.errorRoomAddressInvalidSymbols
+        } else {
+            nil
         }
-        return nil
     }
 }
 

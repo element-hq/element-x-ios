@@ -35,7 +35,7 @@ struct SecurityAndPrivacyScreen: View {
                                   description: L10n.screenSecurityAndPrivacyRoomAccessAnyoneOptionDescription),
                     kind: .selection(isSelected: context.desiredSettings.accessType == .anyone) { context.desiredSettings.accessType = .anyone })
         } header: {
-            Text(L10n.screenSecurityAndPrivacyRoomAccessSectionTitle)
+            Text(L10n.screenSecurityAndPrivacyRoomAccessSectionHeader)
                 .compoundListSectionHeader()
         }
     }
@@ -54,7 +54,7 @@ struct SecurityAndPrivacyScreen: View {
                 // We don't allow editing the encryption state if the current setting on the server is `enabled`
                 .disabled(context.viewState.currentSettings.isEncryptionEnabled)
         } header: {
-            Text(L10n.screenSecurityAndPrivacyEncryptionSectionTitle)
+            Text(L10n.screenSecurityAndPrivacyEncryptionSectionHeader)
                 .compoundListSectionHeader()
         } footer: {
             Text(L10n.screenSecurityAndPrivacyEncryptionSectionFooter)
