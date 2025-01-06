@@ -5282,6 +5282,41 @@ class ClientProxyMock: ClientProxyProtocol {
         }
         await zeroProfileUserIdClosure?(userId)
     }
+    //MARK: - checkAndLinkZeroUser
+
+    var checkAndLinkZeroUserUnderlyingCallsCount = 0
+    var checkAndLinkZeroUserCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return checkAndLinkZeroUserUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = checkAndLinkZeroUserUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                checkAndLinkZeroUserUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    checkAndLinkZeroUserUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var checkAndLinkZeroUserCalled: Bool {
+        return checkAndLinkZeroUserCallsCount > 0
+    }
+    var checkAndLinkZeroUserClosure: (() -> Void)?
+
+    func checkAndLinkZeroUser() {
+        checkAndLinkZeroUserCallsCount += 1
+        checkAndLinkZeroUserClosure?()
+    }
     //MARK: - loadMediaContentForSource
 
     var loadMediaContentForSourceThrowableError: Error?

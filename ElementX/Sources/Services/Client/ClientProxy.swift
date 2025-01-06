@@ -957,6 +957,19 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func checkAndLinkZeroUser() {
+        Task {
+            do {
+                guard let currentUser = try await zeroMatrixUsersService.fetchCurrentUser() else { return }
+                if currentUser.matrixId == nil {
+                    _ = try await zeroCreateAccountApi.linkMatrixUserToZero(matrixUserId: userID)
+                }
+            } catch {
+                MXLog.error("Failed linking matrixId to zero user. Error: \(error)")
+            }
+        }
+    }
+    
     // MARK: - Private
     
     private func updateVerificationState(_ verificationState: VerificationState) async {

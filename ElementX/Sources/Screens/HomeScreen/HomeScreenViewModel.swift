@@ -136,6 +136,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         Task {
             await checkSlidingSyncMigration()
         }
+        
+        checkAndLinkZeroUser()
     }
     
     // MARK: - Public
@@ -492,6 +494,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             try await Task.sleep(for: .seconds(5))
             state.showNewUserRewardsIntimation = false
         }
+    }
+    
+    private func checkAndLinkZeroUser() {
+        userSession.clientProxy.checkAndLinkZeroUser()
     }
 }
 

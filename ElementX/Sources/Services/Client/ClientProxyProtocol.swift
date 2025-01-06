@@ -244,4 +244,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var directMemberZeroProfilePublisher: CurrentValuePublisher<ZMatrixUser?, Never> { get }
         
     func zeroProfile(userId: String) async
+    
+    func checkAndLinkZeroUser()
 }
