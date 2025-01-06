@@ -6,3 +6,7 @@
   Copyright © 2024 Tchap. All rights reserved.
 */
 
+common_legal = "Legals";
+
+legal_terms_of_use = "Terms of use";
+legal_privacy_policy = "Privacy policy";

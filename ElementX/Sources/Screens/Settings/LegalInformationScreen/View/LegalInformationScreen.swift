@@ -17,14 +17,19 @@ struct LegalInformationScreen: View {
             Section {
                 ListRow(label: .plain(title: L10n.commonCopyright),
                         kind: .button { openURL(context.viewState.copyrightURL) })
-                ListRow(label: .plain(title: L10n.commonAcceptableUsePolicy),
+                // Tchap: Customize "About" menu into "Legal" menu
+//                ListRow(label: .plain(title: L10n.commonAcceptableUsePolicy),
+                ListRow(label: .plain(title: TchapL10n.legalTermsOfUse),
                         kind: .button { openURL(context.viewState.acceptableUseURL) })
-                ListRow(label: .plain(title: L10n.commonPrivacyPolicy),
+                // Tchap: Customize "About" menu into "Legal" menu
+//                ListRow(label: .plain(title: L10n.commonPrivacyPolicy),
+                ListRow(label: .plain(title: TchapL10n.legalPrivacyPolicy),
                         kind: .button { openURL(context.viewState.privacyURL) })
             }
         }
         .compoundList()
-        .navigationTitle(L10n.commonAbout)
+        // Tchap: Customize "About" menu into "Legal" menu
+        .navigationTitle(TchapL10n.commonLegal)
         .navigationBarTitleDisplayMode(.inline)
     }
 }

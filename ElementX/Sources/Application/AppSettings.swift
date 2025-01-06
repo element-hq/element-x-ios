@@ -125,10 +125,16 @@ final class AppSettings {
     let logoURL: URL = "https://element.io/mobile-icon.png"
     /// A URL that contains that app's copyright notice.
     let copyrightURL: URL = "https://element.io/copyright"
+    // Tchap: replace Terms of Use and Privacy policy URLs.
+//    /// A URL that contains the app's Terms of use.
+//    let acceptableUseURL: URL = "https://element.io/acceptable-use-policy-terms"
+//    /// A URL that contains the app's Privacy Policy.
+//        let privacyURL: URL = "https://element.io/privacy"
+    // Tchap: Tchap Terms of Use and Privacy policy
     /// A URL that contains the app's Terms of use.
-    let acceptableUseURL: URL = "https://element.io/acceptable-use-policy-terms"
+    let acceptableUseURL: URL = "https://tchap.numerique.gouv.fr/cgu" // Tchap
     /// A URL that contains the app's Privacy Policy.
-    let privacyURL: URL = "https://element.io/privacy"
+    let privacyURL: URL = "https://tchap.numerique.gouv.fr/politique-de-confidentialite/" // Tchap
     /// An email address that should be used for support requests.
     let supportEmailAddress = "support@element.io"
     /// A URL where users can go read more about encryption in general.

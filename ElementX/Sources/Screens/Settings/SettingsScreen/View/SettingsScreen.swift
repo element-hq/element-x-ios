@@ -136,7 +136,9 @@ struct SettingsScreen: View {
     
     private var generalSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.commonAbout,
+            // Tchap: Customize "About" menu into "Legal" menu
+//            ListRow(label: .default(title: L10n.commonAbout,
+            ListRow(label: .default(title: TchapL10n.commonLegal,
                                     icon: \.info),
                     kind: .navigationLink {
                         context.send(viewAction: .about)
