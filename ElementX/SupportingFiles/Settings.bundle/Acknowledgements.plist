@@ -12,22 +12,6 @@
 		</dict>
 		<dict>
 			<key>File</key>
-			<string>Packages/compound-design-tokens</string>
-			<key>Title</key>
-			<string>compound-design-tokens</string>
-			<key>Type</key>
-			<string>PSChildPaneSpecifier</string>
-		</dict>
-		<dict>
-			<key>File</key>
-			<string>Packages/compound-ios</string>
-			<key>Title</key>
-			<string>compound-ios</string>
-			<key>Type</key>
-			<string>PSChildPaneSpecifier</string>
-		</dict>
-		<dict>
-			<key>File</key>
 			<string>Packages/DeviceKit</string>
 			<key>Title</key>
 			<string>DeviceKit</string>
@@ -127,14 +111,6 @@
 			<string>Packages/matrix-analytics-events</string>
 			<key>Title</key>
 			<string>matrix-analytics-events</string>
-			<key>Type</key>
-			<string>PSChildPaneSpecifier</string>
-		</dict>
-		<dict>
-			<key>File</key>
-			<string>Packages/matrix-rich-text-editor-swift</string>
-			<key>Title</key>
-			<string>matrix-rich-text-editor-swift</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
