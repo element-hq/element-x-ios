@@ -9,7 +9,7 @@ then
   exit 1
 fi
 
-swift-package-list ElementX.xcodeproj --requires-license --output-type settings-bundle --output-path ElementX/SupportingFiles
+swift-package-list ElementX.xcodeproj --requires-license --ignore-package compound-ios --ignore-package compound-design-tokens --ignore-package matrix-rich-text-editor-swift --output-type settings-bundle --output-path ElementX/SupportingFiles
 if ! git diff --quiet -- ./ElementX/SupportingFiles/Settings.bundle || [ -n "$(git ls-files --others --exclude-standard -- ./ElementX/SupportingFiles/Settings.bundle)" ]; then
   echo "pre-commit: Commit aborted due to unstaged changes to the package Acknowledgements."
   exit 1
