@@ -2232,6 +2232,11 @@ class ClientProxyMock: ClientProxyProtocol {
         set(value) { underlyingMessengerInvitePublisher = value }
     }
     var underlyingMessengerInvitePublisher: CurrentValuePublisher<ZeroMessengerInvite, Never>!
+    var directMemberZeroProfilePublisher: CurrentValuePublisher<ZMatrixUser?, Never> {
+        get { return underlyingDirectMemberZeroProfilePublisher }
+        set(value) { underlyingDirectMemberZeroProfilePublisher = value }
+    }
+    var underlyingDirectMemberZeroProfilePublisher: CurrentValuePublisher<ZMatrixUser?, Never>!
 
     //MARK: - isOnlyDeviceLeft
 
@@ -5235,6 +5240,82 @@ class ClientProxyMock: ClientProxyProtocol {
         } else {
             return deleteUserAccountReturnValue
         }
+    }
+    //MARK: - zeroProfile
+
+    var zeroProfileUserIdUnderlyingCallsCount = 0
+    var zeroProfileUserIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return zeroProfileUserIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = zeroProfileUserIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                zeroProfileUserIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    zeroProfileUserIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var zeroProfileUserIdCalled: Bool {
+        return zeroProfileUserIdCallsCount > 0
+    }
+    var zeroProfileUserIdReceivedUserId: String?
+    var zeroProfileUserIdReceivedInvocations: [String] = []
+    var zeroProfileUserIdClosure: ((String) async -> Void)?
+
+    func zeroProfile(userId: String) async {
+        zeroProfileUserIdCallsCount += 1
+        zeroProfileUserIdReceivedUserId = userId
+        DispatchQueue.main.async {
+            self.zeroProfileUserIdReceivedInvocations.append(userId)
+        }
+        await zeroProfileUserIdClosure?(userId)
+    }
+    //MARK: - checkAndLinkZeroUser
+
+    var checkAndLinkZeroUserUnderlyingCallsCount = 0
+    var checkAndLinkZeroUserCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return checkAndLinkZeroUserUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = checkAndLinkZeroUserUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                checkAndLinkZeroUserUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    checkAndLinkZeroUserUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var checkAndLinkZeroUserCalled: Bool {
+        return checkAndLinkZeroUserCallsCount > 0
+    }
+    var checkAndLinkZeroUserClosure: (() -> Void)?
+
+    func checkAndLinkZeroUser() {
+        checkAndLinkZeroUserCallsCount += 1
+        checkAndLinkZeroUserClosure?()
     }
     //MARK: - loadMediaContentForSource
 

@@ -87,6 +87,15 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
             .store(in: &cancellables)
         
+        clientProxy.directMemberZeroProfilePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] directMember in
+                guard let self else { return }
+                
+                state.roomSubtitle = directMember?.primaryZIdOrWalletAddress
+            }
+            .store(in: &cancellables)
+        
         Task {
             let userID = roomProxy.ownUserID
             if case let .success(permission) = await roomProxy.canUserJoinCall(userID: userID) {

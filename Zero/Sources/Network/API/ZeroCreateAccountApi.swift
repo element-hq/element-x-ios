@@ -9,6 +9,8 @@ protocol ZeroCreateAccountApiProtocol {
     func finaliseCreateAccount(request: ZFinaliseCreateAccount) async throws -> Result<ZInviter, Error>
     
     func createAccountWithWeb3(web3Token: String, invite: String) async throws -> Result<ZSessionDataResponse, Error>
+    
+    func linkMatrixUserToZero(matrixUserId: String) async throws -> Result<Void, Error>
 }
 
 class ZeroCreateAccountApi: ZeroCreateAccountApiProtocol {
@@ -81,6 +83,15 @@ class ZeroCreateAccountApi: ZeroCreateAccountApiProtocol {
         }
     }
     
+    func linkMatrixUserToZero(matrixUserId: String) async throws -> Result<Void, any Error> {
+        let request = ZLinkMatrixUser(matrixUserId: matrixUserId)
+        let result: Result<Void, Error> = try await APIManager.shared.authorisedRequest(CreateAccountEndPoints.linkMatrixUserEndpoint,
+                                                                                        method: .post,
+                                                                                        appSettings: appSettings,
+                                                                                        parameters: request.toDictionary())
+        return result
+    }
+    
     // MARK: - Constants
     
     private enum CreateAccountEndPoints {
@@ -91,6 +102,8 @@ class ZeroCreateAccountApi: ZeroCreateAccountApiProtocol {
         
         static let createAccountEndPoint = "\(hostURL)api/v2/accounts/createAndAuthorize"
         static let finaliseSignupEndPoint = "\(hostURL)api/v2/accounts/finalize"
+        
+        static let linkMatrixUserEndpoint = "\(hostURL)matrix/link-zero-user"
     }
     
     private enum CreateAccountConstants {

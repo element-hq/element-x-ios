@@ -238,4 +238,12 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func completeUserAccountProfile(avatar: MediaInfo?, displayName: String, inviteCode: String) async -> Result<Void, ClientProxyError>
     
     func deleteUserAccount() async -> Result<Void, ClientProxyError>
+    
+    // MARK: - Zero User Profile
+    
+    var directMemberZeroProfilePublisher: CurrentValuePublisher<ZMatrixUser?, Never> { get }
+        
+    func zeroProfile(userId: String) async
+    
+    func checkAndLinkZeroUser()
 }

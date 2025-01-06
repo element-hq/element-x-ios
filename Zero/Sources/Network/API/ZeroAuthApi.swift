@@ -9,6 +9,8 @@ protocol ZeroAuthApiProtocol {
     func fetchSSOToken() async throws -> Result<ZSSOToken, Error>
     
     func loginWithWeb3(web3Token: String) async throws -> Result<ZSSOToken, Error>
+    
+    func linkMatrixUserToZero(matrixUserId: String) async throws -> Result<Void, Error>
 }
 
 class ZeroAuthApi: ZeroAuthApiProtocol {
@@ -105,6 +107,15 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
         }
     }
     
+    func linkMatrixUserToZero(matrixUserId: String) async throws -> Result<Void, any Error> {
+        let request = ZLinkMatrixUser(matrixUserId: matrixUserId)
+        let result: Result<Void, Error> = try await APIManager.shared.authorisedRequest(AuthEndPoints.linkMatrixUserEndpoint,
+                                                                                        method: .post,
+                                                                                        appSettings: appSettings,
+                                                                                        parameters: request.toDictionary())
+        return result
+    }
+    
     // MARK: - Private
     
     private func fetchMatrixSession(ssoToken: String) async throws -> (Result<ZMatrixSession, Error>) {
@@ -137,6 +148,8 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
         static let matrixSessionEndPoint = "_matrix/client/r0/login"
         
         static let nonceOrAuthoriseEndpoint = "\(hostURL)authentication/nonceOrAuthorize"
+        
+        static let linkMatrixUserEndpoint = "\(hostURL)matrix/link-zero-user"
     }
     
     private enum AuthConstants {

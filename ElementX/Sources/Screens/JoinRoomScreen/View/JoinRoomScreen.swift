@@ -182,6 +182,7 @@ struct JoinRoomScreen: View {
         if context.viewState.mode == .knocked {
             ToolbarItem(placement: .principal) {
                 RoomHeaderView(roomName: context.viewState.title,
+                               roomSubtitle: nil,
                                roomAvatar: context.viewState.avatar,
                                mediaProvider: context.mediaProvider)
             }

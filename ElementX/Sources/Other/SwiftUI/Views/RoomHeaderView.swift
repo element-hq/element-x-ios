@@ -11,6 +11,7 @@ import SwiftUI
 
 struct RoomHeaderView: View {
     let roomName: String
+    let roomSubtitle: String?
     let roomAvatar: RoomAvatar
     
     let mediaProvider: MediaProviderProtocol?
@@ -19,13 +20,22 @@ struct RoomHeaderView: View {
         HStack(spacing: 12) {
             avatarImage
                 .accessibilityHidden(true)
-            Text(roomName)
-                .lineLimit(1)
-                .font(.zero.bodyLGSemibold)
-                .accessibilityIdentifier(A11yIdentifiers.roomScreen.name)
+            VStack(alignment: .leading) {
+                Text(roomName)
+                    .lineLimit(1)
+                    .font(.zero.bodyMDSemibold)
+                    .accessibilityIdentifier(A11yIdentifiers.roomScreen.name)
+                if let subtitle = roomSubtitle {
+                    Text(subtitle)
+                        .lineLimit(1)
+                        .padding(.vertical, 1)
+                        .font(.zero.bodySMSemibold)
+                        .foregroundStyle(.compound.textSecondary)
+                }
+            }
         }
         // Take up as much space as possible, with a leading alignment for use in the principal toolbar position.
-        .frame(idealWidth: .greatestFiniteMagnitude, maxWidth: .infinity, alignment: .leading)
+        // .frame(idealWidth: .greatestFiniteMagnitude, maxWidth: .infinity, alignment: .leading)
     }
     
     @ViewBuilder
@@ -40,6 +50,7 @@ struct RoomHeaderView: View {
 struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         RoomHeaderView(roomName: "Some Room name",
+                       roomSubtitle: nil,
                        roomAvatar: .room(id: "1",
                                          name: "Some Room Name",
                                          avatarURL: .mockMXCAvatar),
@@ -48,6 +59,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
             .padding()
         
         RoomHeaderView(roomName: "Some Room name",
+                       roomSubtitle: nil,
                        roomAvatar: .room(id: "1",
                                          name: "Some Room Name",
                                          avatarURL: nil),

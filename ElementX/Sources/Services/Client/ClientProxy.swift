@@ -150,6 +150,11 @@ class ClientProxy: ClientProxyProtocol {
         verificationStateSubject.asCurrentValuePublisher()
     }
     
+    private let directMemberZeroProfileSubject = CurrentValueSubject<ZMatrixUser?, Never>(nil)
+    var directMemberZeroProfilePublisher: CurrentValuePublisher<ZMatrixUser?, Never> {
+        directMemberZeroProfileSubject.asCurrentValuePublisher()
+    }
+    
     var roomsToAwait: Set<String> = []
     
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
@@ -711,6 +716,15 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func zeroProfile(userId: String) async {
+        do {
+            let zeroProfile = try await zeroMatrixUsersService.fetchZeroUser(userId: userId)
+            directMemberZeroProfileSubject.send(zeroProfile)
+        } catch {
+            MXLog.error("Failed retrieving zero profile for userID: \(userID) with error: \(error)")
+        }
+    }
+    
     func roomDirectorySearchProxy() -> RoomDirectorySearchProxyProtocol {
         RoomDirectorySearchProxy(roomDirectorySearch: client.roomDirectorySearch(), appSettings: appSettings)
     }
@@ -940,6 +954,19 @@ class ClientProxy: ClientProxyProtocol {
         } catch {
             MXLog.error(error)
             return .failure(.zeroError(error))
+        }
+    }
+    
+    func checkAndLinkZeroUser() {
+        Task {
+            do {
+                guard let currentUser = try await zeroMatrixUsersService.fetchCurrentUser() else { return }
+                if currentUser.matrixId == nil {
+                    _ = try await zeroCreateAccountApi.linkMatrixUserToZero(matrixUserId: userID)
+                }
+            } catch {
+                MXLog.error("Failed linking matrixId to zero user. Error: \(error)")
+            }
         }
     }
     

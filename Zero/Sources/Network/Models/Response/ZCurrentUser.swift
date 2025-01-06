@@ -5,6 +5,7 @@ public struct ZCurrentUser: Codable, Identifiable {
     public let id: Tagged<Self, String>
     public let profileId: String
     public let matrixAccessToken: String?
+    public let matrixId: String?
     public let profileSummary: ZMatrixUserProfile?
     
     public var profileImageURL: URL? {
