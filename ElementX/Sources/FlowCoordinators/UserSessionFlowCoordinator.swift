@@ -1,8 +1,8 @@
 //
 // Copyright 2022-2024 New Vector Ltd.
 //
-// SPDX-License-Identifier: AGPL-3.0-only
-// Please see LICENSE in the repository root for full details.
+// SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+// Please see LICENSE files in the repository root for full details.
 //
 
 import AnalyticsEvents
@@ -429,6 +429,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .logout:
                     logout()
+                }
+            }
+            .store(in: &cancellables)
+        
+        StateBus.shared.userAuthStatePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] userState in
+                if userState.hasZeroAccessTokenExpired() {
+                    self?.actionsSubject.send(.logout)
                 }
             }
             .store(in: &cancellables)

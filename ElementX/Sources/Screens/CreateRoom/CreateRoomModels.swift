@@ -1,8 +1,8 @@
 //
 // Copyright 2022-2024 New Vector Ltd.
 //
-// SPDX-License-Identifier: AGPL-3.0-only
-// Please see LICENSE in the repository root for full details.
+// SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+// Please see LICENSE files in the repository root for full details.
 //
 
 import Foundation
@@ -39,11 +39,12 @@ struct CreateRoomViewState: BindableState {
     var aliasErrors: Set<CreateRoomAliasErrorState> = []
     var aliasErrorDescription: String? {
         if aliasErrors.contains(.alreadyExists) {
-            return L10n.screenCreateRoomRoomAddressNotAvailableErrorDescription
+            L10n.errorRoomAddressAlreadyExists
         } else if aliasErrors.contains(.invalidSymbols) {
-            return L10n.screenCreateRoomRoomAddressInvalidSymbolsErrorDescription
+            L10n.errorRoomAddressInvalidSymbols
+        } else {
+            nil
         }
-        return nil
     }
 }
 

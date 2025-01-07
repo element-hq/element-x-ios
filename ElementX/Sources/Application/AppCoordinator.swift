@@ -1,8 +1,8 @@
 //
 // Copyright 2022-2024 New Vector Ltd.
 //
-// SPDX-License-Identifier: AGPL-3.0-only
-// Please see LICENSE in the repository root for full details.
+// SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+// Please see LICENSE files in the repository root for full details.
 //
 
 import AnalyticsEvents
@@ -431,6 +431,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             switch await userSessionStore.restoreUserSession() {
             case .success(let userSession):
                 self.userSession = userSession
+                StateBus.shared.onUserAuthStateChanged(.authorised)
                 stateMachine.processEvent(.createdUserSession)
             case .failure:
                 MXLog.error("Failed to restore an existing session.")
@@ -604,6 +605,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             ServiceLocator.shared.analytics.resetConsentState()
             
             stateMachine.processEvent(.completedSigningOut)
+            
+            StateBus.shared.onUserAuthStateChanged(.unauthorised)
             
             // Handle OIDC's RP-Initiated Logout if needed. Don't fallback to an ASWebAuthenticationSession
             // as it looks weird to show an alert to the user asking them to sign in to their provider.

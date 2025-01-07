@@ -7,3 +7,9 @@ gem 'fastlane-plugin-xcodegen'
 gem 'fastlane-plugin-sentry'
 gem 'fastlane-plugin-browserstack'
 gem 'fastlane-plugin-xcconfig'
+
+# Until Fastlane includes them directly.
+# https://github.com/fastlane/fastlane/issues/29183
+gem "abbrev"
+gem "mutex_m"
+gem "ostruct"

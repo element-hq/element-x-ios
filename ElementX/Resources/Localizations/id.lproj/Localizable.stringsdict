@@ -208,10 +208,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$@ +%2$d other want to join this room</string>
 			<key>other</key>
-			<string>%1$@ +%2$d others want to join this room</string>
+			<string>%1$@ +%2$d lainnya ingin bergabung ke ruangan ini</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>

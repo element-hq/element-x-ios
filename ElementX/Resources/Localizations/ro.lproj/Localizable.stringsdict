@@ -217,9 +217,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Pinned message</string>
+			<string>%1$d Mesaj fixat</string>
+			<key>few</key>
+			<string>%1$d Mesaje fixate</string>
 			<key>other</key>
-			<string>%1$d Pinned messages</string>
+			<string>%1$d Mesaje fixate</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
