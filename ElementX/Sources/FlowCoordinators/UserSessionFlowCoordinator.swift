@@ -432,6 +432,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 }
             }
             .store(in: &cancellables)
+        
+        StateBus.shared.userAuthStatePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] userState in
+                if userState.hasZeroAccessTokenExpired() {
+                    self?.actionsSubject.send(.logout)
+                }
+            }
+            .store(in: &cancellables)
     }
     
     private func setupSessionVerificationRequestsObserver() {

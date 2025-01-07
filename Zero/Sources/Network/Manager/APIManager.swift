@@ -62,6 +62,7 @@ class APIManager {
                     case .success(let data):
                         continuation.resume(returning: .success(data))
                     case .failure(let error):
+                        self.checkResponseCode(error.responseCode)
                         continuation.resume(returning: .failure(error))
                     }
                 }
@@ -86,6 +87,7 @@ class APIManager {
                     case .success:
                         continuation.resume(returning: .success(()))
                     case .failure(let error):
+                        self.checkResponseCode(error.responseCode)
                         continuation.resume(returning: .failure(error))
                     }
                 }
@@ -96,5 +98,12 @@ class APIManager {
         var mHeaders = headers ?? HTTPHeaders()
         mHeaders.add(name: "Authorization", value: "Bearer \(accessToken)")
         return mHeaders
+    }
+    
+    private func checkResponseCode(_ reponseCode: Int?) {
+        let userAuthState = StateBus.shared.userAuthState
+        if reponseCode == 401, userAuthState.isUserAuthorised() {
+            StateBus.shared.onUserAuthStateChanged(.accessTokenExpired)
+        }
     }
 }

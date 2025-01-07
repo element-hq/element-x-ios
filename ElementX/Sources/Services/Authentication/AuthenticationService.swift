@@ -142,7 +142,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
                     _ = try? await client.logout()
                     return .failure(.sessionTokenRefreshNotSupported)
                 }
-                
+                StateBus.shared.onUserAuthStateChanged(.authorised)
                 return await userSession(for: client)
             case .failure:
                 return .failure(.failedLoggingIn)
@@ -195,7 +195,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
                     _ = try? await client.logout()
                     return .failure(.sessionTokenRefreshNotSupported)
                 }
-                
+                StateBus.shared.onUserAuthStateChanged(.authorised)
                 return await userSession(for: client)
             case .failure(_):
                 return .failure(.failedLoggingIn)
@@ -354,7 +354,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
                     _ = try? await client.logout()
                     return .failure(.sessionTokenRefreshNotSupported)
                 }
-                
+                StateBus.shared.onUserAuthStateChanged(.authorised)
                 return await userSession(for: client)
             case .failure:
                 return .failure(.failedLoggingIn)

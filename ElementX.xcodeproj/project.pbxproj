@@ -380,6 +380,8 @@
 		18D467B52D10A0BD00861AA6 /* SecurityAndPrivacyScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AE42C19EDE64B7CB7BE4D0 /* SecurityAndPrivacyScreen.swift */; };
 		18D467B82D10A57900861AA6 /* ReownAppKit in Frameworks */ = {isa = PBXBuildFile; productRef = 18D467B72D10A57900861AA6 /* ReownAppKit */; };
 		18D467BA2D10A57900861AA6 /* ReownAppKitUI in Frameworks */ = {isa = PBXBuildFile; productRef = 18D467B92D10A57900861AA6 /* ReownAppKitUI */; };
+		18D46BA52D2DACA3009F4041 /* StateBus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D46BA42D2DAC9D009F4041 /* StateBus.swift */; };
+		18D46BA62D2DACA3009F4041 /* StateBus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D46BA42D2DAC9D009F4041 /* StateBus.swift */; };
 		18D5D9A42CEB56FE00107940 /* ZRewards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9A32CEB56F500107940 /* ZRewards.swift */; };
 		18D5D9A52CEB56FE00107940 /* ZRewards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9A32CEB56F500107940 /* ZRewards.swift */; };
 		18D5D9A72CEB577300107940 /* ZeroRewardsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9A62CEB576B00107940 /* ZeroRewardsApi.swift */; };
@@ -2735,6 +2737,7 @@
 		18CB80202C7F310E003BC289 /* ViewModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifiers.swift; sourceTree = "<group>"; };
 		18D1EE252CAE99AC007BEB15 /* Zero.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Zero.entitlements; sourceTree = "<group>"; };
 		18D1EE262CAE99B9007BEB15 /* ZeroInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ZeroInfo.plist; sourceTree = "<group>"; };
+		18D46BA42D2DAC9D009F4041 /* StateBus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateBus.swift; sourceTree = "<group>"; };
 		18D5D9A32CEB56F500107940 /* ZRewards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZRewards.swift; sourceTree = "<group>"; };
 		18D5D9A62CEB576B00107940 /* ZeroRewardsApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroRewardsApi.swift; sourceTree = "<group>"; };
 		18D5D9A92CEB5A9000107940 /* ZeroRewards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroRewards.swift; sourceTree = "<group>"; };
@@ -4293,6 +4296,7 @@
 		184D6FC52C7D8563006266D8 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				18D46BA32D2DAC93009F4041 /* State */,
 				184D6FCE2C7D8B73006266D8 /* Models */,
 				184D6FCB2C7D8A97006266D8 /* API */,
 				184D6FC62C7D86B3006266D8 /* Manager */,
@@ -4589,6 +4593,14 @@
 				18DDDF932D15714900CBB04E /* zero_secrets.json */,
 			);
 			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		18D46BA32D2DAC93009F4041 /* State */ = {
+			isa = PBXGroup;
+			children = (
+				18D46BA42D2DAC9D009F4041 /* StateBus.swift */,
+			);
+			path = State;
 			sourceTree = "<group>";
 		};
 		18D5D9AF2CEB72A900107940 /* UserRewards */ = {
@@ -8765,6 +8777,7 @@
 				18E9A4512C9829970082DDA4 /* AppLockSetupPINScreenViewModel.swift in Sources */,
 				18E9A4522C9829970082DDA4 /* AppLockSetupPINScreenViewModelProtocol.swift in Sources */,
 				18E9A4532C9829970082DDA4 /* AppLockSetupSettingsScreen.swift in Sources */,
+				18D46BA52D2DACA3009F4041 /* StateBus.swift in Sources */,
 				18AF61672CF85F5600921644 /* ListRowTrailingSectionSpacing.swift in Sources */,
 				18FFCED12CEC8E71002F2647 /* Avatars.swift in Sources */,
 				18E9A4542C9829970082DDA4 /* AppLockSetupSettingsScreenCoordinator.swift in Sources */,
@@ -10034,6 +10047,7 @@
 				A10D6CCDE2010C09EEA1A593 /* HomeScreenRoomList.swift in Sources */,
 				0A0625A271EE5B06D2AAA069 /* HomeScreenSlidingSyncMigrationBanner.swift in Sources */,
 				DE4F8C4E0F1DB4832F09DE97 /* HomeScreenViewModel.swift in Sources */,
+				18D46BA62D2DACA3009F4041 /* StateBus.swift in Sources */,
 				56F0A22972A3BB519DA2261C /* HomeScreenViewModelProtocol.swift in Sources */,
 				2BBE320EE426A347AAE5C7DA /* IdentityConfirmationScreen.swift in Sources */,
 				C3BB6887CF13B19182E81F87 /* IdentityConfirmationScreenCoordinator.swift in Sources */,
