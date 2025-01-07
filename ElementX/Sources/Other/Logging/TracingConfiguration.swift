@@ -1,8 +1,8 @@
 //
 // Copyright 2024 New Vector Ltd.
 //
-// SPDX-License-Identifier: AGPL-3.0-only
-// Please see LICENSE in the repository root for full details.
+// SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+// Please see LICENSE files in the repository root for full details.
 //
 
 import Collections
@@ -61,6 +61,8 @@ struct TracingConfiguration {
         case matrix_sdk_sliding_sync = "matrix_sdk::sliding_sync"
         case matrix_sdk_base_sliding_sync = "matrix_sdk_base::sliding_sync"
         case matrix_sdk_ui_timeline = "matrix_sdk_ui::timeline"
+        case matrix_sdk_event_cache = "matrix_sdk::event_cache"
+        case matrix_sdk_sqlite_event_cache_store = "matrix_sdk_sqlite::event_cache_store"
     }
     
     // The `common` target is excluded because 3rd-party crates might end up logging user data.
@@ -74,7 +76,9 @@ struct TracingConfiguration {
         .matrix_sdk_http_client: .debug,
         .matrix_sdk_sliding_sync: .info,
         .matrix_sdk_base_sliding_sync: .info,
-        .matrix_sdk_ui_timeline: .info
+        .matrix_sdk_ui_timeline: .info,
+        .matrix_sdk_event_cache: .info,
+        .matrix_sdk_sqlite_event_cache_store: .info
     ]
     
     let filter: String

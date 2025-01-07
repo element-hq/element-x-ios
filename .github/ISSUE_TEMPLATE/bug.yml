@@ -35,14 +35,14 @@ body:
     id: device
     attributes:
       label: Your phone model
-      placeholder: e.g. iPhoneX
+      placeholder: e.g. iPhone 16
     validations:
       required: false
   - type: input
     id: os
     attributes:
       label: Operating system version
-      placeholder: e.g. iOS14.7.1, under "software version"
+      placeholder: e.g. iOS18.1.1, under "software version"
     validations:
       required: false
   - type: input
@@ -60,7 +60,7 @@ body:
       label: Homeserver
       description: |
         Which server is your account registered on? If it is a local or non-public homeserver, please tell us what is the homeserver implementation (ex: Synapse/Dendrite/etc.) and the version.
-      placeholder: e.g. matrix.org or Synapse 1.50.0rc1
+      placeholder: e.g. matrix.org or Synapse 1.121.1rc1
     validations:
       required: false
   - type: dropdown

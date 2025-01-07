@@ -1,8 +1,8 @@
 //
 // Copyright 2022-2024 New Vector Ltd.
 //
-// SPDX-License-Identifier: AGPL-3.0-only
-// Please see LICENSE in the repository root for full details.
+// SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+// Please see LICENSE files in the repository root for full details.
 //
 
 import Compound
@@ -35,7 +35,7 @@ struct SecurityAndPrivacyScreen: View {
                                   description: L10n.screenSecurityAndPrivacyRoomAccessAnyoneOptionDescription),
                     kind: .selection(isSelected: context.desiredSettings.accessType == .anyone) { context.desiredSettings.accessType = .anyone })
         } header: {
-            Text(L10n.screenSecurityAndPrivacyRoomAccessSectionTitle)
+            Text(L10n.screenSecurityAndPrivacyRoomAccessSectionHeader)
                 .compoundListSectionHeader()
         }
     }
@@ -54,7 +54,7 @@ struct SecurityAndPrivacyScreen: View {
                 // We don't allow editing the encryption state if the current setting on the server is `enabled`
                 .disabled(context.viewState.currentSettings.isEncryptionEnabled)
         } header: {
-            Text(L10n.screenSecurityAndPrivacyEncryptionSectionTitle)
+            Text(L10n.screenSecurityAndPrivacyEncryptionSectionHeader)
                 .compoundListSectionHeader()
         } footer: {
             Text(L10n.screenSecurityAndPrivacyEncryptionSectionFooter)

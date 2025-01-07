@@ -2,4 +2,4 @@
 "NSFaceIDUsageDescription" = "Face ID is used to access your app.";
 "NSLocationWhenInUseUsageDescription" = "Предоставете достъп до местоположението, за да може Element X да споделя местоположението ви.";
 "NSMicrophoneUsageDescription" = "За да записвате и изпращате съобщения с аудио, Element X се нуждае от достъп до микрофона.";
-"NSPhotoLibraryUsageDescription" = "Allows saving photos and videos to your library.";
+"NSPhotoLibraryUsageDescription" = "This lets you save images and videos to your photo library.";
