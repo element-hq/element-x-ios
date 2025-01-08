@@ -35,7 +35,7 @@ class AppLockSetupUITests: XCTestCase {
         try await Task.sleep(for: .seconds(0.5))
         
         // Create PIN screen.
-        try await app.assertScreenshot(.appLockSetupFlow, step: Step.createPIN)
+        try await app.assertScreenshot(.appLockSetupFlow, step: Step.createPIN, delay: .seconds(0.5))
         
         enterPIN()
         
@@ -107,7 +107,7 @@ class AppLockSetupUITests: XCTestCase {
         enterPIN()
         
         // Settings screen.
-        try await app.assertScreenshot(.appLockSetupFlow, step: Step.settings)
+        try await app.assertScreenshot(.appLockSetupFlow, step: Step.settings, delay: .seconds(0.5))
         
         app.buttons[A11yIdentifiers.appLockSetupSettingsScreen.removePIN].tap()
         app.alerts.element.buttons[A11yIdentifiers.alertInfo.primaryButton].tap()

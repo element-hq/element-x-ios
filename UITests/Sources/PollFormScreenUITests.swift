@@ -34,7 +34,7 @@ class PollFormScreenUITests: XCTestCase {
         let createButton = app.buttons[A11yIdentifiers.pollFormScreen.submit]
         XCTAssertTrue(createButton.isEnabled)
 
-        try await app.assertScreenshot(.createPoll, step: 1)
+        try await app.assertScreenshot(.createPoll, step: 1, delay: .seconds(0.5))
     }
 
     func testMaxOptions() async throws {
@@ -57,6 +57,6 @@ class PollFormScreenUITests: XCTestCase {
         XCTAssertFalse(addOption.exists)
         XCTAssertFalse(createButton.isEnabled)
 
-        try await app.assertScreenshot(.createPoll, step: 2)
+        try await app.assertScreenshot(.createPoll, step: 2, delay: .seconds(0.5))
     }
 }

@@ -21,7 +21,7 @@ class RoomMembersListScreenUITests: XCTestCase {
         let searchBar = app.searchFields.firstMatch
         searchBar.clearAndTypeText("alice\n", app: app)
         
-        try await app.assertScreenshot(.roomMembersListScreenPendingInvites, step: 1)
+        try await app.assertScreenshot(.roomMembersListScreenPendingInvites, step: 1, delay: .seconds(0.5))
     }
     
     func testSearchJoinedMember() async throws {
@@ -30,6 +30,6 @@ class RoomMembersListScreenUITests: XCTestCase {
         let searchBar = app.searchFields.firstMatch
         searchBar.clearAndTypeText("bob\n", app: app)
         
-        try await app.assertScreenshot(.roomMembersListScreenPendingInvites, step: 2)
+        try await app.assertScreenshot(.roomMembersListScreenPendingInvites, step: 2, delay: .seconds(0.5))
     }
 }

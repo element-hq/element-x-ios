@@ -15,14 +15,14 @@ class RoomScreenUITests: XCTestCase {
         XCTAssert(app.staticTexts[A11yIdentifiers.roomScreen.name].exists)
         XCTAssert(app.staticTexts[A11yIdentifiers.roomScreen.avatar].exists)
 
-        try await app.assertScreenshot(.roomPlainNoAvatar)
+        try await app.assertScreenshot(.roomPlainNoAvatar, delay: .seconds(0.5))
     }
     
     func testSmallTimelineLayout() async throws {
         let app = Application.launch(.roomSmallTimeline)
         
         // The messages should be bottom aligned.
-        try await app.assertScreenshot(.roomSmallTimeline)
+        try await app.assertScreenshot(.roomSmallTimeline, delay: .seconds(0.5))
     }
     
     func testSmallTimelineWithIncomingAndPagination() async throws {
@@ -38,7 +38,7 @@ class RoomScreenUITests: XCTestCase {
         try await performOperation(.paginate, using: client)
 
         // Then the 4 visible messages should stay aligned to the bottom.
-        try await app.assertScreenshot(.roomSmallTimelineIncomingAndSmallPagination)
+        try await app.assertScreenshot(.roomSmallTimelineIncomingAndSmallPagination, delay: .seconds(0.5))
     }
     
     func testSmallTimelineWithLargePagination() async throws {
@@ -53,7 +53,7 @@ class RoomScreenUITests: XCTestCase {
         try await performOperation(.paginate, using: client)
 
         // The bottom of the timeline should remain visible with more items added above.
-        try await app.assertScreenshot(.roomSmallTimelineLargePagination)
+        try await app.assertScreenshot(.roomSmallTimelineLargePagination, delay: .seconds(0.5))
     }
     
     func testTimelineLayoutAtTop() async throws {
@@ -68,13 +68,13 @@ class RoomScreenUITests: XCTestCase {
         for _ in 0...5 {
             app.swipeDown()
         }
-        try await app.assertScreenshot(.roomLayoutTop) // Assert initial state for comparison.
+        try await app.assertScreenshot(.roomLayoutTop, delay: .seconds(0.5)) // Assert initial state for comparison.
         
         // When a back pagination occurs.
         try await performOperation(.paginate, using: client)
 
         // Then the bottom of the timeline should remain unchanged (with new items having been added above).
-        try await app.assertScreenshot(.roomLayoutTop)
+        try await app.assertScreenshot(.roomLayoutTop, delay: .seconds(0.5))
     }
 
     func testTimelineLayoutAtBottom() async throws {
@@ -93,12 +93,12 @@ class RoomScreenUITests: XCTestCase {
         try await Task.sleep(for: .seconds(1))
         
         // Then the timeline should scroll down to reveal the message.
-        try await app.assertScreenshot(.roomLayoutBottom, step: 0)
+        try await app.assertScreenshot(.roomLayoutBottom, step: 0, delay: .seconds(0.5))
         
         // When the keyboard appears for the message composer.
         try await tapMessageComposer(in: app)
         
-        try await app.assertScreenshot(.roomLayoutBottom, step: 1)
+        try await app.assertScreenshot(.roomLayoutBottom, step: 1, delay: .seconds(0.5))
     }
     
     func testTimelineLayoutHighlightExisting() async throws {
@@ -113,7 +113,7 @@ class RoomScreenUITests: XCTestCase {
         try await performOperation(.focusOnEvent("$5"), using: client)
         
         // Then the item should become highlighted.
-        try await app.assertScreenshot(.roomLayoutHighlight, step: 0)
+        try await app.assertScreenshot(.roomLayoutHighlight, step: 0, delay: .seconds(0.5))
         
         guard UIDevice.current.userInterfaceIdiom == .phone else { return }
         
@@ -130,7 +130,7 @@ class RoomScreenUITests: XCTestCase {
         let app = Application.launch(.roomSmallTimelineWithReadReceipts)
 
         // The messages should be bottom aligned.
-        try await app.assertScreenshot(.roomSmallTimelineWithReadReceipts)
+        try await app.assertScreenshot(.roomSmallTimelineWithReadReceipts, delay: .seconds(0.5))
     }
 
     func testTimelineDisclosedPolls() async throws {

@@ -35,6 +35,6 @@ class EncryptionResetUITests: XCTestCase {
         let passwordField = app.secureTextFields[A11yIdentifiers.encryptionResetPasswordScreen.passwordField]
         passwordField.clearAndTypeText("supersecurepassword", app: app)
         app.buttons[A11yIdentifiers.encryptionResetPasswordScreen.submit].tap()
-        try await app.assertScreenshot(.encryptionReset, step: Step.resetingEncryption)
+        try await app.assertScreenshot(.encryptionReset, step: Step.resetingEncryption, delay: .seconds(0.5))
     }
 }
