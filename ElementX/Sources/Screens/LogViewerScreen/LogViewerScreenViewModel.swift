@@ -18,7 +18,7 @@ class LogViewerScreenViewModel: LogViewerScreenViewModelType, LogViewerScreenVie
     }
 
     init() {
-        super.init(initialViewState: LogViewerScreenViewState(urls: RustTracing.logFiles))
+        super.init(initialViewState: LogViewerScreenViewState(urls: Tracing.logFiles))
     }
     
     // MARK: - Public

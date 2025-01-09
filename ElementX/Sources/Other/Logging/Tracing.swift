@@ -8,7 +8,7 @@
 import Foundation
 import MatrixRustSDK
 
-enum RustTracing {
+enum Tracing {
     /// The base filename used for log files. This may be suffixed by the target
     /// name and other log management metadata during rotation.
     static let filePrefix = "console"
@@ -21,27 +21,29 @@ enum RustTracing {
         }
     }
     
-    private(set) static var currentTracingConfiguration: TracingConfiguration?
-    static func setup(configuration: TracingConfiguration) {
-        currentTracingConfiguration = configuration
+    static let fileExtension = "log"
+    
+    static func setup(logLevel: LogLevel, currentTarget: String, filePrefix: String?) {
+        let fileName = if let filePrefix {
+            "\(Tracing.filePrefix)-\(filePrefix)"
+        } else {
+            Tracing.filePrefix
+        }
         
         // Keep a minimum of 1 week of log files. In reality it will be longer
         // as the app is unlikely to be running continuously.
         let maxFiles: UInt64 = 24 * 7
         
         // Log everything on integration tests to check whether
-        // the logs contain any sensitive data. See `UserFlowTests.swift`
-        let filter = if ProcessInfo.isRunningIntegrationTests {
-            TracingConfiguration(logLevel: .trace, currentTarget: "integrationtests", filePrefix: nil).filter
-        } else {
-            configuration.filter
-        }
+        // the logs contain any sensitive data. See `integration-tests.yml`
+        let level: LogLevel = ProcessInfo.isRunningIntegrationTests ? .trace : logLevel
         
-        setupTracing(config: .init(filter: filter,
+        setupTracing(config: .init(logLevel: level.rustLogLevel,
+                                   extraTargets: [currentTarget],
                                    writeToStdoutOrSystem: true,
                                    writeToFiles: .init(path: logsDirectory.path(percentEncoded: false),
-                                                       filePrefix: configuration.fileName,
-                                                       fileSuffix: configuration.fileExtension,
+                                                       filePrefix: fileName,
+                                                       fileSuffix: fileExtension,
                                                        maxFiles: maxFiles)))
     }
     

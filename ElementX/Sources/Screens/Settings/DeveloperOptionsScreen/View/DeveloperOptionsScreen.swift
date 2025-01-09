@@ -152,7 +152,7 @@ struct DeveloperOptionsScreen: View {
 }
 
 private struct LogLevelConfigurationView: View {
-    @Binding var logLevel: TracingConfiguration.LogLevel
+    @Binding var logLevel: LogLevel
     
     var body: some View {
         Picker(selection: $logLevel) {
@@ -166,7 +166,7 @@ private struct LogLevelConfigurationView: View {
     }
     
     /// Allows the picker to work with associated values
-    private var logLevels: [TracingConfiguration.LogLevel] {
+    private var logLevels: [LogLevel] {
         [.error, .warn, .info, .debug, .trace]
     }
 }

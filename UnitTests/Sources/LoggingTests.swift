@@ -15,12 +15,12 @@ class LoggingTests: XCTestCase {
     }
 
     override func setUpWithError() throws {
-        RustTracing.deleteLogFiles()
+        Tracing.deleteLogFiles()
     }
     
     func testLogging() async throws {
         let target = "tests"
-        XCTAssertTrue(RustTracing.logFiles.isEmpty)
+        XCTAssertTrue(Tracing.logFiles.isEmpty)
         
         MXLog.configure(currentTarget: target, filePrefix: target, logLevel: .info)
         
@@ -43,7 +43,7 @@ class LoggingTests: XCTestCase {
         
         MXLog.info(infoLog)
         
-        guard let logFile = RustTracing.logFiles.first else {
+        guard let logFile = Tracing.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
@@ -55,7 +55,7 @@ class LoggingTests: XCTestCase {
         let verboseLog = UUID().uuidString
         
         MXLog.verbose(verboseLog)
-        guard let logFile = RustTracing.logFiles.first else {
+        guard let logFile = Tracing.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
@@ -65,7 +65,7 @@ class LoggingTests: XCTestCase {
         
     func validateTargetName(_ target: String) throws {
         MXLog.info(UUID().uuidString)
-        guard let logFile = RustTracing.logFiles.first else {
+        guard let logFile = Tracing.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
@@ -100,7 +100,7 @@ class LoggingTests: XCTestCase {
         MXLog.info(roomSummary)
         
         // Then the log file should not include the sensitive information
-        guard let logFile = RustTracing.logFiles.first else {
+        guard let logFile = Tracing.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
@@ -188,7 +188,7 @@ class LoggingTests: XCTestCase {
         MXLog.info(fileMessage)
         
         // Then the log file should not include the text content
-        guard let logFile = RustTracing.logFiles.first else {
+        guard let logFile = Tracing.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
@@ -255,7 +255,7 @@ class LoggingTests: XCTestCase {
         MXLog.info(rustFileMessage)
         
         // Then the log file should not include the text content
-        guard let logFile = RustTracing.logFiles.first else {
+        guard let logFile = Tracing.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
@@ -282,10 +282,10 @@ class LoggingTests: XCTestCase {
     
     func testLogFileSorting() async throws {
         // Given a collection of log files.
-        XCTAssertTrue(RustTracing.logFiles.isEmpty)
+        XCTAssertTrue(Tracing.logFiles.isEmpty)
         
         // When creating new logs.
-        let logsFileDirectory = RustTracing.logsDirectory
+        let logsFileDirectory = Tracing.logsDirectory
         for i in 1...5 {
             let filename = "console.\(i).log"
             try "console".write(to: logsFileDirectory.appending(path: filename), atomically: true, encoding: .utf8)
@@ -297,7 +297,7 @@ class LoggingTests: XCTestCase {
         }
         
         // Then the logs should be sorted chronologically (newest first) and not alphabetically.
-        XCTAssertEqual(RustTracing.logFiles.map(\.lastPathComponent),
+        XCTAssertEqual(Tracing.logFiles.map(\.lastPathComponent),
                        ["console-nse.5.log",
                         "console-nse.4.log",
                         "console-nse.3.log",
@@ -317,7 +317,7 @@ class LoggingTests: XCTestCase {
         try fileHandle.close()
         
         // Then that file should now be the first log file.
-        XCTAssertEqual(RustTracing.logFiles.map(\.lastPathComponent),
+        XCTAssertEqual(Tracing.logFiles.map(\.lastPathComponent),
                        ["console.1.log",
                         "console-nse.5.log",
                         "console-nse.4.log",
