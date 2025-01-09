@@ -57,13 +57,13 @@ class AppLockUITests: XCTestCase {
         await client.waitForApp()
         
         // Blank form representing an unlocked app.
-        try await app.assertScreenshot(.appLockFlow, step: Step.unlocked)
+        try await app.assertScreenshot(.appLockFlow, step: Step.unlocked, delay: .seconds(0.5))
         
         // When backgrounding the app.
         try client.send(.notification(name: UIApplication.didEnterBackgroundNotification))
         
         // Then the app should remain unlocked.
-        try await app.assertScreenshot(.appLockFlow, step: Step.unlocked)
+        try await app.assertScreenshot(.appLockFlow, step: Step.unlocked, delay: .seconds(0.5))
         
         // When foregrounding the app.
         try client.send(.notification(name: UIApplication.willEnterForegroundNotification))
@@ -71,7 +71,7 @@ class AppLockUITests: XCTestCase {
         try client.send(.notification(name: UIApplication.didBecomeActiveNotification))
         
         // Then the app should still remain unlocked.
-        try await app.assertScreenshot(.appLockFlow, step: Step.unlocked)
+        try await app.assertScreenshot(.appLockFlow, step: Step.unlocked, delay: .seconds(0.5))
     }
     
     func testWrongPIN() async throws {
@@ -80,7 +80,7 @@ class AppLockUITests: XCTestCase {
         app = Application.launch(.appLockFlow)
         await client.waitForApp()
         
-        try await app.assertScreenshot(.appLockFlow, step: Step.unlocked)
+        try await app.assertScreenshot(.appLockFlow, step: Step.unlocked, delay: .seconds(0.5))
         try client.send(.notification(name: UIApplication.didEnterBackgroundNotification))
         try await Task.sleep(for: .milliseconds(500)) // Don't overwrite the previous signal immediately.
         
@@ -88,22 +88,22 @@ class AppLockUITests: XCTestCase {
         try? await Task.sleep(for: .milliseconds(100))
         try client.send(.notification(name: UIApplication.didBecomeActiveNotification))
         
-        try await app.assertScreenshot(.appLockFlow, step: Step.lockScreen)
+        try await app.assertScreenshot(.appLockFlow, step: Step.lockScreen, delay: .seconds(0.5))
         
         // When entering an incorrect PIN
         enterWrongPIN()
         
         // Then the app should remain locked with a warning.
-        try await app.assertScreenshot(.appLockFlow, step: Step.failedUnlock)
+        try await app.assertScreenshot(.appLockFlow, step: Step.failedUnlock, delay: .seconds(0.5))
         
         // When entering it incorrectly twice more.
         enterWrongPIN()
         enterWrongPIN()
         
         // Then then the app should sign the user out.
-        try await app.assertScreenshot(.appLockFlow, step: Step.logoutAlert)
+        try await app.assertScreenshot(.appLockFlow, step: Step.logoutAlert, delay: .seconds(0.5))
         app.alerts.element.buttons[A11yIdentifiers.alertInfo.primaryButton].tap()
-        try await app.assertScreenshot(.appLockFlow, step: Step.forcedLogout)
+        try await app.assertScreenshot(.appLockFlow, step: Step.forcedLogout, delay: .seconds(0.5))
     }
     
     func testResignActive() async throws {
