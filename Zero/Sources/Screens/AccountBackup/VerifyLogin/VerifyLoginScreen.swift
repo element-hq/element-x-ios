@@ -74,17 +74,17 @@ struct VerifyLoginScreen: View {
                 .font(.zero.bodySM)
                 .foregroundStyle(Asset.Colors.textPrimary.swiftUIColor)
             
-            Button { } label: {
-                HStack {
-                    Text("Learn more")
-                        .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
-                        .font(.zero.bodySM)
-                    
-                    Image(systemName: "arrow.right")
-                        .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
-                        .font(.inter(size: 10))
-                }
-            }
+//            Button { } label: {
+//                HStack {
+//                    Text("Learn more")
+//                        .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
+//                        .font(.zero.bodySM)
+//                    
+//                    Image(systemName: "arrow.right")
+//                        .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
+//                        .font(.inter(size: 10))
+//                }
+//            }
             
             Spacer()
             

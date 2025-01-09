@@ -69,7 +69,9 @@ struct SecureBackupScreen: View {
         var linkString = AttributedString(L10n.actionLearnMore)
         linkString.link = context.viewState.chatBackupDetailsURL
         linkString.bold()
-        description.replace(linkPlaceholder, with: linkString)
+        //description.replace(linkPlaceholder, with: linkString)
+        description.replace(linkPlaceholder, with: "")
+        description.replace(" .", with: "")
         return description
     }
     
