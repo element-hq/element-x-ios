@@ -229,16 +229,17 @@ final class TimelineProxy: TimelineProxyProtocol {
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending audio")
         
-        let handle = timeline.sendAudio(url: url.path(percentEncoded: false),
-                                        audioInfo: audioInfo,
-                                        caption: caption,
-                                        formattedCaption: nil, // Rust will build this from the caption's markdown.
-                                        progressWatcher: nil,
-                                        useSendQueue: true)
-        
-        await requestHandle(handle)
-        
         do {
+            let handle = try timeline.sendAudio(params: .init(filename: url.path(percentEncoded: false),
+                                                              caption: caption,
+                                                              formattedCaption: nil, // Rust will build this from the caption's markdown.
+                                                              mentions: nil,
+                                                              useSendQueue: true),
+                                                audioInfo: audioInfo,
+                                                progressWatcher: nil)
+            
+            await requestHandle(handle)
+            
             try await handle.join()
             MXLog.info("Finished sending audio")
         } catch {
@@ -255,16 +256,17 @@ final class TimelineProxy: TimelineProxyProtocol {
                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending file")
         
-        let handle = timeline.sendFile(url: url.path(percentEncoded: false),
-                                       fileInfo: fileInfo,
-                                       caption: caption,
-                                       formattedCaption: nil, // Rust will build this from the caption's markdown.
-                                       progressWatcher: nil,
-                                       useSendQueue: true)
-        
-        await requestHandle(handle)
-        
         do {
+            let handle = try timeline.sendFile(params: .init(filename: url.path(percentEncoded: false),
+                                                             caption: caption,
+                                                             formattedCaption: nil, // Rust will build this from the caption's markdown.
+                                                             mentions: nil,
+                                                             useSendQueue: true),
+                                               fileInfo: fileInfo,
+                                               progressWatcher: nil)
+            
+            await requestHandle(handle)
+            
             try await handle.join()
             MXLog.info("Finished sending file")
         } catch {
@@ -282,17 +284,18 @@ final class TimelineProxy: TimelineProxyProtocol {
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending image")
         
-        let handle = timeline.sendImage(url: url.path(percentEncoded: false),
-                                        thumbnailUrl: thumbnailURL.path(percentEncoded: false),
-                                        imageInfo: imageInfo,
-                                        caption: caption,
-                                        formattedCaption: nil, // Rust will build this from the caption's markdown.
-                                        progressWatcher: nil,
-                                        useSendQueue: true)
-        
-        await requestHandle(handle)
-        
         do {
+            let handle = try timeline.sendImage(params: .init(filename: url.path(percentEncoded: false),
+                                                              caption: caption,
+                                                              formattedCaption: nil, // Rust will build this from the caption's markdown.
+                                                              mentions: nil,
+                                                              useSendQueue: true),
+                                                thumbnailPath: thumbnailURL.path(percentEncoded: false),
+                                                imageInfo: imageInfo,
+                                                progressWatcher: nil)
+            
+            await requestHandle(handle)
+            
             try await handle.join()
             MXLog.info("Finished sending image")
         } catch {
@@ -328,17 +331,18 @@ final class TimelineProxy: TimelineProxyProtocol {
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending video")
         
-        let handle = timeline.sendVideo(url: url.path(percentEncoded: false),
-                                        thumbnailUrl: thumbnailURL.path(percentEncoded: false),
-                                        videoInfo: videoInfo,
-                                        caption: caption,
-                                        formattedCaption: nil, // Rust will build this from the caption's markdown.
-                                        progressWatcher: nil,
-                                        useSendQueue: true)
-        
-        await requestHandle(handle)
-        
         do {
+            let handle = try timeline.sendVideo(params: .init(filename: url.path(percentEncoded: false),
+                                                              caption: caption,
+                                                              formattedCaption: nil,
+                                                              mentions: nil,
+                                                              useSendQueue: true),
+                                                thumbnailPath: thumbnailURL.path(percentEncoded: false),
+                                                videoInfo: videoInfo,
+                                                progressWatcher: nil)
+            
+            await requestHandle(handle)
+            
             try await handle.join()
             MXLog.info("Finished sending video")
         } catch {
@@ -355,17 +359,18 @@ final class TimelineProxy: TimelineProxyProtocol {
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending voice message")
         
-        let handle = timeline.sendVoiceMessage(url: url.path(percentEncoded: false),
-                                               audioInfo: audioInfo,
-                                               waveform: waveform,
-                                               caption: nil,
-                                               formattedCaption: nil,
-                                               progressWatcher: nil,
-                                               useSendQueue: true)
-        
-        await requestHandle(handle)
-        
         do {
+            let handle = try timeline.sendVoiceMessage(params: .init(filename: url.path(percentEncoded: false),
+                                                                     caption: nil,
+                                                                     formattedCaption: nil,
+                                                                     mentions: nil,
+                                                                     useSendQueue: true),
+                                                       audioInfo: audioInfo,
+                                                       waveform: waveform,
+                                                       progressWatcher: nil)
+            
+            await requestHandle(handle)
+            
             try await handle.join()
             MXLog.info("Finished sending voice message")
         } catch {
