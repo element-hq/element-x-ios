@@ -255,11 +255,12 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                      message: String,
                      html: String?,
                      intentionalMentions: IntentionalMentions) async {
-        // We're waiting on an API for including mentions: https://github.com/matrix-org/matrix-rust-sdk/issues/4302
         MXLog.info("Editing timeline item caption: \(eventOrTransactionID) in \(roomID)")
         
         // When formattedCaption is nil, caption will be parsed as markdown and generate the HTML for us.
-        let newContent = createCaptionEdit(caption: message, formattedCaption: html.map { .init(format: .html, body: $0) })
+        let newContent = createCaptionEdit(caption: message,
+                                           formattedCaption: html.map { .init(format: .html, body: $0) },
+                                           mentions: intentionalMentions.toRustMentions())
         switch await activeTimeline.edit(eventOrTransactionID, newContent: newContent) {
         case .success:
             MXLog.info("Finished editing caption")
@@ -270,7 +271,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     func removeCaption(_ eventOrTransactionID: EventOrTransactionId) async {
         // Set a `nil` caption to remove it from the event.
-        let newContent = createCaptionEdit(caption: nil, formattedCaption: nil)
+        let newContent = createCaptionEdit(caption: nil, formattedCaption: nil, mentions: nil)
         switch await activeTimeline.edit(eventOrTransactionID, newContent: newContent) {
         case .success:
             MXLog.info("Finished removing caption.")

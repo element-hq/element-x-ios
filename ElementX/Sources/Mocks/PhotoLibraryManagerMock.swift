@@ -12,7 +12,6 @@ extension PhotoLibraryManagerMock {
         var authorizationDenied = false
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
     convenience init(_ configuration: Configuration) {
         self.init()
         
