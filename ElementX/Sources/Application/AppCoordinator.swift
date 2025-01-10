@@ -965,30 +965,33 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             return
         }
         
-        backgroundTask = appMediator.beginBackgroundTask { [weak self] in
-            guard let self else { return }
-            
+        backgroundTask = appMediator.beginBackgroundTask {
             MXLog.info("Background task is about to expire.")
-            stopSync(isBackgroundTask: true) { [weak self] in
-                guard let self, let backgroundTask else { return }
-                
-                MXLog.info("Ending background task.")
-                appMediator.endBackgroundTask(backgroundTask)
-                self.backgroundTask = nil
+            
+            // We're intentionally strongly retaining self here to an EXC_BAD_ACCESS
+            // `backgroundTask` will be eventually released in `endActiveBackgroundTask`
+            // https://sentry.tools.element.io/organizations/element/issues/4477794/events/9cfd04e4d045440f87498809cf718de5/
+            self.stopSync(isBackgroundTask: true) {
+                self.endActiveBackgroundTask()
             }
         }
     }
-
+    
     @objc
     private func applicationDidBecomeActive() {
         MXLog.info("Application did become active")
-        
-        if let backgroundTask {
-            appMediator.endBackgroundTask(backgroundTask)
-            self.backgroundTask = nil
+        endActiveBackgroundTask()
+        startSync()
+    }
+    
+    private func endActiveBackgroundTask() {
+        guard let backgroundTask else {
+            return
         }
         
-        startSync()
+        MXLog.info("Ending background task.")
+        appMediator.endBackgroundTask(backgroundTask)
+        self.backgroundTask = nil
     }
     
     // MARK: Background app refresh
