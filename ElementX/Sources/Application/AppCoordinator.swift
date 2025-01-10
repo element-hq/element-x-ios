@@ -968,6 +968,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         backgroundTask = appMediator.beginBackgroundTask {
             MXLog.info("Background task is about to expire.")
             
+            // We're intentionally strongly retaining self here to an EXC_BAD_ACCESS
+            // `backgroundTask` will be eventually released in `endActiveBackgroundTask`
+            // https://sentry.tools.element.io/organizations/element/issues/4477794/events/9cfd04e4d045440f87498809cf718de5/
             self.stopSync(isBackgroundTask: true) {
                 self.endActiveBackgroundTask()
             }
