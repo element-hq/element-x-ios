@@ -190,6 +190,16 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
+    func enableEncryption() async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.enableEncryption()
+            return .success(())
+        } catch {
+            MXLog.error("Failed enabling encryption with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
         do {
             try await room.redact(eventId: eventID, reason: nil)
@@ -359,11 +369,75 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
+    // MARK: - Privacy settings
+    
+    func updateJoinRule(_ rule: JoinRule) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.updateJoinRules(newRule: rule)
+            return .success(())
+        } catch {
+            MXLog.error("Failed updating join rule with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func updateHistoryVisibility(_ visibility: RoomHistoryVisibility) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.updateHistoryVisibility(visibility: visibility)
+            return .success(())
+        } catch {
+            MXLog.error("Failed updating history visibility with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func isVisibleInRoomDirectory() async -> Result<Bool, RoomProxyError> {
         do {
             return try await .success(room.getRoomVisibility() == .public)
         } catch {
             MXLog.error("Failed checking if room is visible in room directory with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func updateRoomDirectoryVisibility(_ visibility: RoomVisibility) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.updateRoomVisibility(visibility: visibility)
+            return .success(())
+        } catch {
+            MXLog.error("Failed updating room directory visibility with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    // MARK: - Canonical Alias
+    
+    func updateCanonicalAlias(_ alias: String?, altAliases: [String]) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.updateCanonicalAlias(alias: alias, altAliases: altAliases)
+            return .success(())
+        } catch {
+            MXLog.error("Failed updating canonical alias with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func publishRoomAliasInRoomDirectory(_ alias: String) async -> Result<Bool, RoomProxyError> {
+        do {
+            let result = try await room.publishRoomAliasInRoomDirectory(alias: alias)
+            return .success(result)
+        } catch {
+            MXLog.error("Failed publishing the room's alias in the room directory with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func removeRoomAliasFromRoomDirectory(_ alias: String) async -> Result<Bool, RoomProxyError> {
+        do {
+            let result = try await room.removeRoomAliasFromRoomDirectory(alias: alias)
+            return .success(result)
+        } catch {
+            MXLog.error("Failed removing the room's alias in the room directory with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
