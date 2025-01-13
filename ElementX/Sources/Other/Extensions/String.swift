@@ -100,10 +100,8 @@ extension String {
 
 extension String {
     static func makeCanonicalAlias(aliasLocalPart: Self?, serverName: Self?) -> Self? {
-        guard let aliasLocalPart = aliasLocalPart,
-              !aliasLocalPart.isEmpty,
-              let serverName = serverName,
-              !serverName.isEmpty else {
+        guard let aliasLocalPart, !aliasLocalPart.isEmpty,
+              let serverName, !serverName.isEmpty else {
             return nil
         }
         return "#\(aliasLocalPart):\(serverName)"

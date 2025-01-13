@@ -91,11 +91,17 @@ struct EditRoomAddressScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             EditRoomAddressScreen(context: invalidSymbolsViewModel.context)
         }
+        .snapshotPreferences(expect: invalidSymbolsViewModel.context.$viewState.map { state in
+            !state.aliasErrors.isEmpty
+        })
         .previewDisplayName("Invalid symbols")
         
         NavigationStack {
             EditRoomAddressScreen(context: alreadyExistingViewModel.context)
         }
+        .snapshotPreferences(expect: alreadyExistingViewModel.context.$viewState.map { state in
+            !state.aliasErrors.isEmpty
+        })
         .previewDisplayName("Already existing")
     }
 }

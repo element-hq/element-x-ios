@@ -212,6 +212,9 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             SecurityAndPrivacyScreen(context: publicViewModel.context)
         }
+        .snapshotPreferences(expect: publicViewModel.context.$viewState.map { state in
+            state.currentSettings.isVisibileInRoomDirectory == true
+        })
         .previewDisplayName("Public room")
         
         NavigationStack {
@@ -222,6 +225,9 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             SecurityAndPrivacyScreen(context: restrictedViewModel.context)
         }
+        .snapshotPreferences(expect: restrictedViewModel.context.$viewState.map { state in
+            state.currentSettings.isVisibileInRoomDirectory == true
+        })
         .previewDisplayName("Restricted room")
     }
 }
