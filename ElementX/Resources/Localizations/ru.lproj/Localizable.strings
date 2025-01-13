@@ -269,6 +269,8 @@
 "crypto_identity_change_pin_violation" = "Судя по всему, идентификатор %1$@ изменился. %2$@";
 "crypto_identity_change_pin_violation_new" = "Пользователь %1$@ сменил имя пользователя на %2$@. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
+"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ verified identity has changed.  %3$@";
+"crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
 "dialog_permission_camera" = "Чтобы приложение могло использовать камеру, предоставьте разрешение в системных настройках.";
 "dialog_permission_generic" = "Пожалуйста, предоставьте разрешение в системных настройках.";
 "dialog_permission_location_description_ios" = "Предоставьте доступ в меню «Настройки» -> «Местоположение».";

@@ -2,4 +2,4 @@
 "NSFaceIDUsageDescription" = "Face ID används för att komma åt din app.";
 "NSLocationWhenInUseUsageDescription" = "Ge platsåtkomst så att Element X kan dela din plats.";
 "NSMicrophoneUsageDescription" = "För att spela in och skicka meddelanden med ljud måste Element X komma åt mikrofonen.";
-"NSPhotoLibraryUsageDescription" = "Gör det möjligt att spara foton och videor i ditt bibliotek.";
+"NSPhotoLibraryUsageDescription" = "Detta låter dig spara bilder och videor i ditt fotobibliotek.";

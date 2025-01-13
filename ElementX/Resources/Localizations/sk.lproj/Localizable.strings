@@ -269,6 +269,8 @@
 "crypto_identity_change_pin_violation" = "Zdá sa, že totožnosť používateľa %1$@ sa zmenila.%2$@";
 "crypto_identity_change_pin_violation_new" = "Zdá sa, že identita %2$@ používateľa %1$@ sa zmenila. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
+"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ verified identity has changed.  %3$@";
+"crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
 "dialog_permission_camera" = "Aby aplikácia mohla používať fotoaparát, udeľte povolenie v systémových nastaveniach.";
 "dialog_permission_generic" = "Udeľte prosím povolenie v systémových nastaveniach.";
 "dialog_permission_location_description_ios" = "Udeľte prístup v časti Nastavenia -> Poloha.";
