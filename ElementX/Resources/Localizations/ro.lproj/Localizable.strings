@@ -269,6 +269,8 @@
 "crypto_identity_change_pin_violation" = "Identitatea lui %1$@ pare să se fi schimbat. %2$@";
 "crypto_identity_change_pin_violation_new" = "Identitatea %2$@ a lui %1$@ pare să se fi schimbat. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
+"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ verified identity has changed.  %3$@";
+"crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
 "dialog_permission_camera" = "Pentru a permite aplicației să utilizeze camera, vă rugăm să acordați permisiunea în setările sistemului.";
 "dialog_permission_generic" = "Vă rugăm să acordați permisiunea în setările sistemului.";
 "dialog_permission_location_description_ios" = "Acordați accesul în Setări -> Locație.";

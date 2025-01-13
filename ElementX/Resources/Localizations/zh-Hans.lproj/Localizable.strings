@@ -269,6 +269,8 @@
 "crypto_identity_change_pin_violation" = "%1$@ 的身份似乎已经改变。%2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@ 的 %2$@ 身份似乎已经改变。%3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
+"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ verified identity has changed.  %3$@";
+"crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
 "dialog_permission_camera" = "为了让应用程序使用相机，请在系统设置中授予权限。";
 "dialog_permission_generic" = "请在系统设置中授予权限。";
 "dialog_permission_location_description_ios" = "在设置->位置中授予访问权限。";

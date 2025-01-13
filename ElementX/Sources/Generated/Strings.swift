@@ -592,6 +592,12 @@ internal enum L10n {
   internal static func cryptoIdentityChangePinViolationNewUserId(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_pin_violation_new_user_id", String(describing: p1))
   }
+  /// %1$@’s %2$@ verified identity has changed.  %3$@
+  internal static func cryptoIdentityChangeVerificationViolationNew(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
+    return L10n.tr("Localizable", "crypto_identity_change_verification_violation_new", String(describing: p1), String(describing: p2), String(describing: p3))
+  }
+  /// Withdraw verification
+  internal static var cryptoIdentityChangeWithdrawVerificationAction: String { return L10n.tr("Localizable", "crypto_identity_change_withdraw_verification_action") }
   /// In order to let the application use the camera, please grant the permission in the system settings.
   internal static var dialogPermissionCamera: String { return L10n.tr("Localizable", "dialog_permission_camera") }
   /// Please grant the permission in the system settings.

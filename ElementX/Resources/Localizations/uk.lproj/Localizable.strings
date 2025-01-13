@@ -269,6 +269,8 @@
 "crypto_identity_change_pin_violation" = "Ідентичність %1$@, схоже, змінилася. %2$@";
 "crypto_identity_change_pin_violation_new" = "Ідентичність %1$@ %2$@ схоже, змінилася. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
+"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ verified identity has changed.  %3$@";
+"crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
 "dialog_permission_camera" = "Щоб дозволити застосунку використовувати камеру, надайте дозвіл у системних налаштуваннях.";
 "dialog_permission_generic" = "Надайте дозвіл в системних налаштуваннях.";
 "dialog_permission_location_description_ios" = "Надайте доступ в Налаштуваннях -> Місцезнаходження.";

@@ -269,6 +269,8 @@
 "crypto_identity_change_pin_violation" = "Tożsamość %1$@ mogła ulec zmianie. %2$@";
 "crypto_identity_change_pin_violation_new" = "Wygląda na to, że tożsamość %1$@ %2$@ uległa zmianie. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
+"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ verified identity has changed.  %3$@";
+"crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
 "dialog_permission_camera" = "Aby umożliwić aplikacji korzystanie z aparatu, prosimy o udzielenie zezwolenia w ustawieniach systemowych.";
 "dialog_permission_generic" = "Proszę nadać uprawnienia w ustawieniach systemowych.";
 "dialog_permission_location_description_ios" = "Przyznaj dostęp w Ustawienia -> Lokalizacja.";

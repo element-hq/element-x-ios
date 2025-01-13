@@ -269,6 +269,8 @@
 "crypto_identity_change_pin_violation" = "Η ταυτότητα του χρήστη %1$@ φαίνεται να έχει αλλάξει. %2$@";
 "crypto_identity_change_pin_violation_new" = "Η ταυτότητα του %1$@ %2$@ φαίνεται να έχει αλλάξει. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
+"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ verified identity has changed.  %3$@";
+"crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
 "dialog_permission_camera" = "Για να επιτρέψεις στην εφαρμογή να χρησιμοποιεί την κάμερα, παραχώρησε την άδεια στις ρυθμίσεις συστήματος.";
 "dialog_permission_generic" = "Παρακαλώ παραχώρησε την άδεια στις ρυθμίσεις συστήματος.";
 "dialog_permission_location_description_ios" = "Παραχώρησε πρόσβαση στις Ρυθμίσεις -> Τοποθεσία.";

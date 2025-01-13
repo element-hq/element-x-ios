@@ -269,6 +269,8 @@
 "crypto_identity_change_pin_violation" = "Kasutaja %1$@ võrguidentiteet tundub olema muutunud. %2$@";
 "crypto_identity_change_pin_violation_new" = "Kasutaja %1$@ %2$@ võrguidentiteet tundub olema muutunud. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
+"crypto_identity_change_verification_violation_new" = "%1$@ kasutaja (%2$@ kasutajanimi) verifitseeritud identiteet on muutunud. %3$@";
+"crypto_identity_change_withdraw_verification_action" = "Võta verifitseerimine tagasi";
 "dialog_permission_camera" = "Selleks, et rakendus saaks kaamerat kasutada, palun luba see süsteemi seadistuses.";
 "dialog_permission_generic" = "Palun luba süsteemi seadistustest vajalikud õigused.";
 "dialog_permission_location_description_ios" = "Luba õigused Seadistused -> Asukoht valikust.";
