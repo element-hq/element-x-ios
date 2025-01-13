@@ -13450,6 +13450,81 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
     }
 
+    //MARK: - publishRoomAliasInRoomDirectory
+
+    open var publishRoomAliasInRoomDirectoryAliasThrowableError: Error?
+    var publishRoomAliasInRoomDirectoryAliasUnderlyingCallsCount = 0
+    open var publishRoomAliasInRoomDirectoryAliasCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return publishRoomAliasInRoomDirectoryAliasUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = publishRoomAliasInRoomDirectoryAliasUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                publishRoomAliasInRoomDirectoryAliasUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    publishRoomAliasInRoomDirectoryAliasUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var publishRoomAliasInRoomDirectoryAliasCalled: Bool {
+        return publishRoomAliasInRoomDirectoryAliasCallsCount > 0
+    }
+    open var publishRoomAliasInRoomDirectoryAliasReceivedAlias: String?
+    open var publishRoomAliasInRoomDirectoryAliasReceivedInvocations: [String] = []
+
+    var publishRoomAliasInRoomDirectoryAliasUnderlyingReturnValue: Bool!
+    open var publishRoomAliasInRoomDirectoryAliasReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return publishRoomAliasInRoomDirectoryAliasUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = publishRoomAliasInRoomDirectoryAliasUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                publishRoomAliasInRoomDirectoryAliasUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    publishRoomAliasInRoomDirectoryAliasUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var publishRoomAliasInRoomDirectoryAliasClosure: ((String) async throws -> Bool)?
+
+    open override func publishRoomAliasInRoomDirectory(alias: String) async throws -> Bool {
+        if let error = publishRoomAliasInRoomDirectoryAliasThrowableError {
+            throw error
+        }
+        publishRoomAliasInRoomDirectoryAliasCallsCount += 1
+        publishRoomAliasInRoomDirectoryAliasReceivedAlias = alias
+        DispatchQueue.main.async {
+            self.publishRoomAliasInRoomDirectoryAliasReceivedInvocations.append(alias)
+        }
+        if let publishRoomAliasInRoomDirectoryAliasClosure = publishRoomAliasInRoomDirectoryAliasClosure {
+            return try await publishRoomAliasInRoomDirectoryAliasClosure(alias)
+        } else {
+            return publishRoomAliasInRoomDirectoryAliasReturnValue
+        }
+    }
+
     //MARK: - rawName
 
     var rawNameUnderlyingCallsCount = 0
@@ -13599,6 +13674,81 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         removeAvatarCallsCount += 1
         try await removeAvatarClosure?()
+    }
+
+    //MARK: - removeRoomAliasFromRoomDirectory
+
+    open var removeRoomAliasFromRoomDirectoryAliasThrowableError: Error?
+    var removeRoomAliasFromRoomDirectoryAliasUnderlyingCallsCount = 0
+    open var removeRoomAliasFromRoomDirectoryAliasCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return removeRoomAliasFromRoomDirectoryAliasUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeRoomAliasFromRoomDirectoryAliasUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeRoomAliasFromRoomDirectoryAliasUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeRoomAliasFromRoomDirectoryAliasUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var removeRoomAliasFromRoomDirectoryAliasCalled: Bool {
+        return removeRoomAliasFromRoomDirectoryAliasCallsCount > 0
+    }
+    open var removeRoomAliasFromRoomDirectoryAliasReceivedAlias: String?
+    open var removeRoomAliasFromRoomDirectoryAliasReceivedInvocations: [String] = []
+
+    var removeRoomAliasFromRoomDirectoryAliasUnderlyingReturnValue: Bool!
+    open var removeRoomAliasFromRoomDirectoryAliasReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return removeRoomAliasFromRoomDirectoryAliasUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeRoomAliasFromRoomDirectoryAliasUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeRoomAliasFromRoomDirectoryAliasUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeRoomAliasFromRoomDirectoryAliasUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var removeRoomAliasFromRoomDirectoryAliasClosure: ((String) async throws -> Bool)?
+
+    open override func removeRoomAliasFromRoomDirectory(alias: String) async throws -> Bool {
+        if let error = removeRoomAliasFromRoomDirectoryAliasThrowableError {
+            throw error
+        }
+        removeRoomAliasFromRoomDirectoryAliasCallsCount += 1
+        removeRoomAliasFromRoomDirectoryAliasReceivedAlias = alias
+        DispatchQueue.main.async {
+            self.removeRoomAliasFromRoomDirectoryAliasReceivedInvocations.append(alias)
+        }
+        if let removeRoomAliasFromRoomDirectoryAliasClosure = removeRoomAliasFromRoomDirectoryAliasClosure {
+            return try await removeRoomAliasFromRoomDirectoryAliasClosure(alias)
+        } else {
+            return removeRoomAliasFromRoomDirectoryAliasReturnValue
+        }
     }
 
     //MARK: - reportContent
@@ -14928,16 +15078,16 @@ open class RoomSDKMock: MatrixRustSDK.Room {
 
     //MARK: - updateCanonicalAlias
 
-    open var updateCanonicalAliasNewAliasThrowableError: Error?
-    var updateCanonicalAliasNewAliasUnderlyingCallsCount = 0
-    open var updateCanonicalAliasNewAliasCallsCount: Int {
+    open var updateCanonicalAliasAliasAltAliasesThrowableError: Error?
+    var updateCanonicalAliasAliasAltAliasesUnderlyingCallsCount = 0
+    open var updateCanonicalAliasAliasAltAliasesCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return updateCanonicalAliasNewAliasUnderlyingCallsCount
+                return updateCanonicalAliasAliasAltAliasesUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = updateCanonicalAliasNewAliasUnderlyingCallsCount
+                    returnValue = updateCanonicalAliasAliasAltAliasesUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -14945,31 +15095,31 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         set {
             if Thread.isMainThread {
-                updateCanonicalAliasNewAliasUnderlyingCallsCount = newValue
+                updateCanonicalAliasAliasAltAliasesUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    updateCanonicalAliasNewAliasUnderlyingCallsCount = newValue
+                    updateCanonicalAliasAliasAltAliasesUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var updateCanonicalAliasNewAliasCalled: Bool {
-        return updateCanonicalAliasNewAliasCallsCount > 0
+    open var updateCanonicalAliasAliasAltAliasesCalled: Bool {
+        return updateCanonicalAliasAliasAltAliasesCallsCount > 0
     }
-    open var updateCanonicalAliasNewAliasReceivedNewAlias: String?
-    open var updateCanonicalAliasNewAliasReceivedInvocations: [String?] = []
-    open var updateCanonicalAliasNewAliasClosure: ((String?) async throws -> Void)?
+    open var updateCanonicalAliasAliasAltAliasesReceivedArguments: (alias: String?, altAliases: [String])?
+    open var updateCanonicalAliasAliasAltAliasesReceivedInvocations: [(alias: String?, altAliases: [String])] = []
+    open var updateCanonicalAliasAliasAltAliasesClosure: ((String?, [String]) async throws -> Void)?
 
-    open override func updateCanonicalAlias(newAlias: String?) async throws {
-        if let error = updateCanonicalAliasNewAliasThrowableError {
+    open override func updateCanonicalAlias(alias: String?, altAliases: [String]) async throws {
+        if let error = updateCanonicalAliasAliasAltAliasesThrowableError {
             throw error
         }
-        updateCanonicalAliasNewAliasCallsCount += 1
-        updateCanonicalAliasNewAliasReceivedNewAlias = newAlias
+        updateCanonicalAliasAliasAltAliasesCallsCount += 1
+        updateCanonicalAliasAliasAltAliasesReceivedArguments = (alias: alias, altAliases: altAliases)
         DispatchQueue.main.async {
-            self.updateCanonicalAliasNewAliasReceivedInvocations.append(newAlias)
+            self.updateCanonicalAliasAliasAltAliasesReceivedInvocations.append((alias: alias, altAliases: altAliases))
         }
-        try await updateCanonicalAliasNewAliasClosure?(newAlias)
+        try await updateCanonicalAliasAliasAltAliasesClosure?(alias, altAliases)
     }
 
     //MARK: - updateHistoryVisibility
@@ -22522,6 +22672,46 @@ open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity {
         }
         pinCallsCount += 1
         try await pinClosure?()
+    }
+
+    //MARK: - withdrawVerification
+
+    open var withdrawVerificationThrowableError: Error?
+    var withdrawVerificationUnderlyingCallsCount = 0
+    open var withdrawVerificationCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return withdrawVerificationUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = withdrawVerificationUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                withdrawVerificationUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    withdrawVerificationUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var withdrawVerificationCalled: Bool {
+        return withdrawVerificationCallsCount > 0
+    }
+    open var withdrawVerificationClosure: (() async throws -> Void)?
+
+    open override func withdrawVerification() async throws {
+        if let error = withdrawVerificationThrowableError {
+            throw error
+        }
+        withdrawVerificationCallsCount += 1
+        try await withdrawVerificationClosure?()
     }
 }
 open class WidgetDriverSDKMock: MatrixRustSDK.WidgetDriver {

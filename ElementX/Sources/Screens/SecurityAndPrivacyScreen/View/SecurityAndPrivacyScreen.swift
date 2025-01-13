@@ -212,7 +212,6 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             SecurityAndPrivacyScreen(context: publicViewModel.context)
         }
-        .snapshotPreferences(delay: 0.1)
         .previewDisplayName("Public room")
         
         NavigationStack {
@@ -223,7 +222,6 @@ struct SecurityAndPrivacyScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             SecurityAndPrivacyScreen(context: restrictedViewModel.context)
         }
-        .snapshotPreferences(delay: 0.1)
         .previewDisplayName("Restricted room")
     }
 }
