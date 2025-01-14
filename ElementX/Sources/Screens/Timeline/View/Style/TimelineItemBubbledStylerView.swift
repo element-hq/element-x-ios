@@ -264,7 +264,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
 private extension EventBasedTimelineItemProtocol {
     var bubbleBackgroundColor: Color? {
-        let defaultColor: Color = isOutgoing ? .zero.bgChatBubblePurple : .compound._bgBubbleIncoming
+        let defaultColor: Color = isOutgoing ? .zero.bgChatBubbleOutgoing : .zero.bgChatBubbleIncoming
 
         switch self {
         case let self as EventBasedMessageTimelineItemProtocol:
