@@ -269,6 +269,8 @@
 "crypto_identity_change_pin_violation" = "%1$@'s identiteit lijkt te zijn veranderd. %2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@'s %2$@ identiteit lijkt te zijn veranderd. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
+"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ verified identity has changed.  %3$@";
+"crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
 "dialog_permission_camera" = "Geef toestemming in de systeeminstellingen om de applicatie de camera te laten gebruiken.";
 "dialog_permission_generic" = "Geef hiervoor toestemming in de systeeminstellingen.";
 "dialog_permission_location_description_ios" = "Verleen toegang via Instellingen -> Locatie.";

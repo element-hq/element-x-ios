@@ -66,7 +66,7 @@ enum ExtensionLogger {
         return "\(formattedStr) MB"
     }
 
-    static func configure(currentTarget: String, logLevel: TracingConfiguration.LogLevel) {
+    static func configure(currentTarget: String, logLevel: LogLevel) {
         guard !isConfigured else {
             return
         }

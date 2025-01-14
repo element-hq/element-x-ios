@@ -269,6 +269,8 @@
 "crypto_identity_change_pin_violation" = "Identitas %1$@ tampaknya telah berubah. %2$@";
 "crypto_identity_change_pin_violation_new" = "Identitas %1$@ yang %2$@ tampaknya telah berubah. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
+"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ verified identity has changed.  %3$@";
+"crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
 "dialog_permission_camera" = "Supaya aplikasinya dapat menggunakan kamera, berikan izin dalam pengaturan sistem.";
 "dialog_permission_generic" = "Silakan memberikan izin dalam pengaturan sistem.";
 "dialog_permission_location_description_ios" = "Berikan akses dalam Pengaturan -> Lokasi.";

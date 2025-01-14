@@ -76,7 +76,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         }
         
         if bugReport.includeLogs {
-            let logAttachments = await zipFiles(RustTracing.logFiles)
+            let logAttachments = await zipFiles(Tracing.logFiles)
             for url in logAttachments.files {
                 params.append(MultipartFormData(key: "compressed-log", type: .file(url: url)))
             }
@@ -163,8 +163,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             MultipartFormData(key: "fallback_language", type: .text(value: Bundle.app.developmentLocalization ?? "null")),
             MultipartFormData(key: "local_time", type: .text(value: localTime)),
             MultipartFormData(key: "utc_time", type: .text(value: utcTime)),
-            MultipartFormData(key: "base_bundle_identifier", type: .text(value: InfoPlistReader.main.baseBundleIdentifier)),
-            MultipartFormData(key: "rust_tracing_filter", type: .text(value: RustTracing.currentTracingConfiguration?.filter ?? "null"))
+            MultipartFormData(key: "base_bundle_identifier", type: .text(value: InfoPlistReader.main.baseBundleIdentifier))
         ]
     }
 

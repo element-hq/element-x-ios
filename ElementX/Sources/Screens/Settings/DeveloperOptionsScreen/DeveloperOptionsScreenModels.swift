@@ -44,7 +44,7 @@ enum DeveloperOptionsScreenViewAction {
 }
 
 protocol DeveloperOptionsProtocol: AnyObject {
-    var logLevel: TracingConfiguration.LogLevel { get set }
+    var logLevel: LogLevel { get set }
     var slidingSyncDiscovery: AppSettings.SlidingSyncDiscovery { get set }
     var publicSearchEnabled: Bool { get set }
     var hideUnreadMessagesBadge: Bool { get set }

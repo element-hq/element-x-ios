@@ -269,6 +269,8 @@
 "crypto_identity_change_pin_violation" = "Zdá se, že se identita %1$@ změnila. %2$@";
 "crypto_identity_change_pin_violation_new" = "Zdá se, že identita %1$@ %2$@ se změnila. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
+"crypto_identity_change_verification_violation_new" = "Ověřená identita uživatele %1$@ %2$@ se změnila. %3$@";
+"crypto_identity_change_withdraw_verification_action" = "Zrušit ověření";
 "dialog_permission_camera" = "Aby mohla aplikace používat fotoaparát, udělte prosím oprávnění v nastavení systému.";
 "dialog_permission_generic" = "Udělte prosím oprávnění v nastavení systému.";
 "dialog_permission_location_description_ios" = "Udělte přístup v Nastavení -> Poloha.";
@@ -374,8 +376,8 @@
 "screen_create_room_room_address_section_footer" = "Aby byla tato místnost viditelná v adresáři veřejných místností, budete potřebovat adresu místnosti.";
 "screen_create_room_room_address_section_title" = "Adresa místnosti";
 "screen_create_room_room_visibility_section_title" = "Viditelnost místnosti";
-"screen_edit_room_address_room_address_section_footer" = "You’ll need a room address in order to make it visible in the directory.";
-"screen_edit_room_address_title" = "Room address";
+"screen_edit_room_address_room_address_section_footer" = "Budete potřebovat adresu místnosti, aby byla viditelná v adresáři.";
+"screen_edit_room_address_title" = "Adresa místnosti";
 "screen_join_room_cancel_knock_action" = "Zrušit žádost";
 "screen_join_room_cancel_knock_alert_confirmation" = "Ano, zrušit";
 "screen_join_room_cancel_knock_alert_description" = "Opravdu chcete zrušit svou žádost o vstup do této místnosti?";

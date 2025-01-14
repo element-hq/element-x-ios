@@ -26,10 +26,10 @@ enum MXLog {
     
     static func configure(currentTarget: String,
                           filePrefix: String?,
-                          logLevel: TracingConfiguration.LogLevel) {
+                          logLevel: LogLevel) {
         guard !didConfigureOnce else { return }
         
-        RustTracing.setup(configuration: .init(logLevel: logLevel, currentTarget: currentTarget, filePrefix: filePrefix))
+        Tracing.setup(logLevel: logLevel, currentTarget: currentTarget, filePrefix: filePrefix)
         
         self.currentTarget = currentTarget
         
@@ -135,7 +135,7 @@ enum MXLog {
             rootSpan.enter()
         }
         
-        return Span(file: file, line: UInt32(line), level: level, target: currentTarget, name: name)
+        return Span(file: file, line: UInt32(line), level: level.rustLogLevel, target: currentTarget, name: name)
     }
     
     // periphery:ignore:parameters function,column,context
@@ -154,6 +154,6 @@ enum MXLog {
             rootSpan.enter()
         }
         
-        logEvent(file: (file as NSString).lastPathComponent, line: UInt32(line), level: level, target: currentTarget, message: "\(message)")
+        logEvent(file: (file as NSString).lastPathComponent, line: UInt32(line), level: level.rustLogLevel, target: currentTarget, message: "\(message)")
     }
 }
