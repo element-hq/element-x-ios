@@ -28,7 +28,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
         super.init(initialViewState: SecurityAndPrivacyScreenViewState(serverName: clientProxy.userIDServerName ?? "",
-                                                                       accessType: roomProxy.infoPublisher.value.roomAccessType,
+                                                                       accessType: roomProxy.infoPublisher.value.joinRule.toSecurityAndPrivacyRoomAccessType,
                                                                        isEncryptionEnabled: roomProxy.isEncrypted,
                                                                        historyVisibility: roomProxy.infoPublisher.value.historyVisibility.toSecurityAndPrivacyHistoryVisibility))
         
@@ -43,8 +43,9 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         
         switch viewAction {
         case .save:
-            // TODO: Implement save action
-            break
+            Task {
+                await saveDesiredSettings()
+            }
         case .tryUpdatingEncryption(let updatedValue):
             if updatedValue {
                 state.bindings.alertInfo = .init(id: .enableEncryption,
@@ -95,15 +96,97 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             case .failure:
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
                 state.bindings.desiredSettings.isVisibileInRoomDirectory = false
+                state.currentSettings.isVisibileInRoomDirectory = false
+            }
+        }
+    }
+    
+    private func saveDesiredSettings() async {
+        showLoadingIndicator()
+        
+        defer {
+            hideLoadingIndicator()
+        }
+        
+        if state.currentSettings.isEncryptionEnabled != state.bindings.desiredSettings.isEncryptionEnabled {
+            switch await roomProxy.enableEncryption() {
+            case .success:
+                state.currentSettings.isEncryptionEnabled = state.bindings.desiredSettings.isEncryptionEnabled
+            case .failure:
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            }
+        }
+        
+        if state.currentSettings.historyVisibility != state.bindings.desiredSettings.historyVisibility {
+            switch await roomProxy.updateHistoryVisibility(state.bindings.desiredSettings.historyVisibility.toRoomHistoryVisibility) {
+            case .success:
+                state.currentSettings.historyVisibility = state.bindings.desiredSettings.historyVisibility
+            case .failure:
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            }
+        }
+        
+        if state.currentSettings.accessType != state.bindings.desiredSettings.accessType {
+            // When a user changes join rules to something other than knock or public,
+            // the room should be automatically made invisible (private) in the room directory.
+            if state.currentSettings.accessType != .askToJoin, state.currentSettings.accessType != .anyone {
                 state.bindings.desiredSettings.isVisibileInRoomDirectory = false
             }
+            
+            switch await roomProxy.updateJoinRule(state.bindings.desiredSettings.accessType.toJoinRule) {
+            case .success:
+                state.currentSettings.accessType = state.bindings.desiredSettings.accessType
+            case .failure:
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            }
+        }
+        
+        if state.currentSettings.isVisibileInRoomDirectory != state.bindings.desiredSettings.isVisibileInRoomDirectory {
+            let visibility: RoomVisibility = state.bindings.desiredSettings.isVisibileInRoomDirectory == true ? .public : .private
+            
+            switch await roomProxy.updateRoomDirectoryVisibility(visibility) {
+            case .success:
+                state.currentSettings.isVisibileInRoomDirectory = state.bindings.desiredSettings.isVisibileInRoomDirectory
+            case .failure:
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            }
+        }
+    }
+    
+    private static let loadingIndicatorIdentifier = "\(EditRoomAddressScreenViewModel.self)-Loading"
+    
+    private func showLoadingIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                              type: .modal,
+                                                              title: L10n.commonLoading,
+                                                              persistent: true))
+    }
+    
+    private func hideLoadingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+    }
+}
+
+private extension SecurityAndPrivacyRoomAccessType {
+    var toJoinRule: JoinRule {
+        switch self {
+        case .inviteOnly:
+            .invite
+        case .askToJoin:
+            .knock
+        case .anyone:
+            .public
+        case .spaceUsers:
+            fatalError("The user shouldn't be able to select this rule")
         }
     }
 }
 
-private extension RoomInfoProxy {
-    var roomAccessType: SecurityAndPrivacyRoomAccessType {
-        switch joinRule {
+private extension Optional where Wrapped == JoinRule {
+    var toSecurityAndPrivacyRoomAccessType: SecurityAndPrivacyRoomAccessType {
+        switch self {
+        case .none, .public:
+            return .anyone
         case .invite:
             return .inviteOnly
         case .knock, .knockRestricted:
@@ -111,7 +194,7 @@ private extension RoomInfoProxy {
         case .restricted:
             return .spaceUsers
         default:
-            return .anyone
+            return .inviteOnly
         }
     }
 }
@@ -125,6 +208,19 @@ private extension RoomHistoryVisibility {
             return .sinceSelection
         case .worldReadable:
             return .anyone
+        }
+    }
+}
+
+private extension SecurityAndPrivacyHistoryVisibility {
+    var toRoomHistoryVisibility: RoomHistoryVisibility {
+        switch self {
+        case .sinceSelection:
+            return .shared
+        case .sinceInvite:
+            return .invited
+        case .anyone:
+            return .worldReadable
         }
     }
 }

@@ -157,13 +157,13 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
     private static let loadingIndicatorIdentifier = "\(EditRoomAddressScreenViewModel.self)-Loading"
     
     private func showLoadingIndicator() {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                                                    type: .modal,
-                                                                                    title: L10n.commonLoading,
-                                                                                    persistent: true))
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                              type: .modal,
+                                                              title: L10n.commonLoading,
+                                                              persistent: true))
     }
     
     private func hideLoadingIndicator() {
-        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }
