@@ -8,7 +8,7 @@
 import Foundation
 
 enum EditRoomAddressScreenViewModelAction {
-    case cancel
+    case dismiss
 }
 
 struct EditRoomAddressScreenViewState: BindableState {

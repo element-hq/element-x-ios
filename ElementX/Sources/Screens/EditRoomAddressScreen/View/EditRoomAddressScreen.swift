@@ -19,6 +19,11 @@ struct EditRoomAddressScreen: View {
                     .onChange(of: context.desiredAliasLocalPart) { _, newAliasLocalPart in
                         context.desiredAliasLocalPart = newAliasLocalPart.lowercased()
                     }
+                    .onSubmit {
+                        if context.viewState.canSave {
+                            context.send(viewAction: .save)
+                        }
+                    }
             } footer: {
                 VStack(alignment: .leading, spacing: 12) {
                     if let errorDescription = context.viewState.aliasErrors.errorDescription {
@@ -47,8 +52,8 @@ struct EditRoomAddressScreen: View {
             .disabled(!context.viewState.canSave)
         }
         ToolbarItem(placement: .cancellationAction) {
-            Button(L10n.actionCreate) {
-                context.send(viewAction: .save)
+            Button(L10n.actionCancel) {
+                context.send(viewAction: .cancel)
             }
         }
     }

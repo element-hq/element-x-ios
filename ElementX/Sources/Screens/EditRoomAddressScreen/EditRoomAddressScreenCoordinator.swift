@@ -42,7 +42,7 @@ final class EditRoomAddressScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
-            case .cancel:
+            case .dismiss:
                 actionsSubject.send(.dismiss)
             }
         }

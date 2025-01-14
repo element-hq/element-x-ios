@@ -38,6 +38,7 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
         }
         
         super.init(initialViewState: EditRoomAddressScreenViewState(serverName: clientProxy.userIDServerName ?? "",
+                                                                    currentAliasLocalPart: aliasLocalPart,
                                                                     bindings: .init(desiredAliasLocalPart: aliasLocalPart)))
         setupSubscriptions()
     }
@@ -51,7 +52,7 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
         case .save:
             Task { await save() }
         case .cancel:
-            actionsSubject.send(.cancel)
+            actionsSubject.send(.dismiss)
         }
     }
     
@@ -88,6 +89,7 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
                     checkAliasAvailabilityTask = nil
                     return
                 }
+                
                 checkAliasAvailabilityTask = Task { [weak self] in
                     guard let self else {
                         return
@@ -106,9 +108,14 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
     }
     
     private func save() async {
-        guard let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: state.bindings.desiredAliasLocalPart,
-                                                             serverName: state.serverName),
-            isRoomAliasFormatValid(alias: canonicalAlias) else {
+        showLoadingIndicator()
+        
+        defer {
+            hideLoadingIndicator()
+        }
+        
+        guard let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: state.bindings.desiredAliasLocalPart, serverName: state.serverName),
+              isRoomAliasFormatValid(alias: canonicalAlias) else {
             state.aliasErrors = [.invalidSymbols]
             return
         }
@@ -124,6 +131,39 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
             return
         }
         
-        // TODO: API calls to edit/add the alias and maybe also dismiss the view? (check with design)
+        let oldAlias = roomProxy.infoPublisher.value.canonicalAlias
+        
+        // First publish the new alias
+        if case .failure = await roomProxy.publishRoomAliasInRoomDirectory(canonicalAlias) {
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            return
+        }
+        
+        // Then set it as the main alias
+        if case .failure = await roomProxy.updateCanonicalAlias(canonicalAlias, altAliases: []) {
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            return
+        }
+        
+        // And finally delete the old one
+        if let oldAlias, case .failure = await roomProxy.removeRoomAliasFromRoomDirectory(oldAlias) {
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            return
+        }
+        
+        actionsSubject.send(.dismiss)
+    }
+    
+    private static let loadingIndicatorIdentifier = "\(EditRoomAddressScreenViewModel.self)-Loading"
+    
+    private func showLoadingIndicator() {
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                                                    type: .modal,
+                                                                                    title: L10n.commonLoading,
+                                                                                    persistent: true))
+    }
+    
+    private func hideLoadingIndicator() {
+        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }
