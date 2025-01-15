@@ -77,7 +77,9 @@ struct EditRoomAddressScreen_Previews: PreviewProvider, TestablePreview {
     static let alreadyExistingViewModel = {
         let clientProxy = ClientProxyMock(.init(userIDServerName: "matrix.org"))
         clientProxy.isAliasAvailableReturnValue = .success(false)
-        return EditRoomAddressScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Room Name")),
+        return EditRoomAddressScreenViewModel(initialViewState: .init(serverName: "matrix.org",
+                                                                      bindings: .init(desiredAliasLocalPart: "whatever")),
+                                              roomProxy: JoinedRoomProxyMock(.init(name: "Room Name")),
                                               clientProxy: clientProxy,
                                               userIndicatorController: UserIndicatorControllerMock())
     }()

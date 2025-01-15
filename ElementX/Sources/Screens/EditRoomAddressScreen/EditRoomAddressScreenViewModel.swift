@@ -23,7 +23,8 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
     
     @CancellableTask private var checkAliasAvailabilityTask: Task<Void, Never>?
 
-    init(roomProxy: JoinedRoomProxyProtocol,
+    init(initialViewState: EditRoomAddressScreenViewState? = nil,
+         roomProxy: JoinedRoomProxyProtocol,
          clientProxy: ClientProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
@@ -37,9 +38,13 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
             aliasLocalPart = roomAliasNameFromRoomDisplayName(roomName: displayName)
         }
         
-        super.init(initialViewState: EditRoomAddressScreenViewState(serverName: clientProxy.userIDServerName ?? "",
-                                                                    currentAliasLocalPart: aliasLocalPart,
-                                                                    bindings: .init(desiredAliasLocalPart: aliasLocalPart)))
+        if let initialViewState {
+            super.init(initialViewState: initialViewState)
+        } else {
+            super.init(initialViewState: EditRoomAddressScreenViewState(serverName: clientProxy.userIDServerName ?? "",
+                                                                        currentAliasLocalPart: aliasLocalPart,
+                                                                        bindings: .init(desiredAliasLocalPart: aliasLocalPart)))
+        }
         setupSubscriptions()
     }
     
@@ -60,7 +65,7 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
         context.$viewState
             .map(\.bindings.desiredAliasLocalPart)
             .removeDuplicates()
-            .debounce(for: 1, scheduler: DispatchQueue.main)
+            .debounce(for: 0.5, scheduler: DispatchQueue.main)
             .sink { [weak self] aliasLocalPart in
                 guard let self else {
                     return
