@@ -97,3 +97,13 @@ extension String {
         trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 }
+
+extension String {
+    static func makeCanonicalAlias(aliasLocalPart: Self?, serverName: Self?) -> Self? {
+        guard let aliasLocalPart, !aliasLocalPart.isEmpty,
+              let serverName, !serverName.isEmpty else {
+            return nil
+        }
+        return "#\(aliasLocalPart):\(serverName)"
+    }
+}

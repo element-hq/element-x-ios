@@ -72,3 +72,14 @@ enum CreateRoomAliasErrorState {
     case alreadyExists
     case invalidSymbols
 }
+
+extension Set<CreateRoomAliasErrorState> {
+    var errorDescription: String? {
+        if contains(.alreadyExists) {
+            return L10n.errorRoomAddressAlreadyExists
+        } else if contains(.invalidSymbols) {
+            return L10n.errorRoomAddressInvalidSymbols
+        }
+        return nil
+    }
+}

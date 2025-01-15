@@ -154,7 +154,8 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                 
                 guard state.isKnockingFeatureEnabled,
                       !state.bindings.isRoomPrivate,
-                      let canonicalAlias = canonicalAlias(aliasLocalPart: aliasLocalPart) else {
+                      let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: aliasLocalPart,
+                                                                     serverName: state.serverName) else {
                     // While is empty or private room we don't change or display the error
                     return
                 }
@@ -209,8 +210,9 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         
         // Better to double check the errors also when trying to create the room
         if state.isKnockingFeatureEnabled, !createRoomParameters.isRoomPrivate {
-            guard let canonicalAlias = canonicalAlias(aliasLocalPart: createRoomParameters.aliasLocalPart),
-                  isRoomAliasFormatValid(alias: canonicalAlias) else {
+            guard let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: createRoomParameters.aliasLocalPart,
+                                                                 serverName: state.serverName),
+                isRoomAliasFormatValid(alias: canonicalAlias) else {
                 state.aliasErrors = [.invalidSymbols]
                 return
             }
@@ -269,14 +271,6 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                                                  title: L10n.commonError,
                                                  message: L10n.screenStartChatErrorStartingChat)
         }
-    }
-    
-    func canonicalAlias(aliasLocalPart: String?) -> String? {
-        guard let aliasLocalPart,
-              !aliasLocalPart.isEmpty else {
-            return nil
-        }
-        return "#\(aliasLocalPart):\(state.serverName)"
     }
     
     // MARK: Loading indicator

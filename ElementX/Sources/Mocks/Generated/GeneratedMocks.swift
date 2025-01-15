@@ -6223,6 +6223,70 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
             return messageFilteredTimelineAllowedMessageTypesReturnValue
         }
     }
+    //MARK: - enableEncryption
+
+    var enableEncryptionUnderlyingCallsCount = 0
+    var enableEncryptionCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return enableEncryptionUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = enableEncryptionUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                enableEncryptionUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    enableEncryptionUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var enableEncryptionCalled: Bool {
+        return enableEncryptionCallsCount > 0
+    }
+
+    var enableEncryptionUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var enableEncryptionReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return enableEncryptionUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = enableEncryptionUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                enableEncryptionUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    enableEncryptionUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var enableEncryptionClosure: (() async -> Result<Void, RoomProxyError>)?
+
+    func enableEncryption() async -> Result<Void, RoomProxyError> {
+        enableEncryptionCallsCount += 1
+        if let enableEncryptionClosure = enableEncryptionClosure {
+            return await enableEncryptionClosure()
+        } else {
+            return enableEncryptionReturnValue
+        }
+    }
     //MARK: - redact
 
     var redactUnderlyingCallsCount = 0
@@ -7225,6 +7289,490 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
             return await withdrawVerificationAndResendUserIDsSendHandleClosure(userIDs, sendHandle)
         } else {
             return withdrawVerificationAndResendUserIDsSendHandleReturnValue
+        }
+    }
+    //MARK: - updateJoinRule
+
+    var updateJoinRuleUnderlyingCallsCount = 0
+    var updateJoinRuleCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateJoinRuleUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateJoinRuleUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateJoinRuleUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateJoinRuleUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var updateJoinRuleCalled: Bool {
+        return updateJoinRuleCallsCount > 0
+    }
+    var updateJoinRuleReceivedRule: JoinRule?
+    var updateJoinRuleReceivedInvocations: [JoinRule] = []
+
+    var updateJoinRuleUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var updateJoinRuleReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return updateJoinRuleUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateJoinRuleUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateJoinRuleUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateJoinRuleUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var updateJoinRuleClosure: ((JoinRule) async -> Result<Void, RoomProxyError>)?
+
+    func updateJoinRule(_ rule: JoinRule) async -> Result<Void, RoomProxyError> {
+        updateJoinRuleCallsCount += 1
+        updateJoinRuleReceivedRule = rule
+        DispatchQueue.main.async {
+            self.updateJoinRuleReceivedInvocations.append(rule)
+        }
+        if let updateJoinRuleClosure = updateJoinRuleClosure {
+            return await updateJoinRuleClosure(rule)
+        } else {
+            return updateJoinRuleReturnValue
+        }
+    }
+    //MARK: - updateHistoryVisibility
+
+    var updateHistoryVisibilityUnderlyingCallsCount = 0
+    var updateHistoryVisibilityCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateHistoryVisibilityUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateHistoryVisibilityUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateHistoryVisibilityUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateHistoryVisibilityUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var updateHistoryVisibilityCalled: Bool {
+        return updateHistoryVisibilityCallsCount > 0
+    }
+    var updateHistoryVisibilityReceivedVisibility: RoomHistoryVisibility?
+    var updateHistoryVisibilityReceivedInvocations: [RoomHistoryVisibility] = []
+
+    var updateHistoryVisibilityUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var updateHistoryVisibilityReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return updateHistoryVisibilityUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateHistoryVisibilityUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateHistoryVisibilityUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateHistoryVisibilityUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var updateHistoryVisibilityClosure: ((RoomHistoryVisibility) async -> Result<Void, RoomProxyError>)?
+
+    func updateHistoryVisibility(_ visibility: RoomHistoryVisibility) async -> Result<Void, RoomProxyError> {
+        updateHistoryVisibilityCallsCount += 1
+        updateHistoryVisibilityReceivedVisibility = visibility
+        DispatchQueue.main.async {
+            self.updateHistoryVisibilityReceivedInvocations.append(visibility)
+        }
+        if let updateHistoryVisibilityClosure = updateHistoryVisibilityClosure {
+            return await updateHistoryVisibilityClosure(visibility)
+        } else {
+            return updateHistoryVisibilityReturnValue
+        }
+    }
+    //MARK: - isVisibleInRoomDirectory
+
+    var isVisibleInRoomDirectoryUnderlyingCallsCount = 0
+    var isVisibleInRoomDirectoryCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return isVisibleInRoomDirectoryUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isVisibleInRoomDirectoryUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isVisibleInRoomDirectoryUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isVisibleInRoomDirectoryUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var isVisibleInRoomDirectoryCalled: Bool {
+        return isVisibleInRoomDirectoryCallsCount > 0
+    }
+
+    var isVisibleInRoomDirectoryUnderlyingReturnValue: Result<Bool, RoomProxyError>!
+    var isVisibleInRoomDirectoryReturnValue: Result<Bool, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return isVisibleInRoomDirectoryUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Bool, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isVisibleInRoomDirectoryUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isVisibleInRoomDirectoryUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isVisibleInRoomDirectoryUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var isVisibleInRoomDirectoryClosure: (() async -> Result<Bool, RoomProxyError>)?
+
+    func isVisibleInRoomDirectory() async -> Result<Bool, RoomProxyError> {
+        isVisibleInRoomDirectoryCallsCount += 1
+        if let isVisibleInRoomDirectoryClosure = isVisibleInRoomDirectoryClosure {
+            return await isVisibleInRoomDirectoryClosure()
+        } else {
+            return isVisibleInRoomDirectoryReturnValue
+        }
+    }
+    //MARK: - updateRoomDirectoryVisibility
+
+    var updateRoomDirectoryVisibilityUnderlyingCallsCount = 0
+    var updateRoomDirectoryVisibilityCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateRoomDirectoryVisibilityUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateRoomDirectoryVisibilityUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateRoomDirectoryVisibilityUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateRoomDirectoryVisibilityUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var updateRoomDirectoryVisibilityCalled: Bool {
+        return updateRoomDirectoryVisibilityCallsCount > 0
+    }
+    var updateRoomDirectoryVisibilityReceivedVisibility: RoomVisibility?
+    var updateRoomDirectoryVisibilityReceivedInvocations: [RoomVisibility] = []
+
+    var updateRoomDirectoryVisibilityUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var updateRoomDirectoryVisibilityReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return updateRoomDirectoryVisibilityUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateRoomDirectoryVisibilityUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateRoomDirectoryVisibilityUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateRoomDirectoryVisibilityUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var updateRoomDirectoryVisibilityClosure: ((RoomVisibility) async -> Result<Void, RoomProxyError>)?
+
+    func updateRoomDirectoryVisibility(_ visibility: RoomVisibility) async -> Result<Void, RoomProxyError> {
+        updateRoomDirectoryVisibilityCallsCount += 1
+        updateRoomDirectoryVisibilityReceivedVisibility = visibility
+        DispatchQueue.main.async {
+            self.updateRoomDirectoryVisibilityReceivedInvocations.append(visibility)
+        }
+        if let updateRoomDirectoryVisibilityClosure = updateRoomDirectoryVisibilityClosure {
+            return await updateRoomDirectoryVisibilityClosure(visibility)
+        } else {
+            return updateRoomDirectoryVisibilityReturnValue
+        }
+    }
+    //MARK: - updateCanonicalAlias
+
+    var updateCanonicalAliasAltAliasesUnderlyingCallsCount = 0
+    var updateCanonicalAliasAltAliasesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateCanonicalAliasAltAliasesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateCanonicalAliasAltAliasesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateCanonicalAliasAltAliasesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateCanonicalAliasAltAliasesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var updateCanonicalAliasAltAliasesCalled: Bool {
+        return updateCanonicalAliasAltAliasesCallsCount > 0
+    }
+    var updateCanonicalAliasAltAliasesReceivedArguments: (alias: String?, altAliases: [String])?
+    var updateCanonicalAliasAltAliasesReceivedInvocations: [(alias: String?, altAliases: [String])] = []
+
+    var updateCanonicalAliasAltAliasesUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var updateCanonicalAliasAltAliasesReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return updateCanonicalAliasAltAliasesUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateCanonicalAliasAltAliasesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateCanonicalAliasAltAliasesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateCanonicalAliasAltAliasesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var updateCanonicalAliasAltAliasesClosure: ((String?, [String]) async -> Result<Void, RoomProxyError>)?
+
+    func updateCanonicalAlias(_ alias: String?, altAliases: [String]) async -> Result<Void, RoomProxyError> {
+        updateCanonicalAliasAltAliasesCallsCount += 1
+        updateCanonicalAliasAltAliasesReceivedArguments = (alias: alias, altAliases: altAliases)
+        DispatchQueue.main.async {
+            self.updateCanonicalAliasAltAliasesReceivedInvocations.append((alias: alias, altAliases: altAliases))
+        }
+        if let updateCanonicalAliasAltAliasesClosure = updateCanonicalAliasAltAliasesClosure {
+            return await updateCanonicalAliasAltAliasesClosure(alias, altAliases)
+        } else {
+            return updateCanonicalAliasAltAliasesReturnValue
+        }
+    }
+    //MARK: - publishRoomAliasInRoomDirectory
+
+    var publishRoomAliasInRoomDirectoryUnderlyingCallsCount = 0
+    var publishRoomAliasInRoomDirectoryCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return publishRoomAliasInRoomDirectoryUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = publishRoomAliasInRoomDirectoryUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                publishRoomAliasInRoomDirectoryUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    publishRoomAliasInRoomDirectoryUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var publishRoomAliasInRoomDirectoryCalled: Bool {
+        return publishRoomAliasInRoomDirectoryCallsCount > 0
+    }
+    var publishRoomAliasInRoomDirectoryReceivedAlias: String?
+    var publishRoomAliasInRoomDirectoryReceivedInvocations: [String] = []
+
+    var publishRoomAliasInRoomDirectoryUnderlyingReturnValue: Result<Bool, RoomProxyError>!
+    var publishRoomAliasInRoomDirectoryReturnValue: Result<Bool, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return publishRoomAliasInRoomDirectoryUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Bool, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = publishRoomAliasInRoomDirectoryUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                publishRoomAliasInRoomDirectoryUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    publishRoomAliasInRoomDirectoryUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var publishRoomAliasInRoomDirectoryClosure: ((String) async -> Result<Bool, RoomProxyError>)?
+
+    func publishRoomAliasInRoomDirectory(_ alias: String) async -> Result<Bool, RoomProxyError> {
+        publishRoomAliasInRoomDirectoryCallsCount += 1
+        publishRoomAliasInRoomDirectoryReceivedAlias = alias
+        DispatchQueue.main.async {
+            self.publishRoomAliasInRoomDirectoryReceivedInvocations.append(alias)
+        }
+        if let publishRoomAliasInRoomDirectoryClosure = publishRoomAliasInRoomDirectoryClosure {
+            return await publishRoomAliasInRoomDirectoryClosure(alias)
+        } else {
+            return publishRoomAliasInRoomDirectoryReturnValue
+        }
+    }
+    //MARK: - removeRoomAliasFromRoomDirectory
+
+    var removeRoomAliasFromRoomDirectoryUnderlyingCallsCount = 0
+    var removeRoomAliasFromRoomDirectoryCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return removeRoomAliasFromRoomDirectoryUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeRoomAliasFromRoomDirectoryUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeRoomAliasFromRoomDirectoryUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeRoomAliasFromRoomDirectoryUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var removeRoomAliasFromRoomDirectoryCalled: Bool {
+        return removeRoomAliasFromRoomDirectoryCallsCount > 0
+    }
+    var removeRoomAliasFromRoomDirectoryReceivedAlias: String?
+    var removeRoomAliasFromRoomDirectoryReceivedInvocations: [String] = []
+
+    var removeRoomAliasFromRoomDirectoryUnderlyingReturnValue: Result<Bool, RoomProxyError>!
+    var removeRoomAliasFromRoomDirectoryReturnValue: Result<Bool, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return removeRoomAliasFromRoomDirectoryUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Bool, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeRoomAliasFromRoomDirectoryUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeRoomAliasFromRoomDirectoryUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeRoomAliasFromRoomDirectoryUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var removeRoomAliasFromRoomDirectoryClosure: ((String) async -> Result<Bool, RoomProxyError>)?
+
+    func removeRoomAliasFromRoomDirectory(_ alias: String) async -> Result<Bool, RoomProxyError> {
+        removeRoomAliasFromRoomDirectoryCallsCount += 1
+        removeRoomAliasFromRoomDirectoryReceivedAlias = alias
+        DispatchQueue.main.async {
+            self.removeRoomAliasFromRoomDirectoryReceivedInvocations.append(alias)
+        }
+        if let removeRoomAliasFromRoomDirectoryClosure = removeRoomAliasFromRoomDirectoryClosure {
+            return await removeRoomAliasFromRoomDirectoryClosure(alias)
+        } else {
+            return removeRoomAliasFromRoomDirectoryReturnValue
         }
     }
     //MARK: - flagAsUnread
