@@ -4682,6 +4682,76 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return pinUserIdentityReturnValue
         }
     }
+    //MARK: - withdrawUserIdentityVerification
+
+    var withdrawUserIdentityVerificationUnderlyingCallsCount = 0
+    var withdrawUserIdentityVerificationCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return withdrawUserIdentityVerificationUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = withdrawUserIdentityVerificationUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                withdrawUserIdentityVerificationUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    withdrawUserIdentityVerificationUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var withdrawUserIdentityVerificationCalled: Bool {
+        return withdrawUserIdentityVerificationCallsCount > 0
+    }
+    var withdrawUserIdentityVerificationReceivedUserID: String?
+    var withdrawUserIdentityVerificationReceivedInvocations: [String] = []
+
+    var withdrawUserIdentityVerificationUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var withdrawUserIdentityVerificationReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return withdrawUserIdentityVerificationUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = withdrawUserIdentityVerificationUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                withdrawUserIdentityVerificationUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    withdrawUserIdentityVerificationUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var withdrawUserIdentityVerificationClosure: ((String) async -> Result<Void, ClientProxyError>)?
+
+    func withdrawUserIdentityVerification(_ userID: String) async -> Result<Void, ClientProxyError> {
+        withdrawUserIdentityVerificationCallsCount += 1
+        withdrawUserIdentityVerificationReceivedUserID = userID
+        DispatchQueue.main.async {
+            self.withdrawUserIdentityVerificationReceivedInvocations.append(userID)
+        }
+        if let withdrawUserIdentityVerificationClosure = withdrawUserIdentityVerificationClosure {
+            return await withdrawUserIdentityVerificationClosure(userID)
+        } else {
+            return withdrawUserIdentityVerificationReturnValue
+        }
+    }
     //MARK: - resetIdentity
 
     var resetIdentityUnderlyingCallsCount = 0

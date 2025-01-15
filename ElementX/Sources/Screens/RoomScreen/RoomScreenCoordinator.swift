@@ -90,7 +90,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                                     maxCompressedHeight: ComposerConstant.maxHeight,
                                                     maxExpandedHeight: ComposerConstant.maxHeight,
                                                     parserStyle: .elementX)
-        let composerViewModel = ComposerToolbarViewModel(initialText: parameters.sharedText,
+        let composerViewModel = ComposerToolbarViewModel(initialText: parameters.sharedText, roomProxy: parameters.roomProxy,
                                                          wysiwygViewModel: wysiwygViewModel,
                                                          completionSuggestionService: parameters.completionSuggestionService,
                                                          mediaProvider: parameters.mediaProvider,
