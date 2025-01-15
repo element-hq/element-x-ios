@@ -143,6 +143,12 @@ extension PreviewTests {
         }
     }
 
+    func test_editRoomAddressScreen() async throws {
+        for preview in EditRoomAddressScreen_Previews._allPreviews {
+            try await assertSnapshots(matching: preview)
+        }
+    }
+
     func test_emojiPickerScreenHeaderView() async throws {
         for preview in EmojiPickerScreenHeaderView_Previews._allPreviews {
             try await assertSnapshots(matching: preview)
@@ -787,6 +793,12 @@ extension PreviewTests {
 
     func test_secureBackupScreen() async throws {
         for preview in SecureBackupScreen_Previews._allPreviews {
+            try await assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_securityAndPrivacyScreen() async throws {
+        for preview in SecurityAndPrivacyScreen_Previews._allPreviews {
             try await assertSnapshots(matching: preview)
         }
     }

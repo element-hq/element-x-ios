@@ -1,4 +1,15 @@
 // swiftlint:disable all
+@preconcurrency import Combine
+@preconcurrency import SwiftUI
+
+@preconcurrency import MatrixRustSDK
+
+import AnalyticsEvents
+import AVFoundation
+import Foundation
+import LocalAuthentication
+import Photos
+
 {% for import in argument.autoMockableImports %}
 import {{ import }}
 {% endfor %}
@@ -221,7 +232,7 @@ import {{ import }}
 {% macro underlyingMockedVariableName variable %}underlying{{ variable.name|upperFirstLetter }}{% endmacro %}
 {% macro mockedVariableName variable %}{{ variable.name }}{% endmacro %}
 {% for type in types.protocols where type.based.AutoMockable or type|annotated:"AutoMockable" %}{% if type.name != "AutoMockable" %}
-{% call accessLevel type.accessLevel %}class {{ type.name | replace:"Protocol","" }}Mock: {{ type.name }} {
+{% call accessLevel type.accessLevel %}class {{ type.name | replace:"Protocol","" }}Mock: {{ type.name }}, @unchecked Sendable {
     {% if type.accessLevel == "public" %}public init() {}{% endif %}
 {% for variable in type.allVariables|!definedInExtension %}
     {% if variable.isAsync or variable.throws %}{% call mockAsyncOrThrowingVariable variable %}{% elif variable.isOptional %}{% call mockOptionalVariable variable %}{% elif variable.isArray or variable.isDictionary %}{% call mockNonOptionalArrayOrDictionaryVariable variable %}{% else %}{% call mockNonOptionalVariable variable %}{% endif %}

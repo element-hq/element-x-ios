@@ -64,12 +64,20 @@ struct ComposerToolbar: View {
                     ProgressView()
                         .scaledFrame(size: 44, relativeTo: .compound.headingLG)
                         .padding(.leading, 3)
-                } else if context.viewState.showSendButton {
-                    sendButton
-                        .padding(.leading, 3)
                 } else {
-                    voiceMessageRecordingButton(mode: context.viewState.isVoiceMessageModeActivated ? .recording : .idle)
-                        .padding(.leading, 3)
+                    HStack {
+                        switch context.viewState.composerMode {
+                        case .previewVoiceMessage(let state, let waveform, let isUploading):
+                            EmptyView()
+                        default:
+                            voiceMessageRecordingButton(mode: context.viewState.isVoiceMessageModeActivated ? .recording : .idle)
+                                .padding(.leading, 3)
+                        }
+                        
+                        if context.viewState.showSendButton {
+                            sendButton
+                        }
+                    }
                 }
             }
         }

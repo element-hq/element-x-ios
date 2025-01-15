@@ -41,6 +41,7 @@ struct JoinedRoomProxyMockConfiguration {
     
     var shouldUseAutoUpdatingTimeline = false
     var joinRule: JoinRule?
+    var isVisibleInPublicDirectory = false
 }
 
 extension JoinedRoomProxyMock {
@@ -127,6 +128,7 @@ extension JoinedRoomProxyMock {
         loadDraftReturnValue = .success(nil)
         clearDraftReturnValue = .success(())
         sendTypingNotificationIsTypingReturnValue = .success(())
+        isVisibleInRoomDirectoryReturnValue = .success(configuration.isVisibleInPublicDirectory)
     }
 }
 
@@ -154,7 +156,8 @@ extension RoomInfo {
                                                                   powerLevel: Int64($0.powerLevel),
                                                                   normalizedPowerLevel: Int64($0.powerLevel),
                                                                   isIgnored: $0.isIgnored,
-                                                                  suggestedRoleForPowerLevel: $0.role) },
+                                                                  suggestedRoleForPowerLevel: $0.role,
+                                                                  membershipChangeReason: $0.membershipChangeReason) },
                   heroes: [],
                   activeMembersCount: UInt64(configuration.members.filter { $0.membership == .join || $0.membership == .invite }.count),
                   invitedMembersCount: UInt64(configuration.members.filter { $0.membership == .invite }.count),
@@ -170,6 +173,7 @@ extension RoomInfo {
                   numUnreadNotifications: 0,
                   numUnreadMentions: 0,
                   pinnedEventIds: Array(configuration.pinnedEventIDs),
-                  joinRule: configuration.joinRule)
+                  joinRule: configuration.joinRule,
+                  historyVisibility: .shared)
     }
 }

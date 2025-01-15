@@ -23,6 +23,7 @@ enum RoomProxyType {
     case invited(InvitedRoomProxyProtocol)
     case knocked(KnockedRoomProxyProtocol)
     case left
+    case banned
 }
 
 // sourcery: AutoMockable
@@ -79,6 +80,8 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     func messageFilteredTimeline(allowedMessageTypes: [RoomMessageEventMessageType]) async -> Result<TimelineProxyProtocol, RoomProxyError>
     
+    func enableEncryption() async -> Result<Void, RoomProxyError>
+    
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
     
     func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError>
@@ -111,6 +114,21 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     func ignoreDeviceTrustAndResend(devices: [String: [String]], sendHandle: SendHandleProxy) async -> Result<Void, RoomProxyError>
     
     func withdrawVerificationAndResend(userIDs: [String], sendHandle: SendHandleProxy) async -> Result<Void, RoomProxyError>
+    
+    // MARK: - Privacy settings
+    
+    func updateJoinRule(_ rule: JoinRule) async -> Result<Void, RoomProxyError>
+    func updateHistoryVisibility(_ visibility: RoomHistoryVisibility) async -> Result<Void, RoomProxyError>
+    
+    func isVisibleInRoomDirectory() async -> Result<Bool, RoomProxyError>
+    func updateRoomDirectoryVisibility(_ visibility: RoomVisibility) async -> Result<Void, RoomProxyError>
+    
+    // MARK: - Canonical Alias
+    
+    func updateCanonicalAlias(_ alias: String?, altAliases: [String]) async -> Result<Void, RoomProxyError>
+    
+    func publishRoomAliasInRoomDirectory(_ alias: String) async -> Result<Bool, RoomProxyError>
+    func removeRoomAliasFromRoomDirectory(_ alias: String) async -> Result<Bool, RoomProxyError>
     
     // MARK: - Room Flags
     

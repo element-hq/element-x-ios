@@ -60,7 +60,8 @@ extension RoomInfo {
                   numUnreadNotifications: 0,
                   numUnreadMentions: 0,
                   pinnedEventIds: [],
-                  joinRule: .invite)
+                  joinRule: .invite,
+                  historyVisibility: .shared)
     }
 }
 
@@ -74,6 +75,7 @@ private extension RoomMember {
                   powerLevel: Int64(proxy.powerLevel),
                   normalizedPowerLevel: Int64(proxy.powerLevel),
                   isIgnored: proxy.isIgnored,
-                  suggestedRoleForPowerLevel: proxy.role)
+                  suggestedRoleForPowerLevel: proxy.role,
+                  membershipChangeReason: proxy.membershipChangeReason)
     }
 }

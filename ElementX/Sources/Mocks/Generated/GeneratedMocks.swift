@@ -2,15 +2,18 @@
 // DO NOT EDIT
 
 // swiftlint:disable all
+@preconcurrency import Combine
+@preconcurrency import SwiftUI
+
+@preconcurrency import MatrixRustSDK
+
 import AnalyticsEvents
 import AVFoundation
-import Combine
 import Foundation
 import LocalAuthentication
-import MatrixRustSDK
 import Photos
-import SwiftUI
-class AnalyticsClientMock: AnalyticsClientProtocol {
+
+class AnalyticsClientMock: AnalyticsClientProtocol, @unchecked Sendable {
     var isRunning: Bool {
         get { return underlyingIsRunning }
         set(value) { underlyingIsRunning = value }
@@ -252,7 +255,7 @@ class AnalyticsClientMock: AnalyticsClientProtocol {
         updateUserPropertiesClosure?(event)
     }
 }
-class AppLockServiceMock: AppLockServiceProtocol {
+class AppLockServiceMock: AppLockServiceProtocol, @unchecked Sendable {
     var isMandatory: Bool {
         get { return underlyingIsMandatory }
         set(value) { underlyingIsMandatory = value }
@@ -803,7 +806,7 @@ class AppLockServiceMock: AppLockServiceProtocol {
         }
     }
 }
-class AppMediatorMock: AppMediatorProtocol {
+class AppMediatorMock: AppMediatorProtocol, @unchecked Sendable {
     var windowManager: WindowManagerProtocol {
         get { return underlyingWindowManager }
         set(value) { underlyingWindowManager = value }
@@ -1107,7 +1110,7 @@ class AppMediatorMock: AppMediatorProtocol {
         }
     }
 }
-class AudioConverterMock: AudioConverterProtocol {
+class AudioConverterMock: AudioConverterProtocol, @unchecked Sendable {
 
     //MARK: - convertToOpusOgg
 
@@ -1200,7 +1203,7 @@ class AudioConverterMock: AudioConverterProtocol {
         try convertToMPEG4AACSourceURLDestinationURLClosure?(sourceURL, destinationURL)
     }
 }
-class AudioPlayerMock: AudioPlayerProtocol {
+class AudioPlayerMock: AudioPlayerProtocol, @unchecked Sendable {
     var sourceURL: URL?
     var duration: TimeInterval {
         get { return underlyingDuration }
@@ -1447,7 +1450,7 @@ class AudioPlayerMock: AudioPlayerProtocol {
         await seekToClosure?(progress)
     }
 }
-class AudioRecorderMock: AudioRecorderProtocol {
+class AudioRecorderMock: AudioRecorderProtocol, @unchecked Sendable {
     var actions: AnyPublisher<AudioRecorderAction, Never> {
         get { return underlyingActions }
         set(value) { underlyingActions = value }
@@ -1641,7 +1644,7 @@ class AudioRecorderMock: AudioRecorderProtocol {
         }
     }
 }
-class AudioSessionMock: AudioSessionProtocol {
+class AudioSessionMock: AudioSessionProtocol, @unchecked Sendable {
 
     //MARK: - requestRecordPermission
 
@@ -1820,7 +1823,7 @@ class AudioSessionMock: AudioSessionProtocol {
         try setActiveOptionsClosure?(active, options)
     }
 }
-class AuthenticationClientBuilderFactoryMock: AuthenticationClientBuilderFactoryProtocol {
+class AuthenticationClientBuilderFactoryMock: AuthenticationClientBuilderFactoryProtocol, @unchecked Sendable {
 
     //MARK: - makeBuilder
 
@@ -1893,7 +1896,7 @@ class AuthenticationClientBuilderFactoryMock: AuthenticationClientBuilderFactory
         }
     }
 }
-class AuthenticationClientBuilderMock: AuthenticationClientBuilderProtocol {
+class AuthenticationClientBuilderMock: AuthenticationClientBuilderProtocol, @unchecked Sendable {
 
     //MARK: - build
 
@@ -2044,7 +2047,7 @@ class AuthenticationClientBuilderMock: AuthenticationClientBuilderProtocol {
         }
     }
 }
-class BugReportServiceMock: BugReportServiceProtocol {
+class BugReportServiceMock: BugReportServiceProtocol, @unchecked Sendable {
     var crashedLastRun: Bool {
         get { return underlyingCrashedLastRun }
         set(value) { underlyingCrashedLastRun = value }
@@ -2123,7 +2126,7 @@ class BugReportServiceMock: BugReportServiceProtocol {
         }
     }
 }
-class ClientProxyMock: ClientProxyProtocol {
+class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var actionsPublisher: AnyPublisher<ClientProxyAction, Never> {
         get { return underlyingActionsPublisher }
         set(value) { underlyingActionsPublisher = value }
@@ -5540,7 +5543,7 @@ class ClientProxyMock: ClientProxyProtocol {
         }
     }
 }
-class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
+class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol, @unchecked Sendable {
     var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> {
         get { return underlyingSuggestionsPublisher }
         set(value) { underlyingSuggestionsPublisher = value }
@@ -5630,7 +5633,7 @@ class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
         setSuggestionTriggerClosure?(suggestionTrigger)
     }
 }
-class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
+class ComposerDraftServiceMock: ComposerDraftServiceProtocol, @unchecked Sendable {
 
     //MARK: - saveDraft
 
@@ -6041,7 +6044,7 @@ class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
         }
     }
 }
-class ElementCallServiceMock: ElementCallServiceProtocol {
+class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked Sendable {
     var actions: AnyPublisher<ElementCallServiceAction, Never> {
         get { return underlyingActions }
         set(value) { underlyingActions = value }
@@ -6212,7 +6215,7 @@ class ElementCallServiceMock: ElementCallServiceProtocol {
         setAudioEnabledRoomIDClosure?(enabled, roomID)
     }
 }
-class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol {
+class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol, @unchecked Sendable {
     var widgetID: String {
         get { return underlyingWidgetID }
         set(value) { underlyingWidgetID = value }
@@ -6370,7 +6373,7 @@ class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol {
         }
     }
 }
-class InvitedRoomProxyMock: InvitedRoomProxyProtocol {
+class InvitedRoomProxyMock: InvitedRoomProxyProtocol, @unchecked Sendable {
     var info: BaseRoomInfoProxyProtocol {
         get { return underlyingInfo }
         set(value) { underlyingInfo = value }
@@ -6453,7 +6456,7 @@ class InvitedRoomProxyMock: InvitedRoomProxyProtocol {
         }
     }
 }
-class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
+class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
     var isEncrypted: Bool {
         get { return underlyingIsEncrypted }
         set(value) { underlyingIsEncrypted = value }
@@ -6730,6 +6733,70 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
             return await messageFilteredTimelineAllowedMessageTypesClosure(allowedMessageTypes)
         } else {
             return messageFilteredTimelineAllowedMessageTypesReturnValue
+        }
+    }
+    //MARK: - enableEncryption
+
+    var enableEncryptionUnderlyingCallsCount = 0
+    var enableEncryptionCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return enableEncryptionUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = enableEncryptionUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                enableEncryptionUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    enableEncryptionUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var enableEncryptionCalled: Bool {
+        return enableEncryptionCallsCount > 0
+    }
+
+    var enableEncryptionUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var enableEncryptionReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return enableEncryptionUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = enableEncryptionUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                enableEncryptionUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    enableEncryptionUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var enableEncryptionClosure: (() async -> Result<Void, RoomProxyError>)?
+
+    func enableEncryption() async -> Result<Void, RoomProxyError> {
+        enableEncryptionCallsCount += 1
+        if let enableEncryptionClosure = enableEncryptionClosure {
+            return await enableEncryptionClosure()
+        } else {
+            return enableEncryptionReturnValue
         }
     }
     //MARK: - redact
@@ -7734,6 +7801,490 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
             return await withdrawVerificationAndResendUserIDsSendHandleClosure(userIDs, sendHandle)
         } else {
             return withdrawVerificationAndResendUserIDsSendHandleReturnValue
+        }
+    }
+    //MARK: - updateJoinRule
+
+    var updateJoinRuleUnderlyingCallsCount = 0
+    var updateJoinRuleCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateJoinRuleUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateJoinRuleUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateJoinRuleUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateJoinRuleUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var updateJoinRuleCalled: Bool {
+        return updateJoinRuleCallsCount > 0
+    }
+    var updateJoinRuleReceivedRule: JoinRule?
+    var updateJoinRuleReceivedInvocations: [JoinRule] = []
+
+    var updateJoinRuleUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var updateJoinRuleReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return updateJoinRuleUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateJoinRuleUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateJoinRuleUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateJoinRuleUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var updateJoinRuleClosure: ((JoinRule) async -> Result<Void, RoomProxyError>)?
+
+    func updateJoinRule(_ rule: JoinRule) async -> Result<Void, RoomProxyError> {
+        updateJoinRuleCallsCount += 1
+        updateJoinRuleReceivedRule = rule
+        DispatchQueue.main.async {
+            self.updateJoinRuleReceivedInvocations.append(rule)
+        }
+        if let updateJoinRuleClosure = updateJoinRuleClosure {
+            return await updateJoinRuleClosure(rule)
+        } else {
+            return updateJoinRuleReturnValue
+        }
+    }
+    //MARK: - updateHistoryVisibility
+
+    var updateHistoryVisibilityUnderlyingCallsCount = 0
+    var updateHistoryVisibilityCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateHistoryVisibilityUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateHistoryVisibilityUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateHistoryVisibilityUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateHistoryVisibilityUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var updateHistoryVisibilityCalled: Bool {
+        return updateHistoryVisibilityCallsCount > 0
+    }
+    var updateHistoryVisibilityReceivedVisibility: RoomHistoryVisibility?
+    var updateHistoryVisibilityReceivedInvocations: [RoomHistoryVisibility] = []
+
+    var updateHistoryVisibilityUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var updateHistoryVisibilityReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return updateHistoryVisibilityUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateHistoryVisibilityUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateHistoryVisibilityUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateHistoryVisibilityUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var updateHistoryVisibilityClosure: ((RoomHistoryVisibility) async -> Result<Void, RoomProxyError>)?
+
+    func updateHistoryVisibility(_ visibility: RoomHistoryVisibility) async -> Result<Void, RoomProxyError> {
+        updateHistoryVisibilityCallsCount += 1
+        updateHistoryVisibilityReceivedVisibility = visibility
+        DispatchQueue.main.async {
+            self.updateHistoryVisibilityReceivedInvocations.append(visibility)
+        }
+        if let updateHistoryVisibilityClosure = updateHistoryVisibilityClosure {
+            return await updateHistoryVisibilityClosure(visibility)
+        } else {
+            return updateHistoryVisibilityReturnValue
+        }
+    }
+    //MARK: - isVisibleInRoomDirectory
+
+    var isVisibleInRoomDirectoryUnderlyingCallsCount = 0
+    var isVisibleInRoomDirectoryCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return isVisibleInRoomDirectoryUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isVisibleInRoomDirectoryUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isVisibleInRoomDirectoryUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isVisibleInRoomDirectoryUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var isVisibleInRoomDirectoryCalled: Bool {
+        return isVisibleInRoomDirectoryCallsCount > 0
+    }
+
+    var isVisibleInRoomDirectoryUnderlyingReturnValue: Result<Bool, RoomProxyError>!
+    var isVisibleInRoomDirectoryReturnValue: Result<Bool, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return isVisibleInRoomDirectoryUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Bool, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isVisibleInRoomDirectoryUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isVisibleInRoomDirectoryUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isVisibleInRoomDirectoryUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var isVisibleInRoomDirectoryClosure: (() async -> Result<Bool, RoomProxyError>)?
+
+    func isVisibleInRoomDirectory() async -> Result<Bool, RoomProxyError> {
+        isVisibleInRoomDirectoryCallsCount += 1
+        if let isVisibleInRoomDirectoryClosure = isVisibleInRoomDirectoryClosure {
+            return await isVisibleInRoomDirectoryClosure()
+        } else {
+            return isVisibleInRoomDirectoryReturnValue
+        }
+    }
+    //MARK: - updateRoomDirectoryVisibility
+
+    var updateRoomDirectoryVisibilityUnderlyingCallsCount = 0
+    var updateRoomDirectoryVisibilityCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateRoomDirectoryVisibilityUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateRoomDirectoryVisibilityUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateRoomDirectoryVisibilityUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateRoomDirectoryVisibilityUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var updateRoomDirectoryVisibilityCalled: Bool {
+        return updateRoomDirectoryVisibilityCallsCount > 0
+    }
+    var updateRoomDirectoryVisibilityReceivedVisibility: RoomVisibility?
+    var updateRoomDirectoryVisibilityReceivedInvocations: [RoomVisibility] = []
+
+    var updateRoomDirectoryVisibilityUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var updateRoomDirectoryVisibilityReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return updateRoomDirectoryVisibilityUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateRoomDirectoryVisibilityUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateRoomDirectoryVisibilityUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateRoomDirectoryVisibilityUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var updateRoomDirectoryVisibilityClosure: ((RoomVisibility) async -> Result<Void, RoomProxyError>)?
+
+    func updateRoomDirectoryVisibility(_ visibility: RoomVisibility) async -> Result<Void, RoomProxyError> {
+        updateRoomDirectoryVisibilityCallsCount += 1
+        updateRoomDirectoryVisibilityReceivedVisibility = visibility
+        DispatchQueue.main.async {
+            self.updateRoomDirectoryVisibilityReceivedInvocations.append(visibility)
+        }
+        if let updateRoomDirectoryVisibilityClosure = updateRoomDirectoryVisibilityClosure {
+            return await updateRoomDirectoryVisibilityClosure(visibility)
+        } else {
+            return updateRoomDirectoryVisibilityReturnValue
+        }
+    }
+    //MARK: - updateCanonicalAlias
+
+    var updateCanonicalAliasAltAliasesUnderlyingCallsCount = 0
+    var updateCanonicalAliasAltAliasesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateCanonicalAliasAltAliasesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateCanonicalAliasAltAliasesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateCanonicalAliasAltAliasesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateCanonicalAliasAltAliasesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var updateCanonicalAliasAltAliasesCalled: Bool {
+        return updateCanonicalAliasAltAliasesCallsCount > 0
+    }
+    var updateCanonicalAliasAltAliasesReceivedArguments: (alias: String?, altAliases: [String])?
+    var updateCanonicalAliasAltAliasesReceivedInvocations: [(alias: String?, altAliases: [String])] = []
+
+    var updateCanonicalAliasAltAliasesUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var updateCanonicalAliasAltAliasesReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return updateCanonicalAliasAltAliasesUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateCanonicalAliasAltAliasesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateCanonicalAliasAltAliasesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateCanonicalAliasAltAliasesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var updateCanonicalAliasAltAliasesClosure: ((String?, [String]) async -> Result<Void, RoomProxyError>)?
+
+    func updateCanonicalAlias(_ alias: String?, altAliases: [String]) async -> Result<Void, RoomProxyError> {
+        updateCanonicalAliasAltAliasesCallsCount += 1
+        updateCanonicalAliasAltAliasesReceivedArguments = (alias: alias, altAliases: altAliases)
+        DispatchQueue.main.async {
+            self.updateCanonicalAliasAltAliasesReceivedInvocations.append((alias: alias, altAliases: altAliases))
+        }
+        if let updateCanonicalAliasAltAliasesClosure = updateCanonicalAliasAltAliasesClosure {
+            return await updateCanonicalAliasAltAliasesClosure(alias, altAliases)
+        } else {
+            return updateCanonicalAliasAltAliasesReturnValue
+        }
+    }
+    //MARK: - publishRoomAliasInRoomDirectory
+
+    var publishRoomAliasInRoomDirectoryUnderlyingCallsCount = 0
+    var publishRoomAliasInRoomDirectoryCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return publishRoomAliasInRoomDirectoryUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = publishRoomAliasInRoomDirectoryUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                publishRoomAliasInRoomDirectoryUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    publishRoomAliasInRoomDirectoryUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var publishRoomAliasInRoomDirectoryCalled: Bool {
+        return publishRoomAliasInRoomDirectoryCallsCount > 0
+    }
+    var publishRoomAliasInRoomDirectoryReceivedAlias: String?
+    var publishRoomAliasInRoomDirectoryReceivedInvocations: [String] = []
+
+    var publishRoomAliasInRoomDirectoryUnderlyingReturnValue: Result<Bool, RoomProxyError>!
+    var publishRoomAliasInRoomDirectoryReturnValue: Result<Bool, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return publishRoomAliasInRoomDirectoryUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Bool, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = publishRoomAliasInRoomDirectoryUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                publishRoomAliasInRoomDirectoryUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    publishRoomAliasInRoomDirectoryUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var publishRoomAliasInRoomDirectoryClosure: ((String) async -> Result<Bool, RoomProxyError>)?
+
+    func publishRoomAliasInRoomDirectory(_ alias: String) async -> Result<Bool, RoomProxyError> {
+        publishRoomAliasInRoomDirectoryCallsCount += 1
+        publishRoomAliasInRoomDirectoryReceivedAlias = alias
+        DispatchQueue.main.async {
+            self.publishRoomAliasInRoomDirectoryReceivedInvocations.append(alias)
+        }
+        if let publishRoomAliasInRoomDirectoryClosure = publishRoomAliasInRoomDirectoryClosure {
+            return await publishRoomAliasInRoomDirectoryClosure(alias)
+        } else {
+            return publishRoomAliasInRoomDirectoryReturnValue
+        }
+    }
+    //MARK: - removeRoomAliasFromRoomDirectory
+
+    var removeRoomAliasFromRoomDirectoryUnderlyingCallsCount = 0
+    var removeRoomAliasFromRoomDirectoryCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return removeRoomAliasFromRoomDirectoryUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeRoomAliasFromRoomDirectoryUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeRoomAliasFromRoomDirectoryUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeRoomAliasFromRoomDirectoryUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var removeRoomAliasFromRoomDirectoryCalled: Bool {
+        return removeRoomAliasFromRoomDirectoryCallsCount > 0
+    }
+    var removeRoomAliasFromRoomDirectoryReceivedAlias: String?
+    var removeRoomAliasFromRoomDirectoryReceivedInvocations: [String] = []
+
+    var removeRoomAliasFromRoomDirectoryUnderlyingReturnValue: Result<Bool, RoomProxyError>!
+    var removeRoomAliasFromRoomDirectoryReturnValue: Result<Bool, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return removeRoomAliasFromRoomDirectoryUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Bool, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeRoomAliasFromRoomDirectoryUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeRoomAliasFromRoomDirectoryUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeRoomAliasFromRoomDirectoryUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var removeRoomAliasFromRoomDirectoryClosure: ((String) async -> Result<Bool, RoomProxyError>)?
+
+    func removeRoomAliasFromRoomDirectory(_ alias: String) async -> Result<Bool, RoomProxyError> {
+        removeRoomAliasFromRoomDirectoryCallsCount += 1
+        removeRoomAliasFromRoomDirectoryReceivedAlias = alias
+        DispatchQueue.main.async {
+            self.removeRoomAliasFromRoomDirectoryReceivedInvocations.append(alias)
+        }
+        if let removeRoomAliasFromRoomDirectoryClosure = removeRoomAliasFromRoomDirectoryClosure {
+            return await removeRoomAliasFromRoomDirectoryClosure(alias)
+        } else {
+            return removeRoomAliasFromRoomDirectoryReturnValue
         }
     }
     //MARK: - flagAsUnread
@@ -9521,7 +10072,7 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
         }
     }
 }
-class KeychainControllerMock: KeychainControllerProtocol {
+class KeychainControllerMock: KeychainControllerProtocol, @unchecked Sendable {
 
     //MARK: - setRestorationToken
 
@@ -10125,7 +10676,7 @@ class KeychainControllerMock: KeychainControllerProtocol {
         removePINCodeBiometricStateClosure?()
     }
 }
-class KnockRequestProxyMock: KnockRequestProxyProtocol {
+class KnockRequestProxyMock: KnockRequestProxyProtocol, @unchecked Sendable {
     var eventID: String {
         get { return underlyingEventID }
         set(value) { underlyingEventID = value }
@@ -10403,7 +10954,7 @@ class KnockRequestProxyMock: KnockRequestProxyProtocol {
         }
     }
 }
-class KnockedRoomProxyMock: KnockedRoomProxyProtocol {
+class KnockedRoomProxyMock: KnockedRoomProxyProtocol, @unchecked Sendable {
     var info: BaseRoomInfoProxyProtocol {
         get { return underlyingInfo }
         set(value) { underlyingInfo = value }
@@ -10485,7 +11036,7 @@ class KnockedRoomProxyMock: KnockedRoomProxyProtocol {
         }
     }
 }
-class MediaLoaderMock: MediaLoaderProtocol {
+class MediaLoaderMock: MediaLoaderProtocol, @unchecked Sendable {
 
     //MARK: - loadMediaContentForSource
 
@@ -10710,7 +11261,7 @@ class MediaLoaderMock: MediaLoaderProtocol {
         }
     }
 }
-class MediaPlayerProviderMock: MediaPlayerProviderProtocol {
+class MediaPlayerProviderMock: MediaPlayerProviderProtocol, @unchecked Sendable {
     var player: AudioPlayerProtocol {
         get { return underlyingPlayer }
         set(value) { underlyingPlayer = value }
@@ -10911,7 +11462,7 @@ class MediaPlayerProviderMock: MediaPlayerProviderProtocol {
         await detachAllStatesExceptClosure?(exception)
     }
 }
-class MediaProviderMock: MediaProviderProtocol {
+class MediaProviderMock: MediaProviderProtocol, @unchecked Sendable {
 
     //MARK: - imageFromSource
 
@@ -11334,7 +11885,7 @@ class MediaProviderMock: MediaProviderProtocol {
         }
     }
 }
-class NetworkMonitorMock: NetworkMonitorProtocol {
+class NetworkMonitorMock: NetworkMonitorProtocol, @unchecked Sendable {
     var reachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> {
         get { return underlyingReachabilityPublisher }
         set(value) { underlyingReachabilityPublisher = value }
@@ -11342,7 +11893,7 @@ class NetworkMonitorMock: NetworkMonitorProtocol {
     var underlyingReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>!
 
 }
-class NotificationManagerMock: NotificationManagerProtocol {
+class NotificationManagerMock: NotificationManagerProtocol, @unchecked Sendable {
     weak var delegate: NotificationManagerDelegate?
 
     //MARK: - start
@@ -11685,7 +12236,7 @@ class NotificationManagerMock: NotificationManagerProtocol {
         await removeDeliveredInviteNotificationsClosure?()
     }
 }
-class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
+class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol, @unchecked Sendable {
     var callbacks: PassthroughSubject<NotificationSettingsProxyCallback, Never> {
         get { return underlyingCallbacks }
         set(value) { underlyingCallbacks = value }
@@ -12562,7 +13113,7 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
         }
     }
 }
-class OrientationManagerMock: OrientationManagerProtocol {
+class OrientationManagerMock: OrientationManagerProtocol, @unchecked Sendable {
 
     //MARK: - setOrientation
 
@@ -12647,7 +13198,7 @@ class OrientationManagerMock: OrientationManagerProtocol {
         lockOrientationClosure?(orientation)
     }
 }
-class PHGPostHogMock: PHGPostHogProtocol {
+class PHGPostHogMock: PHGPostHogProtocol, @unchecked Sendable {
 
     //MARK: - optIn
 
@@ -12837,7 +13388,7 @@ class PHGPostHogMock: PHGPostHogProtocol {
         screenPropertiesClosure?(screenTitle, properties)
     }
 }
-class PhotoLibraryManagerMock: PhotoLibraryManagerProtocol {
+class PhotoLibraryManagerMock: PhotoLibraryManagerProtocol, @unchecked Sendable {
 
     //MARK: - addResource
 
@@ -12910,7 +13461,7 @@ class PhotoLibraryManagerMock: PhotoLibraryManagerProtocol {
         }
     }
 }
-class PollInteractionHandlerMock: PollInteractionHandlerProtocol {
+class PollInteractionHandlerMock: PollInteractionHandlerProtocol, @unchecked Sendable {
 
     //MARK: - sendPollResponse
 
@@ -13053,7 +13604,7 @@ class PollInteractionHandlerMock: PollInteractionHandlerProtocol {
         }
     }
 }
-class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol {
+class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol, @unchecked Sendable {
     var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> {
         get { return underlyingQrLoginProgressPublisher }
         set(value) { underlyingQrLoginProgressPublisher = value }
@@ -13131,7 +13682,7 @@ class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol {
         }
     }
 }
-class RoomDirectorySearchProxyMock: RoomDirectorySearchProxyProtocol {
+class RoomDirectorySearchProxyMock: RoomDirectorySearchProxyProtocol, @unchecked Sendable {
     var resultsPublisher: CurrentValuePublisher<[RoomDirectorySearchResult], Never> {
         get { return underlyingResultsPublisher }
         set(value) { underlyingResultsPublisher = value }
@@ -13273,7 +13824,7 @@ class RoomDirectorySearchProxyMock: RoomDirectorySearchProxyProtocol {
         }
     }
 }
-class RoomMemberProxyMock: RoomMemberProxyProtocol {
+class RoomMemberProxyMock: RoomMemberProxyProtocol, @unchecked Sendable {
     var userID: String {
         get { return underlyingUserID }
         set(value) { underlyingUserID = value }
@@ -13287,6 +13838,7 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
         set(value) { underlyingMembership = value }
     }
     var underlyingMembership: MembershipState!
+    var membershipChangeReason: String?
     var isIgnored: Bool {
         get { return underlyingIsIgnored }
         set(value) { underlyingIsIgnored = value }
@@ -13305,7 +13857,7 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
     var primaryZeroId: String?
 
 }
-class RoomNotificationSettingsProxyMock: RoomNotificationSettingsProxyProtocol {
+class RoomNotificationSettingsProxyMock: RoomNotificationSettingsProxyProtocol, @unchecked Sendable {
     var mode: RoomNotificationModeProxy {
         get { return underlyingMode }
         set(value) { underlyingMode = value }
@@ -13318,7 +13870,7 @@ class RoomNotificationSettingsProxyMock: RoomNotificationSettingsProxyProtocol {
     var underlyingIsDefault: Bool!
 
 }
-class RoomProxyMock: RoomProxyProtocol {
+class RoomProxyMock: RoomProxyProtocol, @unchecked Sendable {
     var id: String {
         get { return underlyingId }
         set(value) { underlyingId = value }
@@ -13331,7 +13883,7 @@ class RoomProxyMock: RoomProxyProtocol {
     var underlyingOwnUserID: String!
 
 }
-class RoomSummaryProviderMock: RoomSummaryProviderProtocol {
+class RoomSummaryProviderMock: RoomSummaryProviderProtocol, @unchecked Sendable {
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
         get { return underlyingRoomListPublisher }
         set(value) { underlyingRoomListPublisher = value }
@@ -13467,7 +14019,7 @@ class RoomSummaryProviderMock: RoomSummaryProviderProtocol {
         setFilterClosure?(filter)
     }
 }
-class RoomTimelineControllerFactoryMock: RoomTimelineControllerFactoryProtocol {
+class RoomTimelineControllerFactoryMock: RoomTimelineControllerFactoryProtocol, @unchecked Sendable {
 
     //MARK: - buildRoomTimelineController
 
@@ -13680,7 +14232,7 @@ class RoomTimelineControllerFactoryMock: RoomTimelineControllerFactoryProtocol {
         }
     }
 }
-class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
+class RoomTimelineProviderMock: RoomTimelineProviderProtocol, @unchecked Sendable {
     var updatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never> {
         get { return underlyingUpdatePublisher }
         set(value) { underlyingUpdatePublisher = value }
@@ -13704,7 +14256,7 @@ class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
     var underlyingMembershipChangePublisher: AnyPublisher<Void, Never>!
 
 }
-class SecureBackupControllerMock: SecureBackupControllerProtocol {
+class SecureBackupControllerMock: SecureBackupControllerProtocol, @unchecked Sendable {
     var recoveryState: CurrentValuePublisher<SecureBackupRecoveryState, Never> {
         get { return underlyingRecoveryState }
         set(value) { underlyingRecoveryState = value }
@@ -14043,7 +14595,7 @@ class SecureBackupControllerMock: SecureBackupControllerProtocol {
         }
     }
 }
-class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {
+class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol, @unchecked Sendable {
     var actions: PassthroughSubject<SessionVerificationControllerProxyAction, Never> {
         get { return underlyingActions }
         set(value) { underlyingActions = value }
@@ -14505,7 +15057,7 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
         }
     }
 }
-class TimelineProxyMock: TimelineProxyProtocol {
+class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
     var timelineProvider: RoomTimelineProviderProtocol {
         get { return underlyingTimelineProvider }
         set(value) { underlyingTimelineProvider = value }
@@ -16210,7 +16762,7 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
     }
 }
-class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol {
+class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol, @unchecked Sendable {
 
     //MARK: - searchProfiles
 
@@ -16283,7 +16835,7 @@ class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol {
         }
     }
 }
-class UserIndicatorControllerMock: UserIndicatorControllerProtocol {
+class UserIndicatorControllerMock: UserIndicatorControllerProtocol, @unchecked Sendable {
     var window: UIWindow?
     var alertInfo: AlertInfo<UUID>?
 
@@ -16539,7 +17091,7 @@ class UserIndicatorControllerMock: UserIndicatorControllerProtocol {
         }
     }
 }
-class UserNotificationCenterMock: UserNotificationCenterProtocol {
+class UserNotificationCenterMock: UserNotificationCenterProtocol, @unchecked Sendable {
     weak var delegate: UNUserNotificationCenterDelegate?
 
     //MARK: - add
@@ -16872,7 +17424,7 @@ class UserNotificationCenterMock: UserNotificationCenterProtocol {
         }
     }
 }
-class UserSessionMock: UserSessionProtocol {
+class UserSessionMock: UserSessionProtocol, @unchecked Sendable {
     var clientProxy: ClientProxyProtocol {
         get { return underlyingClientProxy }
         set(value) { underlyingClientProxy = value }
@@ -16900,7 +17452,7 @@ class UserSessionMock: UserSessionProtocol {
     var underlyingCallbacks: PassthroughSubject<UserSessionCallback, Never>!
 
 }
-class UserSessionStoreMock: UserSessionStoreProtocol {
+class UserSessionStoreMock: UserSessionStoreProtocol, @unchecked Sendable {
     var hasSessions: Bool {
         get { return underlyingHasSessions }
         set(value) { underlyingHasSessions = value }
@@ -17165,7 +17717,7 @@ class UserSessionStoreMock: UserSessionStoreProtocol {
         clearCacheForClosure?(userID)
     }
 }
-class VoiceMessageCacheMock: VoiceMessageCacheProtocol {
+class VoiceMessageCacheMock: VoiceMessageCacheProtocol, @unchecked Sendable {
     var urlForRecording: URL {
         get { return underlyingUrlForRecording }
         set(value) { underlyingUrlForRecording = value }
@@ -17348,7 +17900,7 @@ class VoiceMessageCacheMock: VoiceMessageCacheProtocol {
         clearCacheClosure?()
     }
 }
-class VoiceMessageMediaManagerMock: VoiceMessageMediaManagerProtocol {
+class VoiceMessageMediaManagerMock: VoiceMessageMediaManagerProtocol, @unchecked Sendable {
 
     //MARK: - loadVoiceMessageFromSource
 
@@ -17425,7 +17977,7 @@ class VoiceMessageMediaManagerMock: VoiceMessageMediaManagerProtocol {
         }
     }
 }
-class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
+class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol, @unchecked Sendable {
     var previewAudioPlayerState: AudioPlayerState?
     var isRecording: Bool {
         get { return underlyingIsRecording }
@@ -17825,7 +18377,7 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
         }
     }
 }
-class WindowManagerMock: WindowManagerProtocol {
+class WindowManagerMock: WindowManagerProtocol, @unchecked Sendable {
     var mainWindow: UIWindow!
     var overlayWindow: UIWindow!
     var globalSearchWindow: UIWindow!

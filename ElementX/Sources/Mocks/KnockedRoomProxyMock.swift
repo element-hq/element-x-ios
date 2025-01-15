@@ -58,6 +58,7 @@ extension RoomInfo {
                   numUnreadNotifications: 0,
                   numUnreadMentions: 0,
                   pinnedEventIds: [],
-                  joinRule: .knock)
+                  joinRule: .knock,
+                  historyVisibility: .shared)
     }
 }

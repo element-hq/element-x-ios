@@ -1,10 +1,12 @@
-// Generated using Sourcery 2.2.5 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.2.6 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
+@preconcurrency import MatrixRustSDK
+
 import Foundation
-import MatrixRustSDK
-open class ClientSDKMock: MatrixRustSDK.Client {
+
+open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -623,52 +625,6 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         } else {
             return createRoomRequestReturnValue
         }
-    }
-
-    //MARK: - createRoomAlias
-
-    open var createRoomAliasRoomAliasRoomIdThrowableError: Error?
-    var createRoomAliasRoomAliasRoomIdUnderlyingCallsCount = 0
-    open var createRoomAliasRoomAliasRoomIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return createRoomAliasRoomAliasRoomIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = createRoomAliasRoomAliasRoomIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                createRoomAliasRoomAliasRoomIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    createRoomAliasRoomAliasRoomIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var createRoomAliasRoomAliasRoomIdCalled: Bool {
-        return createRoomAliasRoomAliasRoomIdCallsCount > 0
-    }
-    open var createRoomAliasRoomAliasRoomIdReceivedArguments: (roomAlias: String, roomId: String)?
-    open var createRoomAliasRoomAliasRoomIdReceivedInvocations: [(roomAlias: String, roomId: String)] = []
-    open var createRoomAliasRoomAliasRoomIdClosure: ((String, String) async throws -> Void)?
-
-    open override func createRoomAlias(roomAlias: String, roomId: String) async throws {
-        if let error = createRoomAliasRoomAliasRoomIdThrowableError {
-            throw error
-        }
-        createRoomAliasRoomAliasRoomIdCallsCount += 1
-        createRoomAliasRoomAliasRoomIdReceivedArguments = (roomAlias: roomAlias, roomId: roomId)
-        DispatchQueue.main.async {
-            self.createRoomAliasRoomAliasRoomIdReceivedInvocations.append((roomAlias: roomAlias, roomId: roomId))
-        }
-        try await createRoomAliasRoomAliasRoomIdClosure?(roomAlias, roomId)
     }
 
     //MARK: - customLoginWithJwt
@@ -4281,7 +4237,7 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
     }
 }
-open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
+open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -6045,7 +6001,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
     }
 }
-open class EncryptionSDKMock: MatrixRustSDK.Encryption {
+open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -7303,7 +7259,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption {
         await waitForE2eeInitializationTasksClosure?()
     }
 }
-open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails {
+open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -7639,7 +7595,7 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails {
         }
     }
 }
-open class IdentityResetHandleSDKMock: MatrixRustSDK.IdentityResetHandle {
+open class IdentityResetHandleSDKMock: MatrixRustSDK.IdentityResetHandle, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -7797,7 +7753,7 @@ open class IdentityResetHandleSDKMock: MatrixRustSDK.IdentityResetHandle {
         try await resetAuthClosure?(auth)
     }
 }
-open class InReplyToDetailsSDKMock: MatrixRustSDK.InReplyToDetails {
+open class InReplyToDetailsSDKMock: MatrixRustSDK.InReplyToDetails, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -7938,7 +7894,7 @@ open class InReplyToDetailsSDKMock: MatrixRustSDK.InReplyToDetails {
         }
     }
 }
-open class KnockRequestActionsSDKMock: MatrixRustSDK.KnockRequestActions {
+open class KnockRequestActionsSDKMock: MatrixRustSDK.KnockRequestActions, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -8121,7 +8077,7 @@ open class KnockRequestActionsSDKMock: MatrixRustSDK.KnockRequestActions {
         try await markAsSeenClosure?()
     }
 }
-open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvider {
+open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvider, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -8333,7 +8289,7 @@ open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvid
         }
     }
 }
-open class MediaFileHandleSDKMock: MatrixRustSDK.MediaFileHandle {
+open class MediaFileHandleSDKMock: MatrixRustSDK.MediaFileHandle, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -8488,7 +8444,7 @@ open class MediaFileHandleSDKMock: MatrixRustSDK.MediaFileHandle {
         }
     }
 }
-open class MediaSourceSDKMock: MatrixRustSDK.MediaSource {
+open class MediaSourceSDKMock: MatrixRustSDK.MediaSource, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -8632,7 +8588,7 @@ open class MediaSourceSDKMock: MatrixRustSDK.MediaSource {
         }
     }
 }
-open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient {
+open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -8718,7 +8674,7 @@ open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient {
         }
     }
 }
-open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
+open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -9902,7 +9858,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
         try await unmuteRoomRoomIdIsEncryptedIsOneToOneClosure?(roomId, isEncrypted, isOneToOne)
     }
 }
-open class OidcAuthorizationDataSDKMock: MatrixRustSDK.OidcAuthorizationData {
+open class OidcAuthorizationDataSDKMock: MatrixRustSDK.OidcAuthorizationData, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -9978,7 +9934,7 @@ open class OidcAuthorizationDataSDKMock: MatrixRustSDK.OidcAuthorizationData {
         }
     }
 }
-open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData {
+open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -9992,7 +9948,7 @@ open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData {
     {
     }
 }
-open class RoomSDKMock: MatrixRustSDK.Room {
+open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -11326,6 +11282,46 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         try await editEventIdNewContentClosure?(eventId, newContent)
     }
 
+    //MARK: - enableEncryption
+
+    open var enableEncryptionThrowableError: Error?
+    var enableEncryptionUnderlyingCallsCount = 0
+    open var enableEncryptionCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return enableEncryptionUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = enableEncryptionUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                enableEncryptionUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    enableEncryptionUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var enableEncryptionCalled: Bool {
+        return enableEncryptionCallsCount > 0
+    }
+    open var enableEncryptionClosure: (() async throws -> Void)?
+
+    open override func enableEncryption() async throws {
+        if let error = enableEncryptionThrowableError {
+            throw error
+        }
+        enableEncryptionCallsCount += 1
+        try await enableEncryptionClosure?()
+    }
+
     //MARK: - enableSendQueue
 
     var enableSendQueueEnableUnderlyingCallsCount = 0
@@ -11434,6 +11430,75 @@ open class RoomSDKMock: MatrixRustSDK.Room {
             return try await getPowerLevelsClosure()
         } else {
             return getPowerLevelsReturnValue
+        }
+    }
+
+    //MARK: - getRoomVisibility
+
+    open var getRoomVisibilityThrowableError: Error?
+    var getRoomVisibilityUnderlyingCallsCount = 0
+    open var getRoomVisibilityCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getRoomVisibilityUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRoomVisibilityUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRoomVisibilityUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRoomVisibilityUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var getRoomVisibilityCalled: Bool {
+        return getRoomVisibilityCallsCount > 0
+    }
+
+    var getRoomVisibilityUnderlyingReturnValue: RoomVisibility!
+    open var getRoomVisibilityReturnValue: RoomVisibility! {
+        get {
+            if Thread.isMainThread {
+                return getRoomVisibilityUnderlyingReturnValue
+            } else {
+                var returnValue: RoomVisibility? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRoomVisibilityUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRoomVisibilityUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRoomVisibilityUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var getRoomVisibilityClosure: (() async throws -> RoomVisibility)?
+
+    open override func getRoomVisibility() async throws -> RoomVisibility {
+        if let error = getRoomVisibilityThrowableError {
+            throw error
+        }
+        getRoomVisibilityCallsCount += 1
+        if let getRoomVisibilityClosure = getRoomVisibilityClosure {
+            return try await getRoomVisibilityClosure()
+        } else {
+            return getRoomVisibilityReturnValue
         }
     }
 
@@ -13387,6 +13452,81 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
     }
 
+    //MARK: - publishRoomAliasInRoomDirectory
+
+    open var publishRoomAliasInRoomDirectoryAliasThrowableError: Error?
+    var publishRoomAliasInRoomDirectoryAliasUnderlyingCallsCount = 0
+    open var publishRoomAliasInRoomDirectoryAliasCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return publishRoomAliasInRoomDirectoryAliasUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = publishRoomAliasInRoomDirectoryAliasUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                publishRoomAliasInRoomDirectoryAliasUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    publishRoomAliasInRoomDirectoryAliasUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var publishRoomAliasInRoomDirectoryAliasCalled: Bool {
+        return publishRoomAliasInRoomDirectoryAliasCallsCount > 0
+    }
+    open var publishRoomAliasInRoomDirectoryAliasReceivedAlias: String?
+    open var publishRoomAliasInRoomDirectoryAliasReceivedInvocations: [String] = []
+
+    var publishRoomAliasInRoomDirectoryAliasUnderlyingReturnValue: Bool!
+    open var publishRoomAliasInRoomDirectoryAliasReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return publishRoomAliasInRoomDirectoryAliasUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = publishRoomAliasInRoomDirectoryAliasUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                publishRoomAliasInRoomDirectoryAliasUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    publishRoomAliasInRoomDirectoryAliasUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var publishRoomAliasInRoomDirectoryAliasClosure: ((String) async throws -> Bool)?
+
+    open override func publishRoomAliasInRoomDirectory(alias: String) async throws -> Bool {
+        if let error = publishRoomAliasInRoomDirectoryAliasThrowableError {
+            throw error
+        }
+        publishRoomAliasInRoomDirectoryAliasCallsCount += 1
+        publishRoomAliasInRoomDirectoryAliasReceivedAlias = alias
+        DispatchQueue.main.async {
+            self.publishRoomAliasInRoomDirectoryAliasReceivedInvocations.append(alias)
+        }
+        if let publishRoomAliasInRoomDirectoryAliasClosure = publishRoomAliasInRoomDirectoryAliasClosure {
+            return try await publishRoomAliasInRoomDirectoryAliasClosure(alias)
+        } else {
+            return publishRoomAliasInRoomDirectoryAliasReturnValue
+        }
+    }
+
     //MARK: - rawName
 
     var rawNameUnderlyingCallsCount = 0
@@ -13536,6 +13676,81 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         }
         removeAvatarCallsCount += 1
         try await removeAvatarClosure?()
+    }
+
+    //MARK: - removeRoomAliasFromRoomDirectory
+
+    open var removeRoomAliasFromRoomDirectoryAliasThrowableError: Error?
+    var removeRoomAliasFromRoomDirectoryAliasUnderlyingCallsCount = 0
+    open var removeRoomAliasFromRoomDirectoryAliasCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return removeRoomAliasFromRoomDirectoryAliasUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeRoomAliasFromRoomDirectoryAliasUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeRoomAliasFromRoomDirectoryAliasUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeRoomAliasFromRoomDirectoryAliasUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var removeRoomAliasFromRoomDirectoryAliasCalled: Bool {
+        return removeRoomAliasFromRoomDirectoryAliasCallsCount > 0
+    }
+    open var removeRoomAliasFromRoomDirectoryAliasReceivedAlias: String?
+    open var removeRoomAliasFromRoomDirectoryAliasReceivedInvocations: [String] = []
+
+    var removeRoomAliasFromRoomDirectoryAliasUnderlyingReturnValue: Bool!
+    open var removeRoomAliasFromRoomDirectoryAliasReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return removeRoomAliasFromRoomDirectoryAliasUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeRoomAliasFromRoomDirectoryAliasUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeRoomAliasFromRoomDirectoryAliasUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeRoomAliasFromRoomDirectoryAliasUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var removeRoomAliasFromRoomDirectoryAliasClosure: ((String) async throws -> Bool)?
+
+    open override func removeRoomAliasFromRoomDirectory(alias: String) async throws -> Bool {
+        if let error = removeRoomAliasFromRoomDirectoryAliasThrowableError {
+            throw error
+        }
+        removeRoomAliasFromRoomDirectoryAliasCallsCount += 1
+        removeRoomAliasFromRoomDirectoryAliasReceivedAlias = alias
+        DispatchQueue.main.async {
+            self.removeRoomAliasFromRoomDirectoryAliasReceivedInvocations.append(alias)
+        }
+        if let removeRoomAliasFromRoomDirectoryAliasClosure = removeRoomAliasFromRoomDirectoryAliasClosure {
+            return try await removeRoomAliasFromRoomDirectoryAliasClosure(alias)
+        } else {
+            return removeRoomAliasFromRoomDirectoryAliasReturnValue
+        }
     }
 
     //MARK: - reportContent
@@ -14863,6 +15078,144 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         try await unbanUserUserIdReasonClosure?(userId, reason)
     }
 
+    //MARK: - updateCanonicalAlias
+
+    open var updateCanonicalAliasAliasAltAliasesThrowableError: Error?
+    var updateCanonicalAliasAliasAltAliasesUnderlyingCallsCount = 0
+    open var updateCanonicalAliasAliasAltAliasesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateCanonicalAliasAliasAltAliasesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateCanonicalAliasAliasAltAliasesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateCanonicalAliasAliasAltAliasesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateCanonicalAliasAliasAltAliasesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var updateCanonicalAliasAliasAltAliasesCalled: Bool {
+        return updateCanonicalAliasAliasAltAliasesCallsCount > 0
+    }
+    open var updateCanonicalAliasAliasAltAliasesReceivedArguments: (alias: String?, altAliases: [String])?
+    open var updateCanonicalAliasAliasAltAliasesReceivedInvocations: [(alias: String?, altAliases: [String])] = []
+    open var updateCanonicalAliasAliasAltAliasesClosure: ((String?, [String]) async throws -> Void)?
+
+    open override func updateCanonicalAlias(alias: String?, altAliases: [String]) async throws {
+        if let error = updateCanonicalAliasAliasAltAliasesThrowableError {
+            throw error
+        }
+        updateCanonicalAliasAliasAltAliasesCallsCount += 1
+        updateCanonicalAliasAliasAltAliasesReceivedArguments = (alias: alias, altAliases: altAliases)
+        DispatchQueue.main.async {
+            self.updateCanonicalAliasAliasAltAliasesReceivedInvocations.append((alias: alias, altAliases: altAliases))
+        }
+        try await updateCanonicalAliasAliasAltAliasesClosure?(alias, altAliases)
+    }
+
+    //MARK: - updateHistoryVisibility
+
+    open var updateHistoryVisibilityVisibilityThrowableError: Error?
+    var updateHistoryVisibilityVisibilityUnderlyingCallsCount = 0
+    open var updateHistoryVisibilityVisibilityCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateHistoryVisibilityVisibilityUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateHistoryVisibilityVisibilityUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateHistoryVisibilityVisibilityUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateHistoryVisibilityVisibilityUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var updateHistoryVisibilityVisibilityCalled: Bool {
+        return updateHistoryVisibilityVisibilityCallsCount > 0
+    }
+    open var updateHistoryVisibilityVisibilityReceivedVisibility: RoomHistoryVisibility?
+    open var updateHistoryVisibilityVisibilityReceivedInvocations: [RoomHistoryVisibility] = []
+    open var updateHistoryVisibilityVisibilityClosure: ((RoomHistoryVisibility) async throws -> Void)?
+
+    open override func updateHistoryVisibility(visibility: RoomHistoryVisibility) async throws {
+        if let error = updateHistoryVisibilityVisibilityThrowableError {
+            throw error
+        }
+        updateHistoryVisibilityVisibilityCallsCount += 1
+        updateHistoryVisibilityVisibilityReceivedVisibility = visibility
+        DispatchQueue.main.async {
+            self.updateHistoryVisibilityVisibilityReceivedInvocations.append(visibility)
+        }
+        try await updateHistoryVisibilityVisibilityClosure?(visibility)
+    }
+
+    //MARK: - updateJoinRules
+
+    open var updateJoinRulesNewRuleThrowableError: Error?
+    var updateJoinRulesNewRuleUnderlyingCallsCount = 0
+    open var updateJoinRulesNewRuleCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateJoinRulesNewRuleUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateJoinRulesNewRuleUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateJoinRulesNewRuleUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateJoinRulesNewRuleUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var updateJoinRulesNewRuleCalled: Bool {
+        return updateJoinRulesNewRuleCallsCount > 0
+    }
+    open var updateJoinRulesNewRuleReceivedNewRule: JoinRule?
+    open var updateJoinRulesNewRuleReceivedInvocations: [JoinRule] = []
+    open var updateJoinRulesNewRuleClosure: ((JoinRule) async throws -> Void)?
+
+    open override func updateJoinRules(newRule: JoinRule) async throws {
+        if let error = updateJoinRulesNewRuleThrowableError {
+            throw error
+        }
+        updateJoinRulesNewRuleCallsCount += 1
+        updateJoinRulesNewRuleReceivedNewRule = newRule
+        DispatchQueue.main.async {
+            self.updateJoinRulesNewRuleReceivedInvocations.append(newRule)
+        }
+        try await updateJoinRulesNewRuleClosure?(newRule)
+    }
+
     //MARK: - updatePowerLevelsForUsers
 
     open var updatePowerLevelsForUsersUpdatesThrowableError: Error?
@@ -14907,6 +15260,52 @@ open class RoomSDKMock: MatrixRustSDK.Room {
             self.updatePowerLevelsForUsersUpdatesReceivedInvocations.append(updates)
         }
         try await updatePowerLevelsForUsersUpdatesClosure?(updates)
+    }
+
+    //MARK: - updateRoomVisibility
+
+    open var updateRoomVisibilityVisibilityThrowableError: Error?
+    var updateRoomVisibilityVisibilityUnderlyingCallsCount = 0
+    open var updateRoomVisibilityVisibilityCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return updateRoomVisibilityVisibilityUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = updateRoomVisibilityVisibilityUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                updateRoomVisibilityVisibilityUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    updateRoomVisibilityVisibilityUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var updateRoomVisibilityVisibilityCalled: Bool {
+        return updateRoomVisibilityVisibilityCallsCount > 0
+    }
+    open var updateRoomVisibilityVisibilityReceivedVisibility: RoomVisibility?
+    open var updateRoomVisibilityVisibilityReceivedInvocations: [RoomVisibility] = []
+    open var updateRoomVisibilityVisibilityClosure: ((RoomVisibility) async throws -> Void)?
+
+    open override func updateRoomVisibility(visibility: RoomVisibility) async throws {
+        if let error = updateRoomVisibilityVisibilityThrowableError {
+            throw error
+        }
+        updateRoomVisibilityVisibilityCallsCount += 1
+        updateRoomVisibilityVisibilityReceivedVisibility = visibility
+        DispatchQueue.main.async {
+            self.updateRoomVisibilityVisibilityReceivedInvocations.append(visibility)
+        }
+        try await updateRoomVisibilityVisibilityClosure?(visibility)
     }
 
     //MARK: - uploadAvatar
@@ -15001,7 +15400,7 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         try await withdrawVerificationAndResendUserIdsSendHandleClosure?(userIds, sendHandle)
     }
 }
-open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch {
+open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -15307,7 +15706,7 @@ open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch {
         try await searchFilterBatchSizeViaServerNameClosure?(filter, batchSize, viaServerName)
     }
 }
-open class RoomListSDKMock: MatrixRustSDK.RoomList {
+open class RoomListSDKMock: MatrixRustSDK.RoomList, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -15539,7 +15938,7 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList {
         }
     }
 }
-open class RoomListDynamicEntriesControllerSDKMock: MatrixRustSDK.RoomListDynamicEntriesController {
+open class RoomListDynamicEntriesControllerSDKMock: MatrixRustSDK.RoomListDynamicEntriesController, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -15693,7 +16092,7 @@ open class RoomListDynamicEntriesControllerSDKMock: MatrixRustSDK.RoomListDynami
         }
     }
 }
-open class RoomListEntriesWithDynamicAdaptersResultSDKMock: MatrixRustSDK.RoomListEntriesWithDynamicAdaptersResult {
+open class RoomListEntriesWithDynamicAdaptersResultSDKMock: MatrixRustSDK.RoomListEntriesWithDynamicAdaptersResult, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -15834,7 +16233,7 @@ open class RoomListEntriesWithDynamicAdaptersResultSDKMock: MatrixRustSDK.RoomLi
         }
     }
 }
-open class RoomListItemSDKMock: MatrixRustSDK.RoomListItem {
+open class RoomListItemSDKMock: MatrixRustSDK.RoomListItem, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -16758,7 +17157,7 @@ open class RoomListItemSDKMock: MatrixRustSDK.RoomListItem {
         }
     }
 }
-open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService {
+open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -17101,7 +17500,7 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService {
         }
     }
 }
-open class RoomMembersIteratorSDKMock: MatrixRustSDK.RoomMembersIterator {
+open class RoomMembersIteratorSDKMock: MatrixRustSDK.RoomMembersIterator, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -17248,7 +17647,7 @@ open class RoomMembersIteratorSDKMock: MatrixRustSDK.RoomMembersIterator {
         }
     }
 }
-open class RoomMessageEventContentWithoutRelationSDKMock: MatrixRustSDK.RoomMessageEventContentWithoutRelation {
+open class RoomMessageEventContentWithoutRelationSDKMock: MatrixRustSDK.RoomMessageEventContentWithoutRelation, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -17330,7 +17729,7 @@ open class RoomMessageEventContentWithoutRelationSDKMock: MatrixRustSDK.RoomMess
         }
     }
 }
-open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview {
+open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -17514,8 +17913,73 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview {
         leaveCallsCount += 1
         try await leaveClosure?()
     }
+
+    //MARK: - ownMembershipDetails
+
+    var ownMembershipDetailsUnderlyingCallsCount = 0
+    open var ownMembershipDetailsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return ownMembershipDetailsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = ownMembershipDetailsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                ownMembershipDetailsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    ownMembershipDetailsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var ownMembershipDetailsCalled: Bool {
+        return ownMembershipDetailsCallsCount > 0
+    }
+
+    var ownMembershipDetailsUnderlyingReturnValue: RoomMembershipDetails?
+    open var ownMembershipDetailsReturnValue: RoomMembershipDetails? {
+        get {
+            if Thread.isMainThread {
+                return ownMembershipDetailsUnderlyingReturnValue
+            } else {
+                var returnValue: RoomMembershipDetails?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = ownMembershipDetailsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                ownMembershipDetailsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    ownMembershipDetailsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var ownMembershipDetailsClosure: (() async -> RoomMembershipDetails?)?
+
+    open override func ownMembershipDetails() async -> RoomMembershipDetails? {
+        ownMembershipDetailsCallsCount += 1
+        if let ownMembershipDetailsClosure = ownMembershipDetailsClosure {
+            return await ownMembershipDetailsClosure()
+        } else {
+            return ownMembershipDetailsReturnValue
+        }
+    }
 }
-open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHandle {
+open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHandle, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -17602,7 +18066,7 @@ open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHand
         try await joinClosure?()
     }
 }
-open class SendHandleSDKMock: MatrixRustSDK.SendHandle {
+open class SendHandleSDKMock: MatrixRustSDK.SendHandle, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -17722,7 +18186,7 @@ open class SendHandleSDKMock: MatrixRustSDK.SendHandle {
         try await tryResendClosure?()
     }
 }
-open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificationController {
+open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificationController, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -18061,7 +18525,7 @@ open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificati
         try await startSasVerificationClosure?()
     }
 }
-open class SessionVerificationEmojiSDKMock: MatrixRustSDK.SessionVerificationEmoji {
+open class SessionVerificationEmojiSDKMock: MatrixRustSDK.SessionVerificationEmoji, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -18202,7 +18666,7 @@ open class SessionVerificationEmojiSDKMock: MatrixRustSDK.SessionVerificationEmo
         }
     }
 }
-open class SpanSDKMock: MatrixRustSDK.Span {
+open class SpanSDKMock: MatrixRustSDK.Span, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -18353,7 +18817,7 @@ open class SpanSDKMock: MatrixRustSDK.Span {
         }
     }
 }
-open class SsoHandlerSDKMock: MatrixRustSDK.SsoHandler {
+open class SsoHandlerSDKMock: MatrixRustSDK.SsoHandler, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -18475,7 +18939,7 @@ open class SsoHandlerSDKMock: MatrixRustSDK.SsoHandler {
         }
     }
 }
-open class SyncServiceSDKMock: MatrixRustSDK.SyncService {
+open class SyncServiceSDKMock: MatrixRustSDK.SyncService, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -18698,7 +19162,7 @@ open class SyncServiceSDKMock: MatrixRustSDK.SyncService {
         try await stopClosure?()
     }
 }
-open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder {
+open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -18914,7 +19378,7 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder {
         }
     }
 }
-open class TaskHandleSDKMock: MatrixRustSDK.TaskHandle {
+open class TaskHandleSDKMock: MatrixRustSDK.TaskHandle, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -19026,7 +19490,7 @@ open class TaskHandleSDKMock: MatrixRustSDK.TaskHandle {
         }
     }
 }
-open class TimelineSDKMock: MatrixRustSDK.Timeline {
+open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -20734,7 +21198,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
     }
 }
-open class TimelineDiffSDKMock: MatrixRustSDK.TimelineDiff {
+open class TimelineDiffSDKMock: MatrixRustSDK.TimelineDiff, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -21330,7 +21794,7 @@ open class TimelineDiffSDKMock: MatrixRustSDK.TimelineDiff {
         }
     }
 }
-open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent {
+open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -21605,7 +22069,7 @@ open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent {
         }
     }
 }
-open class TimelineEventTypeFilterSDKMock: MatrixRustSDK.TimelineEventTypeFilter {
+open class TimelineEventTypeFilterSDKMock: MatrixRustSDK.TimelineEventTypeFilter, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -21619,7 +22083,7 @@ open class TimelineEventTypeFilterSDKMock: MatrixRustSDK.TimelineEventTypeFilter
     {
     }
 }
-open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem {
+open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -21890,7 +22354,7 @@ open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem {
         }
     }
 }
-open class UnreadNotificationsCountSDKMock: MatrixRustSDK.UnreadNotificationsCount {
+open class UnreadNotificationsCountSDKMock: MatrixRustSDK.UnreadNotificationsCount, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -22096,7 +22560,7 @@ open class UnreadNotificationsCountSDKMock: MatrixRustSDK.UnreadNotificationsCou
         }
     }
 }
-open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity {
+open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -22276,8 +22740,48 @@ open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity {
         pinCallsCount += 1
         try await pinClosure?()
     }
+
+    //MARK: - withdrawVerification
+
+    open var withdrawVerificationThrowableError: Error?
+    var withdrawVerificationUnderlyingCallsCount = 0
+    open var withdrawVerificationCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return withdrawVerificationUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = withdrawVerificationUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                withdrawVerificationUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    withdrawVerificationUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var withdrawVerificationCalled: Bool {
+        return withdrawVerificationCallsCount > 0
+    }
+    open var withdrawVerificationClosure: (() async throws -> Void)?
+
+    open override func withdrawVerification() async throws {
+        if let error = withdrawVerificationThrowableError {
+            throw error
+        }
+        withdrawVerificationCallsCount += 1
+        try await withdrawVerificationClosure?()
+    }
 }
-open class WidgetDriverSDKMock: MatrixRustSDK.WidgetDriver {
+open class WidgetDriverSDKMock: MatrixRustSDK.WidgetDriver, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -22330,7 +22834,7 @@ open class WidgetDriverSDKMock: MatrixRustSDK.WidgetDriver {
         await runRoomCapabilitiesProviderClosure?(room, capabilitiesProvider)
     }
 }
-open class WidgetDriverHandleSDKMock: MatrixRustSDK.WidgetDriverHandle {
+open class WidgetDriverHandleSDKMock: MatrixRustSDK.WidgetDriverHandle, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
