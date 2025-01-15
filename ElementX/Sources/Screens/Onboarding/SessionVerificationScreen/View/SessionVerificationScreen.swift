@@ -162,7 +162,7 @@ struct SessionVerificationScreen: View {
             VStack(spacing: 16.0) {
                 Text(emoji.symbol)
                     .font(.zero.headingXLBold)
-                Text(emoji.localizedDescription)
+                Text(emoji.localizedDescription.capitalized)
                     .font(.zero.bodyMD)
                     .foregroundColor(.compound.textSecondary)
             }

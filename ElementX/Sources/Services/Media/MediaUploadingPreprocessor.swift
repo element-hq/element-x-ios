@@ -175,7 +175,8 @@ struct MediaUploadingPreprocessor {
                                       size: fileSize,
                                       thumbnailInfo: thumbnailInfo,
                                       thumbnailSource: nil,
-                                      blurhash: thumbnailResult.blurhash)
+                                      blurhash: thumbnailResult.blurhash,
+                                      isAnimated: nil)
             
             let mediaInfo = MediaInfo.image(imageURL: url, thumbnailURL: thumbnailResult.url, imageInfo: imageInfo)
             

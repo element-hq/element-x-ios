@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.2.5 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.2.6 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -139,6 +139,12 @@ extension PreviewTests {
 
     func test_deactivateAccountScreen() async throws {
         for preview in DeactivateAccountScreen_Previews._allPreviews {
+            try await assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_editRoomAddressScreen() async throws {
+        for preview in EditRoomAddressScreen_Previews._allPreviews {
             try await assertSnapshots(matching: preview)
         }
     }
@@ -787,6 +793,12 @@ extension PreviewTests {
 
     func test_secureBackupScreen() async throws {
         for preview in SecureBackupScreen_Previews._allPreviews {
+            try await assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_securityAndPrivacyScreen() async throws {
+        for preview in SecurityAndPrivacyScreen_Previews._allPreviews {
             try await assertSnapshots(matching: preview)
         }
     }

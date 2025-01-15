@@ -90,7 +90,11 @@ extension {{enumName}} {
     guard let bundle = Bundle.lprojBundle(for: language) else { return nil }
     let format = NSLocalizedString(key, tableName: table, bundle: bundle, comment: "")
     let translation = String(format: format, locale: Locale(identifier: language), arguments: args)
-    guard translation != key else { return nil }
+    guard translation != key, 
+          translation != "\(key) \(key)" // Handle double pseudo for tests
+      else { 
+        return nil 
+      }
     return translation
   }
 }
