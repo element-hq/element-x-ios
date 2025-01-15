@@ -5,7 +5,9 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import Compound
+import MatrixRustSDK
 import SwiftUI
 import WysiwygComposer
 
@@ -298,7 +300,7 @@ struct ComposerToolbar: View {
 
 struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
     static let wysiwygViewModel = WysiwygComposerViewModel()
-    static let composerViewModel = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(), wysiwygViewModel: wysiwygViewModel,
+    static let composerViewModel = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(.init()), wysiwygViewModel: wysiwygViewModel,
                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)),
                                                             mediaProvider: MediaProviderMock(configuration: .init()),
                                                             mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
@@ -344,7 +346,7 @@ extension ComposerToolbar {
     static func mock(focused: Bool = true) -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
         var composerViewModel: ComposerToolbarViewModel {
-            let model = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(), wysiwygViewModel: wysiwygViewModel,
+            let model = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(.init()), wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
@@ -361,7 +363,7 @@ extension ComposerToolbar {
     static func textWithVoiceMessage(focused: Bool = true) -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
         var composerViewModel: ComposerToolbarViewModel {
-            let model = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(), wysiwygViewModel: wysiwygViewModel,
+            let model = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(.init()), wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
@@ -378,7 +380,7 @@ extension ComposerToolbar {
     static func voiceMessageRecordingMock() -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
         var composerViewModel: ComposerToolbarViewModel {
-            let model = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(), wysiwygViewModel: wysiwygViewModel,
+            let model = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(.init()), wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
@@ -396,7 +398,7 @@ extension ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
         let waveformData: [Float] = Array(repeating: 1.0, count: 1000)
         var composerViewModel: ComposerToolbarViewModel {
-            let model = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(), wysiwygViewModel: wysiwygViewModel,
+            let model = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(.init()), wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
@@ -417,7 +419,7 @@ extension ComposerToolbar {
     static func replyLoadingPreviewMock(isLoading: Bool) -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
         var composerViewModel: ComposerToolbarViewModel {
-            let model = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(), wysiwygViewModel: wysiwygViewModel,
+            let model = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(.init()), wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
@@ -440,7 +442,7 @@ extension ComposerToolbar {
     static func disabledPreviewMock() -> ComposerToolbar {
         let wysiwygViewModel = WysiwygComposerViewModel()
         var composerViewModel: ComposerToolbarViewModel {
-            let model = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(), wysiwygViewModel: wysiwygViewModel,
+            let model = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(.init()), wysiwygViewModel: wysiwygViewModel,
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
