@@ -14,24 +14,24 @@ struct EditRoomAddressListRow: View {
     var shouldDisplayError: Bool
     
     var body: some View {
-        ListRow(kind: .custom {
+        ZeroListRow(kind: .custom {
             HStack(spacing: 0) {
                 Text("#")
-                    .font(.compound.bodyLG)
+                    .font(.zero.bodyLG)
                     .foregroundStyle(.compound.textSecondary)
                 TextField("", text: $aliasLocalPart)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                     .textContentType(.URL)
                     .tint(.compound.iconAccentTertiary)
-                    .font(.compound.bodyLG)
+                    .font(.zero.bodyLG)
                     .foregroundStyle(.compound.textPrimary)
                     .padding(.horizontal, 8)
                 Text(":\(serverName)")
-                    .font(.compound.bodyLG)
+                    .font(.zero.bodyLG)
                     .foregroundStyle(.compound.textSecondary)
             }
-            .padding(ListRowPadding.textFieldInsets)
+            .padding(ZeroListRowPadding.textFieldInsets)
             .environment(\.layoutDirection, .leftToRight)
             .errorBackground(shouldDisplayError)
         })

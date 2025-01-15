@@ -299,6 +299,12 @@
 		1885A5C72D140A95003F7B3B /* PhotoLibraryManagerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD955A0380C287C418F1A74D /* PhotoLibraryManagerMock.swift */; };
 		1885A5C82D140ACB003F7B3B /* TimelineMediaPreviewScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA57E8563C346B13DDE4A6F4 /* TimelineMediaPreviewScreen.swift */; };
 		18867F4F1C8991EEC56EA932 /* UTType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897DF5E9A70CE05A632FC8AF /* UTType.swift */; };
+		188C87CF2D37F92F00A139EB /* EditRoomAddressScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41656BC6267D55C56A2AAC08 /* EditRoomAddressScreenCoordinator.swift */; };
+		188C87D02D37F93400A139EB /* EditRoomAddressScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD21AF0131AA38FF9534FAD /* EditRoomAddressScreenModels.swift */; };
+		188C87D12D37F93900A139EB /* EditRoomAddressScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FDFAA04174CC99FB66391C /* EditRoomAddressScreenViewModel.swift */; };
+		188C87D22D37F93E00A139EB /* EditRoomAddressScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B18089ED50324583BB2FB7 /* EditRoomAddressScreenViewModelProtocol.swift */; };
+		188C87D32D37F94400A139EB /* EditRoomAddressScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4048547AC50ADCF201684E87 /* EditRoomAddressScreen.swift */; };
+		188C87D42D37F98E00A139EB /* EditRoomAddressListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2776E63E02719B20758EB78 /* EditRoomAddressListRow.swift */; };
 		189334A22D071BEE00CC87B9 /* MediaEventsTimelineFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2178B951602AA921A5FD9DC8 /* MediaEventsTimelineFlowCoordinator.swift */; };
 		189334A32D071BFB00CC87B9 /* MediaEventsTimelineScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8512B82404B1751D0BCC82D2 /* MediaEventsTimelineScreenCoordinator.swift */; };
 		189334A42D071BFF00CC87B9 /* MediaEventsTimelineScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7033218DA395B003F7AB29A2 /* MediaEventsTimelineScreenModels.swift */; };
@@ -8813,6 +8819,7 @@
 				18E9A44F2C9829970082DDA4 /* AppLockSetupPINScreenCoordinator.swift in Sources */,
 				18E9A4502C9829970082DDA4 /* AppLockSetupPINScreenModels.swift in Sources */,
 				18E9A4512C9829970082DDA4 /* AppLockSetupPINScreenViewModel.swift in Sources */,
+				188C87D42D37F98E00A139EB /* EditRoomAddressListRow.swift in Sources */,
 				18E9A4522C9829970082DDA4 /* AppLockSetupPINScreenViewModelProtocol.swift in Sources */,
 				18E9A4532C9829970082DDA4 /* AppLockSetupSettingsScreen.swift in Sources */,
 				18D46BA52D2DACA3009F4041 /* StateBus.swift in Sources */,
@@ -8890,6 +8897,7 @@
 				18E9A4922C9829970082DDA4 /* BugReportScreenModels.swift in Sources */,
 				18E9A4932C9829970082DDA4 /* BugReportScreenViewModel.swift in Sources */,
 				18E9A4942C9829970082DDA4 /* BugReportScreenViewModelProtocol.swift in Sources */,
+				188C87D32D37F94400A139EB /* EditRoomAddressScreen.swift in Sources */,
 				18E9A4952C9829970082DDA4 /* BugReportService.swift in Sources */,
 				18D467A22D109B5C00861AA6 /* TimelineMediaPreviewViewModel.swift in Sources */,
 				18E9A4962C9829970082DDA4 /* BugReportServiceProtocol.swift in Sources */,
@@ -8992,6 +9000,7 @@
 				18E9A4EA2C9829970082DDA4 /* EmojiPickerScreenViewModel.swift in Sources */,
 				18DFC5CA2CD9551800462FE1 /* IdentityResetHandleSDKMock.swift in Sources */,
 				18E9A4EB2C9829970082DDA4 /* EmojiPickerScreenViewModelProtocol.swift in Sources */,
+				188C87CF2D37F92F00A139EB /* EditRoomAddressScreenCoordinator.swift in Sources */,
 				18E9A4EC2C9829970082DDA4 /* EmojiProvider.swift in Sources */,
 				185454E62CFF0EFB003CA957 /* CompleteProfileScreenViewModelProtocol.swift in Sources */,
 				18E9A4ED2C9829970082DDA4 /* EmoteRoomTimelineItem.swift in Sources */,
@@ -9368,6 +9377,7 @@
 				18E9A62C2C9829970082DDA4 /* RoomDetailsScreenModels.swift in Sources */,
 				18E9A62D2C9829970082DDA4 /* RoomDetailsScreenViewModel.swift in Sources */,
 				18E9A62E2C9829970082DDA4 /* RoomDetailsScreenViewModelProtocol.swift in Sources */,
+				188C87D22D37F93E00A139EB /* EditRoomAddressScreenViewModelProtocol.swift in Sources */,
 				18E9A62F2C9829970082DDA4 /* RoomDirectoryCell.swift in Sources */,
 				18E9A6302C9829970082DDA4 /* RoomDirectorySearchMock.swift in Sources */,
 				18E9A6312C9829970082DDA4 /* RoomDirectorySearchProxy.swift in Sources */,
@@ -9729,12 +9739,14 @@
 				18E9A7542C9829970082DDA4 /* VoiceMessageRecordingView.swift in Sources */,
 				18E9A7552C9829970082DDA4 /* (null) in Sources */,
 				18E9A7562C9829970082DDA4 /* VoiceMessageRoomTimelineItem.swift in Sources */,
+				188C87D02D37F93400A139EB /* EditRoomAddressScreenModels.swift in Sources */,
 				18E9A7572C9829970082DDA4 /* (null) in Sources */,
 				18E9A7582C9829970082DDA4 /* WaveformCursorView.swift in Sources */,
 				18E9A7592C9829970082DDA4 /* WaveformInteractionModifier.swift in Sources */,
 				18E9A75A2C9829970082DDA4 /* WaveformSource.swift in Sources */,
 				18E9A75B2C9829970082DDA4 /* WindowManager.swift in Sources */,
 				18E9A75C2C9829970082DDA4 /* WindowManagerProtocol.swift in Sources */,
+				188C87D12D37F93900A139EB /* EditRoomAddressScreenViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11012,7 +11024,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.10.1;
+				MARKETING_VERSION = 0.10.2;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -11047,7 +11059,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.10.1;
+				MARKETING_VERSION = 0.10.2;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;

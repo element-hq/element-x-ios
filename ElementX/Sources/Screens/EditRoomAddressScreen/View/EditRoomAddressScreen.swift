@@ -37,7 +37,7 @@ struct EditRoomAddressScreen: View {
                 }
             }
         }
-        .compoundList()
+        .zeroList()
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(L10n.screenEditRoomAddressTitle)
         .toolbar { toolbar }
