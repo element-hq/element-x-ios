@@ -8,7 +8,7 @@
 @testable import Kingfisher
 import UIKit
 
-class MockImageCache: ImageCache {
+class MockImageCache: ImageCache, @unchecked Sendable {
     var retrievedImagesInMemory = [String: UIImage]()
     var retrievedImages = [String: UIImage]()
     var storedImages = [String: UIImage]()

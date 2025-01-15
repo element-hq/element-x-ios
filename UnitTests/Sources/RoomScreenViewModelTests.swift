@@ -345,7 +345,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController)
         self.viewModel = viewModel
         
-        var deferred = deferFulfillment(viewModel.context.$viewState) { state in
+        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
             state.unseenKnockRequests == [.init(displayName: "Alice", avatarURL: nil, userID: "@alice:matrix.org", reason: "Hello World!", eventID: "1")] &&
                 !state.shouldSeeKnockRequests
         }

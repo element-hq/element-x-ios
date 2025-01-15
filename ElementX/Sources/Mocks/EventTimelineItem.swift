@@ -28,6 +28,7 @@ extension EventTimelineItem {
                   timestamp: 0,
                   reactions: [],
                   localSendState: nil,
+                  localCreatedAt: nil,
                   readReceipts: [:],
                   origin: nil,
                   canBeRepliedTo: false,

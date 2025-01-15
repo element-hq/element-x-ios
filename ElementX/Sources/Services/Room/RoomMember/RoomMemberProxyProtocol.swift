@@ -19,6 +19,8 @@ protocol RoomMemberProxyProtocol: AnyObject {
     
     var membership: MembershipState { get }
     
+    var membershipChangeReason: String? { get }
+    
     var isIgnored: Bool { get }
     
     var powerLevel: Int { get }

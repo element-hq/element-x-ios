@@ -1,4 +1,8 @@
 // swiftlint:disable all
+@preconcurrency import MatrixRustSDK
+
+import Foundation
+
 {% for import in argument.autoMockableImports %}
 import {{ import }}
 {% endfor %}
@@ -218,7 +222,7 @@ import {{ import }}
 {% macro underlyingMockedVariableName variable %}underlying{{ variable.name|upperFirstLetter }}{% endmacro %}
 {% macro mockedVariableName variable %}{{ variable.name }}{% endmacro %}
 {% for type in types.classes %}{% if type.name != "AutoMockable" %}{% if type.accessLevel == "open" %}
-{% call accessLevel type.accessLevel %}class {{ type.name | replace:"Protocol","" }}SDKMock: MatrixRustSDK.{{ type.name }} {
+{% call accessLevel type.accessLevel %}class {{ type.name | replace:"Protocol","" }}SDKMock: MatrixRustSDK.{{ type.name }}, @unchecked Sendable {
     {% if type.accessLevel == "open" %}
     init() {
         super.init(noPointer: .init())

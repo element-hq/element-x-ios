@@ -1,10 +1,12 @@
-// Generated using Sourcery 2.2.5 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.2.6 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
+@preconcurrency import MatrixRustSDK
+
 import Foundation
-import MatrixRustSDK
-open class ClientSDKMock: MatrixRustSDK.Client {
+
+open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -4235,7 +4237,7 @@ open class ClientSDKMock: MatrixRustSDK.Client {
         }
     }
 }
-open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
+open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -5999,7 +6001,7 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder {
         }
     }
 }
-open class EncryptionSDKMock: MatrixRustSDK.Encryption {
+open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -7257,7 +7259,7 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption {
         await waitForE2eeInitializationTasksClosure?()
     }
 }
-open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails {
+open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -7593,7 +7595,7 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails {
         }
     }
 }
-open class IdentityResetHandleSDKMock: MatrixRustSDK.IdentityResetHandle {
+open class IdentityResetHandleSDKMock: MatrixRustSDK.IdentityResetHandle, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -7751,7 +7753,7 @@ open class IdentityResetHandleSDKMock: MatrixRustSDK.IdentityResetHandle {
         try await resetAuthClosure?(auth)
     }
 }
-open class InReplyToDetailsSDKMock: MatrixRustSDK.InReplyToDetails {
+open class InReplyToDetailsSDKMock: MatrixRustSDK.InReplyToDetails, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -7892,7 +7894,7 @@ open class InReplyToDetailsSDKMock: MatrixRustSDK.InReplyToDetails {
         }
     }
 }
-open class KnockRequestActionsSDKMock: MatrixRustSDK.KnockRequestActions {
+open class KnockRequestActionsSDKMock: MatrixRustSDK.KnockRequestActions, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -8075,7 +8077,7 @@ open class KnockRequestActionsSDKMock: MatrixRustSDK.KnockRequestActions {
         try await markAsSeenClosure?()
     }
 }
-open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvider {
+open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvider, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -8287,7 +8289,7 @@ open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvid
         }
     }
 }
-open class MediaFileHandleSDKMock: MatrixRustSDK.MediaFileHandle {
+open class MediaFileHandleSDKMock: MatrixRustSDK.MediaFileHandle, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -8442,7 +8444,7 @@ open class MediaFileHandleSDKMock: MatrixRustSDK.MediaFileHandle {
         }
     }
 }
-open class MediaSourceSDKMock: MatrixRustSDK.MediaSource {
+open class MediaSourceSDKMock: MatrixRustSDK.MediaSource, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -8586,7 +8588,7 @@ open class MediaSourceSDKMock: MatrixRustSDK.MediaSource {
         }
     }
 }
-open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient {
+open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -8672,7 +8674,7 @@ open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient {
         }
     }
 }
-open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
+open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -9856,7 +9858,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings {
         try await unmuteRoomRoomIdIsEncryptedIsOneToOneClosure?(roomId, isEncrypted, isOneToOne)
     }
 }
-open class OidcAuthorizationDataSDKMock: MatrixRustSDK.OidcAuthorizationData {
+open class OidcAuthorizationDataSDKMock: MatrixRustSDK.OidcAuthorizationData, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -9932,7 +9934,7 @@ open class OidcAuthorizationDataSDKMock: MatrixRustSDK.OidcAuthorizationData {
         }
     }
 }
-open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData {
+open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -9946,7 +9948,7 @@ open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData {
     {
     }
 }
-open class RoomSDKMock: MatrixRustSDK.Room {
+open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -15398,7 +15400,7 @@ open class RoomSDKMock: MatrixRustSDK.Room {
         try await withdrawVerificationAndResendUserIdsSendHandleClosure?(userIds, sendHandle)
     }
 }
-open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch {
+open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -15704,7 +15706,7 @@ open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch {
         try await searchFilterBatchSizeViaServerNameClosure?(filter, batchSize, viaServerName)
     }
 }
-open class RoomListSDKMock: MatrixRustSDK.RoomList {
+open class RoomListSDKMock: MatrixRustSDK.RoomList, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -15936,7 +15938,7 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList {
         }
     }
 }
-open class RoomListDynamicEntriesControllerSDKMock: MatrixRustSDK.RoomListDynamicEntriesController {
+open class RoomListDynamicEntriesControllerSDKMock: MatrixRustSDK.RoomListDynamicEntriesController, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -16090,7 +16092,7 @@ open class RoomListDynamicEntriesControllerSDKMock: MatrixRustSDK.RoomListDynami
         }
     }
 }
-open class RoomListEntriesWithDynamicAdaptersResultSDKMock: MatrixRustSDK.RoomListEntriesWithDynamicAdaptersResult {
+open class RoomListEntriesWithDynamicAdaptersResultSDKMock: MatrixRustSDK.RoomListEntriesWithDynamicAdaptersResult, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -16231,7 +16233,7 @@ open class RoomListEntriesWithDynamicAdaptersResultSDKMock: MatrixRustSDK.RoomLi
         }
     }
 }
-open class RoomListItemSDKMock: MatrixRustSDK.RoomListItem {
+open class RoomListItemSDKMock: MatrixRustSDK.RoomListItem, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -17155,7 +17157,7 @@ open class RoomListItemSDKMock: MatrixRustSDK.RoomListItem {
         }
     }
 }
-open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService {
+open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -17498,7 +17500,7 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService {
         }
     }
 }
-open class RoomMembersIteratorSDKMock: MatrixRustSDK.RoomMembersIterator {
+open class RoomMembersIteratorSDKMock: MatrixRustSDK.RoomMembersIterator, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -17645,7 +17647,7 @@ open class RoomMembersIteratorSDKMock: MatrixRustSDK.RoomMembersIterator {
         }
     }
 }
-open class RoomMessageEventContentWithoutRelationSDKMock: MatrixRustSDK.RoomMessageEventContentWithoutRelation {
+open class RoomMessageEventContentWithoutRelationSDKMock: MatrixRustSDK.RoomMessageEventContentWithoutRelation, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -17727,7 +17729,7 @@ open class RoomMessageEventContentWithoutRelationSDKMock: MatrixRustSDK.RoomMess
         }
     }
 }
-open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview {
+open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -17911,8 +17913,73 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview {
         leaveCallsCount += 1
         try await leaveClosure?()
     }
+
+    //MARK: - ownMembershipDetails
+
+    var ownMembershipDetailsUnderlyingCallsCount = 0
+    open var ownMembershipDetailsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return ownMembershipDetailsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = ownMembershipDetailsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                ownMembershipDetailsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    ownMembershipDetailsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var ownMembershipDetailsCalled: Bool {
+        return ownMembershipDetailsCallsCount > 0
+    }
+
+    var ownMembershipDetailsUnderlyingReturnValue: RoomMembershipDetails?
+    open var ownMembershipDetailsReturnValue: RoomMembershipDetails? {
+        get {
+            if Thread.isMainThread {
+                return ownMembershipDetailsUnderlyingReturnValue
+            } else {
+                var returnValue: RoomMembershipDetails?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = ownMembershipDetailsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                ownMembershipDetailsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    ownMembershipDetailsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var ownMembershipDetailsClosure: (() async -> RoomMembershipDetails?)?
+
+    open override func ownMembershipDetails() async -> RoomMembershipDetails? {
+        ownMembershipDetailsCallsCount += 1
+        if let ownMembershipDetailsClosure = ownMembershipDetailsClosure {
+            return await ownMembershipDetailsClosure()
+        } else {
+            return ownMembershipDetailsReturnValue
+        }
+    }
 }
-open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHandle {
+open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHandle, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -17999,7 +18066,7 @@ open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHand
         try await joinClosure?()
     }
 }
-open class SendHandleSDKMock: MatrixRustSDK.SendHandle {
+open class SendHandleSDKMock: MatrixRustSDK.SendHandle, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -18119,7 +18186,7 @@ open class SendHandleSDKMock: MatrixRustSDK.SendHandle {
         try await tryResendClosure?()
     }
 }
-open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificationController {
+open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificationController, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -18458,7 +18525,7 @@ open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificati
         try await startSasVerificationClosure?()
     }
 }
-open class SessionVerificationEmojiSDKMock: MatrixRustSDK.SessionVerificationEmoji {
+open class SessionVerificationEmojiSDKMock: MatrixRustSDK.SessionVerificationEmoji, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -18599,7 +18666,7 @@ open class SessionVerificationEmojiSDKMock: MatrixRustSDK.SessionVerificationEmo
         }
     }
 }
-open class SpanSDKMock: MatrixRustSDK.Span {
+open class SpanSDKMock: MatrixRustSDK.Span, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -18750,7 +18817,7 @@ open class SpanSDKMock: MatrixRustSDK.Span {
         }
     }
 }
-open class SsoHandlerSDKMock: MatrixRustSDK.SsoHandler {
+open class SsoHandlerSDKMock: MatrixRustSDK.SsoHandler, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -18872,7 +18939,7 @@ open class SsoHandlerSDKMock: MatrixRustSDK.SsoHandler {
         }
     }
 }
-open class SyncServiceSDKMock: MatrixRustSDK.SyncService {
+open class SyncServiceSDKMock: MatrixRustSDK.SyncService, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -19095,7 +19162,7 @@ open class SyncServiceSDKMock: MatrixRustSDK.SyncService {
         try await stopClosure?()
     }
 }
-open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder {
+open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -19311,7 +19378,7 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder {
         }
     }
 }
-open class TaskHandleSDKMock: MatrixRustSDK.TaskHandle {
+open class TaskHandleSDKMock: MatrixRustSDK.TaskHandle, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -19423,7 +19490,7 @@ open class TaskHandleSDKMock: MatrixRustSDK.TaskHandle {
         }
     }
 }
-open class TimelineSDKMock: MatrixRustSDK.Timeline {
+open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -21131,7 +21198,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
     }
 }
-open class TimelineDiffSDKMock: MatrixRustSDK.TimelineDiff {
+open class TimelineDiffSDKMock: MatrixRustSDK.TimelineDiff, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -21727,7 +21794,7 @@ open class TimelineDiffSDKMock: MatrixRustSDK.TimelineDiff {
         }
     }
 }
-open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent {
+open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -22002,7 +22069,7 @@ open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent {
         }
     }
 }
-open class TimelineEventTypeFilterSDKMock: MatrixRustSDK.TimelineEventTypeFilter {
+open class TimelineEventTypeFilterSDKMock: MatrixRustSDK.TimelineEventTypeFilter, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -22016,7 +22083,7 @@ open class TimelineEventTypeFilterSDKMock: MatrixRustSDK.TimelineEventTypeFilter
     {
     }
 }
-open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem {
+open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -22287,7 +22354,7 @@ open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem {
         }
     }
 }
-open class UnreadNotificationsCountSDKMock: MatrixRustSDK.UnreadNotificationsCount {
+open class UnreadNotificationsCountSDKMock: MatrixRustSDK.UnreadNotificationsCount, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -22493,7 +22560,7 @@ open class UnreadNotificationsCountSDKMock: MatrixRustSDK.UnreadNotificationsCou
         }
     }
 }
-open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity {
+open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -22714,7 +22781,7 @@ open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity {
         try await withdrawVerificationClosure?()
     }
 }
-open class WidgetDriverSDKMock: MatrixRustSDK.WidgetDriver {
+open class WidgetDriverSDKMock: MatrixRustSDK.WidgetDriver, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }
@@ -22767,7 +22834,7 @@ open class WidgetDriverSDKMock: MatrixRustSDK.WidgetDriver {
         await runRoomCapabilitiesProviderClosure?(room, capabilitiesProvider)
     }
 }
-open class WidgetDriverHandleSDKMock: MatrixRustSDK.WidgetDriverHandle {
+open class WidgetDriverHandleSDKMock: MatrixRustSDK.WidgetDriverHandle, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }

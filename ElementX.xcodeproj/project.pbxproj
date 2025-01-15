@@ -2486,6 +2486,7 @@
 		F3A1AB5A84D843B6AC8D5F1E /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		F3C7252B3461D06175D975A4 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/SAS.strings; sourceTree = "<group>"; };
 		F3EAE3E9D5EF4A6D5D9C6CFD /* EmojiPickerScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPickerScreenViewModel.swift; sourceTree = "<group>"; };
+		F409D44C2E6BE50462E82F8A /* en-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-US"; path = "en-US.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		F4469F6AE311BDC439B3A5EC /* UserSessionMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSessionMock.swift; sourceTree = "<group>"; };
 		F4548A9BDE5CB3AB864BCA9F /* EffectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectsView.swift; sourceTree = "<group>"; };
 		F506C6ADB1E1DA6638078E11 /* UITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -6230,6 +6231,7 @@
 				de,
 				el,
 				en,
+				"en-US",
 				es,
 				et,
 				fa,
@@ -7790,6 +7792,7 @@
 				35AFCF4C05DEED04E3DB1A16 /* de */,
 				113356152C099951A6D17D85 /* el */,
 				CACA846B3E3E9A521D98B178 /* en */,
+				F409D44C2E6BE50462E82F8A /* en-US */,
 				CBBCC6E74774E79B599625D0 /* es */,
 				A443FAE2EE820A5790C35C8D /* et */,
 				A9873374E72AA53260AE90A2 /* fa */,
@@ -8459,7 +8462,7 @@
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 25.01.13;
+				version = 25.01.15;
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {

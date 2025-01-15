@@ -31,6 +31,8 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
     
     var membership: MembershipState { member.membership }
     
+    var membershipChangeReason: String? { member.membershipChangeReason }
+    
     var isIgnored: Bool { member.isIgnored }
     
     var powerLevel: Int { Int(member.powerLevel) }
