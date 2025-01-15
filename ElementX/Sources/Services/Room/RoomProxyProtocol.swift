@@ -23,6 +23,7 @@ enum RoomProxyType {
     case invited(InvitedRoomProxyProtocol)
     case knocked(KnockedRoomProxyProtocol)
     case left
+    case banned
 }
 
 // sourcery: AutoMockable

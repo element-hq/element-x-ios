@@ -952,8 +952,7 @@ class ClientProxy: ClientProxyProtocol {
             case .left:
                 return .left
             case .banned:
-                // TODO: Implement a `bannedRoomProxy` and/or `.banned` case
-                return .left
+                return .banned
             }
         } catch {
             MXLog.error("Failed retrieving room: \(roomID), with error: \(error)")

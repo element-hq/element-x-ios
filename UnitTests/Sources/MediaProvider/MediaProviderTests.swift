@@ -73,7 +73,7 @@ final class MediaProviderTests: XCTestCase {
     }
     
     func test_whenImageFromSourceWithSourceNil_nilReturned() throws {
-        let image = try mediaProvider.imageFromSource(nil, size: Avatars.Size.room(on: .timeline).scaledSize)
+        let image = mediaProvider.imageFromSource(nil, size: Avatars.Size.room(on: .timeline).scaledSize)
         XCTAssertNil(image)
     }
     

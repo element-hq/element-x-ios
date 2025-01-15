@@ -1,16 +1,19 @@
-// Generated using Sourcery 2.2.5 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.2.6 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
+@preconcurrency import Combine
+@preconcurrency import SwiftUI
+
+@preconcurrency import MatrixRustSDK
+
 import AnalyticsEvents
 import AVFoundation
-import Combine
 import Foundation
 import LocalAuthentication
-import MatrixRustSDK
 import Photos
-import SwiftUI
-class AnalyticsClientMock: AnalyticsClientProtocol {
+
+class AnalyticsClientMock: AnalyticsClientProtocol, @unchecked Sendable {
     var isRunning: Bool {
         get { return underlyingIsRunning }
         set(value) { underlyingIsRunning = value }
@@ -252,7 +255,7 @@ class AnalyticsClientMock: AnalyticsClientProtocol {
         updateUserPropertiesClosure?(event)
     }
 }
-class AppLockServiceMock: AppLockServiceProtocol {
+class AppLockServiceMock: AppLockServiceProtocol, @unchecked Sendable {
     var isMandatory: Bool {
         get { return underlyingIsMandatory }
         set(value) { underlyingIsMandatory = value }
@@ -803,7 +806,7 @@ class AppLockServiceMock: AppLockServiceProtocol {
         }
     }
 }
-class AppMediatorMock: AppMediatorProtocol {
+class AppMediatorMock: AppMediatorProtocol, @unchecked Sendable {
     var windowManager: WindowManagerProtocol {
         get { return underlyingWindowManager }
         set(value) { underlyingWindowManager = value }
@@ -1107,7 +1110,7 @@ class AppMediatorMock: AppMediatorProtocol {
         }
     }
 }
-class AudioConverterMock: AudioConverterProtocol {
+class AudioConverterMock: AudioConverterProtocol, @unchecked Sendable {
 
     //MARK: - convertToOpusOgg
 
@@ -1200,7 +1203,7 @@ class AudioConverterMock: AudioConverterProtocol {
         try convertToMPEG4AACSourceURLDestinationURLClosure?(sourceURL, destinationURL)
     }
 }
-class AudioPlayerMock: AudioPlayerProtocol {
+class AudioPlayerMock: AudioPlayerProtocol, @unchecked Sendable {
     var sourceURL: URL?
     var duration: TimeInterval {
         get { return underlyingDuration }
@@ -1447,7 +1450,7 @@ class AudioPlayerMock: AudioPlayerProtocol {
         await seekToClosure?(progress)
     }
 }
-class AudioRecorderMock: AudioRecorderProtocol {
+class AudioRecorderMock: AudioRecorderProtocol, @unchecked Sendable {
     var actions: AnyPublisher<AudioRecorderAction, Never> {
         get { return underlyingActions }
         set(value) { underlyingActions = value }
@@ -1641,7 +1644,7 @@ class AudioRecorderMock: AudioRecorderProtocol {
         }
     }
 }
-class AudioSessionMock: AudioSessionProtocol {
+class AudioSessionMock: AudioSessionProtocol, @unchecked Sendable {
 
     //MARK: - requestRecordPermission
 
@@ -1820,7 +1823,7 @@ class AudioSessionMock: AudioSessionProtocol {
         try setActiveOptionsClosure?(active, options)
     }
 }
-class AuthenticationClientBuilderFactoryMock: AuthenticationClientBuilderFactoryProtocol {
+class AuthenticationClientBuilderFactoryMock: AuthenticationClientBuilderFactoryProtocol, @unchecked Sendable {
 
     //MARK: - makeBuilder
 
@@ -1893,7 +1896,7 @@ class AuthenticationClientBuilderFactoryMock: AuthenticationClientBuilderFactory
         }
     }
 }
-class AuthenticationClientBuilderMock: AuthenticationClientBuilderProtocol {
+class AuthenticationClientBuilderMock: AuthenticationClientBuilderProtocol, @unchecked Sendable {
 
     //MARK: - build
 
@@ -2044,7 +2047,7 @@ class AuthenticationClientBuilderMock: AuthenticationClientBuilderProtocol {
         }
     }
 }
-class BugReportServiceMock: BugReportServiceProtocol {
+class BugReportServiceMock: BugReportServiceProtocol, @unchecked Sendable {
     var crashedLastRun: Bool {
         get { return underlyingCrashedLastRun }
         set(value) { underlyingCrashedLastRun = value }
@@ -2123,7 +2126,7 @@ class BugReportServiceMock: BugReportServiceProtocol {
         }
     }
 }
-class ClientProxyMock: ClientProxyProtocol {
+class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var actionsPublisher: AnyPublisher<ClientProxyAction, Never> {
         get { return underlyingActionsPublisher }
         set(value) { underlyingActionsPublisher = value }
@@ -5036,7 +5039,7 @@ class ClientProxyMock: ClientProxyProtocol {
         }
     }
 }
-class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
+class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol, @unchecked Sendable {
     var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> {
         get { return underlyingSuggestionsPublisher }
         set(value) { underlyingSuggestionsPublisher = value }
@@ -5126,7 +5129,7 @@ class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol {
         setSuggestionTriggerClosure?(suggestionTrigger)
     }
 }
-class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
+class ComposerDraftServiceMock: ComposerDraftServiceProtocol, @unchecked Sendable {
 
     //MARK: - saveDraft
 
@@ -5537,7 +5540,7 @@ class ComposerDraftServiceMock: ComposerDraftServiceProtocol {
         }
     }
 }
-class ElementCallServiceMock: ElementCallServiceProtocol {
+class ElementCallServiceMock: ElementCallServiceProtocol, @unchecked Sendable {
     var actions: AnyPublisher<ElementCallServiceAction, Never> {
         get { return underlyingActions }
         set(value) { underlyingActions = value }
@@ -5708,7 +5711,7 @@ class ElementCallServiceMock: ElementCallServiceProtocol {
         setAudioEnabledRoomIDClosure?(enabled, roomID)
     }
 }
-class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol {
+class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol, @unchecked Sendable {
     var widgetID: String {
         get { return underlyingWidgetID }
         set(value) { underlyingWidgetID = value }
@@ -5866,7 +5869,7 @@ class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol {
         }
     }
 }
-class InvitedRoomProxyMock: InvitedRoomProxyProtocol {
+class InvitedRoomProxyMock: InvitedRoomProxyProtocol, @unchecked Sendable {
     var info: BaseRoomInfoProxyProtocol {
         get { return underlyingInfo }
         set(value) { underlyingInfo = value }
@@ -5949,7 +5952,7 @@ class InvitedRoomProxyMock: InvitedRoomProxyProtocol {
         }
     }
 }
-class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
+class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
     var isEncrypted: Bool {
         get { return underlyingIsEncrypted }
         set(value) { underlyingIsEncrypted = value }
@@ -9560,7 +9563,7 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol {
         }
     }
 }
-class KeychainControllerMock: KeychainControllerProtocol {
+class KeychainControllerMock: KeychainControllerProtocol, @unchecked Sendable {
 
     //MARK: - setRestorationToken
 
@@ -10164,7 +10167,7 @@ class KeychainControllerMock: KeychainControllerProtocol {
         removePINCodeBiometricStateClosure?()
     }
 }
-class KnockRequestProxyMock: KnockRequestProxyProtocol {
+class KnockRequestProxyMock: KnockRequestProxyProtocol, @unchecked Sendable {
     var eventID: String {
         get { return underlyingEventID }
         set(value) { underlyingEventID = value }
@@ -10442,7 +10445,7 @@ class KnockRequestProxyMock: KnockRequestProxyProtocol {
         }
     }
 }
-class KnockedRoomProxyMock: KnockedRoomProxyProtocol {
+class KnockedRoomProxyMock: KnockedRoomProxyProtocol, @unchecked Sendable {
     var info: BaseRoomInfoProxyProtocol {
         get { return underlyingInfo }
         set(value) { underlyingInfo = value }
@@ -10524,7 +10527,7 @@ class KnockedRoomProxyMock: KnockedRoomProxyProtocol {
         }
     }
 }
-class MediaLoaderMock: MediaLoaderProtocol {
+class MediaLoaderMock: MediaLoaderProtocol, @unchecked Sendable {
 
     //MARK: - loadMediaContentForSource
 
@@ -10749,7 +10752,7 @@ class MediaLoaderMock: MediaLoaderProtocol {
         }
     }
 }
-class MediaPlayerProviderMock: MediaPlayerProviderProtocol {
+class MediaPlayerProviderMock: MediaPlayerProviderProtocol, @unchecked Sendable {
     var player: AudioPlayerProtocol {
         get { return underlyingPlayer }
         set(value) { underlyingPlayer = value }
@@ -10950,7 +10953,7 @@ class MediaPlayerProviderMock: MediaPlayerProviderProtocol {
         await detachAllStatesExceptClosure?(exception)
     }
 }
-class MediaProviderMock: MediaProviderProtocol {
+class MediaProviderMock: MediaProviderProtocol, @unchecked Sendable {
 
     //MARK: - imageFromSource
 
@@ -11373,7 +11376,7 @@ class MediaProviderMock: MediaProviderProtocol {
         }
     }
 }
-class NetworkMonitorMock: NetworkMonitorProtocol {
+class NetworkMonitorMock: NetworkMonitorProtocol, @unchecked Sendable {
     var reachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> {
         get { return underlyingReachabilityPublisher }
         set(value) { underlyingReachabilityPublisher = value }
@@ -11381,7 +11384,7 @@ class NetworkMonitorMock: NetworkMonitorProtocol {
     var underlyingReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>!
 
 }
-class NotificationManagerMock: NotificationManagerProtocol {
+class NotificationManagerMock: NotificationManagerProtocol, @unchecked Sendable {
     weak var delegate: NotificationManagerDelegate?
 
     //MARK: - start
@@ -11724,7 +11727,7 @@ class NotificationManagerMock: NotificationManagerProtocol {
         await removeDeliveredInviteNotificationsClosure?()
     }
 }
-class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
+class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol, @unchecked Sendable {
     var callbacks: PassthroughSubject<NotificationSettingsProxyCallback, Never> {
         get { return underlyingCallbacks }
         set(value) { underlyingCallbacks = value }
@@ -12601,7 +12604,7 @@ class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol {
         }
     }
 }
-class OrientationManagerMock: OrientationManagerProtocol {
+class OrientationManagerMock: OrientationManagerProtocol, @unchecked Sendable {
 
     //MARK: - setOrientation
 
@@ -12686,7 +12689,7 @@ class OrientationManagerMock: OrientationManagerProtocol {
         lockOrientationClosure?(orientation)
     }
 }
-class PHGPostHogMock: PHGPostHogProtocol {
+class PHGPostHogMock: PHGPostHogProtocol, @unchecked Sendable {
 
     //MARK: - optIn
 
@@ -12876,7 +12879,7 @@ class PHGPostHogMock: PHGPostHogProtocol {
         screenPropertiesClosure?(screenTitle, properties)
     }
 }
-class PhotoLibraryManagerMock: PhotoLibraryManagerProtocol {
+class PhotoLibraryManagerMock: PhotoLibraryManagerProtocol, @unchecked Sendable {
 
     //MARK: - addResource
 
@@ -12949,7 +12952,7 @@ class PhotoLibraryManagerMock: PhotoLibraryManagerProtocol {
         }
     }
 }
-class PollInteractionHandlerMock: PollInteractionHandlerProtocol {
+class PollInteractionHandlerMock: PollInteractionHandlerProtocol, @unchecked Sendable {
 
     //MARK: - sendPollResponse
 
@@ -13092,7 +13095,7 @@ class PollInteractionHandlerMock: PollInteractionHandlerProtocol {
         }
     }
 }
-class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol {
+class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol, @unchecked Sendable {
     var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> {
         get { return underlyingQrLoginProgressPublisher }
         set(value) { underlyingQrLoginProgressPublisher = value }
@@ -13170,7 +13173,7 @@ class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol {
         }
     }
 }
-class RoomDirectorySearchProxyMock: RoomDirectorySearchProxyProtocol {
+class RoomDirectorySearchProxyMock: RoomDirectorySearchProxyProtocol, @unchecked Sendable {
     var resultsPublisher: CurrentValuePublisher<[RoomDirectorySearchResult], Never> {
         get { return underlyingResultsPublisher }
         set(value) { underlyingResultsPublisher = value }
@@ -13312,7 +13315,7 @@ class RoomDirectorySearchProxyMock: RoomDirectorySearchProxyProtocol {
         }
     }
 }
-class RoomMemberProxyMock: RoomMemberProxyProtocol {
+class RoomMemberProxyMock: RoomMemberProxyProtocol, @unchecked Sendable {
     var userID: String {
         get { return underlyingUserID }
         set(value) { underlyingUserID = value }
@@ -13326,6 +13329,7 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
         set(value) { underlyingMembership = value }
     }
     var underlyingMembership: MembershipState!
+    var membershipChangeReason: String?
     var isIgnored: Bool {
         get { return underlyingIsIgnored }
         set(value) { underlyingIsIgnored = value }
@@ -13343,7 +13347,7 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
     var underlyingRole: RoomMemberRole!
 
 }
-class RoomNotificationSettingsProxyMock: RoomNotificationSettingsProxyProtocol {
+class RoomNotificationSettingsProxyMock: RoomNotificationSettingsProxyProtocol, @unchecked Sendable {
     var mode: RoomNotificationModeProxy {
         get { return underlyingMode }
         set(value) { underlyingMode = value }
@@ -13356,7 +13360,7 @@ class RoomNotificationSettingsProxyMock: RoomNotificationSettingsProxyProtocol {
     var underlyingIsDefault: Bool!
 
 }
-class RoomProxyMock: RoomProxyProtocol {
+class RoomProxyMock: RoomProxyProtocol, @unchecked Sendable {
     var id: String {
         get { return underlyingId }
         set(value) { underlyingId = value }
@@ -13369,7 +13373,7 @@ class RoomProxyMock: RoomProxyProtocol {
     var underlyingOwnUserID: String!
 
 }
-class RoomSummaryProviderMock: RoomSummaryProviderProtocol {
+class RoomSummaryProviderMock: RoomSummaryProviderProtocol, @unchecked Sendable {
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
         get { return underlyingRoomListPublisher }
         set(value) { underlyingRoomListPublisher = value }
@@ -13505,7 +13509,7 @@ class RoomSummaryProviderMock: RoomSummaryProviderProtocol {
         setFilterClosure?(filter)
     }
 }
-class RoomTimelineControllerFactoryMock: RoomTimelineControllerFactoryProtocol {
+class RoomTimelineControllerFactoryMock: RoomTimelineControllerFactoryProtocol, @unchecked Sendable {
 
     //MARK: - buildRoomTimelineController
 
@@ -13718,7 +13722,7 @@ class RoomTimelineControllerFactoryMock: RoomTimelineControllerFactoryProtocol {
         }
     }
 }
-class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
+class RoomTimelineProviderMock: RoomTimelineProviderProtocol, @unchecked Sendable {
     var updatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never> {
         get { return underlyingUpdatePublisher }
         set(value) { underlyingUpdatePublisher = value }
@@ -13742,7 +13746,7 @@ class RoomTimelineProviderMock: RoomTimelineProviderProtocol {
     var underlyingMembershipChangePublisher: AnyPublisher<Void, Never>!
 
 }
-class SecureBackupControllerMock: SecureBackupControllerProtocol {
+class SecureBackupControllerMock: SecureBackupControllerProtocol, @unchecked Sendable {
     var recoveryState: CurrentValuePublisher<SecureBackupRecoveryState, Never> {
         get { return underlyingRecoveryState }
         set(value) { underlyingRecoveryState = value }
@@ -14081,7 +14085,7 @@ class SecureBackupControllerMock: SecureBackupControllerProtocol {
         }
     }
 }
-class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {
+class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol, @unchecked Sendable {
     var actions: PassthroughSubject<SessionVerificationControllerProxyAction, Never> {
         get { return underlyingActions }
         set(value) { underlyingActions = value }
@@ -14543,7 +14547,7 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
         }
     }
 }
-class TimelineProxyMock: TimelineProxyProtocol {
+class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
     var timelineProvider: RoomTimelineProviderProtocol {
         get { return underlyingTimelineProvider }
         set(value) { underlyingTimelineProvider = value }
@@ -16248,7 +16252,7 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
     }
 }
-class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol {
+class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol, @unchecked Sendable {
 
     //MARK: - searchProfiles
 
@@ -16321,7 +16325,7 @@ class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol {
         }
     }
 }
-class UserIndicatorControllerMock: UserIndicatorControllerProtocol {
+class UserIndicatorControllerMock: UserIndicatorControllerProtocol, @unchecked Sendable {
     var window: UIWindow?
     var alertInfo: AlertInfo<UUID>?
 
@@ -16577,7 +16581,7 @@ class UserIndicatorControllerMock: UserIndicatorControllerProtocol {
         }
     }
 }
-class UserNotificationCenterMock: UserNotificationCenterProtocol {
+class UserNotificationCenterMock: UserNotificationCenterProtocol, @unchecked Sendable {
     weak var delegate: UNUserNotificationCenterDelegate?
 
     //MARK: - add
@@ -16910,7 +16914,7 @@ class UserNotificationCenterMock: UserNotificationCenterProtocol {
         }
     }
 }
-class UserSessionMock: UserSessionProtocol {
+class UserSessionMock: UserSessionProtocol, @unchecked Sendable {
     var clientProxy: ClientProxyProtocol {
         get { return underlyingClientProxy }
         set(value) { underlyingClientProxy = value }
@@ -16938,7 +16942,7 @@ class UserSessionMock: UserSessionProtocol {
     var underlyingCallbacks: PassthroughSubject<UserSessionCallback, Never>!
 
 }
-class UserSessionStoreMock: UserSessionStoreProtocol {
+class UserSessionStoreMock: UserSessionStoreProtocol, @unchecked Sendable {
     var hasSessions: Bool {
         get { return underlyingHasSessions }
         set(value) { underlyingHasSessions = value }
@@ -17203,7 +17207,7 @@ class UserSessionStoreMock: UserSessionStoreProtocol {
         clearCacheForClosure?(userID)
     }
 }
-class VoiceMessageCacheMock: VoiceMessageCacheProtocol {
+class VoiceMessageCacheMock: VoiceMessageCacheProtocol, @unchecked Sendable {
     var urlForRecording: URL {
         get { return underlyingUrlForRecording }
         set(value) { underlyingUrlForRecording = value }
@@ -17386,7 +17390,7 @@ class VoiceMessageCacheMock: VoiceMessageCacheProtocol {
         clearCacheClosure?()
     }
 }
-class VoiceMessageMediaManagerMock: VoiceMessageMediaManagerProtocol {
+class VoiceMessageMediaManagerMock: VoiceMessageMediaManagerProtocol, @unchecked Sendable {
 
     //MARK: - loadVoiceMessageFromSource
 
@@ -17463,7 +17467,7 @@ class VoiceMessageMediaManagerMock: VoiceMessageMediaManagerProtocol {
         }
     }
 }
-class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
+class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol, @unchecked Sendable {
     var previewAudioPlayerState: AudioPlayerState?
     var isRecording: Bool {
         get { return underlyingIsRecording }
@@ -17863,7 +17867,7 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol {
         }
     }
 }
-class WindowManagerMock: WindowManagerProtocol {
+class WindowManagerMock: WindowManagerProtocol, @unchecked Sendable {
     var mainWindow: UIWindow!
     var overlayWindow: UIWindow!
     var globalSearchWindow: UIWindow!
