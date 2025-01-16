@@ -86,7 +86,7 @@ private struct RoomAttachmentPickerButtonStyle: ButtonStyle {
 }
 
 struct RoomAttachmentPicker_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(),
+    static let viewModel = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(.init()),
                                                     wysiwygViewModel: WysiwygComposerViewModel(),
                                                     completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                     mediaProvider: MediaProviderMock(configuration: .init()),
