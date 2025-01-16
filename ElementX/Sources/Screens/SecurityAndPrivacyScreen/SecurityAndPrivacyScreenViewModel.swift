@@ -79,11 +79,19 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             }
             .store(in: &cancellables)
         
+        let userIDServerName = clientProxy.userIDServerName
+        
         roomProxy.infoPublisher
-            .map(\.canonicalAlias)
+            .compactMap { roomInfo in
+                guard let userIDServerName else {
+                    return nil
+                }
+                
+                return roomInfo.aliasMatching(serverName: userIDServerName, useFallback: true)
+            }
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.canonicalAlias, on: self)
+            .weakAssign(to: \.state.primaryAlias, on: self)
             .store(in: &cancellables)
     }
     

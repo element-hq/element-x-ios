@@ -17,5 +17,66 @@ class EditRoomAddressScreenViewModelTests: XCTestCase {
         viewModel.context
     }
     
-    override func setUpWithError() throws { }
+    func testCanonicalAliasChosen() async throws {
+        let roomProxy = JoinedRoomProxyMock(.init(name: "Room Name", canonicalAlias: "#room-name:matrix.org",
+                                                  alternativeAliases: ["#beta:homeserver.io",
+                                                                       "#alternative-room-name:matrix.org"]))
+        
+        viewModel = EditRoomAddressScreenViewModel(roomProxy: roomProxy,
+                                                   clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")),
+                                                   userIndicatorController: UserIndicatorControllerMock())
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.bindings.desiredAliasLocalPart == "room-name"
+        }
+        
+        try await deferred.fulfill()
+    }
+    
+    func testAlternativeAliasChosen() async throws {
+        let roomProxy = JoinedRoomProxyMock(.init(name: "Room Name", canonicalAlias: "#alpha:homeserver.io",
+                                                  alternativeAliases: ["#beta:homeserver.io",
+                                                                       "#room-name:matrix.org",
+                                                                       "#alternative-room-name:matrix.org"]))
+        
+        viewModel = EditRoomAddressScreenViewModel(roomProxy: roomProxy,
+                                                   clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")),
+                                                   userIndicatorController: UserIndicatorControllerMock())
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.bindings.desiredAliasLocalPart == "room-name"
+        }
+        
+        try await deferred.fulfill()
+    }
+    
+    func testBuildAliasFromDisplayName() async throws {
+        let roomProxy = JoinedRoomProxyMock(.init(name: "Room Name"))
+        
+        viewModel = EditRoomAddressScreenViewModel(roomProxy: roomProxy,
+                                                   clientProxy: ClientProxyMock(.init(userIDServerName: "matrix.org")),
+                                                   userIndicatorController: UserIndicatorControllerMock())
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.bindings.desiredAliasLocalPart == "room-name"
+        }
+        
+        try await deferred.fulfill()
+    }
+    
+    func testCorrectMethodsCalledOnSave() async throws {
+        let clientProxy = ClientProxyMock(.init(userIDServerName: "matrix.org"))
+        clientProxy.isAliasAvailableReturnValue = .success(true)
+        
+        let roomProxy = JoinedRoomProxyMock(.init(name: "Room Name"))
+        roomProxy.publishRoomAliasInRoomDirectoryReturnValue = .success(true)
+        roomProxy.updateCanonicalAliasAltAliasesReturnValue = .success(())
+        roomProxy.removeRoomAliasFromRoomDirectoryReturnValue = .success(true)
+        
+        viewModel = EditRoomAddressScreenViewModel(roomProxy: roomProxy,
+                                                   clientProxy: clientProxy,
+                                                   userIndicatorController: UserIndicatorControllerMock())
+        
+        context.send(viewAction: .save)
+    }
 }
