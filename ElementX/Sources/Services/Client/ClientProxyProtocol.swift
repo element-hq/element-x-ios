@@ -157,6 +157,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyType?
     
+    func leaveRoom(_ roomID: String) async -> Result<Void, ClientProxyError>
+    
     func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewDetails, ClientProxyError>
     
     @discardableResult func loadUserDisplayName() async -> Result<Void, ClientProxyError>

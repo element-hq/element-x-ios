@@ -424,17 +424,17 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
         
-        guard case let .invited(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
-            displayError()
-            return
-        }
+//        guard case let .invited(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
+//            displayError()
+//            return
+//        }
         
         switch await userSession.clientProxy.joinRoom(roomID, via: []) {
         case .success:
             actionsSubject.send(.presentRoom(roomIdentifier: roomID))
-            analyticsService.trackJoinedRoom(isDM: roomProxy.info.isDirect,
-                                             isSpace: roomProxy.info.isSpace,
-                                             activeMemberCount: UInt(roomProxy.info.activeMembersCount))
+//            analyticsService.trackJoinedRoom(isDM: roomProxy.info.isDirect,
+//                                             isSpace: roomProxy.info.isSpace,
+//                                             activeMemberCount: UInt(roomProxy.info.activeMembersCount))
         case .failure:
             displayError()
         }
@@ -464,12 +464,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
         
-        guard case let .invited(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
-            displayError()
-            return
-        }
-        
-        let result = await roomProxy.rejectInvitation()
+//        guard case let .invited(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
+//            displayError()
+//            return
+//        }
+//        
+//        let result = await roomProxy.rejectInvitation()
+        let result = await userSession.clientProxy.leaveRoom(roomID)
         
         if case .failure = result {
             displayError()

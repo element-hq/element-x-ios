@@ -51,7 +51,7 @@ The project depends on some tools for the build process which are normally insta
 brew install [...]
 ```
 
-Git LFS is used to store UI test snapshots. `swift run tools setup-project` will already install it, however it can also be installed after a checkout by running:
+Git LFS is used to store UI and Preview test snapshots. `swift run tools setup-project` will already install it, however it can also be installed after a checkout by running:
 
 ```
 git lfs install
@@ -59,11 +59,7 @@ git lfs install
 
 ### Snapshot Tests
 
-If you make changes to the UI you may cause existing UI Snapshot tests to fail. You can run the snapshot tests using `UITests` target. To update the reference snapshots, delete them from `element-x-ios/UITests/Sources/__Snapshots__/Application` and run the tests again. 
-These are the devices we store snapshots for that you will need to run against which need to use the iOS 16.4 simulator in en-US for consistency:
-- iPhone 14
-- iPad (9th generation)
-
+If you make changes to the UI you may cause existing UI and Preview test snapshots to fail. The UITests run user flows and record snapshots while doing so using the settings defined under [checkEnvironments](https://github.com/element-hq/element-x-ios/blob/c29175d1f924e58b9646a200dbab0301fce3c258/UITests/Sources/Application.swift#L35-L37) while the PreviewTests use the settings defined in [PreviewTests.swift](https://github.com/element-hq/element-x-ios/blob/c29175d1f924e58b9646a200dbab0301fce3c258/PreviewTests/Sources/PreviewTests.swift#L18-L20). The snapshots are stored under `Sources/__Snapshots__` in their respective target's folder. 
 
 ### Githooks
 

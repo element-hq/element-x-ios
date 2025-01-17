@@ -14,12 +14,13 @@ struct RoomRolesAndPermissionsScreen: View {
     var body: some View {
         Form {
             rolesSection
-            permissionsSection
+            // permissionsSection
             
-            resetSection
+            // resetSection
         }
         .zeroList()
-        .navigationTitle(L10n.screenRoomRolesAndPermissionsTitle)
+        // .navigationTitle(L10n.screenRoomRolesAndPermissionsTitle)
+        .navigationTitle("Roles")
         .navigationBarTitleDisplayMode(.inline)
         .alert(item: $context.alertInfo)
     }
