@@ -3187,13 +3187,13 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var roomPreviewForIdentifierViaReceivedArguments: (identifier: String, via: [String])?
     var roomPreviewForIdentifierViaReceivedInvocations: [(identifier: String, via: [String])] = []
 
-    var roomPreviewForIdentifierViaUnderlyingReturnValue: Result<RoomPreviewDetails, ClientProxyError>!
-    var roomPreviewForIdentifierViaReturnValue: Result<RoomPreviewDetails, ClientProxyError>! {
+    var roomPreviewForIdentifierViaUnderlyingReturnValue: Result<RoomPreviewProxyProtocol, ClientProxyError>!
+    var roomPreviewForIdentifierViaReturnValue: Result<RoomPreviewProxyProtocol, ClientProxyError>! {
         get {
             if Thread.isMainThread {
                 return roomPreviewForIdentifierViaUnderlyingReturnValue
             } else {
-                var returnValue: Result<RoomPreviewDetails, ClientProxyError>? = nil
+                var returnValue: Result<RoomPreviewProxyProtocol, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
                     returnValue = roomPreviewForIdentifierViaUnderlyingReturnValue
                 }
@@ -3211,9 +3211,9 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var roomPreviewForIdentifierViaClosure: ((String, [String]) async -> Result<RoomPreviewDetails, ClientProxyError>)?
+    var roomPreviewForIdentifierViaClosure: ((String, [String]) async -> Result<RoomPreviewProxyProtocol, ClientProxyError>)?
 
-    func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewDetails, ClientProxyError> {
+    func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewProxyProtocol, ClientProxyError> {
         roomPreviewForIdentifierViaCallsCount += 1
         roomPreviewForIdentifierViaReceivedArguments = (identifier: identifier, via: via)
         DispatchQueue.main.async {
@@ -13347,6 +13347,15 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol, @unchecked Sendable {
     var underlyingRole: RoomMemberRole!
 
 }
+class RoomMembershipDetailsProxyMock: RoomMembershipDetailsProxyProtocol, @unchecked Sendable {
+    var ownRoomMember: RoomMemberProxyProtocol {
+        get { return underlyingOwnRoomMember }
+        set(value) { underlyingOwnRoomMember = value }
+    }
+    var underlyingOwnRoomMember: RoomMemberProxyProtocol!
+    var senderRoomMember: RoomMemberProxyProtocol?
+
+}
 class RoomNotificationSettingsProxyMock: RoomNotificationSettingsProxyProtocol, @unchecked Sendable {
     var mode: RoomNotificationModeProxy {
         get { return underlyingMode }
@@ -13358,6 +13367,31 @@ class RoomNotificationSettingsProxyMock: RoomNotificationSettingsProxyProtocol, 
         set(value) { underlyingIsDefault = value }
     }
     var underlyingIsDefault: Bool!
+
+}
+class RoomPreviewProxyMock: RoomPreviewProxyProtocol, @unchecked Sendable {
+    var info: RoomPreviewInfoProxy {
+        get { return underlyingInfo }
+        set(value) { underlyingInfo = value }
+    }
+    var underlyingInfo: RoomPreviewInfoProxy!
+    var ownMembershipDetailsCallsCount = 0
+    var ownMembershipDetailsCalled: Bool {
+        return ownMembershipDetailsCallsCount > 0
+    }
+
+    var ownMembershipDetails: RoomMembershipDetailsProxyProtocol? {
+        get async {
+            ownMembershipDetailsCallsCount += 1
+            if let ownMembershipDetailsClosure = ownMembershipDetailsClosure {
+                return await ownMembershipDetailsClosure()
+            } else {
+                return underlyingOwnMembershipDetails
+            }
+        }
+    }
+    var underlyingOwnMembershipDetails: RoomMembershipDetailsProxyProtocol?
+    var ownMembershipDetailsClosure: (() async -> RoomMembershipDetailsProxyProtocol?)?
 
 }
 class RoomProxyMock: RoomProxyProtocol, @unchecked Sendable {

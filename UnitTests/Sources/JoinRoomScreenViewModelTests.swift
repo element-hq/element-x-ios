@@ -74,32 +74,24 @@ class JoinRoomScreenViewModelTests: XCTestCase {
     }
     
     private func setupViewModel(throwing: Bool = false, knocked: Bool = false) {
+        ServiceLocator.shared.settings.knockingEnabled = true
+        
         let clientProxy = ClientProxyMock(.init())
         
         clientProxy.joinRoomViaReturnValue = throwing ? .failure(.sdkError(ClientProxyMockError.generic)) : .success(())
         
-        clientProxy.roomPreviewForIdentifierViaReturnValue = .success(.init(roomID: "",
-                                                                            name: nil,
-                                                                            canonicalAlias: nil,
-                                                                            topic: nil,
-                                                                            avatarURL: nil,
-                                                                            memberCount: 0,
-                                                                            isHistoryWorldReadable: nil,
-                                                                            isJoined: false,
-                                                                            isInvited: false,
-                                                                            isPublic: false,
-                                                                            canKnock: false))
-        
         if knocked {
+            clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.knocked)
+            
             clientProxy.roomForIdentifierClosure = { _ in
                 let roomProxy = KnockedRoomProxyMock(.init())
                 // to test the cancel knock function
                 roomProxy.cancelKnockUnderlyingReturnValue = .success(())
                 return .knocked(roomProxy)
             }
+        } else {
+            clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.joinable)
         }
-        
-        ServiceLocator.shared.settings.knockingEnabled = true
         
         viewModel = JoinRoomScreenViewModel(roomID: "1",
                                             via: [],
