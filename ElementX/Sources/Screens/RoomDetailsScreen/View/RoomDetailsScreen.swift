@@ -228,13 +228,14 @@ struct RoomDetailsScreen: View {
                             context.send(viewAction: .processTapPeople)
                         })
                         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
-//            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
+            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
 //                ZeroListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
-//                                        icon: \.admin),
-//                        kind: .navigationLink {
-//                            context.send(viewAction: .processTapRolesAndPermissions)
-//                        })
-//            }
+                ZeroListRow(label: .default(title: "Roles",
+                                        icon: \.admin),
+                        kind: .navigationLink {
+                            context.send(viewAction: .processTapRolesAndPermissions)
+                        })
+            }
         }
     }
     
