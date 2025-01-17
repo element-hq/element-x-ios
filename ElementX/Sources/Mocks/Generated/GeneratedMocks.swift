@@ -3180,6 +3180,76 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return roomForIdentifierReturnValue
         }
     }
+    //MARK: - leaveRoom
+
+    var leaveRoomUnderlyingCallsCount = 0
+    var leaveRoomCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return leaveRoomUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = leaveRoomUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                leaveRoomUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    leaveRoomUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var leaveRoomCalled: Bool {
+        return leaveRoomCallsCount > 0
+    }
+    var leaveRoomReceivedRoomID: String?
+    var leaveRoomReceivedInvocations: [String] = []
+
+    var leaveRoomUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var leaveRoomReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return leaveRoomUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = leaveRoomUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                leaveRoomUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    leaveRoomUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var leaveRoomClosure: ((String) async -> Result<Void, ClientProxyError>)?
+
+    func leaveRoom(_ roomID: String) async -> Result<Void, ClientProxyError> {
+        leaveRoomCallsCount += 1
+        leaveRoomReceivedRoomID = roomID
+        DispatchQueue.main.async {
+            self.leaveRoomReceivedInvocations.append(roomID)
+        }
+        if let leaveRoomClosure = leaveRoomClosure {
+            return await leaveRoomClosure(roomID)
+        } else {
+            return leaveRoomReturnValue
+        }
+    }
     //MARK: - roomPreviewForIdentifier
 
     var roomPreviewForIdentifierViaUnderlyingCallsCount = 0

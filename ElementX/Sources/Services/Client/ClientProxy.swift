@@ -562,6 +562,22 @@ class ClientProxy: ClientProxyProtocol {
         return await buildRoomForIdentifier(identifier)
     }
     
+    func leaveRoom(_ roomID: String) async -> Result<Void, ClientProxyError> {
+        guard let roomListService else {
+            MXLog.error("Failed retrieving room: \(roomID), room list service not set up")
+            return .failure(.failedResolvingRoomAlias)
+        }
+        do {
+            let roomListItem = try roomListService.room(roomId: roomID)
+            let invitedRoom = try roomListItem.invitedRoom()
+            try await invitedRoom.leave()
+            return .success(())
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
     func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewDetails, ClientProxyError> {
         do {
             let roomPreview = try await client.getRoomPreviewFromRoomId(roomId: identifier, viaServers: via)

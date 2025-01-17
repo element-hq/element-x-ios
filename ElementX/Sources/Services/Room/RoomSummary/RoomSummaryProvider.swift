@@ -230,7 +230,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         Task {
             do {
-                await joinRoomIfRequired(roomListItem)
+//                await joinRoomIfRequired(roomListItem)
                 
                 roomDetails.latestEvent = await roomListItem.latestEvent()
                 let roomInfo = try await roomListItem.roomInfo()
