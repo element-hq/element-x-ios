@@ -43,11 +43,11 @@ struct RoomRolesAndPermissionsScreen: View {
                         })
                         .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.moderators)
             
-            ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsChangeMyRole,
-                                        icon: \.edit),
-                        kind: .button {
-                            context.send(viewAction: .editOwnUserRole)
-                        })
+//            ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsChangeMyRole,
+//                                        icon: \.edit),
+//                        kind: .button {
+//                            context.send(viewAction: .editOwnUserRole)
+//                        })
         } header: {
             Text(L10n.screenRoomRolesAndPermissionsRolesHeader)
                 .compoundListSectionHeader()
