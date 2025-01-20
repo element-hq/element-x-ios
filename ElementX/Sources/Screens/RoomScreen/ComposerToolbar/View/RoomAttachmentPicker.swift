@@ -12,6 +12,8 @@ import WysiwygComposer
 struct RoomAttachmentPicker: View {
     @ObservedObject var context: ComposerToolbarViewModel.Context
     
+    @Environment(\.isEnabled) private var isEnabled
+    
     var body: some View {
         // Use a menu instead of the popover/sheet shown in Figma because overriding the colour scheme
         // results in a rendering bug on 17.1: https://github.com/element-hq/element-x-ios/issues/2157
@@ -20,6 +22,9 @@ struct RoomAttachmentPicker: View {
         } label: {
             CompoundIcon(asset: Asset.Images.composerAttachment, size: .custom(30), relativeTo: .compound.headingLG)
                 .scaledPadding(7, relativeTo: .compound.headingLG)
+                .foregroundColor(
+                    isEnabled ? .compound.iconPrimary : .compound.iconDisabled
+                )
         }
         .buttonStyle(RoomAttachmentPickerButtonStyle())
         .accessibilityLabel(L10n.actionAddToTimeline)
@@ -81,7 +86,8 @@ private struct RoomAttachmentPickerButtonStyle: ButtonStyle {
 }
 
 struct RoomAttachmentPicker_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = ComposerToolbarViewModel(wysiwygViewModel: WysiwygComposerViewModel(),
+    static let viewModel = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(.init()),
+                                                    wysiwygViewModel: WysiwygComposerViewModel(),
                                                     completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                     mediaProvider: MediaProviderMock(configuration: .init()),
                                                     mentionDisplayHelper: ComposerMentionDisplayHelper.mock,

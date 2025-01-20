@@ -14,6 +14,8 @@ enum VoiceMessageRecordingButtonMode {
 }
 
 struct VoiceMessageRecordingButton: View {
+    @Environment(\.isEnabled) private var isEnabled
+    
     let mode: VoiceMessageRecordingButtonMode
     var startRecording: (() -> Void)?
     var stopRecording: (() -> Void)?
@@ -33,7 +35,9 @@ struct VoiceMessageRecordingButton: View {
             switch mode {
             case .idle:
                 CompoundIcon(\.micOn, size: .medium, relativeTo: .compound.headingLG)
-                    .foregroundColor(.compound.iconSecondary)
+                    .foregroundColor(
+                        isEnabled ? .compound.iconSecondary : .compound.iconDisabled
+                    )
                     .scaledPadding(10, relativeTo: .compound.headingLG)
             case .recording:
                 CompoundIcon(asset: Asset.Images.stopRecording, size: .medium, relativeTo: .compound.headingLG)

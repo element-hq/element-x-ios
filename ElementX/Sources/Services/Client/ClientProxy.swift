@@ -1005,6 +1005,22 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func withdrawUserIdentityVerification(_ userID: String) async -> Result<Void, ClientProxyError> {
+        MXLog.info("Withdrawing current identity verification for user: \(userID)")
+        
+        do {
+            guard let userIdentity = try await client.encryption().userIdentity(userId: userID) else {
+                MXLog.error("Failed retrieving identity for user: \(userID)")
+                return .failure(.failedRetrievingUserIdentity)
+            }
+            
+            return try await .success(userIdentity.withdrawVerification())
+        } catch {
+            MXLog.error("Failed withdrawing current identity verification for user: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func resetIdentity() async -> Result<IdentityResetHandle?, ClientProxyError> {
         do {
             return try await .success(client.encryption().resetIdentity())

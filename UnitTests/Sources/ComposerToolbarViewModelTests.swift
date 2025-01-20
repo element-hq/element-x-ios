@@ -7,6 +7,7 @@
 
 import Combine
 @testable import ElementX
+import MatrixRustSDK
 import XCTest
 
 import WysiwygComposer
@@ -93,7 +94,9 @@ class ComposerToolbarViewModelTests: XCTestCase {
         let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil, range: .init())),
                                              .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: .mockMXCAvatar, range: .init()))]
         let mockCompletionSuggestionService = CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions))
-        viewModel = ComposerToolbarViewModel(wysiwygViewModel: wysiwygViewModel,
+        
+        viewModel = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(.init()),
+                                             wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: mockCompletionSuggestionService,
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
@@ -632,6 +635,120 @@ class ComposerToolbarViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.context.plainComposerText, NSAttributedString(string: sharedText))
     }
     
+    // MARK: - Identity Violation
+    
+    func testVerificationViolationDisablesComposer() async throws {
+        let mockCompletionSuggestionService = CompletionSuggestionServiceMock(configuration: .init())
+        
+        let roomProxyMock = JoinedRoomProxyMock(.init(name: "Test"))
+        
+        let roomMemberProxyMock = RoomMemberProxyMock(with: .init(userID: "@alice:localhost", membership: .join))
+        roomProxyMock.getMemberUserIDClosure = { _ in
+            .success(roomMemberProxyMock)
+        }
+    
+        let mockSubject = CurrentValueSubject<[IdentityStatusChange], Never>([])
+        roomProxyMock.underlyingIdentityStatusChangesPublisher = mockSubject.asCurrentValuePublisher()
+        
+        viewModel = ComposerToolbarViewModel(roomProxy: roomProxyMock,
+                                             wysiwygViewModel: wysiwygViewModel,
+                                             completionSuggestionService: mockCompletionSuggestionService,
+                                             mediaProvider: MediaProviderMock(configuration: .init()),
+                                             mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                             analyticsService: ServiceLocator.shared.analytics,
+                                             composerDraftService: draftServiceMock)
+        
+        var fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is disabled") { $0.canSend == false }
+        mockSubject.send([IdentityStatusChange(userId: "@alice:localhost", changedTo: .verificationViolation)])
+        try await fulfillment.fulfill()
+        
+        fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is enabled") { $0.canSend == true }
+        mockSubject.send([IdentityStatusChange(userId: "@alice:localhost", changedTo: .pinned)])
+        try await fulfillment.fulfill()
+    }
+    
+    func testMultipleViolation() async throws {
+        let mockCompletionSuggestionService = CompletionSuggestionServiceMock(configuration: .init())
+        
+        let roomProxyMock = JoinedRoomProxyMock(.init(name: "Test"))
+        
+        let aliceRoomMemberProxyMock = RoomMemberProxyMock(with: .init(userID: "@alice:localhost", membership: .join))
+        let bobRoomMemberProxyMock = RoomMemberProxyMock(with: .init(userID: "@bob:localhost", membership: .join))
+        
+        roomProxyMock.getMemberUserIDClosure = { userId in
+            if userId == "@alice:localhost" {
+                return .success(aliceRoomMemberProxyMock)
+            } else if userId == "@bob:localhost" {
+                return .success(bobRoomMemberProxyMock)
+            } else {
+                return .failure(.sdkError(ClientProxyMockError.generic))
+            }
+        }
+    
+        // There are 2 violations, ensure that resolving the first one is not enough
+        let mockSubject = CurrentValueSubject<[IdentityStatusChange], Never>([
+            IdentityStatusChange(userId: "@alice:localhost", changedTo: .verificationViolation),
+            IdentityStatusChange(userId: "@bob:localhost", changedTo: .verificationViolation)
+        ])
+        
+        roomProxyMock.underlyingIdentityStatusChangesPublisher = mockSubject.asCurrentValuePublisher()
+        
+        viewModel = ComposerToolbarViewModel(roomProxy: roomProxyMock,
+                                             wysiwygViewModel: wysiwygViewModel,
+                                             completionSuggestionService: mockCompletionSuggestionService,
+                                             mediaProvider: MediaProviderMock(configuration: .init()),
+                                             mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                             analyticsService: ServiceLocator.shared.analytics,
+                                             composerDraftService: draftServiceMock)
+        
+        var fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is disabled") { $0.canSend == false }
+        mockSubject.send([IdentityStatusChange(userId: "@alice:localhost", changedTo: .verificationViolation)])
+        try await fulfillment.fulfill()
+        
+        fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is still disabled") { $0.canSend == false }
+        mockSubject.send([IdentityStatusChange(userId: "@alice:localhost", changedTo: .pinned)])
+        try await fulfillment.fulfill()
+        
+        fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is now enabled") { $0.canSend == true }
+        mockSubject.send([IdentityStatusChange(userId: "@bob:localhost", changedTo: .pinned)])
+        try await fulfillment.fulfill()
+    }
+    
+    func testPinViolationDoesNotDisableComposer() {
+        let mockCompletionSuggestionService = CompletionSuggestionServiceMock(configuration: .init())
+        
+        let roomProxyMock = JoinedRoomProxyMock(.init(name: "Test"))
+        let roomMemberProxyMock = RoomMemberProxyMock(with: .init(userID: "@alice:localhost", membership: .join))
+        
+        roomProxyMock.getMemberUserIDClosure = { _ in
+            .success(roomMemberProxyMock)
+        }
+        
+        roomProxyMock.underlyingIdentityStatusChangesPublisher = CurrentValueSubject([IdentityStatusChange(userId: "@alice:localhost", changedTo: .pinViolation)]).asCurrentValuePublisher()
+        
+        viewModel = ComposerToolbarViewModel(roomProxy: roomProxyMock,
+                                             wysiwygViewModel: wysiwygViewModel,
+                                             completionSuggestionService: mockCompletionSuggestionService,
+                                             mediaProvider: MediaProviderMock(configuration: .init()),
+                                             mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                             analyticsService: ServiceLocator.shared.analytics,
+                                             composerDraftService: draftServiceMock)
+        
+        let expectation = expectation(description: "Composer should be enabled")
+        let cancellable = viewModel
+            .context
+            .$viewState
+            .map(\.canSend)
+            .sink { canSend in
+                if canSend {
+                    expectation.fulfill()
+                }
+            }
+        
+        wait(for: [expectation], timeout: 2.0)
+        cancellable.cancel()
+    }
+    
     // MARK: - Helpers
     
     private func setUpViewModel(initialText: String? = nil, loadDraftClosure: (() async -> Result<ComposerDraftProxy?, ComposerDraftServiceError>)? = nil) {
@@ -643,6 +760,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
         }
         
         viewModel = ComposerToolbarViewModel(initialText: initialText,
+                                             roomProxy: JoinedRoomProxyMock(.init()),
                                              wysiwygViewModel: wysiwygViewModel,
                                              completionSuggestionService: completionSuggestionServiceMock,
                                              mediaProvider: MediaProviderMock(configuration: .init()),

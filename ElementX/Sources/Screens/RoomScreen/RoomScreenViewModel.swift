@@ -25,6 +25,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let pinnedEventStringBuilder: RoomEventStringBuilder
     
     private var identityPinningViolations = [String: RoomMemberProxyProtocol]()
+    private var identityVerificationViolations = [String: RoomMemberProxyProtocol]()
     
     private let actionsSubject: PassthroughSubject<RoomScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<RoomScreenViewModelAction, Never> {
@@ -102,6 +103,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             switch action {
             case .resolvePinViolation(let userID):
                 Task { await resolveIdentityPinningViolation(userID) }
+            case .resolveVerificationViolation(let userID):
+                Task { await resolveIdentityVerificationViolation(userID) }
             }
         case .acceptKnock(let eventID):
             Task { await acceptKnock(eventID: eventID) }
@@ -209,21 +212,30 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private func processIdentityStatusChanges(_ changes: [IdentityStatusChange]) async {
         for change in changes {
             switch change.changedTo {
-            case .pinned:
-                identityPinningViolations[change.userId] = nil
             case .pinViolation:
                 guard case let .success(member) = await roomProxy.getMember(userID: change.userId) else {
                     MXLog.error("Failed retrieving room member for identity status change: \(change)")
                     continue
                 }
-                        
+                
                 identityPinningViolations[change.userId] = member
+            case .verificationViolation:
+                guard case let .success(member) = await roomProxy.getMember(userID: change.userId) else {
+                    MXLog.error("Failed retrieving room member for identity status change: \(change)")
+                    continue
+                }
+
+                identityVerificationViolations[change.userId] = member
             default:
-                break
+                identityVerificationViolations[change.userId] = nil
+                identityPinningViolations[change.userId] = nil
             }
         }
         
-        if let member = identityPinningViolations.values.first {
+        if let member = identityVerificationViolations.values.first {
+            state.footerDetails = .verificationViolation(member: member,
+                                                         learnMoreURL: appSettings.identityPinningViolationDetailsURL)
+        } else if let member = identityPinningViolations.values.first {
             state.footerDetails = .pinViolation(member: member,
                                                 learnMoreURL: appSettings.identityPinningViolationDetailsURL)
         } else {
@@ -239,6 +251,18 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         showLoadingIndicator()
         
         if case .failure = await clientProxy.pinUserIdentity(userID) {
+            userIndicatorController.alertInfo = .init(id: .init(), title: L10n.commonError)
+        }
+    }
+    
+    private func resolveIdentityVerificationViolation(_ userID: String) async {
+        defer {
+            hideLoadingIndicator()
+        }
+
+        showLoadingIndicator()
+
+        if case .failure = await clientProxy.withdrawUserIdentityVerification(userID) {
             userIndicatorController.alertInfo = .init(id: .init(), title: L10n.commonError)
         }
     }
