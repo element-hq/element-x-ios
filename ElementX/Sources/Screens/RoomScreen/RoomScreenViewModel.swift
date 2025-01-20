@@ -227,7 +227,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
                 identityVerificationViolations[change.userId] = member
             default:
-                // clear all
                 identityVerificationViolations[change.userId] = nil
                 identityPinningViolations[change.userId] = nil
             }

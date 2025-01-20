@@ -637,18 +637,17 @@ class ComposerToolbarViewModelTests: XCTestCase {
     
     // MARK: - Identity Violation
     
-    func testVerificationViolationDisablesComposer() {
+    func testVerificationViolationDisablesComposer() async throws {
         let mockCompletionSuggestionService = CompletionSuggestionServiceMock(configuration: .init())
         
         let roomProxyMock = JoinedRoomProxyMock(.init(name: "Test"))
-        let roomMemberProxyMock = RoomMemberProxyMock(with: .init(userID: "@alice:localhost", membership: .join))
         
+        let roomMemberProxyMock = RoomMemberProxyMock(with: .init(userID: "@alice:localhost", membership: .join))
         roomProxyMock.getMemberUserIDClosure = { _ in
             .success(roomMemberProxyMock)
         }
     
-        let mockSubject = CurrentValueSubject<[IdentityStatusChange], Never>([IdentityStatusChange(userId: "@alice:localhost", changedTo: .verificationViolation)])
-        
+        let mockSubject = CurrentValueSubject<[IdentityStatusChange], Never>([])
         roomProxyMock.underlyingIdentityStatusChangesPublisher = mockSubject.asCurrentValuePublisher()
         
         viewModel = ComposerToolbarViewModel(roomProxy: roomProxyMock,
@@ -659,38 +658,16 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                              analyticsService: ServiceLocator.shared.analytics,
                                              composerDraftService: draftServiceMock)
         
-        let expectation1 = expectation(description: "Composer is disabled")
-        let cancellable = viewModel
-            .context
-            .$viewState
-            .map(\.canSend)
-            .sink { canSend in
-                if !canSend {
-                    expectation1.fulfill()
-                }
-            }
+        var fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is disabled") { $0.canSend == false }
+        mockSubject.send([IdentityStatusChange(userId: "@alice:localhost", changedTo: .verificationViolation)])
+        try await fulfillment.fulfill()
         
-        wait(for: [expectation1], timeout: 2.0)
-        cancellable.cancel()
-        
-        let expectation2 = expectation(description: "Composer is enabled")
-        let cancellable2 = viewModel
-            .context
-            .$viewState
-            .map(\.canSend)
-            .sink { canSend in
-                if canSend {
-                    expectation2.fulfill()
-                }
-            }
-        
+        fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is enabled") { $0.canSend == true }
         mockSubject.send([IdentityStatusChange(userId: "@alice:localhost", changedTo: .pinned)])
-        
-        wait(for: [expectation2], timeout: 2.0)
-        cancellable2.cancel()
+        try await fulfillment.fulfill()
     }
     
-    func testMultipleViolation() {
+    func testMultipleViolation() async throws {
         let mockCompletionSuggestionService = CompletionSuggestionServiceMock(configuration: .init())
         
         let roomProxyMock = JoinedRoomProxyMock(.init(name: "Test"))
@@ -724,51 +701,17 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                              analyticsService: ServiceLocator.shared.analytics,
                                              composerDraftService: draftServiceMock)
         
-        let expectation1 = expectation(description: "Composer is disabled")
-        let cancellable = viewModel
-            .context
-            .$viewState
-            .map(\.canSend)
-            .sink { canSend in
-                if !canSend {
-                    expectation1.fulfill()
-                }
-            }
+        var fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is disabled") { $0.canSend == false }
+        mockSubject.send([IdentityStatusChange(userId: "@alice:localhost", changedTo: .verificationViolation)])
+        try await fulfillment.fulfill()
         
-        wait(for: [expectation1], timeout: 2.0)
-        cancellable.cancel()
-        
-        let expectation2 = expectation(description: "Composer is still disabled")
-        let cancellable2 = viewModel
-            .context
-            .$viewState
-            .map(\.canSend)
-            .sink { canSend in
-                if !canSend {
-                    expectation2.fulfill()
-                }
-            }
-        
+        fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is still disabled") { $0.canSend == false }
         mockSubject.send([IdentityStatusChange(userId: "@alice:localhost", changedTo: .pinned)])
+        try await fulfillment.fulfill()
         
-        wait(for: [expectation2], timeout: 2.0)
-        cancellable2.cancel()
-        
-        let expectation3 = expectation(description: "Composer is now enabled")
-        let cancellable3 = viewModel
-            .context
-            .$viewState
-            .map(\.canSend)
-            .sink { canSend in
-                if canSend {
-                    expectation3.fulfill()
-                }
-            }
-        
+        fulfillment = deferFulfillment(viewModel.context.$viewState, message: "Composer is now enabled") { $0.canSend == true }
         mockSubject.send([IdentityStatusChange(userId: "@bob:localhost", changedTo: .pinned)])
-        
-        wait(for: [expectation3], timeout: 2.0)
-        cancellable3.cancel()
+        try await fulfillment.fulfill()
     }
     
     func testPinViolationDoesNotDisableComposer() {
