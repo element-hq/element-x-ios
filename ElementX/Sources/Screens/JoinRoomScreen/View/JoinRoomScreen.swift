@@ -184,25 +184,18 @@ struct JoinRoomScreen: View {
     }
     
     func bottomNoticeMessage(_ notice: String) -> some View {
-        HStack(alignment: .top, spacing: 12) {
-            CompoundIcon(\.info)
-            
-            Text(notice)
-                .font(.compound.bodyLGSemibold)
-                .foregroundStyle(.compound.textPrimary)
-            
-            Spacer()
-        }
-        .padding()
-        .background(.compound.bgSubtleSecondary)
-        .cornerRadius(14, corners: .allCorners)
+        Label(notice, icon: \.info)
+            .labelStyle(.custom(spacing: 12, alignment: .top))
+            .font(.compound.bodyLGSemibold)
+            .foregroundStyle(.compound.textPrimary)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
+            .background(.compound.bgSubtleSecondary)
+            .cornerRadius(14, corners: .allCorners)
     }
     
     func bottomErrorMessage(title: String, subtitle: String?) -> some View {
-        HStack(alignment: .top, spacing: 12) {
-            CompoundIcon(\.error)
-                .foregroundStyle(.compound.iconCriticalPrimary)
-            
+        Label {
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(.compound.bodyLGSemibold)
@@ -214,9 +207,12 @@ struct JoinRoomScreen: View {
                         .foregroundStyle(.compound.textSecondary)
                 }
             }
-            
-            Spacer()
+        } icon: {
+            CompoundIcon(\.error)
+                .foregroundStyle(.compound.iconCriticalPrimary)
         }
+        .labelStyle(.custom(spacing: 12, alignment: .top))
+        .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(.compound.bgSubtleSecondary)
         .cornerRadius(14, corners: .allCorners)

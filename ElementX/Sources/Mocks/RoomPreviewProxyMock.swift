@@ -8,20 +8,20 @@
 import Foundation
 import MatrixRustSDK
 
-struct RoomPreviewProxyMockConfiguration {
-    var roomId = "1"
-    var canonicalAlias = "#3🌞problem:matrix.org"
-    var name = "The Three-Body Problem - 三体"
-    var topic = "“Science and technology were the only keys to opening the door to the future, and people approached science with the faith and sincerity of elementary school students.”"
-    var avatarUrl = URL.mockMXCAvatar.absoluteString
-    var numJoinedMembers = UInt64(100)
-    var numActiveMembers = UInt64(100)
-    var roomType = RoomType.room
-    var membership: Membership?
-    var joinRule: JoinRule
-}
-
 extension RoomPreviewProxyMock {
+    struct Configuration {
+        var roomID = "1"
+        var canonicalAlias = "#3🌞problem:matrix.org"
+        var name = "The Three-Body Problem - 三体"
+        var topic = "“Science and technology were the only keys to opening the door to the future, and people approached science with the faith and sincerity of elementary school students.”"
+        var avatarURL = URL.mockMXCAvatar.absoluteString
+        var numJoinedMembers = UInt64(100)
+        var numActiveMembers = UInt64(100)
+        var roomType = RoomType.room
+        var membership: Membership?
+        var joinRule: JoinRule
+    }
+    
     static var joinable: RoomPreviewProxyMock {
         .init(.init(membership: nil, joinRule: .public))
     }
@@ -36,7 +36,7 @@ extension RoomPreviewProxyMock {
     
     static func invited(roomID: String? = nil) -> RoomPreviewProxyMock {
         if let roomID {
-            return .init(.init(roomId: roomID, membership: .invited, joinRule: .invite))
+            return .init(.init(roomID: roomID, membership: .invited, joinRule: .invite))
         }
         
         return .init(.init(membership: .invited, joinRule: .invite))
@@ -58,13 +58,13 @@ extension RoomPreviewProxyMock {
         .init(.init(membership: .banned, joinRule: .public))
     }
     
-    convenience init(_ configuration: RoomPreviewProxyMockConfiguration) {
+    convenience init(_ configuration: RoomPreviewProxyMock.Configuration) {
         self.init()
-        underlyingInfo = .init(roomPreviewInfo: .init(roomId: configuration.roomId,
+        underlyingInfo = .init(roomPreviewInfo: .init(roomId: configuration.roomID,
                                                       canonicalAlias: configuration.canonicalAlias,
                                                       name: configuration.name,
                                                       topic: configuration.topic,
-                                                      avatarUrl: configuration.avatarUrl,
+                                                      avatarUrl: configuration.avatarURL,
                                                       numJoinedMembers: configuration.numJoinedMembers,
                                                       numActiveMembers: configuration.numActiveMembers,
                                                       roomType: configuration.roomType,

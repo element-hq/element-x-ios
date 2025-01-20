@@ -116,12 +116,12 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             break
         }
         
-        let name = roomInfo?.displayName ?? roomPreview?.info.displayName
-        state.roomDetails = JoinRoomScreenRoomDetails(name: name,
-                                                      topic: roomInfo?.topic ?? roomPreview?.info.topic,
-                                                      canonicalAlias: roomInfo?.canonicalAlias ?? roomPreview?.info.canonicalAlias,
-                                                      avatar: roomInfo?.avatar ?? .room(id: roomID, name: name ?? "", avatarURL: roomPreview?.info.avatarURL),
-                                                      memberCount: UInt(roomInfo?.activeMembersCount ?? Int(roomPreview?.info.activeMembersCount ?? 0)),
+        let info = roomInfo ?? roomPreview?.info
+        state.roomDetails = JoinRoomScreenRoomDetails(name: info?.displayName,
+                                                      topic: info?.topic,
+                                                      canonicalAlias: info?.canonicalAlias,
+                                                      avatar: info?.avatar ?? .room(id: roomID, name: info?.displayName ?? "", avatarURL: nil),
+                                                      memberCount: UInt(info?.activeMembersCount ?? 0),
                                                       inviter: inviter)
         
         await updateMode()
@@ -149,9 +149,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                 case .private, .invite:
                     state.mode = .inviteRequired
                 case .knock, .knockRestricted:
-                    if appSettings.knockingEnabled {
-                        state.mode = .knockable
-                    }
+                    state.mode = appSettings.knockingEnabled ? .knockable : .joinable
                 case .restricted:
                     state.mode = .restricted
                 default:
