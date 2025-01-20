@@ -12,6 +12,9 @@ struct TimelineMediaPreviewDetailsView: View {
     let item: TimelineMediaPreviewItem
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
     
+    @State private var sheetHeight: CGFloat = .zero
+    private let topPadding: CGFloat = 19
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
@@ -19,10 +22,12 @@ struct TimelineMediaPreviewDetailsView: View {
                 actions
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .readHeight($sheetHeight)
         }
-        .presentationDetents([.medium])
+        .scrollBounceBehavior(.basedOnSize)
+        .padding(.top, topPadding) // For the drag indicator
+        .presentationDetents([.height(sheetHeight + topPadding)])
         .presentationDragIndicator(.visible)
-        .padding(.top, 19) // For the drag indicator
         .presentationBackground(.compound.bgCanvasDefault)
         .preferredColorScheme(.dark)
         .sheet(item: $context.redactConfirmationItem) { item in
@@ -95,12 +100,7 @@ struct TimelineMediaPreviewDetailsView: View {
                 }
                 
                 ForEach(actions.actions, id: \.self) { action in
-                    Button(role: action.isDestructive ? .destructive : nil) {
-                        context.send(viewAction: .menuAction(action, item: item))
-                    } label: {
-                        action.label
-                    }
-                    .buttonStyle(.menuSheet)
+                    ActionButton(item: item, action: action, context: context)
                 }
                 
                 if !actions.secondaryActions.isEmpty {
@@ -109,12 +109,7 @@ struct TimelineMediaPreviewDetailsView: View {
                 }
                 
                 ForEach(actions.secondaryActions, id: \.self) { action in
-                    Button(role: action.isDestructive ? .destructive : nil) {
-                        context.send(viewAction: .menuAction(action, item: item))
-                    } label: {
-                        action.label
-                    }
-                    .buttonStyle(.menuSheet)
+                    ActionButton(item: item, action: action, context: context)
                 }
             }
         }
@@ -135,6 +130,38 @@ struct TimelineMediaPreviewDetailsView: View {
             }
         }
     }
+    
+    private struct ActionButton: View {
+        let item: TimelineMediaPreviewItem
+        let action: TimelineItemMenuAction
+        let context: TimelineMediaPreviewViewModel.Context
+        
+        var body: some View {
+            if action == .share {
+                if let itemURL = item.fileHandle?.url {
+                    ShareLink(item: itemURL, message: item.caption.map(Text.init)) {
+                        action.label
+                    }
+                    .buttonStyle(.menuSheet)
+                }
+            } else if action == .save {
+                if item.fileHandle?.url != nil {
+                    button
+                }
+            } else {
+                button
+            }
+        }
+        
+        var button: some View {
+            Button(role: action.isDestructive ? .destructive : nil) {
+                context.send(viewAction: .menuAction(action, item: item))
+            } label: {
+                action.label
+            }
+            .buttonStyle(.menuSheet)
+        }
+    }
 }
 
 // MARK: - Previews
@@ -145,6 +172,7 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
     @Namespace private static var previewNamespace
     
     static let viewModel = makeViewModel(contentType: .jpeg, isOutgoing: true)
+    static let loadingViewModel = makeViewModel(contentType: .jpeg, isOutgoing: true, isDownloaded: false)
     static let unknownTypeViewModel = makeViewModel()
     static let presentedOnRoomViewModel = makeViewModel(isPresentedOnRoomScreen: true)
     
@@ -153,6 +181,13 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
                                         context: viewModel.context)
             .previewDisplayName("Image")
             .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
+                state.currentItemActions?.secondaryActions.contains(.redact) ?? false
+            })
+        
+        TimelineMediaPreviewDetailsView(item: loadingViewModel.state.currentItem,
+                                        context: loadingViewModel.context)
+            .previewDisplayName("Loading")
+            .snapshotPreferences(expect: loadingViewModel.context.$viewState.map { state in
                 state.currentItemActions?.secondaryActions.contains(.redact) ?? false
             })
         
@@ -165,7 +200,10 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
             .previewDisplayName("Incoming on Room")
     }
     
-    static func makeViewModel(contentType: UTType? = nil, isOutgoing: Bool = false, isPresentedOnRoomScreen: Bool = false) -> TimelineMediaPreviewViewModel {
+    static func makeViewModel(contentType: UTType? = nil,
+                              isOutgoing: Bool = false,
+                              isDownloaded: Bool = true,
+                              isPresentedOnRoomScreen: Bool = false) -> TimelineMediaPreviewViewModel {
         let item = ImageRoomTimelineItem(id: .randomEvent,
                                          timestamp: .mock,
                                          isOutgoing: isOutgoing,
@@ -183,13 +221,20 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
         let timelineKind = TimelineKind.media(isPresentedOnRoomScreen ? .roomScreen : .mediaFilesScreen)
         let timelineController = MockRoomTimelineController(timelineKind: timelineKind)
         timelineController.timelineItems = [item]
-        return TimelineMediaPreviewViewModel(context: .init(item: item,
-                                                            viewModel: TimelineViewModel.mock(timelineKind: timelineKind,
-                                                                                              timelineController: timelineController),
-                                                            namespace: previewNamespace),
-                                             mediaProvider: MediaProviderMock(configuration: .init()),
-                                             photoLibraryManager: PhotoLibraryManagerMock(.init()),
-                                             userIndicatorController: UserIndicatorControllerMock(),
-                                             appMediator: AppMediatorMock())
+        
+        let viewModel = TimelineMediaPreviewViewModel(context: .init(item: item,
+                                                                     viewModel: TimelineViewModel.mock(timelineKind: timelineKind,
+                                                                                                       timelineController: timelineController),
+                                                                     namespace: previewNamespace),
+                                                      mediaProvider: MediaProviderMock(configuration: .init()),
+                                                      photoLibraryManager: PhotoLibraryManagerMock(.init()),
+                                                      userIndicatorController: UserIndicatorControllerMock(),
+                                                      appMediator: AppMediatorMock())
+        
+        if isDownloaded {
+            viewModel.context.send(viewAction: .updateCurrentItem(viewModel.state.currentItem))
+        }
+        
+        return viewModel
     }
 }
