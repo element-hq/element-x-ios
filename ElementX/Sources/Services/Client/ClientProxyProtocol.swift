@@ -61,20 +61,6 @@ enum SessionVerificationState {
     case unverified
 }
 
-struct RoomPreviewDetails {
-    let roomID: String
-    let name: String?
-    let canonicalAlias: String?
-    let topic: String?
-    let avatarURL: URL?
-    let memberCount: UInt
-    let isHistoryWorldReadable: Bool?
-    let isJoined: Bool
-    let isInvited: Bool
-    let isPublic: Bool
-    let canKnock: Bool
-}
-
 // sourcery: AutoMockable
 protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var actionsPublisher: AnyPublisher<ClientProxyAction, Never> { get }
@@ -154,7 +140,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyType?
     
-    func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewDetails, ClientProxyError>
+    func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewProxyProtocol, ClientProxyError>
     
     @discardableResult func loadUserDisplayName() async -> Result<Void, ClientProxyError>
     

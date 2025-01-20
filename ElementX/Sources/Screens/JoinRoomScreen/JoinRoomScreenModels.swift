@@ -12,13 +12,16 @@ enum JoinRoomScreenViewModelAction {
     case dismiss
 }
 
-enum JoinRoomScreenInteractionMode {
+enum JoinRoomScreenMode: Equatable {
     case loading
     case unknown
+    case joinable
+    case restricted
+    case inviteRequired
     case invited
-    case join
-    case knock
+    case knockable
     case knocked
+    case banned(sender: String?, reason: String?)
 }
 
 struct JoinRoomScreenRoomDetails {
@@ -31,12 +34,11 @@ struct JoinRoomScreenRoomDetails {
 }
 
 struct JoinRoomScreenViewState: BindableState {
-    // Maybe use room summary details or similar here??
     let roomID: String
     
     var roomDetails: JoinRoomScreenRoomDetails?
     
-    var mode: JoinRoomScreenInteractionMode = .loading
+    var mode: JoinRoomScreenMode = .loading
     
     var bindings = JoinRoomScreenViewStateBindings()
     
@@ -46,10 +48,14 @@ struct JoinRoomScreenViewState: BindableState {
     
     var subtitle: String? {
         switch mode {
-        case .loading: nil
-        case .unknown: L10n.screenJoinRoomSubtitleNoPreview
-        case .invited, .join, .knock: roomDetails?.canonicalAlias
-        case .knocked: nil
+        case .loading:
+            nil
+        case .unknown:
+            L10n.screenJoinRoomSubtitleNoPreview
+        case .knocked:
+            nil
+        default:
+            roomDetails?.canonicalAlias
         }
     }
     

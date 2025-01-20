@@ -316,17 +316,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         clientProxy.roomPreviewForIdentifierViaClosure = { [roomType] roomID, _ in
             switch roomType {
             case .invited:
-                return .success(.init(roomID: roomID,
-                                      name: "Invite",
-                                      canonicalAlias: nil,
-                                      topic: nil,
-                                      avatarURL: nil,
-                                      memberCount: 0,
-                                      isHistoryWorldReadable: nil,
-                                      isJoined: false,
-                                      isInvited: true,
-                                      isPublic: false,
-                                      canKnock: false))
+                return .success(RoomPreviewProxyMock.invited(roomID: roomID))
             default:
                 fatalError("Something isn't set up right")
             }

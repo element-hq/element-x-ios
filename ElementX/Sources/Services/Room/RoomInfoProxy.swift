@@ -113,6 +113,9 @@ struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
     var isSpace: Bool { roomPreviewInfo.roomType == .space }
     var activeMembersCount: Int { Int(roomPreviewInfo.numActiveMembers ?? roomPreviewInfo.numJoinedMembers) }
     
+    var joinRule: JoinRule { roomPreviewInfo.joinRule }
+    var membership: Membership? { roomPreviewInfo.membership }
+    
     /// The room's avatar info for use in a ``RoomAvatarImage``.
     var avatar: RoomAvatar {
         if isDirect, avatarURL == nil {
