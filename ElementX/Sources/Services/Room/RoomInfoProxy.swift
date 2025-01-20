@@ -68,7 +68,11 @@ struct RoomInfoProxy: BaseRoomInfoProxyProtocol {
     var joinRule: JoinRule? { roomInfo.joinRule }
     var historyVisibility: RoomHistoryVisibility { roomInfo.historyVisibility }
     
-    func aliasMatching(serverName: String?, useFallback: Bool) -> String? {
+    /// Find the first alias that matches the given homeserver
+    /// - Parameters:
+    ///   - serverName: the homserver in question
+    ///   - useFallback: whether to return any alias if none match
+    func firstAliasMatching(serverName: String?, useFallback: Bool) -> String? {
         guard let serverName else { return nil }
         
         // Check if the canonical alias matches the homeserver

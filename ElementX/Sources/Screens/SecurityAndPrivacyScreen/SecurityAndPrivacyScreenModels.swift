@@ -15,7 +15,7 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     let serverName: String
     var currentSettings: SecurityAndPrivacySettings
     var bindings: SecurityAndPrivacyScreenViewStateBindings
-    var primaryAlias: String?
+    var canonicalAlias: String?
     
     private var hasChanges: Bool {
         currentSettings != bindings.desiredSettings
@@ -25,7 +25,7 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
         !hasChanges ||
             (currentSettings.isVisibileInRoomDirectory == nil &&
                 bindings.desiredSettings.accessType != .inviteOnly &&
-                primaryAlias != nil)
+                canonicalAlias != nil)
     }
     
     var availableVisibilityOptions: [SecurityAndPrivacyHistoryVisibility] {

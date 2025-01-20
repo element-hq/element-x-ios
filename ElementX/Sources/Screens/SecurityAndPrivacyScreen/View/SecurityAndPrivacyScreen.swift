@@ -15,7 +15,7 @@ struct SecurityAndPrivacyScreen: View {
         Form {
             roomAccessSection
             if context.desiredSettings.accessType != .inviteOnly {
-                if let canonicalAlias = context.viewState.primaryAlias {
+                if let canonicalAlias = context.viewState.canonicalAlias {
                     visibilitySection
                     addressSection(canonicalAlias: canonicalAlias)
                     roomDirectoryVisibilitySection

@@ -33,6 +33,7 @@ class EditRoomAddressScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
     
+    /// Priority should be given to aliases from the current user's homeserver as they can edit those.
     func testAlternativeAliasChosen() async throws {
         let roomProxy = JoinedRoomProxyMock(.init(name: "Room Name", canonicalAlias: "#alpha:homeserver.io",
                                                   alternativeAliases: ["#beta:homeserver.io",

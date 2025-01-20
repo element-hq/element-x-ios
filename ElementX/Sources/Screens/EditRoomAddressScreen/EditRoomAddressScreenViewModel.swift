@@ -37,19 +37,22 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
             super.init(initialViewState: EditRoomAddressScreenViewState(serverName: clientProxy.userIDServerName ?? ""))
             
             state.currentAliasLocalPart = localPartForMatchingAlias(computeFromDisplayName: false)
-            state.bindings.desiredAliasLocalPart = localPartForMatchingAlias(computeFromDisplayName: true)
+            state.bindings.desiredAliasLocalPart = localPartForMatchingAlias(computeFromDisplayName: true) ?? ""
         }
         
         setupSubscriptions()
     }
     
-    private func localPartForMatchingAlias(computeFromDisplayName: Bool) -> String {
-        if let matchingAlias = roomProxy.infoPublisher.value.aliasMatching(serverName: clientProxy.userIDServerName, useFallback: false) {
+    /// Give priority to aliases from the current user's homeserver as remote ones
+    /// cannot be edited. If none match then don't fallback and show an empty alias
+    /// instead so that the user can add one sepecific to this homeserver.
+    private func localPartForMatchingAlias(computeFromDisplayName: Bool) -> String? {
+        if let matchingAlias = roomProxy.infoPublisher.value.firstAliasMatching(serverName: clientProxy.userIDServerName, useFallback: false) {
             return matchingAlias.aliasLocalPart
         }
         
         guard computeFromDisplayName, let displayName = roomProxy.infoPublisher.value.displayName else {
-            return ""
+            return nil
         }
         
         return roomAliasNameFromRoomDisplayName(roomName: displayName)
@@ -143,7 +146,7 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
             return
         }
         
-        let oldAlias = roomProxy.infoPublisher.value.aliasMatching(serverName: clientProxy.userIDServerName, useFallback: false)
+        let oldAlias = roomProxy.infoPublisher.value.firstAliasMatching(serverName: clientProxy.userIDServerName, useFallback: false)
         
         // First publish the new alias
         if case .failure = await roomProxy.publishRoomAliasInRoomDirectory(canonicalAlias) {
