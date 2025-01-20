@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "To take pictures or videos and send them as a message Element X needs access to the camera.";
+"NSFaceIDUsageDescription" = "Face ID is used to access your app.";
+"NSLocationWhenInUseUsageDescription" = "Grant location access so that Element X can share your location.";
+"NSMicrophoneUsageDescription" = "To record and send messages with audio, Element X needs to access the microphone.";
+"NSPhotoLibraryUsageDescription" = "This lets you save images and videos to your photo library.";

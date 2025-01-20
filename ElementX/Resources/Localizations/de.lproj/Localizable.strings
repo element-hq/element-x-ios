@@ -622,7 +622,15 @@
 "screen_invites_decline_direct_chat_title" = "Einladung ablehnen";
 "screen_invites_empty_list" = "Keine Einladungen";
 "screen_invites_invited_you" = "%1$@ (%2$@) hat dich eingeladen";
+"screen_join_room_ban_by_message" = "Sie wurden von diesem Chatroom verbannt%1$@.";
+"screen_join_room_ban_message" = "Sie wurden aus diesem Chatroom verbannt";
+"screen_join_room_ban_reason" = "Grund:%1$@.";
+"screen_join_room_fail_message" = "Der Beitritt zum Chatroom schlug fehl.";
+"screen_join_room_fail_reason" = "Dieser Chatroom ist entweder nur auf Einladung zugänglich oder es kann zu Zugangsbeschränkungen auf Spaceebene kommen.";
+"screen_join_room_forget_action" = "Vergessen Sie diesen Raum";
+"screen_join_room_invite_required_message" = "Sie benötigen eine Einladung, um diesem Raum beizutreten";
 "screen_join_room_join_action" = "Raum beitreten";
+"screen_join_room_join_restricted_message" = "Möglicherweise müssen Sie eingeladen sein oder Mitglied eines Spaces sein, um beitreten zu können.";
 "screen_join_room_knock_action" = "Anklopfen";
 "screen_join_room_space_not_supported_description" = "%1$@ unterstützt noch keine Spaces. Du kannst auf Spaces im Web zugreifen.";
 "screen_join_room_space_not_supported_title" = "Spaces werden noch nicht unterstützt";

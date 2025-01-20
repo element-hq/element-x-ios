@@ -269,8 +269,8 @@
 "crypto_identity_change_pin_violation" = "L'identité de %1$@ semble avoir changé. %2$@";
 "crypto_identity_change_pin_violation_new" = "L'identité de %1$@ %2$@ semble avoir changé. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
-"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ verified identity has changed.  %3$@";
-"crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
+"crypto_identity_change_verification_violation_new" = "L'identité vérifiée de %1$@ %2$@ a changé. %3$@";
+"crypto_identity_change_withdraw_verification_action" = "Révoquer la vérification";
 "dialog_permission_camera" = "Pour permettre à l’application d’utiliser l’appareil photo, veuillez accorder l’autorisation dans les paramètres du système.";
 "dialog_permission_generic" = "Veuillez accorder l’autorisation dans les paramètres du système.";
 "dialog_permission_location_description_ios" = "Autorisez l’accès dans Paramètres / Localisation.";
@@ -622,7 +622,15 @@
 "screen_invites_decline_direct_chat_title" = "Refuser l’invitation";
 "screen_invites_empty_list" = "Aucune invitation";
 "screen_invites_invited_you" = "%1$@ (%2$@) vous a invité(e)";
+"screen_join_room_ban_by_message" = "You were banned from this room by %1$@.";
+"screen_join_room_ban_message" = "You were banned from this room";
+"screen_join_room_ban_reason" = "Reason: %1$@.";
+"screen_join_room_fail_message" = "Joining the room failed.";
+"screen_join_room_fail_reason" = "This room is either invite-only or there might be restrictions to access at space level.";
+"screen_join_room_forget_action" = "Forget this room";
+"screen_join_room_invite_required_message" = "You need an invite in order to join this room";
 "screen_join_room_join_action" = "Rejoindre";
+"screen_join_room_join_restricted_message" = "You may need to be invited or be a member of a space in order to join.";
 "screen_join_room_knock_action" = "Demander à joindre";
 "screen_join_room_space_not_supported_description" = "Les Spaces ne sont pas encore pris en charge par %1$@ . Vous pouvez voir les Spaces sur le Web.";
 "screen_join_room_space_not_supported_title" = "Les Spaces ne sont pas encore pris en charge";

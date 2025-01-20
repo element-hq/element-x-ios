@@ -1286,6 +1286,16 @@ internal enum L10n {
   internal static func screenInvitesInvitedYou(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_invites_invited_you", String(describing: p1), String(describing: p2))
   }
+  /// You were banned from this room by %1$@.
+  internal static func screenJoinRoomBanByMessage(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_join_room_ban_by_message", String(describing: p1))
+  }
+  /// You were banned from this room
+  internal static var screenJoinRoomBanMessage: String { return L10n.tr("Localizable", "screen_join_room_ban_message") }
+  /// Reason: %1$@.
+  internal static func screenJoinRoomBanReason(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_join_room_ban_reason", String(describing: p1))
+  }
   /// Cancel request
   internal static var screenJoinRoomCancelKnockAction: String { return L10n.tr("Localizable", "screen_join_room_cancel_knock_action") }
   /// Yes, cancel
@@ -1294,8 +1304,18 @@ internal enum L10n {
   internal static var screenJoinRoomCancelKnockAlertDescription: String { return L10n.tr("Localizable", "screen_join_room_cancel_knock_alert_description") }
   /// Cancel request to join
   internal static var screenJoinRoomCancelKnockAlertTitle: String { return L10n.tr("Localizable", "screen_join_room_cancel_knock_alert_title") }
+  /// Joining the room failed.
+  internal static var screenJoinRoomFailMessage: String { return L10n.tr("Localizable", "screen_join_room_fail_message") }
+  /// This room is either invite-only or there might be restrictions to access at space level.
+  internal static var screenJoinRoomFailReason: String { return L10n.tr("Localizable", "screen_join_room_fail_reason") }
+  /// Forget this room
+  internal static var screenJoinRoomForgetAction: String { return L10n.tr("Localizable", "screen_join_room_forget_action") }
+  /// You need an invite in order to join this room
+  internal static var screenJoinRoomInviteRequiredMessage: String { return L10n.tr("Localizable", "screen_join_room_invite_required_message") }
   /// Join room
   internal static var screenJoinRoomJoinAction: String { return L10n.tr("Localizable", "screen_join_room_join_action") }
+  /// You may need to be invited or be a member of a space in order to join.
+  internal static var screenJoinRoomJoinRestrictedMessage: String { return L10n.tr("Localizable", "screen_join_room_join_restricted_message") }
   /// Send request to join
   internal static var screenJoinRoomKnockAction: String { return L10n.tr("Localizable", "screen_join_room_knock_action") }
   /// Message (optional)
