@@ -31,21 +31,31 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
         
-        var aliasLocalPart = ""
-        if let canonicalAlias = roomProxy.infoPublisher.value.canonicalAlias {
-            aliasLocalPart = canonicalAlias.dropFirst().split(separator: ":").first.flatMap(String.init) ?? ""
-        } else if let displayName = roomProxy.infoPublisher.value.displayName {
-            aliasLocalPart = roomAliasNameFromRoomDisplayName(roomName: displayName)
-        }
-        
         if let initialViewState {
             super.init(initialViewState: initialViewState)
         } else {
-            super.init(initialViewState: EditRoomAddressScreenViewState(serverName: clientProxy.userIDServerName ?? "",
-                                                                        currentAliasLocalPart: aliasLocalPart,
-                                                                        bindings: .init(desiredAliasLocalPart: aliasLocalPart)))
+            super.init(initialViewState: EditRoomAddressScreenViewState(serverName: clientProxy.userIDServerName ?? ""))
+            
+            state.currentAliasLocalPart = localPartForMatchingAlias(computeFromDisplayName: false)
+            state.bindings.desiredAliasLocalPart = localPartForMatchingAlias(computeFromDisplayName: true) ?? ""
         }
+        
         setupSubscriptions()
+    }
+    
+    /// Give priority to aliases from the current user's homeserver as remote ones
+    /// cannot be edited. If none match then don't fallback and show an empty alias
+    /// instead so that the user can add one sepecific to this homeserver.
+    private func localPartForMatchingAlias(computeFromDisplayName: Bool) -> String? {
+        if let matchingAlias = roomProxy.infoPublisher.value.firstAliasMatching(serverName: clientProxy.userIDServerName, useFallback: false) {
+            return matchingAlias.aliasLocalPart
+        }
+        
+        guard computeFromDisplayName, let displayName = roomProxy.infoPublisher.value.displayName else {
+            return nil
+        }
+        
+        return roomAliasNameFromRoomDisplayName(roomName: displayName)
     }
     
     // MARK: - Public
@@ -136,7 +146,7 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
             return
         }
         
-        let oldAlias = roomProxy.infoPublisher.value.canonicalAlias
+        let oldAlias = roomProxy.infoPublisher.value.firstAliasMatching(serverName: clientProxy.userIDServerName, useFallback: false)
         
         // First publish the new alias
         if case .failure = await roomProxy.publishRoomAliasInRoomDirectory(canonicalAlias) {
@@ -170,5 +180,11 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
     
     private func hideLoadingIndicator() {
         userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+    }
+}
+
+private extension String {
+    var aliasLocalPart: String {
+        dropFirst().split(separator: ":").first.flatMap(String.init) ?? ""
     }
 }

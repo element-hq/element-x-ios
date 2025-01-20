@@ -25,6 +25,7 @@ struct JoinedRoomProxyMockConfiguration {
     var isEncrypted = true
     var hasOngoingCall = true
     var canonicalAlias: String?
+    var alternativeAliases: [String] = []
     var pinnedEventIDs: Set<String> = []
     
     var timelineStartReached = false
@@ -146,7 +147,7 @@ extension RoomInfo {
                   isTombstoned: false,
                   isFavourite: false,
                   canonicalAlias: configuration.canonicalAlias,
-                  alternativeAliases: [],
+                  alternativeAliases: configuration.alternativeAliases,
                   membership: .joined,
                   inviter: configuration.inviter.map { RoomMember(userId: $0.userID,
                                                                   displayName: $0.displayName,

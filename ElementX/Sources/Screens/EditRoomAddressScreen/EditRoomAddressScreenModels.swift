@@ -22,11 +22,11 @@ struct EditRoomAddressScreenViewState: BindableState {
             !bindings.desiredAliasLocalPart.isEmpty
     }
     
-    var bindings: EditRoomAddressScreenViewStateBindings
+    var bindings = EditRoomAddressScreenViewStateBindings()
 }
 
 struct EditRoomAddressScreenViewStateBindings {
-    var desiredAliasLocalPart: String
+    var desiredAliasLocalPart = ""
 }
 
 enum EditRoomAddressScreenViewAction {
