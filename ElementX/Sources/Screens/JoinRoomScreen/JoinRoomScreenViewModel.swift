@@ -115,8 +115,8 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         default:
             break
         }
-        
-        let info = roomInfo ?? roomPreview?.info
+
+        let info = roomPreview?.info ?? roomInfo
         state.roomDetails = JoinRoomScreenRoomDetails(name: info?.displayName,
                                                       topic: info?.topic,
                                                       canonicalAlias: info?.canonicalAlias,
