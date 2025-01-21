@@ -369,8 +369,10 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let dmRoomViewModel = {
+        let me = RoomMemberProxyMock.mockMe
+        me.powerLevel = 100
         let members: [RoomMemberProxyMock] = [
-            .mockMe,
+            me,
             .mockDan
         ]
         

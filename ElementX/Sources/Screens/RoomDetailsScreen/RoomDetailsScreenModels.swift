@@ -69,7 +69,7 @@ struct RoomDetailsScreenViewState: BindableState {
     }
     
     var hasTopicSection: Bool {
-        topic != nil || (canEdit && canEditRoomTopic)
+        topic != nil || canEditRoomTopic
     }
 
     var bindings: RoomDetailsScreenViewStateBindings
