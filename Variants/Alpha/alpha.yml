@@ -1,0 +1,11 @@
+settings:
+  BASE_APP_GROUP_IDENTIFIER: io.element.pr
+  BASE_BUNDLE_IDENTIFIER: io.element.elementx.pr
+
+targets:
+  ElementX:
+    settings:
+      base:
+        ASSETCATALOG_COMPILER_APPICON_NAME: AlphaAppIcon
+    sources:
+    - path: Resources

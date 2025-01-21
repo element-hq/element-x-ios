@@ -170,7 +170,7 @@ lane :config_nightly do |options|
 
   target_file_path = "../project.yml"
   data = YAML.load_file target_file_path
-  data["include"].append({ "path" => "fastlane/nightly.yml" })
+  data["include"].append({ "path" => "Variants/Nightly/nightly.yml" })
 
   config_secrets()
   
@@ -314,7 +314,7 @@ end
 private_lane :config_xcodegen_alpha do
   target_file_path = "../project.yml"
   data = YAML.load_file target_file_path
-  data["include"].append({ "path" => "fastlane/alpha.yml" })
+  data["include"].append({ "path" => "Variants/Alpha/alpha.yml" })
   File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
 
   xcodegen(spec: "project.yml")
