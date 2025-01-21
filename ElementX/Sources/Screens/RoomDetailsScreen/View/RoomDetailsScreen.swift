@@ -15,11 +15,7 @@ struct RoomDetailsScreen: View {
     
     var body: some View {
         Form {
-            if let recipient = context.viewState.dmRecipient {
-                dmHeaderSection(recipient: recipient)
-            } else {
-                normalRoomHeaderSection
-            }
+            roomHeaderSection
 
             topicSection
             
@@ -64,7 +60,7 @@ struct RoomDetailsScreen: View {
     
     // MARK: - Private
     
-    private var normalRoomHeaderSection: some View {
+    private var roomHeaderSection: some View {
         AvatarHeaderView(room: context.viewState.details,
                          avatarSize: .room(on: .details),
                          mediaProvider: context.mediaProvider) { url in
@@ -75,19 +71,6 @@ struct RoomDetailsScreen: View {
             }
         }
         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.avatar)
-    }
-    
-    private func dmHeaderSection(recipient: RoomMemberDetails) -> some View {
-        AvatarHeaderView(member: recipient,
-                         avatarSize: .room(on: .details),
-                         mediaProvider: context.mediaProvider) { url in
-            context.send(viewAction: .displayAvatar(url))
-        } footer: {
-            if !context.viewState.shortcuts.isEmpty {
-                headerSectionShortcuts
-            }
-        }
-        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.dmAvatar)
     }
     
     @ViewBuilder
