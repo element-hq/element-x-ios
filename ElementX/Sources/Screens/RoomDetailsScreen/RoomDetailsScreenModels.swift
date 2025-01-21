@@ -12,7 +12,7 @@ import SwiftUI
 
 // MARK: View model
 
-enum RoomDetailsScreenViewModelAction {
+enum RoomDetailsScreenViewModelAction: Equatable {
     case requestNotificationSettingsPresentation
     case requestMemberDetailsPresentation
     case requestRecipientDetailsPresentation(userID: String)
