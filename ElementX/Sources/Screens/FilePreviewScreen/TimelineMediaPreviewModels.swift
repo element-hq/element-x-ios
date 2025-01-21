@@ -198,7 +198,6 @@ class TimelineMediaPreviewItem: NSObject, QLPreviewItem, Identifiable {
 
 enum TimelineMediaPreviewViewAction {
     case updateCurrentItem(TimelineMediaPreviewItem)
-    case saveCurrentItem
     case showCurrentItemDetails
     case menuAction(TimelineItemMenuAction, item: TimelineMediaPreviewItem)
     case redactConfirmation(item: TimelineMediaPreviewItem)

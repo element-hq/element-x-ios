@@ -59,14 +59,14 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         switch viewAction {
         case .updateCurrentItem(let item):
             Task { await updateCurrentItem(item) }
-        case .saveCurrentItem:
-            Task { await saveCurrentItem() }
         case .showCurrentItemDetails:
             state.bindings.mediaDetailsItem = state.currentItem
         case .menuAction(let action, let item):
             switch action {
             case .viewInRoomTimeline:
                 actionsSubject.send(.viewInRoomTimeline(item.id))
+            case .save:
+                Task { await saveCurrentItem() }
             case .redact:
                 state.bindings.redactConfirmationItem = item
             default:
@@ -118,6 +118,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             MXLog.error("Unable to save an item without a URL, the button shouldn't be visible.")
             return
         }
+        
+        // Dismiss the details sheet (nicer flow for images/video but _required_ in order to select a file directory).
+        state.bindings.mediaDetailsItem = nil
         
         do {
             switch state.currentItem.timelineItem {

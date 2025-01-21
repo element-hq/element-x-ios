@@ -19,19 +19,7 @@ struct MediaEventsTimelineScreen: View {
             .background(.compound.bgCanvasDefault)
             // Doesn't play well with the transformed scrollView
             .toolbarBackground(.visible, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Picker("", selection: $context.screenMode) {
-                        Text(L10n.screenMediaBrowserListModeMedia)
-                            .padding()
-                            .tag(MediaEventsTimelineScreenMode.media)
-                        Text(L10n.screenMediaBrowserListModeFiles)
-                            .padding()
-                            .tag(MediaEventsTimelineScreenMode.files)
-                    }
-                    .pickerStyle(.segmented)
-                }
-            }
+            .toolbar { toolbar }
             .environmentObject(context.viewState.activeTimelineContextProvider())
             .environment(\.timelineContext, context.viewState.activeTimelineContextProvider())
             .onChange(of: context.screenMode) { _, _ in
@@ -203,6 +191,27 @@ struct MediaEventsTimelineScreen: View {
                 .foregroundColor(.compound.textSecondary)
                 .font(.compound.bodyMD)
                 .multilineTextAlignment(.center)
+        }
+    }
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .principal) {
+            Picker("", selection: $context.screenMode) {
+                Text(L10n.screenMediaBrowserListModeMedia)
+                    .padding()
+                    .tag(MediaEventsTimelineScreenMode.media)
+                Text(L10n.screenMediaBrowserListModeFiles)
+                    .padding()
+                    .tag(MediaEventsTimelineScreenMode.files)
+            }
+            .pickerStyle(.segmented)
+            .frame(idealWidth: .greatestFiniteMagnitude)
+        }
+        
+        ToolbarItem(placement: .primaryAction) {
+            // Reserve the space trailing space to match the back button.
+            CompoundIcon(\.search).hidden()
         }
     }
     
