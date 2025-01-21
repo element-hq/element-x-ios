@@ -95,6 +95,13 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         // See if we known about the room locally and, if so, have that
         // take priority over the preview one.
         if let room = await clientProxy.roomForIdentifier(roomID) {
+            // We also need to update the room details
+            switch await clientProxy.roomPreviewForIdentifier(roomID, via: via) {
+            case .success(let updatedPreview):
+                roomPreview = updatedPreview
+            case .failure:
+                break
+            }
             self.room = room
             await updateRoomDetails()
         }
