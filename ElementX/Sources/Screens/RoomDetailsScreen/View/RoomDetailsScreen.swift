@@ -15,10 +15,8 @@ struct RoomDetailsScreen: View {
     
     var body: some View {
         Form {
-            if let recipient = context.viewState.dmRecipient,
-               let accountOwner = context.viewState.accountOwner {
-                dmHeaderSection(accountOwner: accountOwner,
-                                recipient: recipient)
+            if let recipient = context.viewState.dmRecipient {
+                dmHeaderSection(recipient: recipient)
             } else {
                 normalRoomHeaderSection
             }
@@ -79,9 +77,9 @@ struct RoomDetailsScreen: View {
         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.avatar)
     }
     
-    private func dmHeaderSection(accountOwner: RoomMemberDetails, recipient: RoomMemberDetails) -> some View {
-        AvatarHeaderView(accountOwner: accountOwner,
-                         dmRecipient: recipient,
+    private func dmHeaderSection(recipient: RoomMemberDetails) -> some View {
+        AvatarHeaderView(member: recipient,
+                         avatarSize: .room(on: .details),
                          mediaProvider: context.mediaProvider) { url in
             context.send(viewAction: .displayAvatar(url))
         } footer: {
@@ -202,6 +200,14 @@ struct RoomDetailsScreen: View {
                                         icon: \.lock),
                         kind: .navigationLink {
                             context.send(viewAction: .processTapSecurityAndPrivacy)
+                        })
+            }
+            
+            if let dmRecipient = context.viewState.dmRecipient {
+                ListRow(label: .default(title: L10n.screenRoomDetailsProfileRowTitle,
+                                        icon: \.userProfile),
+                        kind: .navigationLink {
+                            context.send(viewAction: .processTapRecipientProfile)
                         })
             }
         }

@@ -15,6 +15,7 @@ import SwiftUI
 enum RoomDetailsScreenViewModelAction {
     case requestNotificationSettingsPresentation
     case requestMemberDetailsPresentation
+    case requestRecipientDetailsPresentation(userID: String)
     case requestInvitePeoplePresentation
     case leftRoom
     case requestEditDetailsPresentation
@@ -198,6 +199,7 @@ enum RoomDetailsScreenViewAction {
     case ignoreConfirmed
     case unignoreConfirmed
     case processTapNotifications
+    case processTapRecipientProfile
     case processToggleMuteNotifications
     case displayAvatar(URL)
     case processTapPolls
