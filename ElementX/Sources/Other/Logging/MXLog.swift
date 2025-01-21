@@ -118,6 +118,21 @@ enum MXLog {
         #endif
     }
     
+    #if DEBUG
+    private static let devPrefix = URL.documentsDirectory.pathComponents[2].uppercased()
+    /// A helper method for print debugging
+    ///
+    /// When running on the simulator this will log `[USERNAME] message` so that
+    /// you can easily filter the Xcode console to see only the logs you're interested in.
+    static func dev(_ message: Any,
+                    file: String = #file,
+                    function: String = #function,
+                    line: Int = #line,
+                    column: Int = #column) {
+        log("[\(devPrefix)] \(message)", level: .info, file: file, function: function, line: line, column: column)
+    }
+    #endif
+    
     // MARK: - Private
     
     // periphery:ignore:parameters function,column
