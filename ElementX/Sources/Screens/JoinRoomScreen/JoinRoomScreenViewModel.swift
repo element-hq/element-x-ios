@@ -209,7 +209,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                                                     message: state.bindings.knockMessage.isBlank ? nil : state.bindings.knockMessage) {
             case .success:
                 // The room should become knocked through the sync
-                await updateRoom()
+                await loadRoomDetails()
             case .failure(let error):
                 MXLog.error("Failed knocking room alias: \(alias) with error: \(error)")
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
@@ -220,7 +220,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                                                message: state.bindings.knockMessage.isBlank ? nil : state.bindings.knockMessage) {
             case .success:
                 // The room should become knocked through the sync
-                await updateRoom()
+                await loadRoomDetails()
             case .failure(let error):
                 MXLog.error("Failed knocking room id: \(roomID) with error: \(error)")
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
