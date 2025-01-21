@@ -1,0 +1,11 @@
+settings:
+  BASE_APP_GROUP_IDENTIFIER: io.element.nightly
+  BASE_BUNDLE_IDENTIFIER: io.element.elementx.nightly
+
+targets:
+  ElementX:
+    settings:
+      base:
+        ASSETCATALOG_COMPILER_APPICON_NAME: NightlyAppIcon
+    sources:
+    - path: Resources
