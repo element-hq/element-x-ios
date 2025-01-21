@@ -95,13 +95,6 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         // See if we known about the room locally and, if so, have that
         // take priority over the preview one.
         if let room = await clientProxy.roomForIdentifier(roomID) {
-            // We also need to update the room preview
-            switch await clientProxy.roomPreviewForIdentifier(roomID, via: via) {
-            case .success(let updatedPreview):
-                roomPreview = updatedPreview
-            case .failure:
-                break
-            }
             self.room = room
             await updateRoomDetails()
         }
@@ -216,7 +209,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                                                     message: state.bindings.knockMessage.isBlank ? nil : state.bindings.knockMessage) {
             case .success:
                 // The room should become knocked through the sync
-                await updateRoom()
+                await loadRoomDetails()
             case .failure(let error):
                 MXLog.error("Failed knocking room alias: \(alias) with error: \(error)")
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
@@ -227,7 +220,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                                                message: state.bindings.knockMessage.isBlank ? nil : state.bindings.knockMessage) {
             case .success:
                 // The room should become knocked through the sync
-                await updateRoom()
+                await loadRoomDetails()
             case .failure(let error):
                 MXLog.error("Failed knocking room id: \(roomID) with error: \(error)")
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
