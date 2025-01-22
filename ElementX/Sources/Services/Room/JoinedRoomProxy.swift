@@ -35,10 +35,13 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                     }
                     
                     do {
-                        let timeline = try await TimelineProxy(timeline: room.pinnedEventsTimeline(internalIdPrefix: nil,
-                                                                                                   maxEventsToLoad: 100,
-                                                                                                   maxConcurrentRequests: 10),
-                                                               kind: .pinned)
+                        let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .pinnedEvents(maxEventsToLoad: 100, maxConcurrentRequests: 10),
+                                                                                                        allowedMessageTypes: .all,
+                                                                                                        internalIdPrefix: nil,
+                                                                                                        dateDividerMode: .daily))
+                        
+                        let timeline = TimelineProxy(timeline: sdkTimeline, kind: .pinned)
+                        
                         await timeline.subscribeForUpdates()
                         innerPinnedEventsTimeline = timeline
                         return timeline
@@ -155,8 +158,12 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError> {
         do {
-            let timeline = try await room.timelineFocusedOnEvent(eventId: eventID, numContextEvents: numberOfEvents, internalIdPrefix: UUID().uuidString)
-            return .success(TimelineProxy(timeline: timeline, kind: .detached))
+            let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .event(eventId: eventID, numContextEvents: numberOfEvents),
+                                                                                            allowedMessageTypes: .all,
+                                                                                            internalIdPrefix: UUID().uuidString,
+                                                                                            dateDividerMode: .daily))
+            
+            return .success(TimelineProxy(timeline: sdkTimeline, kind: .detached))
         } catch let error as FocusEventError {
             switch error {
             case .InvalidEventId(_, let error):
@@ -177,10 +184,12 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     func messageFilteredTimeline(allowedMessageTypes: [RoomMessageEventMessageType]) async -> Result<any TimelineProxyProtocol, RoomProxyError> {
         do {
-            let timeline = try await TimelineProxy(timeline: room.messageFilteredTimeline(internalIdPrefix: nil,
-                                                                                          allowedMessageTypes: allowedMessageTypes,
-                                                                                          dateDividerMode: .monthly),
-                                                   kind: .media(.mediaFilesScreen))
+            let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .live,
+                                                                                            allowedMessageTypes: .only(types: allowedMessageTypes),
+                                                                                            internalIdPrefix: nil,
+                                                                                            dateDividerMode: .monthly))
+            
+            let timeline = TimelineProxy(timeline: sdkTimeline, kind: .media(.mediaFilesScreen))
             await timeline.subscribeForUpdates()
             
             return .success(timeline)
