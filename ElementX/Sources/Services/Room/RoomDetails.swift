@@ -14,4 +14,5 @@ struct RoomDetails {
     let canonicalAlias: String?
     let isEncrypted: Bool
     let isPublic: Bool
+    let isDirect: Bool
 }

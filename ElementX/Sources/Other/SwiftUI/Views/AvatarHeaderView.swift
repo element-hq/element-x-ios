@@ -40,7 +40,7 @@ struct AvatarHeaderView<Footer: View>: View {
         
         if let roomAlias = room.canonicalAlias {
             subtitle = roomAlias
-        } else if case let .heroes(heroes) = room.avatar, heroes.count == 1 {
+        } else if room.isDirect, case let .heroes(heroes) = room.avatar, heroes.count == 1 {
             subtitle = heroes[0].userID
         } else {
             subtitle = nil
@@ -200,7 +200,8 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
                                                        avatarURL: .mockMXCAvatar),
                                          canonicalAlias: "#test:matrix.org",
                                          isEncrypted: true,
-                                         isPublic: true),
+                                         isPublic: true,
+                                         isDirect: false),
                              avatarSize: .room(on: .details),
                              mediaProvider: MediaProviderMock(configuration: .init())) {
                 HStack(spacing: 32) {
