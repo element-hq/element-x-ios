@@ -182,7 +182,8 @@ extension JoinedRoomProxyProtocol {
                     avatar: infoPublisher.value.avatar,
                     canonicalAlias: infoPublisher.value.canonicalAlias,
                     isEncrypted: isEncrypted,
-                    isPublic: infoPublisher.value.isPublic)
+                    isPublic: infoPublisher.value.isPublic,
+                    isDirect: infoPublisher.value.isDirect)
     }
     
     var isDirectOneToOneRoom: Bool {

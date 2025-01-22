@@ -1896,6 +1896,8 @@ internal enum L10n {
   internal static var screenRoomDetailsNotificationTitle: String { return L10n.tr("Localizable", "screen_room_details_notification_title") }
   /// Pinned messages
   internal static var screenRoomDetailsPinnedEventsRowTitle: String { return L10n.tr("Localizable", "screen_room_details_pinned_events_row_title") }
+  /// Profile
+  internal static var screenRoomDetailsProfileRowTitle: String { return L10n.tr("Localizable", "screen_room_details_profile_row_title") }
   /// Requests to join
   internal static var screenRoomDetailsRequestsToJoinTitle: String { return L10n.tr("Localizable", "screen_room_details_requests_to_join_title") }
   /// Roles and permissions
@@ -2780,6 +2782,11 @@ internal enum L10n {
   }
   /// Check UnifiedPush
   internal static var troubleshootNotificationsTestUnifiedPushTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_unified_push_title") }
+
+  internal enum A11y {
+    /// View details
+    internal static var viewDetails: String { return L10n.tr("Localizable", "a11y.view_details") }
+  }
 
   internal enum Common {
     /// Copied to clipboard

@@ -21,6 +21,7 @@
 "a11y_user_menu" = "User menu";
 "a11y_voice_message_record" = "Record voice message.";
 "a11y_voice_message_stop_recording" = "Stop recording";
+"a11y.view_details" = "View details";
 "action_accept" = "Accept";
 "action_add_caption" = "Add caption";
 "action_add_to_timeline" = "Add to timeline";
@@ -440,6 +441,7 @@
 "screen_room_single_knock_request_title" = "%1$@ wants to join this room";
 "screen_room_single_knock_request_view_button_title" = "View";
 "screen_room_details_pinned_events_row_title" = "Pinned messages";
+"screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_room_details_security_and_privacy_title" = "Security & privacy";
 "screen_roomlist_knock_event_sent_description" = "Request to join sent";

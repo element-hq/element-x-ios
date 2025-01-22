@@ -861,6 +861,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentMediaEventsTimeline)
             case .presentSecurityAndPrivacyScreen:
                 stateMachine.tryEvent(.presentSecurityAndPrivacyScreen)
+            case .presentRecipientDetails(let userID):
+                stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID))
             }
         }
         .store(in: &cancellables)

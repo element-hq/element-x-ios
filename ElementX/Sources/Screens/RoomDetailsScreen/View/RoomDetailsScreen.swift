@@ -15,13 +15,7 @@ struct RoomDetailsScreen: View {
     
     var body: some View {
         Form {
-            if let recipient = context.viewState.dmRecipient,
-               let accountOwner = context.viewState.accountOwner {
-                dmHeaderSection(accountOwner: accountOwner,
-                                recipient: recipient)
-            } else {
-                normalRoomHeaderSection
-            }
+            roomHeaderSection
 
             topicSection
             
@@ -66,7 +60,7 @@ struct RoomDetailsScreen: View {
     
     // MARK: - Private
     
-    private var normalRoomHeaderSection: some View {
+    private var roomHeaderSection: some View {
         AvatarHeaderView(room: context.viewState.details,
                          avatarSize: .room(on: .details),
                          mediaProvider: context.mediaProvider) { url in
@@ -77,19 +71,6 @@ struct RoomDetailsScreen: View {
             }
         }
         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.avatar)
-    }
-    
-    private func dmHeaderSection(accountOwner: RoomMemberDetails, recipient: RoomMemberDetails) -> some View {
-        AvatarHeaderView(accountOwner: accountOwner,
-                         dmRecipient: recipient,
-                         mediaProvider: context.mediaProvider) { url in
-            context.send(viewAction: .displayAvatar(url))
-        } footer: {
-            if !context.viewState.shortcuts.isEmpty {
-                headerSectionShortcuts
-            }
-        }
-        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.dmAvatar)
     }
     
     @ViewBuilder
@@ -202,6 +183,14 @@ struct RoomDetailsScreen: View {
                                         icon: \.lock),
                         kind: .navigationLink {
                             context.send(viewAction: .processTapSecurityAndPrivacy)
+                        })
+            }
+            
+            if context.viewState.dmRecipient != nil {
+                ListRow(label: .default(title: L10n.screenRoomDetailsProfileRowTitle,
+                                        icon: \.userProfile),
+                        kind: .navigationLink {
+                            context.send(viewAction: .processTapRecipientProfile)
                         })
             }
         }
@@ -369,12 +358,12 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         ]
         
         let roomProxy = JoinedRoomProxyMock(.init(id: "dm_room_id",
-                                                  name: "DM Room",
+                                                  name: "Dan",
                                                   topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                                                   isDirect: true,
                                                   isEncrypted: true,
-                                                  canonicalAlias: "#alias:domain.com",
-                                                  members: members))
+                                                  members: members,
+                                                  heroes: [.mockDan]))
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         
         return RoomDetailsScreenViewModel(roomProxy: roomProxy,
