@@ -166,7 +166,10 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
         // Finally update the canonical alias state..
         // Allow to update the canonical alias only if the saved canonical alias matches the homeserver or if there is no canonical alias
         if savedCanonicalAlias == nil || savedCanonicalAlias?.hasSuffix(state.serverName) == true {
-            if case .failure = await roomProxy.updateCanonicalAlias(desiredCanonicalAlias, altAliases: roomProxy.infoPublisher.value.alternativeAliases) {
+            var newAlternativeAliases = roomProxy.infoPublisher.value.alternativeAliases
+            newAlternativeAliases.removeAll { $0 == savedAliasFromHomeserver }
+
+            if case .failure = await roomProxy.updateCanonicalAlias(desiredCanonicalAlias, altAliases: newAlternativeAliases) {
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
                 return
             }
@@ -176,6 +179,7 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
             // We also remove the existing saved alias from our homeserver if exists
             newAlternativeAliases.removeAll { $0 == savedAliasFromHomeserver }
             newAlternativeAliases.insert(desiredCanonicalAlias, at: 0)
+            
             if case .failure = await roomProxy.updateCanonicalAlias(savedCanonicalAlias, altAliases: newAlternativeAliases) {
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
                 return
