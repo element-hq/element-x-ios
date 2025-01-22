@@ -90,7 +90,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
         
         let components = text.components(separatedBy: .whitespaces)
         
-        guard var lastComponent = components.last,
+        guard var lastComponent = components.first(where: { $0.first == SuggestionTriggerPattern.at.rawValue }),
               let range = text.range(of: lastComponent, options: .backwards),
               lastComponent.count > 0,
               let suggestionKey = SuggestionTriggerPattern(rawValue: lastComponent.removeFirst()),
