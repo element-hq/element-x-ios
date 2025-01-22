@@ -174,7 +174,7 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
         } else {
             var newAlternativeAliases = roomProxy.infoPublisher.value.alternativeAliases
             // We also remove the existing saved alias from our homeserver if exists
-            newAlternativeAliases.removeAll(where: { $0 == savedAliasFromHomeserver })
+            newAlternativeAliases.removeAll { $0 == savedAliasFromHomeserver }
             newAlternativeAliases.insert(desiredCanonicalAlias, at: 0)
             if case .failure = await roomProxy.updateCanonicalAlias(savedCanonicalAlias, altAliases: newAlternativeAliases) {
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
