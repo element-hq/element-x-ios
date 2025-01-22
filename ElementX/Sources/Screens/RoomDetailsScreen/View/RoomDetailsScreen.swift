@@ -186,7 +186,7 @@ struct RoomDetailsScreen: View {
                         })
             }
             
-            if let dmRecipient = context.viewState.dmRecipient {
+            if context.viewState.dmRecipient != nil {
                 ListRow(label: .default(title: L10n.screenRoomDetailsProfileRowTitle,
                                         icon: \.userProfile),
                         kind: .navigationLink {
@@ -352,20 +352,18 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     }()
     
     static let dmRoomViewModel = {
-        let me = RoomMemberProxyMock.mockMe
-        me.powerLevel = 100
         let members: [RoomMemberProxyMock] = [
-            me,
+            .mockMe,
             .mockDan
         ]
         
         let roomProxy = JoinedRoomProxyMock(.init(id: "dm_room_id",
-                                                  name: "DM Room",
+                                                  name: "Dan",
                                                   topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                                                   isDirect: true,
                                                   isEncrypted: true,
-                                                  canonicalAlias: "#alias:domain.com",
-                                                  members: members))
+                                                  members: members,
+                                                  heroes: [.mockDan]))
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         
         return RoomDetailsScreenViewModel(roomProxy: roomProxy,
