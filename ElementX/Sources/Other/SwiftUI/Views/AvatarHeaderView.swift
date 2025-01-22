@@ -40,8 +40,8 @@ struct AvatarHeaderView<Footer: View>: View {
         
         if let roomAlias = room.canonicalAlias {
             subtitle = roomAlias
-        } else if case let .heroes(heroes) = room.avatar {
-            subtitle = heroes.first?.userID
+        } else if case let .heroes(heroes) = room.avatar, heroes.count == 1 {
+            subtitle = heroes[0].userID
         } else {
             subtitle = nil
         }
