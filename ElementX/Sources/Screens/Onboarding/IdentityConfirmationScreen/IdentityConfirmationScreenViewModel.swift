@@ -25,18 +25,13 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
         
         super.init(initialViewState: IdentityConfirmationScreenViewState(learnMoreURL: appSettings.encryptionURL))
         
-        userSession.sessionSecurityStatePublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] state in
-                Task {
-                    await self?.updateWithSessionSecurityState(state)
-                }
+        Task { [weak self] in
+            for await state in userSession.sessionSecurityStatePublisher.values {
+                // We need to call this inside an AsyncSequence otherwise there's a race condition when the method suspends.
+                await self?.updateWithSessionSecurityState(state)
             }
-            .store(in: &cancellables)
-        
-        Task {
-            await updateWithSessionSecurityState(userSession.sessionSecurityStatePublisher.value)
         }
+        .store(in: &cancellables)
     }
     
     // MARK: - Public
