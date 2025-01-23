@@ -129,13 +129,13 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
             hideLoadingIndicator()
         }
         
-        guard let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: state.bindings.desiredAliasLocalPart, serverName: state.serverName),
-              isRoomAliasFormatValid(alias: canonicalAlias) else {
+        guard let desiredCanonicalAlias = String.makeCanonicalAlias(aliasLocalPart: state.bindings.desiredAliasLocalPart, serverName: state.serverName),
+              isRoomAliasFormatValid(alias: desiredCanonicalAlias) else {
             state.aliasErrors = [.invalidSymbols]
             return
         }
         
-        switch await clientProxy.isAliasAvailable(canonicalAlias) {
+        switch await clientProxy.isAliasAvailable(desiredCanonicalAlias) {
         case .success(true):
             break
         case .success(false):
@@ -146,24 +146,44 @@ class EditRoomAddressScreenViewModel: EditRoomAddressScreenViewModelType, EditRo
             return
         }
         
-        let oldAlias = roomProxy.infoPublisher.value.firstAliasMatching(serverName: clientProxy.userIDServerName, useFallback: false)
+        let savedAliasFromHomeserver = roomProxy.infoPublisher.value.firstAliasMatching(serverName: state.serverName, useFallback: false)
+        let savedCanonicalAlias = roomProxy.infoPublisher.value.canonicalAlias
         
-        // First publish the new alias
-        if case .failure = await roomProxy.publishRoomAliasInRoomDirectory(canonicalAlias) {
+        // First publish the desired new alias in the room directory
+        if case .failure = await roomProxy.publishRoomAliasInRoomDirectory(desiredCanonicalAlias) {
             userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
             return
         }
         
-        // Then set it as the main alias
-        if case .failure = await roomProxy.updateCanonicalAlias(canonicalAlias, altAliases: []) {
-            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
-            return
+        // Then try remove the old alias from the room directory on our current HS
+        if let savedAliasFromHomeserver {
+            if case .failure = await roomProxy.removeRoomAliasFromRoomDirectory(savedAliasFromHomeserver) {
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                return
+            }
         }
         
-        // And finally delete the old one
-        if let oldAlias, case .failure = await roomProxy.removeRoomAliasFromRoomDirectory(oldAlias) {
-            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
-            return
+        // Finally update the canonical alias state..
+        // Allow to update the canonical alias only if the saved canonical alias matches the homeserver or if there is no canonical alias
+        if savedCanonicalAlias == nil || savedCanonicalAlias?.hasSuffix(state.serverName) == true {
+            var newAlternativeAliases = roomProxy.infoPublisher.value.alternativeAliases
+            newAlternativeAliases.removeAll { $0 == savedAliasFromHomeserver }
+
+            if case .failure = await roomProxy.updateCanonicalAlias(desiredCanonicalAlias, altAliases: newAlternativeAliases) {
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                return
+            }
+            // Otherwise, update the alternative aliases and keep the current canonical alias
+        } else {
+            var newAlternativeAliases = roomProxy.infoPublisher.value.alternativeAliases
+            // We also remove the existing saved alias from our homeserver if exists
+            newAlternativeAliases.removeAll { $0 == savedAliasFromHomeserver }
+            newAlternativeAliases.insert(desiredCanonicalAlias, at: 0)
+            
+            if case .failure = await roomProxy.updateCanonicalAlias(savedCanonicalAlias, altAliases: newAlternativeAliases) {
+                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                return
+            }
         }
         
         actionsSubject.send(.dismiss)
