@@ -148,15 +148,11 @@ struct FullscreenDialog<Content: View, BottomContent: View>: View {
 enum FullscreenDialogBackground {
     /// The bottom gradient from the FTUE flow.
     case gradient
-    /// The subtle bloom from the room discovery and permalink flows.
-    case bloom
     
     private var asset: ImageAsset {
         switch self {
         case .gradient:
             Asset.Images.backgroundBottom
-        case .bloom:
-            Asset.Images.joinRoomBackground
         }
     }
     
@@ -164,8 +160,6 @@ enum FullscreenDialogBackground {
         switch self {
         case .gradient:
             EdgeInsets(top: 0, leading: 0, bottom: 250, trailing: 0)
-        case .bloom:
-            EdgeInsets() // This one covers the entire screen.
         }
     }
     
@@ -195,15 +189,6 @@ struct FullscreenDialog_Previews: PreviewProvider, TestablePreview {
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
         .previewDisplayName("Gradient")
-        
-        FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar, background: .bloom) {
-            content
-        } bottomContent: {
-            buttons
-        }
-        .background()
-        .backgroundStyle(.compound.bgCanvasDefault)
-        .previewDisplayName("Bloom")
     }
     
     private static var content: some View {
