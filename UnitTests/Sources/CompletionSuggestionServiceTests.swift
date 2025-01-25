@@ -101,6 +101,31 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         service.setSuggestionTrigger(.init(type: .user, text: "", range: .init()))
         try await deferred.fulfill()
     }
+    
+    func testUserSuggestionInDifferentMessagePositions() async throws {
+        let alice: RoomMemberProxyMock = .mockAlice
+        let members: [RoomMemberProxyMock] = [alice, .mockBob, .mockCharlie, .mockMe]
+        let roomProxyMock = JoinedRoomProxyMock(.init(name: "test", members: members))
+        let service = CompletionSuggestionService(roomProxy: roomProxyMock)
+        
+        var deferred = deferFulfillment(service.suggestionsPublisher) { suggestion in
+            suggestion == [.user(item: .init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL, range: .init(location: 0, length: 3)))]
+        }
+        service.processTextMessage("@al hello")
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(service.suggestionsPublisher) { suggestion in
+            suggestion == [.user(item: .init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL, range: .init(location: 5, length: 3)))]
+        }
+        service.processTextMessage("test @al")
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(service.suggestionsPublisher) { suggestion in
+            suggestion == [.user(item: .init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL, range: .init(location: 5, length: 3)))]
+        }
+        service.processTextMessage("test @al test")
+        try await deferred.fulfill()
+    }
 }
 
 private extension MentionSuggestionItem {
