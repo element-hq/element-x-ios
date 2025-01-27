@@ -14,8 +14,8 @@ struct TextRoomTimelineItem: TextBasedRoomTimelineItem, Equatable {
     let isOutgoing: Bool
     let isEditable: Bool
     let canBeRepliedTo: Bool
-    
     let isThreaded: Bool
+    var shouldBoost = false
     
     let sender: TimelineItemSender
     

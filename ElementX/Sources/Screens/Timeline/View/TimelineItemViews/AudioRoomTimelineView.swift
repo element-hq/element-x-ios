@@ -19,6 +19,7 @@ struct AudioRoomTimelineView: View {
                                          caption: timelineItem.content.caption,
                                          formattedCaption: timelineItem.content.formattedCaption,
                                          additionalWhitespaces: timelineItem.additionalWhitespaces(),
+                                         shouldBoost: timelineItem.shouldBoost,
                                          isAudioFile: true) {
                 context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
             }

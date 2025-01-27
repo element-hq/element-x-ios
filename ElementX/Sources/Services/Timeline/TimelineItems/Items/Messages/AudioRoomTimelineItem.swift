@@ -14,6 +14,8 @@ struct AudioRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
     let isEditable: Bool
     let canBeRepliedTo: Bool
     let isThreaded: Bool
+    var shouldBoost = false
+    
     let sender: TimelineItemSender
     
     let content: AudioRoomTimelineItemContent
