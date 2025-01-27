@@ -21,6 +21,7 @@
 "a11y_user_menu" = "用户菜单";
 "a11y_voice_message_record" = "录制语音消息。";
 "a11y_voice_message_stop_recording" = "停止录制";
+"a11y.view_details" = "View details";
 "action_accept" = "接受";
 "action_add_caption" = "Add caption";
 "action_add_to_timeline" = "添加到时间线";
@@ -173,6 +174,7 @@
 "common_light" = "浅色";
 "common_link_copied_to_clipboard" = "链接已复制到剪贴板";
 "common_loading" = "正在加载...";
+"common_loading_more" = "Loading more…";
 "common_message" = "消息";
 "common_message_actions" = "消息操作";
 "common_message_layout" = "消息布局";
@@ -440,6 +442,7 @@
 "screen_room_single_knock_request_title" = "%1$@ wants to join this room";
 "screen_room_single_knock_request_view_button_title" = "View";
 "screen_room_details_pinned_events_row_title" = "置顶消息";
+"screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_room_details_security_and_privacy_title" = "Security & privacy";
 "screen_roomlist_knock_event_sent_description" = "加入请求已发送";
@@ -475,6 +478,8 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "消息未发送，因为 %1$@ 的已验证身份已经发生改变。";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "消息未发送，因为%1$@尚未验证所有设备。";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "消息未发送，因为您有尚未验证的设备。";
+"screen.media_details.no_more_files_to_show" = "No more files to show";
+"screen.media_details.no_more_media_to_show" = "No more media to show";
 "screen_account_provider_form_hint" = "服务器地址";
 "screen_account_provider_form_notice" = "输入搜索词或域名地址。";
 "screen_account_provider_form_subtitle" = "搜索公司、社区或私人服务器。";

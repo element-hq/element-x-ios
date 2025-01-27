@@ -21,6 +21,7 @@
 "a11y_user_menu" = "Meniu utilizator";
 "a11y_voice_message_record" = "Înregistrați un mesaj vocal";
 "a11y_voice_message_stop_recording" = "Opriți înregistrarea";
+"a11y.view_details" = "View details";
 "action_accept" = "Acceptați";
 "action_add_caption" = "Add caption";
 "action_add_to_timeline" = "Adăugați conversației";
@@ -173,6 +174,7 @@
 "common_light" = "Deschis";
 "common_link_copied_to_clipboard" = "Linkul a fost copiat în clipboard";
 "common_loading" = "Se încarcă…";
+"common_loading_more" = "Loading more…";
 "common_message" = "Mesaj";
 "common_message_actions" = "Acțiuni mesaj";
 "common_message_layout" = "Aspectul mesajelor";
@@ -440,6 +442,7 @@
 "screen_room_single_knock_request_title" = "%1$@ wants to join this room";
 "screen_room_single_knock_request_view_button_title" = "View";
 "screen_room_details_pinned_events_row_title" = "Mesaje fixate";
+"screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_room_details_security_and_privacy_title" = "Security & privacy";
 "screen_roomlist_knock_event_sent_description" = "Cererea de alăturare a fost trimisă";
@@ -475,6 +478,8 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Mesajul nu a fost trimis deoarece identitatea verificată a lui %1$@ s-a schimbat.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Mesajul nu a fost trimis deoarece %1$@ nu a verificat toate dispozitivele.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Mesajul nu a fost trimis deoarece nu ați verificat unul sau mai multe dispozitive.";
+"screen.media_details.no_more_files_to_show" = "No more files to show";
+"screen.media_details.no_more_media_to_show" = "No more media to show";
 "screen_account_provider_form_hint" = "Adresa Homeserver-ului";
 "screen_account_provider_form_notice" = "Introduceţi un termen de căutare sau o adresă de domeniu.";
 "screen_account_provider_form_subtitle" = "Căutați o companie, o comunitate sau un server privat.";

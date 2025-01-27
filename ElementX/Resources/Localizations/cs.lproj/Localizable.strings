@@ -21,6 +21,7 @@
 "a11y_user_menu" = "Uživatelské menu";
 "a11y_voice_message_record" = "Nahrajte hlasovou zprávu.";
 "a11y_voice_message_stop_recording" = "Zastavit nahrávání";
+"a11y.view_details" = "Zobrazit podrobnosti";
 "action_accept" = "Přijmout";
 "action_add_caption" = "Přidat titulek";
 "action_add_to_timeline" = "Přidat na časovou osu";
@@ -173,6 +174,7 @@
 "common_light" = "Světlý";
 "common_link_copied_to_clipboard" = "Odkaz zkopírován do schránky";
 "common_loading" = "Načítání…";
+"common_loading_more" = "Načítání dalších…";
 "common_message" = "Zpráva";
 "common_message_actions" = "Akce zprávy";
 "common_message_layout" = "Zobrazení zpráv";
@@ -440,6 +442,7 @@
 "screen_room_single_knock_request_title" = "%1$@ chce vstoupit do této místnosti";
 "screen_room_single_knock_request_view_button_title" = "Zobrazit";
 "screen_room_details_pinned_events_row_title" = "Připnuté zprávy";
+"screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Žádosti o vstup";
 "screen_room_details_security_and_privacy_title" = "Zabezpečení a soukromí";
 "screen_roomlist_knock_event_sent_description" = "Žádost o vstup odeslána";
@@ -475,6 +478,8 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Zpráva nebyla odeslána, protože ověřená identita uživatele %1$@ se změnila.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Zpráva nebyla odeslána, protože%1$@ neověřil(a) všechna zařízení.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení.";
+"screen.media_details.no_more_files_to_show" = "Žádné další soubory k zobrazení";
+"screen.media_details.no_more_media_to_show" = "Žádná další média k zobrazení";
 "screen_account_provider_form_hint" = "Adresa domovského serveru";
 "screen_account_provider_form_notice" = "Zadejte hledaný výraz nebo adresu domény.";
 "screen_account_provider_form_subtitle" = "Vyhledejte společnost, komunitu nebo soukromý server.";
@@ -622,15 +627,15 @@
 "screen_invites_decline_direct_chat_title" = "Odmítnout chat";
 "screen_invites_empty_list" = "Žádné pozvánky";
 "screen_invites_invited_you" = "%1$@ (%2$@) vás pozval(a)";
-"screen_join_room_ban_by_message" = "You were banned from this room by %1$@.";
-"screen_join_room_ban_message" = "You were banned from this room";
-"screen_join_room_ban_reason" = "Reason: %1$@.";
-"screen_join_room_fail_message" = "Joining the room failed.";
-"screen_join_room_fail_reason" = "This room is either invite-only or there might be restrictions to access at space level.";
-"screen_join_room_forget_action" = "Forget this room";
-"screen_join_room_invite_required_message" = "You need an invite in order to join this room";
+"screen_join_room_ban_by_message" = "%1$@ vás vykázal(a) z této místnosti.";
+"screen_join_room_ban_message" = "Byli jste vykázáni z této místnosti";
+"screen_join_room_ban_reason" = "Důvod: %1$@.";
+"screen_join_room_fail_message" = "Vstup do místnosti se nezdařil.";
+"screen_join_room_fail_reason" = "Tato místnost je buď pouze pro zvané, nebo může být omezen přístup na úrovni prostoru.";
+"screen_join_room_forget_action" = "Zapomenout tuto místnost";
+"screen_join_room_invite_required_message" = "Abyste se mohli připojit k této místnosti, potřebujete pozvánku";
 "screen_join_room_join_action" = "Připojit se do místnosti";
-"screen_join_room_join_restricted_message" = "You may need to be invited or be a member of a space in order to join.";
+"screen_join_room_join_restricted_message" = "Abyste se mohli připojit, možná budete muset být pozváni nebo být členem prostoru.";
 "screen_join_room_knock_action" = "Zaklepejte a připojte se";
 "screen_join_room_space_not_supported_description" = "%1$@ zatím nepodporuje prostory. Prostory můžete používat na webu.";
 "screen_join_room_space_not_supported_title" = "Prostory zatím nejsou podporovány";

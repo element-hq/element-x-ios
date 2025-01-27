@@ -21,6 +21,7 @@
 "a11y_user_menu" = "使用者選單";
 "a11y_voice_message_record" = "錄製語音訊息。";
 "a11y_voice_message_stop_recording" = "停止錄音";
+"a11y.view_details" = "View details";
 "action_accept" = "接受";
 "action_add_caption" = "Add caption";
 "action_add_to_timeline" = "新增至時間軸";
@@ -173,6 +174,7 @@
 "common_light" = "淺色";
 "common_link_copied_to_clipboard" = "連結已複製到剪貼簿";
 "common_loading" = "載入中...";
+"common_loading_more" = "Loading more…";
 "common_message" = "訊息";
 "common_message_actions" = "Message actions";
 "common_message_layout" = "訊息佈局";
@@ -440,6 +442,7 @@
 "screen_room_single_knock_request_title" = "%1$@ wants to join this room";
 "screen_room_single_knock_request_view_button_title" = "View";
 "screen_room_details_pinned_events_row_title" = "Pinned messages";
+"screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_room_details_security_and_privacy_title" = "Security & privacy";
 "screen_roomlist_knock_event_sent_description" = "Request to join sent";
@@ -475,6 +478,8 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
+"screen.media_details.no_more_files_to_show" = "No more files to show";
+"screen.media_details.no_more_media_to_show" = "No more media to show";
 "screen_account_provider_form_hint" = "家伺服器位址";
 "screen_account_provider_form_notice" = "輸入關鍵字或網域名稱。";
 "screen_account_provider_form_subtitle" = "搜尋公司、社群、私有伺服器。";

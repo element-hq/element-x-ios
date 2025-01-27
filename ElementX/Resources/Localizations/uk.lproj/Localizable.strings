@@ -21,6 +21,7 @@
 "a11y_user_menu" = "Меню користувача";
 "a11y_voice_message_record" = "Записати голосове повідомлення.";
 "a11y_voice_message_stop_recording" = "Припинити запис";
+"a11y.view_details" = "View details";
 "action_accept" = "Прийняти";
 "action_add_caption" = "Add caption";
 "action_add_to_timeline" = "Додати до стрічки";
@@ -173,6 +174,7 @@
 "common_light" = "Світла";
 "common_link_copied_to_clipboard" = "Посилання скопійовано в буфер обміну";
 "common_loading" = "Завантаження";
+"common_loading_more" = "Loading more…";
 "common_message" = "Повідомлення";
 "common_message_actions" = "Дії з повідомленнями";
 "common_message_layout" = "Макет повідомлень";
@@ -440,6 +442,7 @@
 "screen_room_single_knock_request_title" = "%1$@ wants to join this room";
 "screen_room_single_knock_request_view_button_title" = "View";
 "screen_room_details_pinned_events_row_title" = "Закріплені повідомлення";
+"screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_room_details_security_and_privacy_title" = "Security & privacy";
 "screen_roomlist_knock_event_sent_description" = "Запит на приєднання надіслано";
@@ -475,6 +478,8 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Повідомлення не надіслано, оскільки підтверджена особистість %1$@ змінилася.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Повідомлення не надіслано, оскільки %1$@ перевірив не всі пристрої.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Повідомлення не надіслано, оскільки ви не підтвердили один або кілька своїх пристроїв.";
+"screen.media_details.no_more_files_to_show" = "No more files to show";
+"screen.media_details.no_more_media_to_show" = "No more media to show";
 "screen_account_provider_form_hint" = "Адреса домашнього сервера";
 "screen_account_provider_form_notice" = "Уведіть пошуковий термін або адресу домену.";
 "screen_account_provider_form_subtitle" = "Пошук компанії, спільноти або приватного сервера.";
