@@ -2,4 +2,4 @@
 "NSFaceIDUsageDescription" = "Face ID sa používa na prístup k vašej aplikácii.";
 "NSLocationWhenInUseUsageDescription" = "Udeľte prístup k polohe, aby Element X mohol zdieľať vašu polohu.";
 "NSMicrophoneUsageDescription" = "Ak chcete nahrávať a odosielať správy so zvukom, Element X musí mať prístup k mikrofónu.";
-"NSPhotoLibraryUsageDescription" = "Umožňuje ukladanie fotografií a videí do vašej knižnice.";
+"NSPhotoLibraryUsageDescription" = "Toto vám umožní ukladať obrázky a videá do vašej knižnice fotografií.";

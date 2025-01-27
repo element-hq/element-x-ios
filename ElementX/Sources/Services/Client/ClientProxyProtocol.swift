@@ -64,20 +64,6 @@ enum SessionVerificationState {
     case unverified
 }
 
-struct RoomPreviewDetails {
-    let roomID: String
-    let name: String?
-    let canonicalAlias: String?
-    let topic: String?
-    let avatarURL: URL?
-    let memberCount: UInt
-    let isHistoryWorldReadable: Bool?
-    let isJoined: Bool
-    let isInvited: Bool
-    let isPublic: Bool
-    let canKnock: Bool
-}
-
 // sourcery: AutoMockable
 protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var actionsPublisher: AnyPublisher<ClientProxyAction, Never> { get }
@@ -159,7 +145,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func leaveRoom(_ roomID: String) async -> Result<Void, ClientProxyError>
     
-    func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewDetails, ClientProxyError>
+    func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewProxyProtocol, ClientProxyError>
     
     @discardableResult func loadUserDisplayName() async -> Result<Void, ClientProxyError>
     
@@ -209,6 +195,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func curve25519Base64() async -> String?
     
     func pinUserIdentity(_ userID: String) async -> Result<Void, ClientProxyError>
+    func withdrawUserIdentityVerification(_ userID: String) async -> Result<Void, ClientProxyError>
     func resetIdentity() async -> Result<IdentityResetHandle?, ClientProxyError>
     
     func userIdentity(for userID: String) async -> Result<UserIdentity?, ClientProxyError>

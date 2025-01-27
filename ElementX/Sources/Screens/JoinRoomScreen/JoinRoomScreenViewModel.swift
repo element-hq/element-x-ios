@@ -17,7 +17,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     private let clientProxy: ClientProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
-    private var roomPreviewDetails: RoomPreviewDetails?
+    private var roomPreview: RoomPreviewProxyProtocol?
     private var room: RoomProxyType?
     
     private let actionsSubject: PassthroughSubject<JoinRoomScreenViewModelAction, Never> = .init()
@@ -72,22 +72,21 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     private func loadRoomDetails() async {
         showLoadingIndicator()
         
-        defer {
-            hideLoadingIndicator()
-            updateRoomDetails()
-        }
-        
         await updateRoom()
         
         switch await clientProxy.roomPreviewForIdentifier(roomID, via: via) {
-        case .success(let roomPreviewDetails):
-            self.roomPreviewDetails = roomPreviewDetails
-            updateRoomDetails()
+        case .success(let roomPreview):
+            self.roomPreview = roomPreview
+            await updateRoomDetails()
         case .failure(.roomPreviewIsPrivate):
             break // Handled by the mode, we don't need an error indicator.
         case .failure:
             userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
         }
+        
+        hideLoadingIndicator()
+        
+        await updateRoomDetails()
     }
     
     private func updateRoom() async {
@@ -97,58 +96,77 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         // take priority over the preview one.
         if let room = await clientProxy.roomForIdentifier(roomID) {
             self.room = room
-            updateRoomDetails()
+            await updateRoomDetails()
         }
     }
     
-    private func updateRoomDetails() {
-        var roomPreviewInfo: BaseRoomInfoProxyProtocol?
+    private func updateRoomDetails() async {
+        var roomInfo: BaseRoomInfoProxyProtocol?
         var inviter: RoomInviterDetails?
         
         switch room {
         case .joined(let joinedRoomProxy):
-            roomPreviewInfo = joinedRoomProxy.infoPublisher.value
+            roomInfo = joinedRoomProxy.infoPublisher.value
         case .invited(let invitedRoomProxy):
             inviter = invitedRoomProxy.inviter.map(RoomInviterDetails.init)
-            roomPreviewInfo = invitedRoomProxy.info
+            roomInfo = invitedRoomProxy.info
         case .knocked(let knockedRoomProxy):
-            roomPreviewInfo = knockedRoomProxy.info
+            roomInfo = knockedRoomProxy.info
         default:
             break
         }
-        
-        let name = roomPreviewInfo?.displayName ?? roomPreviewDetails?.name
-        state.roomDetails = JoinRoomScreenRoomDetails(name: name,
-                                                      topic: roomPreviewInfo?.topic ?? roomPreviewDetails?.topic,
-                                                      canonicalAlias: roomPreviewInfo?.canonicalAlias ?? roomPreviewDetails?.canonicalAlias,
-                                                      avatar: roomPreviewInfo?.avatar ?? .room(id: roomID, name: name ?? "", avatarURL: roomPreviewDetails?.avatarURL),
-                                                      memberCount: UInt(roomPreviewInfo?.activeMembersCount ?? Int(roomPreviewDetails?.memberCount ?? 0)),
+
+        let info = roomPreview?.info ?? roomInfo
+        state.roomDetails = JoinRoomScreenRoomDetails(name: info?.displayName,
+                                                      topic: info?.topic,
+                                                      canonicalAlias: info?.canonicalAlias,
+                                                      avatar: info?.avatar ?? .room(id: roomID, name: info?.displayName ?? "", avatarURL: nil),
+                                                      memberCount: UInt(info?.activeMembersCount ?? 0),
                                                       inviter: inviter)
         
-        updateMode()
+        await updateMode()
     }
     
-    private func updateMode() {
-        if case .knocked = room {
-            state.mode = .knocked
+    private func updateMode() async {
+        if roomPreview == nil, room == nil {
+            state.mode = .unknown
             return
         }
         
-        // Check invites first to show Accept/Decline buttons on public rooms.
-        if case .invited = room {
-            state.mode = .invited
-            return
-        }
-        
-        if roomPreviewDetails?.isInvited ?? false {
-            state.mode = .invited
-            return
-        }
-        
-        if roomPreviewDetails?.canKnock ?? false, appSettings.knockingEnabled {
-            state.mode = .knock
-        } else {
-            state.mode = .join
+        if let roomPreview {
+            let membershipDetails = await roomPreview.ownMembershipDetails
+            
+            switch roomPreview.info.membership {
+            case .invited:
+                state.mode = .invited
+            case .knocked:
+                state.mode = .knocked
+            case .banned:
+                state.mode = .banned(sender: membershipDetails?.senderRoomMember?.displayName ?? membershipDetails?.senderRoomMember?.userID,
+                                     reason: membershipDetails?.ownRoomMember.membershipChangeReason)
+            default:
+                switch roomPreview.info.joinRule {
+                case .private, .invite:
+                    state.mode = .inviteRequired
+                case .knock, .knockRestricted:
+                    state.mode = appSettings.knockingEnabled ? .knockable : .joinable
+                case .restricted:
+                    state.mode = .restricted
+                default:
+                    state.mode = .joinable
+                }
+            }
+        } else if let room {
+            switch room {
+            case .invited:
+                state.mode = .invited
+            case .knocked:
+                state.mode = .knocked
+            case .banned:
+                state.mode = .banned(sender: nil, reason: nil)
+            default:
+                state.mode = .joinable
+            }
         }
     }
     
@@ -191,7 +209,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                                                     message: state.bindings.knockMessage.isBlank ? nil : state.bindings.knockMessage) {
             case .success:
                 // The room should become knocked through the sync
-                await updateRoom()
+                await loadRoomDetails()
             case .failure(let error):
                 MXLog.error("Failed knocking room alias: \(alias) with error: \(error)")
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
@@ -202,7 +220,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                                                message: state.bindings.knockMessage.isBlank ? nil : state.bindings.knockMessage) {
             case .success:
                 // The room should become knocked through the sync
-                await updateRoom()
+                await loadRoomDetails()
             case .failure(let error):
                 MXLog.error("Failed knocking room id: \(roomID) with error: \(error)")
                 userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))

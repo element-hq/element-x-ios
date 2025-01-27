@@ -13237,81 +13237,6 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
     }
 
-    //MARK: - messageFilteredTimeline
-
-    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeThrowableError: Error?
-    var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingCallsCount = 0
-    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeCalled: Bool {
-        return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeCallsCount > 0
-    }
-    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeReceivedArguments: (internalIdPrefix: String?, allowedMessageTypes: [RoomMessageEventMessageType], dateDividerMode: DateDividerMode)?
-    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeReceivedInvocations: [(internalIdPrefix: String?, allowedMessageTypes: [RoomMessageEventMessageType], dateDividerMode: DateDividerMode)] = []
-
-    var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingReturnValue: Timeline!
-    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeReturnValue: Timeline! {
-        get {
-            if Thread.isMainThread {
-                return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingReturnValue
-            } else {
-                var returnValue: Timeline? = nil
-                DispatchQueue.main.sync {
-                    returnValue = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeClosure: ((String?, [RoomMessageEventMessageType], DateDividerMode) async throws -> Timeline)?
-
-    open override func messageFilteredTimeline(internalIdPrefix: String?, allowedMessageTypes: [RoomMessageEventMessageType], dateDividerMode: DateDividerMode) async throws -> Timeline {
-        if let error = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeThrowableError {
-            throw error
-        }
-        messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeCallsCount += 1
-        messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeReceivedArguments = (internalIdPrefix: internalIdPrefix, allowedMessageTypes: allowedMessageTypes, dateDividerMode: dateDividerMode)
-        DispatchQueue.main.async {
-            self.messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeReceivedInvocations.append((internalIdPrefix: internalIdPrefix, allowedMessageTypes: allowedMessageTypes, dateDividerMode: dateDividerMode))
-        }
-        if let messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeClosure = messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeClosure {
-            return try await messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeClosure(internalIdPrefix, allowedMessageTypes, dateDividerMode)
-        } else {
-            return messageFilteredTimelineInternalIdPrefixAllowedMessageTypesDateDividerModeReturnValue
-        }
-    }
-
     //MARK: - ownUserId
 
     var ownUserIdUnderlyingCallsCount = 0
@@ -13374,81 +13299,6 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
             return ownUserIdClosure()
         } else {
             return ownUserIdReturnValue
-        }
-    }
-
-    //MARK: - pinnedEventsTimeline
-
-    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsThrowableError: Error?
-    var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingCallsCount = 0
-    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsCalled: Bool {
-        return pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsCallsCount > 0
-    }
-    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsReceivedArguments: (internalIdPrefix: String?, maxEventsToLoad: UInt16, maxConcurrentRequests: UInt16)?
-    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsReceivedInvocations: [(internalIdPrefix: String?, maxEventsToLoad: UInt16, maxConcurrentRequests: UInt16)] = []
-
-    var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingReturnValue: Timeline!
-    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsReturnValue: Timeline! {
-        get {
-            if Thread.isMainThread {
-                return pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingReturnValue
-            } else {
-                var returnValue: Timeline? = nil
-                DispatchQueue.main.sync {
-                    returnValue = pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsClosure: ((String?, UInt16, UInt16) async throws -> Timeline)?
-
-    open override func pinnedEventsTimeline(internalIdPrefix: String?, maxEventsToLoad: UInt16, maxConcurrentRequests: UInt16) async throws -> Timeline {
-        if let error = pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsThrowableError {
-            throw error
-        }
-        pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsCallsCount += 1
-        pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsReceivedArguments = (internalIdPrefix: internalIdPrefix, maxEventsToLoad: maxEventsToLoad, maxConcurrentRequests: maxConcurrentRequests)
-        DispatchQueue.main.async {
-            self.pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsReceivedInvocations.append((internalIdPrefix: internalIdPrefix, maxEventsToLoad: maxEventsToLoad, maxConcurrentRequests: maxConcurrentRequests))
-        }
-        if let pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsClosure = pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsClosure {
-            return try await pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsClosure(internalIdPrefix, maxEventsToLoad, maxConcurrentRequests)
-        } else {
-            return pinnedEventsTimelineInternalIdPrefixMaxEventsToLoadMaxConcurrentRequestsReturnValue
         }
     }
 
@@ -14846,18 +14696,18 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
     }
 
-    //MARK: - timelineFocusedOnEvent
+    //MARK: - timelineWithConfiguration
 
-    open var timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixThrowableError: Error?
-    var timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixUnderlyingCallsCount = 0
-    open var timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixCallsCount: Int {
+    open var timelineWithConfigurationConfigurationThrowableError: Error?
+    var timelineWithConfigurationConfigurationUnderlyingCallsCount = 0
+    open var timelineWithConfigurationConfigurationCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixUnderlyingCallsCount
+                return timelineWithConfigurationConfigurationUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixUnderlyingCallsCount
+                    returnValue = timelineWithConfigurationConfigurationUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -14865,29 +14715,29 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixUnderlyingCallsCount = newValue
+                timelineWithConfigurationConfigurationUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixUnderlyingCallsCount = newValue
+                    timelineWithConfigurationConfigurationUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixCalled: Bool {
-        return timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixCallsCount > 0
+    open var timelineWithConfigurationConfigurationCalled: Bool {
+        return timelineWithConfigurationConfigurationCallsCount > 0
     }
-    open var timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixReceivedArguments: (eventId: String, numContextEvents: UInt16, internalIdPrefix: String?)?
-    open var timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixReceivedInvocations: [(eventId: String, numContextEvents: UInt16, internalIdPrefix: String?)] = []
+    open var timelineWithConfigurationConfigurationReceivedConfiguration: TimelineConfiguration?
+    open var timelineWithConfigurationConfigurationReceivedInvocations: [TimelineConfiguration] = []
 
-    var timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixUnderlyingReturnValue: Timeline!
-    open var timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixReturnValue: Timeline! {
+    var timelineWithConfigurationConfigurationUnderlyingReturnValue: Timeline!
+    open var timelineWithConfigurationConfigurationReturnValue: Timeline! {
         get {
             if Thread.isMainThread {
-                return timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixUnderlyingReturnValue
+                return timelineWithConfigurationConfigurationUnderlyingReturnValue
             } else {
                 var returnValue: Timeline? = nil
                 DispatchQueue.main.sync {
-                    returnValue = timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixUnderlyingReturnValue
+                    returnValue = timelineWithConfigurationConfigurationUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -14895,29 +14745,29 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixUnderlyingReturnValue = newValue
+                timelineWithConfigurationConfigurationUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixUnderlyingReturnValue = newValue
+                    timelineWithConfigurationConfigurationUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixClosure: ((String, UInt16, String?) async throws -> Timeline)?
+    open var timelineWithConfigurationConfigurationClosure: ((TimelineConfiguration) async throws -> Timeline)?
 
-    open override func timelineFocusedOnEvent(eventId: String, numContextEvents: UInt16, internalIdPrefix: String?) async throws -> Timeline {
-        if let error = timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixThrowableError {
+    open override func timelineWithConfiguration(configuration: TimelineConfiguration) async throws -> Timeline {
+        if let error = timelineWithConfigurationConfigurationThrowableError {
             throw error
         }
-        timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixCallsCount += 1
-        timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixReceivedArguments = (eventId: eventId, numContextEvents: numContextEvents, internalIdPrefix: internalIdPrefix)
+        timelineWithConfigurationConfigurationCallsCount += 1
+        timelineWithConfigurationConfigurationReceivedConfiguration = configuration
         DispatchQueue.main.async {
-            self.timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixReceivedInvocations.append((eventId: eventId, numContextEvents: numContextEvents, internalIdPrefix: internalIdPrefix))
+            self.timelineWithConfigurationConfigurationReceivedInvocations.append(configuration)
         }
-        if let timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixClosure = timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixClosure {
-            return try await timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixClosure(eventId, numContextEvents, internalIdPrefix)
+        if let timelineWithConfigurationConfigurationClosure = timelineWithConfigurationConfigurationClosure {
+            return try await timelineWithConfigurationConfigurationClosure(configuration)
         } else {
-            return timelineFocusedOnEventEventIdNumContextEventsInternalIdPrefixReturnValue
+            return timelineWithConfigurationConfigurationReturnValue
         }
     }
 

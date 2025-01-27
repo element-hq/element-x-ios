@@ -9,46 +9,26 @@ import Foundation
 import SwiftUI
 
 extension View {
-    /// Reads the frame of the view and store it in `frame` binding.
+    /// Reads the frame of the view and stores it in the `frame` binding.
     /// - Parameters:
     ///   - frame: a `CGRect` binding
     ///   - coordinateSpace: the coordinate space of the frame.
     func readFrame(_ frame: Binding<CGRect>, in coordinateSpace: CoordinateSpace = .local) -> some View {
-        background(ViewFrameReader(frame: frame, coordinateSpace: coordinateSpace))
-    }
-}
-
-/// Used to calculate the frame of a view.
-///
-/// Useful in situations as with `ZStack` where you might want to layout views using alignment guides.
-/// ```
-/// @State private var frame: CGRect = CGRect.zero
-/// ...
-/// SomeView()
-///    .background(ViewFrameReader(frame: $frame))
-/// ```
-private struct ViewFrameReader: View {
-    @Binding var frame: CGRect
-    var coordinateSpace: CoordinateSpace = .local
-    
-    var body: some View {
-        GeometryReader { geometry in
-            Color.clear
-                .preference(key: FramePreferenceKey.self,
-                            value: geometry.frame(in: coordinateSpace))
-        }
-        .onPreferenceChange(FramePreferenceKey.self) { newValue in
-            guard frame != newValue else { return }
-            frame = newValue
+        onGeometryChange(for: CGRect.self) { geometry in
+            geometry.frame(in: coordinateSpace)
+        } action: { newValue in
+            frame.wrappedValue = newValue
         }
     }
-}
-
-/// A SwiftUI `PreferenceKey` for `CGRect` values such as a view's frame.
-private struct FramePreferenceKey: PreferenceKey {
-    static var defaultValue: CGRect = .zero
     
-    static func reduce(value: inout CGRect, nextValue: () -> CGRect) {
-        value = nextValue()
+    /// Reads the height of the view and stores it in the `height` binding.
+    /// - Parameters:
+    ///   - height: a `CGFloat` binding
+    func readHeight(_ height: Binding<CGFloat>) -> some View {
+        onGeometryChange(for: CGFloat.self) { geometry in
+            geometry.size.height
+        } action: { newValue in
+            height.wrappedValue = newValue
+        }
     }
 }

@@ -66,6 +66,8 @@ enum ComposerAttachmentType {
 struct ComposerToolbarViewState: BindableState {
     var composerMode: ComposerMode = .default
     var composerEmpty = true
+    /// Could be false if sending is disabled in the room
+    var canSend = true
     var suggestions: [SuggestionItem] = []
     var audioPlayerState: AudioPlayerState
     var audioRecorderState: AudioRecorderState
@@ -91,6 +93,10 @@ struct ComposerToolbarViewState: BindableState {
     }
     
     var sendButtonDisabled: Bool {
+        if !canSend {
+            return true
+        }
+        
         if case .previewVoiceMessage = composerMode {
             return false
         }

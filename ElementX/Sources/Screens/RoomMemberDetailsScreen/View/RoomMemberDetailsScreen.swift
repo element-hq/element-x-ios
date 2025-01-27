@@ -158,7 +158,7 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
             
         RoomMemberDetailsScreen(context: ignoredUserViewModel.context)
             .snapshotPreferences(expect: ignoredUserViewModel.context.$viewState.map { state in
-                state.memberDetails?.isIgnored ?? false
+                state.memberDetails?.isIgnored ?? false && state.dmRoomID != nil
             })
             .previewDisplayName("Ignored User")
     }

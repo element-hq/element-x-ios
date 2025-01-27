@@ -130,7 +130,7 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         
         // When choosing to save the image.
         let item = context.viewState.currentItem
-        context.send(viewAction: .saveCurrentItem)
+        context.send(viewAction: .menuAction(.save, item: item))
         try await Task.sleep(for: .seconds(0.5))
         
         // Then the image should be saved as a photo to the user's photo library.
@@ -147,7 +147,7 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         
         // When choosing to save the image.
         let deferred = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
-        context.send(viewAction: .saveCurrentItem)
+        context.send(viewAction: .menuAction(.save, item: context.viewState.currentItem))
         try await deferred.fulfill()
         
         // Then the user should be prompted to allow access.
@@ -163,7 +163,7 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         
         // When choosing to save the video.
         let item = context.viewState.currentItem
-        context.send(viewAction: .saveCurrentItem)
+        context.send(viewAction: .menuAction(.save, item: item))
         try await Task.sleep(for: .seconds(0.5))
         
         // Then the video should be saved as a video in the user's photo library.
@@ -180,7 +180,7 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         
         // When choosing to save the file.
         let item = context.viewState.currentItem
-        context.send(viewAction: .saveCurrentItem)
+        context.send(viewAction: .menuAction(.save, item: item))
         try await Task.sleep(for: .seconds(0.5))
         
         // Then the binding should be set for the user to export the file to their specified location.

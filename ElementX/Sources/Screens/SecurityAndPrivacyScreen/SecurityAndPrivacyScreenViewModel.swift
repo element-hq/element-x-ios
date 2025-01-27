@@ -79,8 +79,18 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             }
             .store(in: &cancellables)
         
+        let userIDServerName = clientProxy.userIDServerName
+        
         roomProxy.infoPublisher
-            .map(\.canonicalAlias)
+            .compactMap { roomInfo in
+                guard let userIDServerName else {
+                    return nil
+                }
+                
+                // Give priority to aliases from the current user's homeserver as remote ones
+                // cannot be edited.
+                return roomInfo.firstAliasMatching(serverName: userIDServerName, useFallback: true)
+            }
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.canonicalAlias, on: self)

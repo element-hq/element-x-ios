@@ -181,6 +181,10 @@ class TimelineInteractionHandler {
             analyticsService.trackInteraction(name: .PinnedMessageListViewTimeline)
             guard let eventID = itemID.eventID else { return }
             actionsSubject.send(.viewInRoomTimeline(eventID: eventID))
+        case .share:
+            break // Handled inline in the media preview screen with a ShareLink.
+        case .save:
+            break // Handled inline in the media preview screen.
         }
         
         if action.switchToDefaultComposer {

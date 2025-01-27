@@ -14,6 +14,9 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
     let item: TimelineMediaPreviewItem
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
     
+    @State private var sheetHeight: CGFloat = .zero
+    private let topPadding: CGFloat = 19
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
@@ -21,10 +24,12 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
                 preview
                 buttons
             }
+            .readHeight($sheetHeight)
         }
-        .presentationDetents([.medium])
+        .scrollBounceBehavior(.basedOnSize)
+        .padding(.top, topPadding) // For the drag indicator
+        .presentationDetents([.height(sheetHeight + topPadding)])
         .presentationDragIndicator(.visible)
-        .padding(.top, 19) // For the drag indicator
         .presentationBackground(.compound.bgCanvasDefault)
         .preferredColorScheme(.dark)
     }

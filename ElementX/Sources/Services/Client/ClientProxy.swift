@@ -578,11 +578,12 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewDetails, ClientProxyError> {
+    func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewProxyProtocol, ClientProxyError> {
         do {
             let roomPreview = try await client.getRoomPreviewFromRoomId(roomId: identifier, viaServers: via)
-            let roomPreviewInfo = try roomPreview.info()
-            return .success(.init(roomPreviewInfo))
+            return try .success(RoomPreviewProxy(roomId: identifier,
+                                                 roomPreview: roomPreview,
+                                                 zeroUsersService: zeroMatrixUsersService))
         } catch let error as ClientError where error.code == .forbidden {
             return .failure(.roomPreviewIsPrivate)
         } catch {
@@ -1250,6 +1251,22 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func withdrawUserIdentityVerification(_ userID: String) async -> Result<Void, ClientProxyError> {
+        MXLog.info("Withdrawing current identity verification for user: \(userID)")
+        
+        do {
+            guard let userIdentity = try await client.encryption().userIdentity(userId: userID) else {
+                MXLog.error("Failed retrieving identity for user: \(userID)")
+                return .failure(.failedRetrievingUserIdentity)
+            }
+            
+            return try await .success(userIdentity.withdrawVerification())
+        } catch {
+            MXLog.error("Failed withdrawing current identity verification for user: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func resetIdentity() async -> Result<IdentityResetHandle?, ClientProxyError> {
         do {
             return try await .success(client.encryption().resetIdentity())
@@ -1390,42 +1407,5 @@ private class SendQueueRoomErrorListenerProxy: SendQueueRoomErrorListener {
     
     func onError(roomId: String, error: ClientError) {
         onErrorClosure(roomId, error)
-    }
-}
-
-private extension RoomPreviewDetails {
-    init(_ roomPreviewInfo: RoomPreviewInfo) {
-        self = RoomPreviewDetails(roomID: roomPreviewInfo.roomId,
-                                  name: roomPreviewInfo.name,
-                                  canonicalAlias: roomPreviewInfo.canonicalAlias,
-                                  topic: roomPreviewInfo.topic,
-                                  avatarURL: roomPreviewInfo.avatarUrl.flatMap(URL.init(string:)),
-                                  memberCount: UInt(roomPreviewInfo.numJoinedMembers),
-                                  isHistoryWorldReadable: roomPreviewInfo.isHistoryWorldReadable ?? false,
-                                  isJoined: roomPreviewInfo.membership == .joined,
-                                  isInvited: roomPreviewInfo.membership == .invited,
-                                  isPublic: roomPreviewInfo.isPublic,
-                                  canKnock: roomPreviewInfo.canKnock)
-    }
-}
-
-private extension RoomPreviewInfo {
-    var canKnock: Bool {
-        switch joinRule {
-        case .knock, .knockRestricted:
-            return true
-        default:
-            return false
-        }
-    }
-    
-    var isPublic: Bool {
-        switch joinRule {
-        // for restricted rooms we want to show optimistically that the we may be able to join the room
-        case .public, .restricted:
-            return true
-        default:
-            return false
-        }
     }
 }

@@ -21,6 +21,7 @@
 "a11y_user_menu" = "User menu";
 "a11y_voice_message_record" = "Record voice message.";
 "a11y_voice_message_stop_recording" = "Stop recording";
+"a11y.view_details" = "View details";
 "action_accept" = "Accept";
 "action_add_caption" = "Add caption";
 "action_add_to_timeline" = "Add to timeline";
@@ -440,6 +441,7 @@
 "screen_room_single_knock_request_title" = "%1$@ wants to join this room";
 "screen_room_single_knock_request_view_button_title" = "View";
 "screen_room_details_pinned_events_row_title" = "Pinned messages";
+"screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_room_details_security_and_privacy_title" = "Security & privacy";
 "screen_roomlist_knock_event_sent_description" = "Request to join sent";
@@ -622,7 +624,15 @@
 "screen_invites_decline_direct_chat_title" = "Decline chat";
 "screen_invites_empty_list" = "No Invites";
 "screen_invites_invited_you" = "%1$@ (%2$@) invited you";
+"screen_join_room_ban_by_message" = "You were banned from this room by %1$@.";
+"screen_join_room_ban_message" = "You were banned from this room";
+"screen_join_room_ban_reason" = "Reason: %1$@.";
+"screen_join_room_fail_message" = "Joining the room failed.";
+"screen_join_room_fail_reason" = "This room is either invite-only or there might be restrictions to access at space level.";
+"screen_join_room_forget_action" = "Forget this room";
+"screen_join_room_invite_required_message" = "You need an invite in order to join this room";
 "screen_join_room_join_action" = "Join room";
+"screen_join_room_join_restricted_message" = "You may need to be invited or be a member of a space in order to join.";
 "screen_join_room_knock_action" = "Send request to join";
 "screen_join_room_space_not_supported_description" = "%1$@ does not support spaces yet. You can access spaces on web.";
 "screen_join_room_space_not_supported_title" = "Spaces are not supported yet";

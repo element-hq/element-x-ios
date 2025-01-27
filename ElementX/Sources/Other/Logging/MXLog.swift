@@ -51,72 +51,79 @@ enum MXLog {
                         file: String = #file,
                         function: String = #function,
                         line: Int = #line,
-                        column: Int = #column,
-                        context: Any? = nil) {
-        log(message, level: .trace, file: file, function: function, line: line, column: column, context: context)
+                        column: Int = #column) {
+        log(message, level: .trace, file: file, function: function, line: line, column: column)
     }
     
     static func debug(_ message: Any,
                       file: String = #file,
                       function: String = #function,
                       line: Int = #line,
-                      column: Int = #column,
-                      context: Any? = nil) {
-        log(message, level: .debug, file: file, function: function, line: line, column: column, context: context)
+                      column: Int = #column) {
+        log(message, level: .debug, file: file, function: function, line: line, column: column)
     }
     
     static func info(_ message: Any,
                      file: String = #file,
                      function: String = #function,
                      line: Int = #line,
-                     column: Int = #column,
-                     context: Any? = nil) {
-        log(message, level: .info, file: file, function: function, line: line, column: column, context: context)
+                     column: Int = #column) {
+        log(message, level: .info, file: file, function: function, line: line, column: column)
     }
     
     static func warning(_ message: Any,
                         file: String = #file,
                         function: String = #function,
                         line: Int = #line,
-                        column: Int = #column,
-                        context: Any? = nil) {
-        log(message, level: .warn, file: file, function: function, line: line, column: column, context: context)
+                        column: Int = #column) {
+        log(message, level: .warn, file: file, function: function, line: line, column: column)
     }
     
-    /// Log error with additional details
+    /// Log error.
     ///
     /// - Parameters:
     ///     - message: Description of the error without any variables (this is to improve error aggregations by type)
-    ///     - context: Additional context-dependent details about the issue
     static func error(_ message: Any,
                       file: String = #file,
                       function: String = #function,
                       line: Int = #line,
-                      column: Int = #column,
-                      context: Any? = nil) {
-        log(message, level: .error, file: file, function: function, line: line, column: column, context: context)
+                      column: Int = #column) {
+        log(message, level: .error, file: file, function: function, line: line, column: column)
     }
     
-    /// Log failure with additional details
+    /// Log failure.
     ///
     /// A failure is any type of programming error which should never occur in production. In `DEBUG` configuration
     /// any failure will raise `assertionFailure`
     ///
     /// - Parameters:
     ///     - message: Description of the error without any variables (this is to improve error aggregations by type)
-    ///     - context: Additional context-dependent details about the issue
     static func failure(_ message: Any,
                         file: String = #file,
                         function: String = #function,
                         line: Int = #line,
-                        column: Int = #column,
-                        context: Any? = nil) {
-        log(message, level: .error, file: file, function: function, line: line, column: column, context: context)
+                        column: Int = #column) {
+        log(message, level: .error, file: file, function: function, line: line, column: column)
         
         #if DEBUG
         assertionFailure("\(message)")
         #endif
     }
+    
+    #if DEBUG
+    private static let devPrefix = URL.documentsDirectory.pathComponents[2].uppercased()
+    /// A helper method for print debugging, only available on debug builds.
+    ///
+    /// When running on the simulator this will log `[USERNAME] message` so that
+    /// you can easily filter the Xcode console to see only the logs you're interested in.
+    static func dev(_ message: Any,
+                    file: String = #file,
+                    function: String = #function,
+                    line: Int = #line,
+                    column: Int = #column) {
+        log("[\(devPrefix)] \(message)", level: .info, file: file, function: function, line: line, column: column)
+    }
+    #endif
     
     // MARK: - Private
     
@@ -138,14 +145,13 @@ enum MXLog {
         return Span(file: file, line: UInt32(line), level: level.rustLogLevel, target: currentTarget, name: name)
     }
     
-    // periphery:ignore:parameters function,column,context
+    // periphery:ignore:parameters function,column
     private static func log(_ message: Any,
                             level: LogLevel,
                             file: String = #file,
                             function: String = #function,
                             line: Int = #line,
-                            column: Int = #column,
-                            context: Any? = nil) {
+                            column: Int = #column) {
         guard didConfigureOnce else {
             return
         }

@@ -7,7 +7,6 @@
 
 import Foundation
 import MatrixRustSDK
-import UIKit
 
 class KnockedRoomProxy: KnockedRoomProxyProtocol {
     private let roomListItem: RoomListItemProtocol

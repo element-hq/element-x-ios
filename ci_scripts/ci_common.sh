@@ -28,3 +28,62 @@ setup_xcode_cloud_environment () {
     bundle config path vendor/bundle
     bundle install
 }
+
+install_xcode_cloud_brew_dependencies () {
+    brew update && brew install xcodegen
+}
+
+setup_github_actions_environment() {
+    unset HOMEBREW_NO_INSTALL_FROM_API
+    export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+    
+    brew update && brew install xcodegen swiftformat git-lfs a7ex/homebrew-formulae/xcresultparser
+    
+    # brew "swiftlint" # Fails on the CI: `Target /usr/local/bin/swiftlint Target /usr/local/bin/swiftlint already exists`. Installed through https://github.com/actions/virtual-environments/blob/main/images/macos/macos-12-Readme.md#linters
+
+    bundle config path vendor/bundle
+    bundle install --jobs 4 --retry 3
+}
+
+setup_github_actions_translations_environment() {
+    unset HOMEBREW_NO_INSTALL_FROM_API
+    export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
+
+    brew update && brew install swiftgen mint localazy/tools/localazy
+
+    mint install Asana/locheck
+}
+
+generate_what_to_test_notes() {
+    if [[ -d "$CI_APP_STORE_SIGNED_APP_PATH" ]]; then
+        TESTFLIGHT_DIR_PATH=TestFlight
+        TESTFLIGHT_NOTES_FILE_NAME=WhatToTest.en-US.txt
+
+        # Xcode Cloud shallow clones the repo, we need to deepen it to fetch tags and commit history
+        # Instead of trying `--deepen=<depth>` just do a full unshallow to avoid future surprises
+        git fetch --unshallow --quiet
+        
+        LATEST_TAG=""
+        if [ "$CI_WORKFLOW" = "Release" ]; then
+            # Use -v to invert grep, searching for non-nightlies
+            LATEST_TAG=$(git tag --sort=-creatordate | grep -v 'nightly' | head -n1)
+        elif [ "$CI_WORKFLOW" = "Nightly" ]; then
+            LATEST_TAG=$(git tag --sort=-creatordate | grep 'nightly' | head -n1)
+        fi
+
+        if [[ -z "$LATEST_TAG" ]]; then
+            echo "generate_what_to_test_notes: Failed fetching previous tag"
+            return 0 # Continue even though this failed
+        fi
+
+        echo "generate_what_to_test_notes: latest tag is $LATEST_TAG"
+
+        mkdir $TESTFLIGHT_DIR_PATH
+
+        NOTES="$(git log --pretty='- %an: %s' "$LATEST_TAG"..HEAD)"
+
+        echo "generate_what_to_test_notes: Generated notes:\n"$NOTES""
+
+        echo "$NOTES" > $TESTFLIGHT_DIR_PATH/$TESTFLIGHT_NOTES_FILE_NAME
+    fi
+}

@@ -50,9 +50,7 @@ struct TimelineMediaPreviewScreen: View {
             .overlay { downloadStatusIndicator }
             .toolbar { toolbar }
             .toolbar(toolbarVisibility, for: .navigationBar)
-            .toolbar(toolbarVisibility, for: .bottomBar)
             .toolbarBackground(.visible, for: .navigationBar) // The toolbar's scrollEdgeAppearance isn't aware of the quicklook view 🤷‍♂️
-            .toolbarBackground(.visible, for: .bottomBar)
             .navigationBarTitleDisplayMode(.inline)
             .safeAreaInset(edge: .bottom, spacing: 0) { caption }
     }
@@ -112,6 +110,7 @@ struct TimelineMediaPreviewScreen: View {
                 .padding(16)
                 .background {
                     BlurEffectView(style: .systemChromeMaterial) // Darkest material available, matches the bottom bar when content is beneath.
+                        .ignoresSafeArea()
                 }
                 .transition(.move(edge: .bottom).combined(with: .opacity))
         }
@@ -137,11 +136,6 @@ struct TimelineMediaPreviewScreen: View {
             }
             .tint(.compound.textActionPrimary)
         }
-        
-        ToolbarItem(placement: .bottomBar) {
-            bottomBarContent
-                .tint(.compound.textActionPrimary)
-        }
     }
     
     private var toolbarHeader: some View {
@@ -153,22 +147,6 @@ struct TimelineMediaPreviewScreen: View {
                 .font(.compound.bodyXS)
                 .foregroundStyle(.compound.textPrimary)
                 .textCase(.uppercase)
-        }
-    }
-    
-    private var bottomBarContent: some View {
-        HStack(spacing: 8) {
-            if let url = currentItem.fileHandle?.url {
-                ShareLink(item: url, subject: nil, message: currentItem.caption.map(Text.init)) {
-                    CompoundIcon(\.shareIos)
-                }
-                
-                Spacer()
-                
-                Button { context.send(viewAction: .saveCurrentItem) } label: {
-                    CompoundIcon(\.downloadIos)
-                }
-            }
         }
     }
 }

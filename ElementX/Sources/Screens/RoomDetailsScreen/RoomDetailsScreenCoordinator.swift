@@ -22,6 +22,7 @@ struct RoomDetailsScreenCoordinatorParameters {
 enum RoomDetailsScreenCoordinatorAction {
     case leftRoom
     case presentRoomMembersList
+    case presentRecipientDetails(userID: String)
     case presentRoomDetailsEditScreen
     case presentNotificationSettingsScreen
     case presentInviteUsersScreen
@@ -88,6 +89,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentKnockingRequestsListScreen)
                 case .displaySecurityAndPrivacy:
                     actionsSubject.send(.presentSecurityAndPrivacyScreen)
+                case .requestRecipientDetailsPresentation(let userID):
+                    actionsSubject.send(.presentRecipientDetails(userID: userID))
                 }
             }
             .store(in: &cancellables)

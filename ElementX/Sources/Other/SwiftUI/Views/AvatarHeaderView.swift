@@ -38,7 +38,6 @@ struct AvatarHeaderView<Footer: View>: View {
          @ViewBuilder footer: @escaping () -> Footer) {
         avatarInfo = .room(room.avatar)
         title = room.name ?? room.id
-        // subtitle = room.canonicalAlias
         subtitle = roomSubtitle
         
         self.avatarSize = avatarSize
@@ -195,7 +194,8 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
                                                        avatarURL: .mockMXCAvatar),
                                          canonicalAlias: "#test:matrix.org",
                                          isEncrypted: true,
-                                         isPublic: true), roomSubtitle: nil,
+                                         isPublic: true,
+                                         isDirect: false), roomSubtitle: nil,
                              avatarSize: .room(on: .details),
                              mediaProvider: MediaProviderMock(configuration: .init())) {
                 HStack(spacing: 32) {

@@ -179,6 +179,11 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             actionsSubject.send(.displayKnockingRequests)
         case .processTapSecurityAndPrivacy:
             actionsSubject.send(.displaySecurityAndPrivacy)
+        case .processTapRecipientProfile:
+            guard let userID = dmRecipient?.userID else {
+                return
+            }
+            actionsSubject.send(.requestRecipientDetailsPresentation(userID: userID))
         }
     }
     

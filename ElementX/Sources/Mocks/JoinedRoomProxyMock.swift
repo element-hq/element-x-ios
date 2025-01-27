@@ -25,11 +25,13 @@ struct JoinedRoomProxyMockConfiguration {
     var isEncrypted = true
     var hasOngoingCall = true
     var canonicalAlias: String?
+    var alternativeAliases: [String] = []
     var pinnedEventIDs: Set<String> = []
     
     var timelineStartReached = false
     
     var members: [RoomMemberProxyMock] = .allMembers
+    var heroes: [RoomMemberProxyMock] = []
     var knockRequestsState: KnockRequestsState = .loaded([])
     var ownUserID = RoomMemberProxyMock.mockMe.userID
     var inviter: RoomMemberProxyProtocol?
@@ -146,7 +148,7 @@ extension RoomInfo {
                   isTombstoned: false,
                   isFavourite: false,
                   canonicalAlias: configuration.canonicalAlias,
-                  alternativeAliases: [],
+                  alternativeAliases: configuration.alternativeAliases,
                   membership: .joined,
                   inviter: configuration.inviter.map { RoomMember(userId: $0.userID,
                                                                   displayName: $0.displayName,
@@ -158,7 +160,7 @@ extension RoomInfo {
                                                                   isIgnored: $0.isIgnored,
                                                                   suggestedRoleForPowerLevel: $0.role,
                                                                   membershipChangeReason: $0.membershipChangeReason) },
-                  heroes: [],
+                  heroes: configuration.heroes.map(RoomHero.init),
                   activeMembersCount: UInt64(configuration.members.filter { $0.membership == .join || $0.membership == .invite }.count),
                   invitedMembersCount: UInt64(configuration.members.filter { $0.membership == .invite }.count),
                   joinedMembersCount: UInt64(configuration.members.filter { $0.membership == .join }.count),
@@ -175,5 +177,13 @@ extension RoomInfo {
                   pinnedEventIds: Array(configuration.pinnedEventIDs),
                   joinRule: configuration.joinRule,
                   historyVisibility: .shared)
+    }
+}
+
+private extension RoomHero {
+    init(from memberProxy: RoomMemberProxyMock) {
+        self.init(userId: memberProxy.userID,
+                  displayName: memberProxy.displayName,
+                  avatarUrl: memberProxy.avatarURL?.absoluteString)
     }
 }

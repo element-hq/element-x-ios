@@ -18,8 +18,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private var initialText: String?
     private let wysiwygViewModel: WysiwygComposerViewModel
     private let completionSuggestionService: CompletionSuggestionServiceProtocol
+    private let roomProxy: JoinedRoomProxyProtocol
     private let analyticsService: AnalyticsService
     private let draftService: ComposerDraftServiceProtocol
+    private var identityPinningViolations = [String: RoomMemberProxyProtocol]()
     
     private let mentionBuilder: MentionBuilderProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
@@ -44,6 +46,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     private var replyLoadingTask: Task<Void, Never>?
 
     init(initialText: String? = nil,
+         roomProxy: JoinedRoomProxyProtocol,
          wysiwygViewModel: WysiwygComposerViewModel,
          completionSuggestionService: CompletionSuggestionServiceProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -54,6 +57,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         self.wysiwygViewModel = wysiwygViewModel
         self.completionSuggestionService = completionSuggestionService
         self.analyticsService = analyticsService
+        self.roomProxy = roomProxy
         draftService = composerDraftService
         
         mentionBuilder = MentionBuilder()
@@ -121,6 +125,19 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         
         setupMentionsHandling(mentionDisplayHelper: mentionDisplayHelper)
         focusComposerIfHardwareKeyboardConnected()
+        
+        let identityStatusChangesPublisher = roomProxy.identityStatusChangesPublisher.receive(on: DispatchQueue.main)
+
+        Task { [weak self] in
+            for await changes in identityStatusChangesPublisher.values {
+                guard !Task.isCancelled else {
+                    return
+                }
+
+                await self?.processIdentityStatusChanges(changes)
+            }
+        }
+        .store(in: &cancellables)
     }
     
     // MARK: - Public
@@ -487,6 +504,25 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 state.bindings.plainComposerText = attributedString
             }
         }
+    }
+    
+    private func processIdentityStatusChanges(_ changes: [IdentityStatusChange]) async {
+        for change in changes {
+            switch change.changedTo {
+            case .verificationViolation:
+                guard case let .success(member) = await roomProxy.getMember(userID: change.userId) else {
+                    MXLog.error("Failed retrieving room member for identity status change: \(change)")
+                    continue
+                }
+
+                identityPinningViolations[change.userId] = member
+            default:
+                // clear
+                identityPinningViolations[change.userId] = nil
+            }
+        }
+
+        state.canSend = identityPinningViolations.isEmpty
     }
 
     private func set(mode: ComposerMode) {
