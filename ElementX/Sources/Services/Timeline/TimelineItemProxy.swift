@@ -137,6 +137,8 @@ class EventTimelineItemProxy {
     
     lazy var sendHandle = item.lazyProvider.getSendHandle()
     
+    lazy var shouldBoost = item.lazyProvider.containsOnlyEmojis()
+    
     lazy var readReceipts = item.readReceipts
 }
 
