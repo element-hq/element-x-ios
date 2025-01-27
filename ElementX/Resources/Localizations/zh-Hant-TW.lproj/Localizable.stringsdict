@@ -124,10 +124,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%d unread notified message</string>
 			<key>other</key>
-			<string>%d unread notified messages</string>
+			<string>%d 則未讀的已通知訊息</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -182,10 +180,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d Pinned message</string>
 			<key>other</key>
-			<string>%1$d Pinned messages</string>
+			<string>%1$d 則釘選的訊息</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -212,10 +208,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$@ +%2$d other want to join this room</string>
 			<key>other</key>
-			<string>%1$@ +%2$d others want to join this room</string>
+			<string>%1$@ 與 %2$d 個其他人想要加入此聊天室</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>
@@ -284,10 +278,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Found %1$d push provider: %2$@</string>
 			<key>other</key>
-			<string>Found %1$d push providers: %2$@</string>
+			<string>找到 %1$d 個推播提供者：%2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_unified_push_success</key>
@@ -300,10 +292,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d distributor found: %2$@.</string>
 			<key>other</key>
-			<string>%1$d distributors found: %2$@.</string>
+			<string>找到 %1$d 個散佈者：%2$@。</string>
 		</dict>
 	</dict>
 </dict>
