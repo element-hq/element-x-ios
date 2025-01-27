@@ -217,8 +217,7 @@ struct RoomDetailsScreen: View {
                         })
                         .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
             if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
-//                ZeroListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
-                ZeroListRow(label: .default(title: "Roles",
+                ZeroListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
                                         icon: \.admin),
                         kind: .navigationLink {
                             context.send(viewAction: .processTapRolesAndPermissions)

@@ -62,9 +62,9 @@ extension RoomChangePermissionsScreenViewState {
                 RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsRoomAvatar,
                                        value: currentPermissions.roomAvatar,
                                        keyPath: \.roomAvatar),
-                RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsRoomTopic,
-                                       value: currentPermissions.roomTopic,
-                                       keyPath: \.roomTopic)
+//                RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsRoomTopic,
+//                                       value: currentPermissions.roomTopic,
+//                                       keyPath: \.roomTopic)
             ]
             
             self.init(title: L10n.screenRoomChangePermissionsRoomDetails, currentPermissions: currentPermissions, bindings: .init(settings: settings))
@@ -89,9 +89,9 @@ extension RoomChangePermissionsScreenViewState {
                 RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsRemovePeople,
                                        value: currentPermissions.kick,
                                        keyPath: \.kick),
-                RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsBanPeople,
-                                       value: currentPermissions.ban,
-                                       keyPath: \.ban)
+//                RoomPermissionsSetting(title: L10n.screenRoomChangePermissionsBanPeople,
+//                                       value: currentPermissions.ban,
+//                                       keyPath: \.ban)
             ]
             
             self.init(title: L10n.screenRoomChangePermissionsMemberModeration, currentPermissions: currentPermissions, bindings: .init(settings: settings))
