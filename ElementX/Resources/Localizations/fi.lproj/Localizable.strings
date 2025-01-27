@@ -21,6 +21,7 @@
 "a11y_user_menu" = "Käyttäjävalikko";
 "a11y_voice_message_record" = "Nauhoita ääniviesti.";
 "a11y_voice_message_stop_recording" = "Lopeta nauhoittaminen";
+"a11y.view_details" = "View details";
 "action_accept" = "Hyväksy";
 "action_add_caption" = "Lisää kuvateksti";
 "action_add_to_timeline" = "Lisää aikajanalle";
@@ -173,6 +174,7 @@
 "common_light" = "Vaalea";
 "common_link_copied_to_clipboard" = "Linkki kopioitu leikepöydälle";
 "common_loading" = "Ladataan…";
+"common_loading_more" = "Loading more…";
 "common_message" = "Viesti";
 "common_message_actions" = "Viestitoiminnot";
 "common_message_layout" = "Viestien asettelu";
@@ -440,6 +442,7 @@
 "screen_room_single_knock_request_title" = "%1$@ haluaa liittyä tähän huoneeseen";
 "screen_room_single_knock_request_view_button_title" = "Näytä";
 "screen_room_details_pinned_events_row_title" = "Kiinnitetyt viestit";
+"screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Liittymispyynnöt";
 "screen_room_details_security_and_privacy_title" = "Security & privacy";
 "screen_roomlist_knock_event_sent_description" = "Liittymispyyntö lähetetty";
@@ -475,6 +478,8 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Viestiä ei lähetetty, koska käyttäjän %1$@ vahvistettu identiteetti on muuttunut.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Viestiä ei lähetetty, koska %1$@ ei ole vahvistanut kaikkia laitteitaan.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Viestiä ei lähetetty, koska et ole vahvistanut yhtä tai useampaa laitettasi.";
+"screen.media_details.no_more_files_to_show" = "No more files to show";
+"screen.media_details.no_more_media_to_show" = "No more media to show";
 "screen_account_provider_form_hint" = "Kotipalvelimen osoite";
 "screen_account_provider_form_notice" = "Kirjoita hakutermi tai osoite.";
 "screen_account_provider_form_subtitle" = "Hae yritystä, yhteisöä tai yksityistä palvelinta.";
