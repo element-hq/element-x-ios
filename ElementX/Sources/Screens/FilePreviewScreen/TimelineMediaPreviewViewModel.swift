@@ -42,8 +42,8 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         
         rebuildCurrentItemActions()
         
-        let canRedactSelfPublisher = timelineViewModel.context.$viewState.map(\.canCurrentUserRedactSelf).removeDuplicates()
-        let canRedactOthersPublisher = timelineViewModel.context.$viewState.map(\.canCurrentUserRedactOthers).removeDuplicates()
+        let canRedactSelfPublisher = timelineViewModel.context.$viewState.map(\.canCurrentUserRedactSelf)
+        let canRedactOthersPublisher = timelineViewModel.context.$viewState.map(\.canCurrentUserRedactOthers)
         
         canRedactSelfPublisher.merge(with: canRedactOthersPublisher)
             .sink { [weak self] _ in
