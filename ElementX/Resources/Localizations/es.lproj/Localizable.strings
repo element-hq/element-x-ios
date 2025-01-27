@@ -21,7 +21,7 @@
 "a11y_user_menu" = "Menú de usuario";
 "a11y_voice_message_record" = "Grabar mensaje de voz";
 "a11y_voice_message_stop_recording" = "Detener grabación";
-"a11y.view_details" = "View details";
+"a11y.view_details" = "Mostrar detalles";
 "action_accept" = "Aceptar";
 "action_add_caption" = "Add caption";
 "action_add_to_timeline" = "Añadir a la cronología";
@@ -34,13 +34,13 @@
 "action_close" = "Cerrar";
 "action_complete_verification" = "Completar verificación";
 "action_confirm" = "Confirmar";
-"action_confirm_password" = "Confirm password";
+"action_confirm_password" = "Confirmar contraseña";
 "action_continue" = "Continuar";
 "action_copy" = "Copiar";
 "action_copy_caption" = "Copy caption";
 "action_copy_link" = "Copiar enlace";
 "action_copy_link_to_message" = "Copiar enlace al mensaje";
-"action_copy_text" = "Copy text";
+"action_copy_text" = "Copiar texto";
 "action_create" = "Crear";
 "action_create_a_room" = "Crear una sala";
 "action_deactivate" = "Deactivate";
@@ -59,7 +59,7 @@
 "action_forgot_password" = "¿Olvidaste tu contraseña?";
 "action_forward" = "Reenviar";
 "action_go_back" = "Volver atrás";
-"action_ignore" = "Ignore";
+"action_ignore" = "Ignorar";
 "action_invite" = "Invitar";
 "action_invite_friends" = "Invitar personas";
 "action_invite_friends_to_app" = "Invita a alguien a %1$@";
@@ -261,7 +261,7 @@
 "common.pinned" = "Pinned";
 "common.send_to" = "Send to";
 "common.you" = "You";
-"common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
+"common_unable_to_decrypt_insecure_device" = "Enviado desde un dispositivo no seguro";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity has changed";
 "confirm_recovery_key_banner_message" = "La copia de seguridad del chat no está sincronizada en este momento. Debes confirmar tu clave de recuperación para mantener el acceso a la copia de seguridad del chat.";
 "confirm_recovery_key_banner_primary_button_title" = "Enter your recovery key";

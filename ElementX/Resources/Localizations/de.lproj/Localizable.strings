@@ -655,7 +655,7 @@
 "screen_login_error_invalid_user_id" = "Dies ist keine gültige Benutzerkennung. Erwartetes Format: '@user:homeserver.org'";
 "screen_login_error_refresh_tokens" = "Dieser Server ist so konfiguriert, dass er Refresh-Tokens verwendet. Diese werden für die passwortbasierte Anmeldung nicht unterstützt.";
 "screen_login_error_unsupported_authentication" = "Der ausgewählte Homeserver unterstützt weder den Login per Passwort noch per OIDC. Bitte kontaktiere deinen Administrator oder wähle einen anderen Homeserver.";
-"screen_login_form_header" = "Gebe deine Daten ein";
+"screen_login_form_header" = "Gib deine Daten ein";
 "screen_login_title" = "Willkommen zurück!";
 "screen_login_title_with_homeserver" = "Anmelden bei %1$@";
 "screen_media_browser_delete_confirmation_subtitle" = "Diese Datei wird aus dem Chatroom entfernt und die Mitglieder werden keinen Zugriff mehr darauf haben.";
