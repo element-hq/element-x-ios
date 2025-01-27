@@ -142,7 +142,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         do {
             let timelineEndReached = switch direction {
             case .backwards: try await timeline.paginateBackwards(numEvents: requestSize)
-            case .forwards: try await timeline.focusedPaginateForwards(numEvents: requestSize)
+            case .forwards: try await timeline.paginateForwards(numEvents: requestSize)
             }
             MXLog.info("Finished paginating \(direction.rawValue)")
 

@@ -19981,81 +19981,6 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         await fetchMembersClosure?()
     }
 
-    //MARK: - focusedPaginateForwards
-
-    open var focusedPaginateForwardsNumEventsThrowableError: Error?
-    var focusedPaginateForwardsNumEventsUnderlyingCallsCount = 0
-    open var focusedPaginateForwardsNumEventsCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return focusedPaginateForwardsNumEventsUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = focusedPaginateForwardsNumEventsUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                focusedPaginateForwardsNumEventsUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    focusedPaginateForwardsNumEventsUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var focusedPaginateForwardsNumEventsCalled: Bool {
-        return focusedPaginateForwardsNumEventsCallsCount > 0
-    }
-    open var focusedPaginateForwardsNumEventsReceivedNumEvents: UInt16?
-    open var focusedPaginateForwardsNumEventsReceivedInvocations: [UInt16] = []
-
-    var focusedPaginateForwardsNumEventsUnderlyingReturnValue: Bool!
-    open var focusedPaginateForwardsNumEventsReturnValue: Bool! {
-        get {
-            if Thread.isMainThread {
-                return focusedPaginateForwardsNumEventsUnderlyingReturnValue
-            } else {
-                var returnValue: Bool? = nil
-                DispatchQueue.main.sync {
-                    returnValue = focusedPaginateForwardsNumEventsUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                focusedPaginateForwardsNumEventsUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    focusedPaginateForwardsNumEventsUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var focusedPaginateForwardsNumEventsClosure: ((UInt16) async throws -> Bool)?
-
-    open override func focusedPaginateForwards(numEvents: UInt16) async throws -> Bool {
-        if let error = focusedPaginateForwardsNumEventsThrowableError {
-            throw error
-        }
-        focusedPaginateForwardsNumEventsCallsCount += 1
-        focusedPaginateForwardsNumEventsReceivedNumEvents = numEvents
-        DispatchQueue.main.async {
-            self.focusedPaginateForwardsNumEventsReceivedInvocations.append(numEvents)
-        }
-        if let focusedPaginateForwardsNumEventsClosure = focusedPaginateForwardsNumEventsClosure {
-            return try await focusedPaginateForwardsNumEventsClosure(numEvents)
-        } else {
-            return focusedPaginateForwardsNumEventsReturnValue
-        }
-    }
-
     //MARK: - getEventTimelineItemByEventId
 
     open var getEventTimelineItemByEventIdEventIdThrowableError: Error?
@@ -20324,6 +20249,81 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
             return try await paginateBackwardsNumEventsClosure(numEvents)
         } else {
             return paginateBackwardsNumEventsReturnValue
+        }
+    }
+
+    //MARK: - paginateForwards
+
+    open var paginateForwardsNumEventsThrowableError: Error?
+    var paginateForwardsNumEventsUnderlyingCallsCount = 0
+    open var paginateForwardsNumEventsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return paginateForwardsNumEventsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = paginateForwardsNumEventsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                paginateForwardsNumEventsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    paginateForwardsNumEventsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var paginateForwardsNumEventsCalled: Bool {
+        return paginateForwardsNumEventsCallsCount > 0
+    }
+    open var paginateForwardsNumEventsReceivedNumEvents: UInt16?
+    open var paginateForwardsNumEventsReceivedInvocations: [UInt16] = []
+
+    var paginateForwardsNumEventsUnderlyingReturnValue: Bool!
+    open var paginateForwardsNumEventsReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return paginateForwardsNumEventsUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = paginateForwardsNumEventsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                paginateForwardsNumEventsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    paginateForwardsNumEventsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var paginateForwardsNumEventsClosure: ((UInt16) async throws -> Bool)?
+
+    open override func paginateForwards(numEvents: UInt16) async throws -> Bool {
+        if let error = paginateForwardsNumEventsThrowableError {
+            throw error
+        }
+        paginateForwardsNumEventsCallsCount += 1
+        paginateForwardsNumEventsReceivedNumEvents = numEvents
+        DispatchQueue.main.async {
+            self.paginateForwardsNumEventsReceivedInvocations.append(numEvents)
+        }
+        if let paginateForwardsNumEventsClosure = paginateForwardsNumEventsClosure {
+            return try await paginateForwardsNumEventsClosure(numEvents)
+        } else {
+            return paginateForwardsNumEventsReturnValue
         }
     }
 
