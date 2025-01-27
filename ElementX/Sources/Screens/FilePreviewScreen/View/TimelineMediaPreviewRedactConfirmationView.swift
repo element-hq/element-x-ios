@@ -125,7 +125,8 @@ struct TimelineMediaPreviewRedactConfirmationView_Previews: PreviewProvider, Tes
     static let viewModel = makeViewModel(contentType: .jpeg)
     
     static var previews: some View {
-        TimelineMediaPreviewRedactConfirmationView(item: viewModel.state.currentItem, context: viewModel.context)
+        // swiftlint:disable:next force_unwrapping
+        TimelineMediaPreviewRedactConfirmationView(item: viewModel.state.currentItem!, context: viewModel.context)
     }
     
     static func makeViewModel(contentType: UTType? = nil) -> TimelineMediaPreviewViewModel {

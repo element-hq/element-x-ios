@@ -177,27 +177,29 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
     static let presentedOnRoomViewModel = makeViewModel(isPresentedOnRoomScreen: true)
     
     static var previews: some View {
-        TimelineMediaPreviewDetailsView(item: viewModel.state.currentItem,
+        // swiftlint:disable force_unwrapping
+        TimelineMediaPreviewDetailsView(item: viewModel.state.currentItem!,
                                         context: viewModel.context)
             .previewDisplayName("Image")
             .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
                 state.currentItemActions?.secondaryActions.contains(.redact) ?? false
             })
         
-        TimelineMediaPreviewDetailsView(item: loadingViewModel.state.currentItem,
+        TimelineMediaPreviewDetailsView(item: loadingViewModel.state.currentItem!,
                                         context: loadingViewModel.context)
             .previewDisplayName("Loading")
             .snapshotPreferences(expect: loadingViewModel.context.$viewState.map { state in
                 state.currentItemActions?.secondaryActions.contains(.redact) ?? false
             })
         
-        TimelineMediaPreviewDetailsView(item: unknownTypeViewModel.state.currentItem,
+        TimelineMediaPreviewDetailsView(item: unknownTypeViewModel.state.currentItem!,
                                         context: unknownTypeViewModel.context)
             .previewDisplayName("Unknown type")
         
-        TimelineMediaPreviewDetailsView(item: presentedOnRoomViewModel.state.currentItem,
+        TimelineMediaPreviewDetailsView(item: presentedOnRoomViewModel.state.currentItem!,
                                         context: presentedOnRoomViewModel.context)
             .previewDisplayName("Incoming on Room")
+        // swiftlint:enable force_unwrapping
     }
     
     static func makeViewModel(contentType: UTType? = nil,
