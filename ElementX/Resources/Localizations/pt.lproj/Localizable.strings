@@ -21,6 +21,7 @@
 "a11y_user_menu" = "Menu de utilizador";
 "a11y_voice_message_record" = "Gravar mensagem de voz.";
 "a11y_voice_message_stop_recording" = "Parar gravação";
+"a11y.view_details" = "View details";
 "action_accept" = "Aceitar";
 "action_add_caption" = "Adicionar legenda";
 "action_add_to_timeline" = "Adicionar à cronologia";
@@ -173,6 +174,7 @@
 "common_light" = "Claro";
 "common_link_copied_to_clipboard" = "Ligação copiada para a área de transferência";
 "common_loading" = "A carregar…";
+"common_loading_more" = "Loading more…";
 "common_message" = "Mensagem";
 "common_message_actions" = "Ações de mensagem";
 "common_message_layout" = "Disposição das mensagens";
@@ -440,6 +442,7 @@
 "screen_room_single_knock_request_title" = "%1$@ quer entrar nesta sala";
 "screen_room_single_knock_request_view_button_title" = "Ver";
 "screen_room_details_pinned_events_row_title" = "Mensagens afixadas";
+"screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Pedidos de entrada";
 "screen_room_details_security_and_privacy_title" = "Security & privacy";
 "screen_roomlist_knock_event_sent_description" = "Pedido de adesão enviado";
@@ -475,6 +478,8 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Mensagem não enviada porque a identidade verificada de %1$@ foi alterada.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Mensagem não enviada porque %1$@ não verificou todos os dispositivos.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Mensagem não enviada porque não verificou um ou mais dos seus dispositivos.";
+"screen.media_details.no_more_files_to_show" = "No more files to show";
+"screen.media_details.no_more_media_to_show" = "No more media to show";
 "screen_account_provider_form_hint" = "Endereço do servidor";
 "screen_account_provider_form_notice" = "Insira um termo para pesquisa ou um endereço.";
 "screen_account_provider_form_subtitle" = "Pesquisar por uma empresa, comunidade ou servidor privado.";

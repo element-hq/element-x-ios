@@ -390,6 +390,8 @@ internal enum L10n {
   internal static var commonLinkCopiedToClipboard: String { return L10n.tr("Localizable", "common_link_copied_to_clipboard") }
   /// Loading…
   internal static var commonLoading: String { return L10n.tr("Localizable", "common_loading") }
+  /// Loading more…
+  internal static var commonLoadingMore: String { return L10n.tr("Localizable", "common_loading_more") }
   /// Plural format key: "%#@COUNT@"
   internal static func commonMemberCount(_ p1: Int) -> String {
     return L10n.tr("Localizable", "common_member_count", p1)
@@ -1802,7 +1804,7 @@ internal enum L10n {
   internal static var screenRoomChangePermissionsDeleteMessages: String { return L10n.tr("Localizable", "screen_room_change_permissions_delete_messages") }
   /// Everyone
   internal static var screenRoomChangePermissionsEveryone: String { return L10n.tr("Localizable", "screen_room_change_permissions_everyone") }
-  /// Invite people
+  /// Invite people and accept requests to join
   internal static var screenRoomChangePermissionsInvitePeople: String { return L10n.tr("Localizable", "screen_room_change_permissions_invite_people") }
   /// Member moderation
   internal static var screenRoomChangePermissionsMemberModeration: String { return L10n.tr("Localizable", "screen_room_change_permissions_member_moderation") }
@@ -1810,7 +1812,7 @@ internal enum L10n {
   internal static var screenRoomChangePermissionsMessagesAndContent: String { return L10n.tr("Localizable", "screen_room_change_permissions_messages_and_content") }
   /// Admins and moderators
   internal static var screenRoomChangePermissionsModerators: String { return L10n.tr("Localizable", "screen_room_change_permissions_moderators") }
-  /// Remove people
+  /// Remove people and decline requests to join
   internal static var screenRoomChangePermissionsRemovePeople: String { return L10n.tr("Localizable", "screen_room_change_permissions_remove_people") }
   /// Change room avatar
   internal static var screenRoomChangePermissionsRoomAvatar: String { return L10n.tr("Localizable", "screen_room_change_permissions_room_avatar") }
@@ -2801,6 +2803,15 @@ internal enum L10n {
     internal static var sendTo: String { return L10n.tr("Localizable", "common.send_to") }
     /// You
     internal static var you: String { return L10n.tr("Localizable", "common.you") }
+  }
+
+  internal enum Screen {
+    internal enum MediaDetails {
+      /// No more files to show
+      internal static var noMoreFilesToShow: String { return L10n.tr("Localizable", "screen.media_details.no_more_files_to_show") }
+      /// No more media to show
+      internal static var noMoreMediaToShow: String { return L10n.tr("Localizable", "screen.media_details.no_more_media_to_show") }
+    }
   }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length

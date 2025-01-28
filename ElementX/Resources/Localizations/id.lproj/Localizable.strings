@@ -21,6 +21,7 @@
 "a11y_user_menu" = "Menu pengguna";
 "a11y_voice_message_record" = "Rekam pesan suara.";
 "a11y_voice_message_stop_recording" = "Berhenti merekam";
+"a11y.view_details" = "View details";
 "action_accept" = "Terima";
 "action_add_caption" = "Tambahkan keterangan";
 "action_add_to_timeline" = "Tambahkan ke lini masa";
@@ -173,6 +174,7 @@
 "common_light" = "Terang";
 "common_link_copied_to_clipboard" = "Tautan disalin ke papan klip";
 "common_loading" = "Memuat…";
+"common_loading_more" = "Loading more…";
 "common_message" = "Pesan";
 "common_message_actions" = "Tindakan pesan";
 "common_message_layout" = "Tata letak pesan";
@@ -440,6 +442,7 @@
 "screen_room_single_knock_request_title" = "%1$@ ingin bergabung ke ruangan ini";
 "screen_room_single_knock_request_view_button_title" = "Lihat";
 "screen_room_details_pinned_events_row_title" = "Pesan yang disematkan";
+"screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Permintaan untuk bergabung";
 "screen_room_details_security_and_privacy_title" = "Security & privacy";
 "screen_roomlist_knock_event_sent_description" = "Permintaan untuk bergabung dikirim";
@@ -475,6 +478,8 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Pesan tidak terkirim karena identitas terverifikasi %1$@ telah berubah.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Pesan tidak terkirim karena %1$@ belum memverifikasi semua perangkat.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Pesan tidak terkirim karena Anda belum memverifikasi satu atau beberapa perangkat Anda.";
+"screen.media_details.no_more_files_to_show" = "No more files to show";
+"screen.media_details.no_more_media_to_show" = "No more media to show";
 "screen_account_provider_form_hint" = "Alamat homeserver";
 "screen_account_provider_form_notice" = "Masukkan istilah pencarian atau alamat domain.";
 "screen_account_provider_form_subtitle" = "Cari perusahaan, komunitas, atau server pribadi.";

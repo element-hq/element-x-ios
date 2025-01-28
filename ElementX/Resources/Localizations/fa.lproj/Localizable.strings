@@ -21,6 +21,7 @@
 "a11y_user_menu" = "فهرست کاربر";
 "a11y_voice_message_record" = "ضبط پیام صوتی.";
 "a11y_voice_message_stop_recording" = "توقّف ضبط";
+"a11y.view_details" = "View details";
 "action_accept" = "پذیرش";
 "action_add_caption" = "Add caption";
 "action_add_to_timeline" = "افزودن به خط زمانی";
@@ -173,6 +174,7 @@
 "common_light" = "روشن";
 "common_link_copied_to_clipboard" = "پیوند در تخته‌گیره رونوشت شد";
 "common_loading" = "بار کردن…";
+"common_loading_more" = "Loading more…";
 "common_message" = "پیام";
 "common_message_actions" = "کنش‌های پیام";
 "common_message_layout" = "جینش پیام";
@@ -440,6 +442,7 @@
 "screen_room_single_knock_request_title" = "%1$@ wants to join this room";
 "screen_room_single_knock_request_view_button_title" = "View";
 "screen_room_details_pinned_events_row_title" = "پیام‌های سنجاق شده";
+"screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_room_details_security_and_privacy_title" = "Security & privacy";
 "screen_roomlist_knock_event_sent_description" = "Request to join sent";
@@ -475,6 +478,8 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
+"screen.media_details.no_more_files_to_show" = "No more files to show";
+"screen.media_details.no_more_media_to_show" = "No more media to show";
 "screen_account_provider_form_hint" = "نشانی کارساز خانگی";
 "screen_account_provider_form_notice" = "ورود عبارت جست‌وجو یا نشانی دامنه.";
 "screen_account_provider_form_subtitle" = "جست‌وجو برای شرکت، اجتماع یا کارسازی خصوصی.";

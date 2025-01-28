@@ -92,7 +92,7 @@ struct MessageComposer: View {
 
     private var resizeGrabber: some View {
         Capsule()
-            .foregroundColor(Asset.Colors.grabber.swiftUIColor)
+            .foregroundStyle(.tertiary)
             .frame(width: 36, height: 5)
             .padding(.vertical, 8)
             .frame(maxWidth: .infinity)

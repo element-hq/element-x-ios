@@ -16,11 +16,11 @@ struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
             if let attributedString = timelineItem.content.formattedBody {
                 FormattedBodyText(attributedString: attributedString,
                                   additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
-                                  boostEmojiSize: true)
+                                  boostFontSize: timelineItem.shouldBoost)
             } else {
                 FormattedBodyText(text: timelineItem.body,
                                   additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
-                                  boostEmojiSize: true)
+                                  boostFontSize: timelineItem.shouldBoost)
             }
         }
     }

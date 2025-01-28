@@ -21,6 +21,7 @@
 "a11y_user_menu" = "Gebruikersmenu";
 "a11y_voice_message_record" = "Spraakbericht opnemen.";
 "a11y_voice_message_stop_recording" = "Opnemen stoppen";
+"a11y.view_details" = "View details";
 "action_accept" = "Accepteren";
 "action_add_caption" = "Add caption";
 "action_add_to_timeline" = "Toevoegen aan tijdlijn";
@@ -173,6 +174,7 @@
 "common_light" = "Licht";
 "common_link_copied_to_clipboard" = "Link gekopieerd naar klembord";
 "common_loading" = "Laden...";
+"common_loading_more" = "Loading more…";
 "common_message" = "Bericht";
 "common_message_actions" = "Berichtacties";
 "common_message_layout" = "Berichtindeling";
@@ -440,6 +442,7 @@
 "screen_room_single_knock_request_title" = "%1$@ wants to join this room";
 "screen_room_single_knock_request_view_button_title" = "View";
 "screen_room_details_pinned_events_row_title" = "Vastgezette berichten";
+"screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_room_details_security_and_privacy_title" = "Security & privacy";
 "screen_roomlist_knock_event_sent_description" = "Request to join sent";
@@ -475,6 +478,8 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Bericht niet verzonden omdat %1$@'s geverifieerde identiteit is gewijzigd.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Bericht niet verzonden omdat %1$@ niet alle apparaten heeft geverifieerd.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Bericht is niet verzonden omdat je een of meerdere apparaten niet geverifieerd hebt";
+"screen.media_details.no_more_files_to_show" = "No more files to show";
+"screen.media_details.no_more_media_to_show" = "No more media to show";
 "screen_account_provider_form_hint" = "Homeserver-adres";
 "screen_account_provider_form_notice" = "Voer een zoekterm of een domeinnaam in.";
 "screen_account_provider_form_subtitle" = "Zoek naar een bedrijf, community of privéserver.";

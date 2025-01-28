@@ -44,7 +44,7 @@ extension ClientBuilder {
                     .roomDecryptionTrustRequirement(trustRequirement: .crossSignedOrLegacy)
             } else {
                 builder = builder
-                    .roomKeyRecipientStrategy(strategy: .deviceBasedStrategy(onlyAllowTrustedDevices: false, errorOnVerifiedUserProblem: true))
+                    .roomKeyRecipientStrategy(strategy: .errorOnVerifiedUserProblem)
                     .roomDecryptionTrustRequirement(trustRequirement: .untrusted)
             }
         }

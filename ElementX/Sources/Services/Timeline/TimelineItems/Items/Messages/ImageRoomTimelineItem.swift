@@ -15,6 +15,7 @@ struct ImageRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
     let isEditable: Bool
     let canBeRepliedTo: Bool
     let isThreaded: Bool
+    var shouldBoost = false
     
     let sender: TimelineItemSender
     

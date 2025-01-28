@@ -35,22 +35,26 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
         
-        let previewItems = timelineViewModel.context.viewState.timelineState.itemViewStates.compactMap(TimelineMediaPreviewItem.init)
-        let initialItemIndex = previewItems.firstIndex { $0.id == context.item.id } ?? 0
-        let currentItem = previewItems[initialItemIndex]
-        
-        super.init(initialViewState: TimelineMediaPreviewViewState(previewItems: previewItems,
-                                                                   initialItemIndex: initialItemIndex,
-                                                                   currentItem: currentItem,
+        super.init(initialViewState: TimelineMediaPreviewViewState(dataSource: .init(itemViewStates: timelineViewModel.context.viewState.timelineState.itemViewStates,
+                                                                                     initialItem: context.item),
                                                                    transitionNamespace: context.namespace),
                    mediaProvider: mediaProvider)
         
         rebuildCurrentItemActions()
         
-        timelineViewModel.context.$viewState.map(\.canCurrentUserRedactSelf)
-            .merge(with: timelineViewModel.context.$viewState.map(\.canCurrentUserRedactOthers))
+        let canRedactSelfPublisher = timelineViewModel.context.$viewState.map(\.canCurrentUserRedactSelf)
+        let canRedactOthersPublisher = timelineViewModel.context.$viewState.map(\.canCurrentUserRedactOthers)
+        
+        canRedactSelfPublisher.merge(with: canRedactOthersPublisher)
             .sink { [weak self] _ in
                 self?.rebuildCurrentItemActions()
+            }
+            .store(in: &cancellables)
+        
+        timelineViewModel.context.$viewState.map(\.timelineState.itemViewStates)
+            .removeDuplicates()
+            .sink { [weak self] itemViewStates in
+                self?.state.dataSource.updatePreviewItems(itemViewStates: itemViewStates)
             }
             .store(in: &cancellables)
     }
@@ -79,42 +83,48 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
     }
     
-    private func updateCurrentItem(_ previewItem: TimelineMediaPreviewItem) async {
-        previewItem.downloadError = nil // Clear any existing error.
-        state.currentItem = previewItem
-        currentItemIDHandler?(previewItem.id)
-        
+    private func updateCurrentItem(_ previewItem: TimelineMediaPreviewItem?) async {
+        previewItem?.downloadError = nil // Clear any existing error.
+        state.dataSource.updateCurrentItem(previewItem)
         rebuildCurrentItemActions()
         
-        if previewItem.fileHandle == nil, let source = previewItem.mediaSource {
-            switch await mediaProvider.loadFileFromSource(source, filename: previewItem.filename) {
-            case .success(let handle):
-                previewItem.fileHandle = handle
-                state.fileLoadedPublisher.send(previewItem.id)
-            case .failure(let error):
-                MXLog.error("Failed loading media: \(error)")
-                context.objectWillChange.send() // Manually trigger the SwiftUI view update.
-                previewItem.downloadError = error
+        if let previewItem {
+            currentItemIDHandler?(previewItem.id)
+            
+            if previewItem.fileHandle == nil, let source = previewItem.mediaSource {
+                switch await mediaProvider.loadFileFromSource(source, filename: previewItem.filename) {
+                case .success(let handle):
+                    previewItem.fileHandle = handle
+                    state.fileLoadedPublisher.send(previewItem.id)
+                case .failure(let error):
+                    MXLog.error("Failed loading media: \(error)")
+                    context.objectWillChange.send() // Manually trigger the SwiftUI view update.
+                    previewItem.downloadError = error
+                }
             }
         }
     }
     
     private func rebuildCurrentItemActions() {
         let timelineContext = timelineViewModel.context
-        let provider = TimelineItemMenuActionProvider(timelineItem: state.currentItem.timelineItem,
-                                                      canCurrentUserRedactSelf: timelineContext.viewState.canCurrentUserRedactSelf,
-                                                      canCurrentUserRedactOthers: timelineContext.viewState.canCurrentUserRedactOthers,
-                                                      canCurrentUserPin: timelineContext.viewState.canCurrentUserPin,
-                                                      pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
-                                                      isDM: timelineContext.viewState.isEncryptedOneToOneRoom,
-                                                      isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
-                                                      timelineKind: timelineContext.viewState.timelineKind,
-                                                      emojiProvider: timelineContext.viewState.emojiProvider)
-        state.currentItemActions = provider.makeActions()
+        state.currentItemActions = if let currentItem = state.currentItem {
+            TimelineItemMenuActionProvider(timelineItem: currentItem.timelineItem,
+                                           canCurrentUserRedactSelf: timelineContext.viewState.canCurrentUserRedactSelf,
+                                           canCurrentUserRedactOthers: timelineContext.viewState.canCurrentUserRedactOthers,
+                                           canCurrentUserPin: timelineContext.viewState.canCurrentUserPin,
+                                           pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
+                                           isDM: timelineContext.viewState.isEncryptedOneToOneRoom,
+                                           isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
+                                           timelineKind: timelineContext.viewState.timelineKind,
+                                           emojiProvider: timelineContext.viewState.emojiProvider)
+                .makeActions()
+        } else {
+            nil
+        }
     }
     
     private func saveCurrentItem() async {
-        guard let fileURL = state.currentItem.fileHandle?.url else {
+        guard let currentItem = state.currentItem, let fileURL = currentItem.fileHandle?.url else {
             MXLog.error("Unable to save an item without a URL, the button shouldn't be visible.")
             return
         }
@@ -123,7 +133,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         state.bindings.mediaDetailsItem = nil
         
         do {
-            switch state.currentItem.timelineItem {
+            switch currentItem.timelineItem {
             case is AudioRoomTimelineItem, is FileRoomTimelineItem:
                 state.bindings.fileToExport = .init(url: fileURL)
                 return // Don't show the indicator.
