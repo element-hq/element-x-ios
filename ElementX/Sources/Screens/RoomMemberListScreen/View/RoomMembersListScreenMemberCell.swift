@@ -65,8 +65,10 @@ struct RoomMembersListScreenMemberCell: View {
     // Computed properties to hide the user's profile when banned.
     
     var title: String {
-        guard !member.isBanned else { return member.id }
-        return member.name ?? member.id
+//        guard !member.isBanned else { return member.id }
+//        return member.name ?? member.id
+        print("MEMBER_NAME: \(member.name ?? "{EMPTY}")")
+        return member.name ?? ""
     }
     
     var subtitle: String? {

@@ -101,14 +101,16 @@ struct RoomScreenFooterView: View {
         let displayName = displayName ?? fallbackDisplayName(userID)
         var description = AttributedString(L10n.cryptoIdentityChangePinViolationNew(displayName, userIDPlaceholder, linkPlaceholder))
         
-        var userIDString = AttributedString(L10n.cryptoIdentityChangePinViolationNewUserId(userID))
-        userIDString.bold()
-        description.replace(userIDPlaceholder, with: userIDString)
-        
-        var linkString = AttributedString(L10n.actionLearnMore)
-        linkString.link = url
-        linkString.bold()
-        description.replace(linkPlaceholder, with: linkString)
+//        var userIDString = AttributedString(L10n.cryptoIdentityChangePinViolationNewUserId(userID))
+//        userIDString.bold()
+//        description.replace(userIDPlaceholder, with: userIDString)
+        description.replace("\(userIDPlaceholder) ", with: "")
+//
+//        var linkString = AttributedString(L10n.actionLearnMore)
+//        linkString.link = url
+//        linkString.bold()
+//        description.replace(linkPlaceholder, with: linkString)
+        description.replace(linkPlaceholder, with: "")
         return description
     }
     
@@ -118,20 +120,23 @@ struct RoomScreenFooterView: View {
         let displayName = displayName ?? fallbackDisplayName(userID)
         var description = AttributedString(L10n.cryptoIdentityChangeVerificationViolationNew(displayName, userIDPlaceholder, linkPlaceholder))
         
-        var userIDString = AttributedString(L10n.cryptoIdentityChangePinViolationNewUserId(userID))
-        userIDString.bold()
-        description.replace(userIDPlaceholder, with: userIDString)
-        
-        var linkString = AttributedString(L10n.actionLearnMore)
-        linkString.link = url
-        linkString.bold()
-        description.replace(linkPlaceholder, with: linkString)
+//        var userIDString = AttributedString(L10n.cryptoIdentityChangePinViolationNewUserId(userID))
+//        userIDString.bold()
+//        description.replace(userIDPlaceholder, with: userIDString)
+        description.replace("\(userIDPlaceholder) ", with: "")
+//
+//        var linkString = AttributedString(L10n.actionLearnMore)
+//        linkString.link = url
+//        linkString.bold()
+//        description.replace(linkPlaceholder, with: linkString)
+        description.replace(linkPlaceholder, with: "")
         return description
     }
     
     private func fallbackDisplayName(_ userID: String) -> String {
-        guard let localpart = userID.components(separatedBy: ":").first else { return userID }
-        return String(localpart.trimmingPrefix("@"))
+//        guard let localpart = userID.components(separatedBy: ":").first else { return userID }
+//        return String(localpart.trimmingPrefix("@"))
+        ""
     }
 }
 
