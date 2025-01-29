@@ -11,7 +11,7 @@ import SwiftUI
 struct TimelineMediaPreviewRedactConfirmationView: View {
     @Environment(\.dismiss) private var dismiss
     
-    let item: TimelineMediaPreviewItem
+    let item: TimelineMediaPreviewItem.Media
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
     
     @State private var sheetHeight: CGFloat = .zero
@@ -125,7 +125,9 @@ struct TimelineMediaPreviewRedactConfirmationView_Previews: PreviewProvider, Tes
     static let viewModel = makeViewModel(contentType: .jpeg)
     
     static var previews: some View {
-        TimelineMediaPreviewRedactConfirmationView(item: viewModel.state.currentItem, context: viewModel.context)
+        if case let .media(mediaItem) = viewModel.state.currentItem {
+            TimelineMediaPreviewRedactConfirmationView(item: mediaItem, context: viewModel.context)
+        }
     }
     
     static func makeViewModel(contentType: UTType? = nil) -> TimelineMediaPreviewViewModel {

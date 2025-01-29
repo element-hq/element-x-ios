@@ -21,6 +21,7 @@
 "a11y_user_menu" = "Benutzermenü";
 "a11y_voice_message_record" = "Sprachnachricht aufnehmen.";
 "a11y_voice_message_stop_recording" = "Aufnahme beenden";
+"a11y.view_details" = "View details";
 "action_accept" = "Akzeptieren";
 "action_add_caption" = "Bildunterschrift hinzufügen";
 "action_add_to_timeline" = "Zum Nachrichtenverlauf hinzufügen";
@@ -173,6 +174,7 @@
 "common_light" = "Hell";
 "common_link_copied_to_clipboard" = "Link in die Zwischenablage kopiert";
 "common_loading" = "Laden...";
+"common_loading_more" = "Loading more…";
 "common_message" = "Nachricht";
 "common_message_actions" = "Nachrichtenaktionen";
 "common_message_layout" = "Nachrichtenlayout";
@@ -440,6 +442,7 @@
 "screen_room_single_knock_request_title" = "%1$@ möchte diesem Chatroom beitreten";
 "screen_room_single_knock_request_view_button_title" = "Ansicht";
 "screen_room_details_pinned_events_row_title" = "Fixierte Nachrichten";
+"screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Beitrittsanfragen";
 "screen_room_details_security_and_privacy_title" = "Sicherheit & Datenschutz";
 "screen_roomlist_knock_event_sent_description" = "Beitrittsanfrage gesendet";
@@ -475,6 +478,8 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Nachricht nicht gesendet, weil sich die verifizierte Identität von %1$@ geändert hat.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Nachricht wurde nicht gesendet, weil %1$@ nicht alle Geräte verifiziert hat";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Die Nachricht wurde nicht gesendet, weil Sie eines oder mehrere Ihrer Geräte nicht verifiziert haben.";
+"screen.media_details.no_more_files_to_show" = "No more files to show";
+"screen.media_details.no_more_media_to_show" = "No more media to show";
 "screen_account_provider_form_hint" = "Homeserver-Adresse";
 "screen_account_provider_form_notice" = "Gib einen Suchbegriff oder eine Domainadresse ein.";
 "screen_account_provider_form_subtitle" = "Suche nach einem Unternehmen, einer Community oder einem privaten Server.";
@@ -622,7 +627,7 @@
 "screen_invites_decline_direct_chat_title" = "Einladung ablehnen";
 "screen_invites_empty_list" = "Keine Einladungen";
 "screen_invites_invited_you" = "%1$@ (%2$@) hat dich eingeladen";
-"screen_join_room_ban_by_message" = "Sie wurden von diesem Chatroom verbannt%1$@.";
+"screen_join_room_ban_by_message" = "Sie wurden aus diesem Chatroom ausgeschlossen %1$@.";
 "screen_join_room_ban_message" = "Sie wurden aus diesem Chatroom verbannt";
 "screen_join_room_ban_reason" = "Grund:%1$@.";
 "screen_join_room_fail_message" = "Der Beitritt zum Chatroom schlug fehl.";
@@ -650,7 +655,7 @@
 "screen_login_error_invalid_user_id" = "Dies ist keine gültige Benutzerkennung. Erwartetes Format: '@user:homeserver.org'";
 "screen_login_error_refresh_tokens" = "Dieser Server ist so konfiguriert, dass er Refresh-Tokens verwendet. Diese werden für die passwortbasierte Anmeldung nicht unterstützt.";
 "screen_login_error_unsupported_authentication" = "Der ausgewählte Homeserver unterstützt weder den Login per Passwort noch per OIDC. Bitte kontaktiere deinen Administrator oder wähle einen anderen Homeserver.";
-"screen_login_form_header" = "Gebe deine Daten ein";
+"screen_login_form_header" = "Gib deine Daten ein";
 "screen_login_title" = "Willkommen zurück!";
 "screen_login_title_with_homeserver" = "Anmelden bei %1$@";
 "screen_media_browser_delete_confirmation_subtitle" = "Diese Datei wird aus dem Chatroom entfernt und die Mitglieder werden keinen Zugriff mehr darauf haben.";

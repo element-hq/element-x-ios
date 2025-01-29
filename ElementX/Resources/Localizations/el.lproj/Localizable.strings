@@ -21,6 +21,7 @@
 "a11y_user_menu" = "Μενού χρήστη";
 "a11y_voice_message_record" = "Εγγραφή φωνητικού μηνύματος.";
 "a11y_voice_message_stop_recording" = "Διακοπή καταγραφής";
+"a11y.view_details" = "View details";
 "action_accept" = "Αποδοχή";
 "action_add_caption" = "Προσθήκη λεζάντας";
 "action_add_to_timeline" = "Προσθήκη στο χρονοδιάγραμμα";
@@ -173,6 +174,7 @@
 "common_light" = "Φωτεινό";
 "common_link_copied_to_clipboard" = "Ο σύνδεσμος αντιγράφηκε στο πρόχειρο";
 "common_loading" = "Φόρτωση...";
+"common_loading_more" = "Loading more…";
 "common_message" = "Μήνυμα";
 "common_message_actions" = "Ενέργειες μηνυμάτων";
 "common_message_layout" = "Διάταξη μηνύματος";
@@ -440,6 +442,7 @@
 "screen_room_single_knock_request_title" = "Ο χρήστης %1$@ θέλει να μπει σε αυτό το δωμάτιο";
 "screen_room_single_knock_request_view_button_title" = "Προβολή";
 "screen_room_details_pinned_events_row_title" = "Καρφιτσωμένα μηνύματα";
+"screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Αιτήματα συμμετοχής";
 "screen_room_details_security_and_privacy_title" = "Ασφάλεια & απόρρητο";
 "screen_roomlist_knock_event_sent_description" = "Το αίτημα συμμετοχής στάλθηκε";
@@ -475,6 +478,8 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Το μήνυμα δεν στάλθηκε επειδή η επαληθευμένη ταυτότητα του χρήστη %1$@ έχει αλλάξει.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Το μήνυμα δεν στάλθηκε επειδή ο χρήστης %1$@ δεν έχει επαληθεύσει όλες τις συσκευές.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Το μήνυμα δεν στάλθηκε επειδή δεν έχεις επαληθεύσει τουλάχιστον μία από τις συσκευές σου.";
+"screen.media_details.no_more_files_to_show" = "No more files to show";
+"screen.media_details.no_more_media_to_show" = "No more media to show";
 "screen_account_provider_form_hint" = "Διεύθυνση οικιακού διακομιστή";
 "screen_account_provider_form_notice" = "Εισήγαγε έναν όρο αναζήτησης ή μια διεύθυνση τομέα.";
 "screen_account_provider_form_subtitle" = "Αναζήτησε μια εταιρεία, κοινότητα ή ιδιωτικό διακομιστή.";

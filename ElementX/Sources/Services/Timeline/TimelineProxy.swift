@@ -150,7 +150,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         do {
             let timelineEndReached = switch direction {
             case .backwards: try await timeline.paginateBackwards(numEvents: requestSize)
-            case .forwards: try await timeline.focusedPaginateForwards(numEvents: requestSize)
+            case .forwards: try await timeline.paginateForwards(numEvents: requestSize)
             }
             MXLog.info("Finished paginating \(direction.rawValue)")
 
@@ -605,10 +605,13 @@ final class TimelineProxy: TimelineProxyProtocol {
                 MXLog.error("Failed to subscribe to back pagination status with error: \(error)")
             }
             forwardPaginationStatusSubject.send(.timelineEndReached)
-        case .detached, .media:
+        case .detached:
             // Detached timelines don't support observation, set the initial state ourself.
             backPaginationStatusSubject.send(.idle)
             forwardPaginationStatusSubject.send(.idle)
+        case .media(let presentation):
+            backPaginationStatusSubject.send(.idle)
+            forwardPaginationStatusSubject.send(presentation == .mediaFilesScreen ? .timelineEndReached : .idle)
         case .pinned:
             backPaginationStatusSubject.send(.timelineEndReached)
             forwardPaginationStatusSubject.send(.timelineEndReached)

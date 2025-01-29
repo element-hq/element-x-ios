@@ -248,8 +248,11 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         do {
             let membersNoSyncIterator = try await room.membersNoSync()
             if let members = membersNoSyncIterator.nextChunk(chunkSize: membersNoSyncIterator.len()) {
+                let memberIds = members.map { $0.userId }
+                let zeroMembers = try await zeroUsersService.fetchZeroUsers(userIds: memberIds)
                 membersSubject.value = members.map { member in
-                    RoomMemberProxy(member: member)
+                    RoomMemberProxy(member: member,
+                                    zeroMember: zeroMembers.first(where: { $0.matrixId == member.userId }))
                 }
             }
         } catch {
@@ -260,8 +263,11 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             // Then we update members using the sync API, this is slower but will get us the latest members
             let membersIterator = try await room.members()
             if let members = membersIterator.nextChunk(chunkSize: membersIterator.len()) {
+                let memberIds = members.map { $0.userId }
+                let zeroMembers = try await zeroUsersService.fetchZeroUsers(userIds: memberIds)
                 membersSubject.value = members.map { member in
-                    RoomMemberProxy(member: member)
+                    RoomMemberProxy(member: member,
+                                    zeroMember: zeroMembers.first(where: { $0.matrixId == member.userId }))
                 }
             }
         } catch {

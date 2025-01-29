@@ -174,6 +174,7 @@
 "common_light" = "Light";
 "common_link_copied_to_clipboard" = "Link copied to clipboard";
 "common_loading" = "Loading…";
+"common_loading_more" = "Loading more…";
 "common_message" = "Message";
 "common_message_actions" = "Message actions";
 "common_message_layout" = "Message layout";
@@ -413,6 +414,8 @@
 "screen_knock_requests_list_title" = "Requests to join";
 "screen_media_details_file_format" = "File format";
 "screen_media_details_filename" = "File name";
+"screen_media_details_no_more_files_to_show" = "No more files to show";
+"screen_media_details_no_more_media_to_show" = "No more media to show";
 "screen_media_details_redact_confirmation_message" = "This file will be removed from the room and members won’t have access to it.";
 "screen_media_details_redact_confirmation_title" = "Delete file?";
 "screen_media_details_uploaded_by" = "Uploaded by";
@@ -793,9 +796,9 @@
 "screen_room_change_permissions_administrators" = "Admins only";
 "screen_room_change_permissions_ban_people" = "Ban people";
 "screen_room_change_permissions_delete_messages" = "Remove messages";
-"screen_room_change_permissions_invite_people" = "Invite people";
+"screen_room_change_permissions_invite_people" = "Invite people and accept requests to join";
 "screen_room_change_permissions_moderators" = "Admins and moderators";
-"screen_room_change_permissions_remove_people" = "Remove people";
+"screen_room_change_permissions_remove_people" = "Remove people and decline requests to join";
 "screen_room_change_permissions_room_avatar" = "Change room avatar";
 "screen_room_change_permissions_room_name" = "Change room name";
 "screen_room_change_permissions_room_topic" = "Change room topic";

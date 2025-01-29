@@ -35,23 +35,35 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
         
-        let previewItems = timelineViewModel.context.viewState.timelineState.itemViewStates.compactMap(TimelineMediaPreviewItem.init)
-        let initialItemIndex = previewItems.firstIndex { $0.id == context.item.id } ?? 0
-        let currentItem = previewItems[initialItemIndex]
+        let timelineState = timelineViewModel.context.viewState.timelineState
         
-        super.init(initialViewState: TimelineMediaPreviewViewState(previewItems: previewItems,
-                                                                   initialItemIndex: initialItemIndex,
-                                                                   currentItem: currentItem,
+        super.init(initialViewState: TimelineMediaPreviewViewState(dataSource: .init(itemViewStates: timelineState.itemViewStates,
+                                                                                     initialItem: context.item,
+                                                                                     paginationState: timelineState.paginationState),
                                                                    transitionNamespace: context.namespace),
                    mediaProvider: mediaProvider)
         
         rebuildCurrentItemActions()
         
-        timelineViewModel.context.$viewState.map(\.canCurrentUserRedactSelf)
-            .merge(with: timelineViewModel.context.$viewState.map(\.canCurrentUserRedactOthers))
+        let canRedactSelfPublisher = timelineViewModel.context.$viewState.map(\.canCurrentUserRedactSelf)
+        let canRedactOthersPublisher = timelineViewModel.context.$viewState.map(\.canCurrentUserRedactOthers)
+        
+        canRedactSelfPublisher.merge(with: canRedactOthersPublisher)
             .sink { [weak self] _ in
                 self?.rebuildCurrentItemActions()
             }
+            .store(in: &cancellables)
+        
+        timelineViewModel.context.$viewState.map(\.timelineState.itemViewStates)
+            .removeDuplicates()
+            .sink { [weak self] itemViewStates in
+                self?.state.dataSource.updatePreviewItems(itemViewStates: itemViewStates)
+            }
+            .store(in: &cancellables)
+        
+        timelineViewModel.context.$viewState.map(\.timelineState.paginationState)
+            .removeDuplicates()
+            .weakAssign(to: \.state.dataSource.paginationState, on: self)
             .store(in: &cancellables)
     }
     
@@ -59,8 +71,8 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         switch viewAction {
         case .updateCurrentItem(let item):
             Task { await updateCurrentItem(item) }
-        case .showCurrentItemDetails:
-            state.bindings.mediaDetailsItem = state.currentItem
+        case .showItemDetails(let mediaItem):
+            state.bindings.mediaDetailsItem = mediaItem
         case .menuAction(let action, let item):
             switch action {
             case .viewInRoomTimeline:
@@ -74,47 +86,58 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             }
         case .redactConfirmation(let item):
             redactItem(item)
+        case .timelineEndReached:
+            showTimelineEndIndicator()
         case .dismiss:
             actionsSubject.send(.dismiss)
         }
     }
     
     private func updateCurrentItem(_ previewItem: TimelineMediaPreviewItem) async {
-        previewItem.downloadError = nil // Clear any existing error.
-        state.currentItem = previewItem
-        currentItemIDHandler?(previewItem.id)
-        
+        if case let .media(item) = previewItem {
+            item.downloadError = nil // Clear any existing error.
+        }
+        state.dataSource.updateCurrentItem(previewItem)
         rebuildCurrentItemActions()
         
-        if previewItem.fileHandle == nil, let source = previewItem.mediaSource {
-            switch await mediaProvider.loadFileFromSource(source, filename: previewItem.filename) {
-            case .success(let handle):
-                previewItem.fileHandle = handle
-                state.fileLoadedPublisher.send(previewItem.id)
-            case .failure(let error):
-                MXLog.error("Failed loading media: \(error)")
-                context.objectWillChange.send() // Manually trigger the SwiftUI view update.
-                previewItem.downloadError = error
+        if case let .media(mediaItem) = previewItem {
+            currentItemIDHandler?(mediaItem.id)
+            
+            if mediaItem.fileHandle == nil, let source = mediaItem.mediaSource {
+                switch await mediaProvider.loadFileFromSource(source, filename: mediaItem.filename) {
+                case .success(let handle):
+                    mediaItem.fileHandle = handle
+                    state.fileLoadedPublisher.send(mediaItem.id)
+                case .failure(let error):
+                    MXLog.error("Failed loading media: \(error)")
+                    context.objectWillChange.send() // Manually trigger the SwiftUI view update.
+                    mediaItem.downloadError = error
+                }
             }
         }
     }
     
     private func rebuildCurrentItemActions() {
         let timelineContext = timelineViewModel.context
-        let provider = TimelineItemMenuActionProvider(timelineItem: state.currentItem.timelineItem,
-                                                      canCurrentUserRedactSelf: timelineContext.viewState.canCurrentUserRedactSelf,
-                                                      canCurrentUserRedactOthers: timelineContext.viewState.canCurrentUserRedactOthers,
-                                                      canCurrentUserPin: timelineContext.viewState.canCurrentUserPin,
-                                                      pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
-                                                      isDM: timelineContext.viewState.isEncryptedOneToOneRoom,
-                                                      isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
-                                                      timelineKind: timelineContext.viewState.timelineKind,
-                                                      emojiProvider: timelineContext.viewState.emojiProvider)
-        state.currentItemActions = provider.makeActions()
+        state.currentItemActions = switch state.currentItem {
+        case .media(let mediaItem):
+            TimelineItemMenuActionProvider(timelineItem: mediaItem.timelineItem,
+                                           canCurrentUserRedactSelf: timelineContext.viewState.canCurrentUserRedactSelf,
+                                           canCurrentUserRedactOthers: timelineContext.viewState.canCurrentUserRedactOthers,
+                                           canCurrentUserPin: timelineContext.viewState.canCurrentUserPin,
+                                           pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
+                                           isDM: timelineContext.viewState.isEncryptedOneToOneRoom,
+                                           isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
+                                           timelineKind: timelineContext.viewState.timelineKind,
+                                           emojiProvider: timelineContext.viewState.emojiProvider)
+                .makeActions()
+        case .loading:
+            nil
+        }
     }
     
     private func saveCurrentItem() async {
-        guard let fileURL = state.currentItem.fileHandle?.url else {
+        guard case let .media(mediaItem) = state.currentItem, let fileURL = mediaItem.fileHandle?.url else {
             MXLog.error("Unable to save an item without a URL, the button shouldn't be visible.")
             return
         }
@@ -123,7 +146,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         state.bindings.mediaDetailsItem = nil
         
         do {
-            switch state.currentItem.timelineItem {
+            switch mediaItem.timelineItem {
             case is AudioRoomTimelineItem, is FileRoomTimelineItem:
                 state.bindings.fileToExport = .init(url: fileURL)
                 return // Don't show the indicator.
@@ -148,7 +171,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
     }
     
-    private func redactItem(_ item: TimelineMediaPreviewItem) {
+    private func redactItem(_ item: TimelineMediaPreviewItem.Media) {
         timelineViewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.id, action: .redact))
         state.bindings.redactConfirmationItem = nil
         state.bindings.mediaDetailsItem = nil
@@ -177,6 +200,12 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                                                               type: .toast,
                                                               title: L10n.errorUnknown,
                                                               iconName: "xmark"))
+    }
+    
+    private func showTimelineEndIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: statusIndicatorID,
+                                                              type: .toast,
+                                                              title: L10n.screenMediaDetailsNoMoreMediaToShow))
     }
     
     private var statusIndicatorID: String { "\(Self.self)-Status" }

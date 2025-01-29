@@ -2,4 +2,4 @@
 "NSFaceIDUsageDescription" = "Face ID використовується для доступу до вашого застосунку.";
 "NSLocationWhenInUseUsageDescription" = "Надайте доступ до місцеперебування, щоб Element X міг поділитися ним.";
 "NSMicrophoneUsageDescription" = "Щоб записувати та надсилати повідомлення зі звуком, Element X потрібен доступ до мікрофона.";
-"NSPhotoLibraryUsageDescription" = "Дозволяє зберігати світлини та відео у вашій бібліотеці.";
+"NSPhotoLibraryUsageDescription" = "Дає змогу зберігати світлини та відео у вашій бібліотеці.";

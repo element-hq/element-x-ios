@@ -18,6 +18,17 @@ struct TimelineMediaPreviewScreen: View {
     private var toolbarVisibility: Visibility { isFullScreen ? .hidden : .visible }
     
     private var currentItem: TimelineMediaPreviewItem { context.viewState.currentItem }
+    private var currentItemID: TimelineItemIdentifier? {
+        guard case .media(let mediaItem) = currentItem else { return nil }
+        return mediaItem.id
+    }
+    
+    private var shouldShowDownloadIndicator: Bool {
+        switch currentItem {
+        case .media(let mediaItem): mediaItem.fileHandle == nil
+        case .loading(let loadingItem): loadingItem.state == .paginating
+        }
+    }
     
     var body: some View {
         NavigationStack {
@@ -40,7 +51,7 @@ struct TimelineMediaPreviewScreen: View {
         .onDisappear {
             itemIDHandler?(nil)
         }
-        .zoomTransition(sourceID: currentItem.id, in: context.viewState.transitionNamespace)
+        .zoomTransition(sourceID: currentItemID, in: context.viewState.transitionNamespace)
     }
     
     var quickLookPreview: some View {
@@ -55,22 +66,25 @@ struct TimelineMediaPreviewScreen: View {
             .safeAreaInset(edge: .bottom, spacing: 0) { caption }
     }
     
+    @ViewBuilder
     private var fullScreenButton: some View {
-        Button {
-            withAnimation { isFullScreen.toggle() }
-        } label: {
-            CompoundIcon(isFullScreen ? \.collapse : \.expand, size: .xSmall, relativeTo: .compound.bodyLG)
-                .padding(6)
-                .background(.thinMaterial, in: Circle())
+        if case .media = currentItem {
+            Button {
+                withAnimation { isFullScreen.toggle() }
+            } label: {
+                CompoundIcon(isFullScreen ? \.collapse : \.expand, size: .xSmall, relativeTo: .compound.bodyLG)
+                    .padding(6)
+                    .background(.thinMaterial, in: Circle())
+            }
+            .tint(.compound.textActionPrimary)
+            .padding(.top, 12)
+            .padding(.trailing, 14)
         }
-        .tint(.compound.textActionPrimary)
-        .padding(.top, 12)
-        .padding(.trailing, 14)
     }
     
     @ViewBuilder
     private var downloadStatusIndicator: some View {
-        if currentItem.downloadError != nil {
+        if case let .media(mediaItem) = currentItem, mediaItem.downloadError != nil {
             VStack(spacing: 24) {
                 CompoundIcon(\.error, size: .custom(48), relativeTo: .compound.headingLG)
                     .foregroundStyle(.compound.iconCriticalPrimary)
@@ -91,7 +105,7 @@ struct TimelineMediaPreviewScreen: View {
             .padding(.horizontal, 24)
             .padding(.vertical, 40)
             .background(.compound.bgSubtlePrimary, in: RoundedRectangle(cornerRadius: 14))
-        } else if currentItem.fileHandle == nil {
+        } else if shouldShowDownloadIndicator {
             ProgressView()
                 .controlSize(.large)
                 .tint(.compound.iconPrimary)
@@ -100,7 +114,7 @@ struct TimelineMediaPreviewScreen: View {
     
     @ViewBuilder
     private var caption: some View {
-        if let caption = currentItem.caption, !isFullScreen {
+        if case let .media(mediaItem) = currentItem, let caption = mediaItem.caption, !isFullScreen {
             Text(caption)
                 .font(.compound.bodyLG)
                 .foregroundStyle(.compound.textPrimary)
@@ -130,23 +144,33 @@ struct TimelineMediaPreviewScreen: View {
             toolbarHeader
         }
         
-        ToolbarItem(placement: .primaryAction) {
-            Button { context.send(viewAction: .showCurrentItemDetails) } label: {
-                CompoundIcon(\.info)
+        if case let .media(mediaItem) = currentItem {
+            ToolbarItem(placement: .primaryAction) {
+                Button { context.send(viewAction: .showItemDetails(mediaItem)) } label: {
+                    CompoundIcon(\.info)
+                }
+                .tint(.compound.textActionPrimary)
             }
-            .tint(.compound.textActionPrimary)
         }
     }
     
+    @ViewBuilder
     private var toolbarHeader: some View {
-        VStack(spacing: 0) {
-            Text(currentItem.sender.displayName ?? currentItem.sender.id)
+        switch currentItem {
+        case .media(let mediaItem):
+            VStack(spacing: 0) {
+                Text(mediaItem.sender.displayName ?? mediaItem.sender.id)
+                    .font(.compound.bodySMSemibold)
+                    .foregroundStyle(.compound.textPrimary)
+                Text(mediaItem.timestamp.formatted(date: .abbreviated, time: .omitted))
+                    .font(.compound.bodyXS)
+                    .foregroundStyle(.compound.textPrimary)
+                    .textCase(.uppercase)
+            }
+        case .loading:
+            Text(L10n.commonLoadingMore)
                 .font(.compound.bodySMSemibold)
                 .foregroundStyle(.compound.textPrimary)
-            Text(currentItem.timestamp.formatted(date: .abbreviated, time: .omitted))
-                .font(.compound.bodyXS)
-                .foregroundStyle(.compound.textPrimary)
-                .textCase(.uppercase)
         }
     }
 }
@@ -156,14 +180,11 @@ struct TimelineMediaPreviewScreen: View {
 private struct QuickLookView: UIViewControllerRepresentable {
     let viewModelContext: TimelineMediaPreviewViewModel.Context
 
-    func makeUIViewController(context: Context) -> PreviewController {
-        let fileLoadedPublisher = viewModelContext.viewState.fileLoadedPublisher.eraseToAnyPublisher()
-        let controller = PreviewController(coordinator: context.coordinator, fileLoadedPublisher: fileLoadedPublisher)
-        controller.currentPreviewItemIndex = viewModelContext.viewState.initialItemIndex
-        return controller
+    func makeUIViewController(context: Context) -> QLPreviewController {
+        context.coordinator.previewController
     }
 
-    func updateUIViewController(_ uiViewController: PreviewController, context: Context) { }
+    func updateUIViewController(_ uiViewController: QLPreviewController, context: Context) { }
     
     func makeCoordinator() -> Coordinator {
         Coordinator(viewModelContext: viewModelContext)
@@ -171,55 +192,78 @@ private struct QuickLookView: UIViewControllerRepresentable {
     
     // MARK: Coordinator
     
-    class Coordinator: NSObject, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
+    @MainActor class Coordinator {
+        let previewController = QLPreviewController()
+        
         private let viewModelContext: TimelineMediaPreviewViewModel.Context
+        
+        private var cancellables: Set<AnyCancellable> = []
         
         init(viewModelContext: TimelineMediaPreviewViewModel.Context) {
             self.viewModelContext = viewModelContext
-        }
-        
-        func updateCurrentItem(_ item: TimelineMediaPreviewItem) {
-            viewModelContext.send(viewAction: .updateCurrentItem(item))
-        }
-        
-        func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
-            viewModelContext.viewState.previewItems.count
-        }
-
-        func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-            viewModelContext.viewState.previewItems[index]
-        }
-    }
-    
-    // MARK: UIKit
-    
-    class PreviewController: QLPreviewController {
-        private var cancellables: Set<AnyCancellable> = []
-        
-        init(coordinator: Coordinator, fileLoadedPublisher: AnyPublisher<TimelineItemIdentifier, Never>) {
-            super.init(nibName: nil, bundle: nil)
-            
-            dataSource = coordinator
-            delegate = coordinator
             
             // Observation of currentPreviewItem doesn't work, so use the index instead.
-            publisher(for: \.currentPreviewItemIndex)
+            previewController.publisher(for: \.currentPreviewItemIndex)
                 .sink { [weak self] _ in
-                    guard let self, let currentPreviewItem = currentPreviewItem as? TimelineMediaPreviewItem else { return }
-                    coordinator.updateCurrentItem(currentPreviewItem)
+                    // This isn't removing duplicates which may try to download and/or write to disk concurrently????
+                    self?.loadCurrentItem()
                 }
                 .store(in: &cancellables)
             
-            fileLoadedPublisher
-                .sink { [weak self] itemID in
-                    guard let self, (currentPreviewItem as? TimelineMediaPreviewItem)?.id == itemID else { return }
-                    refreshCurrentPreviewItem()
+            viewModelContext.viewState.dataSource.previewItemsPaginationPublisher
+                .sink { [weak self] in
+                    self?.handleUpdatedItems()
                 }
                 .store(in: &cancellables)
+            
+            viewModelContext.viewState.fileLoadedPublisher
+                .sink { [weak self] itemID in
+                    self?.handleFileLoaded(itemID: itemID)
+                }
+                .store(in: &cancellables)
+            
+            previewController.dataSource = viewModelContext.viewState.dataSource
+            previewController.currentPreviewItemIndex = viewModelContext.viewState.dataSource.initialItemIndex
         }
         
-        @available(*, unavailable)
-        required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+        private func loadCurrentItem() {
+            if let previewItem = previewController.currentPreviewItem as? TimelineMediaPreviewItem.Media {
+                viewModelContext.send(viewAction: .updateCurrentItem(.media(previewItem)))
+            } else if let loadingItem = previewController.currentPreviewItem as? TimelineMediaPreviewItem.Loading {
+                switch loadingItem.state {
+                case .paginating:
+                    viewModelContext.send(viewAction: .updateCurrentItem(.loading(loadingItem)))
+                case .timelineStart:
+                    Task { await returnToIndex(viewModelContext.viewState.dataSource.firstPreviewItemIndex) }
+                case .timelineEnd:
+                    Task { await returnToIndex(viewModelContext.viewState.dataSource.lastPreviewItemIndex) }
+                }
+            } else {
+                MXLog.error("Unexpected preview item type: \(type(of: previewController.currentPreviewItem))")
+            }
+        }
+        
+        private func returnToIndex(_ index: Int) async {
+            // Sleep to fix a bug where the update didn't take effect when the swipe velocity was slow.
+            try? await Task.sleep(for: .seconds(0.1))
+            
+            previewController.currentPreviewItemIndex = index
+            viewModelContext.send(viewAction: .timelineEndReached)
+        }
+        
+        private func handleUpdatedItems() {
+            if previewController.currentPreviewItem is TimelineMediaPreviewItem.Loading {
+                let dataSource = viewModelContext.viewState.dataSource
+                if dataSource.previewController(previewController, previewItemAt: previewController.currentPreviewItemIndex) is TimelineMediaPreviewItem.Media {
+                    previewController.refreshCurrentPreviewItem() // This will trigger loadCurrentItem automatically.
+                }
+            }
+        }
+        
+        private func handleFileLoaded(itemID: TimelineItemIdentifier) {
+            guard (previewController.currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID else { return }
+            previewController.refreshCurrentPreviewItem()
+        }
     }
 }
 

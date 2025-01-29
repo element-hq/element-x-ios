@@ -21,6 +21,7 @@
 "a11y_user_menu" = "Användarmeny";
 "a11y_voice_message_record" = "Spela in röstmeddelande.";
 "a11y_voice_message_stop_recording" = "Stoppa inspelning";
+"a11y.view_details" = "View details";
 "action_accept" = "Godkänn";
 "action_add_caption" = "Add caption";
 "action_add_to_timeline" = "Lägg till i tidslinjen";
@@ -58,7 +59,7 @@
 "action_forgot_password" = "Glömt lösenordet?";
 "action_forward" = "Vidarebefordra";
 "action_go_back" = "Gå tillbaka";
-"action_ignore" = "Ignore";
+"action_ignore" = "Ignorera";
 "action_invite" = "Bjud in";
 "action_invite_friends" = "Bjud in personer";
 "action_invite_friends_to_app" = "Bjud in personer till %1$@";
@@ -143,7 +144,7 @@
 "common_date_this_month" = "This month";
 "common_decryption_error" = "Avkrypteringsfel";
 "common_developer_options" = "Utvecklaralternativ";
-"common_device_id" = "Device ID";
+"common_device_id" = "Enhets-ID";
 "common_direct_chat" = "Direktchatt";
 "common_download_failed" = "Download failed";
 "common_downloading" = "Downloading";
@@ -173,6 +174,7 @@
 "common_light" = "Ljust";
 "common_link_copied_to_clipboard" = "Länk kopierad till klippbordet";
 "common_loading" = "Laddar …";
+"common_loading_more" = "Loading more…";
 "common_message" = "Meddelande";
 "common_message_actions" = "Meddelandeåtgärder";
 "common_message_layout" = "Meddelandearrangemang";
@@ -378,12 +380,12 @@
 "screen_create_room_room_visibility_section_title" = "Room visibility";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need a room address in order to make it visible in the directory.";
 "screen_edit_room_address_title" = "Room address";
-"screen_join_room_cancel_knock_action" = "Cancel request";
+"screen_join_room_cancel_knock_action" = "Avbryt begäran";
 "screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
 "screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
 "screen_join_room_cancel_knock_alert_title" = "Cancel request to join";
 "screen_join_room_knock_message_description" = "Meddelande (valfritt)";
-"screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
+"screen_join_room_knock_sent_description" = "Du kommer att få en inbjudan att gå med i rummet om din begäran accepteras.";
 "screen_join_room_knock_sent_title" = "Begäran om att gå med skickad";
 "screen_knock_requests_list_accept_all_alert_confirm_button_title" = "Yes, accept all";
 "screen_knock_requests_list_accept_all_alert_description" = "Are you sure you want to accept all requests to join?";
@@ -440,6 +442,7 @@
 "screen_room_single_knock_request_title" = "%1$@ wants to join this room";
 "screen_room_single_knock_request_view_button_title" = "View";
 "screen_room_details_pinned_events_row_title" = "Fästa meddelanden";
+"screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Requests to join";
 "screen_room_details_security_and_privacy_title" = "Security & privacy";
 "screen_roomlist_knock_event_sent_description" = "Request to join sent";
@@ -475,6 +478,8 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Meddelandet skickades inte eftersom verifierad identitet för %1$@ har ändrats.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Meddelandet skickades inte eftersom %1$@ inte har verifierat alla enheter.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Meddelandet skickades inte eftersom du inte har verifierat en eller flera av dina enheter.";
+"screen.media_details.no_more_files_to_show" = "No more files to show";
+"screen.media_details.no_more_media_to_show" = "No more media to show";
 "screen_account_provider_form_hint" = "Hemserveradress";
 "screen_account_provider_form_notice" = "Ange ett sökord eller en domänadress.";
 "screen_account_provider_form_subtitle" = "Sök efter ett företag, en gemenskap eller en privat server.";
@@ -842,8 +847,8 @@
 "screen_room_member_details_unblock_alert_action" = "Avblockera";
 "screen_room_member_details_unblock_alert_description" = "Du kommer att kunna se alla meddelanden från dem igen.";
 "screen_room_member_details_unblock_user" = "Avblockera användare";
-"screen_room_member_details_verify_button_subtitle" = "Use the web app to verify this user.";
-"screen_room_member_details_verify_button_title" = "Verify %1$@";
+"screen_room_member_details_verify_button_subtitle" = "Använd webbappen för att verifiera den här användaren.";
+"screen_room_member_details_verify_button_title" = "Verifiera %1$@";
 "screen_room_member_list_ban_member_confirmation_action" = "Banna";
 "screen_room_member_list_ban_member_confirmation_description" = "Denne kommer inte att kunna gå med i det här rummet igen om denne bjuds in.";
 "screen_room_member_list_ban_member_confirmation_title" = "Är du säker på att du vill banna den här medlemmen?";
@@ -949,13 +954,13 @@
 "screen_session_verification_positive_button_verifying_ongoing" = "Väntar på att matcha";
 "screen_session_verification_ready_subtitle" = "Jämför en unik uppsättning emojis.";
 "screen_session_verification_request_accepted_subtitle" = "Jämför de unika emojierna och se till att de visas i samma ordning.";
-"screen_session_verification_request_details_timestamp" = "Signed in";
+"screen_session_verification_request_details_timestamp" = "Inloggad";
 "screen_session_verification_request_failure_title" = "Verification failed";
-"screen_session_verification_request_footer" = "Only continue if you initiated this verification.";
-"screen_session_verification_request_subtitle" = "Verify the other device to keep your message history secure.";
+"screen_session_verification_request_footer" = "Fortsätt bara om du initierade denna verifiering.";
+"screen_session_verification_request_subtitle" = "Verifiera den andra enheten för att hålla din meddelandehistorik säker.";
 "screen_session_verification_request_success_subtitle" = "Now you can read or send messages securely on your other device.";
 "screen_session_verification_request_success_title" = "Device verified";
-"screen_session_verification_request_title" = "Verification requested";
+"screen_session_verification_request_title" = "Verifiering begärd";
 "screen_session_verification_they_dont_match" = "De matchar inte";
 "screen_session_verification_they_match" = "De matchar";
 "screen_session_verification_use_another_device_subtitle" = "Make sure you have the app open in the other device before starting verification from here.";
