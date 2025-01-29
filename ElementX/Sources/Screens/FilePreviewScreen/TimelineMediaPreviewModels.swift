@@ -18,7 +18,7 @@ struct TimelineMediaPreviewViewState: BindableState {
     var dataSource: TimelineMediaPreviewDataSource
     
     /// The media item that is currently being previewed.
-    var currentItem: TimelineMediaPreviewItem? { dataSource.currentItem }
+    var currentItem: TimelineMediaPreviewItem { dataSource.currentItem }
     /// All of the available actions for the current item.
     var currentItemActions: TimelineItemMenuActions?
     
@@ -32,9 +32,9 @@ struct TimelineMediaPreviewViewState: BindableState {
 
 struct TimelineMediaPreviewViewStateBindings {
     /// A binding that will present the Details view for the specified item.
-    var mediaDetailsItem: TimelineMediaPreviewItem?
+    var mediaDetailsItem: TimelineMediaPreviewItem.Media?
     /// A binding that will present a confirmation to redact the specified item.
-    var redactConfirmationItem: TimelineMediaPreviewItem?
+    var redactConfirmationItem: TimelineMediaPreviewItem.Media?
     /// A binding that will present a document picker to export the specified file.
     var fileToExport: TimelineMediaPreviewFileExportPicker.File?
     
@@ -46,9 +46,10 @@ enum TimelineMediaPreviewAlertType {
 }
 
 enum TimelineMediaPreviewViewAction {
-    case updateCurrentItem(TimelineMediaPreviewItem?)
-    case showCurrentItemDetails
-    case menuAction(TimelineItemMenuAction, item: TimelineMediaPreviewItem)
-    case redactConfirmation(item: TimelineMediaPreviewItem)
+    case updateCurrentItem(TimelineMediaPreviewItem)
+    case showItemDetails(TimelineMediaPreviewItem.Media)
+    case menuAction(TimelineItemMenuAction, item: TimelineMediaPreviewItem.Media)
+    case redactConfirmation(item: TimelineMediaPreviewItem.Media)
+    case timelineEndReached
     case dismiss
 }
