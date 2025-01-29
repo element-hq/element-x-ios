@@ -44,10 +44,17 @@ class AppLockSetupUITests: XCTestCase {
         
         enterPIN()
         
+        // This test has been especially flakey. We noticed that confirming the PIN will
+        // automatically hide the keyboard which makes the whole screen shift down while
+        // attempting to press the allow button. We also see an `App animations complete
+        // notification not received, will attempt to continue.` warning which seems to
+        // point to the same issue.
+        try await Task.sleep(for: .seconds(1.0))
+        
         // Setup biometrics screen.
         try await app.assertScreenshot(.appLockSetupFlow, step: Step.setupBiometrics)
         
-        app.buttons[A11yIdentifiers.appLockSetupBiometricsScreen.allow].tap()
+        app.buttons[A11yIdentifiers.appLockSetupBiometricsScreen.allow].tapCenter()
         
         // Settings screen.
         try await app.assertScreenshot(.appLockSetupFlow, step: Step.settings)

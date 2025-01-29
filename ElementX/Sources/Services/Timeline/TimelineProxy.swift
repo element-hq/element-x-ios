@@ -605,10 +605,13 @@ final class TimelineProxy: TimelineProxyProtocol {
                 MXLog.error("Failed to subscribe to back pagination status with error: \(error)")
             }
             forwardPaginationStatusSubject.send(.timelineEndReached)
-        case .detached, .media:
+        case .detached:
             // Detached timelines don't support observation, set the initial state ourself.
             backPaginationStatusSubject.send(.idle)
             forwardPaginationStatusSubject.send(.idle)
+        case .media(let presentation):
+            backPaginationStatusSubject.send(.idle)
+            forwardPaginationStatusSubject.send(presentation == .mediaFilesScreen ? .timelineEndReached : .idle)
         case .pinned:
             backPaginationStatusSubject.send(.timelineEndReached)
             forwardPaginationStatusSubject.send(.timelineEndReached)

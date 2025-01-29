@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct TimelineMediaPreviewDetailsView: View {
-    let item: TimelineMediaPreviewItem
+    let item: TimelineMediaPreviewItem.Media
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
     
     @State private var sheetHeight: CGFloat = .zero
@@ -132,7 +132,7 @@ struct TimelineMediaPreviewDetailsView: View {
     }
     
     private struct ActionButton: View {
-        let item: TimelineMediaPreviewItem
+        let item: TimelineMediaPreviewItem.Media
         let action: TimelineItemMenuAction
         let context: TimelineMediaPreviewViewModel.Context
         
@@ -177,29 +177,31 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
     static let presentedOnRoomViewModel = makeViewModel(isPresentedOnRoomScreen: true)
     
     static var previews: some View {
-        // swiftlint:disable force_unwrapping
-        TimelineMediaPreviewDetailsView(item: viewModel.state.currentItem!,
-                                        context: viewModel.context)
-            .previewDisplayName("Image")
-            .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
-                state.currentItemActions?.secondaryActions.contains(.redact) ?? false
-            })
+        if case let .media(mediaItem) = viewModel.state.currentItem {
+            TimelineMediaPreviewDetailsView(item: mediaItem, context: viewModel.context)
+                .previewDisplayName("Image")
+                .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
+                    state.currentItemActions?.secondaryActions.contains(.redact) ?? false
+                })
+        }
         
-        TimelineMediaPreviewDetailsView(item: loadingViewModel.state.currentItem!,
-                                        context: loadingViewModel.context)
-            .previewDisplayName("Loading")
-            .snapshotPreferences(expect: loadingViewModel.context.$viewState.map { state in
-                state.currentItemActions?.secondaryActions.contains(.redact) ?? false
-            })
+        if case let .media(mediaItem) = loadingViewModel.state.currentItem {
+            TimelineMediaPreviewDetailsView(item: mediaItem, context: loadingViewModel.context)
+                .previewDisplayName("Loading")
+                .snapshotPreferences(expect: loadingViewModel.context.$viewState.map { state in
+                    state.currentItemActions?.secondaryActions.contains(.redact) ?? false
+                })
+        }
         
-        TimelineMediaPreviewDetailsView(item: unknownTypeViewModel.state.currentItem!,
-                                        context: unknownTypeViewModel.context)
-            .previewDisplayName("Unknown type")
+        if case let .media(mediaItem) = unknownTypeViewModel.state.currentItem {
+            TimelineMediaPreviewDetailsView(item: mediaItem, context: unknownTypeViewModel.context)
+                .previewDisplayName("Unknown type")
+        }
         
-        TimelineMediaPreviewDetailsView(item: presentedOnRoomViewModel.state.currentItem!,
-                                        context: presentedOnRoomViewModel.context)
-            .previewDisplayName("Incoming on Room")
-        // swiftlint:enable force_unwrapping
+        if case let .media(mediaItem) = presentedOnRoomViewModel.state.currentItem {
+            TimelineMediaPreviewDetailsView(item: mediaItem, context: presentedOnRoomViewModel.context)
+                .previewDisplayName("Incoming on Room")
+        }
     }
     
     static func makeViewModel(contentType: UTType? = nil,
