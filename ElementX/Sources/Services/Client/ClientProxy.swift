@@ -861,6 +861,9 @@ class ClientProxy: ClientProxyProtocol {
                 break
             case .error:
                 restartSync()
+            case .offline:
+                // This needs to be enabled in the client builder first to be actually used
+                break
             }
         })
     }
