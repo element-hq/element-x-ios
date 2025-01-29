@@ -17,7 +17,18 @@ struct TimelineMediaPreviewScreen: View {
     @State private var isFullScreen = false
     private var toolbarVisibility: Visibility { isFullScreen ? .hidden : .visible }
     
-    private var currentItem: TimelineMediaPreviewItem? { context.viewState.currentItem }
+    private var currentItem: TimelineMediaPreviewItem { context.viewState.currentItem }
+    private var currentItemID: TimelineItemIdentifier? {
+        guard case .media(let mediaItem) = currentItem else { return nil }
+        return mediaItem.id
+    }
+    
+    private var shouldShowDownloadIndicator: Bool {
+        switch currentItem {
+        case .media(let mediaItem): mediaItem.fileHandle == nil
+        case .loading(let loadingItem): loadingItem.state == .paginating
+        }
+    }
     
     var body: some View {
         NavigationStack {
@@ -40,7 +51,7 @@ struct TimelineMediaPreviewScreen: View {
         .onDisappear {
             itemIDHandler?(nil)
         }
-        .zoomTransition(sourceID: currentItem?.id, in: context.viewState.transitionNamespace)
+        .zoomTransition(sourceID: currentItemID, in: context.viewState.transitionNamespace)
     }
     
     var quickLookPreview: some View {
@@ -57,7 +68,7 @@ struct TimelineMediaPreviewScreen: View {
     
     @ViewBuilder
     private var fullScreenButton: some View {
-        if currentItem != nil {
+        if case .media = currentItem {
             Button {
                 withAnimation { isFullScreen.toggle() }
             } label: {
@@ -73,7 +84,7 @@ struct TimelineMediaPreviewScreen: View {
     
     @ViewBuilder
     private var downloadStatusIndicator: some View {
-        if currentItem?.downloadError != nil {
+        if case let .media(mediaItem) = currentItem, mediaItem.downloadError != nil {
             VStack(spacing: 24) {
                 CompoundIcon(\.error, size: .custom(48), relativeTo: .compound.headingLG)
                     .foregroundStyle(.compound.iconCriticalPrimary)
@@ -94,7 +105,7 @@ struct TimelineMediaPreviewScreen: View {
             .padding(.horizontal, 24)
             .padding(.vertical, 40)
             .background(.compound.bgSubtlePrimary, in: RoundedRectangle(cornerRadius: 14))
-        } else if currentItem?.fileHandle == nil {
+        } else if shouldShowDownloadIndicator {
             ProgressView()
                 .controlSize(.large)
                 .tint(.compound.iconPrimary)
@@ -103,7 +114,7 @@ struct TimelineMediaPreviewScreen: View {
     
     @ViewBuilder
     private var caption: some View {
-        if let caption = currentItem?.caption, !isFullScreen {
+        if case let .media(mediaItem) = currentItem, let caption = mediaItem.caption, !isFullScreen {
             Text(caption)
                 .font(.compound.bodyLG)
                 .foregroundStyle(.compound.textPrimary)
@@ -133,9 +144,9 @@ struct TimelineMediaPreviewScreen: View {
             toolbarHeader
         }
         
-        if currentItem != nil {
+        if case let .media(mediaItem) = currentItem {
             ToolbarItem(placement: .primaryAction) {
-                Button { context.send(viewAction: .showCurrentItemDetails) } label: {
+                Button { context.send(viewAction: .showItemDetails(mediaItem)) } label: {
                     CompoundIcon(\.info)
                 }
                 .tint(.compound.textActionPrimary)
@@ -145,17 +156,18 @@ struct TimelineMediaPreviewScreen: View {
     
     @ViewBuilder
     private var toolbarHeader: some View {
-        if let currentItem {
+        switch currentItem {
+        case .media(let mediaItem):
             VStack(spacing: 0) {
-                Text(currentItem.sender.displayName ?? currentItem.sender.id)
+                Text(mediaItem.sender.displayName ?? mediaItem.sender.id)
                     .font(.compound.bodySMSemibold)
                     .foregroundStyle(.compound.textPrimary)
-                Text(currentItem.timestamp.formatted(date: .abbreviated, time: .omitted))
+                Text(mediaItem.timestamp.formatted(date: .abbreviated, time: .omitted))
                     .font(.compound.bodyXS)
                     .foregroundStyle(.compound.textPrimary)
                     .textCase(.uppercase)
             }
-        } else {
+        case .loading:
             Text(L10n.commonLoadingMore)
                 .font(.compound.bodySMSemibold)
                 .foregroundStyle(.compound.textPrimary)
@@ -215,20 +227,41 @@ private struct QuickLookView: UIViewControllerRepresentable {
         }
         
         private func loadCurrentItem() {
-            viewModelContext.send(viewAction: .updateCurrentItem(previewController.currentPreviewItem as? TimelineMediaPreviewItem))
+            if let previewItem = previewController.currentPreviewItem as? TimelineMediaPreviewItem.Media {
+                viewModelContext.send(viewAction: .updateCurrentItem(.media(previewItem)))
+            } else if let loadingItem = previewController.currentPreviewItem as? TimelineMediaPreviewItem.Loading {
+                switch loadingItem.state {
+                case .paginating:
+                    viewModelContext.send(viewAction: .updateCurrentItem(.loading(loadingItem)))
+                case .timelineStart:
+                    Task { await returnToIndex(viewModelContext.viewState.dataSource.firstPreviewItemIndex) }
+                case .timelineEnd:
+                    Task { await returnToIndex(viewModelContext.viewState.dataSource.lastPreviewItemIndex) }
+                }
+            } else {
+                MXLog.error("Unexpected preview item type: \(type(of: previewController.currentPreviewItem))")
+            }
+        }
+        
+        private func returnToIndex(_ index: Int) async {
+            // Sleep to fix a bug where the update didn't take effect when the swipe velocity was slow.
+            try? await Task.sleep(for: .seconds(0.1))
+            
+            previewController.currentPreviewItemIndex = index
+            viewModelContext.send(viewAction: .timelineEndReached)
         }
         
         private func handleUpdatedItems() {
-            if previewController.currentPreviewItem is TimelineMediaPreviewLoadingItem {
+            if previewController.currentPreviewItem is TimelineMediaPreviewItem.Loading {
                 let dataSource = viewModelContext.viewState.dataSource
-                if dataSource.previewController(previewController, previewItemAt: previewController.currentPreviewItemIndex) is TimelineMediaPreviewItem {
+                if dataSource.previewController(previewController, previewItemAt: previewController.currentPreviewItemIndex) is TimelineMediaPreviewItem.Media {
                     previewController.refreshCurrentPreviewItem() // This will trigger loadCurrentItem automatically.
                 }
             }
         }
         
         private func handleFileLoaded(itemID: TimelineItemIdentifier) {
-            guard (previewController.currentPreviewItem as? TimelineMediaPreviewItem)?.id == itemID else { return }
+            guard (previewController.currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID else { return }
             previewController.refreshCurrentPreviewItem()
         }
     }

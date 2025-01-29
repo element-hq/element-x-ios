@@ -1458,6 +1458,10 @@ internal enum L10n {
   internal static var screenMediaDetailsFileFormat: String { return L10n.tr("Localizable", "screen_media_details_file_format") }
   /// File name
   internal static var screenMediaDetailsFilename: String { return L10n.tr("Localizable", "screen_media_details_filename") }
+  /// No more files to show
+  internal static var screenMediaDetailsNoMoreFilesToShow: String { return L10n.tr("Localizable", "screen_media_details_no_more_files_to_show") }
+  /// No more media to show
+  internal static var screenMediaDetailsNoMoreMediaToShow: String { return L10n.tr("Localizable", "screen_media_details_no_more_media_to_show") }
   /// This file will be removed from the room and members won’t have access to it.
   internal static var screenMediaDetailsRedactConfirmationMessage: String { return L10n.tr("Localizable", "screen_media_details_redact_confirmation_message") }
   /// Delete file?
@@ -2803,15 +2807,6 @@ internal enum L10n {
     internal static var sendTo: String { return L10n.tr("Localizable", "common.send_to") }
     /// You
     internal static var you: String { return L10n.tr("Localizable", "common.you") }
-  }
-
-  internal enum Screen {
-    internal enum MediaDetails {
-      /// No more files to show
-      internal static var noMoreFilesToShow: String { return L10n.tr("Localizable", "screen.media_details.no_more_files_to_show") }
-      /// No more media to show
-      internal static var noMoreMediaToShow: String { return L10n.tr("Localizable", "screen.media_details.no_more_media_to_show") }
-    }
   }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
