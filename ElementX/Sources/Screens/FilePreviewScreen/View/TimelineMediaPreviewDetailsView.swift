@@ -12,7 +12,7 @@ struct TimelineMediaPreviewDetailsView: View {
     let item: TimelineMediaPreviewItem.Media
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
     
-    @State private var sheetHeight: CGFloat = .zero
+    @Binding var sheetHeight: CGFloat
     private let topPadding: CGFloat = 19
     
     var body: some View {
@@ -174,9 +174,11 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
     static let unknownTypeViewModel = makeViewModel()
     static let presentedOnRoomViewModel = makeViewModel(isPresentedOnRoomScreen: true)
     
+    @State static var sheetHeight: CGFloat = .zero
+    
     static var previews: some View {
         if case let .media(mediaItem) = viewModel.state.currentItem {
-            TimelineMediaPreviewDetailsView(item: mediaItem, context: viewModel.context)
+            TimelineMediaPreviewDetailsView(item: mediaItem, context: viewModel.context, sheetHeight: $sheetHeight)
                 .previewDisplayName("Image")
                 .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
                     state.currentItemActions?.secondaryActions.contains(.redact) ?? false
@@ -184,7 +186,7 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
         }
         
         if case let .media(mediaItem) = loadingViewModel.state.currentItem {
-            TimelineMediaPreviewDetailsView(item: mediaItem, context: loadingViewModel.context)
+            TimelineMediaPreviewDetailsView(item: mediaItem, context: loadingViewModel.context, sheetHeight: $sheetHeight)
                 .previewDisplayName("Loading")
                 .snapshotPreferences(expect: loadingViewModel.context.$viewState.map { state in
                     state.currentItemActions?.secondaryActions.contains(.redact) ?? false
@@ -192,12 +194,12 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
         }
         
         if case let .media(mediaItem) = unknownTypeViewModel.state.currentItem {
-            TimelineMediaPreviewDetailsView(item: mediaItem, context: unknownTypeViewModel.context)
+            TimelineMediaPreviewDetailsView(item: mediaItem, context: unknownTypeViewModel.context, sheetHeight: $sheetHeight)
                 .previewDisplayName("Unknown type")
         }
         
         if case let .media(mediaItem) = presentedOnRoomViewModel.state.currentItem {
-            TimelineMediaPreviewDetailsView(item: mediaItem, context: presentedOnRoomViewModel.context)
+            TimelineMediaPreviewDetailsView(item: mediaItem, context: presentedOnRoomViewModel.context, sheetHeight: $sheetHeight)
                 .previewDisplayName("Incoming on Room")
         }
     }

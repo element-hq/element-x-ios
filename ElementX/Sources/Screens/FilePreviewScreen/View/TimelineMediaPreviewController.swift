@@ -190,10 +190,17 @@ class TimelineMediaPreviewController: QLPreviewController {
     // MARK: - Actions
     
     private func presentMediaDetails(for mediaItem: TimelineMediaPreviewItem.Media) {
-        let hostingController = UIHostingController(rootView: TimelineMediaPreviewDetailsView(item: mediaItem, context: context))
+        let safeArea = view.safeAreaInsets.bottom
+        let sheetHeightBinding = Binding { safeArea } set: { [weak self] newValue, _ in
+            self?.detailsHostingController?.sheetPresentationController?.detents = [.height(newValue + safeArea)]
+        }
+        
+        let hostingController = UIHostingController(rootView: TimelineMediaPreviewDetailsView(item: mediaItem,
+                                                                                              context: context,
+                                                                                              sheetHeight: sheetHeightBinding))
         hostingController.view.backgroundColor = .compound.bgCanvasDefault
         hostingController.overrideUserInterfaceStyle = .dark
-        hostingController.sheetPresentationController?.detents = [.medium(), .large()]
+        hostingController.sheetPresentationController?.detents = [.height(safeArea)]
         hostingController.sheetPresentationController?.prefersGrabberVisible = true
         
         present(hostingController, animated: true)
@@ -325,5 +332,11 @@ private struct DownloadIndicatorView: View {
                 .controlSize(.large)
                 .tint(.compound.iconPrimary)
         }
+    }
+}
+
+private extension UISheetPresentationController.Detent {
+    static func height(_ height: CGFloat) -> UISheetPresentationController.Detent {
+        .custom { _ in height }
     }
 }
