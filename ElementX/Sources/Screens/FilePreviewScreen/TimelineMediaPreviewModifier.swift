@@ -27,6 +27,7 @@ private struct TimelineMediaPreviewModifier: ViewModifier {
             if let viewModel {
                 MediaPreviewViewController(viewModel: viewModel,
                                            dismissalPublisher: dismissalPublisher) { self.viewModel = nil }
+                    .id(viewModel.instanceID) // Fixes a bug where opening a second preview too quickly can break presentation.
             } else {
                 // Work around QLPreviewController dismissal issues, see below.
                 let _ = dismissalPublisher.send(())

@@ -11,6 +11,8 @@ import Foundation
 typealias TimelineMediaPreviewViewModelType = StateStoreViewModel<TimelineMediaPreviewViewState, TimelineMediaPreviewViewAction>
 
 class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
+    let instanceID = UUID()
+    
     private let timelineViewModel: TimelineViewModelProtocol
     private let mediaProvider: MediaProviderProtocol
     private let photoLibraryManager: PhotoLibraryManagerProtocol

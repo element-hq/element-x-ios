@@ -19,6 +19,8 @@ class TimelineMediaPreviewController: QLPreviewController {
     private let downloadIndicatorHostingController: UIHostingController<DownloadIndicatorView>
     private var detailsHostingController: UIHostingController<TimelineMediaPreviewDetailsView>?
     
+    private var barButtonTimer: Timer?
+    
     private var cancellables: Set<AnyCancellable> = []
     
     private var navigationBar: UINavigationBar? { view.subviews.first?.subviews.first { $0 is UINavigationBar } as? UINavigationBar }
@@ -97,6 +99,8 @@ class TimelineMediaPreviewController: QLPreviewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Layout
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
@@ -117,11 +121,27 @@ class TimelineMediaPreviewController: QLPreviewController {
         navigationBar?.topItem?.titleView = headerHostingController.view
         
         updateBarButtons()
+        
+        // Ridiculous hack to undo the controller's attempt to replace our info button with the list button.
+        if barButtonTimer == nil {
+            barButtonTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+                self?.updateBarButtons()
+            }
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        barButtonTimer?.invalidate()
+        barButtonTimer = nil
     }
     
     private func updateBarButtons() {
-        let button = UIBarButtonItem(customView: detailsButtonHostingController.view)
-        navigationBar?.topItem?.leftBarButtonItem = button
+        guard let topItem = navigationBar?.topItem else { return }
+        
+        if topItem.leftBarButtonItem?.customView == nil {
+            let button = UIBarButtonItem(customView: detailsButtonHostingController.view)
+            navigationBar?.topItem?.leftBarButtonItem = button
+        }
     }
     
     // MARK: Item loading
