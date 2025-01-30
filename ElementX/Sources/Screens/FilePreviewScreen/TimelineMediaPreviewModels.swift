@@ -13,6 +13,42 @@ enum TimelineMediaPreviewViewModelAction: Equatable {
     case dismiss
 }
 
+enum TimelineMediaPreviewDriverAction {
+    case itemLoaded(TimelineItemIdentifier)
+    case showItemDetails(TimelineMediaPreviewItem.Media)
+    case exportFile(TimelineMediaPreviewFileExportPicker.File)
+    case authorizationRequired(appMediator: AppMediatorProtocol)
+    case dismissDetailsSheet
+    
+    var isItemLoaded: Bool {
+        switch self {
+        case .itemLoaded: true
+        default: false
+        }
+    }
+    
+    var isShowItemDetails: Bool {
+        switch self {
+        case .showItemDetails: true
+        default: false
+        }
+    }
+    
+    var isExportFile: Bool {
+        switch self {
+        case .exportFile: true
+        default: false
+        }
+    }
+    
+    var isAuthorizationRequired: Bool {
+        switch self {
+        case .authorizationRequired: true
+        default: false
+        }
+    }
+}
+
 struct TimelineMediaPreviewViewState: BindableState {
     /// The data source for all of the preview-able items.
     var dataSource: TimelineMediaPreviewDataSource
@@ -22,23 +58,15 @@ struct TimelineMediaPreviewViewState: BindableState {
     /// All of the available actions for the current item.
     var currentItemActions: TimelineItemMenuActions?
     
-    /// The namespace used for the zoom transition.
-    let transitionNamespace: Namespace.ID
-    /// A publisher that the view model uses to signal to the QLPreviewController when the current item has been loaded.
-    let fileLoadedPublisher = PassthroughSubject<TimelineItemIdentifier, Never>()
+    /// A publisher that the view model uses to signal actions to the QLPreviewController.
+    let previewControllerDriver = PassthroughSubject<TimelineMediaPreviewDriverAction, Never>()
     
     var bindings = TimelineMediaPreviewViewStateBindings()
 }
 
 struct TimelineMediaPreviewViewStateBindings {
-    /// A binding that will present the Details view for the specified item.
-    var mediaDetailsItem: TimelineMediaPreviewItem.Media?
     /// A binding that will present a confirmation to redact the specified item.
     var redactConfirmationItem: TimelineMediaPreviewItem.Media?
-    /// A binding that will present a document picker to export the specified file.
-    var fileToExport: TimelineMediaPreviewFileExportPicker.File?
-    
-    var alertInfo: AlertInfo<TimelineMediaPreviewAlertType>?
 }
 
 enum TimelineMediaPreviewAlertType {
@@ -51,5 +79,4 @@ enum TimelineMediaPreviewViewAction {
     case menuAction(TimelineItemMenuAction, item: TimelineMediaPreviewItem.Media)
     case redactConfirmation(item: TimelineMediaPreviewItem.Media)
     case timelineEndReached
-    case dismiss
 }

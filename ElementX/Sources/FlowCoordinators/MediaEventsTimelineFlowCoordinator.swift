@@ -95,8 +95,9 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actions
             .sink { [weak self] action in
                 switch action {
-                case .viewItem(let previewContext):
-                    self?.presentMediaPreview(for: previewContext)
+                case .viewInRoomTimeline(let itemID):
+                    self?.navigationStackCoordinator.pop(animated: false)
+                    self?.actionsSubject.send(.viewInRoomTimeline(itemID))
                 }
             }
             .store(in: &cancellables)
@@ -104,28 +105,5 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.push(coordinator) { [weak self] in
             self?.actionsSubject.send(.finished)
         }
-    }
-    
-    private func presentMediaPreview(for previewContext: TimelineMediaPreviewContext) {
-        let parameters = TimelineMediaPreviewCoordinatorParameters(context: previewContext,
-                                                                   mediaProvider: userSession.mediaProvider,
-                                                                   userIndicatorController: userIndicatorController,
-                                                                   appMediator: appMediator)
-        
-        let coordinator = TimelineMediaPreviewCoordinator(parameters: parameters)
-        coordinator.actionsPublisher
-            .sink { [weak self] action in
-                switch action {
-                case .viewInRoomTimeline(let itemID):
-                    self?.navigationStackCoordinator.pop(animated: false)
-                    self?.actionsSubject.send(.viewInRoomTimeline(itemID))
-                    self?.navigationStackCoordinator.setFullScreenCoverCoordinator(nil)
-                case .dismiss:
-                    self?.navigationStackCoordinator.setFullScreenCoverCoordinator(nil)
-                }
-            }
-            .store(in: &cancellables)
-        
-        navigationStackCoordinator.setFullScreenCoverCoordinator(coordinator)
     }
 }

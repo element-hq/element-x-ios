@@ -169,8 +169,6 @@ struct TimelineMediaPreviewDetailsView: View {
 import UniformTypeIdentifiers
 
 struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePreview {
-    @Namespace private static var previewNamespace
-    
     static let viewModel = makeViewModel(contentType: .jpeg, isOutgoing: true)
     static let loadingViewModel = makeViewModel(contentType: .jpeg, isOutgoing: true, isDownloaded: false)
     static let unknownTypeViewModel = makeViewModel()
@@ -226,10 +224,9 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
         let timelineController = MockRoomTimelineController(timelineKind: timelineKind)
         timelineController.timelineItems = [item]
         
-        let viewModel = TimelineMediaPreviewViewModel(context: .init(item: item,
-                                                                     viewModel: TimelineViewModel.mock(timelineKind: timelineKind,
-                                                                                                       timelineController: timelineController),
-                                                                     namespace: previewNamespace),
+        let viewModel = TimelineMediaPreviewViewModel(initialItem: item,
+                                                      timelineViewModel: TimelineViewModel.mock(timelineKind: timelineKind,
+                                                                                                timelineController: timelineController),
                                                       mediaProvider: MediaProviderMock(configuration: .init()),
                                                       photoLibraryManager: PhotoLibraryManagerMock(.init()),
                                                       userIndicatorController: UserIndicatorControllerMock(),
