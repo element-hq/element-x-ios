@@ -738,7 +738,7 @@ internal enum L10n {
   }
   /// Notification
   internal static var notificationFallbackContent: String { return L10n.tr("Localizable", "notification_fallback_content") }
-  /// Incoming call
+  /// 📹 Incoming call
   internal static var notificationIncomingCall: String { return L10n.tr("Localizable", "notification_incoming_call") }
   /// ** Failed to send - please open room
   internal static var notificationInlineReplyFailed: String { return L10n.tr("Localizable", "notification_inline_reply_failed") }
