@@ -38,7 +38,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     
     enum Event: EventType {
         case next
-        case nextSkippingIdentityConfimed
+        case nextSkippingIdentityConfirmed
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -79,6 +79,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         
         stateMachine = .init(state: .initial)
         
+        configureStateMachine()
+        
         // Verification can change as part of the onboarding flow by verifying with
         // another device, using a recovery key or by resetting one's crypto identity.
         // It can also happen that onboarding started before it had a chance to update,
@@ -86,15 +88,14 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         // Handle all those cases here instead of spreading them throughout the code.
         verificationStateCancellable = userSession.sessionSecurityStatePublisher
             .map(\.verificationState)
-            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
                 guard let self,
                       value == .verified,
                       stateMachine.state == .identityConfirmation else { return }
                 
                 appSettings.hasRunIdentityConfirmationOnboarding = true
-                stateMachine.tryEvent(.nextSkippingIdentityConfimed)
-                self.verificationStateCancellable = nil
+                stateMachine.tryEvent(.nextSkippingIdentityConfirmed)
             }
     }
     
@@ -110,8 +111,6 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         guard shouldStart else {
             fatalError("This flow coordinator shouldn't have been started")
         }
-        
-        configureStateMachine()
         
         rootNavigationStackCoordinator.setFullScreenCoverCoordinator(navigationStackCoordinator, animated: !isNewLogin)
 
@@ -146,6 +145,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func configureStateMachine() {
+        stateMachine.addRoute(.init(fromState: .finished, toState: .initial))
         stateMachine.addRouteMapping { [weak self] event, fromState, _ in
             guard let self else {
                 return nil
@@ -164,7 +164,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 return .finished
                 
             case (.identityConfirmation, _, _, _, _):
-                if event == .nextSkippingIdentityConfimed {
+                if event == .nextSkippingIdentityConfirmed {
                     // Used when the verification state has updated to verified
                     // after starting the onboarding flow
                     switch (requiresAppLockSetup, requiresAnalyticsSetup, requiresNotificationsSetup) {
@@ -225,8 +225,17 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 presentNotificationPermissionsScreen()
             case (_, _, .finished):
                 rootNavigationStackCoordinator.setFullScreenCoverCoordinator(nil)
+                stateMachine.tryState(.initial)
+            case (.finished, _, .initial):
+                break
             default:
                 fatalError("Unknown transition: \(context)")
+            }
+            
+            if let event = context.event {
+                MXLog.info("Transitioning from `\(context.fromState)` to `\(context.toState)` with event `\(event)`")
+            } else {
+                MXLog.info("Transitioning from \(context.fromState)` to `\(context.toState)`")
             }
         }
         
@@ -251,7 +260,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 presentRecoveryKeyScreen()
             case .skip:
                 appSettings.hasRunIdentityConfirmationOnboarding = true
-                stateMachine.tryEvent(.nextSkippingIdentityConfimed)
+                stateMachine.tryEvent(.nextSkippingIdentityConfirmed)
             case .reset:
                 startEncryptionResetFlow()
             case .logout:
