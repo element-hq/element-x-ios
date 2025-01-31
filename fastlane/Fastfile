@@ -262,7 +262,8 @@ lane :prepare_next_release do
   new_build = build.to_i + 1
   new_version = "#{year}.#{month}.#{new_build}"
 
-  # Update the version in the file
+  # Bump the patch version. The empty string after -i is so that sed doesn't
+  # create a backup file on macOS
   sh("sed -i '' 's/MARKETING_VERSION: #{current_version}/MARKETING_VERSION: #{new_version}/g' #{target_file_path}")
   UI.message("Version updated from #{current_version} to #{new_version}")
 
