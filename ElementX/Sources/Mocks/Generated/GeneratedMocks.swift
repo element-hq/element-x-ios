@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.2.5 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.2.6 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -5459,6 +5459,76 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     func checkAndLinkZeroUser() {
         checkAndLinkZeroUserCallsCount += 1
         checkAndLinkZeroUserClosure?()
+    }
+    //MARK: - fetchZeroPosts
+
+    var fetchZeroPostsLimitUnderlyingCallsCount = 0
+    var fetchZeroPostsLimitCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchZeroPostsLimitUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchZeroPostsLimitUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchZeroPostsLimitUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchZeroPostsLimitUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchZeroPostsLimitCalled: Bool {
+        return fetchZeroPostsLimitCallsCount > 0
+    }
+    var fetchZeroPostsLimitReceivedLimit: Int?
+    var fetchZeroPostsLimitReceivedInvocations: [Int] = []
+
+    var fetchZeroPostsLimitUnderlyingReturnValue: Result<[ZPost], ClientProxyError>!
+    var fetchZeroPostsLimitReturnValue: Result<[ZPost], ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchZeroPostsLimitUnderlyingReturnValue
+            } else {
+                var returnValue: Result<[ZPost], ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchZeroPostsLimitUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchZeroPostsLimitUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchZeroPostsLimitUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchZeroPostsLimitClosure: ((Int) async -> Result<[ZPost], ClientProxyError>)?
+
+    func fetchZeroPosts(limit: Int) async -> Result<[ZPost], ClientProxyError> {
+        fetchZeroPostsLimitCallsCount += 1
+        fetchZeroPostsLimitReceivedLimit = limit
+        DispatchQueue.main.async {
+            self.fetchZeroPostsLimitReceivedInvocations.append(limit)
+        }
+        if let fetchZeroPostsLimitClosure = fetchZeroPostsLimitClosure {
+            return await fetchZeroPostsLimitClosure(limit)
+        } else {
+            return fetchZeroPostsLimitReturnValue
+        }
     }
     //MARK: - loadMediaContentForSource
 

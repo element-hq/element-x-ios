@@ -164,6 +164,7 @@ class ClientProxy: ClientProxyProtocol {
     private let zeroMessengerInviteApi: ZeroMessengerInviteApiProtocol
     private let zeroCreateAccountApi: ZeroCreateAccountApiProtocol
     private let zeroUserAccountApi: ZeroAccountApiProtocol
+    private let zeroPostsApi: ZeroPostsApiProtocol
     
     init(client: ClientProtocol,
          networkMonitor: NetworkMonitorProtocol,
@@ -189,6 +190,7 @@ class ClientProxy: ClientProxyProtocol {
         zeroMessengerInviteApi = ZeroMessengerInviteApi(appSettings: appSettings)
         zeroCreateAccountApi = ZeroCreateAccountApi(appSettings: appSettings)
         zeroUserAccountApi = ZeroAccountApi(appSettings: appSettings)
+        zeroPostsApi = ZeroPostsApi(appSettings: appSettings)
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
@@ -984,6 +986,21 @@ class ClientProxy: ClientProxyProtocol {
             } catch {
                 MXLog.error("Failed linking matrixId to zero user. Error: \(error)")
             }
+        }
+    }
+    
+    func fetchZeroPosts(limit: Int) async -> Result<[ZPost], ClientProxyError> {
+        do {
+            let zeroPostsResult = try await zeroPostsApi.fetchPosts(limit: limit)
+            switch zeroPostsResult {
+            case .success(let posts):
+                return .success(posts)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
         }
     }
     

@@ -235,4 +235,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func zeroProfile(userId: String) async
     
     func checkAndLinkZeroUser()
+    
+    // MARK: - Zero Posts
+    
+    func fetchZeroPosts(limit: Int) async -> Result<[ZPost], ClientProxyError>
 }
