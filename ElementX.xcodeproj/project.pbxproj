@@ -1787,6 +1787,8 @@
 		785613C0C092B532198EB3BB /* TimelineStartRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECC9D66400727DFFEE12E8 /* TimelineStartRoomTimelineView.swift */; };
 		7856DE3EA4580AE0329986EB /* ComposerDraftServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E600B315B920B9687F8EE1B /* ComposerDraftServiceMock.swift */; };
 		78A3D84BA47DAC69B4D0A34C /* CollapsibleRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBF273BC2BFB9F3EEFA988B /* CollapsibleRoomTimelineView.swift */; };
+		790393712D4CD63E0022E293 /* HomeTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393702D4CD63A0022E293 /* HomeTabView.swift */; };
+		790393722D4CD63E0022E293 /* HomeTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393702D4CD63A0022E293 /* HomeTabView.swift */; };
 		795A854F63301DC6B46217B9 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BB8DDE245ED86C489BA983 /* AccessibilityIdentifiers.swift */; };
 		795EAA0D2D4AD83D0015DAD8 /* TimelineMediaPreviewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18A454132A5A5247802821E /* TimelineMediaPreviewDataSource.swift */; };
 		79741C1953269FF1A211D246 /* RoomPollsHistoryScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E14FF533D25A0692F7CEB0 /* RoomPollsHistoryScreenViewModel.swift */; };
@@ -3232,6 +3234,7 @@
 		78913D6E120D46138E97C107 /* NavigationSplitCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationSplitCoordinatorTests.swift; sourceTree = "<group>"; };
 		7893780A1FD6E3F38B3E9049 /* UserIndicatorControllerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIndicatorControllerMock.swift; sourceTree = "<group>"; };
 		78BBDF7A05CF53B5CDC13682 /* landscape_test_video.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = landscape_test_video.mov; sourceTree = "<group>"; };
+		790393702D4CD63A0022E293 /* HomeTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabView.swift; sourceTree = "<group>"; };
 		796CBD0C56FA0D3AEDAB255B /* SessionVerificationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionVerificationScreenCoordinator.swift; sourceTree = "<group>"; };
 		79FAC366FF299BCC555D756E /* ElementWellKnown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementWellKnown.swift; sourceTree = "<group>"; };
 		7A03E073077D92AA19C43DCF /* IdentityConfirmationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityConfirmationScreenCoordinator.swift; sourceTree = "<group>"; };
@@ -5504,6 +5507,7 @@
 		4F43EBE458FBE634996AD7C6 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				790393702D4CD63A0022E293 /* HomeTabView.swift */,
 				D7BEB970F500BFB248443FA1 /* BloomView.swift */,
 				B902EA6CD3296B0E10EE432B /* HomeScreen.swift */,
 				A3B4B58B79A6FA250B24A1EC /* HomeScreenContent.swift */,
@@ -9236,6 +9240,7 @@
 				18525D092CF5EE240055C5E8 /* ZeroMessengerInvite.swift in Sources */,
 				18E9A58B2C9829970082DDA4 /* MediaUploadingPreprocessor.swift in Sources */,
 				18E9A58C2C9829970082DDA4 /* MentionBuilder.swift in Sources */,
+				790393712D4CD63E0022E293 /* HomeTabView.swift in Sources */,
 				18E9A58D2C9829970082DDA4 /* MentionSuggestionItemView.swift in Sources */,
 				18E9A58E2C9829970082DDA4 /* MenuSheetLabelStyle.swift in Sources */,
 				18E9A58F2C9829970082DDA4 /* MessageComposer.swift in Sources */,
@@ -10466,6 +10471,7 @@
 				49500BBA1CD65A5AE252D970 /* RoomDirectorySearchScreenModels.swift in Sources */,
 				91C6AC0E9D2B9C0C76CC6AD4 /* RoomDirectorySearchScreenScreenModelProtocol.swift in Sources */,
 				1DC227816777A2F3A19657E5 /* RoomDirectorySearchScreenViewModel.swift in Sources */,
+				790393722D4CD63E0022E293 /* HomeTabView.swift in Sources */,
 				2814E7075BF3A5C0CCBC9F90 /* RoomDirectorySearchView.swift in Sources */,
 				42F1C8731166633E35A6D7E6 /* RoomEventStringBuilder.swift in Sources */,
 				D55AF9B5B55FEED04771A461 /* RoomFlowCoordinator.swift in Sources */,

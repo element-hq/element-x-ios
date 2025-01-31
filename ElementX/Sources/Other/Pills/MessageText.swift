@@ -87,7 +87,7 @@ struct MessageText: UIViewRepresentable {
         
         textView.dataDetectorTypes = .link
         textView.linkTextAttributes = [
-            .foregroundColor: UIColor(Asset.Colors.brandColor.swiftUIColor),
+            .foregroundColor: UIColor(Asset.Colors.blue11.swiftUIColor),
             .underlineStyle: NSUnderlineStyle.single.rawValue // Underline
         ]
         

@@ -23,7 +23,14 @@ struct HomeScreen: View {
     @State private var hairlineView: UIView?
     
     var body: some View {
-        HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
+        HomeTabView(
+            firstTabContent: {
+                HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
+            },
+            secondTabContent: {
+                Text("Feeds Tab View")
+            }
+        )
             .alert(item: $context.alertInfo)
             .alert(item: $context.leaveRoomAlertItem,
                    actions: leaveRoomAlertActions,
