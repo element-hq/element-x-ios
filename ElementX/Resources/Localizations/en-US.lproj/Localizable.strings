@@ -326,7 +326,7 @@
 "notification_channel_noisy" = "Noisy notifications";
 "notification_channel_ringing_calls" = "Ringing calls";
 "notification_channel_silent" = "Silent notifications";
-"notification_incoming_call" = "Incoming call";
+"notification_incoming_call" = "📹 Incoming call";
 "notification_inline_reply_failed" = "** Failed to send - please open room";
 "notification_invite_body" = "Invited you to chat";
 "notification_invite_body_with_sender" = "%1$@ invited you to chat";
