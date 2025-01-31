@@ -24,6 +24,7 @@ struct SessionVerificationScreen: View {
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
         .interactiveDismissDisabled()
+        .navigationBarBackButtonHidden(context.viewState.verificationState != .initial)
     }
     
     // MARK: - Private

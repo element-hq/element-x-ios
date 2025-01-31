@@ -220,6 +220,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func attemptStartingOnboarding() {
+        MXLog.info("Attempting to start onboarding")
+        
         if onboardingFlowCoordinator.shouldStart {
             clearRoute(animated: false)
             onboardingFlowCoordinator.start()
@@ -340,7 +342,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         userSession.sessionSecurityStatePublisher
             .map(\.verificationState)
             .filter { $0 != .unknown }
-            .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 guard let self else { return }
