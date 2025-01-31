@@ -13,7 +13,9 @@ typealias MediaEventsTimelineScreenViewModelType = StateStoreViewModel<MediaEven
 class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType, MediaEventsTimelineScreenViewModelProtocol {
     private let mediaTimelineViewModel: TimelineViewModelProtocol
     private let filesTimelineViewModel: TimelineViewModelProtocol
+    private let mediaProvider: MediaProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let appMediator: AppMediatorProtocol
     
     private var isOldestItemVisible = false
     
@@ -37,10 +39,13 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
          filesTimelineViewModel: TimelineViewModelProtocol,
          initialViewState: MediaEventsTimelineScreenViewState = .init(bindings: .init(screenMode: .media)),
          mediaProvider: MediaProviderProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         appMediator: AppMediatorProtocol) {
         self.mediaTimelineViewModel = mediaTimelineViewModel
         self.filesTimelineViewModel = filesTimelineViewModel
+        self.mediaProvider = mediaProvider
         self.userIndicatorController = userIndicatorController
+        self.appMediator = appMediator
         
         super.init(initialViewState: initialViewState, mediaProvider: mediaProvider)
         
@@ -84,8 +89,8 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             backPaginateIfNecessary(paginationStatus: activeTimelineViewModel.context.viewState.timelineState.paginationState.backward)
         case .oldestItemDidDisappear:
             isOldestItemVisible = false
-        case .tappedItem(let item, let namespace):
-            handleItemTapped(item, namespace: namespace)
+        case .tappedItem(let item):
+            handleItemTapped(item)
         }
     }
     
@@ -141,7 +146,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         }
     }
     
-    private func handleItemTapped(_ item: RoomTimelineItemViewState, namespace: Namespace.ID) {
+    private func handleItemTapped(_ item: RoomTimelineItemViewState) {
         let item: EventBasedMessageTimelineItemProtocol? = switch item.type {
         case .audio(let audioItem): audioItem
         case .file(let fileItem): fileItem
@@ -155,14 +160,25 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             return
         }
         
-        actionsSubject.send(.viewItem(.init(item: item,
-                                            viewModel: activeTimelineViewModel,
-                                            namespace: namespace) { [weak self] itemID in
-                self?.state.currentPreviewItemID = itemID
-            }))
+        let viewModel = TimelineMediaPreviewViewModel(initialItem: item,
+                                                      timelineViewModel: activeTimelineViewModel,
+                                                      mediaProvider: mediaProvider,
+                                                      photoLibraryManager: PhotoLibraryManager(),
+                                                      userIndicatorController: userIndicatorController,
+                                                      appMediator: appMediator)
+        viewModel.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .viewInRoomTimeline(let itemID):
+                state.bindings.mediaPreviewViewModel = nil
+                actionsSubject.send(.viewInRoomTimeline(itemID))
+            case .dismiss:
+                state.bindings.mediaPreviewViewModel = nil
+            }
+        }
+        .store(in: &cancellables)
         
-        // Set the current item in the next run loop so that (hopefully) the presentation will be ready before we flip the thumbnail.
-        Task { state.currentPreviewItemID = item.id }
+        state.bindings.mediaPreviewViewModel = viewModel
     }
     
     private func titleForDate(_ date: Date) -> String {
