@@ -1,5 +1,4 @@
 require 'yaml'
-require 'semantic'
 
 enterprise = '../Enterprise/fastlane/Fastfile'
 if File.exist?(enterprise)
@@ -253,14 +252,19 @@ lane :prepare_next_release do
 
   data = YAML.load_file target_file_path
   current_version = data["settings"]["MARKETING_VERSION"]
-
-  version = Semantic::Version.new(current_version)
-
-  new_version = version.increment!(:patch)
   
-  # Bump the patch version. The empty string after -i is so that sed doesn't 
-  # create a backup file on macOS
-  sh("sed -i '' 's/MARKETING_VERSION: #{current_version}/MARKETING_VERSION: #{new_version.to_string}/g' #{target_file_path}")
+  matches = current_version.match(/^(\d{2})\.(\d{2})\.(\d+)$/)
+  unless matches
+    UI.user_error!("Invalid version format: #{current_version}")
+  end
+
+  year, month, build = matches.captures
+  new_build = build.to_i + 1
+  new_version = "#{year}.#{month}.#{new_build}"
+
+  # Update the version in the file
+  sh("sed -i '' 's/MARKETING_VERSION: #{current_version}/MARKETING_VERSION: #{new_version}/g' #{target_file_path}")
+  UI.message("Version updated from #{current_version} to #{new_version}")
 
   xcodegen(spec: "project.yml")
 
