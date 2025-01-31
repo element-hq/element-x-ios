@@ -11,6 +11,11 @@ import XCTest
 class AppLockSetupUITests: XCTestCase {
     var app: XCUIApplication!
     
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        continueAfterFailure = false
+    }
+    
     @MainActor enum Step {
         static let createPIN = 0
         static let confirmPIN = 1
