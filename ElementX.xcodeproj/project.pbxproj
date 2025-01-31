@@ -1896,6 +1896,7 @@
 		752A0EB49BF5BCEA37EDF7A3 /* Signposter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signposter.swift; sourceTree = "<group>"; };
 		753B4C6C0EDDCBF0708DC384 /* TimelineItemSendInfoLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemSendInfoLabel.swift; sourceTree = "<group>"; };
 		76310030C831D4610A705603 /* URLComponentsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLComponentsTests.swift; sourceTree = "<group>"; };
+		7720ACAC6155AB7F9C70B546 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nb; path = nb.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		7773CBFDBD458E0B7E270507 /* PillView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillView.swift; sourceTree = "<group>"; };
 		780258F1B9D15E30549FF4BE /* NotificationSettingsEditScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsEditScreenViewModel.swift; sourceTree = "<group>"; };
 		78910787F967CBC6042A101E /* StartChatScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartChatScreenViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -2501,6 +2502,7 @@
 		F4469F6AE311BDC439B3A5EC /* UserSessionMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSessionMock.swift; sourceTree = "<group>"; };
 		F4548A9BDE5CB3AB864BCA9F /* EffectsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectsView.swift; sourceTree = "<group>"; };
 		F506C6ADB1E1DA6638078E11 /* UITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F51D674A5B5F1FE1B878E20F /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F5311C989EC15B4C2D699025 /* StaticLocationScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticLocationScreenViewModel.swift; sourceTree = "<group>"; };
 		F57C8022B8A871A1DCD1750A /* UserIndicatorToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIndicatorToastView.swift; sourceTree = "<group>"; };
 		F5D1BAA90F3A073D91B4F16B /* RoomNotificationSettingsProxyMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomNotificationSettingsProxyMock.swift; sourceTree = "<group>"; };
@@ -6273,6 +6275,7 @@
 				id,
 				it,
 				ka,
+				nb,
 				nl,
 				pl,
 				pt,
@@ -7804,6 +7807,7 @@
 				475D47D0BFE961B02BAC5D49 /* id */,
 				6FC5015B9634698BDB8701AF /* it */,
 				D1896F6288D80E1F3EFB3DF8 /* ka */,
+				7720ACAC6155AB7F9C70B546 /* nb */,
 				2AE83A3DD63BCFBB956FE5CB /* nl */,
 				4C8D988E82A8DFA13BE46F7C /* pl */,
 				8166F121C79C7B62BF01D508 /* pt */,
@@ -7839,6 +7843,7 @@
 				EF98A02DED04075F7CF0C721 /* id */,
 				7B04BD3874D736127A8156B8 /* it */,
 				4629710C0337ADD9C8909542 /* ka */,
+				F51D674A5B5F1FE1B878E20F /* nb */,
 				CDE3F3911FF7CC639BDE5844 /* nl */,
 				8140010A796DB2C7977B6643 /* pl */,
 				0CB569EAA5017B5B23970655 /* pt */,
@@ -8500,7 +8505,7 @@
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 25.01.27;
+				version = 25.01.31;
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {
