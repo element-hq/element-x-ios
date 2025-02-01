@@ -12,6 +12,7 @@ import UserNotifications
 
 enum RoomFlowCoordinatorAction: Equatable {
     case presentCallScreen(roomProxy: JoinedRoomProxyProtocol)
+    case verifyUser(userID: String)
     case finished
     
     static func == (lhs: RoomFlowCoordinatorAction, rhs: RoomFlowCoordinatorAction) -> Bool {
@@ -1247,6 +1248,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
             case .startCall(let roomID):
                 Task { await self.presentCallScreen(roomID: roomID) }
+            case .verifyUser(let userID):
+                actionsSubject.send(.verifyUser(userID: userID))
             }
         }
         .store(in: &cancellables)
@@ -1272,6 +1275,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
             case .startCall(let roomID):
                 Task { await self.presentCallScreen(roomID: roomID) }
+            case .verifyUser(let userID):
+                actionsSubject.send(.verifyUser(userID: userID))
             case .dismiss:
                 break // Not supported when pushed.
             }
@@ -1530,6 +1535,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .presentCallScreen(let roomProxy):
                 actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+            case .verifyUser(let userID):
+                actionsSubject.send(.verifyUser(userID: userID))
             case .finished:
                 stateMachine.tryEvent(.dismissChildFlow)
             }

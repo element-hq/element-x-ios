@@ -278,7 +278,9 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController,
-                                                                        flow: .initiator)
+                                                                        flow: .deviceInitiator,
+                                                                        appSettings: appSettings,
+                                                                        mediaProvider: userSession.mediaProvider)
         
         let coordinator = SessionVerificationScreenCoordinator(parameters: parameters)
         

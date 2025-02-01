@@ -24,7 +24,7 @@ extension SessionVerificationControllerProxyMock {
         
         mock.acknowledgeVerificationRequestDetailsReturnValue = .success(())
 
-        mock.requestVerificationClosure = { [unowned mock] in
+        mock.requestDeviceVerificationClosure = { [unowned mock] in
             Task.detached {
                 try await Task.sleep(for: requestDelay)
                 mock.actions.send(.acceptedVerificationRequest)

@@ -14,13 +14,26 @@ enum SessionVerificationScreenCoordinatorAction {
 }
 
 enum SessionVerificationScreenFlow {
-    case initiator
-    case responder(details: SessionVerificationRequestDetails)
+    case deviceInitiator
+    case deviceResponder(requestDetails: SessionVerificationRequestDetails)
+    case userIntiator(userID: String)
+    case userResponder(requestDetails: SessionVerificationRequestDetails)
+    
+    var isResponder: Bool {
+        switch self {
+        case .deviceInitiator, .userIntiator:
+            false
+        case .deviceResponder, .userResponder:
+            true
+        }
+    }
 }
 
 struct SessionVerificationScreenCoordinatorParameters {
     let sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol
     let flow: SessionVerificationScreenFlow
+    let appSettings: AppSettings
+    let mediaProvider: MediaProviderProtocol
 }
 
 final class SessionVerificationScreenCoordinator: CoordinatorProtocol {
@@ -35,7 +48,9 @@ final class SessionVerificationScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: SessionVerificationScreenCoordinatorParameters) {
         viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: parameters.sessionVerificationControllerProxy,
-                                                       flow: parameters.flow)
+                                                       flow: parameters.flow,
+                                                       appSettings: parameters.appSettings,
+                                                       mediaProvider: parameters.mediaProvider)
     }
     
     // MARK: - Public
