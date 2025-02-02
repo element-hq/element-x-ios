@@ -154,6 +154,7 @@ struct ComposerToolbar: View {
     private var messageComposer: some View {
         MessageComposer(plainComposerText: $context.plainComposerText,
                         presendCallback: $context.presendCallback,
+                        selectedRange: $context.selectedRange,
                         composerView: composerView,
                         mode: context.viewState.composerMode,
                         composerFormattingEnabled: context.composerFormattingEnabled,
@@ -198,6 +199,9 @@ struct ComposerToolbar: View {
         }
         .onChange(of: context.composerFormattingEnabled) {
             context.send(viewAction: .didToggleFormattingOptions)
+        }
+        .onChange(of: context.selectedRange) {
+            context.send(viewAction: .selectedTextChanged)
         }
         .onAppear {
             composerFocused = context.composerFocused

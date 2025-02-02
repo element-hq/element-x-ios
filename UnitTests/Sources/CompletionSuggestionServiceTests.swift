@@ -111,20 +111,46 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         var deferred = deferFulfillment(service.suggestionsPublisher) { suggestion in
             suggestion == [.user(item: .init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL, range: .init(location: 0, length: 3)))]
         }
-        service.processTextMessage("@al hello")
+        service.processTextMessage("@al hello", selectedRange: .init(location: 0, length: 1))
         try await deferred.fulfill()
         
         deferred = deferFulfillment(service.suggestionsPublisher) { suggestion in
             suggestion == [.user(item: .init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL, range: .init(location: 5, length: 3)))]
         }
-        service.processTextMessage("test @al")
+        service.processTextMessage("test @al", selectedRange: .init(location: 5, length: 1))
         try await deferred.fulfill()
         
         deferred = deferFulfillment(service.suggestionsPublisher) { suggestion in
             suggestion == [.user(item: .init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL, range: .init(location: 5, length: 3)))]
         }
-        service.processTextMessage("test @al test")
+        service.processTextMessage("test @al test", selectedRange: .init(location: 5, length: 1))
         try await deferred.fulfill()
+    }
+    
+    func testUserSuggestionWithMultipleMentionSymbol() async throws {
+        let alice: RoomMemberProxyMock = .mockAlice
+        let bob: RoomMemberProxyMock = .mockBob
+        let members: [RoomMemberProxyMock] = [alice, bob, .mockCharlie, .mockMe]
+        let roomProxyMock = JoinedRoomProxyMock(.init(name: "test", members: members))
+        let service = CompletionSuggestionService(roomProxy: roomProxyMock)
+        
+        var deffered = deferFulfillment(service.suggestionsPublisher) { suggestion in
+            suggestion == [.user(item: .init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL, range: .init(location: 0, length: 3)))]
+        }
+        service.processTextMessage("@al test @bo", selectedRange: .init(location: 0, length: 1))
+        try await deffered.fulfill()
+        
+        deffered = deferFulfillment(service.suggestionsPublisher) { suggestion in
+            suggestion == [.user(item: .init(id: bob.userID, displayName: bob.displayName, avatarURL: bob.avatarURL, range: .init(location: 9, length: 3)))]
+        }
+        service.processTextMessage("@al test @bo", selectedRange: .init(location: 9, length: 1))
+        try await deffered.fulfill()
+        
+        deffered = deferFulfillment(service.suggestionsPublisher) { suggestion in
+            suggestion == []
+        }
+        service.processTextMessage("@al test @bo", selectedRange: .init(location: 4, length: 1))
+        try await deffered.fulfill()
     }
 }
 

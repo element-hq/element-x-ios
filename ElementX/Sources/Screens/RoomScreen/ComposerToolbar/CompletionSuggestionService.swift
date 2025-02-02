@@ -73,8 +73,8 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
         }
     }
     
-    func processTextMessage(_ textMessage: String?) {
-        setSuggestionTrigger(detectTriggerInText(textMessage))
+    func processTextMessage(_ textMessage: String?, selectedRange: NSRange?) {
+        setSuggestionTrigger(detectTriggerInText(text: textMessage, selectedRange: selectedRange))
     }
     
     func setSuggestionTrigger(_ suggestionTrigger: SuggestionTrigger?) {
@@ -83,23 +83,46 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     
     // MARK: - Private
     
-    private func detectTriggerInText(_ text: String?) -> SuggestionTrigger? {
-        guard let text else {
+    private func detectTriggerInText(text: String?, selectedRange: NSRange?) -> SuggestionTrigger? {
+        guard let text, let selectedRange else {
             return nil
         }
         
-        let components = text.components(separatedBy: .whitespaces)
+        var suggestionText: String?
+        var range: Range<String.Index>?
         
-        guard var lastComponent = components.first(where: { $0.first == SuggestionTriggerPattern.at.rawValue }),
-              let range = text.range(of: lastComponent, options: .backwards),
-              lastComponent.count > 0,
-              let suggestionKey = SuggestionTriggerPattern(rawValue: lastComponent.removeFirst()),
-              // If a second character exists and is the same as the key it shouldn't trigger.
-              lastComponent.first != suggestionKey.rawValue else {
-            return nil
+        var startIndex: String.Index = text.startIndex
+        let components = text
+            .components(separatedBy: .whitespaces)
+            .filter { $0.first == SuggestionTriggerPattern.at.rawValue }
+        
+        for component in components {
+            guard let textRange = text.range(of: component, range: startIndex..<text.endIndex) else {
+                continue
+            }
+            startIndex = textRange.upperBound
+            
+            let startIndex = textRange.lowerBound.utf16Offset(in: text)
+            let endIndex = textRange.upperBound.utf16Offset(in: text)
+            
+            guard selectedRange.location >= startIndex,
+                  selectedRange.location <= endIndex,
+                  selectedRange.length <= endIndex - startIndex
+            else {
+                continue
+            }
+            
+            suggestionText = String(text[textRange.lowerBound..<textRange.upperBound])
+            suggestionText?.removeFirst()
+            range = textRange
         }
         
-        return .init(type: .user, text: lastComponent, range: NSRange(range, in: text))
+        guard let suggestionText,
+              let range else {
+            return nil
+        }
+      
+        return .init(type: .user, text: suggestionText, range: NSRange(range, in: text))
     }
     
     private static func shouldIncludeMember(userID: String, displayName: String?, searchText: String) -> Bool {

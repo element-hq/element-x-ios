@@ -12,6 +12,7 @@ struct MessageComposerTextField: View {
     let placeholder: String
     @Binding var text: NSAttributedString
     @Binding var presendCallback: (() -> Void)?
+    @Binding var selectedRange: NSRange
 
     let maxHeight: CGFloat
     let keyHandler: GenericKeyHandler
@@ -20,6 +21,7 @@ struct MessageComposerTextField: View {
     var body: some View {
         UITextViewWrapper(text: $text,
                           presendCallback: $presendCallback,
+                          selectedRange: $selectedRange,
                           maxHeight: maxHeight,
                           keyHandler: keyHandler,
                           pasteHandler: pasteHandler)
@@ -54,6 +56,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
 
     @Binding var text: NSAttributedString
     @Binding var presendCallback: (() -> Void)?
+    @Binding var selectedRange: NSRange
 
     let maxHeight: CGFloat
 
@@ -105,7 +108,9 @@ private struct UITextViewWrapper: UIViewRepresentable {
         // Prevent the textView from inheriting attributes from mention pills
         textView.typingAttributes = [.font: font,
                                      .foregroundColor: UIColor.compound.textPrimary]
-        
+        DispatchQueue.main.async {
+            selectedRange = textView.selectedRange
+        }
         if textView.attributedText != text {
             // Remember the selection if only the attributes have changed.
             let selection = textView.attributedText.string == text.string ? textView.selectedTextRange : nil
@@ -331,6 +336,7 @@ struct MessageComposerTextField_Previews: PreviewProvider, TestablePreview {
             MessageComposerTextField(placeholder: "Placeholder",
                                      text: $text,
                                      presendCallback: .constant(nil),
+                                     selectedRange: .constant(NSRange(location: 0, length: 0)),
                                      maxHeight: 300,
                                      keyHandler: { _ in },
                                      pasteHandler: { _ in })
