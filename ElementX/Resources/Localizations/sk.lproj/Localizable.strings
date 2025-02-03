@@ -326,7 +326,7 @@
 "notification_channel_noisy" = "Hlasité oznámenia";
 "notification_channel_ringing_calls" = "Vyzváňanie hovorov";
 "notification_channel_silent" = "Tiché oznámenia";
-"notification_incoming_call" = "Prichádzajúci hovor";
+"notification_incoming_call" = "📹 Prichádzajúci hovor";
 "notification_inline_reply_failed" = "** Nepodarilo sa odoslať - prosím otvorte miestnosť";
 "notification_invite_body" = "Vás pozval/a na konverzáciu";
 "notification_invite_body_with_sender" = "%1$@ vás pozval/a na rozhovor";
@@ -414,6 +414,8 @@
 "screen_knock_requests_list_title" = "Žiadosti o pripojenie";
 "screen_media_details_file_format" = "Formát súboru";
 "screen_media_details_filename" = "Názov súboru";
+"screen_media_details_no_more_files_to_show" = "Žiadne ďalšie súbory na zobrazenie";
+"screen_media_details_no_more_media_to_show" = "Žiadne ďalšie médiá na zobrazenie";
 "screen_media_details_redact_confirmation_message" = "Tento súbor bude odstránený z miestnosti a členovia k nemu nebudú mať prístup.";
 "screen_media_details_redact_confirmation_title" = "Vymazať súbor?";
 "screen_media_details_uploaded_by" = "Nahrané používateľom";
@@ -478,8 +480,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Správa nebola odoslaná, pretože sa zmenila overená totožnosť používateľa %1$@.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Správa nebola odoslaná, pretože %1$@ neoveril/a všetky zariadenia.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Správa nebola odoslaná, pretože ste neoverili jedno alebo viac svojich zariadení.";
-"screen.media_details.no_more_files_to_show" = "Žiadne ďalšie súbory na zobrazenie";
-"screen.media_details.no_more_media_to_show" = "Žiadne ďalšie médiá na zobrazenie";
 "screen_account_provider_form_hint" = "Adresa domovského servera";
 "screen_account_provider_form_notice" = "Zadajte hľadaný výraz alebo adresu domény.";
 "screen_account_provider_form_subtitle" = "Vyhľadať spoločnosť, komunitu alebo súkromný server.";

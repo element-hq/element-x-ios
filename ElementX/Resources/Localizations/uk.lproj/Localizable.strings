@@ -414,6 +414,8 @@
 "screen_knock_requests_list_title" = "Запити на приєднання";
 "screen_media_details_file_format" = "Формат файлу";
 "screen_media_details_filename" = "Назва файлу";
+"screen_media_details_no_more_files_to_show" = "No more files to show";
+"screen_media_details_no_more_media_to_show" = "No more media to show";
 "screen_media_details_redact_confirmation_message" = "Цей файл буде вилучено з кімнати, і учасники не матимуть доступу до нього.";
 "screen_media_details_redact_confirmation_title" = "Видалити файл?";
 "screen_media_details_uploaded_by" = "Вивантажено користувачем";
@@ -478,8 +480,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Повідомлення не надіслано, оскільки підтверджена особистість %1$@ змінилася.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Повідомлення не надіслано, оскільки %1$@ перевірив не всі пристрої.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Повідомлення не надіслано, оскільки ви не підтвердили один або кілька своїх пристроїв.";
-"screen.media_details.no_more_files_to_show" = "No more files to show";
-"screen.media_details.no_more_media_to_show" = "No more media to show";
 "screen_account_provider_form_hint" = "Адреса домашнього сервера";
 "screen_account_provider_form_notice" = "Уведіть пошуковий термін або адресу домену.";
 "screen_account_provider_form_subtitle" = "Пошук компанії, спільноти або приватного сервера.";

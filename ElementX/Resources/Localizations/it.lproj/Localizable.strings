@@ -326,7 +326,7 @@
 "notification_channel_noisy" = "Notifiche con suono";
 "notification_channel_ringing_calls" = "Squillo delle chiamate";
 "notification_channel_silent" = "Notifiche silenziose";
-"notification_incoming_call" = "Chiamata in arrivo";
+"notification_incoming_call" = "📹 Chiamata in arrivo";
 "notification_inline_reply_failed" = "** Invio fallito - si prega di aprire la stanza";
 "notification_invite_body" = "Ti ha invitato ad una conversazione";
 "notification_invite_body_with_sender" = "%1$@ ti ha invitato ad una conversazione";
@@ -414,6 +414,8 @@
 "screen_knock_requests_list_title" = "Richieste di accesso";
 "screen_media_details_file_format" = "Formato del file";
 "screen_media_details_filename" = "Nome del file";
+"screen_media_details_no_more_files_to_show" = "Nessun altro file da mostrare";
+"screen_media_details_no_more_media_to_show" = "Non ci sono più contenuti multimediali da mostrare";
 "screen_media_details_redact_confirmation_message" = "Questo file verrà rimosso dalla stanza e i membri non ne avranno accesso.";
 "screen_media_details_redact_confirmation_title" = "Eliminare il file?";
 "screen_media_details_uploaded_by" = "Caricato da";
@@ -478,8 +480,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Messaggio non inviato perché l'identità verificata di %1$@ è cambiata.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Messaggio non inviato perché %1$@ non ha verificato tutti i dispositivi.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Messaggio non inviato perché non hai verificato uno o più dispositivi.";
-"screen.media_details.no_more_files_to_show" = "Nessun altro file da mostrare";
-"screen.media_details.no_more_media_to_show" = "Non ci sono più contenuti multimediali da mostrare";
 "screen_account_provider_form_hint" = "Indirizzo dell'homeserver";
 "screen_account_provider_form_notice" = "Inserisci un termine di ricerca o un indirizzo di dominio.";
 "screen_account_provider_form_subtitle" = "Cerca un'azienda, una comunità o un server privato.";
