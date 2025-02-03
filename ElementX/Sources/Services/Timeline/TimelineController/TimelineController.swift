@@ -221,7 +221,7 @@ class TimelineController: TimelineControllerProtocol {
         }
     }
     
-    func toggleReaction(_ reaction: String, to eventOrTransactionID: EventOrTransactionId) async {
+    func toggleReaction(_ reaction: String, to eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) async {
         MXLog.info("Toggle reaction \(reaction) to \(eventOrTransactionID)")
         
         switch await activeTimeline.toggleReaction(reaction, to: eventOrTransactionID) {
@@ -232,7 +232,7 @@ class TimelineController: TimelineControllerProtocol {
         }
     }
     
-    func edit(_ eventOrTransactionID: EventOrTransactionId,
+    func edit(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,
               message: String,
               html: String?,
               intentionalMentions: IntentionalMentions) async {
@@ -251,7 +251,7 @@ class TimelineController: TimelineControllerProtocol {
         }
     }
     
-    func editCaption(_ eventOrTransactionID: EventOrTransactionId,
+    func editCaption(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,
                      message: String,
                      html: String?,
                      intentionalMentions: IntentionalMentions) async {
@@ -269,7 +269,7 @@ class TimelineController: TimelineControllerProtocol {
         }
     }
     
-    func removeCaption(_ eventOrTransactionID: EventOrTransactionId) async {
+    func removeCaption(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) async {
         // Set a `nil` caption to remove it from the event.
         let newContent = createCaptionEdit(caption: nil, formattedCaption: nil, mentions: nil)
         switch await activeTimeline.edit(eventOrTransactionID, newContent: newContent) {
@@ -280,7 +280,7 @@ class TimelineController: TimelineControllerProtocol {
         }
     }
     
-    func redact(_ eventOrTransactionID: EventOrTransactionId) async {
+    func redact(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) async {
         MXLog.info("Send redaction in \(roomID)")
         
         switch await activeTimeline.redact(eventOrTransactionID, reason: nil) {

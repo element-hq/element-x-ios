@@ -80,7 +80,7 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
 
     static let sendingLast: TextRoomTimelineItem = {
         let id = viewModel.state.timelineState.uniqueIDs.last ?? .init(id: UUID().uuidString)
-        var result = TextRoomTimelineItem(id: .event(uniqueID: id, eventOrTransactionID: .eventId(eventId: UUID().uuidString)),
+        var result = TextRoomTimelineItem(id: .event(uniqueID: id, eventOrTransactionID: .eventID(UUID().uuidString)),
                                           timestamp: .mock,
                                           isOutgoing: true,
                                           isEditable: false,
@@ -100,7 +100,7 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
 
     static let sentLast: TextRoomTimelineItem = {
         let id = viewModel.state.timelineState.uniqueIDs.last ?? .init(id: UUID().uuidString)
-        let result = TextRoomTimelineItem(id: .event(uniqueID: id, eventOrTransactionID: .eventId(eventId: UUID().uuidString)),
+        let result = TextRoomTimelineItem(id: .event(uniqueID: id, eventOrTransactionID: .eventID(UUID().uuidString)),
                                           timestamp: .mock,
                                           isOutgoing: true,
                                           isEditable: false,

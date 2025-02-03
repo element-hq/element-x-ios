@@ -452,7 +452,7 @@ private extension SeparatorRoomTimelineItem {
 
 private extension TextRoomTimelineItem {
     init(eventID: String) {
-        self.init(id: .event(uniqueID: .init(id: UUID().uuidString), eventOrTransactionID: .eventId(eventId: eventID)),
+        self.init(id: .event(uniqueID: .init(id: UUID().uuidString), eventOrTransactionID: .eventID(eventID)),
                   timestamp: .mock,
                   isOutgoing: false,
                   isEditable: false,

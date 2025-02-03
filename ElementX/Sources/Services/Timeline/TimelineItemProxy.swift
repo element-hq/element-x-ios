@@ -74,7 +74,7 @@ class EventTimelineItemProxy {
     init(item: MatrixRustSDK.EventTimelineItem, uniqueID: TimelineUniqueId) {
         self.item = item
         
-        id = .event(uniqueID: uniqueID, eventOrTransactionID: item.eventOrTransactionId)
+        id = .event(uniqueID: uniqueID, eventOrTransactionID: .init(rustValue: item.eventOrTransactionId))
     }
     
     lazy var deliveryStatus: TimelineItemDeliveryStatus? = {
@@ -212,7 +212,7 @@ struct SendHandleProxy: Hashable {
     
     static var mock: SendHandleProxy {
         .init(itemID: .event(uniqueID: .init(id: UUID().uuidString),
-                             eventOrTransactionID: .eventId(eventId: UUID().uuidString)),
+                             eventOrTransactionID: .eventID(UUID().uuidString)),
               underlyingHandle: .init(noPointer: .init()))
     }
 }
