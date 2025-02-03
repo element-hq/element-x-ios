@@ -26,7 +26,8 @@ class PillContextTests: XCTestCase {
                                      appMediator: AppMediatorMock.default,
                                      appSettings: ServiceLocator.shared.settings,
                                      analyticsService: ServiceLocator.shared.analytics,
-                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertFalse(context.viewState.isOwnMention)
@@ -55,7 +56,8 @@ class PillContextTests: XCTestCase {
                                      appMediator: AppMediatorMock.default,
                                      appSettings: ServiceLocator.shared.settings,
                                      analyticsService: ServiceLocator.shared.analytics,
-                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertTrue(context.viewState.isOwnMention)
@@ -77,7 +79,8 @@ class PillContextTests: XCTestCase {
                                      appMediator: AppMediatorMock.default,
                                      appSettings: ServiceLocator.shared.settings,
                                      analyticsService: ServiceLocator.shared.analytics,
-                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .allUsers, font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertTrue(context.viewState.isOwnMention)

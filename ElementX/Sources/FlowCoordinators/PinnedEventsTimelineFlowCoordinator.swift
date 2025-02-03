@@ -77,7 +77,8 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                                   mediaPlayerProvider: MediaPlayerProvider(),
                                                                                   voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                                                   appMediator: appMediator,
-                                                                                  emojiProvider: emojiProvider))
+                                                                                  emojiProvider: emojiProvider,
+                                                                                  timelineControllerFactory: roomTimelineControllerFactory))
         
         coordinator.actions
             .sink { [weak self] action in

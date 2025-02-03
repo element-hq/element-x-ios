@@ -65,6 +65,7 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID))
         
         guard case let .success(mediaTimelineController) = await roomTimelineControllerFactory.buildMessageFilteredRoomTimelineController(allowedMessageTypes: [.image, .video],
+                                                                                                                                          presentation: .mediaFilesScreen,
                                                                                                                                           roomProxy: roomProxy,
                                                                                                                                           timelineItemFactory: timelineItemFactory,
                                                                                                                                           mediaProvider: userSession.mediaProvider) else {
@@ -73,6 +74,7 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         guard case let .success(filesTimelineController) = await roomTimelineControllerFactory.buildMessageFilteredRoomTimelineController(allowedMessageTypes: [.file, .audio],
+                                                                                                                                          presentation: .mediaFilesScreen,
                                                                                                                                           roomProxy: roomProxy,
                                                                                                                                           timelineItemFactory: timelineItemFactory,
                                                                                                                                           mediaProvider: userSession.mediaProvider) else {
@@ -88,7 +90,8 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                         voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                                         appMediator: appMediator,
                                                                         emojiProvider: emojiProvider,
-                                                                        userIndicatorController: userIndicatorController)
+                                                                        userIndicatorController: userIndicatorController,
+                                                                        timelineControllerFactory: roomTimelineControllerFactory)
         
         let coordinator = MediaEventsTimelineScreenCoordinator(parameters: parameters)
         

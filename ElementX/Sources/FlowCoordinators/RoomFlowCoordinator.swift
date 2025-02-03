@@ -707,7 +707,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                          ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher,
                                                          appMediator: appMediator,
                                                          appSettings: appSettings,
-                                                         composerDraftService: composerDraftService)
+                                                         composerDraftService: composerDraftService,
+                                                         timelineControllerFactory: roomTimelineControllerFactory)
         
         let coordinator = RoomScreenCoordinator(parameters: parameters)
         coordinator.actions

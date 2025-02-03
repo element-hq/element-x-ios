@@ -311,7 +311,8 @@ class TimelineViewModelTests: XCTestCase {
                                           appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
                                           analyticsService: ServiceLocator.shared.analytics,
-                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         return (viewModel, roomProxy, timelineProxy, timelineController)
     }
     
@@ -336,7 +337,8 @@ class TimelineViewModelTests: XCTestCase {
                                           appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
                                           analyticsService: ServiceLocator.shared.analytics,
-                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { value in
             value.bindings.readReceiptsSummaryInfo?.orderedReceipts == receipts
@@ -364,7 +366,8 @@ class TimelineViewModelTests: XCTestCase {
                                           appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
                                           analyticsService: ServiceLocator.shared.analytics,
-                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         XCTAssertEqual(configuration.pinnedEventIDs, viewModel.context.viewState.pinnedEventIDs)
         
         configuration.pinnedEventIDs = ["test1", "test2"]
@@ -390,7 +393,8 @@ class TimelineViewModelTests: XCTestCase {
                                           appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
                                           analyticsService: ServiceLocator.shared.analytics,
-                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { value in
             value.canCurrentUserPin
@@ -420,7 +424,8 @@ class TimelineViewModelTests: XCTestCase {
                           appMediator: AppMediatorMock.default,
                           appSettings: ServiceLocator.shared.settings,
                           analyticsService: ServiceLocator.shared.analytics,
-                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }
 }
 

@@ -18,6 +18,7 @@ struct MediaEventsTimelineScreenCoordinatorParameters {
     let appMediator: AppMediatorProtocol
     let emojiProvider: EmojiProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    let timelineControllerFactory: RoomTimelineControllerFactoryProtocol
 }
 
 enum MediaEventsTimelineScreenCoordinatorAction {
@@ -47,7 +48,8 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        appMediator: parameters.appMediator,
                                                        appSettings: ServiceLocator.shared.settings,
                                                        analyticsService: ServiceLocator.shared.analytics,
-                                                       emojiProvider: parameters.emojiProvider)
+                                                       emojiProvider: parameters.emojiProvider,
+                                                       timelineControllerFactory: parameters.timelineControllerFactory)
         
         let filesTimelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                                        timelineController: parameters.filesTimelineController,
@@ -58,7 +60,8 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        appMediator: parameters.appMediator,
                                                        appSettings: ServiceLocator.shared.settings,
                                                        analyticsService: ServiceLocator.shared.analytics,
-                                                       emojiProvider: parameters.emojiProvider)
+                                                       emojiProvider: parameters.emojiProvider,
+                                                       timelineControllerFactory: parameters.timelineControllerFactory)
         
         viewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: mediaTimelineViewModel,
                                                        filesTimelineViewModel: filesTimelineViewModel,

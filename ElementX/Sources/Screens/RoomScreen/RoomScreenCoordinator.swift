@@ -26,6 +26,7 @@ struct RoomScreenCoordinatorParameters {
     let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
     let composerDraftService: ComposerDraftServiceProtocol
+    let timelineControllerFactory: RoomTimelineControllerFactoryProtocol
 }
 
 enum RoomScreenCoordinatorAction {
@@ -84,7 +85,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                               appMediator: parameters.appMediator,
                                               appSettings: parameters.appSettings,
                                               analyticsService: ServiceLocator.shared.analytics,
-                                              emojiProvider: parameters.emojiProvider)
+                                              emojiProvider: parameters.emojiProvider,
+                                              timelineControllerFactory: parameters.timelineControllerFactory)
 
         wysiwygViewModel = WysiwygComposerViewModel(minHeight: ComposerConstant.minHeight,
                                                     maxCompressedHeight: ComposerConstant.maxHeight,

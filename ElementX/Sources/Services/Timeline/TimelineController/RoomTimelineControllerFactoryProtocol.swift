@@ -24,6 +24,7 @@ protocol RoomTimelineControllerFactoryProtocol {
                                                  mediaProvider: MediaProviderProtocol) async -> RoomTimelineControllerProtocol?
     
     func buildMessageFilteredRoomTimelineController(allowedMessageTypes: [RoomMessageEventMessageType],
+                                                    presentation: TimelineKind.MediaPresentation,
                                                     roomProxy: JoinedRoomProxyProtocol,
                                                     timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                                     mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError>

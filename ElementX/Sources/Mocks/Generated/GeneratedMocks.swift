@@ -6228,15 +6228,15 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
     }
     //MARK: - messageFilteredTimeline
 
-    var messageFilteredTimelineAllowedMessageTypesUnderlyingCallsCount = 0
-    var messageFilteredTimelineAllowedMessageTypesCallsCount: Int {
+    var messageFilteredTimelineAllowedMessageTypesPresentationUnderlyingCallsCount = 0
+    var messageFilteredTimelineAllowedMessageTypesPresentationCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return messageFilteredTimelineAllowedMessageTypesUnderlyingCallsCount
+                return messageFilteredTimelineAllowedMessageTypesPresentationUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = messageFilteredTimelineAllowedMessageTypesUnderlyingCallsCount
+                    returnValue = messageFilteredTimelineAllowedMessageTypesPresentationUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -6244,29 +6244,29 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                messageFilteredTimelineAllowedMessageTypesUnderlyingCallsCount = newValue
+                messageFilteredTimelineAllowedMessageTypesPresentationUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    messageFilteredTimelineAllowedMessageTypesUnderlyingCallsCount = newValue
+                    messageFilteredTimelineAllowedMessageTypesPresentationUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var messageFilteredTimelineAllowedMessageTypesCalled: Bool {
-        return messageFilteredTimelineAllowedMessageTypesCallsCount > 0
+    var messageFilteredTimelineAllowedMessageTypesPresentationCalled: Bool {
+        return messageFilteredTimelineAllowedMessageTypesPresentationCallsCount > 0
     }
-    var messageFilteredTimelineAllowedMessageTypesReceivedAllowedMessageTypes: [RoomMessageEventMessageType]?
-    var messageFilteredTimelineAllowedMessageTypesReceivedInvocations: [[RoomMessageEventMessageType]] = []
+    var messageFilteredTimelineAllowedMessageTypesPresentationReceivedArguments: (allowedMessageTypes: [RoomMessageEventMessageType], presentation: TimelineKind.MediaPresentation)?
+    var messageFilteredTimelineAllowedMessageTypesPresentationReceivedInvocations: [(allowedMessageTypes: [RoomMessageEventMessageType], presentation: TimelineKind.MediaPresentation)] = []
 
-    var messageFilteredTimelineAllowedMessageTypesUnderlyingReturnValue: Result<TimelineProxyProtocol, RoomProxyError>!
-    var messageFilteredTimelineAllowedMessageTypesReturnValue: Result<TimelineProxyProtocol, RoomProxyError>! {
+    var messageFilteredTimelineAllowedMessageTypesPresentationUnderlyingReturnValue: Result<TimelineProxyProtocol, RoomProxyError>!
+    var messageFilteredTimelineAllowedMessageTypesPresentationReturnValue: Result<TimelineProxyProtocol, RoomProxyError>! {
         get {
             if Thread.isMainThread {
-                return messageFilteredTimelineAllowedMessageTypesUnderlyingReturnValue
+                return messageFilteredTimelineAllowedMessageTypesPresentationUnderlyingReturnValue
             } else {
                 var returnValue: Result<TimelineProxyProtocol, RoomProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = messageFilteredTimelineAllowedMessageTypesUnderlyingReturnValue
+                    returnValue = messageFilteredTimelineAllowedMessageTypesPresentationUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -6274,26 +6274,26 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                messageFilteredTimelineAllowedMessageTypesUnderlyingReturnValue = newValue
+                messageFilteredTimelineAllowedMessageTypesPresentationUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    messageFilteredTimelineAllowedMessageTypesUnderlyingReturnValue = newValue
+                    messageFilteredTimelineAllowedMessageTypesPresentationUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var messageFilteredTimelineAllowedMessageTypesClosure: (([RoomMessageEventMessageType]) async -> Result<TimelineProxyProtocol, RoomProxyError>)?
+    var messageFilteredTimelineAllowedMessageTypesPresentationClosure: (([RoomMessageEventMessageType], TimelineKind.MediaPresentation) async -> Result<TimelineProxyProtocol, RoomProxyError>)?
 
-    func messageFilteredTimeline(allowedMessageTypes: [RoomMessageEventMessageType]) async -> Result<TimelineProxyProtocol, RoomProxyError> {
-        messageFilteredTimelineAllowedMessageTypesCallsCount += 1
-        messageFilteredTimelineAllowedMessageTypesReceivedAllowedMessageTypes = allowedMessageTypes
+    func messageFilteredTimeline(allowedMessageTypes: [RoomMessageEventMessageType], presentation: TimelineKind.MediaPresentation) async -> Result<TimelineProxyProtocol, RoomProxyError> {
+        messageFilteredTimelineAllowedMessageTypesPresentationCallsCount += 1
+        messageFilteredTimelineAllowedMessageTypesPresentationReceivedArguments = (allowedMessageTypes: allowedMessageTypes, presentation: presentation)
         DispatchQueue.main.async {
-            self.messageFilteredTimelineAllowedMessageTypesReceivedInvocations.append(allowedMessageTypes)
+            self.messageFilteredTimelineAllowedMessageTypesPresentationReceivedInvocations.append((allowedMessageTypes: allowedMessageTypes, presentation: presentation))
         }
-        if let messageFilteredTimelineAllowedMessageTypesClosure = messageFilteredTimelineAllowedMessageTypesClosure {
-            return await messageFilteredTimelineAllowedMessageTypesClosure(allowedMessageTypes)
+        if let messageFilteredTimelineAllowedMessageTypesPresentationClosure = messageFilteredTimelineAllowedMessageTypesPresentationClosure {
+            return await messageFilteredTimelineAllowedMessageTypesPresentationClosure(allowedMessageTypes, presentation)
         } else {
-            return messageFilteredTimelineAllowedMessageTypesReturnValue
+            return messageFilteredTimelineAllowedMessageTypesPresentationReturnValue
         }
     }
     //MARK: - enableEncryption
@@ -13757,15 +13757,15 @@ class RoomTimelineControllerFactoryMock: RoomTimelineControllerFactoryProtocol, 
     }
     //MARK: - buildMessageFilteredRoomTimelineController
 
-    var buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount = 0
-    var buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderCallsCount: Int {
+    var buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount = 0
+    var buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount
+                return buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount
+                    returnValue = buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -13773,29 +13773,29 @@ class RoomTimelineControllerFactoryMock: RoomTimelineControllerFactoryProtocol, 
         }
         set {
             if Thread.isMainThread {
-                buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount = newValue
+                buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount = newValue
+                    buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderCalled: Bool {
-        return buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderCallsCount > 0
+    var buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderCalled: Bool {
+        return buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderCallsCount > 0
     }
-    var buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderReceivedArguments: (allowedMessageTypes: [RoomMessageEventMessageType], roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol)?
-    var buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderReceivedInvocations: [(allowedMessageTypes: [RoomMessageEventMessageType], roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol)] = []
+    var buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderReceivedArguments: (allowedMessageTypes: [RoomMessageEventMessageType], presentation: TimelineKind.MediaPresentation, roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol)?
+    var buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderReceivedInvocations: [(allowedMessageTypes: [RoomMessageEventMessageType], presentation: TimelineKind.MediaPresentation, roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol)] = []
 
-    var buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue: Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError>!
-    var buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderReturnValue: Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError>! {
+    var buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue: Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError>!
+    var buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderReturnValue: Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError>! {
         get {
             if Thread.isMainThread {
-                return buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue
+                return buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue
             } else {
                 var returnValue: Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue
+                    returnValue = buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -13803,26 +13803,26 @@ class RoomTimelineControllerFactoryMock: RoomTimelineControllerFactoryProtocol, 
         }
         set {
             if Thread.isMainThread {
-                buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue = newValue
+                buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue = newValue
+                    buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderClosure: (([RoomMessageEventMessageType], JoinedRoomProxyProtocol, RoomTimelineItemFactoryProtocol, MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError>)?
+    var buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderClosure: (([RoomMessageEventMessageType], TimelineKind.MediaPresentation, JoinedRoomProxyProtocol, RoomTimelineItemFactoryProtocol, MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError>)?
 
-    func buildMessageFilteredRoomTimelineController(allowedMessageTypes: [RoomMessageEventMessageType], roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError> {
-        buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderCallsCount += 1
-        buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderReceivedArguments = (allowedMessageTypes: allowedMessageTypes, roomProxy: roomProxy, timelineItemFactory: timelineItemFactory, mediaProvider: mediaProvider)
+    func buildMessageFilteredRoomTimelineController(allowedMessageTypes: [RoomMessageEventMessageType], presentation: TimelineKind.MediaPresentation, roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError> {
+        buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderCallsCount += 1
+        buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderReceivedArguments = (allowedMessageTypes: allowedMessageTypes, presentation: presentation, roomProxy: roomProxy, timelineItemFactory: timelineItemFactory, mediaProvider: mediaProvider)
         DispatchQueue.main.async {
-            self.buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderReceivedInvocations.append((allowedMessageTypes: allowedMessageTypes, roomProxy: roomProxy, timelineItemFactory: timelineItemFactory, mediaProvider: mediaProvider))
+            self.buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderReceivedInvocations.append((allowedMessageTypes: allowedMessageTypes, presentation: presentation, roomProxy: roomProxy, timelineItemFactory: timelineItemFactory, mediaProvider: mediaProvider))
         }
-        if let buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderClosure = buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderClosure {
-            return await buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderClosure(allowedMessageTypes, roomProxy, timelineItemFactory, mediaProvider)
+        if let buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderClosure = buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderClosure {
+            return await buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderClosure(allowedMessageTypes, presentation, roomProxy, timelineItemFactory, mediaProvider)
         } else {
-            return buildMessageFilteredRoomTimelineControllerAllowedMessageTypesRoomProxyTimelineItemFactoryMediaProviderReturnValue
+            return buildMessageFilteredRoomTimelineControllerAllowedMessageTypesPresentationRoomProxyTimelineItemFactoryMediaProviderReturnValue
         }
     }
 }

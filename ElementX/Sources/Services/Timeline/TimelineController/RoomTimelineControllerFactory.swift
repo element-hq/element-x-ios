@@ -37,10 +37,11 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
     }
     
     func buildMessageFilteredRoomTimelineController(allowedMessageTypes: [RoomMessageEventMessageType],
+                                                    presentation: TimelineKind.MediaPresentation,
                                                     roomProxy: JoinedRoomProxyProtocol,
                                                     timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                                     mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError> {
-        switch await roomProxy.messageFilteredTimeline(allowedMessageTypes: allowedMessageTypes) {
+        switch await roomProxy.messageFilteredTimeline(allowedMessageTypes: allowedMessageTypes, presentation: presentation) {
         case .success(let timelineProxy):
             return .success(RoomTimelineController(roomProxy: roomProxy,
                                                    timelineProxy: timelineProxy,

@@ -78,7 +78,8 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError>
     
-    func messageFilteredTimeline(allowedMessageTypes: [RoomMessageEventMessageType]) async -> Result<TimelineProxyProtocol, RoomProxyError>
+    func messageFilteredTimeline(allowedMessageTypes: [RoomMessageEventMessageType],
+                                 presentation: TimelineKind.MediaPresentation) async -> Result<TimelineProxyProtocol, RoomProxyError>
     
     func enableEncryption() async -> Result<Void, RoomProxyError>
     

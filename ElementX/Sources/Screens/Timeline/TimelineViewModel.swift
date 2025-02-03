@@ -29,6 +29,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
     private let emojiProvider: EmojiProviderProtocol
+    private let timelineControllerFactory: RoomTimelineControllerFactoryProtocol
     
     private let timelineInteractionHandler: TimelineInteractionHandler
     
@@ -52,7 +53,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          analyticsService: AnalyticsService,
-         emojiProvider: EmojiProviderProtocol) {
+         emojiProvider: EmojiProviderProtocol,
+         timelineControllerFactory: RoomTimelineControllerFactoryProtocol) {
         self.timelineController = timelineController
         self.mediaPlayerProvider = mediaPlayerProvider
         self.roomProxy = roomProxy
@@ -61,6 +63,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
         self.emojiProvider = emojiProvider
+        self.timelineControllerFactory = timelineControllerFactory
         
         let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
@@ -73,7 +76,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                                 userIndicatorController: userIndicatorController,
                                                                 appMediator: appMediator,
                                                                 appSettings: appSettings,
-                                                                analyticsService: analyticsService)
+                                                                analyticsService: analyticsService,
+                                                                emojiProvider: emojiProvider,
+                                                                timelineControllerFactory: timelineControllerFactory)
         
         super.init(initialViewState: TimelineViewState(timelineKind: timelineController.timelineKind,
                                                        roomID: roomProxy.id,
@@ -876,7 +881,8 @@ extension TimelineViewModel {
                           appMediator: AppMediatorMock.default,
                           appSettings: ServiceLocator.shared.settings,
                           analyticsService: ServiceLocator.shared.analytics,
-                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                          timelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()))
     }
 }
 
