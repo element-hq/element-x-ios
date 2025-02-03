@@ -51,7 +51,7 @@ struct MentionSuggestionItem: Identifiable, Equatable {
 protocol CompletionSuggestionServiceProtocol {
     var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> { get }
     
-    func processTextMessage(_ textMessage: String?, selectedRange: NSRange?)
+    func processTextMessage(_ textMessage: String, selectedRange: NSRange)
     
     func setSuggestionTrigger(_ suggestionTrigger: SuggestionTrigger?)
 }

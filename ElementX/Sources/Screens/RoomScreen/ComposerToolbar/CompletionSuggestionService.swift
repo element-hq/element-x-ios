@@ -73,8 +73,8 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
         }
     }
     
-    func processTextMessage(_ textMessage: String?, selectedRange: NSRange?) {
-        setSuggestionTrigger(detectTriggerInText(text: textMessage, selectedRange: selectedRange))
+    func processTextMessage(_ textMessage: String, selectedRange: NSRange) {
+        setSuggestionTrigger(detectTriggerInText(textMessage, selectedRange: selectedRange))
     }
     
     func setSuggestionTrigger(_ suggestionTrigger: SuggestionTrigger?) {
@@ -83,8 +83,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     
     // MARK: - Private
     
-    private func detectTriggerInText(text: String?, selectedRange: NSRange?) -> SuggestionTrigger? {
-        guard let text, let selectedRange else {
+    private func detectTriggerInText(_ text: String, selectedRange: NSRange) -> SuggestionTrigger? {
             return nil
         }
         
