@@ -113,7 +113,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             }
         }.reversed().forEach { item in
             if case .separator(let item) = item.type {
-                let group = MediaEventsTimelineGroup(id: item.id.uniqueID.id,
+                let group = MediaEventsTimelineGroup(id: item.id.uniqueID.value,
                                                      title: titleForDate(item.timestamp),
                                                      items: currentItems)
                 if !currentItems.isEmpty {

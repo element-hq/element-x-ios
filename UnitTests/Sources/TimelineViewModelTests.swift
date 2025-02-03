@@ -259,9 +259,9 @@ class TimelineViewModelTests: XCTestCase {
     
     func testSendReadReceiptWithoutEvents() async throws {
         // Given a room with only virtual items.
-        let items = [SeparatorRoomTimelineItem(uniqueID: .init(id: "v1")),
-                     SeparatorRoomTimelineItem(uniqueID: .init(id: "v2")),
-                     SeparatorRoomTimelineItem(uniqueID: .init(id: "v3"))]
+        let items = [SeparatorRoomTimelineItem(uniqueID: .init("v1")),
+                     SeparatorRoomTimelineItem(uniqueID: .init("v2")),
+                     SeparatorRoomTimelineItem(uniqueID: .init("v3"))]
         let (viewModel, _, timelineProxy, _) = readReceiptsConfiguration(with: items)
         
         // When sending a read receipt for the last item.
@@ -276,7 +276,7 @@ class TimelineViewModelTests: XCTestCase {
         // Given a room where the last event is a virtual item.
         let items: [RoomTimelineItemProtocol] = [TextRoomTimelineItem(eventID: "t1"),
                                                  TextRoomTimelineItem(eventID: "t2"),
-                                                 SeparatorRoomTimelineItem(uniqueID: .init(id: "v3"))]
+                                                 SeparatorRoomTimelineItem(uniqueID: .init("v3"))]
         let (viewModel, _, _, _) = readReceiptsConfiguration(with: items)
         
         // When sending a read receipt for the last item.
@@ -445,14 +445,14 @@ private extension TextRoomTimelineItem {
 }
 
 private extension SeparatorRoomTimelineItem {
-    init(uniqueID: TimelineUniqueId) {
+    init(uniqueID: TimelineItemIdentifier.UniqueID) {
         self.init(id: .virtual(uniqueID: uniqueID), timestamp: .mock)
     }
 }
 
 private extension TextRoomTimelineItem {
     init(eventID: String) {
-        self.init(id: .event(uniqueID: .init(id: UUID().uuidString), eventOrTransactionID: .eventID(eventID)),
+        self.init(id: .event(uniqueID: .init(UUID().uuidString), eventOrTransactionID: .eventID(eventID)),
                   timestamp: .mock,
                   isOutgoing: false,
                   isEditable: false,

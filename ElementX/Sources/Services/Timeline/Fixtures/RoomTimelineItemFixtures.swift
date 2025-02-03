@@ -10,8 +10,8 @@ import Foundation
 enum RoomTimelineItemFixtures {
     /// The default timeline items used in Xcode previews etc.
     static var `default`: [RoomTimelineItemProtocol] = [
-        SeparatorRoomTimelineItem(id: .virtual(uniqueID: .init(id: "Yesterday")), timestamp: .mock),
-        TextRoomTimelineItem(id: .event(uniqueID: .init(id: ".RoomTimelineItemFixtures.default.0"),
+        SeparatorRoomTimelineItem(id: .virtual(uniqueID: .init("Yesterday")), timestamp: .mock),
+        TextRoomTimelineItem(id: .event(uniqueID: .init(".RoomTimelineItemFixtures.default.0"),
                                         eventOrTransactionID: .eventID("RoomTimelineItemFixtures.default.0")),
                              timestamp: .mock,
                              isOutgoing: false,
@@ -21,7 +21,7 @@ enum RoomTimelineItemFixtures {
                              sender: .init(id: "", displayName: "Jacob"),
                              content: .init(body: "That looks so good!"),
                              properties: RoomTimelineItemProperties(isEdited: true)),
-        TextRoomTimelineItem(id: .event(uniqueID: .init(id: "RoomTimelineItemFixtures.default.1"),
+        TextRoomTimelineItem(id: .event(uniqueID: .init("RoomTimelineItemFixtures.default.1"),
                                         eventOrTransactionID: .eventID("RoomTimelineItemFixtures.default.1")),
                              timestamp: .mock,
                              isOutgoing: false,
@@ -33,7 +33,7 @@ enum RoomTimelineItemFixtures {
                              properties: RoomTimelineItemProperties(reactions: [
                                  AggregatedReaction(accountOwnerID: "me", key: "🙌", senders: [ReactionSender(id: "me", timestamp: Date())])
                              ])),
-        TextRoomTimelineItem(id: .event(uniqueID: .init(id: "RoomTimelineItemFixtures.default.2"),
+        TextRoomTimelineItem(id: .event(uniqueID: .init("RoomTimelineItemFixtures.default.2"),
                                         eventOrTransactionID: .eventID("RoomTimelineItemFixtures.default.2")),
                              timestamp: .mock,
                              isOutgoing: false,
@@ -52,8 +52,8 @@ enum RoomTimelineItemFixtures {
                                                         ReactionSender(id: "jacob", timestamp: Date())
                                                     ])
                              ])),
-        SeparatorRoomTimelineItem(id: .virtual(uniqueID: .init(id: "Today")), timestamp: .mock),
-        TextRoomTimelineItem(id: .event(uniqueID: .init(id: "RoomTimelineItemFixtures.default.3"),
+        SeparatorRoomTimelineItem(id: .virtual(uniqueID: .init("Today")), timestamp: .mock),
+        TextRoomTimelineItem(id: .event(uniqueID: .init("RoomTimelineItemFixtures.default.3"),
                                         eventOrTransactionID: .eventID("RoomTimelineItemFixtures.default.3")),
                              timestamp: .mock,
                              isOutgoing: false,
@@ -63,7 +63,7 @@ enum RoomTimelineItemFixtures {
                              sender: .init(id: "", displayName: "Helena"),
                              content: .init(body: "Wow, cool. Ok, lets go the usual place tomorrow?! Is that too soon?  Here’s the menu, let me know what you want it’s on me!"),
                              properties: RoomTimelineItemProperties(orderedReadReceipts: [ReadReceipt(userID: "alice", formattedTimestamp: nil)])),
-        TextRoomTimelineItem(id: .event(uniqueID: .init(id: "RoomTimelineItemFixtures.default.4"),
+        TextRoomTimelineItem(id: .event(uniqueID: .init("RoomTimelineItemFixtures.default.4"),
                                         eventOrTransactionID: .eventID("RoomTimelineItemFixtures.default.4")),
                              timestamp: .mock,
                              isOutgoing: true,
@@ -72,7 +72,7 @@ enum RoomTimelineItemFixtures {
                              isThreaded: false,
                              sender: .init(id: "", displayName: "Bob"),
                              content: .init(body: "And John's speech was amazing!")),
-        TextRoomTimelineItem(id: .event(uniqueID: .init(id: "RoomTimelineItemFixtures.default.5"),
+        TextRoomTimelineItem(id: .event(uniqueID: .init("RoomTimelineItemFixtures.default.5"),
                                         eventOrTransactionID: .eventID("RoomTimelineItemFixtures.default.5")),
                              timestamp: .mock,
                              isOutgoing: true,
@@ -86,7 +86,7 @@ enum RoomTimelineItemFixtures {
                                                                                           ReadReceipt(userID: "bob", formattedTimestamp: nil),
                                                                                           ReadReceipt(userID: "charlie", formattedTimestamp: nil),
                                                                                           ReadReceipt(userID: "dan", formattedTimestamp: nil)])),
-        TextRoomTimelineItem(id: .event(uniqueID: .init(id: "RoomTimelineItemFixtures.default.6"),
+        TextRoomTimelineItem(id: .event(uniqueID: .init("RoomTimelineItemFixtures.default.6"),
                                         eventOrTransactionID: .eventID("RoomTimelineItemFixtures.default.6")),
                              timestamp: .mock,
                              isOutgoing: false,
@@ -242,7 +242,7 @@ enum RoomTimelineItemFixtures {
     
     static var permalinkChunk: [RoomTimelineItemProtocol] {
         (1...20).map { index in
-            TextRoomTimelineItem(id: .event(uniqueID: .init(id: "\(index)"), eventOrTransactionID: .eventID("$\(index)")),
+            TextRoomTimelineItem(id: .event(uniqueID: .init("\(index)"), eventOrTransactionID: .eventID("$\(index)")),
                                  text: "Message ID \(index)",
                                  senderDisplayName: index > 10 ? "Alice" : "Bob")
         }
@@ -264,7 +264,7 @@ enum RoomTimelineItemFixtures {
     }
     
     static var separator: SeparatorRoomTimelineItem {
-        SeparatorRoomTimelineItem(id: .virtual(uniqueID: .init(id: UUID().uuidString)),
+        SeparatorRoomTimelineItem(id: .virtual(uniqueID: .init(UUID().uuidString)),
                                   timestamp: .now)
     }
 }

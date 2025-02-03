@@ -14,6 +14,22 @@ import Foundation
 /// - eventOrTransactionID: Contains the 2 possible identifiers of an event, either it has a remote event id or
 /// a local transaction id, never both or none.
 enum TimelineItemIdentifier: Hashable, Sendable {
+    struct UniqueID: Hashable {
+        let value: String
+        
+        init(_ value: String) {
+            self.value = value
+        }
+        
+        init(rustValue: TimelineUniqueId) {
+            self.init(rustValue.id)
+        }
+        
+        var rustValue: TimelineUniqueId {
+            .init(id: value)
+        }
+    }
+    
     enum EventOrTransactionID: Hashable {
         case eventID(String), transactionID(String)
         
@@ -32,15 +48,13 @@ enum TimelineItemIdentifier: Hashable, Sendable {
         }
     }
     
-    case event(uniqueID: TimelineUniqueId, eventOrTransactionID: EventOrTransactionID)
-    case virtual(uniqueID: TimelineUniqueId)
+    case event(uniqueID: UniqueID, eventOrTransactionID: EventOrTransactionID)
+    case virtual(uniqueID: UniqueID)
     
-    var uniqueID: TimelineUniqueId {
+    var uniqueID: UniqueID {
         switch self {
-        case .event(let uniqueID, _):
-            uniqueID
-        case .virtual(let uniqueID):
-            uniqueID
+        case .event(let uniqueID, _): uniqueID
+        case .virtual(let uniqueID): uniqueID
         }
     }
     
@@ -64,10 +78,10 @@ enum TimelineItemIdentifier: Hashable, Sendable {
 
 extension TimelineItemIdentifier {
     static var randomEvent: Self {
-        .event(uniqueID: .init(id: UUID().uuidString), eventOrTransactionID: .eventID(UUID().uuidString))
+        .event(uniqueID: .init(UUID().uuidString), eventOrTransactionID: .eventID(UUID().uuidString))
     }
     
     static var randomVirtual: Self {
-        .virtual(uniqueID: .init(id: UUID().uuidString))
+        .virtual(uniqueID: .init(UUID().uuidString))
     }
 }
