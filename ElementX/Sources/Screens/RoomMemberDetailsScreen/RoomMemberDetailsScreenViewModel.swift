@@ -184,7 +184,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         
         switch await clientProxy.directRoomForUserID(roomMemberProxy.userID) {
         case .success(let roomID):
-            if let roomID = roomID {
+            if let roomID {
                 actionsSubject.send(.openDirectChat(roomID: roomID))
             } else {
                 let string = roomMemberProxy.displayName ?? roomMemberProxy.userID
