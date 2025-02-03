@@ -181,11 +181,36 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
                                                               persistent: true))
         defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier) }
         
-        switch await clientProxy.createDirectRoomIfNeeded(with: roomMemberProxy.userID, expectedRoomName: roomMemberProxy.displayName) {
-        case .success((let roomID, let isNewRoom)):
-            if isNewRoom {
-                analytics.trackCreatedRoom(isDM: true)
+        switch await clientProxy.directRoomForUserID(roomMemberProxy.userID) {
+        case .success(let roomID):
+            if let roomID = roomID {
+                actionsSubject.send(.openDirectChat(roomID: roomID))
+            } else {
+                let string = roomMemberProxy.displayName ?? roomMemberProxy.userID
+                state.bindings.alertInfo = .init(id: .createDirectChatConfirmation,
+                                                 title: L10n.screenRoomMemberDetailsAlertCreateDmTitle,
+                                                 message: L10n.screenRoomMemberDetailsAlertCreateDmMessage(string),
+                                                 primaryButton: .init(title: L10n.screenRoomMemberDetailsAlertCreateDmConfirmationTitle) { [weak self] in Task { await self?.createDirectChat() }},
+                                                 secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
             }
+        case .failure:
+            state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)
+        }
+    }
+    
+    private func createDirectChat() async {
+        guard let roomMemberProxy else { fatalError() }
+
+        let loadingIndicatorIdentifier = "createDirectChatLoadingIndicator"
+        userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier,
+                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                              title: L10n.commonLoading,
+                                                              persistent: true))
+        defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier) }
+        
+        switch await clientProxy.createDirectRoom(with: roomMemberProxy.userID, expectedRoomName: roomMemberProxy.displayName) {
+        case .success(let roomID):
+            analytics.trackCreatedRoom(isDM: true)
             actionsSubject.send(.openDirectChat(roomID: roomID))
         case .failure:
             state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)

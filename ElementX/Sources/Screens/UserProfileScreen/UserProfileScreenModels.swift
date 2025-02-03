@@ -51,4 +51,5 @@ enum UserProfileScreenViewAction {
 enum UserProfileScreenError: Hashable {
     case failedOpeningDirectChat
     case unknown
+    case createDirectChatConfirmation
 }
