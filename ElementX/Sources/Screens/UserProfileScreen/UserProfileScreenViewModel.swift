@@ -118,7 +118,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         
         switch await clientProxy.directRoomForUserID(userProfile.userID) {
         case .success(let roomID):
-            if let roomID = roomID {
+            if let roomID {
                 actionsSubject.send(.openDirectChat(roomID: roomID))
             } else {
                 let string = userProfile.displayName ?? userProfile.userID
