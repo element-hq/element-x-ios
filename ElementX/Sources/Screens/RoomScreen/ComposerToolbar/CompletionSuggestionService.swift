@@ -8,8 +8,8 @@
 import Combine
 import Foundation
 
-private enum SuggestionTriggerPattern: Character {
-    case at = "@"
+private enum SuggestionTriggerRegex: String {
+    case at = "@\\w+"
 }
 
 final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
@@ -84,43 +84,27 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     // MARK: - Private
     
     private func detectTriggerInText(_ text: String, selectedRange: NSRange) -> SuggestionTrigger? {
+        guard let regex = try? NSRegularExpression(pattern: SuggestionTriggerRegex.at.rawValue, options: []) else {
             return nil
         }
         
-        var suggestionText: String?
-        var range: Range<String.Index>?
-        
-        var startIndex: String.Index = text.startIndex
-        let components = text
-            .components(separatedBy: .whitespaces)
-            .filter { $0.first == SuggestionTriggerPattern.at.rawValue }
-        
-        for component in components {
-            guard let textRange = text.range(of: component, range: startIndex..<text.endIndex) else {
-                continue
+        let matches = regex.matches(in: text)
+        let match = matches
+            .filter { matchResult in
+                selectedRange.location >= matchResult.range.lowerBound
+                    && selectedRange.location <= matchResult.range.upperBound
+                    && selectedRange.length <= matchResult.range.upperBound - matchResult.range.lowerBound
             }
-            startIndex = textRange.upperBound
-            
-            let startIndex = textRange.lowerBound.utf16Offset(in: text)
-            let endIndex = textRange.upperBound.utf16Offset(in: text)
-            
-            guard selectedRange.location >= startIndex,
-                  selectedRange.location <= endIndex,
-                  selectedRange.length <= endIndex - startIndex
-            else {
-                continue
-            }
-            
-            suggestionText = String(text[textRange.lowerBound..<textRange.upperBound])
-            suggestionText?.removeFirst()
-            range = textRange
-        }
+            .first
         
-        guard let suggestionText,
-              let range else {
+        guard let match,
+              let range = Range(match.range, in: text) else {
             return nil
         }
-      
+        
+        var suggestionText = String(text[range])
+        suggestionText.removeFirst()
+        
         return .init(type: .user, text: suggestionText, range: NSRange(range, in: text))
     }
     
