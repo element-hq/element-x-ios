@@ -29,7 +29,7 @@ enum TimelineInteractionHandlerAction {
 @MainActor
 class TimelineInteractionHandler {
     private let roomProxy: JoinedRoomProxyProtocol
-    private let timelineController: RoomTimelineControllerProtocol
+    private let timelineController: TimelineControllerProtocol
     private let mediaProvider: MediaProviderProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let voiceMessageRecorder: VoiceMessageRecorderProtocol
@@ -56,7 +56,7 @@ class TimelineInteractionHandler {
     private var resumeVoiceMessagePlaybackAfterScrubbing = false
     
     init(roomProxy: JoinedRoomProxyProtocol,
-         timelineController: RoomTimelineControllerProtocol,
+         timelineController: TimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          mediaPlayerProvider: MediaPlayerProviderProtocol,
          voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
@@ -501,7 +501,7 @@ class TimelineInteractionHandler {
         actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
     }
     
-    func processItemTap(_ itemID: TimelineItemIdentifier) async -> RoomTimelineControllerAction {
+    func processItemTap(_ itemID: TimelineItemIdentifier) async -> TimelineControllerAction {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
             return .none
         }
@@ -528,7 +528,7 @@ class TimelineInteractionHandler {
         }
     }
     
-    private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> RoomTimelineControllerAction {
+    private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> TimelineControllerAction {
         var source: MediaSourceProxy?
         var filename: String
         var caption: String?

@@ -22,7 +22,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
 
     private let roomProxy: JoinedRoomProxyProtocol
-    private let timelineController: RoomTimelineControllerProtocol
+    private let timelineController: TimelineControllerProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
@@ -45,7 +45,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
 
     init(roomProxy: JoinedRoomProxyProtocol,
          focussedEventID: String? = nil,
-         timelineController: RoomTimelineControllerProtocol,
+         timelineController: TimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          mediaPlayerProvider: MediaPlayerProviderProtocol,
          voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
@@ -870,10 +870,10 @@ private extension RoomInfoProxy {
 extension TimelineViewModel {
     static let mock = mock(timelineKind: .live)
     
-    static func mock(timelineKind: TimelineKind = .live, timelineController: MockRoomTimelineController? = nil) -> TimelineViewModel {
+    static func mock(timelineKind: TimelineKind = .live, timelineController: MockTimelineController? = nil) -> TimelineViewModel {
         TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                           focussedEventID: nil,
-                          timelineController: timelineController ?? MockRoomTimelineController(timelineKind: timelineKind),
+                          timelineController: timelineController ?? MockTimelineController(timelineKind: timelineKind),
                           mediaProvider: MediaProviderMock(configuration: .init()),
                           mediaPlayerProvider: MediaPlayerProviderMock(),
                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),

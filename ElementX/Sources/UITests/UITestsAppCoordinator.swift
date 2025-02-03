@@ -235,7 +235,7 @@ class MockScreen: Identifiable {
             let navigationStackCoordinator = NavigationStackCoordinator()
             let parameters = RoomScreenCoordinatorParameters(clientProxy: ClientProxyMock(),
                                                              roomProxy: JoinedRoomProxyMock(.init(name: "Some room name", avatarURL: nil)),
-                                                             timelineController: MockRoomTimelineController(),
+                                                             timelineController: MockTimelineController(),
                                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                                              mediaPlayerProvider: MediaPlayerProviderMock(),
                                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
@@ -251,7 +251,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .roomSmallTimeline:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let timelineController = MockRoomTimelineController()
+            let timelineController = MockTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.smallChunk
             let parameters = RoomScreenCoordinatorParameters(clientProxy: ClientProxyMock(),
                                                              roomProxy: JoinedRoomProxyMock(.init(name: "New room", avatarURL: .mockMXCAvatar)),
@@ -271,7 +271,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .roomSmallTimelineWithReactions:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let timelineController = MockRoomTimelineController()
+            let timelineController = MockTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.default
             let parameters = RoomScreenCoordinatorParameters(clientProxy: ClientProxyMock(),
                                                              roomProxy: JoinedRoomProxyMock(.init(name: "New room", avatarURL: .mockMXCAvatar)),
@@ -291,7 +291,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .roomSmallTimelineWithReadReceipts:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let timelineController = MockRoomTimelineController()
+            let timelineController = MockTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.smallChunkWithReadReceipts
             let parameters = RoomScreenCoordinatorParameters(clientProxy: ClientProxyMock(),
                                                              roomProxy: JoinedRoomProxyMock(.init(name: "New room", avatarURL: .mockMXCAvatar)),
@@ -312,7 +312,7 @@ class MockScreen: Identifiable {
         case .roomSmallTimelineIncomingAndSmallPagination:
             let navigationStackCoordinator = NavigationStackCoordinator()
             
-            let timelineController = MockRoomTimelineController(listenForSignals: true)
+            let timelineController = MockTimelineController(listenForSignals: true)
             timelineController.timelineItems = RoomTimelineItemFixtures.smallChunk
             timelineController.backPaginationResponses = [RoomTimelineItemFixtures.singleMessageChunk]
             timelineController.incomingItems = [RoomTimelineItemFixtures.incomingMessage]
@@ -336,7 +336,7 @@ class MockScreen: Identifiable {
         case .roomSmallTimelineLargePagination:
             let navigationStackCoordinator = NavigationStackCoordinator()
             
-            let timelineController = MockRoomTimelineController(listenForSignals: true)
+            let timelineController = MockTimelineController(listenForSignals: true)
             timelineController.timelineItems = RoomTimelineItemFixtures.smallChunk
             timelineController.backPaginationResponses = [RoomTimelineItemFixtures.largeChunk]
             let parameters = RoomScreenCoordinatorParameters(clientProxy: ClientProxyMock(),
@@ -359,7 +359,7 @@ class MockScreen: Identifiable {
         case .roomLayoutTop:
             let navigationStackCoordinator = NavigationStackCoordinator()
             
-            let timelineController = MockRoomTimelineController(listenForSignals: true)
+            let timelineController = MockTimelineController(listenForSignals: true)
             timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
             timelineController.backPaginationResponses = [RoomTimelineItemFixtures.largeChunk]
             let parameters = RoomScreenCoordinatorParameters(clientProxy: ClientProxyMock(),
@@ -382,7 +382,7 @@ class MockScreen: Identifiable {
         case .roomLayoutMiddle:
             let navigationStackCoordinator = NavigationStackCoordinator()
             
-            let timelineController = MockRoomTimelineController(listenForSignals: true)
+            let timelineController = MockTimelineController(listenForSignals: true)
             timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
             timelineController.backPaginationResponses = [RoomTimelineItemFixtures.largeChunk]
             timelineController.incomingItems = [RoomTimelineItemFixtures.incomingMessage]
@@ -406,7 +406,7 @@ class MockScreen: Identifiable {
         case .roomLayoutBottom:
             let navigationStackCoordinator = NavigationStackCoordinator()
             
-            let timelineController = MockRoomTimelineController(listenForSignals: true)
+            let timelineController = MockTimelineController(listenForSignals: true)
             timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
             timelineController.incomingItems = [RoomTimelineItemFixtures.incomingMessage]
             let parameters = RoomScreenCoordinatorParameters(clientProxy: ClientProxyMock(),
@@ -429,7 +429,7 @@ class MockScreen: Identifiable {
         case .roomLayoutHighlight:
             let navigationStackCoordinator = NavigationStackCoordinator()
             
-            let timelineController = MockRoomTimelineController()
+            let timelineController = MockTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.permalinkChunk
             let parameters = RoomScreenCoordinatorParameters(clientProxy: ClientProxyMock(),
                                                              roomProxy: JoinedRoomProxyMock(.init(name: "Timeline highlight", avatarURL: .mockMXCAvatar)),
@@ -464,7 +464,7 @@ class MockScreen: Identifiable {
         case .roomWithDisclosedPolls:
             let navigationStackCoordinator = NavigationStackCoordinator()
 
-            let timelineController = MockRoomTimelineController()
+            let timelineController = MockTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.disclosedPolls
             timelineController.incomingItems = []
             let parameters = RoomScreenCoordinatorParameters(clientProxy: ClientProxyMock(),
@@ -487,7 +487,7 @@ class MockScreen: Identifiable {
         case .roomWithUndisclosedPolls:
             let navigationStackCoordinator = NavigationStackCoordinator()
 
-            let timelineController = MockRoomTimelineController()
+            let timelineController = MockTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.undisclosedPolls
             timelineController.incomingItems = []
             let parameters = RoomScreenCoordinatorParameters(clientProxy: ClientProxyMock(),
@@ -510,7 +510,7 @@ class MockScreen: Identifiable {
         case .roomWithOutgoingPolls:
             let navigationStackCoordinator = NavigationStackCoordinator()
 
-            let timelineController = MockRoomTimelineController()
+            let timelineController = MockTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.outgoingPolls
             timelineController.incomingItems = []
             let parameters = RoomScreenCoordinatorParameters(clientProxy: ClientProxyMock(),
@@ -691,14 +691,14 @@ class MockScreen: Identifiable {
             
             clientProxy.roomForIdentifierReturnValue = .joined(roomProxy)
             
-            let timelineController = RoomTimelineController(roomProxy: roomProxy,
-                                                            timelineProxy: roomProxy.timeline,
-                                                            initialFocussedEventID: nil,
-                                                            timelineItemFactory: RoomTimelineItemFactory(userID: "@alice:matrix.org",
-                                                                                                         attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                                                                         stateEventStringBuilder: RoomStateEventStringBuilder(userID: "@alice:matrix.org")),
-                                                            mediaProvider: MediaProviderMock(configuration: .init()),
-                                                            appSettings: ServiceLocator.shared.settings)
+            let timelineController = TimelineController(roomProxy: roomProxy,
+                                                        timelineProxy: roomProxy.timeline,
+                                                        initialFocussedEventID: nil,
+                                                        timelineItemFactory: RoomTimelineItemFactory(userID: "@alice:matrix.org",
+                                                                                                     attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                                                                                     stateEventStringBuilder: RoomStateEventStringBuilder(userID: "@alice:matrix.org")),
+                                                        mediaProvider: MediaProviderMock(configuration: .init()),
+                                                        appSettings: ServiceLocator.shared.settings)
             
             let flowCoordinator = UserSessionFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                              navigationRootCoordinator: navigationRootCoordinator,

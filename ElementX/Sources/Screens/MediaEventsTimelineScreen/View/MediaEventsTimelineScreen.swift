@@ -259,9 +259,9 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     
     private static func makeTimelineViewModel(empty: Bool) -> TimelineViewModel {
         let timelineController = if empty {
-            MockRoomTimelineController.emptyMediaGallery
+            MockTimelineController.emptyMediaGallery
         } else {
-            MockRoomTimelineController.mediaGallery
+            MockTimelineController.mediaGallery
         }
         
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),

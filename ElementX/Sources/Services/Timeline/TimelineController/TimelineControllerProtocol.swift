@@ -9,25 +9,25 @@ import Combine
 import MatrixRustSDK
 import SwiftUI
 
-enum RoomTimelineControllerCallback {
+enum TimelineControllerCallback {
     case updatedTimelineItems(timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool)
     case paginationState(PaginationState)
     case isLive(Bool)
 }
 
-enum RoomTimelineControllerAction {
+enum TimelineControllerAction {
     case displayMediaFile(file: MediaFileHandleProxy, title: String?)
     case displayLocation(body: String, geoURI: GeoURI, description: String?)
     case none
 }
 
-enum RoomTimelineControllerError: Error {
+enum TimelineControllerError: Error {
     case generic
     case eventNotFound
 }
 
 @MainActor
-protocol RoomTimelineControllerProtocol {
+protocol TimelineControllerProtocol {
     var roomID: String { get }
     var timelineKind: TimelineKind { get }
     
@@ -37,17 +37,17 @@ protocol RoomTimelineControllerProtocol {
     /// The current pagination state, use only for setting up the intial state
     var paginationState: PaginationState { get }
     
-    var callbacks: PassthroughSubject<RoomTimelineControllerCallback, Never> { get }
+    var callbacks: PassthroughSubject<TimelineControllerCallback, Never> { get }
     
     func processItemAppearance(_ itemID: TimelineItemIdentifier) async
     
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) async
     
-    func focusOnEvent(_ eventID: String, timelineSize: UInt16) async -> Result<Void, RoomTimelineControllerError>
+    func focusOnEvent(_ eventID: String, timelineSize: UInt16) async -> Result<Void, TimelineControllerError>
     func focusLive()
     
-    func paginateBackwards(requestSize: UInt16) async -> Result<Void, RoomTimelineControllerError>
-    func paginateForwards(requestSize: UInt16) async -> Result<Void, RoomTimelineControllerError>
+    func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineControllerError>
+    func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineControllerError>
     
     func sendReadReceipt(for itemID: TimelineItemIdentifier) async
     

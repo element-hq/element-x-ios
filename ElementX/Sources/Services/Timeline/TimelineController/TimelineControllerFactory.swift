@@ -12,43 +12,43 @@ struct TimelineControllerFactory: TimelineControllerFactoryProtocol {
     func buildTimelineController(roomProxy: JoinedRoomProxyProtocol,
                                  initialFocussedEventID: String?,
                                  timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                 mediaProvider: MediaProviderProtocol) -> RoomTimelineControllerProtocol {
-        RoomTimelineController(roomProxy: roomProxy,
-                               timelineProxy: roomProxy.timeline,
-                               initialFocussedEventID: initialFocussedEventID,
-                               timelineItemFactory: timelineItemFactory,
-                               mediaProvider: mediaProvider,
-                               appSettings: ServiceLocator.shared.settings)
+                                 mediaProvider: MediaProviderProtocol) -> TimelineControllerProtocol {
+        TimelineController(roomProxy: roomProxy,
+                           timelineProxy: roomProxy.timeline,
+                           initialFocussedEventID: initialFocussedEventID,
+                           timelineItemFactory: timelineItemFactory,
+                           mediaProvider: mediaProvider,
+                           appSettings: ServiceLocator.shared.settings)
     }
     
     func buildPinnedEventsTimelineController(roomProxy: JoinedRoomProxyProtocol,
                                              timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                             mediaProvider: MediaProviderProtocol) async -> RoomTimelineControllerProtocol? {
+                                             mediaProvider: MediaProviderProtocol) async -> TimelineControllerProtocol? {
         guard let pinnedEventsTimeline = await roomProxy.pinnedEventsTimeline else {
             return nil
         }
         
-        return RoomTimelineController(roomProxy: roomProxy,
-                                      timelineProxy: pinnedEventsTimeline,
-                                      initialFocussedEventID: nil,
-                                      timelineItemFactory: timelineItemFactory,
-                                      mediaProvider: mediaProvider,
-                                      appSettings: ServiceLocator.shared.settings)
+        return TimelineController(roomProxy: roomProxy,
+                                  timelineProxy: pinnedEventsTimeline,
+                                  initialFocussedEventID: nil,
+                                  timelineItemFactory: timelineItemFactory,
+                                  mediaProvider: mediaProvider,
+                                  appSettings: ServiceLocator.shared.settings)
     }
     
     func buildMessageFilteredTimelineController(allowedMessageTypes: [RoomMessageEventMessageType],
                                                 presentation: TimelineKind.MediaPresentation,
                                                 roomProxy: JoinedRoomProxyProtocol,
                                                 timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                                mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, TimelineFactoryControllerError> {
+                                                mediaProvider: MediaProviderProtocol) async -> Result<TimelineControllerProtocol, TimelineFactoryControllerError> {
         switch await roomProxy.messageFilteredTimeline(allowedMessageTypes: allowedMessageTypes, presentation: presentation) {
         case .success(let timelineProxy):
-            return .success(RoomTimelineController(roomProxy: roomProxy,
-                                                   timelineProxy: timelineProxy,
-                                                   initialFocussedEventID: nil,
-                                                   timelineItemFactory: timelineItemFactory,
-                                                   mediaProvider: mediaProvider,
-                                                   appSettings: ServiceLocator.shared.settings))
+            return .success(TimelineController(roomProxy: roomProxy,
+                                               timelineProxy: timelineProxy,
+                                               initialFocussedEventID: nil,
+                                               timelineItemFactory: timelineItemFactory,
+                                               mediaProvider: mediaProvider,
+                                               appSettings: ServiceLocator.shared.settings))
         case .failure(let error):
             return .failure(.roomProxyError(error))
         }

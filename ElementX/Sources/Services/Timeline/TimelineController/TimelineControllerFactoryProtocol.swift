@@ -17,17 +17,17 @@ protocol TimelineControllerFactoryProtocol {
     func buildTimelineController(roomProxy: JoinedRoomProxyProtocol,
                                  initialFocussedEventID: String?,
                                  timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                 mediaProvider: MediaProviderProtocol) -> RoomTimelineControllerProtocol
+                                 mediaProvider: MediaProviderProtocol) -> TimelineControllerProtocol
     
     func buildPinnedEventsTimelineController(roomProxy: JoinedRoomProxyProtocol,
                                              timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                             mediaProvider: MediaProviderProtocol) async -> RoomTimelineControllerProtocol?
+                                             mediaProvider: MediaProviderProtocol) async -> TimelineControllerProtocol?
     
     func buildMessageFilteredTimelineController(allowedMessageTypes: [RoomMessageEventMessageType],
                                                 presentation: TimelineKind.MediaPresentation,
                                                 roomProxy: JoinedRoomProxyProtocol,
                                                 timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                                mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, TimelineFactoryControllerError>
+                                                mediaProvider: MediaProviderProtocol) async -> Result<TimelineControllerProtocol, TimelineFactoryControllerError>
 }
 
 // sourcery: AutoMockable

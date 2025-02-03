@@ -110,7 +110,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private var timelineController: RoomTimelineControllerProtocol?
+    private var timelineController: TimelineControllerProtocol?
     
     init(roomID: String,
          userSession: UserSessionProtocol,
@@ -1203,13 +1203,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
                 
-        let roomTimelineController = timelineControllerFactory.buildTimelineController(roomProxy: roomProxy,
-                                                                                       initialFocussedEventID: nil,
-                                                                                       timelineItemFactory: timelineItemFactory,
-                                                                                       mediaProvider: userSession.mediaProvider)
+        let timelineController = timelineControllerFactory.buildTimelineController(roomProxy: roomProxy,
+                                                                                   initialFocussedEventID: nil,
+                                                                                   timelineItemFactory: timelineItemFactory,
+                                                                                   mediaProvider: userSession.mediaProvider)
         
         let parameters = RoomPollsHistoryScreenCoordinatorParameters(pollInteractionHandler: PollInteractionHandler(analyticsService: analytics, roomProxy: roomProxy),
-                                                                     roomTimelineController: roomTimelineController)
+                                                                     timelineController: timelineController)
         let coordinator = RoomPollsHistoryScreenCoordinator(parameters: parameters)
         coordinator.actions
             .sink { [weak self] action in

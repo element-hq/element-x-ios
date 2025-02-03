@@ -16,7 +16,7 @@ struct RoomScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
     var focussedEvent: FocusEvent?
     var sharedText: String?
-    let timelineController: RoomTimelineControllerProtocol
+    let timelineController: TimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol

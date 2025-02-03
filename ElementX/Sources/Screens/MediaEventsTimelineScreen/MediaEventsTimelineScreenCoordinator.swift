@@ -10,8 +10,8 @@ import SwiftUI
 
 struct MediaEventsTimelineScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
-    let mediaTimelineController: RoomTimelineControllerProtocol
-    let filesTimelineController: RoomTimelineControllerProtocol
+    let mediaTimelineController: TimelineControllerProtocol
+    let filesTimelineController: TimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol

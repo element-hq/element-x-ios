@@ -13,13 +13,13 @@ import XCTest
 class RoomPollsHistoryScreenViewModelTests: XCTestCase {
     var viewModel: RoomPollsHistoryScreenViewModelProtocol!
     var interactionHandler: PollInteractionHandlerMock!
-    var timelineController: MockRoomTimelineController!
+    var timelineController: MockTimelineController!
     
     override func setUpWithError() throws {
         interactionHandler = PollInteractionHandlerMock()
-        timelineController = MockRoomTimelineController()
+        timelineController = MockTimelineController()
         viewModel = RoomPollsHistoryScreenViewModel(pollInteractionHandler: interactionHandler,
-                                                    roomTimelineController: timelineController,
+                                                    timelineController: timelineController,
                                                     userIndicatorController: UserIndicatorControllerMock())
     }
 

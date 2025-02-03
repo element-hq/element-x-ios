@@ -19,7 +19,7 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
     var context: TimelineMediaPreviewViewModel.Context { viewModel.context }
     var mediaProvider: MediaProviderMock!
     var photoLibraryManager: PhotoLibraryManagerMock!
-    var timelineController: MockRoomTimelineController!
+    var timelineController: MockTimelineController!
     
     func testLoadingItem() async throws {
         // Given a fresh view model.
@@ -274,7 +274,7 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
     
     private func setupViewModel(initialItemIndex: Int = 0, photoLibraryAuthorizationDenied: Bool = false) {
         let initialItems = makeItems()
-        timelineController = MockRoomTimelineController(timelineKind: .media(.mediaFilesScreen))
+        timelineController = MockTimelineController(timelineKind: .media(.mediaFilesScreen))
         timelineController.timelineItems = initialItems
         
         mediaProvider = MediaProviderMock(configuration: .init())

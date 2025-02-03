@@ -40,7 +40,7 @@ class TimelineViewModelTests: XCTestCase {
         ]
         
         // When showing them in a timeline.
-        let timelineController = MockRoomTimelineController()
+        let timelineController = MockTimelineController()
         timelineController.timelineItems = items
         let viewModel = makeViewModel(timelineController: timelineController)
         
@@ -68,7 +68,7 @@ class TimelineViewModelTests: XCTestCase {
         ]
         
         // When showing them in a timeline.
-        let timelineController = MockRoomTimelineController()
+        let timelineController = MockTimelineController()
         timelineController.timelineItems = items
         let viewModel = makeViewModel(timelineController: timelineController)
         
@@ -94,7 +94,7 @@ class TimelineViewModelTests: XCTestCase {
         ]
         
         // When showing them in a timeline.
-        let timelineController = MockRoomTimelineController()
+        let timelineController = MockTimelineController()
         timelineController.timelineItems = items
         let viewModel = makeViewModel(timelineController: timelineController)
         
@@ -117,7 +117,7 @@ class TimelineViewModelTests: XCTestCase {
         ]
         
         // When showing them in a timeline.
-        let timelineController = MockRoomTimelineController()
+        let timelineController = MockTimelineController()
         timelineController.timelineItems = items
         let viewModel = makeViewModel(timelineController: timelineController)
         
@@ -140,7 +140,7 @@ class TimelineViewModelTests: XCTestCase {
         ]
         
         // When showing them in a timeline.
-        let timelineController = MockRoomTimelineController()
+        let timelineController = MockTimelineController()
         timelineController.timelineItems = items
         let viewModel = makeViewModel(timelineController: timelineController)
         
@@ -157,7 +157,7 @@ class TimelineViewModelTests: XCTestCase {
         let items = [TextRoomTimelineItem(eventID: "t1"),
                      TextRoomTimelineItem(eventID: "t2"),
                      TextRoomTimelineItem(eventID: "t3")]
-        let timelineController = MockRoomTimelineController()
+        let timelineController = MockTimelineController()
         timelineController.timelineItems = items
         
         let viewModel = makeViewModel(timelineController: timelineController)
@@ -181,7 +181,7 @@ class TimelineViewModelTests: XCTestCase {
         let items = [TextRoomTimelineItem(eventID: "t1"),
                      TextRoomTimelineItem(eventID: "t2"),
                      TextRoomTimelineItem(eventID: "t3")]
-        let timelineController = MockRoomTimelineController()
+        let timelineController = MockTimelineController()
         timelineController.timelineItems = items
         
         let viewModel = makeViewModel(timelineController: timelineController)
@@ -205,7 +205,7 @@ class TimelineViewModelTests: XCTestCase {
         let items = [TextRoomTimelineItem(eventID: "t1"),
                      TextRoomTimelineItem(eventID: "t2"),
                      TextRoomTimelineItem(eventID: "t3")]
-        let timelineController = MockRoomTimelineController()
+        let timelineController = MockTimelineController()
         timelineController.timelineItems = items
         
         let viewModel = makeViewModel(timelineController: timelineController)
@@ -230,7 +230,7 @@ class TimelineViewModelTests: XCTestCase {
     }
     
     func testInitialFocusViewState() async throws {
-        let timelineController = MockRoomTimelineController()
+        let timelineController = MockTimelineController()
         
         let viewModel = makeViewModel(focussedEventID: "t10", timelineController: timelineController)
         XCTAssertEqual(viewModel.context.viewState.timelineState.focussedEvent, .init(eventID: "t10", appearance: .immediate))
@@ -289,13 +289,13 @@ class TimelineViewModelTests: XCTestCase {
     private func readReceiptsConfiguration(with items: [RoomTimelineItemProtocol]) -> (TimelineViewModel,
                                                                                        JoinedRoomProxyMock,
                                                                                        TimelineProxyMock,
-                                                                                       MockRoomTimelineController) {
+                                                                                       MockTimelineController) {
         let roomProxy = JoinedRoomProxyMock(.init(name: ""))
         
         let timelineProxy = TimelineProxyMock()
         
         roomProxy.timeline = timelineProxy
-        let timelineController = MockRoomTimelineController()
+        let timelineController = MockTimelineController()
         
         timelineProxy.sendReadReceiptForTypeReturnValue = .success(())
         
@@ -326,7 +326,7 @@ class TimelineViewModelTests: XCTestCase {
         let id = message.id
         
         // When showing them in a timeline.
-        let timelineController = MockRoomTimelineController()
+        let timelineController = MockTimelineController()
         timelineController.timelineItems = [message]
         let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "", members: [RoomMemberProxyMock.mockAlice, RoomMemberProxyMock.mockCharlie])),
                                           timelineController: timelineController,
@@ -358,7 +358,7 @@ class TimelineViewModelTests: XCTestCase {
         roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
         
         let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
-                                          timelineController: MockRoomTimelineController(),
+                                          timelineController: MockTimelineController(),
                                           mediaProvider: MediaProviderMock(configuration: .init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
@@ -385,7 +385,7 @@ class TimelineViewModelTests: XCTestCase {
         roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
         
         let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
-                                          timelineController: MockRoomTimelineController(),
+                                          timelineController: MockTimelineController(),
                                           mediaProvider: MediaProviderMock(configuration: .init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
                                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
@@ -413,7 +413,7 @@ class TimelineViewModelTests: XCTestCase {
     
     private func makeViewModel(roomProxy: JoinedRoomProxyProtocol? = nil,
                                focussedEventID: String? = nil,
-                               timelineController: RoomTimelineControllerProtocol) -> TimelineViewModel {
+                               timelineController: TimelineControllerProtocol) -> TimelineViewModel {
         TimelineViewModel(roomProxy: roomProxy ?? JoinedRoomProxyMock(.init(name: "")),
                           focussedEventID: focussedEventID,
                           timelineController: timelineController,

@@ -11,7 +11,7 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-class MockRoomTimelineController: RoomTimelineControllerProtocol {
+class MockTimelineController: TimelineControllerProtocol {
     /// An array of timeline item arrays that will be inserted in order for each back pagination request.
     var backPaginationResponses: [[RoomTimelineItemProtocol]] = []
     /// An array of timeline items that will be appended in order when ``simulateIncomingItems()`` is called.
@@ -21,7 +21,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     var roomID: String { roomProxy?.id ?? "MockRoomIdentifier" }
     var timelineKind: TimelineKind
     
-    let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
+    let callbacks = PassthroughSubject<TimelineControllerCallback, Never>()
     
     var paginationState: PaginationState = .initial {
         didSet {
@@ -34,14 +34,14 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     private var client: UITestsSignalling.Client?
     
-    static var mediaGallery: MockRoomTimelineController {
-        MockRoomTimelineController(timelineKind: .media(.mediaFilesScreen), timelineItems: (0..<5).reduce([]) { partialResult, _ in
+    static var mediaGallery: MockTimelineController {
+        MockTimelineController(timelineKind: .media(.mediaFilesScreen), timelineItems: (0..<5).reduce([]) { partialResult, _ in
             partialResult + [RoomTimelineItemFixtures.separator] + RoomTimelineItemFixtures.mediaChunk
         })
     }
     
-    static var emptyMediaGallery: MockRoomTimelineController {
-        let mock = MockRoomTimelineController(timelineKind: .media(.mediaFilesScreen))
+    static var emptyMediaGallery: MockTimelineController {
+        let mock = MockTimelineController(timelineKind: .media(.mediaFilesScreen))
         mock.paginationState = PaginationState(backward: .timelineEndReached, forward: .timelineEndReached)
         return mock
     }
@@ -63,7 +63,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     private(set) var focusOnEventCallCount = 0
-    func focusOnEvent(_ eventID: String, timelineSize: UInt16) async -> Result<Void, RoomTimelineControllerError> {
+    func focusOnEvent(_ eventID: String, timelineSize: UInt16) async -> Result<Void, TimelineControllerError> {
         focusOnEventCallCount += 1
         callbacks.send(.isLive(false))
         return .success(())
@@ -75,7 +75,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         callbacks.send(.isLive(true))
     }
 
-    func paginateBackwards(requestSize: UInt16) async -> Result<Void, RoomTimelineControllerError> {
+    func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineControllerError> {
         paginationState = PaginationState(backward: .paginating, forward: .timelineEndReached)
         
         if client == nil {
@@ -85,7 +85,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         return .success(())
     }
     
-    func paginateForwards(requestSize: UInt16) async -> Result<Void, RoomTimelineControllerError> {
+    func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineControllerError> {
         // try? await simulateForwardPagination()
         .success(())
     }
