@@ -29,7 +29,7 @@ struct JoinRoomScreenRoomDetails {
     let topic: String?
     let canonicalAlias: String?
     let avatar: RoomAvatar
-    let memberCount: UInt
+    let memberCount: Int
     let inviter: RoomInviterDetails?
 }
 

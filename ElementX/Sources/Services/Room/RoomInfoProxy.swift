@@ -16,6 +16,7 @@ protocol BaseRoomInfoProxyProtocol {
     var canonicalAlias: String? { get }
     var avatarURL: URL? { get }
     var activeMembersCount: Int { get }
+    var joinedMembersCount: Int { get }
     var isDirect: Bool { get }
     var isSpace: Bool { get }
 }
@@ -112,6 +113,7 @@ struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
     var isDirect: Bool { roomPreviewInfo.isDirect ?? false }
     var isSpace: Bool { roomPreviewInfo.roomType == .space }
     var activeMembersCount: Int { Int(roomPreviewInfo.numActiveMembers ?? roomPreviewInfo.numJoinedMembers) }
+    var joinedMembersCount: Int { Int(roomPreviewInfo.numJoinedMembers) }
     
     var joinRule: JoinRule { roomPreviewInfo.joinRule }
     var membership: Membership? { roomPreviewInfo.membership }
