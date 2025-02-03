@@ -326,7 +326,7 @@
 "notification_channel_noisy" = "Lärmakad teavitused";
 "notification_channel_ringing_calls" = "Kõnehelinad";
 "notification_channel_silent" = "Vaiksed teavitused";
-"notification_incoming_call" = "Sissetulev kõne";
+"notification_incoming_call" = "📹 Sissetulev kõne";
 "notification_inline_reply_failed" = "** Saatmine ei õnnestunud - palun ava jututoa täisvaade";
 "notification_invite_body" = "Kutse osalema vestluses";
 "notification_invite_body_with_sender" = "%1$@ saatus sulle vestluskutse";
@@ -414,6 +414,8 @@
 "screen_knock_requests_list_title" = "Liitumispalved";
 "screen_media_details_file_format" = "Failivorming";
 "screen_media_details_filename" = "Failinimi";
+"screen_media_details_no_more_files_to_show" = "Pole enam kuvatavaid faile";
+"screen_media_details_no_more_media_to_show" = "Pole enam kuvatavat meediat";
 "screen_media_details_redact_confirmation_message" = "Järgnevaga eemaldame selle faili jututoast ja tema liikmed enam ei pääse failile ligi.";
 "screen_media_details_redact_confirmation_title" = "Kas kustutame faili?";
 "screen_media_details_uploaded_by" = "Üleslaadija";
@@ -478,8 +480,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Sõnum on saatmata, kuna kasutaja %1$@ verifitseeritud identiteet on muutunud.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Sõnum on saatmata, kuna %1$@ pole verifitseerinud kõiki oma seadmeid.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Kuna sa pole üks või enamgi oma seadet verifitseerinud, siis sinu sõnum on saatmata.";
-"screen.media_details.no_more_files_to_show" = "Pole enam kuvatavaid faile";
-"screen.media_details.no_more_media_to_show" = "Pole enam kuvatavat meediat";
 "screen_account_provider_form_hint" = "Koduserveri aadress";
 "screen_account_provider_form_notice" = "Sisesta otsingusõna või domeeni nimi.";
 "screen_account_provider_form_subtitle" = "Otsi äriühingut, kogukonda või võrgus leiduvat Matrixi serverit.";
