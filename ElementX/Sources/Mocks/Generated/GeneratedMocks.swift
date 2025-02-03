@@ -13613,30 +13613,6 @@ class RoomSummaryProviderMock: RoomSummaryProviderProtocol, @unchecked Sendable 
         setFilterClosure?(filter)
     }
 }
-class RoomTimelineProviderMock: RoomTimelineProviderProtocol, @unchecked Sendable {
-    var updatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never> {
-        get { return underlyingUpdatePublisher }
-        set(value) { underlyingUpdatePublisher = value }
-    }
-    var underlyingUpdatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never>!
-    var itemProxies: [TimelineItemProxy] = []
-    var paginationState: PaginationState {
-        get { return underlyingPaginationState }
-        set(value) { underlyingPaginationState = value }
-    }
-    var underlyingPaginationState: PaginationState!
-    var kind: TimelineKind {
-        get { return underlyingKind }
-        set(value) { underlyingKind = value }
-    }
-    var underlyingKind: TimelineKind!
-    var membershipChangePublisher: AnyPublisher<Void, Never> {
-        get { return underlyingMembershipChangePublisher }
-        set(value) { underlyingMembershipChangePublisher = value }
-    }
-    var underlyingMembershipChangePublisher: AnyPublisher<Void, Never>!
-
-}
 class SecureBackupControllerMock: SecureBackupControllerProtocol, @unchecked Sendable {
     var recoveryState: CurrentValuePublisher<SecureBackupRecoveryState, Never> {
         get { return underlyingRecoveryState }
@@ -14651,12 +14627,36 @@ class TimelineControllerFactoryMock: TimelineControllerFactoryProtocol, @uncheck
         }
     }
 }
+class TimelineProviderMock: TimelineProviderProtocol, @unchecked Sendable {
+    var updatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never> {
+        get { return underlyingUpdatePublisher }
+        set(value) { underlyingUpdatePublisher = value }
+    }
+    var underlyingUpdatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never>!
+    var itemProxies: [TimelineItemProxy] = []
+    var paginationState: PaginationState {
+        get { return underlyingPaginationState }
+        set(value) { underlyingPaginationState = value }
+    }
+    var underlyingPaginationState: PaginationState!
+    var kind: TimelineKind {
+        get { return underlyingKind }
+        set(value) { underlyingKind = value }
+    }
+    var underlyingKind: TimelineKind!
+    var membershipChangePublisher: AnyPublisher<Void, Never> {
+        get { return underlyingMembershipChangePublisher }
+        set(value) { underlyingMembershipChangePublisher = value }
+    }
+    var underlyingMembershipChangePublisher: AnyPublisher<Void, Never>!
+
+}
 class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
-    var timelineProvider: RoomTimelineProviderProtocol {
+    var timelineProvider: TimelineProviderProtocol {
         get { return underlyingTimelineProvider }
         set(value) { underlyingTimelineProvider = value }
     }
-    var underlyingTimelineProvider: RoomTimelineProviderProtocol!
+    var underlyingTimelineProvider: TimelineProviderProtocol!
 
     //MARK: - subscribeForUpdates
 

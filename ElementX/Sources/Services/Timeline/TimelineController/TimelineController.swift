@@ -13,7 +13,7 @@ import UIKit
 
 class TimelineController: TimelineControllerProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
-    private let liveTimelineProvider: RoomTimelineProviderProtocol
+    private let liveTimelineProvider: TimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
     private let appSettings: AppSettings
@@ -23,7 +23,7 @@ class TimelineController: TimelineControllerProtocol {
     let callbacks = PassthroughSubject<TimelineControllerCallback, Never>()
     
     private var activeTimeline: TimelineProxyProtocol
-    private var activeTimelineProvider: RoomTimelineProviderProtocol {
+    private var activeTimelineProvider: TimelineProviderProtocol {
         didSet {
             configureActiveTimelineProvider()
         }
@@ -57,7 +57,7 @@ class TimelineController: TimelineControllerProtocol {
         self.mediaProvider = mediaProvider
         self.appSettings = appSettings
         
-        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
+        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.timelineprovider", qos: .utility)
         
         activeTimeline = timelineProxy
         activeTimelineProvider = liveTimelineProvider

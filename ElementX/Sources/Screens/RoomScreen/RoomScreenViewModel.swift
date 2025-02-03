@@ -32,7 +32,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private var pinnedEventsTimelineProvider: RoomTimelineProviderProtocol? {
+    private var pinnedEventsTimelineProvider: TimelineProviderProtocol? {
         didSet {
             guard let pinnedEventsTimelineProvider else {
                 return
