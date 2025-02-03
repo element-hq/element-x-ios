@@ -178,7 +178,8 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier,
                                                               type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
                                                               title: L10n.commonLoading,
-                                                              persistent: true))
+                                                              persistent: true),
+                                                delay: .milliseconds(200))
         defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier) }
         
         switch await clientProxy.directRoomForUserID(roomMemberProxy.userID) {
@@ -205,7 +206,8 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier,
                                                               type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
                                                               title: L10n.commonLoading,
-                                                              persistent: true))
+                                                              persistent: true),
+                                                delay: .milliseconds(200))
         defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier) }
         
         switch await clientProxy.createDirectRoom(with: roomMemberProxy.userID, expectedRoomName: roomMemberProxy.displayName) {
