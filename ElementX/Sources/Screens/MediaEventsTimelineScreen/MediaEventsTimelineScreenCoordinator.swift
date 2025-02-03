@@ -18,7 +18,7 @@ struct MediaEventsTimelineScreenCoordinatorParameters {
     let appMediator: AppMediatorProtocol
     let emojiProvider: EmojiProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
-    let timelineControllerFactory: RoomTimelineControllerFactoryProtocol
+    let timelineControllerFactory: TimelineControllerFactoryProtocol
 }
 
 enum MediaEventsTimelineScreenCoordinatorAction {

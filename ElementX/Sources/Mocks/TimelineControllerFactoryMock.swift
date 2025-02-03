@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct RoomTimelineControllerFactoryMockConfiguration {
-    var timelineController: RoomTimelineControllerProtocol?
-}
-
-extension RoomTimelineControllerFactoryMock {
-    convenience init(configuration: RoomTimelineControllerFactoryMockConfiguration) {
+extension TimelineControllerFactoryMock {
+    struct Configuration {
+        var timelineController: RoomTimelineControllerProtocol?
+    }
+    
+    convenience init(_ configuration: Configuration) {
         self.init()
         
-        buildRoomTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryMediaProviderReturnValue = configuration.timelineController ?? {
+        buildTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryMediaProviderReturnValue = configuration.timelineController ?? {
             let timelineController = MockRoomTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
             return timelineController

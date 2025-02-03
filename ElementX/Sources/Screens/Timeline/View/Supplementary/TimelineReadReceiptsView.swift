@@ -88,7 +88,7 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
                                              appSettings: ServiceLocator.shared.settings,
                                              analyticsService: ServiceLocator.shared.analytics,
                                              emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                             timelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()))
+                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
 
     static let singleReceipt = [ReadReceipt(userID: RoomMemberProxyMock.mockAlice.userID, formattedTimestamp: "Now")]
     static let doubleReceipt = [ReadReceipt(userID: RoomMemberProxyMock.mockAlice.userID, formattedTimestamp: "Now"),

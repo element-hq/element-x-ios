@@ -26,7 +26,7 @@ struct RoomScreenCoordinatorParameters {
     let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
     let composerDraftService: ComposerDraftServiceProtocol
-    let timelineControllerFactory: RoomTimelineControllerFactoryProtocol
+    let timelineControllerFactory: TimelineControllerFactoryProtocol
 }
 
 enum RoomScreenCoordinatorAction {

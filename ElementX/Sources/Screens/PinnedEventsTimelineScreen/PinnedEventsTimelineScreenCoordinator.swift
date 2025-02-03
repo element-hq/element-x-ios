@@ -16,7 +16,7 @@ struct PinnedEventsTimelineScreenCoordinatorParameters {
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let appMediator: AppMediatorProtocol
     let emojiProvider: EmojiProviderProtocol
-    let timelineControllerFactory: RoomTimelineControllerFactoryProtocol
+    let timelineControllerFactory: TimelineControllerFactoryProtocol
 }
 
 enum PinnedEventsTimelineScreenCoordinatorAction {

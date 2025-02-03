@@ -245,7 +245,7 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -265,7 +265,7 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -285,7 +285,7 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -305,7 +305,7 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -328,7 +328,7 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -351,7 +351,7 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -374,7 +374,7 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -398,7 +398,7 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -421,7 +421,7 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -443,7 +443,7 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             
@@ -479,7 +479,7 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -502,7 +502,7 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -525,7 +525,7 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -553,7 +553,7 @@ class MockScreen: Identifiable {
                                                                                             appSettings: ServiceLocator.shared.settings),
                                                              bugReportService: BugReportServiceMock(),
                                                              elementCallService: ElementCallServiceMock(.init()),
-                                                             roomTimelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()),
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()),
                                                              appMediator: appMediator,
                                                              appSettings: appSettings,
                                                              appHooks: AppHooks(),
@@ -706,7 +706,7 @@ class MockScreen: Identifiable {
                                                                                             appSettings: ServiceLocator.shared.settings),
                                                              bugReportService: BugReportServiceMock(),
                                                              elementCallService: ElementCallServiceMock(.init()),
-                                                             roomTimelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init(timelineController: timelineController)),
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init(timelineController: timelineController)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: appSettings,
                                                              appHooks: AppHooks(),

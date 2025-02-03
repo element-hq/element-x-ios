@@ -34,7 +34,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     // periphery:ignore - retaining purpose
     private var roomFlowCoordinator: RoomFlowCoordinator?
-    private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
+    private let timelineControllerFactory: TimelineControllerFactoryProtocol
     
     private let settingsFlowCoordinator: SettingsFlowCoordinator
     
@@ -69,7 +69,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
          appLockService: AppLockServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          elementCallService: ElementCallServiceProtocol,
-         roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
+         timelineControllerFactory: TimelineControllerFactoryProtocol,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          appHooks: AppHooks,
@@ -81,7 +81,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         self.navigationRootCoordinator = navigationRootCoordinator
         self.bugReportService = bugReportService
         self.elementCallService = elementCallService
-        self.roomTimelineControllerFactory = roomTimelineControllerFactory
+        self.timelineControllerFactory = timelineControllerFactory
         self.appMediator = appMediator
         self.appSettings = appSettings
         self.appHooks = appHooks
@@ -574,7 +574,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = await RoomFlowCoordinator(roomID: roomID,
                                                     userSession: userSession,
                                                     isChildFlow: false,
-                                                    roomTimelineControllerFactory: roomTimelineControllerFactory,
+                                                    timelineControllerFactory: timelineControllerFactory,
                                                     navigationStackCoordinator: detailNavigationStackCoordinator,
                                                     emojiProvider: EmojiProvider(appSettings: appSettings),
                                                     ongoingCallRoomIDPublisher: elementCallService.ongoingCallRoomIDPublisher,

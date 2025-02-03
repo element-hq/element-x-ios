@@ -39,7 +39,7 @@ class TimelineInteractionHandler {
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
     private let emojiProvider: EmojiProviderProtocol
-    private let timelineControllerFactory: RoomTimelineControllerFactoryProtocol
+    private let timelineControllerFactory: TimelineControllerFactoryProtocol
     private let pollInteractionHandler: PollInteractionHandlerProtocol
     
     private let actionsSubject: PassthroughSubject<TimelineInteractionHandlerAction, Never> = .init()
@@ -66,7 +66,7 @@ class TimelineInteractionHandler {
          appSettings: AppSettings,
          analyticsService: AnalyticsService,
          emojiProvider: EmojiProviderProtocol,
-         timelineControllerFactory: RoomTimelineControllerFactoryProtocol) {
+         timelineControllerFactory: TimelineControllerFactoryProtocol) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
         self.mediaProvider = mediaProvider

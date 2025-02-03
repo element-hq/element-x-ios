@@ -29,7 +29,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
     private let emojiProvider: EmojiProviderProtocol
-    private let timelineControllerFactory: RoomTimelineControllerFactoryProtocol
+    private let timelineControllerFactory: TimelineControllerFactoryProtocol
     
     private let timelineInteractionHandler: TimelineInteractionHandler
     
@@ -54,7 +54,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
          appSettings: AppSettings,
          analyticsService: AnalyticsService,
          emojiProvider: EmojiProviderProtocol,
-         timelineControllerFactory: RoomTimelineControllerFactoryProtocol) {
+         timelineControllerFactory: TimelineControllerFactoryProtocol) {
         self.timelineController = timelineController
         self.mediaPlayerProvider = mediaPlayerProvider
         self.roomProxy = roomProxy
@@ -882,7 +882,7 @@ extension TimelineViewModel {
                           appSettings: ServiceLocator.shared.settings,
                           analyticsService: ServiceLocator.shared.analytics,
                           emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                          timelineControllerFactory: RoomTimelineControllerFactoryMock(configuration: .init()))
+                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }
 }
 

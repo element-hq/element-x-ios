@@ -534,7 +534,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                     appLockService: appLockFlowCoordinator.appLockService,
                                                                     bugReportService: ServiceLocator.shared.bugReportService,
                                                                     elementCallService: elementCallService,
-                                                                    roomTimelineControllerFactory: RoomTimelineControllerFactory(),
+                                                                    timelineControllerFactory: TimelineControllerFactory(),
                                                                     appMediator: appMediator,
                                                                     appSettings: appSettings,
                                                                     appHooks: appHooks,

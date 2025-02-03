@@ -8,11 +8,11 @@
 import Foundation
 import MatrixRustSDK
 
-struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
-    func buildRoomTimelineController(roomProxy: JoinedRoomProxyProtocol,
-                                     initialFocussedEventID: String?,
-                                     timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                     mediaProvider: MediaProviderProtocol) -> RoomTimelineControllerProtocol {
+struct TimelineControllerFactory: TimelineControllerFactoryProtocol {
+    func buildTimelineController(roomProxy: JoinedRoomProxyProtocol,
+                                 initialFocussedEventID: String?,
+                                 timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                 mediaProvider: MediaProviderProtocol) -> RoomTimelineControllerProtocol {
         RoomTimelineController(roomProxy: roomProxy,
                                timelineProxy: roomProxy.timeline,
                                initialFocussedEventID: initialFocussedEventID,
@@ -21,9 +21,9 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
                                appSettings: ServiceLocator.shared.settings)
     }
     
-    func buildPinnedEventsRoomTimelineController(roomProxy: JoinedRoomProxyProtocol,
-                                                 timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                                 mediaProvider: MediaProviderProtocol) async -> RoomTimelineControllerProtocol? {
+    func buildPinnedEventsTimelineController(roomProxy: JoinedRoomProxyProtocol,
+                                             timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                             mediaProvider: MediaProviderProtocol) async -> RoomTimelineControllerProtocol? {
         guard let pinnedEventsTimeline = await roomProxy.pinnedEventsTimeline else {
             return nil
         }
@@ -36,11 +36,11 @@ struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
                                       appSettings: ServiceLocator.shared.settings)
     }
     
-    func buildMessageFilteredRoomTimelineController(allowedMessageTypes: [RoomMessageEventMessageType],
-                                                    presentation: TimelineKind.MediaPresentation,
-                                                    roomProxy: JoinedRoomProxyProtocol,
-                                                    timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                                    mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, RoomTimelineFactoryControllerError> {
+    func buildMessageFilteredTimelineController(allowedMessageTypes: [RoomMessageEventMessageType],
+                                                presentation: TimelineKind.MediaPresentation,
+                                                roomProxy: JoinedRoomProxyProtocol,
+                                                timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                                mediaProvider: MediaProviderProtocol) async -> Result<RoomTimelineControllerProtocol, TimelineFactoryControllerError> {
         switch await roomProxy.messageFilteredTimeline(allowedMessageTypes: allowedMessageTypes, presentation: presentation) {
         case .success(let timelineProxy):
             return .success(RoomTimelineController(roomProxy: roomProxy,
