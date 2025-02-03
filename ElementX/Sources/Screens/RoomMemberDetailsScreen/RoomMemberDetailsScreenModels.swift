@@ -90,5 +90,6 @@ enum RoomMemberDetailsScreenViewAction {
 
 enum RoomMemberDetailsScreenError: Hashable {
     case failedOpeningDirectChat
+    case createDirectChatConfirmation
     case unknown
 }
