@@ -10,12 +10,13 @@ import SwiftUI
 
 struct PinnedEventsTimelineScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
-    let timelineController: RoomTimelineControllerProtocol
+    let timelineController: TimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let appMediator: AppMediatorProtocol
     let emojiProvider: EmojiProviderProtocol
+    let timelineControllerFactory: TimelineControllerFactoryProtocol
 }
 
 enum PinnedEventsTimelineScreenCoordinatorAction {
@@ -51,7 +52,8 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                               appMediator: parameters.appMediator,
                                               appSettings: ServiceLocator.shared.settings,
                                               analyticsService: ServiceLocator.shared.analytics,
-                                              emojiProvider: parameters.emojiProvider)
+                                              emojiProvider: parameters.emojiProvider,
+                                              timelineControllerFactory: parameters.timelineControllerFactory)
     }
     
     func start() {

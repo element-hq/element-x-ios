@@ -18,7 +18,7 @@ enum PinnedEventsTimelineFlowCoordinatorAction {
 class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let userSession: UserSessionProtocol
-    private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
+    private let timelineControllerFactory: TimelineControllerFactoryProtocol
     private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
@@ -33,14 +33,14 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     
     init(navigationStackCoordinator: NavigationStackCoordinator,
          userSession: UserSessionProtocol,
-         roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
+         timelineControllerFactory: TimelineControllerFactoryProtocol,
          roomProxy: JoinedRoomProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          appMediator: AppMediatorProtocol,
          emojiProvider: EmojiProviderProtocol) {
         self.navigationStackCoordinator = navigationStackCoordinator
         self.userSession = userSession
-        self.roomTimelineControllerFactory = roomTimelineControllerFactory
+        self.timelineControllerFactory = timelineControllerFactory
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
@@ -65,9 +65,9 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
                 
-        guard let timelineController = await roomTimelineControllerFactory.buildPinnedEventsRoomTimelineController(roomProxy: roomProxy,
-                                                                                                                   timelineItemFactory: timelineItemFactory,
-                                                                                                                   mediaProvider: userSession.mediaProvider) else {
+        guard let timelineController = await timelineControllerFactory.buildPinnedEventsTimelineController(roomProxy: roomProxy,
+                                                                                                           timelineItemFactory: timelineItemFactory,
+                                                                                                           mediaProvider: userSession.mediaProvider) else {
             fatalError("This can never fail because we allow this view to be presented only when the timeline is fully loaded and not nil")
         }
         
@@ -77,7 +77,8 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                                   mediaPlayerProvider: MediaPlayerProvider(),
                                                                                   voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                                                   appMediator: appMediator,
-                                                                                  emojiProvider: emojiProvider))
+                                                                                  emojiProvider: emojiProvider,
+                                                                                  timelineControllerFactory: timelineControllerFactory))
         
         coordinator.actions
             .sink { [weak self] action in

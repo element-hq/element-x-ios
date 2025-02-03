@@ -29,7 +29,7 @@ struct PaginationState: Equatable {
 
 @MainActor
 // sourcery: AutoMockable
-protocol RoomTimelineProviderProtocol {
+protocol TimelineProviderProtocol {
     /// A publisher that signals when ``itemProxies`` or ``paginationState`` are changed.
     var updatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never> { get }
     /// The current set of items in the timeline.

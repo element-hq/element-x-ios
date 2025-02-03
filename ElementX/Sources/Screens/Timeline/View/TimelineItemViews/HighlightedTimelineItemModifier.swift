@@ -89,7 +89,7 @@ struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
     static let focussedEventID = "RoomTimelineItemFixtures.default.5"
     static let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                                      focussedEventID: focussedEventID,
-                                                     timelineController: MockRoomTimelineController(),
+                                                     timelineController: MockTimelineController(),
                                                      mediaProvider: MediaProviderMock(configuration: .init()),
                                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
@@ -97,7 +97,8 @@ struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
                                                      appMediator: AppMediatorMock.default,
                                                      appSettings: ServiceLocator.shared.settings,
                                                      analyticsService: ServiceLocator.shared.analytics,
-                                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+                                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
 
     static var previews: some View {
         NavigationStack {

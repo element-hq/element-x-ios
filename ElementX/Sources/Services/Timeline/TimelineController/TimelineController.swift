@@ -11,19 +11,19 @@ import IntentsUI
 import MatrixRustSDK
 import UIKit
 
-class RoomTimelineController: RoomTimelineControllerProtocol {
+class TimelineController: TimelineControllerProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
-    private let liveTimelineProvider: RoomTimelineProviderProtocol
+    private let liveTimelineProvider: TimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
     private let appSettings: AppSettings
     
     private let serialDispatchQueue: DispatchQueue
     
-    let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
+    let callbacks = PassthroughSubject<TimelineControllerCallback, Never>()
     
     private var activeTimeline: TimelineProxyProtocol
-    private var activeTimelineProvider: RoomTimelineProviderProtocol {
+    private var activeTimelineProvider: TimelineProviderProtocol {
         didSet {
             configureActiveTimelineProvider()
         }
@@ -57,7 +57,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         self.mediaProvider = mediaProvider
         self.appSettings = appSettings
         
-        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
+        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.timelineprovider", qos: .utility)
         
         activeTimeline = timelineProxy
         activeTimelineProvider = liveTimelineProvider
@@ -82,7 +82,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func focusOnEvent(_ eventID: String, timelineSize: UInt16) async -> Result<Void, RoomTimelineControllerError> {
+    func focusOnEvent(_ eventID: String, timelineSize: UInt16) async -> Result<Void, TimelineControllerError> {
         switch await roomProxy.timelineFocusedOnEvent(eventID: eventID, numberOfEvents: timelineSize) {
         case .success(let timeline):
             await timeline.subscribeForUpdates()
@@ -103,7 +103,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         activeTimelineProvider = liveTimelineProvider
     }
     
-    func paginateBackwards(requestSize: UInt16) async -> Result<Void, RoomTimelineControllerError> {
+    func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineControllerError> {
         MXLog.info("Started back pagination request")
         switch await activeTimeline.paginateBackwards(requestSize: requestSize) {
         case .success:
@@ -115,7 +115,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func paginateForwards(requestSize: UInt16) async -> Result<Void, RoomTimelineControllerError> {
+    func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineControllerError> {
         MXLog.info("Started forward pagination request")
         switch await activeTimeline.paginateForwards(requestSize: requestSize) {
         case .success:

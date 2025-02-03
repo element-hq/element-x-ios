@@ -87,7 +87,7 @@ struct PinnedEventsTimelineScreen: View {
 struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = PinnedEventsTimelineScreenViewModel(analyticsService: ServiceLocator.shared.analytics)
     static let emptyTimelineViewModel: TimelineViewModel = {
-        let timelineController = MockRoomTimelineController(timelineKind: .pinned)
+        let timelineController = MockTimelineController(timelineKind: .pinned)
         timelineController.timelineItems = []
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                  timelineController: timelineController,
@@ -98,7 +98,8 @@ struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                  appMediator: AppMediatorMock.default,
                                  appSettings: ServiceLocator.shared.settings,
                                  analyticsService: ServiceLocator.shared.analytics,
-                                 emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+                                 emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }()
         
     static var previews: some View {

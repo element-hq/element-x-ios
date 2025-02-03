@@ -223,7 +223,7 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
                                                         contentType: contentType))
         
         let timelineKind = TimelineKind.media(isPresentedOnRoomScreen ? .roomScreen : .mediaFilesScreen)
-        let timelineController = MockRoomTimelineController(timelineKind: timelineKind)
+        let timelineController = MockTimelineController(timelineKind: timelineKind)
         timelineController.timelineItems = [item]
         
         let viewModel = TimelineMediaPreviewViewModel(initialItem: item,

@@ -44,7 +44,7 @@ struct ReadReceiptsSummaryView_Previews: PreviewProvider, TestablePreview {
         ]
         let roomProxyMock = JoinedRoomProxyMock(.init(name: "Room", members: members))
         let mock = TimelineViewModel(roomProxy: roomProxyMock,
-                                     timelineController: MockRoomTimelineController(),
+                                     timelineController: MockTimelineController(),
                                      mediaProvider: MediaProviderMock(configuration: .init()),
                                      mediaPlayerProvider: MediaPlayerProviderMock(),
                                      voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
@@ -52,7 +52,8 @@ struct ReadReceiptsSummaryView_Previews: PreviewProvider, TestablePreview {
                                      appMediator: AppMediatorMock.default,
                                      appSettings: ServiceLocator.shared.settings,
                                      analyticsService: ServiceLocator.shared.analytics,
-                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         return mock
     }()
     

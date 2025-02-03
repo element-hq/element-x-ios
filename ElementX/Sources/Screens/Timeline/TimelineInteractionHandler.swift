@@ -29,7 +29,7 @@ enum TimelineInteractionHandlerAction {
 @MainActor
 class TimelineInteractionHandler {
     private let roomProxy: JoinedRoomProxyProtocol
-    private let timelineController: RoomTimelineControllerProtocol
+    private let timelineController: TimelineControllerProtocol
     private let mediaProvider: MediaProviderProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let voiceMessageRecorder: VoiceMessageRecorderProtocol
@@ -38,6 +38,8 @@ class TimelineInteractionHandler {
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
+    private let emojiProvider: EmojiProviderProtocol
+    private let timelineControllerFactory: TimelineControllerFactoryProtocol
     private let pollInteractionHandler: PollInteractionHandlerProtocol
     
     private let actionsSubject: PassthroughSubject<TimelineInteractionHandlerAction, Never> = .init()
@@ -54,7 +56,7 @@ class TimelineInteractionHandler {
     private var resumeVoiceMessagePlaybackAfterScrubbing = false
     
     init(roomProxy: JoinedRoomProxyProtocol,
-         timelineController: RoomTimelineControllerProtocol,
+         timelineController: TimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          mediaPlayerProvider: MediaPlayerProviderProtocol,
          voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
@@ -62,7 +64,9 @@ class TimelineInteractionHandler {
          userIndicatorController: UserIndicatorControllerProtocol,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
-         analyticsService: AnalyticsService) {
+         analyticsService: AnalyticsService,
+         emojiProvider: EmojiProviderProtocol,
+         timelineControllerFactory: TimelineControllerFactoryProtocol) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
         self.mediaProvider = mediaProvider
@@ -73,6 +77,8 @@ class TimelineInteractionHandler {
         self.appMediator = appMediator
         self.appSettings = appSettings
         self.analyticsService = analyticsService
+        self.emojiProvider = emojiProvider
+        self.timelineControllerFactory = timelineControllerFactory
         pollInteractionHandler = PollInteractionHandler(analyticsService: analyticsService, roomProxy: roomProxy)
     }
     
@@ -495,7 +501,7 @@ class TimelineInteractionHandler {
         actionsSubject.send(.displayEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
     }
     
-    func processItemTap(_ itemID: TimelineItemIdentifier) async -> RoomTimelineControllerAction {
+    func processItemTap(_ itemID: TimelineItemIdentifier) async -> TimelineControllerAction {
         guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
             return .none
         }
@@ -522,7 +528,7 @@ class TimelineInteractionHandler {
         }
     }
     
-    private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> RoomTimelineControllerAction {
+    private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> TimelineControllerAction {
         var source: MediaSourceProxy?
         var filename: String
         var caption: String?

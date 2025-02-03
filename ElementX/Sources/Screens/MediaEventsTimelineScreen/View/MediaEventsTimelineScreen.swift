@@ -259,9 +259,9 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
     
     private static func makeTimelineViewModel(empty: Bool) -> TimelineViewModel {
         let timelineController = if empty {
-            MockRoomTimelineController.emptyMediaGallery
+            MockTimelineController.emptyMediaGallery
         } else {
-            MockRoomTimelineController.mediaGallery
+            MockTimelineController.mediaGallery
         }
         
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
@@ -273,6 +273,7 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                  appMediator: AppMediatorMock.default,
                                  appSettings: ServiceLocator.shared.settings,
                                  analyticsService: ServiceLocator.shared.analytics,
-                                 emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+                                 emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }
 }

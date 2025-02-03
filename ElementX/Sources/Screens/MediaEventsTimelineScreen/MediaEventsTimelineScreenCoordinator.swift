@@ -10,14 +10,15 @@ import SwiftUI
 
 struct MediaEventsTimelineScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
-    let mediaTimelineController: RoomTimelineControllerProtocol
-    let filesTimelineController: RoomTimelineControllerProtocol
+    let mediaTimelineController: TimelineControllerProtocol
+    let filesTimelineController: TimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let appMediator: AppMediatorProtocol
     let emojiProvider: EmojiProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    let timelineControllerFactory: TimelineControllerFactoryProtocol
 }
 
 enum MediaEventsTimelineScreenCoordinatorAction {
@@ -47,7 +48,8 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        appMediator: parameters.appMediator,
                                                        appSettings: ServiceLocator.shared.settings,
                                                        analyticsService: ServiceLocator.shared.analytics,
-                                                       emojiProvider: parameters.emojiProvider)
+                                                       emojiProvider: parameters.emojiProvider,
+                                                       timelineControllerFactory: parameters.timelineControllerFactory)
         
         let filesTimelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                                        timelineController: parameters.filesTimelineController,
@@ -58,7 +60,8 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        appMediator: parameters.appMediator,
                                                        appSettings: ServiceLocator.shared.settings,
                                                        analyticsService: ServiceLocator.shared.analytics,
-                                                       emojiProvider: parameters.emojiProvider)
+                                                       emojiProvider: parameters.emojiProvider,
+                                                       timelineControllerFactory: parameters.timelineControllerFactory)
         
         viewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: mediaTimelineViewModel,
                                                        filesTimelineViewModel: filesTimelineViewModel,

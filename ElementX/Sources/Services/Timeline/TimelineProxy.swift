@@ -20,8 +20,8 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     private let kind: TimelineKind
    
-    private var innerTimelineProvider: RoomTimelineProviderProtocol!
-    var timelineProvider: RoomTimelineProviderProtocol {
+    private var innerTimelineProvider: TimelineProviderProtocol!
+    var timelineProvider: TimelineProviderProtocol {
         innerTimelineProvider
     }
     
@@ -47,7 +47,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         await subscribeToPagination()
         
-        let provider = await RoomTimelineProvider(timeline: timeline, kind: kind, paginationStatePublisher: paginationStatePublisher)
+        let provider = await TimelineProvider(timeline: timeline, kind: kind, paginationStatePublisher: paginationStatePublisher)
         // Make sure the existing items are built so that we have content in the timeline before
         // determining whether or not the timeline should paginate to load more items.
         await provider.waitForInitialItems()
