@@ -161,12 +161,20 @@ struct JoinRoomScreen: View {
         case .loading:
             EmptyView()
         case .joinable:
-            joinButton
-        case .unknown, .restricted: // If unknown, do our best.
-            VStack(spacing: 24) {
-                bottomNoticeMessage(L10n.screenJoinRoomJoinRestrictedMessage)
-                
+            if context.viewState.shouldShowForbiddenError {
+                forbiddenView
+            } else {
                 joinButton
+            }
+        case .unknown, .restricted: // If unknown, do our best.
+            if context.viewState.shouldShowForbiddenError {
+                forbiddenView
+            } else {
+                VStack(spacing: 24) {
+                    bottomNoticeMessage(L10n.screenJoinRoomJoinRestrictedMessage)
+                    
+                    joinButton
+                }
             }
         case .knockable:
             Button(L10n.screenJoinRoomKnockAction) { context.send(viewAction: .knock) }
@@ -195,6 +203,16 @@ struct JoinRoomScreen: View {
                 }
                 .buttonStyle(.compound(.primary))
             }
+        }
+    }
+    
+    private var forbiddenView: some View {
+        VStack(spacing: 24) {
+            bottomErrorMessage(title: L10n.screenJoinRoomFailMessage, subtitle: L10n.screenJoinRoomFailReason)
+            Button(L10n.actionOk) {
+                context.send(viewAction: .dismiss)
+            }
+            .buttonStyle(.compound(.primary))
         }
     }
     

@@ -64,6 +64,8 @@ struct JoinRoomScreenViewState: BindableState {
             return nil
         }
     }
+    
+    var shouldShowForbiddenError = false
 }
 
 struct JoinRoomScreenViewStateBindings {
@@ -83,4 +85,5 @@ enum JoinRoomScreenViewAction {
     case acceptInvite
     case declineInvite
     case forget
+    case dismiss
 }

@@ -63,6 +63,8 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             showDeclineInviteConfirmationAlert()
         case .cancelKnock:
             showCancelKnockConfirmationAlert()
+        case .dismiss:
+            actionsSubject.send(.dismiss)
         }
     }
     
@@ -207,16 +209,26 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             case .success:
                 actionsSubject.send(.joined)
             case .failure(let error):
-                MXLog.error("Failed joining room alias: \(alias) with error: \(error)")
-                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                if case .forbiddenAccess = error {
+                    MXLog.error("Failed joining room alias: \(alias) forbidden access")
+                    state.shouldShowForbiddenError = true
+                } else {
+                    MXLog.error("Failed joining room alias: \(alias) with error: \(error)")
+                    userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                }
             }
         } else {
             switch await clientProxy.joinRoom(roomID, via: via) {
             case .success:
                 actionsSubject.send(.joined)
             case .failure(let error):
-                MXLog.error("Failed joining room id: \(roomID) with error: \(error)")
-                userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                if case .forbiddenAccess = error {
+                    MXLog.error("Failed joining room id: \(roomID) forbidden access")
+                    state.shouldShowForbiddenError = true
+                } else {
+                    MXLog.error("Failed joining room id: \(roomID) with error: \(error)")
+                    userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                }
             }
         }
     }
