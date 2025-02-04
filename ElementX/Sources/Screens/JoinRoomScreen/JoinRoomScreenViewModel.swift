@@ -19,6 +19,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     
     private var roomPreview: RoomPreviewProxyProtocol?
     private var room: RoomProxyType?
+    private var membershipStateChangeCancellable: AnyCancellable?
     
     private let actionsSubject: PassthroughSubject<JoinRoomScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<JoinRoomScreenViewModelAction, Never> {
@@ -101,6 +102,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     }
     
     private func updateRoomDetails() async {
+        membershipStateChangeCancellable = nil
         var roomInfo: BaseRoomInfoProxyProtocol?
         var inviter: RoomInviterDetails?
         
@@ -112,6 +114,19 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             roomInfo = invitedRoomProxy.info
         case .knocked(let knockedRoomProxy):
             roomInfo = knockedRoomProxy.info
+            if let roomSummaryProvider = clientProxy.roomSummaryProvider {
+                membershipStateChangeCancellable = roomSummaryProvider.roomListPublisher
+                    .compactMap { summaries -> Void? in
+                        guard let roomSummary = summaries.first(where: { $0.id == roomInfo?.id }),
+                              roomSummary.roomListItem.membership() != .knocked else {
+                            return nil
+                        }
+                        return ()
+                    }
+                    .sink { [weak self] in
+                        Task { await self?.loadRoomDetails() }
+                    }
+            }
         default:
             break
         }
@@ -121,7 +136,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                                                       topic: info?.topic,
                                                       canonicalAlias: info?.canonicalAlias,
                                                       avatar: info?.avatar ?? .room(id: roomID, name: info?.displayName ?? "", avatarURL: nil),
-                                                      memberCount: UInt(info?.activeMembersCount ?? 0),
+                                                      memberCount: info?.joinedMembersCount ?? 0,
                                                       inviter: inviter)
         
         await updateMode()
