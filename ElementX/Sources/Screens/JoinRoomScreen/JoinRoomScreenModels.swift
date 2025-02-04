@@ -28,8 +28,8 @@ struct JoinRoomScreenRoomDetails {
     let name: String?
     let topic: String?
     let canonicalAlias: String?
-    let avatar: RoomAvatar
-    let memberCount: Int
+    let avatar: RoomAvatar?
+    let memberCount: Int?
     let inviter: RoomInviterDetails?
 }
 
@@ -48,19 +48,21 @@ struct JoinRoomScreenViewState: BindableState {
     
     var subtitle: String? {
         switch mode {
-        case .loading:
-            nil
-        case .unknown:
-            L10n.screenJoinRoomSubtitleNoPreview
-        case .knocked:
+        case .loading, .unknown, .knocked:
             nil
         default:
             roomDetails?.canonicalAlias
         }
     }
     
-    var avatar: RoomAvatar {
-        roomDetails?.avatar ?? .room(id: roomID, name: title, avatarURL: nil)
+    var avatar: RoomAvatar? {
+        if let avatar = roomDetails?.avatar {
+            return avatar
+        } else if let name = roomDetails?.name {
+            return .room(id: roomID, name: name, avatarURL: nil)
+        } else {
+            return nil
+        }
     }
 }
 

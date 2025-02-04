@@ -132,11 +132,18 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         }
 
         let info = roomPreview?.info ?? roomInfo
+        let avatar: RoomAvatar? = if let avatar = info?.avatar {
+            avatar
+        } else if let displayName = info?.displayName {
+            .room(id: roomID, name: displayName, avatarURL: nil)
+        } else {
+            nil
+        }
         state.roomDetails = JoinRoomScreenRoomDetails(name: info?.displayName,
                                                       topic: info?.topic,
                                                       canonicalAlias: info?.canonicalAlias,
-                                                      avatar: info?.avatar ?? .room(id: roomID, name: info?.displayName ?? "", avatarURL: nil),
-                                                      memberCount: info?.joinedMembersCount ?? 0,
+                                                      avatar: avatar,
+                                                      memberCount: info?.joinedMembersCount,
                                                       inviter: inviter)
         
         await updateMode()

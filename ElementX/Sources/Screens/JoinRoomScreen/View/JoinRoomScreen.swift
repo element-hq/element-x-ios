@@ -50,10 +50,18 @@ struct JoinRoomScreen: View {
     @ViewBuilder
     private var defaultView: some View {
         VStack(spacing: 16) {
-            RoomAvatarImage(avatar: context.viewState.avatar,
-                            avatarSize: .room(on: .joinRoom),
-                            mediaProvider: context.mediaProvider)
-                .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
+            if let avatar = context.viewState.avatar {
+                RoomAvatarImage(avatar: avatar,
+                                avatarSize: .room(on: .joinRoom),
+                                mediaProvider: context.mediaProvider)
+                    .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
+            } else {
+                RoomAvatarImage(avatar: .room(id: "", name: nil, avatarURL: nil),
+                                avatarSize: .room(on: .joinRoom),
+                                mediaProvider: context.mediaProvider)
+                    .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
+                    .hidden()
+            }
             
             VStack(spacing: 8) {
                 Text(context.viewState.title)
@@ -235,9 +243,11 @@ struct JoinRoomScreen: View {
     private var toolbar: some ToolbarContent {
         if context.viewState.mode == .knocked {
             ToolbarItem(placement: .principal) {
-                RoomHeaderView(roomName: context.viewState.title,
-                               roomAvatar: context.viewState.avatar,
-                               mediaProvider: context.mediaProvider)
+                if let avatar = context.viewState.avatar {
+                    RoomHeaderView(roomName: context.viewState.title,
+                                   roomAvatar: avatar,
+                                   mediaProvider: context.mediaProvider)
+                }
             }
         }
     }
