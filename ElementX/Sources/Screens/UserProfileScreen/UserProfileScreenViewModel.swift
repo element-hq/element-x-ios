@@ -123,9 +123,9 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
             } else {
                 let string = userProfile.displayName ?? userProfile.userID
                 state.bindings.alertInfo = .init(id: .createDirectChatConfirmation,
-                                                 title: L10n.screenRoomMemberDetailsAlertCreateDmTitle,
-                                                 message: L10n.screenRoomMemberDetailsAlertCreateDmMessage(string),
-                                                 primaryButton: .init(title: L10n.screenRoomMemberDetailsAlertCreateDmConfirmationTitle) { [weak self] in Task { await self?.createDirectChat() }},
+                                                 title: "",
+                                                 message: "",
+                                                 primaryButton: .init(title: "") { [weak self] in Task { await self?.createDirectChat() }},
                                                  secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
             }
         case .failure:

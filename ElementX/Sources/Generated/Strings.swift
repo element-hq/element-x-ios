@@ -1014,6 +1014,14 @@ internal enum L10n {
   internal static var screenBlockedUsersUnblockAlertTitle: String { return L10n.tr("Localizable", "screen_blocked_users_unblock_alert_title") }
   /// Unblocking…
   internal static var screenBlockedUsersUnblocking: String { return L10n.tr("Localizable", "screen_blocked_users_unblocking") }
+  /// Send invite
+  internal static var screenBottomSheetCreateDmConfirmationButtonTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_confirmation_button_title") }
+  /// Would you like to start a chat with %1$@ (%2$@)?
+  internal static func screenBottomSheetCreateDmMessage(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_message", String(describing: p1), String(describing: p2))
+  }
+  /// Send invite?
+  internal static var screenBottomSheetCreateDmTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_title") }
   /// Attach screenshot
   internal static var screenBugReportAttachScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_attach_screenshot") }
   /// You may contact me if you have any follow up questions.
@@ -1326,6 +1334,8 @@ internal enum L10n {
   internal static var screenJoinRoomKnockSentDescription: String { return L10n.tr("Localizable", "screen_join_room_knock_sent_description") }
   /// Request to join sent
   internal static var screenJoinRoomKnockSentTitle: String { return L10n.tr("Localizable", "screen_join_room_knock_sent_title") }
+  /// We could not display the room preview. This may be due to network or server issues.
+  internal static var screenJoinRoomLoadingAlertMessage: String { return L10n.tr("Localizable", "screen_join_room_loading_alert_message") }
   /// %1$@ does not support spaces yet. You can access spaces on web.
   internal static func screenJoinRoomSpaceNotSupportedDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_join_room_space_not_supported_description", String(describing: p1))
@@ -1938,14 +1948,6 @@ internal enum L10n {
   internal static var screenRoomInviteAgainAlertMessage: String { return L10n.tr("Localizable", "screen_room_invite_again_alert_message") }
   /// You are alone in this chat
   internal static var screenRoomInviteAgainAlertTitle: String { return L10n.tr("Localizable", "screen_room_invite_again_alert_title") }
-  /// Send invite
-  internal static var screenRoomMemberDetailsAlertCreateDmConfirmationTitle: String { return L10n.tr("Localizable", "screen_room_member_details_alert_create_dm_confirmation_title") }
-  /// Would you like to start a chat with %1$@?
-  internal static func screenRoomMemberDetailsAlertCreateDmMessage(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "screen_room_member_details_alert_create_dm_message", String(describing: p1))
-  }
-  /// Send invite?
-  internal static var screenRoomMemberDetailsAlertCreateDmTitle: String { return L10n.tr("Localizable", "screen_room_member_details_alert_create_dm_title") }
   /// Block
   internal static var screenRoomMemberDetailsBlockAlertAction: String { return L10n.tr("Localizable", "screen_room_member_details_block_alert_action") }
   /// Blocked users won't be able to send you messages and all their messages will be hidden. You can unblock them anytime.

@@ -370,6 +370,9 @@
 "screen_advanced_settings_element_call_base_url" = "Custom Element Call base URL";
 "screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Invalid URL, please make sure you include the protocol (http/https) and the correct address.";
+"screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
+"screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@ (%2$@)?";
+"screen_bottom_sheet_create_dm_title" = "Send invite?";
 "screen_create_room_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_room_access_section_anyone_option_title" = "Anyone";
 "screen_create_room_room_access_section_header" = "Room Access";
@@ -387,6 +390,7 @@
 "screen_join_room_knock_message_description" = "Message (optional)";
 "screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
 "screen_join_room_knock_sent_title" = "Request to join sent";
+"screen_join_room_loading_alert_message" = "We could not display the room preview. This may be due to network or server issues.";
 "screen_knock_requests_list_accept_all_alert_confirm_button_title" = "Yes, accept all";
 "screen_knock_requests_list_accept_all_alert_description" = "Are you sure you want to accept all requests to join?";
 "screen_knock_requests_list_accept_all_alert_title" = "Accept all requests";
@@ -840,9 +844,6 @@
 "screen_room_error_failed_retrieving_user_details" = "Could not retrieve user details";
 "screen_room_invite_again_alert_message" = "Would you like to invite them back?";
 "screen_room_invite_again_alert_title" = "You are alone in this chat";
-"screen_room_member_details_alert_create_dm_confirmation_title" = "Send invite";
-"screen_room_member_details_alert_create_dm_message" = "Would you like to start a chat with %1$@?";
-"screen_room_member_details_alert_create_dm_title" = "Send invite?";
 "screen_room_member_details_block_alert_action" = "Block";
 "screen_room_member_details_block_alert_description" = "Blocked users won't be able to send you messages and all their messages will be hidden. You can unblock them anytime.";
 "screen_room_member_details_block_user" = "Block user";
