@@ -14,4 +14,5 @@ protocol RoomScreenViewModelProtocol {
     
     func timelineHasScrolled(direction: ScrollDirection)
     func setSelectedPinnedEventID(_ eventID: String)
+    func displayMediaPreview(_ mediaPreviewViewModel: TimelineMediaPreviewViewModel)
 }

@@ -77,6 +77,8 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.displayUser(userID: userID))
             case .displayMessageForwarding(let forwardingItem):
                 actionsSubject.send(.displayMessageForwarding(forwardingItem: forwardingItem))
+            case .displayMediaPreview(let mediaPreviewViewModel):
+                viewModel.displayMediaPreview(mediaPreviewViewModel)
             case .displayLocation(_, let geoURI, let description):
                 actionsSubject.send(.presentLocationViewer(geoURI: geoURI, description: description))
             case .viewInRoomTimeline(let eventID):

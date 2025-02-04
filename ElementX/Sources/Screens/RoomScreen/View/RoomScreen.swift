@@ -94,7 +94,7 @@ struct RoomScreen: View {
                 ReadReceiptsSummaryView(orderedReadReceipts: $0.orderedReceipts)
                     .environmentObject(timelineContext)
             }
-            .timelineMediaPreview(viewModel: $timelineContext.mediaPreviewViewModel)
+            .timelineMediaPreview(viewModel: $roomContext.mediaPreviewViewModel)
             .track(screen: .Room)
             .onDrop(of: ["public.item", "public.file-url"], isTargeted: $dragOver) { providers -> Bool in
                 guard let provider = providers.first,

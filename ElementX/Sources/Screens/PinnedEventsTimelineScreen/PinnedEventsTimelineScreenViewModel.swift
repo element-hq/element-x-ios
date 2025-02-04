@@ -34,4 +34,18 @@ class PinnedEventsTimelineScreenViewModel: PinnedEventsTimelineScreenViewModelTy
             actionsSubject.send(.dismiss)
         }
     }
+    
+    func displayMediaPreview(_ mediaPreviewViewModel: TimelineMediaPreviewViewModel) {
+        mediaPreviewViewModel.actions.sink { [weak self] action in
+            switch action {
+            case .viewInRoomTimeline:
+                MXLog.error("Unexpected action: viewInRoomTimeline should not be visible on a room preview.")
+            case .dismiss:
+                self?.state.bindings.mediaPreviewViewModel = nil
+            }
+        }
+        .store(in: &cancellables)
+        
+        state.bindings.mediaPreviewViewModel = mediaPreviewViewModel
+    }
 }

@@ -512,10 +512,10 @@ class TimelineInteractionHandler {
             return .displayLocation(body: item.content.body, geoURI: geoURI, description: item.content.description)
         case is ImageRoomTimelineItem,
              is VideoRoomTimelineItem:
-            return await mediaPreviewViewModel(for: timelineItem, messageTypes: [.image, .video]).map { .displayMediaPreview($0) } ?? .none
+            return await mediaPreviewAction(for: timelineItem, messageTypes: [.image, .video])
         case is AudioRoomTimelineItem,
              is FileRoomTimelineItem:
-            return await mediaPreviewViewModel(for: timelineItem, messageTypes: [.audio, .file]).map { .displayMediaPreview($0) } ?? .none
+            return await mediaPreviewAction(for: timelineItem, messageTypes: [.audio, .file])
         default:
             return .none
         }
@@ -534,60 +534,54 @@ class TimelineInteractionHandler {
         }
     }
     
-    private func mediaPreviewViewModel(for item: EventBasedMessageTimelineItemProtocol, messageTypes: [TimelineAllowedMessageType]) async -> TimelineMediaPreviewViewModel? {
-        var timelineFocus: TimelineFocus?
+    private func mediaPreviewAction(for item: EventBasedMessageTimelineItemProtocol, messageTypes: [TimelineAllowedMessageType]) async -> TimelineControllerAction {
+        var newTimelineFocus: TimelineFocus?
         switch timelineController.timelineKind {
         case .live:
-            timelineFocus = .live
+            newTimelineFocus = .live
         case .detached:
             guard case let .event(_, eventOrTransactionID: .eventID(eventID)) = item.id else {
                 MXLog.error("Unexpected event type on a detached timeline.")
-                return nil
+                return .none
             }
-            timelineFocus = .eventID(eventID)
+            newTimelineFocus = .eventID(eventID)
         case .pinned:
-            timelineFocus = .pinned
-        case .media(let mediaPresentation):
-            break
+            newTimelineFocus = .pinned
+        case .media:
+            break // We don't need to create a new timeline as it is already filtered.
         }
         
-        guard let timelineFocus else {
-            MXLog.error("Media timeline previews should be handled at a higher level.")
-            return nil
+        if let newTimelineFocus {
+            let timelineItemFactory = RoomTimelineItemFactory(userID: roomProxy.ownUserID,
+                                                              attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                                              stateEventStringBuilder: RoomStateEventStringBuilder(userID: roomProxy.ownUserID))
+            
+            guard case let .success(timelineController) = await timelineControllerFactory.buildMessageFilteredTimelineController(focus: newTimelineFocus,
+                                                                                                                                 allowedMessageTypes: messageTypes,
+                                                                                                                                 presentation: .roomScreen,
+                                                                                                                                 roomProxy: roomProxy,
+                                                                                                                                 timelineItemFactory: timelineItemFactory,
+                                                                                                                                 mediaProvider: mediaProvider) else {
+                MXLog.error("Failed presenting media timeline")
+                return .none
+            }
+            
+            let timelineViewModel = TimelineViewModel(roomProxy: roomProxy,
+                                                      timelineController: timelineController,
+                                                      mediaProvider: mediaProvider,
+                                                      mediaPlayerProvider: mediaPlayerProvider,
+                                                      voiceMessageMediaManager: voiceMessageMediaManager,
+                                                      userIndicatorController: userIndicatorController,
+                                                      appMediator: appMediator,
+                                                      appSettings: appSettings,
+                                                      analyticsService: analyticsService,
+                                                      emojiProvider: emojiProvider,
+                                                      timelineControllerFactory: timelineControllerFactory)
+            
+            return .displayMediaPreview(item: item, timelineViewModel: .new(timelineViewModel))
+        } else {
+            return .displayMediaPreview(item: item, timelineViewModel: .active)
         }
-        
-        let timelineItemFactory = RoomTimelineItemFactory(userID: roomProxy.ownUserID,
-                                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: roomProxy.ownUserID))
-        
-        guard case let .success(timelineController) = await timelineControllerFactory.buildMessageFilteredTimelineController(focus: timelineFocus,
-                                                                                                                             allowedMessageTypes: messageTypes,
-                                                                                                                             presentation: .roomScreen,
-                                                                                                                             roomProxy: roomProxy,
-                                                                                                                             timelineItemFactory: timelineItemFactory,
-                                                                                                                             mediaProvider: mediaProvider) else {
-            MXLog.error("Failed presenting media timeline")
-            return nil
-        }
-        
-        let timelineViewModel = TimelineViewModel(roomProxy: roomProxy,
-                                                  timelineController: timelineController,
-                                                  mediaProvider: mediaProvider,
-                                                  mediaPlayerProvider: mediaPlayerProvider,
-                                                  voiceMessageMediaManager: voiceMessageMediaManager,
-                                                  userIndicatorController: userIndicatorController,
-                                                  appMediator: appMediator,
-                                                  appSettings: appSettings,
-                                                  analyticsService: analyticsService,
-                                                  emojiProvider: emojiProvider,
-                                                  timelineControllerFactory: timelineControllerFactory)
-        
-        return TimelineMediaPreviewViewModel(initialItem: item,
-                                             timelineViewModel: timelineViewModel,
-                                             mediaProvider: mediaProvider,
-                                             photoLibraryManager: PhotoLibraryManager(),
-                                             userIndicatorController: userIndicatorController,
-                                             appMediator: appMediator)
     }
 }
 
