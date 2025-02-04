@@ -90,12 +90,12 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         
         // When swiping to a "loading more" item.
         let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: 1) { $0.isItemLoaded }
-        context.send(viewAction: .updateCurrentItem(.loading(.paginating)))
+        context.send(viewAction: .updateCurrentItem(.loading(.paginatingBackwards)))
         try await failure.fulfill()
         
         // Then there should no longer be a media preview and no attempt should be made to load one.
         XCTAssertEqual(mediaProvider.loadFileFromSourceFilenameCallsCount, 1)
-        XCTAssertEqual(context.viewState.currentItem, .loading(.paginating))
+        XCTAssertEqual(context.viewState.currentItem, .loading(.paginatingBackwards))
     }
     
     func testPagination() async throws {

@@ -124,9 +124,9 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         let arrayIndex = index - backwardPadding
         
         if index < firstPreviewItemIndex {
-            return paginationState.backward == .timelineEndReached ? TimelineMediaPreviewItem.Loading.timelineStart : .paginating
+            return paginationState.backward == .timelineEndReached ? TimelineMediaPreviewItem.Loading.timelineStart : .paginatingBackwards
         } else if index > lastPreviewItemIndex {
-            return paginationState.forward == .timelineEndReached ? TimelineMediaPreviewItem.Loading.timelineEnd : .paginating
+            return paginationState.forward == .timelineEndReached ? TimelineMediaPreviewItem.Loading.timelineEnd : .paginatingForwards
         } else {
             return previewItems[arrayIndex]
         }
@@ -297,11 +297,12 @@ enum TimelineMediaPreviewItem: Equatable {
     }
     
     class Loading: NSObject, QLPreviewItem {
-        static let paginating = Loading(state: .paginating)
+        static let paginatingBackwards = Loading(state: .paginating(.backwards))
+        static let paginatingForwards = Loading(state: .paginating(.forwards))
         static let timelineStart = Loading(state: .timelineStart)
         static let timelineEnd = Loading(state: .timelineEnd)
         
-        enum State { case paginating, timelineStart, timelineEnd }
+        enum State { case paginating(PaginationDirection), timelineStart, timelineEnd }
         let state: State
         
         let previewItemURL: URL? = nil

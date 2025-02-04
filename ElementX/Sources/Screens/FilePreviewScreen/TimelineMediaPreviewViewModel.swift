@@ -63,7 +63,11 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         
         timelineViewModel.context.$viewState.map(\.timelineState.paginationState)
             .removeDuplicates()
-            .weakAssign(to: \.state.dataSource.paginationState, on: self)
+            .sink { [weak self] paginationState in
+                guard let self else { return }
+                state.dataSource.paginationState = paginationState
+                paginateIfNeeded()
+            }
             .store(in: &cancellables)
     }
     
@@ -111,6 +115,23 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                     mediaItem.downloadError = error
                 }
             }
+        } else {
+            paginateIfNeeded()
+        }
+    }
+    
+    private func paginateIfNeeded() {
+        switch state.currentItem {
+        case .loading(.paginatingBackwards):
+            if state.dataSource.paginationState.backward == .idle {
+                timelineViewModel.context.send(viewAction: .paginateBackwards)
+            }
+        case .loading(.paginatingForwards):
+            if state.dataSource.paginationState.forward == .idle {
+                timelineViewModel.context.send(viewAction: .paginateForwards)
+            }
+        default:
+            break
         }
     }
     
