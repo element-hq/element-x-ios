@@ -26,8 +26,8 @@ class ZeroPostsApi: ZeroPostsApiProtocol {
         let parameters: [String: Any] = [
             "limit": limit,
             "skip": skip,
-            "include_replies": true,
-            "include_meows": true
+            "include_replies": "true",
+            "include_meows": "true"
         ]
         let result: Result<ZPosts, Error> = try await APIManager
             .shared

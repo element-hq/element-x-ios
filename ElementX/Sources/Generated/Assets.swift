@@ -70,6 +70,8 @@ internal enum Asset {
     internal static let homeTabFeedIcon = ImageAsset(name: "images/home-tab-feed-icon")
     internal static let inviteImage = ImageAsset(name: "images/invite-image")
     internal static let landingBackground = ImageAsset(name: "images/landing-background")
+    internal static let postCommentIcon = ImageAsset(name: "images/post-comment-icon")
+    internal static let postMeowIcon = ImageAsset(name: "images/post-meow-icon")
     internal static let rewardsVector = ImageAsset(name: "images/rewards-vector")
     internal static let zeroBackupHeader = ImageAsset(name: "images/zero-backup-header")
     internal static let zeroLogoMark = ImageAsset(name: "images/zero-logo-mark")

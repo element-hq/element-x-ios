@@ -73,7 +73,34 @@ struct HomeScreenPostCell: View {
                         .foregroundStyle(.compound.textPrimary)
                         .padding(.vertical, 12)
                 }
+                
+                HStack {
+                    HomeScreenPostFooterItem(icon: Asset.Images.postMeowIcon,
+                                             count: post.meowCount,
+                                             highlightColor: true)
+                    
+                    HomeScreenPostFooterItem(icon: Asset.Images.postCommentIcon,
+                                             count: post.repliesCount,
+                                             highlightColor: false)
+                    .padding(.horizontal, 24)
+                }
             }
+        }
+    }
+}
+
+struct HomeScreenPostFooterItem: View {
+    
+    let icon: ImageAsset
+    let count: String
+    let highlightColor: Bool
+    
+    var body: some View {
+        HStack {
+            Image(asset: icon)
+            Text("\(count)")
+                .font(.zero.bodyMD)
+                .foregroundStyle(highlightColor ? .zero.bgAccentRest : .compound.textSecondary)
         }
     }
 }

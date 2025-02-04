@@ -80,10 +80,11 @@ struct PostsMeowsSummary: Codable {
 
 extension PostsMeowsSummary {
     func meowCount(decimal: Int) -> String {
+        let mDecimal = decimal > 0 ? decimal : 18
         guard let number = Decimal(string: totalMeowAmount) else { return totalMeowAmount }
         
         // Compute divisor using NSDecimalNumber for precision
-        let divisor = NSDecimalNumber(decimal: pow(10 as Decimal, decimal))
+        let divisor = NSDecimalNumber(decimal: pow(10 as Decimal, mDecimal))
         let result = number / divisor.decimalValue
         
         return NSDecimalNumber(decimal: result).stringValue // Converts to string and removes trailing .0
