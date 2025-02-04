@@ -28,7 +28,7 @@ struct HomeScreen: View {
                 HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
             },
             secondTabContent: {
-                Text("Feeds Tab View")
+                HomePostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
             }
         )
             .alert(item: $context.alertInfo)

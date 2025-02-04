@@ -989,9 +989,9 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func fetchZeroPosts(limit: Int) async -> Result<[ZPost], ClientProxyError> {
+    func fetchZeroPosts(limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
         do {
-            let zeroPostsResult = try await zeroPostsApi.fetchPosts(limit: limit)
+            let zeroPostsResult = try await zeroPostsApi.fetchPosts(limit: limit, skip: skip)
             switch zeroPostsResult {
             case .success(let posts):
                 return .success(posts)

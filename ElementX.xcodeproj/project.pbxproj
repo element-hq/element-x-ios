@@ -1793,6 +1793,12 @@
 		790393752D4CDC7A0022E293 /* ZeroPostsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393732D4CDC750022E293 /* ZeroPostsApi.swift */; };
 		790393772D4CDE4B0022E293 /* ZPosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393762D4CDE470022E293 /* ZPosts.swift */; };
 		790393782D4CDE4B0022E293 /* ZPosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393762D4CDE470022E293 /* ZPosts.swift */; };
+		7903937A2D4D62C70022E293 /* HomePostsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393792D4D62B40022E293 /* HomePostsContent.swift */; };
+		7903937B2D4D62C70022E293 /* HomePostsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393792D4D62B40022E293 /* HomePostsContent.swift */; };
+		7903937D2D50DA930022E293 /* DateUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7903937C2D50DA8E0022E293 /* DateUtil.swift */; };
+		7903937E2D50DA930022E293 /* DateUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7903937C2D50DA8E0022E293 /* DateUtil.swift */; };
+		790393802D50DFE60022E293 /* HomeScreenPostList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7903937F2D50DFE60022E293 /* HomeScreenPostList.swift */; };
+		790393812D50DFE60022E293 /* HomeScreenPostList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7903937F2D50DFE60022E293 /* HomeScreenPostList.swift */; };
 		795A854F63301DC6B46217B9 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BB8DDE245ED86C489BA983 /* AccessibilityIdentifiers.swift */; };
 		795EAA0D2D4AD83D0015DAD8 /* TimelineMediaPreviewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18A454132A5A5247802821E /* TimelineMediaPreviewDataSource.swift */; };
 		79741C1953269FF1A211D246 /* RoomPollsHistoryScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E14FF533D25A0692F7CEB0 /* RoomPollsHistoryScreenViewModel.swift */; };
@@ -3241,6 +3247,9 @@
 		790393702D4CD63A0022E293 /* HomeTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabView.swift; sourceTree = "<group>"; };
 		790393732D4CDC750022E293 /* ZeroPostsApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroPostsApi.swift; sourceTree = "<group>"; };
 		790393762D4CDE470022E293 /* ZPosts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPosts.swift; sourceTree = "<group>"; };
+		790393792D4D62B40022E293 /* HomePostsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePostsContent.swift; sourceTree = "<group>"; };
+		7903937C2D50DA8E0022E293 /* DateUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtil.swift; sourceTree = "<group>"; };
+		7903937F2D50DFE60022E293 /* HomeScreenPostList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenPostList.swift; sourceTree = "<group>"; };
 		796CBD0C56FA0D3AEDAB255B /* SessionVerificationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionVerificationScreenCoordinator.swift; sourceTree = "<group>"; };
 		79FAC366FF299BCC555D756E /* ElementWellKnown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementWellKnown.swift; sourceTree = "<group>"; };
 		7A03E073077D92AA19C43DCF /* IdentityConfirmationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityConfirmationScreenCoordinator.swift; sourceTree = "<group>"; };
@@ -4552,6 +4561,7 @@
 		1882EB982C91B9F6001DA2A9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				7903937C2D50DA8E0022E293 /* DateUtil.swift */,
 				185454D62CFEFC79003CA957 /* ValidationUtil.swift */,
 				18D5D9C02CEBB70300107940 /* ZeroRewardFAQs.swift */,
 				1882EB992C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift */,
@@ -5515,6 +5525,7 @@
 		4F43EBE458FBE634996AD7C6 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				790393792D4D62B40022E293 /* HomePostsContent.swift */,
 				790393702D4CD63A0022E293 /* HomeTabView.swift */,
 				D7BEB970F500BFB248443FA1 /* BloomView.swift */,
 				B902EA6CD3296B0E10EE432B /* HomeScreen.swift */,
@@ -5524,6 +5535,7 @@
 				A103580EBA06155B1343EF16 /* HomeScreenKnockedCell.swift */,
 				05512FB13987D221B7205DE0 /* HomeScreenRecoveryKeyConfirmationBanner.swift */,
 				ED044D00F2176681CC02CD54 /* HomeScreenRoomCell.swift */,
+				7903937F2D50DFE60022E293 /* HomeScreenPostList.swift */,
 				C7661EFFCAA307A97D71132A /* HomeScreenRoomList.swift */,
 				4691B8DE1D51DE152680098A /* HomeScreenSlidingSyncMigrationBanner.swift */,
 				84AF32E4136FD6F159D86C2C /* RoomDirectorySearchView.swift */,
@@ -9019,6 +9031,7 @@
 				18E9A4CC2C9829970082DDA4 /* DecorationTimelineItemProtocol.swift in Sources */,
 				18E9A4CD2C9829970082DDA4 /* DeveloperOptionsScreen.swift in Sources */,
 				18E9A4CE2C9829970082DDA4 /* DeveloperOptionsScreenCoordinator.swift in Sources */,
+				7903937D2D50DA930022E293 /* DateUtil.swift in Sources */,
 				18E9A4CF2C9829970082DDA4 /* DeveloperOptionsScreenModels.swift in Sources */,
 				18E9A4D02C9829970082DDA4 /* DeveloperOptionsScreenViewModel.swift in Sources */,
 				18E9A4D12C9829970082DDA4 /* DeveloperOptionsScreenViewModelProtocol.swift in Sources */,
@@ -9069,6 +9082,7 @@
 				18E9A4F62C9829970082DDA4 /* EncryptionResetPasswordScreen.swift in Sources */,
 				182258E52CCC3D7600BBEDC0 /* HomeScreenKnockedCell.swift in Sources */,
 				18E9A4F72C9829970082DDA4 /* EncryptionResetPasswordScreenCoordinator.swift in Sources */,
+				790393812D50DFE60022E293 /* HomeScreenPostList.swift in Sources */,
 				18E9A4F82C9829970082DDA4 /* EncryptionResetPasswordScreenModels.swift in Sources */,
 				18E9A4F92C9829970082DDA4 /* EncryptionResetPasswordScreenViewModel.swift in Sources */,
 				18E9A4FA2C9829970082DDA4 /* EncryptionResetPasswordScreenViewModelProtocol.swift in Sources */,
@@ -9349,6 +9363,7 @@
 				18E9A5E12C9829970082DDA4 /* PlaceholderAvatarImage.swift in Sources */,
 				790393782D4CDE4B0022E293 /* ZPosts.swift in Sources */,
 				18E9A5E22C9829970082DDA4 /* PlaceholderScreenCoordinator.swift in Sources */,
+				7903937A2D4D62C70022E293 /* HomePostsContent.swift in Sources */,
 				18E9A5E32C9829970082DDA4 /* PlainMentionBuilder.swift in Sources */,
 				18FFCED52CEC8F71002F2647 /* RoomSelectionScreenViewModel.swift in Sources */,
 				18E9A5E42C9829970082DDA4 /* PlatformViewVersionPredicate.swift in Sources */,
@@ -10196,6 +10211,7 @@
 				6A54F52443EC52AC5CD772C0 /* JoinRoomScreen.swift in Sources */,
 				AFE2AB612A1460E49578D746 /* JoinRoomScreenCoordinator.swift in Sources */,
 				1882EB9A2C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift in Sources */,
+				7903937E2D50DA930022E293 /* DateUtil.swift in Sources */,
 				DEDBD3E9CFCC9F20CAC79881 /* JoinRoomScreenModels.swift in Sources */,
 				EF47D802A404A53F15D5D4B6 /* JoinRoomScreenViewModel.swift in Sources */,
 				7B66DA4E7E5FE4D1A0FCEAA4 /* JoinRoomScreenViewModelProtocol.swift in Sources */,
@@ -10550,6 +10566,7 @@
 				617624A97BDBB75ED3DD8156 /* RoomScreenViewModelProtocol.swift in Sources */,
 				66832DE7B5C2E861045265DC /* RoomSelectionScreen.swift in Sources */,
 				18FDE4ED6D83B0771452B43D /* RoomSelectionScreenCoordinator.swift in Sources */,
+				790393802D50DFE60022E293 /* HomeScreenPostList.swift in Sources */,
 				27FEF0F40750465195C9D6D6 /* RoomSelectionScreenModels.swift in Sources */,
 				8DCA1F05C3BA6ED826F1599D /* RoomSelectionScreenViewModel.swift in Sources */,
 				39DFC4B9EB6A8757210BDEC6 /* RoomSelectionScreenViewModelProtocol.swift in Sources */,
@@ -10708,6 +10725,7 @@
 				C0B97FFEC0083F3A36609E61 /* TimelineItemMacContextMenu.swift in Sources */,
 				6C98153D60FF9B648C166C27 /* TimelineItemMenu.swift in Sources */,
 				AE07F215EBC2B9CBF17AA54B /* TimelineItemMenuAction.swift in Sources */,
+				7903937B2D4D62C70022E293 /* HomePostsContent.swift in Sources */,
 				12CD8B5CC30A05061228BF9E /* TimelineItemMenuActionProvider.swift in Sources */,
 				440123E29E2F9B001A775BBE /* TimelineItemProxy.swift in Sources */,
 				9586E90A447C4896C0CA3A8E /* TimelineItemReplyDetails.swift in Sources */,

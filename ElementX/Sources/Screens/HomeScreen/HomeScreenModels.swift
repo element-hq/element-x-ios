@@ -8,6 +8,7 @@
 import Combine
 import Foundation
 import UIKit
+import SwiftUI
 
 enum HomeScreenViewModelAction {
     case presentRoom(roomIdentifier: String)
@@ -39,6 +40,7 @@ enum HomeScreenViewAction {
     case confirmSlidingSyncUpgrade
     case skipSlidingSyncUpgrade
     case updateVisibleItemRange(Range<Int>)
+    case updateVisibleItemRangeForPosts(Range<Int>)
     case globalSearch
     case markRoomAsUnread(roomIdentifier: String)
     case markRoomAsRead(roomIdentifier: String)
@@ -65,6 +67,23 @@ enum HomeScreenRoomListMode: CustomStringConvertible {
             return "Showing empty state"
         case .rooms:
             return "Showing rooms"
+        }
+    }
+}
+
+enum HomeScreenPostListMode: CustomStringConvertible {
+    case skeletons
+    case empty
+    case posts
+    
+    var description: String {
+        switch self {
+        case .skeletons:
+            return "Showing placeholders"
+        case .empty:
+            return "Showing empty state"
+        case .posts:
+            return "Showing posts"
         }
     }
 }
@@ -105,7 +124,9 @@ struct HomeScreenViewState: BindableState {
     var requiresExtraAccountSetup = false
         
     var rooms: [HomeScreenRoom] = []
+    var posts: [HomeScreenPost] = []
     var roomListMode: HomeScreenRoomListMode = .skeletons
+    var postListMode: HomeScreenPostListMode = .skeletons
     
     var hasPendingInvitations = false
     
@@ -121,6 +142,14 @@ struct HomeScreenViewState: BindableState {
         return rooms
     }
     
+    var visiblePosts: [HomeScreenPost] {
+        if postListMode == .skeletons {
+            return placeholderPosts
+        }
+        
+        return posts
+    }
+    
     var userRewards = ZeroRewards.empty()
     var showNewUserRewardsIntimation = false
     
@@ -129,6 +158,12 @@ struct HomeScreenViewState: BindableState {
     var placeholderRooms: [HomeScreenRoom] {
         (1...10).map { _ in
             HomeScreenRoom.placeholder()
+        }
+    }
+    
+    var placeholderPosts: [HomeScreenPost] {
+        (1...10).map { _ in
+            HomeScreenPost.placeholder()
         }
     }
     
@@ -220,6 +255,42 @@ struct HomeScreenRoom: Identifiable, Equatable {
     }
 }
 
+struct HomeScreenPost: Identifiable, Equatable {
+    let id: String
+    
+    // sender info
+    let senderInfo: UserProfileProxy
+    let senderPrimaryZId: String?
+    
+    // post info
+    let postText: String?
+    let attributedPostText: AttributedString?
+    let postUpdatedAt: String
+    let postCreatedAt: String
+    let postTimestamp: String
+    
+    let postImageURL: URL?
+    
+    let worldPrimaryZId: String?
+    let meowCount: String
+    let repliesCount: String
+    
+    static func placeholder() -> HomeScreenPost {
+        HomeScreenPost(id: UUID().uuidString,
+                       senderInfo: UserProfileProxy(userID: UUID().uuidString),
+                       senderPrimaryZId: "0://placeholder-sender-zid",
+                       postText: "Placeholder post text...",
+                       attributedPostText: AttributedString("Placeholder post text..."),
+                       postUpdatedAt: "",
+                       postCreatedAt: "",
+                       postTimestamp: "Now",
+                       postImageURL: nil,
+                       worldPrimaryZId: "0://placeholder-world-zid",
+                       meowCount: "0",
+                       repliesCount: "0")
+    }
+}
+
 extension HomeScreenRoom {
     init(summary: RoomSummary, hideUnreadMessagesBadge: Bool) {
         let identifier = summary.id
@@ -253,5 +324,75 @@ extension HomeScreenRoom {
                   lastMessage: summary.lastMessage,
                   avatar: summary.avatar,
                   canonicalAlias: summary.canonicalAlias)
+    }
+}
+
+extension HomeScreenPost {
+    init(post: ZPost, rewardsDecimalPlaces: Int = 0) {
+        let userProfile = post.user.profileSummary
+        let meowCount = post.postsMeowsSummary?.meowCount(decimal: rewardsDecimalPlaces) ?? "0"
+        let postUpdatedAt = DateUtil.shared.dateFromISO8601String(post.updatedAt)
+        let postTimeStamp = postUpdatedAt.formattedMinimal()
+        let repliesCount = String(post.replies?.count ?? 0)
+        
+        let attributedString = post.text.isEmpty ? nil : HomeScreenPost.attributedString(from: post.text)
+        
+        self.init(
+            id: post.id.rawValue,
+            senderInfo: UserProfileProxy(userID: userProfile.id,
+                                         displayName: userProfile.fullName,
+                                         avatarURL: URL(string: userProfile.profileImage)),
+            senderPrimaryZId: post.zid,
+            postText: post.text,
+            attributedPostText: attributedString,
+            postUpdatedAt: post.updatedAt,
+            postCreatedAt: post.createdAt,
+            postTimestamp: postTimeStamp,
+            postImageURL: (post.imageUrl != nil) ? URL(string: post.imageUrl!) : nil,
+            worldPrimaryZId: post.worldZid,
+            meowCount: meowCount,
+            repliesCount: repliesCount
+        )
+    }
+    
+    private static func attributedString(from text: String) -> AttributedString {
+        var attributedString = AttributedString(text)
+        
+        let patterns: [(String, Color, Bool)] = [
+            ("#\\w+", Asset.Colors.blue11.swiftUIColor, false),  // Hashtags
+            ("@\\w+", Asset.Colors.blue11.swiftUIColor, false),  // Mentions
+            ("(https?://\\S+|www\\.\\S+)", Asset.Colors.blue11.swiftUIColor, true) // URLs
+        ]
+        
+        for (pattern, color, isLink) in patterns {
+            applyAttributes(&attributedString, pattern: pattern, color: color, isLink: isLink)
+        }
+        
+        return attributedString
+    }
+    
+    private static func applyAttributes(_ attributedString: inout AttributedString,
+                                        pattern: String,
+                                        color: Color,
+                                        isLink: Bool = false) {
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return }
+        
+        let fullText = String(attributedString.characters)
+        let matches = regex.matches(in: fullText, range: NSRange(location: 0, length: fullText.utf16.count))
+        
+        for match in matches.reversed() {  // Reverse order to avoid index shifting issues
+            guard let range = Range(match.range, in: attributedString) else { continue }
+            
+            attributedString[range].foregroundColor = color
+            
+            if isLink {
+                let linkText = String(attributedString[range].characters)
+                let urlString = linkText.hasPrefix("www.") ? "https://\(linkText)" : linkText
+                if let url = URL(string: urlString) {
+                    attributedString[range].link = url
+                    attributedString[range].underlineStyle = .single
+                }
+            }
+        }
     }
 }

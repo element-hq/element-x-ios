@@ -5462,15 +5462,15 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     //MARK: - fetchZeroPosts
 
-    var fetchZeroPostsLimitUnderlyingCallsCount = 0
-    var fetchZeroPostsLimitCallsCount: Int {
+    var fetchZeroPostsLimitSkipUnderlyingCallsCount = 0
+    var fetchZeroPostsLimitSkipCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return fetchZeroPostsLimitUnderlyingCallsCount
+                return fetchZeroPostsLimitSkipUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = fetchZeroPostsLimitUnderlyingCallsCount
+                    returnValue = fetchZeroPostsLimitSkipUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -5478,29 +5478,29 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                fetchZeroPostsLimitUnderlyingCallsCount = newValue
+                fetchZeroPostsLimitSkipUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    fetchZeroPostsLimitUnderlyingCallsCount = newValue
+                    fetchZeroPostsLimitSkipUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var fetchZeroPostsLimitCalled: Bool {
-        return fetchZeroPostsLimitCallsCount > 0
+    var fetchZeroPostsLimitSkipCalled: Bool {
+        return fetchZeroPostsLimitSkipCallsCount > 0
     }
-    var fetchZeroPostsLimitReceivedLimit: Int?
-    var fetchZeroPostsLimitReceivedInvocations: [Int] = []
+    var fetchZeroPostsLimitSkipReceivedArguments: (limit: Int, skip: Int)?
+    var fetchZeroPostsLimitSkipReceivedInvocations: [(limit: Int, skip: Int)] = []
 
-    var fetchZeroPostsLimitUnderlyingReturnValue: Result<[ZPost], ClientProxyError>!
-    var fetchZeroPostsLimitReturnValue: Result<[ZPost], ClientProxyError>! {
+    var fetchZeroPostsLimitSkipUnderlyingReturnValue: Result<[ZPost], ClientProxyError>!
+    var fetchZeroPostsLimitSkipReturnValue: Result<[ZPost], ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return fetchZeroPostsLimitUnderlyingReturnValue
+                return fetchZeroPostsLimitSkipUnderlyingReturnValue
             } else {
                 var returnValue: Result<[ZPost], ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = fetchZeroPostsLimitUnderlyingReturnValue
+                    returnValue = fetchZeroPostsLimitSkipUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -5508,26 +5508,26 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                fetchZeroPostsLimitUnderlyingReturnValue = newValue
+                fetchZeroPostsLimitSkipUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    fetchZeroPostsLimitUnderlyingReturnValue = newValue
+                    fetchZeroPostsLimitSkipUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var fetchZeroPostsLimitClosure: ((Int) async -> Result<[ZPost], ClientProxyError>)?
+    var fetchZeroPostsLimitSkipClosure: ((Int, Int) async -> Result<[ZPost], ClientProxyError>)?
 
-    func fetchZeroPosts(limit: Int) async -> Result<[ZPost], ClientProxyError> {
-        fetchZeroPostsLimitCallsCount += 1
-        fetchZeroPostsLimitReceivedLimit = limit
+    func fetchZeroPosts(limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
+        fetchZeroPostsLimitSkipCallsCount += 1
+        fetchZeroPostsLimitSkipReceivedArguments = (limit: limit, skip: skip)
         DispatchQueue.main.async {
-            self.fetchZeroPostsLimitReceivedInvocations.append(limit)
+            self.fetchZeroPostsLimitSkipReceivedInvocations.append((limit: limit, skip: skip))
         }
-        if let fetchZeroPostsLimitClosure = fetchZeroPostsLimitClosure {
-            return await fetchZeroPostsLimitClosure(limit)
+        if let fetchZeroPostsLimitSkipClosure = fetchZeroPostsLimitSkipClosure {
+            return await fetchZeroPostsLimitSkipClosure(limit, skip)
         } else {
-            return fetchZeroPostsLimitReturnValue
+            return fetchZeroPostsLimitSkipReturnValue
         }
     }
     //MARK: - loadMediaContentForSource

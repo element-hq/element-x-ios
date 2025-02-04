@@ -9,7 +9,7 @@ import Alamofire
 import Foundation
 
 protocol ZeroPostsApiProtocol {
-    func fetchPosts(limit: Int) async throws -> Result<[ZPost], Error>
+    func fetchPosts(limit: Int, skip: Int) async throws -> Result<[ZPost], Error>
 }
 
 class ZeroPostsApi: ZeroPostsApiProtocol {
@@ -22,10 +22,10 @@ class ZeroPostsApi: ZeroPostsApiProtocol {
     
     // MARK: - Public
     
-    func fetchPosts(limit: Int = 10) async throws -> Result<[ZPost], Error> {
+    func fetchPosts(limit: Int = 10, skip: Int = 0) async throws -> Result<[ZPost], Error> {
         let parameters: [String: Any] = [
             "limit": limit,
-            "skip": 0,
+            "skip": skip,
             "include_replies": true,
             "include_meows": true
         ]

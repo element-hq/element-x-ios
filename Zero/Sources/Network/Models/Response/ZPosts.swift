@@ -32,12 +32,11 @@ struct ZPost: Codable, Identifiable {
     let replyTo: String?
     let conversationId: String?
     let user: User
-    let postsMeowsSummary: PostsMeowsSummary
-    let meows: [Meow]
-    let replies: [Reply]
+    let postsMeowsSummary: PostsMeowsSummary?
+    let replies: [Reply]?
     
     enum CodingKeys: String, CodingKey {
-        case id, userId, zid, createdAt, updatedAt, signedMessage, unsignedMessage, text, walletAddress, worldZid, imageUrl, arweaveId, replyTo, conversationId, user, postsMeowsSummary, meows, replies
+        case id, userId, zid, createdAt, updatedAt, signedMessage, unsignedMessage, text, walletAddress, worldZid, imageUrl, arweaveId, replyTo, conversationId, user, postsMeowsSummary, replies
     }
 }
 
@@ -68,13 +67,27 @@ struct ProfileSummary: Codable {
     let profileImage: String
 }
 
+extension ProfileSummary {
+    var fullName: String {
+        "\(firstName) \(lastName)".trim()
+    }
+}
+
 struct PostsMeowsSummary: Codable {
     let postId: String
     let totalMeowAmount: String
 }
 
-struct Meow: Codable {
-    // Define properties if needed; the example shows an empty array
+extension PostsMeowsSummary {
+    func meowCount(decimal: Int) -> String {
+        guard let number = Decimal(string: totalMeowAmount) else { return totalMeowAmount }
+        
+        // Compute divisor using NSDecimalNumber for precision
+        let divisor = NSDecimalNumber(decimal: pow(10 as Decimal, decimal))
+        let result = number / divisor.decimalValue
+        
+        return NSDecimalNumber(decimal: result).stringValue // Converts to string and removes trailing .0
+    }
 }
 
 struct Reply: Codable {

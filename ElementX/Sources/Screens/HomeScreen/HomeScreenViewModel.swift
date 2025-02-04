@@ -25,6 +25,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         actionsSubject.eraseToAnyPublisher()
     }
     
+    private let HOME_SCREEN_POST_PAGE_COUNT = 20
+    
     init(userSession: UserSessionProtocol,
          analyticsService: AnalyticsService,
          appSettings: AppSettings,
@@ -132,6 +134,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         setupRoomListSubscriptions()
         
         updateRooms()
+        
+        fetchPosts()
                 
         Task {
             await checkSlidingSyncMigration()
@@ -169,6 +173,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             state.slidingSyncMigrationBannerMode = .dismissed
         case .updateVisibleItemRange(let range):
             roomSummaryProvider?.updateVisibleRange(range)
+        case .updateVisibleItemRangeForPosts(let range):
+            updatePostsVisibleRange(range)
         case .startChat:
             actionsSubject.send(.presentStartChatScreen)
         case .globalSearch:
@@ -499,6 +505,37 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     private func checkAndLinkZeroUser() {
         userSession.clientProxy.checkAndLinkZeroUser()
+    }
+    
+    private func fetchPosts() {
+        Task {
+            state.postListMode = state.posts.isEmpty ? .skeletons : .posts
+            let postsResult = await userSession.clientProxy.fetchZeroPosts(limit: HOME_SCREEN_POST_PAGE_COUNT,
+                                                                           skip: state.posts.count)
+            switch postsResult {
+            case .success(let posts):
+                let hasNoPosts = posts.isEmpty
+                if hasNoPosts {
+                    state.postListMode = state.posts.isEmpty ? .empty : .posts
+                } else {
+                    var homePosts: [HomeScreenPost] = []
+                    for post in posts {
+                        let homePost = HomeScreenPost(post: post, rewardsDecimalPlaces: state.userRewards.decimals)
+                        homePosts.append(homePost)
+                    }
+                    state.posts = homePosts
+                    state.postListMode = .posts
+                }
+            case .failure(let error):
+                MXLog.error("Failed to fetch zero posts: \(error)")
+                state.postListMode = state.posts.isEmpty ? .empty : .posts
+                displayError()
+            }
+        }
+    }
+    
+    private func updatePostsVisibleRange(_ range: Range<Int>) {
+        print("Update Posts Visible Range: Upper bound: \(range.upperBound), Lower bound: \(range.lowerBound)")
     }
 }
 

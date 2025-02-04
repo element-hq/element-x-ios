@@ -238,5 +238,5 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     // MARK: - Zero Posts
     
-    func fetchZeroPosts(limit: Int) async -> Result<[ZPost], ClientProxyError>
+    func fetchZeroPosts(limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError>
 }

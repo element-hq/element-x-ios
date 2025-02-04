@@ -39,4 +39,8 @@ public extension String {
         let end = index(start, offsetBy: length)
         return String(self[start..<end])
     }
+    
+    func trim() -> String {
+        return self.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
 }
