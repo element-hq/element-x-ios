@@ -996,7 +996,7 @@ class ClientProxy: ClientProxyProtocol {
             case .success(let posts):
                 return .success(posts)
             case .failure(let error):
-                return .failure(.zeroError(error))
+                return .failure(checkPostFetchError(error))
             }
         } catch {
             MXLog.error(error)
@@ -1239,6 +1239,15 @@ class ClientProxy: ClientProxyProtocol {
             } catch {
                 MXLog.error("Failed fetching ignored users with error: \(error)")
             }
+        }
+    }
+    
+    private func checkPostFetchError(_ error: Error) -> ClientProxyError {
+        let postLimitReachedError = "The data couldn’t be read because it is missing."
+        if error.asAFError?.underlyingError?.localizedDescription.contains(postLimitReachedError) == true {
+            return .postsLimitReached
+        } else {
+            return .zeroError(error)
         }
     }
     

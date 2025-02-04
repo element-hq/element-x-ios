@@ -32,6 +32,8 @@ enum ClientProxyError: Error {
     case sdkError(Error)
     case zeroError(Error)
     
+    case postsLimitReached
+    
     case invalidMedia
     case invalidServerName
     case failedUploadingMedia(Error, MatrixErrorCode)

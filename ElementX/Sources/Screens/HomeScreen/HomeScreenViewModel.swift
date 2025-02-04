@@ -25,7 +25,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private let HOME_SCREEN_POST_PAGE_COUNT = 20
+    private let HOME_SCREEN_POST_PAGE_COUNT = 10
     
     init(userSession: UserSessionProtocol,
          analyticsService: AnalyticsService,
@@ -173,8 +173,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             state.slidingSyncMigrationBannerMode = .dismissed
         case .updateVisibleItemRange(let range):
             roomSummaryProvider?.updateVisibleRange(range)
-        case .updateVisibleItemRangeForPosts(let range):
-            updatePostsVisibleRange(range)
         case .startChat:
             actionsSubject.send(.presentStartChatScreen)
         case .globalSearch:
@@ -227,6 +225,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             loadUserRewards()
         case .rewardsIntimated:
             dismissNewRewardsIntimation()
+        case .loadMorePostsIfNeeded:
+            fetchPosts()
         }
     }
     
@@ -518,7 +518,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 if hasNoPosts {
                     state.postListMode = state.posts.isEmpty ? .empty : .posts
                 } else {
-                    var homePosts: [HomeScreenPost] = []
+                    var homePosts: [HomeScreenPost] = state.posts
                     for post in posts {
                         let homePost = HomeScreenPost(post: post, rewardsDecimalPlaces: state.userRewards.decimals)
                         homePosts.append(homePost)
@@ -529,7 +529,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             case .failure(let error):
                 MXLog.error("Failed to fetch zero posts: \(error)")
                 state.postListMode = state.posts.isEmpty ? .empty : .posts
-                displayError()
+                switch error {
+                case .postsLimitReached:
+                    state.canLoadMorePosts = false
+                default:
+                    displayError()
+                }
             }
         }
     }

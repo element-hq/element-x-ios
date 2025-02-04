@@ -40,7 +40,6 @@ enum HomeScreenViewAction {
     case confirmSlidingSyncUpgrade
     case skipSlidingSyncUpgrade
     case updateVisibleItemRange(Range<Int>)
-    case updateVisibleItemRangeForPosts(Range<Int>)
     case globalSearch
     case markRoomAsUnread(roomIdentifier: String)
     case markRoomAsRead(roomIdentifier: String)
@@ -52,6 +51,8 @@ enum HomeScreenViewAction {
     
     case loadRewards
     case rewardsIntimated
+    
+    case loadMorePostsIfNeeded
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -127,6 +128,8 @@ struct HomeScreenViewState: BindableState {
     var posts: [HomeScreenPost] = []
     var roomListMode: HomeScreenRoomListMode = .skeletons
     var postListMode: HomeScreenPostListMode = .skeletons
+    
+    var canLoadMorePosts: Bool = true
     
     var hasPendingInvitations = false
     
