@@ -536,29 +536,33 @@ class TimelineInteractionHandler {
     
     private func mediaPreviewAction(for item: EventBasedMessageTimelineItemProtocol, messageTypes: [TimelineAllowedMessageType]) async -> TimelineControllerAction {
         var newTimelineFocus: TimelineFocus?
+        var newTimelinePresentation: TimelineKind.MediaPresentation?
         switch timelineController.timelineKind {
         case .live:
             newTimelineFocus = .live
+            newTimelinePresentation = .roomScreenLive
         case .detached:
             guard case let .event(_, eventOrTransactionID: .eventID(eventID)) = item.id else {
                 MXLog.error("Unexpected event type on a detached timeline.")
                 return .none
             }
             newTimelineFocus = .eventID(eventID)
+            newTimelinePresentation = .roomScreenDetached
         case .pinned:
             newTimelineFocus = .pinned
+            newTimelinePresentation = .pinnedEventsScreen
         case .media:
             break // We don't need to create a new timeline as it is already filtered.
         }
         
-        if let newTimelineFocus {
+        if let newTimelineFocus, let newTimelinePresentation {
             let timelineItemFactory = RoomTimelineItemFactory(userID: roomProxy.ownUserID,
                                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                               stateEventStringBuilder: RoomStateEventStringBuilder(userID: roomProxy.ownUserID))
             
             guard case let .success(timelineController) = await timelineControllerFactory.buildMessageFilteredTimelineController(focus: newTimelineFocus,
                                                                                                                                  allowedMessageTypes: messageTypes,
-                                                                                                                                 presentation: .roomScreen,
+                                                                                                                                 presentation: newTimelinePresentation,
                                                                                                                                  roomProxy: roomProxy,
                                                                                                                                  timelineItemFactory: timelineItemFactory,
                                                                                                                                  mediaProvider: mediaProvider) else {
