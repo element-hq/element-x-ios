@@ -22,8 +22,8 @@ enum RoomProxyType {
     case joined(JoinedRoomProxyProtocol)
     case invited(InvitedRoomProxyProtocol)
     case knocked(KnockedRoomProxyProtocol)
-    case left
     case banned
+    case left
 }
 
 // sourcery: AutoMockable
@@ -43,6 +43,12 @@ protocol InvitedRoomProxyProtocol: RoomProxyProtocol {
 protocol KnockedRoomProxyProtocol: RoomProxyProtocol {
     var info: BaseRoomInfoProxyProtocol { get }
     func cancelKnock() async -> Result<Void, RoomProxyError>
+}
+
+// sourcery: AutoMockable
+protocol BannedRoomProxyProtocol: RoomProxyProtocol {
+    var info: BaseRoomInfoProxyProtocol { get }
+    func forgetRoom() async -> Result<Void, RoomProxyError>
 }
 
 enum JoinedRoomProxyAction: Equatable {

@@ -76,7 +76,7 @@ struct JoinRoomScreen: View {
                         .multilineTextAlignment(.center)
                 }
                 
-                if let memberCount = context.viewState.roomDetails?.memberCount {
+                if !context.viewState.isDMInvite, let memberCount = context.viewState.roomDetails?.memberCount {
                     BadgeLabel(title: "\(memberCount)", icon: \.userProfile, isHighlighted: false)
                 }
                 
@@ -286,6 +286,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
     static let restrictedViewModel = makeViewModel(mode: .restricted)
     static let inviteRequiredViewModel = makeViewModel(mode: .inviteRequired)
     static let invitedViewModel = makeViewModel(mode: .invited)
+    static let dmInviteViewModel = makeViewModel(mode: .invited, isDM: true)
     static let knockableViewModel = makeViewModel(mode: .knockable)
     static let knockedViewModel = makeViewModel(mode: .knocked)
     static let bannedViewModel = makeViewModel(mode: .banned(sender: "Bob", reason: "Spamming"))
@@ -296,6 +297,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         makePreview(viewModel: restrictedViewModel, previewDisplayName: "Restricted")
         makePreview(viewModel: inviteRequiredViewModel, previewDisplayName: "InviteRequired")
         makePreview(viewModel: invitedViewModel, previewDisplayName: "Invited")
+        makePreview(viewModel: dmInviteViewModel, previewDisplayName: "DM Invite")
         makePreview(viewModel: knockableViewModel, previewDisplayName: "Knockable")
         makePreview(viewModel: knockedViewModel, previewDisplayName: "Knocked")
         makePreview(viewModel: bannedViewModel, previewDisplayName: "Banned")
@@ -311,7 +313,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName(previewDisplayName)
     }
     
-    static func makeViewModel(mode: JoinRoomScreenMode) -> JoinRoomScreenViewModel {
+    static func makeViewModel(mode: JoinRoomScreenMode, isDM: Bool = false) -> JoinRoomScreenViewModel {
         ServiceLocator.shared.settings.knockingEnabled = true
         
         let clientProxy = ClientProxyMock(.init())
@@ -330,9 +332,16 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
             clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.inviteRequired)
             clientProxy.roomForIdentifierReturnValue = nil
         case .invited:
-            clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.invited())
-            clientProxy.roomForIdentifierClosure = { _ in
-                .invited(InvitedRoomProxyMock(.init(avatarURL: .mockMXCAvatar)))
+            if isDM {
+                clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.dmInvite())
+                clientProxy.roomForIdentifierClosure = { _ in
+                    .invited(InvitedRoomProxyMock(.init(avatarURL: .mockMXCAvatar)))
+                }
+            } else {
+                clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.invited())
+                clientProxy.roomForIdentifierClosure = { _ in
+                    .invited(InvitedRoomProxyMock(.init(avatarURL: .mockMXCAvatar)))
+                }
             }
         case .knockable:
             clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.knockable)

@@ -31,6 +31,7 @@ struct JoinRoomScreenRoomDetails {
     let avatar: RoomAvatar?
     let memberCount: Int?
     let inviter: RoomInviterDetails?
+    let isDirect: Bool?
 }
 
 struct JoinRoomScreenViewState: BindableState {
@@ -40,23 +41,35 @@ struct JoinRoomScreenViewState: BindableState {
     
     var mode: JoinRoomScreenMode = .loading
     
+    var shouldShowForbiddenError = false
+    
     var bindings = JoinRoomScreenViewStateBindings()
     
     var title: String {
-        roomDetails?.name ?? L10n.screenJoinRoomTitleNoPreview
+        if isDMInvite, let inviter = roomDetails?.inviter {
+            return inviter.displayName ?? inviter.id
+        } else {
+            return roomDetails?.name ?? L10n.screenJoinRoomTitleNoPreview
+        }
     }
     
     var subtitle: String? {
-        switch mode {
-        case .loading, .unknown, .knocked:
-            nil
-        default:
-            roomDetails?.canonicalAlias
+        if isDMInvite, let inviter = roomDetails?.inviter {
+            return inviter.displayName != nil ? inviter.id : nil
+        } else {
+            switch mode {
+            case .loading, .unknown, .knocked:
+                return nil
+            default:
+                return roomDetails?.canonicalAlias
+            }
         }
     }
     
     var avatar: RoomAvatar? {
-        if let avatar = roomDetails?.avatar {
+        if isDMInvite, let inviter = roomDetails?.inviter {
+            return .room(id: roomID, name: inviter.displayName, avatarURL: inviter.avatarURL)
+        } else if let avatar = roomDetails?.avatar {
             return avatar
         } else if let name = roomDetails?.name {
             return .room(id: roomID, name: name, avatarURL: nil)
@@ -65,7 +78,9 @@ struct JoinRoomScreenViewState: BindableState {
         }
     }
     
-    var shouldShowForbiddenError = false
+    var isDMInvite: Bool {
+        mode == .invited && roomDetails?.isDirect == true && roomDetails?.memberCount == 1
+    }
 }
 
 struct JoinRoomScreenViewStateBindings {

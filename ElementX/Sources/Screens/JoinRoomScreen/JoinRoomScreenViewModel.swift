@@ -148,7 +148,8 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                                                       canonicalAlias: info?.canonicalAlias,
                                                       avatar: avatar,
                                                       memberCount: info?.joinedMembersCount,
-                                                      inviter: inviter)
+                                                      inviter: inviter,
+                                                      isDirect: info?.isDirect)
         
         await updateMode()
     }
@@ -329,7 +330,24 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     }
     
     private func forgetRoom() async {
-        // TODO: We need this to be exposed on the room preview, which is not done yet
+        defer {
+            userIndicatorController.retractIndicatorWithId(roomID)
+        }
+        
+        userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
+        
+        guard case .banned = room, let roomPreview else {
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            return
+        }
+        
+        let result = await roomPreview.forgetRoom()
+        
+        if case .failure = result {
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+        } else {
+            actionsSubject.send(.dismiss)
+        }
     }
     
     private static let loadingIndicatorIdentifier = "\(JoinRoomScreenViewModel.self)-Loading"
