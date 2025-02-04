@@ -85,6 +85,8 @@ class TimelineProvider: TimelineProviderProtocol {
             span.exit()
         }
         
+        MXLog.verbose("Received diffs: \(diffs)")
+        
         itemProxies = diffs.reduce(itemProxies) { currentItems, diff in
             guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
                 MXLog.error("Failed building CollectionDifference from \(diff)")
@@ -220,5 +222,55 @@ private final class RoomTimelineListener: TimelineListener {
     
     func onUpdate(diff: [TimelineDiff]) {
         onUpdateClosure(diff)
+    }
+}
+
+private extension Array where Element == TimelineDiff {
+    var debugDescription: String {
+        "[" + map(\.debugDescription).joined(separator: ",") + "]"
+    }
+}
+
+extension TimelineDiff: @retroactive CustomDebugStringConvertible {
+    public var debugDescription: String {
+        switch change() {
+        case .append:
+            guard let update = append() else {
+                fatalError()
+            }
+            return "Append(\(update.count))"
+        case .clear:
+            return "Clear"
+        case .insert:
+            return "Insert"
+        case .set:
+            guard let update = set() else {
+                fatalError()
+            }
+            return "Set(\(update.index))"
+        case .remove:
+            guard let update = remove() else {
+                fatalError()
+            }
+            return "Remove(\(update)"
+        case .pushBack:
+            return "PushBack"
+        case .pushFront:
+            return "PushFront"
+        case .popBack:
+            return "PopBack"
+        case .popFront:
+            return "PopFront"
+        case .truncate:
+            guard let update = truncate() else {
+                fatalError()
+            }
+            return "Truncate(\(update))"
+        case .reset:
+            guard let update = reset() else {
+                fatalError()
+            }
+            return "Reset(\(update.count)@\(update.startIndex)-\(update.endIndex))"
+        }
     }
 }
