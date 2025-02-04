@@ -45,12 +45,6 @@ protocol KnockedRoomProxyProtocol: RoomProxyProtocol {
     func cancelKnock() async -> Result<Void, RoomProxyError>
 }
 
-// sourcery: AutoMockable
-protocol BannedRoomProxyProtocol: RoomProxyProtocol {
-    var info: BaseRoomInfoProxyProtocol { get }
-    func forgetRoom() async -> Result<Void, RoomProxyError>
-}
-
 enum JoinedRoomProxyAction: Equatable {
     case roomInfoUpdate
 }
