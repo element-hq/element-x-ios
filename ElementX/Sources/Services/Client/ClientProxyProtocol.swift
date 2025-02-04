@@ -33,7 +33,7 @@ enum ClientProxyError: Error {
     
     case invalidMedia
     case invalidServerName
-    case failedUploadingMedia(Error, MatrixErrorCode)
+    case failedUploadingMedia(ErrorKind)
     case roomPreviewIsPrivate
     case failedRetrievingUserIdentity
     case failedResolvingRoomAlias

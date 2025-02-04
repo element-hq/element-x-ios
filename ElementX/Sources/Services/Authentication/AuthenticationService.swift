@@ -131,12 +131,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
             }
             
             return await userSession(for: client)
-        } catch {
-            MXLog.error("Failed logging in with error: \(error)")
-            // FIXME: How about we make a proper type in the FFI? 😅
-            guard let error = error as? ClientError else { return .failure(.failedLoggingIn) }
-            
-            switch error.code {
+        } catch let ClientError.MatrixApi(errorKind, _, _) {
+            MXLog.error("Failed logging in with error kind: \(errorKind)")
+            switch errorKind {
             case .forbidden:
                 return .failure(.invalidCredentials)
             case .userDeactivated:
@@ -144,6 +141,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
             default:
                 return .failure(.failedLoggingIn)
             }
+        } catch {
+            MXLog.error("Failed logging in with error: \(error)")
+            return .failure(.failedLoggingIn)
         }
     }
     
