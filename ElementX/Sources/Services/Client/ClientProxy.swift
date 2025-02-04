@@ -465,9 +465,9 @@ class ClientProxy: ClientProxyProtocol {
             let data = try Data(contentsOf: media.url)
             let matrixUrl = try await client.uploadMedia(mimeType: mimeType, data: data, progressWatcher: nil)
             return .success(matrixUrl)
-        } catch let error as ClientError {
-            MXLog.error("Failed uploading media with error: \(error)")
-            return .failure(ClientProxyError.failedUploadingMedia(error, error.code))
+        } catch let ClientError.MatrixApi(errorKind, _, _) {
+            MXLog.error("Failed uploading media with error kind: \(errorKind)")
+            return .failure(ClientProxyError.failedUploadingMedia(errorKind))
         } catch {
             MXLog.error("Failed uploading media with error: \(error)")
             return .failure(ClientProxyError.sdkError(error))
@@ -503,7 +503,8 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let roomPreview = try await client.getRoomPreviewFromRoomId(roomId: identifier, viaServers: via)
             return try .success(RoomPreviewProxy(roomPreview: roomPreview))
-        } catch let error as ClientError where error.code == .forbidden {
+        } catch ClientError.MatrixApi(.forbidden, _, _) {
+            MXLog.error("Failed retrieving preview for room: \(identifier) is private")
             return .failure(.roomPreviewIsPrivate)
         } catch {
             MXLog.error("Failed retrieving preview for room: \(identifier) with error: \(error)")
