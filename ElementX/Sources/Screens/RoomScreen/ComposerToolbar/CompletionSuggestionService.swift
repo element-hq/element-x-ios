@@ -18,6 +18,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     private(set) var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> = Empty().eraseToAnyPublisher()
     
     private let suggestionTriggerSubject = CurrentValueSubject<SuggestionTrigger?, Never>(nil)
+    var rawSuggestionText = ""
     
     init(roomProxy: JoinedRoomProxyProtocol) {
         self.roomProxy = roomProxy
@@ -104,6 +105,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
         
         var suggestionText = String(text[range])
         suggestionText.removeFirst()
+        rawSuggestionText = suggestionText
         
         return .init(type: .user, text: suggestionText, range: NSRange(range, in: text))
     }

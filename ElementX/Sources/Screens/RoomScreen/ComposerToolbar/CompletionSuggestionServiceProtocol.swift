@@ -50,6 +50,7 @@ struct MentionSuggestionItem: Identifiable, Equatable {
 // sourcery: AutoMockable
 protocol CompletionSuggestionServiceProtocol {
     var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> { get }
+    var rawSuggestionText: String { get }
     
     func processTextMessage(_ textMessage: String, selectedRange: NSRange)
     

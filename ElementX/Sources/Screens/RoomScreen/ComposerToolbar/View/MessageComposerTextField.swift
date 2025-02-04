@@ -108,9 +108,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         // Prevent the textView from inheriting attributes from mention pills
         textView.typingAttributes = [.font: font,
                                      .foregroundColor: UIColor.compound.textPrimary]
-        DispatchQueue.main.async {
-            selectedRange = textView.selectedRange
-        }
+        
         if textView.attributedText != text {
             // Remember the selection if only the attributes have changed.
             let selection = textView.attributedText.string == text.string ? textView.selectedTextRange : nil
@@ -140,12 +138,15 @@ private struct UITextViewWrapper: UIViewRepresentable {
                 // moves the caret back to the bottom of the composer.
                 // https://github.com/element-hq/element-x-ios/issues/3104
                 textView.selectedTextRange = selection
+            } else {
+                textView.selectedRange = selectedRange
             }
         }
     }
 
     func makeCoordinator() -> Coordinator {
         Coordinator(text: $text,
+                    selectedRange: $selectedRange,
                     maxHeight: maxHeight,
                     keyHandler: keyHandler,
                     pasteHandler: pasteHandler)
@@ -153,6 +154,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
 
     final class Coordinator: NSObject, UITextViewDelegate, ElementTextViewDelegate {
         private var text: Binding<NSAttributedString>
+        private var selectedRange: Binding<NSRange>
 
         private let maxHeight: CGFloat
 
@@ -160,10 +162,12 @@ private struct UITextViewWrapper: UIViewRepresentable {
         private let pasteHandler: PasteHandler
 
         init(text: Binding<NSAttributedString>,
+             selectedRange: Binding<NSRange>,
              maxHeight: CGFloat,
              keyHandler: @escaping GenericKeyHandler,
              pasteHandler: @escaping PasteHandler) {
             self.text = text
+            self.selectedRange = selectedRange
             self.maxHeight = maxHeight
             self.keyHandler = keyHandler
             self.pasteHandler = pasteHandler
@@ -183,6 +187,14 @@ private struct UITextViewWrapper: UIViewRepresentable {
 
         func textView(_ textView: UITextView, didReceivePasteWith provider: NSItemProvider) {
             pasteHandler(provider)
+        }
+        
+        func textViewDidChangeSelection(_ textView: UITextView) {
+            if selectedRange.wrappedValue != textView.selectedRange {
+                DispatchQueue.main.async {
+                    self.selectedRange.wrappedValue = textView.selectedRange
+                }
+            }
         }
     }
 }
