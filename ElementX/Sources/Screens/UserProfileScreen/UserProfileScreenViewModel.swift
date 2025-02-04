@@ -62,6 +62,8 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
             Task { await displayFullScreenAvatar(url) }
         case .openDirectChat:
             Task { await openDirectChat() }
+        case .createDirectChat:
+            Task { await createDirectChat() }
         case .startCall(let roomID):
             actionsSubject.send(.startCall(roomID: roomID))
         case .dismiss:
@@ -121,12 +123,9 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
             if let roomID {
                 actionsSubject.send(.openDirectChat(roomID: roomID))
             } else {
-                let string = userProfile.displayName ?? userProfile.userID
-                state.bindings.alertInfo = .init(id: .createDirectChatConfirmation,
-                                                 title: "",
-                                                 message: "",
-                                                 primaryButton: .init(title: "") { [weak self] in Task { await self?.createDirectChat() }},
-                                                 secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+                state.bindings.sheetItem = .init(avatarUrl: userProfile.avatarURL,
+                                                 displayName: userProfile.displayName,
+                                                 id: userProfile.userID)
             }
         case .failure:
             state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)

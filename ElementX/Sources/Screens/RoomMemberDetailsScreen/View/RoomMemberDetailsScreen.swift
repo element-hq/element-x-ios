@@ -25,6 +25,12 @@ struct RoomMemberDetailsScreen: View {
         .navigationTitle(L10n.screenRoomMemberDetailsTitle)
         .alert(item: $context.ignoreUserAlert, actions: blockUserAlertActions, message: blockUserAlertMessage)
         .alert(item: $context.alertInfo)
+        .sheet(item: $context.sheetItem) { user in
+            SendInviteConfirmationView(userToInvite: user,
+                                       mediaProvider: context.mediaProvider) {
+                context.send(viewAction: .createDirectChat)
+            }
+        }
         .track(screen: .User)
         .interactiveQuickLook(item: $context.mediaPreviewItem, allowEditing: false)
     }
