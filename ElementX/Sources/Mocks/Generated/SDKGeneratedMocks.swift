@@ -11429,6 +11429,46 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         enableSendQueueEnableClosure?(enable)
     }
 
+    //MARK: - forget
+
+    open var forgetThrowableError: Error?
+    var forgetUnderlyingCallsCount = 0
+    open var forgetCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return forgetUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = forgetUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                forgetUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    forgetUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var forgetCalled: Bool {
+        return forgetCallsCount > 0
+    }
+    open var forgetClosure: (() async throws -> Void)?
+
+    open override func forget() async throws {
+        if let error = forgetThrowableError {
+            throw error
+        }
+        forgetCallsCount += 1
+        try await forgetClosure?()
+    }
+
     //MARK: - getPowerLevels
 
     open var getPowerLevelsThrowableError: Error?
@@ -19418,6 +19458,71 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @uncheck
             return withCrossProcessLockClosure()
         } else {
             return withCrossProcessLockReturnValue
+        }
+    }
+
+    //MARK: - withOfflineMode
+
+    var withOfflineModeUnderlyingCallsCount = 0
+    open var withOfflineModeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return withOfflineModeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = withOfflineModeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                withOfflineModeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    withOfflineModeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var withOfflineModeCalled: Bool {
+        return withOfflineModeCallsCount > 0
+    }
+
+    var withOfflineModeUnderlyingReturnValue: SyncServiceBuilder!
+    open var withOfflineModeReturnValue: SyncServiceBuilder! {
+        get {
+            if Thread.isMainThread {
+                return withOfflineModeUnderlyingReturnValue
+            } else {
+                var returnValue: SyncServiceBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = withOfflineModeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                withOfflineModeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    withOfflineModeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var withOfflineModeClosure: (() -> SyncServiceBuilder)?
+
+    open override func withOfflineMode() -> SyncServiceBuilder {
+        withOfflineModeCallsCount += 1
+        if let withOfflineModeClosure = withOfflineModeClosure {
+            return withOfflineModeClosure()
+        } else {
+            return withOfflineModeReturnValue
         }
     }
 

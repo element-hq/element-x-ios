@@ -57,6 +57,8 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             Task { await joinRoom() }
         case .acceptInvite:
             Task { await joinRoom() }
+        case .forget:
+            Task { await forgetRoom() }
         case .declineInvite:
             showDeclineInviteConfirmationAlert()
         case .cancelKnock:
@@ -249,7 +251,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             }
         }
     }
-    
+        
     private func showDeclineInviteConfirmationAlert() {
         guard let roomDetails = state.roomDetails else {
             userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
@@ -312,6 +314,10 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         } else {
             actionsSubject.send(.dismiss)
         }
+    }
+    
+    private func forgetRoom() async {
+        // TODO: We need this to be exposed on the room preview, which is not done yet
     }
     
     private static let loadingIndicatorIdentifier = "\(JoinRoomScreenViewModel.self)-Loading"

@@ -182,11 +182,18 @@ struct JoinRoomScreen: View {
                 VStack(spacing: 16) { inviteButtons }
             }
         case .banned(let sender, let reason):
-            if let sender, let reason {
-                bottomErrorMessage(title: L10n.screenJoinRoomBanByMessage(sender),
-                                   subtitle: L10n.screenJoinRoomBanReason(reason))
-            } else {
-                bottomErrorMessage(title: L10n.screenJoinRoomBanMessage, subtitle: nil)
+            VStack(spacing: 24) {
+                if let sender, let reason {
+                    bottomErrorMessage(title: L10n.screenJoinRoomBanByMessage(sender),
+                                       subtitle: L10n.screenJoinRoomBanReason(reason))
+                } else {
+                    bottomErrorMessage(title: L10n.screenJoinRoomBanMessage, subtitle: nil)
+                }
+                
+                Button(L10n.screenJoinRoomForgetAction) {
+                    context.send(viewAction: .forget)
+                }
+                .buttonStyle(.compound(.primary))
             }
         }
     }

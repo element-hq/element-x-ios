@@ -82,4 +82,5 @@ enum JoinRoomScreenViewAction {
     case join
     case acceptInvite
     case declineInvite
+    case forget
 }
