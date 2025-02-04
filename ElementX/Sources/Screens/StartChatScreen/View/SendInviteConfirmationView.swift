@@ -8,16 +8,18 @@
 import Compound
 import SwiftUI
 
-struct UserToInvite {
+struct UserToInvite: Identifiable {
     let avatarUrl: URL?
     let displayName: String?
-    let userID: String
+    
+    /// User ID
+    let id: String
 }
 
 struct SendInviteConfirmationView: View {
     let userToInvite: UserToInvite
-    let onInvite: () -> Void
     let mediaProvider: MediaProviderProtocol?
+    let onInvite: () -> Void
     
     @Environment(\.dismiss) private var dismiss
     
@@ -43,7 +45,7 @@ struct SendInviteConfirmationView: View {
         VStack(spacing: 16) {
             LoadableAvatarImage(url: userToInvite.avatarUrl,
                                 name: userToInvite.displayName,
-                                contentID: userToInvite.userID,
+                                contentID: userToInvite.id,
                                 avatarSize: .user(on: .sendInviteConfirmation),
                                 mediaProvider: mediaProvider)
             VStack(spacing: 8) {
@@ -51,7 +53,7 @@ struct SendInviteConfirmationView: View {
                     .multilineTextAlignment(.center)
                     .font(.compound.headingMDBold)
                     .foregroundStyle(.compound.textPrimary)
-                Text(L10n.screenBottomSheetCreateDmMessage(userToInvite.displayName ?? "", userToInvite.userID))
+                Text(L10n.screenBottomSheetCreateDmMessage(userToInvite.displayName ?? "", userToInvite.id))
                     .multilineTextAlignment(.center)
                     .font(.compound.bodyMD)
                     .foregroundStyle(.compound.textSecondary)
@@ -63,6 +65,7 @@ struct SendInviteConfirmationView: View {
     private var actions: some View {
         VStack(spacing: 16) {
             Button {
+                dismiss()
                 onInvite()
             } label: {
                 Label(L10n.screenBottomSheetCreateDmConfirmationButtonTitle,
@@ -86,8 +89,7 @@ struct SendInviteConfirmationView: View {
 
 struct SendInviteConfirmationView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        SendInviteConfirmationView(userToInvite: .init(avatarUrl: nil, displayName: "Alice", userID: "@alice:matrix.org"),
-                                   onInvite: { },
-                                   mediaProvider: nil)
+        SendInviteConfirmationView(userToInvite: .init(avatarUrl: nil, displayName: "Alice", id: "@alice:matrix.org"),
+                                   mediaProvider: nil) { }
     }
 }

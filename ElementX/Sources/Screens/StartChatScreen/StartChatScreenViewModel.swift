@@ -59,15 +59,18 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
                 let currentDirectRoom = await userSession.clientProxy.directRoomForUserID(user.userID)
                 switch currentDirectRoom {
                 case .success(.some(let roomId)):
-                    self.hideLoadingIndicator()
-                    self.actionsSubject.send(.openRoom(withIdentifier: roomId))
+                    hideLoadingIndicator()
+                    actionsSubject.send(.openRoom(withIdentifier: roomId))
                 case .success:
-                    await self.createDirectRoom(with: user)
+                    hideLoadingIndicator()
+                    state.bindings.selectedUserToInvite = .init(avatarUrl: user.avatarURL, displayName: user.displayName, id: user.userID)
                 case .failure:
-                    self.hideLoadingIndicator()
-                    self.displayError()
+                    hideLoadingIndicator()
+                    displayError()
                 }
             }
+        case .createDM(let userID, let displayName):
+            Task { await createDirectRoom(userID: userID, displayName: displayName) }
         }
     }
     
@@ -107,12 +110,12 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         }
     }
         
-    private func createDirectRoom(with user: UserProfileProxy) async {
+    private func createDirectRoom(userID: String, displayName: String?) async {
         defer {
             hideLoadingIndicator()
         }
         showLoadingIndicator()
-        switch await userSession.clientProxy.createDirectRoom(with: user.userID, expectedRoomName: user.displayName) {
+        switch await userSession.clientProxy.createDirectRoom(with: userID, expectedRoomName: displayName) {
         case .success(let roomId):
             analytics.trackCreatedRoom(isDM: true)
             actionsSubject.send(.openRoom(withIdentifier: roomId))
