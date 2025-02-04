@@ -294,7 +294,7 @@ enum ComposerMode: Equatable {
     
     case `default`
     case reply(eventID: String, replyDetails: TimelineItemReplyDetails, isThread: Bool)
-    case edit(originalEventOrTransactionID: EventOrTransactionId, type: EditType)
+    case edit(originalEventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, type: EditType)
     case recordVoiceMessage(state: AudioRecorderState)
     case previewVoiceMessage(state: AudioPlayerState, waveform: WaveformSource, isUploading: Bool)
 

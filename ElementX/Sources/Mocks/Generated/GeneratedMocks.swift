@@ -14944,8 +14944,8 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
     var editNewContentCalled: Bool {
         return editNewContentCallsCount > 0
     }
-    var editNewContentReceivedArguments: (eventOrTransactionID: EventOrTransactionId, newContent: EditedContent)?
-    var editNewContentReceivedInvocations: [(eventOrTransactionID: EventOrTransactionId, newContent: EditedContent)] = []
+    var editNewContentReceivedArguments: (eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, newContent: EditedContent)?
+    var editNewContentReceivedInvocations: [(eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, newContent: EditedContent)] = []
 
     var editNewContentUnderlyingReturnValue: Result<Void, TimelineProxyError>!
     var editNewContentReturnValue: Result<Void, TimelineProxyError>! {
@@ -14971,9 +14971,9 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var editNewContentClosure: ((EventOrTransactionId, EditedContent) async -> Result<Void, TimelineProxyError>)?
+    var editNewContentClosure: ((TimelineItemIdentifier.EventOrTransactionID, EditedContent) async -> Result<Void, TimelineProxyError>)?
 
-    func edit(_ eventOrTransactionID: EventOrTransactionId, newContent: EditedContent) async -> Result<Void, TimelineProxyError> {
+    func edit(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, newContent: EditedContent) async -> Result<Void, TimelineProxyError> {
         editNewContentCallsCount += 1
         editNewContentReceivedArguments = (eventOrTransactionID: eventOrTransactionID, newContent: newContent)
         DispatchQueue.main.async {
@@ -15014,8 +15014,8 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
     var redactReasonCalled: Bool {
         return redactReasonCallsCount > 0
     }
-    var redactReasonReceivedArguments: (eventOrTransactionID: EventOrTransactionId, reason: String?)?
-    var redactReasonReceivedInvocations: [(eventOrTransactionID: EventOrTransactionId, reason: String?)] = []
+    var redactReasonReceivedArguments: (eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, reason: String?)?
+    var redactReasonReceivedInvocations: [(eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, reason: String?)] = []
 
     var redactReasonUnderlyingReturnValue: Result<Void, TimelineProxyError>!
     var redactReasonReturnValue: Result<Void, TimelineProxyError>! {
@@ -15041,9 +15041,9 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var redactReasonClosure: ((EventOrTransactionId, String?) async -> Result<Void, TimelineProxyError>)?
+    var redactReasonClosure: ((TimelineItemIdentifier.EventOrTransactionID, String?) async -> Result<Void, TimelineProxyError>)?
 
-    func redact(_ eventOrTransactionID: EventOrTransactionId, reason: String?) async -> Result<Void, TimelineProxyError> {
+    func redact(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, reason: String?) async -> Result<Void, TimelineProxyError> {
         redactReasonCallsCount += 1
         redactReasonReceivedArguments = (eventOrTransactionID: eventOrTransactionID, reason: reason)
         DispatchQueue.main.async {
@@ -15824,8 +15824,8 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
     var toggleReactionToCalled: Bool {
         return toggleReactionToCallsCount > 0
     }
-    var toggleReactionToReceivedArguments: (reaction: String, eventID: EventOrTransactionId)?
-    var toggleReactionToReceivedInvocations: [(reaction: String, eventID: EventOrTransactionId)] = []
+    var toggleReactionToReceivedArguments: (reaction: String, eventID: TimelineItemIdentifier.EventOrTransactionID)?
+    var toggleReactionToReceivedInvocations: [(reaction: String, eventID: TimelineItemIdentifier.EventOrTransactionID)] = []
 
     var toggleReactionToUnderlyingReturnValue: Result<Void, TimelineProxyError>!
     var toggleReactionToReturnValue: Result<Void, TimelineProxyError>! {
@@ -15851,9 +15851,9 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var toggleReactionToClosure: ((String, EventOrTransactionId) async -> Result<Void, TimelineProxyError>)?
+    var toggleReactionToClosure: ((String, TimelineItemIdentifier.EventOrTransactionID) async -> Result<Void, TimelineProxyError>)?
 
-    func toggleReaction(_ reaction: String, to eventID: EventOrTransactionId) async -> Result<Void, TimelineProxyError> {
+    func toggleReaction(_ reaction: String, to eventID: TimelineItemIdentifier.EventOrTransactionID) async -> Result<Void, TimelineProxyError> {
         toggleReactionToCallsCount += 1
         toggleReactionToReceivedArguments = (reaction: reaction, eventID: eventID)
         DispatchQueue.main.async {

@@ -40,10 +40,10 @@ protocol TimelineProxyProtocol {
     func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError>
     func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineProxyError>
     
-    func edit(_ eventOrTransactionID: EventOrTransactionId,
+    func edit(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,
               newContent: EditedContent) async -> Result<Void, TimelineProxyError>
     
-    func redact(_ eventOrTransactionID: EventOrTransactionId,
+    func redact(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,
                 reason: String?) async -> Result<Void, TimelineProxyError>
     
     func pin(eventID: String) async -> Result<Bool, TimelineProxyError>
@@ -94,7 +94,7 @@ protocol TimelineProxyProtocol {
                      inReplyToEventID: String?,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError>
     
-    func toggleReaction(_ reaction: String, to eventID: EventOrTransactionId) async -> Result<Void, TimelineProxyError>
+    func toggleReaction(_ reaction: String, to eventID: TimelineItemIdentifier.EventOrTransactionID) async -> Result<Void, TimelineProxyError>
     
     func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError>
     

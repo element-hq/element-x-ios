@@ -63,7 +63,7 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
                     .scaledFrame(size: 40)
                     .background {
                         LoadableImage(mediaSource: mediaSource,
-                                      mediaType: .timelineItem(uniqueID: item.id.uniqueID.id),
+                                      mediaType: .timelineItem(uniqueID: item.id.uniqueID),
                                       blurhash: item.blurhash,
                                       mediaProvider: context.mediaProvider) {
                             Color.compound.bgSubtleSecondary

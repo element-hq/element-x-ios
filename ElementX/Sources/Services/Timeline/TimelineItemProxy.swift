@@ -11,14 +11,14 @@ import MatrixRustSDK
 /// A light wrapper around timeline items returned from Rust.
 enum TimelineItemProxy {
     case event(EventTimelineItemProxy)
-    case virtual(MatrixRustSDK.VirtualTimelineItem, uniqueID: TimelineUniqueId)
+    case virtual(MatrixRustSDK.VirtualTimelineItem, uniqueID: TimelineItemIdentifier.UniqueID)
     case unknown(MatrixRustSDK.TimelineItem)
     
     init(item: MatrixRustSDK.TimelineItem) {
         if let eventItem = item.asEvent() {
-            self = .event(EventTimelineItemProxy(item: eventItem, uniqueID: item.uniqueId()))
+            self = .event(EventTimelineItemProxy(item: eventItem, uniqueID: .init(rustValue: item.uniqueId())))
         } else if let virtualItem = item.asVirtual() {
-            self = .virtual(virtualItem, uniqueID: item.uniqueId())
+            self = .virtual(virtualItem, uniqueID: .init(rustValue: item.uniqueId()))
         } else {
             self = .unknown(item)
         }
@@ -71,10 +71,10 @@ class EventTimelineItemProxy {
     let item: MatrixRustSDK.EventTimelineItem
     let id: TimelineItemIdentifier
     
-    init(item: MatrixRustSDK.EventTimelineItem, uniqueID: TimelineUniqueId) {
+    init(item: MatrixRustSDK.EventTimelineItem, uniqueID: TimelineItemIdentifier.UniqueID) {
         self.item = item
         
-        id = .event(uniqueID: uniqueID, eventOrTransactionID: item.eventOrTransactionId)
+        id = .event(uniqueID: uniqueID, eventOrTransactionID: .init(rustValue: item.eventOrTransactionId))
     }
     
     lazy var deliveryStatus: TimelineItemDeliveryStatus? = {
@@ -211,8 +211,8 @@ struct SendHandleProxy: Hashable {
     }
     
     static var mock: SendHandleProxy {
-        .init(itemID: .event(uniqueID: .init(id: UUID().uuidString),
-                             eventOrTransactionID: .eventId(eventId: UUID().uuidString)),
+        .init(itemID: .event(uniqueID: .init(UUID().uuidString),
+                             eventOrTransactionID: .eventID(UUID().uuidString)),
               underlyingHandle: .init(noPointer: .init()))
     }
 }

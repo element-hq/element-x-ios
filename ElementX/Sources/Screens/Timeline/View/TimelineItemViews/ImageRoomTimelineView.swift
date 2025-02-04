@@ -44,7 +44,7 @@ struct ImageRoomTimelineView: View {
     private var loadableImage: some View {
         if timelineItem.content.contentType == .gif {
             LoadableImage(mediaSource: timelineItem.content.imageInfo.source,
-                          mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
+                          mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID),
                           blurhash: timelineItem.content.blurhash,
                           size: timelineItem.content.imageInfo.size,
                           mediaProvider: context?.mediaProvider) {
@@ -53,7 +53,7 @@ struct ImageRoomTimelineView: View {
             .timelineMediaFrame(imageInfo: timelineItem.content.imageInfo)
         } else {
             LoadableImage(mediaSource: timelineItem.content.thumbnailInfo?.source ?? timelineItem.content.imageInfo.source,
-                          mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
+                          mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID),
                           blurhash: timelineItem.content.blurhash,
                           size: timelineItem.content.thumbnailInfo?.size ?? timelineItem.content.imageInfo.size,
                           mediaProvider: context?.mediaProvider) {

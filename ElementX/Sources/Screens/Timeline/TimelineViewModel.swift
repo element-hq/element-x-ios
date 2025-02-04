@@ -658,7 +658,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     // MARK: - Timeline Item Building
     
     private func buildTimelineViews(timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool = false) {
-        var timelineItemsDictionary = OrderedDictionary<TimelineUniqueId, RoomTimelineItemViewState>()
+        var timelineItemsDictionary = OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>()
         
         timelineItems.filter { $0 is RedactedRoomTimelineItem }.forEach { timelineItem in
             // Stops the audio player when a voice message is redacted.

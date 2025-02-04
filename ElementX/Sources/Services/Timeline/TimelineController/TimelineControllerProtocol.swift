@@ -56,21 +56,21 @@ protocol TimelineControllerProtocol {
                      inReplyToEventID: String?,
                      intentionalMentions: IntentionalMentions) async
     
-    func edit(_ eventOrTransactionID: EventOrTransactionId,
+    func edit(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,
               message: String,
               html: String?,
               intentionalMentions: IntentionalMentions) async
     
-    func editCaption(_ eventOrTransactionID: EventOrTransactionId,
+    func editCaption(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,
                      message: String,
                      html: String?,
                      intentionalMentions: IntentionalMentions) async
     
-    func removeCaption(_ eventOrTransactionID: EventOrTransactionId) async
+    func removeCaption(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) async
     
-    func toggleReaction(_ reaction: String, to eventOrTransactionID: EventOrTransactionId) async
+    func toggleReaction(_ reaction: String, to eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) async
 
-    func redact(_ eventOrTransactionID: EventOrTransactionId) async
+    func redact(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) async
     
     func pin(eventID: String) async
     
