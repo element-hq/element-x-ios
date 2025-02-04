@@ -41,9 +41,16 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
         previewItems = itemViewStates.compactMap(TimelineMediaPreviewItem.Media.init)
         self.initialItem = initialItem
         
-        let initialItemArrayIndex = previewItems.firstIndex { $0.id == initialItem.id } ?? 0
-        initialItemIndex = initialItemArrayIndex + initialPadding
-        currentItem = .media(previewItems[initialItemArrayIndex])
+        if let initialItemArrayIndex = previewItems.firstIndex(where: { $0.id == initialItem.id.eventOrTransactionID }) {
+            initialItemIndex = initialItemArrayIndex + initialPadding
+            currentItem = .media(previewItems[initialItemArrayIndex])
+        } else {
+            // The timeline hasn't loaded the initial item yet, so replace the whatever was loaded with
+            // the item the user wants to preview.
+            initialItemIndex = initialPadding
+            previewItems = [.init(timelineItem: initialItem)]
+            currentItem = .media(previewItems[0])
+        }
         
         backwardPadding = initialPadding
         forwardPadding = initialPadding
@@ -83,10 +90,18 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
                 hasPaginated = true
             }
         } else {
-            // Do nothing! Not ideal but if we reload the data source the current item will
-            // also be, reloaded resetting any interaction the user has made with it. If we
-            // ignore the pagination, then the next time they swipe they'll land on a different
+            // When the timeline is loading items from the store and the initial item is the only
+            // preview in the array, we don't want to wipe it out, so if the existing items aren't
+            // found within the new items then let's ignore the update for now. This comes with a
+            // tradeoff that when a media gets redacted, no more previews will be added to the viewer.
+            //
+            // Note for the future if anyone wants to fix the redaction issue: Reloading the data source,
+            // will also reload the current item resetting any interaction the user has made with it.
+            // If you ignore the pagination, then the next time they swipe they'll land on a different
             // media but this is probably less jarring overall. I hate QLPreviewController!
+            
+            MXLog.info("Ignoring update: unable to find existing preview items range.")
+            return
         }
         
         previewItems = newItems
@@ -151,7 +166,15 @@ enum TimelineMediaPreviewItem: Equatable {
         
         // MARK: Identifiable
         
-        var id: TimelineItemIdentifier { timelineItem.id }
+        /// The timeline item's event or transaction ID.
+        ///
+        /// We're identifying items by this to ensure that all matching is made using only this part of the identifier. This is
+        /// because the unique ID will be different across timelines so when the initial item comes from a regular timeline and
+        /// we build a filtered timeline to fetch the other media items, it is impossible to match by the `TimelineItemIdentifier`.
+        var id: TimelineItemIdentifier.EventOrTransactionID {
+            guard let id = timelineItem.id.eventOrTransactionID else { fatalError("Virtual items cannot be previewed.") }
+            return id
+        }
         
         // MARK: QLPreviewItem
         

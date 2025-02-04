@@ -27,7 +27,7 @@ struct PinnedEventsTimelineScreen: View {
             .toolbar { toolbar }
             .background(.compound.bgCanvasDefault)
             .interactiveDismissDisabled()
-            .interactiveQuickLook(item: $timelineContext.mediaPreviewItem)
+            .timelineMediaPreview(viewModel: $timelineContext.mediaPreviewViewModel)
             .sheet(item: $timelineContext.debugInfo) { TimelineItemDebugView(info: $0) }
             .sheet(item: $timelineContext.actionMenuInfo) { info in
                 let actions = TimelineItemMenuActionProvider(timelineItem: info.item,

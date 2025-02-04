@@ -23,6 +23,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
 
     private let roomProxy: JoinedRoomProxyProtocol
     private let timelineController: TimelineControllerProtocol
+    private let mediaProvider: MediaProviderProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
@@ -56,6 +57,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
          emojiProvider: EmojiProviderProtocol,
          timelineControllerFactory: TimelineControllerFactoryProtocol) {
         self.timelineController = timelineController
+        self.mediaProvider = mediaProvider
         self.mediaPlayerProvider = mediaPlayerProvider
         self.roomProxy = roomProxy
         self.appSettings = appSettings
@@ -125,7 +127,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     
     func stop() {
         // Work around QLPreviewController dismissal issues, see the InteractiveQuickLookModifier.
-        state.bindings.mediaPreviewItem = nil
+        state.bindings.mediaPreviewViewModel = nil
     }
     
     override func process(viewAction: TimelineViewAction) {
@@ -542,11 +544,20 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private func handleMediaTapped(with itemID: TimelineItemIdentifier) async {
         state.showLoading = true
         let action = await timelineInteractionHandler.processItemTap(itemID)
-
+        
         switch action {
-        case .displayMediaFile(let file, let title):
+        case .displayMediaPreview(let mediaPreviewViewModel):
             actionsSubject.send(.composer(action: .removeFocus)) // Hide the keyboard otherwise a big white space is sometimes shown when dismissing the preview.
-            state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: title)
+            mediaPreviewViewModel.actions.sink { [weak self] action in
+                switch action {
+                case .viewInRoomTimeline:
+                    MXLog.error("Unexpected action: viewInRoomTimeline should not be visible on a room preview.")
+                case .dismiss:
+                    self?.state.bindings.mediaPreviewViewModel = nil
+                }
+            }
+            .store(in: &cancellables)
+            state.bindings.mediaPreviewViewModel = mediaPreviewViewModel
         case .displayLocation(let body, let geoURI, let description):
             actionsSubject.send(.displayLocation(body: body, geoURI: geoURI, description: description))
         case .none:

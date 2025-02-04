@@ -182,7 +182,7 @@ class TimelineMediaPreviewController: QLPreviewController {
         }
     }
     
-    private func handleFileLoaded(itemID: TimelineItemIdentifier) {
+    private func handleFileLoaded(itemID: TimelineItemIdentifier.EventOrTransactionID) {
         guard (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID else { return }
         refreshCurrentPreviewItem()
     }

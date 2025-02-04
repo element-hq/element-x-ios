@@ -77,7 +77,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             switch action {
             case .viewInRoomTimeline:
                 state.previewControllerDriver.send(.dismissDetailsSheet)
-                actionsSubject.send(.viewInRoomTimeline(item.id))
+                actionsSubject.send(.viewInRoomTimeline(item.timelineItem.id))
             case .save:
                 Task { await saveCurrentItem() }
             case .redact:
@@ -166,7 +166,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     }
     
     private func redactItem(_ item: TimelineMediaPreviewItem.Media) {
-        timelineViewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.id, action: .redact))
+        timelineViewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.timelineItem.id, action: .redact))
         state.bindings.redactConfirmationItem = nil
         state.previewControllerDriver.send(.dismissDetailsSheet)
         actionsSubject.send(.dismiss)

@@ -16,7 +16,7 @@ enum TimelineControllerCallback {
 }
 
 enum TimelineControllerAction {
-    case displayMediaFile(file: MediaFileHandleProxy, title: String?)
+    case displayMediaPreview(TimelineMediaPreviewViewModel)
     case displayLocation(body: String, geoURI: GeoURI, description: String?)
     case none
 }

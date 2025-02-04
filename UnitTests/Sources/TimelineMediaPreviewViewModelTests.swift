@@ -130,7 +130,7 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
             return
         }
         
-        let deferred = deferFulfillment(viewModel.actions) { $0 == .viewInRoomTimeline(mediaItem.id) }
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .viewInRoomTimeline(mediaItem.timelineItem.id) }
         context.send(viewAction: .menuAction(.viewInRoomTimeline, item: mediaItem))
         
         // Then the action should be sent upwards to make this happen.

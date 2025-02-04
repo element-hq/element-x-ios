@@ -502,7 +502,7 @@ class TimelineInteractionHandler {
     }
     
     func processItemTap(_ itemID: TimelineItemIdentifier) async -> TimelineControllerAction {
-        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) as? EventBasedMessageTimelineItemProtocol else {
             return .none
         }
         
@@ -510,8 +510,14 @@ class TimelineInteractionHandler {
         case let item as LocationRoomTimelineItem:
             guard let geoURI = item.content.geoURI else { return .none }
             return .displayLocation(body: item.content.body, geoURI: geoURI, description: item.content.description)
+        case is ImageRoomTimelineItem,
+             is VideoRoomTimelineItem:
+            return await mediaPreviewViewModel(for: timelineItem, messageTypes: [.image, .video]).map { .displayMediaPreview($0) } ?? .none
+        case is AudioRoomTimelineItem,
+             is FileRoomTimelineItem:
+            return await mediaPreviewViewModel(for: timelineItem, messageTypes: [.audio, .file]).map { .displayMediaPreview($0) } ?? .none
         default:
-            return await displayMediaActionIfPossible(timelineItem: timelineItem)
+            return .none
         }
     }
     
@@ -528,40 +534,60 @@ class TimelineInteractionHandler {
         }
     }
     
-    private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> TimelineControllerAction {
-        var source: MediaSourceProxy?
-        var filename: String
-        var caption: String?
+    private func mediaPreviewViewModel(for item: EventBasedMessageTimelineItemProtocol, messageTypes: [TimelineAllowedMessageType]) async -> TimelineMediaPreviewViewModel? {
+        var timelineFocus: TimelineFocus?
+        switch timelineController.timelineKind {
+        case .live:
+            timelineFocus = .live
+        case .detached:
+            guard case let .event(_, eventOrTransactionID: .eventID(eventID)) = item.id else {
+                MXLog.error("Unexpected event type on a detached timeline.")
+                return nil
+            }
+            timelineFocus = .eventID(eventID)
+        case .pinned:
+            timelineFocus = .pinned
+        case .media(let mediaPresentation):
+            break
+        }
         
-        switch timelineItem {
-        case let item as ImageRoomTimelineItem:
-            source = item.content.imageInfo.source
-            filename = item.content.filename
-            caption = item.content.caption
-        case let item as VideoRoomTimelineItem:
-            source = item.content.videoInfo.source
-            filename = item.content.filename
-            caption = item.content.caption
-        case let item as FileRoomTimelineItem:
-            source = item.content.source
-            filename = item.content.filename
-            caption = item.content.caption
-        case let item as AudioRoomTimelineItem:
-            // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
-            source = item.content.source
-            filename = item.content.filename
-            caption = item.content.caption
-        default:
-            return .none
+        guard let timelineFocus else {
+            MXLog.error("Media timeline previews should be handled at a higher level.")
+            return nil
         }
-
-        guard let source else { return .none }
-        switch await mediaProvider.loadFileFromSource(source, filename: filename) {
-        case .success(let file):
-            return .displayMediaFile(file: file, title: caption ?? filename)
-        case .failure:
-            return .none
+        
+        let timelineItemFactory = RoomTimelineItemFactory(userID: roomProxy.ownUserID,
+                                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: roomProxy.ownUserID))
+        
+        guard case let .success(timelineController) = await timelineControllerFactory.buildMessageFilteredTimelineController(focus: timelineFocus,
+                                                                                                                             allowedMessageTypes: messageTypes,
+                                                                                                                             presentation: .roomScreen,
+                                                                                                                             roomProxy: roomProxy,
+                                                                                                                             timelineItemFactory: timelineItemFactory,
+                                                                                                                             mediaProvider: mediaProvider) else {
+            MXLog.error("Failed presenting media timeline")
+            return nil
         }
+        
+        let timelineViewModel = TimelineViewModel(roomProxy: roomProxy,
+                                                  timelineController: timelineController,
+                                                  mediaProvider: mediaProvider,
+                                                  mediaPlayerProvider: mediaPlayerProvider,
+                                                  voiceMessageMediaManager: voiceMessageMediaManager,
+                                                  userIndicatorController: userIndicatorController,
+                                                  appMediator: appMediator,
+                                                  appSettings: appSettings,
+                                                  analyticsService: analyticsService,
+                                                  emojiProvider: emojiProvider,
+                                                  timelineControllerFactory: timelineControllerFactory)
+        
+        return TimelineMediaPreviewViewModel(initialItem: item,
+                                             timelineViewModel: timelineViewModel,
+                                             mediaProvider: mediaProvider,
+                                             photoLibraryManager: PhotoLibraryManager(),
+                                             userIndicatorController: userIndicatorController,
+                                             appMediator: appMediator)
     }
 }
 

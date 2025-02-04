@@ -18,6 +18,16 @@ enum TimelineKind: Equatable {
     case media(MediaPresentation)
 }
 
+enum TimelineFocus {
+    case live
+    case eventID(String)
+    case pinned
+}
+
+enum TimelineAllowedMessageType {
+    case audio, file, image, video
+}
+
 enum TimelineProxyError: Error {
     case sdkError(Error)
     

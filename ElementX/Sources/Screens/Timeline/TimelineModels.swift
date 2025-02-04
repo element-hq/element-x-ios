@@ -123,8 +123,8 @@ struct TimelineViewStateBindings {
     /// Key is itemID, value is the collapsed state.
     var reactionsCollapsed: [TimelineItemIdentifier: Bool]
     
-    /// A media item that will be previewed with QuickLook.
-    var mediaPreviewItem: MediaPreviewItem?
+    /// The view model used to present a QuickLook media preview.
+    var mediaPreviewViewModel: TimelineMediaPreviewViewModel?
     
     var alertInfo: AlertInfo<RoomScreenAlertInfoType>?
     
