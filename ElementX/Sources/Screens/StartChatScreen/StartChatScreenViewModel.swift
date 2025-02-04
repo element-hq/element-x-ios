@@ -54,7 +54,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         case .createRoom:
             actionsSubject.send(.createRoom)
         case .selectUser(let user):
-            showLoadingIndicator()
+            showLoadingIndicator(delay: .milliseconds(200))
             Task {
                 let currentDirectRoom = await userSession.clientProxy.directRoomForUserID(user.userID)
                 switch currentDirectRoom {
@@ -134,11 +134,12 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     
     private static let loadingIndicatorIdentifier = "\(StartChatScreenViewModel.self)-Loading"
     
-    private func showLoadingIndicator() {
+    private func showLoadingIndicator(delay: Duration? = nil) {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
                                                               type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
                                                               title: L10n.commonLoading,
-                                                              persistent: true))
+                                                              persistent: true),
+                                                delay: delay)
     }
     
     private func hideLoadingIndicator() {
