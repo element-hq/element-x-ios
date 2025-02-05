@@ -20,11 +20,6 @@ class AppLockUITests: XCTestCase {
         static let unlocked = 99
     }
     
-    override func setUpWithError() throws {
-        try super.setUpWithError()
-        continueAfterFailure = false
-    }
-    
     func testFlowEnabled() async throws {
         // Given an app with screen lock enabled.
         let client = try UITestsSignalling.Client(mode: .tests)
