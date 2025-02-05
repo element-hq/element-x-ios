@@ -42,6 +42,8 @@ class TimelineInteractionHandler {
     private let timelineControllerFactory: TimelineControllerFactoryProtocol
     private let pollInteractionHandler: PollInteractionHandlerProtocol
     
+    private let zeroAttachmentService: ZeroAttachmentService
+    
     private let actionsSubject: PassthroughSubject<TimelineInteractionHandlerAction, Never> = .init()
     var actions: AnyPublisher<TimelineInteractionHandlerAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -80,6 +82,8 @@ class TimelineInteractionHandler {
         self.emojiProvider = emojiProvider
         self.timelineControllerFactory = timelineControllerFactory
         pollInteractionHandler = PollInteractionHandler(analyticsService: analyticsService, roomProxy: roomProxy)
+        
+        zeroAttachmentService = ZeroAttachmentService(appSettings: appSettings, isRoomEncrypted: roomProxy.isEncrypted)
     }
     
     // MARK: Timeline Item Action Menu
@@ -559,7 +563,7 @@ class TimelineInteractionHandler {
         if let newTimelineFocus, let newTimelinePresentation {
             let timelineItemFactory = RoomTimelineItemFactory(userID: roomProxy.ownUserID,
                                                               attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                              stateEventStringBuilder: RoomStateEventStringBuilder(userID: roomProxy.ownUserID))
+                                                              stateEventStringBuilder: RoomStateEventStringBuilder(userID: roomProxy.ownUserID), zeroAttachmentService: zeroAttachmentService)
             
             guard case let .success(timelineController) = await timelineControllerFactory.buildMessageFilteredTimelineController(focus: newTimelineFocus,
                                                                                                                                  allowedMessageTypes: messageTypes,

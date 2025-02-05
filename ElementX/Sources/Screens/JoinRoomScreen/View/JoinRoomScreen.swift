@@ -263,10 +263,10 @@ struct JoinRoomScreen: View {
         if context.viewState.mode == .knocked {
             ToolbarItem(placement: .principal) {
                 if let avatar = context.viewState.avatar {
-                RoomHeaderView(roomName: context.viewState.title,
-                               roomSubtitle: nil,
+                    RoomHeaderView(roomName: context.viewState.title,
+                                   roomSubtitle: nil,
                                    roomAvatar: avatar,
-                               mediaProvider: context.mediaProvider)
+                                   mediaProvider: context.mediaProvider)
                 }
             }
         }
