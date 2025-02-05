@@ -72,7 +72,7 @@ struct RoomMemberDetailsScreenViewStateBindings {
     }
     
     var ignoreUserAlert: IgnoreUserAlertItem?
-    var alertInfo: AlertInfo<RoomMemberDetailsScreenError>?
+    var alertInfo: AlertInfo<RoomMemberDetailsScreenAlertType>?
     
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: MediaPreviewItem?
@@ -88,7 +88,8 @@ enum RoomMemberDetailsScreenViewAction {
     case startCall(roomID: String)
 }
 
-enum RoomMemberDetailsScreenError: Hashable {
+enum RoomMemberDetailsScreenAlertType: Hashable {
     case failedOpeningDirectChat
+    case createDirectChatConfirmation
     case unknown
 }

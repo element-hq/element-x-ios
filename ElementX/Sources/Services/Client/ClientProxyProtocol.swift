@@ -32,9 +32,11 @@ enum ClientProxyError: Error {
     case sdkError(Error)
     case zeroError(Error)
     
+    case postsLimitReached
+    
     case invalidMedia
     case invalidServerName
-    case failedUploadingMedia(Error, MatrixErrorCode)
+    case failedUploadingMedia(ErrorKind)
     case roomPreviewIsPrivate
     case failedRetrievingUserIdentity
     case failedResolvingRoomAlias
@@ -115,8 +117,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func stopSync(completion: (() -> Void)?) // Hopefully this will become async once we get SE-0371.
     
     func accountURL(action: AccountManagementAction) async -> URL?
-    
-    func createDirectRoomIfNeeded(with userID: String, expectedRoomName: String?) async -> Result<(roomID: String, isNewRoom: Bool), ClientProxyError>
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError>
     
@@ -235,4 +235,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func zeroProfile(userId: String) async
     
     func checkAndLinkZeroUser()
+    
+    // MARK: - Zero Posts
+    
+    func fetchZeroPosts(limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError>
 }

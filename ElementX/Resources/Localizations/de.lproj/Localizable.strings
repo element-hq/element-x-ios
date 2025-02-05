@@ -21,7 +21,7 @@
 "a11y_user_menu" = "Benutzermenü";
 "a11y_voice_message_record" = "Sprachnachricht aufnehmen.";
 "a11y_voice_message_stop_recording" = "Aufnahme beenden";
-"a11y.view_details" = "View details";
+"a11y.view_details" = "Details anzeigen";
 "action_accept" = "Akzeptieren";
 "action_add_caption" = "Bildunterschrift hinzufügen";
 "action_add_to_timeline" = "Zum Nachrichtenverlauf hinzufügen";
@@ -174,13 +174,13 @@
 "common_light" = "Hell";
 "common_link_copied_to_clipboard" = "Link in die Zwischenablage kopiert";
 "common_loading" = "Laden...";
-"common_loading_more" = "Loading more…";
+"common_loading_more" = "Mehr wird geladen...";
 "common_message" = "Nachricht";
 "common_message_actions" = "Nachrichtenaktionen";
 "common_message_layout" = "Nachrichtenlayout";
 "common_message_removed" = "Nachricht entfernt";
 "common_modern" = "Modern";
-"common_mute" = "Stummschalten";
+"common_mute" = "Stumm";
 "common_no_results" = "Keine Ergebnisse";
 "common_no_room_name" = "Kein Raumname";
 "common_offline" = "Offline";
@@ -414,6 +414,8 @@
 "screen_knock_requests_list_title" = "Beitrittsanfragen";
 "screen_media_details_file_format" = "Dateiformat";
 "screen_media_details_filename" = "Dateiname";
+"screen_media_details_no_more_files_to_show" = "Keine weiteren Dateien zum Anzeigen";
+"screen_media_details_no_more_media_to_show" = "Keine weiteren Medien mehr zum Anzeigen";
 "screen_media_details_redact_confirmation_message" = "Diese Datei wird aus dem Chatroom entfernt und die Mitglieder werden keinen Zugriff mehr darauf haben.";
 "screen_media_details_redact_confirmation_title" = "Datei löschen?";
 "screen_media_details_uploaded_by" = "Hochgeladen von";
@@ -442,7 +444,7 @@
 "screen_room_single_knock_request_title" = "%1$@ möchte diesem Chatroom beitreten";
 "screen_room_single_knock_request_view_button_title" = "Ansicht";
 "screen_room_details_pinned_events_row_title" = "Fixierte Nachrichten";
-"screen_room_details_profile_row_title" = "Profile";
+"screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Beitrittsanfragen";
 "screen_room_details_security_and_privacy_title" = "Sicherheit & Datenschutz";
 "screen_roomlist_knock_event_sent_description" = "Beitrittsanfrage gesendet";
@@ -478,8 +480,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Nachricht nicht gesendet, weil sich die verifizierte Identität von %1$@ geändert hat.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Nachricht wurde nicht gesendet, weil %1$@ nicht alle Geräte verifiziert hat";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Die Nachricht wurde nicht gesendet, weil Sie eines oder mehrere Ihrer Geräte nicht verifiziert haben.";
-"screen.media_details.no_more_files_to_show" = "No more files to show";
-"screen.media_details.no_more_media_to_show" = "No more media to show";
 "screen_account_provider_form_hint" = "Homeserver-Adresse";
 "screen_account_provider_form_notice" = "Gib einen Suchbegriff oder eine Domainadresse ein.";
 "screen_account_provider_form_subtitle" = "Suche nach einem Unternehmen, einer Community oder einem privaten Server.";
@@ -796,9 +796,9 @@
 "screen_room_change_permissions_administrators" = "Nur Administratoren";
 "screen_room_change_permissions_ban_people" = "Mitglieder sperren";
 "screen_room_change_permissions_delete_messages" = "Nachrichten anderer Mitgliedern löschen";
-"screen_room_change_permissions_invite_people" = "Personen einladen";
+"screen_room_change_permissions_invite_people" = "Leute einladen und Beitrittsanfragen annehmen";
 "screen_room_change_permissions_moderators" = "Administratoren und Moderatoren";
-"screen_room_change_permissions_remove_people" = "Personen entfernen";
+"screen_room_change_permissions_remove_people" = "Personen entfernen und Beitrittsanfragen ablehnen";
 "screen_room_change_permissions_room_avatar" = "Avatar ändern";
 "screen_room_change_permissions_room_name" = "Raumname ändern";
 "screen_room_change_permissions_room_topic" = "Raumthema ändern";

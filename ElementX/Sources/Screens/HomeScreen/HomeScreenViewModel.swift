@@ -25,6 +25,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         actionsSubject.eraseToAnyPublisher()
     }
     
+    private let HOME_SCREEN_POST_PAGE_COUNT = 10
+    private var isFetchPostsInProgress = false
+    
     init(userSession: UserSessionProtocol,
          analyticsService: AnalyticsService,
          appSettings: AppSettings,
@@ -132,6 +135,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         setupRoomListSubscriptions()
         
         updateRooms()
+        
+        fetchPosts()
                 
         Task {
             await checkSlidingSyncMigration()
@@ -221,6 +226,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             loadUserRewards()
         case .rewardsIntimated:
             dismissNewRewardsIntimation()
+        case .loadMorePostsIfNeeded:
+            fetchPosts()
         }
     }
     
@@ -499,6 +506,48 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     private func checkAndLinkZeroUser() {
         userSession.clientProxy.checkAndLinkZeroUser()
+    }
+    
+    private func fetchPosts() {
+        guard !isFetchPostsInProgress else { return }
+        isFetchPostsInProgress = true
+        
+        Task {
+            defer { isFetchPostsInProgress = false } // Ensure flag is reset when the task completes
+            
+            state.postListMode = state.posts.isEmpty ? .skeletons : .posts
+            let postsResult = await userSession.clientProxy.fetchZeroPosts(limit: HOME_SCREEN_POST_PAGE_COUNT,
+                                                                           skip: state.posts.count)
+            switch postsResult {
+            case .success(let posts):
+                let hasNoPosts = posts.isEmpty
+                if hasNoPosts {
+                    state.postListMode = state.posts.isEmpty ? .empty : .posts
+                    state.canLoadMorePosts = false
+                } else {
+                    var homePosts: [HomeScreenPost] = state.posts
+                    for post in posts {
+                        let homePost = HomeScreenPost(post: post, rewardsDecimalPlaces: state.userRewards.decimals)
+                        homePosts.append(homePost)
+                    }
+                    state.posts = homePosts
+                    state.postListMode = .posts
+                }
+            case .failure(let error):
+                MXLog.error("Failed to fetch zero posts: \(error)")
+                state.postListMode = state.posts.isEmpty ? .empty : .posts
+                switch error {
+                case .postsLimitReached:
+                    state.canLoadMorePosts = false
+                default:
+                    displayError()
+                }
+            }
+        }
+    }
+    
+    private func updatePostsVisibleRange(_ range: Range<Int>) {
+        print("Update Posts Visible Range: Upper bound: \(range.upperBound), Lower bound: \(range.lowerBound)")
     }
 }
 

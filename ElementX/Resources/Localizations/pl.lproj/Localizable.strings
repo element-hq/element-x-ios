@@ -414,6 +414,8 @@
 "screen_knock_requests_list_title" = "Prośby o dołączenie";
 "screen_media_details_file_format" = "Format pliku";
 "screen_media_details_filename" = "Nazwa pliku";
+"screen_media_details_no_more_files_to_show" = "No more files to show";
+"screen_media_details_no_more_media_to_show" = "No more media to show";
 "screen_media_details_redact_confirmation_message" = "Plik zostanie usunięty z pokoju, a członkowie nie będą mieli do niego dostępu.";
 "screen_media_details_redact_confirmation_title" = "Usunąć plik?";
 "screen_media_details_uploaded_by" = "Przesłane przez";
@@ -478,8 +480,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Wiadomość nie została wysłana, ponieważ tożsamość %1$@ uległa zmianie.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Wiadomość nie została wysłana, ponieważ %1$@ nie zweryfikował wszystkich urządzeń.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Wiadomość nie została wysłana, ponieważ nie zweryfikowałeś jednego lub więcej swoich urządzeń.";
-"screen.media_details.no_more_files_to_show" = "No more files to show";
-"screen.media_details.no_more_media_to_show" = "No more media to show";
 "screen_account_provider_form_hint" = "Adres serwera domowego";
 "screen_account_provider_form_notice" = "Wprowadź wyszukiwane hasło lub adres domeny.";
 "screen_account_provider_form_subtitle" = "Szukaj serwera firmowego, społeczności lub prywatnego.";

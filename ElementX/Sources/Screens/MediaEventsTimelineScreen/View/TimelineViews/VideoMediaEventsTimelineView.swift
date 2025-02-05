@@ -28,7 +28,7 @@ struct VideoMediaEventsTimelineView: View {
     var thumbnail: some View {
         if let thumbnailSource = timelineItem.content.thumbnailInfo?.source {
             LoadableImage(mediaSource: thumbnailSource,
-                          mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
+                          mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID),
                           blurhash: timelineItem.content.blurhash,
                           size: timelineItem.content.thumbnailInfo?.size,
                           mediaProvider: context?.mediaProvider) {

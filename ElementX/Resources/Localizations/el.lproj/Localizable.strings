@@ -414,6 +414,8 @@
 "screen_knock_requests_list_title" = "Αιτήματα συμμετοχής";
 "screen_media_details_file_format" = "Μορφή αρχείου";
 "screen_media_details_filename" = "Όνομα αρχείου";
+"screen_media_details_no_more_files_to_show" = "No more files to show";
+"screen_media_details_no_more_media_to_show" = "No more media to show";
 "screen_media_details_redact_confirmation_message" = "Αυτό το αρχείο θα αφαιρεθεί από το δωμάτιο και τα μέλη δεν θα έχουν πρόσβαση σε αυτό.";
 "screen_media_details_redact_confirmation_title" = "Διαγραφή αρχείου;";
 "screen_media_details_uploaded_by" = "Μεταφορτώθηκε από";
@@ -478,8 +480,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Το μήνυμα δεν στάλθηκε επειδή η επαληθευμένη ταυτότητα του χρήστη %1$@ έχει αλλάξει.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Το μήνυμα δεν στάλθηκε επειδή ο χρήστης %1$@ δεν έχει επαληθεύσει όλες τις συσκευές.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Το μήνυμα δεν στάλθηκε επειδή δεν έχεις επαληθεύσει τουλάχιστον μία από τις συσκευές σου.";
-"screen.media_details.no_more_files_to_show" = "No more files to show";
-"screen.media_details.no_more_media_to_show" = "No more media to show";
 "screen_account_provider_form_hint" = "Διεύθυνση οικιακού διακομιστή";
 "screen_account_provider_form_notice" = "Εισήγαγε έναν όρο αναζήτησης ή μια διεύθυνση τομέα.";
 "screen_account_provider_form_subtitle" = "Αναζήτησε μια εταιρεία, κοινότητα ή ιδιωτικό διακομιστή.";

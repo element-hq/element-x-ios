@@ -9,7 +9,7 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-class RoomTimelineProvider: RoomTimelineProviderProtocol {
+class TimelineProvider: TimelineProviderProtocol {
     private var cancellables = Set<AnyCancellable>()
     private let serialDispatchQueue: DispatchQueue
     
@@ -46,7 +46,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     }
 
     init(timeline: Timeline, kind: TimelineKind, paginationStatePublisher: AnyPublisher<PaginationState, Never>) {
-        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
+        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.timelineprovider", qos: .utility)
         itemProxiesSubject = CurrentValueSubject<[TimelineItemProxy], Never>([])
         self.kind = kind
         
@@ -84,6 +84,8 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         defer {
             span.exit()
         }
+        
+        MXLog.verbose("Received diffs: \(diffs)")
         
         itemProxies = diffs.reduce(itemProxies) { currentItems, diff in
             guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
@@ -220,5 +222,55 @@ private final class RoomTimelineListener: TimelineListener {
     
     func onUpdate(diff: [TimelineDiff]) {
         onUpdateClosure(diff)
+    }
+}
+
+private extension Array where Element == TimelineDiff {
+    var debugDescription: String {
+        "[" + map(\.debugDescription).joined(separator: ",") + "]"
+    }
+}
+
+extension TimelineDiff: @retroactive CustomDebugStringConvertible {
+    public var debugDescription: String {
+        switch change() {
+        case .append:
+            guard let update = append() else {
+                fatalError()
+            }
+            return "Append(\(update.count))"
+        case .clear:
+            return "Clear"
+        case .insert:
+            return "Insert"
+        case .set:
+            guard let update = set() else {
+                fatalError()
+            }
+            return "Set(\(update.index))"
+        case .remove:
+            guard let update = remove() else {
+                fatalError()
+            }
+            return "Remove(\(update)"
+        case .pushBack:
+            return "PushBack"
+        case .pushFront:
+            return "PushFront"
+        case .popBack:
+            return "PopBack"
+        case .popFront:
+            return "PopFront"
+        case .truncate:
+            guard let update = truncate() else {
+                fatalError()
+            }
+            return "Truncate(\(update))"
+        case .reset:
+            guard let update = reset() else {
+                fatalError()
+            }
+            return "Reset(\(update.count)@\(update.startIndex)-\(update.endIndex))"
+        }
     }
 }

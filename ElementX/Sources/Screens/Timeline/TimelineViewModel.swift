@@ -22,13 +22,14 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
 
     private let roomProxy: JoinedRoomProxyProtocol
-    private let timelineController: RoomTimelineControllerProtocol
+    private let timelineController: TimelineControllerProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
     private let emojiProvider: EmojiProviderProtocol
+    private let timelineControllerFactory: TimelineControllerFactoryProtocol
     
     private let timelineInteractionHandler: TimelineInteractionHandler
     
@@ -44,7 +45,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
 
     init(roomProxy: JoinedRoomProxyProtocol,
          focussedEventID: String? = nil,
-         timelineController: RoomTimelineControllerProtocol,
+         timelineController: TimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          mediaPlayerProvider: MediaPlayerProviderProtocol,
          voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
@@ -52,7 +53,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          analyticsService: AnalyticsService,
-         emojiProvider: EmojiProviderProtocol) {
+         emojiProvider: EmojiProviderProtocol,
+         timelineControllerFactory: TimelineControllerFactoryProtocol) {
         self.timelineController = timelineController
         self.mediaPlayerProvider = mediaPlayerProvider
         self.roomProxy = roomProxy
@@ -61,6 +63,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
         self.emojiProvider = emojiProvider
+        self.timelineControllerFactory = timelineControllerFactory
         
         let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
@@ -73,7 +76,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                                 userIndicatorController: userIndicatorController,
                                                                 appMediator: appMediator,
                                                                 appSettings: appSettings,
-                                                                analyticsService: analyticsService)
+                                                                analyticsService: analyticsService,
+                                                                emojiProvider: emojiProvider,
+                                                                timelineControllerFactory: timelineControllerFactory)
         
         super.init(initialViewState: TimelineViewState(timelineKind: timelineController.timelineKind,
                                                        roomID: roomProxy.id,
@@ -653,7 +658,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     // MARK: - Timeline Item Building
     
     private func buildTimelineViews(timelineItems: [RoomTimelineItemProtocol], isSwitchingTimelines: Bool = false) {
-        var timelineItemsDictionary = OrderedDictionary<TimelineUniqueId, RoomTimelineItemViewState>()
+        var timelineItemsDictionary = OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>()
         
         timelineItems.filter { $0 is RedactedRoomTimelineItem }.forEach { timelineItem in
             // Stops the audio player when a voice message is redacted.
@@ -865,10 +870,10 @@ private extension RoomInfoProxy {
 extension TimelineViewModel {
     static let mock = mock(timelineKind: .live)
     
-    static func mock(timelineKind: TimelineKind = .live, timelineController: MockRoomTimelineController? = nil) -> TimelineViewModel {
+    static func mock(timelineKind: TimelineKind = .live, timelineController: MockTimelineController? = nil) -> TimelineViewModel {
         TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                           focussedEventID: nil,
-                          timelineController: timelineController ?? MockRoomTimelineController(timelineKind: timelineKind),
+                          timelineController: timelineController ?? MockTimelineController(timelineKind: timelineKind),
                           mediaProvider: MediaProviderMock(configuration: .init()),
                           mediaPlayerProvider: MediaPlayerProviderMock(),
                           voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
@@ -876,7 +881,8 @@ extension TimelineViewModel {
                           appMediator: AppMediatorMock.default,
                           appSettings: ServiceLocator.shared.settings,
                           analyticsService: ServiceLocator.shared.analytics,
-                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }
 }
 

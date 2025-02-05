@@ -285,7 +285,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .newMessage:
             set(mode: .default)
         case .edit(let eventID):
-            set(mode: .edit(originalEventOrTransactionID: .eventId(eventId: eventID), type: .default))
+            set(mode: .edit(originalEventOrTransactionID: .eventID(eventID), type: .default))
         case .reply(let eventID):
             set(mode: .reply(eventID: eventID, replyDetails: .loading(eventID: eventID), isThread: false))
             replyLoadingTask = Task {
@@ -341,7 +341,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         switch state.composerMode {
         case .default:
             type = .newMessage
-        case .edit(.eventId(let originalEventID), .default):
+        case .edit(.eventID(let originalEventID), .default):
             type = .edit(eventID: originalEventID)
         case .reply(let eventID, _, _):
             type = .reply(eventID: eventID)

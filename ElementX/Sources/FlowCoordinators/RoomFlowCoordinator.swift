@@ -78,7 +78,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let roomID: String
     private let userSession: UserSessionProtocol
     private let isChildFlow: Bool
-    private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
+    private let timelineControllerFactory: TimelineControllerFactoryProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let emojiProvider: EmojiProviderProtocol
     private let ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>
@@ -110,13 +110,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private var timelineController: RoomTimelineControllerProtocol?
+    private var timelineController: TimelineControllerProtocol?
     private let zeroAttachmentService: ZeroAttachmentService
     
     init(roomID: String,
          userSession: UserSessionProtocol,
          isChildFlow: Bool,
-         roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol,
+         timelineControllerFactory: TimelineControllerFactoryProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
          emojiProvider: EmojiProviderProtocol,
          ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>,
@@ -127,7 +127,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         self.roomID = roomID
         self.userSession = userSession
         self.isChildFlow = isChildFlow
-        self.roomTimelineControllerFactory = roomTimelineControllerFactory
+        self.timelineControllerFactory = timelineControllerFactory
         self.navigationStackCoordinator = navigationStackCoordinator
         self.emojiProvider = emojiProvider
         self.ongoingCallRoomIDPublisher = ongoingCallRoomIDPublisher
@@ -689,11 +689,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
                                                           zeroAttachmentService: zeroAttachmentService)
-                
-        let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
-                                                                                           initialFocussedEventID: presentationAction?.focusedEvent?.eventID,
-                                                                                           timelineItemFactory: timelineItemFactory,
-                                                                                           mediaProvider: userSession.mediaProvider)
+        let timelineController = timelineControllerFactory.buildTimelineController(roomProxy: roomProxy,
+                                                                                   initialFocussedEventID: presentationAction?.focusedEvent?.eventID,
+                                                                                   timelineItemFactory: timelineItemFactory,
+                                                                                   mediaProvider: userSession.mediaProvider)
         self.timelineController = timelineController
         
         let completionSuggestionService = CompletionSuggestionService(roomProxy: roomProxy)
@@ -712,7 +711,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                          ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher,
                                                          appMediator: appMediator,
                                                          appSettings: appSettings,
-                                                         composerDraftService: composerDraftService)
+                                                         composerDraftService: composerDraftService,
+                                                         timelineControllerFactory: timelineControllerFactory)
         
         let coordinator = RoomScreenCoordinator(parameters: parameters)
         coordinator.actions
@@ -1208,13 +1208,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
                                                           zeroAttachmentService: zeroAttachmentService)
                 
-        let roomTimelineController = roomTimelineControllerFactory.buildRoomTimelineController(roomProxy: roomProxy,
-                                                                                               initialFocussedEventID: nil,
-                                                                                               timelineItemFactory: timelineItemFactory,
-                                                                                               mediaProvider: userSession.mediaProvider)
+        let timelineController = timelineControllerFactory.buildTimelineController(roomProxy: roomProxy,
+                                                                                   initialFocussedEventID: nil,
+                                                                                   timelineItemFactory: timelineItemFactory,
+                                                                                   mediaProvider: userSession.mediaProvider)
         
         let parameters = RoomPollsHistoryScreenCoordinatorParameters(pollInteractionHandler: PollInteractionHandler(analyticsService: analytics, roomProxy: roomProxy),
-                                                                     roomTimelineController: roomTimelineController)
+                                                                     timelineController: timelineController)
         let coordinator = RoomPollsHistoryScreenCoordinator(parameters: parameters)
         coordinator.actions
             .sink { [weak self] action in
@@ -1536,7 +1536,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = await RoomFlowCoordinator(roomID: roomID,
                                                     userSession: userSession,
                                                     isChildFlow: true,
-                                                    roomTimelineControllerFactory: roomTimelineControllerFactory,
+                                                    timelineControllerFactory: timelineControllerFactory,
                                                     navigationStackCoordinator: navigationStackCoordinator,
                                                     emojiProvider: emojiProvider,
                                                     ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher,
@@ -1574,7 +1574,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let flowCoordinator = PinnedEventsTimelineFlowCoordinator(navigationStackCoordinator: stackCoordinator,
                                                                   userSession: userSession,
-                                                                  roomTimelineControllerFactory: roomTimelineControllerFactory,
+                                                                  timelineControllerFactory: timelineControllerFactory,
                                                                   roomProxy: roomProxy,
                                                                   userIndicatorController: userIndicatorController,
                                                                   appSettings: appSettings,
@@ -1614,7 +1614,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func startMediaEventsTimelineFlow() async {
         let flowCoordinator = MediaEventsTimelineFlowCoordinator(navigationStackCoordinator: navigationStackCoordinator,
                                                                  userSession: userSession,
-                                                                 roomTimelineControllerFactory: roomTimelineControllerFactory,
+                                                                 timelineControllerFactory: timelineControllerFactory,
                                                                  roomProxy: roomProxy,
                                                                  userIndicatorController: userIndicatorController,
                                                                  appSettings: appSettings,

@@ -206,9 +206,9 @@ struct TimelineState {
     // These can be removed when we have full swiftUI and moved as @State values in the view
     var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
     
-    var itemsDictionary = OrderedDictionary<TimelineUniqueId, RoomTimelineItemViewState>()
+    var itemsDictionary = OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>()
     
-    var uniqueIDs: [TimelineUniqueId] {
+    var uniqueIDs: [TimelineItemIdentifier.UniqueID] {
         itemsDictionary.keys.elements
     }
     

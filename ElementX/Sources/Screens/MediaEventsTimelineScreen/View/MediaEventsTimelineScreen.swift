@@ -11,8 +11,6 @@ import SwiftUI
 struct MediaEventsTimelineScreen: View {
     @ObservedObject var context: MediaEventsTimelineScreenViewModel.Context
     
-    @Namespace private var zoomTransition
-    
     var body: some View {
         mainContent
             .navigationBarTitleDisplayMode(.inline)
@@ -25,6 +23,7 @@ struct MediaEventsTimelineScreen: View {
             .onChange(of: context.screenMode) { _, _ in
                 context.send(viewAction: .changedScreenMode)
             }
+            .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
     }
     
     // The scale effects do the following:
@@ -65,9 +64,8 @@ struct MediaEventsTimelineScreen: View {
                             tappedItem(item)
                         } label: {
                             viewForTimelineItem(item)
-                                .scaleEffect(scale(for: item, isGridLayout: true))
+                                .scaleEffect(CGSize(width: -1, height: -1))
                         }
-                        .zoomTransitionSource(id: item.identifier, in: zoomTransition)
                     }
                 } footer: {
                     // Use a footer as the header because the scrollView is flipped
@@ -92,9 +90,8 @@ struct MediaEventsTimelineScreen: View {
                                 tappedItem(item)
                             } label: {
                                 viewForTimelineItem(item)
-                                    .scaleEffect(scale(for: item, isGridLayout: false))
+                                    .scaleEffect(CGSize(width: 1, height: -1))
                             }
-                            .zoomTransitionSource(id: item.identifier, in: zoomTransition)
                         }
                         .padding(.horizontal, 16)
                     }
@@ -216,16 +213,7 @@ struct MediaEventsTimelineScreen: View {
     }
     
     func tappedItem(_ item: RoomTimelineItemViewState) {
-        context.send(viewAction: .tappedItem(item: item, namespace: zoomTransition))
-    }
-    
-    func scale(for item: RoomTimelineItemViewState, isGridLayout: Bool) -> CGSize {
-        if item.identifier == context.viewState.currentPreviewItemID, #available(iOS 18.0, *) {
-            // Remove the flip when presenting a preview so that the zoom transition is the right way up 🙃
-            CGSize(width: 1, height: 1)
-        } else {
-            CGSize(width: isGridLayout ? -1 : 1, height: -1)
-        }
+        context.send(viewAction: .tappedItem(item: item))
     }
 }
 
@@ -265,14 +253,15 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                            filesTimelineViewModel: makeTimelineViewModel(empty: empty),
                                            initialViewState: .init(bindings: .init(screenMode: screenMode)),
                                            mediaProvider: MediaProviderMock(configuration: .init()),
-                                           userIndicatorController: UserIndicatorControllerMock())
+                                           userIndicatorController: UserIndicatorControllerMock(),
+                                           appMediator: AppMediatorMock())
     }
     
     private static func makeTimelineViewModel(empty: Bool) -> TimelineViewModel {
         let timelineController = if empty {
-            MockRoomTimelineController.emptyMediaGallery
+            MockTimelineController.emptyMediaGallery
         } else {
-            MockRoomTimelineController.mediaGallery
+            MockTimelineController.mediaGallery
         }
         
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
@@ -284,6 +273,7 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                  appMediator: AppMediatorMock.default,
                                  appSettings: ServiceLocator.shared.settings,
                                  analyticsService: ServiceLocator.shared.analytics,
-                                 emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+                                 emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }
 }

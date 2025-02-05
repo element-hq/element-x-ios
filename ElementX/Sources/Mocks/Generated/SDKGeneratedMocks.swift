@@ -19242,7 +19242,6 @@ open class SyncServiceSDKMock: MatrixRustSDK.SyncService, @unchecked Sendable {
 
     //MARK: - stop
 
-    open var stopThrowableError: Error?
     var stopUnderlyingCallsCount = 0
     open var stopCallsCount: Int {
         get {
@@ -19270,14 +19269,11 @@ open class SyncServiceSDKMock: MatrixRustSDK.SyncService, @unchecked Sendable {
     open var stopCalled: Bool {
         return stopCallsCount > 0
     }
-    open var stopClosure: (() async throws -> Void)?
+    open var stopClosure: (() async -> Void)?
 
-    open override func stop() async throws {
-        if let error = stopThrowableError {
-            throw error
-        }
+    open override func stop() async {
         stopCallsCount += 1
-        try await stopClosure?()
+        await stopClosure?()
     }
 }
 open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @unchecked Sendable {

@@ -164,6 +164,7 @@ class ClientProxy: ClientProxyProtocol {
     private let zeroMessengerInviteApi: ZeroMessengerInviteApiProtocol
     private let zeroCreateAccountApi: ZeroCreateAccountApiProtocol
     private let zeroUserAccountApi: ZeroAccountApiProtocol
+    private let zeroPostsApi: ZeroPostsApiProtocol
     
     init(client: ClientProtocol,
          networkMonitor: NetworkMonitorProtocol,
@@ -189,6 +190,7 @@ class ClientProxy: ClientProxyProtocol {
         zeroMessengerInviteApi = ZeroMessengerInviteApi(appSettings: appSettings)
         zeroCreateAccountApi = ZeroCreateAccountApi(appSettings: appSettings)
         zeroUserAccountApi = ZeroAccountApi(appSettings: appSettings)
+        zeroPostsApi = ZeroPostsApi(appSettings: appSettings)
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
@@ -384,23 +386,6 @@ class ClientProxy: ClientProxyProtocol {
         try? await client.accountUrl(action: action).flatMap(URL.init(string:))
     }
     
-    func createDirectRoomIfNeeded(with userID: String, expectedRoomName: String?) async -> Result<(roomID: String, isNewRoom: Bool), ClientProxyError> {
-        let currentDirectRoom = await directRoomForUserID(userID)
-        switch currentDirectRoom {
-        case .success(.some(let roomID)):
-            return .success((roomID: roomID, isNewRoom: false))
-        case .success(.none):
-            switch await createDirectRoom(with: userID, expectedRoomName: expectedRoomName) {
-            case .success(let roomID):
-                return .success((roomID: roomID, isNewRoom: true))
-            case .failure(let error):
-                return .failure(.sdkError(error))
-            }
-        case .failure(let error):
-            return .failure(.sdkError(error))
-        }
-    }
-    
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
@@ -528,9 +513,9 @@ class ClientProxy: ClientProxyProtocol {
             let data = try Data(contentsOf: media.url)
             let matrixUrl = try await client.uploadMedia(mimeType: mimeType, data: data, progressWatcher: nil)
             return .success(matrixUrl)
-        } catch let error as ClientError {
-            MXLog.error("Failed uploading media with error: \(error)")
-            return .failure(ClientProxyError.failedUploadingMedia(error, error.code))
+        } catch let ClientError.MatrixApi(errorKind, _, _) {
+            MXLog.error("Failed uploading media with error kind: \(errorKind)")
+            return .failure(ClientProxyError.failedUploadingMedia(errorKind))
         } catch {
             MXLog.error("Failed uploading media with error: \(error)")
             return .failure(ClientProxyError.sdkError(error))
@@ -581,10 +566,9 @@ class ClientProxy: ClientProxyProtocol {
     func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewProxyProtocol, ClientProxyError> {
         do {
             let roomPreview = try await client.getRoomPreviewFromRoomId(roomId: identifier, viaServers: via)
-            return try .success(RoomPreviewProxy(roomId: identifier,
-                                                 roomPreview: roomPreview,
-                                                 zeroUsersService: zeroMatrixUsersService))
-        } catch let error as ClientError where error.code == .forbidden {
+            return try .success(RoomPreviewProxy(roomId: identifier, roomPreview: roomPreview, zeroUsersService: zeroMatrixUsersService))
+        } catch ClientError.MatrixApi(.forbidden, _, _) {
+            MXLog.error("Failed retrieving preview for room: \(identifier) is private")
             return .failure(.roomPreviewIsPrivate)
         } catch {
             MXLog.error("Failed retrieving preview for room: \(identifier) with error: \(error)")
@@ -987,6 +971,21 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func fetchZeroPosts(limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
+        do {
+            let zeroPostsResult = try await zeroPostsApi.fetchPosts(limit: limit, skip: skip)
+            switch zeroPostsResult {
+            case .success(let posts):
+                return .success(posts)
+            case .failure(let error):
+                return .failure(checkPostFetchError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
     // MARK: - Private
     
     private func updateVerificationState(_ verificationState: VerificationState) async {
@@ -1103,6 +1102,9 @@ class ClientProxy: ClientProxyProtocol {
                 break
             case .error:
                 restartSync()
+            case .offline:
+                // This needs to be enabled in the client builder first to be actually used
+                break
             }
         })
     }
@@ -1222,6 +1224,15 @@ class ClientProxy: ClientProxyProtocol {
             } catch {
                 MXLog.error("Failed fetching ignored users with error: \(error)")
             }
+        }
+    }
+    
+    private func checkPostFetchError(_ error: Error) -> ClientProxyError {
+        let postLimitReachedError = "The data couldn’t be read because it is missing."
+        if error.asAFError?.underlyingError?.localizedDescription.contains(postLimitReachedError) == true {
+            return .postsLimitReached
+        } else {
+            return .zeroError(error)
         }
     }
     

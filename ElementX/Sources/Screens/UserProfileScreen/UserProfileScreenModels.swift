@@ -35,7 +35,7 @@ struct UserProfileScreenViewState: BindableState {
 }
 
 struct UserProfileScreenViewStateBindings {
-    var alertInfo: AlertInfo<UserProfileScreenError>?
+    var alertInfo: AlertInfo<UserProfileScreenAlertType>?
     
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: MediaPreviewItem?
@@ -48,7 +48,8 @@ enum UserProfileScreenViewAction {
     case dismiss
 }
 
-enum UserProfileScreenError: Hashable {
+enum UserProfileScreenAlertType: Hashable {
     case failedOpeningDirectChat
     case unknown
+    case createDirectChatConfirmation
 }

@@ -11,8 +11,9 @@ import Foundation
 typealias TimelineMediaPreviewViewModelType = StateStoreViewModel<TimelineMediaPreviewViewState, TimelineMediaPreviewViewAction>
 
 class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
+    let instanceID = UUID()
+    
     private let timelineViewModel: TimelineViewModelProtocol
-    private let currentItemIDHandler: ((TimelineItemIdentifier?) -> Void)?
     private let mediaProvider: MediaProviderProtocol
     private let photoLibraryManager: PhotoLibraryManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -23,13 +24,13 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(context: TimelineMediaPreviewContext,
+    init(initialItem: EventBasedMessageTimelineItemProtocol,
+         timelineViewModel: TimelineViewModelProtocol,
          mediaProvider: MediaProviderProtocol,
          photoLibraryManager: PhotoLibraryManagerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          appMediator: AppMediatorProtocol) {
-        timelineViewModel = context.viewModel
-        currentItemIDHandler = context.itemIDHandler
+        self.timelineViewModel = timelineViewModel
         self.mediaProvider = mediaProvider
         self.photoLibraryManager = photoLibraryManager
         self.userIndicatorController = userIndicatorController
@@ -38,9 +39,8 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         let timelineState = timelineViewModel.context.viewState.timelineState
         
         super.init(initialViewState: TimelineMediaPreviewViewState(dataSource: .init(itemViewStates: timelineState.itemViewStates,
-                                                                                     initialItem: context.item,
-                                                                                     paginationState: timelineState.paginationState),
-                                                                   transitionNamespace: context.namespace),
+                                                                                     initialItem: initialItem,
+                                                                                     paginationState: timelineState.paginationState)),
                    mediaProvider: mediaProvider)
         
         rebuildCurrentItemActions()
@@ -72,10 +72,11 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         case .updateCurrentItem(let item):
             Task { await updateCurrentItem(item) }
         case .showItemDetails(let mediaItem):
-            state.bindings.mediaDetailsItem = mediaItem
+            state.previewControllerDriver.send(.showItemDetails(mediaItem))
         case .menuAction(let action, let item):
             switch action {
             case .viewInRoomTimeline:
+                state.previewControllerDriver.send(.dismissDetailsSheet)
                 actionsSubject.send(.viewInRoomTimeline(item.id))
             case .save:
                 Task { await saveCurrentItem() }
@@ -88,8 +89,6 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             redactItem(item)
         case .timelineEndReached:
             showTimelineEndIndicator()
-        case .dismiss:
-            actionsSubject.send(.dismiss)
         }
     }
     
@@ -101,13 +100,11 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         rebuildCurrentItemActions()
         
         if case let .media(mediaItem) = previewItem {
-            currentItemIDHandler?(mediaItem.id)
-            
             if mediaItem.fileHandle == nil, let source = mediaItem.mediaSource {
                 switch await mediaProvider.loadFileFromSource(source, filename: mediaItem.filename) {
                 case .success(let handle):
                     mediaItem.fileHandle = handle
-                    state.fileLoadedPublisher.send(mediaItem.id)
+                    state.previewControllerDriver.send(.itemLoaded(mediaItem.id))
                 case .failure(let error):
                     MXLog.error("Failed loading media: \(error)")
                     context.objectWillChange.send() // Manually trigger the SwiftUI view update.
@@ -143,12 +140,12 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         }
         
         // Dismiss the details sheet (nicer flow for images/video but _required_ in order to select a file directory).
-        state.bindings.mediaDetailsItem = nil
+        state.previewControllerDriver.send(.dismissDetailsSheet)
         
         do {
             switch mediaItem.timelineItem {
             case is AudioRoomTimelineItem, is FileRoomTimelineItem:
-                state.bindings.fileToExport = .init(url: fileURL)
+                state.previewControllerDriver.send(.exportFile(.init(url: fileURL)))
                 return // Don't show the indicator.
             case is ImageRoomTimelineItem:
                 try await photoLibraryManager.addResource(.photo, at: fileURL).get()
@@ -161,10 +158,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             showSavedIndicator()
         } catch PhotoLibraryManagerError.notAuthorized {
             MXLog.error("Not authorised to save item to photo library")
-            state.bindings.alertInfo = .init(id: .authorizationRequired,
-                                             title: L10n.dialogPermissionPhotoLibraryTitleIos(InfoPlistReader.main.bundleDisplayName),
-                                             primaryButton: .init(title: L10n.commonSettings) { self.appMediator.openAppSettings() },
-                                             secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+            state.previewControllerDriver.send(.authorizationRequired(appMediator: appMediator))
         } catch {
             MXLog.error("Failed saving item: \(error)")
             showErrorIndicator()
@@ -174,7 +168,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     private func redactItem(_ item: TimelineMediaPreviewItem.Media) {
         timelineViewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.id, action: .redact))
         state.bindings.redactConfirmationItem = nil
-        state.bindings.mediaDetailsItem = nil
+        state.previewControllerDriver.send(.dismissDetailsSheet)
         actionsSubject.send(.dismiss)
         showRedactedIndicator()
     }

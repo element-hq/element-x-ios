@@ -326,7 +326,7 @@
 "notification_channel_noisy" = "ხმაურიანი შეტყობინებები";
 "notification_channel_ringing_calls" = "Ringing calls";
 "notification_channel_silent" = "ჩუმი შეტყობინებები";
-"notification_incoming_call" = "Incoming call";
+"notification_incoming_call" = "📹 Incoming call";
 "notification_inline_reply_failed" = "** გაგზავნა ვერ მოხერხდა - გთხოვთ, გახსნათ ოთახი";
 "notification_invite_body" = "მოგიწვიათ ჩატში";
 "notification_invite_body_with_sender" = "%1$@ invited you to chat";
@@ -414,6 +414,8 @@
 "screen_knock_requests_list_title" = "Requests to join";
 "screen_media_details_file_format" = "File format";
 "screen_media_details_filename" = "File name";
+"screen_media_details_no_more_files_to_show" = "No more files to show";
+"screen_media_details_no_more_media_to_show" = "No more media to show";
 "screen_media_details_redact_confirmation_message" = "This file will be removed from the room and members won’t have access to it.";
 "screen_media_details_redact_confirmation_title" = "Delete file?";
 "screen_media_details_uploaded_by" = "Uploaded by";
@@ -478,8 +480,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
-"screen.media_details.no_more_files_to_show" = "No more files to show";
-"screen.media_details.no_more_media_to_show" = "No more media to show";
 "screen_account_provider_form_hint" = "სახლის სერვერის მისამართი";
 "screen_account_provider_form_notice" = "შეიყვანეთ საძიებო სიტყვა ან დომენის მისამართი.";
 "screen_account_provider_form_subtitle" = "მოძებნეთ კომპანია, საზოგადოება ან კერძო სერვერი.";

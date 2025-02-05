@@ -63,7 +63,7 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
                     .scaledFrame(size: 40)
                     .background {
                         LoadableImage(mediaSource: mediaSource,
-                                      mediaType: .timelineItem(uniqueID: item.id.uniqueID.id),
+                                      mediaType: .timelineItem(uniqueID: item.id.uniqueID),
                                       blurhash: item.blurhash,
                                       mediaProvider: context.mediaProvider) {
                             Color.compound.bgSubtleSecondary
@@ -121,7 +121,6 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
 import UniformTypeIdentifiers
 
 struct TimelineMediaPreviewRedactConfirmationView_Previews: PreviewProvider, TestablePreview {
-    @Namespace private static var previewNamespace
     static let viewModel = makeViewModel(contentType: .jpeg)
     
     static var previews: some View {
@@ -145,12 +144,11 @@ struct TimelineMediaPreviewRedactConfirmationView_Previews: PreviewProvider, Tes
                                                         thumbnailInfo: .mockThumbnail,
                                                         contentType: contentType))
         
-        let timelineController = MockRoomTimelineController(timelineKind: .media(.mediaFilesScreen))
+        let timelineController = MockTimelineController(timelineKind: .media(.mediaFilesScreen))
         timelineController.timelineItems = [item]
-        return TimelineMediaPreviewViewModel(context: .init(item: item,
-                                                            viewModel: TimelineViewModel.mock(timelineKind: timelineController.timelineKind,
-                                                                                              timelineController: timelineController),
-                                                            namespace: previewNamespace),
+        return TimelineMediaPreviewViewModel(initialItem: item,
+                                             timelineViewModel: TimelineViewModel.mock(timelineKind: timelineController.timelineKind,
+                                                                                       timelineController: timelineController),
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              photoLibraryManager: PhotoLibraryManagerMock(.init()),
                                              userIndicatorController: UserIndicatorControllerMock(),

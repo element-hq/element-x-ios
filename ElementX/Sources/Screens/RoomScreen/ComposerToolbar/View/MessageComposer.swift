@@ -303,7 +303,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
             messageComposer()
             
             messageComposer(.init(string: "Some message"),
-                            mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString), type: .default))
+                            mode: .edit(originalEventOrTransactionID: .eventID(UUID().uuidString), type: .default))
             
             messageComposer(mode: .reply(eventID: UUID().uuidString,
                                          replyDetails: .loaded(sender: .init(id: "Kirk"),
@@ -314,9 +314,9 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
             Color.clear.frame(height: 20)
             
             messageComposer(.init(string: "Some new caption"),
-                            mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString), type: .addCaption))
+                            mode: .edit(originalEventOrTransactionID: .eventID(UUID().uuidString), type: .addCaption))
             messageComposer(.init(string: "Some updated caption"),
-                            mode: .edit(originalEventOrTransactionID: .eventId(eventId: UUID().uuidString), type: .editCaption))
+                            mode: .edit(originalEventOrTransactionID: .eventID(UUID().uuidString), type: .editCaption))
         }
         .padding(.horizontal)
         

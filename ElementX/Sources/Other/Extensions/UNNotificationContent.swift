@@ -197,7 +197,7 @@ extension UNMutableNotificationContent {
             .clipShape(Circle())
             .frame(width: 50, height: 50)
             .background(Color.black)
-            .foregroundStyle(Asset.Colors.brandColor.swiftUIColor)
+            .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
         let renderer = ImageRenderer(content: image)
         
         let data = Avatars.generatePlaceholderAvatarImageData(name: name, id: id, size: .init(width: 50, height: 50))

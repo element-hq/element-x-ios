@@ -47,7 +47,6 @@ class UserSession: UserSessionProtocol {
                 MXLog.info("Session security state changed, verificationState: \($0), recoveryState: \($1)")
                 return SessionSecurityState(verificationState: $0, recoveryState: $1)
             }
-            .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] value in
                 self?.sessionSecurityStateSubject.send(value)

@@ -79,7 +79,7 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
     ]
 
     static let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Test", members: members)),
-                                             timelineController: MockRoomTimelineController(),
+                                             timelineController: MockTimelineController(),
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              mediaPlayerProvider: MediaPlayerProviderMock(),
                                              voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
@@ -87,7 +87,8 @@ struct TimelineReadReceiptsView_Previews: PreviewProvider, TestablePreview {
                                              appMediator: AppMediatorMock.default,
                                              appSettings: ServiceLocator.shared.settings,
                                              analyticsService: ServiceLocator.shared.analytics,
-                                             emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings))
+                                             emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
 
     static let singleReceipt = [ReadReceipt(userID: RoomMemberProxyMock.mockAlice.userID, formattedTimestamp: "Now")]
     static let doubleReceipt = [ReadReceipt(userID: RoomMemberProxyMock.mockAlice.userID, formattedTimestamp: "Now"),
