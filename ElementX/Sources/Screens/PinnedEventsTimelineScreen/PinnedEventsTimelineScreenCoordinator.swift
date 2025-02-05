@@ -93,6 +93,10 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
+    
+    func stop() {
+        viewModel.stop()
+    }
         
     func toPresentable() -> AnyView {
         AnyView(PinnedEventsTimelineScreen(context: viewModel.context, timelineContext: timelineViewModel.context))

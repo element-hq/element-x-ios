@@ -12,5 +12,7 @@ protocol PinnedEventsTimelineScreenViewModelProtocol {
     var actionsPublisher: AnyPublisher<PinnedEventsTimelineScreenViewModelAction, Never> { get }
     var context: PinnedEventsTimelineScreenViewModelType.Context { get }
     
+    func stop()
+    
     func displayMediaPreview(_ mediaPreviewViewModel: TimelineMediaPreviewViewModel)
 }

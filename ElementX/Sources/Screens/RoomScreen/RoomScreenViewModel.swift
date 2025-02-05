@@ -115,6 +115,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
+    func stop() {
+        // Work around QLPreviewController dismissal issues, see the InteractiveQuickLookModifier.
+        state.bindings.mediaPreviewViewModel = nil
+    }
+    
     func timelineHasScrolled(direction: ScrollDirection) {
         state.lastScrollDirection = direction
     }

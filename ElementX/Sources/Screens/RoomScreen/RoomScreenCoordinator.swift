@@ -201,7 +201,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     
     func stop() {
         composerViewModel.saveDraft()
-        timelineViewModel.stop()
+        roomViewModel.stop()
     }
     
     func toPresentable() -> AnyView {

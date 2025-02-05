@@ -125,11 +125,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     
     // MARK: - Public
     
-    func stop() {
-        // Work around QLPreviewController dismissal issues, see the InteractiveQuickLookModifier.
-//        state.bindings.mediaPreviewViewModel = nil
-    }
-    
     override func process(viewAction: TimelineViewAction) {
         switch viewAction {
         case .itemAppeared(let id):

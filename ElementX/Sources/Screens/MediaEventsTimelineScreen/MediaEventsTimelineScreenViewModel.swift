@@ -120,6 +120,11 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         }
     }
     
+    func stop() {
+        // Work around QLPreviewController dismissal issues, see the InteractiveQuickLookModifier.
+        state.bindings.mediaPreviewViewModel = nil
+    }
+    
     // MARK: - Private
     
     private func updateWithTimelineViewState(_ timelineViewState: TimelineViewState) {
