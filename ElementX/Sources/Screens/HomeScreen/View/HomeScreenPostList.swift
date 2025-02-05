@@ -22,6 +22,9 @@ struct HomeScreenPostList: View {
                     .padding(.all, 16)
                 Divider()
             }
+            .onTapGesture {
+                context.send(viewAction: .postTapped(post))
+            }
         }
     }
 }

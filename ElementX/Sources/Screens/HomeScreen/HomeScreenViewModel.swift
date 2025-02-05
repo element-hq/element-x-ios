@@ -228,6 +228,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             dismissNewRewardsIntimation()
         case .loadMorePostsIfNeeded:
             fetchPosts()
+        case .postTapped(let post):
+            actionsSubject.send(.postTapped(post))
         }
     }
     

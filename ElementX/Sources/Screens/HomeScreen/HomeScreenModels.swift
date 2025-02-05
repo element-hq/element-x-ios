@@ -24,6 +24,7 @@ enum HomeScreenViewModelAction {
     case presentRoomDirectorySearch
     case logoutWithoutConfirmation
     case logout
+    case postTapped(_ post: HomeScreenPost)
 }
 
 enum HomeScreenViewAction {
@@ -53,6 +54,8 @@ enum HomeScreenViewAction {
     case rewardsIntimated
     
     case loadMorePostsIfNeeded
+    
+    case postTapped(_ post: HomeScreenPost)
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
