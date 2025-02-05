@@ -609,8 +609,8 @@ final class TimelineProxy: TimelineProxyProtocol {
             backPaginationStatusSubject.send(.idle)
             forwardPaginationStatusSubject.send(.idle)
         case .media(let presentation):
-            backPaginationStatusSubject.send(.idle)
-            forwardPaginationStatusSubject.send(presentation == .mediaFilesScreen ? .timelineEndReached : .idle)
+            backPaginationStatusSubject.send(presentation == .pinnedEventsScreen ? .timelineEndReached : .idle)
+            forwardPaginationStatusSubject.send(presentation == .roomScreenDetached ? .idle : .timelineEndReached)
         case .pinned:
             backPaginationStatusSubject.send(.timelineEndReached)
             forwardPaginationStatusSubject.send(.timelineEndReached)

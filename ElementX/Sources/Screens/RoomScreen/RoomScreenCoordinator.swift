@@ -126,6 +126,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentMediaUploadPicker(.photoLibrary))
                 case .displayDocumentPicker:
                     actionsSubject.send(.presentMediaUploadPicker(.documents))
+                case .displayMediaPreview(let mediaPreviewViewModel):
+                    roomViewModel.displayMediaPreview(mediaPreviewViewModel)
                 case .displayLocationPicker:
                     actionsSubject.send(.presentLocationPicker)
                 case .displayPollForm(let mode):
@@ -199,7 +201,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     
     func stop() {
         composerViewModel.saveDraft()
-        timelineViewModel.stop()
+        roomViewModel.stop()
     }
     
     func toPresentable() -> AnyView {

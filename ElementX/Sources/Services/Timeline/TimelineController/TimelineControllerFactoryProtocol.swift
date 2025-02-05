@@ -23,7 +23,8 @@ protocol TimelineControllerFactoryProtocol {
                                              timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                              mediaProvider: MediaProviderProtocol) async -> TimelineControllerProtocol?
     
-    func buildMessageFilteredTimelineController(allowedMessageTypes: [RoomMessageEventMessageType],
+    func buildMessageFilteredTimelineController(focus: TimelineFocus,
+                                                allowedMessageTypes: [TimelineAllowedMessageType],
                                                 presentation: TimelineKind.MediaPresentation,
                                                 roomProxy: JoinedRoomProxyProtocol,
                                                 timelineItemFactory: RoomTimelineItemFactoryProtocol,

@@ -41,6 +41,10 @@ function_body_length:
   warning: 100
   error: 100
 
+function_parameter_count:
+  warning: 10
+  error: 10
+
 cyclomatic_complexity:
   ignores_case_statements: true
 

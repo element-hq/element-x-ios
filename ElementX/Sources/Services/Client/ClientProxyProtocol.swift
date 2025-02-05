@@ -30,6 +30,7 @@ enum ClientProxyLoadingState {
 
 enum ClientProxyError: Error {
     case sdkError(Error)
+    case forbiddenAccess
     case zeroError(Error)
     
     case postsLimitReached
@@ -122,7 +123,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func createDirectRoom(with userID: String, expectedRoomName: String?) async -> Result<String, ClientProxyError>
     
-    // swiftlint:disable:next function_parameter_count
     func createRoom(name: String,
                     topic: String?,
                     isRoomPrivate: Bool,

@@ -18,19 +18,21 @@ enum JoinRoomScreenMode: Equatable {
     case joinable
     case restricted
     case inviteRequired
-    case invited
+    case invited(isDM: Bool)
     case knockable
     case knocked
     case banned(sender: String?, reason: String?)
+    case forbidden
 }
 
 struct JoinRoomScreenRoomDetails {
     let name: String?
     let topic: String?
     let canonicalAlias: String?
-    let avatar: RoomAvatar
-    let memberCount: Int
+    let avatar: RoomAvatar?
+    let memberCount: Int?
     let inviter: RoomInviterDetails?
+    let isDirect: Bool?
 }
 
 struct JoinRoomScreenViewState: BindableState {
@@ -39,28 +41,45 @@ struct JoinRoomScreenViewState: BindableState {
     var roomDetails: JoinRoomScreenRoomDetails?
     
     var mode: JoinRoomScreenMode = .loading
-    
+        
     var bindings = JoinRoomScreenViewStateBindings()
     
     var title: String {
-        roomDetails?.name ?? L10n.screenJoinRoomTitleNoPreview
+        if isDMInvite, let inviter = roomDetails?.inviter {
+            return inviter.displayName ?? inviter.id
+        } else {
+            return roomDetails?.name ?? L10n.screenJoinRoomTitleNoPreview
+        }
     }
     
     var subtitle: String? {
         switch mode {
-        case .loading:
-            nil
-        case .unknown:
-            L10n.screenJoinRoomSubtitleNoPreview
-        case .knocked:
-            nil
+        case .invited(isDM: true):
+            if let inviter = roomDetails?.inviter {
+                return inviter.displayName != nil ? inviter.id : nil
+            }
+            return nil
+        case .loading, .unknown, .knocked:
+            return nil
         default:
-            roomDetails?.canonicalAlias
+            return roomDetails?.canonicalAlias
         }
     }
     
-    var avatar: RoomAvatar {
-        roomDetails?.avatar ?? .room(id: roomID, name: title, avatarURL: nil)
+    var avatar: RoomAvatar? {
+        if isDMInvite, let inviter = roomDetails?.inviter {
+            return .room(id: roomID, name: inviter.displayName, avatarURL: inviter.avatarURL)
+        } else if let avatar = roomDetails?.avatar {
+            return avatar
+        } else if let name = roomDetails?.name {
+            return .room(id: roomID, name: name, avatarURL: nil)
+        } else {
+            return nil
+        }
+    }
+    
+    var isDMInvite: Bool {
+        mode == .invited(isDM: true)
     }
 }
 
@@ -80,4 +99,6 @@ enum JoinRoomScreenViewAction {
     case join
     case acceptInvite
     case declineInvite
+    case forget
+    case dismiss
 }

@@ -182,7 +182,7 @@ class TimelineMediaPreviewController: QLPreviewController {
         }
     }
     
-    private func handleFileLoaded(itemID: TimelineItemIdentifier) {
+    private func handleFileLoaded(itemID: TimelineItemIdentifier.EventOrTransactionID) {
         guard (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID else { return }
         refreshCurrentPreviewItem()
     }
@@ -301,7 +301,8 @@ private struct DownloadIndicatorView: View {
     private var shouldShowDownloadIndicator: Bool {
         switch currentItem {
         case .media(let mediaItem): mediaItem.fileHandle == nil
-        case .loading(let loadingItem): loadingItem.state == .paginating
+        case .loading(.paginatingBackwards), .loading(.paginatingForwards): true
+        case .loading: false
         }
     }
     

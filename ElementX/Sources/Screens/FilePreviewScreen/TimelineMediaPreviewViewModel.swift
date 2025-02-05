@@ -63,7 +63,11 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         
         timelineViewModel.context.$viewState.map(\.timelineState.paginationState)
             .removeDuplicates()
-            .weakAssign(to: \.state.dataSource.paginationState, on: self)
+            .sink { [weak self] paginationState in
+                guard let self else { return }
+                state.dataSource.paginationState = paginationState
+                paginateIfNeeded()
+            }
             .store(in: &cancellables)
     }
     
@@ -77,7 +81,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             switch action {
             case .viewInRoomTimeline:
                 state.previewControllerDriver.send(.dismissDetailsSheet)
-                actionsSubject.send(.viewInRoomTimeline(item.id))
+                actionsSubject.send(.viewInRoomTimeline(item.timelineItem.id))
             case .save:
                 Task { await saveCurrentItem() }
             case .redact:
@@ -111,6 +115,23 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                     mediaItem.downloadError = error
                 }
             }
+        } else {
+            paginateIfNeeded()
+        }
+    }
+    
+    private func paginateIfNeeded() {
+        switch state.currentItem {
+        case .loading(.paginatingBackwards):
+            if state.dataSource.paginationState.backward == .idle {
+                timelineViewModel.context.send(viewAction: .paginateBackwards)
+            }
+        case .loading(.paginatingForwards):
+            if state.dataSource.paginationState.forward == .idle {
+                timelineViewModel.context.send(viewAction: .paginateForwards)
+            }
+        default:
+            break
         }
     }
     
@@ -166,7 +187,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     }
     
     private func redactItem(_ item: TimelineMediaPreviewItem.Media) {
-        timelineViewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.id, action: .redact))
+        timelineViewModel.context.send(viewAction: .handleTimelineItemMenuAction(itemID: item.timelineItem.id, action: .redact))
         state.bindings.redactConfirmationItem = nil
         state.previewControllerDriver.send(.dismissDetailsSheet)
         actionsSubject.send(.dismiss)

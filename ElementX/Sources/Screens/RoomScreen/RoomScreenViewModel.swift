@@ -117,12 +117,31 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
+    func stop() {
+        // Work around QLPreviewController dismissal issues, see the InteractiveQuickLookModifier.
+        state.bindings.mediaPreviewViewModel = nil
+    }
+    
     func timelineHasScrolled(direction: ScrollDirection) {
         state.lastScrollDirection = direction
     }
     
     func setSelectedPinnedEventID(_ eventID: String) {
         state.pinnedEventsBannerState.setSelectedPinnedEventID(eventID)
+    }
+    
+    func displayMediaPreview(_ mediaPreviewViewModel: TimelineMediaPreviewViewModel) {
+        mediaPreviewViewModel.actions.sink { [weak self] action in
+            switch action {
+            case .viewInRoomTimeline:
+                fatalError("viewInRoomTimeline should not be visible on a room preview.")
+            case .dismiss:
+                self?.state.bindings.mediaPreviewViewModel = nil
+            }
+        }
+        .store(in: &cancellables)
+        
+        state.bindings.mediaPreviewViewModel = mediaPreviewViewModel
     }
     
     // MARK: - Private

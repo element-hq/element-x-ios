@@ -14,7 +14,6 @@ import XCTest
 class HomeScreenRoomTests: XCTestCase {
     var roomSummary: RoomSummary!
     
-    // swiftlint:disable:next function_parameter_count
     func setupRoomSummary(isMarkedUnread: Bool,
                           unreadMessagesCount: UInt,
                           unreadMentionsCount: UInt,

@@ -2050,6 +2050,7 @@
 		A4E885358D7DD5A072A06824 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = CCE5BF78B125320CBF3BB834 /* PostHog */; };
 		A51C65E5A3C9F2464A91A380 /* AuthenticationClientBuilderFactoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0554FEA301486A8CFA475D5A /* AuthenticationClientBuilderFactoryMock.swift */; };
 		A52090A4FE0DB826578DFC03 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0724EBDFE8BB4C9E5547C57D /* Client.swift */; };
+		A588572ED0EB18D947B32A5E /* SendInviteConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F276F31C1AEC19E52B951B62 /* SendInviteConfirmationView.swift */; };
 		A5B455D1A6DADF7476F7B417 /* EmojiProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCCE3D12B0A9C6E559B5B5A /* EmojiProviderProtocol.swift */; };
 		A5B9EF45C7B8ACEB4954AE36 /* LoginScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9780389F8A53E4D26E23DD03 /* LoginScreenViewModelProtocol.swift */; };
 		A5D551E5691749066E0E0C44 /* RoomDetailsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837B440C4705E4B899BCB899 /* RoomDetailsScreenViewModel.swift */; };
@@ -3848,6 +3849,7 @@
 		F174A5627CDB3CAF280D1880 /* EmojiPickerScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPickerScreenModels.swift; sourceTree = "<group>"; };
 		F17EFA1D3D09FC2F9C5E1CB2 /* MediaProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaProvider.swift; sourceTree = "<group>"; };
 		F1B8500C152BC59445647DA8 /* UnsupportedRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsupportedRoomTimelineItem.swift; sourceTree = "<group>"; };
+		F276F31C1AEC19E52B951B62 /* SendInviteConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendInviteConfirmationView.swift; sourceTree = "<group>"; };
 		F2E4EF80DFB8FE7C4469B15D /* RoomDirectorySearchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDirectorySearchScreen.swift; sourceTree = "<group>"; };
 		F31F59030205A6F65B057E1A /* MatrixEntityRegexTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixEntityRegexTests.swift; sourceTree = "<group>"; };
 		F348B5F2C12F9D4F4B4D3884 /* VideoRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRoomTimelineItem.swift; sourceTree = "<group>"; };
@@ -6836,6 +6838,7 @@
 		A7F3784CAF9F4CF654BC52CD /* View */ = {
 			isa = PBXGroup;
 			children = (
+				F276F31C1AEC19E52B951B62 /* SendInviteConfirmationView.swift */,
 				6861FE915C7B5466E6962BBA /* StartChatScreen.swift */,
 			);
 			path = View;
@@ -10640,6 +10643,7 @@
 				6B80C24A52411EAF10E06E96 /* SecurityAndPrivacyScreenModels.swift in Sources */,
 				7C545FFEC9930F7247352593 /* SecurityAndPrivacyScreenViewModel.swift in Sources */,
 				0D617A152D099D94271D3BA8 /* SecurityAndPrivacyScreenViewModelProtocol.swift in Sources */,
+				A588572ED0EB18D947B32A5E /* SendInviteConfirmationView.swift in Sources */,
 				08547E55DD3686A84550996D /* SeparatorMediaEventsTimelineView.swift in Sources */,
 				14E99D27628B1A6F0CB46FEA /* SeparatorRoomTimelineItem.swift in Sources */,
 				5341D48F833E3E30F16FA2A3 /* SeparatorRoomTimelineView.swift in Sources */,

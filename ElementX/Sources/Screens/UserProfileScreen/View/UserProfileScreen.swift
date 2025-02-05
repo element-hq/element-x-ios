@@ -22,6 +22,12 @@ struct UserProfileScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .alert(item: $context.alertInfo)
+        .sheet(item: $context.inviteConfirmationUser) { user in
+            SendInviteConfirmationView(userToInvite: user,
+                                       mediaProvider: context.mediaProvider) {
+                context.send(viewAction: .createDirectChat)
+            }
+        }
         .track(screen: .User)
         .interactiveQuickLook(item: $context.mediaPreviewItem, allowEditing: false)
     }

@@ -423,7 +423,6 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    // swiftlint:disable:next function_parameter_count
     func createRoom(name: String,
                     topic: String?,
                     isRoomPrivate: Bool,
@@ -462,6 +461,9 @@ class ClientProxy: ClientProxyProtocol {
             await waitForRoomToSync(roomID: roomID, timeout: .seconds(30))
             
             return .success(())
+        } catch ClientError.MatrixApi(.forbidden, _, _) {
+            MXLog.error("Failed joining roomAlias: \(roomID) forbidden")
+            return .failure(.forbiddenAccess)
         } catch {
             MXLog.error("Failed joining roomID: \(roomID) with error: \(error)")
             return .failure(.sdkError(error))
@@ -475,6 +477,9 @@ class ClientProxy: ClientProxyProtocol {
             await waitForRoomToSync(roomID: room.id(), timeout: .seconds(30))
             
             return .success(())
+        } catch ClientError.MatrixApi(.forbidden, _, _) {
+            MXLog.error("Failed joining roomAlias: \(roomAlias) forbidden")
+            return .failure(.forbiddenAccess)
         } catch {
             MXLog.error("Failed joining roomAlias: \(roomAlias) with error: \(error)")
             return .failure(.sdkError(error))

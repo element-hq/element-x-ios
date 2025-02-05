@@ -76,66 +76,6 @@ struct RoomStateEventStringBuilder {
         }
     }
     
-    func buildString(for change: MembershipChange?,
-                     member: ZMatrixUser?,
-                     sender: ZMatrixUser?,
-                     isOutgoing: Bool) -> String? {
-        guard let change else {
-            MXLog.verbose("Filtering timeline item for membership change that is nil")
-            return nil
-        }
-        
-        let senderIsYou = isOutgoing
-        let memberIsYou = member?.matrixId == userID
-        let member = member?.displayName ?? ""
-        let senderDisplayName = sender?.displayName ?? ""
-        
-        switch change {
-        case .joined:
-            return memberIsYou ? L10n.stateEventRoomJoinByYou : L10n.stateEventRoomJoin(senderDisplayName)
-        case .left:
-            return memberIsYou ? L10n.stateEventRoomLeaveByYou : L10n.stateEventRoomLeave(member)
-        case .banned, .kickedAndBanned:
-            return senderIsYou ? L10n.stateEventRoomBanByYou(member) : L10n.stateEventRoomBan(senderDisplayName, member)
-        case .unbanned:
-            return senderIsYou ? L10n.stateEventRoomUnbanByYou(member) : L10n.stateEventRoomUnban(senderDisplayName, member)
-        case .kicked:
-            return senderIsYou ? L10n.stateEventRoomRemoveByYou(member) : L10n.stateEventRoomRemove(senderDisplayName, member)
-        case .invited:
-            if senderIsYou {
-                return L10n.stateEventRoomInviteByYou(member)
-            } else if memberIsYou {
-                return L10n.stateEventRoomInviteYou(senderDisplayName)
-            } else {
-                return L10n.stateEventRoomInvite(senderDisplayName, member)
-            }
-        case .invitationAccepted:
-            return memberIsYou ? L10n.stateEventRoomInviteAcceptedByYou : L10n.stateEventRoomInviteAccepted(member)
-        case .invitationRejected:
-            return memberIsYou ? L10n.stateEventRoomRejectByYou : L10n.stateEventRoomReject(senderDisplayName)
-        case .invitationRevoked:
-            return senderIsYou ? L10n.stateEventRoomThirdPartyRevokedInviteByYou(member) : L10n.stateEventRoomThirdPartyRevokedInvite(senderDisplayName, member)
-        case .knocked:
-            return memberIsYou ? L10n.stateEventRoomKnockByYou : L10n.stateEventRoomKnock(member)
-        case .knockAccepted:
-            return senderIsYou ? L10n.stateEventRoomKnockAcceptedByYou(senderDisplayName) : L10n.stateEventRoomKnockAccepted(senderDisplayName, member)
-        case .knockRetracted:
-            return memberIsYou ? L10n.stateEventRoomKnockRetractedByYou : L10n.stateEventRoomKnockRetracted(member)
-        case .knockDenied:
-            if senderIsYou {
-                return L10n.stateEventRoomKnockDeniedByYou(member)
-            } else if memberIsYou {
-                return L10n.stateEventRoomKnockDeniedYou(senderDisplayName)
-            } else {
-                return L10n.stateEventRoomKnockDenied(senderDisplayName, member)
-            }
-        case .none, .error, .notImplemented: // Not useful information for the user.
-            MXLog.verbose("Filtering timeline item for membership change: \(change)")
-            return nil
-        }
-    }
-    
-    // swiftlint:disable:next function_parameter_count
     func buildProfileChangeString(displayName: String?, previousDisplayName: String?,
                                   avatarURLString: String?, previousAvatarURLString: String?,
                                   member: String, memberIsYou: Bool) -> String? {

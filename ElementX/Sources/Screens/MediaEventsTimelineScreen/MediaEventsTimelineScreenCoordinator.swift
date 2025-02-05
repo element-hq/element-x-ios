@@ -79,6 +79,10 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
             .store(in: &cancellables)
     }
     
+    func stop() {
+        viewModel.stop()
+    }
+    
     func toPresentable() -> AnyView {
         AnyView(MediaEventsTimelineScreen(context: viewModel.context))
     }

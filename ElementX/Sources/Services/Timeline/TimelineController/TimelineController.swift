@@ -42,7 +42,7 @@ class TimelineController: TimelineControllerProtocol {
     }
     
     var timelineKind: TimelineKind {
-        liveTimelineProvider.kind
+        activeTimelineProvider.kind
     }
     
     init(roomProxy: JoinedRoomProxyProtocol,

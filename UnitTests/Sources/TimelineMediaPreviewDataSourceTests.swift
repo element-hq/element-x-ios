@@ -23,7 +23,7 @@ class TimelineMediaPreviewDataSourceTests: XCTestCase {
         initialMediaViewStates = initialMediaItems.map { RoomTimelineItemViewState(item: $0, groupStyle: .single) }
     }
     
-    func testInitialItems() -> TimelineMediaPreviewDataSource {
+    func testInitialItems() throws -> TimelineMediaPreviewDataSource {
         // Given a data source built with the initial items.
         let dataSource = TimelineMediaPreviewDataSource(itemViewStates: initialMediaViewStates,
                                                         initialItem: initialMediaItems[initialItemIndex],
@@ -32,12 +32,13 @@ class TimelineMediaPreviewDataSourceTests: XCTestCase {
         
         // When the preview controller displays the data.
         let previewItemCount = dataSource.numberOfPreviewItems(in: previewController)
-        let displayedItem = dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media
+        let displayedItem = try XCTUnwrap(dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media,
+                                          "A preview item should be found.")
         
         // Then the preview controller should be showing the initial item and the data source should reflect this.
         XCTAssertEqual(dataSource.initialItemIndex, initialItemIndex + initialPadding, "The initial item index should be padded for the preview controller.")
-        XCTAssertEqual(displayedItem?.id, initialMediaItems[initialItemIndex].id, "The displayed item should be the initial item.")
-        XCTAssertEqual(dataSource.currentMediaItemID, initialMediaItems[initialItemIndex].id, "The current item should also be the initial item.")
+        XCTAssertEqual(displayedItem.id, initialMediaItems[initialItemIndex].id.eventOrTransactionID, "The displayed item should be the initial item.")
+        XCTAssertEqual(dataSource.currentMediaItemID, initialMediaItems[initialItemIndex].id.eventOrTransactionID, "The current item should also be the initial item.")
         
         XCTAssertEqual(dataSource.previewItems.count, initialMediaViewStates.count, "The initial count of preview items should be correct.")
         XCTAssertEqual(previewItemCount, initialMediaViewStates.count + (2 * initialPadding), "The initial item count should be padded for the preview controller.")
@@ -45,17 +46,15 @@ class TimelineMediaPreviewDataSourceTests: XCTestCase {
         return dataSource
     }
     
-    func testCurrentUpdateItem() {
+    func testCurrentUpdateItem() throws {
         // Given a data source built with the initial items.
         let dataSource = TimelineMediaPreviewDataSource(itemViewStates: initialMediaViewStates,
                                                         initialItem: initialMediaItems[initialItemIndex],
                                                         paginationState: .initial)
         
         // When a different item is displayed.
-        guard let previewItem = dataSource.previewController(previewController, previewItemAt: 1 + initialPadding) as? TimelineMediaPreviewItem.Media else {
-            XCTFail("A preview item should be found.")
-            return
-        }
+        let previewItem = try XCTUnwrap(dataSource.previewController(previewController, previewItemAt: 1 + initialPadding) as? TimelineMediaPreviewItem.Media,
+                                        "A preview item should be found.")
         dataSource.updateCurrentItem(.media(previewItem))
         
         // Then the data source should reflect the change of item.
@@ -74,7 +73,7 @@ class TimelineMediaPreviewDataSourceTests: XCTestCase {
     
     func testUpdatedItems() async throws {
         // Given a data source built with the initial items.
-        let dataSource = testInitialItems()
+        let dataSource = try testInitialItems()
         
         // When one of the items changes but no pagination has occurred.
         let deferred = deferFailure(dataSource.previewItemsPaginationPublisher, timeout: 1) { _ in true }
@@ -84,9 +83,9 @@ class TimelineMediaPreviewDataSourceTests: XCTestCase {
         try await deferred.fulfill()
         
         let previewItemCount = dataSource.numberOfPreviewItems(in: previewController)
-        let displayedItem = dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media
-        XCTAssertEqual(displayedItem?.id, initialMediaItems[initialItemIndex].id, "The displayed item should not change.")
-        XCTAssertEqual(dataSource.currentMediaItemID, initialMediaItems[initialItemIndex].id, "The current item should not change.")
+        let displayedItem = try XCTUnwrap(dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media)
+        XCTAssertEqual(displayedItem.id, initialMediaItems[initialItemIndex].id.eventOrTransactionID, "The displayed item should not change.")
+        XCTAssertEqual(dataSource.currentMediaItemID, initialMediaItems[initialItemIndex].id.eventOrTransactionID, "The current item should not change.")
         
         XCTAssertEqual(dataSource.previewItems.count, initialMediaViewStates.count, "The number of items should not change.")
         XCTAssertEqual(previewItemCount, initialMediaViewStates.count + (2 * initialPadding), "The padded number of items should not change.")
@@ -94,7 +93,7 @@ class TimelineMediaPreviewDataSourceTests: XCTestCase {
     
     func testPagination() async throws {
         // Given a data source built with the initial items.
-        let dataSource = testInitialItems()
+        let dataSource = try testInitialItems()
         
         // When more items are loaded in a back pagination.
         var deferred = deferFulfillment(dataSource.previewItemsPaginationPublisher) { _ in true }
@@ -107,9 +106,9 @@ class TimelineMediaPreviewDataSourceTests: XCTestCase {
         XCTAssertEqual(dataSource.previewItems.count, newViewStates.count, "The new items should be added.")
         
         var previewItemCount = dataSource.numberOfPreviewItems(in: previewController)
-        var displayedItem = dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media
-        XCTAssertEqual(displayedItem?.id, initialMediaItems[initialItemIndex].id, "The displayed item should not change.")
-        XCTAssertEqual(dataSource.currentMediaItemID, initialMediaItems[initialItemIndex].id, "The current item should not change.")
+        var displayedItem = try XCTUnwrap(dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media)
+        XCTAssertEqual(displayedItem.id, initialMediaItems[initialItemIndex].id.eventOrTransactionID, "The displayed item should not change.")
+        XCTAssertEqual(dataSource.currentMediaItemID, initialMediaItems[initialItemIndex].id.eventOrTransactionID, "The current item should not change.")
         XCTAssertEqual(previewItemCount, initialMediaViewStates.count + (2 * initialPadding), "The number of items should not change")
         
         // When more items are loaded in a forward pagination or sync.
@@ -123,16 +122,16 @@ class TimelineMediaPreviewDataSourceTests: XCTestCase {
         XCTAssertEqual(dataSource.previewItems.count, newViewStates.count, "The new items should be added.")
         
         previewItemCount = dataSource.numberOfPreviewItems(in: previewController)
-        displayedItem = dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media
-        XCTAssertEqual(displayedItem?.id, initialMediaItems[initialItemIndex].id, "The displayed item should not change.")
-        XCTAssertEqual(dataSource.currentMediaItemID, initialMediaItems[initialItemIndex].id, "The current item should not change.")
+        displayedItem = try XCTUnwrap(dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media)
+        XCTAssertEqual(displayedItem.id, initialMediaItems[initialItemIndex].id.eventOrTransactionID, "The displayed item should not change.")
+        XCTAssertEqual(dataSource.currentMediaItemID, initialMediaItems[initialItemIndex].id.eventOrTransactionID, "The current item should not change.")
         XCTAssertEqual(previewItemCount, initialMediaViewStates.count + (2 * initialPadding), "The number of items should not change")
     }
     
     func testPaginationLimits() async throws {
         // Given a data source with a small amount of padding remaining.
         initialPadding = 2
-        let dataSource = testInitialItems()
+        let dataSource = try testInitialItems()
         
         // When paginating backwards by more than the available padding.
         var deferred = deferFulfillment(dataSource.previewItemsPaginationPublisher) { _ in true }
@@ -146,9 +145,9 @@ class TimelineMediaPreviewDataSourceTests: XCTestCase {
         XCTAssertEqual(dataSource.previewItems.count, newViewStates.count, "The new items should be added.")
         
         var previewItemCount = dataSource.numberOfPreviewItems(in: previewController)
-        var displayedItem = dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media
-        XCTAssertEqual(displayedItem?.id, initialMediaItems[initialItemIndex].id, "The displayed item should not change.")
-        XCTAssertEqual(dataSource.currentMediaItemID, initialMediaItems[initialItemIndex].id, "The current item should not change.")
+        var displayedItem = try XCTUnwrap(dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media)
+        XCTAssertEqual(displayedItem.id, initialMediaItems[initialItemIndex].id.eventOrTransactionID, "The displayed item should not change.")
+        XCTAssertEqual(dataSource.currentMediaItemID, initialMediaItems[initialItemIndex].id.eventOrTransactionID, "The current item should not change.")
         XCTAssertEqual(previewItemCount, initialMediaViewStates.count + (2 * initialPadding), "The number of items should not change")
         
         // When paginating forwards by more than the available padding.
@@ -162,10 +161,90 @@ class TimelineMediaPreviewDataSourceTests: XCTestCase {
         XCTAssertEqual(dataSource.previewItems.count, newViewStates.count, "The new items should be added.")
         
         previewItemCount = dataSource.numberOfPreviewItems(in: previewController)
-        displayedItem = dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media
-        XCTAssertEqual(displayedItem?.id, initialMediaItems[initialItemIndex].id, "The displayed item should not change.")
-        XCTAssertEqual(dataSource.currentMediaItemID, initialMediaItems[initialItemIndex].id, "The current item should not change.")
+        displayedItem = try XCTUnwrap(dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media)
+        XCTAssertEqual(displayedItem.id, initialMediaItems[initialItemIndex].id.eventOrTransactionID, "The displayed item should not change.")
+        XCTAssertEqual(dataSource.currentMediaItemID, initialMediaItems[initialItemIndex].id.eventOrTransactionID, "The current item should not change.")
         XCTAssertEqual(previewItemCount, initialMediaViewStates.count + (2 * initialPadding), "The number of items should not change")
+    }
+    
+    func testEmptyTimeline() async throws {
+        // Given a data source built with no timeline items loaded.
+        let initialItem = initialMediaItems[initialItemIndex]
+        let dataSource = TimelineMediaPreviewDataSource(itemViewStates: [],
+                                                        initialItem: initialItem,
+                                                        initialPadding: initialPadding,
+                                                        paginationState: .initial)
+        
+        // When the preview controller displays the data.
+        var previewItemCount = dataSource.numberOfPreviewItems(in: previewController)
+        var displayedItem = try XCTUnwrap(dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media,
+                                          "A preview item should be found.")
+        
+        // Then the preview controller should always show the initial item.
+        XCTAssertEqual(dataSource.previewItems.count, 1, "The initial item should be in the preview items array.")
+        XCTAssertEqual(previewItemCount, 1 + (2 * initialPadding), "The initial item count should be padded for the preview controller.")
+        XCTAssertEqual(dataSource.initialItemIndex, initialPadding, "The initial item index should be padded for the preview controller.")
+        
+        XCTAssertEqual(displayedItem.id, initialItem.id.eventOrTransactionID, "The displayed item should be the initial item.")
+        XCTAssertEqual(dataSource.currentMediaItemID, initialItem.id.eventOrTransactionID, "The current item should also be the initial item.")
+        
+        // When the timeline loads the initial items.
+        let deferred = deferFulfillment(dataSource.previewItemsPaginationPublisher) { _ in true }
+        let loadedItems = initialMediaItems.map { RoomTimelineItemViewState(item: $0, groupStyle: .single) }
+        dataSource.updatePreviewItems(itemViewStates: loadedItems)
+        try await deferred.fulfill()
+        
+        // Then the preview controller should still show the initial item with the other items loaded around it.
+        previewItemCount = dataSource.numberOfPreviewItems(in: previewController)
+        displayedItem = try XCTUnwrap(dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media,
+                                      "A preview item should be found.")
+        
+        XCTAssertEqual(dataSource.previewItems.count, initialMediaViewStates.count, "The preview items should now be loaded.")
+        XCTAssertEqual(previewItemCount, 1 + (2 * initialPadding), "The item count should not change as the padding will be reduced.")
+        XCTAssertEqual(dataSource.initialItemIndex, initialPadding, "The item index should not change.")
+        
+        XCTAssertEqual(displayedItem.id, initialMediaItems[initialItemIndex].id.eventOrTransactionID, "The displayed item should not change.")
+        XCTAssertEqual(dataSource.currentMediaItemID, initialMediaItems[initialItemIndex].id.eventOrTransactionID, "The current item should not change.")
+    }
+    
+    func testTimelineUpdateWithoutInitialItem() async throws {
+        // Given a data source built with no timeline items loaded.
+        let initialItem = initialMediaItems[initialItemIndex]
+        let dataSource = TimelineMediaPreviewDataSource(itemViewStates: [],
+                                                        initialItem: initialItem,
+                                                        initialPadding: initialPadding,
+                                                        paginationState: .initial)
+        
+        // When the preview controller displays the data.
+        var previewItemCount = dataSource.numberOfPreviewItems(in: previewController)
+        var displayedItem = try XCTUnwrap(dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media,
+                                          "A preview item should be found.")
+        
+        // Then the preview controller should always show the initial item.
+        XCTAssertEqual(dataSource.previewItems.count, 1, "The initial item should be in the preview items array.")
+        XCTAssertEqual(previewItemCount, 1 + (2 * initialPadding), "The initial item count should be padded for the preview controller.")
+        XCTAssertEqual(dataSource.initialItemIndex, initialPadding, "The initial item index should be padded for the preview controller.")
+        
+        XCTAssertEqual(displayedItem.id, initialItem.id.eventOrTransactionID, "The displayed item should be the initial item.")
+        XCTAssertEqual(dataSource.currentMediaItemID, initialItem.id.eventOrTransactionID, "The current item should also be the initial item.")
+        
+        // When the timeline loads more items but still doesn't include the initial item.
+        let failure = deferFailure(dataSource.previewItemsPaginationPublisher, timeout: 1) { _ in true }
+        let loadedItems = newChunk().map { RoomTimelineItemViewState(item: $0, groupStyle: .single) }
+        dataSource.updatePreviewItems(itemViewStates: loadedItems)
+        try await failure.fulfill()
+        
+        // Then the preview controller shouldn't update the available preview items.
+        previewItemCount = dataSource.numberOfPreviewItems(in: previewController)
+        displayedItem = try XCTUnwrap(dataSource.previewController(previewController, previewItemAt: dataSource.initialItemIndex) as? TimelineMediaPreviewItem.Media,
+                                      "A preview item should be found.")
+        
+        XCTAssertEqual(dataSource.previewItems.count, 1, "No new items should have been added to the array.")
+        XCTAssertEqual(previewItemCount, 1 + (2 * initialPadding), "The initial item count should not change.")
+        XCTAssertEqual(dataSource.initialItemIndex, initialPadding, "The initial item index should not change.")
+        
+        XCTAssertEqual(displayedItem.id, initialItem.id.eventOrTransactionID, "The displayed item should not change.")
+        XCTAssertEqual(dataSource.currentMediaItemID, initialItem.id.eventOrTransactionID, "The current item not change.")
     }
     
     // MARK: Helpers
@@ -178,7 +257,7 @@ class TimelineMediaPreviewDataSourceTests: XCTestCase {
 }
 
 private extension TimelineMediaPreviewDataSource {
-    var currentMediaItemID: TimelineItemIdentifier? {
+    var currentMediaItemID: TimelineItemIdentifier.EventOrTransactionID? {
         switch currentItem {
         case .media(let mediaItem): mediaItem.id
         case .loading: nil
