@@ -36,6 +36,7 @@ struct UserProfileScreenViewState: BindableState {
 
 struct UserProfileScreenViewStateBindings {
     var alertInfo: AlertInfo<UserProfileScreenAlertType>?
+    var inviteConfirmationUser: UserProfileProxy?
     
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: MediaPreviewItem?
@@ -44,6 +45,7 @@ struct UserProfileScreenViewStateBindings {
 enum UserProfileScreenViewAction {
     case displayAvatar(URL)
     case openDirectChat
+    case createDirectChat
     case startCall(roomID: String)
     case dismiss
 }
@@ -51,5 +53,4 @@ enum UserProfileScreenViewAction {
 enum UserProfileScreenAlertType: Hashable {
     case failedOpeningDirectChat
     case unknown
-    case createDirectChatConfirmation
 }

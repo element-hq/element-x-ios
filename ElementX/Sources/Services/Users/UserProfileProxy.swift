@@ -55,3 +55,7 @@ extension SearchUsersResultsProxy {
         limited = sdkResults.limited
     }
 }
+
+extension UserProfileProxy: Identifiable {
+    var id: String { userID }
+}
