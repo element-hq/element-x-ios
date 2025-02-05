@@ -203,7 +203,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                             internalIdPrefix: nil,
                                                                                             dateDividerMode: .monthly))
             
-            let timeline = TimelineProxy(timeline: sdkTimeline, kind: .media(presentation))
+            let timeline = TimelineProxy(timeline: sdkTimeline, roomId: room.id(), kind: .media(presentation), zeroChatApi: zeroChatApi)
             await timeline.subscribeForUpdates()
             
             return .success(timeline)

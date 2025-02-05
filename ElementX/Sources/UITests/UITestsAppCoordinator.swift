@@ -698,7 +698,8 @@ class MockScreen: Identifiable {
                                                         initialFocussedEventID: nil,
                                                         timelineItemFactory: RoomTimelineItemFactory(userID: "@alice:matrix.org",
                                                                                                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                                                                     stateEventStringBuilder: RoomStateEventStringBuilder(userID: "@alice:matrix.org")),
+                                                                                                     stateEventStringBuilder: RoomStateEventStringBuilder(userID: "@alice:matrix.org"),
+                                                                                                     zeroAttachmentService: zeroAttachmentService),
                                                         mediaProvider: MediaProviderMock(configuration: .init()),
                                                         appSettings: ServiceLocator.shared.settings)
             

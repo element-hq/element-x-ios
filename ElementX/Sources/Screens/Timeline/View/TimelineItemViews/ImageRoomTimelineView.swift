@@ -27,7 +27,7 @@ struct ImageRoomTimelineView: View {
                             .startLoadingBeforeViewAppear(false)
                     } else {
                         LoadableImage(mediaSource: timelineItem.content.imageInfo.source,
-                                      mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
+                                      mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID),
                                       blurhash: timelineItem.content.blurhash,
                                       size: timelineItem.content.imageInfo.size,
                                       mediaProvider: context?.mediaProvider) {

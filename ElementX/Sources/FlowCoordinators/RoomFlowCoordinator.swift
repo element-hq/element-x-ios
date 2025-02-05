@@ -687,7 +687,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let userID = userSession.clientProxy.userID
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
+                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
+                                                          zeroAttachmentService: zeroAttachmentService)
         let timelineController = timelineControllerFactory.buildTimelineController(roomProxy: roomProxy,
                                                                                    initialFocussedEventID: presentationAction?.focusedEvent?.eventID,
                                                                                    timelineItemFactory: timelineItemFactory,
