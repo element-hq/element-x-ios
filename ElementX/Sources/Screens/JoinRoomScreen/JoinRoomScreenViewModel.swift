@@ -86,8 +86,8 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             self.roomPreview = roomPreview
             await updateRoomDetails()
         case .failure(.roomPreviewIsPrivate):
+            // Handled by the mode, we don't need an error indicator.
             isLoadingPreview = false
-        // Handled by the mode, we don't need an error indicator.
         case .failure:
             hideLoadingIndicator()
             state.bindings.alertInfo = .init(id: .loadingError,
