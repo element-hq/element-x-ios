@@ -76,7 +76,6 @@ struct RoomStateEventStringBuilder {
         }
     }
     
-    // swiftlint:disable:next function_parameter_count
     func buildProfileChangeString(displayName: String?, previousDisplayName: String?,
                                   avatarURLString: String?, previousAvatarURLString: String?,
                                   member: String, memberIsYou: Bool) -> String? {

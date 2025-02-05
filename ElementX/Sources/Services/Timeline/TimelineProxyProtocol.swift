@@ -14,8 +14,18 @@ enum TimelineKind: Equatable {
     case detached
     case pinned
     
-    enum MediaPresentation { case roomScreen, mediaFilesScreen }
+    enum MediaPresentation { case roomScreenLive, roomScreenDetached, pinnedEventsScreen, mediaFilesScreen }
     case media(MediaPresentation)
+}
+
+enum TimelineFocus {
+    case live
+    case eventID(String)
+    case pinned
+}
+
+enum TimelineAllowedMessageType {
+    case audio, file, image, video
 }
 
 enum TimelineProxyError: Error {

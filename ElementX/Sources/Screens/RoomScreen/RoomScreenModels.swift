@@ -67,7 +67,10 @@ struct RoomScreenViewState: BindableState {
     var bindings: RoomScreenViewStateBindings
 }
 
-struct RoomScreenViewStateBindings { }
+struct RoomScreenViewStateBindings {
+    /// The view model used to present a QuickLook media preview.
+    var mediaPreviewViewModel: TimelineMediaPreviewViewModel?
+}
 
 enum RoomScreenFooterViewAction {
     case resolvePinViolation(userID: String)

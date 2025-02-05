@@ -502,7 +502,7 @@ class TimelineInteractionHandler {
     }
     
     func processItemTap(_ itemID: TimelineItemIdentifier) async -> TimelineControllerAction {
-        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) else {
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) as? EventBasedMessageTimelineItemProtocol else {
             return .none
         }
         
@@ -510,8 +510,14 @@ class TimelineInteractionHandler {
         case let item as LocationRoomTimelineItem:
             guard let geoURI = item.content.geoURI else { return .none }
             return .displayLocation(body: item.content.body, geoURI: geoURI, description: item.content.description)
+        case is ImageRoomTimelineItem,
+             is VideoRoomTimelineItem:
+            return await mediaPreviewAction(for: timelineItem, messageTypes: [.image, .video])
+        case is AudioRoomTimelineItem,
+             is FileRoomTimelineItem:
+            return await mediaPreviewAction(for: timelineItem, messageTypes: [.audio, .file])
         default:
-            return await displayMediaActionIfPossible(timelineItem: timelineItem)
+            return .none
         }
     }
     
@@ -528,39 +534,57 @@ class TimelineInteractionHandler {
         }
     }
     
-    private func displayMediaActionIfPossible(timelineItem: RoomTimelineItemProtocol) async -> TimelineControllerAction {
-        var source: MediaSourceProxy?
-        var filename: String
-        var caption: String?
-        
-        switch timelineItem {
-        case let item as ImageRoomTimelineItem:
-            source = item.content.imageInfo.source
-            filename = item.content.filename
-            caption = item.content.caption
-        case let item as VideoRoomTimelineItem:
-            source = item.content.videoInfo.source
-            filename = item.content.filename
-            caption = item.content.caption
-        case let item as FileRoomTimelineItem:
-            source = item.content.source
-            filename = item.content.filename
-            caption = item.content.caption
-        case let item as AudioRoomTimelineItem:
-            // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
-            source = item.content.source
-            filename = item.content.filename
-            caption = item.content.caption
-        default:
-            return .none
+    private func mediaPreviewAction(for item: EventBasedMessageTimelineItemProtocol, messageTypes: [TimelineAllowedMessageType]) async -> TimelineControllerAction {
+        var newTimelineFocus: TimelineFocus?
+        var newTimelinePresentation: TimelineKind.MediaPresentation?
+        switch timelineController.timelineKind {
+        case .live:
+            newTimelineFocus = .live
+            newTimelinePresentation = .roomScreenLive
+        case .detached:
+            guard case let .event(_, eventOrTransactionID: .eventID(eventID)) = item.id else {
+                MXLog.error("Unexpected event type on a detached timeline.")
+                return .none
+            }
+            newTimelineFocus = .eventID(eventID)
+            newTimelinePresentation = .roomScreenDetached
+        case .pinned:
+            newTimelineFocus = .pinned
+            newTimelinePresentation = .pinnedEventsScreen
+        case .media:
+            break // We don't need to create a new timeline as it is already filtered.
         }
-
-        guard let source else { return .none }
-        switch await mediaProvider.loadFileFromSource(source, filename: filename) {
-        case .success(let file):
-            return .displayMediaFile(file: file, title: caption ?? filename)
-        case .failure:
-            return .none
+        
+        if let newTimelineFocus, let newTimelinePresentation {
+            let timelineItemFactory = RoomTimelineItemFactory(userID: roomProxy.ownUserID,
+                                                              attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                                              stateEventStringBuilder: RoomStateEventStringBuilder(userID: roomProxy.ownUserID))
+            
+            guard case let .success(timelineController) = await timelineControllerFactory.buildMessageFilteredTimelineController(focus: newTimelineFocus,
+                                                                                                                                 allowedMessageTypes: messageTypes,
+                                                                                                                                 presentation: newTimelinePresentation,
+                                                                                                                                 roomProxy: roomProxy,
+                                                                                                                                 timelineItemFactory: timelineItemFactory,
+                                                                                                                                 mediaProvider: mediaProvider) else {
+                MXLog.error("Failed presenting media timeline")
+                return .none
+            }
+            
+            let timelineViewModel = TimelineViewModel(roomProxy: roomProxy,
+                                                      timelineController: timelineController,
+                                                      mediaProvider: mediaProvider,
+                                                      mediaPlayerProvider: mediaPlayerProvider,
+                                                      voiceMessageMediaManager: voiceMessageMediaManager,
+                                                      userIndicatorController: userIndicatorController,
+                                                      appMediator: appMediator,
+                                                      appSettings: appSettings,
+                                                      analyticsService: analyticsService,
+                                                      emojiProvider: emojiProvider,
+                                                      timelineControllerFactory: timelineControllerFactory)
+            
+            return .displayMediaPreview(item: item, timelineViewModel: .new(timelineViewModel))
+        } else {
+            return .displayMediaPreview(item: item, timelineViewModel: .active)
         }
     }
 }

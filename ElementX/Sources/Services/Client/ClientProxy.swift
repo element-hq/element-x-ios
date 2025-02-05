@@ -375,7 +375,6 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    // swiftlint:disable:next function_parameter_count
     func createRoom(name: String,
                     topic: String?,
                     isRoomPrivate: Bool,

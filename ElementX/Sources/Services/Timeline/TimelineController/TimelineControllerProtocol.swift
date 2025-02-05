@@ -16,7 +16,14 @@ enum TimelineControllerCallback {
 }
 
 enum TimelineControllerAction {
-    case displayMediaFile(file: MediaFileHandleProxy, title: String?)
+    enum TimelineViewModelKind {
+        /// Use the active timeline view model.
+        case active
+        /// Use the newly generated view model provided.
+        case new(TimelineViewModel)
+    }
+    
+    case displayMediaPreview(item: EventBasedMessageTimelineItemProtocol, timelineViewModel: TimelineViewModelKind)
     case displayLocation(body: String, geoURI: GeoURI, description: String?)
     case none
 }

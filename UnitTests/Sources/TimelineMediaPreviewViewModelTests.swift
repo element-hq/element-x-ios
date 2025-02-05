@@ -84,18 +84,22 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.currentItem, .media(context.viewState.dataSource.previewItems[0]))
     }
     
-    func testLoadingMoreItem() async throws {
+    func testLoadingMoreItems() async throws {
         // Given a view model with a loaded item.
         try await testLoadingItem()
+        XCTAssertEqual(timelineController.paginateBackwardsCallCount, 0)
         
-        // When swiping to a "loading more" item.
+        // When swiping to a "loading more" item and there are more media items to load.
+        timelineController.paginationState = .init(backward: .idle, forward: .timelineEndReached)
+        timelineController.backPaginationResponses.append(RoomTimelineItemFixtures.mediaChunk)
         let failure = deferFailure(viewModel.state.previewControllerDriver, timeout: 1) { $0.isItemLoaded }
-        context.send(viewAction: .updateCurrentItem(.loading(.paginating)))
+        context.send(viewAction: .updateCurrentItem(.loading(.paginatingBackwards)))
         try await failure.fulfill()
         
-        // Then there should no longer be a media preview and no attempt should be made to load one.
+        // Then there should no longer be a media preview and instead of loading any media, a pagination request should be made.
         XCTAssertEqual(mediaProvider.loadFileFromSourceFilenameCallsCount, 1)
-        XCTAssertEqual(context.viewState.currentItem, .loading(.paginating))
+        XCTAssertEqual(context.viewState.currentItem, .loading(.paginatingBackwards)) // Note: This item only changes when the preview controller handles the new items.
+        XCTAssertEqual(timelineController.paginateBackwardsCallCount, 1)
     }
     
     func testPagination() async throws {
@@ -130,7 +134,7 @@ class TimelineMediaPreviewViewModelTests: XCTestCase {
             return
         }
         
-        let deferred = deferFulfillment(viewModel.actions) { $0 == .viewInRoomTimeline(mediaItem.id) }
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .viewInRoomTimeline(mediaItem.timelineItem.id) }
         context.send(viewAction: .menuAction(.viewInRoomTimeline, item: mediaItem))
         
         // Then the action should be sent upwards to make this happen.
