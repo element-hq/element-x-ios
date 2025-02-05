@@ -181,6 +181,7 @@
 "common_message_removed" = "Message removed";
 "common_modern" = "Modern";
 "common_mute" = "Mute";
+"common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "No results";
 "common_no_room_name" = "No room name";
 "common_offline" = "Offline";
@@ -371,8 +372,7 @@
 "screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Invalid URL, please make sure you include the protocol (http/https) and the correct address.";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
-"screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@ (%2$@)?";
-"screen_bottom_sheet_create_dm_message_no_displayname" = "Would you like to start a chat with %1$@?";
+"screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Send invite?";
 "screen_create_room_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_room_access_section_anyone_option_title" = "Anyone";

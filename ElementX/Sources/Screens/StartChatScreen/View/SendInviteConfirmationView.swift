@@ -19,11 +19,13 @@ struct SendInviteConfirmationView: View {
     private let topPadding: CGFloat = 24
     
     private var subtitle: String {
+        let string: String
         if let displayName = userToInvite.displayName {
-            L10n.screenBottomSheetCreateDmMessage(displayName, userToInvite.userID)
+            string = L10n.commonNameAndId(displayName, userToInvite.userID)
         } else {
-            L10n.screenBottomSheetCreateDmMessageNoDisplayname(userToInvite.userID)
+            string = userToInvite.userID
         }
+        return L10n.screenBottomSheetCreateDmMessage(string)
     }
     
     var body: some View {
