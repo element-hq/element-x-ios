@@ -11,4 +11,7 @@ import Foundation
 protocol RoomPreviewProxyProtocol {
     var info: RoomPreviewInfoProxy { get }
     var ownMembershipDetails: RoomMembershipDetailsProxyProtocol? { get async }
+    
+    /// Use this function to forget the room, should only be used if the current user membership is `banned`
+    func forgetRoom() async -> Result<Void, RoomProxyError>
 }

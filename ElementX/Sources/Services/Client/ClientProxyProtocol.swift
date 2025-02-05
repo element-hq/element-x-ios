@@ -30,6 +30,7 @@ enum ClientProxyLoadingState {
 
 enum ClientProxyError: Error {
     case sdkError(Error)
+    case forbiddenAccess
     
     case invalidMedia
     case invalidServerName

@@ -13,13 +13,14 @@ extension RoomPreviewProxyMock {
         var roomID = "1"
         var canonicalAlias = "#3🌞problem:matrix.org"
         var name = "The Three-Body Problem - 三体"
-        var topic = "“Science and technology were the only keys to opening the door to the future, and people approached science with the faith and sincerity of elementary school students.”"
+        var topic: String? = "“Science and technology were the only keys to opening the door to the future, and people approached science with the faith and sincerity of elementary school students.”"
         var avatarURL = URL.mockMXCAvatar.absoluteString
         var numJoinedMembers = UInt64(100)
         var numActiveMembers = UInt64(100)
         var roomType = RoomType.room
         var membership: Membership?
         var joinRule: JoinRule
+        var isDirect = false
     }
     
     static var joinable: RoomPreviewProxyMock {
@@ -40,6 +41,14 @@ extension RoomPreviewProxyMock {
         }
         
         return .init(.init(membership: .invited, joinRule: .invite))
+    }
+    
+    static func inviteDM(roomID: String? = nil) -> RoomPreviewProxyMock {
+        if let roomID {
+            return .init(.init(roomID: roomID, topic: nil, numJoinedMembers: 1, membership: .invited, joinRule: .invite, isDirect: true))
+        }
+        
+        return .init(.init(topic: nil, numJoinedMembers: 1, membership: .invited, joinRule: .invite, isDirect: true))
     }
     
     static var knockable: RoomPreviewProxyMock {
@@ -71,7 +80,7 @@ extension RoomPreviewProxyMock {
                                                       isHistoryWorldReadable: nil,
                                                       membership: configuration.membership,
                                                       joinRule: configuration.joinRule,
-                                                      isDirect: nil,
+                                                      isDirect: configuration.isDirect,
                                                       heroes: nil))
         
         let roomMembershipDetails = RoomMembershipDetailsProxyMock()

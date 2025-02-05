@@ -32,4 +32,14 @@ final class RoomPreviewProxy: RoomPreviewProxyProtocol {
                                               senderRoomMember: senderRoomMember)
         }
     }
+    
+    func forgetRoom() async -> Result<Void, RoomProxyError> {
+        do {
+            try await roomPreview.forget()
+            return .success(())
+        } catch {
+            MXLog.error("Failed forgetting the room with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
 }
