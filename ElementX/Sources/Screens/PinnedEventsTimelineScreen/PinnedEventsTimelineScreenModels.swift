@@ -8,6 +8,7 @@
 import Foundation
 
 enum PinnedEventsTimelineScreenViewModelAction {
+    case viewInRoomTimeline(itemID: TimelineItemIdentifier)
     case dismiss
 }
 

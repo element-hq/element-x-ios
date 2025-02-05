@@ -132,7 +132,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         mediaPreviewViewModel.actions.sink { [weak self] action in
             switch action {
             case .viewInRoomTimeline:
-                MXLog.error("Unexpected action: viewInRoomTimeline should not be visible on a room preview.")
+                fatalError("viewInRoomTimeline should not be visible on a room preview.")
             case .dismiss:
                 self?.state.bindings.mediaPreviewViewModel = nil
             }

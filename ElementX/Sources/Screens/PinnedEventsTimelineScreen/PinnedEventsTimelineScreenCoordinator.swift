@@ -62,6 +62,9 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
+            case .viewInRoomTimeline(let itemID):
+                guard let eventID = itemID.eventID else { fatalError("A pinned event must have an event ID.") }
+                actionsSubject.send(.displayRoomScreenWithFocussedPin(eventID: eventID))
             case .dismiss:
                 self.actionsSubject.send(.dismiss)
             }
