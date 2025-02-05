@@ -19,6 +19,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     
     private var roomPreview: RoomPreviewProxyProtocol?
     private var room: RoomProxyType?
+    private var isLoadingPreview = true
     private var membershipStateChangeCancellable: AnyCancellable?
     
     private let actionsSubject: PassthroughSubject<JoinRoomScreenViewModelAction, Never> = .init()
@@ -81,12 +82,19 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         
         switch await clientProxy.roomPreviewForIdentifier(roomID, via: via) {
         case .success(let roomPreview):
+            isLoadingPreview = false
             self.roomPreview = roomPreview
             await updateRoomDetails()
         case .failure(.roomPreviewIsPrivate):
-            break // Handled by the mode, we don't need an error indicator.
+            isLoadingPreview = false
+        // Handled by the mode, we don't need an error indicator.
         case .failure:
-            userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+            hideLoadingIndicator()
+            state.bindings.alertInfo = .init(id: .loadingError,
+                                             title: L10n.commonError,
+                                             message: L10n.screenJoinRoomLoadingAlertMessage,
+                                             primaryButton: .init(title: L10n.actionTryAgain) { [weak self] in Task { await self?.loadRoomDetails() }},
+                                             secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: { [weak self] in self?.actionsSubject.send(.dismiss) }))
         }
         
         hideLoadingIndicator()
@@ -131,6 +139,8 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                         Task { await self?.loadRoomDetails() }
                     }
             }
+        case .banned(let bannedRoomProxy):
+            roomInfo = bannedRoomProxy.info
         default:
             break
         }
@@ -155,6 +165,11 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     }
     
     private func updateMode() async {
+        if isLoadingPreview {
+            state.mode = .loading
+            return
+        }
+        
         if roomPreview == nil, room == nil {
             state.mode = .unknown
             return
@@ -336,12 +351,12 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         
         userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
         
-        guard case .banned = room, let roomPreview else {
+        guard case let .banned(roomProxy) = room else {
             userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
             return
         }
         
-        let result = await roomPreview.forgetRoom()
+        let result = await roomProxy.forgetRoom()
         
         if case .failure = result {
             userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))

@@ -364,7 +364,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         case .banned:
             clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.banned)
             clientProxy.roomForIdentifierClosure = { _ in
-                .banned
+                .banned(BannedRoomProxyMock(.init(avatarURL: .mockMXCAvatar)))
             }
         case .forbidden:
             clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.restricted)

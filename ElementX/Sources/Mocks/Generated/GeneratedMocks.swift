@@ -2047,6 +2047,88 @@ class AuthenticationClientBuilderMock: AuthenticationClientBuilderProtocol, @unc
         }
     }
 }
+class BannedRoomProxyMock: BannedRoomProxyProtocol, @unchecked Sendable {
+    var info: BaseRoomInfoProxyProtocol {
+        get { return underlyingInfo }
+        set(value) { underlyingInfo = value }
+    }
+    var underlyingInfo: BaseRoomInfoProxyProtocol!
+    var id: String {
+        get { return underlyingId }
+        set(value) { underlyingId = value }
+    }
+    var underlyingId: String!
+    var ownUserID: String {
+        get { return underlyingOwnUserID }
+        set(value) { underlyingOwnUserID = value }
+    }
+    var underlyingOwnUserID: String!
+
+    //MARK: - forgetRoom
+
+    var forgetRoomUnderlyingCallsCount = 0
+    var forgetRoomCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return forgetRoomUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = forgetRoomUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                forgetRoomUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    forgetRoomUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var forgetRoomCalled: Bool {
+        return forgetRoomCallsCount > 0
+    }
+
+    var forgetRoomUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var forgetRoomReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return forgetRoomUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = forgetRoomUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                forgetRoomUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    forgetRoomUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var forgetRoomClosure: (() async -> Result<Void, RoomProxyError>)?
+
+    func forgetRoom() async -> Result<Void, RoomProxyError> {
+        forgetRoomCallsCount += 1
+        if let forgetRoomClosure = forgetRoomClosure {
+            return await forgetRoomClosure()
+        } else {
+            return forgetRoomReturnValue
+        }
+    }
+}
 class BugReportServiceMock: BugReportServiceProtocol, @unchecked Sendable {
     var crashedLastRun: Bool {
         get { return underlyingCrashedLastRun }
@@ -13393,70 +13475,6 @@ class RoomPreviewProxyMock: RoomPreviewProxyProtocol, @unchecked Sendable {
     var underlyingOwnMembershipDetails: RoomMembershipDetailsProxyProtocol?
     var ownMembershipDetailsClosure: (() async -> RoomMembershipDetailsProxyProtocol?)?
 
-    //MARK: - forgetRoom
-
-    var forgetRoomUnderlyingCallsCount = 0
-    var forgetRoomCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return forgetRoomUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = forgetRoomUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                forgetRoomUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    forgetRoomUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var forgetRoomCalled: Bool {
-        return forgetRoomCallsCount > 0
-    }
-
-    var forgetRoomUnderlyingReturnValue: Result<Void, RoomProxyError>!
-    var forgetRoomReturnValue: Result<Void, RoomProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return forgetRoomUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, RoomProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = forgetRoomUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                forgetRoomUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    forgetRoomUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var forgetRoomClosure: (() async -> Result<Void, RoomProxyError>)?
-
-    func forgetRoom() async -> Result<Void, RoomProxyError> {
-        forgetRoomCallsCount += 1
-        if let forgetRoomClosure = forgetRoomClosure {
-            return await forgetRoomClosure()
-        } else {
-            return forgetRoomReturnValue
-        }
-    }
 }
 class RoomProxyMock: RoomProxyProtocol, @unchecked Sendable {
     var id: String {
