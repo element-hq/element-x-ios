@@ -10,18 +10,19 @@ import SwiftUI
 
 struct MediaEventsTimelineScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
-    let mediaTimelineController: RoomTimelineControllerProtocol
-    let filesTimelineController: RoomTimelineControllerProtocol
+    let mediaTimelineController: TimelineControllerProtocol
+    let filesTimelineController: TimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let appMediator: AppMediatorProtocol
     let emojiProvider: EmojiProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    let timelineControllerFactory: TimelineControllerFactoryProtocol
 }
 
 enum MediaEventsTimelineScreenCoordinatorAction {
-    case viewItem(TimelineMediaPreviewContext)
+    case viewInRoomTimeline(TimelineItemIdentifier)
 }
 
 final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
@@ -47,7 +48,8 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        appMediator: parameters.appMediator,
                                                        appSettings: ServiceLocator.shared.settings,
                                                        analyticsService: ServiceLocator.shared.analytics,
-                                                       emojiProvider: parameters.emojiProvider)
+                                                       emojiProvider: parameters.emojiProvider,
+                                                       timelineControllerFactory: parameters.timelineControllerFactory)
         
         let filesTimelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                                        timelineController: parameters.filesTimelineController,
@@ -58,18 +60,20 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        appMediator: parameters.appMediator,
                                                        appSettings: ServiceLocator.shared.settings,
                                                        analyticsService: ServiceLocator.shared.analytics,
-                                                       emojiProvider: parameters.emojiProvider)
+                                                       emojiProvider: parameters.emojiProvider,
+                                                       timelineControllerFactory: parameters.timelineControllerFactory)
         
         viewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: mediaTimelineViewModel,
                                                        filesTimelineViewModel: filesTimelineViewModel,
                                                        mediaProvider: parameters.mediaProvider,
-                                                       userIndicatorController: parameters.userIndicatorController)
+                                                       userIndicatorController: parameters.userIndicatorController,
+                                                       appMediator: parameters.appMediator)
         
         viewModel.actionsPublisher
             .sink { [weak self] action in
                 switch action {
-                case .viewItem(let previewContext):
-                    self?.actionsSubject.send(.viewItem(previewContext))
+                case .viewInRoomTimeline(let itemID):
+                    self?.actionsSubject.send(.viewInRoomTimeline(itemID))
                 }
             }
             .store(in: &cancellables)

@@ -36,7 +36,7 @@ enum ClientProxyError: Error {
     
     case invalidMedia
     case invalidServerName
-    case failedUploadingMedia(Error, MatrixErrorCode)
+    case failedUploadingMedia(ErrorKind)
     case roomPreviewIsPrivate
     case failedRetrievingUserIdentity
     case failedResolvingRoomAlias
@@ -117,8 +117,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func stopSync(completion: (() -> Void)?) // Hopefully this will become async once we get SE-0371.
     
     func accountURL(action: AccountManagementAction) async -> URL?
-    
-    func createDirectRoomIfNeeded(with userID: String, expectedRoomName: String?) async -> Result<(roomID: String, isNewRoom: Bool), ClientProxyError>
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError>
     

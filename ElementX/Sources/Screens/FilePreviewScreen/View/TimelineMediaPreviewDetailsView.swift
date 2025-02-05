@@ -12,7 +12,7 @@ struct TimelineMediaPreviewDetailsView: View {
     let item: TimelineMediaPreviewItem.Media
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
     
-    @State private var sheetHeight: CGFloat = .zero
+    @Binding var sheetHeight: CGFloat
     private let topPadding: CGFloat = 19
     
     var body: some View {
@@ -169,16 +169,16 @@ struct TimelineMediaPreviewDetailsView: View {
 import UniformTypeIdentifiers
 
 struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePreview {
-    @Namespace private static var previewNamespace
-    
     static let viewModel = makeViewModel(contentType: .jpeg, isOutgoing: true)
     static let loadingViewModel = makeViewModel(contentType: .jpeg, isOutgoing: true, isDownloaded: false)
     static let unknownTypeViewModel = makeViewModel()
     static let presentedOnRoomViewModel = makeViewModel(isPresentedOnRoomScreen: true)
     
+    @State static var sheetHeight: CGFloat = .zero
+    
     static var previews: some View {
         if case let .media(mediaItem) = viewModel.state.currentItem {
-            TimelineMediaPreviewDetailsView(item: mediaItem, context: viewModel.context)
+            TimelineMediaPreviewDetailsView(item: mediaItem, context: viewModel.context, sheetHeight: $sheetHeight)
                 .previewDisplayName("Image")
                 .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
                     state.currentItemActions?.secondaryActions.contains(.redact) ?? false
@@ -186,7 +186,7 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
         }
         
         if case let .media(mediaItem) = loadingViewModel.state.currentItem {
-            TimelineMediaPreviewDetailsView(item: mediaItem, context: loadingViewModel.context)
+            TimelineMediaPreviewDetailsView(item: mediaItem, context: loadingViewModel.context, sheetHeight: $sheetHeight)
                 .previewDisplayName("Loading")
                 .snapshotPreferences(expect: loadingViewModel.context.$viewState.map { state in
                     state.currentItemActions?.secondaryActions.contains(.redact) ?? false
@@ -194,12 +194,12 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
         }
         
         if case let .media(mediaItem) = unknownTypeViewModel.state.currentItem {
-            TimelineMediaPreviewDetailsView(item: mediaItem, context: unknownTypeViewModel.context)
+            TimelineMediaPreviewDetailsView(item: mediaItem, context: unknownTypeViewModel.context, sheetHeight: $sheetHeight)
                 .previewDisplayName("Unknown type")
         }
         
         if case let .media(mediaItem) = presentedOnRoomViewModel.state.currentItem {
-            TimelineMediaPreviewDetailsView(item: mediaItem, context: presentedOnRoomViewModel.context)
+            TimelineMediaPreviewDetailsView(item: mediaItem, context: presentedOnRoomViewModel.context, sheetHeight: $sheetHeight)
                 .previewDisplayName("Incoming on Room")
         }
     }
@@ -223,13 +223,12 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
                                                         contentType: contentType))
         
         let timelineKind = TimelineKind.media(isPresentedOnRoomScreen ? .roomScreen : .mediaFilesScreen)
-        let timelineController = MockRoomTimelineController(timelineKind: timelineKind)
+        let timelineController = MockTimelineController(timelineKind: timelineKind)
         timelineController.timelineItems = [item]
         
-        let viewModel = TimelineMediaPreviewViewModel(context: .init(item: item,
-                                                                     viewModel: TimelineViewModel.mock(timelineKind: timelineKind,
-                                                                                                       timelineController: timelineController),
-                                                                     namespace: previewNamespace),
+        let viewModel = TimelineMediaPreviewViewModel(initialItem: item,
+                                                      timelineViewModel: TimelineViewModel.mock(timelineKind: timelineKind,
+                                                                                                timelineController: timelineController),
                                                       mediaProvider: MediaProviderMock(configuration: .init()),
                                                       photoLibraryManager: PhotoLibraryManagerMock(.init()),
                                                       userIndicatorController: UserIndicatorControllerMock(),

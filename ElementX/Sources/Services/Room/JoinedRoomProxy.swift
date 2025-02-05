@@ -195,14 +195,15 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
-    func messageFilteredTimeline(allowedMessageTypes: [RoomMessageEventMessageType]) async -> Result<any TimelineProxyProtocol, RoomProxyError> {
+    func messageFilteredTimeline(allowedMessageTypes: [RoomMessageEventMessageType],
+                                 presentation: TimelineKind.MediaPresentation) async -> Result<any TimelineProxyProtocol, RoomProxyError> {
         do {
             let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .live,
                                                                                             allowedMessageTypes: .only(types: allowedMessageTypes),
                                                                                             internalIdPrefix: nil,
                                                                                             dateDividerMode: .monthly))
             
-            let timeline = TimelineProxy(timeline: sdkTimeline, roomId: room.id(), kind: .media(.mediaFilesScreen), zeroChatApi: zeroChatApi)
+            let timeline = TimelineProxy(timeline: sdkTimeline, kind: .media(presentation))
             await timeline.subscribeForUpdates()
             
             return .success(timeline)

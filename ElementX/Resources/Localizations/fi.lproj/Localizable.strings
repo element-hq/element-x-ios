@@ -414,6 +414,8 @@
 "screen_knock_requests_list_title" = "Liittymispyynnöt";
 "screen_media_details_file_format" = "Tiedostomuoto";
 "screen_media_details_filename" = "Tiedostonimi";
+"screen_media_details_no_more_files_to_show" = "Ei enää näytettäviä tiedostoja";
+"screen_media_details_no_more_media_to_show" = "Ei enää näytettävää mediaa";
 "screen_media_details_redact_confirmation_message" = "Tämä tiedosto poistetaan huoneesta, eikä jäsenillä ole enää pääsyä siihen.";
 "screen_media_details_redact_confirmation_title" = "Poistetaanko tiedosto?";
 "screen_media_details_uploaded_by" = "Lähettäjä";
@@ -478,8 +480,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Viestiä ei lähetetty, koska käyttäjän %1$@ vahvistettu identiteetti on muuttunut.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Viestiä ei lähetetty, koska %1$@ ei ole vahvistanut kaikkia laitteitaan.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Viestiä ei lähetetty, koska et ole vahvistanut yhtä tai useampaa laitettasi.";
-"screen.media_details.no_more_files_to_show" = "Ei enää näytettäviä tiedostoja";
-"screen.media_details.no_more_media_to_show" = "Ei enää näytettävää mediaa";
 "screen_account_provider_form_hint" = "Kotipalvelimen osoite";
 "screen_account_provider_form_notice" = "Kirjoita hakutermi tai osoite.";
 "screen_account_provider_form_subtitle" = "Hae yritystä, yhteisöä tai yksityistä palvelinta.";

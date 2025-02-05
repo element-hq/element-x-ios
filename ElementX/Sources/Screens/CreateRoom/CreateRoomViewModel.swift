@@ -236,9 +236,9 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                 avatarURL = URL(string: url)
             case .failure(let error):
                 switch error {
-                case .failedUploadingMedia(_, let errorCode):
-                    switch errorCode {
-                    case .fileTooLarge:
+                case .failedUploadingMedia(let errorKind):
+                    switch errorKind {
+                    case .tooLarge:
                         state.bindings.alertInfo = AlertInfo(id: .fileTooLarge)
                     default:
                         state.bindings.alertInfo = AlertInfo(id: .failedUploadingMedia)

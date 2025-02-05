@@ -22,8 +22,8 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     private let kind: TimelineKind
    
-    private var innerTimelineProvider: RoomTimelineProviderProtocol!
-    var timelineProvider: RoomTimelineProviderProtocol {
+    private var innerTimelineProvider: TimelineProviderProtocol!
+    var timelineProvider: TimelineProviderProtocol {
         innerTimelineProvider
     }
         
@@ -54,8 +54,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         await subscribeToPagination()
         
-        let provider = await RoomTimelineProvider(timeline: timeline, kind: kind,
-                                                  paginationStatePublisher: paginationStatePublisher)
+        let provider = await TimelineProvider(timeline: timeline, kind: kind, paginationStatePublisher: paginationStatePublisher)
         // Make sure the existing items are built so that we have content in the timeline before
         // determining whether or not the timeline should paginate to load more items.
         await provider.waitForInitialItems()
@@ -174,9 +173,9 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func edit(_ eventOrTransactionID: EventOrTransactionId, newContent: EditedContent) async -> Result<Void, TimelineProxyError> {
+    func edit(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, newContent: EditedContent) async -> Result<Void, TimelineProxyError> {
         do {
-            try await timeline.edit(eventOrTransactionId: eventOrTransactionID, newContent: newContent)
+            try await timeline.edit(eventOrTransactionId: eventOrTransactionID.rustValue, newContent: newContent)
             
             MXLog.info("Finished editing timeline item: \(eventOrTransactionID)")
 
@@ -187,11 +186,11 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func redact(_ eventOrTransactionID: EventOrTransactionId, reason: String?) async -> Result<Void, TimelineProxyError> {
+    func redact(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, reason: String?) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Redacting timeline item: \(eventOrTransactionID)")
         
         do {
-            try await timeline.redactEvent(eventOrTransactionId: eventOrTransactionID, reason: reason)
+            try await timeline.redactEvent(eventOrTransactionId: eventOrTransactionID.rustValue, reason: reason)
             
             MXLog.info("Redacted timeline item: \(eventOrTransactionID)")
             
@@ -462,11 +461,11 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func toggleReaction(_ reaction: String, to eventOrTransactionID: EventOrTransactionId) async -> Result<Void, TimelineProxyError> {
+    func toggleReaction(_ reaction: String, to eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Toggling reaction \(reaction) for event: \(eventOrTransactionID)")
         
         do {
-            try await timeline.toggleReaction(itemId: eventOrTransactionID, key: reaction)
+            try await timeline.toggleReaction(itemId: eventOrTransactionID.rustValue, key: reaction)
             MXLog.info("Finished toggling reaction for event: \(eventOrTransactionID)")
             return .success(())
         } catch {
@@ -669,7 +668,7 @@ extension Array where Element == TimelineItemProxy {
         return nil
     }
     
-    func firstEventTimelineItemUsingEventOrTransactionID(_ eventOrTransactionID: EventOrTransactionId) -> EventTimelineItem? {
+    func firstEventTimelineItemUsingEventOrTransactionID(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) -> EventTimelineItem? {
         for item in self {
             if case let .event(eventTimelineItem) = item,
                case let .event(_, identifier) = eventTimelineItem.id,

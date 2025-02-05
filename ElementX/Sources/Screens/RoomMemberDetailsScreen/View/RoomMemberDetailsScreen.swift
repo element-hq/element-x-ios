@@ -146,7 +146,7 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
             
         RoomMemberDetailsScreen(context: otherUserViewModel.context)
             .snapshotPreferences(expect: otherUserViewModel.context.$viewState.map { state in
-                state.memberDetails?.role == .user
+                state.memberDetails?.role == .user && state.dmRoomID != nil
             })
             .previewDisplayName("Other User")
             

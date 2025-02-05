@@ -15,7 +15,7 @@ struct StickerRoomTimelineView: View {
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             LoadableImage(mediaSource: timelineItem.imageInfo.source,
-                          mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID.id),
+                          mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID),
                           blurhash: timelineItem.blurhash,
                           size: timelineItem.imageInfo.size,
                           mediaProvider: context?.mediaProvider) {

@@ -156,13 +156,14 @@ enum TimelineMediaPreviewItem: Equatable {
         // MARK: QLPreviewItem
         
         var previewItemURL: URL? {
-            // Falling back to a clear image allows the presentation animation to work when
-            // the item is in the event cache and just needs to be loaded from the store.
-            fileHandle?.url ?? Bundle.main.url(forResource: "clear", withExtension: "png")
+            fileHandle?.url
         }
         
         var previewItemTitle: String? {
-            filename
+            switch fileHandle?.url {
+            case .some: filename
+            case .none: " " // Don't show any background text when the preview is still loading.
+            }
         }
         
         // MARK: Event details

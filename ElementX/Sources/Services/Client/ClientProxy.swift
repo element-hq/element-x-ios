@@ -386,23 +386,6 @@ class ClientProxy: ClientProxyProtocol {
         try? await client.accountUrl(action: action).flatMap(URL.init(string:))
     }
     
-    func createDirectRoomIfNeeded(with userID: String, expectedRoomName: String?) async -> Result<(roomID: String, isNewRoom: Bool), ClientProxyError> {
-        let currentDirectRoom = await directRoomForUserID(userID)
-        switch currentDirectRoom {
-        case .success(.some(let roomID)):
-            return .success((roomID: roomID, isNewRoom: false))
-        case .success(.none):
-            switch await createDirectRoom(with: userID, expectedRoomName: expectedRoomName) {
-            case .success(let roomID):
-                return .success((roomID: roomID, isNewRoom: true))
-            case .failure(let error):
-                return .failure(.sdkError(error))
-            }
-        case .failure(let error):
-            return .failure(.sdkError(error))
-        }
-    }
-    
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
@@ -530,9 +513,9 @@ class ClientProxy: ClientProxyProtocol {
             let data = try Data(contentsOf: media.url)
             let matrixUrl = try await client.uploadMedia(mimeType: mimeType, data: data, progressWatcher: nil)
             return .success(matrixUrl)
-        } catch let error as ClientError {
-            MXLog.error("Failed uploading media with error: \(error)")
-            return .failure(ClientProxyError.failedUploadingMedia(error, error.code))
+        } catch let ClientError.MatrixApi(errorKind, _, _) {
+            MXLog.error("Failed uploading media with error kind: \(errorKind)")
+            return .failure(ClientProxyError.failedUploadingMedia(errorKind))
         } catch {
             MXLog.error("Failed uploading media with error: \(error)")
             return .failure(ClientProxyError.sdkError(error))
@@ -583,10 +566,9 @@ class ClientProxy: ClientProxyProtocol {
     func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewProxyProtocol, ClientProxyError> {
         do {
             let roomPreview = try await client.getRoomPreviewFromRoomId(roomId: identifier, viaServers: via)
-            return try .success(RoomPreviewProxy(roomId: identifier,
-                                                 roomPreview: roomPreview,
-                                                 zeroUsersService: zeroMatrixUsersService))
-        } catch let error as ClientError where error.code == .forbidden {
+            return try .success(RoomPreviewProxy(roomPreview: roomPreview))
+        } catch ClientError.MatrixApi(.forbidden, _, _) {
+            MXLog.error("Failed retrieving preview for room: \(identifier) is private")
             return .failure(.roomPreviewIsPrivate)
         } catch {
             MXLog.error("Failed retrieving preview for room: \(identifier) with error: \(error)")
@@ -1120,6 +1102,9 @@ class ClientProxy: ClientProxyProtocol {
                 break
             case .error:
                 restartSync()
+            case .offline:
+                // This needs to be enabled in the client builder first to be actually used
+                break
             }
         })
     }

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import MatrixRustSDK
+@preconcurrency import MatrixRustSDK
 
 /// A timeline item identifier
 /// - uniqueID: Stable id across state changes of the timeline item, it uniquely identifies an item in a timeline.
@@ -14,42 +14,63 @@ import MatrixRustSDK
 /// - eventOrTransactionID: Contains the 2 possible identifiers of an event, either it has a remote event id or
 /// a local transaction id, never both or none.
 enum TimelineItemIdentifier: Hashable, Sendable {
-    case event(uniqueID: TimelineUniqueId, eventOrTransactionID: EventOrTransactionId)
-    case virtual(uniqueID: TimelineUniqueId)
-    
-    var uniqueID: TimelineUniqueId {
-        switch self {
-        case .event(let uniqueID, _):
-            return uniqueID
-        case .virtual(let uniqueID):
-            return uniqueID
+    struct UniqueID: Hashable {
+        let value: String
+        
+        init(_ value: String) {
+            self.value = value
         }
+        
+        init(rustValue: TimelineUniqueId) {
+            self.init(rustValue.id)
+        }
+        
+        var rustValue: TimelineUniqueId {
+            .init(id: value)
+        }
+    }
+    
+    enum EventOrTransactionID: Hashable {
+        case eventID(String), transactionID(String)
+        
+        init(rustValue: EventOrTransactionId) {
+            switch rustValue {
+            case .eventId(let eventID): self = .eventID(eventID)
+            case .transactionId(let transactionID): self = .transactionID(transactionID)
+            }
+        }
+        
+        var rustValue: EventOrTransactionId {
+            switch self {
+            case .eventID(let eventID): .eventId(eventId: eventID)
+            case .transactionID(let transactionID): .transactionId(transactionId: transactionID)
+            }
+        }
+    }
+    
+    case event(uniqueID: UniqueID, eventOrTransactionID: EventOrTransactionID)
+    case virtual(uniqueID: UniqueID)
+    
+    var uniqueID: UniqueID {
+        switch self {
+        case .event(let uniqueID, _): uniqueID
+        case .virtual(let uniqueID): uniqueID
+        }
+    }
+    
+    var eventOrTransactionID: EventOrTransactionID? {
+        guard case let .event(_, eventOrTransactionID) = self else { return nil }
+        return eventOrTransactionID
     }
     
     var eventID: String? {
-        guard case let .event(_, eventOrTransactionID) = self else {
-            return nil
-        }
-        
-        switch eventOrTransactionID {
-        case .eventId(let eventID):
-            return eventID
-        default:
-            return nil
-        }
+        guard case let .event(_, .eventID(eventID)) = self else { return nil }
+        return eventID
     }
     
     var transactionID: String? {
-        guard case let .event(_, eventOrTransactionID) = self else {
-            return nil
-        }
-        
-        switch eventOrTransactionID {
-        case .transactionId(let transactionID):
-            return transactionID
-        default:
-            return nil
-        }
+        guard case let .event(_, .transactionID(transactionID)) = self else { return nil }
+        return transactionID
     }
 }
 
@@ -57,10 +78,10 @@ enum TimelineItemIdentifier: Hashable, Sendable {
 
 extension TimelineItemIdentifier {
     static var randomEvent: Self {
-        .event(uniqueID: .init(id: UUID().uuidString), eventOrTransactionID: .eventId(eventId: UUID().uuidString))
+        .event(uniqueID: .init(UUID().uuidString), eventOrTransactionID: .eventID(UUID().uuidString))
     }
     
     static var randomVirtual: Self {
-        .virtual(uniqueID: .init(id: UUID().uuidString))
+        .virtual(uniqueID: .init(UUID().uuidString))
     }
 }

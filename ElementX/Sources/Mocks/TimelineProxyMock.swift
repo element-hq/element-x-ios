@@ -24,9 +24,9 @@ extension TimelineProxyMock {
         sendReadReceiptForTypeReturnValue = .success(())
         
         if configuration.isAutoUpdating {
-            underlyingTimelineProvider = AutoUpdatingRoomTimelineProviderMock()
+            underlyingTimelineProvider = AutoUpdatingTimelineProviderMock()
         } else {
-            let timelineProvider = RoomTimelineProviderMock()
+            let timelineProvider = TimelineProviderMock()
             timelineProvider.paginationState = .init(backward: configuration.timelineStartReached ? .timelineEndReached : .idle, forward: .timelineEndReached)
             timelineProvider.underlyingMembershipChangePublisher = PassthroughSubject().eraseToAnyPublisher()
             underlyingTimelineProvider = timelineProvider

@@ -414,6 +414,8 @@
 "screen_knock_requests_list_title" = "Pedidos de entrada";
 "screen_media_details_file_format" = "Formato do ficheiro";
 "screen_media_details_filename" = "Nome do ficheiro";
+"screen_media_details_no_more_files_to_show" = "No more files to show";
+"screen_media_details_no_more_media_to_show" = "No more media to show";
 "screen_media_details_redact_confirmation_message" = "This file will be removed from the room and members won’t have access to it.";
 "screen_media_details_redact_confirmation_title" = "Eliminar ficheiro?";
 "screen_media_details_uploaded_by" = "Enviado por";
@@ -478,8 +480,6 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Mensagem não enviada porque a identidade verificada de %1$@ foi alterada.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Mensagem não enviada porque %1$@ não verificou todos os dispositivos.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Mensagem não enviada porque não verificou um ou mais dos seus dispositivos.";
-"screen.media_details.no_more_files_to_show" = "No more files to show";
-"screen.media_details.no_more_media_to_show" = "No more media to show";
 "screen_account_provider_form_hint" = "Endereço do servidor";
 "screen_account_provider_form_notice" = "Insira um termo para pesquisa ou um endereço.";
 "screen_account_provider_form_subtitle" = "Pesquisar por uma empresa, comunidade ou servidor privado.";
