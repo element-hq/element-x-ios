@@ -33,7 +33,7 @@ struct StartChatScreen: View {
         .alert(item: $context.alertInfo)
         .sheet(item: $context.selectedUserToInvite) { user in
             SendInviteConfirmationView(userToInvite: user, mediaProvider: context.mediaProvider) {
-                context.send(viewAction: .createDM(userID: user.id, displayName: user.displayName))
+                context.send(viewAction: .createDM(user: user))
             }
         }
     }

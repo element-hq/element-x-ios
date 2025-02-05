@@ -36,7 +36,7 @@ struct UserProfileScreenViewState: BindableState {
 
 struct UserProfileScreenViewStateBindings {
     var alertInfo: AlertInfo<UserProfileScreenAlertType>?
-    var sheetItem: UserToInvite?
+    var sheetItem: UserProfileProxy?
     
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: MediaPreviewItem?

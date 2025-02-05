@@ -38,12 +38,12 @@ struct StartChatScreenViewStateBindings {
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<StartChatScreenErrorType>?
     
-    var selectedUserToInvite: UserToInvite?
+    var selectedUserToInvite: UserProfileProxy?
 }
 
 enum StartChatScreenViewAction {
     case close
     case createRoom
-    case createDM(userID: String, displayName: String?)
+    case createDM(user: UserProfileProxy)
     case selectUser(UserProfileProxy)
 }

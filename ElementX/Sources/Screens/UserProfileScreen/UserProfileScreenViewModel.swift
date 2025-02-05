@@ -123,9 +123,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
             if let roomID {
                 actionsSubject.send(.openDirectChat(roomID: roomID))
             } else {
-                state.bindings.sheetItem = .init(avatarUrl: userProfile.avatarURL,
-                                                 displayName: userProfile.displayName,
-                                                 id: userProfile.userID)
+                state.bindings.sheetItem = userProfile
             }
         case .failure:
             state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)

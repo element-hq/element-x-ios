@@ -63,14 +63,14 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
                     actionsSubject.send(.openRoom(withIdentifier: roomId))
                 case .success:
                     hideLoadingIndicator()
-                    state.bindings.selectedUserToInvite = .init(avatarUrl: user.avatarURL, displayName: user.displayName, id: user.userID)
+                    state.bindings.selectedUserToInvite = user
                 case .failure:
                     hideLoadingIndicator()
                     displayError()
                 }
             }
-        case .createDM(let userID, let displayName):
-            Task { await createDirectRoom(userID: userID, displayName: displayName) }
+        case .createDM(let user):
+            Task { await createDirectRoom(user: user) }
         }
     }
     
@@ -110,12 +110,12 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         }
     }
         
-    private func createDirectRoom(userID: String, displayName: String?) async {
+    private func createDirectRoom(user: UserProfileProxy) async {
         defer {
             hideLoadingIndicator()
         }
         showLoadingIndicator()
-        switch await userSession.clientProxy.createDirectRoom(with: userID, expectedRoomName: displayName) {
+        switch await userSession.clientProxy.createDirectRoom(with: user.userID, expectedRoomName: user.displayName) {
         case .success(let roomId):
             analytics.trackCreatedRoom(isDM: true)
             actionsSubject.send(.openRoom(withIdentifier: roomId))

@@ -1020,6 +1020,10 @@ internal enum L10n {
   internal static func screenBottomSheetCreateDmMessage(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_message", String(describing: p1), String(describing: p2))
   }
+  /// Would you like to start a chat with %1$@?
+  internal static func screenBottomSheetCreateDmMessageNoDisplayname(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_message_no_displayname", String(describing: p1))
+  }
   /// Send invite?
   internal static var screenBottomSheetCreateDmTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_title") }
   /// Attach screenshot

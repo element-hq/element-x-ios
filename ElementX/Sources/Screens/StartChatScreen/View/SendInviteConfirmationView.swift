@@ -8,16 +8,8 @@
 import Compound
 import SwiftUI
 
-struct UserToInvite: Identifiable {
-    let avatarUrl: URL?
-    let displayName: String?
-    
-    /// User ID
-    let id: String
-}
-
 struct SendInviteConfirmationView: View {
-    let userToInvite: UserToInvite
+    let userToInvite: UserProfileProxy
     let mediaProvider: MediaProviderProtocol?
     let onInvite: () -> Void
     
@@ -25,6 +17,14 @@ struct SendInviteConfirmationView: View {
     
     @State private var sheetHeight: CGFloat = .zero
     private let topPadding: CGFloat = 24
+    
+    var subtitle: String {
+        if let displayName = userToInvite.displayName {
+            L10n.screenBottomSheetCreateDmMessage(displayName, userToInvite.userID)
+        } else {
+            L10n.screenBottomSheetCreateDmMessageNoDisplayname(userToInvite.userID)
+        }
+    }
     
     var body: some View {
         ScrollView {
@@ -43,9 +43,9 @@ struct SendInviteConfirmationView: View {
     
     private var header: some View {
         VStack(spacing: 16) {
-            LoadableAvatarImage(url: userToInvite.avatarUrl,
+            LoadableAvatarImage(url: userToInvite.avatarURL,
                                 name: userToInvite.displayName,
-                                contentID: userToInvite.id,
+                                contentID: userToInvite.userID,
                                 avatarSize: .user(on: .sendInviteConfirmation),
                                 mediaProvider: mediaProvider)
             VStack(spacing: 8) {
@@ -53,7 +53,7 @@ struct SendInviteConfirmationView: View {
                     .multilineTextAlignment(.center)
                     .font(.compound.headingMDBold)
                     .foregroundStyle(.compound.textPrimary)
-                Text(L10n.screenBottomSheetCreateDmMessage(userToInvite.displayName ?? "", userToInvite.id))
+                Text(subtitle)
                     .multilineTextAlignment(.center)
                     .font(.compound.bodyMD)
                     .foregroundStyle(.compound.textSecondary)
@@ -89,7 +89,7 @@ struct SendInviteConfirmationView: View {
 
 struct SendInviteConfirmationView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        SendInviteConfirmationView(userToInvite: .init(avatarUrl: nil, displayName: "Alice", id: "@alice:matrix.org"),
+        SendInviteConfirmationView(userToInvite: .mockAlice,
                                    mediaProvider: nil) { }
     }
 }
