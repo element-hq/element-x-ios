@@ -376,12 +376,12 @@ class TimelineController: TimelineControllerProtocol {
         callbacks.send(.isLive(activeTimelineProvider.kind == .live))
         
         updateTimelineItemsCancellable = Task { [weak self, activeTimelineProvider] in
-            let publisher = activeTimelineProvider.updatePublisher
-            let notification = NotificationCenter.default.publisher(for: UIContentSizeCategory.didChangeNotification)
+            let contentSizeChangePublisher = NotificationCenter.default.publisher(for: UIContentSizeCategory.didChangeNotification)
+            let timelineUpdates = activeTimelineProvider.updatePublisher.merge(with: contentSizeChangePublisher.map { _ in
+                (activeTimelineProvider.itemProxies, activeTimelineProvider.paginationState)
+            })
             
-            let whatever = publisher.merge(with: notification.map { _ in (activeTimelineProvider.itemProxies, activeTimelineProvider.paginationState) })
-            
-            for await (items, paginationState) in whatever.values {
+            for await (items, paginationState) in timelineUpdates.values {
                 await self?.updateTimelineItems(itemProxies: items, paginationState: paginationState)
             }
         }.asCancellable()

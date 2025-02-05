@@ -79,7 +79,7 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
         }
         
         Task {
-            try await Task.sleep(for: .seconds(minimumDisplayDuration))
+            try? await Task.sleep(for: .seconds(minimumDisplayDuration))
             indicatorQueue.removeAll { $0.id == id }
             displayTimes[id] = nil
         }
