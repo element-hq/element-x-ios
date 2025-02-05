@@ -123,7 +123,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
             if let roomID {
                 actionsSubject.send(.openDirectChat(roomID: roomID))
             } else {
-                state.bindings.sheetItem = userProfile
+                state.bindings.inviteConfirmationUser = userProfile
             }
         case .failure:
             state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)

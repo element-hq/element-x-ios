@@ -189,7 +189,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             if let roomID {
                 actionsSubject.send(.openDirectChat(roomID: roomID))
             } else {
-                state.bindings.sheetItem = .init(userID: roomMemberProxy.userID, displayName: roomMemberProxy.displayName, avatarURL: roomMemberProxy.avatarURL)
+                state.bindings.inviteConfirmationUser = .init(userID: roomMemberProxy.userID, displayName: roomMemberProxy.displayName, avatarURL: roomMemberProxy.avatarURL)
             }
         case .failure:
             state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)

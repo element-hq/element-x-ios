@@ -18,7 +18,7 @@ struct SendInviteConfirmationView: View {
     @State private var sheetHeight: CGFloat = .zero
     private let topPadding: CGFloat = 24
     
-    var subtitle: String {
+    private var subtitle: String {
         if let displayName = userToInvite.displayName {
             L10n.screenBottomSheetCreateDmMessage(displayName, userToInvite.userID)
         } else {
@@ -89,7 +89,7 @@ struct SendInviteConfirmationView: View {
 
 struct SendInviteConfirmationView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        SendInviteConfirmationView(userToInvite: .mockAlice,
+        SendInviteConfirmationView(userToInvite: .mockBob,
                                    mediaProvider: nil) { }
     }
 }
