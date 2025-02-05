@@ -379,8 +379,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                                         orderedReadReceipts: orderReadReceipts(eventItemProxy.readReceipts),
                                                                         encryptionAuthenticity: authenticity(eventItemProxy.shieldState)))
     }
-
-    // swiftlint:disable:next function_parameter_count
+    
     private func buildPollTimelineItem(_ question: String,
                                        _ pollKind: PollKind,
                                        _ maxSelections: UInt64,
@@ -645,7 +644,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         return buildStateTimelineItem(for: eventItemProxy, text: text, isOutgoing: isOutgoing)
     }
     
-    // swiftlint:disable:next function_parameter_count
     private func buildStateProfileChangeTimelineItem(for eventItemProxy: EventTimelineItemProxy,
                                                      displayName: String?,
                                                      previousDisplayName: String?,
