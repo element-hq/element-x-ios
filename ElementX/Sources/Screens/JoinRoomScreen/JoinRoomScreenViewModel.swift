@@ -94,7 +94,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                                              title: L10n.commonError,
                                              message: L10n.screenJoinRoomLoadingAlertMessage,
                                              primaryButton: .init(title: L10n.actionTryAgain) { [weak self] in Task { await self?.loadRoomDetails() }},
-                                             secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: { [weak self] in self?.actionsSubject.send(.dismiss) }))
+                                             secondaryButton: .init(title: L10n.actionCancel, role: .cancel) { [weak self] in self?.actionsSubject.send(.dismiss) })
         }
         
         hideLoadingIndicator()
