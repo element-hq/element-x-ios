@@ -330,7 +330,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         
         switch mode {
         case .unknown:
-            clientProxy.roomPreviewForIdentifierViaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+            clientProxy.roomPreviewForIdentifierViaReturnValue = .failure(.roomPreviewIsPrivate)
             clientProxy.roomForIdentifierReturnValue = nil
         case .joinable:
             clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.joinable)
