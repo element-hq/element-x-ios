@@ -26,6 +26,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     private let HOME_SCREEN_POST_PAGE_COUNT = 10
+    private var isFetchPostsInProgress = false
     
     init(userSession: UserSessionProtocol,
          analyticsService: AnalyticsService,
@@ -508,7 +509,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     private func fetchPosts() {
+        guard !isFetchPostsInProgress else { return }
+        isFetchPostsInProgress = true
+        
         Task {
+            defer { isFetchPostsInProgress = false } // Ensure flag is reset when the task completes
+            
             state.postListMode = state.posts.isEmpty ? .skeletons : .posts
             let postsResult = await userSession.clientProxy.fetchZeroPosts(limit: HOME_SCREEN_POST_PAGE_COUNT,
                                                                            skip: state.posts.count)
@@ -517,6 +523,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 let hasNoPosts = posts.isEmpty
                 if hasNoPosts {
                     state.postListMode = state.posts.isEmpty ? .empty : .posts
+                    state.canLoadMorePosts = false
                 } else {
                     var homePosts: [HomeScreenPost] = state.posts
                     for post in posts {

@@ -22,20 +22,20 @@ struct HomePostsContent: View {
             ScrollView {
                 switch context.viewState.postListMode {
                 case .skeletons:
-                    // TODO: add skeleton list loading for post (for now added a simple progress loader)
-                    //                    LazyVStack(spacing: 0) {
-                    //                        ForEach(context.viewState.visiblePosts) { room in
-                    //                            HomeScreenRoomCell(room: room, context: context, isSelected: false)
-                    //                                .redacted(reason: .placeholder)
-                    //                                .shimmer() // Putting this directly on the LazyVStack creates an accordion animation on iOS 16.
-                    //                        }
-                    //                    }
-                    //                    .disabled(true)
-                    
-                    ProgressView()
+                    LazyVStack(spacing: 0) {
+                        ForEach(context.viewState.visiblePosts) { post in
+                            VStack {
+                                HomeScreenPostCell(post: post, context: context)
+                                    .padding(.all, 16)
+                                Divider()
+                            }
+                            .redacted(reason: .placeholder)
+                            .shimmer()
+                        }
+                    }
+                    .disabled(true)
                 case .empty:
-                    // TODO: add an empty view stating no posts etc
-                    EmptyView()
+                    HomePostsEmptyView()
                 case .posts:
                     LazyVStack(spacing: 0) {
                         HomeScreenPostList(context: context)
@@ -70,5 +70,17 @@ struct HomePostsContent: View {
             .animation(.elementDefault, value: context.viewState.postListMode)
             .animation(.none, value: context.viewState.visiblePosts)
         }
+    }
+}
+
+struct HomePostsEmptyView: View {
+    var body: some View {
+        ZStack {
+            Text("No posts yet")
+                .font(.compound.headingMD)
+                .foregroundColor(.compound.textSecondary)
+                .frame(maxWidth: .infinity, alignment: .center)
+        }
+        .frame(maxWidth: .infinity, minHeight: 500)
     }
 }

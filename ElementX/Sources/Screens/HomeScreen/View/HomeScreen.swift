@@ -22,13 +22,18 @@ struct HomeScreen: View {
     @State private var navigationBarContainer: UIView?
     @State private var hairlineView: UIView?
     
+    @State private var isHomeTabSelected: Bool = true
+    
     var body: some View {
         HomeTabView(
-            firstTabContent: {
+            chatTabContent: {
                 HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
             },
-            secondTabContent: {
+            homeTabContent: {
                 HomePostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+            },
+            onTabSelected: { tabIndex in
+                isHomeTabSelected = tabIndex == 0
             }
         )
             .alert(item: $context.alertInfo)
@@ -183,8 +188,10 @@ struct HomeScreen: View {
             .accessibilityLabel(L10n.commonSettings)
         }
         
-        ToolbarItem(placement: .primaryAction) {
-            newRoomButton
+        if isHomeTabSelected {
+            ToolbarItem(placement: .primaryAction) {
+                newRoomButton
+            }
         }
     }
     

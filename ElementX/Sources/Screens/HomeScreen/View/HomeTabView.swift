@@ -10,8 +10,9 @@ import SwiftUI
 struct HomeTabView<Content1: View, Content2: View>: View {
     @State private var selectedTab = 0
     
-    let firstTabContent: Content1
-    let secondTabContent: Content2
+    let chatTabContent: Content1
+    let homeTabContent: Content2
+    let onTabSelected: (Int) -> Void
     
     private let tabs = [
         (
@@ -26,18 +27,20 @@ struct HomeTabView<Content1: View, Content2: View>: View {
         )
     ]
     
-    init(@ViewBuilder firstTabContent: () -> Content1,
-         @ViewBuilder secondTabContent: () -> Content2) {
-        self.firstTabContent = firstTabContent()
-        self.secondTabContent = secondTabContent()
+    init(@ViewBuilder chatTabContent: () -> Content1,
+         @ViewBuilder homeTabContent: () -> Content2,
+         onTabSelected: @escaping (Int) -> Void) {
+        self.chatTabContent = chatTabContent()
+        self.homeTabContent = homeTabContent()
+        self.onTabSelected = onTabSelected
     }
     
     var body: some View {
         VStack(spacing: 0) {
             // Content View
             Group {
-                if selectedTab == 0 { firstTabContent }
-                else { secondTabContent }
+                if selectedTab == 0 { chatTabContent }
+                else { homeTabContent }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             
@@ -56,6 +59,9 @@ struct HomeTabView<Content1: View, Content2: View>: View {
                 }
                 .background(.black)
             }
+        }
+        .onChange(of: selectedTab) { _, newValue in
+            self.onTabSelected(newValue)
         }
     }
     
