@@ -43,7 +43,7 @@ extension RoomPreviewProxyMock {
         return .init(.init(membership: .invited, joinRule: .invite))
     }
     
-    static func dmInvite(roomID: String? = nil) -> RoomPreviewProxyMock {
+    static func inviteDM(roomID: String? = nil) -> RoomPreviewProxyMock {
         if let roomID {
             return .init(.init(roomID: roomID, topic: nil, numJoinedMembers: 1, membership: .invited, joinRule: .invite, isDirect: true))
         }

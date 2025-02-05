@@ -165,7 +165,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             
             switch roomPreview.info.membership {
             case .invited:
-                state.mode = .invited
+                state.mode = .invited(isDM: state.roomDetails?.isDirect == true && state.roomDetails?.memberCount == 1)
             case .knocked:
                 state.mode = .knocked
             case .banned:
@@ -186,7 +186,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         } else if let room {
             switch room {
             case .invited:
-                state.mode = .invited
+                state.mode = .invited(isDM: state.roomDetails?.isDirect == true && state.roomDetails?.memberCount == 1)
             case .knocked:
                 state.mode = .knocked
             case .banned:
@@ -212,7 +212,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             case .failure(let error):
                 if case .forbiddenAccess = error {
                     MXLog.error("Failed joining room alias: \(alias) forbidden access")
-                    state.shouldShowForbiddenError = true
+                    state.mode = .forbidden
                 } else {
                     MXLog.error("Failed joining room alias: \(alias) with error: \(error)")
                     userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
@@ -225,7 +225,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             case .failure(let error):
                 if case .forbiddenAccess = error {
                     MXLog.error("Failed joining room id: \(roomID) forbidden access")
-                    state.shouldShowForbiddenError = true
+                    state.mode = .forbidden
                 } else {
                     MXLog.error("Failed joining room id: \(roomID) with error: \(error)")
                     userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))

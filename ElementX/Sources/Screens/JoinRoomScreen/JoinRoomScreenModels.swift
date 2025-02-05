@@ -18,10 +18,11 @@ enum JoinRoomScreenMode: Equatable {
     case joinable
     case restricted
     case inviteRequired
-    case invited
+    case invited(isDM: Bool)
     case knockable
     case knocked
     case banned(sender: String?, reason: String?)
+    case forbidden
 }
 
 struct JoinRoomScreenRoomDetails {
@@ -40,9 +41,7 @@ struct JoinRoomScreenViewState: BindableState {
     var roomDetails: JoinRoomScreenRoomDetails?
     
     var mode: JoinRoomScreenMode = .loading
-    
-    var shouldShowForbiddenError = false
-    
+        
     var bindings = JoinRoomScreenViewStateBindings()
     
     var title: String {
@@ -54,15 +53,16 @@ struct JoinRoomScreenViewState: BindableState {
     }
     
     var subtitle: String? {
-        if isDMInvite, let inviter = roomDetails?.inviter {
-            return inviter.displayName != nil ? inviter.id : nil
-        } else {
-            switch mode {
-            case .loading, .unknown, .knocked:
-                return nil
-            default:
-                return roomDetails?.canonicalAlias
+        switch mode {
+        case .invited(isDM: true):
+            if let inviter = roomDetails?.inviter {
+                return inviter.displayName != nil ? inviter.id : nil
             }
+            return nil
+        case .loading, .unknown, .knocked:
+            return nil
+        default:
+            return roomDetails?.canonicalAlias
         }
     }
     
@@ -79,7 +79,7 @@ struct JoinRoomScreenViewState: BindableState {
     }
     
     var isDMInvite: Bool {
-        mode == .invited && roomDetails?.isDirect == true && roomDetails?.memberCount == 1
+        mode == .invited(isDM: true)
     }
 }
 
