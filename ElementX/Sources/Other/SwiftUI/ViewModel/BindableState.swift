@@ -8,6 +8,7 @@
 import Foundation
 
 /// Represents a specific portion of the ViewState that can be bound to with SwiftUI's [2-way binding](https://developer.apple.com/documentation/swiftui/binding).
+@MainActor
 protocol BindableState {
     /// The associated type of the Bindable State. Defaults to Void.
     associatedtype BindStateType = Void

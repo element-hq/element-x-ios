@@ -81,8 +81,8 @@ struct WebRegistrationWebView: UIViewRepresentable {
             webView.load(URLRequest(url: url))
         }
         
-        nonisolated func userContentController(_ userContentController: WKUserContentController,
-                                               didReceive message: WKScriptMessage) {
+        func userContentController(_ userContentController: WKUserContentController,
+                                   didReceive message: WKScriptMessage) {
             guard let jsonString = message.body as? String, let jsonData = jsonString.data(using: .utf8) else {
                 MXLog.error("Unexpected response.")
                 return
@@ -94,7 +94,7 @@ struct WebRegistrationWebView: UIViewRepresentable {
             }
             
             MXLog.info("Received login credentials.")
-            Task { await viewModelContext.send(viewAction: .signedIn(credentials)) }
+            viewModelContext.send(viewAction: .signedIn(credentials))
         }
         
         // MARK: WKUIDelegate
@@ -120,8 +120,8 @@ struct WebRegistrationWebView: UIViewRepresentable {
         
         // MARK: WKScriptMessageHandler
         
-        nonisolated func userContentController(_ userContentController: WKUserContentController,
-                                               didReceive message: WKScriptMessage) {
+        func userContentController(_ userContentController: WKUserContentController,
+                                   didReceive message: WKScriptMessage) {
             coordinator?.userContentController(userContentController, didReceive: message)
         }
     }

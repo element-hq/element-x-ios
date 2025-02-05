@@ -386,7 +386,9 @@ class TimelineController: TimelineControllerProtocol {
     @objc private func contentSizeCategoryDidChange() {
         // Recompute all attributed strings on content size changes -> DynamicType support
         serialDispatchQueue.async { [activeTimelineProvider] in
-            self.updateTimelineItems(itemProxies: activeTimelineProvider.itemProxies, paginationState: activeTimelineProvider.paginationState)
+            MainActor.assumeIsolated {
+                self.updateTimelineItems(itemProxies: activeTimelineProvider.itemProxies, paginationState: activeTimelineProvider.paginationState)
+            }
         }
     }
     

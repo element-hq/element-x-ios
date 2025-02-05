@@ -6,7 +6,6 @@
 //
 
 import Combine
-import Foundation
 
 @MainActor
 protocol ReportContentScreenViewModelProtocol {
