@@ -140,7 +140,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                     }
             }
         case .banned(let bannedRoomProxy):
-            roomInfo = bannedRoomProxy.info
+            roomInfo = try? await bannedRoomProxy.info
         default:
             break
         }

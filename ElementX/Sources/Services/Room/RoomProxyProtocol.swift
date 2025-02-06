@@ -47,7 +47,7 @@ protocol KnockedRoomProxyProtocol: RoomProxyProtocol {
 
 // sourcery: AutoMockable
 protocol BannedRoomProxyProtocol: RoomProxyProtocol {
-    var info: BaseRoomInfoProxyProtocol { get }
+    var info: BaseRoomInfoProxyProtocol { get async throws }
     func forgetRoom() async -> Result<Void, RoomProxyError>
 }
 

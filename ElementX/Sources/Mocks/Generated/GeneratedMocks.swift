@@ -2048,11 +2048,27 @@ class AuthenticationClientBuilderMock: AuthenticationClientBuilderProtocol, @unc
     }
 }
 class BannedRoomProxyMock: BannedRoomProxyProtocol, @unchecked Sendable {
+    var infoCallsCount = 0
+    var infoCalled: Bool {
+        return infoCallsCount > 0
+    }
+
     var info: BaseRoomInfoProxyProtocol {
-        get { return underlyingInfo }
-        set(value) { underlyingInfo = value }
+        get async throws {
+            if let error = infoThrowableError {
+                throw error
+            }
+            infoCallsCount += 1
+            if let infoClosure = infoClosure {
+                return try await infoClosure()
+            } else {
+                return underlyingInfo
+            }
+        }
     }
     var underlyingInfo: BaseRoomInfoProxyProtocol!
+    var infoThrowableError: Error?
+    var infoClosure: (() async throws -> BaseRoomInfoProxyProtocol)?
     var id: String {
         get { return underlyingId }
         set(value) { underlyingId = value }
