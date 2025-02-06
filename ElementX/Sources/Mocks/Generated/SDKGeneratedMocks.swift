@@ -17898,6 +17898,46 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
 
     fileprivate var pointer: UnsafeMutableRawPointer!
 
+    //MARK: - forget
+
+    open var forgetThrowableError: Error?
+    var forgetUnderlyingCallsCount = 0
+    open var forgetCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return forgetUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = forgetUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                forgetUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    forgetUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var forgetCalled: Bool {
+        return forgetCallsCount > 0
+    }
+    open var forgetClosure: (() async throws -> Void)?
+
+    open override func forget() async throws {
+        if let error = forgetThrowableError {
+            throw error
+        }
+        forgetCallsCount += 1
+        try await forgetClosure?()
+    }
+
     //MARK: - info
 
     open var infoThrowableError: Error?
@@ -18561,18 +18601,18 @@ open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificati
         try await declineVerificationClosure?()
     }
 
-    //MARK: - requestVerification
+    //MARK: - requestDeviceVerification
 
-    open var requestVerificationThrowableError: Error?
-    var requestVerificationUnderlyingCallsCount = 0
-    open var requestVerificationCallsCount: Int {
+    open var requestDeviceVerificationThrowableError: Error?
+    var requestDeviceVerificationUnderlyingCallsCount = 0
+    open var requestDeviceVerificationCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return requestVerificationUnderlyingCallsCount
+                return requestDeviceVerificationUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = requestVerificationUnderlyingCallsCount
+                    returnValue = requestDeviceVerificationUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -18580,25 +18620,71 @@ open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificati
         }
         set {
             if Thread.isMainThread {
-                requestVerificationUnderlyingCallsCount = newValue
+                requestDeviceVerificationUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    requestVerificationUnderlyingCallsCount = newValue
+                    requestDeviceVerificationUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var requestVerificationCalled: Bool {
-        return requestVerificationCallsCount > 0
+    open var requestDeviceVerificationCalled: Bool {
+        return requestDeviceVerificationCallsCount > 0
     }
-    open var requestVerificationClosure: (() async throws -> Void)?
+    open var requestDeviceVerificationClosure: (() async throws -> Void)?
 
-    open override func requestVerification() async throws {
-        if let error = requestVerificationThrowableError {
+    open override func requestDeviceVerification() async throws {
+        if let error = requestDeviceVerificationThrowableError {
             throw error
         }
-        requestVerificationCallsCount += 1
-        try await requestVerificationClosure?()
+        requestDeviceVerificationCallsCount += 1
+        try await requestDeviceVerificationClosure?()
+    }
+
+    //MARK: - requestUserVerification
+
+    open var requestUserVerificationUserIdThrowableError: Error?
+    var requestUserVerificationUserIdUnderlyingCallsCount = 0
+    open var requestUserVerificationUserIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return requestUserVerificationUserIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = requestUserVerificationUserIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                requestUserVerificationUserIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    requestUserVerificationUserIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var requestUserVerificationUserIdCalled: Bool {
+        return requestUserVerificationUserIdCallsCount > 0
+    }
+    open var requestUserVerificationUserIdReceivedUserId: String?
+    open var requestUserVerificationUserIdReceivedInvocations: [String] = []
+    open var requestUserVerificationUserIdClosure: ((String) async throws -> Void)?
+
+    open override func requestUserVerification(userId: String) async throws {
+        if let error = requestUserVerificationUserIdThrowableError {
+            throw error
+        }
+        requestUserVerificationUserIdCallsCount += 1
+        requestUserVerificationUserIdReceivedUserId = userId
+        DispatchQueue.main.async {
+            self.requestUserVerificationUserIdReceivedInvocations.append(userId)
+        }
+        try await requestUserVerificationUserIdClosure?(userId)
     }
 
     //MARK: - setDelegate
