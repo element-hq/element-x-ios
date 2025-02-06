@@ -11,9 +11,13 @@ import SwiftUI
 struct FeedDetailsScreen: View {
     @ObservedObject var context: FeedDetailsScreenViewModel.Context
     
+    @State private var scrollViewAdapter = ScrollViewAdapter()
+    
     var body: some View {
-        HStack {
-            
-        }
+        FeedDetailsContent(context: context,
+                           scrollViewAdapter: scrollViewAdapter)
+        .alert(item: $context.alertInfo)
+        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
+        .sentryTrace("\(Self.self)")
     }
 }

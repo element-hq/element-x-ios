@@ -1066,6 +1066,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func presentFeedDetailsScreen(_ post: HomeScreenPost) {
         let parameters = FeedDetailsScreenCoordinatorParameters(userSession: userSession, feedItem: post)
         let coordinator = FeedDetailsScreenCoordinator(parameters: parameters)
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .replyTapped(let reply):
+                    presentFeedDetailsScreen(reply)
+                }
+            }
+            .store(in: &cancellables)
         navigationSplitCoordinator.setDetailCoordinator(coordinator)
     }
 }

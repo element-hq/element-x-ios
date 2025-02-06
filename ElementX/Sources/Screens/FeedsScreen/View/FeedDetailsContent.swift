@@ -1,5 +1,5 @@
 //
-// Copyright 2023, 2024 New Vector Ltd.
+// Copyright 2025 New Vector Ltd.
 //
 // SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 // Please see LICENSE files in the repository root for full details.
@@ -7,34 +7,32 @@
 
 import SwiftUI
 
-struct HomeScreenPostList: View {
-    @ObservedObject var context: HomeScreenViewModel.Context
+struct FeedDetailsContent: View {
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    
+    @ObservedObject var context: FeedDetailsScreenViewModel.Context
+    let scrollViewAdapter: ScrollViewAdapter
     
     var body: some View {
-        content
+        feedDetails
     }
     
-    @ViewBuilder
-    private var content: some View {
-        ForEach(context.viewState.visiblePosts) { post in
-            VStack(alignment: .leading) {
-                HomeScreenPostCell(post: post, context: context)
+    private var feedDetails: some View {
+        GeometryReader { geometry in
+            ScrollView {
+                // Feed Details view
+                FeedDetailsSection(post: context.viewState.bindings.feed, context: context)
                     .padding(.all, 16)
-                Divider()
-            }
-            .onTapGesture {
-                context.send(viewAction: .postTapped(post))
             }
         }
     }
 }
 
-struct HomeScreenPostCell: View {
+struct FeedDetailsSection: View {
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
-    @Environment(\.redactionReasons) private var redactionReasons
     
     let post: HomeScreenPost
-    let context: HomeScreenViewModel.Context
+    let context: FeedDetailsScreenViewModel.Context
     
     var body: some View {
         HStack(alignment: .top) {
@@ -81,7 +79,7 @@ struct HomeScreenPostCell: View {
                                              count: post.repliesCount,
                                              highlightColor: false,
                                              action: {
-                        context.send(viewAction: .postTapped(post))
+                        // context.send(viewAction: .postTapped(post))
                     })
                     .padding(.horizontal, 24)
                     
@@ -93,27 +91,6 @@ struct HomeScreenPostCell: View {
                                              action: {
                         context.send(viewAction: .openArweaveLink(post))
                     })
-                }
-            }
-        }
-    }
-}
-
-struct HomeScreenPostFooterItem: View {
-    
-    let icon: ImageAsset
-    let count: String
-    let highlightColor: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            HStack {
-                Image(asset: icon)
-                if !count.isEmpty {
-                    Text("\(count)")
-                        .font(.zero.bodyMD)
-                        .foregroundStyle(highlightColor ? .zero.bgAccentRest : .compound.textSecondary)
                 }
             }
         }

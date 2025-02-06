@@ -976,12 +976,42 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func fetchZeroPosts(limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
+    func fetchZeroFeeds(limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
         do {
             let zeroPostsResult = try await zeroPostsApi.fetchPosts(limit: limit, skip: skip)
             switch zeroPostsResult {
             case .success(let posts):
                 return .success(posts)
+            case .failure(let error):
+                return .failure(checkPostFetchError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func fetchFeedDetails(feedId: String) async -> Result<ZPost, ClientProxyError> {
+        do {
+            let zeroPostResult = try await zeroPostsApi.fetchPostDetails(postId: feedId)
+            switch zeroPostResult {
+            case .success(let post):
+                return .success(post)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func fetchFeedReplies(feedId: String, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
+        do {
+            let zeroFeedRepliesResult = try await zeroPostsApi.fetchPostReplies(postId: feedId, limit: limit, skip: skip)
+            switch zeroFeedRepliesResult {
+            case .success(let replies):
+                return .success(replies)
             case .failure(let error):
                 return .failure(checkPostFetchError(error))
             }

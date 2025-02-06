@@ -9,5 +9,7 @@ import Combine
 
 @MainActor
 protocol FeedDetailsScreenViewModelProtocol {
+    var actions: AnyPublisher<FeedDetailsScreenViewModelAction, Never> { get }
+    
     var context: FeedDetailsScreenViewModelType.Context { get }
 }

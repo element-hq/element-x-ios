@@ -10,11 +10,56 @@ import UIKit
 
 struct FeedDetailsScreenViewState: BindableState {
     var bindings: FeedDetailsScreenViewStateBindings
+    
+    var feedReplies: [HomeScreenPost] = []
+    var repliesListMode: FeedRepliesListMode = .skeletons
+    
+    var canLoadMoreReplies: Bool = true
+    
+    var visibleReplies: [HomeScreenPost] {
+        if repliesListMode == .skeletons {
+            return placeholderReplies
+        }
+        
+        return feedReplies
+    }
+    
+    var placeholderReplies: [HomeScreenPost] {
+        (1...10).map { _ in
+            HomeScreenPost.placeholder()
+        }
+    }
+    
+    var userRewards = ZeroRewards.empty()
 }
 
 struct FeedDetailsScreenViewStateBindings {
     var feed: HomeScreenPost = HomeScreenPost.placeholder()
-    var feedReplies: [ZPost] = []
+    var alertInfo: AlertInfo<UUID>?
 }
 
-enum FeedDetailsScreenViewAction { }
+enum FeedDetailsScreenViewModelAction {
+    case replyTapped(_ reply: HomeScreenPost)
+}
+
+enum FeedDetailsScreenViewAction {
+    case replyTapped(_ reply: HomeScreenPost)
+    case openArweaveLink(_ post: HomeScreenPost)
+}
+
+enum FeedRepliesListMode: CustomStringConvertible {
+    case skeletons
+    case empty
+    case replies
+    
+    var description: String {
+        switch self {
+        case .skeletons:
+            return "Showing placeholders"
+        case .empty:
+            return "Showing empty state"
+        case .replies:
+            return "Showing replies"
+        }
+    }
+}

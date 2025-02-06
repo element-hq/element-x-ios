@@ -520,7 +520,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             defer { isFetchPostsInProgress = false } // Ensure flag is reset when the task completes
             
             state.postListMode = state.posts.isEmpty ? .skeletons : .posts
-            let postsResult = await userSession.clientProxy.fetchZeroPosts(limit: HOME_SCREEN_POST_PAGE_COUNT,
+            let postsResult = await userSession.clientProxy.fetchZeroFeeds(limit: HOME_SCREEN_POST_PAGE_COUNT,
                                                                            skip: state.posts.count)
             switch postsResult {
             case .success(let posts):

@@ -5390,17 +5390,17 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         checkAndLinkZeroUserCallsCount += 1
         checkAndLinkZeroUserClosure?()
     }
-    //MARK: - fetchZeroPosts
+    //MARK: - fetchZeroFeeds
 
-    var fetchZeroPostsLimitSkipUnderlyingCallsCount = 0
-    var fetchZeroPostsLimitSkipCallsCount: Int {
+    var fetchZeroFeedsLimitSkipUnderlyingCallsCount = 0
+    var fetchZeroFeedsLimitSkipCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return fetchZeroPostsLimitSkipUnderlyingCallsCount
+                return fetchZeroFeedsLimitSkipUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = fetchZeroPostsLimitSkipUnderlyingCallsCount
+                    returnValue = fetchZeroFeedsLimitSkipUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -5408,29 +5408,29 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                fetchZeroPostsLimitSkipUnderlyingCallsCount = newValue
+                fetchZeroFeedsLimitSkipUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    fetchZeroPostsLimitSkipUnderlyingCallsCount = newValue
+                    fetchZeroFeedsLimitSkipUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var fetchZeroPostsLimitSkipCalled: Bool {
-        return fetchZeroPostsLimitSkipCallsCount > 0
+    var fetchZeroFeedsLimitSkipCalled: Bool {
+        return fetchZeroFeedsLimitSkipCallsCount > 0
     }
-    var fetchZeroPostsLimitSkipReceivedArguments: (limit: Int, skip: Int)?
-    var fetchZeroPostsLimitSkipReceivedInvocations: [(limit: Int, skip: Int)] = []
+    var fetchZeroFeedsLimitSkipReceivedArguments: (limit: Int, skip: Int)?
+    var fetchZeroFeedsLimitSkipReceivedInvocations: [(limit: Int, skip: Int)] = []
 
-    var fetchZeroPostsLimitSkipUnderlyingReturnValue: Result<[ZPost], ClientProxyError>!
-    var fetchZeroPostsLimitSkipReturnValue: Result<[ZPost], ClientProxyError>! {
+    var fetchZeroFeedsLimitSkipUnderlyingReturnValue: Result<[ZPost], ClientProxyError>!
+    var fetchZeroFeedsLimitSkipReturnValue: Result<[ZPost], ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return fetchZeroPostsLimitSkipUnderlyingReturnValue
+                return fetchZeroFeedsLimitSkipUnderlyingReturnValue
             } else {
                 var returnValue: Result<[ZPost], ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = fetchZeroPostsLimitSkipUnderlyingReturnValue
+                    returnValue = fetchZeroFeedsLimitSkipUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -5438,26 +5438,166 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                fetchZeroPostsLimitSkipUnderlyingReturnValue = newValue
+                fetchZeroFeedsLimitSkipUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    fetchZeroPostsLimitSkipUnderlyingReturnValue = newValue
+                    fetchZeroFeedsLimitSkipUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var fetchZeroPostsLimitSkipClosure: ((Int, Int) async -> Result<[ZPost], ClientProxyError>)?
+    var fetchZeroFeedsLimitSkipClosure: ((Int, Int) async -> Result<[ZPost], ClientProxyError>)?
 
-    func fetchZeroPosts(limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
-        fetchZeroPostsLimitSkipCallsCount += 1
-        fetchZeroPostsLimitSkipReceivedArguments = (limit: limit, skip: skip)
+    func fetchZeroFeeds(limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
+        fetchZeroFeedsLimitSkipCallsCount += 1
+        fetchZeroFeedsLimitSkipReceivedArguments = (limit: limit, skip: skip)
         DispatchQueue.main.async {
-            self.fetchZeroPostsLimitSkipReceivedInvocations.append((limit: limit, skip: skip))
+            self.fetchZeroFeedsLimitSkipReceivedInvocations.append((limit: limit, skip: skip))
         }
-        if let fetchZeroPostsLimitSkipClosure = fetchZeroPostsLimitSkipClosure {
-            return await fetchZeroPostsLimitSkipClosure(limit, skip)
+        if let fetchZeroFeedsLimitSkipClosure = fetchZeroFeedsLimitSkipClosure {
+            return await fetchZeroFeedsLimitSkipClosure(limit, skip)
         } else {
-            return fetchZeroPostsLimitSkipReturnValue
+            return fetchZeroFeedsLimitSkipReturnValue
+        }
+    }
+    //MARK: - fetchFeedDetails
+
+    var fetchFeedDetailsFeedIdUnderlyingCallsCount = 0
+    var fetchFeedDetailsFeedIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchFeedDetailsFeedIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchFeedDetailsFeedIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchFeedDetailsFeedIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchFeedDetailsFeedIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchFeedDetailsFeedIdCalled: Bool {
+        return fetchFeedDetailsFeedIdCallsCount > 0
+    }
+    var fetchFeedDetailsFeedIdReceivedFeedId: String?
+    var fetchFeedDetailsFeedIdReceivedInvocations: [String] = []
+
+    var fetchFeedDetailsFeedIdUnderlyingReturnValue: Result<ZPost, ClientProxyError>!
+    var fetchFeedDetailsFeedIdReturnValue: Result<ZPost, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchFeedDetailsFeedIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZPost, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchFeedDetailsFeedIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchFeedDetailsFeedIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchFeedDetailsFeedIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchFeedDetailsFeedIdClosure: ((String) async -> Result<ZPost, ClientProxyError>)?
+
+    func fetchFeedDetails(feedId: String) async -> Result<ZPost, ClientProxyError> {
+        fetchFeedDetailsFeedIdCallsCount += 1
+        fetchFeedDetailsFeedIdReceivedFeedId = feedId
+        DispatchQueue.main.async {
+            self.fetchFeedDetailsFeedIdReceivedInvocations.append(feedId)
+        }
+        if let fetchFeedDetailsFeedIdClosure = fetchFeedDetailsFeedIdClosure {
+            return await fetchFeedDetailsFeedIdClosure(feedId)
+        } else {
+            return fetchFeedDetailsFeedIdReturnValue
+        }
+    }
+    //MARK: - fetchFeedReplies
+
+    var fetchFeedRepliesFeedIdLimitSkipUnderlyingCallsCount = 0
+    var fetchFeedRepliesFeedIdLimitSkipCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchFeedRepliesFeedIdLimitSkipUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchFeedRepliesFeedIdLimitSkipUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchFeedRepliesFeedIdLimitSkipUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchFeedRepliesFeedIdLimitSkipUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchFeedRepliesFeedIdLimitSkipCalled: Bool {
+        return fetchFeedRepliesFeedIdLimitSkipCallsCount > 0
+    }
+    var fetchFeedRepliesFeedIdLimitSkipReceivedArguments: (feedId: String, limit: Int, skip: Int)?
+    var fetchFeedRepliesFeedIdLimitSkipReceivedInvocations: [(feedId: String, limit: Int, skip: Int)] = []
+
+    var fetchFeedRepliesFeedIdLimitSkipUnderlyingReturnValue: Result<[ZPost], ClientProxyError>!
+    var fetchFeedRepliesFeedIdLimitSkipReturnValue: Result<[ZPost], ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchFeedRepliesFeedIdLimitSkipUnderlyingReturnValue
+            } else {
+                var returnValue: Result<[ZPost], ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchFeedRepliesFeedIdLimitSkipUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchFeedRepliesFeedIdLimitSkipUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchFeedRepliesFeedIdLimitSkipUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchFeedRepliesFeedIdLimitSkipClosure: ((String, Int, Int) async -> Result<[ZPost], ClientProxyError>)?
+
+    func fetchFeedReplies(feedId: String, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
+        fetchFeedRepliesFeedIdLimitSkipCallsCount += 1
+        fetchFeedRepliesFeedIdLimitSkipReceivedArguments = (feedId: feedId, limit: limit, skip: skip)
+        DispatchQueue.main.async {
+            self.fetchFeedRepliesFeedIdLimitSkipReceivedInvocations.append((feedId: feedId, limit: limit, skip: skip))
+        }
+        if let fetchFeedRepliesFeedIdLimitSkipClosure = fetchFeedRepliesFeedIdLimitSkipClosure {
+            return await fetchFeedRepliesFeedIdLimitSkipClosure(feedId, limit, skip)
+        } else {
+            return fetchFeedRepliesFeedIdLimitSkipReturnValue
         }
     }
     //MARK: - loadMediaContentForSource

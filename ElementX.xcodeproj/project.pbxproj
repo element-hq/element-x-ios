@@ -1825,6 +1825,8 @@
 		7968A4362D540A3400E9056A /* FeedDetailsScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7968A4342D540A2D00E9056A /* FeedDetailsScreenViewModelProtocol.swift */; };
 		7968A4392D540A4700E9056A /* FeedDetailsScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7968A4382D540A4000E9056A /* FeedDetailsScreenView.swift */; };
 		7968A43A2D540A4700E9056A /* FeedDetailsScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7968A4382D540A4000E9056A /* FeedDetailsScreenView.swift */; };
+		7968A43C2D553AFF00E9056A /* FeedDetailsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7968A43B2D553AF800E9056A /* FeedDetailsContent.swift */; };
+		7968A43D2D553AFF00E9056A /* FeedDetailsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7968A43B2D553AF800E9056A /* FeedDetailsContent.swift */; };
 		79741C1953269FF1A211D246 /* RoomPollsHistoryScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E14FF533D25A0692F7CEB0 /* RoomPollsHistoryScreenViewModel.swift */; };
 		798BF3072137833FBD3F4C96 /* TimelineDeliveryStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F91544AC136BF6477BDAB8 /* TimelineDeliveryStatusView.swift */; };
 		79959F8E45C3749997482A7F /* TimelineItemBubbledStylerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A459AE4B6566B2FA99E86B2 /* TimelineItemBubbledStylerView.swift */; };
@@ -3275,6 +3277,7 @@
 		7968A4312D5409FF00E9056A /* FeedDetailsScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsScreenModels.swift; sourceTree = "<group>"; };
 		7968A4342D540A2D00E9056A /* FeedDetailsScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		7968A4382D540A4000E9056A /* FeedDetailsScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsScreenView.swift; sourceTree = "<group>"; };
+		7968A43B2D553AF800E9056A /* FeedDetailsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsContent.swift; sourceTree = "<group>"; };
 		796CBD0C56FA0D3AEDAB255B /* SessionVerificationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionVerificationScreenCoordinator.swift; sourceTree = "<group>"; };
 		79FAC366FF299BCC555D756E /* ElementWellKnown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementWellKnown.swift; sourceTree = "<group>"; };
 		7A03E073077D92AA19C43DCF /* IdentityConfirmationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityConfirmationScreenCoordinator.swift; sourceTree = "<group>"; };
@@ -6226,6 +6229,7 @@
 			isa = PBXGroup;
 			children = (
 				7968A4382D540A4000E9056A /* FeedDetailsScreenView.swift */,
+				7968A43B2D553AF800E9056A /* FeedDetailsContent.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -8998,6 +9002,7 @@
 				18E9A4872C9829970082DDA4 /* BlockedUsersScreenCoordinator.swift in Sources */,
 				18E9A4882C9829970082DDA4 /* BlockedUsersScreenModels.swift in Sources */,
 				18E9A4892C9829970082DDA4 /* BlockedUsersScreenViewModel.swift in Sources */,
+				7968A43C2D553AFF00E9056A /* FeedDetailsContent.swift in Sources */,
 				18E9A48A2C9829970082DDA4 /* BlockedUsersScreenViewModelProtocol.swift in Sources */,
 				18E9A48B2C9829970082DDA4 /* BloomView.swift in Sources */,
 				18E9A48C2C9829970082DDA4 /* BlurHashDecode.swift in Sources */,
@@ -10131,6 +10136,7 @@
 				07F6382E29845D235BFA3308 /* DeactivateAccountScreenModels.swift in Sources */,
 				C9ABF75A43F2D26F1D9A1F27 /* DeactivateAccountScreenViewModel.swift in Sources */,
 				4AD2B5426DBED97196AA4783 /* DeactivateAccountScreenViewModelProtocol.swift in Sources */,
+				7968A43D2D553AFF00E9056A /* FeedDetailsContent.swift in Sources */,
 				EE8491AD81F47DF3C192497B /* DecorationTimelineItemProtocol.swift in Sources */,
 				5780E444F405AA1304E1C23E /* DeveloperOptionsScreen.swift in Sources */,
 				185454C12CFDE66E003CA957 /* CreateAccountScreenModels.swift in Sources */,
