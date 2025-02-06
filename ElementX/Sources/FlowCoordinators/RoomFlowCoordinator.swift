@@ -230,11 +230,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         guard roomID == self.roomID else { fatalError("Navigation route doesn't belong to this room flow.") }
         
         showLoadingIndicator(delay: .milliseconds(250))
+        defer { hideLoadingIndicator() }
         guard let room = await userSession.clientProxy.roomForIdentifier(roomID) else {
             stateMachine.tryEvent(.presentJoinRoomScreen(via: via), userInfo: EventUserInfo(animated: animated))
             return
         }
-        hideLoadingIndicator()
         
         switch room {
         case .joined(let roomProxy):
