@@ -38,6 +38,28 @@ extension Date {
         formatted(date: .omitted, time: .shortened)
     }
     
+    func timeAgo() -> String {
+        let seconds = Int(Date().timeIntervalSince(self))
+        
+        if seconds < 60 { return "\(seconds)s ago" }
+        
+        let minutes = seconds / 60
+        if minutes < 60 { return "\(minutes)m ago" }
+        
+        let hours = minutes / 60
+        if hours < 24 { return "\(hours)h ago" }
+        
+        //        let days = hours / 24
+        //        if days < 365 { return "\(days)d ago" }
+        //
+        //        return "\(days / 365)y ago"
+        
+        // If more than 24 hours, return date in "MMM dd" format
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM dd"
+        return formatter.string(from: self)
+    }
+    
     /// A fixed date used for mocks, previews etc.
     static var mock: Date {
         DateComponents(calendar: .current, year: 2007, month: 1, day: 9, hour: 9, minute: 41).date ?? .now

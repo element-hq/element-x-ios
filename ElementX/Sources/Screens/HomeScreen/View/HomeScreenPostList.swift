@@ -17,13 +17,13 @@ struct HomeScreenPostList: View {
     @ViewBuilder
     private var content: some View {
         ForEach(context.viewState.visiblePosts) { post in
-            VStack {
+            VStack(alignment: .leading) {
                 HomeScreenPostCell(post: post, context: context)
                     .padding(.all, 16)
                 Divider()
             }
             .onTapGesture {
-                context.send(viewAction: .postTapped(post))
+                // context.send(viewAction: .postTapped(post))
             }
         }
     }
@@ -45,17 +45,11 @@ struct HomeScreenPostCell: View {
                                 avatarSize: .user(on: .home),
                                 mediaProvider: context.mediaProvider)
             VStack(alignment: .leading) {
-                HStack {
-                    Text(post.senderInfo.displayName ?? "")
-                        .font(.compound.bodyMDSemibold)
-                        .foregroundStyle(.compound.textPrimary)
+                HStack(alignment: .center) {
+                    Text(post.attributedSenderHeaderText)
                         .lineLimit(1)
                     
-                    Text("• \(post.postTimestamp)")
-                        .font(.zero.bodyMD)
-                        .foregroundStyle(.compound.textSecondary)
-                        .lineLimit(1)
-                    if post.worldPrimaryZId != nil {
+                    if post.worldPrimaryZId != nil && !post.isPostInOwnFeed {
                         Spacer()
                         Text("0://\(post.worldPrimaryZId!)")
                             .font(.compound.bodyMDSemibold)
@@ -80,12 +74,25 @@ struct HomeScreenPostCell: View {
                 HStack {
                     HomeScreenPostFooterItem(icon: Asset.Images.postMeowIcon,
                                              count: post.meowCount,
-                                             highlightColor: true)
+                                             highlightColor: true,
+                                             action: {})
                     
                     HomeScreenPostFooterItem(icon: Asset.Images.postCommentIcon,
                                              count: post.repliesCount,
-                                             highlightColor: false)
+                                             highlightColor: false,
+                                             action: {
+                        // context.send(viewAction: .postTapped(post))
+                    })
                     .padding(.horizontal, 24)
+                    
+                    Spacer()
+                    
+                    HomeScreenPostFooterItem(icon: Asset.Images.postArweaveIcon,
+                                             count: "",
+                                             highlightColor: false,
+                                             action: {
+                        context.send(viewAction: .openArweaveLink(post))
+                    })
                 }
             }
         }
@@ -97,13 +104,18 @@ struct HomeScreenPostFooterItem: View {
     let icon: ImageAsset
     let count: String
     let highlightColor: Bool
+    let action: () -> Void
     
     var body: some View {
-        HStack {
-            Image(asset: icon)
-            Text("\(count)")
-                .font(.zero.bodyMD)
-                .foregroundStyle(highlightColor ? .zero.bgAccentRest : .compound.textSecondary)
+        Button(action: action) {
+            HStack {
+                Image(asset: icon)
+                if !count.isEmpty {
+                    Text("\(count)")
+                        .font(.zero.bodyMD)
+                        .foregroundStyle(highlightColor ? .zero.bgAccentRest : .compound.textSecondary)
+                }
+            }
         }
     }
 }

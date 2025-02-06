@@ -230,6 +230,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             fetchPosts()
         case .postTapped(let post):
             actionsSubject.send(.postTapped(post))
+        case .openArweaveLink(let post):
+            openArweaveLink(post)
         }
     }
     
@@ -550,6 +552,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     private func updatePostsVisibleRange(_ range: Range<Int>) {
         print("Update Posts Visible Range: Upper bound: \(range.upperBound), Lower bound: \(range.lowerBound)")
+    }
+    
+    private func openArweaveLink(_ post: HomeScreenPost) {
+        guard let arweaveUrl = post.getArweaveLink() else { return }
+        UIApplication.shared.open(arweaveUrl)
     }
 }
 

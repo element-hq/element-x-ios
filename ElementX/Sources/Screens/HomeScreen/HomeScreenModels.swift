@@ -56,6 +56,7 @@ enum HomeScreenViewAction {
     case loadMorePostsIfNeeded
     
     case postTapped(_ post: HomeScreenPost)
+    case openArweaveLink(_ post: HomeScreenPost)
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -270,6 +271,7 @@ struct HomeScreenPost: Identifiable, Equatable {
     
     // post info
     let postText: String?
+    let attributedSenderHeaderText: AttributedString
     let attributedPostText: AttributedString?
     let postUpdatedAt: String
     let postCreatedAt: String
@@ -281,11 +283,15 @@ struct HomeScreenPost: Identifiable, Equatable {
     let meowCount: String
     let repliesCount: String
     
+    let isPostInOwnFeed: Bool
+    let arweaveId: String
+    
     static func placeholder() -> HomeScreenPost {
         HomeScreenPost(id: UUID().uuidString,
                        senderInfo: UserProfileProxy(userID: UUID().uuidString),
                        senderPrimaryZId: "0://placeholder-sender-zid",
                        postText: "Placeholder post text...",
+                       attributedSenderHeaderText: AttributedString("Placeholder sender text..."),
                        attributedPostText: AttributedString("Placeholder post text..."),
                        postUpdatedAt: "",
                        postCreatedAt: "",
@@ -293,7 +299,9 @@ struct HomeScreenPost: Identifiable, Equatable {
                        postImageURL: nil,
                        worldPrimaryZId: "0://placeholder-world-zid",
                        meowCount: "0",
-                       repliesCount: "0")
+                       repliesCount: "0",
+                       isPostInOwnFeed: false,
+                       arweaveId: "")
     }
 }
 
@@ -338,10 +346,13 @@ extension HomeScreenPost {
         let userProfile = post.user.profileSummary
         let meowCount = post.postsMeowsSummary?.meowCount(decimal: rewardsDecimalPlaces) ?? "0"
         let postUpdatedAt = DateUtil.shared.dateFromISO8601String(post.updatedAt)
-        let postTimeStamp = postUpdatedAt.formattedMinimal()
+        let postTimeStamp = postUpdatedAt.timeAgo()
         let repliesCount = String(post.replies?.count ?? 0)
         
-        let attributedString = post.text.isEmpty ? nil : HomeScreenPost.attributedString(from: post.text)
+        let attributedSenderHeaderText = HomeScreenPost.attributedSenderHeader(from: userProfile.fullName,
+                                                                               timeStamp: postTimeStamp)
+        let attributedPostText = post.text.isEmpty ? nil : HomeScreenPost.attributedPostText(from: post.text)
+        let isPostInOwnFeed = post.worldZid == post.zid
         
         self.init(
             id: post.id.rawValue,
@@ -350,18 +361,27 @@ extension HomeScreenPost {
                                          avatarURL: URL(string: userProfile.profileImage)),
             senderPrimaryZId: post.zid,
             postText: post.text,
-            attributedPostText: attributedString,
+            attributedSenderHeaderText: attributedSenderHeaderText,
+            attributedPostText: attributedPostText,
             postUpdatedAt: post.updatedAt,
             postCreatedAt: post.createdAt,
             postTimestamp: postTimeStamp,
             postImageURL: (post.imageUrl != nil) ? URL(string: post.imageUrl!) : nil,
             worldPrimaryZId: post.worldZid,
             meowCount: meowCount,
-            repliesCount: repliesCount
+            repliesCount: repliesCount,
+            isPostInOwnFeed: isPostInOwnFeed,
+            arweaveId: post.arweaveId
         )
     }
     
-    private static func attributedString(from text: String) -> AttributedString {
+    func getArweaveLink() -> URL? {
+        let arweaveHost = "https://of2ub4a2ai55lgpqj5z7so7j7v6uwjcruh6cdm3ojgnhqngahkwa.arweave.net/"
+        let arweaveUrl = arweaveHost.appending(arweaveId)
+        return URL(string: arweaveUrl)
+    }
+    
+    private static func attributedPostText(from text: String) -> AttributedString {
         var attributedString = AttributedString(text)
         
         let patterns: [(String, Color, Bool)] = [
@@ -375,6 +395,21 @@ extension HomeScreenPost {
         }
         
         return attributedString
+    }
+    
+    
+    private static func attributedSenderHeader(from senderName: String, timeStamp: String) -> AttributedString {
+        let timeStampPostFix = " • \(timeStamp)"
+        var attributedSenderHeader = AttributedString("\(senderName)\(timeStampPostFix)")
+        // applyAttributes
+        let nameRange = attributedSenderHeader.range(of: senderName)!
+        let timeStampRange = attributedSenderHeader.range(of: timeStampPostFix)!
+        attributedSenderHeader[nameRange].foregroundColor = .compound.textPrimary
+        attributedSenderHeader[timeStampRange].foregroundColor = .compound.textSecondary
+        attributedSenderHeader[nameRange].font = .compound.bodyMDSemibold
+        attributedSenderHeader[timeStampRange].font = .zero.bodyMD
+        
+        return attributedSenderHeader
     }
     
     private static func applyAttributes(_ attributedString: inout AttributedString,
