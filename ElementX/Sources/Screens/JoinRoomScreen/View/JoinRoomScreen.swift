@@ -330,7 +330,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         
         switch mode {
         case .unknown:
-            clientProxy.roomPreviewForIdentifierViaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+            clientProxy.roomPreviewForIdentifierViaReturnValue = .failure(.roomPreviewIsPrivate)
             clientProxy.roomForIdentifierReturnValue = nil
         case .joinable:
             clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.joinable)
@@ -364,7 +364,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         case .banned:
             clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.banned)
             clientProxy.roomForIdentifierClosure = { _ in
-                .banned
+                .banned(BannedRoomProxyMock(.init(avatarURL: .mockMXCAvatar)))
             }
         case .forbidden:
             clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.restricted)
