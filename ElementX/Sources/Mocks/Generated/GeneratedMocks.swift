@@ -5952,12 +5952,48 @@ class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol, @unchecked S
     }
 }
 class InvitedRoomProxyMock: InvitedRoomProxyProtocol, @unchecked Sendable {
+    var infoCallsCount = 0
+    var infoCalled: Bool {
+        return infoCallsCount > 0
+    }
+
     var info: BaseRoomInfoProxyProtocol {
-        get { return underlyingInfo }
-        set(value) { underlyingInfo = value }
+        get async throws {
+            if let error = infoThrowableError {
+                throw error
+            }
+            infoCallsCount += 1
+            if let infoClosure = infoClosure {
+                return try await infoClosure()
+            } else {
+                return underlyingInfo
+            }
+        }
     }
     var underlyingInfo: BaseRoomInfoProxyProtocol!
-    var inviter: RoomMemberProxyProtocol?
+    var infoThrowableError: Error?
+    var infoClosure: (() async throws -> BaseRoomInfoProxyProtocol)?
+    var inviterCallsCount = 0
+    var inviterCalled: Bool {
+        return inviterCallsCount > 0
+    }
+
+    var inviter: RoomMemberProxyProtocol? {
+        get async throws {
+            if let error = inviterThrowableError {
+                throw error
+            }
+            inviterCallsCount += 1
+            if let inviterClosure = inviterClosure {
+                return try await inviterClosure()
+            } else {
+                return underlyingInviter
+            }
+        }
+    }
+    var underlyingInviter: RoomMemberProxyProtocol?
+    var inviterThrowableError: Error?
+    var inviterClosure: (() async throws -> RoomMemberProxyProtocol?)?
     var id: String {
         get { return underlyingId }
         set(value) { underlyingId = value }
@@ -10528,11 +10564,27 @@ class KnockRequestProxyMock: KnockRequestProxyProtocol, @unchecked Sendable {
     }
 }
 class KnockedRoomProxyMock: KnockedRoomProxyProtocol, @unchecked Sendable {
+    var infoCallsCount = 0
+    var infoCalled: Bool {
+        return infoCallsCount > 0
+    }
+
     var info: BaseRoomInfoProxyProtocol {
-        get { return underlyingInfo }
-        set(value) { underlyingInfo = value }
+        get async throws {
+            if let error = infoThrowableError {
+                throw error
+            }
+            infoCallsCount += 1
+            if let infoClosure = infoClosure {
+                return try await infoClosure()
+            } else {
+                return underlyingInfo
+            }
+        }
     }
     var underlyingInfo: BaseRoomInfoProxyProtocol!
+    var infoThrowableError: Error?
+    var infoClosure: (() async throws -> BaseRoomInfoProxyProtocol)?
     var id: String {
         get { return underlyingId }
         set(value) { underlyingId = value }

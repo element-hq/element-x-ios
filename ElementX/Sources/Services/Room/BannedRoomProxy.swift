@@ -19,10 +19,9 @@ class BannedRoomProxy: BannedRoomProxyProtocol {
     lazy var id = info.id
         
     init(roomListItem: RoomListItemProtocol,
-         roomPreview: RoomPreviewProtocol,
-         ownUserID: String) throws {
+         ownUserID: String) async throws {
         self.roomListItem = roomListItem
-        self.roomPreview = roomPreview
+        roomPreview = try await roomListItem.previewRoom(via: [])
         self.ownUserID = ownUserID
         info = try RoomPreviewInfoProxy(roomPreviewInfo: roomPreview.info())
     }

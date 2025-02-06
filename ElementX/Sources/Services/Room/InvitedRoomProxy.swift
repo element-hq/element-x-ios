@@ -11,23 +11,39 @@ import UIKit
 
 class InvitedRoomProxy: InvitedRoomProxyProtocol {
     private let roomListItem: RoomListItemProtocol
-    private let roomPreview: RoomPreviewProtocol
-    let info: BaseRoomInfoProxyProtocol
+    private var roomPreview: RoomPreviewProtocol {
+        get async throws {
+            try await roomPreviewTask.value
+        }
+    }
+    
+    private var roomPreviewTask: Task<RoomPreviewProtocol, Error>
+    
+    var info: BaseRoomInfoProxyProtocol {
+        get async throws {
+            try await RoomPreviewInfoProxy(roomPreviewInfo: roomPreview.info())
+        }
+    }
+    
+    var inviter: RoomMemberProxyProtocol? {
+        get async throws {
+            try await roomPreview.inviter().map(RoomMemberProxy.init)
+        }
+    }
+    
     let ownUserID: String
-    let inviter: RoomMemberProxyProtocol?
     
     // A room identifier is constant and lazy stops it from being fetched
     // multiple times over FFI
-    lazy var id: String = info.id
+    lazy var id: String = roomListItem.id()
         
     init(roomListItem: RoomListItemProtocol,
-         roomPreview: RoomPreviewProtocol,
-         ownUserID: String) async throws {
+         ownUserID: String) {
         self.roomListItem = roomListItem
-        self.roomPreview = roomPreview
         self.ownUserID = ownUserID
-        info = try RoomPreviewInfoProxy(roomPreviewInfo: roomPreview.info())
-        inviter = await roomPreview.inviter().map(RoomMemberProxy.init)
+        roomPreviewTask = Task {
+            try await roomListItem.previewRoom(via: [])
+        }
     }
     
     func rejectInvitation() async -> Result<Void, RoomProxyError> {

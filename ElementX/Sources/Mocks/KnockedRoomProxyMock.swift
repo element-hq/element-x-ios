@@ -22,7 +22,7 @@ extension KnockedRoomProxyMock {
     convenience init(_ configuration: KnockedRoomProxyMockConfiguration) {
         self.init()
         id = configuration.id
-        info = RoomInfoProxy(roomInfo: .init(configuration))
+        underlyingInfo = RoomInfoProxy(roomInfo: .init(configuration))
     }
 }
 

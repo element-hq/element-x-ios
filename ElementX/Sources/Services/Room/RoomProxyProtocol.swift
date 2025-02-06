@@ -34,14 +34,14 @@ protocol RoomProxyProtocol {
 
 // sourcery: AutoMockable
 protocol InvitedRoomProxyProtocol: RoomProxyProtocol {
-    var info: BaseRoomInfoProxyProtocol { get }
-    var inviter: RoomMemberProxyProtocol? { get }
+    var info: BaseRoomInfoProxyProtocol { get async throws }
+    var inviter: RoomMemberProxyProtocol? { get async throws }
     func rejectInvitation() async -> Result<Void, RoomProxyError>
 }
 
 // sourcery: AutoMockable
 protocol KnockedRoomProxyProtocol: RoomProxyProtocol {
-    var info: BaseRoomInfoProxyProtocol { get }
+    var info: BaseRoomInfoProxyProtocol { get async throws }
     func cancelKnock() async -> Result<Void, RoomProxyError>
 }
 

@@ -98,7 +98,6 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         }
         
         hideLoadingIndicator()
-        
         await updateRoomDetails()
     }
     
@@ -121,11 +120,12 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         switch room {
         case .joined(let joinedRoomProxy):
             roomInfo = joinedRoomProxy.infoPublisher.value
+            roomInfo = joinedRoomProxy.infoPublisher.value
         case .invited(let invitedRoomProxy):
-            inviter = invitedRoomProxy.inviter.map(RoomInviterDetails.init)
-            roomInfo = invitedRoomProxy.info
+            inviter = try? await invitedRoomProxy.inviter.map(RoomInviterDetails.init)
+            roomInfo = try? await invitedRoomProxy.info
         case .knocked(let knockedRoomProxy):
-            roomInfo = knockedRoomProxy.info
+            roomInfo = try? await knockedRoomProxy.info
             if let roomSummaryProvider = clientProxy.roomSummaryProvider {
                 membershipStateChangeCancellable = roomSummaryProvider.roomListPublisher
                     .compactMap { summaries -> Void? in

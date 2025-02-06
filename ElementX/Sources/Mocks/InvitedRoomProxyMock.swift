@@ -23,8 +23,8 @@ extension InvitedRoomProxyMock {
     convenience init(_ configuration: InvitedRoomProxyMockConfiguration) {
         self.init()
         id = configuration.id
-        inviter = configuration.inviter
-        info = RoomInfoProxy(roomInfo: .init(configuration))
+        underlyingInviter = configuration.inviter
+        underlyingInfo = RoomInfoProxy(roomInfo: .init(configuration))
     }
 }
 

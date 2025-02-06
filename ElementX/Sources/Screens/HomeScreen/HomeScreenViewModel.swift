@@ -410,9 +410,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         switch await userSession.clientProxy.joinRoom(roomID, via: []) {
         case .success:
             actionsSubject.send(.presentRoom(roomIdentifier: roomID))
-            analyticsService.trackJoinedRoom(isDM: roomProxy.info.isDirect,
-                                             isSpace: roomProxy.info.isSpace,
-                                             activeMemberCount: UInt(roomProxy.info.activeMembersCount))
+            Task {
+                let info = try await roomProxy.info
+                analyticsService.trackJoinedRoom(isDM: info.isDirect,
+                                                 isSpace: info.isSpace,
+                                                 activeMemberCount: UInt(info.activeMembersCount))
+            }
         case .failure:
             displayError()
         }

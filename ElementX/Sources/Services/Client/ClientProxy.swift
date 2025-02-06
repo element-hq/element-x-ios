@@ -916,14 +916,12 @@ class ClientProxy: ClientProxyProtocol {
             
             switch roomListItem.membership() {
             case .invited:
-                return try await .invited(InvitedRoomProxy(roomListItem: roomListItem,
-                                                           roomPreview: roomListItem.previewRoom(via: []),
-                                                           ownUserID: userID))
+                return .invited(InvitedRoomProxy(roomListItem: roomListItem,
+                                                 ownUserID: userID))
             case .knocked:
                 if appSettings.knockingEnabled {
-                    return try await .knocked(KnockedRoomProxy(roomListItem: roomListItem,
-                                                               roomPreview: roomListItem.previewRoom(via: []),
-                                                               ownUserID: userID))
+                    return .knocked(KnockedRoomProxy(roomListItem: roomListItem,
+                                                     ownUserID: userID))
                 }
                 return nil
             case .joined:
@@ -940,7 +938,6 @@ class ClientProxy: ClientProxyProtocol {
                 return .left
             case .banned:
                 return try await .banned(BannedRoomProxy(roomListItem: roomListItem,
-                                                         roomPreview: roomListItem.previewRoom(via: []),
                                                          ownUserID: userID))
             }
         } catch {
