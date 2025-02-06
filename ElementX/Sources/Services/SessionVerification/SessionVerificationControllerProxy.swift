@@ -95,7 +95,7 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
         MXLog.info("Requesting session verification")
         
         do {
-            try await sessionVerificationController.requestVerification()
+            try await sessionVerificationController.requestDeviceVerification()
             return .success(())
         } catch {
             MXLog.error("Failed requesting session verification with error: \(error)")
@@ -159,7 +159,7 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
         let details = SessionVerificationRequestDetails(senderID: details.senderId,
                                                         flowID: details.flowId,
                                                         deviceID: details.deviceId,
-                                                        displayName: details.displayName,
+                                                        displayName: details.deviceDisplayName,
                                                         firstSeenDate: Date(timeIntervalSince1970: TimeInterval(details.firstSeenTimestamp / 1000)))
         
         actions.send(.receivedVerificationRequest(details: details))
