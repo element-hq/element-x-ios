@@ -38,6 +38,14 @@ struct MediaFileRoomTimelineContent: View {
     var shouldBoost = false
     var isAudioFile = false
     
+    private var fileDescription: String {
+        var fileDescription = "\(filename.validatedFileExtension.uppercased())"
+        if let fileSize {
+            fileDescription += " (\(fileSize.formatted(.byteCount(style: .file))))"
+        }
+        return fileDescription
+    }
+    
     var onMediaTap: (() -> Void)?
     
     private var icon: KeyPath<CompoundIcons, Image> {
@@ -69,14 +77,13 @@ struct MediaFileRoomTimelineContent: View {
     
     var filePreview: some View {
         Label {
-            HStack(spacing: 4) {
+            VStack(alignment: .leading, spacing: 0) {
                 Text(filename)
-                    .truncationMode(.middle)
-                
-                if let fileSize {
-                    Text("(\(fileSize.formatted(.byteCount(style: .file))))")
-                        .layoutPriority(1) // We want the filename to truncate rather than the size.
-                }
+                    .foregroundStyle(.compound.textPrimary)
+                    .font(.compound.bodyLG)
+                Text(fileDescription)
+                    .font(.compound.bodySM)
+                    .foregroundStyle(.compound.textSecondary)
             }
             .font(.compound.bodyLG)
             .foregroundStyle(.compound.textPrimary)

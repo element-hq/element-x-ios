@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 extension String {
     /// Returns the string as an `AttributedString` with the specified character tinted in a different color.
@@ -105,5 +106,15 @@ extension String {
             return nil
         }
         return "#\(aliasLocalPart):\(serverName)"
+    }
+}
+
+extension String {
+    var validatedFileExtension: String {
+        let fileExtension = (self as NSString).pathExtension
+        guard !fileExtension.isEmpty else {
+            return "bin"
+        }
+        return UTType(filenameExtension: fileExtension) != nil ? fileExtension : "bin"
     }
 }
