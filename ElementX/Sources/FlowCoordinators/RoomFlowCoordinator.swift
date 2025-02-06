@@ -1621,10 +1621,15 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         flowCoordinator.start()
     }
     
-    private static let loadingIndicatorID = "RoomFlowCoordinator.loadingIndicator"
+    private static let loadingIndicatorID = "\(RoomFlowCoordinator.self)-Loading"
     
     private func showLoadingIndicator(delay: Duration? = nil) {
-        userIndicatorController.submitIndicator(.init(id: Self.loadingIndicatorID, type: .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: false), title: L10n.commonLoading, persistent: true), delay: delay)
+        userIndicatorController.submitIndicator(.init(id: Self.loadingIndicatorID,
+                                                      type: .modal(progress: .indeterminate,
+                                                                   interactiveDismissDisabled: false,
+                                                                   allowsInteraction: false),
+                                                      title: L10n.commonLoading, persistent: true),
+                                                delay: delay)
     }
     
     private func hideLoadingIndicator() {
