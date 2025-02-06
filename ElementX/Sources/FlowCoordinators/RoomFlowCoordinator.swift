@@ -229,10 +229,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func handleRoomRoute(roomID: String, via: [String], presentationAction: PresentationAction? = nil, animated: Bool) async {
         guard roomID == self.roomID else { fatalError("Navigation route doesn't belong to this room flow.") }
         
+        showLoadingIndicator(delay: .milliseconds(250))
         guard let room = await userSession.clientProxy.roomForIdentifier(roomID) else {
             stateMachine.tryEvent(.presentJoinRoomScreen(via: via), userInfo: EventUserInfo(animated: animated))
             return
         }
+        hideLoadingIndicator()
         
         switch room {
         case .joined(let roomProxy):
@@ -1617,6 +1619,16 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         mediaEventsTimelineFlowCoordinator = flowCoordinator
         
         flowCoordinator.start()
+    }
+    
+    private static let loadingIndicatorID = "RoomFlowCoordinator.loadingIndicator"
+    
+    private func showLoadingIndicator(delay: Duration? = nil) {
+        userIndicatorController.submitIndicator(.init(id: Self.loadingIndicatorID, type: .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: false), title: L10n.commonLoading, persistent: true), delay: delay)
+    }
+    
+    private func hideLoadingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorID)
     }
 }
 
