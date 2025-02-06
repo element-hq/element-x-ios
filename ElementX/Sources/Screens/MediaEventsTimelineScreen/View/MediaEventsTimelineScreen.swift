@@ -18,8 +18,8 @@ struct MediaEventsTimelineScreen: View {
             // Doesn't play well with the transformed scrollView
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbar { toolbar }
-            .environmentObject(context.viewState.activeTimelineContextProvider())
-            .environment(\.timelineContext, context.viewState.activeTimelineContextProvider())
+            .environmentObject(context.viewState.activeTimelineContext)
+            .environment(\.timelineContext, context.viewState.activeTimelineContext)
             .onChange(of: context.screenMode) { _, _ in
                 context.send(viewAction: .changedScreenMode)
             }
@@ -137,7 +137,7 @@ struct MediaEventsTimelineScreen: View {
             AudioMediaEventsTimelineView(timelineItem: timelineItem)
         case .voice(let timelineItem):
             let defaultPlayerState = AudioPlayerState(id: .timelineItemIdentifier(timelineItem.id), title: L10n.commonVoiceMessage, duration: 0)
-            let playerState = context.viewState.activeTimelineContextProvider().viewState.audioPlayerStateProvider?(timelineItem.id) ?? defaultPlayerState
+            let playerState = context.viewState.activeTimelineContext.viewState.audioPlayerStateProvider?(timelineItem.id) ?? defaultPlayerState
             VoiceMessageMediaEventsTimelineView(timelineItem: timelineItem, playerState: playerState)
         default:
             EmptyView()
@@ -251,7 +251,7 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                       screenMode: MediaEventsTimelineScreenMode) -> MediaEventsTimelineScreenViewModel {
         MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: makeTimelineViewModel(empty: empty),
                                            filesTimelineViewModel: makeTimelineViewModel(empty: empty),
-                                           initialViewState: .init(bindings: .init(screenMode: screenMode)),
+                                           initialScreenMode: screenMode,
                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                            userIndicatorController: UserIndicatorControllerMock(),
                                            appMediator: AppMediatorMock())
