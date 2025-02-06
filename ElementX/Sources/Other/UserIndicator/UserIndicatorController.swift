@@ -5,10 +5,11 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import SwiftUI
 
 class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol {
-    private var dismissalTimer: Timer?
+    private var timerCancellable: AnyCancellable?
     private var displayTimes = [String: Date]()
     private var delayedIndicators = Set<String>()
     
@@ -21,10 +22,11 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
             activeIndicator = indicatorQueue.last
             
             if let activeIndicator, !activeIndicator.persistent {
-                dismissalTimer?.invalidate()
-                dismissalTimer = Timer.scheduledTimer(withTimeInterval: nonPersistentDisplayDuration, repeats: false) { [weak self] _ in
+                timerCancellable?.cancel()
+                timerCancellable = Task { [weak self, nonPersistentDisplayDuration] in
+                    try await Task.sleep(for: .seconds(nonPersistentDisplayDuration))
                     self?.retractIndicatorWithId(activeIndicator.id)
-                }
+                }.asCancellable()
             }
         }
     }
@@ -46,9 +48,9 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
         } else {
             if let delay {
                 delayedIndicators.insert(indicator.id)
-
-                Timer.scheduledTimer(withTimeInterval: delay.seconds, repeats: false) { [weak self] _ in
-                    guard let self else { return }
+                
+                Task {
+                    try await Task.sleep(for: .seconds(delay.seconds))
                     
                     guard delayedIndicators.contains(indicator.id) else {
                         return
@@ -75,10 +77,11 @@ class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol
             indicatorQueue.removeAll { $0.id == id }
             return
         }
-    
-        Timer.scheduledTimer(withTimeInterval: minimumDisplayDuration, repeats: false) { [weak self] _ in
-            self?.indicatorQueue.removeAll { $0.id == id }
-            self?.displayTimes[id] = nil
+        
+        Task {
+            try? await Task.sleep(for: .seconds(minimumDisplayDuration))
+            indicatorQueue.removeAll { $0.id == id }
+            displayTimes[id] = nil
         }
     }
     

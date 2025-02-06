@@ -62,8 +62,6 @@ class TimelineController: TimelineControllerProtocol {
         activeTimeline = timelineProxy
         activeTimelineProvider = liveTimelineProvider
         
-        NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
-        
         guard let initialFocussedEventID else {
             configureActiveTimelineProvider()
             return
@@ -148,7 +146,9 @@ class TimelineController: TimelineControllerProtocol {
         }
         
         if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
-            fetchEventDetails(for: messageTimelineItem, refetchOnError: true)
+            fetchEventDetails(for: messageTimelineItem,
+                              refetchOnError: true,
+                              activeTimeline: activeTimeline)
         }
     }
     
@@ -375,55 +375,60 @@ class TimelineController: TimelineControllerProtocol {
         paginationState = PaginationState(backward: .paginating, forward: .paginating)
         callbacks.send(.isLive(activeTimelineProvider.kind == .live))
         
-        updateTimelineItemsCancellable = activeTimelineProvider
-            .updatePublisher
-            .receive(on: serialDispatchQueue)
-            .sink { [weak self] items, paginationState in
-                self?.updateTimelineItems(itemProxies: items, paginationState: paginationState)
+        updateTimelineItemsCancellable = Task { [weak self, activeTimelineProvider] in
+            let contentSizeChangePublisher = NotificationCenter.default.publisher(for: UIContentSizeCategory.didChangeNotification)
+            let timelineUpdates = activeTimelineProvider.updatePublisher.merge(with: contentSizeChangePublisher.map { _ in
+                (activeTimelineProvider.itemProxies, activeTimelineProvider.paginationState)
+            })
+            
+            for await (items, paginationState) in timelineUpdates.values {
+                await self?.updateTimelineItems(itemProxies: items, paginationState: paginationState)
             }
+        }.asCancellable()
     }
     
-    @objc private func contentSizeCategoryDidChange() {
-        // Recompute all attributed strings on content size changes -> DynamicType support
-        serialDispatchQueue.async { [activeTimelineProvider] in
-            self.updateTimelineItems(itemProxies: activeTimelineProvider.itemProxies, paginationState: activeTimelineProvider.paginationState)
-        }
-    }
-    
-    private func updateTimelineItems(itemProxies: [TimelineItemProxy], paginationState: PaginationState) {
-        var newTimelineItems = [RoomTimelineItemProtocol]()
-        
+    private func updateTimelineItems(itemProxies: [TimelineItemProxy], paginationState: PaginationState) async {
         let isNewTimeline = isSwitchingTimelines
         isSwitchingTimelines = false
         
-        let collapsibleChunks = itemProxies.groupBy { isItemCollapsible($0) }
+        let isDM = roomProxy.isDirectOneToOneRoom
         
-        for (index, collapsibleChunk) in collapsibleChunks.enumerated() {
-            let isLastItem = index == collapsibleChunks.indices.last
+        var newTimelineItems = await Task.detached { [timelineItemFactory, activeTimeline] in
+            var newTimelineItems = [RoomTimelineItemProtocol]()
             
-            let items = collapsibleChunk.compactMap { itemProxy in
+            let collapsibleChunks = itemProxies.groupBy { $0.isItemCollapsible }
+            
+            for (index, collapsibleChunk) in collapsibleChunks.enumerated() {
+                let isLastItem = index == collapsibleChunks.indices.last
                 
-                let timelineItem = buildTimelineItem(for: itemProxy)
+                let items = collapsibleChunk.compactMap { itemProxy in
+                    let timelineItem = self.buildTimelineItem(for: itemProxy,
+                                                              isDM: isDM,
+                                                              timelineItemFactory: timelineItemFactory,
+                                                              activeTimeline: activeTimeline)
+                    
+                    return timelineItem
+                }
                 
-                return timelineItem
-            }
-            
-            if items.isEmpty {
-                continue
-            }
-            
-            if items.count == 1, let timelineItem = items.first {
-                // Don't show the read marker if it's the last item in the timeline
-                // https://github.com/matrix-org/matrix-rust-sdk/issues/1546
-                guard !(timelineItem is ReadMarkerRoomTimelineItem && isLastItem) else {
+                if items.isEmpty {
                     continue
                 }
                 
-                newTimelineItems.append(timelineItem)
-            } else {
-                newTimelineItems.append(CollapsibleTimelineItem(items: items))
+                if items.count == 1, let timelineItem = items.first {
+                    // Don't show the read marker if it's the last item in the timeline
+                    // https://github.com/matrix-org/matrix-rust-sdk/issues/1546
+                    guard !(timelineItem is ReadMarkerRoomTimelineItem && isLastItem) else {
+                        continue
+                    }
+                    
+                    newTimelineItems.append(timelineItem)
+                } else {
+                    newTimelineItems.append(CollapsibleTimelineItem(items: items))
+                }
             }
-        }
+            
+            return newTimelineItems
+        }.value
         
         // Check if we need to add anything to the top of the timeline.
         switch paginationState.backward {
@@ -445,23 +450,26 @@ class TimelineController: TimelineControllerProtocol {
             break
         }
         
-        DispatchQueue.main.sync {
-            timelineItems = newTimelineItems
-        }
+        timelineItems = newTimelineItems
         
         callbacks.send(.updatedTimelineItems(timelineItems: newTimelineItems, isSwitchingTimelines: isNewTimeline))
         self.paginationState = paginationState
     }
     
-    private func buildTimelineItem(for itemProxy: TimelineItemProxy) -> RoomTimelineItemProtocol? {
+    private nonisolated func buildTimelineItem(for itemProxy: TimelineItemProxy,
+                                               isDM: Bool,
+                                               timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                               activeTimeline: TimelineProxyProtocol) -> RoomTimelineItemProtocol? {
         switch itemProxy {
         case .event(let eventTimelineItem):
-            let timelineItem = timelineItemFactory.buildTimelineItem(for: eventTimelineItem, isDM: roomProxy.isDirectOneToOneRoom)
-                        
+            let timelineItem = timelineItemFactory.buildTimelineItem(for: eventTimelineItem, isDM: isDM)
+            
             if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
                 // Avoid fetching this over and over again as it changes states if it keeps failing to load
                 // Errors will be handled again on appearance
-                fetchEventDetails(for: messageTimelineItem, refetchOnError: false)
+                fetchEventDetails(for: messageTimelineItem,
+                                  refetchOnError: false,
+                                  activeTimeline: activeTimeline)
             }
             
             return timelineItem
@@ -477,21 +485,10 @@ class TimelineController: TimelineControllerProtocol {
             return nil
         }
     }
-        
-    private func isItemCollapsible(_ item: TimelineItemProxy) -> Bool {
-        if case let .event(eventItem) = item {
-            switch eventItem.content {
-            case .profileChange, .roomMembership, .state:
-                return true
-            default:
-                return false
-            }
-        }
-        
-        return false
-    }
     
-    private func fetchEventDetails(for timelineItem: EventBasedMessageTimelineItemProtocol, refetchOnError: Bool) {
+    private nonisolated func fetchEventDetails(for timelineItem: EventBasedMessageTimelineItemProtocol,
+                                               refetchOnError: Bool,
+                                               activeTimeline: TimelineProxyProtocol) {
         guard let eventID = timelineItem.id.eventID else {
             return
         }
@@ -522,5 +519,20 @@ class TimelineController: TimelineControllerProtocol {
             }
         }
         return nil
+    }
+}
+
+private extension TimelineItemProxy {
+    var isItemCollapsible: Bool {
+        if case let .event(eventItem) = self {
+            switch eventItem.content {
+            case .profileChange, .roomMembership, .state:
+                return true
+            default:
+                return false
+            }
+        }
+        
+        return false
     }
 }

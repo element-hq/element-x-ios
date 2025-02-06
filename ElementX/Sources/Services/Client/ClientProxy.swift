@@ -324,16 +324,12 @@ class ClientProxy: ClientProxyProtocol {
         // Note: This isn't strictly necessary now given the unwrap above, but leaving the code as
         // documentation. SE-0371 will allow us to fix this by using an async deinit.
         Task { [syncService] in
-            do {
-                defer {
-                    completion?()
-                }
-                
-                try await syncService.stop()
-                MXLog.info("Sync stopped")
-            } catch {
-                MXLog.error("Failed stopping the sync service with error: \(error)")
+            defer {
+                completion?()
             }
+            
+            await syncService.stop()
+            MXLog.info("Sync stopped")
         }
     }
     

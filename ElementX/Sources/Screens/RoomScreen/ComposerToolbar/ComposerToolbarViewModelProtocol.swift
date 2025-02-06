@@ -9,6 +9,7 @@ import Combine
 import WysiwygComposer
 
 // periphery: ignore - markdown protocol
+@MainActor
 protocol ComposerToolbarViewModelProtocol {
     var actions: AnyPublisher<ComposerToolbarViewModelAction, Never> { get }
     var context: ComposerToolbarViewModelType.Context { get }
