@@ -1,8 +1,0 @@
-version: 2
-updates:
-  - package-ecosystem: "swift"
-    directories: 
-      - "/"
-      - "/ElementX.xcodeproj/project.xcworkspace/xcshareddata/swiftpm"
-    schedule:
-      interval: "daily"
