@@ -37,7 +37,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     
     init(mediaTimelineViewModel: TimelineViewModelProtocol,
          filesTimelineViewModel: TimelineViewModelProtocol,
-         initialViewState: MediaEventsTimelineScreenViewState = .init(bindings: .init(screenMode: .media)),
+         initialScreenMode: MediaEventsTimelineScreenMode = .media,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          appMediator: AppMediatorProtocol) {
@@ -47,13 +47,23 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
         
-        super.init(initialViewState: initialViewState, mediaProvider: mediaProvider)
-        
-        state.activeTimelineContextProvider = { [weak self] in
-            guard let self else { fatalError() }
-            
-            return activeTimelineViewModel.context
+        let activeTimelineContext = switch initialScreenMode {
+        case .media: mediaTimelineViewModel.context
+        case .files: filesTimelineViewModel.context
         }
+        
+        super.init(initialViewState: .init(activeTimelineContext: activeTimelineContext, bindings: .init(screenMode: initialScreenMode)), mediaProvider: mediaProvider)
+        
+        context.$viewState.map(\.bindings.screenMode)
+            .removeDuplicates()
+            .map {
+                switch $0 {
+                case .media: mediaTimelineViewModel.context
+                case .files: filesTimelineViewModel.context
+                }
+            }
+            .weakAssign(to: \.state.activeTimelineContext, on: self)
+            .store(in: &cancellables)
         
         mediaTimelineViewModel.context.$viewState.sink { [weak self] timelineViewState in
             guard let self, state.bindings.screenMode == .media else {
@@ -64,12 +74,38 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         }
         .store(in: &cancellables)
         
+        mediaTimelineViewModel.actions.sink { [weak self] action in
+            switch action {
+            case .displayMediaPreview(let mediaPreviewViewModel):
+                self?.displayMediaPreview(mediaPreviewViewModel)
+            case .displayEmojiPicker, .displayReportContent, .displayCameraPicker, .displayMediaPicker,
+                 .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediaUploadPreviewScreen,
+                 .tappedOnSenderDetails, .displayMessageForwarding, .displayLocation, .displayResolveSendFailure,
+                 .composer, .hasScrolled, .viewInRoomTimeline:
+                break
+            }
+        }
+        .store(in: &cancellables)
+        
         filesTimelineViewModel.context.$viewState.sink { [weak self] timelineViewState in
             guard let self, state.bindings.screenMode == .files else {
                 return
             }
             
             updateWithTimelineViewState(timelineViewState)
+        }
+        .store(in: &cancellables)
+        
+        filesTimelineViewModel.actions.sink { [weak self] action in
+            switch action {
+            case .displayMediaPreview(let mediaPreviewViewModel):
+                self?.displayMediaPreview(mediaPreviewViewModel)
+            case .displayEmojiPicker, .displayReportContent, .displayCameraPicker, .displayMediaPicker,
+                 .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediaUploadPreviewScreen,
+                 .tappedOnSenderDetails, .displayMessageForwarding, .displayLocation, .displayResolveSendFailure,
+                 .composer, .hasScrolled, .viewInRoomTimeline:
+                break
+            }
         }
         .store(in: &cancellables)
         
@@ -90,8 +126,13 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         case .oldestItemDidDisappear:
             isOldestItemVisible = false
         case .tappedItem(let item):
-            handleItemTapped(item)
+            activeTimelineViewModel.context.send(viewAction: .mediaTapped(itemID: item.identifier))
         }
+    }
+    
+    func stop() {
+        // Work around QLPreviewController dismissal issues, see the InteractiveQuickLookModifier.
+        state.bindings.mediaPreviewViewModel = nil
     }
     
     // MARK: - Private
@@ -146,26 +187,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         }
     }
     
-    private func handleItemTapped(_ item: RoomTimelineItemViewState) {
-        let item: EventBasedMessageTimelineItemProtocol? = switch item.type {
-        case .audio(let audioItem): audioItem
-        case .file(let fileItem): fileItem
-        case .image(let imageItem): imageItem
-        case .video(let videoItem): videoItem
-        default: nil
-        }
-        
-        guard let item else {
-            MXLog.error("Unexpected item type tapped.")
-            return
-        }
-        
-        let viewModel = TimelineMediaPreviewViewModel(initialItem: item,
-                                                      timelineViewModel: activeTimelineViewModel,
-                                                      mediaProvider: mediaProvider,
-                                                      photoLibraryManager: PhotoLibraryManager(),
-                                                      userIndicatorController: userIndicatorController,
-                                                      appMediator: appMediator)
+    private func displayMediaPreview(_ viewModel: TimelineMediaPreviewViewModel) {
         viewModel.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {

@@ -74,8 +74,11 @@ class MockTimelineController: TimelineControllerProtocol {
         focusLiveCallCount += 1
         callbacks.send(.isLive(true))
     }
-
+    
+    private(set) var paginateBackwardsCallCount = 0
     func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineControllerError> {
+        paginateBackwardsCallCount += 1
+        
         paginationState = PaginationState(backward: .paginating, forward: .timelineEndReached)
         
         if client == nil {
@@ -85,9 +88,10 @@ class MockTimelineController: TimelineControllerProtocol {
         return .success(())
     }
     
+    private(set) var paginateForwardsCallCount = 0
     func paginateForwards(requestSize: UInt16) async -> Result<Void, TimelineControllerError> {
-        // try? await simulateForwardPagination()
-        .success(())
+        paginateForwardsCallCount += 1
+        return .success(())
     }
     
     func sendReadReceipt(for itemID: TimelineItemIdentifier) async {

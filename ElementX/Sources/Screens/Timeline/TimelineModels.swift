@@ -21,6 +21,7 @@ enum TimelineViewModelAction {
     case displayMediaUploadPreviewScreen(url: URL)
     case tappedOnSenderDetails(userID: String)
     case displayMessageForwarding(forwardingItem: MessageForwardingItem)
+    case displayMediaPreview(TimelineMediaPreviewViewModel)
     case displayLocation(body: String, geoURI: GeoURI, description: String?)
     case displayResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
     case composer(action: TimelineComposerAction)
@@ -122,9 +123,6 @@ struct TimelineViewStateBindings {
     /// The state of wether reactions listed on the timeline are expanded/collapsed.
     /// Key is itemID, value is the collapsed state.
     var reactionsCollapsed: [TimelineItemIdentifier: Bool]
-    
-    /// A media item that will be previewed with QuickLook.
-    var mediaPreviewItem: MediaPreviewItem?
     
     var alertInfo: AlertInfo<RoomScreenAlertInfoType>?
     

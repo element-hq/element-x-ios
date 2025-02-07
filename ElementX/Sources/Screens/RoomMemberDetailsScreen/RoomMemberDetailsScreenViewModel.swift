@@ -79,6 +79,8 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             Task { await displayFullScreenAvatar(url) }
         case .openDirectChat:
             Task { await openDirectChat() }
+        case .createDirectChat:
+            Task { await createDirectChat() }
         case .startCall(let roomID):
             actionsSubject.send(.startCall(roomID: roomID))
         }
@@ -195,12 +197,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             if let roomID {
                 actionsSubject.send(.openDirectChat(roomID: roomID))
             } else {
-                let string = roomMemberProxy.displayName ?? roomMemberProxy.userID
-                state.bindings.alertInfo = .init(id: .createDirectChatConfirmation,
-                                                 title: L10n.screenRoomMemberDetailsAlertCreateDmTitle,
-                                                 message: L10n.screenRoomMemberDetailsAlertCreateDmMessage(string),
-                                                 primaryButton: .init(title: L10n.screenRoomMemberDetailsAlertCreateDmConfirmationTitle) { [weak self] in Task { await self?.createDirectChat() }},
-                                                 secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+                state.bindings.inviteConfirmationUser = .init(userID: roomMemberProxy.userID, displayName: roomMemberProxy.displayName, avatarURL: roomMemberProxy.avatarURL)
             }
         case .failure:
             state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)

@@ -36,12 +36,13 @@ struct TimelineControllerFactory: TimelineControllerFactoryProtocol {
                                   appSettings: ServiceLocator.shared.settings)
     }
     
-    func buildMessageFilteredTimelineController(allowedMessageTypes: [RoomMessageEventMessageType],
+    func buildMessageFilteredTimelineController(focus: TimelineFocus,
+                                                allowedMessageTypes: [TimelineAllowedMessageType],
                                                 presentation: TimelineKind.MediaPresentation,
                                                 roomProxy: JoinedRoomProxyProtocol,
                                                 timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                                 mediaProvider: MediaProviderProtocol) async -> Result<TimelineControllerProtocol, TimelineFactoryControllerError> {
-        switch await roomProxy.messageFilteredTimeline(allowedMessageTypes: allowedMessageTypes, presentation: presentation) {
+        switch await roomProxy.messageFilteredTimeline(focus: focus, allowedMessageTypes: allowedMessageTypes, presentation: presentation) {
         case .success(let timelineProxy):
             return .success(TimelineController(roomProxy: roomProxy,
                                                timelineProxy: timelineProxy,

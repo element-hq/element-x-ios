@@ -89,3 +89,7 @@ extension SearchUsersResultsProxy {
         limited = true
     }
 }
+
+extension UserProfileProxy: Identifiable {
+    var id: String { userID }
+}

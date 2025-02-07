@@ -76,6 +76,7 @@ enum UserAvatarSizeOnScreen {
     case knockingUserBanner
     case knockingUserList
     case mediaPreviewDetails
+    case sendInviteConfirmation
 
     var value: CGFloat {
         switch self {
@@ -113,6 +114,8 @@ enum UserAvatarSizeOnScreen {
             return 52
         case .mediaPreviewDetails:
             return 32
+        case .sendInviteConfirmation:
+            return 64
         }
     }
 }

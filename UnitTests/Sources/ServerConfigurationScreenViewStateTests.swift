@@ -9,6 +9,7 @@ import XCTest
 
 @testable import ElementX
 
+@MainActor
 class ServerConfirmationScreenViewStateTests: XCTestCase {
     func testLoginMessageString() {
         let matrixDotOrgLogin = ServerConfirmationScreenViewState(homeserverAddress: LoginHomeserver.mockMatrixDotOrg.address,

@@ -369,16 +369,12 @@ class ClientProxy: ClientProxyProtocol {
         // Note: This isn't strictly necessary now given the unwrap above, but leaving the code as
         // documentation. SE-0371 will allow us to fix this by using an async deinit.
         Task { [syncService] in
-            do {
-                defer {
-                    completion?()
-                }
-                
-                try await syncService.stop()
-                MXLog.info("Sync stopped")
-            } catch {
-                MXLog.error("Failed stopping the sync service with error: \(error)")
+            defer {
+                completion?()
             }
+            
+            await syncService.stop()
+            MXLog.info("Sync stopped")
         }
     }
     
@@ -423,7 +419,6 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    // swiftlint:disable:next function_parameter_count
     func createRoom(name: String,
                     topic: String?,
                     isRoomPrivate: Bool,
@@ -462,6 +457,9 @@ class ClientProxy: ClientProxyProtocol {
             await waitForRoomToSync(roomID: roomID, timeout: .seconds(30))
             
             return .success(())
+        } catch ClientError.MatrixApi(.forbidden, _, _) {
+            MXLog.error("Failed joining roomAlias: \(roomID) forbidden")
+            return .failure(.forbiddenAccess)
         } catch {
             MXLog.error("Failed joining roomID: \(roomID) with error: \(error)")
             return .failure(.sdkError(error))
@@ -475,6 +473,9 @@ class ClientProxy: ClientProxyProtocol {
             await waitForRoomToSync(roomID: room.id(), timeout: .seconds(30))
             
             return .success(())
+        } catch ClientError.MatrixApi(.forbidden, _, _) {
+            MXLog.error("Failed joining roomAlias: \(roomAlias) forbidden")
+            return .failure(.forbiddenAccess)
         } catch {
             MXLog.error("Failed joining roomAlias: \(roomAlias) with error: \(error)")
             return .failure(.sdkError(error))
@@ -971,12 +972,42 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func fetchZeroPosts(limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
+    func fetchZeroFeeds(limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
         do {
             let zeroPostsResult = try await zeroPostsApi.fetchPosts(limit: limit, skip: skip)
             switch zeroPostsResult {
             case .success(let posts):
                 return .success(posts)
+            case .failure(let error):
+                return .failure(checkPostFetchError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func fetchFeedDetails(feedId: String) async -> Result<ZPost, ClientProxyError> {
+        do {
+            let zeroPostResult = try await zeroPostsApi.fetchPostDetails(postId: feedId)
+            switch zeroPostResult {
+            case .success(let post):
+                return .success(post)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func fetchFeedReplies(feedId: String, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
+        do {
+            let zeroFeedRepliesResult = try await zeroPostsApi.fetchPostReplies(postId: feedId, limit: limit, skip: skip)
+            switch zeroFeedRepliesResult {
+            case .success(let replies):
+                return .success(replies)
             case .failure(let error):
                 return .failure(checkPostFetchError(error))
             }
@@ -1200,7 +1231,10 @@ class ClientProxy: ClientProxyProtocol {
             case .left:
                 return .left
             case .banned:
-                return .banned
+                return try await .banned(BannedRoomProxy(roomListItem: roomListItem,
+                                                         roomPreview: roomListItem.previewRoom(via: []),
+                                                         ownUserID: userID,
+                                                         zeroUsersService: zeroMatrixUsersService))
             }
         } catch {
             MXLog.error("Failed retrieving room: \(roomID), with error: \(error)")

@@ -519,6 +519,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     self.actionsSubject.send(.logout)
                 case .logout:
                     Task { await self.runLogoutFlow() }
+                case .postTapped(let post):
+                    presentFeedDetailsScreen(post)
                 }
             }
             .store(in: &cancellables)
@@ -1058,6 +1060,25 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case .failure:
                 showFailureIndicator()
             }
+        }
+    }
+    
+    private func presentFeedDetailsScreen(_ post: HomeScreenPost, showSheetCoodinator: Bool = false) {
+        let parameters = FeedDetailsScreenCoordinatorParameters(userSession: userSession, feedItem: post)
+        let coordinator = FeedDetailsScreenCoordinator(parameters: parameters)
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .replyTapped(let reply):
+                    presentFeedDetailsScreen(reply, showSheetCoodinator: true)
+                }
+            }
+            .store(in: &cancellables)
+        if showSheetCoodinator {
+            navigationSplitCoordinator.setSheetCoordinator(coordinator)
+        } else {
+            navigationSplitCoordinator.setDetailCoordinator(coordinator)
         }
     }
 }

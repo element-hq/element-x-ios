@@ -38,7 +38,7 @@ struct TimelineItemMenuActionProvider {
         var actions: [TimelineItemMenuAction] = []
         var secondaryActions: [TimelineItemMenuAction] = []
         
-        if timelineKind == .pinned || timelineKind == .media(.mediaFilesScreen) {
+        if timelineKind == .pinned || timelineKind == .media(.mediaFilesScreen) || timelineKind == .media(.pinnedEventsScreen) {
             actions.append(.viewInRoomTimeline)
         }
         

@@ -8,10 +8,18 @@
 import Foundation
 
 enum PinnedEventsTimelineScreenViewModelAction {
+    case viewInRoomTimeline(itemID: TimelineItemIdentifier)
     case dismiss
 }
 
-struct PinnedEventsTimelineScreenViewState: BindableState { }
+struct PinnedEventsTimelineScreenViewState: BindableState {
+    var bindings = PinnedEventsTimelineScreenViewStateBindings()
+}
+
+struct PinnedEventsTimelineScreenViewStateBindings {
+    /// The view model used to present a QuickLook media preview.
+    var mediaPreviewViewModel: TimelineMediaPreviewViewModel?
+}
 
 enum PinnedEventsTimelineScreenViewAction {
     case close

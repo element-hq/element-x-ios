@@ -73,6 +73,7 @@ struct RoomMemberDetailsScreenViewStateBindings {
     
     var ignoreUserAlert: IgnoreUserAlertItem?
     var alertInfo: AlertInfo<RoomMemberDetailsScreenAlertType>?
+    var inviteConfirmationUser: UserProfileProxy?
     
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: MediaPreviewItem?
@@ -85,11 +86,11 @@ enum RoomMemberDetailsScreenViewAction {
     case unignoreConfirmed
     case displayAvatar(URL)
     case openDirectChat
+    case createDirectChat
     case startCall(roomID: String)
 }
 
 enum RoomMemberDetailsScreenAlertType: Hashable {
     case failedOpeningDirectChat
-    case createDirectChatConfirmation
     case unknown
 }

@@ -1,0 +1,23 @@
+//
+// Copyright 2025 New Vector Ltd.
+//
+// SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+// Please see LICENSE files in the repository root for full details.
+//
+
+import Compound
+import SwiftUI
+
+struct FeedDetailsScreen: View {
+    @ObservedObject var context: FeedDetailsScreenViewModel.Context
+    
+    @State private var scrollViewAdapter = ScrollViewAdapter()
+    
+    var body: some View {
+        FeedDetailsContent(context: context,
+                           scrollViewAdapter: scrollViewAdapter)
+        .alert(item: $context.alertInfo)
+        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
+        .sentryTrace("\(Self.self)")
+    }
+}

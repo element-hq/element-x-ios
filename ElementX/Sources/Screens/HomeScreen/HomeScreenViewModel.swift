@@ -228,6 +228,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             dismissNewRewardsIntimation()
         case .loadMorePostsIfNeeded:
             fetchPosts()
+        case .postTapped(let post):
+            actionsSubject.send(.postTapped(post))
+        case .openArweaveLink(let post):
+            openArweaveLink(post)
         }
     }
     
@@ -516,7 +520,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             defer { isFetchPostsInProgress = false } // Ensure flag is reset when the task completes
             
             state.postListMode = state.posts.isEmpty ? .skeletons : .posts
-            let postsResult = await userSession.clientProxy.fetchZeroPosts(limit: HOME_SCREEN_POST_PAGE_COUNT,
+            let postsResult = await userSession.clientProxy.fetchZeroFeeds(limit: HOME_SCREEN_POST_PAGE_COUNT,
                                                                            skip: state.posts.count)
             switch postsResult {
             case .success(let posts):
@@ -548,6 +552,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     private func updatePostsVisibleRange(_ range: Range<Int>) {
         print("Update Posts Visible Range: Upper bound: \(range.upperBound), Lower bound: \(range.lowerBound)")
+    }
+    
+    private func openArweaveLink(_ post: HomeScreenPost) {
+        guard let arweaveUrl = post.getArweaveLink() else { return }
+        UIApplication.shared.open(arweaveUrl)
     }
 }
 

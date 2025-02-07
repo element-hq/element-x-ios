@@ -13,8 +13,8 @@ import SwiftUI
 protocol TimelineViewModelProtocol {
     var actions: AnyPublisher<TimelineViewModelAction, Never> { get }
     var context: TimelineViewModel.Context { get }
+    
     func process(composerAction: ComposerToolbarViewModelAction)
     /// Updates the timeline to show and highlight the item with the corresponding event ID.
     func focusOnEvent(eventID: String) async
-    func stop()
 }

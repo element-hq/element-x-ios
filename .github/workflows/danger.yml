@@ -15,7 +15,7 @@ jobs:
 
       - name: Setup environment
         run: 
-          brew install danger/tap/danger-swift
+          brew install danger/tap/danger-swift swiftlint
 
       - name: Danger
         run: 

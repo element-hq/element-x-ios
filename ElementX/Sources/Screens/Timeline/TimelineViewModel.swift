@@ -23,6 +23,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
 
     private let roomProxy: JoinedRoomProxyProtocol
     private let timelineController: TimelineControllerProtocol
+    private let mediaProvider: MediaProviderProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
@@ -56,6 +57,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
          emojiProvider: EmojiProviderProtocol,
          timelineControllerFactory: TimelineControllerFactoryProtocol) {
         self.timelineController = timelineController
+        self.mediaProvider = mediaProvider
         self.mediaPlayerProvider = mediaPlayerProvider
         self.roomProxy = roomProxy
         self.appSettings = appSettings
@@ -122,11 +124,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     // MARK: - Public
-    
-    func stop() {
-        // Work around QLPreviewController dismissal issues, see the InteractiveQuickLookModifier.
-        state.bindings.mediaPreviewItem = nil
-    }
     
     override func process(viewAction: TimelineViewAction) {
         switch viewAction {
@@ -542,11 +539,13 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private func handleMediaTapped(with itemID: TimelineItemIdentifier) async {
         state.showLoading = true
         let action = await timelineInteractionHandler.processItemTap(itemID)
-
+        
         switch action {
-        case .displayMediaFile(let file, let title):
+        case .displayMediaPreview(let item, let timelineViewModelKind):
             actionsSubject.send(.composer(action: .removeFocus)) // Hide the keyboard otherwise a big white space is sometimes shown when dismissing the preview.
-            state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: title)
+            
+            let mediaPreviewViewModel = makeMediaPreviewViewModel(item: item, timelineViewModelKind: timelineViewModelKind)
+            actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
         case .displayLocation(let body, let geoURI, let description):
             actionsSubject.send(.displayLocation(body: body, geoURI: geoURI, description: description))
         case .none:
@@ -653,6 +652,21 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
         
         analyticsService.trackComposer(inThread: false, isEditing: isEdit, isReply: isReply, startsThread: nil)
+    }
+    
+    private func makeMediaPreviewViewModel(item: EventBasedMessageTimelineItemProtocol,
+                                           timelineViewModelKind: TimelineControllerAction.TimelineViewModelKind) -> TimelineMediaPreviewViewModel {
+        let timelineViewModel = switch timelineViewModelKind {
+        case .active: self
+        case .new(let newViewModel): newViewModel
+        }
+        
+        return TimelineMediaPreviewViewModel(initialItem: item,
+                                             timelineViewModel: timelineViewModel,
+                                             mediaProvider: mediaProvider,
+                                             photoLibraryManager: PhotoLibraryManager(),
+                                             userIndicatorController: userIndicatorController,
+                                             appMediator: appMediator)
     }
     
     // MARK: - Timeline Item Building
