@@ -1233,7 +1233,8 @@ class ClientProxy: ClientProxyProtocol {
             case .banned:
                 return try await .banned(BannedRoomProxy(roomListItem: roomListItem,
                                                          roomPreview: roomListItem.previewRoom(via: []),
-                                                         ownUserID: userID))
+                                                         ownUserID: userID,
+                                                         zeroUsersService: zeroMatrixUsersService))
             }
         } catch {
             MXLog.error("Failed retrieving room: \(roomID), with error: \(error)")

@@ -20,11 +20,13 @@ class BannedRoomProxy: BannedRoomProxyProtocol {
         
     init(roomListItem: RoomListItemProtocol,
          roomPreview: RoomPreviewProtocol,
-         ownUserID: String) throws {
+         ownUserID: String,
+         zeroUsersService: ZeroMatrixUsersService) throws {
         self.roomListItem = roomListItem
         self.roomPreview = roomPreview
         self.ownUserID = ownUserID
-        info = try RoomPreviewInfoProxy(roomPreviewInfo: roomPreview.info())
+        let cachedRoomAvatar = zeroUsersService.getRoomAvatarFromCache(roomId: roomListItem.id())
+        info = try RoomPreviewInfoProxy(roomPreviewInfo: roomPreview.info(), roomAvatarCached: cachedRoomAvatar)
     }
     
     func forgetRoom() async -> Result<Void, RoomProxyError> {

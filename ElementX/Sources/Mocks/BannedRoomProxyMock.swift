@@ -22,7 +22,7 @@ extension BannedRoomProxyMock {
     convenience init(_ configuration: KnockedRoomProxyMockConfiguration) {
         self.init()
         id = configuration.id
-        info = RoomInfoProxy(roomInfo: .init(configuration))
+        info = RoomInfoProxy(roomInfo: .init(configuration), roomAvatarCached: nil)
     }
 }
 
