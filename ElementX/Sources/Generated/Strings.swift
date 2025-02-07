@@ -408,6 +408,10 @@ internal enum L10n {
   internal static var commonModern: String { return L10n.tr("Localizable", "common_modern") }
   /// Mute
   internal static var commonMute: String { return L10n.tr("Localizable", "common_mute") }
+  /// %1$@ (%2$@)
+  internal static func commonNameAndId(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "common_name_and_id", String(describing: p1), String(describing: p2))
+  }
   /// No results
   internal static var commonNoResults: String { return L10n.tr("Localizable", "common_no_results") }
   /// No room name
@@ -1016,13 +1020,9 @@ internal enum L10n {
   internal static var screenBlockedUsersUnblocking: String { return L10n.tr("Localizable", "screen_blocked_users_unblocking") }
   /// Send invite
   internal static var screenBottomSheetCreateDmConfirmationButtonTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_confirmation_button_title") }
-  /// Would you like to start a chat with %1$@ (%2$@)?
-  internal static func screenBottomSheetCreateDmMessage(_ p1: Any, _ p2: Any) -> String {
-    return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_message", String(describing: p1), String(describing: p2))
-  }
   /// Would you like to start a chat with %1$@?
-  internal static func screenBottomSheetCreateDmMessageNoDisplayname(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_message_no_displayname", String(describing: p1))
+  internal static func screenBottomSheetCreateDmMessage(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_message", String(describing: p1))
   }
   /// Send invite?
   internal static var screenBottomSheetCreateDmTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_title") }

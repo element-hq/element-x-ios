@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 protocol AppCoordinatorProtocol: CoordinatorProtocol {
     var windowManager: SecureWindowManagerProtocol { get }
     

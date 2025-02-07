@@ -7,6 +7,7 @@
 
 import Combine
 
+@MainActor
 protocol SoftLogoutScreenViewModelProtocol {
     var actions: AnyPublisher<SoftLogoutScreenViewModelAction, Never> { get }
     var context: SoftLogoutScreenViewModelType.Context { get }

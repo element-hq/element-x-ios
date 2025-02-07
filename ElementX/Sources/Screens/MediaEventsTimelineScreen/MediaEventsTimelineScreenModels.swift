@@ -28,7 +28,7 @@ struct MediaEventsTimelineScreenViewState: BindableState {
     
     var groups = [MediaEventsTimelineGroup]()
     
-    var activeTimelineContextProvider: (() -> TimelineViewModel.Context)!
+    var activeTimelineContext: TimelineViewModel.Context
     
     var bindings: MediaEventsTimelineScreenViewStateBindings
 }

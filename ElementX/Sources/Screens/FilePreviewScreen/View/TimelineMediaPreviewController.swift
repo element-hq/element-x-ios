@@ -25,6 +25,7 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     private var navigationBar: UINavigationBar? { view.subviews.first?.subviews.first { $0 is UINavigationBar } as? UINavigationBar }
     private var toolbar: UIToolbar? { view.subviews.first?.subviews.last { $0 is UIToolbar } as? UIToolbar }
+    private var pageScrollView: UIScrollView? { view.firstScrollView() }
     private var captionView: UIView { captionHostingController.view }
     
     override var overrideUserInterfaceStyle: UIUserInterfaceStyle {
@@ -184,6 +185,13 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     private func handleFileLoaded(itemID: TimelineItemIdentifier.EventOrTransactionID) {
         guard (currentPreviewItem as? TimelineMediaPreviewItem.Media)?.id == itemID else { return }
+        
+        // There's a bug where refreshCurrentPreviewItem completely breaks the QLPreviewController
+        // if it's called whilst swiping between items. So don't let that happen.
+        if let scrollView = pageScrollView, scrollView.isDragging || scrollView.isDecelerating {
+            return
+        }
+        
         refreshCurrentPreviewItem()
     }
     
@@ -333,6 +341,19 @@ private struct DownloadIndicatorView: View {
                 .controlSize(.large)
                 .tint(.compound.iconPrimary)
         }
+    }
+}
+
+// MARK: - Helpers
+
+private extension UIView {
+    func firstScrollView() -> UIScrollView? {
+        for view in subviews {
+            if let scrollView = view as? UIScrollView ?? view.firstScrollView() {
+                return scrollView
+            }
+        }
+        return nil
     }
 }
 
