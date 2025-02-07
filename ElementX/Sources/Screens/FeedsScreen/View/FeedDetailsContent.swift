@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct FeedDetailsContent: View {
@@ -21,8 +22,76 @@ struct FeedDetailsContent: View {
         GeometryReader { geometry in
             ScrollView {
                 // Feed Details view
-                FeedDetailsSection(post: context.viewState.bindings.feed, context: context)
+                FeedDetailsSection(post: context.viewState.bindings.feed,
+                                   context: context,
+                                   shouldNavigateToDetails: false)
                     .padding(.all, 16)
+                
+                Divider()
+                    .foregroundStyle(.compound.textSecondary)
+                
+                // Feed Replies Section
+                switch context.viewState.repliesListMode {
+                case .skeletons:
+                    LazyVStack(spacing: 0) {
+                        ForEach(context.viewState.visibleReplies) { reply in
+                            VStack {
+                                FeedDetailsSection(post: reply, context: context, shouldNavigateToDetails: false)
+                                    .padding(.all, 16)
+                                Divider()
+                            }
+                            .redacted(reason: .placeholder)
+                            .shimmer()
+                        }
+                    }
+                    .disabled(true)
+                case .empty:
+                    EmptyView()
+                case .replies:
+                    LazyVStack(spacing: 0) {
+                        PostRepliesList(context: context)
+                        
+                        if context.viewState.canLoadMoreReplies {
+                            ProgressView()
+                                .padding()
+                                .onAppear {
+                                    context.send(viewAction: .loadMoreRepliesIfNeeded)
+                                }
+                        }
+                    }
+                }
+            }
+            .introspect(.scrollView, on: .supportedVersions) { scrollView in
+                guard scrollView != scrollViewAdapter.scrollView else { return }
+                scrollViewAdapter.scrollView = scrollView
+            }
+            .scrollDismissesKeyboard(.immediately)
+            .scrollDisabled(context.viewState.repliesListMode == .skeletons)
+            .scrollBounceBehavior(context.viewState.repliesListMode == .empty ? .basedOnSize : .automatic)
+            .animation(.elementDefault, value: context.viewState.repliesListMode)
+            .animation(.none, value: context.viewState.visibleReplies)
+        }
+    }
+}
+
+struct PostRepliesList: View {
+    @ObservedObject var context: FeedDetailsScreenViewModel.Context
+    
+    var body: some View {
+        content
+            .padding(.horizontal, 16)
+    }
+    
+    @ViewBuilder
+    private var content: some View {
+        ForEach(context.viewState.visibleReplies) { post in
+            VStack(alignment: .leading) {
+                FeedDetailsSection(post: post, context: context, shouldNavigateToDetails: true)
+                    .padding(.all, 16)
+                Divider()
+            }
+            .onTapGesture {
+                context.send(viewAction: .replyTapped(post))
             }
         }
     }
@@ -30,9 +99,11 @@ struct FeedDetailsContent: View {
 
 struct FeedDetailsSection: View {
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
+    @Environment(\.redactionReasons) private var redactionReasons
     
     let post: HomeScreenPost
     let context: FeedDetailsScreenViewModel.Context
+    let shouldNavigateToDetails: Bool
     
     var body: some View {
         HStack(alignment: .top) {
@@ -79,7 +150,9 @@ struct FeedDetailsSection: View {
                                              count: post.repliesCount,
                                              highlightColor: false,
                                              action: {
-                        // context.send(viewAction: .postTapped(post))
+                        if shouldNavigateToDetails {
+                            context.send(viewAction: .replyTapped(post))
+                        }
                     })
                     .padding(.horizontal, 24)
                     

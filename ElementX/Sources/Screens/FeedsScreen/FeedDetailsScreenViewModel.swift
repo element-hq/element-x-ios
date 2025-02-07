@@ -42,6 +42,8 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             actionsSubject.send(.replyTapped(reply))
         case .openArweaveLink(let post):
             openArweaveLink(post)
+        case .loadMoreRepliesIfNeeded:
+            fetchFeedReplies(state.bindings.feed.id)
         }
     }
     

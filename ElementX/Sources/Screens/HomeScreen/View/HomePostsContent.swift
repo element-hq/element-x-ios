@@ -58,12 +58,6 @@ struct HomePostsContent: View {
                 guard scrollView != scrollViewAdapter.scrollView else { return }
                 scrollViewAdapter.scrollView = scrollView
             }
-            .background {
-                Button("") {
-                    context.send(viewAction: .globalSearch)
-                }
-                .keyboardShortcut(KeyEquivalent("k"), modifiers: [.command])
-            }
             .scrollDismissesKeyboard(.immediately)
             .scrollDisabled(context.viewState.postListMode == .skeletons)
             .scrollBounceBehavior(context.viewState.postListMode == .empty ? .basedOnSize : .automatic)

@@ -1063,7 +1063,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentFeedDetailsScreen(_ post: HomeScreenPost) {
+    private func presentFeedDetailsScreen(_ post: HomeScreenPost, showSheetCoodinator: Bool = false) {
         let parameters = FeedDetailsScreenCoordinatorParameters(userSession: userSession, feedItem: post)
         let coordinator = FeedDetailsScreenCoordinator(parameters: parameters)
         coordinator.actions
@@ -1071,10 +1071,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .replyTapped(let reply):
-                    presentFeedDetailsScreen(reply)
+                    presentFeedDetailsScreen(reply, showSheetCoodinator: true)
                 }
             }
             .store(in: &cancellables)
-        navigationSplitCoordinator.setDetailCoordinator(coordinator)
+        if showSheetCoodinator {
+            navigationSplitCoordinator.setSheetCoordinator(coordinator)
+        } else {
+            navigationSplitCoordinator.setDetailCoordinator(coordinator)
+        }
     }
 }
