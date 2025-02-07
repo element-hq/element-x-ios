@@ -25,7 +25,7 @@ class TimelineMediaPreviewController: QLPreviewController {
     
     private var navigationBar: UINavigationBar? { view.subviews.first?.subviews.first { $0 is UINavigationBar } as? UINavigationBar }
     private var toolbar: UIToolbar? { view.subviews.first?.subviews.last { $0 is UIToolbar } as? UIToolbar }
-    private var pageScrollView: UIScrollView? { view.subviews.first?.subviews.first?.subviews.first?.subviews.first?.subviews.first?.subviews.first as? UIScrollView }
+    private var pageScrollView: UIScrollView? { view.firstScrollView() }
     private var captionView: UIView { captionHostingController.view }
     
     override var overrideUserInterfaceStyle: UIUserInterfaceStyle {
@@ -341,6 +341,19 @@ private struct DownloadIndicatorView: View {
                 .controlSize(.large)
                 .tint(.compound.iconPrimary)
         }
+    }
+}
+
+// MARK: - Helpers
+
+private extension UIView {
+    func firstScrollView() -> UIScrollView? {
+        for view in subviews {
+            if let scrollView = view as? UIScrollView ?? view.firstScrollView() {
+                return scrollView
+            }
+        }
+        return nil
     }
 }
 
