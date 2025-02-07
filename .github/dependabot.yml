@@ -3,5 +3,6 @@ updates:
   - package-ecosystem: "swift"
     directories: 
       - "/"
+      - "/ElementX.xcodeproj/project.xcworkspace/xcshareddata/swiftpm"
     schedule:
       interval: "daily"
