@@ -43,7 +43,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         XCTAssertEqual(audioInfo.mimetype, "audio/mpeg")
         XCTAssertEqual(audioInfo.duration ?? 0, 27, accuracy: 100)
-        XCTAssertEqual(audioInfo.size ?? 0, 764_176, accuracy: 100)
+        XCTAssertEqual(audioInfo.size ?? 0, 194_811, accuracy: 100)
     }
     
     func testLandscapeMovVideoProcessing() async {
@@ -77,15 +77,15 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         // Check resulting video info
         XCTAssertEqual(videoInfo.mimetype, "video/mp4")
-        XCTAssertEqual(videoInfo.blurhash, "K22PJZx^DgadWAbbMuRio$")
-        XCTAssertEqual(videoInfo.size ?? 0, 1_431_959, accuracy: 100)
+        XCTAssertEqual(videoInfo.blurhash, "K9F$LJZ9,+8yA9-:yT,@%1")
+        XCTAssertEqual(videoInfo.size ?? 0, 4_016_620, accuracy: 100)
         XCTAssertEqual(videoInfo.width, 1280)
         XCTAssertEqual(videoInfo.height, 720)
         XCTAssertEqual(videoInfo.duration ?? 0, 30, accuracy: 100)
         
         XCTAssertNotNil(videoInfo.thumbnailInfo)
         XCTAssertEqual(videoInfo.thumbnailInfo?.mimetype, "image/jpeg")
-        XCTAssertEqual(videoInfo.thumbnailInfo?.size ?? 0, 33611, accuracy: 100)
+        XCTAssertEqual(videoInfo.thumbnailInfo?.size ?? 0, 183_093, accuracy: 100)
         XCTAssertEqual(videoInfo.thumbnailInfo?.width, 800)
         XCTAssertEqual(videoInfo.thumbnailInfo?.height, 450)
         
@@ -102,8 +102,8 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         // Check optimised video info
         XCTAssertEqual(optimizedVideoInfo.mimetype, "video/mp4")
-        XCTAssertEqual(optimizedVideoInfo.blurhash, "K22PJZx^DgadWAbbMuRio$")
-        XCTAssertEqual(optimizedVideoInfo.size ?? 0, 1_431_959, accuracy: 100) // Note: This is slightly stupid because it is larger now 🤦‍♂️
+        XCTAssertEqual(optimizedVideoInfo.blurhash, "K9F$LJZ9,+8yA9-:yT,@%1")
+        XCTAssertEqual(optimizedVideoInfo.size ?? 0, 4_016_620, accuracy: 100) // Note: The video is already 720p so it doesn't change size.
         XCTAssertEqual(optimizedVideoInfo.width, 1280)
         XCTAssertEqual(optimizedVideoInfo.height, 720)
         XCTAssertEqual(optimizedVideoInfo.duration ?? 0, 30, accuracy: 100)
@@ -140,15 +140,15 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         // Check resulting video info
         XCTAssertEqual(videoInfo.mimetype, "video/mp4")
-        XCTAssertEqual(videoInfo.blurhash, "K7C$_zs;0LKQMx^+~B9GIU")
-        XCTAssertEqual(videoInfo.size ?? 0, 9_775_822, accuracy: 100)
+        XCTAssertEqual(videoInfo.blurhash, "KSB{UFO]MuwQS4oJvcaIt8")
+        XCTAssertEqual(videoInfo.size ?? 0, 5_824_946, accuracy: 100)
         XCTAssertEqual(videoInfo.width, 1080)
         XCTAssertEqual(videoInfo.height, 1920)
         XCTAssertEqual(videoInfo.duration ?? 0, 21, accuracy: 100)
         
         XCTAssertNotNil(videoInfo.thumbnailInfo)
         XCTAssertEqual(videoInfo.thumbnailInfo?.mimetype, "image/jpeg")
-        XCTAssertEqual(videoInfo.thumbnailInfo?.size ?? 0, 81515, accuracy: 100)
+        XCTAssertEqual(videoInfo.thumbnailInfo?.size ?? 0, 41444, accuracy: 100)
         XCTAssertEqual(videoInfo.thumbnailInfo?.width, 337)
         XCTAssertEqual(videoInfo.thumbnailInfo?.height, 600)
         
@@ -165,8 +165,8 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         // Check optimised video info
         XCTAssertEqual(optimizedVideoInfo.mimetype, "video/mp4")
-        XCTAssertEqual(optimizedVideoInfo.blurhash, "K7BDNJD*0L%#sl_2~C9ZE1")
-        XCTAssertEqual(optimizedVideoInfo.size ?? 0, 21_936_767, accuracy: 100)
+        XCTAssertEqual(optimizedVideoInfo.blurhash, "KSB{UFO]MuwQS4oJvcaIt8")
+        XCTAssertEqual(optimizedVideoInfo.size ?? 0, 12_169_117, accuracy: 100) // Note: This is slightly stupid because it is larger now 🤦‍♂️
         XCTAssertEqual(optimizedVideoInfo.width, 720)
         XCTAssertEqual(optimizedVideoInfo.height, 1280)
         XCTAssertEqual(optimizedVideoInfo.duration ?? 0, 30, accuracy: 100)
@@ -391,16 +391,16 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         // Check resulting image info
         XCTAssertEqual(imageInfo.mimetype, "image/gif")
-        XCTAssertEqual(imageInfo.blurhash, "K7SY{qs;%NxuRjof~qozIU")
+        XCTAssertEqual(imageInfo.blurhash, "KpRMPTj[_NxuaeRj%MofMx")
         XCTAssertEqual(imageInfo.size ?? 0, UInt64(originalSize), accuracy: 100)
-        XCTAssertEqual(imageInfo.width, 490)
-        XCTAssertEqual(imageInfo.height, 498)
+        XCTAssertEqual(imageInfo.width, 331)
+        XCTAssertEqual(imageInfo.height, 472)
         
         XCTAssertNotNil(imageInfo.thumbnailInfo)
         XCTAssertEqual(imageInfo.thumbnailInfo?.mimetype, "image/jpeg")
-        XCTAssertEqual(imageInfo.thumbnailInfo?.size ?? 0, 29511, accuracy: 100)
-        XCTAssertEqual(imageInfo.thumbnailInfo?.width, 490)
-        XCTAssertEqual(imageInfo.thumbnailInfo?.height, 498)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.size ?? 0, 34215, accuracy: 100)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.width, 331)
+        XCTAssertEqual(imageInfo.thumbnailInfo?.height, 472)
         
         // Repeat with optimised media setting
         appSettings.optimizeMediaUploads = true
@@ -417,10 +417,10 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         // Ensure optimised image is still the same as the original image.
         XCTAssertEqual(optimizedImageInfo.mimetype, "image/gif")
-        XCTAssertEqual(optimizedImageInfo.blurhash, "K7SY{qs;%NxuRjof~qozIU")
+        XCTAssertEqual(optimizedImageInfo.blurhash, "KpRMPTj[_NxuaeRj%MofMx")
         XCTAssertEqual(optimizedImageInfo.size ?? 0, UInt64(originalSize), accuracy: 100)
-        XCTAssertEqual(optimizedImageInfo.width, 490)
-        XCTAssertEqual(optimizedImageInfo.height, 498)
+        XCTAssertEqual(optimizedImageInfo.width, 331)
+        XCTAssertEqual(optimizedImageInfo.height, 472)
     }
     
     func testRotatedImageProcessing() async {
