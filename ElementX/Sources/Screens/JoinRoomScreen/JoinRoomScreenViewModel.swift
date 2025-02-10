@@ -313,14 +313,18 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     }
     
     private func declineAndBlock(userID: String) async {
-        await declineInvite()
-        // The decline and the view are already dismissed at this point so we can dispatch this separately as a best effort
+        guard await declineInvite() else {
+            return
+        }
+        // The decline alert and the view are already dismissed at this point so we can dispatch this separately as a best effort
+        // but only if the decline invite was succesfull
         Task {
             await clientProxy.ignoreUser(userID)
         }
     }
     
-    private func declineInvite() async {
+    @discardableResult
+    private func declineInvite() async -> Bool {
         defer {
             userIndicatorController.retractIndicatorWithId(roomID)
         }
@@ -329,16 +333,18 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         
         guard case let .invited(roomProxy) = room else {
             userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
-            return
+            return false
         }
         
         let result = await roomProxy.rejectInvitation()
         
         if case .failure = result {
             userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
-        } else {
-            actionsSubject.send(.dismiss)
+            return false
         }
+        
+        actionsSubject.send(.dismiss)
+        return true
     }
     
     private func cancelKnock() async {
