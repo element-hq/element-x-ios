@@ -181,6 +181,7 @@
 "common_message_removed" = "Zpráva byla odstraněna";
 "common_modern" = "Moderní";
 "common_mute" = "Ztlumit";
+"common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Žádné výsledky";
 "common_no_room_name" = "Žádný název místnosti";
 "common_offline" = "Offline";
@@ -251,6 +252,7 @@
 "common_verified" = "Ověřeno";
 "common_verify_device" = "Ověřit zařízení";
 "common_verify_identity" = "Ověření totožnosti";
+"common_verify_user" = "Verify user";
 "common_video" = "Video";
 "common_voice_message" = "Hlasová zpráva";
 "common_waiting" = "Čekání...";
@@ -294,6 +296,7 @@
 "emoji_picker_category_people" = "Smajlíci a lidé";
 "emoji_picker_category_places" = "Cestování a místa";
 "emoji_picker_category_symbols" = "Symboly";
+"error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "Tato adresa místnosti již existuje, zkuste prosím upravit pole adresy místnosti nebo změnit název místnosti";
 "error_room_address_invalid_symbols" = "Některé znaky nejsou povoleny. Podporovány jsou pouze písmena, číslice a následující symboly ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
 "error_account_creation_not_possible" = "Váš domovský server je třeba upgradovat, aby podporoval službu Matrix Authentication Service a vytváření účtu.";
@@ -326,7 +329,7 @@
 "notification_channel_noisy" = "Hlasitá oznámení";
 "notification_channel_ringing_calls" = "Vyzvánění hovorů";
 "notification_channel_silent" = "Tichá oznámení";
-"notification_incoming_call" = "Příchozí hovor";
+"notification_incoming_call" = "📹 Příchozí hovor";
 "notification_inline_reply_failed" = "** Nepodařilo se odeslat - otevřete prosím místnost";
 "notification_invite_body" = "Vás pozval(a) do chatu";
 "notification_invite_body_with_sender" = "%1$@ vás pozval(a) do chatu";
@@ -370,6 +373,9 @@
 "screen_advanced_settings_element_call_base_url" = "Vlastní URL pro Element Call";
 "screen_advanced_settings_element_call_base_url_description" = "Nastavte vlastní URL pro Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Neplatné URL, ujistěte se, že jste uvedli protokol (http/https) a správnou adresu.";
+"screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
+"screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
+"screen_bottom_sheet_create_dm_title" = "Send invite?";
 "screen_create_room_room_access_section_anyone_option_description" = "Do této místnosti může vstoupit kdokoli";
 "screen_create_room_room_access_section_anyone_option_title" = "Kdokoliv";
 "screen_create_room_room_access_section_header" = "Přístup do místnosti";
@@ -387,6 +393,8 @@
 "screen_join_room_knock_message_description" = "Zpráva (nepovinné)";
 "screen_join_room_knock_sent_description" = "Pokud bude váš požadavek přijat, obdržíte pozvánku na vstup do místnosti.";
 "screen_join_room_knock_sent_title" = "Žádost o vstup odeslána";
+"screen_join_room_loading_alert_message" = "We could not display the room preview. This may be due to network or server issues.";
+"screen_join_room_loading_alert_title" = "We couldn’t display this room preview";
 "screen_knock_requests_list_accept_all_alert_confirm_button_title" = "Ano, přijmout všechny";
 "screen_knock_requests_list_accept_all_alert_description" = "Opravdu chcete přijmout všechny žádosti o vstup?";
 "screen_knock_requests_list_accept_all_alert_title" = "Přijmout všechny požadavky";
@@ -942,9 +950,11 @@
 "screen_session_verification_cancelled_subtitle" = "Něco není v pořádku. Buď vypršel časový limit požadavku, nebo byl požadavek zamítnut.";
 "screen_session_verification_compare_emojis_subtitle" = "Zkontrolujte, zda se níže uvedené emotikony shodují s emotikony zobrazenými na jiné relaci.";
 "screen_session_verification_compare_emojis_title" = "Porovnání emotikonů";
+"screen_session_verification_compare_emojis_user_subtitle" = "Confirm that the emojis below match those shown on the other user’s device.";
 "screen_session_verification_compare_numbers_subtitle" = "Potvrďte, že níže uvedená čísla odpovídají číslům zobrazeným na vaší druhé relaci.";
 "screen_session_verification_compare_numbers_title" = "Porovnejte čísla";
 "screen_session_verification_complete_subtitle" = "Vaše nová relace je nyní ověřena. Má přístup k vašim zašifrovaným zprávám a ostatní uživatelé ji uvidí jako důvěryhodnou.";
+"screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
 "screen_session_verification_enter_recovery_key" = "Zadejte klíč pro obnovení";
 "screen_session_verification_failed_subtitle" = "Buď vypršel časový limit požadavku, požadavek byl zamítnut, nebo došlo k nesouladu ověření.";
 "screen_session_verification_open_existing_session_subtitle" = "Pro přístup k historii zašifrovaných zpráv prokažte, že jste to vy.";
@@ -965,8 +975,14 @@
 "screen_session_verification_they_match" = "Shodují se";
 "screen_session_verification_use_another_device_subtitle" = "Před zahájením ověřování se ujistěte, že máte aplikaci otevřenou na druhém zařízení.";
 "screen_session_verification_use_another_device_title" = "Otevřete aplikaci na jiném ověřeném zařízení";
+"screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
+"screen_session_verification_user_initiator_title" = "Verify this user?";
+"screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "Na druhém zařízení byste měli vidět vyskakovací okno. Začněte s ověrením tam.";
 "screen_session_verification_waiting_another_device_title" = "Spusťte ověření na druhém zařízení";
+"screen_session_verification_waiting_other_device_title" = "Waiting for the other device";
+"screen_session_verification_waiting_other_user_title" = "Waiting for the other user";
+"screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Pro pokračování přijměte požadavek na zahájení ověření v jiné relaci.";
 "screen_session_verification_waiting_to_accept_title" = "Čekání na přijetí žádosti";
 "screen_share_location_title" = "Sdílet polohu";

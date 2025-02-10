@@ -181,6 +181,7 @@
 "common_message_removed" = "Správa odstránená";
 "common_modern" = "Moderné";
 "common_mute" = "Stlmiť";
+"common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Žiadne výsledky";
 "common_no_room_name" = "Žiadny názov miestnosti";
 "common_offline" = "Offline";
@@ -251,6 +252,7 @@
 "common_verified" = "Overené";
 "common_verify_device" = "Overiť zariadenie";
 "common_verify_identity" = "Overiť totožnosť";
+"common_verify_user" = "Overiť používateľa";
 "common_video" = "Video";
 "common_voice_message" = "Hlasová správa";
 "common_waiting" = "Čaká sa…";
@@ -294,6 +296,7 @@
 "emoji_picker_category_people" = "Smajlíky a ľudia";
 "emoji_picker_category_places" = "Cestovanie a miesta";
 "emoji_picker_category_symbols" = "Symboly";
+"error_network_or_server_issue" = "Môže to byť spôsobené problémami so sieťou alebo serverom.";
 "error_room_address_already_exists" = "Táto adresa miestnosti už existuje, skúste upraviť pole adresy miestnosti alebo zmeňte názov miestnosti";
 "error_room_address_invalid_symbols" = "Niektoré znaky nie sú povolené. Podporované sú iba písmená, číslice a nasledujúce symboly ! $ & '() * +/; =? @ [] - . _";
 "error_account_creation_not_possible" = "Váš domovský server musí byť aktualizovaný tak, aby podporoval Matrix Authentication Service a vytvorenie účtu.";
@@ -370,6 +373,9 @@
 "screen_advanced_settings_element_call_base_url" = "Vlastná Element Call základná URL adresa";
 "screen_advanced_settings_element_call_base_url_description" = "Nastaviť vlastnú základnú URL adresu pre Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Neplatná adresa URL, uistite sa, že ste uviedli protokol (http/https) a správnu adresu.";
+"screen_bottom_sheet_create_dm_confirmation_button_title" = "Odoslať pozvánku";
+"screen_bottom_sheet_create_dm_message" = "Chceli by ste začať rozhovor s používateľom %1$@?";
+"screen_bottom_sheet_create_dm_title" = "Poslať pozvánku?";
 "screen_create_room_room_access_section_anyone_option_description" = "Do tejto miestnosti sa môže pripojiť ktokoľvek";
 "screen_create_room_room_access_section_anyone_option_title" = "Ktokoľvek";
 "screen_create_room_room_access_section_header" = "Prístup do miestnosti";
@@ -387,6 +393,8 @@
 "screen_join_room_knock_message_description" = "Správa (voliteľné)";
 "screen_join_room_knock_sent_description" = "Ak bude vaša žiadosť prijatá, dostanete pozvánku na vstup do miestnosti.";
 "screen_join_room_knock_sent_title" = "Žiadosť o pripojenie bola odoslaná";
+"screen_join_room_loading_alert_message" = "Nepodarilo sa zobraziť ukážku miestnosti. Môže to byť spôsobené problémami so sieťou alebo serverom.";
+"screen_join_room_loading_alert_title" = "Ukážku tejto miestnosti sa nepodarilo zobraziť";
 "screen_knock_requests_list_accept_all_alert_confirm_button_title" = "Áno, prijať všetky";
 "screen_knock_requests_list_accept_all_alert_description" = "Ste si istí, že chcete prijať všetky žiadosti o pripojenie?";
 "screen_knock_requests_list_accept_all_alert_title" = "Prijať všetky žiadosti";
@@ -942,9 +950,11 @@
 "screen_session_verification_cancelled_subtitle" = "Zdá sa, že niečo nie je v poriadku. Časový limit žiadosti vypršal alebo bola žiadosť zamietnutá.";
 "screen_session_verification_compare_emojis_subtitle" = "Skontrolujte, či sa emotikony uvedené nižšie zhodujú s emotikonmi zobrazenými vo vašej druhej relácii.";
 "screen_session_verification_compare_emojis_title" = "Porovnajte emotikony";
+"screen_session_verification_compare_emojis_user_subtitle" = "Potvrďte, že emotikony uvedené nižšie zodpovedajú emotikonom zobrazeným na zariadení druhého používateľa.";
 "screen_session_verification_compare_numbers_subtitle" = "Skontrolujte, či sa nižšie uvedené čísla zhodujú s číslami zobrazenými na vašej druhej relácii.";
 "screen_session_verification_compare_numbers_title" = "Porovnať čísla";
 "screen_session_verification_complete_subtitle" = "Vaša nová relácia je teraz overená. Má prístup k vašim zašifrovaným správam a ostatní používatelia ju budú vidieť ako dôveryhodnú.";
+"screen_session_verification_complete_user_subtitle" = "Teraz môžete dôverovať identite tohto používateľa pri odosielaní alebo prijímaní správ.";
 "screen_session_verification_enter_recovery_key" = "Zadajte kľúč na obnovenie";
 "screen_session_verification_failed_subtitle" = "Buď žiadosť vypršala, žiadosť bola zamietnutá, alebo došlo k nesúladu overovania.";
 "screen_session_verification_open_existing_session_subtitle" = "Dokážte, že ste to vy, aby ste získali prístup k histórii vašich zašifrovaných správ.";
@@ -965,8 +975,14 @@
 "screen_session_verification_they_match" = "Zhodujú sa";
 "screen_session_verification_use_another_device_subtitle" = "Pred začatím overovania odtiaľto sa uistite, že máte aplikáciu otvorenú v inom zariadení.";
 "screen_session_verification_use_another_device_title" = "Otvorte aplikáciu na inom overenom zariadení";
+"screen_session_verification_user_initiator_subtitle" = "Pre väčšiu bezpečnosť overte tohto používateľa porovnaním sady emotikonov vo vašich zariadeniach. Urobte to pomocou dôveryhodného spôsobu komunikácie.";
+"screen_session_verification_user_initiator_title" = "Overiť tohto používateľa?";
+"screen_session_verification_user_responder_subtitle" = "Kvôli vyššej bezpečnosti chce druhý používateľ overiť vašu identitu. Zobrazí sa vám sada emotikonov na porovnanie.";
 "screen_session_verification_waiting_another_device_subtitle" = "Na druhom zariadení by sa malo zobraziť vyskakovacie okno. Začnite teraz overovanie odtiaľ.";
 "screen_session_verification_waiting_another_device_title" = "Spustiť overovanie na druhom zariadení";
+"screen_session_verification_waiting_other_device_title" = "Čaká sa na druhé zariadenie";
+"screen_session_verification_waiting_other_user_title" = "Čaká sa na druhého používateľa";
+"screen_session_verification_waiting_subtitle" = "Po prijatí budete môcť pokračovať v overovaní.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Ak chcete pokračovať, prijmite žiadosť o spustenie procesu overenia vo vašej druhej relácii.";
 "screen_session_verification_waiting_to_accept_title" = "Čaká sa na prijatie žiadosti";
 "screen_share_location_title" = "Zdieľať polohu";

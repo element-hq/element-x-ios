@@ -566,6 +566,8 @@ internal enum L10n {
   internal static var commonVerifyDevice: String { return L10n.tr("Localizable", "common_verify_device") }
   /// Verify identity
   internal static var commonVerifyIdentity: String { return L10n.tr("Localizable", "common_verify_identity") }
+  /// Verify user
+  internal static var commonVerifyUser: String { return L10n.tr("Localizable", "common_verify_user") }
   /// Video
   internal static var commonVideo: String { return L10n.tr("Localizable", "common_video") }
   /// Voice message
@@ -674,6 +676,8 @@ internal enum L10n {
   internal static var errorFailedUploadingVoiceMessage: String { return L10n.tr("Localizable", "error_failed_uploading_voice_message") }
   /// Message not found
   internal static var errorMessageNotFound: String { return L10n.tr("Localizable", "error_message_not_found") }
+  /// This may be due to network or server issues.
+  internal static var errorNetworkOrServerIssue: String { return L10n.tr("Localizable", "error_network_or_server_issue") }
   /// No compatible app was found to handle this action.
   internal static var errorNoCompatibleAppFound: String { return L10n.tr("Localizable", "error_no_compatible_app_found") }
   /// This room address already exists. Please try editing the room address field or change the room name
@@ -1340,6 +1344,8 @@ internal enum L10n {
   internal static var screenJoinRoomKnockSentTitle: String { return L10n.tr("Localizable", "screen_join_room_knock_sent_title") }
   /// We could not display the room preview. This may be due to network or server issues.
   internal static var screenJoinRoomLoadingAlertMessage: String { return L10n.tr("Localizable", "screen_join_room_loading_alert_message") }
+  /// We couldn’t display this room preview
+  internal static var screenJoinRoomLoadingAlertTitle: String { return L10n.tr("Localizable", "screen_join_room_loading_alert_title") }
   /// %1$@ does not support spaces yet. You can access spaces on web.
   internal static func screenJoinRoomSpaceNotSupportedDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_join_room_space_not_supported_description", String(describing: p1))
@@ -2306,12 +2312,16 @@ internal enum L10n {
   internal static var screenSessionVerificationCompareEmojisSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_emojis_subtitle") }
   /// Compare emojis
   internal static var screenSessionVerificationCompareEmojisTitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_emojis_title") }
+  /// Confirm that the emojis below match those shown on the other user’s device.
+  internal static var screenSessionVerificationCompareEmojisUserSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_emojis_user_subtitle") }
   /// Confirm that the numbers below match those shown on your other session.
   internal static var screenSessionVerificationCompareNumbersSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_numbers_subtitle") }
   /// Compare numbers
   internal static var screenSessionVerificationCompareNumbersTitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_numbers_title") }
   /// Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.
   internal static var screenSessionVerificationCompleteSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_complete_subtitle") }
+  /// Now you can trust the identity of this user when sending or receiving messages.
+  internal static var screenSessionVerificationCompleteUserSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_complete_user_subtitle") }
   /// Enter recovery key
   internal static var screenSessionVerificationEnterRecoveryKey: String { return L10n.tr("Localizable", "screen_session_verification_enter_recovery_key") }
   /// Either the request timed out, the request was denied, or there was a verification mismatch.
@@ -2354,10 +2364,22 @@ internal enum L10n {
   internal static var screenSessionVerificationUseAnotherDeviceSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_use_another_device_subtitle") }
   /// Open the app on another verified device
   internal static var screenSessionVerificationUseAnotherDeviceTitle: String { return L10n.tr("Localizable", "screen_session_verification_use_another_device_title") }
+  /// For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.
+  internal static var screenSessionVerificationUserInitiatorSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_user_initiator_subtitle") }
+  /// Verify this user?
+  internal static var screenSessionVerificationUserInitiatorTitle: String { return L10n.tr("Localizable", "screen_session_verification_user_initiator_title") }
+  /// For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.
+  internal static var screenSessionVerificationUserResponderSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_user_responder_subtitle") }
   /// You should see a popup on the other device. Start the verification from there now.
   internal static var screenSessionVerificationWaitingAnotherDeviceSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_another_device_subtitle") }
   /// Start verification on the other device
   internal static var screenSessionVerificationWaitingAnotherDeviceTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_another_device_title") }
+  /// Waiting for the other device
+  internal static var screenSessionVerificationWaitingOtherDeviceTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_other_device_title") }
+  /// Waiting for the other user
+  internal static var screenSessionVerificationWaitingOtherUserTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_other_user_title") }
+  /// Once accepted you’ll be able to continue with the verification.
+  internal static var screenSessionVerificationWaitingSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_subtitle") }
   /// Accept the request to start the verification process in your other session to continue.
   internal static var screenSessionVerificationWaitingToAcceptSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_subtitle") }
   /// Waiting to accept request

@@ -181,6 +181,7 @@
 "common_message_removed" = "Сообщение удалено";
 "common_modern" = "Современный";
 "common_mute" = "Выкл. звук";
+"common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Ничего не найдено";
 "common_no_room_name" = "Название комнаты отсутствует";
 "common_offline" = "Не в сети";
@@ -251,6 +252,7 @@
 "common_verified" = "Проверено";
 "common_verify_device" = "Подтверждение устройства";
 "common_verify_identity" = "Подтвердить личность";
+"common_verify_user" = "Verify user";
 "common_video" = "Видео";
 "common_voice_message" = "Голосовое сообщение";
 "common_waiting" = "Ожидание…";
@@ -294,6 +296,7 @@
 "emoji_picker_category_people" = "Улыбки и люди";
 "emoji_picker_category_places" = "Путешествия и места";
 "emoji_picker_category_symbols" = "Символы";
+"error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "Такой адрес комнаты уже существует, попробуйте отредактировать поле адреса комнаты или изменить название комнаты";
 "error_room_address_invalid_symbols" = "Некоторые символы не допускаются. Поддерживаются только буквы, цифры и следующие символы! $ & '() * +/; =? @ [] - . _";
 "error_account_creation_not_possible" = "Ваш домашний сервер необходимо обновить, чтобы он поддерживал Matrix Authentication Service и создание учётных записей.";
@@ -326,7 +329,7 @@
 "notification_channel_noisy" = "Шумные уведомления";
 "notification_channel_ringing_calls" = "Звонки";
 "notification_channel_silent" = "Бесшумные уведомления";
-"notification_incoming_call" = "Входящий вызов";
+"notification_incoming_call" = "📹 Входящий вызов";
 "notification_inline_reply_failed" = "** Не удалось отправить - пожалуйста, откройте комнату";
 "notification_invite_body" = "Пригласил вас в чат";
 "notification_invite_body_with_sender" = "%1$@ пригласил вас в чат";
@@ -370,6 +373,9 @@
 "screen_advanced_settings_element_call_base_url" = "Базовый URL сервера звонков Element";
 "screen_advanced_settings_element_call_base_url_description" = "Задайте свой сервер Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Адрес указан неверно, удостоверьтесь, что вы указали протокол (http/https) и правильный адрес.";
+"screen_bottom_sheet_create_dm_confirmation_button_title" = "Отправить приглашение";
+"screen_bottom_sheet_create_dm_message" = "Хотите начать чат с %1$@?";
+"screen_bottom_sheet_create_dm_title" = "Отправить приглашение?";
 "screen_create_room_room_access_section_anyone_option_description" = "Любой желающий может присоединиться к этой комнате";
 "screen_create_room_room_access_section_anyone_option_title" = "Любой";
 "screen_create_room_room_access_section_header" = "Доступ в комнату";
@@ -387,6 +393,8 @@
 "screen_join_room_knock_message_description" = "Сообщение (опционально)";
 "screen_join_room_knock_sent_description" = "Вы получите приглашение присоединиться к комнате, как только ваш запрос будет принят.";
 "screen_join_room_knock_sent_title" = "Запрос на присоединение отправлен";
+"screen_join_room_loading_alert_message" = "Не удалось отобразить предварительный просмотр комнаты. Это может быть связано с проблемами сети или сервера.";
+"screen_join_room_loading_alert_title" = "We couldn’t display this room preview";
 "screen_knock_requests_list_accept_all_alert_confirm_button_title" = "Да, принять все";
 "screen_knock_requests_list_accept_all_alert_description" = "Вы действительно хотите принять все заявки на присоединение?";
 "screen_knock_requests_list_accept_all_alert_title" = "Принять все запросы";
@@ -942,9 +950,11 @@
 "screen_session_verification_cancelled_subtitle" = "Похоже, что-то не так. Время ожидания запроса либо истекло, либо запрос был отклонен.";
 "screen_session_verification_compare_emojis_subtitle" = "Убедитесь, что приведенные ниже емоджи совпадают с емоджи показанными во время другого сеанса.";
 "screen_session_verification_compare_emojis_title" = "Сравните емодзи";
+"screen_session_verification_compare_emojis_user_subtitle" = "Confirm that the emojis below match those shown on the other user’s device.";
 "screen_session_verification_compare_numbers_subtitle" = "Убедитесь, что приведенные ниже числа совпадают с цифрами, показанными в другом сеансе.";
 "screen_session_verification_compare_numbers_title" = "Сравните числа";
 "screen_session_verification_complete_subtitle" = "Ваш новый сеанс подтвержден. У него есть доступ к вашим зашифрованным сообщениям, и другие пользователи увидят его как доверенное.";
+"screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
 "screen_session_verification_enter_recovery_key" = "Введите ключ восстановления";
 "screen_session_verification_failed_subtitle" = "Время ожидания подтверждения истекло, запрос был отклонён, или при подтверждении произошло несоответствие.";
 "screen_session_verification_open_existing_session_subtitle" = "Чтобы получить доступ к зашифрованной истории сообщений, докажите, что это вы.";
@@ -965,8 +975,14 @@
 "screen_session_verification_they_match" = "Они совпадают";
 "screen_session_verification_use_another_device_subtitle" = "Прежде чем начать проверку, убедитесь, что приложение открыто на другом устройстве.";
 "screen_session_verification_use_another_device_title" = "Откройте приложение на другом проверенном устройстве";
+"screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
+"screen_session_verification_user_initiator_title" = "Verify this user?";
+"screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "Вы должны увидеть всплывающее окно на другом устройстве. Начните проверку оттуда прямо сейчас.";
 "screen_session_verification_waiting_another_device_title" = "Начать проверку на другом устройстве";
+"screen_session_verification_waiting_other_device_title" = "Waiting for the other device";
+"screen_session_verification_waiting_other_user_title" = "Waiting for the other user";
+"screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Чтобы продолжить, примите запрос на запуск процесса подтверждения в другом сеансе.";
 "screen_session_verification_waiting_to_accept_title" = "Ожидание принятия запроса";
 "screen_share_location_title" = "Поделиться местоположением";
