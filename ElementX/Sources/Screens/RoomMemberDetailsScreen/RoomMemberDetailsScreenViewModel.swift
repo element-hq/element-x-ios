@@ -75,6 +75,8 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             Task { await createDirectChat() }
         case .startCall(let roomID):
             actionsSubject.send(.startCall(roomID: roomID))
+        case .verifyUser:
+            actionsSubject.send(.verifyUser(userID: state.userID))
         }
     }
 

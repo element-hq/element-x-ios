@@ -21,6 +21,7 @@ enum RoomMemberDetailsScreenCoordinatorAction {
     case openUserProfile
     case openDirectChat(roomID: String)
     case startCall(roomID: String)
+    case verifyUser(userID: String)
 }
 
 final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
@@ -53,6 +54,8 @@ final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.openDirectChat(roomID: roomID))
             case .startCall(let roomID):
                 actionsSubject.send(.startCall(roomID: roomID))
+            case .verifyUser(let userID):
+                actionsSubject.send(.verifyUser(userID: userID))
             }
         }
         .store(in: &cancellables)

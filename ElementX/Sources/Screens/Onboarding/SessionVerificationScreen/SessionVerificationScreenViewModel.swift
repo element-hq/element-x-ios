@@ -24,13 +24,18 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
 
     init(sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol,
          flow: SessionVerificationScreenFlow,
+         appSettings: AppSettings,
+         mediaProvider: MediaProviderProtocol,
          verificationState: SessionVerificationScreenStateMachine.State = .initial) {
         self.sessionVerificationControllerProxy = sessionVerificationControllerProxy
         self.flow = flow
         
         stateMachine = SessionVerificationScreenStateMachine(state: verificationState)
         
-        super.init(initialViewState: .init(flow: flow, verificationState: verificationState))
+        super.init(initialViewState: .init(flow: flow,
+                                           learnMoreURL: appSettings.encryptionURL,
+                                           verificationState: verificationState),
+                   mediaProvider: mediaProvider)
         
         setupStateMachine()
         
@@ -63,10 +68,13 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
             }
             .store(in: &cancellables)
         
-        if case .responder(let details) = flow {
+        switch flow {
+        case .deviceResponder(let details), .userResponder(let details):
             Task {
                 await self.sessionVerificationControllerProxy.acknowledgeVerificationRequest(details: details)
             }
+        default:
+            break
         }
     }
     
@@ -86,6 +94,9 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
             stateMachine.processEvent(.acceptChallenge)
         case .decline:
             stateMachine.processEvent(.declineChallenge)
+        case .cancel:
+            stateMachine.processEvent(.cancel)
+            actionsSubject.send(.finished)
         case .done:
             actionsSubject.send(.finished)
         }
@@ -112,7 +123,15 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
             case (.initial, .acceptVerificationRequest, .acceptingVerificationRequest):
                 acceptVerificationRequest()
             case (.initial, .requestVerification, .requestingVerification):
-                requestVerification()
+                Task {
+                    switch await self.requestVerification() {
+                    case .success:
+                        // Need to wait for the callback from the remote
+                        break
+                    case .failure:
+                        self.stateMachine.processEvent(.didFail)
+                    }
+                }
             case (.verificationRequestAccepted, .startSasVerification, .startingSasVerification):
                 startSasVerification()
             case (.showingChallenge, .acceptChallenge, .acceptingChallenge):
@@ -124,8 +143,11 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
             case (_, _, .verified):
                 actionsSubject.send(.finished)
             case (.initial, _, .cancelled):
-                if case .responder = flow {
+                switch flow {
+                case .deviceResponder, .userResponder:
                     actionsSubject.send(.finished)
+                default:
+                    break
                 }
             default:
                 break
@@ -139,7 +161,7 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
     
     private func acceptVerificationRequest() {
         Task {
-            guard case .responder = flow else {
+            guard flow.isResponder else {
                 fatalError("Incorrect API usage.")
             }
             
@@ -152,15 +174,14 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
         }
     }
     
-    private func requestVerification() {
-        Task {
-            switch await sessionVerificationControllerProxy.requestVerification() {
-            case .success:
-                // Need to wait for the callback from the remote
-                break
-            case .failure:
-                stateMachine.processEvent(.didFail)
-            }
+    private func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
+        switch flow {
+        case .deviceInitiator:
+            return await sessionVerificationControllerProxy.requestDeviceVerification()
+        case .userIntiator(let userID):
+            return await sessionVerificationControllerProxy.requestUserVerification(userID)
+        default:
+            fatalError("Incorrect API usage.")
         }
     }
     
