@@ -66,7 +66,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             showCancelKnockConfirmationAlert()
         case .dismiss:
             actionsSubject.send(.dismiss)
-        case .declineInviteAndBlock(userID: let userID):
+        case .declineInviteAndBlock(let userID):
             showDeclineAndBlockConfirmationAlert(userID: userID)
         }
     }
