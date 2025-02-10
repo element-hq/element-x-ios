@@ -18,9 +18,16 @@ struct JoinRoomScreen: View {
     private enum Focus {
         case knockMessage
     }
+    
+    private var topPadding: CGFloat {
+        if context.viewState.roomDetails?.inviter != nil {
+            return 32
+        }
+        return context.viewState.mode == .knocked ? 151 : 44
+    }
 
     var body: some View {
-        FullscreenDialog(topPadding: context.viewState.mode == .knocked ? 151 : 35) {
+        FullscreenDialog(topPadding: topPadding) {
             if context.viewState.mode == .loading {
                 EmptyView()
             } else {
@@ -50,6 +57,14 @@ struct JoinRoomScreen: View {
     @ViewBuilder
     private var defaultView: some View {
         VStack(spacing: 16) {
+            if let inviter = context.viewState.roomDetails?.inviter {
+                RoomInviterLabel(inviter: inviter, mediaProvider: context.mediaProvider)
+                    .multilineTextAlignment(.center)
+                    .font(.compound.bodyMD)
+                    .foregroundStyle(.compound.textSecondary)
+                    .padding(.bottom, 44)
+            }
+            
             if let avatar = context.viewState.avatar {
                 RoomAvatarImage(avatar: avatar,
                                 avatarSize: .room(on: .joinRoom),
@@ -78,12 +93,6 @@ struct JoinRoomScreen: View {
                 
                 if !context.viewState.isDMInvite, let memberCount = context.viewState.roomDetails?.memberCount {
                     BadgeLabel(title: "\(memberCount)", icon: \.userProfile, isHighlighted: false)
-                }
-                
-                if let inviter = context.viewState.roomDetails?.inviter {
-                    RoomInviterLabel(inviter: inviter, mediaProvider: context.mediaProvider)
-                        .font(.compound.bodyMD)
-                        .foregroundStyle(.compound.textSecondary)
                 }
                 
                 if let topic = context.viewState.roomDetails?.topic {
@@ -178,8 +187,17 @@ struct JoinRoomScreen: View {
             bottomNoticeMessage(L10n.screenJoinRoomInviteRequiredMessage)
         case .invited:
             ViewThatFits {
-                HStack(spacing: 8) { inviteButtons }
-                VStack(spacing: 16) { inviteButtons }
+                VStack(spacing: 24) {
+                    HStack(spacing: 16) {
+                        inviteButtons
+                    }
+                    declineAndBlockButton
+                }
+                
+                VStack(spacing: 16) {
+                    inviteButtons
+                    declineAndBlockButton
+                }
             }
         case .banned(let sender, let reason):
             VStack(spacing: 24) {
@@ -251,6 +269,19 @@ struct JoinRoomScreen: View {
             .buttonStyle(.compound(.secondary))
         Button(L10n.actionAccept) { context.send(viewAction: .acceptInvite) }
             .buttonStyle(.compound(.primary))
+    }
+    
+    @ViewBuilder
+    var declineAndBlockButton: some View {
+        if let inviter = context.viewState.roomDetails?.inviter {
+            Button(role: .destructive) {
+                context.send(viewAction: .declineInviteAndBlock(userID: inviter.id))
+            } label: {
+                Text(L10n.screenJoinRoomDeclineAndBlockButtonTitle)
+                    .padding(.vertical, 14)
+            }
+            .buttonStyle(.compound(.plain))
+        }
     }
     
     var joinButton: some View {

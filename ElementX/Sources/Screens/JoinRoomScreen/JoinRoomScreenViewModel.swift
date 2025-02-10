@@ -66,6 +66,8 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             showCancelKnockConfirmationAlert()
         case .dismiss:
             actionsSubject.send(.dismiss)
+        case .declineInviteAndBlock(userID: let userID):
+            showDeclineAndBlockConfirmationAlert(userID: userID)
         }
     }
     
@@ -300,6 +302,22 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                                          message: L10n.screenJoinRoomCancelKnockAlertDescription,
                                          primaryButton: .init(title: L10n.actionNo, role: .cancel, action: nil),
                                          secondaryButton: .init(title: L10n.screenJoinRoomCancelKnockAlertConfirmation, role: .destructive) { Task { await self.cancelKnock() } })
+    }
+    
+    private func showDeclineAndBlockConfirmationAlert(userID: String) {
+        state.bindings.alertInfo = .init(id: .declineInviteAndBlock,
+                                         title: L10n.screenJoinRoomDeclineAndBlockAlertTitle,
+                                         message: L10n.screenJoinRoomDeclineAndBlockAlertMessage(userID),
+                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                         secondaryButton: .init(title: L10n.screenJoinRoomDeclineAndBlockAlertConfirmation, role: .destructive) { Task { await self.declineAndBlock(userID: userID) } })
+    }
+    
+    private func declineAndBlock(userID: String) async {
+        await declineInvite()
+        // The decline and the view are already dismissed at this point so we can dispatch this separately as a best effort
+        Task {
+            await clientProxy.ignoreUser(userID)
+        }
     }
     
     private func declineInvite() async {
