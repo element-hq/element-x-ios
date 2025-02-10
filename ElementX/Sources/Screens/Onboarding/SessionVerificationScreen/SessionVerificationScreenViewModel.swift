@@ -123,7 +123,15 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
             case (.initial, .acceptVerificationRequest, .acceptingVerificationRequest):
                 acceptVerificationRequest()
             case (.initial, .requestVerification, .requestingVerification):
-                requestVerification()
+                Task {
+                    switch await self.requestVerification() {
+                    case .success:
+                        // Need to wait for the callback from the remote
+                        break
+                    case .failure:
+                        self.stateMachine.processEvent(.didFail)
+                    }
+                }
             case (.verificationRequestAccepted, .startSasVerification, .startingSasVerification):
                 startSasVerification()
             case (.showingChallenge, .acceptChallenge, .acceptingChallenge):
@@ -166,28 +174,14 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
         }
     }
     
-    private func requestVerification() {
-        Task {
-            switch flow {
-            case .deviceInitiator:
-                switch await sessionVerificationControllerProxy.requestDeviceVerification() {
-                case .success:
-                    // Need to wait for the callback from the remote
-                    break
-                case .failure:
-                    stateMachine.processEvent(.didFail)
-                }
-            case .userIntiator(let userID):
-                switch await sessionVerificationControllerProxy.requestUserVerification(userID) {
-                case .success:
-                    // Need to wait for the callback from the remote
-                    break
-                case .failure:
-                    stateMachine.processEvent(.didFail)
-                }
-            default:
-                fatalError("Incorrect API usage.")
-            }
+    private func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
+        switch flow {
+        case .deviceInitiator:
+            return await sessionVerificationControllerProxy.requestDeviceVerification()
+        case .userIntiator(let userID):
+            return await sessionVerificationControllerProxy.requestUserVerification(userID)
+        default:
+            fatalError("Incorrect API usage.")
         }
     }
     

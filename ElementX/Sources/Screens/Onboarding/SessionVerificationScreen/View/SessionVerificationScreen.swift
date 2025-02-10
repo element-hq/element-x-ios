@@ -31,7 +31,7 @@ struct SessionVerificationScreen: View {
     // MARK: - Private
     
     private var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .navigationBarLeading) {
+        ToolbarItem(placement: .cancellationAction) {
             switch context.viewState.flow {
             case .userIntiator, .userResponder:
                 Button(L10n.actionCancel) {

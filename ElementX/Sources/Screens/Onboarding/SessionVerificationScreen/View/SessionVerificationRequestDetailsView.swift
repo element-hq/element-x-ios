@@ -98,7 +98,9 @@ struct SessionVerificationRequestDetailsView: View {
             }
             
             .font(.compound.bodyMDSemibold)
+            
             Text(L10n.screenSessionVerificationRequestFooter)
+                .font(.compound.bodyMDSemibold)
                 .foregroundColor(.compound.textPrimary)
         }
     }
