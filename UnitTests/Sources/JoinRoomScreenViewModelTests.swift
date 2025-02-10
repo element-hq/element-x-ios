@@ -48,13 +48,18 @@ class JoinRoomScreenViewModelTests: XCTestCase {
     }
     
     func testDeclineInviteInteraction() async throws {
-        setupViewModel()
+        setupViewModel(state: .invited)
         
         try await deferFulfillment(viewModel.context.$viewState) { $0.roomDetails != nil }.fulfill()
         
         context.send(viewAction: .declineInvite)
         
         XCTAssertEqual(viewModel.context.alertInfo?.id, .declineInvite)
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { action in
+            action == .dismiss
+        }
+        context.alertInfo?.secondaryButton?.action?()
+        try await deferred.fulfill()
     }
     
     func testKnockedState() async throws {
