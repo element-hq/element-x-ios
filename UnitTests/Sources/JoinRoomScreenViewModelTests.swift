@@ -11,7 +11,7 @@ import XCTest
 
 @MainActor
 class JoinRoomScreenViewModelTests: XCTestCase {
-    private enum TestCase {
+    private enum TestMode {
         case joined
         case knocked
         case invited
@@ -48,7 +48,7 @@ class JoinRoomScreenViewModelTests: XCTestCase {
     }
     
     func testDeclineInviteInteraction() async throws {
-        setupViewModel(state: .invited)
+        setupViewModel(mode: .invited)
         
         try await deferFulfillment(viewModel.context.$viewState) { $0.roomDetails != nil }.fulfill()
         
@@ -63,7 +63,7 @@ class JoinRoomScreenViewModelTests: XCTestCase {
     }
     
     func testKnockedState() async throws {
-        setupViewModel(state: .knocked)
+        setupViewModel(mode: .knocked)
         
         try await deferFulfillment(viewModel.context.$viewState) { state in
             state.mode == .knocked
@@ -71,7 +71,7 @@ class JoinRoomScreenViewModelTests: XCTestCase {
     }
     
     func testCancelKnock() async throws {
-        setupViewModel(state: .knocked)
+        setupViewModel(mode: .knocked)
         
         try await deferFulfillment(viewModel.context.$viewState) { state in
             state.mode == .knocked
@@ -88,7 +88,7 @@ class JoinRoomScreenViewModelTests: XCTestCase {
     }
     
     func testDeclineAndBlockInviteInteraction() async throws {
-        setupViewModel(state: .invited)
+        setupViewModel(mode: .invited)
         let expectation = expectation(description: "Wait for the user to be ignored")
         clientProxy.ignoreUserClosure = { userID in
             defer { expectation.fulfill() }
@@ -112,7 +112,7 @@ class JoinRoomScreenViewModelTests: XCTestCase {
     }
     
     func testForgetRoom() async throws {
-        setupViewModel(state: .banned)
+        setupViewModel(mode: .banned)
         
         try await deferFulfillment(viewModel.context.$viewState) { $0.roomDetails != nil }.fulfill()
         
@@ -123,14 +123,14 @@ class JoinRoomScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
     
-    private func setupViewModel(throwing: Bool = false, state: TestCase = .joined) {
+    private func setupViewModel(throwing: Bool = false, mode: TestMode = .joined) {
         ServiceLocator.shared.settings.knockingEnabled = true
         
         clientProxy = ClientProxyMock(.init())
         
         clientProxy.joinRoomViaReturnValue = throwing ? .failure(.sdkError(ClientProxyMockError.generic)) : .success(())
         
-        switch state {
+        switch mode {
         case .knocked:
             clientProxy.roomPreviewForIdentifierViaReturnValue = .success(RoomPreviewProxyMock.knocked)
             
