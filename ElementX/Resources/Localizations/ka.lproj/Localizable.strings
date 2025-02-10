@@ -181,6 +181,7 @@
 "common_message_removed" = "მესიჯი წაშლილია";
 "common_modern" = "თანამედროვე";
 "common_mute" = "დადუმება";
+"common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "შედეგი არ არის";
 "common_no_room_name" = "No room name";
 "common_offline" = "ხაზგარეშე";
@@ -251,6 +252,7 @@
 "common_verified" = "Verified";
 "common_verify_device" = "დაადასტურეთ მოწყობილობა";
 "common_verify_identity" = "Verify identity";
+"common_verify_user" = "Verify user";
 "common_video" = "ვიდეო";
 "common_voice_message" = "ხმოვანი შეტყობინება";
 "common_waiting" = "მოცდა...";
@@ -294,6 +296,7 @@
 "emoji_picker_category_people" = "ღიმილები & ხალხი";
 "emoji_picker_category_places" = "მოგზაურობა და ადგილები";
 "emoji_picker_category_symbols" = "სიმბოლოები";
+"error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "This room address already exists. Please try editing the room address field or change the room name";
 "error_room_address_invalid_symbols" = "Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
 "error_account_creation_not_possible" = "Your homeserver needs to be upgraded to support Matrix Authentication Service and account creation.";
@@ -370,6 +373,9 @@
 "screen_advanced_settings_element_call_base_url" = "მორგებული Element-ის ზარის საბაზისო URL";
 "screen_advanced_settings_element_call_base_url_description" = "დააყენეთ საბაზისო URL Element-ის ზარებისათვის.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "არასწორი URL, გთხოვთ, დარწმუნდეთ, რომ შეიტანეთ პროტოკოლი (http/https) და სწორი მისამართი.";
+"screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
+"screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
+"screen_bottom_sheet_create_dm_title" = "Send invite?";
 "screen_create_room_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_room_access_section_anyone_option_title" = "Anyone";
 "screen_create_room_room_access_section_header" = "Room Access";
@@ -387,6 +393,8 @@
 "screen_join_room_knock_message_description" = "Message (optional)";
 "screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
 "screen_join_room_knock_sent_title" = "Request to join sent";
+"screen_join_room_loading_alert_message" = "We could not display the room preview. This may be due to network or server issues.";
+"screen_join_room_loading_alert_title" = "We couldn’t display this room preview";
 "screen_knock_requests_list_accept_all_alert_confirm_button_title" = "Yes, accept all";
 "screen_knock_requests_list_accept_all_alert_description" = "Are you sure you want to accept all requests to join?";
 "screen_knock_requests_list_accept_all_alert_title" = "Accept all requests";
@@ -942,9 +950,11 @@
 "screen_session_verification_cancelled_subtitle" = "რაღაცა არასწორადაა. ან მოთხოვნის ვადაა ამოწურული, ან მოთხოვნა უარყოფილი იყო.";
 "screen_session_verification_compare_emojis_subtitle" = "დაადასტურეთ, რომ ქვემოთ მოყვანილი ემოჯიები შეესაბამება თქვენს სხვა სესიაზე ნაჩვენებს.";
 "screen_session_verification_compare_emojis_title" = "შეადარეთ ემოჯიები";
+"screen_session_verification_compare_emojis_user_subtitle" = "Confirm that the emojis below match those shown on the other user’s device.";
 "screen_session_verification_compare_numbers_subtitle" = "დაადასტურეთ, რომ ქვემოთ მოცემული ნომრები ემთხვევა თქვენს სხვა სესიაზე ნაჩვენები ნომრებს.";
 "screen_session_verification_compare_numbers_title" = "შეადარეთ რიცხვები";
 "screen_session_verification_complete_subtitle" = "თქვენი ახალი სესია დადასტურებულია. მას აქვს წვდომა დაშიფრულ შეტყობინებებზე და სხვა მომხმარებლები მას სანდოდ ხედავენ.";
+"screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
 "screen_session_verification_enter_recovery_key" = "Enter recovery key";
 "screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "დაამტკიცეთ, რომ ეს თქვენ ხართ, რათა მიიღოთ წვდომა თქვენი დაშიფრული შეტყობინებების ისტორიასთან.";
@@ -965,8 +975,14 @@
 "screen_session_verification_they_match" = "ისინი ემთხვევიან ერთმანეთს";
 "screen_session_verification_use_another_device_subtitle" = "Make sure you have the app open in the other device before starting verification from here.";
 "screen_session_verification_use_another_device_title" = "Open the app on another verified device";
+"screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
+"screen_session_verification_user_initiator_title" = "Verify this user?";
+"screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "You should see a popup on the other device. Start the verification from there now.";
 "screen_session_verification_waiting_another_device_title" = "Start verification on the other device";
+"screen_session_verification_waiting_other_device_title" = "Waiting for the other device";
+"screen_session_verification_waiting_other_user_title" = "Waiting for the other user";
+"screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "მიიღეთ დადასტურების მოთხოვნა თქვენს სხვა სესიაში ამ პროცესის გასაგრძელებლად.";
 "screen_session_verification_waiting_to_accept_title" = "მოთხოვნის მიღებას ველოდებით";
 "screen_share_location_title" = "მდებარეობის გაზიარება";

@@ -2,4 +2,4 @@
 "NSFaceIDUsageDescription" = "Face ID jest w użyciu, aby uzyskać dostęp do aplikacji.";
 "NSLocationWhenInUseUsageDescription" = "Przyznaj dostęp do lokalizacji, aby Element X mógł udostępnić Twoją lokalizację.";
 "NSMicrophoneUsageDescription" = "Aby nagrywać lub wysyłać wiadomości audio, Element X potrzebuje dostępu do mikrofonu.";
-"NSPhotoLibraryUsageDescription" = "Umożliwia zapisywanie zdjęć i filmów w bibliotece.";
+"NSPhotoLibraryUsageDescription" = "Dzięki temu możesz zapisywać obrazy i filmy w bibliotece zdjęć.";

@@ -181,6 +181,7 @@
 "common_message_removed" = "Üzenet eltávolítva";
 "common_modern" = "Modern";
 "common_mute" = "Némítás";
+"common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Nincs találat";
 "common_no_room_name" = "Nincs szobanév";
 "common_offline" = "Kapcsolat nélkül";
@@ -251,6 +252,7 @@
 "common_verified" = "Ellenőrizve";
 "common_verify_device" = "Eszköz ellenőrzése";
 "common_verify_identity" = "Személyazonosság ellenőrzése";
+"common_verify_user" = "Verify user";
 "common_video" = "Videó";
 "common_voice_message" = "Hangüzenet";
 "common_waiting" = "Várakozás…";
@@ -294,6 +296,7 @@
 "emoji_picker_category_people" = "Mosolyok és emberek";
 "emoji_picker_category_places" = "Utazás és helyek";
 "emoji_picker_category_symbols" = "Szimbólumok";
+"error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "Ez a szobacím már létezik. Próbálja meg szerkeszteni a szobacím mezőt, vagy módosítsa a szoba nevét.";
 "error_room_address_invalid_symbols" = "Egyes karakterek nem engedélyezettek. Csak a betűk, a számjegyek és a következő szimbólumok támogatottak: $ & '() * +/; =? @ [] - . _";
 "error_account_creation_not_possible" = "A Matrix-kiszolgálót frissíteni kell a Matrix Authentication Service és a fióklétrehozás támogatásához.";
@@ -370,6 +373,9 @@
 "screen_advanced_settings_element_call_base_url" = "Egyéni Element Call alapwebcím";
 "screen_advanced_settings_element_call_base_url_description" = "Egyéni alapwebcím beállítása az Element Callhoz.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Érvénytelen webcím, győződjön meg arról, hogy szerepel-e benne a protokoll (http/https), és hogy helyes-e a cím.";
+"screen_bottom_sheet_create_dm_confirmation_button_title" = "Meghívó küldése";
+"screen_bottom_sheet_create_dm_message" = "Csevegést kezd vele: %1$@?";
+"screen_bottom_sheet_create_dm_title" = "Meghívó küldése?";
 "screen_create_room_room_access_section_anyone_option_description" = "Bárki csatlakozhat ehhez a szobához";
 "screen_create_room_room_access_section_anyone_option_title" = "Bárki";
 "screen_create_room_room_access_section_header" = "Szobahozzáférés";
@@ -387,6 +393,8 @@
 "screen_join_room_knock_message_description" = "Üzenet (nem kötelező)";
 "screen_join_room_knock_sent_description" = "Ha a kérését elfogadják, meghívót kap a szobához való csatlakozáshoz.";
 "screen_join_room_knock_sent_title" = "Csatlakozási kérés elküldve";
+"screen_join_room_loading_alert_message" = "Nem tudtuk megjeleníteni a szoba előnézetét. Ennek az oka hálózati vagy kiszolgálóprobléma is lehet.";
+"screen_join_room_loading_alert_title" = "We couldn’t display this room preview";
 "screen_knock_requests_list_accept_all_alert_confirm_button_title" = "Igen, az összes elfogadása";
 "screen_knock_requests_list_accept_all_alert_description" = "Biztos, hogy elfogadja az összes csatlakozási kérelmet?";
 "screen_knock_requests_list_accept_all_alert_title" = "Minden kérés elfogadása";
@@ -942,9 +950,11 @@
 "screen_session_verification_cancelled_subtitle" = "Valami hibásnak tűnik. A kérés vagy időtúllépésre futott, vagy elutasították.";
 "screen_session_verification_compare_emojis_subtitle" = "Erősítse meg, hogy a lenti emodzsik egyeznek-e a másik munkamenetben megjelenítettekkel.";
 "screen_session_verification_compare_emojis_title" = "Emodzsik összehasonlítása";
+"screen_session_verification_compare_emojis_user_subtitle" = "Confirm that the emojis below match those shown on the other user’s device.";
 "screen_session_verification_compare_numbers_subtitle" = "Ellenőrizze, hogy az alábbi számok megegyeznek-e a másik munkamenetben feltüntetett számokkal.";
 "screen_session_verification_compare_numbers_title" = "Számok összehasonlítása";
 "screen_session_verification_complete_subtitle" = "Az új munkamenete most már ellenőrizve van. Eléri a titkosított üzeneteit, és a többi felhasználó is megbízhatónak fogja látni.";
+"screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
 "screen_session_verification_enter_recovery_key" = "Adja meg a helyreállítási kulcsot";
 "screen_session_verification_failed_subtitle" = "A kérés túllépte az időkorlátot, el lett utasítva, vagy ellenőrzési eltérés történt.";
 "screen_session_verification_open_existing_session_subtitle" = "Bizonyítsa, hogy valóban Ön az, hogy elérje a titkosított üzeneteinek előzményeit.";
@@ -965,8 +975,14 @@
 "screen_session_verification_they_match" = "Megegyeznek";
 "screen_session_verification_use_another_device_subtitle" = "Győződjön meg róla, hogy az alkalmazás nyitva van a másik eszközön, mielőtt innen elindítja az ellenőrzést.";
 "screen_session_verification_use_another_device_title" = "Nyissa meg az alkalmazást egy másik ellenőrzött eszközön";
+"screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
+"screen_session_verification_user_initiator_title" = "Verify this user?";
+"screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "A másik eszközön egy felugró ablaknak kell megjelennie. Kezdje el az ellenőrzést onnan.";
 "screen_session_verification_waiting_another_device_title" = "Ellenőrzés megkezdése a másik eszközön";
+"screen_session_verification_waiting_other_device_title" = "Waiting for the other device";
+"screen_session_verification_waiting_other_user_title" = "Waiting for the other user";
+"screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "A folytatáshoz fogadja el az ellenőrzési folyamat indítási kérését a másik munkamenetében.";
 "screen_session_verification_waiting_to_accept_title" = "Várakozás a kérés elfogadására";
 "screen_share_location_title" = "Hely megosztása";

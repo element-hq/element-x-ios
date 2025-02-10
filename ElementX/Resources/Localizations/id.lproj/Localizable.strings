@@ -181,6 +181,7 @@
 "common_message_removed" = "Pesan dihapus";
 "common_modern" = "Modern";
 "common_mute" = "Bisukan";
+"common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Tidak ada hasil";
 "common_no_room_name" = "Tidak ada nama ruangan";
 "common_offline" = "Luring";
@@ -251,6 +252,7 @@
 "common_verified" = "Terverifikasi";
 "common_verify_device" = "Verifikasi perangkat";
 "common_verify_identity" = "Verifikasi identitas";
+"common_verify_user" = "Verify user";
 "common_video" = "Video";
 "common_voice_message" = "Pesan suara";
 "common_waiting" = "Menunggu…";
@@ -294,6 +296,7 @@
 "emoji_picker_category_people" = "Senyuman & Orang";
 "emoji_picker_category_places" = "Wisata & Tempat";
 "emoji_picker_category_symbols" = "Simbol";
+"error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "Alamat ruangan sudah ada, silakan coba sunting kolom alamat ruangan atau ubah nama ruangan";
 "error_room_address_invalid_symbols" = "Beberapa karakter tidak diperbolehkan. Hanya huruf, angka, dan simbol berikut didukung ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
 "error_account_creation_not_possible" = "Homeserver Anda perlu ditingkatkan untuk mendukung Matrix Authentication Service dan pembuatan akun.";
@@ -370,6 +373,9 @@
 "screen_advanced_settings_element_call_base_url" = "URL dasar Element Call khusus";
 "screen_advanced_settings_element_call_base_url_description" = "Tetapkan URL dasar khusus untuk Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL tidak valid, pastikan Anda menyertakan protokol (http/https) dan alamat yang benar.";
+"screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
+"screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
+"screen_bottom_sheet_create_dm_title" = "Send invite?";
 "screen_create_room_room_access_section_anyone_option_description" = "Siapa pun dapat bergabung dengan ruangan ini";
 "screen_create_room_room_access_section_anyone_option_title" = "Siapa pun";
 "screen_create_room_room_access_section_header" = "Akses Ruangan";
@@ -387,6 +393,8 @@
 "screen_join_room_knock_message_description" = "Pesan (opsional)";
 "screen_join_room_knock_sent_description" = "Anda akan menerima undangan untuk bergabung dengan ruangan jika permintaan Anda diterima.";
 "screen_join_room_knock_sent_title" = "Permintaan untuk bergabung dikirim";
+"screen_join_room_loading_alert_message" = "We could not display the room preview. This may be due to network or server issues.";
+"screen_join_room_loading_alert_title" = "We couldn’t display this room preview";
 "screen_knock_requests_list_accept_all_alert_confirm_button_title" = "Ya, terima semua";
 "screen_knock_requests_list_accept_all_alert_description" = "Apakah Anda yakin ingin menerima semua permintaan untuk bergabung?";
 "screen_knock_requests_list_accept_all_alert_title" = "Terima semua permintaan";
@@ -942,9 +950,11 @@
 "screen_session_verification_cancelled_subtitle" = "Sepertinya ada yang tidak beres. Entah permintaan sudah habis masa berlakunya atau permintaan ditolak.";
 "screen_session_verification_compare_emojis_subtitle" = "Konfirmasikan bahwa emoji di bawah ini sesuai dengan yang ditampilkan pada sesi Anda yang lain.";
 "screen_session_verification_compare_emojis_title" = "Bandingkan emoji";
+"screen_session_verification_compare_emojis_user_subtitle" = "Confirm that the emojis below match those shown on the other user’s device.";
 "screen_session_verification_compare_numbers_subtitle" = "Konfirmasikan bahwa angka-angka di bawah ini sesuai dengan yang ditampilkan pada sesi Anda yang lain.";
 "screen_session_verification_compare_numbers_title" = "Bandingkan angka";
 "screen_session_verification_complete_subtitle" = "Sesi baru Anda sekarang diverifikasi. Ini memiliki akses ke pesan terenkripsi Anda, dan pengguna lain akan melihatnya sebagai tepercaya.";
+"screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
 "screen_session_verification_enter_recovery_key" = "Masukkan kunci pemulihan";
 "screen_session_verification_failed_subtitle" = "Entah permintaan habis waktu, permintaan ditolak, atau ada ketidakcocokan verifikasi.";
 "screen_session_verification_open_existing_session_subtitle" = "Buktikan bahwa ini memang Anda untuk mengakses riwayat pesan terenkripsi Anda.";
@@ -965,8 +975,14 @@
 "screen_session_verification_they_match" = "Mereka cocok";
 "screen_session_verification_use_another_device_subtitle" = "Pastikan Anda membuka aplikasi di perangkat lain sebelum memulai verifikasi dari sini.";
 "screen_session_verification_use_another_device_title" = "Buka aplikasi di perangkat terverifikasi lain";
+"screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
+"screen_session_verification_user_initiator_title" = "Verify this user?";
+"screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "Anda akan melihat popup di perangkat lain. Mulai verifikasi dari sana sekarang.";
 "screen_session_verification_waiting_another_device_title" = "Mulai verifikasi di perangkat lain";
+"screen_session_verification_waiting_other_device_title" = "Waiting for the other device";
+"screen_session_verification_waiting_other_user_title" = "Waiting for the other user";
+"screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Terima permintaan untuk memulai proses verifikasi di sesi Anda yang lain untuk melanjutkan.";
 "screen_session_verification_waiting_to_accept_title" = "Menunggu untuk menerima permintaan";
 "screen_share_location_title" = "Bagikan lokasi";

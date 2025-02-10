@@ -181,6 +181,7 @@
 "common_message_removed" = "Mesaj sters";
 "common_modern" = "Modern";
 "common_mute" = "Dezactivați sunetul";
+"common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Niciun rezultat";
 "common_no_room_name" = "Fără nume de cameră";
 "common_offline" = "Deconectat";
@@ -251,6 +252,7 @@
 "common_verified" = "Verificat";
 "common_verify_device" = "Verificați dispozitivul";
 "common_verify_identity" = "Verify identity";
+"common_verify_user" = "Verify user";
 "common_video" = "Video";
 "common_voice_message" = "Mesaj vocal";
 "common_waiting" = "Se aşteaptă…";
@@ -294,6 +296,7 @@
 "emoji_picker_category_people" = "Fețe zâmbitoare & Oameni";
 "emoji_picker_category_places" = "Călătorii & Locuri";
 "emoji_picker_category_symbols" = "Simboluri";
+"error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "This room address already exists. Please try editing the room address field or change the room name";
 "error_room_address_invalid_symbols" = "Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
 "error_account_creation_not_possible" = "Serverul dumneavoastră trebuie actualizat pentru a suporta serviciul de autentificare Matrix și crearea de conturi.";
@@ -370,6 +373,9 @@
 "screen_advanced_settings_element_call_base_url" = "Adresa URL de bază Element Call";
 "screen_advanced_settings_element_call_base_url_description" = "Setați o adresă URL de bază personalizată pentru Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL invalid, vă rugăm să vă asigurați că includeți protocolul (http/https) și adresa corectă.";
+"screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
+"screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
+"screen_bottom_sheet_create_dm_title" = "Send invite?";
 "screen_create_room_room_access_section_anyone_option_description" = "Oricine se poate alătura acestei camere";
 "screen_create_room_room_access_section_anyone_option_title" = "Oricine";
 "screen_create_room_room_access_section_header" = "Acces la cameră";
@@ -387,6 +393,8 @@
 "screen_join_room_knock_message_description" = "Mesaj (opțional)";
 "screen_join_room_knock_sent_description" = "Veți primi o invitație de a vă alătura camerei dacă cererea dumneavoastră este acceptată.";
 "screen_join_room_knock_sent_title" = "Cererea de alăturare a fost trimisă";
+"screen_join_room_loading_alert_message" = "We could not display the room preview. This may be due to network or server issues.";
+"screen_join_room_loading_alert_title" = "We couldn’t display this room preview";
 "screen_knock_requests_list_accept_all_alert_confirm_button_title" = "Yes, accept all";
 "screen_knock_requests_list_accept_all_alert_description" = "Are you sure you want to accept all requests to join?";
 "screen_knock_requests_list_accept_all_alert_title" = "Accept all requests";
@@ -942,9 +950,11 @@
 "screen_session_verification_cancelled_subtitle" = "Ceva nu este în regulă. Fie cererea a expirat, fie a fost respinsă.";
 "screen_session_verification_compare_emojis_subtitle" = "Confirmați că emoticoanele de mai jos se potrivesc cu cele afișate în cealaltă sesiune.";
 "screen_session_verification_compare_emojis_title" = "Comparați emoticoanele";
+"screen_session_verification_compare_emojis_user_subtitle" = "Confirm that the emojis below match those shown on the other user’s device.";
 "screen_session_verification_compare_numbers_subtitle" = "Confirmați că numerele de mai jos se potrivesc cu cele afișate în cealaltă sesiune.";
 "screen_session_verification_compare_numbers_title" = "Comparați numerele";
 "screen_session_verification_complete_subtitle" = "Noua dumneavoastră sesiune este acum verificată. Are acces la mesajele dumneavoastră criptate, iar alți utilizatori vă vor vedea ca fiind de încredere.";
+"screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
 "screen_session_verification_enter_recovery_key" = "Introduceți cheia de recuperare";
 "screen_session_verification_failed_subtitle" = "Fie cererea a expirat, cererea a fost respinsă, fie a existat o nepotrivire de verificare.";
 "screen_session_verification_open_existing_session_subtitle" = "Demonstrați-vă identitatea pentru a accesa istoricul mesajelor criptate.";
@@ -965,8 +975,14 @@
 "screen_session_verification_they_match" = "Se potrivesc";
 "screen_session_verification_use_another_device_subtitle" = "Make sure you have the app open in the other device before starting verification from here.";
 "screen_session_verification_use_another_device_title" = "Open the app on another verified device";
+"screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
+"screen_session_verification_user_initiator_title" = "Verify this user?";
+"screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "You should see a popup on the other device. Start the verification from there now.";
 "screen_session_verification_waiting_another_device_title" = "Start verification on the other device";
+"screen_session_verification_waiting_other_device_title" = "Waiting for the other device";
+"screen_session_verification_waiting_other_user_title" = "Waiting for the other user";
+"screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Acceptați solicitarea de a începe procesul de verificare în cealaltă sesiune pentru a continua.";
 "screen_session_verification_waiting_to_accept_title" = "Se așteptă acceptarea cererii";
 "screen_share_location_title" = "Partajați locația";

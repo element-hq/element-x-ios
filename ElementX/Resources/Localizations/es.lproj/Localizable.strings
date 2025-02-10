@@ -181,6 +181,7 @@
 "common_message_removed" = "Mensaje eliminado";
 "common_modern" = "Moderno";
 "common_mute" = "Silenciar";
+"common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "No hay resultados";
 "common_no_room_name" = "No room name";
 "common_offline" = "Sin conexión";
@@ -251,6 +252,7 @@
 "common_verified" = "Verified";
 "common_verify_device" = "Verificar dispositivo";
 "common_verify_identity" = "Verify identity";
+"common_verify_user" = "Verify user";
 "common_video" = "Vídeo";
 "common_voice_message" = "Mensaje de voz";
 "common_waiting" = "Esperando…";
@@ -294,6 +296,7 @@
 "emoji_picker_category_people" = "Emojis y personas";
 "emoji_picker_category_places" = "Viajes y lugares";
 "emoji_picker_category_symbols" = "Símbolos";
+"error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "This room address already exists. Please try editing the room address field or change the room name";
 "error_room_address_invalid_symbols" = "Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
 "error_account_creation_not_possible" = "Your homeserver needs to be upgraded to support Matrix Authentication Service and account creation.";
@@ -370,6 +373,9 @@
 "screen_advanced_settings_element_call_base_url" = "URL base personalizada de Element Call";
 "screen_advanced_settings_element_call_base_url_description" = "Define una URL base personalizada para Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL no válida, asegúrate de incluir el protocolo (http/https) y la dirección correcta.";
+"screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
+"screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
+"screen_bottom_sheet_create_dm_title" = "Send invite?";
 "screen_create_room_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_room_access_section_anyone_option_title" = "Anyone";
 "screen_create_room_room_access_section_header" = "Room Access";
@@ -387,6 +393,8 @@
 "screen_join_room_knock_message_description" = "Message (optional)";
 "screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
 "screen_join_room_knock_sent_title" = "Request to join sent";
+"screen_join_room_loading_alert_message" = "We could not display the room preview. This may be due to network or server issues.";
+"screen_join_room_loading_alert_title" = "We couldn’t display this room preview";
 "screen_knock_requests_list_accept_all_alert_confirm_button_title" = "Yes, accept all";
 "screen_knock_requests_list_accept_all_alert_description" = "Are you sure you want to accept all requests to join?";
 "screen_knock_requests_list_accept_all_alert_title" = "Accept all requests";
@@ -942,9 +950,11 @@
 "screen_session_verification_cancelled_subtitle" = "Algo no fue bien. Se agotó el tiempo de espera de la solicitud o se rechazó.";
 "screen_session_verification_compare_emojis_subtitle" = "Confirma que los emojis que aparecen a continuación coinciden con los que aparecen en tu otra sesión.";
 "screen_session_verification_compare_emojis_title" = "Comparar emojis";
+"screen_session_verification_compare_emojis_user_subtitle" = "Confirm that the emojis below match those shown on the other user’s device.";
 "screen_session_verification_compare_numbers_subtitle" = "Confirma que los números que aparecen a continuación coinciden con los mostrados en tu otra sesión.";
 "screen_session_verification_compare_numbers_title" = "Comparar números";
 "screen_session_verification_complete_subtitle" = "Tu nueva sesión ya está verificada. Tienes acceso a tus mensajes cifrados y otros usuarios lo considerarán de confianza.";
+"screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
 "screen_session_verification_enter_recovery_key" = "Introduzca la clave de recuperación";
 "screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Demuestra que eres tú para acceder a tu historial de mensajes cifrados.";
@@ -965,8 +975,14 @@
 "screen_session_verification_they_match" = "Coinciden";
 "screen_session_verification_use_another_device_subtitle" = "Make sure you have the app open in the other device before starting verification from here.";
 "screen_session_verification_use_another_device_title" = "Open the app on another verified device";
+"screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
+"screen_session_verification_user_initiator_title" = "Verify this user?";
+"screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "You should see a popup on the other device. Start the verification from there now.";
 "screen_session_verification_waiting_another_device_title" = "Start verification on the other device";
+"screen_session_verification_waiting_other_device_title" = "Waiting for the other device";
+"screen_session_verification_waiting_other_user_title" = "Waiting for the other user";
+"screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Acepta la solicitud para iniciar el proceso de verificación en tu otra sesión para continuar.";
 "screen_session_verification_waiting_to_accept_title" = "A la espera de aceptar la solicitud";
 "screen_share_location_title" = "Compartir ubicación";

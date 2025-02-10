@@ -181,6 +181,7 @@
 "common_message_removed" = "Message supprimé";
 "common_modern" = "Moderne";
 "common_mute" = "Mettre en sourdine";
+"common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Aucun résultat";
 "common_no_room_name" = "Salon sans nom";
 "common_offline" = "Hors ligne";
@@ -251,6 +252,7 @@
 "common_verified" = "Vérifié(e)";
 "common_verify_device" = "Vérifier la session";
 "common_verify_identity" = "Vérifier l'identité";
+"common_verify_user" = "Verify user";
 "common_video" = "Vidéo";
 "common_voice_message" = "Message vocal";
 "common_waiting" = "En attente…";
@@ -294,6 +296,7 @@
 "emoji_picker_category_people" = "Émoticônes et personnes";
 "emoji_picker_category_places" = "Voyages & lieux";
 "emoji_picker_category_symbols" = "Symboles";
+"error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "Cette adresse de salon existe déjà, veuillez essayer de modifier le champ d'adresse de salon ou de modifier le nom du salon";
 "error_room_address_invalid_symbols" = "Certains caractères ne sont pas autorisés. Seuls les lettres, les chiffres et les symboles suivants sont utilisables ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
 "error_account_creation_not_possible" = "Votre serveur d’accueil doit être mis à jour pour prendre en charge le protocole MAS (Matrix Authentication Service) et la création de compte.";
@@ -370,6 +373,9 @@
 "screen_advanced_settings_element_call_base_url" = "URL de base pour Element Call personnalisée";
 "screen_advanced_settings_element_call_base_url_description" = "Configurer une URL de base pour Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL invalide, assurez-vous d’inclure le protocol (http/https) et l’adresse correcte.";
+"screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
+"screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
+"screen_bottom_sheet_create_dm_title" = "Send invite?";
 "screen_create_room_room_access_section_anyone_option_description" = "Tout le monde peut rejoindre ce salon";
 "screen_create_room_room_access_section_anyone_option_title" = "Tout le monde";
 "screen_create_room_room_access_section_header" = "Accès au salon";
@@ -387,6 +393,8 @@
 "screen_join_room_knock_message_description" = "Message (facultatif)";
 "screen_join_room_knock_sent_description" = "Vous recevrez une invitation à rejoindre le salon si votre demande est acceptée.";
 "screen_join_room_knock_sent_title" = "Demande de rejoindre le salon envoyée";
+"screen_join_room_loading_alert_message" = "We could not display the room preview. This may be due to network or server issues.";
+"screen_join_room_loading_alert_title" = "We couldn’t display this room preview";
 "screen_knock_requests_list_accept_all_alert_confirm_button_title" = "Oui, tout accepter";
 "screen_knock_requests_list_accept_all_alert_description" = "Êtes-vous sûr de vouloir accepter toutes les demandes pour rejoindre le salon ?";
 "screen_knock_requests_list_accept_all_alert_title" = "Tout accepter";
@@ -942,9 +950,11 @@
 "screen_session_verification_cancelled_subtitle" = "Quelque chose ne va pas. Soit la demande a expiré, soit elle a été refusée.";
 "screen_session_verification_compare_emojis_subtitle" = "Confirmez que les emojis ci-dessous correspondent à ceux affichés sur votre autre session.";
 "screen_session_verification_compare_emojis_title" = "Comparez les émojis";
+"screen_session_verification_compare_emojis_user_subtitle" = "Confirm that the emojis below match those shown on the other user’s device.";
 "screen_session_verification_compare_numbers_subtitle" = "Confirmez que les nombres ci-dessous correspondent à ceux affichés sur votre autre session.";
 "screen_session_verification_compare_numbers_title" = "Comparez les nombres";
 "screen_session_verification_complete_subtitle" = "Votre nouvelle session est désormais vérifiée. Elle a accès à vos messages chiffrés et les autres utilisateurs la verront identifiée comme fiable.";
+"screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
 "screen_session_verification_enter_recovery_key" = "Utiliser la clé de récupération";
 "screen_session_verification_failed_subtitle" = "Soit la demande a expiré, soit elle a été refusée, soit il y a eu une non-concordance de vérification.";
 "screen_session_verification_open_existing_session_subtitle" = "Prouvez qu’il s’agit bien de vous pour accéder à l’historique de vos messages chiffrés.";
@@ -965,8 +975,14 @@
 "screen_session_verification_they_match" = "Ils correspondent";
 "screen_session_verification_use_another_device_subtitle" = "Assurez-vous que l'application est ouverte sur un autre appareil avant de commencer la vérification.";
 "screen_session_verification_use_another_device_title" = "Ouvrez l'application sur un autre appareil vérifié";
+"screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
+"screen_session_verification_user_initiator_title" = "Verify this user?";
+"screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "Vous devriez voir une alerte sur l'autre appareil. Démarrez la vérification à partir de là dès maintenant.";
 "screen_session_verification_waiting_another_device_title" = "Démarrer la vérification sur l’autre appareil";
+"screen_session_verification_waiting_other_device_title" = "Waiting for the other device";
+"screen_session_verification_waiting_other_user_title" = "Waiting for the other user";
+"screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Pour continuer, acceptez la demande de lancement de la procédure de vérification dans votre autre session.";
 "screen_session_verification_waiting_to_accept_title" = "En attente d’acceptation de la demande";
 "screen_share_location_title" = "Partage de position";
