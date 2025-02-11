@@ -106,7 +106,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         }
         
         if case let .success(.some(identity)) = await identityResult {
-            state.isVerified = identity.isVerified()
+            state.isVerified = identity.verificationState == .verified
         } else {
             MXLog.error("Failed to find the member's identity.")
         }

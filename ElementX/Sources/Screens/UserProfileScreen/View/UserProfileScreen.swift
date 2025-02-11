@@ -139,7 +139,7 @@ struct UserProfileScreen_Previews: PreviewProvider, TestablePreview {
         let clientProxyMock = ClientProxyMock(.init())
         clientProxyMock.userIdentityForClosure = { userID in
             let isVerified = userID == RoomMemberProxyMock.mockDan.userID
-            return .success(UserIdentitySDKMock(configuration: .init(isVerified: isVerified)))
+            return .success(UserIdentityProxyMock(configuration: .init(isVerified: isVerified)))
         }
         if userID != RoomMemberProxyMock.mockMe.userID {
             clientProxyMock.directRoomForUserIDReturnValue = .success("roomID")

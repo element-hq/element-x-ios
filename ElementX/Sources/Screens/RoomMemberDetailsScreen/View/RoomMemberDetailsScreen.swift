@@ -175,7 +175,7 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
         
         clientProxyMock.userIdentityForClosure = { userID in
             let isVerified = userID == RoomMemberProxyMock.mockDan.userID
-            return .success(UserIdentitySDKMock(configuration: .init(isVerified: isVerified)))
+            return .success(UserIdentityProxyMock(configuration: .init(isVerified: isVerified)))
         }
         // to avoid mock the call state for the account owner test case
         if member.userID != RoomMemberProxyMock.mockMe.userID {
