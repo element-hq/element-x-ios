@@ -25,7 +25,9 @@ struct HomePostsContent: View {
                     LazyVStack(spacing: 0) {
                         ForEach(context.viewState.visiblePosts) { post in
                             VStack {
-                                HomeScreenPostCell(post: post, context: context)
+                                HomeScreenPostCell(post: post, mediaProvider: context.mediaProvider, showThreadLine: false,
+                                                   onPostTapped: {},
+                                                   onOpenArweaveLink: {})
                                     .padding(.all, 16)
                                 Divider()
                             }
