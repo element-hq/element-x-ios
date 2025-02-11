@@ -198,14 +198,23 @@ struct RoomDetailsScreen: View {
     
     private var peopleSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.commonPeople,
-                                    icon: \.user),
-                    details: .title(String(context.viewState.joinedMembersCount)),
-                    kind: .navigationLink {
-                        context.send(viewAction: .processTapPeople)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
-            
+            if context.viewState.hasMemberIdentityVerificationStateViolations {
+                ListRow(label: .default(title: L10n.commonPeople, icon: \.user),
+                        details: .icon(CompoundIcon(\.infoSolid).foregroundStyle(.compound.iconCriticalPrimary)),
+                        kind: .navigationLink {
+                            context.send(viewAction: .processTapPeople)
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
+                
+            } else {
+                ListRow(label: .default(title: L10n.commonPeople, icon: \.user),
+                        details: .title(String(context.viewState.joinedMembersCount)),
+                        kind: .navigationLink {
+                            context.send(viewAction: .processTapPeople)
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
+            }
+        
             if context.viewState.canSeeKnockingRequests {
                 ListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
                                         icon: \.askToJoin),

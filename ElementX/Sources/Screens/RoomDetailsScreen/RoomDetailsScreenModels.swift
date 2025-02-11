@@ -39,7 +39,10 @@ struct RoomDetailsScreenViewState: BindableState {
 
     var topic: AttributedString?
     var topicSummary: AttributedString?
+    
     var joinedMembersCount: Int
+    var hasMemberIdentityVerificationStateViolations = false
+    
     var isProcessingIgnoreRequest = false
     var canInviteUsers = false
     var canEditRoomName = false
