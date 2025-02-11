@@ -85,8 +85,8 @@ struct VideoRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                 
                 // Blurhash item?
                 
-                VideoRoomTimelineView(timelineItem: makeTimelineItem(caption: "This is a great image 😎"))
-                VideoRoomTimelineView(timelineItem: makeTimelineItem(caption: "This is a great image with a really long multiline caption",
+                VideoRoomTimelineView(timelineItem: makeTimelineItem(caption: "This is a great video 😎"))
+                VideoRoomTimelineView(timelineItem: makeTimelineItem(caption: "This is a great video with a really long multiline caption",
                                                                      isEdited: true))
             }
         }
