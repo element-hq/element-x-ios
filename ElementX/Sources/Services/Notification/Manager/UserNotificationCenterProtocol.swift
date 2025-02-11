@@ -16,6 +16,7 @@ protocol UserNotificationCenterProtocol: AnyObject {
     func removeDeliveredNotifications(withIdentifiers identifiers: [String])
     func setNotificationCategories(_ categories: Set<UNNotificationCategory>)
     func authorizationStatus() async -> UNAuthorizationStatus
+    func notificationSettings() async -> UNNotificationSettings
 }
 
 // sourcery: AutoMockable

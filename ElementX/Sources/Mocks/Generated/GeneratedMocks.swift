@@ -17099,6 +17099,70 @@ class UserNotificationCenterMock: UserNotificationCenterProtocol, @unchecked Sen
             return authorizationStatusReturnValue
         }
     }
+    //MARK: - notificationSettings
+
+    var notificationSettingsUnderlyingCallsCount = 0
+    var notificationSettingsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return notificationSettingsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = notificationSettingsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                notificationSettingsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    notificationSettingsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var notificationSettingsCalled: Bool {
+        return notificationSettingsCallsCount > 0
+    }
+
+    var notificationSettingsUnderlyingReturnValue: UNNotificationSettings!
+    var notificationSettingsReturnValue: UNNotificationSettings! {
+        get {
+            if Thread.isMainThread {
+                return notificationSettingsUnderlyingReturnValue
+            } else {
+                var returnValue: UNNotificationSettings? = nil
+                DispatchQueue.main.sync {
+                    returnValue = notificationSettingsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                notificationSettingsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    notificationSettingsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var notificationSettingsClosure: (() async -> UNNotificationSettings)?
+
+    func notificationSettings() async -> UNNotificationSettings {
+        notificationSettingsCallsCount += 1
+        if let notificationSettingsClosure = notificationSettingsClosure {
+            return await notificationSettingsClosure()
+        } else {
+            return notificationSettingsReturnValue
+        }
+    }
 }
 class UserSessionMock: UserSessionProtocol, @unchecked Sendable {
     var clientProxy: ClientProxyProtocol {
