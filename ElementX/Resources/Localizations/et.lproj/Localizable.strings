@@ -181,6 +181,7 @@
 "common_message_removed" = "Sõnum on eemaldatud";
 "common_modern" = "Kaasaegne";
 "common_mute" = "Summutatud";
+"common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Otsingul pole tulemusi";
 "common_no_room_name" = "Jututoal puudub nimi";
 "common_offline" = "Võrgust väljas";
@@ -251,6 +252,7 @@
 "common_verified" = "Verifitseeritud";
 "common_verify_device" = "Verifitseeri seade";
 "common_verify_identity" = "Verifitseeri võrguidentiteet";
+"common_verify_user" = "Verifitseeri kasutaja";
 "common_video" = "Video";
 "common_voice_message" = "Häälsõnum";
 "common_waiting" = "Ootame…";
@@ -294,6 +296,7 @@
 "emoji_picker_category_people" = "Emotikonid ja inimesed";
 "emoji_picker_category_places" = "Reisimine ja kohad";
 "emoji_picker_category_symbols" = "Sümbolid";
+"error_network_or_server_issue" = "See võib olla põhjustatud võrgu- või serverivigadest.";
 "error_room_address_already_exists" = "Selline jututoa aadress on juba olemas. Palun proovi muuta kas aadressi või jututoa nime";
 "error_room_address_invalid_symbols" = "Mõned tähemärgid pole lubatud. Kasuta vaid tähti, numbreid ja neid kirjavahemärke ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
 "error_account_creation_not_possible" = "Selleks et koos kasutajakonto loomisega toimiks Matrix Authentication Service'i tugi, vajab sinu koduserver uuendamist.";
@@ -370,6 +373,9 @@
 "screen_advanced_settings_element_call_base_url" = "Element Calli kohandatud teenuseaadress";
 "screen_advanced_settings_element_call_base_url_description" = "Seadista kohandatud teenuseaadress Element Calli jaoks.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Vigane url. Palun vaata, et url algaks protokolliga (http/https) ning aadress ise oleks ka õige.";
+"screen_bottom_sheet_create_dm_confirmation_button_title" = "Saada kutse";
+"screen_bottom_sheet_create_dm_message" = "Kas sa soovid alustada vestlust kasutajaga %1$@?";
+"screen_bottom_sheet_create_dm_title" = "Kas saadame kutse?";
 "screen_create_room_room_access_section_anyone_option_description" = "Kõik võivad selle jututoaga liituda";
 "screen_create_room_room_access_section_anyone_option_title" = "Kõik";
 "screen_create_room_room_access_section_header" = "Ligipääs jututoale";
@@ -387,6 +393,8 @@
 "screen_join_room_knock_message_description" = "Selgitus (kui soovid lisada)";
 "screen_join_room_knock_sent_description" = "Kui sinu liitumispalvega ollakse nõus, siis saad kutse jututoaga liitumiseks.";
 "screen_join_room_knock_sent_title" = "Liitumispalve on saadetud";
+"screen_join_room_loading_alert_message" = "We could not display the room preview. This may be due to network or server issues.";
+"screen_join_room_loading_alert_title" = "Meil ei õnnestunud selle jututoa eelvaadet kuvada";
 "screen_knock_requests_list_accept_all_alert_confirm_button_title" = "Jah, võta kõik vastu";
 "screen_knock_requests_list_accept_all_alert_description" = "Kas sa oled kindel, et soovid kõik vastu liitumist soovinud võtta?";
 "screen_knock_requests_list_accept_all_alert_title" = "Võta kõik vastu";
@@ -942,9 +950,11 @@
 "screen_session_verification_cancelled_subtitle" = "Olukord pole päris õige. Päring kas aegus või teine osapool keeldus päringule vastamast.";
 "screen_session_verification_compare_emojis_subtitle" = "Kinnita, et kõik järgnevalt kuvatud emojid on täpselt samad, mida sa näed oma teises sessioonis.";
 "screen_session_verification_compare_emojis_title" = "Võrdle emojisid";
+"screen_session_verification_compare_emojis_user_subtitle" = "Palun kinnita, et allpool näidatud emojid vastavad täpselt neile, mida kuvatakse teise kasutaja seadmes.";
 "screen_session_verification_compare_numbers_subtitle" = "Kinnita, et kõik järgnevalt kuvatud numbrid on täpselt samad, mida sa näed oma teises sessioonis.";
 "screen_session_verification_compare_numbers_title" = "Võrdle numbreid";
 "screen_session_verification_complete_subtitle" = "Sinu uus sessioon on nüüd verifitseeritud. Sellel sessioonil on nüüd ligipääs sinu krüptitud sõnumitele ja teised osapooled näevad teda usaldusväärsena.";
+"screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
 "screen_session_verification_enter_recovery_key" = "Sisesta taastevõti";
 "screen_session_verification_failed_subtitle" = "Kas verifitseerimine aegus, teine osapool keeldus vastamast või tekkis vastuste mittevastavus.";
 "screen_session_verification_open_existing_session_subtitle" = "Saamaks ligipääsu krüptitud sõnumite ajaloole tõesta et tegemist on sinuga.";
@@ -965,8 +975,14 @@
 "screen_session_verification_they_match" = "Nad klapivad omavahel";
 "screen_session_verification_use_another_device_subtitle" = "Enne kui alustad siin verifitseerimist, palun ava rakendus teises seadmes.";
 "screen_session_verification_use_another_device_title" = "Ava rakendus teises verifitseeritud seadmes";
+"screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
+"screen_session_verification_user_initiator_title" = "Kas verifitseerime selle kasutaja?";
+"screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "Sa peaksid teises seadmes nägema hüpikakent. Palun alusta sealt verifitseerimist.";
 "screen_session_verification_waiting_another_device_title" = "Alusta verifitseerimist teises seadmes";
+"screen_session_verification_waiting_other_device_title" = "Ootame teise seadme järgi";
+"screen_session_verification_waiting_other_user_title" = "Ootame teise kasutaja järgi";
+"screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Jätkamaks nõustu verifitseerimisprotsessi alustamisega oma teises sessioonis.";
 "screen_session_verification_waiting_to_accept_title" = "Ootame nõustumist verifitseerimispäringuga";
 "screen_share_location_title" = "Jaga asukohta";

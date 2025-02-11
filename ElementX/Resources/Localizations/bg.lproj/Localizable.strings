@@ -181,6 +181,7 @@
 "common_message_removed" = "Съобщението е премахнато";
 "common_modern" = "Модерно";
 "common_mute" = "Заглушаване";
+"common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Няма резултати";
 "common_no_room_name" = "No room name";
 "common_offline" = "Офлайн";
@@ -251,6 +252,7 @@
 "common_verified" = "Verified";
 "common_verify_device" = "Потвърждаване на устройството";
 "common_verify_identity" = "Verify identity";
+"common_verify_user" = "Verify user";
 "common_video" = "Видео";
 "common_voice_message" = "Гласово съобщение";
 "common_waiting" = "Waiting…";
@@ -294,6 +296,7 @@
 "emoji_picker_category_people" = "Усмивки & Хора";
 "emoji_picker_category_places" = "Пътуване & Места";
 "emoji_picker_category_symbols" = "Символи";
+"error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "This room address already exists. Please try editing the room address field or change the room name";
 "error_room_address_invalid_symbols" = "Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
 "error_account_creation_not_possible" = "Your homeserver needs to be upgraded to support Matrix Authentication Service and account creation.";
@@ -370,6 +373,9 @@
 "screen_advanced_settings_element_call_base_url" = "Custom Element Call base URL";
 "screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Invalid URL, please make sure you include the protocol (http/https) and the correct address.";
+"screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
+"screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
+"screen_bottom_sheet_create_dm_title" = "Send invite?";
 "screen_create_room_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_room_access_section_anyone_option_title" = "Anyone";
 "screen_create_room_room_access_section_header" = "Room Access";
@@ -387,6 +393,8 @@
 "screen_join_room_knock_message_description" = "Message (optional)";
 "screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
 "screen_join_room_knock_sent_title" = "Request to join sent";
+"screen_join_room_loading_alert_message" = "We could not display the room preview. This may be due to network or server issues.";
+"screen_join_room_loading_alert_title" = "We couldn’t display this room preview";
 "screen_knock_requests_list_accept_all_alert_confirm_button_title" = "Yes, accept all";
 "screen_knock_requests_list_accept_all_alert_description" = "Are you sure you want to accept all requests to join?";
 "screen_knock_requests_list_accept_all_alert_title" = "Accept all requests";
@@ -942,9 +950,11 @@
 "screen_session_verification_cancelled_subtitle" = "Нещо не изглежда наред. Или времето за изчакване на заявката е изтекло, или заявката е отхвърлена.";
 "screen_session_verification_compare_emojis_subtitle" = "Потвърдете, че емоджитата по-долу съвпадат с показаните в другата ви сесия.";
 "screen_session_verification_compare_emojis_title" = "Сравнете емоджита";
+"screen_session_verification_compare_emojis_user_subtitle" = "Confirm that the emojis below match those shown on the other user’s device.";
 "screen_session_verification_compare_numbers_subtitle" = "Confirm that the numbers below match those shown on your other session.";
 "screen_session_verification_compare_numbers_title" = "Compare numbers";
 "screen_session_verification_complete_subtitle" = "Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.";
+"screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
 "screen_session_verification_enter_recovery_key" = "Въвеждане на ключ за възстановяване";
 "screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Докажете, че сте вие, за да получите достъп до хронологията на шифрованите си съобщения.";
@@ -965,8 +975,14 @@
 "screen_session_verification_they_match" = "Те съвпадат";
 "screen_session_verification_use_another_device_subtitle" = "Make sure you have the app open in the other device before starting verification from here.";
 "screen_session_verification_use_another_device_title" = "Open the app on another verified device";
+"screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
+"screen_session_verification_user_initiator_title" = "Verify this user?";
+"screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "You should see a popup on the other device. Start the verification from there now.";
 "screen_session_verification_waiting_another_device_title" = "Start verification on the other device";
+"screen_session_verification_waiting_other_device_title" = "Waiting for the other device";
+"screen_session_verification_waiting_other_user_title" = "Waiting for the other user";
+"screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Приемете заявката, за да започнете процеса на потвърждаване в другата си сесия, за да продължите.";
 "screen_session_verification_waiting_to_accept_title" = "В очакване на приемане на заявка";
 "screen_share_location_title" = "Споделяне на местоположение";

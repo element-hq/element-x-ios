@@ -181,6 +181,7 @@
 "common_message_removed" = "消息已移除";
 "common_modern" = "现代";
 "common_mute" = "静音";
+"common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "没有结果";
 "common_no_room_name" = "无聊天室名";
 "common_offline" = "离线";
@@ -251,6 +252,7 @@
 "common_verified" = "已验证";
 "common_verify_device" = "验证设备";
 "common_verify_identity" = "验证身份";
+"common_verify_user" = "Verify user";
 "common_video" = "视频";
 "common_voice_message" = "语音消息";
 "common_waiting" = "等待...";
@@ -294,6 +296,7 @@
 "emoji_picker_category_people" = "表情和人物";
 "emoji_picker_category_places" = "旅行和地点";
 "emoji_picker_category_symbols" = "符号";
+"error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "此房间地址已存在。请尝试编辑房间地址字段或更改房间名称";
 "error_room_address_invalid_symbols" = "不允许使用某些字符。仅支持字母、数字和以下符号 $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
 "error_account_creation_not_possible" = "您的服务器需要升级，以支持 Matrix 鉴权服务和账户创建。";
@@ -370,6 +373,9 @@
 "screen_advanced_settings_element_call_base_url" = "自定义 Element Call URL";
 "screen_advanced_settings_element_call_base_url_description" = "为 Element 通话设置根 URL。";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL 无效，请确保包含协议（http/https）和正确的地址。";
+"screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
+"screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
+"screen_bottom_sheet_create_dm_title" = "Send invite?";
 "screen_create_room_room_access_section_anyone_option_description" = "任何人都可以加入此房间";
 "screen_create_room_room_access_section_anyone_option_title" = "任何人";
 "screen_create_room_room_access_section_header" = "房间访问权限";
@@ -387,6 +393,8 @@
 "screen_join_room_knock_message_description" = "消息（可选）";
 "screen_join_room_knock_sent_description" = "如果您的请求被接受，您将收到加入房间的邀请。";
 "screen_join_room_knock_sent_title" = "加入请求已发送";
+"screen_join_room_loading_alert_message" = "We could not display the room preview. This may be due to network or server issues.";
+"screen_join_room_loading_alert_title" = "We couldn’t display this room preview";
 "screen_knock_requests_list_accept_all_alert_confirm_button_title" = "是的，全部接受";
 "screen_knock_requests_list_accept_all_alert_description" = "您确定要接受所有加入请求吗？";
 "screen_knock_requests_list_accept_all_alert_title" = "接受所有请求";
@@ -942,9 +950,11 @@
 "screen_session_verification_cancelled_subtitle" = "发生了一些错误。网络请求超时，或者被服务器拒绝。";
 "screen_session_verification_compare_emojis_subtitle" = "确认下方的表情符号与另一设备上显示的相同。";
 "screen_session_verification_compare_emojis_title" = "比较表情符号";
+"screen_session_verification_compare_emojis_user_subtitle" = "Confirm that the emojis below match those shown on the other user’s device.";
 "screen_session_verification_compare_numbers_subtitle" = "确认以下数字与其他会话中显示的一致。";
 "screen_session_verification_compare_numbers_title" = "比较数字";
 "screen_session_verification_complete_subtitle" = "新设备已经成功验证。现在新设备可以访问加密信息，其他用户也会信任这个设备。";
+"screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
 "screen_session_verification_enter_recovery_key" = "输入恢复密钥";
 "screen_session_verification_failed_subtitle" = "要么请求超时，要么请求被拒绝，要么验证不匹配。";
 "screen_session_verification_open_existing_session_subtitle" = "证明自己的身份以访问加密历史消息。";
@@ -965,8 +975,14 @@
 "screen_session_verification_they_match" = "匹配";
 "screen_session_verification_use_another_device_subtitle" = "从此处开始验证之前，请确保您已在其他设备上打开了该应用程序。";
 "screen_session_verification_use_another_device_title" = "在另一台验证的设备上打开应用";
+"screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
+"screen_session_verification_user_initiator_title" = "Verify this user?";
+"screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "您应该会在另一台设备上看到一个弹出窗口。现在从那里开始验证。";
 "screen_session_verification_waiting_another_device_title" = "在另一台设备上开始验证";
+"screen_session_verification_waiting_other_device_title" = "Waiting for the other device";
+"screen_session_verification_waiting_other_user_title" = "Waiting for the other user";
+"screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "请在其他会话中接受验证请求。";
 "screen_session_verification_waiting_to_accept_title" = "等待接受请求";
 "screen_share_location_title" = "分享位置";

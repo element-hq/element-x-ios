@@ -58,6 +58,12 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         }
     }
     
+    deinit {
+        cleanUp()
+        ExtensionLogger.logMemory(with: tag)
+        MXLog.info("\(tag) deinit")
+    }
+    
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
         guard !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory),
@@ -124,6 +130,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         MXLog.warning("\(tag) serviceExtensionTimeWillExpire")
         notify(unreadCount: nil)
     }
+    
+    // MARK: - Private
 
     private func run(with credentials: KeychainCredentials,
                      roomID: String,
@@ -141,13 +149,12 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                 MXLog.info("\(tag) no notification for the event, discard")
                 return discard(unreadCount: unreadCount)
             }
-            
-            guard await shouldHandleCallNotification(itemProxy) else {
+                  
+            switch await preprocessNotification(itemProxy) {
+            case .processedShouldDiscard, .unsupportedShouldDiscard:
                 return discard(unreadCount: unreadCount)
-            }
-            
-            if await handleRedactionNotification(itemProxy) {
-                return discard(unreadCount: unreadCount)
+            case .shouldDisplay:
+                break
             }
             
             // After the first processing, update the modified content
@@ -213,14 +220,71 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         handler = nil
         modifiedContent = nil
     }
-
-    deinit {
-        cleanUp()
-        ExtensionLogger.logMemory(with: tag)
-        MXLog.info("\(tag) deinit")
+    
+    private func preprocessNotification(_ itemProxy: NotificationItemProxyProtocol) async -> NotificationProcessingResult {
+        guard case let .timeline(event) = itemProxy.event else {
+            return .shouldDisplay
+        }
+        
+        switch try? event.eventType() {
+        case .messageLike(let content):
+            switch content {
+            case .poll,
+                 .roomEncrypted,
+                 .sticker:
+                return .shouldDisplay
+            case .roomMessage(let messageType, _):
+                switch messageType {
+                case .emote, .image, .audio, .video, .file, .notice, .text, .location:
+                    return .shouldDisplay
+                case .other:
+                    return .unsupportedShouldDiscard
+                }
+            case .roomRedaction(let redactedEventID, _):
+                guard let redactedEventID else {
+                    MXLog.error("Unable to handle redact notification due to missing event ID.")
+                    return .processedShouldDiscard
+                }
+                
+                let deliveredNotifications = await UNUserNotificationCenter.current().deliveredNotifications()
+                
+                if let targetNotification = deliveredNotifications.first(where: { $0.request.content.eventID == redactedEventID }) {
+                    UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [targetNotification.request.identifier])
+                }
+                
+                return .processedShouldDiscard
+            case .callNotify(let notifyType):
+                return await handleCallNotification(notifyType: notifyType,
+                                                    timestamp: event.timestamp(),
+                                                    roomID: itemProxy.roomID,
+                                                    roomDisplayName: itemProxy.roomDisplayName)
+            case .callAnswer,
+                 .callInvite,
+                 .callHangup,
+                 .callCandidates,
+                 .keyVerificationReady,
+                 .keyVerificationStart,
+                 .keyVerificationCancel,
+                 .keyVerificationAccept,
+                 .keyVerificationKey,
+                 .keyVerificationMac,
+                 .keyVerificationDone,
+                 .reactionContent:
+                return .unsupportedShouldDiscard
+            }
+        case .state:
+            return .unsupportedShouldDiscard
+        case .none:
+            return .unsupportedShouldDiscard
+        }
     }
     
-    private func shouldHandleCallNotification(_ itemProxy: NotificationItemProxyProtocol) async -> Bool {
+    /// Handle incoming call notifications.
+    /// - Returns: A boolean indicating whether the notification was handled and should now be discarded.
+    private func handleCallNotification(notifyType: NotifyType,
+                                        timestamp: Timestamp,
+                                        roomID: String,
+                                        roomDisplayName: String) async -> NotificationProcessingResult {
         // Handle incoming VoIP calls, show the native OS call screen
         // https://developer.apple.com/documentation/callkit/sending-end-to-end-encrypted-voip-calls
         //
@@ -233,54 +297,33 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         // - the main app picks this up in `PKPushRegistry.didReceiveIncomingPushWith` and
         // `CXProvider.reportNewIncomingCall` to show the system UI and handle actions on it.
         // N.B. this flow works properly only when background processing capabilities are enabled
-        
-        guard case let .timeline(event) = itemProxy.event,
-              case let .messageLike(content) = try? event.eventType(),
-              case let .callNotify(notificationType) = content,
-              notificationType == .ring else {
-            return true
+        guard notifyType == .ring else {
+            return .shouldDisplay
         }
         
-        let timestamp = Date(timeIntervalSince1970: TimeInterval(event.timestamp() / 1000))
+        let timestamp = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
         guard abs(timestamp.timeIntervalSinceNow) < ElementCallServiceNotificationDiscardDelta else {
             MXLog.info("Call notification is too old, handling as push notification")
-            return true
+            return .shouldDisplay
         }
         
-        let payload = [ElementCallServiceNotificationKey.roomID.rawValue: itemProxy.roomID,
-                       ElementCallServiceNotificationKey.roomDisplayName.rawValue: itemProxy.roomDisplayName]
+        let payload = [ElementCallServiceNotificationKey.roomID.rawValue: roomID,
+                       ElementCallServiceNotificationKey.roomDisplayName.rawValue: roomDisplayName]
         
         do {
             try await CXProvider.reportNewIncomingVoIPPushPayload(payload)
         } catch {
             MXLog.error("Failed reporting voip call with error: \(error). Handling as push notification")
-            return true
+            return .shouldDisplay
         }
         
-        return false
+        return .processedShouldDiscard
     }
     
-    /// Handles a notification for an `m.room.redaction` event.
-    /// - Returns: A boolean indicating whether the notification was handled.
-    private func handleRedactionNotification(_ itemProxy: NotificationItemProxyProtocol) async -> Bool {
-        guard case let .timeline(event) = itemProxy.event,
-              case let .messageLike(content) = try? event.eventType(),
-              case let .roomRedaction(redactedEventID, _) = content else {
-            return false
-        }
-        
-        guard let redactedEventID else {
-            MXLog.error("Unable to redact notification due to missing event ID.")
-            return true // Return true as there's no point showing this notification.
-        }
-        
-        let deliveredNotifications = await UNUserNotificationCenter.current().deliveredNotifications()
-        
-        if let targetNotification = deliveredNotifications.first(where: { $0.request.content.eventID == redactedEventID }) {
-            UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [targetNotification.request.identifier])
-        }
-        
-        return true
+    private enum NotificationProcessingResult {
+        case shouldDisplay
+        case processedShouldDiscard
+        case unsupportedShouldDiscard
     }
 }
 

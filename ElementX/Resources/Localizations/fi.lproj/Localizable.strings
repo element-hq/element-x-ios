@@ -181,6 +181,7 @@
 "common_message_removed" = "Viesti poistettu";
 "common_modern" = "Moderni";
 "common_mute" = "Mykistä";
+"common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Ei tuloksia";
 "common_no_room_name" = "Nimetön huone";
 "common_offline" = "Ei yhteyttä";
@@ -251,6 +252,7 @@
 "common_verified" = "Vahvistettu";
 "common_verify_device" = "Vahvista laite";
 "common_verify_identity" = "Vahvista identiteetti";
+"common_verify_user" = "Verify user";
 "common_video" = "Video";
 "common_voice_message" = "Ääniviesti";
 "common_waiting" = "Odotetaan…";
@@ -294,6 +296,7 @@
 "emoji_picker_category_people" = "Hymiöt ja ihmiset";
 "emoji_picker_category_places" = "Matkustaminen ja paikat";
 "emoji_picker_category_symbols" = "Symbolit";
+"error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "Tämä huoneen osoite on jo käytössä, yritä muokata huoneen osoitekenttää tai muuta huoneen nimeä";
 "error_room_address_invalid_symbols" = "Jotkin merkit eivät ole sallittuja. Vain kirjaimet, numerot ja seuraavat symbolit ovat tuettuja ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
 "error_account_creation_not_possible" = "Kotipalvelimesi on päivitettävä tukemaan Matrix Authentication Serviceä ja tilin luomista.";
@@ -370,6 +373,9 @@
 "screen_advanced_settings_element_call_base_url" = "Mukautettu Element Call URL-osoite";
 "screen_advanced_settings_element_call_base_url_description" = "Aseta mukautettu URL-osoite Element Callille.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Virheellinen URL-osoite. Varmista, että sisällytät protokollan (http/https) ja oikean osoitteen.";
+"screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
+"screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
+"screen_bottom_sheet_create_dm_title" = "Send invite?";
 "screen_create_room_room_access_section_anyone_option_description" = "Kuka tahansa voi liittyä tähän huoneeseen";
 "screen_create_room_room_access_section_anyone_option_title" = "Kuka tahansa";
 "screen_create_room_room_access_section_header" = "Huoneeseen Pääsy";
@@ -387,6 +393,8 @@
 "screen_join_room_knock_message_description" = "Viesti (valinnainen)";
 "screen_join_room_knock_sent_description" = "Saat kutsun liittyä huoneeseen, jos pyyntösi hyväksytään.";
 "screen_join_room_knock_sent_title" = "Liittymispyyntö lähetetty";
+"screen_join_room_loading_alert_message" = "We could not display the room preview. This may be due to network or server issues.";
+"screen_join_room_loading_alert_title" = "We couldn’t display this room preview";
 "screen_knock_requests_list_accept_all_alert_confirm_button_title" = "Kyllä, hyväksy kaikki";
 "screen_knock_requests_list_accept_all_alert_description" = "Haluatko varmasti hyväksyä kaikki liittymispyynnöt?";
 "screen_knock_requests_list_accept_all_alert_title" = "Hyväksy kaikki pyynnöt";
@@ -942,9 +950,11 @@
 "screen_session_verification_cancelled_subtitle" = "Jokin ei vaikuta oikealta. Joko pyyntö aikakatkaistiin tai hylättiin.";
 "screen_session_verification_compare_emojis_subtitle" = "Vahvista, että alla olevat hymiöt vastaavat toisella laitteella näkyviä hymiöitä.";
 "screen_session_verification_compare_emojis_title" = "Vertaa hymiöitä";
+"screen_session_verification_compare_emojis_user_subtitle" = "Confirm that the emojis below match those shown on the other user’s device.";
 "screen_session_verification_compare_numbers_subtitle" = "Varmista, että alla olevat numerot vastaavat toisessa istunnossa näkyviä numeroita.";
 "screen_session_verification_compare_numbers_title" = "Vertaa numeroita";
 "screen_session_verification_complete_subtitle" = "Uusi kirjautumisesi on nyt vahvistettu. Sillä on pääsy salattuihin viesteihisi, ja muut käyttäjät näkevät sen luotettuna.";
+"screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
 "screen_session_verification_enter_recovery_key" = "Syötä palautusavain";
 "screen_session_verification_failed_subtitle" = "Joko pyyntö aikakatkaistiin, pyyntö hylättiin tai vahvistus ei täsmännyt.";
 "screen_session_verification_open_existing_session_subtitle" = "Vahvista, että se olet sinä, jotta näet aiemmat salatut viestisi.";
@@ -965,8 +975,14 @@
 "screen_session_verification_they_match" = "Ne täsmäävät";
 "screen_session_verification_use_another_device_subtitle" = "Varmista, että sovellus on avoinna toisessa laitteessa, ennen kuin aloitat vahvistuksen tästä.";
 "screen_session_verification_use_another_device_title" = "Avaa sovellus toisella vahvistetulla laitteella";
+"screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
+"screen_session_verification_user_initiator_title" = "Verify this user?";
+"screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "Sinun pitäisi nähdä ponnahdusikkuna toisessa laitteessa. Aloita vahvistus nyt sieltä.";
 "screen_session_verification_waiting_another_device_title" = "Aloita vahvistus toisella laitteella";
+"screen_session_verification_waiting_other_device_title" = "Waiting for the other device";
+"screen_session_verification_waiting_other_user_title" = "Waiting for the other user";
+"screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Hyväksy vahvistuspyyntö toisella laitteella jatkaaksesi.";
 "screen_session_verification_waiting_to_accept_title" = "Odotetaan pyynnön hyväksymistä";
 "screen_share_location_title" = "Jaa sijainti";

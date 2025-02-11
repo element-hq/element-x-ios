@@ -181,6 +181,7 @@
 "common_message_removed" = "訊息已移除";
 "common_modern" = "現代";
 "common_mute" = "關閉通知";
+"common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "查無結果";
 "common_no_room_name" = "無聊天室名稱";
 "common_offline" = "離線";
@@ -251,6 +252,7 @@
 "common_verified" = "已驗證";
 "common_verify_device" = "驗證裝置";
 "common_verify_identity" = "驗證身份";
+"common_verify_user" = "Verify user";
 "common_video" = "影片";
 "common_voice_message" = "語音訊息";
 "common_waiting" = "等待中...";
@@ -294,6 +296,7 @@
 "emoji_picker_category_people" = "表情與人物";
 "emoji_picker_category_places" = "旅行與景點";
 "emoji_picker_category_symbols" = "標誌";
+"error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "此聊天室地址已存在。請嘗試編輯聊天室地址欄位或變更聊天室名稱";
 "error_room_address_invalid_symbols" = "不允許使用部份字元。僅支援字母、數字與以下符號 ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
 "error_account_creation_not_possible" = "您的家伺服器需要升級才能支援 Matrix Authentication Service 與帳號建立。";
@@ -370,6 +373,9 @@
 "screen_advanced_settings_element_call_base_url" = "自訂 Element 通話基礎 URL";
 "screen_advanced_settings_element_call_base_url_description" = "設定 Element 通話的自訂基礎 URL。";
 "screen_advanced_settings_element_call_base_url_validation_error" = "無效的 URL，請確定包含了協定 (http/https) 與正確的地址。";
+"screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
+"screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
+"screen_bottom_sheet_create_dm_title" = "Send invite?";
 "screen_create_room_room_access_section_anyone_option_description" = "任何人都可以加入此聊天室";
 "screen_create_room_room_access_section_anyone_option_title" = "任何人";
 "screen_create_room_room_access_section_header" = "聊天室存取權";
@@ -387,6 +393,8 @@
 "screen_join_room_knock_message_description" = "訊息（選擇性）";
 "screen_join_room_knock_sent_description" = "若接受了您的請求，您將會收到加入聊天是的邀請。";
 "screen_join_room_knock_sent_title" = "已傳送加入請求";
+"screen_join_room_loading_alert_message" = "We could not display the room preview. This may be due to network or server issues.";
+"screen_join_room_loading_alert_title" = "We couldn’t display this room preview";
 "screen_knock_requests_list_accept_all_alert_confirm_button_title" = "是的，全部接受";
 "screen_knock_requests_list_accept_all_alert_description" = "您確定要接受所有加入請求嗎？";
 "screen_knock_requests_list_accept_all_alert_title" = "接受所有請求";
@@ -942,9 +950,11 @@
 "screen_session_verification_cancelled_subtitle" = "似乎出了一點問題。有可能是因為等候逾時，或是請求被拒絕。";
 "screen_session_verification_compare_emojis_subtitle" = "確認顯示在其他工作階段上的表情符號是否和下方的相同。";
 "screen_session_verification_compare_emojis_title" = "比對表情符號";
+"screen_session_verification_compare_emojis_user_subtitle" = "Confirm that the emojis below match those shown on the other user’s device.";
 "screen_session_verification_compare_numbers_subtitle" = "確認以下數字是否與其他作業階段中顯示的數字相符。";
 "screen_session_verification_compare_numbers_title" = "比較數字";
 "screen_session_verification_complete_subtitle" = "新的工作階段已完成驗證。它能夠存取您的加密訊息，而其他使用者會將它視為可信任的。";
+"screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
 "screen_session_verification_enter_recovery_key" = "輸入復原金鑰";
 "screen_session_verification_failed_subtitle" = "請求逾時、請求被拒或是驗證不符。";
 "screen_session_verification_open_existing_session_subtitle" = "為了存取被加密的歷史訊息，您需要證明這是您本人。";
@@ -965,8 +975,14 @@
 "screen_session_verification_they_match" = "一樣";
 "screen_session_verification_use_another_device_subtitle" = "從這裡開始驗證之前，請確保您在其他裝置中開啟了應用程式。";
 "screen_session_verification_use_another_device_title" = "在另外一個已驗證的裝置上開啟應用程式";
+"screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
+"screen_session_verification_user_initiator_title" = "Verify this user?";
+"screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "您應該會在其他裝置上看到一個彈出式視窗。立刻從那裡開始驗證。";
 "screen_session_verification_waiting_another_device_title" = "在其他裝置上開始驗證";
+"screen_session_verification_waiting_other_device_title" = "Waiting for the other device";
+"screen_session_verification_waiting_other_user_title" = "Waiting for the other user";
+"screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "準備開始驗證，請到您的其他工作階段接受請求。";
 "screen_session_verification_waiting_to_accept_title" = "等待接受請求";
 "screen_share_location_title" = "分享位置";
