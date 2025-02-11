@@ -18,7 +18,10 @@ class SessionVerificationViewModelTests: XCTestCase {
     
     override func setUpWithError() throws {
         sessionVerificationController = SessionVerificationControllerProxyMock.configureMock()
-        viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: sessionVerificationController, flow: .initiator)
+        viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: sessionVerificationController,
+                                                       flow: .deviceInitiator,
+                                                       appSettings: AppSettings(),
+                                                       mediaProvider: MediaProviderMock(configuration: .init()))
         context = viewModel.context
     }
 
@@ -28,7 +31,7 @@ class SessionVerificationViewModelTests: XCTestCase {
         context.send(viewAction: .requestVerification)
         
         try await Task.sleep(for: .milliseconds(100))
-        XCTAssert(sessionVerificationController.requestVerificationCallsCount == 1)
+        XCTAssert(sessionVerificationController.requestDeviceVerificationCallsCount == 1)
         XCTAssertEqual(context.viewState.verificationState, .requestingVerification)
     }
     
@@ -53,7 +56,7 @@ class SessionVerificationViewModelTests: XCTestCase {
         
         XCTAssertEqual(context.viewState.verificationState, .initial)
 
-        XCTAssert(sessionVerificationController.requestVerificationCallsCount == 1)
+        XCTAssert(sessionVerificationController.requestDeviceVerificationCallsCount == 1)
         XCTAssert(sessionVerificationController.cancelVerificationCallsCount == 1)
     }
     
@@ -154,7 +157,7 @@ class SessionVerificationViewModelTests: XCTestCase {
         wait(for: [verificationDataReceivalExpectation], timeout: 10.0)
         XCTAssertEqual(context.viewState.verificationState, .showingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
 
-        XCTAssert(sessionVerificationController.requestVerificationCallsCount == 1)
+        XCTAssert(sessionVerificationController.requestDeviceVerificationCallsCount == 1)
         XCTAssert(sessionVerificationController.startSasVerificationCallsCount == 1)
     }
 }

@@ -30,10 +30,10 @@ enum SessionVerificationControllerProxyAction {
 }
 
 struct SessionVerificationRequestDetails {
-    let senderID: String
+    let senderProfile: UserProfileProxy
     let flowID: String
     let deviceID: String
-    let displayName: String?
+    let deviceDisplayName: String?
     let firstSeenDate: Date
 }
 
@@ -54,7 +54,9 @@ protocol SessionVerificationControllerProxyProtocol {
     
     func acceptVerificationRequest() async -> Result<Void, SessionVerificationControllerProxyError>
         
-    func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError>
+    func requestDeviceVerification() async -> Result<Void, SessionVerificationControllerProxyError>
+    
+    func requestUserVerification(_ userID: String) async -> Result<Void, SessionVerificationControllerProxyError>
     
     func startSasVerification() async -> Result<Void, SessionVerificationControllerProxyError>
     

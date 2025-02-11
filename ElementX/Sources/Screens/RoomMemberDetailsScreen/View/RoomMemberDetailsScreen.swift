@@ -91,11 +91,10 @@ struct RoomMemberDetailsScreen: View {
     var verificationSection: some View {
         if context.viewState.showVerificationSection {
             Section {
-                ZeroListRow(label: .default(title: L10n.commonVerifyIdentity,
-                                            description: L10n.screenRoomMemberDetailsVerifyButtonSubtitle,
-                                            icon: \.lock),
-                            kind: .button { })
-                    .disabled(true)
+                ZeroListRow(label: .default(title: L10n.commonVerifyUser, icon: \.lock),
+                        kind: .button {
+                            context.send(viewAction: .verifyUser)
+                        })
             }
         }
     }

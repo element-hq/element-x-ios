@@ -10,6 +10,7 @@ import Foundation
 enum UserProfileScreenViewModelAction {
     case openDirectChat(roomID: String)
     case startCall(roomID: String)
+    case verifyUser(userID: String)
     case dismiss
 }
 
@@ -47,6 +48,7 @@ enum UserProfileScreenViewAction {
     case openDirectChat
     case createDirectChat
     case startCall(roomID: String)
+    case verifyUser
     case dismiss
 }
 

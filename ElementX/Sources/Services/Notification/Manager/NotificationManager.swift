@@ -94,6 +94,9 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
                     self?.delegate?.registerForRemoteNotifications()
                 }
             }
+            
+            let settings = await notificationCenter.notificationSettings()
+            MXLog.info("Notification sound enabled: \(settings.soundSetting == .enabled)")
         }
     }
 

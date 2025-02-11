@@ -1322,6 +1322,16 @@ internal enum L10n {
   internal static var screenJoinRoomCancelKnockAlertDescription: String { return L10n.tr("Localizable", "screen_join_room_cancel_knock_alert_description") }
   /// Cancel request to join
   internal static var screenJoinRoomCancelKnockAlertTitle: String { return L10n.tr("Localizable", "screen_join_room_cancel_knock_alert_title") }
+  /// Yes, decline & block
+  internal static var screenJoinRoomDeclineAndBlockAlertConfirmation: String { return L10n.tr("Localizable", "screen_join_room_decline_and_block_alert_confirmation") }
+  /// Are you sure you want to decline the invite to join this room? This will also prevent %1$@ from contacting you or inviting you to rooms.
+  internal static func screenJoinRoomDeclineAndBlockAlertMessage(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_join_room_decline_and_block_alert_message", String(describing: p1))
+  }
+  /// Decline invite & block
+  internal static var screenJoinRoomDeclineAndBlockAlertTitle: String { return L10n.tr("Localizable", "screen_join_room_decline_and_block_alert_title") }
+  /// Decline and block
+  internal static var screenJoinRoomDeclineAndBlockButtonTitle: String { return L10n.tr("Localizable", "screen_join_room_decline_and_block_button_title") }
   /// Joining the room failed.
   internal static var screenJoinRoomFailMessage: String { return L10n.tr("Localizable", "screen_join_room_fail_message") }
   /// This room is either invite-only or there might be restrictions to access at space level.

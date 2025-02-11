@@ -11,6 +11,7 @@ enum RoomMemberDetailsScreenViewModelAction {
     case openUserProfile
     case openDirectChat(roomID: String)
     case startCall(roomID: String)
+    case verifyUser(userID: String)
 }
 
 struct RoomMemberDetailsScreenViewState: BindableState {
@@ -88,6 +89,7 @@ enum RoomMemberDetailsScreenViewAction {
     case openDirectChat
     case createDirectChat
     case startCall(roomID: String)
+    case verifyUser
 }
 
 enum RoomMemberDetailsScreenAlertType: Hashable {

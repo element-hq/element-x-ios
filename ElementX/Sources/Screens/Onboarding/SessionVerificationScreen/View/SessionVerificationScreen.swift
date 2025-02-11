@@ -25,9 +25,23 @@ struct SessionVerificationScreen: View {
         .backgroundStyle(.zero.bgCanvasDefault)
         .interactiveDismissDisabled()
         .navigationBarBackButtonHidden(context.viewState.verificationState == .verified)
+        .toolbar { toolbar }
     }
     
     // MARK: - Private
+    
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            switch context.viewState.flow {
+            case .userIntiator, .userResponder:
+                Button(L10n.actionCancel) {
+                    context.send(viewAction: .cancel)
+                }
+            default:
+                EmptyView()
+            }
+        }
+    }
     
     @ViewBuilder
     private var screenHeader: some View {
@@ -55,11 +69,23 @@ struct SessionVerificationScreen: View {
         switch context.viewState.verificationState {
         case .initial:
             switch context.viewState.flow {
-            case .responder(let details):
-                SessionVerificationRequestDetailsView(details: details)
+            case .deviceResponder(let details):
+                SessionVerificationRequestDetailsView(details: details,
+                                                      isUserVerification: false,
+                                                      mediaProvider: context.mediaProvider)
+            case .userResponder(let details):
+                SessionVerificationRequestDetailsView(details: details,
+                                                      isUserVerification: true,
+                                                      mediaProvider: context.mediaProvider)
+            case .userIntiator:
+                Button(L10n.actionLearnMore) {
+                    UIApplication.shared.open(context.viewState.learnMoreURL)
+                }
+                .buttonStyle(.compound(.plain))
             default:
                 EmptyView()
             }
+            
         case .showingChallenge(let emojis), .acceptingChallenge(let emojis), .decliningChallenge(let emojis):
             emojisPanel(with: emojis)
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.emojiWrapper)
@@ -89,13 +115,13 @@ struct SessionVerificationScreen: View {
         switch context.viewState.verificationState {
         case .initial:
             switch context.viewState.flow {
-            case .initiator:
+            case .deviceInitiator, .userIntiator:
                 Button(L10n.actionStartVerification) {
                     context.send(viewAction: .requestVerification)
                 }
                 .buttonStyle(.compound(.primary))
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.requestVerification)
-            case .responder:
+            case .deviceResponder, .userResponder:
                 VStack(spacing: 16) {
                     Button(L10n.actionStart) {
                         context.send(viewAction: .acceptVerificationRequest)
@@ -112,12 +138,12 @@ struct SessionVerificationScreen: View {
             }
         case .cancelled:
             switch context.viewState.flow {
-            case .initiator:
+            case .deviceInitiator, .userIntiator:
                 Button(L10n.actionRetry) {
                     context.send(viewAction: .restart)
                 }
                 .buttonStyle(.compound(.primary))
-            case .responder:
+            case .deviceResponder, .userResponder:
                 Button(L10n.actionDone) {
                     context.send(viewAction: .done)
                 }
@@ -146,11 +172,6 @@ struct SessionVerificationScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.declineChallenge)
             }
             
-        case .acceptingVerificationRequest, .acceptingChallenge, .decliningChallenge, .requestingVerification:
-            Button(L10n.screenIdentityWaitingOnOtherDevice) { }
-                .buttonStyle(.compound(.primary))
-                .disabled(true)
-
         default:
             EmptyView()
         }
@@ -174,16 +195,25 @@ struct SessionVerificationScreen: View {
 
 struct SessionVerification_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        sessionVerificationScreen(state: .initial)
-            .previewDisplayName("Initial - Initiator")
+        sessionVerificationScreen(state: .initial, flow: .deviceInitiator)
+            .previewDisplayName("Initial - Device Initiator")
         
-        let details = SessionVerificationRequestDetails(senderID: "@bob:matrix.org",
+        sessionVerificationScreen(state: .initial, flow: .userIntiator(userID: "@bob:matrix.org"))
+            .previewDisplayName("Initial - User Initiator")
+        
+        let details = SessionVerificationRequestDetails(senderProfile: UserProfileProxy(userID: "@bob:matrix.org",
+                                                                                        displayName: "Billy Bob",
+                                                                                        avatarURL: .mockMXCUserAvatar),
                                                         flowID: "123",
                                                         deviceID: "CODEMISTAKE",
-                                                        displayName: "Bob's Element X iOS",
+                                                        deviceDisplayName: "Bob's Element X iOS",
                                                         firstSeenDate: .init(timeIntervalSince1970: 0))
-        sessionVerificationScreen(state: .initial, flow: .responder(details: details))
-            .previewDisplayName("Initial - Responder")
+        
+        sessionVerificationScreen(state: .initial, flow: .deviceResponder(requestDetails: details))
+            .previewDisplayName("Initial - Device Responder")
+        
+        sessionVerificationScreen(state: .initial, flow: .userResponder(requestDetails: details))
+            .previewDisplayName("Initial - User Responder")
         
         sessionVerificationScreen(state: .acceptingVerificationRequest)
             .previewDisplayName("Accepting Verification Request")
@@ -213,9 +243,11 @@ struct SessionVerification_Previews: PreviewProvider, TestablePreview {
     }
     
     static func sessionVerificationScreen(state: SessionVerificationScreenStateMachine.State,
-                                          flow: SessionVerificationScreenFlow = .initiator) -> some View {
+                                          flow: SessionVerificationScreenFlow = .deviceInitiator) -> some View {
         let viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: SessionVerificationControllerProxyMock.configureMock(),
                                                            flow: flow,
+                                                           appSettings: AppSettings(),
+                                                           mediaProvider: MediaProviderMock(configuration: .init()),
                                                            verificationState: state)
         
         return SessionVerificationScreen(context: viewModel.context)

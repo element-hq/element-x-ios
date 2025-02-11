@@ -90,6 +90,7 @@ struct JoinRoomScreenViewStateBindings {
 
 enum JoinRoomScreenAlertType {
     case declineInvite
+    case declineInviteAndBlock
     case cancelKnock
     case loadingError
 }
@@ -100,6 +101,7 @@ enum JoinRoomScreenViewAction {
     case join
     case acceptInvite
     case declineInvite
+    case declineInviteAndBlock(userID: String)
     case forget
     case dismiss
 }

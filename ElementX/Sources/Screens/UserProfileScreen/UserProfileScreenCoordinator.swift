@@ -20,6 +20,7 @@ struct UserProfileScreenCoordinatorParameters {
 enum UserProfileScreenCoordinatorAction {
     case openDirectChat(roomID: String)
     case startCall(roomID: String)
+    case verifyUser(userID: String)
     case dismiss
 }
 
@@ -51,6 +52,8 @@ final class UserProfileScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.openDirectChat(roomID: roomID))
             case .startCall(let roomID):
                 actionsSubject.send(.startCall(roomID: roomID))
+            case .verifyUser(let userID):
+                actionsSubject.send(.verifyUser(userID: userID))
             case .dismiss:
                 actionsSubject.send(.dismiss)
             }
