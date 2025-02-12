@@ -5,6 +5,10 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+#if canImport(EmbeddedWebApp)
+import EmbeddedWebApp
+#endif
+
 import Foundation
 import SwiftUI
 
@@ -252,7 +256,8 @@ final class AppSettings {
 
     // MARK: - Element Call
     
-    let elementCallBaseURL: URL = "https://call.element.io"
+    // swiftlint:disable:next force_unwrapping
+    let elementCallBaseURL: URL = EmbeddedWebApp.appURL!
     
     @UserPreference(key: UserDefaultsKeys.elementCallBaseURLOverride, defaultValue: nil, storageType: .userDefaults(store))
     var elementCallBaseURLOverride: URL?

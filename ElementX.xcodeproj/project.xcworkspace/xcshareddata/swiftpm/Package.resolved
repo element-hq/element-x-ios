@@ -1,5 +1,5 @@
 {
-  "originHash" : "f9011692b20e61e6f0df94b6e0946a4c8f4d58429a88998f249712bb1fee47f1",
+  "originHash" : "589ad34c2f16e593ee87c301010a99d03dce7abcc7227123fe28f9782a905b8d",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -52,6 +52,14 @@
       "state" : {
         "revision" : "76062513434421cb6c8a1ae1d4f8368a7ebc2da3",
         "version" : "1.7.18"
+      }
+    },
+    {
+      "identity" : "embeddedwebapp",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Velin92/EmbeddedWebApp",
+      "state" : {
+        "revision" : "77d8a4fdd75e4baf75931c1a456bb8e9ec8c61ef"
       }
     },
     {
