@@ -164,7 +164,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                                                 colorScheme: colorScheme,
                                                 analyticsConfiguration: analyticsConfiguration) {
                 case .success(let url):
-                    state.url = url
+                    // TODO: Set back to url, for now we are just testing if the baseURL is able to load, the widget url still defaults to aboutblank
+                    state.url = baseURL
                 case .failure(let error):
                     MXLog.error("Failed starting ElementCall Widget Driver with error: \(error)")
                     state.bindings.alertInfo = .init(id: UUID(),
