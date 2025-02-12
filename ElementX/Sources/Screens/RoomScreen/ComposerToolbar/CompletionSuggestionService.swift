@@ -8,8 +8,8 @@
 import Combine
 import Foundation
 
-private enum SuggestionTriggerRegex: String {
-    case at = "@\\w+"
+private enum SuggestionTriggerRegex {
+    static let at = /@\w+/
 }
 
 final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
@@ -86,28 +86,25 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     // MARK: - Private
     
     private func detectTriggerInText(_ text: String, selectedRange: NSRange) -> SuggestionTrigger? {
-        guard let regex = try? NSRegularExpression(pattern: SuggestionTriggerRegex.at.rawValue, options: []) else {
-            return nil
-        }
-        
-        let matches = regex.matches(in: text)
+        let matches = text.matches(of: SuggestionTriggerRegex.at)
         let match = matches
             .filter { matchResult in
-                selectedRange.location >= matchResult.range.lowerBound
-                    && selectedRange.location <= matchResult.range.upperBound
-                    && selectedRange.length <= matchResult.range.upperBound - matchResult.range.lowerBound
+                let lowerBound = matchResult.range.lowerBound.utf16Offset(in: matchResult.base)
+                let upperBound = matchResult.range.upperBound.utf16Offset(in: matchResult.base)
+                return selectedRange.location >= lowerBound
+                    && selectedRange.location <= upperBound
+                    && selectedRange.length <= upperBound - lowerBound
             }
             .first
         
-        guard let match,
-              let range = Range(match.range, in: text) else {
+        guard let match else {
             return nil
         }
         
-        var suggestionText = String(text[range])
+        var suggestionText = String(text[match.range])
         suggestionText.removeFirst()
         
-        return .init(type: .user, text: suggestionText, range: NSRange(range, in: text))
+        return .init(type: .user, text: suggestionText, range: NSRange(match.range, in: text))
     }
     
     private static func shouldIncludeMember(userID: String, displayName: String?, searchText: String) -> Bool {
