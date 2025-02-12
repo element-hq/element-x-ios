@@ -134,6 +134,10 @@ packages:
   Version:
     url: https://github.com/mxcl/Version
     minorVersion: 2.1.0
+  EmbeddedWebApp:
+    url: https://github.com/Velin92/EmbeddedWebApp
+    branch: main
+    revision: 77d8a4fdd75e4baf75931c1a456bb8e9ec8c61ef
 
 aggregateTargets:
   Periphery:

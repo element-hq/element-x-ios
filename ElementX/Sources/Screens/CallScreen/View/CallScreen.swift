@@ -7,6 +7,7 @@
 
 import AVKit
 import Combine
+import EmbeddedWebApp
 import SFSafeSymbols
 import SwiftUI
 import WebKit
@@ -98,6 +99,7 @@ private struct CallView: UIViewRepresentable {
             let userContentController = WKUserContentController()
             userContentController.add(WKScriptMessageHandlerWrapper(self), name: viewModelContext.viewState.messageHandler)
             
+            configuration.setValue(true, forKey: "allowUniversalAccessFromFileURLs")
             configuration.userContentController = userContentController
             configuration.allowsInlineMediaPlayback = true
             configuration.allowsPictureInPictureMediaPlayback = true
@@ -134,7 +136,7 @@ private struct CallView: UIViewRepresentable {
         func load(_ url: URL) {
             self.url = url
             let request = URLRequest(url: url)
-            webView.load(request)
+            webView.loadFileRequest(request, allowingReadAccessTo: EmbeddedWebApp.bundle.bundleURL)
         }
         
         func evaluateJavaScript(_ script: String) async throws -> Any? {
