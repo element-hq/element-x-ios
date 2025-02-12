@@ -18,7 +18,6 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     private(set) var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> = Empty().eraseToAnyPublisher()
     
     private let suggestionTriggerSubject = CurrentValueSubject<SuggestionTrigger?, Never>(nil)
-    var rawSuggestionText = ""
     
     init(roomProxy: JoinedRoomProxyProtocol) {
         self.roomProxy = roomProxy
@@ -43,7 +42,8 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                             return SuggestionItem.user(item: .init(id: member.userID,
                                                                    displayName: member.displayName,
                                                                    avatarURL: member.avatarURL,
-                                                                   range: suggestionTrigger.range))
+                                                                   range: suggestionTrigger.range,
+                                                                   rawSuggestionText: suggestionTrigger.text))
                         }
                     
                     if self.canMentionAllUsers,
@@ -53,7 +53,8 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                             .insert(SuggestionItem.allUsers(item: .init(id: PillConstants.atRoom,
                                                                         displayName: PillConstants.everyone,
                                                                         avatarURL: self.roomProxy.infoPublisher.value.avatarURL,
-                                                                        range: suggestionTrigger.range)), at: 0)
+                                                                        range: suggestionTrigger.range,
+                                                                        rawSuggestionText: suggestionTrigger.text)), at: 0)
                     }
                     
                     return membersSuggestion
@@ -105,7 +106,6 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
         
         var suggestionText = String(text[range])
         suggestionText.removeFirst()
-        rawSuggestionText = suggestionText
         
         return .init(type: .user, text: suggestionText, range: NSRange(range, in: text))
     }

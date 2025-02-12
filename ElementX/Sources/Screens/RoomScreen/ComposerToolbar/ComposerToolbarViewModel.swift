@@ -485,11 +485,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 let attributedString = NSMutableAttributedString(attributedString: state.bindings.plainComposerText)
                 mentionBuilder.handleUserMention(for: attributedString, in: suggestion.range, url: url, userID: item.id, userDisplayName: item.displayName)
                 state.bindings.plainComposerText = attributedString
-                
-                let newSelectedRange = NSRange(location: state.bindings.selectedRange.location - completionSuggestionService.rawSuggestionText.count, length: 0)
+                let newSelectedRange = NSRange(location: state.bindings.selectedRange.location - item.rawSuggestionText.count, length: 0)
                 state.bindings.selectedRange = newSelectedRange
             }
-        case .allUsers:
+        case let .allUsers(item):
             if context.composerFormattingEnabled {
                 wysiwygViewModel.setAtRoomMention()
             } else {
@@ -497,7 +496,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 mentionBuilder.handleAllUsersMention(for: attributedString, in: suggestion.range)
                 state.bindings.plainComposerText = attributedString
                 
-                let newSelectedRange = NSRange(location: state.bindings.selectedRange.location - completionSuggestionService.rawSuggestionText.count, length: 0)
+                let newSelectedRange = NSRange(location: state.bindings.selectedRange.location - item.rawSuggestionText.count, length: 0)
                 state.bindings.selectedRange = newSelectedRange
             }
         }
