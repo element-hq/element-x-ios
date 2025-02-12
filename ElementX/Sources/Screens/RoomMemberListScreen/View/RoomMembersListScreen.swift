@@ -59,23 +59,23 @@ struct RoomMembersListScreen: View {
     
     var roomMembers: some View {
         LazyVStack(alignment: .leading, spacing: 12) {
-            membersSection(data: context.viewState.visibleInvitedMembers, sectionTitle: L10n.screenRoomMemberListPendingHeaderTitle)
-            membersSection(data: context.viewState.visibleJoinedMembers, sectionTitle: L10n.screenRoomMemberListHeaderTitle(Int(context.viewState.joinedMembersCount)))
+            membersSection(entries: context.viewState.visibleInvitedMembers, sectionTitle: L10n.screenRoomMemberListPendingHeaderTitle)
+            membersSection(entries: context.viewState.visibleJoinedMembers, sectionTitle: L10n.screenRoomMemberListHeaderTitle(Int(context.viewState.joinedMembersCount)))
         }
     }
     
     var bannedUsers: some View {
         LazyVStack(alignment: .leading, spacing: 12) {
-            membersSection(data: context.viewState.visibleBannedMembers)
+            membersSection(entries: context.viewState.visibleBannedMembers)
         }
     }
     
     @ViewBuilder
-    private func membersSection(data: [RoomMemberDetails], sectionTitle: String? = nil) -> some View {
-        if !data.isEmpty {
+    private func membersSection(entries: [RoomMemberListScreenEntry], sectionTitle: String? = nil) -> some View {
+        if !entries.isEmpty {
             Section {
-                ForEach(data, id: \.id) { member in
-                    RoomMembersListScreenMemberCell(member: member, context: context)
+                ForEach(entries, id: \.member.id) { entry in
+                    RoomMembersListScreenMemberCell(listEntry: entry, context: context)
                 }
             } header: {
                 if let sectionTitle {
@@ -179,7 +179,22 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
             members.append(.mockInvited)
         }
         
+        let clientProxyMock = ClientProxyMock(.init())
+        clientProxyMock.userIdentityForClosure = { userID in
+            let identity = switch userID {
+            case RoomMemberProxyMock.mockAlice.userID:
+                UserIdentityProxyMock(configuration: .init(verificationState: .verified))
+            case RoomMemberProxyMock.mockBob.userID:
+                UserIdentityProxyMock(configuration: .init(verificationState: .verificationViolation))
+            default:
+                UserIdentityProxyMock(configuration: .init())
+            }
+            
+            return .success(identity)
+        }
+        
         return RoomMembersListScreenViewModel(initialMode: initialMode,
+                                              clientProxy: clientProxyMock,
                                               roomProxy: JoinedRoomProxyMock(.init(name: "Some room",
                                                                                    members: members,
                                                                                    ownUserID: ownUserID,

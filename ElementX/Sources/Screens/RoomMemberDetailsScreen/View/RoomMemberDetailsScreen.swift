@@ -171,12 +171,20 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel(member: RoomMemberProxyMock) -> RoomMemberDetailsScreenViewModel {
         let roomProxyMock = JoinedRoomProxyMock(.init(name: ""))
         roomProxyMock.getMemberUserIDReturnValue = .success(member)
+        
         let clientProxyMock = ClientProxyMock(.init())
         
         clientProxyMock.userIdentityForClosure = { userID in
-            let isVerified = userID == RoomMemberProxyMock.mockDan.userID
-            return .success(UserIdentityProxyMock(configuration: .init(isVerified: isVerified)))
+            let identity = switch userID {
+            case RoomMemberProxyMock.mockDan.userID:
+                UserIdentityProxyMock(configuration: .init(verificationState: .verified))
+            default:
+                UserIdentityProxyMock(configuration: .init())
+            }
+            
+            return .success(identity)
         }
+        
         // to avoid mock the call state for the account owner test case
         if member.userID != RoomMemberProxyMock.mockMe.userID {
             clientProxyMock.directRoomForUserIDReturnValue = .success("roomID")

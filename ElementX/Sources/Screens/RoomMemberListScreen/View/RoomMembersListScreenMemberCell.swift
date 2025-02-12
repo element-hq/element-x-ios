@@ -8,22 +8,22 @@
 import SwiftUI
 
 struct RoomMembersListScreenMemberCell: View {
-    let member: RoomMemberDetails
+    let listEntry: RoomMemberListScreenEntry
     let context: RoomMembersListScreenViewModel.Context
 
     var body: some View {
         Button {
-            context.send(viewAction: .selectMember(member))
+            context.send(viewAction: .selectMember(listEntry.member))
         } label: {
             HStack(spacing: 8) {
                 LoadableAvatarImage(url: avatarURL,
                                     name: avatarName,
-                                    contentID: member.id,
+                                    contentID: listEntry.member.id,
                                     avatarSize: .user(on: .roomDetails),
                                     mediaProvider: context.mediaProvider)
                     .accessibilityHidden(true)
                 
-                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                HStack(alignment: .center, spacing: 4) {
                     VStack(alignment: .leading, spacing: 0) {
                         Text(title)
                             .font(.compound.bodyMDSemibold)
@@ -39,6 +39,8 @@ struct RoomMembersListScreenMemberCell: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     
+                    VerificationBadge(verificationState: listEntry.verificationState)
+                    
                     if let role {
                         Text(role)
                             .font(.compound.bodyXS)
@@ -52,7 +54,7 @@ struct RoomMembersListScreenMemberCell: View {
     }
     
     var role: String? {
-        switch member.role {
+        switch listEntry.member.role {
         case .administrator:
             L10n.screenRoomMemberListRoleAdministrator
         case .moderator:
@@ -65,55 +67,72 @@ struct RoomMembersListScreenMemberCell: View {
     // Computed properties to hide the user's profile when banned.
     
     var title: String {
-        guard !member.isBanned else { return member.id }
-        return member.name ?? member.id
+        guard !listEntry.member.isBanned else { return listEntry.member.id }
+        return listEntry.member.name ?? listEntry.member.id
     }
     
     var subtitle: String? {
-        member.isBanned ? nil : member.id
+        listEntry.member.isBanned ? nil : listEntry.member.id
     }
     
     var avatarName: String? {
-        member.isBanned ? nil : member.name
+        listEntry.member.isBanned ? nil : listEntry.member.name
     }
     
     var avatarURL: URL? {
-        member.isBanned ? nil : member.avatarURL
+        listEntry.member.isBanned ? nil : listEntry.member.avatarURL
     }
 }
 
 struct RoomMembersListMemberCell_Previews: PreviewProvider, TestablePreview {
-    static let members: [RoomMemberProxyMock] = [
-        .mockAlice,
-        .mockAdmin,
-        .mockModerator,
-        .init(with: .init(userID: "@nodisplayname:matrix.org", membership: .join)),
-        .init(with: .init(userID: "@avatar:matrix.org", displayName: "Avatar", avatarURL: .mockMXCUserAvatar, membership: .join))
+    static let members: [RoomMemberListScreenEntry] = [
+        .init(member: .init(withProxy: RoomMemberProxyMock.mockAlice),
+              verificationState: .notVerified),
+        .init(member: .init(withProxy: RoomMemberProxyMock.mockAdmin),
+              verificationState: .verified),
+        .init(member: .init(withProxy: RoomMemberProxyMock.mockModerator),
+              verificationState: .verificationViolation),
+        .init(member: .init(withProxy: RoomMemberProxyMock(with: .init(userID: "@nodisplayname:matrix.org",
+                                                                       membership: .join))),
+        verificationState: .notVerified),
+        .init(member: .init(withProxy: RoomMemberProxyMock(with: .init(userID: "@avatar:matrix.org",
+                                                                       displayName: "Avatar",
+                                                                       avatarURL: .mockMXCUserAvatar,
+                                                                       membership: .join))),
+        verificationState: .notVerified)
     ]
     
-    static let bannedMembers: [RoomMemberProxyMock] = [
-        .init(with: .init(userID: "@nodisplayname:matrix.org", membership: .ban)),
-        .init(with: .init(userID: "@fake:matrix.org", displayName: "President", membership: .ban)),
-        .init(with: .init(userID: "@badavatar:matrix.org", avatarURL: .mockMXCUserAvatar, membership: .ban))
+    static let bannedMembers: [RoomMemberListScreenEntry] = [
+        .init(member: .init(withProxy: RoomMemberProxyMock(with: .init(userID: "@nodisplayname:matrix.org",
+                                                                       membership: .ban))),
+        verificationState: .notVerified),
+        .init(member: .init(withProxy: RoomMemberProxyMock(with: .init(userID: "@fake:matrix.org",
+                                                                       displayName: "President",
+                                                                       membership: .ban))),
+        verificationState: .verified),
+        .init(member: .init(withProxy: RoomMemberProxyMock(with: .init(userID: "@badavatar:matrix.org",
+                                                                       avatarURL: .mockMXCUserAvatar,
+                                                                       membership: .ban))),
+        verificationState: .verificationViolation)
     ]
     
-    static let viewModel = RoomMembersListScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Some room",
-                                                                                               members: members)),
+    static let viewModel = RoomMembersListScreenViewModel(clientProxy: ClientProxyMock(.init()),
+                                                          roomProxy: JoinedRoomProxyMock(.init(name: "Some room", members: [])),
                                                           mediaProvider: MediaProviderMock(configuration: .init()),
                                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                           analytics: ServiceLocator.shared.analytics)
     static var previews: some View {
         VStack(spacing: 12) {
             Section("Invited/Joined") {
-                ForEach(members, id: \.userID) { member in
-                    RoomMembersListScreenMemberCell(member: .init(withProxy: member), context: viewModel.context)
+                ForEach(members, id: \.member.id) { entry in
+                    RoomMembersListScreenMemberCell(listEntry: entry, context: viewModel.context)
                 }
             }
             
             // Banned members should have their profiles hidden and the avatar should use the first letter from their user ID.
             Section("Banned") {
-                ForEach(bannedMembers, id: \.userID) { member in
-                    RoomMembersListScreenMemberCell(member: .init(withProxy: member), context: viewModel.context)
+                ForEach(bannedMembers, id: \.member.id) { entry in
+                    RoomMembersListScreenMemberCell(listEntry: entry, context: viewModel.context)
                 }
             }
         }
