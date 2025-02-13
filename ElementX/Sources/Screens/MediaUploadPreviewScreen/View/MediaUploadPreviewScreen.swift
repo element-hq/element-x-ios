@@ -60,6 +60,7 @@ struct MediaUploadPreviewScreen: View {
                 MessageComposerTextField(placeholder: L10n.richTextEditorComposerCaptionPlaceholder,
                                          text: $context.caption,
                                          presendCallback: $context.presendCallback,
+                                         selectedRange: $context.selectedRange,
                                          maxHeight: ComposerConstant.maxHeight,
                                          keyHandler: handleKeyPress) { _ in }
                     .focused($isComposerFocussed)

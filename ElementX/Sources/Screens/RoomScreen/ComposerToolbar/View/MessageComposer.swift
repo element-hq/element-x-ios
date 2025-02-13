@@ -15,6 +15,7 @@ typealias PasteHandler = (NSItemProvider) -> Void
 struct MessageComposer: View {
     @Binding var plainComposerText: NSAttributedString
     @Binding var presendCallback: (() -> Void)?
+    @Binding var selectedRange: NSRange
     let composerView: WysiwygComposerView
     let mode: ComposerMode
     let composerFormattingEnabled: Bool
@@ -66,6 +67,7 @@ struct MessageComposer: View {
             MessageComposerTextField(placeholder: L10n.richTextEditorComposerPlaceholder,
                                      text: $plainComposerText,
                                      presendCallback: $presendCallback,
+                                     selectedRange: $selectedRange,
                                      maxHeight: ComposerConstant.maxHeight,
                                      keyHandler: { handleKeyPress($0) },
                                      pasteHandler: pasteAction)
@@ -285,6 +287,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
         
         return MessageComposer(plainComposerText: .constant(content),
                                presendCallback: .constant(nil),
+                               selectedRange: .constant(NSRange(location: 0, length: 0)),
                                composerView: composerView,
                                mode: mode,
                                composerFormattingEnabled: false,

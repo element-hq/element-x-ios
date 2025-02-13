@@ -45,13 +45,14 @@ struct MentionSuggestionItem: Identifiable, Equatable {
     let displayName: String?
     let avatarURL: URL?
     let range: NSRange
+    let rawSuggestionText: String
 }
 
 // sourcery: AutoMockable
 protocol CompletionSuggestionServiceProtocol {
     var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> { get }
     
-    func processTextMessage(_ textMessage: String?)
+    func processTextMessage(_ textMessage: String, selectedRange: NSRange)
     
     func setSuggestionTrigger(_ suggestionTrigger: SuggestionTrigger?)
 }
