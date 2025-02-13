@@ -100,6 +100,7 @@ private struct CallView: UIViewRepresentable {
             userContentController.add(WKScriptMessageHandlerWrapper(self), name: viewModelContext.viewState.messageHandler)
             
             configuration.setValue(true, forKey: "allowUniversalAccessFromFileURLs")
+            configuration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
             configuration.userContentController = userContentController
             configuration.allowsInlineMediaPlayback = true
             configuration.allowsPictureInPictureMediaPlayback = true
@@ -135,8 +136,7 @@ private struct CallView: UIViewRepresentable {
         
         func load(_ url: URL) {
             self.url = url
-            let request = URLRequest(url: url)
-            webView.loadFileRequest(request, allowingReadAccessTo: EmbeddedWebApp.bundle.bundleURL)
+            webView.loadFileURL(url, allowingReadAccessTo: EmbeddedWebApp.bundle.bundleURL)
         }
         
         func evaluateJavaScript(_ script: String) async throws -> Any? {
