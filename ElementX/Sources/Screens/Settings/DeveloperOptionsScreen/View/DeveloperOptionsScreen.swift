@@ -67,7 +67,7 @@ struct DeveloperOptionsScreen: View {
             Section("Join rules") {
                 Toggle(isOn: $context.knockingEnabled) {
                     Text("Knocking")
-                    Text("Experimental, still using mocked data")
+                    Text("Ask to join rooms")
                 }
             }
             
