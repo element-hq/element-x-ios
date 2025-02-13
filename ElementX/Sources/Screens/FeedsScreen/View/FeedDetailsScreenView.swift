@@ -18,6 +18,8 @@ struct FeedDetailsScreen: View {
                            scrollViewAdapter: scrollViewAdapter)
         .alert(item: $context.alertInfo)
         .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
+        .navigationTitle("Post")
+        .navigationBarTitleDisplayMode(.inline)
         .sentryTrace("\(Self.self)")
     }
 }

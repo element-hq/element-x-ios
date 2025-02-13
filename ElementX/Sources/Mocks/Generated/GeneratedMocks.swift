@@ -14895,17 +14895,17 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
             return acceptVerificationRequestReturnValue
         }
     }
-    //MARK: - requestVerification
+    //MARK: - requestDeviceVerification
 
-    var requestVerificationUnderlyingCallsCount = 0
-    var requestVerificationCallsCount: Int {
+    var requestDeviceVerificationUnderlyingCallsCount = 0
+    var requestDeviceVerificationCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return requestVerificationUnderlyingCallsCount
+                return requestDeviceVerificationUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = requestVerificationUnderlyingCallsCount
+                    returnValue = requestDeviceVerificationUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -14913,27 +14913,27 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
         }
         set {
             if Thread.isMainThread {
-                requestVerificationUnderlyingCallsCount = newValue
+                requestDeviceVerificationUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    requestVerificationUnderlyingCallsCount = newValue
+                    requestDeviceVerificationUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var requestVerificationCalled: Bool {
-        return requestVerificationCallsCount > 0
+    var requestDeviceVerificationCalled: Bool {
+        return requestDeviceVerificationCallsCount > 0
     }
 
-    var requestVerificationUnderlyingReturnValue: Result<Void, SessionVerificationControllerProxyError>!
-    var requestVerificationReturnValue: Result<Void, SessionVerificationControllerProxyError>! {
+    var requestDeviceVerificationUnderlyingReturnValue: Result<Void, SessionVerificationControllerProxyError>!
+    var requestDeviceVerificationReturnValue: Result<Void, SessionVerificationControllerProxyError>! {
         get {
             if Thread.isMainThread {
-                return requestVerificationUnderlyingReturnValue
+                return requestDeviceVerificationUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, SessionVerificationControllerProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = requestVerificationUnderlyingReturnValue
+                    returnValue = requestDeviceVerificationUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -14941,22 +14941,92 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
         }
         set {
             if Thread.isMainThread {
-                requestVerificationUnderlyingReturnValue = newValue
+                requestDeviceVerificationUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    requestVerificationUnderlyingReturnValue = newValue
+                    requestDeviceVerificationUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var requestVerificationClosure: (() async -> Result<Void, SessionVerificationControllerProxyError>)?
+    var requestDeviceVerificationClosure: (() async -> Result<Void, SessionVerificationControllerProxyError>)?
 
-    func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        requestVerificationCallsCount += 1
-        if let requestVerificationClosure = requestVerificationClosure {
-            return await requestVerificationClosure()
+    func requestDeviceVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
+        requestDeviceVerificationCallsCount += 1
+        if let requestDeviceVerificationClosure = requestDeviceVerificationClosure {
+            return await requestDeviceVerificationClosure()
         } else {
-            return requestVerificationReturnValue
+            return requestDeviceVerificationReturnValue
+        }
+    }
+    //MARK: - requestUserVerification
+
+    var requestUserVerificationUnderlyingCallsCount = 0
+    var requestUserVerificationCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return requestUserVerificationUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = requestUserVerificationUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                requestUserVerificationUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    requestUserVerificationUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var requestUserVerificationCalled: Bool {
+        return requestUserVerificationCallsCount > 0
+    }
+    var requestUserVerificationReceivedUserID: String?
+    var requestUserVerificationReceivedInvocations: [String] = []
+
+    var requestUserVerificationUnderlyingReturnValue: Result<Void, SessionVerificationControllerProxyError>!
+    var requestUserVerificationReturnValue: Result<Void, SessionVerificationControllerProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return requestUserVerificationUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, SessionVerificationControllerProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = requestUserVerificationUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                requestUserVerificationUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    requestUserVerificationUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var requestUserVerificationClosure: ((String) async -> Result<Void, SessionVerificationControllerProxyError>)?
+
+    func requestUserVerification(_ userID: String) async -> Result<Void, SessionVerificationControllerProxyError> {
+        requestUserVerificationCallsCount += 1
+        requestUserVerificationReceivedUserID = userID
+        DispatchQueue.main.async {
+            self.requestUserVerificationReceivedInvocations.append(userID)
+        }
+        if let requestUserVerificationClosure = requestUserVerificationClosure {
+            return await requestUserVerificationClosure(userID)
+        } else {
+            return requestUserVerificationReturnValue
         }
     }
     //MARK: - startSasVerification
@@ -17817,6 +17887,70 @@ class UserNotificationCenterMock: UserNotificationCenterProtocol, @unchecked Sen
             return await authorizationStatusClosure()
         } else {
             return authorizationStatusReturnValue
+        }
+    }
+    //MARK: - notificationSettings
+
+    var notificationSettingsUnderlyingCallsCount = 0
+    var notificationSettingsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return notificationSettingsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = notificationSettingsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                notificationSettingsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    notificationSettingsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var notificationSettingsCalled: Bool {
+        return notificationSettingsCallsCount > 0
+    }
+
+    var notificationSettingsUnderlyingReturnValue: UNNotificationSettings!
+    var notificationSettingsReturnValue: UNNotificationSettings! {
+        get {
+            if Thread.isMainThread {
+                return notificationSettingsUnderlyingReturnValue
+            } else {
+                var returnValue: UNNotificationSettings? = nil
+                DispatchQueue.main.sync {
+                    returnValue = notificationSettingsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                notificationSettingsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    notificationSettingsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var notificationSettingsClosure: (() async -> UNNotificationSettings)?
+
+    func notificationSettings() async -> UNNotificationSettings {
+        notificationSettingsCallsCount += 1
+        if let notificationSettingsClosure = notificationSettingsClosure {
+            return await notificationSettingsClosure()
+        } else {
+            return notificationSettingsReturnValue
         }
     }
 }

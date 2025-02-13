@@ -14,8 +14,44 @@ struct SessionVerificationRequestDetailsView: View {
     private let outerShape = RoundedRectangle(cornerRadius: 8)
     
     let details: SessionVerificationRequestDetails
+    let isUserVerification: Bool
+    let mediaProvider: MediaProviderProtocol?
     
     var body: some View {
+        if isUserVerification {
+            userRequestDetails
+        } else {
+            deviceRequestDetails
+        }
+    }
+    
+    private var userRequestDetails: some View {
+        HStack(spacing: 12) {
+            LoadableAvatarImage(url: details.senderProfile.avatarURL,
+                                name: details.senderProfile.displayName,
+                                contentID: details.senderProfile.userID,
+                                avatarSize: .user(on: .sessionVerification),
+                                mediaProvider: mediaProvider)
+            
+            VStack(alignment: .leading, spacing: 0) {
+                Text(details.senderProfile.displayName ?? details.senderProfile.userID)
+                    .font(.compound.bodySM)
+                    .foregroundColor(.compound.textSecondary)
+                
+                if details.senderProfile.displayName != nil {
+                    Text(details.senderProfile.userID)
+                        .font(.compound.bodyMD)
+                        .foregroundColor(.compound.textPrimary)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(12)
+        .background(.compound.bgSubtleSecondary)
+        .clipShape(outerShape)
+    }
+    
+    private var deviceRequestDetails: some View {
         VStack(spacing: 24) {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 16) {
@@ -26,7 +62,8 @@ struct SessionVerificationRequestDetailsView: View {
                         .background(.compound.bgSubtleSecondary)
                         .clipShape(RoundedRectangle(cornerRadius: 8))
                     
-                    Text(details.displayName ?? details.senderID)
+                    let displayName = isUserVerification ? details.senderProfile.displayName : details.deviceDisplayName
+                    Text(displayName ?? details.senderProfile.userID)
                         .font(.compound.bodyMDSemibold)
                         .foregroundColor(.compound.textPrimary)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -60,6 +97,8 @@ struct SessionVerificationRequestDetailsView: View {
                     .stroke(.compound.borderDisabled)
             }
             
+            .font(.compound.bodyMDSemibold)
+            
             Text(L10n.screenSessionVerificationRequestFooter)
                 .font(.compound.bodyMDSemibold)
                 .foregroundColor(.compound.textPrimary)
@@ -68,13 +107,25 @@ struct SessionVerificationRequestDetailsView: View {
 }
 
 struct SessionVerificationRequestDetailsView_Previews: PreviewProvider, TestablePreview {
+    static let details = SessionVerificationRequestDetails(senderProfile: UserProfileProxy(userID: "@bob:matrix.org",
+                                                                                           displayName: "Billy bob",
+                                                                                           avatarURL: .mockMXCUserAvatar),
+                                                           flowID: "123",
+                                                           deviceID: "CODEMISTAKE",
+                                                           deviceDisplayName: "Bob's Element X iOS",
+                                                           firstSeenDate: .init(timeIntervalSince1970: 0))
+    
     static var previews: some View {
-        let details = SessionVerificationRequestDetails(senderID: "@bob:matrix.org",
-                                                        flowID: "123",
-                                                        deviceID: "CODEMISTAKE",
-                                                        displayName: "Bob's Element X iOS",
-                                                        firstSeenDate: .init(timeIntervalSince1970: 0))
+        SessionVerificationRequestDetailsView(details: details,
+                                              isUserVerification: true,
+                                              mediaProvider: MediaProviderMock(configuration: .init()))
+            .padding()
+            .previewDisplayName("User")
         
-        SessionVerificationRequestDetailsView(details: details)
+        SessionVerificationRequestDetailsView(details: details,
+                                              isUserVerification: false,
+                                              mediaProvider: MediaProviderMock(configuration: .init()))
+            .padding()
+            .previewDisplayName("Device")
     }
 }

@@ -285,6 +285,8 @@ struct HomeScreenPost: Identifiable, Equatable {
     
     let isPostInOwnFeed: Bool
     let arweaveId: String
+    let isMeowedByMe: Bool
+    let postDateTime: String
     
     static func placeholder() -> HomeScreenPost {
         HomeScreenPost(id: UUID().uuidString,
@@ -301,7 +303,9 @@ struct HomeScreenPost: Identifiable, Equatable {
                        meowCount: "0",
                        repliesCount: "0",
                        isPostInOwnFeed: false,
-                       arweaveId: "")
+                       arweaveId: "",
+                       isMeowedByMe: false,
+                       postDateTime: "")
     }
 }
 
@@ -354,6 +358,10 @@ extension HomeScreenPost {
         let attributedPostText = post.text.isEmpty ? nil : HomeScreenPost.attributedPostText(from: post.text)
         let isPostInOwnFeed = post.worldZid == post.zid
         
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm aa • MMM d, yyyy"
+        let postDateTime = formatter.string(from: postUpdatedAt)
+        
         self.init(
             id: post.id.rawValue,
             senderInfo: UserProfileProxy(userID: userProfile.id,
@@ -371,7 +379,9 @@ extension HomeScreenPost {
             meowCount: meowCount,
             repliesCount: repliesCount,
             isPostInOwnFeed: isPostInOwnFeed,
-            arweaveId: post.arweaveId
+            arweaveId: post.arweaveId,
+            isMeowedByMe: (post.meows?.isEmpty == false),
+            postDateTime: postDateTime
         )
     }
     

@@ -452,18 +452,26 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 
                 MXLog.info("Received session verification request")
                 
-                presentSessionVerificationScreen(details: details)
+                if details.senderProfile.userID == userSession.clientProxy.userID {
+                    presentSessionVerificationScreen(flow: .deviceResponder(requestDetails: details))
+                } else {
+                    presentSessionVerificationScreen(flow: .userResponder(requestDetails: details))
+                }
             }
             .store(in: &cancellables)
     }
     
-    private func presentSessionVerificationScreen(details: SessionVerificationRequestDetails) {
+    private func presentSessionVerificationScreen(flow: SessionVerificationScreenFlow) {
         guard let sessionVerificationController = userSession.clientProxy.sessionVerificationController else {
             fatalError("The sessionVerificationController should aways be valid at this point")
         }
         
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        
         let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController,
-                                                                        flow: .responder(details: details))
+                                                                        flow: flow,
+                                                                        appSettings: appSettings,
+                                                                        mediaProvider: userSession.mediaProvider)
         
         let coordinator = SessionVerificationScreenCoordinator(parameters: parameters)
         
@@ -476,7 +484,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        navigationSplitCoordinator.setSheetCoordinator(coordinator)
+        navigationStackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator)
     }
     
     private func presentHomeScreen() {
@@ -604,6 +614,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case .presentCallScreen(let roomProxy):
                 // Here we assume that the app is running and the call state is already up to date
                 presentCallScreen(roomProxy: roomProxy, notifyOtherParticipants: !roomProxy.infoPublisher.value.hasRoomCall)
+            case .verifyUser(let userID):
+                presentSessionVerificationScreen(flow: .userIntiator(userID: userID))
             case .finished:
                 stateMachine.processEvent(.deselectRoom)
             }
@@ -925,6 +937,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
             case .startCall(let roomID):
                 Task { await self.presentCallScreen(roomID: roomID, notifyOtherParticipants: false) }
+            case .verifyUser(let userID):
+                presentSessionVerificationScreen(flow: .userIntiator(userID: userID))
             case .dismiss:
                 navigationSplitCoordinator.setSheetCoordinator(nil)
             }

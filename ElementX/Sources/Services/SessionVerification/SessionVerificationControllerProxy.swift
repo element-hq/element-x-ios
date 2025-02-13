@@ -71,7 +71,7 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
         MXLog.info("Acknowledging verification request")
         
         do {
-            try await sessionVerificationController.acknowledgeVerificationRequest(senderId: details.senderID, flowId: details.flowID)
+            try await sessionVerificationController.acknowledgeVerificationRequest(senderId: details.senderProfile.userID, flowId: details.flowID)
             return .success(())
         } catch {
             MXLog.error("Failed requesting session verification with error: \(error)")
@@ -91,14 +91,26 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
         }
     }
         
-    func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        MXLog.info("Requesting session verification")
+    func requestDeviceVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
+        MXLog.info("Requesting device verification")
         
         do {
             try await sessionVerificationController.requestDeviceVerification()
             return .success(())
         } catch {
-            MXLog.error("Failed requesting session verification with error: \(error)")
+            MXLog.error("Failed requesting device verification with error: \(error)")
+            return .failure(.failedRequestingVerification)
+        }
+    }
+    
+    func requestUserVerification(_ userID: String) async -> Result<Void, SessionVerificationControllerProxyError> {
+        MXLog.info("Requesting user verification")
+        
+        do {
+            try await sessionVerificationController.requestUserVerification(userId: userID)
+            return .success(())
+        } catch {
+            MXLog.error("Failed requesting verification for user \(userID) with error: \(error)")
             return .failure(.failedRequestingVerification)
         }
     }
@@ -156,10 +168,10 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     fileprivate func didReceiveVerificationRequest(details: MatrixRustSDK.SessionVerificationRequestDetails) {
         MXLog.info("Received verification request \(details)")
         
-        let details = SessionVerificationRequestDetails(senderID: details.senderId,
+        let details = SessionVerificationRequestDetails(senderProfile: UserProfileProxy(sdkUserProfile: details.senderProfile),
                                                         flowID: details.flowId,
                                                         deviceID: details.deviceId,
-                                                        displayName: details.deviceDisplayName,
+                                                        deviceDisplayName: details.deviceDisplayName,
                                                         firstSeenDate: Date(timeIntervalSince1970: TimeInterval(details.firstSeenTimestamp / 1000)))
         
         actions.send(.receivedVerificationRequest(details: details))
