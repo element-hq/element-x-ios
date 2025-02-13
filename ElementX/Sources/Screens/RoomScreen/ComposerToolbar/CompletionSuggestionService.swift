@@ -88,14 +88,13 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     private func detectTriggerInText(_ text: String, selectedRange: NSRange) -> SuggestionTrigger? {
         let matches = text.matches(of: SuggestionTriggerRegex.at)
         let match = matches
-            .filter { matchResult in
+            .first { matchResult in
                 let lowerBound = matchResult.range.lowerBound.utf16Offset(in: matchResult.base)
                 let upperBound = matchResult.range.upperBound.utf16Offset(in: matchResult.base)
                 return selectedRange.location >= lowerBound
                     && selectedRange.location <= upperBound
                     && selectedRange.length <= upperBound - lowerBound
             }
-            .first
         
         guard let match else {
             return nil
