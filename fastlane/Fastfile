@@ -1,6 +1,6 @@
 require 'yaml'
 
-enterprise = '../Enterprise/fastlane/Fastfile'
+enterprise = '../Enterprise/Pipeline/Scripts/iOS/Fastfile'
 if File.exist?(enterprise)
   import enterprise
 end
@@ -169,7 +169,11 @@ lane :config_nightly do |options|
 
   target_file_path = "../project.yml"
   data = YAML.load_file target_file_path
-  data["include"].append({ "path" => "Variants/Nightly/nightly.yml" })
+  
+  # Check if the "path" already exists in the "include" array
+  if !data["include"].any? { |item| item["path"] == "Variants/Nightly/nightly.yml" }
+    data["include"].append({ "path" => "Variants/Nightly/nightly.yml" })
+  end
 
   config_secrets()
   
@@ -321,7 +325,12 @@ end
 lane :config_alpha do
   target_file_path = "../project.yml"
   data = YAML.load_file target_file_path
-  data["include"].append({ "path" => "Variants/Alpha/alpha.yml" })
+  
+  # Check if the "path" already exists in the "include" array
+  if !data["include"].any? { |item| item["path"] == "Variants/Alpha/alpha.yml" }
+    data["include"].append({ "path" => "Variants/Alpha/alpha.yml" })
+  end
+  
   File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
 
   xcodegen(spec: "project.yml")
