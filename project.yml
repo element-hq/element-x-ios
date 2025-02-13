@@ -137,7 +137,7 @@ packages:
   EmbeddedWebApp:
     url: https://github.com/Velin92/EmbeddedWebApp
     branch: main
-    revision: 77d8a4fdd75e4baf75931c1a456bb8e9ec8c61ef
+    revision: 1e6918acc44ee6609d9070a07a2e358d81d788fe
 
 aggregateTargets:
   Periphery:

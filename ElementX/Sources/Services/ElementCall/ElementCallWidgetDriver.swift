@@ -112,7 +112,8 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
             return .failure(.failedBuildingCallURL)
         }
         
-        guard let url = URL(string: urlString) else {
+        let correctedUrlString = urlString.replacingOccurrences(of: "/room#", with: "#")
+        guard let url = URL(string: correctedUrlString) else {
             return .failure(.failedParsingCallURL)
         }
         
