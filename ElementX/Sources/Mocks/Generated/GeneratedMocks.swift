@@ -5118,15 +5118,15 @@ class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol, @unc
 
     //MARK: - processTextMessage
 
-    var processTextMessageUnderlyingCallsCount = 0
-    var processTextMessageCallsCount: Int {
+    var processTextMessageSelectedRangeUnderlyingCallsCount = 0
+    var processTextMessageSelectedRangeCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return processTextMessageUnderlyingCallsCount
+                return processTextMessageSelectedRangeUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = processTextMessageUnderlyingCallsCount
+                    returnValue = processTextMessageSelectedRangeUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -5134,28 +5134,28 @@ class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol, @unc
         }
         set {
             if Thread.isMainThread {
-                processTextMessageUnderlyingCallsCount = newValue
+                processTextMessageSelectedRangeUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    processTextMessageUnderlyingCallsCount = newValue
+                    processTextMessageSelectedRangeUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var processTextMessageCalled: Bool {
-        return processTextMessageCallsCount > 0
+    var processTextMessageSelectedRangeCalled: Bool {
+        return processTextMessageSelectedRangeCallsCount > 0
     }
-    var processTextMessageReceivedTextMessage: String?
-    var processTextMessageReceivedInvocations: [String?] = []
-    var processTextMessageClosure: ((String?) -> Void)?
+    var processTextMessageSelectedRangeReceivedArguments: (textMessage: String, selectedRange: NSRange)?
+    var processTextMessageSelectedRangeReceivedInvocations: [(textMessage: String, selectedRange: NSRange)] = []
+    var processTextMessageSelectedRangeClosure: ((String, NSRange) -> Void)?
 
-    func processTextMessage(_ textMessage: String?) {
-        processTextMessageCallsCount += 1
-        processTextMessageReceivedTextMessage = textMessage
+    func processTextMessage(_ textMessage: String, selectedRange: NSRange) {
+        processTextMessageSelectedRangeCallsCount += 1
+        processTextMessageSelectedRangeReceivedArguments = (textMessage: textMessage, selectedRange: selectedRange)
         DispatchQueue.main.async {
-            self.processTextMessageReceivedInvocations.append(textMessage)
+            self.processTextMessageSelectedRangeReceivedInvocations.append((textMessage: textMessage, selectedRange: selectedRange))
         }
-        processTextMessageClosure?(textMessage)
+        processTextMessageSelectedRangeClosure?(textMessage, selectedRange)
     }
     //MARK: - setSuggestionTrigger
 
