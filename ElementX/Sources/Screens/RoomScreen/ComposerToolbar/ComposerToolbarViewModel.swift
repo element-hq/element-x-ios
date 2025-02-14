@@ -198,7 +198,9 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .voiceMessage(let voiceMessageAction):
             processVoiceMessageAction(voiceMessageAction)
         case .plainComposerTextChanged:
-            completionSuggestionService.processTextMessage(state.bindings.plainComposerText.string)
+            completionSuggestionService.processTextMessage(state.bindings.plainComposerText.string, selectedRange: context.viewState.bindings.selectedRange)
+        case .selectedTextChanged:
+            completionSuggestionService.processTextMessage(state.bindings.plainComposerText.string, selectedRange: context.viewState.bindings.selectedRange)
         case .didToggleFormattingOptions:
             if context.composerFormattingEnabled {
                 guard !context.plainComposerText.string.isEmpty else {
@@ -492,8 +494,10 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 /// Appending space after each mention to maintain text formatting
                 attributedString.appendString(" ")
                 state.bindings.plainComposerText = attributedString
+                let newSelectedRange = NSRange(location: state.bindings.selectedRange.location - item.rawSuggestionText.count, length: 0)
+                state.bindings.selectedRange = newSelectedRange
             }
-        case .allUsers:
+        case let .allUsers(item):
             if context.composerFormattingEnabled {
                 wysiwygViewModel.setAtRoomMention()
             } else {
@@ -502,6 +506,9 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 /// Appending space after each mention to maintain text formatting
                 attributedString.appendString(" ")
                 state.bindings.plainComposerText = attributedString
+                
+                let newSelectedRange = NSRange(location: state.bindings.selectedRange.location - item.rawSuggestionText.count, length: 0)
+                state.bindings.selectedRange = newSelectedRange
             }
         }
     }

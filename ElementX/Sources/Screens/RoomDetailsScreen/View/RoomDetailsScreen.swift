@@ -189,13 +189,13 @@ struct RoomDetailsScreen: View {
                     context.send(viewAction: .toggleFavourite(isFavourite: newValue))
                 }
             
-            if context.viewState.canSeeSecurityAndPrivacy {
-                ZeroListRow(label: .default(title: L10n.screenRoomDetailsSecurityAndPrivacyTitle,
-                                        icon: \.lock),
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapSecurityAndPrivacy)
-                        })
-            }
+//            if context.viewState.canSeeSecurityAndPrivacy {
+//                ZeroListRow(label: .default(title: L10n.screenRoomDetailsSecurityAndPrivacyTitle,
+//                                        icon: \.lock),
+//                        kind: .navigationLink {
+//                            context.send(viewAction: .processTapSecurityAndPrivacy)
+//                        })
+//            }
             
             if context.viewState.dmRecipient != nil {
                 ZeroListRow(label: .default(title: L10n.screenRoomDetailsProfileRowTitle,

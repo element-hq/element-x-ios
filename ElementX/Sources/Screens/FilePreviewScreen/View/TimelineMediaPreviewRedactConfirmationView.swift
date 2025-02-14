@@ -39,12 +39,12 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
             BigIcon(icon: \.delete, style: .alertSolid)
             
             VStack(spacing: 8) {
-                Text(L10n.screenMediaDetailsRedactConfirmationTitle)
+                Text(L10n.screenMediaBrowserDeleteConfirmationTitle)
                     .font(.compound.headingMDBold)
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)
                 
-                Text(L10n.screenMediaDetailsRedactConfirmationMessage)
+                Text(L10n.screenMediaBrowserDeleteConfirmationSubtitle)
                     .font(.compound.bodyMD)
                     .foregroundStyle(.compound.textSecondary)
                     .multilineTextAlignment(.center)

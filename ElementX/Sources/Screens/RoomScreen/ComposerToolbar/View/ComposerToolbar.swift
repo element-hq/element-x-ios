@@ -175,6 +175,7 @@ struct ComposerToolbar: View {
     private var messageComposer: some View {
         MessageComposer(plainComposerText: $context.plainComposerText,
                         presendCallback: $context.presendCallback,
+                        selectedRange: $context.selectedRange,
                         composerView: composerView,
                         mode: context.viewState.composerMode,
                         composerFormattingEnabled: context.composerFormattingEnabled,
@@ -219,6 +220,9 @@ struct ComposerToolbar: View {
         }
         .onChange(of: context.composerFormattingEnabled) {
             context.send(viewAction: .didToggleFormattingOptions)
+        }
+        .onChange(of: context.selectedRange) {
+            context.send(viewAction: .selectedTextChanged)
         }
         .onAppear {
             composerFocused = context.composerFocused
@@ -328,8 +332,8 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
                                                             mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                             analyticsService: ServiceLocator.shared.analytics,
                                                             composerDraftService: ComposerDraftServiceMock())
-    static let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil, range: .init())),
-                                                .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: .mockMXCUserAvatar, range: .init()))]
+    static let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil, range: .init(), rawSuggestionText: "")),
+                                                .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: .mockMXCUserAvatar, range: .init(), rawSuggestionText: ""))]
     
     static var previews: some View {
         ComposerToolbar.mock(focused: true)

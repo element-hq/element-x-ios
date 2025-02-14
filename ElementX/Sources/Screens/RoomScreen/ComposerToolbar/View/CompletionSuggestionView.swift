@@ -32,7 +32,7 @@ struct CompletionSuggestionView: View {
             EmptyView()
         } else {
             ZStack {
-                MentionSuggestionItemView(mediaProvider: nil, item: .init(id: "", displayName: nil, avatarURL: nil, range: .init()))
+                MentionSuggestionItemView(mediaProvider: nil, item: .init(id: "", displayName: nil, avatarURL: nil, range: .init(), rawSuggestionText: ""))
                     .readFrame($prototypeListItemFrame)
                     .hidden()
                 if showBackgroundShadow {
@@ -110,15 +110,15 @@ private struct BackgroundView<Content: View>: View {
 
 struct CompletionSuggestion_Previews: PreviewProvider, TestablePreview {
     static let multipleItems: [SuggestionItem] = (0...10).map { index in
-        SuggestionItem.user(item: MentionSuggestionItem(id: "\(index)", displayName: "\(index)", avatarURL: nil, range: .init()))
+        SuggestionItem.user(item: MentionSuggestionItem(id: "\(index)", displayName: "\(index)", avatarURL: nil, range: .init(), rawSuggestionText: ""))
     }
     
     static var previews: some View {
         // Putting them is VStack allows the preview to work properly in tests
         VStack(spacing: 8) {
             CompletionSuggestionView(mediaProvider: MediaProviderMock(configuration: .init()),
-                                     items: [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil, range: .init())),
-                                             .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: .mockMXCUserAvatar, range: .init()))]) { _ in }
+                                     items: [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil, range: .init(), rawSuggestionText: "")),
+                                             .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: .mockMXCUserAvatar, range: .init(), rawSuggestionText: ""))]) { _ in }
         }
         VStack(spacing: 8) {
             CompletionSuggestionView(mediaProvider: MediaProviderMock(configuration: .init()),

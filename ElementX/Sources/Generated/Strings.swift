@@ -600,6 +600,10 @@ internal enum L10n {
   internal static func cryptoIdentityChangePinViolationNewUserId(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_pin_violation_new_user_id", String(describing: p1))
   }
+  /// %1$@’s verified identity has changed.
+  internal static func cryptoIdentityChangeProfilePinViolation(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "crypto_identity_change_profile_pin_violation", String(describing: p1))
+  }
   /// %1$@’s %2$@ verified identity has changed.  %3$@
   internal static func cryptoIdentityChangeVerificationViolationNew(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_verification_violation_new", String(describing: p1), String(describing: p2), String(describing: p3))
@@ -1492,10 +1496,6 @@ internal enum L10n {
   internal static var screenMediaDetailsNoMoreFilesToShow: String { return L10n.tr("Localizable", "screen_media_details_no_more_files_to_show") }
   /// No more media to show
   internal static var screenMediaDetailsNoMoreMediaToShow: String { return L10n.tr("Localizable", "screen_media_details_no_more_media_to_show") }
-  /// This file will be removed from the room and members won’t have access to it.
-  internal static var screenMediaDetailsRedactConfirmationMessage: String { return L10n.tr("Localizable", "screen_media_details_redact_confirmation_message") }
-  /// Delete file?
-  internal static var screenMediaDetailsRedactConfirmationTitle: String { return L10n.tr("Localizable", "screen_media_details_redact_confirmation_title") }
   /// Uploaded by
   internal static var screenMediaDetailsUploadedBy: String { return L10n.tr("Localizable", "screen_media_details_uploaded_by") }
   /// Uploaded on

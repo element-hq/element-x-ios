@@ -8,8 +8,8 @@
 import Combine
 import Foundation
 
-private enum SuggestionTriggerPattern: Character {
-    case at = "@"
+private enum SuggestionTriggerRegex {
+    static let at = /@\w+/
 }
 
 final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
@@ -42,7 +42,8 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                             return SuggestionItem.user(item: .init(id: member.userID,
                                                                    displayName: member.displayName,
                                                                    avatarURL: member.avatarURL,
-                                                                   range: suggestionTrigger.range))
+                                                                   range: suggestionTrigger.range,
+                                                                   rawSuggestionText: suggestionTrigger.text))
                         }
                     
                     if self.canMentionAllUsers,
@@ -52,7 +53,8 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                             .insert(SuggestionItem.allUsers(item: .init(id: PillConstants.atRoom,
                                                                         displayName: PillConstants.everyone,
                                                                         avatarURL: self.roomProxy.infoPublisher.value.avatarURL,
-                                                                        range: suggestionTrigger.range)), at: 0)
+                                                                        range: suggestionTrigger.range,
+                                                                        rawSuggestionText: suggestionTrigger.text)), at: 0)
                     }
                     
                     return membersSuggestion
@@ -75,8 +77,8 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
         }
     }
     
-    func processTextMessage(_ textMessage: String?) {
-        setSuggestionTrigger(detectTriggerInText(textMessage))
+    func processTextMessage(_ textMessage: String, selectedRange: NSRange) {
+        setSuggestionTrigger(detectTriggerInText(textMessage, selectedRange: selectedRange))
     }
     
     func setSuggestionTrigger(_ suggestionTrigger: SuggestionTrigger?) {
@@ -85,23 +87,25 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     
     // MARK: - Private
     
-    private func detectTriggerInText(_ text: String?) -> SuggestionTrigger? {
-        guard let text else {
+    private func detectTriggerInText(_ text: String, selectedRange: NSRange) -> SuggestionTrigger? {
+        let matches = text.matches(of: SuggestionTriggerRegex.at)
+        let match = matches
+            .first { matchResult in
+                let lowerBound = matchResult.range.lowerBound.utf16Offset(in: matchResult.base)
+                let upperBound = matchResult.range.upperBound.utf16Offset(in: matchResult.base)
+                return selectedRange.location >= lowerBound
+                    && selectedRange.location <= upperBound
+                    && selectedRange.length <= upperBound - lowerBound
+            }
+        
+        guard let match else {
             return nil
         }
         
-        let components = text.components(separatedBy: .whitespaces)
+        var suggestionText = String(text[match.range])
+        suggestionText.removeFirst()
         
-        guard var lastComponent = components.last,
-              let range = text.range(of: lastComponent, options: .backwards),
-              lastComponent.count > 0,
-              let suggestionKey = SuggestionTriggerPattern(rawValue: lastComponent.removeFirst()),
-              // If a second character exists and is the same as the key it shouldn't trigger.
-              lastComponent.first != suggestionKey.rawValue else {
-            return nil
-        }
-        
-        return .init(type: .user, text: lastComponent, range: NSRange(range, in: text))
+        return .init(type: .user, text: suggestionText, range: NSRange(match.range, in: text))
     }
     
     private static func shouldIncludeMember(userID: String, displayName: String?, searchText: String) -> Bool {
