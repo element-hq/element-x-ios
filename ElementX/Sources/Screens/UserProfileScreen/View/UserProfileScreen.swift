@@ -14,8 +14,6 @@ struct UserProfileScreen: View {
     var body: some View {
         Form {
             headerSection
-            
-            verificationSection
         }
         .compoundList()
         .navigationTitle(L10n.screenRoomMemberDetailsTitle)
@@ -83,19 +81,7 @@ struct UserProfileScreen: View {
         }
         .padding(.top, 32)
     }
-    
-    @ViewBuilder
-    var verificationSection: some View {
-        if context.viewState.showVerificationSection {
-            Section {
-                ListRow(label: .default(title: L10n.commonVerifyUser, icon: \.lock),
-                        kind: .button {
-                            context.send(viewAction: .verifyUser)
-                        })
-            }
-        }
-    }
-    
+        
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         if context.viewState.isPresentedModally {

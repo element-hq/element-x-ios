@@ -10,7 +10,6 @@ import Foundation
 enum UserProfileScreenViewModelAction {
     case openDirectChat(roomID: String)
     case startCall(roomID: String)
-    case verifyUser(userID: String)
     case dismiss
 }
 
@@ -29,10 +28,6 @@ struct UserProfileScreenViewState: BindableState {
     var showVerifiedBadge: Bool {
         isVerified == true // We purposely show the badge on your own account for consistency with Web.
     }
-    
-    var showVerificationSection: Bool {
-        isVerified == false && !isOwnUser
-    }
 }
 
 struct UserProfileScreenViewStateBindings {
@@ -48,7 +43,6 @@ enum UserProfileScreenViewAction {
     case openDirectChat
     case createDirectChat
     case startCall(roomID: String)
-    case verifyUser
     case dismiss
 }
 

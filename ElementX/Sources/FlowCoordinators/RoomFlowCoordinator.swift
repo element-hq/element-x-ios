@@ -1276,8 +1276,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
             case .startCall(let roomID):
                 Task { await self.presentCallScreen(roomID: roomID) }
-            case .verifyUser(let userID):
-                actionsSubject.send(.verifyUser(userID: userID))
             case .dismiss:
                 break // Not supported when pushed.
             }
