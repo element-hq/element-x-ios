@@ -15,7 +15,9 @@ struct RoomMemberDetailsScreen: View {
         Form {
             headerSection
             
-            verificationSection
+            if context.viewState.showVerifyIdentitySection {
+                verificationSection
+            }
             
             if context.viewState.memberDetails != nil, !context.viewState.isOwnMemberDetails {
                 blockUserSection
@@ -46,7 +48,14 @@ struct RoomMemberDetailsScreen: View {
                              mediaProvider: context.mediaProvider) { url in
                 context.send(viewAction: .displayAvatar(url))
             } footer: {
-                otherUserFooter
+                VStack(spacing: 24) {
+                    if context.viewState.showWithdrawVerificationSection {
+                        withdrawVerificationSection
+                    }
+                    
+                    otherUserFooter
+                }
+                .padding(.top, 24)
             }
         } else {
             AvatarHeaderView(user: UserProfileProxy(userID: context.viewState.userID),
@@ -54,6 +63,26 @@ struct RoomMemberDetailsScreen: View {
                              avatarSize: .user(on: .memberDetails),
                              mediaProvider: context.mediaProvider) { }
         }
+    }
+    
+    private var withdrawVerificationSection: some View {
+        VStack(spacing: 16) {
+            if let memberDetails = context.viewState.memberDetails {
+                Text(L10n.cryptoIdentityChangeProfilePinViolation(memberDetails.name ?? memberDetails.id))
+                    .foregroundStyle(.compound.textCriticalPrimary)
+                    .font(.compound.bodyMDSemibold)
+            } else {
+                Text(L10n.cryptoIdentityChangeProfilePinViolation(context.viewState.userID))
+                    .foregroundStyle(.compound.textCriticalPrimary)
+                    .font(.compound.bodyMDSemibold)
+            }
+            
+            Button(L10n.cryptoIdentityChangeWithdrawVerificationAction) {
+                context.send(viewAction: .withdrawVerification)
+            }
+            .buttonStyle(.compound(.secondary, size: .medium))
+        }
+        .padding(.horizontal, 16)
     }
     
     private var otherUserFooter: some View {
@@ -84,18 +113,14 @@ struct RoomMemberDetailsScreen: View {
                 .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
             }
         }
-        .padding(.top, 32)
     }
     
     @ViewBuilder
     var verificationSection: some View {
-        if context.viewState.showVerificationSection {
-            Section {
-                ListRow(label: .default(title: L10n.commonVerifyUser, icon: \.lock),
-                        kind: .button {
-                            context.send(viewAction: .verifyUser)
-                        })
-            }
+        Section {
+            ListRow(label: .default(title: L10n.commonVerifyUser, icon: \.lock), kind: .button {
+                context.send(viewAction: .verifyUser)
+            })
         }
     }
     
@@ -138,6 +163,7 @@ struct RoomMemberDetailsScreen: View {
 
 struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static let verifiedUserViewModel = makeViewModel(member: .mockDan)
+    static let verificationViolationUserViewModel = makeViewModel(member: .mockBob)
     static let otherUserViewModel = makeViewModel(member: .mockAlice)
     static let accountOwnerViewModel = makeViewModel(member: .mockMe)
     static let ignoredUserViewModel = makeViewModel(member: .mockIgnored)
@@ -145,9 +171,15 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         RoomMemberDetailsScreen(context: verifiedUserViewModel.context)
             .snapshotPreferences(expect: verifiedUserViewModel.context.$viewState.map { state in
-                state.isVerified == true
+                state.verificationState == .verified
             })
             .previewDisplayName("Verified User")
+        
+        RoomMemberDetailsScreen(context: verificationViolationUserViewModel.context)
+            .snapshotPreferences(expect: verificationViolationUserViewModel.context.$viewState.map { state in
+                state.verificationState == .verificationViolation
+            })
+            .previewDisplayName("Verification Violation User")
             
         RoomMemberDetailsScreen(context: otherUserViewModel.context)
             .snapshotPreferences(expect: otherUserViewModel.context.$viewState.map { state in
@@ -178,6 +210,8 @@ struct RoomMemberDetailsScreen_Previews: PreviewProvider, TestablePreview {
             let identity = switch userID {
             case RoomMemberProxyMock.mockDan.userID:
                 UserIdentityProxyMock(configuration: .init(verificationState: .verified))
+            case RoomMemberProxyMock.mockBob.userID:
+                UserIdentityProxyMock(configuration: .init(verificationState: .verificationViolation))
             default:
                 UserIdentityProxyMock(configuration: .init())
             }
