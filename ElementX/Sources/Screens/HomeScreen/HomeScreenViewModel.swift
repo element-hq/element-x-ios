@@ -228,6 +228,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             dismissNewRewardsIntimation()
         case .loadMorePostsIfNeeded:
             fetchPosts()
+        case .forceRefreshPosts:
+            fetchPosts(isForceRefresh: true)
         case .postTapped(let post):
             actionsSubject.send(.postTapped(post))
         case .openArweaveLink(let post):
@@ -512,7 +514,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         userSession.clientProxy.checkAndLinkZeroUser()
     }
     
-    private func fetchPosts() {
+    private func fetchPosts(isForceRefresh: Bool = false) {
         guard !isFetchPostsInProgress else { return }
         isFetchPostsInProgress = true
         
@@ -520,8 +522,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             defer { isFetchPostsInProgress = false } // Ensure flag is reset when the task completes
             
             state.postListMode = state.posts.isEmpty ? .skeletons : .posts
+            let skipItems = isForceRefresh ? 0 : state.posts.count
             let postsResult = await userSession.clientProxy.fetchZeroFeeds(limit: HOME_SCREEN_POST_PAGE_COUNT,
-                                                                           skip: state.posts.count)
+                                                                           skip: skipItems)
             switch postsResult {
             case .success(let posts):
                 let hasNoPosts = posts.isEmpty
@@ -529,7 +532,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     state.postListMode = state.posts.isEmpty ? .empty : .posts
                     state.canLoadMorePosts = false
                 } else {
-                    var homePosts: [HomeScreenPost] = state.posts
+                    var homePosts: [HomeScreenPost] = isForceRefresh ? [] : state.posts
                     for post in posts {
                         let homePost = HomeScreenPost(post: post, rewardsDecimalPlaces: state.userRewards.decimals)
                         homePosts.append(homePost)

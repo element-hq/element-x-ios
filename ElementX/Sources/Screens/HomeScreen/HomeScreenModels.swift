@@ -54,6 +54,7 @@ enum HomeScreenViewAction {
     case rewardsIntimated
     
     case loadMorePostsIfNeeded
+    case forceRefreshPosts
     
     case postTapped(_ post: HomeScreenPost)
     case openArweaveLink(_ post: HomeScreenPost)

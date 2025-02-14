@@ -65,6 +65,9 @@ struct HomePostsContent: View {
             .scrollBounceBehavior(context.viewState.postListMode == .empty ? .basedOnSize : .automatic)
             .animation(.elementDefault, value: context.viewState.postListMode)
             .animation(.none, value: context.viewState.visiblePosts)
+            .refreshable {
+                context.send(viewAction: .forceRefreshPosts)
+            }
         }
     }
 }
