@@ -47,6 +47,7 @@ enum FeedDetailsScreenViewAction {
     case openArweaveLink(_ post: HomeScreenPost)
     case loadMoreRepliesIfNeeded
     case forceRefreshFeed
+    case meowTapped(_ postId: String, amount: Int, isPostAReply: Bool)
 }
 
 enum FeedRepliesListMode: CustomStringConvertible {

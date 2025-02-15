@@ -46,6 +46,8 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             fetchFeedReplies(state.bindings.feed.id)
         case .forceRefreshFeed:
             forceRefreshFeed()
+        case .meowTapped(let postId, let amount, let isPostAReply):
+            addMeowToPost(postId, amount, isPostAReply: isPostAReply)
         }
     }
     
@@ -115,5 +117,25 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
         let feedId = state.bindings.feed.id
         fetchFeed(feedId)
         fetchFeedReplies(feedId, isForceRefresh: true)
+    }
+    
+    private func addMeowToPost(_ postId: String, _ amount: Int, isPostAReply: Bool) {
+        Task {
+            let addMeowResult = await clientProxy.addMeowsToFeed(feedId: postId, amount: amount)
+            switch addMeowResult {
+            case .success(let post):
+                let homePost = HomeScreenPost(post: post, rewardsDecimalPlaces: state.userRewards.decimals)
+                if isPostAReply {
+                    if let index = state.feedReplies.firstIndex(where: { $0.id == homePost.id }) {
+                        state.feedReplies[index] = homePost
+                    }
+                } else {
+                    state.bindings.feed = homePost
+                }
+            case .failure(let error):
+                MXLog.error("Failed to add meow: \(error)")
+                displayError()
+            }
+        }
     }
 }

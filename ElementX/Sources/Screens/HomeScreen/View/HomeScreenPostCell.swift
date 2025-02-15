@@ -13,7 +13,7 @@ struct HomeScreenPostCell: View {
     let showThreadLine: Bool
     let onPostTapped: () -> Void
     let onOpenArweaveLink: () -> Void
-    let onMeowTapped: () -> Void
+    let onMeowTapped: (Int) -> Void
     
     var body: some View {
         HStack(alignment: .top) {
@@ -80,11 +80,10 @@ struct HomeScreenPostCell: View {
                         onPostTapped()
                     })
                     
-                    HomeScreenPostFooterItem(icon: Asset.Images.postMeowIcon,
-                                             count: post.meowCount,
+                    HomeScreenPostMeowButton(count: post.meowCount,
                                              highlightColor: post.isMeowedByMe,
-                                             action: {
-                        onMeowTapped()
+                                             onMeowTouchEnded: { count in
+                        onMeowTapped(count)
                     })
                     .padding(.horizontal, 32)
                     
@@ -98,28 +97,6 @@ struct HomeScreenPostCell: View {
                     })
                 }
             }.padding(.leading, 8)
-        }
-    }
-}
-
-struct HomeScreenPostFooterItem: View {
-    
-    let icon: ImageAsset
-    let count: String
-    let highlightColor: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            HStack {
-                Image(asset: icon)
-                    .foregroundStyle(highlightColor ? .zero.bgAccentRest : .compound.textSecondary)
-                if !count.isEmpty {
-                    Text("\(count)")
-                        .font(.zero.bodyMD)
-                        .foregroundStyle(highlightColor ? .zero.bgAccentRest : .compound.textSecondary)
-                }
-            }
         }
     }
 }

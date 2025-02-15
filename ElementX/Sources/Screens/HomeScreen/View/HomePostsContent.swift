@@ -28,7 +28,7 @@ struct HomePostsContent: View {
                                 HomeScreenPostCell(post: post, mediaProvider: context.mediaProvider, showThreadLine: false,
                                                    onPostTapped: {},
                                                    onOpenArweaveLink: {},
-                                                   onMeowTapped: {})
+                                                   onMeowTapped: { _ in })
                                     .padding(.all, 16)
                                 Divider()
                             }

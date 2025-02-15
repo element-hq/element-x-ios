@@ -5,13 +5,13 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Foundation
+import BigInt
 
 public struct ZPostMeowAmount: Encodable {
     public let amount: String
     
     init(amount: Int) {
-        let actualAmount = (Int64(amount) * 1_000_000_000_000_000_000)
+        let actualAmount = BigInt(amount) * BigInt(1_000_000_000_000_000_000)
         self.amount = String(actualAmount)
     }
 }

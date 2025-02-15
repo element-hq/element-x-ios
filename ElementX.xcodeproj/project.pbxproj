@@ -1837,6 +1837,10 @@
 		798457532D5FD58A0039623F /* ZPostMeowAmount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798457512D5FD58A0039623F /* ZPostMeowAmount.swift */; };
 		798457582D5FDEF60039623F /* ZPostMeowAmountResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798457572D5FDEF50039623F /* ZPostMeowAmountResponse.swift */; };
 		798457592D5FDEF60039623F /* ZPostMeowAmountResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798457572D5FDEF50039623F /* ZPostMeowAmountResponse.swift */; };
+		7984575B2D6084710039623F /* HomeScreenPostFooterItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7984575A2D60846F0039623F /* HomeScreenPostFooterItem.swift */; };
+		7984575C2D6084710039623F /* HomeScreenPostFooterItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7984575A2D60846F0039623F /* HomeScreenPostFooterItem.swift */; };
+		7984575E2D60849F0039623F /* HomeScreenPostMeowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7984575D2D60849D0039623F /* HomeScreenPostMeowButton.swift */; };
+		7984575F2D60849F0039623F /* HomeScreenPostMeowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7984575D2D60849D0039623F /* HomeScreenPostMeowButton.swift */; };
 		798BF3072137833FBD3F4C96 /* TimelineDeliveryStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F91544AC136BF6477BDAB8 /* TimelineDeliveryStatusView.swift */; };
 		79959F8E45C3749997482A7F /* TimelineItemBubbledStylerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A459AE4B6566B2FA99E86B2 /* TimelineItemBubbledStylerView.swift */; };
 		79C6BB252D47B6E700FC3CBF /* RoomPreviewProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739077686814E4EA339B1C83 /* RoomPreviewProxyProtocol.swift */; };
@@ -3292,6 +3296,8 @@
 		796CBD0C56FA0D3AEDAB255B /* SessionVerificationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionVerificationScreenCoordinator.swift; sourceTree = "<group>"; };
 		798457512D5FD58A0039623F /* ZPostMeowAmount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZPostMeowAmount.swift; path = Zero/Sources/Network/Models/ZPostMeowAmount.swift; sourceTree = SOURCE_ROOT; };
 		798457572D5FDEF50039623F /* ZPostMeowAmountResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPostMeowAmountResponse.swift; sourceTree = "<group>"; };
+		7984575A2D60846F0039623F /* HomeScreenPostFooterItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenPostFooterItem.swift; sourceTree = "<group>"; };
+		7984575D2D60849D0039623F /* HomeScreenPostMeowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenPostMeowButton.swift; sourceTree = "<group>"; };
 		79FAC366FF299BCC555D756E /* ElementWellKnown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementWellKnown.swift; sourceTree = "<group>"; };
 		7A03E073077D92AA19C43DCF /* IdentityConfirmationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityConfirmationScreenCoordinator.swift; sourceTree = "<group>"; };
 		7AAD8C633AA57948B34EDCF7 /* RoomChangeRolesScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomChangeRolesScreenViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -5583,8 +5589,10 @@
 				A103580EBA06155B1343EF16 /* HomeScreenKnockedCell.swift */,
 				05512FB13987D221B7205DE0 /* HomeScreenRecoveryKeyConfirmationBanner.swift */,
 				ED044D00F2176681CC02CD54 /* HomeScreenRoomCell.swift */,
-				7903937F2D50DFE60022E293 /* HomeScreenPostList.swift */,
 				793FA5B62D5B33DE00893AC4 /* HomeScreenPostCell.swift */,
+				7903937F2D50DFE60022E293 /* HomeScreenPostList.swift */,
+				7984575A2D60846F0039623F /* HomeScreenPostFooterItem.swift */,
+				7984575D2D60849D0039623F /* HomeScreenPostMeowButton.swift */,
 				C7661EFFCAA307A97D71132A /* HomeScreenRoomList.swift */,
 				4691B8DE1D51DE152680098A /* HomeScreenSlidingSyncMigrationBanner.swift */,
 				84AF32E4136FD6F159D86C2C /* RoomDirectorySearchView.swift */,
@@ -9169,6 +9177,7 @@
 				18C4540C2CF09A5E00F25539 /* KnockRequestsListScreen.swift in Sources */,
 				18E9A4FB2C9829970082DDA4 /* EncryptionResetScreen.swift in Sources */,
 				18D467A12D109B5900861AA6 /* (null) in Sources */,
+				7984575F2D60849F0039623F /* HomeScreenPostMeowButton.swift in Sources */,
 				18E9A4FC2C9829970082DDA4 /* EncryptionResetScreenCoordinator.swift in Sources */,
 				18793DE82CF5052F00F1C85D /* KnockRequestsBannerView.swift in Sources */,
 				18E9A4FD2C9829970082DDA4 /* EncryptionResetScreenModels.swift in Sources */,
@@ -9778,6 +9787,7 @@
 				18E9A6E72C9829970082DDA4 /* TemplateScreenViewModel.swift in Sources */,
 				189E88532D0CA77A002FA063 /* ZeroAccountApi.swift in Sources */,
 				18E9A6E82C9829970082DDA4 /* TemplateScreenViewModelProtocol.swift in Sources */,
+				7984575B2D6084710039623F /* HomeScreenPostFooterItem.swift in Sources */,
 				18E9A6E92C9829970082DDA4 /* TestablePreview.swift in Sources */,
 				798457592D5FDEF60039623F /* ZPostMeowAmountResponse.swift in Sources */,
 				18E9A6EA2C9829970082DDA4 /* TextBasedRoomTimelineItem.swift in Sources */,
@@ -10289,6 +10299,7 @@
 				93AC1E8418D8C827671FB3A9 /* IdentityConfirmedScreenCoordinator.swift in Sources */,
 				D22345698F6548C1EE960940 /* IdentityConfirmedScreenModels.swift in Sources */,
 				01681E8B20AD6F0D237F2DC1 /* IdentityConfirmedScreenViewModel.swift in Sources */,
+				7984575C2D6084710039623F /* HomeScreenPostFooterItem.swift in Sources */,
 				AADE7C2497A7B55D8BED7BD6 /* IdentityConfirmedScreenViewModelProtocol.swift in Sources */,
 				FFD52DCDA6962055A363CC8F /* IdentityResetHandleSDKMock.swift in Sources */,
 				BA31448FBD9697F8CB9A83CD /* ImageCache.swift in Sources */,
@@ -10675,6 +10686,7 @@
 				6C34237AFB808E38FC8776B9 /* RoomStateEventStringBuilder.swift in Sources */,
 				59C41313AED7566C3AC51163 /* RoomSummary.swift in Sources */,
 				983896D611ABF52A5C37498D /* RoomSummaryProvider.swift in Sources */,
+				7984575E2D60849F0039623F /* HomeScreenPostMeowButton.swift in Sources */,
 				B5899F18AD6C56CE08FE532B /* RoomSummaryProviderMock.swift in Sources */,
 				18659CBE2CFB257C000EF0A6 /* ZNonceResponse.swift in Sources */,
 				AA050DF4AEE54A641BA7CA22 /* RoomSummaryProviderProtocol.swift in Sources */,
@@ -11217,7 +11229,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.10.8;
+				MARKETING_VERSION = 0.10.9;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -11252,7 +11264,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.10.8;
+				MARKETING_VERSION = 0.10.9;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
