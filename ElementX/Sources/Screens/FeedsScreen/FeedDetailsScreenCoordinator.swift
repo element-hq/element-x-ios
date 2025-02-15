@@ -10,6 +10,7 @@ import SwiftUI
 
 struct FeedDetailsScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
+    let feedUpdatedProtocol: FeedDetailsUpdatedProtocol
     let feedItem: HomeScreenPost
 }
 
@@ -28,7 +29,9 @@ final class FeedDetailsScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: FeedDetailsScreenCoordinatorParameters) {
-        viewModel = FeedDetailsScreenViewModel(userSession: parameters.userSession, feedItem: parameters.feedItem)
+        viewModel = FeedDetailsScreenViewModel(userSession: parameters.userSession,
+                                               feedUpdatedProtocol: parameters.feedUpdatedProtocol,
+                                               feedItem: parameters.feedItem)
         viewModel.actions
             .sink { [weak self] action in
                 guard let self else { return }

@@ -24,7 +24,7 @@ enum HomeScreenViewModelAction {
     case presentRoomDirectorySearch
     case logoutWithoutConfirmation
     case logout
-    case postTapped(_ post: HomeScreenPost)
+    case postTapped(_ post: HomeScreenPost, feedUpdatedProtocol: FeedDetailsUpdatedProtocol)
 }
 
 enum HomeScreenViewAction {

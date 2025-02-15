@@ -28,7 +28,7 @@ enum HomeScreenCoordinatorAction {
     case presentRoomDirectorySearch
     case logoutWithoutConfirmation
     case logout
-    case postTapped(_ post: HomeScreenPost)
+    case postTapped(_ post: HomeScreenPost, feedUpdatedProtocol: FeedDetailsUpdatedProtocol)
 }
 
 final class HomeScreenCoordinator: CoordinatorProtocol {
@@ -82,8 +82,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.logoutWithoutConfirmation)
                 case .logout:
                     actionsSubject.send(.logout)
-                case .postTapped(let post):
-                    actionsSubject.send(.postTapped(post))
+                case .postTapped(let post, let feedUpdatedProtocol):
+                    actionsSubject.send(.postTapped(post, feedUpdatedProtocol: feedUpdatedProtocol))
                 }
             }
             .store(in: &cancellables)

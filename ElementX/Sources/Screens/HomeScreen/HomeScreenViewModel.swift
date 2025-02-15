@@ -12,7 +12,7 @@ import SwiftUI
 
 typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, HomeScreenViewAction>
 
-class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
+class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol, FeedDetailsUpdatedProtocol {
     private let userSession: UserSessionProtocol
     private let analyticsService: AnalyticsService
     private let appSettings: AppSettings
@@ -231,7 +231,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         case .forceRefreshPosts:
             fetchPosts(isForceRefresh: true)
         case .postTapped(let post):
-            actionsSubject.send(.postTapped(post))
+            actionsSubject.send(.postTapped(post, feedUpdatedProtocol: self))
         case .openArweaveLink(let post):
             openArweaveLink(post)
         case .addMeowToPost(let postId, let amount):
@@ -576,6 +576,21 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             case .failure(let error):
                 MXLog.error("Failed to add meow: \(error)")
                 displayError()
+            }
+        }
+    }
+    
+    func onFeedUpdated(_ feedId: String) {
+        Task {
+            let feedDetailsResult = await userSession.clientProxy.fetchFeedDetails(feedId: feedId)
+            switch feedDetailsResult {
+            case .success(let post):
+                let homePost = HomeScreenPost(post: post, rewardsDecimalPlaces: state.userRewards.decimals)
+                if let index = state.posts.firstIndex(where: { $0.id == homePost.id }) {
+                    state.posts[index] = homePost
+                }
+            case .failure(let error):
+                MXLog.error("Failed to fetch updated feed details: \(error)")
             }
         }
     }

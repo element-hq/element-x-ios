@@ -13,6 +13,7 @@ typealias FeedDetailsScreenViewModelType = StateStoreViewModel<FeedDetailsScreen
 class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScreenViewModelProtocol {
     
     private let clientProxy: ClientProxyProtocol
+    private let feedUpdatedProtocol: FeedDetailsUpdatedProtocol
     
     private let POST_REPLIES_PAGE_COUNT = 10
     private var isFetchRepliesInProgress = false
@@ -22,8 +23,9 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol, feedItem: HomeScreenPost) {
+    init(userSession: UserSessionProtocol, feedUpdatedProtocol: FeedDetailsUpdatedProtocol, feedItem: HomeScreenPost) {
         self.clientProxy = userSession.clientProxy
+        self.feedUpdatedProtocol = feedUpdatedProtocol
         
         super.init(initialViewState: .init(bindings: .init(feed: feedItem)), mediaProvider: userSession.mediaProvider)
         
@@ -132,6 +134,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                 } else {
                     state.bindings.feed = homePost
                 }
+                feedUpdatedProtocol.onFeedUpdated(postId)
             case .failure(let error):
                 MXLog.error("Failed to add meow: \(error)")
                 displayError()
