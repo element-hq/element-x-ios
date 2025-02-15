@@ -70,6 +70,9 @@ struct FeedDetailsContent: View {
             .scrollBounceBehavior(context.viewState.repliesListMode == .empty ? .basedOnSize : .automatic)
             .animation(.elementDefault, value: context.viewState.repliesListMode)
             .animation(.none, value: context.viewState.visibleReplies)
+            .refreshable {
+                context.send(viewAction: .forceRefreshFeed)
+            }
         }
     }
 }

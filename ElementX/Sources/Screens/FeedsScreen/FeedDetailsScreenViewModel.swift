@@ -44,6 +44,8 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             openArweaveLink(post)
         case .loadMoreRepliesIfNeeded:
             fetchFeedReplies(state.bindings.feed.id)
+        case .forceRefreshFeed:
+            forceRefreshFeed()
         }
     }
     
@@ -59,7 +61,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
         }
     }
     
-    private func fetchFeedReplies(_ feedId: String) {
+    private func fetchFeedReplies(_ feedId: String, isForceRefresh: Bool = false) {
         guard !isFetchRepliesInProgress else { return }
         isFetchRepliesInProgress = true
         
@@ -67,8 +69,9 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             defer { isFetchRepliesInProgress = false } // Ensure flag is reset when the task completes
             
             state.repliesListMode = state.feedReplies.isEmpty ? .skeletons : .replies
+            let skipItems = isForceRefresh ? 0 : state.feedReplies.count
             let repliesResult = await clientProxy.fetchFeedReplies(feedId: feedId, limit: POST_REPLIES_PAGE_COUNT,
-                                                                   skip: state.feedReplies.count)
+                                                                   skip: skipItems)
             switch repliesResult {
             case .success(let replies):
                 let hasNoReplies = replies.isEmpty
@@ -76,7 +79,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                     state.repliesListMode = state.feedReplies.isEmpty ? .empty : .replies
                     state.canLoadMoreReplies = false
                 } else {
-                    var feedReplies: [HomeScreenPost] = state.feedReplies
+                    var feedReplies: [HomeScreenPost] = isForceRefresh ? [] : state.feedReplies
                     for reply in replies {
                         let feedReply = HomeScreenPost(post: reply, rewardsDecimalPlaces: state.userRewards.decimals)
                         feedReplies.append(feedReply)
@@ -106,5 +109,11 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
     private func openArweaveLink(_ post: HomeScreenPost) {
         guard let arweaveUrl = post.getArweaveLink() else { return }
         UIApplication.shared.open(arweaveUrl)
+    }
+    
+    private func forceRefreshFeed() {
+        let feedId = state.bindings.feed.id
+        fetchFeed(feedId)
+        fetchFeedReplies(feedId, isForceRefresh: true)
     }
 }
