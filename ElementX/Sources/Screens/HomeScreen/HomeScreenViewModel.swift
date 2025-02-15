@@ -234,6 +234,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             actionsSubject.send(.postTapped(post))
         case .openArweaveLink(let post):
             openArweaveLink(post)
+        case .addMeowToPost(let postId, let amount):
+            addMeowToPost(postId, amount)
         }
     }
     
@@ -560,6 +562,22 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private func openArweaveLink(_ post: HomeScreenPost) {
         guard let arweaveUrl = post.getArweaveLink() else { return }
         UIApplication.shared.open(arweaveUrl)
+    }
+    
+    private func addMeowToPost(_ postId: String, _ amount: Int) {
+        Task {
+            let addMeowResult = await userSession.clientProxy.addMeowsToFeed(feedId: postId, amount: amount)
+            switch addMeowResult {
+            case .success(let post):
+                let homePost = HomeScreenPost(post: post, rewardsDecimalPlaces: state.userRewards.decimals)
+                if let index = state.posts.firstIndex(where: { $0.id == homePost.id }) {
+                    state.posts[index] = homePost
+                }
+            case .failure(let error):
+                MXLog.error("Failed to add meow: \(error)")
+                displayError()
+            }
+        }
     }
 }
 

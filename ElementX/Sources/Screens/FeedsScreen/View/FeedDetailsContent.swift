@@ -94,6 +94,9 @@ struct PostRepliesList: View {
                 },
                                    onOpenArweaveLink: {
                     context.send(viewAction: .openArweaveLink(post))
+                },
+                                   onMeowTapped: {
+                    
                 })
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)

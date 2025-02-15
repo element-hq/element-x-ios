@@ -12,6 +12,7 @@ protocol ZeroPostsApiProtocol {
     func fetchPosts(limit: Int, skip: Int) async throws -> Result<[ZPost], Error>
     func fetchPostDetails(postId: String) async throws -> Result<ZPost, Error>
     func fetchPostReplies(postId: String, limit: Int, skip: Int) async throws -> Result<[ZPost], Error>
+    func addMeowsToPst(amount: Int, postId: String) async throws -> Result<ZPost, Error>
 }
 
 class ZeroPostsApi: ZeroPostsApiProtocol {
@@ -92,12 +93,31 @@ class ZeroPostsApi: ZeroPostsApiProtocol {
         }
     }
     
+    func addMeowsToPst(amount: Int, postId: String) async throws -> Result<ZPost, any Error> {
+        let meowAmount = ZPostMeowAmount(amount: amount)
+        let requestUrl = FeedEndPoints.meowPostEndPoint
+            .replacingOccurrences(of: FeedConstants.feed_id_path_param, with: postId)
+        let result: Result<ZPostMeowAmountResponse, Error> = try await APIManager
+            .shared
+            .authorisedRequest(requestUrl,
+                               method: .post,
+                               appSettings: appSettings,
+                               parameters: meowAmount.toDictionary())
+        switch result {
+        case .success(let postMeow):
+            return try await fetchPostDetails(postId: postId)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     // MARK: - Constants
     
     private enum FeedEndPoints {
         static let postsEndPoint = "\(ZeroContants.appServer.zeroRootUrl)api/v2/posts"
         static let postDetailsEndPoint = "\(ZeroContants.appServer.zeroRootUrl)api/v2/posts/\(FeedConstants.feed_id_path_param)"
         static let postRepliesEndPoint = "\(ZeroContants.appServer.zeroRootUrl)api/v2/posts/\(FeedConstants.feed_id_path_param)/replies"
+        static let meowPostEndPoint = "\(ZeroContants.appServer.zeroRootUrl)api/v2/posts/post/\(FeedConstants.feed_id_path_param)/meow"
     }
     
     private enum FeedConstants {

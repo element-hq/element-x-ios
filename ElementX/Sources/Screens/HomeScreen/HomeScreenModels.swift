@@ -55,6 +55,7 @@ enum HomeScreenViewAction {
     
     case loadMorePostsIfNeeded
     case forceRefreshPosts
+    case addMeowToPost(postId: String, amount: Int)
     
     case postTapped(_ post: HomeScreenPost)
     case openArweaveLink(_ post: HomeScreenPost)

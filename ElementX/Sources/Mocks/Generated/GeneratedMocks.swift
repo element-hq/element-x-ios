@@ -5682,6 +5682,76 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return fetchFeedRepliesFeedIdLimitSkipReturnValue
         }
     }
+    //MARK: - addMeowsToFeed
+
+    var addMeowsToFeedFeedIdAmountUnderlyingCallsCount = 0
+    var addMeowsToFeedFeedIdAmountCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return addMeowsToFeedFeedIdAmountUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addMeowsToFeedFeedIdAmountUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addMeowsToFeedFeedIdAmountUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addMeowsToFeedFeedIdAmountUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var addMeowsToFeedFeedIdAmountCalled: Bool {
+        return addMeowsToFeedFeedIdAmountCallsCount > 0
+    }
+    var addMeowsToFeedFeedIdAmountReceivedArguments: (feedId: String, amount: Int)?
+    var addMeowsToFeedFeedIdAmountReceivedInvocations: [(feedId: String, amount: Int)] = []
+
+    var addMeowsToFeedFeedIdAmountUnderlyingReturnValue: Result<ZPost, ClientProxyError>!
+    var addMeowsToFeedFeedIdAmountReturnValue: Result<ZPost, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return addMeowsToFeedFeedIdAmountUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZPost, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addMeowsToFeedFeedIdAmountUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addMeowsToFeedFeedIdAmountUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addMeowsToFeedFeedIdAmountUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var addMeowsToFeedFeedIdAmountClosure: ((String, Int) async -> Result<ZPost, ClientProxyError>)?
+
+    func addMeowsToFeed(feedId: String, amount: Int) async -> Result<ZPost, ClientProxyError> {
+        addMeowsToFeedFeedIdAmountCallsCount += 1
+        addMeowsToFeedFeedIdAmountReceivedArguments = (feedId: feedId, amount: amount)
+        DispatchQueue.main.async {
+            self.addMeowsToFeedFeedIdAmountReceivedInvocations.append((feedId: feedId, amount: amount))
+        }
+        if let addMeowsToFeedFeedIdAmountClosure = addMeowsToFeedFeedIdAmountClosure {
+            return await addMeowsToFeedFeedIdAmountClosure(feedId, amount)
+        } else {
+            return addMeowsToFeedFeedIdAmountReturnValue
+        }
+    }
     //MARK: - loadMediaContentForSource
 
     var loadMediaContentForSourceThrowableError: Error?

@@ -13,6 +13,7 @@ struct HomeScreenPostCell: View {
     let showThreadLine: Bool
     let onPostTapped: () -> Void
     let onOpenArweaveLink: () -> Void
+    let onMeowTapped: () -> Void
     
     var body: some View {
         HStack(alignment: .top) {
@@ -82,7 +83,9 @@ struct HomeScreenPostCell: View {
                     HomeScreenPostFooterItem(icon: Asset.Images.postMeowIcon,
                                              count: post.meowCount,
                                              highlightColor: post.isMeowedByMe,
-                                             action: {})
+                                             action: {
+                        onMeowTapped()
+                    })
                     .padding(.horizontal, 32)
                     
                     Spacer()
