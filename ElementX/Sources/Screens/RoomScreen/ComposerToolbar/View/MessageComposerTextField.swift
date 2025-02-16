@@ -190,8 +190,8 @@ private struct UITextViewWrapper: UIViewRepresentable {
         }
         
         func textViewDidChangeSelection(_ textView: UITextView) {
-            if selectedRange.wrappedValue != textView.selectedRange {
-                DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                if self.selectedRange.wrappedValue != textView.selectedRange {
                     self.selectedRange.wrappedValue = textView.selectedRange
                 }
             }
