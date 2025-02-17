@@ -18,6 +18,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
     
+    private var previouslySeenInvites: Set<String>
     private let roomSummaryProvider: RoomSummaryProviderProtocol?
     
     private var actionsSubject: PassthroughSubject<HomeScreenViewModelAction, Never> = .init()
@@ -35,6 +36,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
         
+        previouslySeenInvites = appSettings.seenInvites
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         
         super.init(initialViewState: .init(userID: userSession.clientProxy.userID),
@@ -96,6 +98,15 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         appSettings.$publicSearchEnabled
             .weakAssign(to: \.state.isRoomDirectorySearchEnabled, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.$seenInvites
+            .removeDuplicates()
+            .sink { [weak self] seenInvites in
+                guard let self else { return }
+                previouslySeenInvites = seenInvites
+                updateRooms()
+            }
             .store(in: &cancellables)
         
         let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
@@ -297,7 +308,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         var rooms = [HomeScreenRoom]()
         
         for summary in roomSummaryProvider.roomListPublisher.value {
-            let room = HomeScreenRoom(summary: summary, hideUnreadMessagesBadge: appSettings.hideUnreadMessagesBadge)
+            let room = HomeScreenRoom(summary: summary,
+                                      hideUnreadMessagesBadge: appSettings.hideUnreadMessagesBadge,
+                                      seenInvites: previouslySeenInvites)
             rooms.append(room)
         }
         

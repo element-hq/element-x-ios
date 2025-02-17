@@ -122,10 +122,13 @@ struct HomeScreenInviteCell: View {
         room.isDirect ? room.inviter?.id : room.canonicalAlias
     }
     
+    @ViewBuilder
     private var badge: some View {
-        Circle()
-            .scaledFrame(size: 12)
-            .foregroundColor(.compound.iconAccentTertiary)
+        if room.badges.isDotShown {
+            Circle()
+                .scaledFrame(size: 12)
+                .foregroundColor(.compound.iconAccentTertiary) // The badge is always green, no need to check isHighlighted here.
+        }
     }
 }
 

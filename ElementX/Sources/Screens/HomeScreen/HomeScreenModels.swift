@@ -214,16 +214,17 @@ struct HomeScreenRoom: Identifiable, Equatable {
 }
 
 extension HomeScreenRoom {
-    init(summary: RoomSummary, hideUnreadMessagesBadge: Bool) {
-        let identifier = summary.id
+    init(summary: RoomSummary, hideUnreadMessagesBadge: Bool, seenInvites: Set<String> = []) {
+        let roomID = summary.id
         
         let hasUnreadMessages = hideUnreadMessagesBadge ? false : summary.hasUnreadMessages
+        let isUnseenInvite = summary.knockRequestType?.isInvite == true && !seenInvites.contains(roomID)
         
-        let isDotShown = hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || summary.knockRequestType?.isKnock == true
+        let isDotShown = hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || summary.knockRequestType?.isKnock == true || isUnseenInvite
         let isMentionShown = summary.hasUnreadMentions && !summary.isMuted
         let isMuteShown = summary.isMuted
         let isCallShown = summary.hasOngoingCall
-        let isHighlighted = summary.isMarkedUnread || (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || summary.knockRequestType?.isKnock == true
+        let isHighlighted = summary.isMarkedUnread || (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || summary.knockRequestType?.isKnock == true || isUnseenInvite
         
         let type: HomeScreenRoom.RoomType = switch summary.knockRequestType {
         case .invite(let inviter): .invite(inviterDetails: inviter.map(RoomInviterDetails.init))
@@ -231,7 +232,7 @@ extension HomeScreenRoom {
         case .none: .room
         }
         
-        self.init(id: identifier,
+        self.init(id: roomID,
                   roomID: summary.id,
                   type: type,
                   badges: .init(isDotShown: isDotShown,

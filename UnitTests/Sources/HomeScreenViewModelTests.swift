@@ -13,13 +13,20 @@ import XCTest
 @MainActor
 class HomeScreenViewModelTests: XCTestCase {
     var viewModel: HomeScreenViewModelProtocol!
-    var clientProxy: ClientProxyMock!
     var context: HomeScreenViewModelType.Context! { viewModel.context }
-    var cancellables = Set<AnyCancellable>()
-    var roomSummaryProvider: RoomSummaryProviderMock!
     
-    override func setUpWithError() throws {
+    var clientProxy: ClientProxyMock!
+    var roomSummaryProvider: RoomSummaryProviderMock!
+    var appSettings: AppSettings!
+    
+    var cancellables = Set<AnyCancellable>()
+    
+    override func setUp() {
         cancellables.removeAll()
+        
+        AppSettings.resetAllSettings()
+        appSettings = AppSettings()
+        ServiceLocator.shared.register(appSettings: appSettings)
     }
     
     override func tearDown() {
@@ -29,26 +36,26 @@ class HomeScreenViewModelTests: XCTestCase {
     func testSelectRoom() async throws {
         setupViewModel()
         
-        let mockRoomId = "mock_room_id"
+        let mockRoomID = "mock_room_id"
         var correctResult = false
-        var selectedRoomId = ""
+        var selectedRoomID = ""
         
         viewModel.actions
             .sink { action in
                 switch action {
-                case .presentRoom(let roomId):
+                case .presentRoom(let roomID):
                     correctResult = true
-                    selectedRoomId = roomId
+                    selectedRoomID = roomID
                 default:
                     break
                 }
             }
             .store(in: &cancellables)
         
-        context.send(viewAction: .selectRoom(roomIdentifier: mockRoomId))
+        context.send(viewAction: .selectRoom(roomIdentifier: mockRoomID))
         await Task.yield()
         XCTAssert(correctResult)
-        XCTAssertEqual(mockRoomId, selectedRoomId)
+        XCTAssertEqual(mockRoomID, selectedRoomID)
     }
 
     func testTapUserAvatar() async throws {
@@ -75,26 +82,26 @@ class HomeScreenViewModelTests: XCTestCase {
     func testLeaveRoomAlert() async throws {
         setupViewModel()
         
-        let mockRoomId = "1"
+        let mockRoomID = "1"
         
-        clientProxy.roomForIdentifierClosure = { _ in .joined(JoinedRoomProxyMock(.init(id: mockRoomId, name: "Some room"))) }
+        clientProxy.roomForIdentifierClosure = { _ in .joined(JoinedRoomProxyMock(.init(id: mockRoomID, name: "Some room"))) }
         
         let deferred = deferFulfillment(context.$viewState) { value in
             value.bindings.leaveRoomAlertItem != nil
         }
         
-        context.send(viewAction: .leaveRoom(roomIdentifier: mockRoomId))
+        context.send(viewAction: .leaveRoom(roomIdentifier: mockRoomID))
         
         try await deferred.fulfill()
         
-        XCTAssertEqual(context.leaveRoomAlertItem?.roomID, mockRoomId)
+        XCTAssertEqual(context.leaveRoomAlertItem?.roomID, mockRoomID)
     }
     
     func testLeaveRoomError() async throws {
         setupViewModel()
         
-        let mockRoomId = "1"
-        let room = JoinedRoomProxyMock(.init(id: mockRoomId, name: "Some room"))
+        let mockRoomID = "1"
+        let room = JoinedRoomProxyMock(.init(id: mockRoomID, name: "Some room"))
         room.leaveRoomClosure = { .failure(.sdkError(ClientProxyMockError.generic)) }
         
         clientProxy.roomForIdentifierClosure = { _ in .joined(room) }
@@ -103,7 +110,7 @@ class HomeScreenViewModelTests: XCTestCase {
             value.bindings.alertInfo != nil
         }
         
-        context.send(viewAction: .confirmLeaveRoom(roomIdentifier: mockRoomId))
+        context.send(viewAction: .confirmLeaveRoom(roomIdentifier: mockRoomID))
         
         try await deferred.fulfill()
                 
@@ -113,26 +120,26 @@ class HomeScreenViewModelTests: XCTestCase {
     func testLeaveRoomSuccess() async throws {
         setupViewModel()
         
-        let mockRoomId = "1"
+        let mockRoomID = "1"
         var correctResult = false
         let expectation = expectation(description: #function)
         viewModel.actions
             .sink { action in
                 switch action {
                 case .roomLeft(let roomIdentifier):
-                    correctResult = roomIdentifier == mockRoomId
+                    correctResult = roomIdentifier == mockRoomID
                 default:
                     break
                 }
                 expectation.fulfill()
             }
             .store(in: &cancellables)
-        let room = JoinedRoomProxyMock(.init(id: mockRoomId, name: "Some room"))
+        let room = JoinedRoomProxyMock(.init(id: mockRoomID, name: "Some room"))
         room.leaveRoomClosure = { .success(()) }
         
         clientProxy.roomForIdentifierClosure = { _ in .joined(room) }
         
-        context.send(viewAction: .confirmLeaveRoom(roomIdentifier: mockRoomId))
+        context.send(viewAction: .confirmLeaveRoom(roomIdentifier: mockRoomID))
         await fulfillment(of: [expectation])
         XCTAssertNil(context.alertInfo)
         XCTAssertTrue(correctResult)
@@ -141,19 +148,19 @@ class HomeScreenViewModelTests: XCTestCase {
     func testShowRoomDetails() async throws {
         setupViewModel()
         
-        let mockRoomId = "1"
+        let mockRoomID = "1"
         var correctResult = false
         viewModel.actions
             .sink { action in
                 switch action {
                 case .presentRoomDetails(let roomIdentifier):
-                    correctResult = roomIdentifier == mockRoomId
+                    correctResult = roomIdentifier == mockRoomID
                 default:
                     break
                 }
             }
             .store(in: &cancellables)
-        context.send(viewAction: .showRoomDetails(roomIdentifier: mockRoomId))
+        context.send(viewAction: .showRoomDetails(roomIdentifier: mockRoomID))
         await Task.yield()
         XCTAssertNil(context.alertInfo)
         XCTAssertTrue(correctResult)
@@ -256,10 +263,40 @@ class HomeScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.securityBannerMode, .none)
     }
     
+    func testInviteUnreadBadge() async throws {
+        setupViewModel(withInvites: true)
+        XCTAssertEqual(context.viewState.rooms.count, 9)
+        
+        var invites = context.viewState.rooms.invites
+        XCTAssertEqual(invites.count, 2)
+        
+        for invite in invites {
+            XCTAssertTrue(invite.badges.isDotShown)
+        }
+        
+        let deferred = deferFulfillment(context.$viewState) { state in
+            state.rooms.contains { room in
+                room.roomID == invites[0].roomID && room.badges.isDotShown == false
+            }
+        }
+        appSettings.seenInvites = Set(invites.compactMap(\.roomID))
+        try await deferred.fulfill()
+        invites = context.viewState.rooms.invites
+        
+        for invite in invites {
+            XCTAssertFalse(invite.badges.isDotShown)
+        }
+    }
+    
     // MARK: - Helpers
     
-    private func setupViewModel(securityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never>? = nil) {
-        roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
+    private func setupViewModel(securityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never>? = nil, withInvites: Bool = false) {
+        var rooms: [RoomSummary] = .mockRooms
+        if withInvites {
+            rooms += .mockInvites
+        }
+        
+        roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(rooms)))
         clientProxy = ClientProxyMock(.init(userID: "@mock:client.com",
                                             roomSummaryProvider: roomSummaryProvider))
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
@@ -269,8 +306,20 @@ class HomeScreenViewModelTests: XCTestCase {
         
         viewModel = HomeScreenViewModel(userSession: userSession,
                                         analyticsService: ServiceLocator.shared.analytics,
-                                        appSettings: ServiceLocator.shared.settings,
+                                        appSettings: appSettings,
                                         selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController)
+    }
+}
+
+private extension [HomeScreenRoom] {
+    var invites: [HomeScreenRoom] {
+        filter { room in
+            if case .invite = room.type {
+                true
+            } else {
+                false
+            }
+        }
     }
 }

@@ -19,10 +19,18 @@ class JoinRoomScreenViewModelTests: XCTestCase {
     }
     
     var viewModel: JoinRoomScreenViewModelProtocol!
+    
     var clientProxy: ClientProxyMock!
+    var appSettings: AppSettings!
     
     var context: JoinRoomScreenViewModelType.Context {
         viewModel.context
+    }
+    
+    override func setUp() {
+        AppSettings.resetAllSettings()
+        appSettings = AppSettings()
+        ServiceLocator.shared.register(appSettings: appSettings)
     }
     
     override func tearDown() {
@@ -32,7 +40,12 @@ class JoinRoomScreenViewModelTests: XCTestCase {
     }
 
     func testInteraction() async throws {
+        XCTAssertTrue(appSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
+        
         setupViewModel()
+        try await deferFulfillment(viewModel.context.$viewState) { $0.mode == .joinable }.fulfill()
+        
+        XCTAssertTrue(appSettings.seenInvites.isEmpty, "Only an invited room should register the room ID as a seen invite.")
         
         let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .joined }
         context.send(viewAction: .join)
@@ -40,7 +53,12 @@ class JoinRoomScreenViewModelTests: XCTestCase {
     }
     
     func testAcceptInviteInteraction() async throws {
-        setupViewModel()
+        XCTAssertTrue(appSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
+        
+        setupViewModel(mode: .invited)
+        try await deferFulfillment(viewModel.context.$viewState) { $0.mode == .invited(isDM: false) }.fulfill()
+        
+        XCTAssertEqual(appSettings.seenInvites, ["1"], "The invited room's ID should be registered as a seen invite.")
         
         let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .joined }
         context.send(viewAction: .acceptInvite)
@@ -63,11 +81,12 @@ class JoinRoomScreenViewModelTests: XCTestCase {
     }
     
     func testKnockedState() async throws {
+        XCTAssertTrue(appSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
         setupViewModel(mode: .knocked)
         
-        try await deferFulfillment(viewModel.context.$viewState) { state in
-            state.mode == .knocked
-        }.fulfill()
+        try await deferFulfillment(viewModel.context.$viewState) { $0.mode == .knocked }.fulfill()
+        
+        XCTAssertTrue(appSettings.seenInvites.isEmpty, "Only an invited room should register the room ID as a seen invite.")
     }
     
     func testCancelKnock() async throws {
@@ -129,6 +148,7 @@ class JoinRoomScreenViewModelTests: XCTestCase {
         clientProxy = ClientProxyMock(.init())
         
         clientProxy.joinRoomViaReturnValue = throwing ? .failure(.sdkError(ClientProxyMockError.generic)) : .success(())
+        clientProxy.joinRoomAliasReturnValue = clientProxy.joinRoomViaReturnValue
         
         switch mode {
         case .knocked:
@@ -160,7 +180,7 @@ class JoinRoomScreenViewModelTests: XCTestCase {
         
         viewModel = JoinRoomScreenViewModel(roomID: "1",
                                             via: [],
-                                            appSettings: ServiceLocator.shared.settings,
+                                            appSettings: appSettings,
                                             clientProxy: clientProxy,
                                             mediaProvider: MediaProviderMock(configuration: .init()),
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController)

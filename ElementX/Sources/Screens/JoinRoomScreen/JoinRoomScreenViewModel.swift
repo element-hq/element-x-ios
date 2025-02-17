@@ -41,6 +41,18 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         
         super.init(initialViewState: JoinRoomScreenViewState(roomID: roomID), mediaProvider: mediaProvider)
         
+        context.$viewState.map(\.mode)
+            .removeDuplicates()
+            .sink { mode in
+                switch mode {
+                case .invited:
+                    appSettings.seenInvites.insert(roomID)
+                default:
+                    break
+                }
+            }
+            .store(in: &cancellables)
+        
         Task {
             await loadRoomDetails()
         }
