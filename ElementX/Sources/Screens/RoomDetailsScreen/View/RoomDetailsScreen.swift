@@ -27,7 +27,7 @@ struct RoomDetailsScreen: View {
 
             aboutSection
 
-//            securitySection
+            securitySection
 
 //            if let recipient = context.viewState.dmRecipient {
 //                ignoreUserSection(user: recipient)

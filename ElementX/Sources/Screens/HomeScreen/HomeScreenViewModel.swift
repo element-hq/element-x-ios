@@ -12,7 +12,7 @@ import SwiftUI
 
 typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, HomeScreenViewAction>
 
-class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
+class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol, FeedDetailsUpdatedProtocol {
     private let userSession: UserSessionProtocol
     private let analyticsService: AnalyticsService
     private let appSettings: AppSettings
@@ -228,10 +228,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             dismissNewRewardsIntimation()
         case .loadMorePostsIfNeeded:
             fetchPosts()
+        case .forceRefreshPosts:
+            fetchPosts(isForceRefresh: true)
         case .postTapped(let post):
-            actionsSubject.send(.postTapped(post))
+            actionsSubject.send(.postTapped(post, feedUpdatedProtocol: self))
         case .openArweaveLink(let post):
             openArweaveLink(post)
+        case .addMeowToPost(let postId, let amount):
+            addMeowToPost(postId, amount)
         }
     }
     
@@ -512,7 +516,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         userSession.clientProxy.checkAndLinkZeroUser()
     }
     
-    private func fetchPosts() {
+    private func fetchPosts(isForceRefresh: Bool = false) {
         guard !isFetchPostsInProgress else { return }
         isFetchPostsInProgress = true
         
@@ -520,8 +524,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             defer { isFetchPostsInProgress = false } // Ensure flag is reset when the task completes
             
             state.postListMode = state.posts.isEmpty ? .skeletons : .posts
+            let skipItems = isForceRefresh ? 0 : state.posts.count
             let postsResult = await userSession.clientProxy.fetchZeroFeeds(limit: HOME_SCREEN_POST_PAGE_COUNT,
-                                                                           skip: state.posts.count)
+                                                                           skip: skipItems)
             switch postsResult {
             case .success(let posts):
                 let hasNoPosts = posts.isEmpty
@@ -529,7 +534,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     state.postListMode = state.posts.isEmpty ? .empty : .posts
                     state.canLoadMorePosts = false
                 } else {
-                    var homePosts: [HomeScreenPost] = state.posts
+                    var homePosts: [HomeScreenPost] = isForceRefresh ? [] : state.posts
                     for post in posts {
                         let homePost = HomeScreenPost(post: post, rewardsDecimalPlaces: state.userRewards.decimals)
                         homePosts.append(homePost)
@@ -557,6 +562,37 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private func openArweaveLink(_ post: HomeScreenPost) {
         guard let arweaveUrl = post.getArweaveLink() else { return }
         UIApplication.shared.open(arweaveUrl)
+    }
+    
+    private func addMeowToPost(_ postId: String, _ amount: Int) {
+        Task {
+            let addMeowResult = await userSession.clientProxy.addMeowsToFeed(feedId: postId, amount: amount)
+            switch addMeowResult {
+            case .success(let post):
+                let homePost = HomeScreenPost(post: post, rewardsDecimalPlaces: state.userRewards.decimals)
+                if let index = state.posts.firstIndex(where: { $0.id == homePost.id }) {
+                    state.posts[index] = homePost
+                }
+            case .failure(let error):
+                MXLog.error("Failed to add meow: \(error)")
+                displayError()
+            }
+        }
+    }
+    
+    func onFeedUpdated(_ feedId: String) {
+        Task {
+            let feedDetailsResult = await userSession.clientProxy.fetchFeedDetails(feedId: feedId)
+            switch feedDetailsResult {
+            case .success(let post):
+                let homePost = HomeScreenPost(post: post, rewardsDecimalPlaces: state.userRewards.decimals)
+                if let index = state.posts.firstIndex(where: { $0.id == homePost.id }) {
+                    state.posts[index] = homePost
+                }
+            case .failure(let error):
+                MXLog.error("Failed to fetch updated feed details: \(error)")
+            }
+        }
     }
 }
 

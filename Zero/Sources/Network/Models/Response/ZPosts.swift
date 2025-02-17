@@ -113,6 +113,8 @@ struct Meow: Codable {
     let id: String
     let postId: String
     let amount: String
+    let createdAt: String?
+    let userId:String?
 }
 
 struct Reply: Codable {

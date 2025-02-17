@@ -24,6 +24,9 @@ struct HomeScreenPostList: View {
                 },
                                    onOpenArweaveLink: {
                     context.send(viewAction: .openArweaveLink(post))
+                },
+                                   onMeowTapped: { count in
+                    context.send(viewAction: .addMeowToPost(postId: post.id, amount: count))
                 })
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)

@@ -24,7 +24,7 @@ enum HomeScreenViewModelAction {
     case presentRoomDirectorySearch
     case logoutWithoutConfirmation
     case logout
-    case postTapped(_ post: HomeScreenPost)
+    case postTapped(_ post: HomeScreenPost, feedUpdatedProtocol: FeedDetailsUpdatedProtocol)
 }
 
 enum HomeScreenViewAction {
@@ -54,6 +54,8 @@ enum HomeScreenViewAction {
     case rewardsIntimated
     
     case loadMorePostsIfNeeded
+    case forceRefreshPosts
+    case addMeowToPost(postId: String, amount: Int)
     
     case postTapped(_ post: HomeScreenPost)
     case openArweaveLink(_ post: HomeScreenPost)

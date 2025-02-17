@@ -1017,6 +1017,21 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func addMeowsToFeed(feedId: String, amount: Int) async -> Result<ZPost, ClientProxyError> {
+        do {
+            let zeroAddPostMeowResult = try await zeroPostsApi.addMeowsToPst(amount: amount, postId: feedId)
+            switch zeroAddPostMeowResult {
+            case .success(let post):
+                return .success(post)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
     // MARK: - Private
     
     private func updateVerificationState(_ verificationState: VerificationState) async {

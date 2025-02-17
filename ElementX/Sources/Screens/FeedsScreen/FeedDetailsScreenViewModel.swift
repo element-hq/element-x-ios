@@ -13,6 +13,7 @@ typealias FeedDetailsScreenViewModelType = StateStoreViewModel<FeedDetailsScreen
 class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScreenViewModelProtocol {
     
     private let clientProxy: ClientProxyProtocol
+    private let feedUpdatedProtocol: FeedDetailsUpdatedProtocol
     
     private let POST_REPLIES_PAGE_COUNT = 10
     private var isFetchRepliesInProgress = false
@@ -22,8 +23,9 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol, feedItem: HomeScreenPost) {
+    init(userSession: UserSessionProtocol, feedUpdatedProtocol: FeedDetailsUpdatedProtocol, feedItem: HomeScreenPost) {
         self.clientProxy = userSession.clientProxy
+        self.feedUpdatedProtocol = feedUpdatedProtocol
         
         super.init(initialViewState: .init(bindings: .init(feed: feedItem)), mediaProvider: userSession.mediaProvider)
         
@@ -44,6 +46,10 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             openArweaveLink(post)
         case .loadMoreRepliesIfNeeded:
             fetchFeedReplies(state.bindings.feed.id)
+        case .forceRefreshFeed:
+            forceRefreshFeed()
+        case .meowTapped(let postId, let amount, let isPostAReply):
+            addMeowToPost(postId, amount, isPostAReply: isPostAReply)
         }
     }
     
@@ -59,7 +65,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
         }
     }
     
-    private func fetchFeedReplies(_ feedId: String) {
+    private func fetchFeedReplies(_ feedId: String, isForceRefresh: Bool = false) {
         guard !isFetchRepliesInProgress else { return }
         isFetchRepliesInProgress = true
         
@@ -67,8 +73,9 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             defer { isFetchRepliesInProgress = false } // Ensure flag is reset when the task completes
             
             state.repliesListMode = state.feedReplies.isEmpty ? .skeletons : .replies
+            let skipItems = isForceRefresh ? 0 : state.feedReplies.count
             let repliesResult = await clientProxy.fetchFeedReplies(feedId: feedId, limit: POST_REPLIES_PAGE_COUNT,
-                                                                   skip: state.feedReplies.count)
+                                                                   skip: skipItems)
             switch repliesResult {
             case .success(let replies):
                 let hasNoReplies = replies.isEmpty
@@ -76,7 +83,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                     state.repliesListMode = state.feedReplies.isEmpty ? .empty : .replies
                     state.canLoadMoreReplies = false
                 } else {
-                    var feedReplies: [HomeScreenPost] = state.feedReplies
+                    var feedReplies: [HomeScreenPost] = isForceRefresh ? [] : state.feedReplies
                     for reply in replies {
                         let feedReply = HomeScreenPost(post: reply, rewardsDecimalPlaces: state.userRewards.decimals)
                         feedReplies.append(feedReply)
@@ -106,5 +113,32 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
     private func openArweaveLink(_ post: HomeScreenPost) {
         guard let arweaveUrl = post.getArweaveLink() else { return }
         UIApplication.shared.open(arweaveUrl)
+    }
+    
+    private func forceRefreshFeed() {
+        let feedId = state.bindings.feed.id
+        fetchFeed(feedId)
+        fetchFeedReplies(feedId, isForceRefresh: true)
+    }
+    
+    private func addMeowToPost(_ postId: String, _ amount: Int, isPostAReply: Bool) {
+        Task {
+            let addMeowResult = await clientProxy.addMeowsToFeed(feedId: postId, amount: amount)
+            switch addMeowResult {
+            case .success(let post):
+                let homePost = HomeScreenPost(post: post, rewardsDecimalPlaces: state.userRewards.decimals)
+                if isPostAReply {
+                    if let index = state.feedReplies.firstIndex(where: { $0.id == homePost.id }) {
+                        state.feedReplies[index] = homePost
+                    }
+                } else {
+                    state.bindings.feed = homePost
+                }
+                feedUpdatedProtocol.onFeedUpdated(postId)
+            case .failure(let error):
+                MXLog.error("Failed to add meow: \(error)")
+                displayError()
+            }
+        }
     }
 }

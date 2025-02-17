@@ -5682,6 +5682,76 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return fetchFeedRepliesFeedIdLimitSkipReturnValue
         }
     }
+    //MARK: - addMeowsToFeed
+
+    var addMeowsToFeedFeedIdAmountUnderlyingCallsCount = 0
+    var addMeowsToFeedFeedIdAmountCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return addMeowsToFeedFeedIdAmountUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addMeowsToFeedFeedIdAmountUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addMeowsToFeedFeedIdAmountUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addMeowsToFeedFeedIdAmountUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var addMeowsToFeedFeedIdAmountCalled: Bool {
+        return addMeowsToFeedFeedIdAmountCallsCount > 0
+    }
+    var addMeowsToFeedFeedIdAmountReceivedArguments: (feedId: String, amount: Int)?
+    var addMeowsToFeedFeedIdAmountReceivedInvocations: [(feedId: String, amount: Int)] = []
+
+    var addMeowsToFeedFeedIdAmountUnderlyingReturnValue: Result<ZPost, ClientProxyError>!
+    var addMeowsToFeedFeedIdAmountReturnValue: Result<ZPost, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return addMeowsToFeedFeedIdAmountUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZPost, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addMeowsToFeedFeedIdAmountUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addMeowsToFeedFeedIdAmountUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addMeowsToFeedFeedIdAmountUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var addMeowsToFeedFeedIdAmountClosure: ((String, Int) async -> Result<ZPost, ClientProxyError>)?
+
+    func addMeowsToFeed(feedId: String, amount: Int) async -> Result<ZPost, ClientProxyError> {
+        addMeowsToFeedFeedIdAmountCallsCount += 1
+        addMeowsToFeedFeedIdAmountReceivedArguments = (feedId: feedId, amount: amount)
+        DispatchQueue.main.async {
+            self.addMeowsToFeedFeedIdAmountReceivedInvocations.append((feedId: feedId, amount: amount))
+        }
+        if let addMeowsToFeedFeedIdAmountClosure = addMeowsToFeedFeedIdAmountClosure {
+            return await addMeowsToFeedFeedIdAmountClosure(feedId, amount)
+        } else {
+            return addMeowsToFeedFeedIdAmountReturnValue
+        }
+    }
     //MARK: - loadMediaContentForSource
 
     var loadMediaContentForSourceThrowableError: Error?
@@ -5914,15 +5984,15 @@ class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol, @unc
 
     //MARK: - processTextMessage
 
-    var processTextMessageUnderlyingCallsCount = 0
-    var processTextMessageCallsCount: Int {
+    var processTextMessageSelectedRangeUnderlyingCallsCount = 0
+    var processTextMessageSelectedRangeCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return processTextMessageUnderlyingCallsCount
+                return processTextMessageSelectedRangeUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = processTextMessageUnderlyingCallsCount
+                    returnValue = processTextMessageSelectedRangeUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -5930,28 +6000,28 @@ class CompletionSuggestionServiceMock: CompletionSuggestionServiceProtocol, @unc
         }
         set {
             if Thread.isMainThread {
-                processTextMessageUnderlyingCallsCount = newValue
+                processTextMessageSelectedRangeUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    processTextMessageUnderlyingCallsCount = newValue
+                    processTextMessageSelectedRangeUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var processTextMessageCalled: Bool {
-        return processTextMessageCallsCount > 0
+    var processTextMessageSelectedRangeCalled: Bool {
+        return processTextMessageSelectedRangeCallsCount > 0
     }
-    var processTextMessageReceivedTextMessage: String?
-    var processTextMessageReceivedInvocations: [String?] = []
-    var processTextMessageClosure: ((String?) -> Void)?
+    var processTextMessageSelectedRangeReceivedArguments: (textMessage: String, selectedRange: NSRange)?
+    var processTextMessageSelectedRangeReceivedInvocations: [(textMessage: String, selectedRange: NSRange)] = []
+    var processTextMessageSelectedRangeClosure: ((String, NSRange) -> Void)?
 
-    func processTextMessage(_ textMessage: String?) {
-        processTextMessageCallsCount += 1
-        processTextMessageReceivedTextMessage = textMessage
+    func processTextMessage(_ textMessage: String, selectedRange: NSRange) {
+        processTextMessageSelectedRangeCallsCount += 1
+        processTextMessageSelectedRangeReceivedArguments = (textMessage: textMessage, selectedRange: selectedRange)
         DispatchQueue.main.async {
-            self.processTextMessageReceivedInvocations.append(textMessage)
+            self.processTextMessageSelectedRangeReceivedInvocations.append((textMessage: textMessage, selectedRange: selectedRange))
         }
-        processTextMessageClosure?(textMessage)
+        processTextMessageSelectedRangeClosure?(textMessage, selectedRange)
     }
     //MARK: - setSuggestionTrigger
 

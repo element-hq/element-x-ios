@@ -70,6 +70,9 @@ struct FeedDetailsContent: View {
             .scrollBounceBehavior(context.viewState.repliesListMode == .empty ? .basedOnSize : .automatic)
             .animation(.elementDefault, value: context.viewState.repliesListMode)
             .animation(.none, value: context.viewState.visibleReplies)
+            .refreshable {
+                context.send(viewAction: .forceRefreshFeed)
+            }
         }
     }
 }
@@ -91,6 +94,9 @@ struct PostRepliesList: View {
                 },
                                    onOpenArweaveLink: {
                     context.send(viewAction: .openArweaveLink(post))
+                },
+                                   onMeowTapped: { count in
+                    context.send(viewAction: .meowTapped(post.id, amount: count, isPostAReply: true))
                 })
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
@@ -162,10 +168,11 @@ struct FeedDetailsSection: View {
                     }
                 })
                 
-                HomeScreenPostFooterItem(icon: Asset.Images.postMeowIcon,
-                                         count: post.meowCount,
+                HomeScreenPostMeowButton(count: post.meowCount,
                                          highlightColor: post.isMeowedByMe,
-                                         action: {})
+                                         onMeowTouchEnded: { count in
+                    context.send(viewAction: .meowTapped(post.id, amount: count, isPostAReply: false))
+                })
                 .padding(.horizontal, 32)
                 
                 Spacer()

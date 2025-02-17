@@ -27,7 +27,8 @@ struct HomePostsContent: View {
                             VStack {
                                 HomeScreenPostCell(post: post, mediaProvider: context.mediaProvider, showThreadLine: false,
                                                    onPostTapped: {},
-                                                   onOpenArweaveLink: {})
+                                                   onOpenArweaveLink: {},
+                                                   onMeowTapped: { _ in })
                                     .padding(.all, 16)
                                 Divider()
                             }
@@ -65,6 +66,9 @@ struct HomePostsContent: View {
             .scrollBounceBehavior(context.viewState.postListMode == .empty ? .basedOnSize : .automatic)
             .animation(.elementDefault, value: context.viewState.postListMode)
             .animation(.none, value: context.viewState.visiblePosts)
+            .refreshable {
+                context.send(viewAction: .forceRefreshPosts)
+            }
         }
     }
 }

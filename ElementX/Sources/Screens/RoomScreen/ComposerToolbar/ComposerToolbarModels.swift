@@ -53,6 +53,7 @@ enum ComposerToolbarViewAction {
     
     case plainComposerTextChanged
     case didToggleFormattingOptions
+    case selectedTextChanged
 }
 
 enum ComposerAttachmentType {
@@ -125,6 +126,7 @@ struct ComposerToolbarViewStateBindings {
     var composerExpanded = false
     var formatItems: [FormatItem] = .init()
     var alertInfo: AlertInfo<UUID>?
+    var selectedRange = NSRange(location: 0, length: 0)
     
     var presendCallback: (() -> Void)?
 }

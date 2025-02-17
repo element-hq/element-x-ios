@@ -243,4 +243,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func fetchFeedDetails(feedId: String) async -> Result<ZPost, ClientProxyError>
     
     func fetchFeedReplies(feedId: String, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError>
+    
+    func addMeowsToFeed(feedId: String, amount: Int) async -> Result<ZPost, ClientProxyError>
 }
