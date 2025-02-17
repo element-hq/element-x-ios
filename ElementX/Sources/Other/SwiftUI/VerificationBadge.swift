@@ -24,3 +24,14 @@ struct VerificationBadge: View {
         }
     }
 }
+
+struct VerificationBadge_Previews: PreviewProvider, TestablePreview {
+    static var previews: some View {
+        VStack(spacing: 16.0) {
+            VerificationBadge(verificationState: .notVerified)
+            VerificationBadge(verificationState: .verificationViolation)
+            VerificationBadge(verificationState: .verified)
+        }
+        .previewLayout(.sizeThatFits)
+    }
+}

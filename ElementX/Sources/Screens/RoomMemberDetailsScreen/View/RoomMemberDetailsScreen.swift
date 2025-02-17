@@ -115,7 +115,6 @@ struct RoomMemberDetailsScreen: View {
         }
     }
     
-    @ViewBuilder
     var verificationSection: some View {
         Section {
             ListRow(label: .default(title: L10n.commonVerifyUser, icon: \.lock), kind: .button {

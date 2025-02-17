@@ -12,7 +12,7 @@ import SwiftUI
 struct RoomHeaderView: View {
     let roomName: String
     let roomAvatar: RoomAvatar
-    var counterpartVerificationState: UserIdentityVerificationState?
+    var dmRecipientVerificationState: UserIdentityVerificationState?
     
     let mediaProvider: MediaProviderProtocol?
     
@@ -27,8 +27,8 @@ struct RoomHeaderView: View {
                     .font(.compound.bodyLGSemibold)
                     .accessibilityIdentifier(A11yIdentifiers.roomScreen.name)
                 
-                if let counterpartVerificationState {
-                    VerificationBadge(verificationState: counterpartVerificationState)
+                if let dmRecipientVerificationState {
+                    VerificationBadge(verificationState: dmRecipientVerificationState)
                 }
             }
         }
@@ -61,7 +61,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
                        roomAvatar: .room(id: "1",
                                          name: "Some Room Name",
                                          avatarURL: avatarURL),
-                       counterpartVerificationState: verificationState,
+                       dmRecipientVerificationState: verificationState,
                        mediaProvider: MediaProviderMock(configuration: .init()))
             .padding()
     }

@@ -1020,11 +1020,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func userIdentity(for userID: String) async -> Result<UserIdentityProxyProtocol?, ClientProxyError> {
         do {
-            guard let userIdentity = try await client.encryption().userIdentity(userId: userID) else {
-                return .success(nil)
-            }
-            
-            return .success(UserIdentityProxy(userIdentity: userIdentity))
+            return try await .success(client.encryption().userIdentity(userId: userID).map(UserIdentityProxy.init))
         } catch {
             MXLog.error("Failed retrieving user identity: \(error)")
             return .failure(.sdkError(error))

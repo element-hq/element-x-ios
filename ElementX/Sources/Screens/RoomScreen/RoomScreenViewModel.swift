@@ -268,13 +268,18 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private func updateVerificationBadge() async {
         guard roomProxy.isDirectOneToOneRoom,
               let dmRecipient = roomProxy.membersPublisher.value.first(where: { $0.userID != roomProxy.ownUserID }),
-              case let .success(userIdentity) = await clientProxy.userIdentity(for: dmRecipient.userID),
-              let userIdentity else {
-            state.counterpartVerificationState = .notVerified
+              case let .success(userIdentity) = await clientProxy.userIdentity(for: dmRecipient.userID) else {
+            state.dmRecipientVerificationState = .notVerified
             return
         }
         
-        state.counterpartVerificationState = userIdentity.verificationState
+        guard let userIdentity else {
+            MXLog.failure("User identity should be known at this point")
+            state.dmRecipientVerificationState = .notVerified
+            return
+        }
+        
+        state.dmRecipientVerificationState = userIdentity.verificationState
     }
     
     private func resolveIdentityPinningViolation(_ userID: String) async {
