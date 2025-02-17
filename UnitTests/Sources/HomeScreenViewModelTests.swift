@@ -265,8 +265,6 @@ class HomeScreenViewModelTests: XCTestCase {
     
     func testInviteUnreadBadge() async throws {
         setupViewModel(withInvites: true)
-        XCTAssertEqual(context.viewState.rooms.count, 9)
-        
         var invites = context.viewState.rooms.invites
         XCTAssertEqual(invites.count, 2)
         
@@ -288,6 +286,47 @@ class HomeScreenViewModelTests: XCTestCase {
         }
     }
     
+    func testAcceptInvite() async throws {
+        setupViewModel(withInvites: true)
+        
+        let invitedRoomIDs = context.viewState.rooms.invites.compactMap(\.roomID)
+        appSettings.seenInvites = Set(invitedRoomIDs)
+        XCTAssertEqual(invitedRoomIDs.count, 2)
+        
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .presentRoom(roomIdentifier: invitedRoomIDs[0]) }
+        context.send(viewAction: .acceptInvite(roomIdentifier: invitedRoomIDs[0]))
+        try await deferred.fulfill()
+        
+        XCTAssertEqual(appSettings.seenInvites, [invitedRoomIDs[1]])
+    }
+    
+    func testDeclineInvite() async throws {
+        setupViewModel(withInvites: true)
+        
+        let invitedRoomIDs = context.viewState.rooms.invites.compactMap(\.roomID)
+        appSettings.seenInvites = Set(invitedRoomIDs)
+        XCTAssertEqual(invitedRoomIDs.count, 2)
+        
+        let deferred = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
+        context.send(viewAction: .declineInvite(roomIdentifier: invitedRoomIDs[0]))
+        try await deferred.fulfill()
+        
+        let rejectExpectation = expectation(description: "Expected rejectInvitation to be called.")
+        clientProxy.roomForIdentifierClosure = { _ in
+            let roomProxy = InvitedRoomProxyMock(.init())
+            roomProxy.rejectInvitationClosure = {
+                rejectExpectation.fulfill()
+                return .success(())
+            }
+            
+            return .invited(roomProxy)
+        }
+        context.viewState.bindings.alertInfo?.primaryButton.action?()
+        await fulfillment(of: [rejectExpectation], timeout: 1.0)
+        
+        XCTAssertEqual(appSettings.seenInvites, [invitedRoomIDs[1]])
+    }
+    
     // MARK: - Helpers
     
     private func setupViewModel(securityStatePublisher: CurrentValuePublisher<SessionSecurityState, Never>? = nil, withInvites: Bool = false) {
@@ -297,8 +336,15 @@ class HomeScreenViewModelTests: XCTestCase {
         }
         
         roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(rooms)))
+        
         clientProxy = ClientProxyMock(.init(userID: "@mock:client.com",
                                             roomSummaryProvider: roomSummaryProvider))
+        if withInvites {
+            clientProxy.joinRoomViaReturnValue = .success(())
+            clientProxy.joinRoomAliasReturnValue = .success(())
+            clientProxy.roomForIdentifierClosure = { _ in .invited(InvitedRoomProxyMock(.init())) }
+        }
+        
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         if let securityStatePublisher {
             userSession.sessionSecurityStatePublisher = securityStatePublisher

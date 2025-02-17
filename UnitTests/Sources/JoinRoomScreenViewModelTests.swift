@@ -63,21 +63,26 @@ class JoinRoomScreenViewModelTests: XCTestCase {
         let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .joined }
         context.send(viewAction: .acceptInvite)
         try await deferred.fulfill()
+        
+        XCTAssertTrue(appSettings.seenInvites.isEmpty, "The after accepting an invite the invite should be forgotten in case the user leaves.")
     }
     
     func testDeclineInviteInteraction() async throws {
+        XCTAssertTrue(appSettings.seenInvites.isEmpty, "There shouldn't be any seen invites before running the tests.")
+        
         setupViewModel(mode: .invited)
         
-        try await deferFulfillment(viewModel.context.$viewState) { $0.roomDetails != nil }.fulfill()
+        try await deferFulfillment(viewModel.context.$viewState) { $0.mode == .invited(isDM: false) }.fulfill()
+        XCTAssertEqual(appSettings.seenInvites, ["1"], "The invited room's ID should be registered as a seen invite.")
         
         context.send(viewAction: .declineInvite)
         
         XCTAssertEqual(viewModel.context.alertInfo?.id, .declineInvite)
-        let deferred = deferFulfillment(viewModel.actionsPublisher) { action in
-            action == .dismiss
-        }
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { $0 == .dismiss }
         context.alertInfo?.secondaryButton?.action?()
         try await deferred.fulfill()
+        
+        XCTAssertTrue(appSettings.seenInvites.isEmpty, "The after declining an invite the invite should be forgotten in case another invite is received.")
     }
     
     func testKnockedState() async throws {

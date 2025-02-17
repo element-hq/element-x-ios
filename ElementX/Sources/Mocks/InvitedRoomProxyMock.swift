@@ -25,6 +25,8 @@ extension InvitedRoomProxyMock {
         id = configuration.id
         inviter = configuration.inviter
         info = RoomInfoProxy(roomInfo: .init(configuration))
+        
+        rejectInvitationReturnValue = .success(())
     }
 }
 

@@ -426,6 +426,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             analyticsService.trackJoinedRoom(isDM: roomProxy.info.isDirect,
                                              isSpace: roomProxy.info.isSpace,
                                              activeMemberCount: UInt(roomProxy.info.activeMembersCount))
+            appSettings.seenInvites.remove(roomID)
         case .failure:
             displayError()
         }
@@ -444,8 +445,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         state.bindings.alertInfo = .init(id: UUID(),
                                          title: title,
                                          message: message,
-                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                         secondaryButton: .init(title: L10n.actionDecline, role: .destructive) { Task { await self.declineInvite(roomID: room.id) } })
+                                         primaryButton: .init(title: L10n.actionDecline, role: .destructive) { Task { await self.declineInvite(roomID: room.id) } },
+                                         secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
     }
     
     private func declineInvite(roomID: String) async {
@@ -462,7 +463,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         let result = await roomProxy.rejectInvitation()
         
-        if case .failure = result {
+        switch result {
+        case .success:
+            appSettings.seenInvites.remove(roomID)
+        case .failure:
             displayError()
         }
     }

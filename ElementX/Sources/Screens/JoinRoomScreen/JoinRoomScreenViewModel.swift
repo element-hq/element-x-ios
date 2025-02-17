@@ -237,6 +237,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         if let alias = state.roomDetails?.canonicalAlias {
             switch await clientProxy.joinRoomAlias(alias) {
             case .success:
+                appSettings.seenInvites.remove(roomID)
                 actionsSubject.send(.joined)
             case .failure(let error):
                 if case .forbiddenAccess = error {
@@ -250,6 +251,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         } else {
             switch await clientProxy.joinRoom(roomID, via: via) {
             case .success:
+                appSettings.seenInvites.remove(roomID)
                 actionsSubject.send(.joined)
             case .failure(let error):
                 if case .forbiddenAccess = error {
@@ -354,6 +356,8 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
             return false
         }
+        
+        appSettings.seenInvites.remove(roomID)
         
         actionsSubject.send(.dismiss)
         return true
