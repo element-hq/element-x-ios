@@ -18,7 +18,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
     
-    private var previouslySeenInvites: Set<String>
     private let roomSummaryProvider: RoomSummaryProviderProtocol?
     
     private var actionsSubject: PassthroughSubject<HomeScreenViewModelAction, Never> = .init()
@@ -36,7 +35,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
         
-        previouslySeenInvites = appSettings.seenInvites
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         
         super.init(initialViewState: .init(userID: userSession.clientProxy.userID),
@@ -102,10 +100,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         appSettings.$seenInvites
             .removeDuplicates()
-            .sink { [weak self] seenInvites in
-                guard let self else { return }
-                previouslySeenInvites = seenInvites
-                updateRooms()
+            .sink { [weak self] _ in
+                self?.updateRooms()
             }
             .store(in: &cancellables)
         
@@ -306,11 +302,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
         
         var rooms = [HomeScreenRoom]()
+        let seenInvites = appSettings.seenInvites
         
         for summary in roomSummaryProvider.roomListPublisher.value {
             let room = HomeScreenRoom(summary: summary,
                                       hideUnreadMessagesBadge: appSettings.hideUnreadMessagesBadge,
-                                      seenInvites: previouslySeenInvites)
+                                      seenInvites: seenInvites)
             rooms.append(room)
         }
         

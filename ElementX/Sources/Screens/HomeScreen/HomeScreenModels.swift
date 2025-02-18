@@ -218,7 +218,7 @@ extension HomeScreenRoom {
         let roomID = summary.id
         
         let hasUnreadMessages = hideUnreadMessagesBadge ? false : summary.hasUnreadMessages
-        let isUnseenInvite = summary.knockRequestType?.isInvite == true && !seenInvites.contains(roomID)
+        let isUnseenInvite = summary.joinRequestType?.isInvite == true && !seenInvites.contains(roomID)
         
         let isDotShown = hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || isUnseenInvite
         let isMentionShown = summary.hasUnreadMentions && !summary.isMuted
@@ -226,7 +226,7 @@ extension HomeScreenRoom {
         let isCallShown = summary.hasOngoingCall
         let isHighlighted = summary.isMarkedUnread || (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || isUnseenInvite
         
-        let type: HomeScreenRoom.RoomType = switch summary.knockRequestType {
+        let type: HomeScreenRoom.RoomType = switch summary.joinRequestType {
         case .invite(let inviter): .invite(inviterDetails: inviter.map(RoomInviterDetails.init))
         case .knock: .knock
         case .none: .room
