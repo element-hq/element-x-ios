@@ -17,9 +17,9 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(developerOptions: DeveloperOptionsProtocol, elementCallBaseURL: URL, isUsingNativeSlidingSync: Bool) {
+    init(developerOptions: DeveloperOptionsProtocol, elementCallBaseURL: URL) {
         let bindings = DeveloperOptionsScreenViewStateBindings(developerOptions: developerOptions)
-        let state = DeveloperOptionsScreenViewState(elementCallBaseURL: elementCallBaseURL, isUsingNativeSlidingSync: isUsingNativeSlidingSync, bindings: bindings)
+        let state = DeveloperOptionsScreenViewState(elementCallBaseURL: elementCallBaseURL, bindings: bindings)
         
         super.init(initialViewState: state)
     }

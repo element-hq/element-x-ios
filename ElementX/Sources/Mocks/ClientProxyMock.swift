@@ -69,10 +69,8 @@ extension ClientProxyMock {
         ignoreUserReturnValue = .success(())
         unignoreUserReturnValue = .success(())
         
+        needsSlidingSyncMigration = false
         slidingSyncVersion = .native
-        availableSlidingSyncVersionsClosure = {
-            []
-        }
         
         trackRecentlyVisitedRoomReturnValue = .success(())
         recentlyVisitedRoomsReturnValue = .success([])

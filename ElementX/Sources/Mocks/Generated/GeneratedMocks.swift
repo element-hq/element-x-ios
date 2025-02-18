@@ -2235,28 +2235,16 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingHomeserver = value }
     }
     var underlyingHomeserver: String!
+    var needsSlidingSyncMigration: Bool {
+        get { return underlyingNeedsSlidingSyncMigration }
+        set(value) { underlyingNeedsSlidingSyncMigration = value }
+    }
+    var underlyingNeedsSlidingSyncMigration: Bool!
     var slidingSyncVersion: SlidingSyncVersion {
         get { return underlyingSlidingSyncVersion }
         set(value) { underlyingSlidingSyncVersion = value }
     }
     var underlyingSlidingSyncVersion: SlidingSyncVersion!
-    var availableSlidingSyncVersionsCallsCount = 0
-    var availableSlidingSyncVersionsCalled: Bool {
-        return availableSlidingSyncVersionsCallsCount > 0
-    }
-
-    var availableSlidingSyncVersions: [SlidingSyncVersion] {
-        get async {
-            availableSlidingSyncVersionsCallsCount += 1
-            if let availableSlidingSyncVersionsClosure = availableSlidingSyncVersionsClosure {
-                return await availableSlidingSyncVersionsClosure()
-            } else {
-                return underlyingAvailableSlidingSyncVersions
-            }
-        }
-    }
-    var underlyingAvailableSlidingSyncVersions: [SlidingSyncVersion]!
-    var availableSlidingSyncVersionsClosure: (() async -> [SlidingSyncVersion])?
     var canDeactivateAccount: Bool {
         get { return underlyingCanDeactivateAccount }
         set(value) { underlyingCanDeactivateAccount = value }

@@ -22,10 +22,9 @@ final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(isUsingNativeSlidingSync: Bool) {
+    init() {
         viewModel = DeveloperOptionsScreenViewModel(developerOptions: ServiceLocator.shared.settings,
-                                                    elementCallBaseURL: ServiceLocator.shared.settings.elementCallBaseURL,
-                                                    isUsingNativeSlidingSync: isUsingNativeSlidingSync)
+                                                    elementCallBaseURL: ServiceLocator.shared.settings.elementCallBaseURL)
         
         viewModel.actions
             .sink { [weak self] action in

@@ -36,8 +36,6 @@ enum HomeScreenViewAction {
     case confirmRecoveryKey
     case resetEncryption
     case skipRecoveryKeyConfirmation
-    case confirmSlidingSyncUpgrade
-    case skipSlidingSyncUpgrade
     case updateVisibleItemRange(Range<Int>)
     case globalSearch
     case markRoomAsUnread(roomIdentifier: String)
@@ -86,17 +84,12 @@ enum HomeScreenSecurityBannerMode: Equatable {
     }
 }
 
-enum HomeScreenMigrationBannerMode {
-    case none, show, dismissed
-}
-
 struct HomeScreenViewState: BindableState {
     let userID: String
     var userDisplayName: String?
     var userAvatarURL: URL?
     
     var securityBannerMode = HomeScreenSecurityBannerMode.none
-    var slidingSyncMigrationBannerMode = HomeScreenMigrationBannerMode.none
     
     var requiresExtraAccountSetup = false
         

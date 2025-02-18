@@ -275,12 +275,6 @@ extension PreviewTests {
         }
     }
 
-    func test_homeScreenSlidingSyncMigrationBanner() async throws {
-        for preview in HomeScreenSlidingSyncMigrationBanner_Previews._allPreviews {
-            try await assertSnapshots(matching: preview)
-        }
-    }
-
     func test_homeScreen() async throws {
         for preview in HomeScreen_Previews._allPreviews {
             try await assertSnapshots(matching: preview)
