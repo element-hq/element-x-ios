@@ -42,7 +42,7 @@ struct SecureBackupKeyBackupScreen: View {
     private var disableBackupSection: some View {
         VStack(spacing: 24) {
             VStack(spacing: 16) {
-                BigIcon(icon: \.error, style: .alertSolid)
+                BigIcon(icon: \.errorSolid, style: .alertSolid)
                 
                 VStack(spacing: 8) {
                     Text(L10n.screenKeyBackupDisableTitle)
