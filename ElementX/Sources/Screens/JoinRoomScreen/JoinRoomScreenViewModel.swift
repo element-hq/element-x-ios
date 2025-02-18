@@ -41,6 +41,18 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         
         super.init(initialViewState: JoinRoomScreenViewState(roomID: roomID), mediaProvider: mediaProvider)
         
+        context.$viewState.map(\.mode)
+            .removeDuplicates()
+            .sink { mode in
+                switch mode {
+                case .invited:
+                    appSettings.seenInvites.insert(roomID)
+                default:
+                    break
+                }
+            }
+            .store(in: &cancellables)
+        
         Task {
             await loadRoomDetails()
         }
@@ -225,6 +237,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         if let alias = state.roomDetails?.canonicalAlias {
             switch await clientProxy.joinRoomAlias(alias) {
             case .success:
+                appSettings.seenInvites.remove(roomID)
                 actionsSubject.send(.joined)
             case .failure(let error):
                 if case .forbiddenAccess = error {
@@ -238,6 +251,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         } else {
             switch await clientProxy.joinRoom(roomID, via: via) {
             case .success:
+                appSettings.seenInvites.remove(roomID)
                 actionsSubject.send(.joined)
             case .failure(let error):
                 if case .forbiddenAccess = error {
@@ -342,6 +356,8 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
             return false
         }
+        
+        appSettings.seenInvites.remove(roomID)
         
         actionsSubject.send(.dismiss)
         return true

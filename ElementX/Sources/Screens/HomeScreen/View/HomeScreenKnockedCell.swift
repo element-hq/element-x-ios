@@ -49,10 +49,9 @@ struct HomeScreenKnockedCell: View {
     private var mainContent: some View {
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 0) {
-                HStack(alignment: .firstTextBaseline, spacing: 16) {
-                    textualContent
-                    badge
-                }
+                textualContent
+                
+                // No badge - the user initiated the knock, it cannot be unread.
                 
                 Text(L10n.screenRoomlistKnockEventSentDescription)
                     .font(.compound.bodyMD)
@@ -94,12 +93,6 @@ struct HomeScreenKnockedCell: View {
     
     private var subtitle: String? {
         room.canonicalAlias
-    }
-    
-    private var badge: some View {
-        Circle()
-            .scaledFrame(size: 12)
-            .foregroundColor(.compound.iconAccentTertiary)
     }
 }
 
@@ -152,7 +145,7 @@ private extension HomeScreenRoom {
         
         let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
                                   id: "@someone:somewhere.com",
-                                  knockRequestType: .invite(inviter: inviter),
+                                  joinRequestType: .invite(inviter: inviter),
                                   name: "Some Guy",
                                   isDirect: true,
                                   avatarURL: nil,
@@ -179,7 +172,7 @@ private extension HomeScreenRoom {
         
         let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
                                   id: "@someone:somewhere.com",
-                                  knockRequestType: .invite(inviter: inviter),
+                                  joinRequestType: .invite(inviter: inviter),
                                   name: "Awesome Room",
                                   isDirect: false,
                                   avatarURL: avatarURL,
