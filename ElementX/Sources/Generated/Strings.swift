@@ -274,8 +274,10 @@ internal enum L10n {
   internal static var actionYesTryAgain: String { return L10n.tr("Localizable", "action_yes_try_again") }
   /// Log Out & Upgrade
   internal static var bannerMigrateToNativeSlidingSyncAction: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_action") }
-  /// Element X no longer supports the old protocol. Please log out and log back in to continue using the app.
-  internal static var bannerMigrateToNativeSlidingSyncAppForceLogoutTitle: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_app_force_logout_title") }
+  /// %1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.
+  internal static func bannerMigrateToNativeSlidingSyncAppForceLogoutTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_app_force_logout_title", String(describing: p1))
+  }
   /// Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.
   internal static var bannerMigrateToNativeSlidingSyncDescription: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_description") }
   /// Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.
