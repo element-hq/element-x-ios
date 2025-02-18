@@ -320,7 +320,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         // Delay setting the alert otherwise it automatically gets dismissed. Same as the crashed last run one
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.state.bindings.alertInfo = AlertInfo(id: UUID(),
-                                                      title: L10n.bannerMigrateToNativeSlidingSyncAppForceLogoutTitle,
+                                                      title: L10n.bannerMigrateToNativeSlidingSyncAppForceLogoutTitle(InfoPlistReader.main.bundleDisplayName),
                                                       primaryButton: .init(title: L10n.bannerMigrateToNativeSlidingSyncAction) { [weak self] in
                                                           self?.actionsSubject.send(.logoutWithoutConfirmation)
                                                       })
