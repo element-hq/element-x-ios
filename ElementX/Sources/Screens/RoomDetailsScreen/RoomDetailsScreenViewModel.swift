@@ -200,6 +200,12 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .throttle(for: .milliseconds(100), scheduler: DispatchQueue.main, latest: true)
             .weakAssign(to: \.state.knockRequestsCount, on: self)
             .store(in: &cancellables)
+        
+        roomProxy.membersPublisher.combineLatest(roomProxy.identityStatusChangesPublisher)
+            .sink { _ in
+                Task { await self.updateMemberIdentityVerificationStates() }
+            }
+            .store(in: &cancellables)
     }
     
     private func updateRoomInfo(_ roomInfo: RoomInfoProxy) {
@@ -237,6 +243,24 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .store(in: &cancellables)
         
         await roomProxy.updateMembers()
+    }
+    
+    private func updateMemberIdentityVerificationStates() async {
+        guard roomProxy.isEncrypted else {
+            // We don't care about identity statuses on non-encrypted rooms
+            return
+        }
+        
+        for member in roomProxy.membersPublisher.value {
+            if case let .success(identity) = await clientProxy.userIdentity(for: member.userID) {
+                if identity?.verificationState == .verificationViolation {
+                    state.hasMemberIdentityVerificationStateViolations = true
+                    return
+                }
+            }
+        }
+        
+        state.hasMemberIdentityVerificationStateViolations = false
     }
     
     private func updatePowerLevelPermissions() async {

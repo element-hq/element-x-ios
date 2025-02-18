@@ -923,8 +923,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
             case .startCall(let roomID):
                 Task { await self.presentCallScreen(roomID: roomID, notifyOtherParticipants: false) }
-            case .verifyUser(let userID):
-                presentSessionVerificationScreen(flow: .userIntiator(userID: userID))
             case .dismiss:
                 navigationSplitCoordinator.setSheetCoordinator(nil)
             }

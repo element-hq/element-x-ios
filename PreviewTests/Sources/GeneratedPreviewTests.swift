@@ -1037,6 +1037,12 @@ extension PreviewTests {
         }
     }
 
+    func test_verificationBadge() async throws {
+        for preview in VerificationBadge_Previews._allPreviews {
+            try await assertSnapshots(matching: preview)
+        }
+    }
+
     func test_videoMediaEventsTimelineView() async throws {
         for preview in VideoMediaEventsTimelineView_Previews._allPreviews {
             try await assertSnapshots(matching: preview)

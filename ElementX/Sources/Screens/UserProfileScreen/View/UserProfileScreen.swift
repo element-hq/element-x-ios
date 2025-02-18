@@ -14,8 +14,6 @@ struct UserProfileScreen: View {
     var body: some View {
         Form {
             headerSection
-            
-            verificationSection
         }
         .compoundList()
         .navigationTitle(L10n.screenRoomMemberDetailsTitle)
@@ -83,19 +81,7 @@ struct UserProfileScreen: View {
         }
         .padding(.top, 32)
     }
-    
-    @ViewBuilder
-    var verificationSection: some View {
-        if context.viewState.showVerificationSection {
-            Section {
-                ListRow(label: .default(title: L10n.commonVerifyUser, icon: \.lock),
-                        kind: .button {
-                            context.send(viewAction: .verifyUser)
-                        })
-            }
-        }
-    }
-    
+        
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         if context.viewState.isPresentedModally {
@@ -137,13 +123,22 @@ struct UserProfileScreen_Previews: PreviewProvider, TestablePreview {
     
     static func makeViewModel(userID: String) -> UserProfileScreenViewModel {
         let clientProxyMock = ClientProxyMock(.init())
+        
         clientProxyMock.userIdentityForClosure = { userID in
-            let isVerified = userID == RoomMemberProxyMock.mockDan.userID
-            return .success(UserIdentitySDKMock(configuration: .init(isVerified: isVerified)))
+            let identity = switch userID {
+            case RoomMemberProxyMock.mockDan.userID:
+                UserIdentityProxyMock(configuration: .init(verificationState: .verified))
+            default:
+                UserIdentityProxyMock(configuration: .init())
+            }
+            
+            return .success(identity)
         }
+
         if userID != RoomMemberProxyMock.mockMe.userID {
             clientProxyMock.directRoomForUserIDReturnValue = .success("roomID")
         }
+        
         return UserProfileScreenViewModel(userID: userID,
                                           isPresentedModally: false,
                                           clientProxy: clientProxyMock,

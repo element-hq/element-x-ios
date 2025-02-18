@@ -4860,13 +4860,13 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var userIdentityForReceivedUserID: String?
     var userIdentityForReceivedInvocations: [String] = []
 
-    var userIdentityForUnderlyingReturnValue: Result<UserIdentity?, ClientProxyError>!
-    var userIdentityForReturnValue: Result<UserIdentity?, ClientProxyError>! {
+    var userIdentityForUnderlyingReturnValue: Result<UserIdentityProxyProtocol?, ClientProxyError>!
+    var userIdentityForReturnValue: Result<UserIdentityProxyProtocol?, ClientProxyError>! {
         get {
             if Thread.isMainThread {
                 return userIdentityForUnderlyingReturnValue
             } else {
-                var returnValue: Result<UserIdentity?, ClientProxyError>? = nil
+                var returnValue: Result<UserIdentityProxyProtocol?, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
                     returnValue = userIdentityForUnderlyingReturnValue
                 }
@@ -4884,9 +4884,9 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var userIdentityForClosure: ((String) async -> Result<UserIdentity?, ClientProxyError>)?
+    var userIdentityForClosure: ((String) async -> Result<UserIdentityProxyProtocol?, ClientProxyError>)?
 
-    func userIdentity(for userID: String) async -> Result<UserIdentity?, ClientProxyError> {
+    func userIdentity(for userID: String) async -> Result<UserIdentityProxyProtocol?, ClientProxyError> {
         userIdentityForCallsCount += 1
         userIdentityForReceivedUserID = userID
         DispatchQueue.main.async {
@@ -16510,6 +16510,14 @@ class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol, @unchecked Sendabl
             return searchProfilesWithReturnValue
         }
     }
+}
+class UserIdentityProxyMock: UserIdentityProxyProtocol, @unchecked Sendable {
+    var verificationState: UserIdentityVerificationState {
+        get { return underlyingVerificationState }
+        set(value) { underlyingVerificationState = value }
+    }
+    var underlyingVerificationState: UserIdentityVerificationState!
+
 }
 class UserIndicatorControllerMock: UserIndicatorControllerProtocol, @unchecked Sendable {
     var window: UIWindow?
