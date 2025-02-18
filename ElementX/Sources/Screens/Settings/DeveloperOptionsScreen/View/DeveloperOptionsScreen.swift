@@ -32,18 +32,6 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
-            Section {
-                Picker("Discovery", selection: $context.slidingSyncDiscovery) {
-                    Text("Proxy only").tag(AppSettings.SlidingSyncDiscovery.proxy)
-                    Text("Automatic").tag(AppSettings.SlidingSyncDiscovery.native)
-                    Text("Force Native ⚠️").tag(AppSettings.SlidingSyncDiscovery.forceNative)
-                }
-            } header: {
-                Text("Sliding Sync")
-            } footer: {
-                Text(context.viewState.slidingSyncFooter)
-            }
-            
             Section("Room List") {
                 Toggle(isOn: $context.publicSearchEnabled) {
                     Text("Public search")
@@ -175,8 +163,7 @@ private struct LogLevelConfigurationView: View {
 
 struct DeveloperOptionsScreen_Previews: PreviewProvider {
     static let viewModel = DeveloperOptionsScreenViewModel(developerOptions: ServiceLocator.shared.settings,
-                                                           elementCallBaseURL: ServiceLocator.shared.settings.elementCallBaseURL,
-                                                           isUsingNativeSlidingSync: true)
+                                                           elementCallBaseURL: ServiceLocator.shared.settings.elementCallBaseURL)
     static var previews: some View {
         NavigationStack {
             DeveloperOptionsScreen(context: viewModel.context)

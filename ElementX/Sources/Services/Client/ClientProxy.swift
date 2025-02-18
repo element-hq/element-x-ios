@@ -19,7 +19,7 @@ class ClientProxy: ClientProxyProtocol {
     
     private let mediaLoader: MediaLoaderProtocol
     private let clientQueue: DispatchQueue
-        
+    
     private var roomListService: RoomListService?
     // periphery: ignore - only for retain
     private var roomListStateUpdateTaskHandle: TaskHandle?
@@ -135,6 +135,7 @@ class ClientProxy: ClientProxyProtocol {
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
     
     init(client: ClientProtocol,
+         needsSlidingSyncMigration: Bool,
          networkMonitor: NetworkMonitorProtocol,
          appSettings: AppSettings) async {
         self.client = client
@@ -148,6 +149,8 @@ class ClientProxy: ClientProxyProtocol {
         notificationSettings = NotificationSettingsProxy(notificationSettings: client.getNotificationSettings())
         
         secureBackupController = SecureBackupController(encryption: client.encryption())
+        
+        self.needsSlidingSyncMigration = needsSlidingSyncMigration
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
@@ -221,14 +224,9 @@ class ClientProxy: ClientProxyProtocol {
         client.homeserver()
     }
     
+    let needsSlidingSyncMigration: Bool
     var slidingSyncVersion: SlidingSyncVersion {
         client.slidingSyncVersion()
-    }
-    
-    var availableSlidingSyncVersions: [SlidingSyncVersion] {
-        get async {
-            await client.availableSlidingSyncVersions()
-        }
     }
     
     var canDeactivateAccount: Bool {
@@ -263,6 +261,11 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     func startSync() {
+        guard !needsSlidingSyncMigration else {
+            MXLog.warning("Ignoring request, this client needs to be migrated to native sliding sync.")
+            return
+        }
+        
         guard !hasEncounteredAuthError else {
             MXLog.warning("Ignoring request, this client has an unknown token.")
             return

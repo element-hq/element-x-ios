@@ -230,7 +230,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentDeveloperOptions() {
-        let coordinator = DeveloperOptionsScreenCoordinator(isUsingNativeSlidingSync: parameters.userSession.clientProxy.slidingSyncVersion == .native)
+        let coordinator = DeveloperOptionsScreenCoordinator()
         
         coordinator.actions
             .sink { [weak self] action in

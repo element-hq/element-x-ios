@@ -44,7 +44,6 @@ final class AppSettings {
         case elementCallBaseURLOverride
         
         // Feature flags
-        case slidingSyncDiscovery
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
         case enableOnlySignedDeviceIsolationMode
@@ -282,10 +281,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.fuzzyRoomListSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
     var fuzzyRoomListSearchEnabled
-    
-    enum SlidingSyncDiscovery: Codable { case proxy, native, forceNative }
-    @UserPreference(key: UserDefaultsKeys.slidingSyncDiscovery, defaultValue: .native, storageType: .userDefaults(store))
-    var slidingSyncDiscovery: SlidingSyncDiscovery
     
     @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var knockingEnabled
