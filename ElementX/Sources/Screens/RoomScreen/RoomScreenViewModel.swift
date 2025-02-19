@@ -77,6 +77,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         Task {
             await handleRoomInfoUpdate(roomProxy.infoPublisher.value)
+            
+            await updateVerificationBadge()
         }
         
         setupSubscriptions(ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher)
@@ -184,6 +186,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 }
                 
                 await self?.processIdentityStatusChanges(changes)
+                await self?.updateVerificationBadge()
             }
         }
         .store(in: &cancellables)
@@ -262,6 +265,23 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         } else {
             state.footerDetails = nil
         }
+    }
+    
+    private func updateVerificationBadge() async {
+        guard roomProxy.isDirectOneToOneRoom,
+              let dmRecipient = roomProxy.membersPublisher.value.first(where: { $0.userID != roomProxy.ownUserID }),
+              case let .success(userIdentity) = await clientProxy.userIdentity(for: dmRecipient.userID) else {
+            state.dmRecipientVerificationState = .notVerified
+            return
+        }
+        
+        guard let userIdentity else {
+            MXLog.failure("User identity should be known at this point")
+            state.dmRecipientVerificationState = .notVerified
+            return
+        }
+        
+        state.dmRecipientVerificationState = userIdentity.verificationState
     }
     
     private func resolveIdentityPinningViolation(_ userID: String) async {

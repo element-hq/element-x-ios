@@ -13,13 +13,15 @@ struct RoomHeaderView: View {
     let roomName: String
     let roomSubtitle: String?
     let roomAvatar: RoomAvatar
+    var dmRecipientVerificationState: UserIdentityVerificationState?
     
     let mediaProvider: MediaProviderProtocol?
     
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 8) {
             avatarImage
                 .accessibilityHidden(true)
+            HStack(spacing: 4) {
             VStack(alignment: .leading) {
                 Text(roomName)
                     .lineLimit(1)
@@ -31,6 +33,10 @@ struct RoomHeaderView: View {
                         .padding(.vertical, 1)
                         .font(.zero.bodySMSemibold)
                         .foregroundStyle(.compound.textSecondary)
+                }
+            }
+                if let dmRecipientVerificationState {
+                    VerificationBadge(verificationState: dmRecipientVerificationState)
                 }
             }
         }
@@ -49,22 +55,24 @@ struct RoomHeaderView: View {
 
 struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
+        VStack(spacing: 8) {
+            makeHeader(avatarURL: nil, verificationState: .notVerified)
+            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .notVerified)
+            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .verified)
+            makeHeader(avatarURL: .mockMXCAvatar, verificationState: .verificationViolation)
+        }
+        .previewLayout(.sizeThatFits)
+    }
+    
+    static func makeHeader(avatarURL: URL?,
+                           verificationState: UserIdentityVerificationState) -> some View {
         RoomHeaderView(roomName: "Some Room name",
                        roomSubtitle: nil,
                        roomAvatar: .room(id: "1",
                                          name: "Some Room Name",
-                                         avatarURL: .mockMXCAvatar),
+                                         avatarURL: avatarURL),
+                       dmRecipientVerificationState: verificationState,
                        mediaProvider: MediaProviderMock(configuration: .init()))
-            .previewLayout(.sizeThatFits)
-            .padding()
-        
-        RoomHeaderView(roomName: "Some Room name",
-                       roomSubtitle: nil,
-                       roomAvatar: .room(id: "1",
-                                         name: "Some Room Name",
-                                         avatarURL: nil),
-                       mediaProvider: MediaProviderMock(configuration: .init()))
-            .previewLayout(.sizeThatFits)
             .padding()
     }
 }

@@ -29,10 +29,15 @@ enum RoomMembersListScreenMode {
     case banned
 }
 
+struct RoomMemberListScreenEntry: Equatable {
+    let member: RoomMemberDetails
+    let verificationState: UserIdentityVerificationState
+}
+
 struct RoomMembersListScreenViewState: BindableState {
-    private var joinedMembers: [RoomMemberDetails]
-    private var invitedMembers: [RoomMemberDetails]
-    private var bannedMembers: [RoomMemberDetails]
+    private var joinedMembers: [RoomMemberListScreenEntry]
+    private var invitedMembers: [RoomMemberListScreenEntry]
+    private var bannedMembers: [RoomMemberListScreenEntry]
     
     let joinedMembersCount: Int
     var bannedMembersCount: Int { bannedMembers.count }
@@ -44,9 +49,9 @@ struct RoomMembersListScreenViewState: BindableState {
     var bindings: RoomMembersListScreenViewStateBindings
     
     init(joinedMembersCount: Int,
-         joinedMembers: [RoomMemberDetails] = [],
-         invitedMembers: [RoomMemberDetails] = [],
-         bannedMembers: [RoomMemberDetails] = [],
+         joinedMembers: [RoomMemberListScreenEntry] = [],
+         invitedMembers: [RoomMemberListScreenEntry] = [],
+         bannedMembers: [RoomMemberListScreenEntry] = [],
          bindings: RoomMembersListScreenViewStateBindings) {
         self.joinedMembersCount = joinedMembersCount
         self.joinedMembers = joinedMembers
@@ -55,19 +60,19 @@ struct RoomMembersListScreenViewState: BindableState {
         self.bindings = bindings
     }
     
-    var visibleJoinedMembers: [RoomMemberDetails] {
+    var visibleJoinedMembers: [RoomMemberListScreenEntry] {
         joinedMembers
-            .filter { $0.matches(searchQuery: bindings.searchQuery) }
+            .filter { $0.member.matches(searchQuery: bindings.searchQuery) }
     }
     
-    var visibleInvitedMembers: [RoomMemberDetails] {
+    var visibleInvitedMembers: [RoomMemberListScreenEntry] {
         invitedMembers
-            .filter { $0.matches(searchQuery: bindings.searchQuery) }
+            .filter { $0.member.matches(searchQuery: bindings.searchQuery) }
     }
     
-    var visibleBannedMembers: [RoomMemberDetails] {
+    var visibleBannedMembers: [RoomMemberListScreenEntry] {
         bannedMembers
-            .filter { $0.matches(searchQuery: bindings.searchQuery) }
+            .filter { $0.member.matches(searchQuery: bindings.searchQuery) }
     }
 }
 

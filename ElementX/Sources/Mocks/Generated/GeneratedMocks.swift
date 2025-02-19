@@ -2235,28 +2235,16 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingHomeserver = value }
     }
     var underlyingHomeserver: String!
+    var needsSlidingSyncMigration: Bool {
+        get { return underlyingNeedsSlidingSyncMigration }
+        set(value) { underlyingNeedsSlidingSyncMigration = value }
+    }
+    var underlyingNeedsSlidingSyncMigration: Bool!
     var slidingSyncVersion: SlidingSyncVersion {
         get { return underlyingSlidingSyncVersion }
         set(value) { underlyingSlidingSyncVersion = value }
     }
     var underlyingSlidingSyncVersion: SlidingSyncVersion!
-    var availableSlidingSyncVersionsCallsCount = 0
-    var availableSlidingSyncVersionsCalled: Bool {
-        return availableSlidingSyncVersionsCallsCount > 0
-    }
-
-    var availableSlidingSyncVersions: [SlidingSyncVersion] {
-        get async {
-            availableSlidingSyncVersionsCallsCount += 1
-            if let availableSlidingSyncVersionsClosure = availableSlidingSyncVersionsClosure {
-                return await availableSlidingSyncVersionsClosure()
-            } else {
-                return underlyingAvailableSlidingSyncVersions
-            }
-        }
-    }
-    var underlyingAvailableSlidingSyncVersions: [SlidingSyncVersion]!
-    var availableSlidingSyncVersionsClosure: (() async -> [SlidingSyncVersion])?
     var canDeactivateAccount: Bool {
         get { return underlyingCanDeactivateAccount }
         set(value) { underlyingCanDeactivateAccount = value }
@@ -4955,13 +4943,13 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var userIdentityForReceivedUserID: String?
     var userIdentityForReceivedInvocations: [String] = []
 
-    var userIdentityForUnderlyingReturnValue: Result<UserIdentity?, ClientProxyError>!
-    var userIdentityForReturnValue: Result<UserIdentity?, ClientProxyError>! {
+    var userIdentityForUnderlyingReturnValue: Result<UserIdentityProxyProtocol?, ClientProxyError>!
+    var userIdentityForReturnValue: Result<UserIdentityProxyProtocol?, ClientProxyError>! {
         get {
             if Thread.isMainThread {
                 return userIdentityForUnderlyingReturnValue
             } else {
-                var returnValue: Result<UserIdentity?, ClientProxyError>? = nil
+                var returnValue: Result<UserIdentityProxyProtocol?, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
                     returnValue = userIdentityForUnderlyingReturnValue
                 }
@@ -4979,9 +4967,9 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var userIdentityForClosure: ((String) async -> Result<UserIdentity?, ClientProxyError>)?
+    var userIdentityForClosure: ((String) async -> Result<UserIdentityProxyProtocol?, ClientProxyError>)?
 
-    func userIdentity(for userID: String) async -> Result<UserIdentity?, ClientProxyError> {
+    func userIdentity(for userID: String) async -> Result<UserIdentityProxyProtocol?, ClientProxyError> {
         userIdentityForCallsCount += 1
         userIdentityForReceivedUserID = userID
         DispatchQueue.main.async {
@@ -17370,6 +17358,14 @@ class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol, @unchecked Sendabl
             return searchProfilesWithReturnValue
         }
     }
+}
+class UserIdentityProxyMock: UserIdentityProxyProtocol, @unchecked Sendable {
+    var verificationState: UserIdentityVerificationState {
+        get { return underlyingVerificationState }
+        set(value) { underlyingVerificationState = value }
+    }
+    var underlyingVerificationState: UserIdentityVerificationState!
+
 }
 class UserIndicatorControllerMock: UserIndicatorControllerProtocol, @unchecked Sendable {
     var window: UIWindow?

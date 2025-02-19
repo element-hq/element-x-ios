@@ -82,6 +82,7 @@ struct HomeScreenPostCell: View {
                     
                     HomeScreenPostMeowButton(count: post.meowCount,
                                              highlightColor: post.isMeowedByMe,
+                                             isEnabled: !post.isMyPost,
                                              onMeowTouchEnded: { count in
                         onMeowTapped(count)
                     })

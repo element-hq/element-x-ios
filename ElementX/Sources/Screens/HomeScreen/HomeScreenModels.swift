@@ -38,8 +38,6 @@ enum HomeScreenViewAction {
     case confirmRecoveryKey
     case resetEncryption
     case skipRecoveryKeyConfirmation
-    case confirmSlidingSyncUpgrade
-    case skipSlidingSyncUpgrade
     case updateVisibleItemRange(Range<Int>)
     case globalSearch
     case markRoomAsUnread(roomIdentifier: String)
@@ -115,10 +113,6 @@ enum HomeScreenSecurityBannerMode: Equatable {
     }
 }
 
-enum HomeScreenMigrationBannerMode {
-    case none, show, dismissed
-}
-
 struct HomeScreenViewState: BindableState {
     let userID: String
     var userDisplayName: String?
@@ -126,7 +120,6 @@ struct HomeScreenViewState: BindableState {
     var primaryZeroId: String?
     
     var securityBannerMode = HomeScreenSecurityBannerMode.none
-    var slidingSyncMigrationBannerMode = HomeScreenMigrationBannerMode.none
     
     var requiresExtraAccountSetup = false
         
@@ -289,6 +282,7 @@ struct HomeScreenPost: Identifiable, Equatable {
     let arweaveId: String
     let isMeowedByMe: Bool
     let postDateTime: String
+    let isMyPost: Bool
     
     static func placeholder() -> HomeScreenPost {
         HomeScreenPost(id: UUID().uuidString,
@@ -307,29 +301,31 @@ struct HomeScreenPost: Identifiable, Equatable {
                        isPostInOwnFeed: false,
                        arweaveId: "",
                        isMeowedByMe: false,
-                       postDateTime: "")
+                       postDateTime: "",
+                       isMyPost: false)
     }
 }
 
 extension HomeScreenRoom {
-    init(summary: RoomSummary, hideUnreadMessagesBadge: Bool) {
-        let identifier = summary.id
+    init(summary: RoomSummary, hideUnreadMessagesBadge: Bool, seenInvites: Set<String> = []) {
+        let roomID = summary.id
         
         let hasUnreadMessages = hideUnreadMessagesBadge ? false : summary.hasUnreadMessages
+        let isUnseenInvite = summary.joinRequestType?.isInvite == true && !seenInvites.contains(roomID)
         
-        let isDotShown = hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || summary.knockRequestType?.isKnock == true
+        let isDotShown = hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || isUnseenInvite
         let isMentionShown = summary.hasUnreadMentions && !summary.isMuted
         let isMuteShown = summary.isMuted
         let isCallShown = summary.hasOngoingCall
-        let isHighlighted = summary.isMarkedUnread || (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || summary.knockRequestType?.isKnock == true
+        let isHighlighted = summary.isMarkedUnread || (!summary.isMuted && (summary.hasUnreadNotifications || summary.hasUnreadMentions)) || isUnseenInvite
         
-        let type: HomeScreenRoom.RoomType = switch summary.knockRequestType {
+        let type: HomeScreenRoom.RoomType = switch summary.joinRequestType {
         case .invite(let inviter): .invite(inviterDetails: inviter.map(RoomInviterDetails.init))
         case .knock: .knock
         case .none: .room
         }
         
-        self.init(id: identifier,
+        self.init(id: roomID,
                   roomID: summary.id,
                   type: type,
                   badges: .init(isDotShown: isDotShown,
@@ -348,7 +344,7 @@ extension HomeScreenRoom {
 }
 
 extension HomeScreenPost {
-    init(post: ZPost, rewardsDecimalPlaces: Int = 0) {
+    init(loggedInUserId: String, post: ZPost, rewardsDecimalPlaces: Int = 0) {
         let userProfile = post.user.profileSummary
         let meowCount = post.postsMeowsSummary?.meowCount(decimal: rewardsDecimalPlaces) ?? "0"
         let postUpdatedAt = DateUtil.shared.dateFromISO8601String(post.updatedAt)
@@ -363,6 +359,8 @@ extension HomeScreenPost {
         let formatter = DateFormatter()
         formatter.dateFormat = "h:mm aa • MMM d, yyyy"
         let postDateTime = formatter.string(from: postUpdatedAt)
+        
+        let isMyPost = loggedInUserId == post.userId
         
         self.init(
             id: post.id.rawValue,
@@ -383,7 +381,8 @@ extension HomeScreenPost {
             isPostInOwnFeed: isPostInOwnFeed,
             arweaveId: post.arweaveId,
             isMeowedByMe: (post.meows?.isEmpty == false),
-            postDateTime: postDateTime
+            postDateTime: postDateTime,
+            isMyPost: isMyPost
         )
     }
     

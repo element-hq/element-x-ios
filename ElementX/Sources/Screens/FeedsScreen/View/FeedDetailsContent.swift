@@ -170,6 +170,7 @@ struct FeedDetailsSection: View {
                 
                 HomeScreenPostMeowButton(count: post.meowCount,
                                          highlightColor: post.isMeowedByMe,
+                                         isEnabled: post.isPostInOwnFeed,
                                          onMeowTouchEnded: { count in
                     context.send(viewAction: .meowTapped(post.id, amount: count, isPostAReply: false))
                 })

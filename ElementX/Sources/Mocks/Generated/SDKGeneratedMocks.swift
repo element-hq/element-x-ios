@@ -22876,6 +22876,71 @@ open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity, @unchecked Sendable 
 
     fileprivate var pointer: UnsafeMutableRawPointer!
 
+    //MARK: - hasVerificationViolation
+
+    var hasVerificationViolationUnderlyingCallsCount = 0
+    open var hasVerificationViolationCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return hasVerificationViolationUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = hasVerificationViolationUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                hasVerificationViolationUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    hasVerificationViolationUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var hasVerificationViolationCalled: Bool {
+        return hasVerificationViolationCallsCount > 0
+    }
+
+    var hasVerificationViolationUnderlyingReturnValue: Bool!
+    open var hasVerificationViolationReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return hasVerificationViolationUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = hasVerificationViolationUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                hasVerificationViolationUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    hasVerificationViolationUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var hasVerificationViolationClosure: (() -> Bool)?
+
+    open override func hasVerificationViolation() -> Bool {
+        hasVerificationViolationCallsCount += 1
+        if let hasVerificationViolationClosure = hasVerificationViolationClosure {
+            return hasVerificationViolationClosure()
+        } else {
+            return hasVerificationViolationReturnValue
+        }
+    }
+
     //MARK: - isVerified
 
     var isVerifiedUnderlyingCallsCount = 0
@@ -23044,6 +23109,71 @@ open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity, @unchecked Sendable 
         }
         pinCallsCount += 1
         try await pinClosure?()
+    }
+
+    //MARK: - wasPreviouslyVerified
+
+    var wasPreviouslyVerifiedUnderlyingCallsCount = 0
+    open var wasPreviouslyVerifiedCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return wasPreviouslyVerifiedUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = wasPreviouslyVerifiedUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                wasPreviouslyVerifiedUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    wasPreviouslyVerifiedUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var wasPreviouslyVerifiedCalled: Bool {
+        return wasPreviouslyVerifiedCallsCount > 0
+    }
+
+    var wasPreviouslyVerifiedUnderlyingReturnValue: Bool!
+    open var wasPreviouslyVerifiedReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return wasPreviouslyVerifiedUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = wasPreviouslyVerifiedUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                wasPreviouslyVerifiedUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    wasPreviouslyVerifiedUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var wasPreviouslyVerifiedClosure: (() -> Bool)?
+
+    open override func wasPreviouslyVerified() -> Bool {
+        wasPreviouslyVerifiedCallsCount += 1
+        if let wasPreviouslyVerifiedClosure = wasPreviouslyVerifiedClosure {
+            return wasPreviouslyVerifiedClosure()
+        } else {
+            return wasPreviouslyVerifiedReturnValue
+        }
     }
 
     //MARK: - withdrawVerification

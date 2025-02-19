@@ -17,7 +17,7 @@ struct SetupProject: ParsableCommand {
     }
 
     func brewInstall() throws {
-        try Zsh.run(command: "brew install xcodegen swiftgen swiftformat git-lfs sourcery mint kiliankoe/formulae/swift-outdated localazy/tools/localazy peripheryapp/periphery/periphery FelixHerrmann/tap/swift-package-list")
+        try Zsh.run(command: "brew install xcodegen swiftgen swiftformat git-lfs sourcery mint pkl kiliankoe/formulae/swift-outdated localazy/tools/localazy peripheryapp/periphery/periphery FelixHerrmann/tap/swift-package-list")
     }
 
     func mintPackagesInstall() throws {

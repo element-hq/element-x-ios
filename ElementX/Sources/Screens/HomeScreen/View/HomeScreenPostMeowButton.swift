@@ -10,10 +10,13 @@ import SwiftUI
 struct HomeScreenPostMeowButton: View {
     let count: String
     let highlightColor: Bool
+    let isEnabled: Bool
     
     @State private var counter: Int = 0
     @State private var isTouching: Bool = false
     @State private var timer: Timer? = nil
+    
+    private let MAX_MEOW_LIMIT = 100
     
     let onMeowTouchEnded: (Int) -> Void
     
@@ -26,13 +29,15 @@ struct HomeScreenPostMeowButton: View {
             .simultaneousGesture(
                 DragGesture(minimumDistance: 0) // Detect touch down
                     .onChanged { _ in
-                        if !isTouching {
+                        if !isTouching, isEnabled {
                             startIncrementing()
                             isTouching = true
                         }
                     }
                     .onEnded { _ in
-                        onMeowTouchEnded(counter)
+                        if isEnabled {
+                            onMeowTouchEnded(counter)
+                        }
                         stopIncrementing()
                         isTouching = false
                     }
@@ -48,9 +53,9 @@ struct HomeScreenPostMeowButton: View {
     
     func startIncrementing() {
         stopIncrementing()
-        // Start a timer that fires every 10 milliseconds
-        timer = Timer.scheduledTimer(withTimeInterval: 0.02, repeats: true) { _ in
-            if counter < 100 {
+        // Start a timer that fires every 250 milliseconds
+        timer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { _ in
+            if counter < MAX_MEOW_LIMIT {
                 counter += 1
             }
         }

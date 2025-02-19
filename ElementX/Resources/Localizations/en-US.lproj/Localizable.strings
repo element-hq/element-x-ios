@@ -120,6 +120,7 @@
 "action_yes" = "Yes";
 "action_yes_try_again" = "Yes, try again";
 "banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
+"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade available";

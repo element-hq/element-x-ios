@@ -275,12 +275,6 @@ extension PreviewTests {
         }
     }
 
-    func test_homeScreenSlidingSyncMigrationBanner() async throws {
-        for preview in HomeScreenSlidingSyncMigrationBanner_Previews._allPreviews {
-            try await assertSnapshots(matching: preview)
-        }
-    }
-
     func test_homeScreen() async throws {
         for preview in HomeScreen_Previews._allPreviews {
             try await assertSnapshots(matching: preview)
@@ -1045,6 +1039,12 @@ extension PreviewTests {
 
     func test_userRewardsSettingsScreen() async throws {
         for preview in UserRewardsSettingsScreen_Previews._allPreviews {
+            try await assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_verificationBadge() async throws {
+        for preview in VerificationBadge_Previews._allPreviews {
             try await assertSnapshots(matching: preview)
         }
     }

@@ -97,6 +97,7 @@ struct RoomMembersListManageMemberSheetLive_Previews: PreviewProvider {
 private extension RoomMembersListScreenViewModel {
     static var mock: RoomMembersListScreenViewModel {
         RoomMembersListScreenViewModel(initialMode: .members,
+                                       clientProxy: ClientProxyMock(.init()),
                                        roomProxy: JoinedRoomProxyMock(.init(members: .allMembersAsAdmin)),
                                        mediaProvider: MediaProviderMock(configuration: .init()),
                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
