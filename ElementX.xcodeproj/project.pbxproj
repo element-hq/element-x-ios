@@ -1013,7 +1013,7 @@
 		C9F5B48D15B9BCAE1F8D564E /* RoomNotificationModeProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1511766C534367700C8DD75 /* RoomNotificationModeProxy.swift */; };
 		CA12AE0DCD57D49CD96C699A /* WaveformCursorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB9EABCA9348DFA27439A809 /* WaveformCursorView.swift */; };
 		CACD1352927336F01FC76612 /* EncryptionResetUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE4C76F31A382B8E4DD07583 /* EncryptionResetUITests.swift */; };
-		CB137BFB3E083C33E398A6CB /* EmbeddedWebApp in Frameworks */ = {isa = PBXBuildFile; productRef = 84F4A0B24D2857CF25E9E45C /* EmbeddedWebApp */; };
+		CB137BFB3E083C33E398A6CB /* EmbeddedElementCall in Frameworks */ = {isa = PBXBuildFile; productRef = 424B603C07AEA6FCA7C8E7C9 /* EmbeddedElementCall */; };
 		CB498F4E27AA0545DCEF0F6F /* DTCoreText in Frameworks */ = {isa = PBXBuildFile; productRef = 36B7FC232711031AA2B0D188 /* DTCoreText */; };
 		CB6956565D858C523E3E3B16 /* ComposerDraftServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E37072597F67C4DD8CC2DB /* ComposerDraftServiceProtocol.swift */; };
 		CB6BCBF28E4B76EA08C2926D /* StateRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16048D30F0438731C41F775 /* StateRoomTimelineItem.swift */; };
@@ -2635,7 +2635,7 @@
 				6F2AB43A1EFAD8A97AF41A15 /* Collections in Frameworks */,
 				93BA4A81B6D893271101F9F0 /* DeviceKit in Frameworks */,
 				9AC5F8142413862A9E3A2D98 /* DTCoreText in Frameworks */,
-				CB137BFB3E083C33E398A6CB /* EmbeddedWebApp in Frameworks */,
+				CB137BFB3E083C33E398A6CB /* EmbeddedElementCall in Frameworks */,
 				3C549A0BF39F8A854D45D9FD /* KeychainAccess in Frameworks */,
 				41DFDD212D1BE57CA50D783B /* Kingfisher in Frameworks */,
 				6298AB0906DDD3525CD78C6B /* KZFileWatchers in Frameworks */,
@@ -6150,7 +6150,7 @@
 				9C73F37731C9FDED1BB24C1C /* Collections */,
 				A7CA6F33C553805035C3B114 /* DeviceKit */,
 				531CE4334AC5CA8DFF6AEB84 /* DTCoreText */,
-				84F4A0B24D2857CF25E9E45C /* EmbeddedWebApp */,
+				424B603C07AEA6FCA7C8E7C9 /* EmbeddedElementCall */,
 				020597E28A4BC8E1BE8EDF6E /* KeychainAccess */,
 				0DD568A494247444A4B56031 /* Kingfisher */,
 				81DB3AB6CE996AB3954F4F03 /* KZFileWatchers */,
@@ -6312,7 +6312,7 @@
 				4C34425923978C97409A3EF2 /* XCRemoteSwiftPackageReference "DSWaveformImage" */,
 				C13F55E4518415CB4C278E73 /* XCRemoteSwiftPackageReference "DTCoreText" */,
 				D5F7D47BBAAE0CF1DDEB3034 /* XCRemoteSwiftPackageReference "DeviceKit" */,
-				7D7A843AB6425DA610BEA054 /* XCRemoteSwiftPackageReference "EmbeddedWebApp" */,
+				8213398B60F9B660D9216ADF /* XCRemoteSwiftPackageReference "element-call-swift" */,
 				821C67C9A7F8CC3FD41B28B4 /* XCRemoteSwiftPackageReference "emojibase-bindings" */,
 				701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */,
 				395DE6AE429B7ACC7C7FE31D /* XCRemoteSwiftPackageReference "KZFileWatchers" */,
@@ -8532,12 +8532,12 @@
 				minimumVersion = 1.3.2;
 			};
 		};
-		7D7A843AB6425DA610BEA054 /* XCRemoteSwiftPackageReference "EmbeddedWebApp" */ = {
+		8213398B60F9B660D9216ADF /* XCRemoteSwiftPackageReference "element-call-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Velin92/EmbeddedWebApp";
+			repositoryURL = "https://github.com/element-hq/element-call-swift";
 			requirement = {
-				kind = revision;
-				revision = 1e6918acc44ee6609d9070a07a2e358d81d788fe;
+				kind = exactVersion;
+				version = 1.1.35;
 			};
 		};
 		821C67C9A7F8CC3FD41B28B4 /* XCRemoteSwiftPackageReference "emojibase-bindings" */ = {
@@ -8768,6 +8768,11 @@
 			package = D5F7D47BBAAE0CF1DDEB3034 /* XCRemoteSwiftPackageReference "DeviceKit" */;
 			productName = DeviceKit;
 		};
+		424B603C07AEA6FCA7C8E7C9 /* EmbeddedElementCall */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8213398B60F9B660D9216ADF /* XCRemoteSwiftPackageReference "element-call-swift" */;
+			productName = EmbeddedElementCall;
+		};
 		4278261E147DB2DE5CFB7FC5 /* PostHog */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 96495DD8554E2F39D3954354 /* XCRemoteSwiftPackageReference "posthog-ios" */;
@@ -8837,11 +8842,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 395DE6AE429B7ACC7C7FE31D /* XCRemoteSwiftPackageReference "KZFileWatchers" */;
 			productName = KZFileWatchers;
-		};
-		84F4A0B24D2857CF25E9E45C /* EmbeddedWebApp */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7D7A843AB6425DA610BEA054 /* XCRemoteSwiftPackageReference "EmbeddedWebApp" */;
-			productName = EmbeddedWebApp;
 		};
 		886A0A498FA01E8EDD451D05 /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;

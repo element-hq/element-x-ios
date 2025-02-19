@@ -5,8 +5,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-#if canImport(EmbeddedWebApp)
-import EmbeddedWebApp
+#if canImport(EmbeddedElementCall)
+import EmbeddedElementCall
 #endif
 
 import Foundation
@@ -257,7 +257,7 @@ final class AppSettings {
     // MARK: - Element Call
     
     // swiftlint:disable:next force_unwrapping
-    let elementCallBaseURL: URL = EmbeddedWebApp.appURL!
+    let elementCallBaseURL: URL = EmbeddedElementCall.appURL!
     
     @UserPreference(key: UserDefaultsKeys.elementCallBaseURLOverride, defaultValue: nil, storageType: .userDefaults(store))
     var elementCallBaseURLOverride: URL?
