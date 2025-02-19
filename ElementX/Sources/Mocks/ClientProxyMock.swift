@@ -69,10 +69,8 @@ extension ClientProxyMock {
         ignoreUserReturnValue = .success(())
         unignoreUserReturnValue = .success(())
         
+        needsSlidingSyncMigration = false
         slidingSyncVersion = .native
-        availableSlidingSyncVersionsClosure = {
-            []
-        }
         
         trackRecentlyVisitedRoomReturnValue = .success(())
         recentlyVisitedRoomsReturnValue = .success([])
@@ -95,6 +93,6 @@ extension ClientProxyMock {
             return await .joined(JoinedRoomProxyMock(.init(id: room.id, name: room.name)))
         }
         
-        userIdentityForReturnValue = .success(UserIdentitySDKMock(configuration: .init()))
+        userIdentityForReturnValue = .success(UserIdentityProxyMock(configuration: .init()))
     }
 }

@@ -893,8 +893,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentRoomMembersList() {
-        let parameters = RoomMembersListScreenCoordinatorParameters(mediaProvider: userSession.mediaProvider,
+        let parameters = RoomMembersListScreenCoordinatorParameters(clientProxy: userSession.clientProxy,
                                                                     roomProxy: roomProxy,
+                                                                    mediaProvider: userSession.mediaProvider,
                                                                     userIndicatorController: userIndicatorController,
                                                                     analytics: analytics)
         let coordinator = RoomMembersListScreenCoordinator(parameters: parameters)
@@ -1280,8 +1281,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
             case .startCall(let roomID):
                 Task { await self.presentCallScreen(roomID: roomID) }
-            case .verifyUser(let userID):
-                actionsSubject.send(.verifyUser(userID: userID))
             case .dismiss:
                 break // Not supported when pushed.
             }

@@ -116,6 +116,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             .weakAssign(to: \.state.isRoomDirectorySearchEnabled, on: self)
             .store(in: &cancellables)
         
+        appSettings.$seenInvites
+            .removeDuplicates()
+            .sink { [weak self] _ in
+                self?.updateRooms()
+            }
+            .store(in: &cancellables)
+        
         let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
         let searchQuery = context.$viewState.map(\.bindings.searchQuery)
         let activeFilters = context.$viewState.map(\.bindings.filtersState.activeFilters)
@@ -167,11 +174,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             actionsSubject.send(.presentEncryptionResetScreen)
         case .skipRecoveryKeyConfirmation:
             state.securityBannerMode = .dismissed
-        case .confirmSlidingSyncUpgrade:
-            appSettings.slidingSyncDiscovery = .native
-            actionsSubject.send(.logout)
-        case .skipSlidingSyncUpgrade:
-            state.slidingSyncMigrationBannerMode = .dismissed
         case .updateVisibleItemRange(let range):
             roomSummaryProvider?.updateVisibleRange(range)
         case .startChat:
@@ -332,9 +334,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
         
         var rooms = [HomeScreenRoom]()
+        let seenInvites = appSettings.seenInvites
         
         for summary in roomSummaryProvider.roomListPublisher.value {
-            let room = HomeScreenRoom(summary: summary, hideUnreadMessagesBadge: appSettings.hideUnreadMessagesBadge)
+            let room = HomeScreenRoom(summary: summary,
+                                      hideUnreadMessagesBadge: appSettings.hideUnreadMessagesBadge,
+                                      seenInvites: seenInvites)
             rooms.append(room)
         }
         
@@ -344,30 +349,18 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     /// Check whether we can inform the user about potential migrations
     /// or have him logout as his proxy is no longer available
     private func checkSlidingSyncMigration() async {
-        // Not logged in with a proxy, don't need to do anything
-        guard userSession.clientProxy.slidingSyncVersion.isProxy else {
+        guard userSession.clientProxy.needsSlidingSyncMigration else {
             return
         }
         
-        let versions = await userSession.clientProxy.availableSlidingSyncVersions
-        
-        // Native not available, nothing we can do
-        guard versions.contains(.native) else {
-            return
-        }
-        
-        if versions.contains(where: \.isProxy) { // Both available, prompt for migration
-            state.slidingSyncMigrationBannerMode = .show
-        } else { // The proxy has been removed and logout is needed
-            // Delay setting the alert otherwise it automatically gets dismissed. Same as the crashed last run one
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.state.bindings.alertInfo = AlertInfo(id: UUID(),
-                                                          title: L10n.bannerMigrateToNativeSlidingSyncForceLogoutTitle,
-                                                          primaryButton: .init(title: L10n.bannerMigrateToNativeSlidingSyncAction) { [weak self] in
-                                                              self?.appSettings.slidingSyncDiscovery = .native
-                                                              self?.actionsSubject.send(.logoutWithoutConfirmation)
-                                                          })
-            }
+        // The proxy is no longer supported so a logout is needed.
+        // Delay setting the alert otherwise it automatically gets dismissed. Same as the crashed last run one
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.state.bindings.alertInfo = AlertInfo(id: UUID(),
+                                                      title: L10n.bannerMigrateToNativeSlidingSyncAppForceLogoutTitle(InfoPlistReader.main.bundleDisplayName),
+                                                      primaryButton: .init(title: L10n.bannerMigrateToNativeSlidingSyncAction) { [weak self] in
+                                                          self?.actionsSubject.send(.logoutWithoutConfirmation)
+                                                      })
         }
     }
     
@@ -447,9 +440,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         switch await userSession.clientProxy.joinRoom(roomID, via: []) {
         case .success:
             actionsSubject.send(.presentRoom(roomIdentifier: roomID))
-//            analyticsService.trackJoinedRoom(isDM: roomProxy.info.isDirect,
-//                                             isSpace: roomProxy.info.isSpace,
-//                                             activeMemberCount: UInt(roomProxy.info.activeMembersCount))
+            analyticsService.trackJoinedRoom(isDM: roomProxy.info.isDirect,
+                                             isSpace: roomProxy.info.isSpace,
+                                             activeMemberCount: UInt(roomProxy.info.activeMembersCount))
+            appSettings.seenInvites.remove(roomID)
         case .failure:
             displayError()
         }
@@ -468,8 +462,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         state.bindings.alertInfo = .init(id: UUID(),
                                          title: title,
                                          message: message,
-                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                         secondaryButton: .init(title: L10n.actionDecline, role: .destructive) { Task { await self.declineInvite(roomID: room.id) } })
+                                         primaryButton: .init(title: L10n.actionDecline, role: .destructive) { Task { await self.declineInvite(roomID: room.id) } },
+                                         secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
     }
     
     private func declineInvite(roomID: String) async {
@@ -592,17 +586,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             case .failure(let error):
                 MXLog.error("Failed to fetch updated feed details: \(error)")
             }
-        }
-    }
-}
-
-extension SlidingSyncVersion {
-    var isProxy: Bool {
-        switch self {
-        case .proxy:
-            return true
-        default:
-            return false
         }
     }
 }

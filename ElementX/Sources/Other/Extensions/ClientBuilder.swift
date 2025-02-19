@@ -27,9 +27,7 @@ extension ClientBuilder {
         
         builder = switch slidingSync {
         case .restored: builder
-        case .discoverProxy: builder.slidingSyncVersionBuilder(versionBuilder: .discoverProxy)
-        case .discoverNative: builder.slidingSyncVersionBuilder(versionBuilder: .discoverNative)
-        case .forceNative: builder.slidingSyncVersionBuilder(versionBuilder: .native)
+        case .discover: builder.slidingSyncVersionBuilder(versionBuilder: .discoverNative)
         }
         
         if setupEncryption {
@@ -58,12 +56,8 @@ extension ClientBuilder {
 }
 
 enum ClientBuilderSlidingSync {
-    /// The proxy will be supplied when restoring the Session.
+    /// Sliding sync will be configured when restoring the Session.
     case restored
-    /// A proxy must be discovered whilst building the session.
-    case discoverProxy
-    /// Native sliding sync must be discovered whilst building the session.
-    case discoverNative
-    /// Forces native sliding sync without discovering it.
-    case forceNative
+    /// Sliding sync must be discovered whilst building the session.
+    case discover
 }

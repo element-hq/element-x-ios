@@ -19,7 +19,7 @@ class ClientProxy: ClientProxyProtocol {
     
     private let mediaLoader: MediaLoaderProtocol
     private let clientQueue: DispatchQueue
-        
+    
     private var roomListService: RoomListService?
     // periphery: ignore - only for retain
     private var roomListStateUpdateTaskHandle: TaskHandle?
@@ -167,6 +167,7 @@ class ClientProxy: ClientProxyProtocol {
     private let zeroPostsApi: ZeroPostsApiProtocol
     
     init(client: ClientProtocol,
+         needsSlidingSyncMigration: Bool,
          networkMonitor: NetworkMonitorProtocol,
          appSettings: AppSettings) async {
         self.client = client
@@ -180,6 +181,8 @@ class ClientProxy: ClientProxyProtocol {
         notificationSettings = NotificationSettingsProxy(notificationSettings: client.getNotificationSettings())
         
         secureBackupController = SecureBackupController(encryption: client.encryption())
+        
+        self.needsSlidingSyncMigration = needsSlidingSyncMigration
         
         /// Configure Zero Utlils, Services and APIs
         let zeroUsersApi = ZeroUsersApi(appSettings: appSettings)
@@ -266,14 +269,9 @@ class ClientProxy: ClientProxyProtocol {
         client.homeserver()
     }
     
+    let needsSlidingSyncMigration: Bool
     var slidingSyncVersion: SlidingSyncVersion {
         client.slidingSyncVersion()
-    }
-    
-    var availableSlidingSyncVersions: [SlidingSyncVersion] {
-        get async {
-            await client.availableSlidingSyncVersions()
-        }
     }
     
     var canDeactivateAccount: Bool {
@@ -308,6 +306,11 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     func startSync() {
+        guard !needsSlidingSyncMigration else {
+            MXLog.warning("Ignoring request, this client needs to be migrated to native sliding sync.")
+            return
+        }
+        
         guard !hasEncounteredAuthError else {
             MXLog.warning("Ignoring request, this client has an unknown token.")
             return
@@ -1335,9 +1338,9 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func userIdentity(for userID: String) async -> Result<UserIdentity?, ClientProxyError> {
+    func userIdentity(for userID: String) async -> Result<UserIdentityProxyProtocol?, ClientProxyError> {
         do {
-            return try await .success(client.encryption().userIdentity(userId: userID))
+            return try await .success(client.encryption().userIdentity(userId: userID).map(UserIdentityProxy.init))
         } catch {
             MXLog.error("Failed retrieving user identity: \(error)")
             return .failure(.sdkError(error))

@@ -284,7 +284,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         let notificationMode = roomInfo.cachedUserDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
         
-        let knockRequestType: RoomSummary.KnockRequestType? = switch roomInfo.membership {
+        let joinRequestType: RoomSummary.JoinRequestType? = switch roomInfo.membership {
         case .invited: .invite(inviter: inviterProxy)
         case .knocked: .knock
         default: nil
@@ -296,7 +296,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         return RoomSummary(roomListItem: roomListItem,
                            id: roomInfo.id,
-                           knockRequestType: knockRequestType,
+                           joinRequestType: joinRequestType,
                            name: displayName ?? "",
                            isDirect: roomInfo.isDirect,
                            avatarURL: roomAvatar.flatMap(URL.init(string:)),

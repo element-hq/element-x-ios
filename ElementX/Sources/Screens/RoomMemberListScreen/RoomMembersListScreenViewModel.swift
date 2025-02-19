@@ -11,6 +11,7 @@ import SwiftUI
 typealias RoomMembersListScreenViewModelType = StateStoreViewModel<RoomMembersListScreenViewState, RoomMembersListScreenViewAction>
 
 class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMembersListScreenViewModelProtocol {
+    private let clientProxy: ClientProxyProtocol
     private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let analytics: AnalyticsService
@@ -24,10 +25,12 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     }
 
     init(initialMode: RoomMembersListScreenMode = .members,
+         clientProxy: ClientProxyProtocol,
          roomProxy: JoinedRoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          analytics: AnalyticsService) {
+        self.clientProxy = clientProxy
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics
@@ -59,22 +62,23 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     }
     
     func stop() {
-        hideLoader()
+        hideLoadingIndicator(Self.setupMembersLoadingIndicatorIdentifier)
+        hideLoadingIndicator(Self.updateStateLoadingIndicatorIdentifier)
     }
     
     // MARK: - Members
     
     private func setupMembers() {
         Task {
-            showLoader()
+            showLoadingIndicator(Self.setupMembersLoadingIndicatorIdentifier)
             await roomProxy.updateMembers()
-            hideLoader()
+            hideLoadingIndicator(Self.setupMembersLoadingIndicatorIdentifier)
         }
         
-        roomProxy.membersPublisher
-            .filter { !$0.isEmpty }
+        roomProxy.membersPublisher.combineLatest(roomProxy.identityStatusChangesPublisher)
+            .filter { !$0.0.isEmpty }
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] members in
+            .sink { [weak self] members, _ in
                 self?.updateState(members: members)
             }
             .store(in: &cancellables)
@@ -87,11 +91,12 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     
     private func updateState(members: [RoomMemberProxyProtocol]) {
         Task {
-            showLoader()
+            showLoadingIndicator(Self.updateStateLoadingIndicatorIdentifier)
             
             let members = members.sorted()
             let roomMembersDetails = await buildMembersDetails(members: members)
             self.members = members
+            
             self.state = .init(joinedMembersCount: roomProxy.infoPublisher.value.joinedMembersCount,
                                joinedMembers: roomMembersDetails.joinedMembers,
                                invitedMembers: roomMembersDetails.invitedMembers,
@@ -102,25 +107,32 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             self.state.canKickUsers = await (try? roomProxy.canUserKick(userID: roomProxy.ownUserID).get()) == true
             self.state.canBanUsers = await (try? roomProxy.canUserBan(userID: roomProxy.ownUserID).get()) == true
             
-            hideLoader()
+            hideLoadingIndicator(Self.updateStateLoadingIndicatorIdentifier)
         }
     }
     
     private func buildMembersDetails(members: [RoomMemberProxyProtocol]) async -> RoomMembersDetails {
-        await Task.detached {
+        await Task.detached { [clientProxy, roomProxy] in
             // accessing RoomMember's properties is very slow. We need to do it in a background thread.
-            var invitedMembers: [RoomMemberDetails] = .init()
-            var joinedMembers: [RoomMemberDetails] = .init()
-            var bannedMembers: [RoomMemberDetails] = .init()
+            var invitedMembers: [RoomMemberListScreenEntry] = .init()
+            var joinedMembers: [RoomMemberListScreenEntry] = .init()
+            var bannedMembers: [RoomMemberListScreenEntry] = .init()
             
             for member in members {
+                var verificationState: UserIdentityVerificationState = .notVerified
+                if roomProxy.isEncrypted, // We don't care about identity statuses on non-encrypted rooms
+                   case let .success(userIdentity) = await clientProxy.userIdentity(for: member.userID),
+                   let userIdentity {
+                    verificationState = userIdentity.verificationState
+                }
+                
                 switch member.membership {
                 case .invite:
-                    invitedMembers.append(.init(withProxy: member))
+                    invitedMembers.append(.init(member: .init(withProxy: member), verificationState: verificationState))
                 case .join:
-                    joinedMembers.append(.init(withProxy: member))
+                    joinedMembers.append(.init(member: .init(withProxy: member), verificationState: verificationState))
                 case .ban:
-                    bannedMembers.append(.init(withProxy: member))
+                    bannedMembers.append(.init(member: .init(withProxy: member), verificationState: verificationState))
                 default:
                     continue
                 }
@@ -128,7 +140,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             
             return .init(invitedMembers: invitedMembers,
                          joinedMembers: joinedMembers,
-                         bannedMembers: bannedMembers.sorted { $0.id.localizedStandardCompare($1.id) == .orderedAscending }) // Re-sort ignoring display name.
+                         bannedMembers: bannedMembers.sorted { $0.member.id.localizedStandardCompare($1.member.id) == .orderedAscending }) // Re-sort ignoring display name.
         }
         .value
     }
@@ -215,18 +227,19 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     
     // MARK: - Indicators
     
-    private let userIndicatorID = UUID().uuidString
+    private static let setupMembersLoadingIndicatorIdentifier = "\(RoomMembersListScreenViewModel.self)-SetupMembers"
+    private static let updateStateLoadingIndicatorIdentifier = "\(RoomMembersListScreenViewModel.self)-UpdateState"
     
-    private func showLoader() {
-        userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
+    private func showLoadingIndicator(_ identifier: String) {
+        userIndicatorController.submitIndicator(UserIndicator(id: identifier,
                                                               type: .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: true),
                                                               title: L10n.commonLoading,
                                                               persistent: true),
                                                 delay: .milliseconds(200))
     }
     
-    private func hideLoader() {
-        userIndicatorController.retractIndicatorWithId(userIndicatorID)
+    private func hideLoadingIndicator(_ identifier: String) {
+        userIndicatorController.retractIndicatorWithId(identifier)
     }
     
     private func showManageMemberIndicator(title: String) {
@@ -247,7 +260,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
 }
 
 private struct RoomMembersDetails {
-    var invitedMembers: [RoomMemberDetails]
-    var joinedMembers: [RoomMemberDetails]
-    var bannedMembers: [RoomMemberDetails]
+    var invitedMembers: [RoomMemberListScreenEntry]
+    var joinedMembers: [RoomMemberListScreenEntry]
+    var bannedMembers: [RoomMemberListScreenEntry]
 }

@@ -22,6 +22,7 @@ protocol CommonSettingsProtocol {
 final class AppSettings {
     private enum UserDefaultsKeys: String {
         case lastVersionLaunched
+        case seenInvites
         case appLockNumberOfPINAttempts
         case appLockNumberOfBiometricAttempts
         case timelineStyle
@@ -46,7 +47,6 @@ final class AppSettings {
         case elementCallBaseURLOverride
         
         // Feature flags
-        case slidingSyncDiscovery
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
         case enableOnlySignedDeviceIsolationMode
@@ -110,6 +110,11 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.lastVersionLaunched, storageType: .userDefaults(store))
     var lastVersionLaunched: String?
         
+    /// The Set of room identifiers of invites that the user already saw in the invites list.
+    /// This Set is being used to implement badges for unread invites.
+    @UserPreference(key: UserDefaultsKeys.seenInvites, defaultValue: [], storageType: .userDefaults(store))
+    var seenInvites: Set<String>
+    
     /// The default homeserver address used. This is intentionally a string without a scheme
     /// so that it can be passed to Rust as a ServerName for well-known discovery.
     private(set) var defaultHomeserverAddress = ZeroContants.appServer.matrixHomeServerUrl
@@ -288,10 +293,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.fuzzyRoomListSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
     var fuzzyRoomListSearchEnabled
-    
-    enum SlidingSyncDiscovery: Codable { case proxy, native, forceNative }
-    @UserPreference(key: UserDefaultsKeys.slidingSyncDiscovery, defaultValue: .forceNative, storageType: .userDefaults(store))
-    var slidingSyncDiscovery: SlidingSyncDiscovery
     
     @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var knockingEnabled

@@ -80,9 +80,11 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var deviceID: String? { get }
 
     var homeserver: String { get }
-
+    
+    // TODO: This is a temporary value, in the future we should throw a migration error
+    // when decoding a session that contains a sliding sync proxy URL instead of restoring it.
+    var needsSlidingSyncMigration: Bool { get }
     var slidingSyncVersion: SlidingSyncVersion { get }
-    var availableSlidingSyncVersions: [SlidingSyncVersion] { get async }
     
     var canDeactivateAccount: Bool { get }
     
@@ -198,6 +200,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func withdrawUserIdentityVerification(_ userID: String) async -> Result<Void, ClientProxyError>
     func resetIdentity() async -> Result<IdentityResetHandle?, ClientProxyError>
     
+    func userIdentity(for userID: String) async -> Result<UserIdentityProxyProtocol?, ClientProxyError>
     func userIdentity(for userID: String) async -> Result<UserIdentity?, ClientProxyError>
     
     // MARK: - Zero Rewards

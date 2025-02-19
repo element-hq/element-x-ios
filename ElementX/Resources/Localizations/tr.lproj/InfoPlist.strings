@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "Fotoğraf veya video çekmek ve bunları mesaj olarak göndermek için Element X'in kameraya erişimi gerekir.";
+"NSFaceIDUsageDescription" = "Face ID, uygulamanıza erişmek için kullanılır.";
+"NSLocationWhenInUseUsageDescription" = "Element X'in konumunuzu paylaşabilmesi için konum erişimi verin.";
+"NSMicrophoneUsageDescription" = "Sesli mesaj kaydetmek ve göndermek için Element X'in mikrofona erişmesi gerekir.";
+"NSPhotoLibraryUsageDescription" = "Bu, görüntüleri ve videoları fotoğraf kitaplığınıza kaydetmenizi sağlar.";

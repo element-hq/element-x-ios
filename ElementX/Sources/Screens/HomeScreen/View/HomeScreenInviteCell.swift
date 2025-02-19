@@ -123,10 +123,13 @@ struct HomeScreenInviteCell: View {
         nil
     }
     
+    @ViewBuilder
     private var badge: some View {
-        Circle()
-            .scaledFrame(size: 12)
-            .foregroundColor(.zero.iconAccentTertiary)
+        if room.badges.isDotShown {
+            Circle()
+                .scaledFrame(size: 12)
+                .foregroundColor(.compound.iconAccentTertiary) // The badge is always green, no need to check isHighlighted here.
+        }
     }
 }
 
@@ -179,7 +182,7 @@ private extension HomeScreenRoom {
         
         let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
                                   id: "@someone:somewhere.com",
-                                  knockRequestType: .invite(inviter: inviter),
+                                  joinRequestType: .invite(inviter: inviter),
                                   name: "Some Guy",
                                   isDirect: true,
                                   avatarURL: nil,
@@ -206,7 +209,7 @@ private extension HomeScreenRoom {
         
         let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
                                   id: "@someone:somewhere.com",
-                                  knockRequestType: .invite(inviter: inviter),
+                                  joinRequestType: .invite(inviter: inviter),
                                   name: "Awesome Room",
                                   isDirect: false,
                                   avatarURL: avatarURL,

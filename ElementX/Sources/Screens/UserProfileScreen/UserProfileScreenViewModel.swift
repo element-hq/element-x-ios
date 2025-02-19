@@ -66,8 +66,6 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
             Task { await createDirectChat() }
         case .startCall(let roomID):
             actionsSubject.send(.startCall(roomID: roomID))
-        case .verifyUser:
-            actionsSubject.send(.verifyUser(userID: state.userID))
         case .dismiss:
             actionsSubject.send(.dismiss)
         }
@@ -95,7 +93,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         }
         
         if case let .success(.some(identity)) = await identityResult {
-            state.isVerified = identity.isVerified()
+            state.isVerified = identity.verificationState == .verified
         } else {
             MXLog.error("Failed to find the user's identity.")
         }

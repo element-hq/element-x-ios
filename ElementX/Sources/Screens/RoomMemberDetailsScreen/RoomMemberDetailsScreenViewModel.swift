@@ -50,10 +50,20 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             .store(in: &cancellables)
         
         showMemberLoadingIndicator()
+        
         Task {
             await loadMember()
             hideMemberLoadingIndicator()
         }
+        
+        roomProxy.identityStatusChangesPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { changes in
+                if changes.map(\.userId).contains(userID) {
+                    Task { await self.loadMember() }
+                }
+            }
+            .store(in: &cancellables)
     }
     
     // MARK: - Public
@@ -85,16 +95,15 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             actionsSubject.send(.startCall(roomID: roomID))
         case .verifyUser:
             actionsSubject.send(.verifyUser(userID: state.userID))
+        case .withdrawVerification:
+            Task { await clientProxy.withdrawUserIdentityVerification(state.userID) }
         }
     }
 
     // MARK: - Private
     
     private func loadMember() async {
-        async let memberResult = roomProxy.getMember(userID: state.userID)
-        async let identityResult = clientProxy.userIdentity(for: state.userID)
-        
-        switch await memberResult {
+        switch await roomProxy.getMember(userID: state.userID) {
         case .success(let member):
             roomMemberProxy = member
             state.memberDetails = RoomMemberDetails(withProxy: member)
@@ -113,8 +122,8 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             actionsSubject.send(.openUserProfile)
         }
         
-        if case let .success(.some(identity)) = await identityResult {
-            state.isVerified = identity.isVerified()
+        if case let .success(.some(identity)) = await clientProxy.userIdentity(for: state.userID) {
+            state.verificationState = identity.verificationState
         } else {
             MXLog.error("Failed to find the member's identity.")
         }
