@@ -15,13 +15,13 @@ struct RoomMemberDetailsScreen: View {
         Form {
             headerSection
             
-            if context.viewState.showVerifyIdentitySection {
-                verificationSection
-            }
-            
-            if context.viewState.memberDetails != nil, !context.viewState.isOwnMemberDetails {
-                blockUserSection
-            }
+//            if context.viewState.showVerifyIdentitySection {
+//                verificationSection
+//            }
+//            
+//            if context.viewState.memberDetails != nil, !context.viewState.isOwnMemberDetails {
+//                blockUserSection
+//            }
         }
         .zeroList()
         .navigationTitle(L10n.screenRoomMemberDetailsTitle)
@@ -117,7 +117,7 @@ struct RoomMemberDetailsScreen: View {
     
     var verificationSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.commonVerifyUser, icon: \.lock), kind: .button {
+            ZeroListRow(label: .default(title: L10n.commonVerifyUser, icon: \.lock), kind: .button {
                 context.send(viewAction: .verifyUser)
             })
         }

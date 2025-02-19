@@ -208,41 +208,41 @@ struct RoomDetailsScreen: View {
     }
     
     private var peopleSection: some View {
-        Section {
-            if context.viewState.hasMemberIdentityVerificationStateViolations {
-                ListRow(label: .default(title: L10n.commonPeople, icon: \.user),
-                        details: .icon(CompoundIcon(\.infoSolid).foregroundStyle(.compound.iconCriticalPrimary)),
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapPeople)
-                        })
-                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
-                
-            } else {
-                ListRow(label: .default(title: L10n.commonPeople, icon: \.user),
-                        details: .title(String(context.viewState.joinedMembersCount)),
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapPeople)
-                        })
-                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
-            }
-        
-            if context.viewState.canSeeKnockingRequests {
-                ListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
-                                        icon: \.askToJoin),
-                        details: context.viewState.knockRequestsCount > 0 ? .counter(context.viewState.knockRequestsCount) : nil,
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapPeople)
-                        })
-                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
-            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
-                ZeroListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
-                                        icon: \.admin),
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapRolesAndPermissions)
-                        })
+            Section {
+                if context.viewState.hasMemberIdentityVerificationStateViolations {
+                    ZeroListRow(label: .default(title: L10n.commonPeople, icon: \.user),
+                            details: .icon(CompoundIcon(\.infoSolid).foregroundStyle(.compound.iconCriticalPrimary)),
+                            kind: .navigationLink {
+                                context.send(viewAction: .processTapPeople)
+                            })
+                            .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
+                    
+                } else {
+                    ZeroListRow(label: .default(title: L10n.commonPeople, icon: \.user),
+                            details: .title(String(context.viewState.joinedMembersCount)),
+                            kind: .navigationLink {
+                                context.send(viewAction: .processTapPeople)
+                            })
+                            .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
+                }
+//                if context.viewState.canSeeKnockingRequests {
+//                    ZeroListRow(label: .default(title: L10n.screenRoomDetailsRequestsToJoinTitle,
+//                                                icon: \.askToJoin),
+//                                details: context.viewState.knockRequestsCount > 0 ? .counter(context.viewState.knockRequestsCount) : nil,
+//                                kind: .navigationLink {
+//                        context.send(viewAction: .processTapPeople)
+//                    })
+//                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
+//                }
+                if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
+                    ZeroListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
+                                            icon: \.admin),
+                            kind: .navigationLink {
+                                context.send(viewAction: .processTapRolesAndPermissions)
+                            })
+                }
             }
         }
-    }
     
     private var toggleMuteButton: some View {
         Button {

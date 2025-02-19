@@ -1037,14 +1037,14 @@ extension PreviewTests {
         }
     }
 
-    func test_verificationBadge() async throws {
-        for preview in VerificationBadge_Previews._allPreviews {
+    func test_userRewardsSettingsScreen() async throws {
+        for preview in UserRewardsSettingsScreen_Previews._allPreviews {
             try await assertSnapshots(matching: preview)
         }
     }
 
-    func test_userRewardsSettingsScreen() async throws {
-        for preview in UserRewardsSettingsScreen_Previews._allPreviews {
+    func test_verificationBadge() async throws {
+        for preview in VerificationBadge_Previews._allPreviews {
             try await assertSnapshots(matching: preview)
         }
     }

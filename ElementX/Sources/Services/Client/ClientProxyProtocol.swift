@@ -201,7 +201,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func resetIdentity() async -> Result<IdentityResetHandle?, ClientProxyError>
     
     func userIdentity(for userID: String) async -> Result<UserIdentityProxyProtocol?, ClientProxyError>
-    func userIdentity(for userID: String) async -> Result<UserIdentity?, ClientProxyError>
     
     // MARK: - Zero Rewards
     

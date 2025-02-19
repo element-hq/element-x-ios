@@ -440,9 +440,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         switch await userSession.clientProxy.joinRoom(roomID, via: []) {
         case .success:
             actionsSubject.send(.presentRoom(roomIdentifier: roomID))
-            analyticsService.trackJoinedRoom(isDM: roomProxy.info.isDirect,
-                                             isSpace: roomProxy.info.isSpace,
-                                             activeMemberCount: UInt(roomProxy.info.activeMembersCount))
+//            analyticsService.trackJoinedRoom(isDM: roomProxy.info.isDirect,
+//                                             isSpace: roomProxy.info.isSpace,
+//                                             activeMemberCount: UInt(roomProxy.info.activeMembersCount))
             appSettings.seenInvites.remove(roomID)
         case .failure:
             displayError()
@@ -483,6 +483,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         
         if case .failure = result {
             displayError()
+        } else {
+            appSettings.seenInvites.remove(roomID)
         }
     }
     

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SwiftUI
 
-enum HomeScreenViewModelAction: Equatable {
+enum HomeScreenViewModelAction {
     case presentRoom(roomIdentifier: String)
     case presentRoomDetails(roomIdentifier: String)
     case roomLeft(roomIdentifier: String)

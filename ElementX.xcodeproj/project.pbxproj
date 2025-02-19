@@ -312,7 +312,7 @@
 		189334A62D071C0900CC87B9 /* MediaEventsTimelineScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A175D0FDEDBFA44C47FE13AE /* MediaEventsTimelineScreenViewModelProtocol.swift */; };
 		189334A72D071C1000CC87B9 /* MediaEventsTimelineScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002399C6CB875C4EBB01CBC0 /* MediaEventsTimelineScreen.swift */; };
 		1896C50B2CC7DAB800142C49 /* KnockedRoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 858DA81F2ACF484B7CAD6AE4 /* KnockedRoomProxy.swift */; };
-		1896C50C2CC7DAC000142C49 /* UserIdentitySDKMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DE9D0D480D087D0F676B52 /* UserIdentitySDKMock.swift */; };
+		1896C50C2CC7DAC000142C49 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		1896C50D2CC7DB0200142C49 /* KnockedRoomProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E8F4D7D61B80EBD5CB92F8A /* KnockedRoomProxyMock.swift */; };
 		18978C9438206828C1D5AF2A /* test_animated_image.gif in Resources */ = {isa = PBXBuildFile; fileRef = 53FD6D3D38F556CEAA280C58 /* test_animated_image.gif */; };
 		189E88522D0CA77A002FA063 /* ZeroAccountApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 189E88512D0CA773002FA063 /* ZeroAccountApi.swift */; };
@@ -694,7 +694,7 @@
 		18E9A5242C9829970082DDA4 /* HomeScreenRecoveryKeyConfirmationBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05512FB13987D221B7205DE0 /* HomeScreenRecoveryKeyConfirmationBanner.swift */; };
 		18E9A5252C9829970082DDA4 /* HomeScreenRoomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED044D00F2176681CC02CD54 /* HomeScreenRoomCell.swift */; };
 		18E9A5262C9829970082DDA4 /* HomeScreenRoomList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7661EFFCAA307A97D71132A /* HomeScreenRoomList.swift */; };
-		18E9A5272C9829970082DDA4 /* HomeScreenSlidingSyncMigrationBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4691B8DE1D51DE152680098A /* HomeScreenSlidingSyncMigrationBanner.swift */; };
+		18E9A5272C9829970082DDA4 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		18E9A5282C9829970082DDA4 /* HomeScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31D6764D6976D235926FE5FC /* HomeScreenViewModel.swift */; };
 		18E9A5292C9829970082DDA4 /* HomeScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F5530B2212862FA4BEFF2D /* HomeScreenViewModelProtocol.swift */; };
 		18E9A52A2C9829970082DDA4 /* IdentityConfirmationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00AFC5F08734C2EA4EE79C59 /* IdentityConfirmationScreen.swift */; };
@@ -1847,6 +1847,10 @@
 		798457622D6090DD0039623F /* FeedDetailsUpdatedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798457602D6090D20039623F /* FeedDetailsUpdatedProtocol.swift */; };
 		798BF3072137833FBD3F4C96 /* TimelineDeliveryStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F91544AC136BF6477BDAB8 /* TimelineDeliveryStatusView.swift */; };
 		79959F8E45C3749997482A7F /* TimelineItemBubbledStylerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A459AE4B6566B2FA99E86B2 /* TimelineItemBubbledStylerView.swift */; };
+		79B8E34A2D660B68000304AE /* UserIdentityProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F793C422BDACE0C60C774F4 /* UserIdentityProxyProtocol.swift */; };
+		79B8E34B2D660BA9000304AE /* UserIdentityProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8536B40F578BA7FDB23D97B1 /* UserIdentityProxyMock.swift */; };
+		79B8E34C2D660BBB000304AE /* UserIdentityProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964093C7CA8823CAB7FFD88E /* UserIdentityProxy.swift */; };
+		79B8E34D2D660CEC000304AE /* VerificationBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D97BAF04AA150C0EF03021 /* VerificationBadge.swift */; };
 		79C6BB252D47B6E700FC3CBF /* RoomPreviewProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739077686814E4EA339B1C83 /* RoomPreviewProxyProtocol.swift */; };
 		79C6BB262D47B6F400FC3CBF /* RoomPreviewProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D94852AD5BB376CBCC3544 /* RoomPreviewProxy.swift */; };
 		79C6BB272D47B73B00FC3CBF /* RoomMembershipDetailsProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1434D5169F0EE319E226DA7F /* RoomMembershipDetailsProxyProtocol.swift */; };
@@ -8951,7 +8955,7 @@
 				18E9A43A2C9829970082DDA4 /* AppCoordinator.swift in Sources */,
 				18E9A43B2C9829970082DDA4 /* AppCoordinatorProtocol.swift in Sources */,
 				7968A4362D540A3400E9056A /* FeedDetailsScreenViewModelProtocol.swift in Sources */,
-				1896C50C2CC7DAC000142C49 /* UserIdentitySDKMock.swift in Sources */,
+				1896C50C2CC7DAC000142C49 /* (null) in Sources */,
 				18E9A43C2C9829970082DDA4 /* AppCoordinatorStateMachine.swift in Sources */,
 				18C4540A2CF09A5200F25539 /* (null) in Sources */,
 				18E9A43D2C9829970082DDA4 /* AppDelegate.swift in Sources */,
@@ -9170,12 +9174,14 @@
 				188C87CF2D37F92F00A139EB /* EditRoomAddressScreenCoordinator.swift in Sources */,
 				18E9A4EC2C9829970082DDA4 /* EmojiProvider.swift in Sources */,
 				185454E62CFF0EFB003CA957 /* CompleteProfileScreenViewModelProtocol.swift in Sources */,
+				79B8E34B2D660BA9000304AE /* UserIdentityProxyMock.swift in Sources */,
 				18E9A4ED2C9829970082DDA4 /* EmoteRoomTimelineItem.swift in Sources */,
 				18E9A4EE2C9829970082DDA4 /* EmoteRoomTimelineItemContent.swift in Sources */,
 				18E9A4EF2C9829970082DDA4 /* EmoteRoomTimelineView.swift in Sources */,
 				18E9A4F02C9829970082DDA4 /* Encodable.swift in Sources */,
 				18E9A4F12C9829970082DDA4 /* EncryptedRoomTimelineItem.swift in Sources */,
 				18E9A4F22C9829970082DDA4 /* EncryptedRoomTimelineView.swift in Sources */,
+				79B8E34D2D660CEC000304AE /* VerificationBadge.swift in Sources */,
 				18D467B52D10A0BD00861AA6 /* SecurityAndPrivacyScreen.swift in Sources */,
 				18E9A4F32C9829970082DDA4 /* EncryptionAuthenticity.swift in Sources */,
 				185454D02CFE3D2E003CA957 /* InfoBox.swift in Sources */,
@@ -9213,6 +9219,7 @@
 				18D5D9BE2CEB768600107940 /* UserRewardsSettingsScreen.swift in Sources */,
 				1828CE482D0114A2002FF640 /* CreateAccountHelper.swift in Sources */,
 				18E9A5092C9829970082DDA4 /* FileRoomTimelineItemContent.swift in Sources */,
+				79B8E34A2D660B68000304AE /* UserIdentityProxyProtocol.swift in Sources */,
 				18E9A50A2C9829970082DDA4 /* FileRoomTimelineView.swift in Sources */,
 				18E9A50B2C9829970082DDA4 /* FlowCoordinatorProtocol.swift in Sources */,
 				184EC99A2CA5AF3F000F405E /* AuthenticationClientBuilderMock.swift in Sources */,
@@ -9248,7 +9255,7 @@
 				18E9A5242C9829970082DDA4 /* HomeScreenRecoveryKeyConfirmationBanner.swift in Sources */,
 				18E9A5252C9829970082DDA4 /* HomeScreenRoomCell.swift in Sources */,
 				18E9A5262C9829970082DDA4 /* HomeScreenRoomList.swift in Sources */,
-				18E9A5272C9829970082DDA4 /* HomeScreenSlidingSyncMigrationBanner.swift in Sources */,
+				18E9A5272C9829970082DDA4 /* (null) in Sources */,
 				18E9A5282C9829970082DDA4 /* HomeScreenViewModel.swift in Sources */,
 				18E9A5292C9829970082DDA4 /* HomeScreenViewModelProtocol.swift in Sources */,
 				18E9A52A2C9829970082DDA4 /* IdentityConfirmationScreen.swift in Sources */,
@@ -9408,6 +9415,7 @@
 				18E9A5AD2C9829970082DDA4 /* NotificationManagerProtocol.swift in Sources */,
 				18326FD82CA53E7400389CB2 /* ZeroColors.swift in Sources */,
 				18E9A5AE2C9829970082DDA4 /* NotificationPermissionsScreen.swift in Sources */,
+				79B8E34C2D660BBB000304AE /* UserIdentityProxy.swift in Sources */,
 				18E9A5AF2C9829970082DDA4 /* NotificationPermissionsScreenCoordinator.swift in Sources */,
 				18E9A5B02C9829970082DDA4 /* NotificationPermissionsScreenModels.swift in Sources */,
 				18E9A5B12C9829970082DDA4 /* NotificationPermissionsScreenViewModel.swift in Sources */,
