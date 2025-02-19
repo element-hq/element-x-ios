@@ -58,7 +58,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             let feedResult = await clientProxy.fetchFeedDetails(feedId: feedId)
             switch feedResult {
             case .success(let feed):
-                state.bindings.feed = HomeScreenPost.init(post: feed)
+                state.bindings.feed = HomeScreenPost.init(loggedInUserId: clientProxy.userID, post: feed)
             case .failure(let error):
                 MXLog.error("Failed to fetch feed details: \(error)")
             }
@@ -85,7 +85,9 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                 } else {
                     var feedReplies: [HomeScreenPost] = isForceRefresh ? [] : state.feedReplies
                     for reply in replies {
-                        let feedReply = HomeScreenPost(post: reply, rewardsDecimalPlaces: state.userRewards.decimals)
+                        let feedReply = HomeScreenPost(loggedInUserId: clientProxy.userID,
+                                                       post: reply,
+                                                       rewardsDecimalPlaces: state.userRewards.decimals)
                         feedReplies.append(feedReply)
                     }
                     state.feedReplies = feedReplies
@@ -126,7 +128,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             let addMeowResult = await clientProxy.addMeowsToFeed(feedId: postId, amount: amount)
             switch addMeowResult {
             case .success(let post):
-                let homePost = HomeScreenPost(post: post, rewardsDecimalPlaces: state.userRewards.decimals)
+                let homePost = HomeScreenPost(loggedInUserId: clientProxy.userID, post: post, rewardsDecimalPlaces: state.userRewards.decimals)
                 if isPostAReply {
                     if let index = state.feedReplies.firstIndex(where: { $0.id == homePost.id }) {
                         state.feedReplies[index] = homePost

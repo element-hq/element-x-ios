@@ -532,7 +532,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 } else {
                     var homePosts: [HomeScreenPost] = isForceRefresh ? [] : state.posts
                     for post in posts {
-                        let homePost = HomeScreenPost(post: post, rewardsDecimalPlaces: state.userRewards.decimals)
+                        let homePost = HomeScreenPost(loggedInUserId: userSession.clientProxy.userID,
+                                                      post: post,
+                                                      rewardsDecimalPlaces: state.userRewards.decimals)
                         homePosts.append(homePost)
                     }
                     state.posts = homePosts
@@ -565,7 +567,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             let addMeowResult = await userSession.clientProxy.addMeowsToFeed(feedId: postId, amount: amount)
             switch addMeowResult {
             case .success(let post):
-                let homePost = HomeScreenPost(post: post, rewardsDecimalPlaces: state.userRewards.decimals)
+                let homePost = HomeScreenPost(loggedInUserId: userSession.clientProxy.userID,
+                                              post: post,
+                                              rewardsDecimalPlaces: state.userRewards.decimals)
                 if let index = state.posts.firstIndex(where: { $0.id == homePost.id }) {
                     state.posts[index] = homePost
                 }
@@ -581,7 +585,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             let feedDetailsResult = await userSession.clientProxy.fetchFeedDetails(feedId: feedId)
             switch feedDetailsResult {
             case .success(let post):
-                let homePost = HomeScreenPost(post: post, rewardsDecimalPlaces: state.userRewards.decimals)
+                let homePost = HomeScreenPost(loggedInUserId: userSession.clientProxy.userID,
+                                              post: post,
+                                              rewardsDecimalPlaces: state.userRewards.decimals)
                 if let index = state.posts.firstIndex(where: { $0.id == homePost.id }) {
                     state.posts[index] = homePost
                 }

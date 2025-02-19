@@ -282,6 +282,7 @@ struct HomeScreenPost: Identifiable, Equatable {
     let arweaveId: String
     let isMeowedByMe: Bool
     let postDateTime: String
+    let isMyPost: Bool
     
     static func placeholder() -> HomeScreenPost {
         HomeScreenPost(id: UUID().uuidString,
@@ -300,7 +301,8 @@ struct HomeScreenPost: Identifiable, Equatable {
                        isPostInOwnFeed: false,
                        arweaveId: "",
                        isMeowedByMe: false,
-                       postDateTime: "")
+                       postDateTime: "",
+                       isMyPost: false)
     }
 }
 
@@ -342,7 +344,7 @@ extension HomeScreenRoom {
 }
 
 extension HomeScreenPost {
-    init(post: ZPost, rewardsDecimalPlaces: Int = 0) {
+    init(loggedInUserId: String, post: ZPost, rewardsDecimalPlaces: Int = 0) {
         let userProfile = post.user.profileSummary
         let meowCount = post.postsMeowsSummary?.meowCount(decimal: rewardsDecimalPlaces) ?? "0"
         let postUpdatedAt = DateUtil.shared.dateFromISO8601String(post.updatedAt)
@@ -357,6 +359,8 @@ extension HomeScreenPost {
         let formatter = DateFormatter()
         formatter.dateFormat = "h:mm aa • MMM d, yyyy"
         let postDateTime = formatter.string(from: postUpdatedAt)
+        
+        let isMyPost = loggedInUserId == post.userId
         
         self.init(
             id: post.id.rawValue,
@@ -377,7 +381,8 @@ extension HomeScreenPost {
             isPostInOwnFeed: isPostInOwnFeed,
             arweaveId: post.arweaveId,
             isMeowedByMe: (post.meows?.isEmpty == false),
-            postDateTime: postDateTime
+            postDateTime: postDateTime,
+            isMyPost: isMyPost
         )
     }
     
