@@ -136,7 +136,13 @@ private struct CallView: UIViewRepresentable {
         
         func load(_ url: URL) {
             self.url = url
-            webView.loadFileURL(url, allowingReadAccessTo: EmbeddedElementCall.bundle.bundleURL)
+            // The only file URL we allow is the one coming from our own local ElementCall bundle, so it's okay to allow read permission only to our local EC bundle
+            if url.isFileURL {
+                webView.loadFileURL(url, allowingReadAccessTo: EmbeddedElementCall.bundle.bundleURL)
+            } else {
+                let request = URLRequest(url: url)
+                webView.load(request)
+            }
         }
         
         func evaluateJavaScript(_ script: String) async throws -> Any? {
