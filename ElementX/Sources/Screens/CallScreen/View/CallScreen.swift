@@ -7,7 +7,7 @@
 
 import AVKit
 import Combine
-import EmbeddedWebApp
+import EmbeddedElementCall
 import SFSafeSymbols
 import SwiftUI
 import WebKit
@@ -136,7 +136,7 @@ private struct CallView: UIViewRepresentable {
         
         func load(_ url: URL) {
             self.url = url
-            webView.loadFileURL(url, allowingReadAccessTo: EmbeddedWebApp.bundle.bundleURL)
+            webView.loadFileURL(url, allowingReadAccessTo: EmbeddedElementCall.bundle.bundleURL)
         }
         
         func evaluateJavaScript(_ script: String) async throws -> Any? {

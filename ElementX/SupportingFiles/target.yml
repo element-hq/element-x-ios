@@ -214,7 +214,7 @@ targets:
     - package: Collections
     - package: DeviceKit
     - package: DTCoreText
-    - package: EmbeddedWebApp
+    - package: EmbeddedElementCall
     - package: KeychainAccess
     - package: Kingfisher
     - package: KZFileWatchers

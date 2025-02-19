@@ -112,6 +112,7 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
             return .failure(.failedBuildingCallURL)
         }
         
+        // Required to make the embedded app work with the widget URL
         let correctedUrlString = urlString.replacingOccurrences(of: "/room#", with: "#")
         guard let url = URL(string: correctedUrlString) else {
             return .failure(.failedParsingCallURL)
