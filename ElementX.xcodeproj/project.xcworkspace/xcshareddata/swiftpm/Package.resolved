@@ -1,5 +1,5 @@
 {
-  "originHash" : "589ad34c2f16e593ee87c301010a99d03dce7abcc7227123fe28f9782a905b8d",
+  "originHash" : "cb4b4c28930e04929217c9570b7f82a1dc8e3dc51e3f956f11584dbae9bac079",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -55,11 +55,12 @@
       }
     },
     {
-      "identity" : "embeddedwebapp",
+      "identity" : "element-call-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Velin92/EmbeddedWebApp",
+      "location" : "https://github.com/element-hq/element-call-swift",
       "state" : {
-        "revision" : "1e6918acc44ee6609d9070a07a2e358d81d788fe"
+        "revision" : "c429986d7053fb21d5d7fe6f0f9679e1d1680108",
+        "version" : "1.1.35"
       }
     },
     {
