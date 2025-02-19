@@ -73,7 +73,7 @@ struct DeveloperOptionsScreen: View {
             }
 
             Section {
-                TextField(context.viewState.elementCallBaseURL.absoluteString, text: $elementCallURLOverrideString)
+                TextField("Leave empty to use EC locally", text: $elementCallURLOverrideString)
                     .autocorrectionDisabled(true)
                     .autocapitalization(.none)
                     .foregroundColor(URL(string: elementCallURLOverrideString) == nil ? .red : .primary)
@@ -86,11 +86,7 @@ struct DeveloperOptionsScreen: View {
                         }
                     }
             } header: {
-                Text("Element Call")
-            } footer: {
-                if context.elementCallBaseURLOverride == nil {
-                    Text("The call URL may be overridden by your homeserver.")
-                }
+                Text("Element Call remote URL override")
             }
             
             Section {
