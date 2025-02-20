@@ -35,7 +35,7 @@ struct PinnedEventsTimelineScreen: View {
                                                              canCurrentUserRedactOthers: timelineContext.viewState.canCurrentUserRedactOthers,
                                                              canCurrentUserPin: timelineContext.viewState.canCurrentUserPin,
                                                              pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
-                                                             isDM: timelineContext.viewState.isEncryptedOneToOneRoom,
+                                                             isDM: timelineContext.viewState.isDirectOneToOneRoom,
                                                              isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
                                                              timelineKind: timelineContext.viewState.timelineKind,
                                                              emojiProvider: timelineContext.viewState.emojiProvider)
