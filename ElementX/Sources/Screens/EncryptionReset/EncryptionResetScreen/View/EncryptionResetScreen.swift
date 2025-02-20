@@ -40,7 +40,7 @@ struct EncryptionResetScreen: View {
     
     private var header: some View {
         VStack(spacing: 8) {
-            BigIcon(icon: \.error, style: .alertSolid)
+            BigIcon(icon: \.errorSolid, style: .alertSolid)
                 .padding(.bottom, 8)
             
             Text(L10n.screenEncryptionResetTitle)

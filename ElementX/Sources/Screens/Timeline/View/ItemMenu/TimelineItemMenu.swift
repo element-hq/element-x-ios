@@ -228,7 +228,7 @@ private struct VerifiedUserSendFailureView: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: 8) {
-                Label(title, icon: \.error, iconSize: .small, relativeTo: .compound.bodySMSemibold)
+                Label(title, icon: \.errorSolid, iconSize: .small, relativeTo: .compound.bodySMSemibold)
                     .font(.compound.bodySMSemibold)
                     .foregroundStyle(.compound.textCriticalPrimary)
                     .frame(maxWidth: .infinity, alignment: .leading)
