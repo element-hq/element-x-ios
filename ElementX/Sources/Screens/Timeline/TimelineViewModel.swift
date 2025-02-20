@@ -113,6 +113,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             return self.timelineInteractionHandler.audioPlayerState(for: itemID)
         }
         
+        state.pillContextUpdater = { [weak self] pillContext in
+            self?.pillContextUpdater(pillContext)
+        }
+        
         state.timelineState.paginationState = timelineController.paginationState
         buildTimelineViews(timelineItems: timelineController.timelineItems)
         
@@ -824,6 +828,46 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private func forwardMessage(itemID: TimelineItemIdentifier) async {
         guard let content = await timelineController.messageEventContent(for: itemID) else { return }
         actionsSubject.send(.displayMessageForwarding(forwardingItem: .init(id: itemID, roomID: roomProxy.id, content: content)))
+    }
+    
+    // MARK: Pills
+    
+    private func pillContextUpdater(_ pillContext: PillContext) {
+        switch pillContext.data.type {
+        case let .user(id):
+            let isOwnMention = id == state.ownUserID
+            if let profile = state.members[id] {
+                var name = id
+                if let displayName = profile.displayName {
+                    name = "@\(displayName)"
+                }
+                pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: name)
+            } else {
+                pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: id)
+                pillContext.cancellable = context.$viewState.sink { [weak pillContext] state in
+                    guard let pillContext else {
+                        return
+                    }
+                    
+                    if let profile = state.members[id] {
+                        var name = id
+                        if let displayName = profile.displayName {
+                            name = "@\(displayName)"
+                        }
+                        pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: name)
+                        pillContext.cancellable = nil
+                    }
+                }
+            }
+        case .allUsers:
+            pillContext.viewState = .mention(isOwnMention: true, displayText: PillConstants.atRoom)
+        case .event(_, let room):
+            pillContext.viewState = .reference(avatar: .default, displayText: L10n.screenRoomEventPill(room.value))
+        case .roomAlias(let alias):
+            pillContext.viewState = .reference(avatar: .default, displayText: alias)
+        case .roomID(let id):
+            pillContext.viewState = .reference(avatar: .default, displayText: id)
+        }
     }
     
     // MARK: - User Indicators

@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct PillView: View {
@@ -22,17 +23,40 @@ struct PillView: View {
     }
         
     var body: some View {
-        Text(context.viewState.displayText)
-            .font(.compound.bodyLGSemibold)
-            .foregroundColor(textColor)
-            .lineLimit(1)
-            .padding(.leading, 4)
-            .padding(.trailing, 6)
-            .padding(.vertical, 1)
-            .background { Capsule().foregroundColor(backgroundColor) }
+        mainContent
             .onChange(of: context.viewState.displayText) {
                 didChangeText()
             }
+    }
+    
+    @ViewBuilder
+    private var mainContent: some View {
+        HStack(spacing: 4) {
+            if let avatar = context.viewState.avatar {
+                switch avatar {
+                case .default:
+                    CompoundIcon(\.link, size: .custom(10.67), relativeTo: .compound.bodyLGSemibold)
+                        .padding(2.67)
+                        .foregroundStyle(.compound.bgCanvasDefault)
+                        .background(.compound.textLinkExternal)
+                        .clipShape(Circle())
+                case .roomAvatar(let url, let contentID, let displayName):
+                    LoadableAvatarImage(url: url,
+                                        name: displayName,
+                                        contentID: contentID,
+                                        avatarSize: .custom(16), mediaProvider: mediaProvider)
+                }
+            }
+            Text(context.viewState.displayText)
+                .font(.compound.bodyLGSemibold)
+                .foregroundColor(textColor)
+                .lineLimit(1)
+        }
+        .padding(.leading, 4)
+        .padding(.trailing, 6)
+        .padding(.vertical, 1)
+        .background { Capsule().foregroundColor(backgroundColor)
+        }
     }
 }
 
@@ -60,5 +84,9 @@ struct PillView_Previews: PreviewProvider, TestablePreview {
                  context: PillContext.mock(type: .allUsers)) { }
             .frame(maxWidth: PillConstants.mockMaxWidth)
             .previewDisplayName("All Users")
+        PillView(mediaProvider: mockMediaProvider,
+                 context: PillContext.mock(type: .loadingAlias)) { }
+            .frame(maxWidth: PillConstants.mockMaxWidth)
+            .previewDisplayName("Loading Alias")
     }
 }
