@@ -12,6 +12,7 @@ struct SecureBackupRecoveryKeyScreenCoordinatorParameters {
     let secureBackupController: SecureBackupControllerProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let isModallyPresented: Bool
+    let isForceKeyReset: Bool
 }
 
 enum SecureBackupRecoveryKeyScreenCoordinatorAction {
@@ -33,7 +34,8 @@ final class SecureBackupRecoveryKeyScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         viewModel = SecureBackupRecoveryKeyScreenViewModel(secureBackupController: parameters.secureBackupController,
                                                            userIndicatorController: parameters.userIndicatorController,
-                                                           isModallyPresented: parameters.isModallyPresented)
+                                                           isModallyPresented: parameters.isModallyPresented,
+                                                           isForceKeyReset: parameters.isForceKeyReset)
     }
     
     func start() {
@@ -48,7 +50,7 @@ final class SecureBackupRecoveryKeyScreenCoordinator: CoordinatorProtocol {
                 switch mode {
                 case .setupRecovery:
                     showSuccessIndicator(title: L10n.screenRecoveryKeySetupSuccess)
-                case .changeRecovery:
+                case .changeRecovery, .forceResetRecoveryKey:
                     showSuccessIndicator(title: L10n.screenRecoveryKeyChangeSuccess)
                 case .fixRecovery:
                     showSuccessIndicator(title: L10n.screenRecoveryKeyConfirmSuccess)

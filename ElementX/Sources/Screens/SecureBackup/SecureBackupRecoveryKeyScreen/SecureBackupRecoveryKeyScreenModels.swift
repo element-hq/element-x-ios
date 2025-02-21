@@ -16,6 +16,7 @@ enum SecureBackupRecoveryKeyScreenViewMode {
     case setupRecovery
     case changeRecovery
     case fixRecovery
+    case forceResetRecoveryKey
     case unknown
 }
 
@@ -39,6 +40,8 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
             return recoveryKey == nil ? L10n.screenRecoveryKeyChangeTitle : L10n.screenRecoveryKeySaveTitle
         case .fixRecovery:
             return L10n.screenRecoveryKeyConfirmTitle
+        case .forceResetRecoveryKey:
+            return "Reset recovery key"
         default:
             return L10n.errorUnknown
         }
@@ -48,7 +51,7 @@ struct SecureBackupRecoveryKeyScreenViewState: BindableState {
         switch mode {
         case .setupRecovery:
             return recoveryKey == nil ? L10n.screenRecoveryKeySetupDescription : L10n.screenRecoveryKeySaveDescription
-        case .changeRecovery:
+        case .changeRecovery, .forceResetRecoveryKey:
             return recoveryKey == nil ? L10n.screenRecoveryKeyChangeDescription : L10n.screenRecoveryKeySaveDescription
         case .fixRecovery:
             return L10n.screenRecoveryKeyConfirmDescription

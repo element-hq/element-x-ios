@@ -54,6 +54,9 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
         case disableKeyBackup
         /// The key backup screen was dismissed.
         case finishedDisablingKeyBackup
+        
+        /// The user forgot/lost old recovery key, need to force reset it.
+        case forceResetRecoveryKey
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -120,6 +123,9 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addRoutes(event: .manageRecoveryKey, transitions: [.secureBackupScreen => .recoveryKeyScreen]) { [weak self] _ in
             self?.presentRecoveryKeyScreen()
         }
+        stateMachine.addRoutes(event: .forceResetRecoveryKey, transitions: [.secureBackupScreen => .recoveryKeyScreen]) { [weak self] _ in
+            self?.presentRecoveryKeyScreen(isForceKeyReset: true)
+        }
         stateMachine.addRoutes(event: .finishedManagingRecoveryKey, transitions: [.recoveryKeyScreen => .secureBackupScreen])
         
         stateMachine.addRoutes(event: .disableKeyBackup, transitions: [.secureBackupScreen => .keyBackupScreen]) { [weak self] _ in
@@ -144,6 +150,9 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.manageRecoveryKey)
             case .disableKeyBackup:
                 stateMachine.tryEvent(.disableKeyBackup)
+            case .forceResetRecoveryKey:
+                stateMachine.tryEvent(.forceResetRecoveryKey)
+                
             }
         }
         .store(in: &cancellables)
@@ -153,11 +162,12 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentRecoveryKeyScreen() {
+    private func presentRecoveryKeyScreen(isForceKeyReset: Bool = false) {
         let sheetNavigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = SecureBackupRecoveryKeyScreenCoordinator(parameters: .init(secureBackupController: userSession.clientProxy.secureBackupController,
                                                                                      userIndicatorController: userIndicatorController,
-                                                                                     isModallyPresented: true))
+                                                                                     isModallyPresented: true,
+                                                                                     isForceKeyReset: isForceKeyReset))
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }

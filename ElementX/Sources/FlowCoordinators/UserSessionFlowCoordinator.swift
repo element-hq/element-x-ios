@@ -771,11 +771,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: Secure backup
     
-    private func presentRecoveryKeyScreen(animated: Bool) {
+    private func presentRecoveryKeyScreen(animated: Bool, isForceKeyReset: Bool = false) {
         let sheetNavigationStackCoordinator = NavigationStackCoordinator()
         let parameters = SecureBackupRecoveryKeyScreenCoordinatorParameters(secureBackupController: userSession.clientProxy.secureBackupController,
                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                            isModallyPresented: true)
+                                                                            isModallyPresented: true,
+                                                                            isForceKeyReset: isForceKeyReset)
         
         let coordinator = SecureBackupRecoveryKeyScreenCoordinator(parameters: parameters)
         coordinator.actions.sink { [weak self] action in

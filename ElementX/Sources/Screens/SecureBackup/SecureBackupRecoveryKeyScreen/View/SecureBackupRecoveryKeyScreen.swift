@@ -38,7 +38,7 @@ struct SecureBackupRecoveryKeyScreen: View {
     private var mainContent: some View {
         VStack(spacing: 48) {
             switch context.viewState.mode {
-            case .setupRecovery, .changeRecovery:
+            case .setupRecovery, .changeRecovery, .forceResetRecoveryKey:
                 header
                 generateRecoveryKeySection
             case .fixRecovery:
@@ -71,7 +71,7 @@ struct SecureBackupRecoveryKeyScreen: View {
     @ViewBuilder
     private var footer: some View {
         switch context.viewState.mode {
-        case .setupRecovery, .changeRecovery:
+        case .setupRecovery, .changeRecovery, .forceResetRecoveryKey:
             recoveryCreatedActionButtons
         case .fixRecovery:
             incompleteVerificationActionButtons
@@ -291,7 +291,8 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
         
         let viewModel = SecureBackupRecoveryKeyScreenViewModel(secureBackupController: backupController,
                                                                userIndicatorController: UserIndicatorControllerMock(),
-                                                               isModallyPresented: true)
+                                                               isModallyPresented: true,
+                                                               isForceKeyReset: false)
         
         if generateKey {
             viewModel.context.send(viewAction: .generateKey)

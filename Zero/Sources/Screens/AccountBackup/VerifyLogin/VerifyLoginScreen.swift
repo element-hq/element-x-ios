@@ -114,25 +114,46 @@ struct VerifyLoginScreen: View {
     }
     
     var actionButton: some View {
-        Button {
-            context.send(viewAction: .recoveryKey)
-        } label: {
-            Text("Verify with backup phrase")
-                .font(.zero.bodyMDSemibold)
-                .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
-                .frame(height: 48)
-                .frame(maxWidth: .infinity)
-                .background(Color(red: 0.99, green: 0.99, blue: 0.99).opacity(0.05))
-                .cornerRadius(9999)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 9999)
-                        .inset(by: 0.5)
-                        .stroke(.white.opacity(0.25), lineWidth: 1)
-                )
+        VStack {
+            Button {
+                context.send(viewAction: .recoveryKey)
+            } label: {
+                Text("Verify with backup phrase")
+                    .font(.zero.bodyMDSemibold)
+                    .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
+                    .frame(height: 48)
+                    .frame(maxWidth: .infinity)
+                    .background(Color(red: 0.99, green: 0.99, blue: 0.99).opacity(0.05))
+                    .cornerRadius(9999)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 9999)
+                            .inset(by: 0.5)
+                            .stroke(.white.opacity(0.25), lineWidth: 1)
+                    )
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 32)
+            
+            Button {
+                context.send(viewAction: .forceResetKey)
+            } label: {
+                Text("Forgot recovery key?")
+                    .font(.zero.bodyMDSemibold)
+                    .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
+                    .frame(height: 48)
+                    .frame(maxWidth: .infinity)
+                    .background(Color(red: 0.99, green: 0.99, blue: 0.99).opacity(0.05))
+                    .cornerRadius(9999)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 9999)
+                            .inset(by: 0.5)
+                            .stroke(.white.opacity(0.25), lineWidth: 1)
+                    )
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.bottom, 44)
+            .padding(.horizontal, 32)
         }
-        .frame(maxWidth: .infinity)
-        .padding(.bottom, 44)
-        .padding(.horizontal, 32)
     }
 }
 
