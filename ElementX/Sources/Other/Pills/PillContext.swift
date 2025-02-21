@@ -52,20 +52,19 @@ extension PillContext {
             return PillContext(timelineContext: TimelineViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
         case .loadingAlias:
             pillType = .roomAlias("#room-alias:matrix.org")
-            let viewModel = PillContext(timelineContext: TimelineViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
             return PillContext(timelineContext: TimelineViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
         }
     }
 }
 
 enum PillViewState: Equatable {
-    enum PillAvatar: Equatable {
-        case `default`
-        case roomAvatar(url: URL?, contentID: String, displayName: String?)
+    enum PillImage: Equatable {
+        case link
+        case roomAvatar(RoomAvatar)
     }
     
     case mention(isOwnMention: Bool, displayText: String)
-    case reference(avatar: PillAvatar, displayText: String)
+    case reference(avatar: PillImage, displayText: String)
     case undefined
     
     var isOwnMention: Bool {
@@ -95,7 +94,7 @@ enum PillViewState: Equatable {
         }
     }
     
-    var avatar: PillAvatar? {
+    var image: PillImage? {
         switch self {
         case .reference(let avatar, _):
             return avatar

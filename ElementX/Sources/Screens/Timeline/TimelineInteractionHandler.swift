@@ -580,7 +580,8 @@ class TimelineInteractionHandler {
                                                       appSettings: appSettings,
                                                       analyticsService: analyticsService,
                                                       emojiProvider: emojiProvider,
-                                                      timelineControllerFactory: timelineControllerFactory)
+                                                      timelineControllerFactory: timelineControllerFactory,
+                                                      roomListPublisher: nil)
             
             return .displayMediaPreview(item: item, timelineViewModel: .new(timelineViewModel))
         } else {

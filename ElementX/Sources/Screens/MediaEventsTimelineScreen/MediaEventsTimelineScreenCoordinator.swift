@@ -49,7 +49,8 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        appSettings: ServiceLocator.shared.settings,
                                                        analyticsService: ServiceLocator.shared.analytics,
                                                        emojiProvider: parameters.emojiProvider,
-                                                       timelineControllerFactory: parameters.timelineControllerFactory)
+                                                       timelineControllerFactory: parameters.timelineControllerFactory,
+                                                       roomListPublisher: nil)
         
         let filesTimelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                                        timelineController: parameters.filesTimelineController,
@@ -61,7 +62,8 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        appSettings: ServiceLocator.shared.settings,
                                                        analyticsService: ServiceLocator.shared.analytics,
                                                        emojiProvider: parameters.emojiProvider,
-                                                       timelineControllerFactory: parameters.timelineControllerFactory)
+                                                       timelineControllerFactory: parameters.timelineControllerFactory,
+                                                       roomListPublisher: nil)
         
         viewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: mediaTimelineViewModel,
                                                        filesTimelineViewModel: filesTimelineViewModel,

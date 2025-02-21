@@ -32,21 +32,7 @@ struct PillView: View {
     @ViewBuilder
     private var mainContent: some View {
         HStack(spacing: 4) {
-            if let avatar = context.viewState.avatar {
-                switch avatar {
-                case .default:
-                    CompoundIcon(\.link, size: .custom(10.67), relativeTo: .compound.bodyLGSemibold)
-                        .padding(2.67)
-                        .foregroundStyle(.compound.bgCanvasDefault)
-                        .background(.compound.textLinkExternal)
-                        .clipShape(Circle())
-                case .roomAvatar(let url, let contentID, let displayName):
-                    LoadableAvatarImage(url: url,
-                                        name: displayName,
-                                        contentID: contentID,
-                                        avatarSize: .custom(16), mediaProvider: mediaProvider)
-                }
-            }
+            image
             Text(context.viewState.displayText)
                 .font(.compound.bodyLGSemibold)
                 .foregroundColor(textColor)
@@ -56,6 +42,22 @@ struct PillView: View {
         .padding(.trailing, 6)
         .padding(.vertical, 1)
         .background { Capsule().foregroundColor(backgroundColor)
+        }
+    }
+    
+    @ViewBuilder
+    private var image: some View {
+        if let image = context.viewState.image {
+            switch image {
+            case .link:
+                CompoundIcon(\.link, size: .custom(12), relativeTo: .compound.bodyLGSemibold)
+                    .padding(2)
+                    .foregroundStyle(.compound.bgCanvasDefault)
+                    .background(.compound.textLinkExternal)
+                    .clipShape(Circle())
+            case .roomAvatar(let avatar):
+                RoomAvatarImage(avatar: avatar, avatarSize: .custom(16), mediaProvider: mediaProvider)
+            }
         }
     }
 }

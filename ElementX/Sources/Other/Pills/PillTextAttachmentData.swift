@@ -21,7 +21,7 @@ enum PillType: Codable, Equatable {
         }
     }
     
-    case event(eventID: String, room: EventRoom)
+    case event(room: EventRoom)
     case roomAlias(String)
     case roomID(String)
     /// A pill that mentions a user

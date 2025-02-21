@@ -99,7 +99,8 @@ struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                  appSettings: ServiceLocator.shared.settings,
                                  analyticsService: ServiceLocator.shared.analytics,
                                  emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                 roomListPublisher: nil)
     }()
         
     static var previews: some View {

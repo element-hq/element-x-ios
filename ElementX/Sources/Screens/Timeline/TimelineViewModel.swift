@@ -31,6 +31,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private let analyticsService: AnalyticsService
     private let emojiProvider: EmojiProviderProtocol
     private let timelineControllerFactory: TimelineControllerFactoryProtocol
+    private let roomListPublisher: CurrentValuePublisher<[RoomSummary], Never>?
     
     private let timelineInteractionHandler: TimelineInteractionHandler
     
@@ -55,7 +56,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
          appSettings: AppSettings,
          analyticsService: AnalyticsService,
          emojiProvider: EmojiProviderProtocol,
-         timelineControllerFactory: TimelineControllerFactoryProtocol) {
+         timelineControllerFactory: TimelineControllerFactoryProtocol,
+         roomListPublisher: CurrentValuePublisher<[RoomSummary], Never>?) {
         self.timelineController = timelineController
         self.mediaProvider = mediaProvider
         self.mediaPlayerProvider = mediaPlayerProvider
@@ -66,6 +68,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         self.appMediator = appMediator
         self.emojiProvider = emojiProvider
         self.timelineControllerFactory = timelineControllerFactory
+        self.roomListPublisher = roomListPublisher
         
         let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
@@ -844,12 +847,13 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: name)
             } else {
                 pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: id)
-                pillContext.cancellable = context.$viewState.sink { [weak pillContext] state in
-                    guard let pillContext else {
-                        return
-                    }
-                    
-                    if let profile = state.members[id] {
+                pillContext.cancellable = context.$viewState
+                    .compactMap { $0.members[id] }
+                    .sink { [weak pillContext] profile in
+                        guard let pillContext else {
+                            return
+                        }
+                        
                         var name = id
                         if let displayName = profile.displayName {
                             name = "@\(displayName)"
@@ -857,16 +861,45 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                         pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: name)
                         pillContext.cancellable = nil
                     }
-                }
             }
         case .allUsers:
             pillContext.viewState = .mention(isOwnMention: true, displayText: PillConstants.atRoom)
-        case .event(_, let room):
-            pillContext.viewState = .reference(avatar: .default, displayText: L10n.screenRoomEventPill(room.value))
+        case .event(let room):
+            var pillViewState: PillViewState = .reference(avatar: .link, displayText: L10n.screenRoomEventPill(room.value))
+            defer {
+                pillContext.viewState = pillViewState
+            }
+            
+            guard let roomListPublisher else {
+                return
+            }
+            
+            switch room {
+            case .roomAlias(let alias):
+                guard let roomSummary = roomListPublisher.value.first(where: { $0.canonicalAlias == alias }) else {
+                    return
+                }
+                pillViewState = .reference(avatar: .roomAvatar(roomSummary.avatar), displayText: L10n.screenRoomEventPill(roomSummary.name))
+            case .roomID(let id):
+                guard let roomSummary = roomListPublisher.value.first(where: { $0.id == id }) else {
+                    return
+                }
+                pillViewState = .reference(avatar: .roomAvatar(roomSummary.avatar), displayText: L10n.screenRoomEventPill(roomSummary.name))
+            }
         case .roomAlias(let alias):
-            pillContext.viewState = .reference(avatar: .default, displayText: alias)
+            guard let roomListPublisher,
+                  let roomSummary = roomListPublisher.value.first(where: { $0.canonicalAlias == alias }) else {
+                pillContext.viewState = .reference(avatar: .link, displayText: alias)
+                return
+            }
+            pillContext.viewState = .reference(avatar: .roomAvatar(roomSummary.avatar), displayText: roomSummary.name)
         case .roomID(let id):
-            pillContext.viewState = .reference(avatar: .default, displayText: id)
+            guard let roomListPublisher,
+                  let roomSummary = roomListPublisher.value.first(where: { $0.id == id }) else {
+                pillContext.viewState = .reference(avatar: .link, displayText: id)
+                return
+            }
+            pillContext.viewState = .reference(avatar: .roomAvatar(roomSummary.avatar), displayText: roomSummary.name)
         }
     }
     
@@ -940,7 +973,8 @@ extension TimelineViewModel {
                           appSettings: ServiceLocator.shared.settings,
                           analyticsService: ServiceLocator.shared.analytics,
                           emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                          timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                          roomListPublisher: nil)
     }
 }
 
