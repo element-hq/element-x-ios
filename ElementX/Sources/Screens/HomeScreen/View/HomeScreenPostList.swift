@@ -29,7 +29,8 @@ struct HomeScreenPostList: View {
                     context.send(viewAction: .addMeowToPost(postId: post.id, amount: count))
                 })
                     .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
+                    .padding(.top, 12)
+                    .padding(.bottom, 6)
                 Divider()
             }
             .onTapGesture {
