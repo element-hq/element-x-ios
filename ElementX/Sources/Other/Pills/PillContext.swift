@@ -22,38 +22,19 @@ final class PillContext: ObservableObject {
 }
 
 extension PillContext {
-    enum MockType {
-        case loadUser(isOwn: Bool)
-        case loadedUser(isOwn: Bool)
-        case loadingAlias
-        case allUsers
-    }
-    
-    static func mock(type: MockType) -> PillContext {
-        let testID = "@test:test.com"
-        let pillType: PillType
-        switch type {
-        case .loadUser(let isOwn):
-            pillType = .user(userID: testID)
-            let viewModel = PillContext(timelineContext: TimelineViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
-            viewModel.viewState = .mention(isOwnMention: isOwn, displayText: testID)
+    static func mock(viewState: PillViewState, delay: Duration? = nil) -> PillContext {
+        // This is just for previews so the internal data doesn't really matter
+        let viewModel = PillContext(timelineContext: TimelineViewModel.mock.context, data: PillTextAttachmentData(type: .allUsers, font: .preferredFont(forTextStyle: .body)))
+        if let delay {
+            viewModel.viewState = .mention(isOwnMention: false, displayText: "placeholder")
             Task {
-                try? await Task.sleep(for: .seconds(2))
-                viewModel.viewState = .mention(isOwnMention: isOwn, displayText: "@Test Long Display Text")
+                try? await Task.sleep(for: delay)
+                viewModel.viewState = viewState
             }
-            return viewModel
-        case .loadedUser(let isOwn):
-            pillType = .user(userID: "@test:test.com")
-            let viewModel = PillContext(timelineContext: TimelineViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
-            viewModel.viewState = .mention(isOwnMention: isOwn, displayText: "@Very Very Long Test Display Text")
-            return viewModel
-        case .allUsers:
-            pillType = .allUsers
-            return PillContext(timelineContext: TimelineViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
-        case .loadingAlias:
-            pillType = .roomAlias("#room-alias:matrix.org")
-            return PillContext(timelineContext: TimelineViewModel.mock.context, data: PillTextAttachmentData(type: pillType, font: .preferredFont(forTextStyle: .body)))
+        } else {
+            viewModel.viewState = viewState
         }
+        return viewModel
     }
 }
 

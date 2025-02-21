@@ -12,7 +12,7 @@ import XCTest
 
 @MainActor
 class PillContextTests: XCTestCase {
-    func testUser() async throws {
+    func testUser() async {
         let id = "@test:matrix.org"
         let proxyMock = JoinedRoomProxyMock(.init(name: "Test"))
         let subject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
@@ -27,7 +27,8 @@ class PillContextTests: XCTestCase {
                                      appSettings: ServiceLocator.shared.settings,
                                      analyticsService: ServiceLocator.shared.analytics,
                                      emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                     roomListPublisher: nil)
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertFalse(context.viewState.isOwnMention)
@@ -39,10 +40,11 @@ class PillContextTests: XCTestCase {
         await Task.yield()
         
         XCTAssertFalse(context.viewState.isOwnMention)
+        XCTAssertNil(context.viewState.image)
         XCTAssertEqual(context.viewState.displayText, "@\(name)")
     }
     
-    func testOwnUser() async throws {
+    func testOwnUser() {
         let id = "@test:matrix.org"
         let proxyMock = JoinedRoomProxyMock(.init(name: "Test", ownUserID: id))
         let subject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
@@ -57,13 +59,15 @@ class PillContextTests: XCTestCase {
                                      appSettings: ServiceLocator.shared.settings,
                                      analyticsService: ServiceLocator.shared.analytics,
                                      emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                     roomListPublisher: nil)
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .user(userID: id), font: .preferredFont(forTextStyle: .body)))
         
+        XCTAssertNil(context.viewState.image)
         XCTAssertTrue(context.viewState.isOwnMention)
     }
     
-    func testAllUsers() async throws {
+    func testAllUsers() {
         let avatarURL = URL(string: "https://matrix.jpg")
         let id = "test_room"
         let displayName = "Test"
@@ -80,10 +84,204 @@ class PillContextTests: XCTestCase {
                                      appSettings: ServiceLocator.shared.settings,
                                      analyticsService: ServiceLocator.shared.analytics,
                                      emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                     roomListPublisher: nil)
         let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .allUsers, font: .preferredFont(forTextStyle: .body)))
         
         XCTAssertTrue(context.viewState.isOwnMention)
+        XCTAssertNil(context.viewState.image)
         XCTAssertEqual(context.viewState.displayText, PillConstants.atRoom)
+    }
+    
+    func testRoomIDMention() {
+        let proxyMock = JoinedRoomProxyMock(.init())
+        let mockController = MockTimelineController()
+        mockController.roomProxy = proxyMock
+        let mock = TimelineViewModel(roomProxy: proxyMock,
+                                     timelineController: mockController,
+                                     mediaProvider: MediaProviderMock(configuration: .init()),
+                                     mediaPlayerProvider: MediaPlayerProviderMock(),
+                                     voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                     appMediator: AppMediatorMock.default,
+                                     appSettings: ServiceLocator.shared.settings,
+                                     analyticsService: ServiceLocator.shared.analytics,
+                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                     roomListPublisher: .init(.init(.mockRooms)))
+        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .roomID("1"), font: .preferredFont(forTextStyle: .body)))
+        
+        XCTAssertFalse(context.viewState.isOwnMention)
+        XCTAssertFalse(context.viewState.isUndefined)
+        XCTAssertEqual(context.viewState.image, .roomAvatar(.room(id: "1", name: "Foundation 🔭🪐🌌", avatarURL: nil)))
+        XCTAssertEqual(context.viewState.displayText, "Foundation 🔭🪐🌌")
+    }
+    
+    func testRoomIDMentionMissingRoom() {
+        let proxyMock = JoinedRoomProxyMock(.init())
+        let mockController = MockTimelineController()
+        mockController.roomProxy = proxyMock
+        let mock = TimelineViewModel(roomProxy: proxyMock,
+                                     timelineController: mockController,
+                                     mediaProvider: MediaProviderMock(configuration: .init()),
+                                     mediaPlayerProvider: MediaPlayerProviderMock(),
+                                     voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                     appMediator: AppMediatorMock.default,
+                                     appSettings: ServiceLocator.shared.settings,
+                                     analyticsService: ServiceLocator.shared.analytics,
+                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                     roomListPublisher: nil)
+        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .roomID("1"), font: .preferredFont(forTextStyle: .body)))
+        
+        XCTAssertFalse(context.viewState.isOwnMention)
+        XCTAssertFalse(context.viewState.isUndefined)
+        XCTAssertEqual(context.viewState.image, .link)
+        XCTAssertEqual(context.viewState.displayText, "1")
+    }
+    
+    func testRoomAliasMention() {
+        let proxyMock = JoinedRoomProxyMock(.init())
+        let mockController = MockTimelineController()
+        mockController.roomProxy = proxyMock
+        let mock = TimelineViewModel(roomProxy: proxyMock,
+                                     timelineController: mockController,
+                                     mediaProvider: MediaProviderMock(configuration: .init()),
+                                     mediaPlayerProvider: MediaPlayerProviderMock(),
+                                     voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                     appMediator: AppMediatorMock.default,
+                                     appSettings: ServiceLocator.shared.settings,
+                                     analyticsService: ServiceLocator.shared.analytics,
+                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                     roomListPublisher: .init(.init(.mockRooms)))
+        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .roomAlias("#foundation-and-empire:matrix.org"), font: .preferredFont(forTextStyle: .body)))
+        
+        XCTAssertFalse(context.viewState.isOwnMention)
+        XCTAssertFalse(context.viewState.isUndefined)
+        XCTAssertEqual(context.viewState.image, .roomAvatar(.room(id: "2", name: "Foundation and Empire", avatarURL: .mockMXCAvatar)))
+        XCTAssertEqual(context.viewState.displayText, "Foundation and Empire")
+    }
+    
+    func testRoomAliasMentionMissingRoom() {
+        let proxyMock = JoinedRoomProxyMock(.init())
+        let mockController = MockTimelineController()
+        mockController.roomProxy = proxyMock
+        let mock = TimelineViewModel(roomProxy: proxyMock,
+                                     timelineController: mockController,
+                                     mediaProvider: MediaProviderMock(configuration: .init()),
+                                     mediaPlayerProvider: MediaPlayerProviderMock(),
+                                     voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                     appMediator: AppMediatorMock.default,
+                                     appSettings: ServiceLocator.shared.settings,
+                                     analyticsService: ServiceLocator.shared.analytics,
+                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                     roomListPublisher: nil)
+        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .roomAlias("#foundation-and-empire:matrix.org"), font: .preferredFont(forTextStyle: .body)))
+        
+        XCTAssertFalse(context.viewState.isOwnMention)
+        XCTAssertFalse(context.viewState.isUndefined)
+        XCTAssertEqual(context.viewState.image, .link)
+        XCTAssertEqual(context.viewState.displayText, "#foundation-and-empire:matrix.org")
+    }
+    
+    func testEventOnRoomIDMention() {
+        let proxyMock = JoinedRoomProxyMock(.init())
+        let mockController = MockTimelineController()
+        mockController.roomProxy = proxyMock
+        let mock = TimelineViewModel(roomProxy: proxyMock,
+                                     timelineController: mockController,
+                                     mediaProvider: MediaProviderMock(configuration: .init()),
+                                     mediaPlayerProvider: MediaPlayerProviderMock(),
+                                     voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                     appMediator: AppMediatorMock.default,
+                                     appSettings: ServiceLocator.shared.settings,
+                                     analyticsService: ServiceLocator.shared.analytics,
+                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                     roomListPublisher: .init(.init(.mockRooms)))
+        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .event(room: .roomID("1")), font: .preferredFont(forTextStyle: .body)))
+        
+        XCTAssertFalse(context.viewState.isOwnMention)
+        XCTAssertFalse(context.viewState.isUndefined)
+        XCTAssertEqual(context.viewState.image, .link)
+        XCTAssertEqual(context.viewState.displayText, L10n.screenRoomEventPill("Foundation 🔭🪐🌌"))
+    }
+    
+    func testEventOnRoomIDMentionMissingRoom() {
+        let proxyMock = JoinedRoomProxyMock(.init())
+        let mockController = MockTimelineController()
+        mockController.roomProxy = proxyMock
+        let mock = TimelineViewModel(roomProxy: proxyMock,
+                                     timelineController: mockController,
+                                     mediaProvider: MediaProviderMock(configuration: .init()),
+                                     mediaPlayerProvider: MediaPlayerProviderMock(),
+                                     voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                     appMediator: AppMediatorMock.default,
+                                     appSettings: ServiceLocator.shared.settings,
+                                     analyticsService: ServiceLocator.shared.analytics,
+                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                     roomListPublisher: nil)
+        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .event(room: .roomID("1")), font: .preferredFont(forTextStyle: .body)))
+        
+        XCTAssertFalse(context.viewState.isOwnMention)
+        XCTAssertFalse(context.viewState.isUndefined)
+        XCTAssertEqual(context.viewState.image, .link)
+        XCTAssertEqual(context.viewState.displayText, L10n.screenRoomEventPill("1"))
+    }
+    
+    func testEventOnRoomAliasMention() async throws {
+        let proxyMock = JoinedRoomProxyMock(.init())
+        let mockController = MockTimelineController()
+        mockController.roomProxy = proxyMock
+        let mock = TimelineViewModel(roomProxy: proxyMock,
+                                     timelineController: mockController,
+                                     mediaProvider: MediaProviderMock(configuration: .init()),
+                                     mediaPlayerProvider: MediaPlayerProviderMock(),
+                                     voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                     appMediator: AppMediatorMock.default,
+                                     appSettings: ServiceLocator.shared.settings,
+                                     analyticsService: ServiceLocator.shared.analytics,
+                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                     roomListPublisher: .init(.init(.mockRooms)))
+        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .event(room: .roomAlias("#foundation-and-empire:matrix.org")), font: .preferredFont(forTextStyle: .body)))
+        
+        XCTAssertFalse(context.viewState.isOwnMention)
+        XCTAssertFalse(context.viewState.isUndefined)
+        XCTAssertEqual(context.viewState.image, .link)
+        XCTAssertEqual(context.viewState.displayText, L10n.screenRoomEventPill("Foundation and Empire"))
+    }
+    
+    func testEventOnRoomAliasMentionMissingRoom() async throws {
+        let proxyMock = JoinedRoomProxyMock(.init())
+        let mockController = MockTimelineController()
+        mockController.roomProxy = proxyMock
+        let mock = TimelineViewModel(roomProxy: proxyMock,
+                                     timelineController: mockController,
+                                     mediaProvider: MediaProviderMock(configuration: .init()),
+                                     mediaPlayerProvider: MediaPlayerProviderMock(),
+                                     voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                     appMediator: AppMediatorMock.default,
+                                     appSettings: ServiceLocator.shared.settings,
+                                     analyticsService: ServiceLocator.shared.analytics,
+                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                     roomListPublisher: nil)
+        let context = PillContext(timelineContext: mock.context, data: PillTextAttachmentData(type: .event(room: .roomAlias("#foundation-and-empire:matrix.org")), font: .preferredFont(forTextStyle: .body)))
+        
+        XCTAssertFalse(context.viewState.isOwnMention)
+        XCTAssertFalse(context.viewState.isUndefined)
+        XCTAssertEqual(context.viewState.image, .link)
+        XCTAssertEqual(context.viewState.displayText, L10n.screenRoomEventPill("#foundation-and-empire:matrix.org"))
     }
 }

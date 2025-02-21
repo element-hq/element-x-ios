@@ -67,28 +67,27 @@ struct PillView_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         PillView(mediaProvider: mockMediaProvider,
-                 context: PillContext.mock(type: .loadUser(isOwn: false))) { }
+                 context: PillContext.mock(viewState: .mention(isOwnMention: false,
+                                                               displayText: "@Alice"))) { }
             .frame(maxWidth: PillConstants.mockMaxWidth)
-            .previewDisplayName("Loading")
+            .previewDisplayName("User with short name")
         PillView(mediaProvider: mockMediaProvider,
-                 context: PillContext.mock(type: .loadUser(isOwn: true))) { }
+                 context: PillContext.mock(viewState: .mention(isOwnMention: false,
+                                                               displayText: "@Alice but with a very very long name"))) { }
             .frame(maxWidth: PillConstants.mockMaxWidth)
-            .previewDisplayName("Loading Own")
+            .previewDisplayName("User with a long name")
         PillView(mediaProvider: mockMediaProvider,
-                 context: PillContext.mock(type: .loadedUser(isOwn: false))) { }
+                 context: PillContext.mock(viewState: .mention(isOwnMention: true,
+                                                               displayText: "@Alice"))) { }
             .frame(maxWidth: PillConstants.mockMaxWidth)
-            .previewDisplayName("Loaded Long")
+            .previewDisplayName("Own user")
         PillView(mediaProvider: mockMediaProvider,
-                 context: PillContext.mock(type: .loadedUser(isOwn: true))) { }
+                 context: PillContext.mock(viewState: .reference(avatar: .roomAvatar(.room(id: "roomID", name: "Room", avatarURL: nil)), displayText: "Room"))) { }
             .frame(maxWidth: PillConstants.mockMaxWidth)
-            .previewDisplayName("Loaded Long Own")
+            .previewDisplayName("Room")
         PillView(mediaProvider: mockMediaProvider,
-                 context: PillContext.mock(type: .allUsers)) { }
+                 context: PillContext.mock(viewState: .reference(avatar: .link, displayText: L10n.screenRoomEventPill("Room")))) { }
             .frame(maxWidth: PillConstants.mockMaxWidth)
-            .previewDisplayName("All Users")
-        PillView(mediaProvider: mockMediaProvider,
-                 context: PillContext.mock(type: .loadingAlias)) { }
-            .frame(maxWidth: PillConstants.mockMaxWidth)
-            .previewDisplayName("Loading Alias")
+            .previewDisplayName("Message link")
     }
 }

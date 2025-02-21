@@ -99,7 +99,7 @@ extension Array where Element == RoomSummary {
                     unreadMentionsCount: 0,
                     unreadNotificationsCount: 2,
                     notificationMode: .mute,
-                    canonicalAlias: nil,
+                    canonicalAlias: "#foundation-and-empire:matrix.org",
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false),

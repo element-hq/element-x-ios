@@ -879,12 +879,14 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 guard let roomSummary = roomListPublisher.value.first(where: { $0.canonicalAlias == alias }) else {
                     return
                 }
-                pillViewState = .reference(avatar: .roomAvatar(roomSummary.avatar), displayText: L10n.screenRoomEventPill(roomSummary.name))
+                // We always show the link image for event permalinks
+                pillViewState = .reference(avatar: .link, displayText: L10n.screenRoomEventPill(roomSummary.name))
             case .roomID(let id):
                 guard let roomSummary = roomListPublisher.value.first(where: { $0.id == id }) else {
                     return
                 }
-                pillViewState = .reference(avatar: .roomAvatar(roomSummary.avatar), displayText: L10n.screenRoomEventPill(roomSummary.name))
+                // We always show the link image for event permalinks
+                pillViewState = .reference(avatar: .link, displayText: L10n.screenRoomEventPill(roomSummary.name))
             }
         case .roomAlias(let alias):
             guard let roomListPublisher,

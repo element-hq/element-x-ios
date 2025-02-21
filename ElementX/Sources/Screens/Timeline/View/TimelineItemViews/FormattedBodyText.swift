@@ -142,8 +142,6 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
         let htmlStrings = [
             """
             Plain text\n
-            @bob:matrix.org\n
-            #room:matrix.org\n
             !room:matrix.org\n
             https://www.matrix.org\n
             www.matrix.org\n
