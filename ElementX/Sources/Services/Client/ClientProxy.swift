@@ -1347,6 +1347,22 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func verifyUserPassword(_ password: String) async -> Result<Void, ClientProxyError> {
+        do {
+            let verifyPasswordResult = try await zeroUserAccountApi.verifyPassword(password: password)
+            switch verifyPasswordResult {
+            case .success:
+                return .success(())
+            case .failure(let error):
+                MXLog.error("Failed to verify password: \(error)")
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to verify password: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
     private func joinRoomExplicitly(_ roomId: String) async {
         do {
             _ = try await client.joinRoomById(roomId: roomId)

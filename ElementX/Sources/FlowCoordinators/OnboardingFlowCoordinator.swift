@@ -259,7 +259,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             case .recoveryKey:
                 presentRecoveryKeyScreen()
             case .forceResetRecoveryKey:
-                presentRecoveryKeyScreen(isForceKeyReset: true)
+                startEncryptionResetFlow()
             case .skip:
                 appSettings.hasRunIdentityConfirmationOnboarding = true
                 stateMachine.tryEvent(.nextSkippingIdentityConfirmed)
