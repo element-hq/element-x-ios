@@ -224,7 +224,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             case .atRoom:
                 attributedString.addAttribute(.MatrixAllUsersMention, value: true, range: match.range)
             case .roomAlias(let alias):
-                if let url = try? matrixToRoomAliasPermalink(roomAlias: alias) {
+                if let urlString = try? matrixToRoomAliasPermalink(roomAlias: alias),
+                   let url = URL(string: urlString) {
                     attributedString.addAttribute(.link, value: url, range: match.range)
                 }
             case .matrixURI(let uri):

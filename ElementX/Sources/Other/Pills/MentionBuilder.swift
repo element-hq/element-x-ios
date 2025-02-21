@@ -33,7 +33,10 @@ struct MentionBuilder: MentionBuilderProtocol {
             return
         }
         
-        var attachmentAttributes: [NSAttributedString.Key: Any] = [.link: url, .MatrixUserID: userID, .font: attributesToRestore.font, .foregroundColor: attributesToRestore.foregroundColor]
+        var attachmentAttributes: [NSAttributedString.Key: Any] = [.link: url,
+                                                                   .MatrixUserID: userID,
+                                                                   .font: attributesToRestore.font,
+                                                                   .foregroundColor: attributesToRestore.foregroundColor]
         attachmentAttributes.addBlockquoteIfNeeded(attributesToRestore.blockquote)
         
         setPillAttachment(attachment: attachment,
@@ -50,7 +53,9 @@ struct MentionBuilder: MentionBuilderProtocol {
             return
         }
         
-        var attachmentAttributes: [NSAttributedString.Key: Any] = [.font: attributesToRestore.font, .MatrixAllUsersMention: true, .foregroundColor: attributesToRestore.foregroundColor]
+        var attachmentAttributes: [NSAttributedString.Key: Any] = [.font: attributesToRestore.font,
+                                                                   .MatrixAllUsersMention: true,
+                                                                   .foregroundColor: attributesToRestore.foregroundColor]
         attachmentAttributes.addBlockquoteIfNeeded(attributesToRestore.blockquote)
         
         setPillAttachment(attachment: attachment,
@@ -68,7 +73,10 @@ struct MentionBuilder: MentionBuilderProtocol {
             return
         }
         
-        var attachmentAttributes: [NSAttributedString.Key: Any] = [.link: url, .MatrixRoomID: roomID, .font: attributesToRestore.font, .foregroundColor: attributesToRestore.foregroundColor]
+        var attachmentAttributes: [NSAttributedString.Key: Any] = [.link: url,
+                                                                   .MatrixRoomID: roomID,
+                                                                   .font: attributesToRestore.font,
+                                                                   .foregroundColor: attributesToRestore.foregroundColor]
         attachmentAttributes.addBlockquoteIfNeeded(attributesToRestore.blockquote)
         
         setPillAttachment(attachment: attachment,
@@ -86,7 +94,10 @@ struct MentionBuilder: MentionBuilderProtocol {
             return
         }
         
-        var attachmentAttributes: [NSAttributedString.Key: Any] = [.link: url, .MatrixRoomAlias: roomAlias, .font: attributesToRestore.font, .foregroundColor: attributesToRestore.foregroundColor]
+        var attachmentAttributes: [NSAttributedString.Key: Any] = [.link: url,
+                                                                   .MatrixRoomAlias: roomAlias,
+                                                                   .font: attributesToRestore.font,
+                                                                   .foregroundColor: attributesToRestore.foregroundColor]
         attachmentAttributes.addBlockquoteIfNeeded(attributesToRestore.blockquote)
         
         setPillAttachment(attachment: attachment,
@@ -104,7 +115,10 @@ struct MentionBuilder: MentionBuilderProtocol {
             return
         }
         
-        var attachmentAttributes: [NSAttributedString.Key: Any] = [.link: url, .MatrixEventOnRoomAlias: EventOnRoomAliasAttribute.Value(alias: roomAlias, eventID: eventID), .font: attributesToRestore.font, .foregroundColor: attributesToRestore.foregroundColor]
+        var attachmentAttributes: [NSAttributedString.Key: Any] = [.link: url,
+                                                                   .MatrixEventOnRoomAlias: EventOnRoomAliasAttribute.Value(alias: roomAlias, eventID: eventID),
+                                                                   .font: attributesToRestore.font,
+                                                                   .foregroundColor: attributesToRestore.foregroundColor]
         attachmentAttributes.addBlockquoteIfNeeded(attributesToRestore.blockquote)
         
         setPillAttachment(attachment: attachment,
@@ -122,7 +136,10 @@ struct MentionBuilder: MentionBuilderProtocol {
             return
         }
         
-        var attachmentAttributes: [NSAttributedString.Key: Any] = [.link: url, .MatrixEventOnRoomID: EventOnRoomIDAttribute.Value(roomID: roomID, eventID: eventID), .font: attributesToRestore.font, .foregroundColor: attributesToRestore.foregroundColor]
+        var attachmentAttributes: [NSAttributedString.Key: Any] = [.link: url,
+                                                                   .MatrixEventOnRoomID: EventOnRoomIDAttribute.Value(roomID: roomID, eventID: eventID),
+                                                                   .font: attributesToRestore.font,
+                                                                   .foregroundColor: attributesToRestore.foregroundColor]
         attachmentAttributes.addBlockquoteIfNeeded(attributesToRestore.blockquote)
         
         setPillAttachment(attachment: attachment,
