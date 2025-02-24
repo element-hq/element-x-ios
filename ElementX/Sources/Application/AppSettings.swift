@@ -273,7 +273,7 @@ final class AppSettings {
     let mapTilerBaseURL: URL = "https://api.maptiler.com/maps"
 
     // maptiler api key
-    let mapTilerApiKey = InfoPlistReader.main.mapLibreAPIKey
+    let mapTilerApiKey = Secrets.mapLibreAPIKey
     
     // MARK: - Presence
 

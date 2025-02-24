@@ -408,14 +408,9 @@ private_lane :create_simulator_if_necessary do |options|
   end
 end
 
-private_lane :config_secrets do
-  maplibre_api_key = ENV["MAPLIBRE_API_KEY"]
-  UI.user_error!("Invalid Map Libre API key.") unless !maplibre_api_key.to_s.empty?
-
-  set_xcconfig_value(
-    path: './ElementX/SupportingFiles/secrets.xcconfig',
-    name: 'MAPLIBRE_API_KEY',
-    value: maplibre_api_key,
-    mask_value: true
-  )
+lane :config_secrets do
+  Dir.chdir "../Secrets" do
+    sh("pkl eval -f yaml -o secrets.yml Secrets.pkl")
+    sh("swiftgen run yaml -n inline-swift5 --param enumName=Secrets -o Secrets.swift secrets.yml")
+  end
 end
