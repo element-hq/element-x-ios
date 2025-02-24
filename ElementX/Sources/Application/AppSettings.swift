@@ -200,8 +200,8 @@ final class AppSettings {
         
     // MARK: - Bug report
 
-    let bugReportServiceBaseURL: URL = "https://riot.im/bugreports"
-    let bugReportSentryURL: URL = "https://f39ac49e97714316965b777d9f3d6cd8@sentry.tools.element.io/44"
+    let bugReportServiceBaseURL: URL! = URL(string: Secrets.rageshakeServerURL)
+    let bugReportSentryURL: URL! = URL(string: Secrets.sentryDSN)
     // Use the name allocated by the bug report server
     let bugReportApplicationId = "element-x-ios"
     /// The maximum size of the upload request. Default value is just below CloudFlare's max request size.
@@ -209,22 +209,15 @@ final class AppSettings {
     
     // MARK: - Analytics
     
-    #if DEBUG
-    /// The configuration to use for analytics during development. Set `isEnabled` to false to disable analytics in debug builds.
-    /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
-    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element."),
-                                                        host: "https://posthog.element.dev",
-                                                        apiKey: "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN",
-                                                        termsURL: "https://element.io/cookie-policy")
-    #else
     /// The configuration to use for analytics. Set `isEnabled` to false to disable analytics.
-    /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
-    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element."),
-                                                        host: "https://posthog.element.io",
-                                                        apiKey: "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
-                                                        termsURL: URL("https://element.io/cookie-policy"))
-    #endif
-        
+    ///
+    /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork
+    /// you will need to update the Secrets file with your PostHog server and API key.
+    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: !Secrets.postHogHost.contains("localhost"),
+                                                        host: Secrets.postHogHost,
+                                                        apiKey: Secrets.postHogAPIKey,
+                                                        termsURL: "https://element.io/cookie-policy")
+    
     /// Whether the user has opted in to send analytics.
     @UserPreference(key: UserDefaultsKeys.analyticsConsentState, defaultValue: AnalyticsConsentState.unknown, storageType: .userDefaults(store))
     var analyticsConsentState
