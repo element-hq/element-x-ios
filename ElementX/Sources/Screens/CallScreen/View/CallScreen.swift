@@ -167,8 +167,8 @@ private struct CallView: UIViewRepresentable {
         // MARK: - WKUIDelegate
         
         func webView(_ webView: WKWebView, decideMediaCapturePermissionsFor origin: WKSecurityOrigin, initiatedBy frame: WKFrameInfo, type: WKMediaCaptureType) async -> WKPermissionDecision {
-            // Don't allow permissions for domains different than what the call was started on
-            guard origin.host == url.host else {
+            // If we are using the local url, we allow the camera and microphone, otherwise we need to verify that the host matches the one from the provided URL.
+            guard url.isFileURL || origin.host == url.host else {
                 return .deny
             }
             
