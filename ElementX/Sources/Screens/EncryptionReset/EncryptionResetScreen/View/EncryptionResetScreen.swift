@@ -51,8 +51,10 @@ struct EncryptionResetScreen: View {
     }
     
     private var footer: some View {
-        Text(L10n.screenEncryptionResetFooter)
-            .font(.zero.bodyMDSemibold)
+        //Text(L10n.screenEncryptionResetFooter)
+        Text("Only reset your identity if you have access to your login password and you’ve lost your recovery key.")
+            .font(.compound.bodyMDSemibold)
+            .padding(.horizontal, 16)
             .multilineTextAlignment(.center)
             .foregroundColor(.compound.textPrimary)
     }
@@ -62,7 +64,7 @@ struct EncryptionResetScreen: View {
         VStack(alignment: .leading, spacing: 4) {
             checkMarkItem(title: L10n.screenEncryptionResetBullet1, position: .top, positive: true)
             checkMarkItem(title: L10n.screenEncryptionResetBullet2, position: .middle, positive: false)
-            checkMarkItem(title: L10n.screenEncryptionResetBullet3, position: .bottom, positive: false)
+//            checkMarkItem(title: L10n.screenEncryptionResetBullet3, position: .bottom, positive: false)
         }
         .fixedSize(horizontal: false, vertical: true)
         .frame(maxWidth: .infinity)
