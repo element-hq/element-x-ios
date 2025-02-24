@@ -120,6 +120,7 @@
 "action_yes" = "Ναι";
 "action_yes_try_again" = "Yes, try again";
 "banner_migrate_to_native_sliding_sync_action" = "Αποσύνδεση & Αναβάθμιση";
+"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_description" = "Ο διακομιστής σου υποστηρίζει τώρα ένα νέο, ταχύτερο πρωτόκολλο. Αποσυνδέσου και συνδέσου ξανά για αναβάθμιση τώρα. Κάνοντας αυτό τώρα θα σε βοηθήσει να αποφύγεις μια αναγκαστική αποσύνδεση όταν το παλιό πρωτόκολλο καταργηθεί αργότερα.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Ο οικιακός διακομιστής σου δεν υποστηρίζει πλέον το παλιό πρωτόκολλο. Αποσυνδέσου και συνδέσου ξανά για να συνεχίσεις να χρησιμοποιείς την εφαρμογή.";
 "banner_migrate_to_native_sliding_sync_title" = "Διαθέσιμη αναβάθμιση";
@@ -443,6 +444,7 @@
 "screen_resolve_send_failure_unsigned_device_title" = "Το μήνυμά σου δεν στάλθηκε επειδή ο χρήστης %1$@ δεν έχει επαληθεύσει όλες τις συσκευές";
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Μία ή περισσότερες από τις συσκευές σου δεν έχουν επαληθευτεί. Μπορείς να στείλεις το μήνυμα ούτως ή άλλως, ή μπορείς να το ακυρώσεις προς το παρόν και να προσπαθήσεις ξανά αργότερα αφού επαληθεύσεις όλες τις συσκευές σου.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Το μήνυμά σου δεν στάλθηκε επειδή δεν έχεις επαληθεύσει τουλάχιστον μία από τις συσκευές σου";
+"screen_room_event_pill" = "Message in %1$@";
 "screen_room_mentions_at_room_subtitle" = "Ειδοποίησε όλο το δωμάτιο";
 "screen_room_multiple_knock_requests_view_all_button_title" = "Προβολή όλων";
 "screen_room_pinned_banner_indicator" = "%1$@ από %2$@";
