@@ -93,7 +93,8 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                         appMediator: appMediator,
                                                                         emojiProvider: emojiProvider,
                                                                         userIndicatorController: userIndicatorController,
-                                                                        timelineControllerFactory: timelineControllerFactory)
+                                                                        timelineControllerFactory: timelineControllerFactory,
+                                                                        clientProxy: userSession.clientProxy)
         
         let coordinator = MediaEventsTimelineScreenCoordinator(parameters: parameters)
         

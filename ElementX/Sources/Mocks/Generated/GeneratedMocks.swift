@@ -3225,6 +3225,146 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return roomPreviewForIdentifierViaReturnValue
         }
     }
+    //MARK: - roomSummaryForIdentifier
+
+    var roomSummaryForIdentifierUnderlyingCallsCount = 0
+    var roomSummaryForIdentifierCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return roomSummaryForIdentifierUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomSummaryForIdentifierUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomSummaryForIdentifierUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomSummaryForIdentifierUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var roomSummaryForIdentifierCalled: Bool {
+        return roomSummaryForIdentifierCallsCount > 0
+    }
+    var roomSummaryForIdentifierReceivedIdentifier: String?
+    var roomSummaryForIdentifierReceivedInvocations: [String] = []
+
+    var roomSummaryForIdentifierUnderlyingReturnValue: RoomSummary?
+    var roomSummaryForIdentifierReturnValue: RoomSummary? {
+        get {
+            if Thread.isMainThread {
+                return roomSummaryForIdentifierUnderlyingReturnValue
+            } else {
+                var returnValue: RoomSummary?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomSummaryForIdentifierUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomSummaryForIdentifierUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomSummaryForIdentifierUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var roomSummaryForIdentifierClosure: ((String) -> RoomSummary?)?
+
+    func roomSummaryForIdentifier(_ identifier: String) -> RoomSummary? {
+        roomSummaryForIdentifierCallsCount += 1
+        roomSummaryForIdentifierReceivedIdentifier = identifier
+        DispatchQueue.main.async {
+            self.roomSummaryForIdentifierReceivedInvocations.append(identifier)
+        }
+        if let roomSummaryForIdentifierClosure = roomSummaryForIdentifierClosure {
+            return roomSummaryForIdentifierClosure(identifier)
+        } else {
+            return roomSummaryForIdentifierReturnValue
+        }
+    }
+    //MARK: - roomSummaryForAlias
+
+    var roomSummaryForAliasUnderlyingCallsCount = 0
+    var roomSummaryForAliasCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return roomSummaryForAliasUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomSummaryForAliasUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomSummaryForAliasUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomSummaryForAliasUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var roomSummaryForAliasCalled: Bool {
+        return roomSummaryForAliasCallsCount > 0
+    }
+    var roomSummaryForAliasReceivedAlias: String?
+    var roomSummaryForAliasReceivedInvocations: [String] = []
+
+    var roomSummaryForAliasUnderlyingReturnValue: RoomSummary?
+    var roomSummaryForAliasReturnValue: RoomSummary? {
+        get {
+            if Thread.isMainThread {
+                return roomSummaryForAliasUnderlyingReturnValue
+            } else {
+                var returnValue: RoomSummary?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomSummaryForAliasUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomSummaryForAliasUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomSummaryForAliasUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var roomSummaryForAliasClosure: ((String) -> RoomSummary?)?
+
+    func roomSummaryForAlias(_ alias: String) -> RoomSummary? {
+        roomSummaryForAliasCallsCount += 1
+        roomSummaryForAliasReceivedAlias = alias
+        DispatchQueue.main.async {
+            self.roomSummaryForAliasReceivedInvocations.append(alias)
+        }
+        if let roomSummaryForAliasClosure = roomSummaryForAliasClosure {
+            return roomSummaryForAliasClosure(alias)
+        } else {
+            return roomSummaryForAliasReturnValue
+        }
+    }
     //MARK: - loadUserDisplayName
 
     var loadUserDisplayNameUnderlyingCallsCount = 0

@@ -313,7 +313,7 @@ class TimelineViewModelTests: XCTestCase {
                                           analyticsService: ServiceLocator.shared.analytics,
                                           emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                          roomListPublisher: nil)
+                                          clientProxy: ClientProxyMock(.init()))
         return (viewModel, roomProxy, timelineProxy, timelineController)
     }
     
@@ -340,7 +340,7 @@ class TimelineViewModelTests: XCTestCase {
                                           analyticsService: ServiceLocator.shared.analytics,
                                           emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                          roomListPublisher: nil)
+                                          clientProxy: ClientProxyMock(.init()))
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { value in
             value.bindings.readReceiptsSummaryInfo?.orderedReceipts == receipts
@@ -370,7 +370,7 @@ class TimelineViewModelTests: XCTestCase {
                                           analyticsService: ServiceLocator.shared.analytics,
                                           emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                          roomListPublisher: nil)
+                                          clientProxy: ClientProxyMock(.init()))
         XCTAssertEqual(configuration.pinnedEventIDs, viewModel.context.viewState.pinnedEventIDs)
         
         configuration.pinnedEventIDs = ["test1", "test2"]
@@ -398,7 +398,7 @@ class TimelineViewModelTests: XCTestCase {
                                           analyticsService: ServiceLocator.shared.analytics,
                                           emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                          roomListPublisher: nil)
+                                          clientProxy: ClientProxyMock(.init()))
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { value in
             value.canCurrentUserPin
@@ -430,7 +430,7 @@ class TimelineViewModelTests: XCTestCase {
                           analyticsService: ServiceLocator.shared.analytics,
                           emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
                           timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                          roomListPublisher: nil)
+                          clientProxy: ClientProxyMock(.init()))
     }
 }
 

@@ -515,6 +515,16 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
+    
+    func roomSummaryForIdentifier(_ identifier: String) -> RoomSummary? {
+        // the alternate room summary provider is not impacted by filtering
+        alternateRoomSummaryProvider?.roomListPublisher.value.first(where: { $0.id == identifier })
+    }
+    
+    func roomSummaryForAlias(_ alias: String) -> RoomSummary? {
+        // the alternate room summary provider is not impacted by filtering
+        alternateRoomSummaryProvider?.roomListPublisher.value.first(where: { $0.canonicalAlias == alias })
+    }
 
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
         do {

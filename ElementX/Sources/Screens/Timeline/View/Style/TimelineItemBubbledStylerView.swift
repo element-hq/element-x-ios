@@ -340,7 +340,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                  analyticsService: ServiceLocator.shared.analytics,
                                  emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                 roomListPublisher: nil)
+                                 clientProxy: ClientProxyMock(.init()))
     }()
 
     static var previews: some View {

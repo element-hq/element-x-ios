@@ -70,7 +70,7 @@ struct PillView_Previews: PreviewProvider, TestablePreview {
                  context: PillContext.mock(viewState: .mention(isOwnMention: false,
                                                                displayText: "@Alice"))) { }
             .frame(maxWidth: PillConstants.mockMaxWidth)
-            .previewDisplayName("User with short name")
+            .previewDisplayName("User")
         PillView(mediaProvider: mockMediaProvider,
                  context: PillContext.mock(viewState: .mention(isOwnMention: false,
                                                                displayText: "@Alice but with a very very long name"))) { }

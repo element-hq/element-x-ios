@@ -19,6 +19,7 @@ struct MediaEventsTimelineScreenCoordinatorParameters {
     let emojiProvider: EmojiProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol
+    let clientProxy: ClientProxyProtocol
 }
 
 enum MediaEventsTimelineScreenCoordinatorAction {
@@ -50,7 +51,7 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        analyticsService: ServiceLocator.shared.analytics,
                                                        emojiProvider: parameters.emojiProvider,
                                                        timelineControllerFactory: parameters.timelineControllerFactory,
-                                                       roomListPublisher: nil)
+                                                       clientProxy: parameters.clientProxy)
         
         let filesTimelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                                        timelineController: parameters.filesTimelineController,
@@ -63,7 +64,7 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        analyticsService: ServiceLocator.shared.analytics,
                                                        emojiProvider: parameters.emojiProvider,
                                                        timelineControllerFactory: parameters.timelineControllerFactory,
-                                                       roomListPublisher: nil)
+                                                       clientProxy: parameters.clientProxy)
         
         viewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: mediaTimelineViewModel,
                                                        filesTimelineViewModel: filesTimelineViewModel,

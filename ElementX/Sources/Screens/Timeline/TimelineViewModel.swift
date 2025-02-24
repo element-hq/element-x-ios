@@ -31,7 +31,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private let analyticsService: AnalyticsService
     private let emojiProvider: EmojiProviderProtocol
     private let timelineControllerFactory: TimelineControllerFactoryProtocol
-    private let roomListPublisher: CurrentValuePublisher<[RoomSummary], Never>?
+    private let clientProxy: ClientProxyProtocol
     
     private let timelineInteractionHandler: TimelineInteractionHandler
     
@@ -57,7 +57,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
          analyticsService: AnalyticsService,
          emojiProvider: EmojiProviderProtocol,
          timelineControllerFactory: TimelineControllerFactoryProtocol,
-         roomListPublisher: CurrentValuePublisher<[RoomSummary], Never>?) {
+         clientProxy: ClientProxyProtocol) {
         self.timelineController = timelineController
         self.mediaProvider = mediaProvider
         self.mediaPlayerProvider = mediaPlayerProvider
@@ -68,7 +68,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         self.appMediator = appMediator
         self.emojiProvider = emojiProvider
         self.timelineControllerFactory = timelineControllerFactory
-        self.roomListPublisher = roomListPublisher
+        self.clientProxy = clientProxy
         
         let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
@@ -83,7 +83,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                                 appSettings: appSettings,
                                                                 analyticsService: analyticsService,
                                                                 emojiProvider: emojiProvider,
-                                                                timelineControllerFactory: timelineControllerFactory)
+                                                                timelineControllerFactory: timelineControllerFactory,
+                                                                clientProxy: clientProxy)
         
         super.init(initialViewState: TimelineViewState(timelineKind: timelineController.timelineKind,
                                                        roomID: roomProxy.id,
@@ -870,34 +871,28 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 pillContext.viewState = pillViewState
             }
             
-            guard let roomListPublisher else {
-                return
-            }
-            
             switch room {
             case .roomAlias(let alias):
-                guard let roomSummary = roomListPublisher.value.first(where: { $0.canonicalAlias == alias }) else {
+                guard let roomSummary = clientProxy.roomSummaryForAlias(alias) else {
                     return
                 }
                 // We always show the link image for event permalinks
                 pillViewState = .reference(avatar: .link, displayText: L10n.screenRoomEventPill(roomSummary.name))
             case .roomID(let id):
-                guard let roomSummary = roomListPublisher.value.first(where: { $0.id == id }) else {
+                guard let roomSummary = clientProxy.roomSummaryForIdentifier(id) else {
                     return
                 }
                 // We always show the link image for event permalinks
                 pillViewState = .reference(avatar: .link, displayText: L10n.screenRoomEventPill(roomSummary.name))
             }
         case .roomAlias(let alias):
-            guard let roomListPublisher,
-                  let roomSummary = roomListPublisher.value.first(where: { $0.canonicalAlias == alias }) else {
+            guard let roomSummary = clientProxy.roomSummaryForAlias(alias) else {
                 pillContext.viewState = .reference(avatar: .link, displayText: alias)
                 return
             }
             pillContext.viewState = .reference(avatar: .roomAvatar(roomSummary.avatar), displayText: roomSummary.name)
         case .roomID(let id):
-            guard let roomListPublisher,
-                  let roomSummary = roomListPublisher.value.first(where: { $0.id == id }) else {
+            guard let roomSummary = clientProxy.roomSummaryForIdentifier(id) else {
                 pillContext.viewState = .reference(avatar: .link, displayText: id)
                 return
             }
@@ -976,7 +971,7 @@ extension TimelineViewModel {
                           analyticsService: ServiceLocator.shared.analytics,
                           emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
                           timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                          roomListPublisher: nil)
+                          clientProxy: ClientProxyMock(.init()))
     }
 }
 
