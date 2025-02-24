@@ -120,6 +120,7 @@
 "action_yes" = "Sì";
 "action_yes_try_again" = "Sì, riprova";
 "banner_migrate_to_native_sliding_sync_action" = "Esci e aggiorna";
+"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_description" = "Il tuo server ora supporta un nuovo protocollo più veloce. Esci e rientra per effettuare l'aggiornamento. Se lo fai ora, eviterai una disconnessione forzata quando il vecchio protocollo verrà rimosso in seguito.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Il tuo homeserver non supporta più il vecchio protocollo. Esci e rientra per continuare a usare l'app.";
 "banner_migrate_to_native_sliding_sync_title" = "Aggiornamento disponibile";
@@ -443,6 +444,7 @@
 "screen_resolve_send_failure_unsigned_device_title" = "Il tuo messaggio non è stato inviato perché %1$@ non ha verificato tutti i dispositivi.";
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Uno o più dispositivi non sono verificati. Puoi inviare il messaggio comunque, oppure annullarlo e riprovare più tardi dopo aver verificato tutti i tuoi dispositivi.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Il tuo messaggio non è stato inviato perché non hai verificato uno o più dispositivi.";
+"screen_room_event_pill" = "Message in %1$@";
 "screen_room_mentions_at_room_subtitle" = "Notifica l'intera stanza";
 "screen_room_multiple_knock_requests_view_all_button_title" = "Visualizza tutte";
 "screen_room_pinned_banner_indicator" = "%1$@ di %2$@";
