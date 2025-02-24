@@ -38,6 +38,7 @@ struct MentionBuilder: MentionBuilderProtocol {
                                                                    .font: attributesToRestore.font,
                                                                    .foregroundColor: attributesToRestore.foregroundColor]
         attachmentAttributes.addBlockquoteIfNeeded(attributesToRestore.blockquote)
+        attachmentAttributes.addMatrixUsernameIfNeeded(userDisplayName)
         
         setPillAttachment(attachment: attachment,
                           attributedString: attributedString,
@@ -169,8 +170,14 @@ struct MentionBuilder: MentionBuilderProtocol {
 
 private extension Dictionary where Key == NSAttributedString.Key, Value == Any {
     mutating func addBlockquoteIfNeeded(_ value: Bool?) {
-        if let blockquote = value {
-            self[.MatrixBlockquote] = blockquote
+        if let value {
+            self[.MatrixBlockquote] = value
+        }
+    }
+    
+    mutating func addMatrixUsernameIfNeeded(_ value: String?) {
+        if let value {
+            self[.MatrixUserDisplayName] = value
         }
     }
 }
