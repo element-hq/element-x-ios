@@ -120,6 +120,7 @@
 "action_yes" = "Oui";
 "action_yes_try_again" = "Oui, réessayez";
 "banner_migrate_to_native_sliding_sync_action" = "Déconnecter et mettre à niveau";
+"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ ne prend plus en charge l'ancien protocole. Veuillez vous déconnecter puis vous reconnecter pour continuer à utiliser l'application.";
 "banner_migrate_to_native_sliding_sync_description" = "Votre serveur prend désormais en charge un nouveau protocole plus rapide. Déconnectez-vous, puis reconnectez-vous pour effectuer la mise à niveau dès maintenant. En le faisant tout de suite, vous éviterez une déconnexion forcée lorsque l'ancien protocole sera supprimé.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Votre serveur d’accueil ne prend plus en charge l'ancien protocole. Veuillez vous déconnecter puis vous reconnecter pour continuer à utiliser l'application.";
 "banner_migrate_to_native_sliding_sync_title" = "Mise à niveau disponible";
@@ -443,6 +444,7 @@
 "screen_resolve_send_failure_unsigned_device_title" = "Votre message n'a pas été envoyé car %1$@ n'a pas vérifié tous ses appareils";
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Un ou plusieurs de vos appareils ne sont pas vérifiés. Vous pouvez quand même envoyer le message, ou vous pouvez annuler et réessayer plus tard après avoir vérifié tous vos appareils.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Votre message n'a pas été envoyé car vous n'avez pas vérifié tous vos appareils";
+"screen_room_event_pill" = "Message dans %1$@";
 "screen_room_mentions_at_room_subtitle" = "Notifier tout le salon";
 "screen_room_multiple_knock_requests_view_all_button_title" = "Tout afficher";
 "screen_room_pinned_banner_indicator" = "%1$@ sur %2$@";

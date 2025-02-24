@@ -178,7 +178,7 @@ struct QRCodeLoginScreen: View {
                     
                     VStack(spacing: 4) {
                         Label(L10n.screenQrCodeLoginInvalidScanStateSubtitle,
-                              icon: \.error,
+                              icon: \.errorSolid,
                               iconSize: .medium,
                               relativeTo: .compound.bodyMDSemibold)
                             .labelStyle(.custom(spacing: 10))
@@ -200,7 +200,7 @@ struct QRCodeLoginScreen: View {
                     
                     VStack(spacing: 4) {
                         Label(L10n.screenQrCodeLoginDeviceNotSignedInScanStateSubtitle,
-                              icon: \.error,
+                              icon: \.errorSolid,
                               iconSize: .medium,
                               relativeTo: .compound.bodyMDSemibold)
                             .labelStyle(.custom(spacing: 10))
@@ -273,7 +273,7 @@ struct QRCodeLoginScreen: View {
         case .connectionNotSecure:
             VStack(spacing: 40) {
                 VStack(spacing: 16) {
-                    BigIcon(icon: \.error, style: .alert)
+                    BigIcon(icon: \.errorSolid, style: .alert)
                     
                     VStack(spacing: 8) {
                         Text(L10n.screenQrCodeLoginConnectionNoteSecureStateTitle)
@@ -339,7 +339,7 @@ struct QRCodeLoginScreen: View {
         }
         
         VStack(spacing: 16) {
-            BigIcon(icon: \.error, style: .alert)
+            BigIcon(icon: \.errorSolid, style: .alert)
             
             VStack(spacing: 8) {
                 Text(title)

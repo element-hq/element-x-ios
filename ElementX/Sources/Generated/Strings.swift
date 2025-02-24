@@ -1968,6 +1968,10 @@ internal enum L10n {
   internal static var screenRoomErrorFailedProcessingMedia: String { return L10n.tr("Localizable", "screen_room_error_failed_processing_media") }
   /// Could not retrieve user details
   internal static var screenRoomErrorFailedRetrievingUserDetails: String { return L10n.tr("Localizable", "screen_room_error_failed_retrieving_user_details") }
+  /// Message in %1$@
+  internal static func screenRoomEventPill(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_room_event_pill", String(describing: p1))
+  }
   /// Would you like to invite them back?
   internal static var screenRoomInviteAgainAlertMessage: String { return L10n.tr("Localizable", "screen_room_invite_again_alert_message") }
   /// You are alone in this chat

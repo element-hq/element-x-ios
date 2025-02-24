@@ -140,7 +140,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             roomInfo = invitedRoomProxy.info
         case .knocked(let knockedRoomProxy):
             roomInfo = knockedRoomProxy.info
-            if let roomSummaryProvider = clientProxy.roomSummaryProvider {
+            if let roomSummaryProvider = clientProxy.alternateRoomSummaryProvider {
                 membershipStateChangeCancellable = roomSummaryProvider.roomListPublisher
                     .compactMap { summaries -> Void? in
                         guard let roomSummary = summaries.first(where: { $0.id == roomInfo?.id }),
