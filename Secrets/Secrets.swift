@@ -12,8 +12,8 @@ import Foundation
 internal enum Secrets {
   internal static let mapLibreAPIKey: String = "your_key"
   internal static let postHogAPIKey: String = "your_key"
-  internal static let postHogHost: String = "https://get.your.own.io"
-  internal static let rageshakeServerURL: String = "https://⁦bring.your.own.and.en.joy"
-  internal static let sentryDSN: String = "https://⁦insert.your.hearts.desire.here"
+  internal static let postHogHost: String = "https://posthog.localhost"
+  internal static let rageshakeServerURL: String = "https://rageshake.localhost"
+  internal static let sentryDSN: String = "https://sentry.localhost"
 }
 // swiftlint:enable identifier_name line_length number_separator type_body_length
