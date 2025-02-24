@@ -67,7 +67,7 @@ struct HomeTabView<Content1: View, Content2: View>: View {
     
     // Tab Button
     private func tabButton(title: String, icon: ImageAsset, isSelected: Bool, index: Int) -> some View {
-        Button(action: { withAnimation { selectedTab = index } }) {
+        Button(action: { selectedTab = index }) {
             VStack {
                 Image(asset: icon)
                     .font(.system(size: 18))

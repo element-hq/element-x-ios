@@ -4981,6 +4981,76 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return userIdentityForReturnValue
         }
     }
+    //MARK: - verifyUserPassword
+
+    var verifyUserPasswordUnderlyingCallsCount = 0
+    var verifyUserPasswordCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return verifyUserPasswordUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = verifyUserPasswordUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                verifyUserPasswordUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    verifyUserPasswordUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var verifyUserPasswordCalled: Bool {
+        return verifyUserPasswordCallsCount > 0
+    }
+    var verifyUserPasswordReceivedPassword: String?
+    var verifyUserPasswordReceivedInvocations: [String] = []
+
+    var verifyUserPasswordUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var verifyUserPasswordReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return verifyUserPasswordUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = verifyUserPasswordUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                verifyUserPasswordUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    verifyUserPasswordUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var verifyUserPasswordClosure: ((String) async -> Result<Void, ClientProxyError>)?
+
+    func verifyUserPassword(_ password: String) async -> Result<Void, ClientProxyError> {
+        verifyUserPasswordCallsCount += 1
+        verifyUserPasswordReceivedPassword = password
+        DispatchQueue.main.async {
+            self.verifyUserPasswordReceivedInvocations.append(password)
+        }
+        if let verifyUserPasswordClosure = verifyUserPasswordClosure {
+            return await verifyUserPasswordClosure(password)
+        } else {
+            return verifyUserPasswordReturnValue
+        }
+    }
     //MARK: - getUserRewards
 
     var getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount = 0

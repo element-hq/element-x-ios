@@ -317,7 +317,7 @@ private struct DownloadIndicatorView: View {
     var body: some View {
         if case let .media(mediaItem) = currentItem, mediaItem.downloadError != nil {
             VStack(spacing: 24) {
-                CompoundIcon(\.error, size: .custom(48), relativeTo: .compound.headingLG)
+                CompoundIcon(\.errorSolid, size: .custom(48), relativeTo: .compound.headingLG)
                     .foregroundStyle(.compound.iconCriticalPrimary)
                     .padding(.vertical, 24.5)
                     .padding(.horizontal, 28.5)

@@ -112,8 +112,15 @@ class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, Encryp
         }
         
         do {
-            try await identityResetHandle.reset(auth: .password(passwordDetails: .init(identifier: clientProxy.userID, password: password)))
-            actionsSubject.send(.resetFinished)
+            let verifyPasswordResult = await clientProxy.verifyUserPassword(password)
+            switch verifyPasswordResult {
+            case .success:
+                try await identityResetHandle.reset(auth: .password(passwordDetails: .init(identifier: clientProxy.userID, password: password)))
+                actionsSubject.send(.resetFinished)
+            case .failure(let error):
+                MXLog.error("Failed resetting encryption with error \(error)")
+                showErrorToast()
+            }
         } catch {
             MXLog.error("Failed resetting encryption with error \(error)")
             showErrorToast()

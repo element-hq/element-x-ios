@@ -21,12 +21,14 @@ class SecureBackupRecoveryKeyScreenViewModel: SecureBackupRecoveryKeyScreenViewM
 
     init(secureBackupController: SecureBackupControllerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         isModallyPresented: Bool) {
+         isModallyPresented: Bool,
+         isForceKeyReset: Bool
+    ) {
         self.secureBackupController = secureBackupController
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: .init(isModallyPresented: isModallyPresented,
-                                           mode: secureBackupController.recoveryState.value.viewMode,
+                                           mode: isForceKeyReset ? .forceResetRecoveryKey : secureBackupController.recoveryState.value.viewMode,
                                            bindings: .init()))
     }
     

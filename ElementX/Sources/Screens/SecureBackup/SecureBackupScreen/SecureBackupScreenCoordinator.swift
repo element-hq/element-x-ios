@@ -17,6 +17,7 @@ struct SecureBackupScreenCoordinatorParameters {
 enum SecureBackupScreenCoordinatorAction {
     case manageRecoveryKey
     case disableKeyBackup
+    case forceResetRecoveryKey
 }
 
 final class SecureBackupScreenCoordinator: CoordinatorProtocol {
@@ -47,6 +48,8 @@ final class SecureBackupScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.manageRecoveryKey)
             case .disableKeyBackup:
                 actionsSubject.send(.disableKeyBackup)
+            case .forceResetRecoveryKey:
+                actionsSubject.send(.forceResetRecoveryKey)
             }
         }
         .store(in: &cancellables)

@@ -360,7 +360,7 @@ extension HomeScreenPost {
         formatter.dateFormat = "h:mm aa • MMM d, yyyy"
         let postDateTime = formatter.string(from: postUpdatedAt)
         
-        let isMyPost = loggedInUserId == post.userId
+        let isMyPost = loggedInUserId.matrixIdToCleanHex() == post.userId.matrixIdToCleanHex()
         
         self.init(
             id: post.id.rawValue,

@@ -253,7 +253,7 @@ struct JoinRoomScreen: View {
                 }
             }
         } icon: {
-            CompoundIcon(\.error)
+            CompoundIcon(\.errorSolid)
                 .foregroundStyle(.compound.iconCriticalPrimary)
         }
         .labelStyle(.custom(spacing: 12, alignment: .top))

@@ -203,6 +203,7 @@ struct VerifyBackupKeyScreen_Previews: PreviewProvider, TestablePreview {
         
         return SecureBackupRecoveryKeyScreenViewModel(secureBackupController: backupController,
                                                       userIndicatorController: UserIndicatorControllerMock(),
-                                                      isModallyPresented: true)
+                                                      isModallyPresented: true,
+                                                      isForceKeyReset: false)
     }
 }

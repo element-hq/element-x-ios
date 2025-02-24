@@ -258,6 +258,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
                 presentSessionVerificationScreen()
             case .recoveryKey:
                 presentRecoveryKeyScreen()
+            case .forceResetRecoveryKey:
+                startEncryptionResetFlow()
             case .skip:
                 appSettings.hasRunIdentityConfirmationOnboarding = true
                 stateMachine.tryEvent(.nextSkippingIdentityConfirmed)
@@ -296,10 +298,11 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         presentCoordinator(coordinator)
     }
     
-    private func presentRecoveryKeyScreen() {
+    private func presentRecoveryKeyScreen(isForceKeyReset: Bool = false) {
         let parameters = SecureBackupRecoveryKeyScreenCoordinatorParameters(secureBackupController: userSession.clientProxy.secureBackupController,
                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                            isModallyPresented: false)
+                                                                            isModallyPresented: false,
+                                                                            isForceKeyReset: isForceKeyReset)
         
         let coordinator = SecureBackupRecoveryKeyScreenCoordinator(parameters: parameters)
         

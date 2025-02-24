@@ -120,6 +120,7 @@
 "action_yes" = "Ya";
 "action_yes_try_again" = "Yes, try again";
 "banner_migrate_to_native_sliding_sync_action" = "Keluar & Tingkatkan";
+"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_description" = "Server Anda kini mendukung protokol baru yang lebih cepat. Keluar dan masuk lagi untuk memperbarui sekarang. Melakukan hal ini sekarang akan membantu Anda menghindari keluar paksa saat protokol lama dihapus nantinya.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Homeserver Anda tidak lagi mendukung protokol lama. Silakan keluar dan masuk kembali untuk terus menggunakan aplikasi.";
 "banner_migrate_to_native_sliding_sync_title" = "Peningkatan tersedia";
@@ -443,6 +444,7 @@
 "screen_resolve_send_failure_unsigned_device_title" = "Pesan Anda tidak terkirim karena %1$@ belum memverifikasi semua perangkat";
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Satu atau beberapa perangkat Anda tidak terverifikasi. Anda tetap dapat mengirim pesan, atau Anda dapat membatalkannya dan mencoba lagi nanti setelah Anda memverifikasi semua perangkat.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Pesan Anda tidak terkirim karena Anda belum memverifikasi satu atau beberapa perangkat Anda";
+"screen_room_event_pill" = "Message in %1$@";
 "screen_room_mentions_at_room_subtitle" = "Beri tahu seluruh ruangan";
 "screen_room_multiple_knock_requests_view_all_button_title" = "Lihat semua";
 "screen_room_pinned_banner_indicator" = "%1$@ dari %2$@";

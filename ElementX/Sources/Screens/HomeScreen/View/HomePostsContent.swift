@@ -51,10 +51,6 @@ struct HomePostsContent: View {
                                 }
                         }
                     }
-                    //                    .isSearching($context.isSearchFieldFocused)
-                    //                    .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
-                    //                    .compoundSearchField()
-                    //                    .disableAutocorrection(true)
                 }
             }
             .introspect(.scrollView, on: .supportedVersions) { scrollView in

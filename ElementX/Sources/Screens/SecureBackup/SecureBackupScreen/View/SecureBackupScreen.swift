@@ -98,6 +98,13 @@ struct SecureBackupScreen: View {
                             details: .icon(BadgeView(size: 10)),
                             kind: .navigationLink { context.send(viewAction: .recoveryKey) })
                     .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
+                
+                // Forgot recovery key option
+                ZeroListRow(label: .plain(title: "Forgot recovery key?",
+                                          description: "Create a new recovery key in case you lost your current one."),
+                            kind: .navigationLink { context.send(viewAction: .forceResetKey) })
+                .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
+                
             default:
                 ZeroListRow(label: .plain(title: L10n.commonLoading), details: .isWaiting(true), kind: .label)
             }

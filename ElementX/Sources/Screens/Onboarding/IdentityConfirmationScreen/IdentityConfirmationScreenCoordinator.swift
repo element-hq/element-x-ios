@@ -21,6 +21,7 @@ enum IdentityConfirmationScreenCoordinatorAction {
     case skip
     case reset
     case logout
+    case forceResetRecoveryKey
 }
 
 final class IdentityConfirmationScreenCoordinator: CoordinatorProtocol {
@@ -58,6 +59,8 @@ final class IdentityConfirmationScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.reset)
             case .logout:
                 actionsSubject.send(.logout)
+            case .forceResetRecoveryKey:
+                actionsSubject.send(.forceResetRecoveryKey)
             }
         }
         .store(in: &cancellables)

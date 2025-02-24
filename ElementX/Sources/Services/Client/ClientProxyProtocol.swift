@@ -202,6 +202,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func userIdentity(for userID: String) async -> Result<UserIdentityProxyProtocol?, ClientProxyError>
     
+    func verifyUserPassword(_ password: String) async -> Result<Void, ClientProxyError>
+    
     // MARK: - Zero Rewards
     
     var userRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never> { get }

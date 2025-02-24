@@ -10,6 +10,7 @@ import Foundation
 enum IdentityConfirmationScreenViewModelAction {
     case otherDevice
     case recoveryKey
+    case forceResetRecoveryKey
     /// Only possible in debug builds.
     case skip
     case reset
@@ -29,6 +30,7 @@ struct IdentityConfirmationScreenViewState: BindableState {
 enum IdentityConfirmationScreenViewAction {
     case otherDevice
     case recoveryKey
+    case forceResetKey
     /// Only possible in debug builds.
     case skip
     case reset

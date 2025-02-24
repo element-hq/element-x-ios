@@ -120,6 +120,7 @@
 "action_yes" = "Evet";
 "action_yes_try_again" = "Evet, tekrar dene";
 "banner_migrate_to_native_sliding_sync_action" = "Çıkış Yap ve Yükselt";
+"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_description" = "Sunucunuz artık yeni, daha hızlı bir protokolü destekliyor. Şimdi oturumu kapatıp tekrar oturum açarak yükseltme yapın. Bunu şimdi yapmak, eski protokol daha sonra kaldırıldığında zorunlu oturum kapatmayı önlemenize yardımcı olacaktır.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Ana sunucunuz artık eski protokolü desteklemiyor. Lütfen oturumu kapatın ve uygulamayı kullanmaya devam etmek için tekrar oturum açın.";
 "banner_migrate_to_native_sliding_sync_title" = "Yükseltme mevcut";
@@ -443,6 +444,7 @@
 "screen_resolve_send_failure_unsigned_device_title" = "%1$@ tüm cihazları doğrulamadığı için mesajınız gönderilmedi";
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Bir veya daha fazla cihazınız doğrulanmamış. Mesajı yine de gönderebilir veya şimdilik iptal edip tüm cihazlarınızı doğruladıktan sonra tekrar deneyebilirsiniz.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Bir veya daha fazla cihazınızı doğrulamadığınız için mesajınız gönderilmedi";
+"screen_room_event_pill" = "Message in %1$@";
 "screen_room_mentions_at_room_subtitle" = "Tüm odaya bildir";
 "screen_room_multiple_knock_requests_view_all_button_title" = "Tümünü görüntüle";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";

@@ -120,6 +120,7 @@
 "action_yes" = "Так";
 "action_yes_try_again" = "Так, повторити спробу";
 "banner_migrate_to_native_sliding_sync_action" = "Вийти та оновити";
+"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_description" = "Ваш сервер тепер підтримує новий, швидший протокол. Вийдіть із системи та увійдіть знову, щоб оновити систему зараз. Якщо ви зробите це зараз, це допоможе вам уникнути примусового виходу з системи, коли старий протокол буде видалено пізніше.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Ваш домашній сервер більше не підтримує старий протокол. Будь ласка, вийдіть і увійдіть знову, щоб продовжити використання програми.";
 "banner_migrate_to_native_sliding_sync_title" = "Доступне оновлення";
@@ -443,6 +444,7 @@
 "screen_resolve_send_failure_unsigned_device_title" = "Ваше повідомлення не було надіслано, тому що %1$@ не перевірив усі пристрої";
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Один або кілька ваших пристроїв не підтверджено. Ви можете відправити повідомлення в будь-якому випадку, або ж скасувати відправку і спробувати пізніше, коли перевірите всі свої пристрої.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Ваше повідомлення не було надіслано, оскільки ви не підтвердили один або декілька своїх пристроїв";
+"screen_room_event_pill" = "Message in %1$@";
 "screen_room_mentions_at_room_subtitle" = "Сповістити всю кімнату";
 "screen_room_multiple_knock_requests_view_all_button_title" = "Переглянути все";
 "screen_room_pinned_banner_indicator" = "%1$@ із %2$@";

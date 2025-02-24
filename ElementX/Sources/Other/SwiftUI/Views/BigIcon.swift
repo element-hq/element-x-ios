@@ -102,8 +102,8 @@ struct BigIcon_Previews: PreviewProvider, TestablePreview {
                 }
                 
                 HStack(spacing: 20) {
-                    BigIcon(icon: \.error, style: .alertSolid)
-                    BigIcon(icon: \.error, style: .alert)
+                    BigIcon(icon: \.errorSolid, style: .alertSolid)
+                    BigIcon(icon: \.errorSolid, style: .alert)
                 }
                 
                 HStack(spacing: 20) {

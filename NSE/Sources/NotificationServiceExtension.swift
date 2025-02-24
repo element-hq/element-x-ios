@@ -298,6 +298,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         // `CXProvider.reportNewIncomingCall` to show the system UI and handle actions on it.
         // N.B. this flow works properly only when background processing capabilities are enabled
         guard notifyType == .ring else {
+            MXLog.info("Non-ringing call notification, handling as push notification")
             return .shouldDisplay
         }
         
@@ -312,6 +313,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         
         do {
             try await CXProvider.reportNewIncomingVoIPPushPayload(payload)
+            MXLog.info("Call notification delegated to CallKit")
         } catch {
             MXLog.error("Failed reporting voip call with error: \(error). Handling as push notification")
             return .shouldDisplay

@@ -49,6 +49,8 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
             actionsSubject.send(.reset)
         case .logout:
             actionsSubject.send(.logout)
+        case .forceResetKey:
+            actionsSubject.send(.forceResetRecoveryKey)
         }
     }
     
