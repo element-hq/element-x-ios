@@ -48,6 +48,6 @@ class ZeroAccountApi: ZeroAccountApiProtocol {
         private static let hostURL = ZeroContants.appServer.zeroRootUrl
         
         static let deleteAccountEndPoint = "\(hostURL)api/v2/accounts/delete"
-        static let verifyPasswordEndPoint = "\(ZeroContants.appServer.matrixHomeServerUrl)/matrix/admin/reset-password"
+        static let verifyPasswordEndPoint = "\(hostURL)matrix/admin/reset-password"
     }
 }

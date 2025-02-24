@@ -658,7 +658,8 @@ class MockScreen: Identifiable {
             let coordinator = EncryptionSettingsFlowCoordinator(parameters: .init(userSession: userSession,
                                                                                   appSettings: ServiceLocator.shared.settings,
                                                                                   userIndicatorController: UserIndicatorControllerMock(),
-                                                                                  navigationStackCoordinator: navigationStackCoordinator))
+                                                                                  navigationStackCoordinator: navigationStackCoordinator,
+                                                                                  windowManager: windowManager))
             retainedState.append(coordinator)
             coordinator.start()
             
