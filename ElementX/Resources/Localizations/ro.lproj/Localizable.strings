@@ -120,6 +120,7 @@
 "action_yes" = "Da";
 "action_yes_try_again" = "Yes, try again";
 "banner_migrate_to_native_sliding_sync_action" = "Deconectați-vă și faceți upgrade";
+"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_description" = "Serverul dvs. acceptă acum un protocol nou, mai rapid. Deconectați-vă și conectați-vă din nou pentru a face upgrade acum. Dacă faceți acest lucru acum, vă va ajuta să evitați o deconectare forțată atunci când vechiul protocol este eliminat ulterior.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Serverul dvs. de acasă nu mai acceptă vechiul protocol. Vă rugăm să vă deconectați și să vă conectați din nou pentru a continua să utilizați aplicația.";
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade disponibil";
@@ -443,6 +444,7 @@
 "screen_resolve_send_failure_unsigned_device_title" = "Mesajul dvs. nu a fost trimis deoarece %1$@ nu si-a verificat toate dispozitivele";
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Unul sau mai multe dispozitive nu sunt verificate. Puteți trimite mesajul oricum sau puteți anula deocamdată și încercați din nou mai târziu după ce ați verificat toate dispozitivele.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Mesajul dumneavoastră nu a fost trimis deoarece nu ați verificat unul sau mai multe dispozitive";
+"screen_room_event_pill" = "Message in %1$@";
 "screen_room_mentions_at_room_subtitle" = "Notificați întreaga cameră";
 "screen_room_multiple_knock_requests_view_all_button_title" = "View all";
 "screen_room_pinned_banner_indicator" = "%1$@ din %2$@";

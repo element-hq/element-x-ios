@@ -120,6 +120,7 @@
 "action_yes" = "Tak";
 "action_yes_try_again" = "Tak, spróbuj ponownie";
 "banner_migrate_to_native_sliding_sync_action" = "Wyloguj się i zaktualizuj";
+"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_description" = "Twój serwer obsługuje teraz nowy, szybszy protokół. Wyloguj się i zaloguj ponownie, aby uaktualnić teraz. Zrobienie tego teraz pomoże uniknąć wymuszonego wylogowania, gdy stary protokół zostanie później usunięty.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Twój serwer domowy już nie wspiera starego protokołu. Zaloguj się ponownie, aby kontynuować korzystanie z aplikacji.";
 "banner_migrate_to_native_sliding_sync_title" = "Dostępna aktualizacja";
@@ -443,6 +444,7 @@
 "screen_resolve_send_failure_unsigned_device_title" = "Twoja wiadomość nie została wysłana, ponieważ %1$@ nie zweryfikował swoich wszystkich urządzeń";
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Jedno lub więcej z Twoich urządzeń jest niezweryfikowanych. Wyślij wiadomość mimo to lub anuluj i spróbuj ponownie po zweryfikowaniu wszystkich swoich urządzeń.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Twoja wiadomość nie została wysłana, ponieważ nie zweryfikowałeś jednego lub więcej swoich urządzeń.";
+"screen_room_event_pill" = "Message in %1$@";
 "screen_room_mentions_at_room_subtitle" = "Powiadom cały pokój";
 "screen_room_multiple_knock_requests_view_all_button_title" = "Wyświetl wszystkie";
 "screen_room_pinned_banner_indicator" = "%1$@ z %2$@";

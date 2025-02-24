@@ -120,6 +120,7 @@
 "action_yes" = "Jah";
 "action_yes_try_again" = "Jah, proovi uuesti";
 "banner_migrate_to_native_sliding_sync_action" = "Logi välja ja uuenda";
+"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ enam ei toeta vana protokolli. Kui soovid rakendust edasi kasutada, siis logi korraks temast välja ning seejärel tagasi.";
 "banner_migrate_to_native_sliding_sync_description" = "Sinu koduserver toetab uut ja kiiremat protokolli. Uuendamiseks logi korraks rakendusest välja ja siis tagasi. Mingil hetkel tulevikus vana protokoll eemaldatakse kasutusest ja tehes uuenduse nüüd väldid hilisemat sundkorras uuendust.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Sinu koduserver enam ei toeta vana protokolli. Jätkamaks rakenduse kasutamist palun logi välja ning seejärel tagasi.";
 "banner_migrate_to_native_sliding_sync_title" = "Saadaval on uuendus";
@@ -443,6 +444,7 @@
 "screen_resolve_send_failure_unsigned_device_title" = "Sinu sõnum on saatmata, kuna %1$@ pole verifitseerinud kõiki oma seadmeid";
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Üks või enam sinu seadet on verifitseerimata. Sa võid sõnumi ikkagi ära saata või katkestad saatmise ning proovid uuesti, kui oled kõik oma seadmed verifitseerinud.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Kuna sul on üks või enam verifitseerimata seadet, siis sinu sõnum jäi saatmata";
+"screen_room_event_pill" = "Sõnum jututoas %1$@";
 "screen_room_mentions_at_room_subtitle" = "Teavita kogu jututuba";
 "screen_room_multiple_knock_requests_view_all_button_title" = "Vaata kõiki";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";
