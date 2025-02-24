@@ -41,6 +41,10 @@ jobs:
         run: bundle exec fastlane config_enterprise
         env:
           MAPLIBRE_API_KEY: WeDontNeedOneForUnitTests
+          SENTRY_DSN: https://sentry.localhost
+          POSTHOG_HOST: https://posthog.localhost
+          POSTHOG_API_KEY: WeDontNeedOneForUnitTests
+          RAGESHAKE_SERVER_URL: https://rageshake.localhost
       
       - name: SwiftFormat
         run: swiftformat --lint .

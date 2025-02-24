@@ -211,9 +211,9 @@ final class AppSettings {
     
     /// The configuration to use for analytics. Set `isEnabled` to false to disable analytics.
     ///
-    /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork
-    /// you will need to update the Secrets file with your PostHog server and API key.
-    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: !Secrets.postHogHost.contains("localhost"),
+    /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork you will
+    /// need to regenerate the Secrets file with your PostHog server and API key before enabling.
+    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element."),
                                                         host: Secrets.postHogHost,
                                                         apiKey: Secrets.postHogAPIKey,
                                                         termsURL: "https://element.io/cookie-policy")
