@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct PillView: View {
@@ -22,17 +23,41 @@ struct PillView: View {
     }
         
     var body: some View {
-        Text(context.viewState.displayText)
-            .font(.compound.bodyLGSemibold)
-            .foregroundColor(textColor)
-            .lineLimit(1)
-            .padding(.leading, 4)
-            .padding(.trailing, 6)
-            .padding(.vertical, 1)
-            .background { Capsule().foregroundColor(backgroundColor) }
+        mainContent
             .onChange(of: context.viewState.displayText) {
                 didChangeText()
             }
+    }
+    
+    @ViewBuilder
+    private var mainContent: some View {
+        HStack(spacing: 4) {
+            image
+            Text(context.viewState.displayText)
+                .font(.compound.bodyLGSemibold)
+                .foregroundColor(textColor)
+                .lineLimit(1)
+        }
+        .padding(.leading, 4)
+        .padding(.trailing, 6)
+        .padding(.vertical, 1)
+        .background { Capsule().foregroundColor(backgroundColor) }
+    }
+    
+    @ViewBuilder
+    private var image: some View {
+        if let image = context.viewState.image {
+            switch image {
+            case .link:
+                CompoundIcon(\.link, size: .custom(12), relativeTo: .compound.bodyLGSemibold)
+                    .padding(2)
+                    .foregroundStyle(.compound.bgCanvasDefault)
+                    .background(.compound.textLinkExternal)
+                    .clipShape(Circle())
+            case .roomAvatar(let avatar):
+                RoomAvatarImage(avatar: avatar, avatarSize: .custom(16), mediaProvider: mediaProvider)
+            }
+        }
     }
 }
 
@@ -41,24 +66,27 @@ struct PillView_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         PillView(mediaProvider: mockMediaProvider,
-                 context: PillContext.mock(type: .loadUser(isOwn: false))) { }
+                 context: PillContext.mock(viewState: .mention(isOwnMention: false,
+                                                               displayText: "@Alice"))) { }
             .frame(maxWidth: PillConstants.mockMaxWidth)
-            .previewDisplayName("Loading")
+            .previewDisplayName("User")
         PillView(mediaProvider: mockMediaProvider,
-                 context: PillContext.mock(type: .loadUser(isOwn: true))) { }
+                 context: PillContext.mock(viewState: .mention(isOwnMention: false,
+                                                               displayText: "@Alice but with a very very long name"))) { }
             .frame(maxWidth: PillConstants.mockMaxWidth)
-            .previewDisplayName("Loading Own")
+            .previewDisplayName("User with a long name")
         PillView(mediaProvider: mockMediaProvider,
-                 context: PillContext.mock(type: .loadedUser(isOwn: false))) { }
+                 context: PillContext.mock(viewState: .mention(isOwnMention: true,
+                                                               displayText: "@Alice"))) { }
             .frame(maxWidth: PillConstants.mockMaxWidth)
-            .previewDisplayName("Loaded Long")
+            .previewDisplayName("Own user")
         PillView(mediaProvider: mockMediaProvider,
-                 context: PillContext.mock(type: .loadedUser(isOwn: true))) { }
+                 context: PillContext.mock(viewState: .reference(avatar: .roomAvatar(.room(id: "roomID", name: "Room", avatarURL: nil)), displayText: "Room"))) { }
             .frame(maxWidth: PillConstants.mockMaxWidth)
-            .previewDisplayName("Loaded Long Own")
+            .previewDisplayName("Room")
         PillView(mediaProvider: mockMediaProvider,
-                 context: PillContext.mock(type: .allUsers)) { }
+                 context: PillContext.mock(viewState: .reference(avatar: .link, displayText: L10n.screenRoomEventPill("Room")))) { }
             .frame(maxWidth: PillConstants.mockMaxWidth)
-            .previewDisplayName("All Users")
+            .previewDisplayName("Message link")
     }
 }

@@ -17,6 +17,7 @@ struct PinnedEventsTimelineScreenCoordinatorParameters {
     let appMediator: AppMediatorProtocol
     let emojiProvider: EmojiProviderProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol
+    let clientProxy: ClientProxyProtocol
 }
 
 enum PinnedEventsTimelineScreenCoordinatorAction {
@@ -53,7 +54,8 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                               appSettings: ServiceLocator.shared.settings,
                                               analyticsService: ServiceLocator.shared.analytics,
                                               emojiProvider: parameters.emojiProvider,
-                                              timelineControllerFactory: parameters.timelineControllerFactory)
+                                              timelineControllerFactory: parameters.timelineControllerFactory,
+                                              clientProxy: parameters.clientProxy)
     }
     
     func start() {

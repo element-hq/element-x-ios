@@ -18,6 +18,7 @@ enum RoomProxyError: Error {
     case missingTransactionID
 }
 
+/// An enum that describes the relationship between the current user and the room, and contains a reference to the specific implementation of the `RoomProxy`.
 enum RoomProxyType {
     case joined(JoinedRoomProxyProtocol)
     case invited(InvitedRoomProxyProtocol)

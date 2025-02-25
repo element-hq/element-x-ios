@@ -34,6 +34,7 @@ class HomeScreenRoomTests: XCTestCase {
                                   unreadNotificationsCount: unreadNotificationsCount,
                                   notificationMode: notificationMode,
                                   canonicalAlias: nil,
+                                  alternativeAliases: [],
                                   hasOngoingCall: hasOngoingCall,
                                   isMarkedUnread: isMarkedUnread,
                                   isFavourite: false)

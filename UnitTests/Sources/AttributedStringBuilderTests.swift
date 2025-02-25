@@ -425,14 +425,88 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(numberOfBlockquotes, 3, "Couldn't find all the blockquotes")
     }
     
-    func testUserMentionAtachment() {
+    func testUserPermalinkMentionAtachment() {
         let string = "https://matrix.to/#/@test:matrix.org"
         let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
         XCTAssertNotNil(attributedStringFromHTML?.attachment)
-        XCTAssertNotNil(attributedStringFromHTML?.link)
+        XCTAssertEqual(attributedStringFromHTML?.userID, "@test:matrix.org")
+        XCTAssertEqual(attributedStringFromHTML?.link?.absoluteString, string)
         let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
         XCTAssertNotNil(attributedStringFromPlain?.attachment)
-        XCTAssertNotNil(attributedStringFromHTML?.link)
+        XCTAssertEqual(attributedStringFromPlain?.userID, "@test:matrix.org")
+        XCTAssertEqual(attributedStringFromPlain?.link?.absoluteString, string)
+    }
+    
+    func testUserIDMentionAtachment() {
+        let string = "@test:matrix.org"
+        let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
+        XCTAssertNotNil(attributedStringFromHTML?.attachment)
+        XCTAssertEqual(attributedStringFromHTML?.userID, "@test:matrix.org")
+        XCTAssertEqual(attributedStringFromHTML?.link?.absoluteString, "https://matrix.to/#/@test:matrix.org")
+        let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
+        XCTAssertNotNil(attributedStringFromPlain?.attachment)
+        XCTAssertEqual(attributedStringFromPlain?.userID, "@test:matrix.org")
+        XCTAssertEqual(attributedStringFromPlain?.link?.absoluteString, "https://matrix.to/#/@test:matrix.org")
+    }
+    
+    func testRoomIDPermalinkMentionAttachment() {
+        let string = "https://matrix.to/#/!test:matrix.org"
+        let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
+        XCTAssertNotNil(attributedStringFromHTML?.attachment)
+        XCTAssertEqual(attributedStringFromHTML?.roomID, "!test:matrix.org")
+        XCTAssertEqual(attributedStringFromHTML?.link?.absoluteString, string)
+        let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
+        XCTAssertNotNil(attributedStringFromPlain?.attachment)
+        XCTAssertEqual(attributedStringFromHTML?.roomID, "!test:matrix.org")
+        XCTAssertEqual(attributedStringFromPlain?.link?.absoluteString, string)
+    }
+    
+    func testRoomAliasPermalinkMentionAttachment() {
+        let string = "https://matrix.to/#/#test:matrix.org"
+        let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
+        XCTAssertNotNil(attributedStringFromHTML?.attachment)
+        XCTAssertEqual(attributedStringFromHTML?.roomAlias, "#test:matrix.org")
+        XCTAssertEqual(attributedStringFromHTML?.link?.absoluteString, "https://matrix.to/#/%23test:matrix.org")
+        let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
+        XCTAssertNotNil(attributedStringFromPlain?.attachment)
+        XCTAssertEqual(attributedStringFromHTML?.roomAlias, "#test:matrix.org")
+        XCTAssertEqual(attributedStringFromPlain?.link?.absoluteString, "https://matrix.to/#/%23test:matrix.org")
+    }
+    
+    func testRoomAliasMentionAttachment() {
+        let string = "#test:matrix.org"
+        let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
+        XCTAssertNotNil(attributedStringFromHTML?.attachment)
+        XCTAssertEqual(attributedStringFromHTML?.roomAlias, "#test:matrix.org")
+        XCTAssertEqual(attributedStringFromHTML?.link?.absoluteString, "https://matrix.to/#/%23test:matrix.org")
+        let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
+        XCTAssertNotNil(attributedStringFromPlain?.attachment)
+        XCTAssertEqual(attributedStringFromHTML?.roomAlias, "#test:matrix.org")
+        XCTAssertEqual(attributedStringFromPlain?.link?.absoluteString, "https://matrix.to/#/%23test:matrix.org")
+    }
+    
+    func testEventRoomIDPermalinkMentionAttachment() {
+        let string = "https://matrix.to/#/!test:matrix.org/$test"
+        let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
+        XCTAssertNotNil(attributedStringFromHTML?.attachment)
+        XCTAssertEqual(attributedStringFromHTML?.eventOnRoomID, .some(.init(roomID: "!test:matrix.org", eventID: "$test")))
+        XCTAssertEqual(attributedStringFromHTML?.link?.absoluteString, string)
+        let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
+        XCTAssertNotNil(attributedStringFromPlain?.attachment)
+        XCTAssertEqual(attributedStringFromPlain?.eventOnRoomID, .some(.init(roomID: "!test:matrix.org", eventID: "$test")))
+        XCTAssertEqual(attributedStringFromPlain?.link?.absoluteString, string)
+    }
+    
+    func testEventRoomAliasPermalinkMentionAttachment() {
+        let string = "https://matrix.to/#/#test:matrix.org/$test"
+        let attributedStringFromHTML = attributedStringBuilder.fromHTML(string)
+        XCTAssertNotNil(attributedStringFromHTML?.attachment)
+        XCTAssertEqual(attributedStringFromHTML?.eventOnRoomAlias, .some(.init(alias: "#test:matrix.org", eventID: "$test")))
+        XCTAssertEqual(attributedStringFromHTML?.link?.absoluteString, "https://matrix.to/#/%23test:matrix.org/$test")
+        let attributedStringFromPlain = attributedStringBuilder.fromPlain(string)
+        XCTAssertNotNil(attributedStringFromPlain?.attachment)
+        XCTAssertEqual(attributedStringFromPlain?.eventOnRoomAlias, .some(.init(alias: "#test:matrix.org", eventID: "$test")))
+        XCTAssertEqual(attributedStringFromPlain?.link?.absoluteString, "https://matrix.to/#/%23test:matrix.org/$test")
     }
     
     func testUserMentionAtachmentInBlockQuotes() {
@@ -631,7 +705,7 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(foundLink, url)
         XCTAssertEqual(foundAttachments, 2)
     }
-
+    
     // MARK: - Private
     
     private func checkLinkIn(attributedString: AttributedString?, expectedLink: String, expectedRuns: Int) {
