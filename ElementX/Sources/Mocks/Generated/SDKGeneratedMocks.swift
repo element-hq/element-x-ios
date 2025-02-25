@@ -2526,43 +2526,14 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var logoutCalled: Bool {
         return logoutCallsCount > 0
     }
+    open var logoutClosure: (() async throws -> Void)?
 
-    var logoutUnderlyingReturnValue: String?
-    open var logoutReturnValue: String? {
-        get {
-            if Thread.isMainThread {
-                return logoutUnderlyingReturnValue
-            } else {
-                var returnValue: String?? = nil
-                DispatchQueue.main.sync {
-                    returnValue = logoutUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                logoutUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    logoutUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var logoutClosure: (() async throws -> String?)?
-
-    open override func logout() async throws -> String? {
+    open override func logout() async throws {
         if let error = logoutThrowableError {
             throw error
         }
         logoutCallsCount += 1
-        if let logoutClosure = logoutClosure {
-            return try await logoutClosure()
-        } else {
-            return logoutReturnValue
-        }
+        try await logoutClosure?()
     }
 
     //MARK: - notificationClient

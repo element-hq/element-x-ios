@@ -62,7 +62,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         XCTAssertNotEqual(context.viewState.selectedUsers.first?.userID, UserProfileProxy.mockAlice.userID)
     }
     
-    func testDefaulSecurity() {
+    func testDefaultSecurity() {
         XCTAssertTrue(context.viewState.bindings.isRoomPrivate)
     }
     
@@ -70,6 +70,29 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         XCTAssertFalse(context.viewState.canCreateRoom)
         context.send(viewAction: .updateRoomName("A"))
         XCTAssertTrue(context.viewState.canCreateRoom)
+    }
+    
+    func testCreateRoom() async throws {
+        // Given a form with a blank topic.
+        context.send(viewAction: .updateRoomName("A"))
+        context.roomTopic = ""
+        context.isRoomPrivate = false
+        XCTAssertTrue(context.viewState.canCreateRoom)
+        
+        // When creating the room.
+        clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReturnValue = .success("1")
+        let deferred = deferFulfillment(viewModel.actions) { action in
+            guard case .openRoom("1") = action else { return false }
+            return true
+        }
+        context.send(viewAction: .createRoom)
+        try await deferred.fulfill()
+        
+        // Then the room should be created and a topic should not be set.
+        XCTAssertTrue(clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartCalled)
+        XCTAssertEqual(clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReceivedArguments?.name, "A")
+        XCTAssertNil(clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReceivedArguments?.topic,
+                     "The topic should be sent as nil when it is empty.")
     }
     
     func testCreateKnockingRoom() async {

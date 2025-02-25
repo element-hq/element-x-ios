@@ -79,7 +79,7 @@ class TimelineProvider: TimelineProviderProtocol {
     // MARK: - Private
     
     private func updateItemsWithDiffs(_ diffs: [TimelineDiff]) {
-        let span = MXLog.createSpan("process_timeline_list_diffs")
+        let span = MXLog.createSpan("process_timeline_list_diffs:\(kind)")
         span.enter()
         defer {
             span.exit()

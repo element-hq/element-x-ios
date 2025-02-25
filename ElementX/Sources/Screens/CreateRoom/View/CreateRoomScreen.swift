@@ -70,6 +70,9 @@ struct CreateRoomScreen: View {
                               text: roomNameBinding,
                               prompt: Text(L10n.commonRoomNamePlaceholder).foregroundColor(.compound.textSecondary),
                               axis: .horizontal)
+                        .font(.compound.bodyLG)
+                        .foregroundStyle(.compound.textPrimary)
+                        .tint(.compound.iconAccentTertiary)
                         .focused($focus, equals: .name)
                         .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomName)
                         .padding(.horizontal, ListRowPadding.horizontal)
