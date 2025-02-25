@@ -256,7 +256,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         }
         
         switch await userSession.clientProxy.createRoom(name: createRoomParameters.name,
-                                                        topic: createRoomParameters.topic,
+                                                        topic: createRoomParameters.topic.isBlank ? nil : createRoomParameters.topic,
                                                         isRoomPrivate: createRoomParameters.isRoomPrivate,
                                                         // As of right now we don't want to make private rooms with the knock rule
                                                         isKnockingOnly: createRoomParameters.isRoomPrivate ? false : createRoomParameters.isKnockingOnly,
