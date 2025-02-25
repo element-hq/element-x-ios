@@ -584,12 +584,11 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    func logout() async -> URL? {
+    func logout() async {
         do {
-            return try await client.logout().flatMap(URL.init(string:))
+            try await client.logout()
         } catch {
             MXLog.error("Failed logging out with error: \(error)")
-            return nil
         }
     }
     

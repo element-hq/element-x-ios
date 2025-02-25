@@ -154,7 +154,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     func deactivateAccount(password: String?, eraseData: Bool) async -> Result<Void, ClientProxyError>
     
-    func logout() async -> URL?
+    func logout() async
 
     func setPusher(with configuration: PusherConfiguration) async throws
     

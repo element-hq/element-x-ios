@@ -3658,40 +3658,11 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var logoutCalled: Bool {
         return logoutCallsCount > 0
     }
+    var logoutClosure: (() async -> Void)?
 
-    var logoutUnderlyingReturnValue: URL?
-    var logoutReturnValue: URL? {
-        get {
-            if Thread.isMainThread {
-                return logoutUnderlyingReturnValue
-            } else {
-                var returnValue: URL?? = nil
-                DispatchQueue.main.sync {
-                    returnValue = logoutUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                logoutUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    logoutUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var logoutClosure: (() async -> URL?)?
-
-    func logout() async -> URL? {
+    func logout() async {
         logoutCallsCount += 1
-        if let logoutClosure = logoutClosure {
-            return await logoutClosure()
-        } else {
-            return logoutReturnValue
-        }
+        await logoutClosure?()
     }
     //MARK: - setPusher
 
