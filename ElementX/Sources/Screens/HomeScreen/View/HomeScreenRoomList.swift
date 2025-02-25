@@ -25,7 +25,7 @@ struct HomeScreenRoomList: View {
     
     @ViewBuilder
     private var content: some View {
-        ForEach(context.viewState.visibleRooms) { room in
+        ForEach(context.viewState.visibleRooms.filter{ $0.canonicalAlias == nil }) { room in
             switch room.type {
             case .placeholder:
                 HomeScreenRoomCell(room: room, context: context, isSelected: false)
