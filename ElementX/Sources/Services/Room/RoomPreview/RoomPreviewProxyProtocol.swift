@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// A preview object for the Room. useful to get all the possible info for rooms to which the user is not invited to
 // sourcery: AutoMockable
 protocol RoomPreviewProxyProtocol {
     var info: RoomPreviewInfoProxy { get }

@@ -41,8 +41,7 @@ struct PillView: View {
         .padding(.leading, 4)
         .padding(.trailing, 6)
         .padding(.vertical, 1)
-        .background { Capsule().foregroundColor(backgroundColor)
-        }
+        .background { Capsule().foregroundColor(backgroundColor) }
     }
     
     @ViewBuilder

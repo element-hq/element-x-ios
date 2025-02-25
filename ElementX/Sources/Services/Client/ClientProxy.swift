@@ -518,12 +518,14 @@ class ClientProxy: ClientProxyProtocol {
     
     func roomSummaryForIdentifier(_ identifier: String) -> RoomSummary? {
         // the alternate room summary provider is not impacted by filtering
-        alternateRoomSummaryProvider?.roomListPublisher.value.first(where: { $0.id == identifier })
+        alternateRoomSummaryProvider?.roomListPublisher.value.first { $0.id == identifier }
     }
     
     func roomSummaryForAlias(_ alias: String) -> RoomSummary? {
         // the alternate room summary provider is not impacted by filtering
-        alternateRoomSummaryProvider?.roomListPublisher.value.first(where: { $0.canonicalAlias == alias })
+        alternateRoomSummaryProvider?.roomListPublisher.value.first { roomSummary in
+            roomSummary.canonicalAlias == alias || roomSummary.alternativeAliases.contains(alias)
+        }
     }
 
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
