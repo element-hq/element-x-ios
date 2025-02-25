@@ -591,7 +591,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         Task {
             // First log out from the server
-            let accountLogoutURL = await userSession.clientProxy.logout()
+            await userSession.clientProxy.logout()
             
             // Regardless of the result, clear user data
             userSessionStore.logout(userSession: userSession)
@@ -604,13 +604,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             ServiceLocator.shared.analytics.resetConsentState()
             
             stateMachine.processEvent(.completedSigningOut)
-            
-            // Handle OIDC's RP-Initiated Logout if needed. Don't fallback to an ASWebAuthenticationSession
-            // as it looks weird to show an alert to the user asking them to sign in to their provider.
-            if let accountLogoutURL, UIApplication.shared.canOpenURL(accountLogoutURL) {
-                await UIApplication.shared.open(accountLogoutURL)
-            }
-            
+                       
             hideLoadingIndicator()
         }
     }
