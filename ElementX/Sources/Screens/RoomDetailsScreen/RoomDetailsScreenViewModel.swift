@@ -234,11 +234,21 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .receive(on: DispatchQueue.main)
             .sink { [weak self, ownUserID = roomProxy.ownUserID] members in
                 guard let self else { return }
+                
                 let accountOwner = members.first { $0.userID == ownUserID }
                 let dmRecipient = members.first { $0.userID != ownUserID }
+                
                 self.dmRecipient = dmRecipient
                 self.state.dmRecipient = dmRecipient.map(RoomMemberDetails.init(withProxy:))
                 self.state.accountOwner = accountOwner.map(RoomMemberDetails.init(withProxy:))
+                
+                if let dmRecipient {
+                    Task { [weak self] in
+                        if case let .success(userIdentity) = await self?.clientProxy.userIdentity(for: dmRecipient.userID) {
+                            self?.state.dmRecipientVerificationState = userIdentity?.verificationState
+                        }
+                    }
+                }
             }
             .store(in: &cancellables)
         

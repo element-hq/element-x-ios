@@ -78,6 +78,8 @@ struct RoomDetailsScreenViewState: BindableState {
     var bindings: RoomDetailsScreenViewStateBindings
 
     var dmRecipient: RoomMemberDetails?
+    var dmRecipientVerificationState: UserIdentityVerificationState?
+    
     var accountOwner: RoomMemberDetails?
     
     var shortcuts: [RoomDetailsScreenViewShortcut] {
