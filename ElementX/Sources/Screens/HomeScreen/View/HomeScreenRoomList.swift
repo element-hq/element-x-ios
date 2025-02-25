@@ -10,6 +10,8 @@ import SwiftUI
 struct HomeScreenRoomList: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     
+    private let ZERO_CHANNEL_PREFIX = "0://"
+    
     var body: some View {
         // Hide the room list when the search bar is focused but the query is empty
         // This works hand in hand with the room list service layer filtering and
@@ -25,7 +27,7 @@ struct HomeScreenRoomList: View {
     
     @ViewBuilder
     private var content: some View {
-        ForEach(context.viewState.visibleRooms.filter{ $0.canonicalAlias == nil }) { room in
+        ForEach(context.viewState.visibleRooms.filter { !$0.name.starts(with: ZERO_CHANNEL_PREFIX) }) { room in
             switch room.type {
             case .placeholder:
                 HomeScreenRoomCell(room: room, context: context, isSelected: false)

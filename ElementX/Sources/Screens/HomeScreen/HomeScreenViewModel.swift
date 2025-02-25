@@ -243,7 +243,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         case .forceRefreshChannels:
             fetchChannels(isForceRefresh: true)
         case .channelTapped(let channel):
-            joinZeroChannel(channelId: channel.id)
+            joinZeroChannel(channel)
         }
     }
     
@@ -606,7 +606,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
     }
     
-    private func joinZeroChannel(channelId: String) {
+    private func joinZeroChannel(_ channel: HomeScreenChannel) {
         Task {
             let userIndicatorID = UUID().uuidString
             defer {
@@ -616,14 +616,20 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                                                                   type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
                                                                   title: L10n.commonLoading,
                                                                   persistent: true))
-            
-            let joinChannelResult = await userSession.clientProxy.joinChannel(roomAliasOrId: channelId)
-            switch joinChannelResult {
-            case .success(let roomId):
-                actionsSubject.send(.presentRoom(roomIdentifier: roomId))
-            case .failure(let failure):
-                MXLog.error("Failed to join channel: \(failure)")
-                displayError()
+            let roomAliasResult = await userSession.clientProxy.resolveRoomAlias(channel.id)
+            switch roomAliasResult {
+            case .success(let roomInfo):
+                actionsSubject.send(.presentRoom(roomIdentifier: roomInfo.roomId))
+            case .failure(let error):
+                MXLog.error("Failed to resolve room alias: \(channel.id). Error: \(error)")
+                let joinChannelResult = await userSession.clientProxy.joinChannel(roomAliasOrId: channel.id)
+                switch joinChannelResult {
+                case .success(let roomId):
+                    actionsSubject.send(.presentRoom(roomIdentifier: roomId))
+                case .failure(let failure):
+                    MXLog.error("Failed to join channel: \(failure)")
+                    displayError()
+                }
             }
         }
     }
