@@ -112,8 +112,9 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func startSync()
 
     func stopSync()
-    func stopSync(completion: (() -> Void)?) // Hopefully this will become async once we get SE-0371.
     
+    func stopSync(completion: (() -> Void)?) // Hopefully this will become async once we get SE-0371.
+        
     func accountURL(action: AccountManagementAction) async -> URL?
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError>
