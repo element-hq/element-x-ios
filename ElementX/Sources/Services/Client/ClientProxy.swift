@@ -281,7 +281,8 @@ class ClientProxy: ClientProxyProtocol {
         Task {
             await syncService?.start()
             
-            // If we are using OIDC we want to cache the account management URL, the cache lives for 24 hours
+            // If we are using OIDC we want to cache the account management URL in volatile memory on the SDK side.
+            // To avoid the cache being invalidated while the app is backgrounded, we cache at every sync start.
             await cacheAccountURL()
         }
     }
@@ -757,6 +758,7 @@ class ClientProxy: ClientProxyProtocol {
     // MARK: - Private
     
     private func cacheAccountURL() async {
+        // Calling this function for the first time will cache the account URL in volatile memory for 24 hrs on the SDK.
         _ = try? await client.accountUrl(action: nil)
     }
     
