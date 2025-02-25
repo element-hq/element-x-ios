@@ -1,3 +1,89 @@
+## Changes in 25.03.0 (2025-02-25)
+
+### What's Changed
+
+✨ Features
+* Add support for initiating and responding to user verification requests by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3759
+* User verification state indicators by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3793
+* Show error screens in group calls by @robintown in https://github.com/element-hq/element-x-ios/pull/3813
+* Render Room and Message Pills by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3809
+
+🙌 Improvements
+* Updated the notification string for incoming calls by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3723
+* Revert back to UIKit for the presentation of the timeline media preview. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3719
+* Added an alert before creating a new DM by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3730
+* Bottom Sheet to confirm DM creation by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3739
+* Use the new preview screen when tapping media on the room and pinned events screens. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3736
+* Added a delayed loading when opening a room by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3748
+* Updated Bottom Sheet message string by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3743
+* Updated File and Media timeline view by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3751
+* Fix message completion trigger to work anywhere in the message by @vickcoo in https://github.com/element-hq/element-x-ios/pull/3696
+* Hide the unread dot after previewing an invite. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3800
+
+🐛 Bugfixes
+* Ensure multiple mandatory verification flows can be ran consecutively (e.g. following encryption resets) by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3722
+* Fix missing user IDs. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3725
+* Knocking polishing part 1 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3732
+* Fix a crash in the media browser by storing the active timeline context. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3746
+* Fix a bug where the preview controller breaks when swiping quickly. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3750
+* Stop the message composer from randomly changing the cursor position by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3796
+* Use alternative summary provider when listening to knocked membership change by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3817
+* Don't set the room topic when creating a room if it is blank. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3821
+
+⚠️ API Changes
+* Remove support for the sliding sync proxy. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3801
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3727
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3775
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3799
+* Update translations (manually). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3815
+
+🧱 Build
+* Add a test dependabot.yml file and see to see what it picks up. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3756
+* Delete dependabot.yml - it doesn't work for Xcode projects (or XcodeGen). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3757
+* Update our development assets. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3783
+* Update the Enterprise submodule. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3789
+* Configure diagnostics (and MapLibre) using Pkl. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3820
+
+🚧 In development 🚧
+* Knocking feature polishing part 2 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3738
+* Added the banned room proxy by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3744
+* Knock Polishing part 4 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3779
+* Updated dev options screen for ask to join by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3787
+
+Others
+* Fix flakey room member details screen snapshot test by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3726
+* RoomTimeline… refactor (drop the `Room`). by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3728
+* Switch the ElementCall UI test to `call.element.io` for stability by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3733
+* Refactor Rust timeline identifiers into our own. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3731
+* Add back verbose logging for the timeline provider to help debug the event cache and lazy loading by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3734
+* updated the SDK to 25.02.04 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3737
+* Revert unsuccessful UI test stability tweaks by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3740
+* Fix some concurrency warnings, update missed licence headers. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3741
+* Bump the RustSDK to v25.02.06 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3749
+* Removed now unused secrets by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3754
+* Refactor how notifications are preprocessed and be explicit about which ones are supposed to be displayed or discarded by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3776
+* Log whether a notification is expected to make a noise. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3782
+* Fix UI test snapshots following session verification screen changes. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3781
+* Update dependency jpsim/Yams to from: "5.2.0" by @renovate in https://github.com/element-hq/element-x-ios/pull/3788
+* Update strings after resolving some duplicities. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3791
+* Update dependency jpsim/Yams to from: "5.3.0" by @renovate in https://github.com/element-hq/element-x-ios/pull/3798
+* Use the app name placeholder added to the logout alert title. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3802
+* Update Compound by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3803
+* Rename a couple of missed isEncryptedOneToOneRoom properties. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3804
+* Update dependency jpsim/Yams to from: "5.3.1" by @renovate in https://github.com/element-hq/element-x-ios/pull/3814
+* Add a couple of extra logs around the state of call ringing notifications. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3808
+* Fix various UI test snapshots following changes to the development assets by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3816
+* Revert "Show error screens in group calls" by @hughns in https://github.com/element-hq/element-x-ios/pull/3819
+* Bump the RustSDK to v25.2.25 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3823
+
+### New Contributors
+* @vickcoo made their first contribution in https://github.com/element-hq/element-x-ios/pull/3696
+* @robintown made their first contribution in https://github.com/element-hq/element-x-ios/pull/3813
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/25.02.0...25.03.0
+
 ## Changes in 25.02.0 (2025-01-31)
 
 ### What's Changed
