@@ -57,6 +57,9 @@ enum HomeScreenViewAction {
     
     case postTapped(_ post: HomeScreenPost)
     case openArweaveLink(_ post: HomeScreenPost)
+    
+    case forceRefreshChannels
+    case channelTapped(_ channel: HomeScreenChannel)
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -93,6 +96,23 @@ enum HomeScreenPostListMode: CustomStringConvertible {
     }
 }
 
+enum HomeScreenChannelListMode: CustomStringConvertible {
+    case skeletons
+    case empty
+    case channels
+    
+    var description: String {
+        switch self {
+        case .skeletons:
+            return "Showing placeholders"
+        case .empty:
+            return "Showing empty state"
+        case .channels:
+            return "Showing channels"
+        }
+    }
+}
+
 enum HomeScreenSecurityBannerMode: Equatable {
     case none
     case dismissed
@@ -125,8 +145,11 @@ struct HomeScreenViewState: BindableState {
         
     var rooms: [HomeScreenRoom] = []
     var posts: [HomeScreenPost] = []
+    var channels: [HomeScreenChannel] = []
+    
     var roomListMode: HomeScreenRoomListMode = .skeletons
     var postListMode: HomeScreenPostListMode = .skeletons
+    var channelsListMode: HomeScreenChannelListMode = .skeletons
     
     var canLoadMorePosts: Bool = true
     
@@ -143,13 +166,19 @@ struct HomeScreenViewState: BindableState {
         
         return rooms
     }
-    
     var visiblePosts: [HomeScreenPost] {
         if postListMode == .skeletons {
             return placeholderPosts
         }
         
         return posts
+    }
+    var visibleChannels: [HomeScreenChannel] {
+        if channelsListMode == .skeletons {
+            return placeholderChannels
+        }
+        
+        return channels
     }
     
     var userRewards = ZeroRewards.empty()
@@ -162,10 +191,14 @@ struct HomeScreenViewState: BindableState {
             HomeScreenRoom.placeholder()
         }
     }
-    
     var placeholderPosts: [HomeScreenPost] {
         (1...10).map { _ in
             HomeScreenPost.placeholder()
+        }
+    }
+    var placeholderChannels: [HomeScreenChannel] {
+        (1...20).map { _ in
+            HomeScreenChannel.placeholder()
         }
     }
     
@@ -303,6 +336,18 @@ struct HomeScreenPost: Identifiable, Equatable {
                        isMeowedByMe: false,
                        postDateTime: "",
                        isMyPost: false)
+    }
+}
+
+struct HomeScreenChannel: Identifiable, Equatable {
+    let id: String
+    let channelFullName: String
+    let displayName: AttributedString
+    
+    static func placeholder() -> HomeScreenChannel {
+        .init(id: UUID().uuidString,
+              channelFullName: "Placeholder Channel Name",
+              displayName: "Placeholder Channel Display Name")
     }
 }
 
@@ -446,5 +491,24 @@ extension HomeScreenPost {
                 }
             }
         }
+    }
+}
+
+extension HomeScreenChannel {
+    init(channelZId: String) {
+        let channelDisplayName = String((channelZId.split(separator: ".").first ?? ""))
+        var attributedChannelDisplayName = AttributedString(channelDisplayName)
+        if let prefixRange = attributedChannelDisplayName.range(of: "0://") {
+            attributedChannelDisplayName[prefixRange].foregroundColor = .compound.textSecondary
+        }
+        
+        let rootChannelName = channelDisplayName.replacingOccurrences(of: "0://", with: "")
+        let channelId = "#\(rootChannelName):\(ZeroContants.appServer.matrixHomeServerPostfix)"
+        
+        self.init(
+            id: channelId,
+            channelFullName: channelZId,
+            displayName: attributedChannelDisplayName
+        )
     }
 }

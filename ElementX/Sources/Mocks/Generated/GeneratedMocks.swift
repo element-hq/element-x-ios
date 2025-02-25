@@ -5810,6 +5810,140 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return addMeowsToFeedFeedIdAmountReturnValue
         }
     }
+    //MARK: - fetchUserZIds
+
+    var fetchUserZIdsUnderlyingCallsCount = 0
+    var fetchUserZIdsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchUserZIdsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchUserZIdsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchUserZIdsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchUserZIdsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchUserZIdsCalled: Bool {
+        return fetchUserZIdsCallsCount > 0
+    }
+
+    var fetchUserZIdsUnderlyingReturnValue: Result<[String], ClientProxyError>!
+    var fetchUserZIdsReturnValue: Result<[String], ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchUserZIdsUnderlyingReturnValue
+            } else {
+                var returnValue: Result<[String], ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchUserZIdsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchUserZIdsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchUserZIdsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchUserZIdsClosure: (() async -> Result<[String], ClientProxyError>)?
+
+    func fetchUserZIds() async -> Result<[String], ClientProxyError> {
+        fetchUserZIdsCallsCount += 1
+        if let fetchUserZIdsClosure = fetchUserZIdsClosure {
+            return await fetchUserZIdsClosure()
+        } else {
+            return fetchUserZIdsReturnValue
+        }
+    }
+    //MARK: - joinChannel
+
+    var joinChannelRoomAliasOrIdUnderlyingCallsCount = 0
+    var joinChannelRoomAliasOrIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return joinChannelRoomAliasOrIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinChannelRoomAliasOrIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinChannelRoomAliasOrIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinChannelRoomAliasOrIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var joinChannelRoomAliasOrIdCalled: Bool {
+        return joinChannelRoomAliasOrIdCallsCount > 0
+    }
+    var joinChannelRoomAliasOrIdReceivedRoomAliasOrId: String?
+    var joinChannelRoomAliasOrIdReceivedInvocations: [String] = []
+
+    var joinChannelRoomAliasOrIdUnderlyingReturnValue: Result<String, ClientProxyError>!
+    var joinChannelRoomAliasOrIdReturnValue: Result<String, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return joinChannelRoomAliasOrIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<String, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinChannelRoomAliasOrIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinChannelRoomAliasOrIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinChannelRoomAliasOrIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var joinChannelRoomAliasOrIdClosure: ((String) async -> Result<String, ClientProxyError>)?
+
+    func joinChannel(roomAliasOrId: String) async -> Result<String, ClientProxyError> {
+        joinChannelRoomAliasOrIdCallsCount += 1
+        joinChannelRoomAliasOrIdReceivedRoomAliasOrId = roomAliasOrId
+        DispatchQueue.main.async {
+            self.joinChannelRoomAliasOrIdReceivedInvocations.append(roomAliasOrId)
+        }
+        if let joinChannelRoomAliasOrIdClosure = joinChannelRoomAliasOrIdClosure {
+            return await joinChannelRoomAliasOrIdClosure(roomAliasOrId)
+        } else {
+            return joinChannelRoomAliasOrIdReturnValue
+        }
+    }
     //MARK: - loadMediaContentForSource
 
     var loadMediaContentForSourceThrowableError: Error?

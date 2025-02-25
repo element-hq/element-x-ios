@@ -303,7 +303,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: ZERO Account Management
     
     private func showDeleteZeroAccountConfirmation() {
-        ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
+        parameters.userIndicatorController.alertInfo = .init(id: .init(),
                                                                         title: "Delete Account",
                                                                         message: "Are you sure you want to delete your account? You won't be able to recover your account later!",
                                                                         primaryButton: .init(title: L10n.actionConfirm, role: .destructive) { [weak self] in

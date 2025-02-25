@@ -165,6 +165,7 @@ class ClientProxy: ClientProxyProtocol {
     private let zeroCreateAccountApi: ZeroCreateAccountApiProtocol
     private let zeroUserAccountApi: ZeroAccountApiProtocol
     private let zeroPostsApi: ZeroPostsApiProtocol
+    private let zeroChannelsApi: ZeroChannelsApiProtocol
     
     init(client: ClientProtocol,
          needsSlidingSyncMigration: Bool,
@@ -194,6 +195,7 @@ class ClientProxy: ClientProxyProtocol {
         zeroCreateAccountApi = ZeroCreateAccountApi(appSettings: appSettings)
         zeroUserAccountApi = ZeroAccountApi(appSettings: appSettings)
         zeroPostsApi = ZeroPostsApi(appSettings: appSettings)
+        zeroChannelsApi = ZeroChannelsApi(appSettings: appSettings)
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
@@ -1026,6 +1028,37 @@ class ClientProxy: ClientProxyProtocol {
             switch zeroAddPostMeowResult {
             case .success(let post):
                 return .success(post)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func fetchUserZIds() async -> Result<[String], ClientProxyError> {
+        do {
+            let zIdsResult = try await zeroChannelsApi.fetchZeroIds()
+            switch zIdsResult {
+            case .success(let zIds):
+                return .success(zIds)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func joinChannel(roomAliasOrId: String) async -> Result<String, ClientProxyError> {
+        do {
+            let joinChannelResult = try await zeroChannelsApi.joinChannel(roomAliasOrId: roomAliasOrId)
+            switch joinChannelResult {
+            case .success(let roomId):
+                _ = await joinRoom(roomAliasOrId, via: [])
+                return .success(roomId)
             case .failure(let error):
                 return .failure(.zeroError(error))
             }

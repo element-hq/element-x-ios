@@ -7,11 +7,12 @@
 
 import SwiftUI
 
-struct HomeTabView<Content1: View, Content2: View>: View {
+struct HomeTabView<Content1: View, Content2: View, Content3: View>: View {
     @State private var selectedTab = 0
     
     let chatTabContent: Content1
     let homeTabContent: Content2
+    let channelTabContent: Content3
     let onTabSelected: (Int) -> Void
     
     private let tabs = [
@@ -19,6 +20,11 @@ struct HomeTabView<Content1: View, Content2: View>: View {
             title: "Chat",
             icon: Asset.Images.homeTabChatIcon,
             selectedIcon: Asset.Images.homeTabChatFillIcon
+        ),
+        (
+            title: "Channels",
+            icon: Asset.Images.homeTabExplorerIcon,
+            selectedIcon: Asset.Images.homeTabExplorerFillIcon
         ),
         (
             title: "Feed",
@@ -29,9 +35,11 @@ struct HomeTabView<Content1: View, Content2: View>: View {
     
     init(@ViewBuilder chatTabContent: () -> Content1,
          @ViewBuilder homeTabContent: () -> Content2,
+         @ViewBuilder channelTabContent: () -> Content3,
          onTabSelected: @escaping (Int) -> Void) {
         self.chatTabContent = chatTabContent()
         self.homeTabContent = homeTabContent()
+        self.channelTabContent = channelTabContent()
         self.onTabSelected = onTabSelected
     }
     
@@ -39,8 +47,14 @@ struct HomeTabView<Content1: View, Content2: View>: View {
         VStack(spacing: 0) {
             // Content View
             Group {
-                if selectedTab == 0 { chatTabContent }
-                else { homeTabContent }
+                switch selectedTab {
+                case 1:
+                    channelTabContent
+                case 2:
+                    homeTabContent
+                default:
+                    chatTabContent
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             

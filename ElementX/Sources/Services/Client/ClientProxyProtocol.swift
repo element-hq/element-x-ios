@@ -249,4 +249,10 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func fetchFeedReplies(feedId: String, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError>
     
     func addMeowsToFeed(feedId: String, amount: Int) async -> Result<ZPost, ClientProxyError>
+    
+    // MARK: - Zero Channels
+    
+    func fetchUserZIds() async -> Result<[String], ClientProxyError>
+    
+    func joinChannel(roomAliasOrId: String) async -> Result<String, ClientProxyError>
 }
