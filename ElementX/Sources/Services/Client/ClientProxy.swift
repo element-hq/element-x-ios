@@ -280,6 +280,9 @@ class ClientProxy: ClientProxyProtocol {
         
         Task {
             await syncService?.start()
+            
+            // If we are using OIDC we want to cache the account management URL, the cache lives for 24 hours
+            await cacheAccountURL()
         }
     }
     
@@ -752,6 +755,10 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     // MARK: - Private
+    
+    private func cacheAccountURL() async {
+        _ = try? await client.accountUrl(action: nil)
+    }
     
     private func updateVerificationState(_ verificationState: VerificationState) async {
         let verificationState: SessionVerificationState = switch verificationState {
