@@ -58,7 +58,7 @@ struct StartChatScreen: View {
         Section {
             ListRow(label: .default(title: L10n.screenStartChatJoinRoomByAddressAction,
                                     icon: \.room),
-                    kind: .navigationLink {
+                    kind: .button {
                         context.isJoinRoomByAddressSheetPresented = true
                     })
         }
