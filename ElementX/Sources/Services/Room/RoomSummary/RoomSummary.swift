@@ -8,6 +8,7 @@
 import Foundation
 import MatrixRustSDK
 
+/// A quick summary of a Room, useful to describe and give quick informations for the room list
 struct RoomSummary {
     enum JoinRequestType {
         case invite(inviter: RoomMemberProxyProtocol?)
@@ -45,6 +46,7 @@ struct RoomSummary {
     let unreadNotificationsCount: UInt
     let notificationMode: RoomNotificationModeProxy?
     let canonicalAlias: String?
+    let alternativeAliases: Set<String>
     
     let hasOngoingCall: Bool
     
@@ -99,6 +101,7 @@ extension RoomSummary {
         unreadNotificationsCount = hasUnreadNotifications ? 1 : 0
         notificationMode = settingsMode
         canonicalAlias = nil
+        alternativeAliases = []
         hasOngoingCall = false
         
         joinRequestType = nil

@@ -30,6 +30,11 @@ enum RoomDetailsScreenViewModelAction: Equatable {
 
 // MARK: View
 
+struct DMRecipientInfo {
+    var member: RoomMemberDetails
+    var verificationState: UserIdentityVerificationState?
+}
+
 struct RoomDetailsScreenViewState: BindableState {
     var details: RoomDetails
     
@@ -60,11 +65,11 @@ struct RoomDetailsScreenViewState: BindableState {
     var knockRequestsCount = 0
     
     var canSeeKnockingRequests: Bool {
-        knockingEnabled && dmRecipient == nil && isKnockableRoom && (canInviteUsers || canKickUsers || canBanUsers)
+        knockingEnabled && dmRecipientInfo == nil && isKnockableRoom && (canInviteUsers || canKickUsers || canBanUsers)
     }
     
     var canSeeSecurityAndPrivacy: Bool {
-        knockingEnabled && dmRecipient == nil && canEditRolesOrPermissions
+        knockingEnabled && dmRecipientInfo == nil && canEditRolesOrPermissions
     }
     
     var canEdit: Bool {
@@ -77,18 +82,18 @@ struct RoomDetailsScreenViewState: BindableState {
 
     var bindings: RoomDetailsScreenViewStateBindings
 
-    var dmRecipient: RoomMemberDetails?
+    var dmRecipientInfo: DMRecipientInfo?
     var accountOwner: RoomMemberDetails?
     
     var shortcuts: [RoomDetailsScreenViewShortcut] {
-        let shortcuts: [RoomDetailsScreenViewShortcut] = [.mute]
+        var shortcuts: [RoomDetailsScreenViewShortcut] = [.mute]
 //        if !ProcessInfo.processInfo.isiOSAppOnMac, canJoinCall {
 //            shortcuts.append(.call)
 //        }
-//        if dmRecipient == nil, canInviteUsers {
+//        if dmRecipientInfo == nil, canInviteUsers {
 //            shortcuts.append(.invite)
 //        }
-//        if let permalink = dmRecipient?.permalink {
+//        if let permalink = dmRecipientInfo?.member.permalink {
 //            shortcuts.append(.share(link: permalink))
 //        } else if let permalink {
 //            shortcuts.append(.share(link: permalink))

@@ -41,6 +41,7 @@ class TimelineInteractionHandler {
     private let emojiProvider: EmojiProviderProtocol
     private let timelineControllerFactory: TimelineControllerFactoryProtocol
     private let pollInteractionHandler: PollInteractionHandlerProtocol
+    private let clientProxy: ClientProxyProtocol
     
     private let zeroAttachmentService: ZeroAttachmentService
     
@@ -68,7 +69,8 @@ class TimelineInteractionHandler {
          appSettings: AppSettings,
          analyticsService: AnalyticsService,
          emojiProvider: EmojiProviderProtocol,
-         timelineControllerFactory: TimelineControllerFactoryProtocol) {
+         timelineControllerFactory: TimelineControllerFactoryProtocol,
+         clientProxy: ClientProxyProtocol) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
         self.mediaProvider = mediaProvider
@@ -81,6 +83,7 @@ class TimelineInteractionHandler {
         self.analyticsService = analyticsService
         self.emojiProvider = emojiProvider
         self.timelineControllerFactory = timelineControllerFactory
+        self.clientProxy = clientProxy
         pollInteractionHandler = PollInteractionHandler(analyticsService: analyticsService, roomProxy: roomProxy)
         
         zeroAttachmentService = ZeroAttachmentService(appSettings: appSettings, isRoomEncrypted: roomProxy.isEncrypted)
@@ -585,7 +588,8 @@ class TimelineInteractionHandler {
                                                       appSettings: appSettings,
                                                       analyticsService: analyticsService,
                                                       emojiProvider: emojiProvider,
-                                                      timelineControllerFactory: timelineControllerFactory)
+                                                      timelineControllerFactory: timelineControllerFactory,
+                                                      clientProxy: clientProxy)
             
             return .displayMediaPreview(item: item, timelineViewModel: .new(timelineViewModel))
         } else {

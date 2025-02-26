@@ -58,7 +58,8 @@ private struct TimelineItemSendInfoLabel: View {
     var statusIcon: KeyPath<CompoundIcons, Image>? {
         switch sendInfo.status {
         case .sendingFailed: \.errorSolid
-        case .encryptionAuthenticity(let authenticity): authenticity.icon
+        case .encryptionAuthenticity(let authenticity): nil
+        // case .encryptionAuthenticity(let authenticity): authenticity.icon
         case .none: nil
         }
     }

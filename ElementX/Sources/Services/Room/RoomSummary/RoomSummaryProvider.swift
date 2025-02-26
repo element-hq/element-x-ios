@@ -308,6 +308,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            unreadNotificationsCount: UInt(roomInfo.numUnreadNotifications),
                            notificationMode: notificationMode,
                            canonicalAlias: roomInfo.canonicalAlias,
+                           alternativeAliases: .init(roomInfo.alternativeAliases),
                            hasOngoingCall: roomInfo.hasRoomCall,
                            isMarkedUnread: roomInfo.isMarkedUnread,
                            isFavourite: roomInfo.isFavourite)

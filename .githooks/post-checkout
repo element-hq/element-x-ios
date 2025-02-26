@@ -5,5 +5,5 @@ git lfs post-checkout "$@"
 #!/bin/bash
 export PATH="$PATH:/opt/homebrew/bin"
 
-# ignores updates of 'secrets.xcconfig' to avoid pushing sensitive data by mistake
-git update-index --assume-unchanged ElementX/SupportingFiles/secrets.xcconfig
+# ignores updates of 'Secrets.swift' to avoid pushing sensitive data by mistake
+git update-index --assume-unchanged Secrets/Secrets.swift

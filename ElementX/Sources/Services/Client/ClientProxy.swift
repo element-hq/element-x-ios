@@ -327,6 +327,10 @@ class ClientProxy: ClientProxyProtocol {
         
         Task {
             await syncService?.start()
+            
+            // If we are using OIDC we want to cache the account management URL in volatile memory on the SDK side.
+            // To avoid the cache being invalidated while the app is backgrounded, we cache at every sync start.
+            await cacheAccountURL()
         }
     }
     
@@ -581,6 +585,18 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
+    
+    func roomSummaryForIdentifier(_ identifier: String) -> RoomSummary? {
+        // the alternate room summary provider is not impacted by filtering
+        alternateRoomSummaryProvider?.roomListPublisher.value.first { $0.id == identifier }
+    }
+    
+    func roomSummaryForAlias(_ alias: String) -> RoomSummary? {
+        // the alternate room summary provider is not impacted by filtering
+        alternateRoomSummaryProvider?.roomListPublisher.value.first { roomSummary in
+            roomSummary.canonicalAlias == alias || roomSummary.alternativeAliases.contains(alias)
+        }
+    }
 
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
         do {
@@ -668,12 +684,11 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    func logout() async -> URL? {
+    func logout() async {
         do {
-            return try await client.logout().flatMap(URL.init(string:))
+            try await client.logout()
         } catch {
             MXLog.error("Failed logging out with error: \(error)")
-            return nil
         }
     }
     
@@ -1069,6 +1084,11 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     // MARK: - Private
+    
+    private func cacheAccountURL() async {
+        // Calling this function for the first time will cache the account URL in volatile memory for 24 hrs on the SDK.
+        _ = try? await client.accountUrl(action: nil)
+    }
     
     private func updateVerificationState(_ verificationState: VerificationState) async {
         let verificationState: SessionVerificationState = switch verificationState {

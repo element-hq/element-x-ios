@@ -31,6 +31,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private let analyticsService: AnalyticsService
     private let emojiProvider: EmojiProviderProtocol
     private let timelineControllerFactory: TimelineControllerFactoryProtocol
+    private let clientProxy: ClientProxyProtocol
     
     private let timelineInteractionHandler: TimelineInteractionHandler
     
@@ -55,7 +56,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
          appSettings: AppSettings,
          analyticsService: AnalyticsService,
          emojiProvider: EmojiProviderProtocol,
-         timelineControllerFactory: TimelineControllerFactoryProtocol) {
+         timelineControllerFactory: TimelineControllerFactoryProtocol,
+         clientProxy: ClientProxyProtocol) {
         self.timelineController = timelineController
         self.mediaProvider = mediaProvider
         self.mediaPlayerProvider = mediaPlayerProvider
@@ -66,6 +68,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         self.appMediator = appMediator
         self.emojiProvider = emojiProvider
         self.timelineControllerFactory = timelineControllerFactory
+        self.clientProxy = clientProxy
         
         let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
@@ -80,7 +83,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                                 appSettings: appSettings,
                                                                 analyticsService: analyticsService,
                                                                 emojiProvider: emojiProvider,
-                                                                timelineControllerFactory: timelineControllerFactory)
+                                                                timelineControllerFactory: timelineControllerFactory,
+                                                                clientProxy: clientProxy)
         
         super.init(initialViewState: TimelineViewState(timelineKind: timelineController.timelineKind,
                                                        roomID: roomProxy.id,
@@ -111,6 +115,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             }
             
             return self.timelineInteractionHandler.audioPlayerState(for: itemID)
+        }
+        
+        state.pillContextUpdater = { [weak self] pillContext in
+            self?.pillContextUpdater(pillContext)
         }
         
         state.timelineState.paginationState = timelineController.paginationState
@@ -826,6 +834,72 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         actionsSubject.send(.displayMessageForwarding(forwardingItem: .init(id: itemID, roomID: roomProxy.id, content: content)))
     }
     
+    // MARK: Pills
+    
+    private func pillContextUpdater(_ pillContext: PillContext) {
+        switch pillContext.data.type {
+        case let .user(id):
+            let isOwnMention = id == state.ownUserID
+            if let profile = state.members[id] {
+                var name = id
+                if let displayName = profile.displayName {
+                    name = "@\(displayName)"
+                }
+                pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: name)
+            } else {
+                pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: id)
+                pillContext.cancellable = context.$viewState
+                    .compactMap { $0.members[id] }
+                    .sink { [weak pillContext] profile in
+                        guard let pillContext else {
+                            return
+                        }
+                        
+                        var name = id
+                        if let displayName = profile.displayName {
+                            name = "@\(displayName)"
+                        }
+                        pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: name)
+                        pillContext.cancellable = nil
+                    }
+            }
+        case .allUsers:
+            pillContext.viewState = .mention(isOwnMention: true, displayText: PillConstants.atRoom)
+        case .event(let room):
+            var pillViewState: PillViewState = .reference(avatar: .link, displayText: L10n.screenRoomEventPill(room.value))
+            defer {
+                pillContext.viewState = pillViewState
+            }
+            
+            switch room {
+            case .roomAlias(let alias):
+                guard let roomSummary = clientProxy.roomSummaryForAlias(alias) else {
+                    return
+                }
+                // We always show the link image for event permalinks
+                pillViewState = .reference(avatar: .link, displayText: L10n.screenRoomEventPill(roomSummary.name))
+            case .roomID(let id):
+                guard let roomSummary = clientProxy.roomSummaryForIdentifier(id) else {
+                    return
+                }
+                // We always show the link image for event permalinks
+                pillViewState = .reference(avatar: .link, displayText: L10n.screenRoomEventPill(roomSummary.name))
+            }
+        case .roomAlias(let alias):
+            guard let roomSummary = clientProxy.roomSummaryForAlias(alias) else {
+                pillContext.viewState = .reference(avatar: .link, displayText: alias)
+                return
+            }
+            pillContext.viewState = .reference(avatar: .roomAvatar(roomSummary.avatar), displayText: roomSummary.name)
+        case .roomID(let id):
+            guard let roomSummary = clientProxy.roomSummaryForIdentifier(id) else {
+                pillContext.viewState = .reference(avatar: .link, displayText: id)
+                return
+            }
+            pillContext.viewState = .reference(avatar: .roomAvatar(roomSummary.avatar), displayText: roomSummary.name)
+        }
+    }
+    
     // MARK: - User Indicators
     
     private func showFocusLoadingIndicator() {
@@ -896,7 +970,8 @@ extension TimelineViewModel {
                           appSettings: ServiceLocator.shared.settings,
                           analyticsService: ServiceLocator.shared.analytics,
                           emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                          timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                          clientProxy: ClientProxyMock(.init()))
     }
 }
 

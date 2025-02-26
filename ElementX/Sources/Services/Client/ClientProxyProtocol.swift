@@ -117,8 +117,9 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func startSync()
 
     func stopSync()
-    func stopSync(completion: (() -> Void)?) // Hopefully this will become async once we get SE-0371.
     
+    func stopSync(completion: (() -> Void)?) // Hopefully this will become async once we get SE-0371.
+        
     func accountURL(action: AccountManagementAction) async -> URL?
     
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError>
@@ -149,6 +150,10 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewProxyProtocol, ClientProxyError>
     
+    func roomSummaryForIdentifier(_ identifier: String) -> RoomSummary?
+    
+    func roomSummaryForAlias(_ alias: String) -> RoomSummary?
+    
     @discardableResult func loadUserDisplayName() async -> Result<Void, ClientProxyError>
     
     func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError>
@@ -161,7 +166,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     func deactivateAccount(password: String?, eraseData: Bool) async -> Result<Void, ClientProxyError>
     
-    func logout() async -> URL?
+    func logout() async
 
     func setPusher(with configuration: PusherConfiguration) async throws
     
