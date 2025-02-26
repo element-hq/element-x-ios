@@ -49,6 +49,8 @@ struct JoinRoomByAddressView: View {
                     .textFieldStyle(.authentication(labelText: L10n.screenStartChatJoinRoomByAddressAction,
                                                     footerText: footerText,
                                                     state: textFieldState))
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
                     .focused($textFieldFocus)
                 
                 Button(L10n.actionContinue) {
