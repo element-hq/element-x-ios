@@ -40,7 +40,7 @@ settings:
   ENABLE_BITCODE: false
   APP_GROUP_IDENTIFIER: group.$(BASE_APP_GROUP_IDENTIFIER)
   APP_NAME: ElementX
-  KEYCHAIN_ACCESS_GROUP_IDENTIFIER: "$(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)"
+  KEYCHAIN_ACCESS_GROUP_IDENTIFIER: "$(DEVELOPMENT_TEAM).$(BASE_BUNDLE_IDENTIFIER)"
   MARKETING_VERSION: 25.03.2
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
@@ -54,7 +54,6 @@ include:
 - path: IntegrationTests/SupportingFiles/target.yml
 - path: NSE/SupportingFiles/target.yml
 - path: ShareExtension/SupportingFiles/target.yml
-# - path: NCE/SupportingFiles/target.yml (not used yet)
 # - path: MyAppVariant/override.yml
 
 packages:
