@@ -139,7 +139,13 @@ private struct UITextViewWrapper: UIViewRepresentable {
                 // https://github.com/element-hq/element-x-ios/issues/3104
                 textView.selectedTextRange = selection
             } else {
-                textView.selectedRange = selectedRange
+                // Re-setting the selected range is important when inserting pills
+                // but we need to not do that when entering edit mode, where the
+                // cursor needs to stay at the end of the text
+                // https://github.com/element-hq/element-x-ios/issues/3830
+                if textView.selectedRange.location != text.length {
+                    textView.selectedRange = selectedRange
+                }
             }
         }
     }
