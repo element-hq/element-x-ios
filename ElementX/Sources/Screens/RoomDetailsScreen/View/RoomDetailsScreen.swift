@@ -21,7 +21,7 @@ struct RoomDetailsScreen: View {
             
             configurationSection
             
-            if context.viewState.dmRecipient == nil {
+            if context.viewState.dmRecipientInfo == nil {
                 peopleSection
             }
 
@@ -29,7 +29,7 @@ struct RoomDetailsScreen: View {
 
             securitySection
 
-            if let recipient = context.viewState.dmRecipient {
+            if let recipient = context.viewState.dmRecipientInfo?.member {
                 ignoreUserSection(user: recipient)
             }
             
@@ -182,8 +182,8 @@ struct RoomDetailsScreen: View {
                         })
             }
             
-            if context.viewState.dmRecipient != nil {
-                switch context.viewState.dmRecipientVerificationState {
+            if context.viewState.dmRecipientInfo != nil {
+                switch context.viewState.dmRecipientInfo?.verificationState {
                 case .verified:
                     ListRow(label: .default(title: L10n.screenRoomDetailsProfileRowTitle, icon: \.userProfile),
                             details: .icon(CompoundIcon(\.verified).foregroundStyle(.compound.iconSuccessPrimary)),
@@ -233,7 +233,7 @@ struct RoomDetailsScreen: View {
                         })
             }
             
-            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
+            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipientInfo == nil {
                 ListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions, icon: \.admin),
                         kind: .navigationLink {
                             context.send(viewAction: .processTapRolesAndPermissions)
@@ -273,7 +273,7 @@ struct RoomDetailsScreen: View {
     }
     
     private var leaveRoomTitle: String {
-        context.viewState.dmRecipient == nil ? L10n.screenRoomDetailsLeaveRoomTitle : L10n.screenRoomDetailsLeaveConversationTitle
+        context.viewState.dmRecipientInfo == nil ? L10n.screenRoomDetailsLeaveRoomTitle : L10n.screenRoomDetailsLeaveConversationTitle
     }
 
     private var leaveRoomSection: some View {

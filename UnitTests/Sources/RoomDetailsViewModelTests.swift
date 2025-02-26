@@ -151,12 +151,12 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appSettings: ServiceLocator.shared.settings)
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { state in
-            state.dmRecipient != nil
+            state.dmRecipientInfo != nil
         }
         
         try await deferred.fulfill()
         
-        XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
+        XCTAssertEqual(context.viewState.dmRecipientInfo?.member, RoomMemberDetails(withProxy: recipient))
     }
     
     func testIgnoreSuccess() async throws {
@@ -175,12 +175,12 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appSettings: ServiceLocator.shared.settings)
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { state in
-            state.dmRecipient != nil
+            state.dmRecipientInfo != nil
         }
         
         try await deferred.fulfill()
         
-        XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
+        XCTAssertEqual(context.viewState.dmRecipientInfo?.member, RoomMemberDetails(withProxy: recipient))
         
         deferred = deferFulfillment(viewModel.context.$viewState,
                                     keyPath: \.isProcessingIgnoreRequest,
@@ -190,7 +190,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         
         try await deferred.fulfill()
         
-        XCTAssert(context.viewState.dmRecipient?.isIgnored == true)
+        XCTAssert(context.viewState.dmRecipientInfo?.member.isIgnored == true)
     }
     
     func testIgnoreFailure() async throws {
@@ -210,12 +210,12 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appSettings: ServiceLocator.shared.settings)
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { state in
-            state.dmRecipient != nil
+            state.dmRecipientInfo != nil
         }
         
         try await deferred.fulfill()
         
-        XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
+        XCTAssertEqual(context.viewState.dmRecipientInfo?.member, RoomMemberDetails(withProxy: recipient))
         
         deferred = deferFulfillment(viewModel.context.$viewState,
                                     keyPath: \.isProcessingIgnoreRequest,
@@ -225,7 +225,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         
         try await deferred.fulfill()
         
-        XCTAssert(context.viewState.dmRecipient?.isIgnored == false)
+        XCTAssert(context.viewState.dmRecipientInfo?.member.isIgnored == false)
         XCTAssertNotNil(context.alertInfo)
     }
     
@@ -244,12 +244,12 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appSettings: ServiceLocator.shared.settings)
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { state in
-            state.dmRecipient != nil
+            state.dmRecipientInfo != nil
         }
         
         try await deferred.fulfill()
         
-        XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
+        XCTAssertEqual(context.viewState.dmRecipientInfo?.member, RoomMemberDetails(withProxy: recipient))
         
         deferred = deferFulfillment(viewModel.context.$viewState,
                                     keyPath: \.isProcessingIgnoreRequest,
@@ -259,7 +259,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                 
         try await deferred.fulfill()
         
-        XCTAssert(context.viewState.dmRecipient?.isIgnored == false)
+        XCTAssert(context.viewState.dmRecipientInfo?.member.isIgnored == false)
     }
     
     func testUnignoreFailure() async throws {
@@ -279,12 +279,12 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appSettings: ServiceLocator.shared.settings)
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { state in
-            state.dmRecipient != nil
+            state.dmRecipientInfo != nil
         }
         
         try await deferred.fulfill()
         
-        XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
+        XCTAssertEqual(context.viewState.dmRecipientInfo?.member, RoomMemberDetails(withProxy: recipient))
         
         deferred = deferFulfillment(viewModel.context.$viewState,
                                     keyPath: \.isProcessingIgnoreRequest,
@@ -294,7 +294,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                 
         try await deferred.fulfill()
         
-        XCTAssert(context.viewState.dmRecipient?.isIgnored == true)
+        XCTAssert(context.viewState.dmRecipientInfo?.member.isIgnored == true)
         XCTAssertNotNil(context.alertInfo)
     }
     
@@ -734,7 +734,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         
         let deferred = deferFulfillment(context.$viewState) { state in
             state.knockRequestsCount == 2 &&
-                state.dmRecipient == nil &&
+                state.dmRecipientInfo == nil &&
                 !state.canSeeKnockingRequests &&
                 !state.canInviteUsers
         }
@@ -760,7 +760,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         let deferred = deferFulfillment(context.$viewState) { state in
             state.knockRequestsCount == 2 &&
                 !state.canSeeKnockingRequests &&
-                state.dmRecipient != nil &&
+                state.dmRecipientInfo != nil &&
                 state.canInviteUsers
         }
         
