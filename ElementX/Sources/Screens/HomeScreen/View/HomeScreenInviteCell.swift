@@ -194,6 +194,7 @@ private extension HomeScreenRoom {
                                   unreadNotificationsCount: 0,
                                   notificationMode: nil,
                                   canonicalAlias: "#footest:somewhere.org",
+                                  alternativeAliases: [],
                                   hasOngoingCall: false,
                                   isMarkedUnread: false,
                                   isFavourite: false)
@@ -221,6 +222,7 @@ private extension HomeScreenRoom {
                                   unreadNotificationsCount: 0,
                                   notificationMode: nil,
                                   canonicalAlias: alias,
+                                  alternativeAliases: [],
                                   hasOngoingCall: false,
                                   isMarkedUnread: false,
                                   isFavourite: false)

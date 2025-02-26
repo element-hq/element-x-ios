@@ -20,7 +20,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     private let appSettings: AppSettings
 
-    private var dmRecipient: RoomMemberProxyProtocol?
     private var pinnedEventsTimelineProvider: TimelineProviderProtocol? {
         didSet {
             guard let pinnedEventsTimelineProvider else {
@@ -180,7 +179,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .processTapSecurityAndPrivacy:
             actionsSubject.send(.displaySecurityAndPrivacy)
         case .processTapRecipientProfile:
-            guard let userID = dmRecipient?.userID else {
+            guard let userID = state.dmRecipientInfo?.member.id else {
                 return
             }
             actionsSubject.send(.requestRecipientDetailsPresentation(userID: userID))
@@ -243,11 +242,16 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .receive(on: DispatchQueue.main)
             .sink { [weak self, ownUserID = roomProxy.ownUserID] members in
                 guard let self else { return }
-                let accountOwner = members.first { $0.userID == ownUserID }
-                let dmRecipient = members.first { $0.userID != ownUserID }
-                self.dmRecipient = dmRecipient
-                self.state.dmRecipient = dmRecipient.map(RoomMemberDetails.init(withProxy:))
-                self.state.accountOwner = accountOwner.map(RoomMemberDetails.init(withProxy:))
+                
+                if let accountOwner = members.first(where: { $0.userID == ownUserID }) {
+                    self.state.accountOwner = .init(withProxy: accountOwner)
+                }
+                
+                if let dmRecipient = members.first(where: { $0.userID != ownUserID }) {
+                    self.state.dmRecipientInfo = .init(member: .init(withProxy: dmRecipient))
+                    
+                    Task { await self.updateMemberIdentityVerificationStates() }
+                }
             }
             .store(in: &cancellables)
         
@@ -260,16 +264,25 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             return
         }
         
-        for member in roomProxy.membersPublisher.value {
-            if case let .success(identity) = await clientProxy.userIdentity(for: member.userID) {
-                if identity?.verificationState == .verificationViolation {
-                    state.hasMemberIdentityVerificationStateViolations = true
-                    return
+        if roomProxy.isDirectOneToOneRoom {
+            if var dmRecipientInfo = state.dmRecipientInfo {
+                if case let .success(userIdentity) = await clientProxy.userIdentity(for: dmRecipientInfo.member.id) {
+                    dmRecipientInfo.verificationState = userIdentity?.verificationState
+                    state.dmRecipientInfo = dmRecipientInfo
                 }
             }
+        } else {
+            for member in roomProxy.membersPublisher.value {
+                if case let .success(userIdentity) = await clientProxy.userIdentity(for: member.userID) {
+                    if userIdentity?.verificationState == .verificationViolation {
+                        state.hasMemberIdentityVerificationStateViolations = true
+                        return
+                    }
+                }
+            }
+            
+            state.hasMemberIdentityVerificationStateViolations = false
         }
-        
-        state.hasMemberIdentityVerificationStateViolations = false
     }
     
     private func updatePowerLevelPermissions() async {
@@ -366,7 +379,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     }
 
     private func ignore() async {
-        guard let dmUserID = dmRecipient?.userID else {
+        guard let dmUserID = state.dmRecipientInfo?.member.id else {
             MXLog.error("Attempting to ignore a nil DM Recipient")
             state.bindings.alertInfo = .init(id: .unknown)
             return
@@ -378,16 +391,16 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         switch result {
         case .success:
             // Mutating the optional in place when built for Release crashes 🤷‍♂️
-            var dmRecipient = state.dmRecipient
-            dmRecipient?.isIgnored = true
-            state.dmRecipient = dmRecipient
+            var dmRecipientInfo = state.dmRecipientInfo
+            dmRecipientInfo?.member.isIgnored = true
+            state.dmRecipientInfo = dmRecipientInfo
         case .failure:
             state.bindings.alertInfo = .init(id: .unknown)
         }
     }
 
     private func unignore() async {
-        guard let dmUserID = dmRecipient?.userID else {
+        guard let dmUserID = state.dmRecipientInfo?.member.id else {
             MXLog.error("Attempting to unignore a nil DM Recipient")
             state.bindings.alertInfo = .init(id: .unknown)
             return
@@ -399,9 +412,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         switch result {
         case .success:
             // Mutating the optional in place when built for Release crashes 🤷‍♂️
-            var dmRecipient = state.dmRecipient
-            dmRecipient?.isIgnored = false
-            state.dmRecipient = dmRecipient
+            var dmRecipientInfo = state.dmRecipientInfo
+            dmRecipientInfo?.member.isIgnored = false
+            state.dmRecipientInfo = dmRecipientInfo
         case .failure:
             state.bindings.alertInfo = .init(id: .unknown)
         }

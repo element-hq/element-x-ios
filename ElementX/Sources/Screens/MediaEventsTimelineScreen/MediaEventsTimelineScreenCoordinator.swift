@@ -19,6 +19,7 @@ struct MediaEventsTimelineScreenCoordinatorParameters {
     let emojiProvider: EmojiProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol
+    let clientProxy: ClientProxyProtocol
 }
 
 enum MediaEventsTimelineScreenCoordinatorAction {
@@ -49,7 +50,8 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        appSettings: ServiceLocator.shared.settings,
                                                        analyticsService: ServiceLocator.shared.analytics,
                                                        emojiProvider: parameters.emojiProvider,
-                                                       timelineControllerFactory: parameters.timelineControllerFactory)
+                                                       timelineControllerFactory: parameters.timelineControllerFactory,
+                                                       clientProxy: parameters.clientProxy)
         
         let filesTimelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                                        timelineController: parameters.filesTimelineController,
@@ -61,7 +63,8 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        appSettings: ServiceLocator.shared.settings,
                                                        analyticsService: ServiceLocator.shared.analytics,
                                                        emojiProvider: parameters.emojiProvider,
-                                                       timelineControllerFactory: parameters.timelineControllerFactory)
+                                                       timelineControllerFactory: parameters.timelineControllerFactory,
+                                                       clientProxy: parameters.clientProxy)
         
         viewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: mediaTimelineViewModel,
                                                        filesTimelineViewModel: filesTimelineViewModel,

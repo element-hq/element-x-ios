@@ -67,6 +67,31 @@ extension RoomSummaryProviderMock {
     }
 }
 
+extension RoomSummary {
+    static func mock(id: String,
+                     name: String,
+                     canonicalAlias: String? = nil) -> RoomSummary {
+        RoomSummary(roomListItem: RoomListItemSDKMock(),
+                    id: id,
+                    joinRequestType: nil,
+                    name: name,
+                    isDirect: false,
+                    avatarURL: nil,
+                    heroes: [],
+                    lastMessage: AttributedString("I do not wish to take the trouble to understand mysticism"),
+                    lastMessageFormattedTimestamp: "14:56",
+                    unreadMessagesCount: 0,
+                    unreadMentionsCount: 0,
+                    unreadNotificationsCount: 0,
+                    notificationMode: .allMessages,
+                    canonicalAlias: canonicalAlias,
+                    alternativeAliases: [],
+                    hasOngoingCall: false,
+                    isMarkedUnread: false,
+                    isFavourite: false)
+    }
+}
+
 extension Array where Element == RoomSummary {
     static let mockRooms: [Element] = [
         RoomSummary(roomListItem: RoomListItemSDKMock(),
@@ -83,6 +108,7 @@ extension Array where Element == RoomSummary {
                     unreadNotificationsCount: 0,
                     notificationMode: .allMessages,
                     canonicalAlias: nil,
+                    alternativeAliases: [],
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false),
@@ -99,7 +125,8 @@ extension Array where Element == RoomSummary {
                     unreadMentionsCount: 0,
                     unreadNotificationsCount: 2,
                     notificationMode: .mute,
-                    canonicalAlias: nil,
+                    canonicalAlias: "#foundation-and-empire:matrix.org",
+                    alternativeAliases: [],
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false),
@@ -117,6 +144,7 @@ extension Array where Element == RoomSummary {
                     unreadNotificationsCount: 0,
                     notificationMode: .mentionsAndKeywordsOnly,
                     canonicalAlias: nil,
+                    alternativeAliases: [],
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false),
@@ -134,6 +162,7 @@ extension Array where Element == RoomSummary {
                     unreadNotificationsCount: 2,
                     notificationMode: .allMessages,
                     canonicalAlias: nil,
+                    alternativeAliases: [],
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false),
@@ -151,6 +180,7 @@ extension Array where Element == RoomSummary {
                     unreadNotificationsCount: 1,
                     notificationMode: .allMessages,
                     canonicalAlias: nil,
+                    alternativeAliases: [],
                     hasOngoingCall: true,
                     isMarkedUnread: false,
                     isFavourite: false),
@@ -168,6 +198,7 @@ extension Array where Element == RoomSummary {
                     unreadNotificationsCount: 0,
                     notificationMode: .mute,
                     canonicalAlias: nil,
+                    alternativeAliases: [],
                     hasOngoingCall: true,
                     isMarkedUnread: false,
                     isFavourite: false),
@@ -185,6 +216,7 @@ extension Array where Element == RoomSummary {
                     unreadNotificationsCount: 0,
                     notificationMode: nil,
                     canonicalAlias: nil,
+                    alternativeAliases: [],
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false)
@@ -235,6 +267,7 @@ extension Array where Element == RoomSummary {
                     unreadNotificationsCount: 0,
                     notificationMode: nil,
                     canonicalAlias: "#footest:somewhere.org",
+                    alternativeAliases: [],
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false),
@@ -252,6 +285,7 @@ extension Array where Element == RoomSummary {
                     unreadNotificationsCount: 0,
                     notificationMode: nil,
                     canonicalAlias: nil,
+                    alternativeAliases: [],
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false)

@@ -66,6 +66,8 @@ internal enum Asset {
     internal static let defaultWalletConnectButton = ImageAsset(name: "images/default-wallet-connect-button")
     internal static let homeTabChatFillIcon = ImageAsset(name: "images/home-tab-chat-fill-icon")
     internal static let homeTabChatIcon = ImageAsset(name: "images/home-tab-chat-icon")
+    internal static let homeTabExplorerFillIcon = ImageAsset(name: "images/home-tab-explorer-fill-icon")
+    internal static let homeTabExplorerIcon = ImageAsset(name: "images/home-tab-explorer-icon")
     internal static let homeTabFeedFillIcon = ImageAsset(name: "images/home-tab-feed-fill-icon")
     internal static let homeTabFeedIcon = ImageAsset(name: "images/home-tab-feed-icon")
     internal static let inviteImage = ImageAsset(name: "images/invite-image")

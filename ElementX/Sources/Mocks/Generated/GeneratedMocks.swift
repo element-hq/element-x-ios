@@ -3320,6 +3320,146 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return roomPreviewForIdentifierViaReturnValue
         }
     }
+    //MARK: - roomSummaryForIdentifier
+
+    var roomSummaryForIdentifierUnderlyingCallsCount = 0
+    var roomSummaryForIdentifierCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return roomSummaryForIdentifierUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomSummaryForIdentifierUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomSummaryForIdentifierUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomSummaryForIdentifierUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var roomSummaryForIdentifierCalled: Bool {
+        return roomSummaryForIdentifierCallsCount > 0
+    }
+    var roomSummaryForIdentifierReceivedIdentifier: String?
+    var roomSummaryForIdentifierReceivedInvocations: [String] = []
+
+    var roomSummaryForIdentifierUnderlyingReturnValue: RoomSummary?
+    var roomSummaryForIdentifierReturnValue: RoomSummary? {
+        get {
+            if Thread.isMainThread {
+                return roomSummaryForIdentifierUnderlyingReturnValue
+            } else {
+                var returnValue: RoomSummary?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomSummaryForIdentifierUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomSummaryForIdentifierUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomSummaryForIdentifierUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var roomSummaryForIdentifierClosure: ((String) -> RoomSummary?)?
+
+    func roomSummaryForIdentifier(_ identifier: String) -> RoomSummary? {
+        roomSummaryForIdentifierCallsCount += 1
+        roomSummaryForIdentifierReceivedIdentifier = identifier
+        DispatchQueue.main.async {
+            self.roomSummaryForIdentifierReceivedInvocations.append(identifier)
+        }
+        if let roomSummaryForIdentifierClosure = roomSummaryForIdentifierClosure {
+            return roomSummaryForIdentifierClosure(identifier)
+        } else {
+            return roomSummaryForIdentifierReturnValue
+        }
+    }
+    //MARK: - roomSummaryForAlias
+
+    var roomSummaryForAliasUnderlyingCallsCount = 0
+    var roomSummaryForAliasCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return roomSummaryForAliasUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomSummaryForAliasUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomSummaryForAliasUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomSummaryForAliasUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var roomSummaryForAliasCalled: Bool {
+        return roomSummaryForAliasCallsCount > 0
+    }
+    var roomSummaryForAliasReceivedAlias: String?
+    var roomSummaryForAliasReceivedInvocations: [String] = []
+
+    var roomSummaryForAliasUnderlyingReturnValue: RoomSummary?
+    var roomSummaryForAliasReturnValue: RoomSummary? {
+        get {
+            if Thread.isMainThread {
+                return roomSummaryForAliasUnderlyingReturnValue
+            } else {
+                var returnValue: RoomSummary?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomSummaryForAliasUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomSummaryForAliasUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomSummaryForAliasUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var roomSummaryForAliasClosure: ((String) -> RoomSummary?)?
+
+    func roomSummaryForAlias(_ alias: String) -> RoomSummary? {
+        roomSummaryForAliasCallsCount += 1
+        roomSummaryForAliasReceivedAlias = alias
+        DispatchQueue.main.async {
+            self.roomSummaryForAliasReceivedInvocations.append(alias)
+        }
+        if let roomSummaryForAliasClosure = roomSummaryForAliasClosure {
+            return roomSummaryForAliasClosure(alias)
+        } else {
+            return roomSummaryForAliasReturnValue
+        }
+    }
     //MARK: - loadUserDisplayName
 
     var loadUserDisplayNameUnderlyingCallsCount = 0
@@ -3753,40 +3893,11 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var logoutCalled: Bool {
         return logoutCallsCount > 0
     }
+    var logoutClosure: (() async -> Void)?
 
-    var logoutUnderlyingReturnValue: URL?
-    var logoutReturnValue: URL? {
-        get {
-            if Thread.isMainThread {
-                return logoutUnderlyingReturnValue
-            } else {
-                var returnValue: URL?? = nil
-                DispatchQueue.main.sync {
-                    returnValue = logoutUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                logoutUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    logoutUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var logoutClosure: (() async -> URL?)?
-
-    func logout() async -> URL? {
+    func logout() async {
         logoutCallsCount += 1
-        if let logoutClosure = logoutClosure {
-            return await logoutClosure()
-        } else {
-            return logoutReturnValue
-        }
+        await logoutClosure?()
     }
     //MARK: - setPusher
 
@@ -5808,6 +5919,140 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return await addMeowsToFeedFeedIdAmountClosure(feedId, amount)
         } else {
             return addMeowsToFeedFeedIdAmountReturnValue
+        }
+    }
+    //MARK: - fetchUserZIds
+
+    var fetchUserZIdsUnderlyingCallsCount = 0
+    var fetchUserZIdsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchUserZIdsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchUserZIdsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchUserZIdsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchUserZIdsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchUserZIdsCalled: Bool {
+        return fetchUserZIdsCallsCount > 0
+    }
+
+    var fetchUserZIdsUnderlyingReturnValue: Result<[String], ClientProxyError>!
+    var fetchUserZIdsReturnValue: Result<[String], ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchUserZIdsUnderlyingReturnValue
+            } else {
+                var returnValue: Result<[String], ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchUserZIdsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchUserZIdsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchUserZIdsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchUserZIdsClosure: (() async -> Result<[String], ClientProxyError>)?
+
+    func fetchUserZIds() async -> Result<[String], ClientProxyError> {
+        fetchUserZIdsCallsCount += 1
+        if let fetchUserZIdsClosure = fetchUserZIdsClosure {
+            return await fetchUserZIdsClosure()
+        } else {
+            return fetchUserZIdsReturnValue
+        }
+    }
+    //MARK: - joinChannel
+
+    var joinChannelRoomAliasOrIdUnderlyingCallsCount = 0
+    var joinChannelRoomAliasOrIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return joinChannelRoomAliasOrIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinChannelRoomAliasOrIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinChannelRoomAliasOrIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinChannelRoomAliasOrIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var joinChannelRoomAliasOrIdCalled: Bool {
+        return joinChannelRoomAliasOrIdCallsCount > 0
+    }
+    var joinChannelRoomAliasOrIdReceivedRoomAliasOrId: String?
+    var joinChannelRoomAliasOrIdReceivedInvocations: [String] = []
+
+    var joinChannelRoomAliasOrIdUnderlyingReturnValue: Result<String, ClientProxyError>!
+    var joinChannelRoomAliasOrIdReturnValue: Result<String, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return joinChannelRoomAliasOrIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<String, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinChannelRoomAliasOrIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinChannelRoomAliasOrIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinChannelRoomAliasOrIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var joinChannelRoomAliasOrIdClosure: ((String) async -> Result<String, ClientProxyError>)?
+
+    func joinChannel(roomAliasOrId: String) async -> Result<String, ClientProxyError> {
+        joinChannelRoomAliasOrIdCallsCount += 1
+        joinChannelRoomAliasOrIdReceivedRoomAliasOrId = roomAliasOrId
+        DispatchQueue.main.async {
+            self.joinChannelRoomAliasOrIdReceivedInvocations.append(roomAliasOrId)
+        }
+        if let joinChannelRoomAliasOrIdClosure = joinChannelRoomAliasOrIdClosure {
+            return await joinChannelRoomAliasOrIdClosure(roomAliasOrId)
+        } else {
+            return joinChannelRoomAliasOrIdReturnValue
         }
     }
     //MARK: - loadMediaContentForSource

@@ -32,6 +32,9 @@ struct HomeScreen: View {
             homeTabContent: {
                 HomePostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
             },
+            channelTabContent: {
+                HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+            },
             onTabSelected: { tabIndex in
                 isHomeTabSelected = tabIndex == 0
             }

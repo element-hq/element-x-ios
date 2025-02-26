@@ -68,6 +68,7 @@ class RoomSummaryTests: XCTestCase {
                     unreadNotificationsCount: 0,
                     notificationMode: nil,
                     canonicalAlias: nil,
+                    alternativeAliases: [],
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false)

@@ -165,6 +165,7 @@ class ClientProxy: ClientProxyProtocol {
     private let zeroCreateAccountApi: ZeroCreateAccountApiProtocol
     private let zeroUserAccountApi: ZeroAccountApiProtocol
     private let zeroPostsApi: ZeroPostsApiProtocol
+    private let zeroChannelsApi: ZeroChannelsApiProtocol
     
     init(client: ClientProtocol,
          needsSlidingSyncMigration: Bool,
@@ -194,6 +195,7 @@ class ClientProxy: ClientProxyProtocol {
         zeroCreateAccountApi = ZeroCreateAccountApi(appSettings: appSettings)
         zeroUserAccountApi = ZeroAccountApi(appSettings: appSettings)
         zeroPostsApi = ZeroPostsApi(appSettings: appSettings)
+        zeroChannelsApi = ZeroChannelsApi(appSettings: appSettings)
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
@@ -325,6 +327,10 @@ class ClientProxy: ClientProxyProtocol {
         
         Task {
             await syncService?.start()
+            
+            // If we are using OIDC we want to cache the account management URL in volatile memory on the SDK side.
+            // To avoid the cache being invalidated while the app is backgrounded, we cache at every sync start.
+            await cacheAccountURL()
         }
     }
     
@@ -579,6 +585,18 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
+    
+    func roomSummaryForIdentifier(_ identifier: String) -> RoomSummary? {
+        // the alternate room summary provider is not impacted by filtering
+        alternateRoomSummaryProvider?.roomListPublisher.value.first { $0.id == identifier }
+    }
+    
+    func roomSummaryForAlias(_ alias: String) -> RoomSummary? {
+        // the alternate room summary provider is not impacted by filtering
+        alternateRoomSummaryProvider?.roomListPublisher.value.first { roomSummary in
+            roomSummary.canonicalAlias == alias || roomSummary.alternativeAliases.contains(alias)
+        }
+    }
 
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
         do {
@@ -666,12 +684,11 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    func logout() async -> URL? {
+    func logout() async {
         do {
-            return try await client.logout().flatMap(URL.init(string:))
+            try await client.logout()
         } catch {
             MXLog.error("Failed logging out with error: \(error)")
-            return nil
         }
     }
     
@@ -1035,7 +1052,43 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func fetchUserZIds() async -> Result<[String], ClientProxyError> {
+        do {
+            let zIdsResult = try await zeroChannelsApi.fetchZeroIds()
+            switch zIdsResult {
+            case .success(let zIds):
+                return .success(zIds)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func joinChannel(roomAliasOrId: String) async -> Result<String, ClientProxyError> {
+        do {
+            let joinChannelResult = try await zeroChannelsApi.joinChannel(roomAliasOrId: roomAliasOrId)
+            switch joinChannelResult {
+            case .success(let roomId):
+                _ = await joinRoom(roomAliasOrId, via: [])
+                return .success(roomId)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
     // MARK: - Private
+    
+    private func cacheAccountURL() async {
+        // Calling this function for the first time will cache the account URL in volatile memory for 24 hrs on the SDK.
+        _ = try? await client.accountUrl(action: nil)
+    }
     
     private func updateVerificationState(_ verificationState: VerificationState) async {
         let verificationState: SessionVerificationState = switch verificationState {
