@@ -1,3 +1,15 @@
+## Changes in 25.03.1 (2025-02-26)
+
+### What's Changed
+
+🐛 Bugfixes
+* Cache account management URL by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3826
+* Fix editing messages not placing the cursor at the end of the text by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3833
+* Fix a bug where you couldn't log in to matrix.org by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3829
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/25.03.0...25.03.1
+
 ## Changes in 25.03.0 (2025-02-25)
 
 ### What's Changed
