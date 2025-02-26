@@ -30,15 +30,19 @@ struct StartChatScreenViewState: BindableState {
     var hasEmptySearchResults: Bool {
         isSearching && usersSection.type == .searchResult && usersSection.users.isEmpty
     }
+    
+    var joinByAddressState: JoinByAddressState = .example
 }
 
 struct StartChatScreenViewStateBindings {
     var searchQuery = ""
+    var roomAddress = ""
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<StartChatScreenErrorType>?
     
     var selectedUserToInvite: UserProfileProxy?
+    var isJoinRoomByAddressSheetPresented = false
 }
 
 enum StartChatScreenViewAction {
@@ -46,4 +50,12 @@ enum StartChatScreenViewAction {
     case createRoom
     case createDM(user: UserProfileProxy)
     case selectUser(UserProfileProxy)
+    case joinRoomByAddress
+}
+
+enum JoinByAddressState {
+    case example
+    case invalidAddress
+    case addressNotFound
+    case addressFound(address: String, roomID: String)
 }

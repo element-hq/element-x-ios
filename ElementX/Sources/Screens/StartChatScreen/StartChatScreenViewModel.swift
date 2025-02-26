@@ -6,6 +6,7 @@
 //
 
 import Combine
+import MatrixRustSDK
 import SwiftUI
 
 typealias StartChatScreenViewModelType = StateStoreViewModel<StartChatScreenViewState, StartChatScreenViewAction>
@@ -71,10 +72,16 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
             }
         case .createDM(let user):
             Task { await createDirectRoom(user: user) }
+        case .joinRoomByAddress:
+            joinRoomByAddress()
         }
     }
     
     // MARK: - Private
+    
+    // periphery:ignore - auto cancels when reassigned
+    @CancellableTask private var resolveAliasTask: Task<Void, Never>?
+    private var internalRoomAddressState: JoinByAddressState = .example
     
     private func setupBindings() {
         context.$viewState
@@ -82,6 +89,41 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
             .debounceTextQueriesAndRemoveDuplicates()
             .sink { [weak self] _ in
                 self?.fetchUsers()
+            }
+            .store(in: &cancellables)
+        
+        context.$viewState
+            .map(\.bindings.roomAddress)
+            .debounceTextQueriesAndRemoveDuplicates()
+            .sink { [weak self] roomAddress in
+                guard let self else {
+                    return
+                }
+                
+                state.joinByAddressState = .example
+                internalRoomAddressState = .example
+                
+                guard !roomAddress.isEmpty,
+                      isRoomAliasFormatValid(alias: roomAddress) else {
+                    internalRoomAddressState = .invalidAddress
+                    return
+                }
+                
+                resolveAliasTask = Task { [weak self] in
+                    guard let self else {
+                        return
+                    }
+                    defer { resolveAliasTask = nil }
+                    
+                    guard case let .success(resolved) = await userSession.clientProxy.resolveRoomAlias(roomAddress) else {
+                        internalRoomAddressState = .addressNotFound
+                        return
+                    }
+                    
+                    let result = JoinByAddressState.addressFound(address: roomAddress, roomID: resolved.roomId)
+                    internalRoomAddressState = result
+                    state.joinByAddressState = result
+                }
             }
             .store(in: &cancellables)
     }
@@ -128,6 +170,23 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,
                                              title: L10n.commonError,
                                              message: L10n.screenStartChatErrorStartingChat)
+    }
+    
+    private func joinRoomByAddress() {
+        if case let .addressFound(lastTestedAddress, roomID) = internalRoomAddressState,
+           lastTestedAddress == state.bindings.roomAddress {
+            actionsSubject.send(.openRoom(withIdentifier: roomID))
+        } else if let resolveAliasTask {
+            // If the task is still running we wait for it to complete and we check the state again
+            showLoadingIndicator(delay: .milliseconds(250))
+            Task {
+                await resolveAliasTask.value
+                hideLoadingIndicator()
+                joinRoomByAddress()
+            }
+        } else {
+            state.joinByAddressState = internalRoomAddressState
+        }
     }
         
     // MARK: Loading indicator

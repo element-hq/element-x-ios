@@ -36,6 +36,11 @@ struct StartChatScreen: View {
                 context.send(viewAction: .createDM(user: user))
             }
         }
+        .sheet(isPresented: $context.isJoinRoomByAddressSheetPresented) {
+            context.roomAddress = ""
+        } content: {
+            JoinRoomByAddressView(context: context)
+        }
     }
 
     // MARK: - Private
@@ -45,7 +50,18 @@ struct StartChatScreen: View {
     private var mainContent: some View {
         createRoomSection
         inviteFriendsSection
+        joinRoomByAddressSection
         usersSection
+    }
+    
+    private var joinRoomByAddressSection: some View {
+        Section {
+            ListRow(label: .default(title: L10n.screenStartChatJoinRoomByAddressAction,
+                                    icon: \.room),
+                    kind: .navigationLink {
+                        context.isJoinRoomByAddressSheetPresented = true
+                    })
+        }
     }
     
     /// The content shown in the form when a search query has been entered.

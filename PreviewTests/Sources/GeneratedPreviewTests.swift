@@ -317,6 +317,12 @@ extension PreviewTests {
         }
     }
 
+    func test_joinRoomByAddressView() async throws {
+        for preview in JoinRoomByAddressView_Previews._allPreviews {
+            try await assertSnapshots(matching: preview)
+        }
+    }
+
     func test_joinRoomScreen() async throws {
         for preview in JoinRoomScreen_Previews._allPreviews {
             try await assertSnapshots(matching: preview)

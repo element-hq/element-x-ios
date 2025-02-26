@@ -9,38 +9,48 @@ import Compound
 import SwiftUI
 import SwiftUIIntrospect
 
-public extension TextFieldStyle where Self == AuthenticationTextFieldStyle {
+extension TextFieldStyle where Self == AuthenticationTextFieldStyle {
     static func authentication(labelText: String? = nil,
                                footerText: String? = nil,
-                               isError: Bool = false,
+                               state: AuthenticationTextFieldStyle.State = .default,
                                accessibilityIdentifier: String? = nil) -> AuthenticationTextFieldStyle {
         AuthenticationTextFieldStyle(labelText: labelText.map(Text.init),
                                      footerText: footerText.map(Text.init),
-                                     isError: isError,
+                                     state: state,
                                      accessibilityIdentifier: accessibilityIdentifier)
     }
     
     @_disfavoredOverload
     static func authentication(labelText: Text? = nil,
                                footerText: Text? = nil,
-                               isError: Bool = false,
+                               state: AuthenticationTextFieldStyle.State = .default,
                                accessibilityIdentifier: String? = nil) -> AuthenticationTextFieldStyle {
         AuthenticationTextFieldStyle(labelText: labelText,
                                      footerText: footerText,
-                                     isError: isError,
+                                     state: state,
                                      accessibilityIdentifier: accessibilityIdentifier)
     }
 }
 
 /// The text field style used in authentication screens.
-public struct AuthenticationTextFieldStyle: TextFieldStyle {
+struct AuthenticationTextFieldStyle: TextFieldStyle {
+    enum State {
+        case success
+        case error
+        case `default`
+    }
+    
     @Environment(\.isEnabled) private var isEnabled
     
     @FocusState private var isFocused: Bool
-    public let labelText: Text?
-    public let footerText: Text?
-    public let isError: Bool
-    public let accessibilityIdentifier: String?
+    let labelText: Text?
+    let footerText: Text?
+    let state: State
+    let accessibilityIdentifier: String?
+    
+    private var isError: Bool {
+        state == .error
+    }
     
     /// The color of the text field's border.
     private var borderColor: Color {
@@ -63,7 +73,8 @@ public struct AuthenticationTextFieldStyle: TextFieldStyle {
     
     /// The color of the text field's background.
     private var backgroundColor: Color {
-        .compound.bgSubtleSecondary.opacity(isEnabled ? 1 : 0.5)
+        isError ? .compound.bgCriticalSubtleHovered :
+            .compound.bgSubtleSecondary.opacity(isEnabled ? 1 : 0.5)
     }
     
     /// The color of the placeholder text inside the text field.
@@ -77,8 +88,27 @@ public struct AuthenticationTextFieldStyle: TextFieldStyle {
     }
     
     /// The color of the footer label below the text field.
-    private var footerColor: Color {
-        isError ? .compound.textCriticalPrimary : .compound.textSecondary
+    private var footerTextColor: Color {
+        switch state {
+        case .default:
+            .compound.textSecondary
+        case .error:
+            .compound.textCriticalPrimary
+        case .success:
+            .compound.textSuccessPrimary
+        }
+    }
+    
+    private var footerIconColor: Color {
+        switch state {
+        // Doesn't matter we don't render it
+        case .default:
+            .clear
+        case .error:
+            .compound.iconCriticalPrimary
+        case .success:
+            .compound.iconSuccessPrimary
+        }
     }
     
     /// Creates the text field style configured as required.
@@ -86,20 +116,20 @@ public struct AuthenticationTextFieldStyle: TextFieldStyle {
     ///   - labelText: The text shown in the label above the field.
     ///   - footerText: The text shown in the footer label below the field.
     ///   - isError: Whether or not the text field is currently in the error state.
-    public init(labelText: Text? = nil, footerText: Text? = nil, isError: Bool = false, accessibilityIdentifier: String? = nil) {
+    init(labelText: Text? = nil, footerText: Text? = nil, state: State = .default, accessibilityIdentifier: String? = nil) {
         self.labelText = labelText
         self.footerText = footerText
-        self.isError = isError
+        self.state = state
         self.accessibilityIdentifier = accessibilityIdentifier
     }
     
     @MainActor
-    public func _body(configuration: TextField<_Label>) -> some View {
+    func _body(configuration: TextField<_Label>) -> some View {
         let rectangle = RoundedRectangle(cornerRadius: 14.0)
         
         return VStack(alignment: .leading, spacing: 8) {
             labelText
-                .font(.compound.bodySM)
+                .font(.compound.bodySMSemibold)
                 .foregroundColor(labelColor)
                 .padding(.horizontal, 16)
             
@@ -126,11 +156,26 @@ public struct AuthenticationTextFieldStyle: TextFieldStyle {
                     textField.accessibilityIdentifier = accessibilityIdentifier
                 }
  
-            footerText
-                .tint(.compound.textLinkExternal)
-                .font(.compound.bodyXS)
-                .foregroundColor(footerColor)
+            if let footerText {
+                HStack(spacing: 4) {
+                    switch state {
+                    case .success:
+                        CompoundIcon(\.checkCircleSolid, size: .xSmall, relativeTo: .compound.bodySM)
+                            .foregroundStyle(.compound.iconSuccessPrimary)
+                    case .error:
+                        CompoundIcon(\.errorSolid, size: .xSmall, relativeTo: .compound.bodySM)
+                            .foregroundStyle(.compound.iconCriticalPrimary)
+                    case .default:
+                        EmptyView()
+                    }
+                    
+                    footerText
+                        .tint(.compound.textLinkExternal)
+                        .font(.compound.bodySM)
+                        .foregroundColor(footerTextColor)
+                }
                 .padding(.horizontal, 16)
+            }
         }
     }
 }
@@ -148,7 +193,7 @@ struct ElementTextFieldStyle_Previews: PreviewProvider {
                     .textFieldStyle(.authentication())
                     .disabled(true)
                 TextField("Placeholder", text: .constant("Web"))
-                    .textFieldStyle(.authentication(isError: true))
+                    .textFieldStyle(.authentication(state: .error))
                 
                 // Text field with labels
                 TextField("Placeholder", text: .constant(""))
@@ -156,7 +201,7 @@ struct ElementTextFieldStyle_Previews: PreviewProvider {
                 TextField("Placeholder", text: .constant("Input text"))
                     .textFieldStyle(.authentication(labelText: "Title", footerText: "Footer"))
                 TextField("Placeholder", text: .constant("Bad text"))
-                    .textFieldStyle(.authentication(labelText: "Title", footerText: "Footer", isError: true))
+                    .textFieldStyle(.authentication(labelText: "Title", footerText: "Footer", state: .error))
                 TextField("Placeholder", text: .constant(""))
                     .textFieldStyle(.authentication(labelText: "Title", footerText: "Footer"))
                     .disabled(true)

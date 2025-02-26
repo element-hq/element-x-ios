@@ -54,7 +54,7 @@ struct ServerSelectionScreen: View {
             TextField(L10n.commonServerUrl, text: $context.homeserverAddress)
                 .textFieldStyle(.authentication(labelText: Text(L10n.screenChangeServerFormHeader),
                                                 footerText: Text(context.viewState.footerMessage),
-                                                isError: context.viewState.isShowingFooterError,
+                                                state: context.viewState.isShowingFooterError ? .error : .default,
                                                 accessibilityIdentifier: A11yIdentifiers.changeServerScreen.server))
                 .keyboardType(.URL)
                 .autocapitalization(.none)
