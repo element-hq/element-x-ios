@@ -43,7 +43,7 @@ targets:
     platform: iOS
 
     info:
-      path: ../SupportingFiles/Info.plist
+      path: Info.plist
       properties:
         UILaunchScreen:
           UIColorName: colors/background-color
@@ -106,6 +106,28 @@ targets:
           LSItemContentTypes: $(PILLS_UT_TYPE_IDENTIFIER)
         LSSupportsOpeningDocumentsInPlace: false
 
+    entitlements:
+      path: ElementX.entitlements
+      properties:
+        aps-environment: development
+        com.apple.developer.associated-domains:
+        - applinks:element.io
+        - applinks:app.element.io
+        - applinks:staging.element.io
+        - applinks:develop.element.io
+        - applinks:mobile.element.io
+        - applinks:call.element.io
+        - applinks:call.element.dev
+        - applinks:matrix.to
+        - webcredentials:*.element.io
+        com.apple.developer.usernotifications.communication: true
+        com.apple.security.app-sandbox: true
+        com.apple.security.application-groups:
+        - $(APP_GROUP_IDENTIFIER)
+        com.apple.security.network.client: true
+        keychain-access-groups:
+        - $(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)
+
     settings:
       base:
         PRODUCT_NAME: $(APP_NAME)
@@ -114,7 +136,6 @@ targets:
         CURRENT_PROJECT_VERSION: $(CURRENT_PROJECT_VERSION)
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
-        CODE_SIGN_ENTITLEMENTS: ElementX/SupportingFiles/ElementX.entitlements
         SWIFT_OBJC_BRIDGING_HEADER: ElementX/SupportingFiles/ElementX-Bridging-Header.h
         SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
         PILLS_UT_TYPE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER).pills
