@@ -51,7 +51,11 @@ struct JoinRoomByAddressView: View {
                                                     state: textFieldState))
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
+                    .textContentType(.URL)
                     .focused($textFieldFocus)
+                    .onChange(of: context.roomAddress) { _, newValue in
+                        context.roomAddress = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                    }
                 
                 Button(L10n.actionContinue) {
                     context.send(viewAction: .joinRoomByAddress)
