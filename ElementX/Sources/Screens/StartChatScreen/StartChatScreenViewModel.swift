@@ -16,6 +16,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
+    private let appSettings: AppSettings
     
     private var suggestedUsers = [UserProfileProxy]()
     
@@ -27,11 +28,13 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     init(userSession: UserSessionProtocol,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
-         userDiscoveryService: UserDiscoveryServiceProtocol) {
+         userDiscoveryService: UserDiscoveryServiceProtocol,
+         appSettings: AppSettings) {
         self.userSession = userSession
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.userDiscoveryService = userDiscoveryService
+        self.appSettings = appSettings
         
         super.init(initialViewState: StartChatScreenViewState(userID: userSession.clientProxy.userID), mediaProvider: userSession.mediaProvider)
         
@@ -74,6 +77,8 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
             Task { await createDirectRoom(user: user) }
         case .joinRoomByAddress:
             joinRoomByAddress()
+        case .openRoomDirectorySearch:
+            actionsSubject.send(.openRoomDirectorySearch)
         }
     }
     
@@ -84,6 +89,10 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     private var internalRoomAddressState: JoinByAddressState = .example
     
     private func setupBindings() {
+        appSettings.$publicSearchEnabled
+            .weakAssign(to: \.state.isRoomDirectoryEnabled, on: self)
+            .store(in: &cancellables)
+        
         context.$viewState
             .map(\.bindings.searchQuery)
             .debounceTextQueriesAndRemoveDuplicates()

@@ -653,12 +653,6 @@ extension PreviewTests {
         }
     }
 
-    func test_roomDirectorySearchView() async throws {
-        for preview in RoomDirectorySearchView_Previews._allPreviews {
-            try await assertSnapshots(matching: preview)
-        }
-    }
-
     func test_roomHeaderView() async throws {
         for preview in RoomHeaderView_Previews._allPreviews {
             try await assertSnapshots(matching: preview)

@@ -84,7 +84,8 @@ struct JoinRoomByAddressView_Previews: PreviewProvider, TestablePreview {
         let viewModel = StartChatScreenViewModel(userSession: userSession,
                                                  analytics: ServiceLocator.shared.analytics,
                                                  userIndicatorController: UserIndicatorControllerMock(),
-                                                 userDiscoveryService: userDiscoveryService)
+                                                 userDiscoveryService: userDiscoveryService,
+                                                 appSettings: ServiceLocator.shared.settings)
         return viewModel
     }()
     

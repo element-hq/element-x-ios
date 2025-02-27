@@ -49,6 +49,9 @@ struct StartChatScreen: View {
     @ViewBuilder
     private var mainContent: some View {
         createRoomSection
+        if context.viewState.isRoomDirectoryEnabled {
+            roomDirectorySearch
+        }
         inviteFriendsSection
         joinRoomByAddressSection
         usersSection
@@ -60,6 +63,16 @@ struct StartChatScreen: View {
                                     icon: \.room),
                     kind: .button {
                         context.isJoinRoomByAddressSheetPresented = true
+                    })
+        }
+    }
+    
+    private var roomDirectorySearch: some View {
+        Section {
+            ListRow(label: .default(title: L10n.screenRoomDirectorySearchTitle,
+                                    icon: \.listBulleted),
+                    kind: .navigationLink {
+                        context.send(viewAction: .openRoomDirectorySearch)
                     })
         }
     }
@@ -141,13 +154,16 @@ struct StartChatScreen: View {
 
 struct StartChatScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
+        let appSettings = AppSettings()
+        appSettings.publicSearchEnabled = true
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
         let userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
         let viewModel = StartChatScreenViewModel(userSession: userSession,
                                                  analytics: ServiceLocator.shared.analytics,
                                                  userIndicatorController: UserIndicatorControllerMock(),
-                                                 userDiscoveryService: userDiscoveryService)
+                                                 userDiscoveryService: userDiscoveryService,
+                                                 appSettings: appSettings)
         return viewModel
     }()
     

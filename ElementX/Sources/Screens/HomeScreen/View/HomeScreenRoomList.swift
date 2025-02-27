@@ -16,10 +16,6 @@ struct HomeScreenRoomList: View {
         // avoids glitches when focusing the search bar
         if !context.viewState.shouldHideRoomList {
             content
-        } else if context.viewState.isRoomDirectorySearchEnabled {
-            RoomDirectorySearchView {
-                context.send(viewAction: .selectRoomDirectorySearch)
-            }
         }
     }
     

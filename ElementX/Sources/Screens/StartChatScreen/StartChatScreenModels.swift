@@ -16,12 +16,14 @@ enum StartChatScreenViewModelAction {
     case close
     case createRoom
     case openRoom(withIdentifier: String)
+    case openRoomDirectorySearch
 }
 
 struct StartChatScreenViewState: BindableState {
     let userID: String
     var bindings = StartChatScreenViewStateBindings()
     var usersSection: UserDiscoverySection = .init(type: .suggestions, users: [])
+    var isRoomDirectoryEnabled = false
 
     var isSearching: Bool {
         !bindings.searchQuery.isEmpty
@@ -51,6 +53,7 @@ enum StartChatScreenViewAction {
     case createDM(user: UserProfileProxy)
     case selectUser(UserProfileProxy)
     case joinRoomByAddress
+    case openRoomDirectorySearch
 }
 
 enum JoinByAddressState {

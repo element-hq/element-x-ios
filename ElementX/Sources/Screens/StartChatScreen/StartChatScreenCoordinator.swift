@@ -20,6 +20,7 @@ struct StartChatScreenCoordinatorParameters {
 enum StartChatScreenCoordinatorAction {
     case close
     case openRoom(withIdentifier: String)
+    case openRoomDirectorySearch
 }
 
 final class StartChatScreenCoordinator: CoordinatorProtocol {
@@ -48,7 +49,8 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         viewModel = StartChatScreenViewModel(userSession: parameters.userSession,
                                              analytics: ServiceLocator.shared.analytics,
                                              userIndicatorController: parameters.userIndicatorController,
-                                             userDiscoveryService: parameters.userDiscoveryService)
+                                             userDiscoveryService: parameters.userDiscoveryService,
+                                             appSettings: ServiceLocator.shared.settings)
     }
     
     func start() {
@@ -62,6 +64,8 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
                 presentInviteUsersScreen()
             case .openRoom(let identifier):
                 actionsSubject.send(.openRoom(withIdentifier: identifier))
+            case .openRoomDirectorySearch:
+                actionsSubject.send(.openRoomDirectorySearch)
             }
         }
         .store(in: &cancellables)

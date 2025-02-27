@@ -27,7 +27,8 @@ class StartChatScreenViewModelTests: XCTestCase {
         viewModel = StartChatScreenViewModel(userSession: userSession,
                                              analytics: ServiceLocator.shared.analytics,
                                              userIndicatorController: UserIndicatorControllerMock(),
-                                             userDiscoveryService: userDiscoveryService)
+                                             userDiscoveryService: userDiscoveryService,
+                                             appSettings: ServiceLocator.shared.settings)
     }
     
     func testQueryShowingNoResults() async throws {
