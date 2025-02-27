@@ -12,6 +12,7 @@ struct FeedDetailsContent: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     @ObservedObject var context: FeedDetailsScreenViewModel.Context
+    let isRefreshable: Bool
     let scrollViewAdapter: ScrollViewAdapter
     
     var body: some View {
@@ -19,6 +20,12 @@ struct FeedDetailsContent: View {
     }
     
     private var feedDetails: some View {
+        isRefreshable
+                ? AnyView(actualContent.refreshable { context.send(viewAction: .forceRefreshFeed) })
+                : AnyView(actualContent)
+    }
+    
+    private var actualContent: some View {
         GeometryReader { geometry in
             ScrollView {
                 // Feed Details view
@@ -70,9 +77,6 @@ struct FeedDetailsContent: View {
             .scrollBounceBehavior(context.viewState.repliesListMode == .empty ? .basedOnSize : .automatic)
             .animation(.elementDefault, value: context.viewState.repliesListMode)
             .animation(.none, value: context.viewState.visibleReplies)
-            .refreshable {
-                context.send(viewAction: .forceRefreshFeed)
-            }
         }
     }
 }
