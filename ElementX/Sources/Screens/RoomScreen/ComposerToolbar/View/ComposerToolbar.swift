@@ -157,9 +157,11 @@ struct ComposerToolbar: View {
                         selectedRange: $context.selectedRange,
                         composerView: composerView,
                         mode: context.viewState.composerMode,
+                        placeholder: placeholder,
                         composerFormattingEnabled: context.composerFormattingEnabled,
                         showResizeGrabber: context.composerFormattingEnabled,
-                        isExpanded: $context.composerExpanded) {
+                        isExpanded: $context.composerExpanded,
+                        isEncrypted: context.viewState.isRoomEncrypted) {
             sendMessage()
         } editAction: {
             context.send(viewAction: .editLastMessage)
@@ -222,8 +224,16 @@ struct ComposerToolbar: View {
     private var placeholder: String {
         switch context.viewState.composerMode {
         case .reply(_, _, let isThread):
-            return isThread ? L10n.actionReplyInThread : L10n.richTextEditorComposerPlaceholder
+            return isThread ? L10n.actionReplyInThread : composerPlaceholder
         default:
+            return composerPlaceholder
+        }
+    }
+    
+    private var composerPlaceholder: String {
+        if context.viewState.isRoomEncrypted {
+            return L10n.richTextEditorComposerEncryptedPlaceholder
+        } else {
             return L10n.richTextEditorComposerPlaceholder
         }
     }
