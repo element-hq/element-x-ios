@@ -86,9 +86,12 @@ struct PostRepliesList: View {
     
     @ViewBuilder
     private var content: some View {
-        ForEach(context.viewState.visibleReplies) { post in
+        ForEach(Array(context.viewState.visibleReplies.enumerated()), id: \.element.id) { index, post in
+            let nextPost = index < context.viewState.visibleReplies.count - 1 ? context.viewState.visibleReplies[index + 1] : nil
+            let showThreadLine = nextPost?.senderInfo.userID == post.senderInfo.userID
+
             VStack(alignment: .leading) {
-                HomeScreenPostCell(post: post, mediaProvider: context.mediaProvider, showThreadLine: true,
+                HomeScreenPostCell(post: post, mediaProvider: context.mediaProvider, showThreadLine: showThreadLine,
                                    onPostTapped: {
                     context.send(viewAction: .replyTapped(post))
                 },
