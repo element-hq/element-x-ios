@@ -2,7 +2,7 @@ import Alamofire
 import Foundation
 
 protocol ZeroChatApiProtocol {
-    func notifyAboutMessage(roomId: String) async throws -> Result<Void, Error>
+    func notifyAboutMessage(roomId: String, isRoomChannel: Bool) async throws -> Result<Void, Error>
 }
 
 class ZeroChatApi: ZeroChatApiProtocol {
@@ -14,13 +14,13 @@ class ZeroChatApi: ZeroChatApiProtocol {
     
     // MARK: - Public
     
-    func notifyAboutMessage(roomId: String) async throws -> Result<Void, any Error> {
+    func notifyAboutMessage(roomId: String, isRoomChannel: Bool) async throws -> Result<Void, any Error> {
         let time = Int64(Date().timeIntervalSince1970 * 1000)
 //        let parameters: Parameters = [
 //            "roomId": roomId,
 //            "sentAt": time
 //        ]
-        let request = ZSentMessage(roomId: roomId, sentAt: time)
+        let request = ZSentMessage(roomId: roomId, sentAt: time, isRoomChannel: isRoomChannel)
         
         let result: Result<Void, Error> = try await APIManager
             .shared

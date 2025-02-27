@@ -131,7 +131,7 @@ struct FeedDetailsSection: View {
                         
                         if post.worldPrimaryZId != nil && !post.isPostInOwnFeed {
                             Spacer()
-                            Text("0://\(post.worldPrimaryZId!)")
+                            Text("\(ZeroContants.ZERO_CHANNEL_PREFIX)\(post.worldPrimaryZId!)")
                                 .font(.zero.bodyMD)
                                 .foregroundStyle(.compound.textSecondary)
                                 .lineLimit(1)
@@ -139,7 +139,7 @@ struct FeedDetailsSection: View {
                         }
                     }
                     if post.senderPrimaryZId != nil {
-                        Text("0://\(post.senderPrimaryZId!)")
+                        Text("\(ZeroContants.ZERO_CHANNEL_PREFIX)\(post.senderPrimaryZId!)")
                             .font(.zero.bodyMD)
                             .foregroundStyle(.compound.textSecondary)
                             .lineLimit(1)

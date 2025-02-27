@@ -3,6 +3,8 @@ import Foundation
 enum ZeroContants {
     /// Change app environment here and respective values will be applied everywhere .i.e. `DevServer()` or `ProdServer()`
     static let appServer: AppServer = ProdServer()
+    
+    static let ZERO_CHANNEL_PREFIX = "0://"
 }
 
 protocol AppServer {
