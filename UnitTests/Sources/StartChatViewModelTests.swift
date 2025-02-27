@@ -45,6 +45,43 @@ class StartChatScreenViewModelTests: XCTestCase {
         XCTAssertTrue(userDiscoveryService.searchProfilesWithCalled)
     }
     
+    func testJoinRoomByAddress() async throws {
+        clientProxy.resolveRoomAliasReturnValue = .success(.init(roomId: "id", servers: []))
+        viewModel.context.roomAddress = "#room:example.com"
+        
+        let deferredViewState = deferFulfillment(viewModel.context.$viewState) { viewState in
+            viewState.joinByAddressState == .addressFound(address: "#room:example.com", roomID: "id")
+        }
+        try await deferredViewState.fulfill()
+        
+        let deferredAction = deferFulfillment(viewModel.actions) { action in
+            action == .openRoom(withIdentifier: "id")
+        }
+        context.send(viewAction: .joinRoomByAddress)
+        try await deferredAction.fulfill()
+    }
+    
+    func testJoinRoomByAddressFailsBecauseInvalid() async throws {
+        viewModel.context.roomAddress = ":"
+        
+        let deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
+            viewState.joinByAddressState == .invalidAddress
+        }
+        context.send(viewAction: .joinRoomByAddress)
+        try await deferred.fulfill()
+    }
+    
+    func testJoinRoomByAddressFailsBecauseNotFound() async throws {
+        clientProxy.resolveRoomAliasReturnValue = .failure(.failedResolvingRoomAlias)
+        viewModel.context.roomAddress = "#room:example.com"
+        
+        let deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
+            viewState.joinByAddressState == .addressNotFound
+        }
+        context.send(viewAction: .joinRoomByAddress)
+        try await deferred.fulfill()
+    }
+    
     // MARK: - Private
     
     private func assertSearchResults(toBe count: Int) {

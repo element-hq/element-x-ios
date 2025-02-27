@@ -24,7 +24,7 @@ struct JoinRoomByAddressView: View {
         case .addressNotFound:
             L10n.screenStartChatJoinRoomByAddressRoomNotFound
         case .addressFound:
-            L10n.screenStartChatJoinRoomByAddressRoomNotFound
+            L10n.screenStartChatJoinRoomByAddressRoomFound
         case .invalidAddress:
             L10n.screenStartChatJoinRoomByAddressInvalidAddress
         }

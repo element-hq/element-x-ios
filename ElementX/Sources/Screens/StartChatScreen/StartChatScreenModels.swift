@@ -12,7 +12,7 @@ enum StartChatScreenErrorType: Error {
     case unknown
 }
 
-enum StartChatScreenViewModelAction {
+enum StartChatScreenViewModelAction: Equatable {
     case close
     case createRoom
     case openRoom(withIdentifier: String)
@@ -56,7 +56,7 @@ enum StartChatScreenViewAction {
     case openRoomDirectorySearch
 }
 
-enum JoinByAddressState {
+enum JoinByAddressState: Equatable {
     case example
     case invalidAddress
     case addressNotFound

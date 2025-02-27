@@ -103,38 +103,60 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         
         context.$viewState
             .map(\.bindings.roomAddress)
-            .debounceTextQueriesAndRemoveDuplicates()
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self else {
+                    return
+                }
+                state.joinByAddressState = .example
+                internalRoomAddressState = .example
+            }
+            .store(in: &cancellables)
+        
+        context.$viewState
+            .map(\.bindings.roomAddress)
+            .debounce(for: .milliseconds(250), scheduler: DispatchQueue.main)
+            .removeDuplicates()
             .sink { [weak self] roomAddress in
                 guard let self else {
                     return
                 }
-                
-                state.joinByAddressState = .example
-                internalRoomAddressState = .example
-                
-                guard !roomAddress.isEmpty,
-                      isRoomAliasFormatValid(alias: roomAddress) else {
-                    internalRoomAddressState = .invalidAddress
-                    return
-                }
-                
-                resolveAliasTask = Task { [weak self] in
-                    guard let self else {
-                        return
-                    }
-                    defer { resolveAliasTask = nil }
-                    
-                    guard case let .success(resolved) = await userSession.clientProxy.resolveRoomAlias(roomAddress) else {
-                        internalRoomAddressState = .addressNotFound
-                        return
-                    }
-                    
-                    let result = JoinByAddressState.addressFound(address: roomAddress, roomID: resolved.roomId)
-                    internalRoomAddressState = result
-                    state.joinByAddressState = result
-                }
+                resolveRoomAddress(roomAddress)
             }
             .store(in: &cancellables)
+    }
+    
+    private func resolveRoomAddress(_ roomAddress: String) {
+        guard !roomAddress.isEmpty,
+              isRoomAliasFormatValid(alias: roomAddress) else {
+            internalRoomAddressState = .invalidAddress
+            resolveAliasTask = nil
+            return
+        }
+        
+        resolveAliasTask = Task { [weak self] in
+            guard let self else {
+                return
+            }
+            defer { resolveAliasTask = nil }
+            
+            guard case let .success(resolved) = await userSession.clientProxy.resolveRoomAlias(roomAddress) else {
+                if Task.isCancelled {
+                    return
+                }
+                internalRoomAddressState = .addressNotFound
+                return
+            }
+
+            guard !Task.isCancelled else {
+                return
+            }
+            
+            let result = JoinByAddressState.addressFound(address: roomAddress, roomID: resolved.roomId)
+            internalRoomAddressState = result
+            state.joinByAddressState = result
+        }
     }
     
     // periphery:ignore - auto cancels when reassigned
@@ -193,6 +215,9 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
                 hideLoadingIndicator()
                 joinRoomByAddress()
             }
+        } else if internalRoomAddressState == .example {
+            resolveRoomAddress(state.bindings.roomAddress)
+            joinRoomByAddress()
         } else {
             state.joinByAddressState = internalRoomAddressState
         }
