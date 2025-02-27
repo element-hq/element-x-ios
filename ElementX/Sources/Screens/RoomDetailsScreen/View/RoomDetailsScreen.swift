@@ -33,7 +33,8 @@ struct RoomDetailsScreen: View {
 //                ignoreUserSection(user: recipient)
 //            }
             
-            if context.viewState.dmRecipientInfo.isNil {
+            if context.viewState.dmRecipientInfo.isNil,
+               !context.viewState.isAChannel {
                 leaveRoomSection
             }
         }
@@ -236,7 +237,8 @@ struct RoomDetailsScreen: View {
             //                        })
             //            }
             
-            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipientInfo == nil {
+            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipientInfo == nil,
+               !context.viewState.isAChannel {
                 ZeroListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions, icon: \.admin),
                             kind: .navigationLink {
                     context.send(viewAction: .processTapRolesAndPermissions)
