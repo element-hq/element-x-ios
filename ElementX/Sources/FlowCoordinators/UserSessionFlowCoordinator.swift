@@ -669,9 +669,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             self?.stateMachine.processEvent(.dismissedStartChatScreen)
         }
     }
-    
-    // MARK: Session Verification
-    
+        
     // MARK: Calls
     
     private func presentCallScreen(genericCallLink url: URL) {

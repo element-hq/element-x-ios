@@ -180,33 +180,34 @@ struct AuthenticationTextFieldStyle: TextFieldStyle {
     }
 }
 
-struct ElementTextFieldStyle_Previews: PreviewProvider {
+struct ElementTextFieldStyle_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                // Plain text field.
-                TextField("Placeholder", text: .constant(""))
-                    .textFieldStyle(.authentication())
-                TextField("Placeholder", text: .constant("Web"))
-                    .textFieldStyle(.authentication())
-                TextField("Placeholder", text: .constant("Web"))
-                    .textFieldStyle(.authentication())
-                    .disabled(true)
-                TextField("Placeholder", text: .constant("Web"))
-                    .textFieldStyle(.authentication(state: .error))
-                
-                // Text field with labels
-                TextField("Placeholder", text: .constant(""))
-                    .textFieldStyle(.authentication(labelText: "Label", footerText: "Footer"))
-                TextField("Placeholder", text: .constant("Input text"))
-                    .textFieldStyle(.authentication(labelText: "Title", footerText: "Footer"))
-                TextField("Placeholder", text: .constant("Bad text"))
-                    .textFieldStyle(.authentication(labelText: "Title", footerText: "Footer", state: .error))
-                TextField("Placeholder", text: .constant(""))
-                    .textFieldStyle(.authentication(labelText: "Title", footerText: "Footer"))
-                    .disabled(true)
-            }
-            .padding()
+        VStack(spacing: 20) {
+            // Plain text field.
+            TextField("Placeholder", text: .constant(""))
+                .textFieldStyle(.authentication())
+            TextField("Placeholder", text: .constant("Web"))
+                .textFieldStyle(.authentication())
+            TextField("Placeholder", text: .constant("Web"))
+                .textFieldStyle(.authentication())
+                .disabled(true)
+            TextField("Placeholder", text: .constant("Web"))
+                .textFieldStyle(.authentication(state: .error))
+            
+            // Text field with labels
+            TextField("Placeholder", text: .constant(""))
+                .textFieldStyle(.authentication(labelText: "Label", footerText: "Footer"))
+            TextField("Placeholder", text: .constant("Input text"))
+                .textFieldStyle(.authentication(labelText: "Title", footerText: "Footer"))
+            TextField("Placeholder", text: .constant("Bad text"))
+                .textFieldStyle(.authentication(labelText: "Title", footerText: "Footer", state: .error))
+            TextField("Placeholder", text: .constant(""))
+                .textFieldStyle(.authentication(labelText: "Title", footerText: "Footer"))
+                .disabled(true)
+            TextField("Placeholder", text: .constant(""))
+                .textFieldStyle(.authentication(labelText: "Title", footerText: "Footer", state: .success))
         }
+        .previewLayout(.sizeThatFits)
+        .padding()
     }
 }

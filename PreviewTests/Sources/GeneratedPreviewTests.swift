@@ -149,6 +149,12 @@ extension PreviewTests {
         }
     }
 
+    func test_elementTextFieldStyle() async throws {
+        for preview in ElementTextFieldStyle_Previews._allPreviews {
+            try await assertSnapshots(matching: preview)
+        }
+    }
+
     func test_emojiPickerScreenHeaderView() async throws {
         for preview in EmojiPickerScreenHeaderView_Previews._allPreviews {
             try await assertSnapshots(matching: preview)
