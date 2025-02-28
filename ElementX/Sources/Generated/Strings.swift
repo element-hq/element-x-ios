@@ -2460,6 +2460,8 @@ internal enum L10n {
   internal static var screenSignoutSaveRecoveryKeyTitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_title") }
   /// An error occurred when trying to start a chat
   internal static var screenStartChatErrorStartingChat: String { return L10n.tr("Localizable", "screen_start_chat_error_starting_chat") }
+  /// Join room by address
+  internal static var screenStartChatJoinRoomByAddressAction: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_action") }
   /// Not a valid address
   internal static var screenStartChatJoinRoomByAddressInvalidAddress: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_invalid_address") }
   /// Enter...
@@ -2873,13 +2875,6 @@ internal enum L10n {
     internal static var sendTo: String { return L10n.tr("Localizable", "common.send_to") }
     /// You
     internal static var you: String { return L10n.tr("Localizable", "common.you") }
-  }
-
-  internal enum Screen {
-    internal enum StartChat {
-      /// Join room by address
-      internal static var joinRoomByAddressAction: String { return L10n.tr("Localizable", "screen.start_chat.join_room_by_address_action") }
-    }
   }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
