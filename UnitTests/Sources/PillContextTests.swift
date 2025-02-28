@@ -242,7 +242,7 @@ class PillContextTests: XCTestCase {
         XCTAssertFalse(context.viewState.isOwnMention)
         XCTAssertFalse(context.viewState.isUndefined)
         XCTAssertEqual(context.viewState.image, .link)
-        XCTAssertEqual(context.viewState.displayText, L10n.screenRoomEventPill("1"))
+        XCTAssertEqual(context.viewState.displayText, L10n.screenRoomEventPill(L10n.commonRoom))
     }
     
     func testEventOnRoomAliasMention() async throws {
@@ -294,6 +294,6 @@ class PillContextTests: XCTestCase {
         XCTAssertFalse(context.viewState.isOwnMention)
         XCTAssertFalse(context.viewState.isUndefined)
         XCTAssertEqual(context.viewState.image, .link)
-        XCTAssertEqual(context.viewState.displayText, L10n.screenRoomEventPill("#foundation-and-empire:matrix.org"))
+        XCTAssertEqual(context.viewState.displayText, L10n.screenRoomEventPill(L10n.commonRoom))
     }
 }
