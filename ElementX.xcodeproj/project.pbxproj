@@ -5763,6 +5763,7 @@
 		E6E1D07163F8752D62DA4A93 /* Styles */ = {
 			isa = PBXGroup;
 			children = (
+				CCACD75595C40EACD6AD4A74 /* AuthenticationTextFieldStyle.swift */,
 				89FBFC09F9DAFF1E4BA97849 /* FormButtonStyles.swift */,
 			);
 			path = Styles;
@@ -5795,7 +5796,6 @@
 		E74CD7681375AD2EAA34D66B /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
-				CCACD75595C40EACD6AD4A74 /* AuthenticationTextFieldStyle.swift */,
 				92390F9FA98255440A6BF5F8 /* OIDCAuthenticationPresenter.swift */,
 				9E6D88E8AFFBF2C1D589C0FA /* UIConstants.swift */,
 				90F48FEF84016ED42A94BA24 /* LoginScreen */,

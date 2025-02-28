@@ -157,7 +157,12 @@ struct AuthenticationTextFieldStyle: TextFieldStyle {
                 }
  
             if let footerText {
-                HStack(spacing: 4) {
+                Label {
+                    footerText
+                        .tint(.compound.textLinkExternal)
+                        .font(.compound.bodySM)
+                        .foregroundColor(footerTextColor)
+                } icon: {
                     switch state {
                     case .success:
                         CompoundIcon(\.checkCircleSolid, size: .xSmall, relativeTo: .compound.bodySM)
@@ -168,12 +173,8 @@ struct AuthenticationTextFieldStyle: TextFieldStyle {
                     case .default:
                         EmptyView()
                     }
-                    
-                    footerText
-                        .tint(.compound.textLinkExternal)
-                        .font(.compound.bodySM)
-                        .foregroundColor(footerTextColor)
                 }
+                .labelStyle(.custom(spacing: 4, alignment: .top))
                 .padding(.horizontal, 16)
             }
         }

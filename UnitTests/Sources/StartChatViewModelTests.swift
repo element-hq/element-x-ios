@@ -55,7 +55,7 @@ class StartChatScreenViewModelTests: XCTestCase {
         try await deferredViewState.fulfill()
         
         let deferredAction = deferFulfillment(viewModel.actions) { action in
-            action == .openRoom(withIdentifier: "id")
+            action == .showRoom(withIdentifier: "id")
         }
         context.send(viewAction: .joinRoomByAddress)
         try await deferredAction.fulfill()

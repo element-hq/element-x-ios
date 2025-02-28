@@ -62,7 +62,7 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
             case .createRoom:
                 // before creating a room we select the users we would like to invite in that room
                 presentInviteUsersScreen()
-            case .openRoom(let identifier):
+            case .showRoom(let identifier):
                 actionsSubject.send(.openRoom(withIdentifier: identifier))
             case .openRoomDirectorySearch:
                 actionsSubject.send(.openRoomDirectorySearch)

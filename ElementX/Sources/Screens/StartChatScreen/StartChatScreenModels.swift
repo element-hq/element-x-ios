@@ -15,7 +15,7 @@ enum StartChatScreenErrorType: Error {
 enum StartChatScreenViewModelAction: Equatable {
     case close
     case createRoom
-    case openRoom(withIdentifier: String)
+    case showRoom(withIdentifier: String)
     case openRoomDirectorySearch
 }
 

@@ -64,7 +64,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
                 switch currentDirectRoom {
                 case .success(.some(let roomId)):
                     hideLoadingIndicator()
-                    actionsSubject.send(.openRoom(withIdentifier: roomId))
+                    actionsSubject.send(.showRoom(withIdentifier: roomId))
                 case .success:
                     hideLoadingIndicator()
                     state.bindings.selectedUserToInvite = user
@@ -116,8 +116,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         
         context.$viewState
             .map(\.bindings.roomAddress)
-            .debounce(for: .milliseconds(250), scheduler: DispatchQueue.main)
-            .removeDuplicates()
+            .debounceTextQueriesAndRemoveDuplicates()
             .sink { [weak self] roomAddress in
                 guard let self else {
                     return
@@ -191,7 +190,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         switch await userSession.clientProxy.createDirectRoom(with: user.userID, expectedRoomName: user.displayName) {
         case .success(let roomId):
             analytics.trackCreatedRoom(isDM: true)
-            actionsSubject.send(.openRoom(withIdentifier: roomId))
+            actionsSubject.send(.showRoom(withIdentifier: roomId))
         case .failure:
             displayError()
         }
@@ -206,7 +205,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     private func joinRoomByAddress() {
         if case let .addressFound(lastTestedAddress, roomID) = internalRoomAddressState,
            lastTestedAddress == state.bindings.roomAddress {
-            actionsSubject.send(.openRoom(withIdentifier: roomID))
+            actionsSubject.send(.showRoom(withIdentifier: roomID))
         } else if let resolveAliasTask {
             // If the task is still running we wait for it to complete and we check the state again
             showLoadingIndicator(delay: .milliseconds(250))
@@ -216,9 +215,11 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
                 joinRoomByAddress()
             }
         } else if internalRoomAddressState == .example {
+            // If we are in the example state internally, this means that the task has not started yet so we start it, and the check the state again
             resolveRoomAddress(state.bindings.roomAddress)
             joinRoomByAddress()
         } else {
+            // In any other case we just use the internal state
             state.joinByAddressState = internalRoomAddressState
         }
     }
