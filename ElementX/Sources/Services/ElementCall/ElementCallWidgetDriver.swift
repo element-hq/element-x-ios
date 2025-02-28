@@ -17,6 +17,7 @@ struct ElementCallWidgetMessage: Codable {
     
     enum Action: String, Codable {
         case hangup = "im.vector.hangup"
+        case close = "io.element.close"
         case mediaState = "io.element.device_mute"
     }
     
@@ -181,6 +182,8 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
             if widgetMessage.direction == .fromWidget {
                 switch widgetMessage.action {
                 case .hangup:
+                    break
+                case .close:
                     actionsSubject.send(.callEnded)
                 case .mediaState:
                     guard let audioEnabled = widgetMessage.data.audioEnabled,
