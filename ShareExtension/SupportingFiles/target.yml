@@ -37,7 +37,7 @@ targets:
       - package: Compound
 
     info:
-      path: ../SupportingFiles/Info.plist
+      path: Info.plist
       properties:
         CFBundleDisplayName: $(PRODUCT_DISPLAY_NAME)
         CFBundleShortVersionString: $(MARKETING_VERSION)
@@ -60,6 +60,12 @@ targets:
               NSExtensionActivationSupportsText: true
               NSExtensionActivationSupportsWebURLWithMaxCount: 1
 
+    entitlements:
+      path: ShareExtension.entitlements
+      properties:
+        com.apple.security.application-groups:
+        - $(APP_GROUP_IDENTIFIER)
+
     settings:
       base:
         PRODUCT_NAME: ShareExtension
@@ -68,7 +74,6 @@ targets:
         MARKETING_VERSION: $(MARKETING_VERSION)
         CURRENT_PROJECT_VERSION: $(CURRENT_PROJECT_VERSION)
         DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
-        CODE_SIGN_ENTITLEMENTS: ShareExtension/SupportingFiles/ShareExtension.entitlements
 
     sources:
     - path: ../Sources
