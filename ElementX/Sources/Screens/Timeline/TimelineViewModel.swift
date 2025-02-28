@@ -866,7 +866,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .allUsers:
             pillContext.viewState = .mention(isOwnMention: true, displayText: PillConstants.atRoom)
         case .event(let room):
-            var pillViewState: PillViewState = .reference(avatar: .link, displayText: L10n.screenRoomEventPill(room.value))
+            var pillViewState: PillViewState = .reference(avatar: .link, displayText: L10n.screenRoomEventPill(L10n.commonRoom))
             defer {
                 pillContext.viewState = pillViewState
             }
