@@ -1081,7 +1081,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                           showSheetCoodinator: Bool = false) {
         let parameters = FeedDetailsScreenCoordinatorParameters(userSession: userSession,
                                                                 feedUpdatedProtocol: feedUpdatedProtocol,
-                                                                feedItem: post)
+                                                                feedItem: post,
+                                                                isFeedDetailsRefreshable: !showSheetCoodinator)
         let coordinator = FeedDetailsScreenCoordinator(parameters: parameters)
         coordinator.actions
             .sink { [weak self] action in

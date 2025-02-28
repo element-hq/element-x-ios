@@ -40,6 +40,7 @@ struct RoomDetailsScreenViewState: BindableState {
     
     let isEncrypted: Bool
     let isDirect: Bool
+    let isAChannel: Bool
     var permalink: URL?
 
     var topic: AttributedString?
@@ -73,7 +74,7 @@ struct RoomDetailsScreenViewState: BindableState {
     }
     
     var canEdit: Bool {
-        !isDirect && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
+        !isDirect && !isAChannel && (canEditRoomName || canEditRoomTopic || canEditRoomAvatar)
     }
     
     var hasTopicSection: Bool {

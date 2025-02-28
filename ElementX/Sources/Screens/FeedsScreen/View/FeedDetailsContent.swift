@@ -12,6 +12,7 @@ struct FeedDetailsContent: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     @ObservedObject var context: FeedDetailsScreenViewModel.Context
+    let isRefreshable: Bool
     let scrollViewAdapter: ScrollViewAdapter
     
     var body: some View {
@@ -19,6 +20,12 @@ struct FeedDetailsContent: View {
     }
     
     private var feedDetails: some View {
+        isRefreshable
+                ? AnyView(actualContent.refreshable { context.send(viewAction: .forceRefreshFeed) })
+                : AnyView(actualContent)
+    }
+    
+    private var actualContent: some View {
         GeometryReader { geometry in
             ScrollView {
                 // Feed Details view
@@ -70,9 +77,6 @@ struct FeedDetailsContent: View {
             .scrollBounceBehavior(context.viewState.repliesListMode == .empty ? .basedOnSize : .automatic)
             .animation(.elementDefault, value: context.viewState.repliesListMode)
             .animation(.none, value: context.viewState.visibleReplies)
-            .refreshable {
-                context.send(viewAction: .forceRefreshFeed)
-            }
         }
     }
 }
@@ -86,9 +90,12 @@ struct PostRepliesList: View {
     
     @ViewBuilder
     private var content: some View {
-        ForEach(context.viewState.visibleReplies) { post in
+        ForEach(Array(context.viewState.visibleReplies.enumerated()), id: \.element.id) { index, post in
+            let nextPost = index < context.viewState.visibleReplies.count - 1 ? context.viewState.visibleReplies[index + 1] : nil
+            let showThreadLine = nextPost?.senderInfo.userID == post.senderInfo.userID
+
             VStack(alignment: .leading) {
-                HomeScreenPostCell(post: post, mediaProvider: context.mediaProvider, showThreadLine: true,
+                HomeScreenPostCell(post: post, mediaProvider: context.mediaProvider, showThreadLine: showThreadLine,
                                    onPostTapped: {
                     context.send(viewAction: .replyTapped(post))
                 },
@@ -131,7 +138,7 @@ struct FeedDetailsSection: View {
                         
                         if post.worldPrimaryZId != nil && !post.isPostInOwnFeed {
                             Spacer()
-                            Text("0://\(post.worldPrimaryZId!)")
+                            Text("\(ZeroContants.ZERO_CHANNEL_PREFIX)\(post.worldPrimaryZId!)")
                                 .font(.zero.bodyMD)
                                 .foregroundStyle(.compound.textSecondary)
                                 .lineLimit(1)
@@ -139,7 +146,7 @@ struct FeedDetailsSection: View {
                         }
                     }
                     if post.senderPrimaryZId != nil {
-                        Text("0://\(post.senderPrimaryZId!)")
+                        Text("\(ZeroContants.ZERO_CHANNEL_PREFIX)\(post.senderPrimaryZId!)")
                             .font(.zero.bodyMD)
                             .foregroundStyle(.compound.textSecondary)
                             .lineLimit(1)

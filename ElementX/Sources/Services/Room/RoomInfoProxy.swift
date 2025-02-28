@@ -48,6 +48,7 @@ struct RoomInfoProxy: BaseRoomInfoProxyProtocol {
     }
 
     var isDirect: Bool { roomInfo.isDirect }
+    var isAChannel: Bool { displayName?.starts(with: ZeroContants.ZERO_CHANNEL_PREFIX) == true }
     var isPublic: Bool { roomInfo.isPublic }
     var isSpace: Bool { roomInfo.isSpace }
     var isTombstoned: Bool { roomInfo.isTombstoned }

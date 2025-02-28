@@ -12,6 +12,7 @@ struct FeedDetailsScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let feedUpdatedProtocol: FeedDetailsUpdatedProtocol
     let feedItem: HomeScreenPost
+    let isFeedDetailsRefreshable: Bool
 }
 
 enum FeedDetailsScreenCoordinatorAction {
@@ -23,12 +24,14 @@ final class FeedDetailsScreenCoordinator: CoordinatorProtocol {
     
     private let actionsSubject: PassthroughSubject<FeedDetailsScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
+    private let isFeedDetailsRefreshable: Bool
     
     var actions: AnyPublisher<FeedDetailsScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
     init(parameters: FeedDetailsScreenCoordinatorParameters) {
+        self.isFeedDetailsRefreshable = parameters.isFeedDetailsRefreshable
         viewModel = FeedDetailsScreenViewModel(userSession: parameters.userSession,
                                                feedUpdatedProtocol: parameters.feedUpdatedProtocol,
                                                feedItem: parameters.feedItem)
@@ -45,6 +48,6 @@ final class FeedDetailsScreenCoordinator: CoordinatorProtocol {
     }
             
     func toPresentable() -> AnyView {
-        AnyView(FeedDetailsScreen(context: viewModel.context))
+        AnyView(FeedDetailsScreen(context: viewModel.context, isRefreshable: isFeedDetailsRefreshable))
     }
 }
