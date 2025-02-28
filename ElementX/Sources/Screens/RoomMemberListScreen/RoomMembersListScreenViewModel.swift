@@ -103,7 +103,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                                bannedMembers: roomMembersDetails.bannedMembers,
                                bindings: state.bindings)
             
-            self.state.canInviteUsers = await (try? roomProxy.canUserInvite(userID: roomProxy.ownUserID).get()) == true
+            self.state.canInviteUsers = (await (try? roomProxy.canUserInvite(userID: roomProxy.ownUserID).get()) == true) && !roomProxy.infoPublisher.value.isAChannel
             self.state.canKickUsers = await (try? roomProxy.canUserKick(userID: roomProxy.ownUserID).get()) == true
             self.state.canBanUsers = await (try? roomProxy.canUserBan(userID: roomProxy.ownUserID).get()) == true
             

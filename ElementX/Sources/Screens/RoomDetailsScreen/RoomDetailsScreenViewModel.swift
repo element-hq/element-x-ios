@@ -67,6 +67,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         super.init(initialViewState: .init(details: roomProxy.details,
                                            isEncrypted: roomProxy.isEncrypted,
                                            isDirect: roomProxy.infoPublisher.value.isDirect,
+                                           isAChannel: roomProxy.infoPublisher.value.isAChannel,
                                            topic: topic,
                                            topicSummary: topic?.unattributedStringByReplacingNewlinesWithSpaces(),
                                            joinedMembersCount: roomProxy.infoPublisher.value.joinedMembersCount,

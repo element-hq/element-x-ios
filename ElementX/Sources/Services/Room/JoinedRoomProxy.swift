@@ -42,7 +42,11 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                                         internalIdPrefix: nil,
                                                                                                         dateDividerMode: .daily))
                         
-                        let timeline = TimelineProxy(timeline: sdkTimeline, roomId: room.id(), kind: .pinned, zeroChatApi: zeroChatApi)
+                        let timeline = TimelineProxy(timeline: sdkTimeline,
+                                                     roomId: room.id(),
+                                                     kind: .pinned,
+                                                     isRoomChannel: room.isAChannel(),
+                                                     zeroChatApi: zeroChatApi)
                         
                         await timeline.subscribeForUpdates()
                         innerPinnedEventsTimeline = timeline
@@ -123,7 +127,11 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         
         let cachedRoomAvatar = zeroUsersService.getRoomAvatarFromCache(roomId: room.id())
         infoSubject = try await .init(RoomInfoProxy(roomInfo: room.roomInfo(), roomAvatarCached: cachedRoomAvatar))
-        timeline = try await TimelineProxy(timeline: room.timeline(), roomId: room.id(), kind: .live, zeroChatApi: zeroChatApi)
+        timeline = try await TimelineProxy(timeline: room.timeline(),
+                                           roomId: room.id(),
+                                           kind: .live,
+                                           isRoomChannel: room.isAChannel(),
+                                           zeroChatApi: zeroChatApi)
         
         Task {
             await updateMembers()
@@ -176,7 +184,11 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                             internalIdPrefix: UUID().uuidString,
                                                                                             dateDividerMode: .daily))
             
-            return .success(TimelineProxy(timeline: sdkTimeline, roomId: room.id(), kind: .detached, zeroChatApi: zeroChatApi))
+            return .success(TimelineProxy(timeline: sdkTimeline,
+                                          roomId: room.id(),
+                                          kind: .detached,
+                                          isRoomChannel: room.isAChannel(),
+                                          zeroChatApi: zeroChatApi))
         } catch let error as FocusEventError {
             switch error {
             case .InvalidEventId(_, let error):
@@ -219,7 +231,11 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                             internalIdPrefix: nil,
                                                                                             dateDividerMode: .monthly))
             
-            let timeline = TimelineProxy(timeline: sdkTimeline, roomId: room.id(), kind: .media(presentation), zeroChatApi: zeroChatApi)
+            let timeline = TimelineProxy(timeline: sdkTimeline,
+                                         roomId: room.id(),
+                                         kind: .media(presentation),
+                                         isRoomChannel: room.isAChannel(),
+                                         zeroChatApi: zeroChatApi)
             await timeline.subscribeForUpdates()
             
             return .success(timeline)
@@ -854,5 +870,11 @@ private final class RoomKnockRequestsListener: KnockRequestsListener {
     
     func call(joinRequests: [KnockRequest]) {
         onUpdateClosure(joinRequests)
+    }
+}
+
+extension RoomProtocol {
+    public func isAChannel() -> Bool {
+        displayName()?.starts(with: ZeroContants.ZERO_CHANNEL_PREFIX) == true
     }
 }

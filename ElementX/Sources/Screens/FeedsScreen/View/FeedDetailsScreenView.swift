@@ -10,11 +10,12 @@ import SwiftUI
 
 struct FeedDetailsScreen: View {
     @ObservedObject var context: FeedDetailsScreenViewModel.Context
+    let isRefreshable: Bool
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
     
     var body: some View {
-        FeedDetailsContent(context: context,
+        FeedDetailsContent(context: context, isRefreshable: isRefreshable,
                            scrollViewAdapter: scrollViewAdapter)
         .alert(item: $context.alertInfo)
         .background(Color.zero.bgCanvasDefault.ignoresSafeArea())

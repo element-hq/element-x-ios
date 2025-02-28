@@ -498,11 +498,11 @@ extension HomeScreenChannel {
     init(channelZId: String) {
         let channelDisplayName = String((channelZId.split(separator: ".").first ?? ""))
         var attributedChannelDisplayName = AttributedString(channelDisplayName)
-        if let prefixRange = attributedChannelDisplayName.range(of: "0://") {
+        if let prefixRange = attributedChannelDisplayName.range(of: ZeroContants.ZERO_CHANNEL_PREFIX) {
             attributedChannelDisplayName[prefixRange].foregroundColor = .compound.textSecondary
         }
         
-        let rootChannelName = channelDisplayName.replacingOccurrences(of: "0://", with: "")
+        let rootChannelName = channelDisplayName.replacingOccurrences(of: ZeroContants.ZERO_CHANNEL_PREFIX, with: "")
         let channelId = "#\(rootChannelName):\(ZeroContants.appServer.matrixHomeServerPostfix)"
         
         self.init(
