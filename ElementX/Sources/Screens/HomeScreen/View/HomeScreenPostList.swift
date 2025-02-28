@@ -16,7 +16,7 @@ struct HomeScreenPostList: View {
     
     @ViewBuilder
     private var content: some View {
-        ForEach(context.viewState.visiblePosts) { post in
+        ForEach(context.viewState.visiblePosts, id: \.id) { post in
             VStack(alignment: .leading) {
                 HomeScreenPostCell(post: post, mediaProvider: context.mediaProvider, showThreadLine: false,
                                    onPostTapped: {

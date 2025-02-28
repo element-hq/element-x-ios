@@ -545,7 +545,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                                                       rewardsDecimalPlaces: state.userRewards.decimals)
                         homePosts.append(homePost)
                     }
-                    state.posts = homePosts
+                    state.posts = homePosts.uniqued(on: \.id)
                     state.postListMode = .posts
                 }
             case .failure(let error):
@@ -597,7 +597,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 if zIds.isEmpty {
                     state.channelsListMode = .empty
                 } else {
-                    state.channels = zIds.map { HomeScreenChannel(channelZId: $0) }
+                    let mappedChannels = zIds.sorted().map { HomeScreenChannel(channelZId: $0) }
+                    state.channels = mappedChannels.uniqued(on: \.id)
                     state.channelsListMode = .channels
                 }
             case .failure(let error):
