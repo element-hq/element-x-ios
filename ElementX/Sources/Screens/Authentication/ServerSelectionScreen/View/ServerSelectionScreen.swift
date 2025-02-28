@@ -52,10 +52,10 @@ struct ServerSelectionScreen: View {
     var serverForm: some View {
         VStack(alignment: .leading, spacing: 24) {
             TextField(L10n.commonServerUrl, text: $context.homeserverAddress)
-                .textFieldStyle(.authentication(labelText: Text(L10n.screenChangeServerFormHeader),
-                                                footerText: Text(context.viewState.footerMessage),
-                                                isError: context.viewState.isShowingFooterError,
-                                                accessibilityIdentifier: A11yIdentifiers.changeServerScreen.server))
+                .textFieldStyle(.element(labelText: Text(L10n.screenChangeServerFormHeader),
+                                         footerText: Text(context.viewState.footerMessage),
+                                         state: context.viewState.isShowingFooterError ? .error : .default,
+                                         accessibilityIdentifier: A11yIdentifiers.changeServerScreen.server))
                 .keyboardType(.URL)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)

@@ -25,7 +25,6 @@ enum HomeScreenCoordinatorAction {
     case presentEncryptionResetScreen
     case presentStartChatScreen
     case presentGlobalSearch
-    case presentRoomDirectorySearch
     case logoutWithoutConfirmation
     case logout
 }
@@ -75,8 +74,6 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentStartChatScreen)
                 case .presentGlobalSearch:
                     actionsSubject.send(.presentGlobalSearch)
-                case .presentRoomDirectorySearch:
-                    actionsSubject.send(.presentRoomDirectorySearch)
                 case .logoutWithoutConfirmation:
                     actionsSubject.send(.logoutWithoutConfirmation)
                 case .logout:

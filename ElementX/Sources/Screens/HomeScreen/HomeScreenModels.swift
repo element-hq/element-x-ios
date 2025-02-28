@@ -20,7 +20,6 @@ enum HomeScreenViewModelAction: Equatable {
     case presentFeedbackScreen
     case presentStartChatScreen
     case presentGlobalSearch
-    case presentRoomDirectorySearch
     case logoutWithoutConfirmation
     case logout
 }
@@ -41,7 +40,6 @@ enum HomeScreenViewAction {
     case markRoomAsUnread(roomIdentifier: String)
     case markRoomAsRead(roomIdentifier: String)
     case markRoomAsFavourite(roomIdentifier: String, isFavourite: Bool)
-    case selectRoomDirectorySearch
     
     case acceptInvite(roomIdentifier: String)
     case declineInvite(roomIdentifier: String)
@@ -97,9 +95,7 @@ struct HomeScreenViewState: BindableState {
     var roomListMode: HomeScreenRoomListMode = .skeletons
     
     var hasPendingInvitations = false
-    
-    var isRoomDirectorySearchEnabled = false
-    
+        
     var selectedRoomID: String?
     
     var visibleRooms: [HomeScreenRoom] {
