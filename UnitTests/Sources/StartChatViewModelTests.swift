@@ -47,11 +47,11 @@ class StartChatScreenViewModelTests: XCTestCase {
     
     func testJoinRoomByAddress() async throws {
         clientProxy.resolveRoomAliasReturnValue = .success(.init(roomId: "id", servers: []))
-        viewModel.context.roomAddress = "#room:example.com"
         
         let deferredViewState = deferFulfillment(viewModel.context.$viewState) { viewState in
             viewState.joinByAddressState == .addressFound(address: "#room:example.com", roomID: "id")
         }
+        viewModel.context.roomAddress = "#room:example.com"
         try await deferredViewState.fulfill()
         
         let deferredAction = deferFulfillment(viewModel.actions) { action in
@@ -62,22 +62,21 @@ class StartChatScreenViewModelTests: XCTestCase {
     }
     
     func testJoinRoomByAddressFailsBecauseInvalid() async throws {
-        viewModel.context.roomAddress = ":"
-        
         let deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
             viewState.joinByAddressState == .invalidAddress
         }
+        viewModel.context.roomAddress = ":"
         context.send(viewAction: .joinRoomByAddress)
         try await deferred.fulfill()
     }
     
     func testJoinRoomByAddressFailsBecauseNotFound() async throws {
         clientProxy.resolveRoomAliasReturnValue = .failure(.failedResolvingRoomAlias)
-        viewModel.context.roomAddress = "#room:example.com"
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
             viewState.joinByAddressState == .addressNotFound
         }
+        viewModel.context.roomAddress = "#room:example.com"
         context.send(viewAction: .joinRoomByAddress)
         try await deferred.fulfill()
     }

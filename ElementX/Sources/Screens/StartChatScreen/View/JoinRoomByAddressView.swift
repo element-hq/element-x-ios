@@ -30,7 +30,7 @@ struct JoinRoomByAddressView: View {
         }
     }
     
-    private var textFieldState: AuthenticationTextFieldStyle.State {
+    private var textFieldState: ElementTextFieldStyle.State {
         switch context.viewState.joinByAddressState {
         case .addressFound:
             .success
@@ -46,9 +46,9 @@ struct JoinRoomByAddressView: View {
             VStack(spacing: 24) {
                 TextField(L10n.screenStartChatJoinRoomByAddressPlaceholder,
                           text: $context.roomAddress)
-                    .textFieldStyle(.authentication(labelText: L10n.screenStartChatJoinRoomByAddressAction,
-                                                    footerText: footerText,
-                                                    state: textFieldState))
+                    .textFieldStyle(.element(labelText: L10n.screenStartChatJoinRoomByAddressAction,
+                                             footerText: footerText,
+                                             state: textFieldState))
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                     .textContentType(.URL)

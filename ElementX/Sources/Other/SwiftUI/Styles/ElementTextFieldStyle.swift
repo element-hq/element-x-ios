@@ -9,31 +9,31 @@ import Compound
 import SwiftUI
 import SwiftUIIntrospect
 
-extension TextFieldStyle where Self == AuthenticationTextFieldStyle {
-    static func authentication(labelText: String? = nil,
-                               footerText: String? = nil,
-                               state: AuthenticationTextFieldStyle.State = .default,
-                               accessibilityIdentifier: String? = nil) -> AuthenticationTextFieldStyle {
-        AuthenticationTextFieldStyle(labelText: labelText.map(Text.init),
-                                     footerText: footerText.map(Text.init),
-                                     state: state,
-                                     accessibilityIdentifier: accessibilityIdentifier)
+extension TextFieldStyle where Self == ElementTextFieldStyle {
+    static func element(labelText: String? = nil,
+                        footerText: String? = nil,
+                        state: ElementTextFieldStyle.State = .default,
+                        accessibilityIdentifier: String? = nil) -> ElementTextFieldStyle {
+        ElementTextFieldStyle(labelText: labelText.map(Text.init),
+                              footerText: footerText.map(Text.init),
+                              state: state,
+                              accessibilityIdentifier: accessibilityIdentifier)
     }
     
     @_disfavoredOverload
-    static func authentication(labelText: Text? = nil,
-                               footerText: Text? = nil,
-                               state: AuthenticationTextFieldStyle.State = .default,
-                               accessibilityIdentifier: String? = nil) -> AuthenticationTextFieldStyle {
-        AuthenticationTextFieldStyle(labelText: labelText,
-                                     footerText: footerText,
-                                     state: state,
-                                     accessibilityIdentifier: accessibilityIdentifier)
+    static func element(labelText: Text? = nil,
+                        footerText: Text? = nil,
+                        state: ElementTextFieldStyle.State = .default,
+                        accessibilityIdentifier: String? = nil) -> ElementTextFieldStyle {
+        ElementTextFieldStyle(labelText: labelText,
+                              footerText: footerText,
+                              state: state,
+                              accessibilityIdentifier: accessibilityIdentifier)
     }
 }
 
 /// The text field style used in authentication screens.
-struct AuthenticationTextFieldStyle: TextFieldStyle {
+struct ElementTextFieldStyle: TextFieldStyle {
     enum State {
         case success
         case error
@@ -155,7 +155,7 @@ struct AuthenticationTextFieldStyle: TextFieldStyle {
                                                                          attributes: [NSAttributedString.Key.foregroundColor: placeholderColor])
                     textField.accessibilityIdentifier = accessibilityIdentifier
                 }
- 
+            
             if let footerText {
                 Label {
                     footerText
@@ -186,27 +186,27 @@ struct ElementTextFieldStyle_Previews: PreviewProvider, TestablePreview {
         VStack(spacing: 20) {
             // Plain text field.
             TextField("Placeholder", text: .constant(""))
-                .textFieldStyle(.authentication())
+                .textFieldStyle(.element())
             TextField("Placeholder", text: .constant("Web"))
-                .textFieldStyle(.authentication())
+                .textFieldStyle(.element())
             TextField("Placeholder", text: .constant("Web"))
-                .textFieldStyle(.authentication())
+                .textFieldStyle(.element())
                 .disabled(true)
             TextField("Placeholder", text: .constant("Web"))
-                .textFieldStyle(.authentication(state: .error))
+                .textFieldStyle(.element(state: .error))
             
             // Text field with labels
             TextField("Placeholder", text: .constant(""))
-                .textFieldStyle(.authentication(labelText: "Label", footerText: "Footer"))
+                .textFieldStyle(.element(labelText: "Label", footerText: "Footer"))
             TextField("Placeholder", text: .constant("Input text"))
-                .textFieldStyle(.authentication(labelText: "Title", footerText: "Footer"))
+                .textFieldStyle(.element(labelText: "Title", footerText: "Footer"))
             TextField("Placeholder", text: .constant("Bad text"))
-                .textFieldStyle(.authentication(labelText: "Title", footerText: "Footer", state: .error))
+                .textFieldStyle(.element(labelText: "Title", footerText: "Footer", state: .error))
             TextField("Placeholder", text: .constant(""))
-                .textFieldStyle(.authentication(labelText: "Title", footerText: "Footer"))
+                .textFieldStyle(.element(labelText: "Title", footerText: "Footer"))
                 .disabled(true)
             TextField("Placeholder", text: .constant(""))
-                .textFieldStyle(.authentication(labelText: "Title", footerText: "Footer", state: .success))
+                .textFieldStyle(.element(labelText: "Title", footerText: "Footer", state: .success))
         }
         .previewLayout(.sizeThatFits)
         .padding()
