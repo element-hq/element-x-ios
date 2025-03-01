@@ -28,6 +28,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private let HOME_SCREEN_POST_PAGE_COUNT = 10
     private var isFetchPostsInProgress = false
     
+    private var channelRoomIdMap: [String: String] = [:]
+    
     init(userSession: UserSessionProtocol,
          analyticsService: AnalyticsService,
          appSettings: AppSettings,
@@ -543,7 +545,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                                                       rewardsDecimalPlaces: state.userRewards.decimals)
                         homePosts.append(homePost)
                     }
-                    state.posts = homePosts
+                    state.posts = homePosts.uniqued(on: \.id)
                     state.postListMode = .posts
                 }
             case .failure(let error):
@@ -595,7 +597,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 if zIds.isEmpty {
                     state.channelsListMode = .empty
                 } else {
-                    state.channels = zIds.map { HomeScreenChannel(channelZId: $0) }
+                    let mappedChannels = zIds.sorted().map { HomeScreenChannel(channelZId: $0) }
+                    state.channels = mappedChannels.uniqued(on: \.id)
                     state.channelsListMode = .channels
                 }
             case .failure(let error):
@@ -607,6 +610,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     }
     
     private func joinZeroChannel(_ channel: HomeScreenChannel) {
+        if let channelRoomId = channelRoomIdMap[channel.id] {
+            actionsSubject.send(.presentRoom(roomIdentifier: channelRoomId))
+            return
+        }
+        
         Task {
             let userIndicatorID = UUID().uuidString
             defer {
@@ -619,12 +627,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             let roomAliasResult = await userSession.clientProxy.resolveRoomAlias(channel.id)
             switch roomAliasResult {
             case .success(let roomInfo):
+                channelRoomIdMap[channel.id] = roomInfo.roomId
                 actionsSubject.send(.presentRoom(roomIdentifier: roomInfo.roomId))
             case .failure(let error):
                 MXLog.error("Failed to resolve room alias: \(channel.id). Error: \(error)")
                 let joinChannelResult = await userSession.clientProxy.joinChannel(roomAliasOrId: channel.id)
                 switch joinChannelResult {
                 case .success(let roomId):
+                    channelRoomIdMap[channel.id] = roomId
                     actionsSubject.send(.presentRoom(roomIdentifier: roomId))
                 case .failure(let failure):
                     MXLog.error("Failed to join channel: \(failure)")

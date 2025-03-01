@@ -71,8 +71,8 @@ struct HomeTabView<Content1: View, Content2: View, Content3: View>: View {
                         )
                     }
                 }
-                .background(.black)
             }
+            .background(.ultraThickMaterial)
         }
         .onChange(of: selectedTab) { _, newValue in
             self.onTabSelected(newValue)

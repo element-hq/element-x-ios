@@ -53,6 +53,7 @@ struct HomeScreenPostMeowButton: View {
     
     func startIncrementing() {
         stopIncrementing()
+        counter += 1
         // Start a timer that fires every 250 milliseconds
         timer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { _ in
             if counter < MAX_MEOW_LIMIT {

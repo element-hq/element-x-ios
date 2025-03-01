@@ -17,6 +17,7 @@ struct HomeScreenChannelCell: View {
             .foregroundStyle(.compound.textPrimary)
             .padding(.vertical, 12)
             .padding(.horizontal, 24)
+            .lineLimit(1)
             .onTapGesture {
                 onChannelSelected(channel)
             }

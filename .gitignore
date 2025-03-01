@@ -8,6 +8,7 @@ xcuserdata/
 *.ipa
 *.dSYM.zip
 *.dSYM
+*.xcarchive
 
 ## SwiftPM
 /.build
