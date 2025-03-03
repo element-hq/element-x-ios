@@ -353,6 +353,7 @@
 "rich_text_editor_bullet_list" = "Lülita mummudega loend sisse/välja";
 "rich_text_editor_close_formatting_options" = "Sulge vorminduse valikud";
 "rich_text_editor_code_block" = "Lülita lähtekoodi lõik sisse/välja";
+"rich_text_editor_composer_encrypted_placeholder" = "Krüptitud sõnum…";
 "rich_text_editor_composer_placeholder" = "Sõnum…";
 "rich_text_editor_create_link" = "Lisa link";
 "rich_text_editor_edit_link" = "Muuda linki";
@@ -479,6 +480,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Jututoa avaldamine";
 "screen_security_and_privacy_room_visibility_section_footer" = "Jututoa aadressid annavad võimaluse neid leida ning saada neile ligi. Samuti võimaldab see jututuba teistele huvilistele jagada.\nLisaks on aadress vajalik, et jututuba oleks %1$@ serveri avalikus jututubade kataloogis nähtav.";
 "screen_security_and_privacy_title" = "Turvalisus ja privaatsus";
+"screen_start_chat_join_room_by_address_action" = "Liitu jututoaga aadressi alusel";
+"screen_start_chat_join_room_by_address_invalid_address" = "See pole kehtiv aadress";
+"screen_start_chat_join_room_by_address_placeholder" = "Sisene...";
+"screen_start_chat_join_room_by_address_room_found" = "Leidsime vastava jututoa";
+"screen_start_chat_join_room_by_address_room_not_found" = "Jututuba ei leidu";
+"screen_start_chat_join_room_by_address_supporting_text" = "nt. #jututoa-nimi:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Sõnum on saatmata, kuna kasutaja %1$@ verifitseeritud identiteet on muutunud.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Sõnum on saatmata, kuna %1$@ pole verifitseerinud kõiki oma seadmeid.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Kuna sa pole üks või enamgi oma seadet verifitseerinud, siis sinu sõnum on saatmata.";

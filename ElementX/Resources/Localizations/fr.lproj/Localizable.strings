@@ -353,6 +353,7 @@
 "rich_text_editor_bullet_list" = "Afficher une liste à puces";
 "rich_text_editor_close_formatting_options" = "Fermer les options de formatage";
 "rich_text_editor_code_block" = "Afficher le bloc de code";
+"rich_text_editor_composer_encrypted_placeholder" = "Message chiffré…";
 "rich_text_editor_composer_placeholder" = "Message…";
 "rich_text_editor_create_link" = "Créer un lien";
 "rich_text_editor_edit_link" = "Modifier le lien";
@@ -479,6 +480,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Publication du salon";
 "screen_security_and_privacy_room_visibility_section_footer" = "Les adresses de salon sont un moyen de trouver et d'accéder aux salons. Cela vous permet également de partager facilement votre salon avec d'autres personnes.\nL'adresse est également requise pour que le salon soit visible dans le répertoire %1$@ des salons publics.";
 "screen_security_and_privacy_title" = "Sécurité & confidentialité";
+"screen_start_chat_join_room_by_address_action" = "Saisir une adresse de salon";
+"screen_start_chat_join_room_by_address_invalid_address" = "Ce n'est pas une adresse valide";
+"screen_start_chat_join_room_by_address_placeholder" = "Saisir…";
+"screen_start_chat_join_room_by_address_room_found" = "Ce salon existe";
+"screen_start_chat_join_room_by_address_room_not_found" = "Salon non trouvé";
+"screen_start_chat_join_room_by_address_supporting_text" = "ex: #nom-du-salon:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Le message n'a pas été envoyé car l'identité vérifiée de %1$@ a changé.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Le message n'a pas été envoyé car %1$@ n'a pas vérifié tous ses appareils.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message non envoyé car vous n'avez pas vérifié tous vos appareils.";

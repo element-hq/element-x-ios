@@ -353,6 +353,7 @@
 "rich_text_editor_bullet_list" = "Felsorolás be/ki";
 "rich_text_editor_close_formatting_options" = "Formázási beállítások bezárása";
 "rich_text_editor_code_block" = "Kódblokk be/ki";
+"rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Üzenet…";
 "rich_text_editor_create_link" = "Hivatkozás létrehozása";
 "rich_text_editor_edit_link" = "Hivatkozás szerkesztése";
@@ -479,6 +480,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Szoba közzététele";
 "screen_security_and_privacy_room_visibility_section_footer" = "A szobacímek a szobák megtalálásának és elérésnek módjai. Ez azt is biztosítja, hogy könnyen megoszthatja a szobáját másokkal.\nA cím szükséges ahhoz is, hogy a nyilvános szoba láthatóvá váljon a(z) %1$@ kiszolgáló nyilvános szobakatalógusában.";
 "screen_security_and_privacy_title" = "Biztonság és adatvédelem";
+"screen_start_chat_join_room_by_address_action" = "Join room by address";
+"screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
+"screen_start_chat_join_room_by_address_placeholder" = "Enter...";
+"screen_start_chat_join_room_by_address_room_found" = "Matching room found";
+"screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
+"screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Az üzenet nem lett elküldve, mert %1$@ ellenőrzött személyazonossága megváltozott.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Az üzenet nem lett elküldve, mert %1$@ nem ellenőrizte az összes eszközét.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Az üzenet nem lett elküldve, mert egy vagy több eszközét nem ellenőrizte.";

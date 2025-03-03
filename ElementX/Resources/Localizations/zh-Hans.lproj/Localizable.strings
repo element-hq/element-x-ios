@@ -353,6 +353,7 @@
 "rich_text_editor_bullet_list" = "切换符号列表";
 "rich_text_editor_close_formatting_options" = "关闭格式化选项";
 "rich_text_editor_code_block" = "切换代码块";
+"rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "消息...";
 "rich_text_editor_create_link" = "创建链接";
 "rich_text_editor_edit_link" = "编辑链接";
@@ -479,6 +480,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "房间发布";
 "screen_security_and_privacy_room_visibility_section_footer" = "房间地址是查找和访问房间的方式。这也确保你可以轻松地向他人分享房间。\n在 %1$@ 的公共房间目录中显示该房间时也需要地址。";
 "screen_security_and_privacy_title" = "安全与隐私";
+"screen_start_chat_join_room_by_address_action" = "Join room by address";
+"screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
+"screen_start_chat_join_room_by_address_placeholder" = "Enter...";
+"screen_start_chat_join_room_by_address_room_found" = "Matching room found";
+"screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
+"screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "消息未发送，因为 %1$@ 的已验证身份已经发生改变。";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "消息未发送，因为%1$@尚未验证所有设备。";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "消息未发送，因为您有尚未验证的设备。";
