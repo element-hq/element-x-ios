@@ -523,14 +523,32 @@ class ClientProxy: ClientProxyProtocol {
     
     func roomSummaryForIdentifier(_ identifier: String) -> RoomSummary? {
         // the alternate room summary provider is not impacted by filtering
-        alternateRoomSummaryProvider?.roomListPublisher.value.first { $0.id == identifier }
+        guard let provider = alternateRoomSummaryProvider else {
+            MXLog.verbose("Missing room summary provider")
+            return nil
+        }
+        
+        guard let roomSummary = provider.roomListPublisher.value.first(where: { $0.id == identifier }) else {
+            MXLog.verbose("Missing room summary, count: \(provider.roomListPublisher.value.count)")
+            return nil
+        }
+        
+        return roomSummary
     }
     
     func roomSummaryForAlias(_ alias: String) -> RoomSummary? {
         // the alternate room summary provider is not impacted by filtering
-        alternateRoomSummaryProvider?.roomListPublisher.value.first { roomSummary in
-            roomSummary.canonicalAlias == alias || roomSummary.alternativeAliases.contains(alias)
+        guard let provider = alternateRoomSummaryProvider else {
+            MXLog.verbose("Missing room summary provider")
+            return nil
         }
+        
+        guard let roomSummary = provider.roomListPublisher.value.first(where: { $0.canonicalAlias == alias || $0.alternativeAliases.contains(alias) }) else {
+            MXLog.verbose("Missing room summary, count: \(provider.roomListPublisher.value.count)")
+            return nil
+        }
+        
+        return roomSummary
     }
 
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
