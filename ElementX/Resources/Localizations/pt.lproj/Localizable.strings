@@ -353,6 +353,7 @@
 "rich_text_editor_bullet_list" = "Ativar/desativar lista de pontos";
 "rich_text_editor_close_formatting_options" = "Fechar opções de formatação";
 "rich_text_editor_code_block" = "Ativar/desativar bloco de código";
+"rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Mensagem…";
 "rich_text_editor_create_link" = "Criar uma ligação";
 "rich_text_editor_edit_link" = "Editar ligação";
@@ -479,6 +480,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Publicar sala";
 "screen_security_and_privacy_room_visibility_section_footer" = "Estes endereços permitem encontrar e aceder a sala, bem como a sua fácil partilha com outros.\nAlém disso, é necessário ter endereço para publicar a sala no diretório público do %1$@.";
 "screen_security_and_privacy_title" = "Segurança e privacidade";
+"screen_start_chat_join_room_by_address_action" = "Join room by address";
+"screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
+"screen_start_chat_join_room_by_address_placeholder" = "Enter...";
+"screen_start_chat_join_room_by_address_room_found" = "Matching room found";
+"screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
+"screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Mensagem não enviada porque a identidade verificada de %1$@ foi alterada.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Mensagem não enviada porque %1$@ não verificou todos os dispositivos.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Mensagem não enviada porque não verificou um ou mais dos seus dispositivos.";

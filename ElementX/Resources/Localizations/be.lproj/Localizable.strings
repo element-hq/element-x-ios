@@ -353,6 +353,7 @@
 "rich_text_editor_bullet_list" = "Пераключыць маркіраваны спіс";
 "rich_text_editor_close_formatting_options" = "Закрыць параметры фарматавання";
 "rich_text_editor_code_block" = "Пераключыць блок кода";
+"rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Паведамленне…";
 "rich_text_editor_create_link" = "Стварыць спасылку";
 "rich_text_editor_edit_link" = "Рэдагаваць спасылку";
@@ -479,6 +480,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Room publishing";
 "screen_security_and_privacy_room_visibility_section_footer" = "Room addresses are ways to find and access rooms. This also ensures you can easily share your room with others.\nThe address is also required to make the room visible in %1$@ public room directory.";
 "screen_security_and_privacy_title" = "Security & privacy";
+"screen_start_chat_join_room_by_address_action" = "Join room by address";
+"screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
+"screen_start_chat_join_room_by_address_placeholder" = "Enter...";
+"screen_start_chat_join_room_by_address_room_found" = "Matching room found";
+"screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
+"screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";

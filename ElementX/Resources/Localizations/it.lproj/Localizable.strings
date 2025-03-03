@@ -353,6 +353,7 @@
 "rich_text_editor_bullet_list" = "Attiva/disattiva l'elenco puntato";
 "rich_text_editor_close_formatting_options" = "Chiudi le opzioni di formattazione";
 "rich_text_editor_code_block" = "Attiva/disattiva il blocco di codice";
+"rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Messaggio…";
 "rich_text_editor_create_link" = "Crea un collegamento";
 "rich_text_editor_edit_link" = "Modifica collegamento";
@@ -479,6 +480,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Pubblicazione della stanza";
 "screen_security_and_privacy_room_visibility_section_footer" = "Gli indirizzi delle stanze sono modi per trovare e accedere a queste ultime. Questo assicura anche che tu possa condividere facilmente la tua stanza con altri. L'indirizzo è anche necessario per rendere la stanza visibile in %1$@ nell'elenco delle stanze pubbliche.";
 "screen_security_and_privacy_title" = "Sicurezza e privacy";
+"screen_start_chat_join_room_by_address_action" = "Join room by address";
+"screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
+"screen_start_chat_join_room_by_address_placeholder" = "Enter...";
+"screen_start_chat_join_room_by_address_room_found" = "Matching room found";
+"screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
+"screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Messaggio non inviato perché l'identità verificata di %1$@ è cambiata.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Messaggio non inviato perché %1$@ non ha verificato tutti i dispositivi.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Messaggio non inviato perché non hai verificato uno o più dispositivi.";

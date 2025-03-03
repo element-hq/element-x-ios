@@ -353,6 +353,7 @@
 "rich_text_editor_bullet_list" = "Перемкнути маркований список";
 "rich_text_editor_close_formatting_options" = "Закрити параметри форматування";
 "rich_text_editor_code_block" = "Перемкнути блок коду";
+"rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Повідомлення...";
 "rich_text_editor_create_link" = "Створити посилання";
 "rich_text_editor_edit_link" = "Редагувати посилання";
@@ -479,6 +480,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Публікація в кімнаті";
 "screen_security_and_privacy_room_visibility_section_footer" = "Адреси кімнат — це спосіб знайти та отримати доступ до кімнат. Це також гарантує, що ви зможете легко поділитися своєю кімнатою з іншими.\nАдреса також необхідна, щоб зробити кімнату видимою в каталозі загальнодоступних кімнат %1$@.";
 "screen_security_and_privacy_title" = "Безпека й приватність";
+"screen_start_chat_join_room_by_address_action" = "Join room by address";
+"screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
+"screen_start_chat_join_room_by_address_placeholder" = "Enter...";
+"screen_start_chat_join_room_by_address_room_found" = "Matching room found";
+"screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
+"screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Повідомлення не надіслано, оскільки підтверджена особистість %1$@ змінилася.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Повідомлення не надіслано, оскільки %1$@ перевірив не всі пристрої.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Повідомлення не надіслано, оскільки ви не підтвердили один або кілька своїх пристроїв.";

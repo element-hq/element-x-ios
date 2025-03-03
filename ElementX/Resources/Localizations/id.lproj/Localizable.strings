@@ -353,6 +353,7 @@
 "rich_text_editor_bullet_list" = "Alihkan daftar poin";
 "rich_text_editor_close_formatting_options" = "Tutup opsi pemformatan";
 "rich_text_editor_code_block" = "Alihkan blok kode";
+"rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Kirim pesan...";
 "rich_text_editor_create_link" = "Buat tautan";
 "rich_text_editor_edit_link" = "Sunting tautan";
@@ -479,6 +480,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Room publishing";
 "screen_security_and_privacy_room_visibility_section_footer" = "Room addresses are ways to find and access rooms. This also ensures you can easily share your room with others.\nThe address is also required to make the room visible in %1$@ public room directory.";
 "screen_security_and_privacy_title" = "Security & privacy";
+"screen_start_chat_join_room_by_address_action" = "Join room by address";
+"screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
+"screen_start_chat_join_room_by_address_placeholder" = "Enter...";
+"screen_start_chat_join_room_by_address_room_found" = "Matching room found";
+"screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
+"screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Pesan tidak terkirim karena identitas terverifikasi %1$@ telah berubah.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Pesan tidak terkirim karena %1$@ belum memverifikasi semua perangkat.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Pesan tidak terkirim karena Anda belum memverifikasi satu atau beberapa perangkat Anda.";

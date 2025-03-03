@@ -353,6 +353,7 @@
 "rich_text_editor_bullet_list" = "切換項目編號";
 "rich_text_editor_close_formatting_options" = "關閉格式化選項";
 "rich_text_editor_code_block" = "切換程式碼區塊";
+"rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "訊息";
 "rich_text_editor_create_link" = "建立連結";
 "rich_text_editor_edit_link" = "編輯連結";
@@ -479,6 +480,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "聊天室發佈";
 "screen_security_and_privacy_room_visibility_section_footer" = "聊天室地址是尋找與存取聊天室的方法。也確保您可以輕鬆與其他人分享聊天室。\n若要讓聊天室在 %1$@ 公開聊天室目錄中可見，地址也是必要的。";
 "screen_security_and_privacy_title" = "安全與隱私";
+"screen_start_chat_join_room_by_address_action" = "Join room by address";
+"screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
+"screen_start_chat_join_room_by_address_placeholder" = "Enter...";
+"screen_start_chat_join_room_by_address_room_found" = "Matching room found";
+"screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
+"screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "因為 %1$@ 的驗證身份已變更，因此未傳送訊息。";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "訊息未傳送，因為 %1$@ 尚未驗證所有裝置。";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "因為您尚未驗證一個或多個裝置，因此未傳送訊息";
