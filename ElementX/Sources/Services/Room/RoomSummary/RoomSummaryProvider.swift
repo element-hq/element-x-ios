@@ -17,7 +17,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let notificationSettings: NotificationSettingsProxyProtocol
     private let appSettings: AppSettings
 
-    private let roomListPageSize = 200
+    private let roomListPageSize: UInt32
     
     private let serialDispatchQueue: DispatchQueue
     
@@ -59,6 +59,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
          eventStringBuilder: RoomEventStringBuilder,
          name: String,
          shouldUpdateVisibleRange: Bool = false,
+         roomListPageSize: UInt32 = 200,
          notificationSettings: NotificationSettingsProxyProtocol,
          appSettings: AppSettings) {
         self.roomListService = roomListService
@@ -68,6 +69,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.shouldUpdateVisibleRange = shouldUpdateVisibleRange
         self.notificationSettings = notificationSettings
         self.appSettings = appSettings
+        self.roomListPageSize = roomListPageSize
         
         diffsPublisher
             .receive(on: serialDispatchQueue)

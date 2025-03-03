@@ -870,6 +870,7 @@ class ClientProxy: ClientProxyProtocol {
             staticRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
                                                             eventStringBuilder: eventStringBuilder,
                                                             name: "StaticAllRooms",
+                                                            roomListPageSize: .max,
                                                             notificationSettings: notificationSettings,
                                                             appSettings: appSettings)
             try await staticRoomSummaryProvider?.setRoomList(roomListService.allRooms())
