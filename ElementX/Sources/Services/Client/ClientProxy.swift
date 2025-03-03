@@ -46,6 +46,8 @@ class ClientProxy: ClientProxyProtocol {
     private(set) var roomSummaryProvider: RoomSummaryProviderProtocol?
     private(set) var alternateRoomSummaryProvider: RoomSummaryProviderProtocol?
     
+    private(set) var staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol?
+    
     let notificationSettings: NotificationSettingsProxyProtocol
 
     let secureBackupController: SecureBackupControllerProtocol
@@ -523,7 +525,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func roomSummaryForIdentifier(_ identifier: String) -> RoomSummary? {
         // the alternate room summary provider is not impacted by filtering
-        guard let provider = alternateRoomSummaryProvider else {
+        guard let provider = staticRoomSummaryProvider else {
             MXLog.verbose("Missing room summary provider")
             return nil
         }
@@ -538,7 +540,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func roomSummaryForAlias(_ alias: String) -> RoomSummary? {
         // the alternate room summary provider is not impacted by filtering
-        guard let provider = alternateRoomSummaryProvider else {
+        guard let provider = staticRoomSummaryProvider else {
             MXLog.verbose("Missing room summary provider")
             return nil
         }
@@ -864,6 +866,13 @@ class ClientProxy: ClientProxyProtocol {
                                                                notificationSettings: notificationSettings,
                                                                appSettings: appSettings)
             try await alternateRoomSummaryProvider?.setRoomList(roomListService.allRooms())
+            
+            staticRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
+                                                            eventStringBuilder: eventStringBuilder,
+                                                            name: "StaticAllRooms",
+                                                            notificationSettings: notificationSettings,
+                                                            appSettings: appSettings)
+            try await staticRoomSummaryProvider?.setRoomList(roomListService.allRooms())
                         
             self.syncService = syncService
             self.roomListService = roomListService

@@ -72,6 +72,11 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         }
     }
     
+    func stop() {
+        // This is a shared provider so we should reset the filtering when we are done with the view
+        roomSummaryProvider.setFilter(.all(filters: []))
+    }
+    
     // MARK: - Private
     
     private func updateRooms() {
