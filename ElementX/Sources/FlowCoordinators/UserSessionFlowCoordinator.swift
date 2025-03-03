@@ -147,10 +147,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     func asyncHandleAppRoute(_ appRoute: AppRoute, animated: Bool) async {
-        showLoadingIndicator(delay: .seconds(0.25))
-        defer {
-            hideLoadingIndicator()
-        }
+        showLoadingIndicator(delay: .seconds(0.5))
+        defer { hideLoadingIndicator() }
         
         await clearPresentedSheets(animated: animated)
         

@@ -232,8 +232,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func handleRoomRoute(roomID: String, via: [String], presentationAction: PresentationAction? = nil, animated: Bool) async {
         guard roomID == self.roomID else { fatalError("Navigation route doesn't belong to this room flow.") }
         
-        showLoadingIndicator(delay: .milliseconds(250))
+        showLoadingIndicator(delay: .seconds(0.5))
         defer { hideLoadingIndicator() }
+        
         guard let room = await userSession.clientProxy.roomForIdentifier(roomID) else {
             stateMachine.tryEvent(.presentJoinRoomScreen(via: via), userInfo: EventUserInfo(animated: animated))
             return

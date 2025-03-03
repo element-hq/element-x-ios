@@ -846,6 +846,8 @@ internal enum L10n {
   internal static var richTextEditorCodeBlock: String { return L10n.tr("Localizable", "rich_text_editor_code_block") }
   /// Add a caption
   internal static var richTextEditorComposerCaptionPlaceholder: String { return L10n.tr("Localizable", "rich_text_editor_composer_caption_placeholder") }
+  /// Encrypted message…
+  internal static var richTextEditorComposerEncryptedPlaceholder: String { return L10n.tr("Localizable", "rich_text_editor_composer_encrypted_placeholder") }
   /// Message…
   internal static var richTextEditorComposerPlaceholder: String { return L10n.tr("Localizable", "rich_text_editor_composer_placeholder") }
   /// Create a link
@@ -2458,6 +2460,16 @@ internal enum L10n {
   internal static var screenSignoutSaveRecoveryKeyTitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_title") }
   /// An error occurred when trying to start a chat
   internal static var screenStartChatErrorStartingChat: String { return L10n.tr("Localizable", "screen_start_chat_error_starting_chat") }
+  /// Not a valid address
+  internal static var screenStartChatJoinRoomByAddressInvalidAddress: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_invalid_address") }
+  /// Enter...
+  internal static var screenStartChatJoinRoomByAddressPlaceholder: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_placeholder") }
+  /// Matching room found
+  internal static var screenStartChatJoinRoomByAddressRoomFound: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_room_found") }
+  /// Room not found
+  internal static var screenStartChatJoinRoomByAddressRoomNotFound: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_room_not_found") }
+  /// e.g. #room-name:matrix.org
+  internal static var screenStartChatJoinRoomByAddressSupportingText: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_supporting_text") }
   /// Message not sent because %1$@’s verified identity has changed.
   internal static func screenTimelineItemMenuSendFailureChangedIdentity(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_changed_identity", String(describing: p1))
@@ -2861,6 +2873,13 @@ internal enum L10n {
     internal static var sendTo: String { return L10n.tr("Localizable", "common.send_to") }
     /// You
     internal static var you: String { return L10n.tr("Localizable", "common.you") }
+  }
+
+  internal enum Screen {
+    internal enum StartChat {
+      /// Join room by address
+      internal static var joinRoomByAddressAction: String { return L10n.tr("Localizable", "screen.start_chat.join_room_by_address_action") }
+    }
   }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length

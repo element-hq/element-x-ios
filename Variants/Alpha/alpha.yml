@@ -1,5 +1,5 @@
 settings:
-  BASE_APP_GROUP_IDENTIFIER: io.element.pr
+  APP_GROUP_IDENTIFIER: group.io.element.pr
   BASE_BUNDLE_IDENTIFIER: io.element.elementx.pr
 
 targets:
