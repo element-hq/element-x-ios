@@ -11,4 +11,6 @@ import Combine
 protocol RoomSelectionScreenViewModelProtocol {
     var actionsPublisher: AnyPublisher<RoomSelectionScreenViewModelAction, Never> { get }
     var context: RoomSelectionScreenViewModelType.Context { get }
+    
+    func stop()
 }

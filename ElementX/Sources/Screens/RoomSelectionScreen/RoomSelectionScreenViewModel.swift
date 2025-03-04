@@ -54,7 +54,6 @@ class RoomSelectionScreenViewModel: RoomSelectionScreenViewModelType, RoomSelect
         switch viewAction {
         case .cancel:
             actionsSubject.send(.dismiss)
-            roomSummaryProvider.setFilter(.all(filters: []))
         case .confirm:
             guard let selectedRoomID = state.selectedRoomID else {
                 return
@@ -68,6 +67,11 @@ class RoomSelectionScreenViewModel: RoomSelectionScreenViewModelType, RoomSelect
         case .reachedBottom:
             updateVisibleRange(edge: .bottom)
         }
+    }
+    
+    func stop() {
+        // This is a shared provider so we should reset the filtering when we are done with the view
+        roomSummaryProvider.setFilter(.all(filters: []))
     }
     
     // MARK: - Private

@@ -2268,12 +2268,13 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var underlyingIgnoredUsersPublisher: CurrentValuePublisher<[String]?, Never>!
     var pusherNotificationClientIdentifier: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol?
+    var alternateRoomSummaryProvider: RoomSummaryProviderProtocol?
+    var staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol?
     var roomsToAwait: Set<String> {
         get { return underlyingRoomsToAwait }
         set(value) { underlyingRoomsToAwait = value }
     }
     var underlyingRoomsToAwait: Set<String>!
-    var alternateRoomSummaryProvider: RoomSummaryProviderProtocol?
     var notificationSettings: NotificationSettingsProxyProtocol {
         get { return underlyingNotificationSettings }
         set(value) { underlyingNotificationSettings = value }
@@ -13589,58 +13590,17 @@ class RoomProxyMock: RoomProxyProtocol, @unchecked Sendable {
 
 }
 class RoomSummaryProviderMock: RoomSummaryProviderProtocol, @unchecked Sendable {
-    var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
-        get { return underlyingRoomListPublisher }
-        set(value) { underlyingRoomListPublisher = value }
-    }
-    var underlyingRoomListPublisher: CurrentValuePublisher<[RoomSummary], Never>!
     var statePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never> {
         get { return underlyingStatePublisher }
         set(value) { underlyingStatePublisher = value }
     }
     var underlyingStatePublisher: CurrentValuePublisher<RoomSummaryProviderState, Never>!
-
-    //MARK: - setRoomList
-
-    var setRoomListUnderlyingCallsCount = 0
-    var setRoomListCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return setRoomListUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = setRoomListUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                setRoomListUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    setRoomListUnderlyingCallsCount = newValue
-                }
-            }
-        }
+    var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
+        get { return underlyingRoomListPublisher }
+        set(value) { underlyingRoomListPublisher = value }
     }
-    var setRoomListCalled: Bool {
-        return setRoomListCallsCount > 0
-    }
-    var setRoomListReceivedRoomList: RoomList?
-    var setRoomListReceivedInvocations: [RoomList] = []
-    var setRoomListClosure: ((RoomList) -> Void)?
+    var underlyingRoomListPublisher: CurrentValuePublisher<[RoomSummary], Never>!
 
-    func setRoomList(_ roomList: RoomList) {
-        setRoomListCallsCount += 1
-        setRoomListReceivedRoomList = roomList
-        DispatchQueue.main.async {
-            self.setRoomListReceivedInvocations.append(roomList)
-        }
-        setRoomListClosure?(roomList)
-    }
     //MARK: - updateVisibleRange
 
     var updateVisibleRangeUnderlyingCallsCount = 0
@@ -13722,6 +13682,47 @@ class RoomSummaryProviderMock: RoomSummaryProviderProtocol, @unchecked Sendable 
             self.setFilterReceivedInvocations.append(filter)
         }
         setFilterClosure?(filter)
+    }
+    //MARK: - setRoomList
+
+    var setRoomListUnderlyingCallsCount = 0
+    var setRoomListCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setRoomListUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setRoomListUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setRoomListUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setRoomListUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var setRoomListCalled: Bool {
+        return setRoomListCallsCount > 0
+    }
+    var setRoomListReceivedRoomList: RoomList?
+    var setRoomListReceivedInvocations: [RoomList] = []
+    var setRoomListClosure: ((RoomList) -> Void)?
+
+    func setRoomList(_ roomList: RoomList) {
+        setRoomListCallsCount += 1
+        setRoomListReceivedRoomList = roomList
+        DispatchQueue.main.async {
+            self.setRoomListReceivedInvocations.append(roomList)
+        }
+        setRoomListClosure?(roomList)
     }
 }
 class SecureBackupControllerMock: SecureBackupControllerProtocol, @unchecked Sendable {
@@ -14593,6 +14594,55 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
         } else {
             return cancelVerificationReturnValue
         }
+    }
+}
+class StaticRoomSummaryProviderMock: StaticRoomSummaryProviderProtocol, @unchecked Sendable {
+    var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
+        get { return underlyingRoomListPublisher }
+        set(value) { underlyingRoomListPublisher = value }
+    }
+    var underlyingRoomListPublisher: CurrentValuePublisher<[RoomSummary], Never>!
+
+    //MARK: - setRoomList
+
+    var setRoomListUnderlyingCallsCount = 0
+    var setRoomListCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setRoomListUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setRoomListUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setRoomListUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setRoomListUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var setRoomListCalled: Bool {
+        return setRoomListCallsCount > 0
+    }
+    var setRoomListReceivedRoomList: RoomList?
+    var setRoomListReceivedInvocations: [RoomList] = []
+    var setRoomListClosure: ((RoomList) -> Void)?
+
+    func setRoomList(_ roomList: RoomList) {
+        setRoomListCallsCount += 1
+        setRoomListReceivedRoomList = roomList
+        DispatchQueue.main.async {
+            self.setRoomListReceivedInvocations.append(roomList)
+        }
+        setRoomListClosure?(roomList)
     }
 }
 class TimelineControllerFactoryMock: TimelineControllerFactoryProtocol, @unchecked Sendable {

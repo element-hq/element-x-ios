@@ -46,6 +46,8 @@ class ClientProxy: ClientProxyProtocol {
     private(set) var roomSummaryProvider: RoomSummaryProviderProtocol?
     private(set) var alternateRoomSummaryProvider: RoomSummaryProviderProtocol?
     
+    private(set) var staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol?
+    
     let notificationSettings: NotificationSettingsProxyProtocol
 
     let secureBackupController: SecureBackupControllerProtocol
@@ -523,14 +525,32 @@ class ClientProxy: ClientProxyProtocol {
     
     func roomSummaryForIdentifier(_ identifier: String) -> RoomSummary? {
         // the alternate room summary provider is not impacted by filtering
-        alternateRoomSummaryProvider?.roomListPublisher.value.first { $0.id == identifier }
+        guard let provider = staticRoomSummaryProvider else {
+            MXLog.verbose("Missing room summary provider")
+            return nil
+        }
+        
+        guard let roomSummary = provider.roomListPublisher.value.first(where: { $0.id == identifier }) else {
+            MXLog.verbose("Missing room summary, count: \(provider.roomListPublisher.value.count)")
+            return nil
+        }
+        
+        return roomSummary
     }
     
     func roomSummaryForAlias(_ alias: String) -> RoomSummary? {
         // the alternate room summary provider is not impacted by filtering
-        alternateRoomSummaryProvider?.roomListPublisher.value.first { roomSummary in
-            roomSummary.canonicalAlias == alias || roomSummary.alternativeAliases.contains(alias)
+        guard let provider = staticRoomSummaryProvider else {
+            MXLog.verbose("Missing room summary provider")
+            return nil
         }
+        
+        guard let roomSummary = provider.roomListPublisher.value.first(where: { $0.canonicalAlias == alias || $0.alternativeAliases.contains(alias) }) else {
+            MXLog.verbose("Missing room summary, count: \(provider.roomListPublisher.value.count)")
+            return nil
+        }
+        
+        return roomSummary
     }
 
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
@@ -846,6 +866,14 @@ class ClientProxy: ClientProxyProtocol {
                                                                notificationSettings: notificationSettings,
                                                                appSettings: appSettings)
             try await alternateRoomSummaryProvider?.setRoomList(roomListService.allRooms())
+            
+            staticRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
+                                                            eventStringBuilder: eventStringBuilder,
+                                                            name: "StaticAllRooms",
+                                                            roomListPageSize: .max,
+                                                            notificationSettings: notificationSettings,
+                                                            appSettings: appSettings)
+            try await staticRoomSummaryProvider?.setRoomList(roomListService.allRooms())
                         
             self.syncService = syncService
             self.roomListService = roomListService
