@@ -20,6 +20,7 @@ enum HomeScreenViewModelAction {
     case presentSettingsScreen
     case presentFeedbackScreen
     case presentStartChatScreen
+    case presentCreateFeedScreen
     case presentGlobalSearch
     case logoutWithoutConfirmation
     case logout
@@ -33,6 +34,7 @@ enum HomeScreenViewAction {
     case confirmLeaveRoom(roomIdentifier: String)
     case showSettings
     case startChat
+    case newFeed
     case setupRecovery
     case confirmRecoveryKey
     case resetEncryption

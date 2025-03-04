@@ -178,6 +178,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             roomSummaryProvider?.updateVisibleRange(range)
         case .startChat:
             actionsSubject.send(.presentStartChatScreen)
+        case .newFeed:
+            actionsSubject.send(.presentCreateFeedScreen)
         case .globalSearch:
             actionsSubject.send(.presentGlobalSearch)
         case .markRoomAsUnread(let roomIdentifier):

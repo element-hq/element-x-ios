@@ -519,6 +519,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.startEncryptionResetFlow)
                 case .presentStartChatScreen:
                     stateMachine.processEvent(.showStartChatScreen)
+                case .presentCreateFeedScreen:
+                    presentCreateFeedScreen()
                 case .presentGlobalSearch:
                     presentGlobalSearch()
                 case .logoutWithoutConfirmation:
@@ -1095,5 +1097,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         } else {
             navigationSplitCoordinator.setDetailCoordinator(coordinator)
         }
+    }
+    
+    private func presentCreateFeedScreen() {
+        let coordinator = CreateFeedScreenCoordinator(parameters: .init(userSession: userSession))
+        navigationSplitCoordinator.setSheetCoordinator(coordinator)
     }
 }
