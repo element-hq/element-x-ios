@@ -26,7 +26,7 @@ public struct SecureInputField: View {
                         Text(placeHolder).foregroundColor(.compound.textSecondary)
                     }
                     .focused(isFocused)
-                    .textFieldStyle(.authentication(accessibilityIdentifier: accessibilityIdentifier))
+                    .textFieldStyle(.element(accessibilityIdentifier: accessibilityIdentifier))
                     .textContentType(.password)
                     .submitLabel(submitLabel)
                     .onSubmit(onSubmit)
@@ -35,7 +35,7 @@ public struct SecureInputField: View {
                         Text(placeHolder).foregroundColor(.compound.textSecondary)
                     }
                     .focused(isFocused)
-                    .textFieldStyle(.authentication(accessibilityIdentifier: accessibilityIdentifier))
+                    .textFieldStyle(.element(accessibilityIdentifier: accessibilityIdentifier))
                     .disableAutocorrection(true)
                     .autocapitalization(.none)
                     .submitLabel(submitLabel)

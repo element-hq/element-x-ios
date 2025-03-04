@@ -527,7 +527,7 @@
 		18E9A47C2C9829970082DDA4 /* AuthenticationStartScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8609BE4CA71C30D1FCE3AF9B /* AuthenticationStartScreenModels.swift */; };
 		18E9A47D2C9829970082DDA4 /* AuthenticationStartScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C3ACC093F88FD9888518561 /* AuthenticationStartScreenViewModel.swift */; };
 		18E9A47E2C9829970082DDA4 /* AuthenticationStartScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F7CCC4A9D1927223F559D5 /* AuthenticationStartScreenViewModelProtocol.swift */; };
-		18E9A47F2C9829970082DDA4 /* AuthenticationTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCACD75595C40EACD6AD4A74 /* AuthenticationTextFieldStyle.swift */; };
+		18E9A47F2C9829970082DDA4 /* ElementTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCACD75595C40EACD6AD4A74 /* ElementTextFieldStyle.swift */; };
 		18E9A4802C9829970082DDA4 /* AvatarHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC743C7A85E3171BCBF0A653 /* AvatarHeaderView.swift */; };
 		18E9A4812C9829970082DDA4 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		18E9A4822C9829970082DDA4 /* BadgeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A028783CFFF861C5E44FFB1 /* BadgeLabel.swift */; };
@@ -966,7 +966,7 @@
 		18E9A6352C9829970082DDA4 /* RoomDirectorySearchScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41BB37D96C3EA18F3CE8675D /* RoomDirectorySearchScreenModels.swift */; };
 		18E9A6362C9829970082DDA4 /* RoomDirectorySearchScreenScreenModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3984C93B8E9B10C92DADF9EE /* RoomDirectorySearchScreenScreenModelProtocol.swift */; };
 		18E9A6372C9829970082DDA4 /* RoomDirectorySearchScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF71646898A2F720C5BFDF5 /* RoomDirectorySearchScreenViewModel.swift */; };
-		18E9A6382C9829970082DDA4 /* RoomDirectorySearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF32E4136FD6F159D86C2C /* RoomDirectorySearchView.swift */; };
+		18E9A6382C9829970082DDA4 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		18E9A6392C9829970082DDA4 /* RoomEventStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A307A44F952CD73E63AE31 /* RoomEventStringBuilder.swift */; };
 		18E9A63A2C9829970082DDA4 /* RoomFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A008E57D52B07B78DFAD1BB /* RoomFlowCoordinator.swift */; };
 		18E9A63B2C9829970082DDA4 /* (null) in Sources */ = {isa = PBXBuildFile; };
@@ -1822,6 +1822,7 @@
 		7905F9AD2D676BB000C3A203 /* HomeScreenChannelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905F9AC2D676BA900C3A203 /* HomeScreenChannelCell.swift */; };
 		7905F9AE2D676BB000C3A203 /* HomeScreenChannelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905F9AC2D676BA900C3A203 /* HomeScreenChannelCell.swift */; };
 		791341542D6F58E1000E497F /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3557ACB95D0F666EF5AF0CE /* Secrets.swift */; };
+		791930892D76EE7E00D9E6F7 /* JoinRoomByAddressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7F55DC42D6F5CCF00CE60E9 /* JoinRoomByAddressView.swift */; };
 		793FA5B72D5B33E700893AC4 /* HomeScreenPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793FA5B62D5B33DE00893AC4 /* HomeScreenPostCell.swift */; };
 		793FA5B82D5B33E700893AC4 /* HomeScreenPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793FA5B62D5B33DE00893AC4 /* HomeScreenPostCell.swift */; };
 		794F08A92D6CFF5B008B575F /* ZChannelRoomId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794F08A82D6CFF56008B575F /* ZChannelRoomId.swift */; };
@@ -3652,7 +3653,7 @@
 		BA40B98B098B6F0371B750B3 /* TemplateScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateScreenModels.swift; sourceTree = "<group>"; };
 		BA919F521E9F0EE3638AFC85 /* BugReportScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReportScreen.swift; sourceTree = "<group>"; };
 		BB284643AF7AB131E307DCE0 /* AudioSessionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSessionProtocol.swift; sourceTree = "<group>"; };
-		BB576F4118C35E6B5124FA22 /* test_apple_image.heic */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_apple_image.heic; sourceTree = "<group>"; };
+		BB576F4118C35E6B5124FA22 /* test_apple_image.heic */ = {isa = PBXFileReference; lastKnownFileType = text; path = test_apple_image.heic; sourceTree = "<group>"; };
 		BB5B00A014307CE37B2812CD /* TimelineViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineViewModelProtocol.swift; sourceTree = "<group>"; };
 		BB8BC4C791D0E88CFCF4E5DF /* ServerSelectionScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectionScreenCoordinator.swift; sourceTree = "<group>"; };
 		BBEC57C204D77908E355EF42 /* AudioRecorderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderProtocol.swift; sourceTree = "<group>"; };
@@ -9045,6 +9046,7 @@
 				18E9A46C2C9829970082DDA4 /* AudioRecorder.swift in Sources */,
 				18E9A46D2C9829970082DDA4 /* AudioRecorderProtocol.swift in Sources */,
 				18E9A46E2C9829970082DDA4 /* AudioRecorderState.swift in Sources */,
+				791930892D76EE7E00D9E6F7 /* JoinRoomByAddressView.swift in Sources */,
 				18E9A46F2C9829970082DDA4 /* AudioRoomTimelineItem.swift in Sources */,
 				18E9A4702C9829970082DDA4 /* AudioRoomTimelineItemContent.swift in Sources */,
 				18E9A4712C9829970082DDA4 /* AudioRoomTimelineView.swift in Sources */,
@@ -9063,7 +9065,7 @@
 				18E9A47C2C9829970082DDA4 /* AuthenticationStartScreenModels.swift in Sources */,
 				18E9A47D2C9829970082DDA4 /* AuthenticationStartScreenViewModel.swift in Sources */,
 				18E9A47E2C9829970082DDA4 /* AuthenticationStartScreenViewModelProtocol.swift in Sources */,
-				18E9A47F2C9829970082DDA4 /* AuthenticationTextFieldStyle.swift in Sources */,
+				18E9A47F2C9829970082DDA4 /* ElementTextFieldStyle.swift in Sources */,
 				18E9A4802C9829970082DDA4 /* AvatarHeaderView.swift in Sources */,
 				18E9A4812C9829970082DDA4 /* (null) in Sources */,
 				18E9A4822C9829970082DDA4 /* BadgeLabel.swift in Sources */,
@@ -9612,7 +9614,7 @@
 				18E9A6372C9829970082DDA4 /* RoomDirectorySearchScreenViewModel.swift in Sources */,
 				7968A4292D54028600E9056A /* SendInviteConfirmationView.swift in Sources */,
 				18ECA49C2CB53E7500938F8B /* RoomScreenFooterView.swift in Sources */,
-				18E9A6382C9829970082DDA4 /* RoomDirectorySearchView.swift in Sources */,
+				18E9A6382C9829970082DDA4 /* (null) in Sources */,
 				18E9A6392C9829970082DDA4 /* RoomEventStringBuilder.swift in Sources */,
 				185454BD2CFDE64D003CA957 /* CreateAccountScreenCoordinator.swift in Sources */,
 				18659CC42CFB2D2A000EF0A6 /* ZFinaliseCreateAccount.swift in Sources */,

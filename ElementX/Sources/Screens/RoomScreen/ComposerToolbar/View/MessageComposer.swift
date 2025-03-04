@@ -217,8 +217,8 @@ private struct MessageComposerStyleModifier<Header: View>: ViewModifier {
             header
             
             HStack(alignment: .top, spacing: 6) {
-                icon
-                    .scaledOffset(y: 2)
+//                icon
+//                    .scaledOffset(y: 2)
                 
                 content
                     .tint(.compound.iconAccentTertiary)
