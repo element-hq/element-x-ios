@@ -9,10 +9,15 @@ import Foundation
 import UIKit
 
 struct CreateFeedScreenViewState: BindableState {
+    let userID: String
+    var userDisplayName: String?
+    var userAvatarURL: URL?
+    
     var bindings: CreateFeedScreenViewStateBindings
 }
 
 struct CreateFeedScreenViewStateBindings {
+    var feedText: String = ""
     var alertInfo: AlertInfo<UUID>?
 }
 

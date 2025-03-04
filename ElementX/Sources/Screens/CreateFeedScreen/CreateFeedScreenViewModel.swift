@@ -22,6 +22,17 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
     init(clientProxy: ClientProxyProtocol, mediaProvider: MediaProviderProtocol) {
         self.clientProxy = clientProxy
         
-        super.init(initialViewState: .init(bindings: .init()), mediaProvider: mediaProvider)
+        super.init(initialViewState: .init(userID: clientProxy.userID, bindings: .init()), mediaProvider: mediaProvider)
+        
+        clientProxy.userAvatarURLPublisher
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.userAvatarURL, on: self)
+            .store(in: &cancellables)
+        
+        clientProxy.userDisplayNamePublisher
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.userDisplayName, on: self)
+            .store(in: &cancellables)
+        
     }
 }

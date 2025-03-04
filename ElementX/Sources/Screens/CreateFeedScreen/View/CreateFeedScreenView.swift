@@ -12,11 +12,66 @@ struct CreateFeedScreen: View {
     @ObservedObject var context: CreateFeedScreenViewModel.Context
     
     var body: some View {
-        HStack {
-            Text("Create a feed")
-                .font(.headline)
-            Spacer()
+        CreateFeedContent(context: context)
+            .zeroList()
+            .navigationTitle("New Post")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                if !context.feedText.isEmpty {
+                    toolbar
+                }
+            }
+            .alert(item: $context.alertInfo)
+    }
+    
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .confirmationAction) {
+            Button(L10n.actionCreate) {
+                //context.send(viewAction: .close)
+            }
         }
-        .padding()
+    }
+}
+
+private struct CreateFeedContent: View {
+    @ObservedObject var context: CreateFeedScreenViewModel.Context
+    
+    @FocusState private var isTextEditorFocused: Bool  // Focus state
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack(alignment: .top) {
+                LoadableAvatarImage(url: context.viewState.userAvatarURL,
+                                    name: context.viewState.userDisplayName,
+                                    contentID: context.viewState.userID,
+                                    avatarSize: .user(on: .home),
+                                    mediaProvider: context.mediaProvider)
+                    .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
+                
+                ZStack(alignment: .topLeading) {
+                    if context.feedText.isEmpty {
+                        Text("Share what's on your mind...")
+                            .font(.zero.bodyLG)
+                            .foregroundStyle(.compound.textSecondary)
+                            .frame(alignment: .topLeading)
+                            .padding(.top, 8)
+                            .padding(.leading, 4)
+                    }
+                    
+                    TextEditor(text: $context.feedText)
+                        .background(.clear)
+                        .font(.zero.bodyLG)
+                        .foregroundStyle(.compound.textPrimary)
+                        .focused($isTextEditorFocused)
+                        .frame(alignment: .topLeading)
+                }
+            }
+            .padding()
+        }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { // Small delay for smooth focus
+                isTextEditorFocused = true  // Automatically focus when view appears
+            }
+        }
     }
 }

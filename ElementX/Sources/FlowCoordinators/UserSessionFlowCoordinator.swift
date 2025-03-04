@@ -1100,7 +1100,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentCreateFeedScreen() {
+        let createFeedNavigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = CreateFeedScreenCoordinator(parameters: .init(userSession: userSession))
-        navigationSplitCoordinator.setSheetCoordinator(coordinator)
+        createFeedNavigationStackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationSplitCoordinator.setSheetCoordinator(createFeedNavigationStackCoordinator)
     }
 }
