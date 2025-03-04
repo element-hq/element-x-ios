@@ -9,22 +9,25 @@ import SwiftUI
 
 struct MentionSuggestionItemView: View {
     let mediaProvider: MediaProviderProtocol?
-    let item: MentionSuggestionItem
+    let item: SuggestionItem
     
     var body: some View {
         HStack(alignment: .center, spacing: 16) {
-            LoadableAvatarImage(url: item.avatarURL,
-                                name: item.displayName,
-                                contentID: item.id,
-                                avatarSize: .user(on: .suggestions),
-                                mediaProvider: mediaProvider)
+            switch item.suggestionType {
+            case .user(let user):
+                LoadableAvatarImage(url: user.avatarURL, name: user.displayName, contentID: user.id, avatarSize: .user(on: .suggestions), mediaProvider: mediaProvider)
+            case .allUsers(let avatar):
+                RoomAvatarImage(avatar: avatar, avatarSize: .room(on: .suggestions), mediaProvider: mediaProvider)
+            case .room(let room):
+                RoomAvatarImage(avatar: room.avatar, avatarSize: .room(on: .suggestions), mediaProvider: mediaProvider)
+            }
             VStack(alignment: .leading, spacing: 0) {
-                Text(item.displayName ?? item.id)
+                Text(item.displayName)
                     .font(.compound.bodyLG)
                     .foregroundColor(.compound.textPrimary)
                     .lineLimit(1)
-                if item.displayName != nil {
-                    Text(item.id)
+                if let subtitle = item.subtitle {
+                    Text(subtitle)
                         .font(.compound.bodySM)
                         .foregroundColor(.compound.textSecondary)
                         .lineLimit(1)
@@ -38,7 +41,7 @@ struct MentionSuggestionItemView_Previews: PreviewProvider, TestablePreview {
     static let mockMediaProvider = MediaProviderMock(configuration: .init())
     
     static var previews: some View {
-        MentionSuggestionItemView(mediaProvider: mockMediaProvider, item: .init(id: "test", displayName: "Test", avatarURL: .mockMXCUserAvatar, range: .init(), rawSuggestionText: ""))
-        MentionSuggestionItemView(mediaProvider: mockMediaProvider, item: .init(id: "test2", displayName: nil, avatarURL: nil, range: .init(), rawSuggestionText: ""))
+        MentionSuggestionItemView(mediaProvider: mockMediaProvider, item: .init(suggestionType: .user(.init(id: "test", displayName: "Test", avatarURL: nil)), range: .init(), rawSuggestionText: ""))
+        MentionSuggestionItemView(mediaProvider: mockMediaProvider, item: .init(suggestionType: .user(.init(id: "test2", displayName: nil, avatarURL: nil)), range: .init(), rawSuggestionText: ""))
     }
 }

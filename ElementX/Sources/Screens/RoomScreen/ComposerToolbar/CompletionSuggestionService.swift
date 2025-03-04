@@ -39,22 +39,14 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                                   Self.shouldIncludeMember(userID: member.userID, displayName: member.displayName, searchText: suggestionTrigger.text) else {
                                 return nil
                             }
-                            return SuggestionItem.user(item: .init(id: member.userID,
-                                                                   displayName: member.displayName,
-                                                                   avatarURL: member.avatarURL,
-                                                                   range: suggestionTrigger.range,
-                                                                   rawSuggestionText: suggestionTrigger.text))
+                            return .init(suggestionType: .user(.init(id: member.userID, displayName: member.displayName, avatarURL: member.avatarURL)), range: suggestionTrigger.range, rawSuggestionText: suggestionTrigger.text)
                         }
                     
                     if self.canMentionAllUsers,
                        !self.roomProxy.isDirectOneToOneRoom,
                        Self.shouldIncludeMember(userID: PillConstants.atRoom, displayName: PillConstants.everyone, searchText: suggestionTrigger.text) {
                         membersSuggestion
-                            .insert(SuggestionItem.allUsers(item: .init(id: PillConstants.atRoom,
-                                                                        displayName: PillConstants.everyone,
-                                                                        avatarURL: self.roomProxy.infoPublisher.value.avatarURL,
-                                                                        range: suggestionTrigger.range,
-                                                                        rawSuggestionText: suggestionTrigger.text)), at: 0)
+                            .insert(SuggestionItem(suggestionType: .allUsers(roomProxy.details.avatar), range: suggestionTrigger.range, rawSuggestionText: suggestionTrigger.text), at: 0)
                     }
                     
                     return membersSuggestion

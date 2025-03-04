@@ -473,23 +473,23 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
     
     private func handleSuggestion(_ suggestion: SuggestionItem) {
-        switch suggestion {
-        case let .user(item):
-            guard let url = try? URL(string: matrixToUserPermalink(userId: item.id)) else {
+        switch suggestion.suggestionType {
+        case let .user(user):
+            guard let url = try? URL(string: matrixToUserPermalink(userId: user.id)) else {
                 MXLog.error("Could not build user permalink")
                 return
             }
             
             if context.composerFormattingEnabled {
-                wysiwygViewModel.setMention(url: url.absoluteString, name: item.id, mentionType: .user)
+                wysiwygViewModel.setMention(url: url.absoluteString, name: user.id, mentionType: .user)
             } else {
                 let attributedString = NSMutableAttributedString(attributedString: state.bindings.plainComposerText)
-                mentionBuilder.handleUserMention(for: attributedString, in: suggestion.range, url: url, userID: item.id, userDisplayName: item.displayName)
+                mentionBuilder.handleUserMention(for: attributedString, in: suggestion.range, url: url, userID: user.id, userDisplayName: user.displayName)
                 state.bindings.plainComposerText = attributedString
-                let newSelectedRange = NSRange(location: state.bindings.selectedRange.location - item.rawSuggestionText.count, length: 0)
+                let newSelectedRange = NSRange(location: state.bindings.selectedRange.location - suggestion.rawSuggestionText.count, length: 0)
                 state.bindings.selectedRange = newSelectedRange
             }
-        case let .allUsers(item):
+        case .allUsers:
             if context.composerFormattingEnabled {
                 wysiwygViewModel.setAtRoomMention()
             } else {
@@ -497,9 +497,11 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 mentionBuilder.handleAllUsersMention(for: attributedString, in: suggestion.range)
                 state.bindings.plainComposerText = attributedString
                 
-                let newSelectedRange = NSRange(location: state.bindings.selectedRange.location - item.rawSuggestionText.count, length: 0)
+                let newSelectedRange = NSRange(location: state.bindings.selectedRange.location - suggestion.rawSuggestionText.count, length: 0)
                 state.bindings.selectedRange = newSelectedRange
             }
+        case let .room(room):
+            break
         }
     }
     
