@@ -324,7 +324,7 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
     
     static let suggestions: [SuggestionItem] = [
         .init(suggestionType: .user(.init(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)), range: .init(), rawSuggestionText: ""),
-        .init(suggestionType: .user(.init(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: nil)), range: .init(), rawSuggestionText: "")
+        .init(suggestionType: .user(.init(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: .mockMXCUserAvatar)), range: .init(), rawSuggestionText: "")
     ]
     
     static var previews: some View {

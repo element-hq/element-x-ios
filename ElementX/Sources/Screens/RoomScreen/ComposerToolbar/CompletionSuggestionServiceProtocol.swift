@@ -12,6 +12,7 @@ import WysiwygComposer
 struct SuggestionTrigger: Equatable {
     enum SuggestionType: Equatable {
         case user
+        case room
     }
     
     let type: SuggestionType
@@ -35,7 +36,7 @@ struct SuggestionItem: Identifiable, Equatable {
     struct Room: Equatable {
         let id: String
         let canonicalAlias: String?
-        let displayName: String?
+        let displayName: String
         let avatar: RoomAvatar
     }
     
@@ -61,7 +62,7 @@ struct SuggestionItem: Identifiable, Equatable {
         case .user(let user):
             return user.displayName ?? user.id
         case .room(let room):
-            return room.displayName ?? room.canonicalAlias ?? room.id
+            return room.displayName
         }
     }
     
@@ -72,7 +73,7 @@ struct SuggestionItem: Identifiable, Equatable {
         case .user(let user):
             return user.displayName == nil ? nil : user.id
         case .room(let room):
-            return room.displayName == nil ? nil : room.canonicalAlias
+            return room.canonicalAlias
         }
     }
 }
@@ -91,6 +92,8 @@ extension WysiwygComposer.SuggestionPattern {
         switch key {
         case .at:
             return SuggestionTrigger(type: .user, text: text, range: .init(location: Int(start), length: Int(end)))
+        case .hash:
+            return SuggestionTrigger(type: .room, text: text, range: .init(location: Int(start), length: Int(end)))
         default:
             return nil
         }

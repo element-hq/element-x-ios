@@ -115,7 +115,7 @@ struct CompletionSuggestion_Previews: PreviewProvider, TestablePreview {
         VStack(spacing: 8) {
             CompletionSuggestionView(mediaProvider: MediaProviderMock(configuration: .init()),
                                      items: [.init(suggestionType: .user(.init(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)), range: .init(), rawSuggestionText: ""),
-                                             .init(suggestionType: .user(.init(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: nil)), range: .init(), rawSuggestionText: "")]) { _ in }
+                                             .init(suggestionType: .user(.init(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: .mockMXCUserAvatar)), range: .init(), rawSuggestionText: "")]) { _ in }
         }
         
         VStack(spacing: 8) {
