@@ -353,6 +353,7 @@
 "rich_text_editor_bullet_list" = "Madde işaretli listeyi aç/kapat";
 "rich_text_editor_close_formatting_options" = "Biçimlendirme seçeneklerini kapat";
 "rich_text_editor_code_block" = "Kod Bloğunu Aç/Kapat";
+"rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Mesaj…";
 "rich_text_editor_create_link" = "Bir bağlantı oluştur";
 "rich_text_editor_edit_link" = "Bağlantıyı Düzenle";
@@ -479,6 +480,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Oda yayınlama";
 "screen_security_and_privacy_room_visibility_section_footer" = "Oda adresleri, odaları bulmanın ve odalara erişmenin yollarıdır. Bu aynı zamanda odanızı başkalarıyla kolayca paylaşabilmenizi sağlar.\nAdres, odayı %1$@ genel oda dizininde görünür kılmak için de gereklidir.";
 "screen_security_and_privacy_title" = "Güvenlik ve gizlilik";
+"screen_start_chat_join_room_by_address_action" = "Join room by address";
+"screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
+"screen_start_chat_join_room_by_address_placeholder" = "Enter...";
+"screen_start_chat_join_room_by_address_room_found" = "Matching room found";
+"screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
+"screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "%1$@ kullanıcısının doğrulanmış kimliği değiştiği için ileti gönderilmedi.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "%1$@ tüm cihazları doğrulamadığı için mesaj gönderilmedi.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Bir veya daha fazla cihazınızı doğrulamadığınız için mesaj gönderilmedi.";

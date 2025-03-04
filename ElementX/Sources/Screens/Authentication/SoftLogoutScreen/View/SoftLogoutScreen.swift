@@ -74,7 +74,7 @@ struct SoftLogoutScreen: View {
         VStack(spacing: 14) {
             SecureField(L10n.commonPassword, text: $context.password)
                 .focused($isPasswordFocused)
-                .textFieldStyle(.authentication())
+                .textFieldStyle(.element())
                 .textContentType(.password)
                 .submitLabel(.done)
                 .onSubmit(submit)

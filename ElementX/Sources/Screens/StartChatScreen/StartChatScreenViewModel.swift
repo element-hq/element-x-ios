@@ -6,6 +6,7 @@
 //
 
 import Combine
+import MatrixRustSDK
 import SwiftUI
 
 typealias StartChatScreenViewModelType = StateStoreViewModel<StartChatScreenViewState, StartChatScreenViewAction>
@@ -15,6 +16,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
+    private let appSettings: AppSettings
     
     private var suggestedUsers = [UserProfileProxy]()
     
@@ -26,11 +28,13 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
     init(userSession: UserSessionProtocol,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
-         userDiscoveryService: UserDiscoveryServiceProtocol) {
+         userDiscoveryService: UserDiscoveryServiceProtocol,
+         appSettings: AppSettings) {
         self.userSession = userSession
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         self.userDiscoveryService = userDiscoveryService
+        self.appSettings = appSettings
         
         super.init(initialViewState: StartChatScreenViewState(userID: userSession.clientProxy.userID), mediaProvider: userSession.mediaProvider)
         
@@ -60,7 +64,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
                 switch currentDirectRoom {
                 case .success(.some(let roomId)):
                     hideLoadingIndicator()
-                    actionsSubject.send(.openRoom(withIdentifier: roomId))
+                    actionsSubject.send(.showRoom(withIdentifier: roomId))
                 case .success:
                     hideLoadingIndicator()
                     state.bindings.selectedUserToInvite = user
@@ -71,12 +75,24 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
             }
         case .createDM(let user):
             Task { await createDirectRoom(user: user) }
+        case .joinRoomByAddress:
+            joinRoomByAddress()
+        case .openRoomDirectorySearch:
+            actionsSubject.send(.openRoomDirectorySearch)
         }
     }
     
     // MARK: - Private
     
+    // periphery:ignore - auto cancels when reassigned
+    @CancellableTask private var resolveAliasTask: Task<Void, Never>?
+    private var internalRoomAddressState: JoinByAddressState = .example
+    
     private func setupBindings() {
+        appSettings.$publicSearchEnabled
+            .weakAssign(to: \.state.isRoomDirectoryEnabled, on: self)
+            .store(in: &cancellables)
+        
         context.$viewState
             .map(\.bindings.searchQuery)
             .debounceTextQueriesAndRemoveDuplicates()
@@ -84,6 +100,62 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
                 self?.fetchUsers()
             }
             .store(in: &cancellables)
+        
+        context.$viewState
+            .map(\.bindings.roomAddress)
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self else {
+                    return
+                }
+                state.joinByAddressState = .example
+                internalRoomAddressState = .example
+            }
+            .store(in: &cancellables)
+        
+        context.$viewState
+            .map(\.bindings.roomAddress)
+            .debounceTextQueriesAndRemoveDuplicates()
+            .sink { [weak self] roomAddress in
+                guard let self else {
+                    return
+                }
+                resolveRoomAddress(roomAddress)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func resolveRoomAddress(_ roomAddress: String) {
+        guard !roomAddress.isEmpty,
+              isRoomAliasFormatValid(alias: roomAddress) else {
+            internalRoomAddressState = .invalidAddress
+            resolveAliasTask = nil
+            return
+        }
+        
+        resolveAliasTask = Task { [weak self] in
+            guard let self else {
+                return
+            }
+            defer { resolveAliasTask = nil }
+            
+            guard case let .success(resolved) = await userSession.clientProxy.resolveRoomAlias(roomAddress) else {
+                if Task.isCancelled {
+                    return
+                }
+                internalRoomAddressState = .addressNotFound
+                return
+            }
+
+            guard !Task.isCancelled else {
+                return
+            }
+            
+            let result = JoinByAddressState.addressFound(address: roomAddress, roomID: resolved.roomId)
+            internalRoomAddressState = result
+            state.joinByAddressState = result
+        }
     }
     
     // periphery:ignore - auto cancels when reassigned
@@ -118,7 +190,7 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         switch await userSession.clientProxy.createDirectRoom(with: user.userID, expectedRoomName: user.displayName) {
         case .success(let roomId):
             analytics.trackCreatedRoom(isDM: true)
-            actionsSubject.send(.openRoom(withIdentifier: roomId))
+            actionsSubject.send(.showRoom(withIdentifier: roomId))
         case .failure:
             displayError()
         }
@@ -128,6 +200,28 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
         state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,
                                              title: L10n.commonError,
                                              message: L10n.screenStartChatErrorStartingChat)
+    }
+    
+    private func joinRoomByAddress() {
+        if case let .addressFound(lastTestedAddress, roomID) = internalRoomAddressState,
+           lastTestedAddress == state.bindings.roomAddress {
+            actionsSubject.send(.showRoom(withIdentifier: roomID))
+        } else if let resolveAliasTask {
+            // If the task is still running we wait for it to complete and we check the state again
+            showLoadingIndicator(delay: .milliseconds(250))
+            Task {
+                await resolveAliasTask.value
+                hideLoadingIndicator()
+                joinRoomByAddress()
+            }
+        } else if internalRoomAddressState == .example {
+            // If we are in the example state internally, this means that the task has not started yet so we start it, and the check the state again
+            resolveRoomAddress(state.bindings.roomAddress)
+            joinRoomByAddress()
+        } else {
+            // In any other case we just use the internal state
+            state.joinByAddressState = internalRoomAddressState
+        }
     }
         
     // MARK: Loading indicator

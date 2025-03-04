@@ -353,6 +353,7 @@
 "rich_text_editor_bullet_list" = "Przełącz listę punktową";
 "rich_text_editor_close_formatting_options" = "Zamknij opcje formatowania";
 "rich_text_editor_code_block" = "Przełącz blok kodu";
+"rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Wiadomość...";
 "rich_text_editor_create_link" = "Utwórz link";
 "rich_text_editor_edit_link" = "Edytuj link";
@@ -479,6 +480,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Publikowanie pokoju";
 "screen_security_and_privacy_room_visibility_section_footer" = "Adresy pokoju umożliwiają łatwe znalezienie i dołączenie do pokojów.\nDodatkowo adres pokoju jest wymagany, aby pomieszczenie było widoczne w katalogu pokoi publicznych %1$@.";
 "screen_security_and_privacy_title" = "Bezpieczeństwo i prywatność";
+"screen_start_chat_join_room_by_address_action" = "Join room by address";
+"screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
+"screen_start_chat_join_room_by_address_placeholder" = "Enter...";
+"screen_start_chat_join_room_by_address_room_found" = "Matching room found";
+"screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
+"screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Wiadomość nie została wysłana, ponieważ tożsamość %1$@ uległa zmianie.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Wiadomość nie została wysłana, ponieważ %1$@ nie zweryfikował wszystkich urządzeń.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Wiadomość nie została wysłana, ponieważ nie zweryfikowałeś jednego lub więcej swoich urządzeń.";

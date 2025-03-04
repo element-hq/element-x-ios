@@ -353,6 +353,7 @@
 "rich_text_editor_bullet_list" = "Numeroimaton luettelo päälle/pois";
 "rich_text_editor_close_formatting_options" = "Sulje muotoiluasetukset";
 "rich_text_editor_code_block" = "Koodilohko päälle/pois";
+"rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Viesti...";
 "rich_text_editor_create_link" = "Luo linkki";
 "rich_text_editor_edit_link" = "Muokkaa linkkiä";
@@ -479,6 +480,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Huoneen julkaiseminen";
 "screen_security_and_privacy_room_visibility_section_footer" = "Huoneosoitteet ovat tapoja löytää ja käyttää huoneita. Näin voit myös helposti jakaa huoneesi muiden kanssa.\nOsoitetta tarvitaan myös, jotta huone näkyy %1$@ -palvelimen julkisessa huonehakemistossa.";
 "screen_security_and_privacy_title" = "Turvallisuus ja yksityisyys";
+"screen_start_chat_join_room_by_address_action" = "Join room by address";
+"screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
+"screen_start_chat_join_room_by_address_placeholder" = "Enter...";
+"screen_start_chat_join_room_by_address_room_found" = "Matching room found";
+"screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
+"screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Viestiä ei lähetetty, koska käyttäjän %1$@ vahvistettu identiteetti on muuttunut.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Viestiä ei lähetetty, koska %1$@ ei ole vahvistanut kaikkia laitteitaan.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Viestiä ei lähetetty, koska et ole vahvistanut yhtä tai useampaa laitettasi.";

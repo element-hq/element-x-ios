@@ -149,6 +149,12 @@ extension PreviewTests {
         }
     }
 
+    func test_elementTextFieldStyle() async throws {
+        for preview in ElementTextFieldStyle_Previews._allPreviews {
+            try await assertSnapshots(matching: preview)
+        }
+    }
+
     func test_emojiPickerScreenHeaderView() async throws {
         for preview in EmojiPickerScreenHeaderView_Previews._allPreviews {
             try await assertSnapshots(matching: preview)
@@ -319,6 +325,12 @@ extension PreviewTests {
 
     func test_inviteUsersScreen() async throws {
         for preview in InviteUsersScreen_Previews._allPreviews {
+            try await assertSnapshots(matching: preview)
+        }
+    }
+
+    func test_joinRoomByAddressView() async throws {
+        for preview in JoinRoomByAddressView_Previews._allPreviews {
             try await assertSnapshots(matching: preview)
         }
     }
@@ -649,12 +661,6 @@ extension PreviewTests {
 
     func test_roomDirectorySearchScreen() async throws {
         for preview in RoomDirectorySearchScreen_Previews._allPreviews {
-            try await assertSnapshots(matching: preview)
-        }
-    }
-
-    func test_roomDirectorySearchView() async throws {
-        for preview in RoomDirectorySearchView_Previews._allPreviews {
             try await assertSnapshots(matching: preview)
         }
     }

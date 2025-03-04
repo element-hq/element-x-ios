@@ -21,7 +21,6 @@ enum HomeScreenViewModelAction {
     case presentFeedbackScreen
     case presentStartChatScreen
     case presentGlobalSearch
-    case presentRoomDirectorySearch
     case logoutWithoutConfirmation
     case logout
     case postTapped(_ post: HomeScreenPost, feedUpdatedProtocol: FeedDetailsUpdatedProtocol)
@@ -43,7 +42,6 @@ enum HomeScreenViewAction {
     case markRoomAsUnread(roomIdentifier: String)
     case markRoomAsRead(roomIdentifier: String)
     case markRoomAsFavourite(roomIdentifier: String, isFavourite: Bool)
-    case selectRoomDirectorySearch
     
     case acceptInvite(roomIdentifier: String)
     case declineInvite(roomIdentifier: String)
@@ -154,9 +152,7 @@ struct HomeScreenViewState: BindableState {
     var canLoadMorePosts: Bool = true
     
     var hasPendingInvitations = false
-    
-    var isRoomDirectorySearchEnabled = false
-    
+        
     var selectedRoomID: String?
     
     var visibleRooms: [HomeScreenRoom] {

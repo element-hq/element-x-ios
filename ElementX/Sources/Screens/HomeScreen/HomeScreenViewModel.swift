@@ -114,10 +114,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             .sink { [weak self] _ in self?.updateRooms() }
             .store(in: &cancellables)
         
-        appSettings.$publicSearchEnabled
-            .weakAssign(to: \.state.isRoomDirectorySearchEnabled, on: self)
-            .store(in: &cancellables)
-        
         appSettings.$seenInvites
             .removeDuplicates()
             .sink { [weak self] _ in
@@ -220,8 +216,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             Task {
                 await markRoomAsFavourite(roomIdentifier, isFavourite: isFavourite)
             }
-        case .selectRoomDirectorySearch:
-            actionsSubject.send(.presentRoomDirectorySearch)
         case .acceptInvite(let roomIdentifier):
             Task {
                 await acceptInvite(roomID: roomIdentifier)

@@ -521,8 +521,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.showStartChatScreen)
                 case .presentGlobalSearch:
                     presentGlobalSearch()
-                case .presentRoomDirectorySearch:
-                    stateMachine.processEvent(.showRoomDirectorySearchScreen)
                 case .logoutWithoutConfirmation:
                     self.actionsSubject.send(.logout)
                 case .logout:
@@ -668,10 +666,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .close:
-                self.navigationSplitCoordinator.setSheetCoordinator(nil)
+                navigationSplitCoordinator.setSheetCoordinator(nil)
             case .openRoom(let roomID):
-                self.navigationSplitCoordinator.setSheetCoordinator(nil)
-                self.stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+                stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
+            case .openRoomDirectorySearch:
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+                stateMachine.processEvent(.showRoomDirectorySearchScreen)
             }
         }
         .store(in: &cancellables)
@@ -682,9 +683,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             self?.stateMachine.processEvent(.dismissedStartChatScreen)
         }
     }
-    
-    // MARK: Session Verification
-    
+        
     // MARK: Calls
     
     private func presentCallScreen(genericCallLink url: URL) {
