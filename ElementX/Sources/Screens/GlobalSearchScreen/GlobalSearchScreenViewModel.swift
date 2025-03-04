@@ -60,7 +60,6 @@ class GlobalSearchScreenViewModel: GlobalSearchScreenViewModelType, GlobalSearch
         switch viewAction {
         case .dismiss:
             actionsSubject.send(.dismiss)
-            roomSummaryProvider.setFilter(.all(filters: [])) // This is a shared provider
         case .select(let roomID):
             actionsSubject.send(.select(roomID: roomID))
         case .reachedTop:

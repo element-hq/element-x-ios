@@ -54,7 +54,6 @@ class RoomSelectionScreenViewModel: RoomSelectionScreenViewModelType, RoomSelect
         switch viewAction {
         case .cancel:
             actionsSubject.send(.dismiss)
-            roomSummaryProvider.setFilter(.all(filters: []))
         case .confirm:
             guard let selectedRoomID = state.selectedRoomID else {
                 return

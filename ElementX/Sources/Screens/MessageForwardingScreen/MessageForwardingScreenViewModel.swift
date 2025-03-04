@@ -60,7 +60,6 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         switch viewAction {
         case .cancel:
             actionsSubject.send(.dismiss)
-            roomSummaryProvider.setFilter(.all(filters: []))
         case .send:
             Task { await forward() }
         case .selectRoom(let roomID):
