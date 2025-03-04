@@ -119,14 +119,14 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
             return nil
         }
 
-        let suggestionText = String(text[match.range])
-        let firstChar = suggestionText.first
+        var suggestionText = String(text[match.range])
+        let firstChar = suggestionText.removeFirst()
         
         switch firstChar {
         case SuggestionTriggerRegex.at:
             return .init(type: .user, text: suggestionText, range: NSRange(match.range, in: text))
         case SuggestionTriggerRegex.hash:
-            return .init(type: .user, text: suggestionText, range: NSRange(match.range, in: text))
+            return .init(type: .room, text: suggestionText, range: NSRange(match.range, in: text))
         default:
             return nil
         }
