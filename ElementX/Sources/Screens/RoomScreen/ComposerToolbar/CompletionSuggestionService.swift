@@ -119,7 +119,8 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
             return nil
         }
 
-        let firstChar = String(text[match.range]).first
+        let suggestionText = String(text[match.range])
+        let firstChar = suggestionText.first
         
         switch firstChar {
         case SuggestionTriggerRegex.at:
