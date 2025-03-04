@@ -16,15 +16,15 @@ class UserSessionScreenTests: XCTestCase {
         
         app.swipeDown() // Make sure the header shows a large title
         
-        try await app.assertScreenshot(.userSessionScreen, step: 1)
+        try await app.assertScreenshot(step: 1)
 
         app.buttons[A11yIdentifiers.homeScreen.roomName(firstRoomName)].tap()
         XCTAssert(app.staticTexts[firstRoomName].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
-        try await app.assertScreenshot(.userSessionScreen, step: 2)
+        try await app.assertScreenshot(step: 2)
 
         app.buttons[A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions].tapCenter()
-        try await app.assertScreenshot(.userSessionScreen, step: 3)
+        try await app.assertScreenshot(step: 3)
     }
 
     func testUserSessionReply() async throws {
@@ -36,7 +36,7 @@ class UserSessionScreenTests: XCTestCase {
         let cell = app.cells.element(boundBy: 1) // Skip the typing indicator cell
         cell.swipeRight(velocity: .fast)
 
-        try await app.assertScreenshot(.userSessionScreenReply)
+        try await app.assertScreenshot()
     }
 
     func testElementCall() async throws {

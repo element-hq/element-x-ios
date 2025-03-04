@@ -57,35 +57,32 @@ extension XCUIApplication {
     static var recordMode: SnapshotTestingConfiguration.Record = .missing
     
     /// Assert screenshot for a screen with the given identifier. Does not fail if a screenshot is newly created.
-    /// - Parameter identifier: Identifier of the UI test screen
-    /// - Parameter step: An optional integer that can be used to take multiple snapshots per test identifier.
-    /// - Parameter insets: Optional insets with which to crop the image by.
+    /// - Parameter testName: The current test name, first part of the resulting snapshot filename.
+    /// - Parameter step: An optional integer that can be used to take multiple snapshots per test identifier
+    /// - Parameter delay: How much to wait before taking the snapshot
     @MainActor
-    func assertScreenshot(_ identifier: UITestsScreenIdentifier, step: Int? = nil, insets: UIEdgeInsets? = nil, delay: Duration = .seconds(1), precision: Float = 0.99) async throws {
-        var snapshotName = identifier.rawValue
-        if let step {
-            snapshotName += "-\(step)"
-        }
-        
-        snapshotName += "-\(deviceName)-\(localeCode)"
-
+    func assertScreenshot(fileName: String = #file, testName: String = #function, step: Int? = nil, delay: Duration = .seconds(0.5)) async throws {
         // Sometimes the CI might be too slow to load the content so let's wait the delay time
         try await Task.sleep(for: delay)
         
-        var snapshot = screenshot().image
+        let snapshot = screenshot().image
         
-        if let insets {
-            snapshot = snapshot.inset(by: insets)
+        var sanitizedSuiteName = String(fileName.prefix(fileName.count - "Tests.swift".count))
+        sanitizedSuiteName = (sanitizedSuiteName as NSString).lastPathComponent
+        sanitizedSuiteName = sanitizedSuiteName.prefix(1).lowercased() + sanitizedSuiteName.dropFirst()
+        
+        var testName = "\(testName.dropLast(2))-\(deviceName)-\(localeCode)"
+        if let step {
+            testName += "-\(step)"
         }
-
+        
         let failure = withSnapshotTesting(record: Self.recordMode) {
             verifySnapshot(of: snapshot,
-                           as: .image(precision: precision,
+                           as: .image(precision: 0.99,
                                       perceptualPrecision: 0.98,
                                       scale: nil),
-                           // use any kind of suffix here to snapshot the same file multiple times and avoid countering on the library side
-                           named: "UI",
-                           testName: snapshotName)
+                           named: testName,
+                           testName: sanitizedSuiteName)
         }
         
         if let failure {
