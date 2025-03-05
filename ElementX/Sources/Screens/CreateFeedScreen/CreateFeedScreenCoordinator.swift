@@ -10,10 +10,11 @@ import SwiftUI
 
 struct CreateFeedScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
+    let createFeedProtocol: CreateFeedProtocol
 }
 
 enum CreateFeedScreenCoordinatorAction {
-    
+    case newPostCreated
 }
 
 final class CreateFeedScreenCoordinator: CoordinatorProtocol {
@@ -28,11 +29,16 @@ final class CreateFeedScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: CreateFeedScreenCoordinatorParameters) {
         viewModel = CreateFeedScreenViewModel(clientProxy: parameters.userSession.clientProxy,
+                                              createFeedProtocol: parameters.createFeedProtocol,
+                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                               mediaProvider: parameters.userSession.mediaProvider)
         viewModel.actions
             .sink { [weak self] action in
                 guard let self else { return }
-                
+                switch action {
+                case .newFeedPosted:
+                    actionsSubject.send(.newPostCreated)
+                }
             }
             .store(in: &cancellables)
     }

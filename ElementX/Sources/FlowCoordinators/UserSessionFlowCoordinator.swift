@@ -519,8 +519,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.startEncryptionResetFlow)
                 case .presentStartChatScreen:
                     stateMachine.processEvent(.showStartChatScreen)
-                case .presentCreateFeedScreen:
-                    presentCreateFeedScreen()
+                case .presentCreateFeedScreen(let createFeedProtocol):
+                    presentCreateFeedScreen(createFeedProtocol)
                 case .presentGlobalSearch:
                     presentGlobalSearch()
                 case .logoutWithoutConfirmation:
@@ -1099,9 +1099,19 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentCreateFeedScreen() {
+    private func presentCreateFeedScreen(_ createFeedProtocol: CreateFeedProtocol) {
         let createFeedNavigationStackCoordinator = NavigationStackCoordinator()
-        let coordinator = CreateFeedScreenCoordinator(parameters: .init(userSession: userSession))
+        let coordinator = CreateFeedScreenCoordinator(parameters: .init(userSession: userSession, createFeedProtocol: createFeedProtocol))
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .newPostCreated:
+                    self.navigationSplitCoordinator.setSheetCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
+        
         createFeedNavigationStackCoordinator.setRootCoordinator(coordinator)
         
         navigationSplitCoordinator.setSheetCoordinator(createFeedNavigationStackCoordinator)

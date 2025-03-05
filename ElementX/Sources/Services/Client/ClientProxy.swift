@@ -1053,6 +1053,23 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func postNewFeed(channelZId: String, userWalletAddress: String, content: String) async -> Result<ZPost, ClientProxyError> {
+        do {
+            let postFeedResult = try await zeroPostsApi.createNewPost(channelZId: channelZId,
+                                                                      userWalletAddress: userWalletAddress,
+                                                                      content: content)
+            switch postFeedResult {
+            case .success(let post):
+                return .success(post)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
     func fetchUserZIds() async -> Result<[String], ClientProxyError> {
         do {
             let zIdsResult = try await zeroChannelsApi.fetchZeroIds()

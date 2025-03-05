@@ -20,7 +20,7 @@ enum HomeScreenViewModelAction {
     case presentSettingsScreen
     case presentFeedbackScreen
     case presentStartChatScreen
-    case presentCreateFeedScreen
+    case presentCreateFeedScreen(createFeedProtocol: CreateFeedProtocol)
     case presentGlobalSearch
     case logoutWithoutConfirmation
     case logout

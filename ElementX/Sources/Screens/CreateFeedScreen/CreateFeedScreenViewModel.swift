@@ -13,14 +13,21 @@ typealias CreateFeedScreenViewModelType = StateStoreViewModel<CreateFeedScreenVi
 class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreenViewModelProtocol {
     
     private let clientProxy: ClientProxyProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
+    private let createFeedProtocol: CreateFeedProtocol
         
     private var actionsSubject: PassthroughSubject<CreateFeedScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<CreateFeedScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(clientProxy: ClientProxyProtocol, mediaProvider: MediaProviderProtocol) {
+    init(clientProxy: ClientProxyProtocol,
+         createFeedProtocol: CreateFeedProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol,
+         mediaProvider: MediaProviderProtocol) {
         self.clientProxy = clientProxy
+        self.createFeedProtocol = createFeedProtocol
+        self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: .init(userID: clientProxy.userID, bindings: .init()), mediaProvider: mediaProvider)
         
@@ -34,5 +41,38 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
             .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
         
+    }
+    
+    override func process(viewAction: CreateFeedScreenViewAction) {
+        switch viewAction {
+        case .createPost:
+            createNewPost()
+        }
+    }
+    
+    private func createNewPost() {
+        Task {
+            let userIndicatorID = UUID().uuidString
+            defer {
+                userIndicatorController.retractIndicatorWithId(userIndicatorID)
+            }
+            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
+                                                                  type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                                  title: "Posting...",
+                                                                  persistent: true))
+            
+            let postFeedResult = await clientProxy.postNewFeed(channelZId: "",
+                                                         userWalletAddress: "",
+                                                         content: state.bindings.feedText)
+            switch postFeedResult {
+            case .success(_):
+                createFeedProtocol.onNewFeedPosted()
+                actionsSubject.send(.newFeedPosted)
+            case .failure(_):
+                state.bindings.alertInfo = .init(id: UUID(),
+                                                 title: L10n.commonError,
+                                                 message: L10n.errorUnknown)
+            }
+        }
     }
 }

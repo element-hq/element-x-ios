@@ -22,9 +22,9 @@ struct CreateFeedScreenViewStateBindings {
 }
 
 enum CreateFeedScreenViewModelAction {
-    
+    case newFeedPosted
 }
 
 enum CreateFeedScreenViewAction {
-    
+    case createPost
 }

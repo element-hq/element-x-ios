@@ -12,7 +12,7 @@ import SwiftUI
 
 typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, HomeScreenViewAction>
 
-class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol, FeedDetailsUpdatedProtocol {
+class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol, FeedDetailsUpdatedProtocol, CreateFeedProtocol {
     private let userSession: UserSessionProtocol
     private let analyticsService: AnalyticsService
     private let appSettings: AppSettings
@@ -179,7 +179,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         case .startChat:
             actionsSubject.send(.presentStartChatScreen)
         case .newFeed:
-            actionsSubject.send(.presentCreateFeedScreen)
+            actionsSubject.send(.presentCreateFeedScreen(createFeedProtocol: self))
         case .globalSearch:
             actionsSubject.send(.presentGlobalSearch)
         case .markRoomAsUnread(let roomIdentifier):
@@ -655,5 +655,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 MXLog.error("Failed to fetch updated feed details: \(error)")
             }
         }
+    }
+    
+    func onNewFeedPosted() {
+        fetchPosts(isForceRefresh: true)
     }
 }

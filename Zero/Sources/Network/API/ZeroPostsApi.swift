@@ -13,6 +13,8 @@ protocol ZeroPostsApiProtocol {
     func fetchPostDetails(postId: String) async throws -> Result<ZPost, Error>
     func fetchPostReplies(postId: String, limit: Int, skip: Int) async throws -> Result<[ZPost], Error>
     func addMeowsToPst(amount: Int, postId: String) async throws -> Result<ZPost, Error>
+    
+    func createNewPost(channelZId: String, userWalletAddress: String, content: String) async throws -> Result<ZPost, Error>
 }
 
 class ZeroPostsApi: ZeroPostsApiProtocol {
@@ -104,8 +106,31 @@ class ZeroPostsApi: ZeroPostsApiProtocol {
                                appSettings: appSettings,
                                parameters: meowAmount.toDictionary())
         switch result {
-        case .success(let postMeow):
+        case .success(_):
             return try await fetchPostDetails(postId: postId)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    func createNewPost(channelZId: String, userWalletAddress: String, content: String) async throws -> Result<ZPost, any Error> {
+        let unsignedMessage = ZNewPostUnsignedMessage(text: content, walletAddress: userWalletAddress, zid: channelZId)
+        let parameters: [String: String] = [
+            "text": content,
+            "unsignedMessage": try unsignedMessage.asJSONEncodedString(),
+            "signedMessage": "",
+            "zid": channelZId,
+            "walletAddress": userWalletAddress
+        ]
+        let requestUrl = FeedEndPoints.newPostEndPoint
+            .replacingOccurrences(of: FeedConstants.channel_path_param, with: channelZId)
+        
+        let result: Result<ZPost, Error> = try await APIManager.shared.authorisedMultipartRequest(requestUrl,
+                                                                                                  appSettings: appSettings,
+                                                                                                  parameters: parameters)
+        switch result {
+        case .success(let post):
+            return .success(post)
         case .failure(let error):
             return .failure(error)
         }
@@ -114,13 +139,16 @@ class ZeroPostsApi: ZeroPostsApiProtocol {
     // MARK: - Constants
     
     private enum FeedEndPoints {
-        static let postsEndPoint = "\(ZeroContants.appServer.zeroRootUrl)api/v2/posts"
-        static let postDetailsEndPoint = "\(ZeroContants.appServer.zeroRootUrl)api/v2/posts/\(FeedConstants.feed_id_path_param)"
-        static let postRepliesEndPoint = "\(ZeroContants.appServer.zeroRootUrl)api/v2/posts/\(FeedConstants.feed_id_path_param)/replies"
-        static let meowPostEndPoint = "\(ZeroContants.appServer.zeroRootUrl)api/v2/posts/post/\(FeedConstants.feed_id_path_param)/meow"
+        private static let hostUrl = ZeroContants.appServer.zeroRootUrl
+        static let postsEndPoint = "\(hostUrl)api/v2/posts"
+        static let postDetailsEndPoint = "\(hostUrl)api/v2/posts/\(FeedConstants.feed_id_path_param)"
+        static let postRepliesEndPoint = "\(hostUrl)api/v2/posts/\(FeedConstants.feed_id_path_param)/replies"
+        static let meowPostEndPoint = "\(hostUrl)api/v2/posts/post/\(FeedConstants.feed_id_path_param)/meow"
+        static let newPostEndPoint = "\(hostUrl)api/v2/posts/channel/\(FeedConstants.channel_path_param)"
     }
     
     private enum FeedConstants {
         static let feed_id_path_param = "{feed_id}"
+        static let channel_path_param = "{channel}"
     }
 }

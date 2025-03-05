@@ -27,7 +27,7 @@ struct CreateFeedScreen: View {
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .confirmationAction) {
             Button(L10n.actionCreate) {
-                //context.send(viewAction: .close)
+                context.send(viewAction: .createPost)
             }
         }
     }
@@ -64,6 +64,7 @@ private struct CreateFeedContent: View {
                         .foregroundStyle(.compound.textPrimary)
                         .focused($isTextEditorFocused)
                         .frame(alignment: .topLeading)
+                        // .lineSpacing(6)
                 }
             }
             .padding()

@@ -94,6 +94,40 @@ class APIManager {
         }
     }
     
+    func authorisedMultipartRequest<T: Decodable>(
+        _ url: String,
+        appSettings: AppSettings,
+        parameters: [String: String]? = nil,
+        headers: HTTPHeaders? = nil
+    ) async throws -> Result<T, Error> {
+        var authHeaders = headers
+        if let accessToken = appSettings.zeroAccessToken {
+            authHeaders = getAuthHeaders(headers: headers, accessToken: accessToken)
+        }
+        authHeaders?.add(name: "Content-Type", value: "multipart/form-data")
+
+        return try await withCheckedThrowingContinuation { continuation in
+            AF.upload(multipartFormData: { formData in
+                // Append parameters as form-data
+                parameters?.forEach { key, value in
+                    if let data = value.data(using: .utf8) {
+                        formData.append(data, withName: key)
+                    }
+                }
+            }, to: url, method: .post, headers: authHeaders)
+            .validate()
+            .responseDecodable(of: T.self) { response in
+                switch response.result {
+                case .success(let data):
+                    continuation.resume(returning: .success(data))
+                case .failure(let error):
+                    self.checkResponseCode(error.responseCode)
+                    continuation.resume(returning: .failure(error))
+                }
+            }
+        }
+    }
+    
     private func getAuthHeaders(headers: HTTPHeaders?, accessToken: String) -> HTTPHeaders {
         var mHeaders = headers ?? HTTPHeaders()
         mHeaders.add(name: "Authorization", value: "Bearer \(accessToken)")

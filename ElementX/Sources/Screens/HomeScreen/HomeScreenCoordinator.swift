@@ -24,7 +24,7 @@ enum HomeScreenCoordinatorAction {
     case presentRecoveryKeyScreen
     case presentEncryptionResetScreen
     case presentStartChatScreen
-    case presentCreateFeedScreen
+    case presentCreateFeedScreen(createFeedProtocol: CreateFeedProtocol)
     case presentGlobalSearch
     case logoutWithoutConfirmation
     case logout
@@ -74,8 +74,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentEncryptionResetScreen)
                 case .presentStartChatScreen:
                     actionsSubject.send(.presentStartChatScreen)
-                case .presentCreateFeedScreen:
-                    actionsSubject.send(.presentCreateFeedScreen)
+                case .presentCreateFeedScreen(let createFeedProtocol):
+                    actionsSubject.send(.presentCreateFeedScreen(createFeedProtocol: createFeedProtocol))
                 case .presentGlobalSearch:
                     actionsSubject.send(.presentGlobalSearch)
                 case .logoutWithoutConfirmation:
