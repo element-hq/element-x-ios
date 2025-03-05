@@ -107,13 +107,16 @@ class ComposerToolbarViewModelTests: XCTestCase {
     }
     
     func testSuggestionTrigger() async throws {
-        let deferred = deferFulfillment(wysiwygViewModel.$attributedContent) { $0.plainText == "#not_implemented_yay" }
-        wysiwygViewModel.setMarkdownContent("@test")
-        wysiwygViewModel.setMarkdownContent("#not_implemented_yay")
+        let deferred = deferFulfillment(wysiwygViewModel.$attributedContent) { $0.plainText == "#room-alias-test" }
+        wysiwygViewModel.setMarkdownContent("@user-test")
+        wysiwygViewModel.setMarkdownContent("#room-alias-test")
         try await deferred.fulfill()
         
         // The first one is nil because when initialised the view model is empty
-        XCTAssertEqual(completionSuggestionServiceMock.setSuggestionTriggerReceivedInvocations, [nil, .init(type: .user, text: "test", range: .init(location: 0, length: 5)), nil])
+        XCTAssertEqual(completionSuggestionServiceMock.setSuggestionTriggerReceivedInvocations, [nil,
+                                                                                                 .init(type: .user, text: "user-test", range: .init(location: 0, length: 10)),
+                                                                                                 .init(type: .room, text: "room-alias-test",
+                                                                                                       range: .init(location: 0, length: 16))])
     }
     
     func testSelectedUserSuggestion() {
@@ -122,6 +125,21 @@ class ComposerToolbarViewModelTests: XCTestCase {
         
         // The display name can be used for HTML injection in the rich text editor and it's useless anyway as the clients don't use it when resolving display names
         XCTAssertEqual(wysiwygViewModel.content.html, "<a href=\"https://matrix.to/#/@test:matrix.org\">@test:matrix.org</a> ")
+    }
+    
+    func testSelectedRoomSuggestion() {
+        let suggestion = SuggestionItem(suggestionType: .room(.init(id: "!room:matrix.org",
+                                                                    canonicalAlias: "#room-alias:matrix.org",
+                                                                    name: "Room",
+                                                                    avatar: .room(id: "!room:matrix.org",
+                                                                                  name: "Room",
+                                                                                  avatarURL: nil))),
+                                        range: .init(), rawSuggestionText: "")
+        viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
+        
+        // The display name can be used for HTML injection in the rich text editor and it's useless anyway as the clients don't use it when resolving display names
+
+        XCTAssertEqual(wysiwygViewModel.content.html, "<a href=\"https://matrix.to/#/%23room-alias:matrix.org\">#room-alias:matrix.org</a> ")
     }
     
     func testAllUsersSuggestion() {
@@ -143,6 +161,17 @@ class ComposerToolbarViewModelTests: XCTestCase {
         
         let attachment = wysiwygViewModel.textView.attributedText.attribute(.attachment, at: 0, effectiveRange: nil) as? PillTextAttachment
         XCTAssertEqual(attachment?.pillData?.type, .user(userID: userID))
+    }
+    
+    func testRoomMentionPillInRTE() async {
+        viewModel.context.send(viewAction: .composerAppeared)
+        await Task.yield()
+        let roomAlias = "#test:matrix.org"
+        let suggestion = SuggestionItem(suggestionType: .room(.init(id: "room-id", canonicalAlias: roomAlias, name: "Room", avatar: .room(id: "room-id", name: "Room", avatarURL: nil))), range: .init(), rawSuggestionText: "")
+        viewModel.context.send(viewAction: .selectedSuggestion(suggestion))
+        
+        let attachment = wysiwygViewModel.textView.attributedText.attribute(.attachment, at: 0, effectiveRange: nil) as? PillTextAttachment
+        XCTAssertEqual(attachment?.pillData?.type, .roomAlias(roomAlias))
     }
     
     func testAllUsersMentionPillInRTE() async {
