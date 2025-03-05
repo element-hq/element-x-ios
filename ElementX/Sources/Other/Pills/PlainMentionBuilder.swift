@@ -13,7 +13,7 @@ struct PlainMentionBuilder: MentionBuilderProtocol {
     
     func handleEventOnRoomIDMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, eventID: String, roomID: String) { }
     
-    func handleRoomAliasMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, roomAlias: String) { }
+    func handleRoomAliasMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, roomAlias: String, roomDisplayName: String?) { }
     
     func handleAllUsersMention(for attributedString: NSMutableAttributedString, in range: NSRange) { }
     

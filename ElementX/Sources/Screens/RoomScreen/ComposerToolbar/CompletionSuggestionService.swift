@@ -93,13 +93,14 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                                  roomSummaries: [RoomSummary]) -> [SuggestionItem] {
         roomSummaries
             .compactMap { roomSummary -> SuggestionItem? in
-                guard Self.shouldIncludeRoom(roomName: roomSummary.name, roomAlias: roomSummary.canonicalAlias, searchText: suggestionTrigger.text) else {
+                guard let canonicalAlias = roomSummary.canonicalAlias,
+                      Self.shouldIncludeRoom(roomName: roomSummary.name, roomAlias: canonicalAlias, searchText: suggestionTrigger.text) else {
                     return nil
                 }
                 
                 return .init(suggestionType: .room(.init(id: roomSummary.id,
-                                                         canonicalAlias: roomSummary.canonicalAlias,
-                                                         displayName: roomSummary.name,
+                                                         canonicalAlias: canonicalAlias,
+                                                         name: roomSummary.name,
                                                          avatar: roomSummary.avatar)),
                              range: suggestionTrigger.range, rawSuggestionText: suggestionTrigger.text)
             }
@@ -149,21 +150,11 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
         return containedInUserID || containedInDisplayName
     }
     
-    private static func shouldIncludeRoom(roomName: String, roomAlias: String?, searchText: String) -> Bool {
+    private static func shouldIncludeRoom(roomName: String, roomAlias: String, searchText: String) -> Bool {
         // If the search text is empty give back all the results
         guard !searchText.isEmpty else {
             return true
         }
-        
-        let containedInRoomName = roomName.localizedStandardContains(searchText.lowercased())
-        
-        let containedInAlias: Bool
-        if let roomAlias {
-            containedInAlias = roomAlias.localizedStandardContains(searchText.lowercased())
-        } else {
-            containedInAlias = false
-        }
-        
-        return containedInRoomName || containedInAlias
+        return roomName.localizedStandardContains(searchText.lowercased()) || roomAlias.localizedStandardContains(searchText.lowercased())
     }
 }

@@ -22,7 +22,8 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         let alice: RoomMemberProxyMock = .mockAlice
         let members: [RoomMemberProxyMock] = [alice, .mockBob, .mockCharlie, .mockMe]
         let roomProxyMock = JoinedRoomProxyMock(.init(id: "roomID", name: "test", members: members))
-        let service = CompletionSuggestionService(roomProxy: roomProxyMock)
+        let service = CompletionSuggestionService(roomProxy: roomProxyMock,
+                                                  roomListPublisher: Empty().replaceEmpty(with: []).eraseToAnyPublisher())
         
         var deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
             suggestions == []
@@ -59,7 +60,8 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         let alice: RoomMemberProxyMock = .mockAlice
         let members: [RoomMemberProxyMock] = [alice, .mockBob, .mockCharlie, .mockMe]
         let roomProxyMock = JoinedRoomProxyMock(.init(id: "roomID", name: "test", members: members, canUserTriggerRoomNotification: true))
-        let service = CompletionSuggestionService(roomProxy: roomProxyMock)
+        let service = CompletionSuggestionService(roomProxy: roomProxyMock,
+                                                  roomListPublisher: Empty().replaceEmpty(with: []).eraseToAnyPublisher())
                 
         var deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
             suggestions == []
@@ -85,7 +87,8 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         let bob: RoomMemberProxyMock = .mockBob
         let members: [RoomMemberProxyMock] = [alice, bob, .mockMe]
         let roomProxyMock = JoinedRoomProxyMock(.init(id: "roomID", name: "test", members: members, canUserTriggerRoomNotification: true))
-        let service = CompletionSuggestionService(roomProxy: roomProxyMock)
+        let service = CompletionSuggestionService(roomProxy: roomProxyMock,
+                                                  roomListPublisher: Empty().replaceEmpty(with: []).eraseToAnyPublisher())
                 
         var deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
             suggestions == []
@@ -106,7 +109,8 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         let alice: RoomMemberProxyMock = .mockAlice
         let members: [RoomMemberProxyMock] = [alice, .mockBob, .mockCharlie, .mockMe]
         let roomProxyMock = JoinedRoomProxyMock(.init(name: "test", members: members))
-        let service = CompletionSuggestionService(roomProxy: roomProxyMock)
+        let service = CompletionSuggestionService(roomProxy: roomProxyMock,
+                                                  roomListPublisher: Empty().replaceEmpty(with: []).eraseToAnyPublisher())
         
         var deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
             suggestions == [.init(suggestionType: .user(.init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL)), range: .init(location: 0, length: 3), rawSuggestionText: "al")]
@@ -132,7 +136,8 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         let bob: RoomMemberProxyMock = .mockBob
         let members: [RoomMemberProxyMock] = [alice, bob, .mockCharlie, .mockMe]
         let roomProxyMock = JoinedRoomProxyMock(.init(name: "test", members: members))
-        let service = CompletionSuggestionService(roomProxy: roomProxyMock)
+        let service = CompletionSuggestionService(roomProxy: roomProxyMock,
+                                                  roomListPublisher: Empty().replaceEmpty(with: []).eraseToAnyPublisher())
         
         var deffered = deferFulfillment(service.suggestionsPublisher) { suggestions in
             suggestions == [.init(suggestionType: .user(.init(id: alice.userID, displayName: alice.displayName, avatarURL: alice.avatarURL)), range: .init(location: 0, length: 3), rawSuggestionText: "al")]

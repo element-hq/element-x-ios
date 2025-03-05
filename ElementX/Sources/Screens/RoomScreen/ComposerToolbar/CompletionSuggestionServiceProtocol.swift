@@ -35,8 +35,8 @@ struct SuggestionItem: Identifiable, Equatable {
     
     struct Room: Equatable {
         let id: String
-        let canonicalAlias: String?
-        let displayName: String
+        let canonicalAlias: String
+        let name: String
         let avatar: RoomAvatar
     }
     
@@ -62,7 +62,7 @@ struct SuggestionItem: Identifiable, Equatable {
         case .user(let user):
             return user.displayName ?? user.id
         case .room(let room):
-            return room.displayName
+            return room.name
         }
     }
     

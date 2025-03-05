@@ -378,22 +378,23 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             shouldMakeAnotherPass = false
             attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, stop in
                 guard let value else { return }
-                
                 shouldMakeAnotherPass = true
                 
                 // Remove the attribute so it doesn't get inherited by the new string
                 attributedString.removeAttribute(.link, range: range)
                 
-                guard let userID = attributedString.attribute(.MatrixUserID, at: range.location, effectiveRange: nil) as? String else {
+                if let userID = attributedString.attribute(.MatrixUserID, at: range.location, effectiveRange: nil) as? String {
+                    let displayName = attributedString.attribute(.MatrixUserDisplayName, at: range.location, effectiveRange: nil)
+                    attributedString.replaceCharacters(in: range, with: "[\(displayName ?? userID)](\(value))")
+                    userIDs.insert(userID)
+                    stop.pointee = true
+                } else if let roomAlias = attributedString.attribute(.MatrixRoomAlias, at: range.location, effectiveRange: nil) as? String {
+                    let displayName = attributedString.attribute(.MatrixRoomDisplayName, at: range.location, effectiveRange: nil)
+                    attributedString.replaceCharacters(in: range, with: "[\(displayName ?? roomAlias)](\(value))")
+                    stop.pointee = true
+                } else {
                     return
                 }
-                
-                let displayName = attributedString.attribute(.MatrixUserDisplayName, at: range.location, effectiveRange: nil)
-                
-                attributedString.replaceCharacters(in: range, with: "[\(displayName ?? userID)](\(value))")
-                userIDs.insert(userID)
-                
-                stop.pointee = true
             }
         } while shouldMakeAnotherPass
         
@@ -486,6 +487,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 let attributedString = NSMutableAttributedString(attributedString: state.bindings.plainComposerText)
                 mentionBuilder.handleUserMention(for: attributedString, in: suggestion.range, url: url, userID: user.id, userDisplayName: user.displayName)
                 state.bindings.plainComposerText = attributedString
+                
                 let newSelectedRange = NSRange(location: state.bindings.selectedRange.location - suggestion.rawSuggestionText.count, length: 0)
                 state.bindings.selectedRange = newSelectedRange
             }
@@ -501,7 +503,21 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 state.bindings.selectedRange = newSelectedRange
             }
         case let .room(room):
-            break
+            guard let url = try? URL(string: matrixToRoomAliasPermalink(roomAlias: room.canonicalAlias)) else {
+                MXLog.error("Could not build alias permalink")
+                return
+            }
+            
+            if context.composerFormattingEnabled {
+                wysiwygViewModel.setMention(url: url.absoluteString, name: room.name, mentionType: .room)
+            } else {
+                let attributedString = NSMutableAttributedString(attributedString: state.bindings.plainComposerText)
+                mentionBuilder.handleRoomAliasMention(for: attributedString, in: suggestion.range, url: url, roomAlias: room.canonicalAlias, roomDisplayName: room.name)
+                state.bindings.plainComposerText = attributedString
+                
+                let newSelectedRange = NSRange(location: state.bindings.selectedRange.location - suggestion.rawSuggestionText.count, length: 0)
+                state.bindings.selectedRange = newSelectedRange
+            }
         }
     }
     

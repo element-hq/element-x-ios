@@ -50,14 +50,11 @@ struct MentionSuggestionItemView_Previews: PreviewProvider, TestablePreview {
         MentionSuggestionItemView(mediaProvider: mockMediaProvider,
                                   item: .init(suggestionType: .room(.init(id: "room",
                                                                           canonicalAlias: "#room:matrix.org",
-                                                                          displayName: "Room",
+                                                                          name: "Room",
                                                                           avatar: .room(id: "room",
                                                                                         name: "Room", avatarURL: .mockMXCAvatar))),
                                               range: .init(),
                                               rawSuggestionText: ""))
             .previewDisplayName("Room")
-        MentionSuggestionItemView(mediaProvider: mockMediaProvider,
-                                  item: .init(suggestionType: .room(.init(id: "room", canonicalAlias: nil, displayName: "Room", avatar: .room(id: "room", name: "Room", avatarURL: nil))), range: .init(), rawSuggestionText: ""))
-            .previewDisplayName("Room no alias")
     }
 }
