@@ -19,9 +19,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private let appSettings: AppSettings
     private let appHooks: AppHooks
     
-    private let zeroAuthApi: ZeroAuthApiProtocol
-    private let zeroCreateAccountApi: ZeroCreateAccountApiProtocol
-    private let zeroUsersApi: ZeroUsersApiProtocol
+    private let zeroAuthApiProxy: ZeroAuthApiProxyProtocol
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never>
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
@@ -39,9 +37,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         self.appSettings = appSettings
         self.appHooks = appHooks
         
-        zeroAuthApi = ZeroAuthApi(appSettings: appSettings)
-        zeroCreateAccountApi = ZeroCreateAccountApi(appSettings: appSettings)
-        zeroUsersApi = ZeroUsersApi(appSettings: appSettings)
+        zeroAuthApiProxy = ZeroAuthApiProxy(appSettings: appSettings)
         
         // When updating these, don't forget to update the reset method too.
         homeserverSubject = .init(LoginHomeserver(address: appSettings.defaultHomeserverAddress, loginMode: .unknown))
@@ -129,7 +125,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     func login(username: String, password: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         guard let client else { return .failure(.failedLoggingIn) }
         do {
-            let zeroMatrixSSOResult = try await zeroAuthApi.loginSSO(email: username, password: password)
+            let zeroMatrixSSOResult = try await zeroAuthApiProxy.authApi.loginSSO(email: username, password: password)
             switch zeroMatrixSSOResult {
             case .success(let zeroSSOToken):
                 try await client.customLoginWithJwt(jwt: zeroSSOToken.token, initialDeviceName: initialDeviceName, deviceId: deviceID)
@@ -166,7 +162,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     func loginWithWeb3(web3Token: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         guard let client else { return .failure(.failedLoggingIn) }
         do {
-            let zeroMatrixSSOResult = try await zeroAuthApi.loginWithWeb3(web3Token: web3Token)
+            let zeroMatrixSSOResult = try await zeroAuthApiProxy.authApi.loginWithWeb3(web3Token: web3Token)
             switch zeroMatrixSSOResult {
             case .success(let zeroSSOToken):
                 try await client.customLoginWithJwt(jwt: zeroSSOToken.token, initialDeviceName: initialDeviceName, deviceId: deviceID)
@@ -227,7 +223,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     func verifyCreateAccountInviteCode(inviteCode: String) async -> Result<Void, AuthenticationServiceError> {
         do {
-            let result = try await zeroCreateAccountApi.validateInviteCode(inviteCode: inviteCode)
+            let result = try await zeroAuthApiProxy.createAccountApi.validateInviteCode(inviteCode: inviteCode)
             switch result {
             case .success:
                 return .success(())
@@ -242,7 +238,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     func createUserAccount(email: String, password: String, inviteCode: String) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         do {
-            let result = try await zeroCreateAccountApi.createAccountWithEmail(email: email, password: password, invite: inviteCode)
+            let result = try await zeroAuthApiProxy.createAccountApi.createAccountWithEmail(email: email, password: password, invite: inviteCode)
             switch result {
             case .success:
                 await ensureHomeServerIsConfigured()
@@ -267,7 +263,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     func createUserAccountWithWeb3(web3Token: String, inviteCode: String) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         do {
-            let result = try await zeroCreateAccountApi.createAccountWithWeb3(web3Token: web3Token, invite: inviteCode)
+            let result = try await zeroAuthApiProxy.createAccountApi.createAccountWithWeb3(web3Token: web3Token, invite: inviteCode)
             switch result {
             case .success(_):
                 await ensureHomeServerIsConfigured()
@@ -327,7 +323,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private func loginNewlyCreatedUser() async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         guard let client else { return .failure(.failedLoggingIn) }
         do {
-            let zeroMatrixSSOResult = try await zeroAuthApi.fetchSSOToken()
+            let zeroMatrixSSOResult = try await zeroAuthApiProxy.authApi.fetchSSOToken()
             switch zeroMatrixSSOResult {
             case .success(let zeroSSOToken):
                 try await client.customLoginWithJwt(jwt: zeroSSOToken.token, initialDeviceName: nil, deviceId: nil)
@@ -352,11 +348,11 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private func checkAndLinkMatrixUser(_ userId: String?, fromCreateAccountFlow: Bool = false) async throws {
         guard let userId else { return }
         
-        let currentUserResult = try await zeroUsersApi.fetchCurrentUser()
+        let currentUserResult = try await zeroAuthApiProxy.usersApi.fetchCurrentUser()
         switch currentUserResult {
         case .success(let currentUser):
             if fromCreateAccountFlow || currentUser.matrixId == nil {
-                _ = try await zeroAuthApi.linkMatrixUserToZero(matrixUserId: userId)
+                _ = try await zeroAuthApiProxy.authApi.linkMatrixUserToZero(matrixUserId: userId)
             }
         case .failure(let failure):
             MXLog.failure("Failed to fetch current zero user. Error: \(failure)")

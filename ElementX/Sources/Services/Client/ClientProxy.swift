@@ -159,14 +159,7 @@ class ClientProxy: ClientProxyProtocol {
     
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
     
-    private let zeroMatrixUsersService: ZeroMatrixUsersService
-    private let zeroRewardsApi: ZeroRewardsApiProtocol
-    private let zeroMessengerInviteApi: ZeroMessengerInviteApiProtocol
-    private let zeroCreateAccountApi: ZeroCreateAccountApiProtocol
-    private let zeroUserAccountApi: ZeroAccountApiProtocol
-    private let zeroPostsApi: ZeroPostsApiProtocol
-    private let zeroChannelsApi: ZeroChannelsApiProtocol
-    private let zeroWalletsApi: ZeroWalletsApiProtocol
+    private let zeroApiProxy: ZeroApiProxyProtocol
     
     init(client: ClientProtocol,
          needsSlidingSyncMigration: Bool,
@@ -186,18 +179,7 @@ class ClientProxy: ClientProxyProtocol {
         
         self.needsSlidingSyncMigration = needsSlidingSyncMigration
         
-        /// Configure Zero Utlils, Services and APIs
-        let zeroUsersApi = ZeroUsersApi(appSettings: appSettings)
-        zeroMatrixUsersService = ZeroMatrixUsersService(zeroUsersApi: zeroUsersApi,
-                                                        appSettings: appSettings,
-                                                        client: client)
-        zeroRewardsApi = ZeroRewardsApi(appSettings: appSettings)
-        zeroMessengerInviteApi = ZeroMessengerInviteApi(appSettings: appSettings)
-        zeroCreateAccountApi = ZeroCreateAccountApi(appSettings: appSettings)
-        zeroUserAccountApi = ZeroAccountApi(appSettings: appSettings)
-        zeroPostsApi = ZeroPostsApi(appSettings: appSettings)
-        zeroChannelsApi = ZeroChannelsApi(appSettings: appSettings)
-        zeroWalletsApi = ZeroWalletsApi(appSettings: appSettings)
+        zeroApiProxy = ZeroApiProxy(client: client, appSettings: appSettings)
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
@@ -248,7 +230,7 @@ class ClientProxy: ClientProxyProtocol {
             }
             .store(in: &cancellables)
         
-        await loadZeroMessengerInvite()
+        _ = await loadZeroMessengerInvite()
     }
     
     var userID: String {
@@ -579,7 +561,7 @@ class ClientProxy: ClientProxyProtocol {
     func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewProxyProtocol, ClientProxyError> {
         do {
             let roomPreview = try await client.getRoomPreviewFromRoomId(roomId: identifier, viaServers: via)
-            return try .success(RoomPreviewProxy(roomId: identifier, roomPreview: roomPreview, zeroUsersService: zeroMatrixUsersService))
+            return try .success(RoomPreviewProxy(roomId: identifier, roomPreview: roomPreview, zeroUsersService: zeroApiProxy.matrixUsersService))
         } catch ClientError.MatrixApi(.forbidden, _, _) {
             MXLog.error("Failed retrieving preview for room: \(identifier) is private")
             return .failure(.roomPreviewIsPrivate)
@@ -615,7 +597,7 @@ class ClientProxy: ClientProxyProtocol {
     func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError> {
         do {
             try await client.setDisplayName(name: name)
-            try await zeroMatrixUsersService.updateUserName(displayName: name)
+            try await zeroApiProxy.matrixUsersService.updateUserName(displayName: name)
             Task {
                 await self.loadUserDisplayName()
             }
@@ -652,7 +634,7 @@ class ClientProxy: ClientProxyProtocol {
             }
             Task {
                 if let urlString = try await client.avatarUrl() {
-                    try await zeroMatrixUsersService.updateUserAvatar(avatarUrl: urlString)
+                    try await zeroApiProxy.matrixUsersService.updateUserAvatar(avatarUrl: urlString)
                 }
             }
             return .success(())
@@ -666,7 +648,7 @@ class ClientProxy: ClientProxyProtocol {
         Task {
             do {
                 let userId = try client.userId()
-                let zeroProfile = try await zeroMatrixUsersService.fetchZeroUser(userId: userId)
+                let zeroProfile = try await zeroApiProxy.matrixUsersService.fetchZeroUser(userId: userId)
                 primaryZeroIdSubject.send(zeroProfile?.primaryZID)
             } catch {
                 MXLog.error("Failed loading user primary zero id with error: \(error)")
@@ -716,7 +698,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError> {
         do {
-            let zeroUsers = try await zeroMatrixUsersService.searchZeroUsers(query: searchTerm)
+            let zeroUsers = try await zeroApiProxy.matrixUsersService.searchZeroUsers(query: searchTerm)
             let matrixUsers = try await zeroUsers.concurrentMap { zeroUser in
                 let userProfile = try await self.client.getProfile(userId: zeroUser.matrixId)
                 return UserProfileProxy(sdkUserProfile: userProfile, zeroUserProfile: zeroUser)
@@ -731,7 +713,7 @@ class ClientProxy: ClientProxyProtocol {
     func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError> {
         do {
             async let sdkProfile = client.getProfile(userId: userID)
-            async let zeroProfile = zeroMatrixUsersService.fetchZeroUser(userId: userID)
+            async let zeroProfile = zeroApiProxy.matrixUsersService.fetchZeroUser(userId: userID)
             // Await both results
             let (sdkProfileResult, zeroProfileResult) = try await (sdkProfile, zeroProfile)
             return .success(.init(zeroUserProfile: zeroProfileResult, sdkUserProfile: sdkProfileResult))
@@ -743,7 +725,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func zeroProfile(userId: String) async {
         do {
-            let zeroProfile = try await zeroMatrixUsersService.fetchZeroUser(userId: userId)
+            let zeroProfile = try await zeroApiProxy.matrixUsersService.fetchZeroUser(userId: userId)
             directMemberZeroProfileSubject.send(zeroProfile)
         } catch {
             MXLog.error("Failed retrieving zero profile for userID: \(userID) with error: \(error)")
@@ -867,10 +849,10 @@ class ClientProxy: ClientProxyProtocol {
                 userRewardsSubject.send(oldRewards)
             }
             
-            let apiRewards = try await zeroRewardsApi.fetchMyRewards()
+            let apiRewards = try await zeroApiProxy.rewardsApi.fetchMyRewards()
             switch apiRewards {
             case .success(let zRewards):
-                let apiCurrency = try await zeroRewardsApi.loadZeroCurrenyRate()
+                let apiCurrency = try await zeroApiProxy.rewardsApi.loadZeroCurrenyRate()
                 switch apiCurrency {
                 case .success(let zCurrency):
                     let zeroRewards = ZeroRewards(rewards: zRewards, currency: zCurrency)
@@ -905,7 +887,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func loadZeroMessengerInvite() async -> Result<Void, ClientProxyError> {
         do {
-            let apiMessengerInvite = try await zeroMessengerInviteApi.fetchMessengerInvite()
+            let apiMessengerInvite = try await zeroApiProxy.messengerInviteApi.fetchMessengerInvite()
             switch apiMessengerInvite {
             case .success(let invite):
                 let zeroMessengerInvite = ZeroMessengerInvite(messengerInvite: invite)
@@ -922,7 +904,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func isProfileCompletionRequired() async -> Bool {
         do {
-            let currentUser = try await zeroMatrixUsersService.fetchCurrentUser()
+            let currentUser = try await zeroApiProxy.matrixUsersService.fetchCurrentUser()
             if let user = currentUser {
                 return user.displayName.isEmpty || user.displayName.stringMatchesUserIdFormatRegex()
             } else {
@@ -949,7 +931,7 @@ class ClientProxy: ClientProxyProtocol {
             }
             let userId = try client.userId().matrixIdToCleanHex()
             let avatarUrl = try await client.avatarUrl() ?? ""
-            let result = try await zeroCreateAccountApi
+            let result = try await zeroApiProxy.createAccountApi
                 .finaliseCreateAccount(request: ZFinaliseCreateAccount(inviteCode: inviteCode, name: displayName, userId: userId, profileImageUrl: avatarUrl))
             
             switch result {
@@ -969,7 +951,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func deleteUserAccount() async -> Result<Void, ClientProxyError> {
         do {
-            let deleteAccountResult = try await zeroUserAccountApi.deleteAccount()
+            let deleteAccountResult = try await zeroApiProxy.userAccountApi.deleteAccount()
             switch deleteAccountResult {
             case .success(_):
                 return .success(())
@@ -985,9 +967,9 @@ class ClientProxy: ClientProxyProtocol {
     func checkAndLinkZeroUser() {
         Task {
             do {
-                guard let currentUser = try await zeroMatrixUsersService.fetchCurrentUser() else { return }
+                guard let currentUser = try await zeroApiProxy.matrixUsersService.fetchCurrentUser() else { return }
                 if currentUser.matrixId == nil {
-                    _ = try await zeroCreateAccountApi.linkMatrixUserToZero(matrixUserId: userID)
+                    _ = try await zeroApiProxy.createAccountApi.linkMatrixUserToZero(matrixUserId: userID)
                 }
             } catch {
                 MXLog.error("Failed linking matrixId to zero user. Error: \(error)")
@@ -997,7 +979,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func fetchCurrentZeroUser() async -> ZCurrentUser? {
         do {
-            return try await zeroMatrixUsersService.fetchCurrentUser()
+            return try await zeroApiProxy.matrixUsersService.fetchCurrentUser()
         } catch {
             MXLog.error("Failed to fetch current zero user. Error: \(error)")
             return nil
@@ -1006,7 +988,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func fetchZeroFeeds(limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
         do {
-            let zeroPostsResult = try await zeroPostsApi.fetchPosts(limit: limit, skip: skip)
+            let zeroPostsResult = try await zeroApiProxy.postsApi.fetchPosts(limit: limit, skip: skip)
             switch zeroPostsResult {
             case .success(let posts):
                 return .success(posts)
@@ -1021,7 +1003,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func fetchFeedDetails(feedId: String) async -> Result<ZPost, ClientProxyError> {
         do {
-            let zeroPostResult = try await zeroPostsApi.fetchPostDetails(postId: feedId)
+            let zeroPostResult = try await zeroApiProxy.postsApi.fetchPostDetails(postId: feedId)
             switch zeroPostResult {
             case .success(let post):
                 return .success(post)
@@ -1036,7 +1018,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func fetchFeedReplies(feedId: String, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
         do {
-            let zeroFeedRepliesResult = try await zeroPostsApi.fetchPostReplies(postId: feedId, limit: limit, skip: skip)
+            let zeroFeedRepliesResult = try await zeroApiProxy.postsApi.fetchPostReplies(postId: feedId, limit: limit, skip: skip)
             switch zeroFeedRepliesResult {
             case .success(let replies):
                 return .success(replies)
@@ -1051,7 +1033,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func addMeowsToFeed(feedId: String, amount: Int) async -> Result<ZPost, ClientProxyError> {
         do {
-            let zeroAddPostMeowResult = try await zeroPostsApi.addMeowsToPst(amount: amount, postId: feedId)
+            let zeroAddPostMeowResult = try await zeroApiProxy.postsApi.addMeowsToPst(amount: amount, postId: feedId)
             switch zeroAddPostMeowResult {
             case .success(let post):
                 return .success(post)
@@ -1066,7 +1048,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func postNewFeed(channelZId: String, userWalletAddress: String, content: String) async -> Result<ZPost, ClientProxyError> {
         do {
-            let postFeedResult = try await zeroPostsApi.createNewPost(channelZId: channelZId,
+            let postFeedResult = try await zeroApiProxy.postsApi.createNewPost(channelZId: channelZId,
                                                                       userWalletAddress: userWalletAddress,
                                                                       content: content)
             switch postFeedResult {
@@ -1083,7 +1065,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func fetchUserZIds() async -> Result<[String], ClientProxyError> {
         do {
-            let zIdsResult = try await zeroChannelsApi.fetchZeroIds()
+            let zIdsResult = try await zeroApiProxy.channelsApi.fetchZeroIds()
             switch zIdsResult {
             case .success(let zIds):
                 return .success(zIds)
@@ -1098,7 +1080,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func joinChannel(roomAliasOrId: String) async -> Result<String, ClientProxyError> {
         do {
-            let joinChannelResult = try await zeroChannelsApi.joinChannel(roomAliasOrId: roomAliasOrId)
+            let joinChannelResult = try await zeroApiProxy.channelsApi.joinChannel(roomAliasOrId: roomAliasOrId)
             switch joinChannelResult {
             case .success(let roomId):
                 _ = await joinRoom(roomAliasOrId, via: [])
@@ -1114,7 +1096,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func initializeThirdWebWalletForUser() async -> Result<Void, ClientProxyError> {
         do {
-            let result = try await zeroWalletsApi.initializeThirdWebWallet()
+            let result = try await zeroApiProxy.walletsApi.initializeThirdWebWallet()
             switch result {
             case .success:
                 return .success(())
@@ -1209,7 +1191,7 @@ class ClientProxy: ClientProxyProtocol {
                                                       shouldUpdateVisibleRange: true,
                                                       notificationSettings: notificationSettings,
                                                       appSettings: appSettings,
-                                                      zeroUsersService: zeroMatrixUsersService,
+                                                      zeroUsersService: zeroApiProxy.matrixUsersService,
                                                       onJoinRoomExplicitly: { [weak self] roomId in
                 await self?.joinRoomExplicitly(roomId)
             })
@@ -1220,7 +1202,7 @@ class ClientProxy: ClientProxyProtocol {
                                                                name: "AlternateAllRooms",
                                                                notificationSettings: notificationSettings,
                                                                appSettings: appSettings,
-                                                               zeroUsersService: zeroMatrixUsersService,
+                                                               zeroUsersService: zeroApiProxy.matrixUsersService,
                                                                onJoinRoomExplicitly: { [weak self] roomId in
                 await self?.joinRoomExplicitly(roomId)
             })
@@ -1321,26 +1303,24 @@ class ClientProxy: ClientProxyProtocol {
                 return try await .invited(InvitedRoomProxy(roomListItem: roomListItem,
                                                            roomPreview: roomListItem.previewRoom(via: []),
                                                            ownUserID: userID,
-                                                           zeroUsersService: zeroMatrixUsersService))
+                                                           zeroUsersService: zeroApiProxy.matrixUsersService))
             case .knocked:
                 if appSettings.knockingEnabled {
                     return try await .knocked(KnockedRoomProxy(roomListItem: roomListItem,
                                                                roomPreview: roomListItem.previewRoom(via: []),
                                                                ownUserID: userID,
-                                                               zeroUsersService: zeroMatrixUsersService))
+                                                               zeroUsersService: zeroApiProxy.matrixUsersService))
                 }
                 return nil
             case .joined:
                 if roomListItem.isTimelineInitialized() == false {
                     try await roomListItem.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
-                }
-                let zeroChatApi = ZeroChatApi(appSettings: appSettings)
-                
+                }                
                 let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,
                                                           roomListItem: roomListItem,
                                                           room: roomListItem.fullRoom(),
-                                                          zeroChatApi: zeroChatApi,
-                                                          zeroUsersService: zeroMatrixUsersService)
+                                                          zeroChatApi: zeroApiProxy.chatApi,
+                                                          zeroUsersService: zeroApiProxy.matrixUsersService)
                 
                 return .joined(roomProxy)
             case .left:
@@ -1349,7 +1329,7 @@ class ClientProxy: ClientProxyProtocol {
                 return try await .banned(BannedRoomProxy(roomListItem: roomListItem,
                                                          roomPreview: roomListItem.previewRoom(via: []),
                                                          ownUserID: userID,
-                                                         zeroUsersService: zeroMatrixUsersService))
+                                                         zeroUsersService: zeroApiProxy.matrixUsersService))
             }
         } catch {
             MXLog.error("Failed retrieving room: \(roomID), with error: \(error)")
@@ -1446,7 +1426,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func verifyUserPassword(_ password: String) async -> Result<Void, ClientProxyError> {
         do {
-            let verifyPasswordResult = try await zeroUserAccountApi.verifyPassword(password: password)
+            let verifyPasswordResult = try await zeroApiProxy.userAccountApi.verifyPassword(password: password)
             switch verifyPasswordResult {
             case .success:
                 return .success(())
