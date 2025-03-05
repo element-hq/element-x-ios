@@ -15,7 +15,9 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
     private let clientProxy: ClientProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let createFeedProtocol: CreateFeedProtocol
-        
+    
+    private var currentUserWalletAddress: String? = nil
+    
     private var actionsSubject: PassthroughSubject<CreateFeedScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<CreateFeedScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -41,6 +43,7 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
             .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
         
+        fetchAndCheckCurrentUser()
     }
     
     override func process(viewAction: CreateFeedScreenViewAction) {
@@ -50,7 +53,25 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
         }
     }
     
+    private func fetchAndCheckCurrentUser() {
+        Task {
+            if let walletAddress = await fetchPrimaryWalletAddress() {
+                currentUserWalletAddress = walletAddress
+            } else {
+                _ = await clientProxy.initializeThirdWebWalletForUser()
+                currentUserWalletAddress = await fetchPrimaryWalletAddress()
+            }
+        }
+    }
+
+    private func fetchPrimaryWalletAddress() async -> String? {
+        guard let user = await clientProxy.fetchCurrentZeroUser() else { return nil }
+        return user.primaryWalletAddress ?? user.wallets?.first?.publicAddress
+    }
+    
     private func createNewPost() {
+        guard let userWalletAddress = currentUserWalletAddress else { return }
+        
         Task {
             let userIndicatorID = UUID().uuidString
             defer {
@@ -62,8 +83,8 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
                                                                   persistent: true))
             
             let postFeedResult = await clientProxy.postNewFeed(channelZId: "",
-                                                         userWalletAddress: "",
-                                                         content: state.bindings.feedText)
+                                                               userWalletAddress: userWalletAddress,
+                                                               content: state.bindings.feedText)
             switch postFeedResult {
             case .success(_):
                 createFeedProtocol.onNewFeedPosted()

@@ -5641,6 +5641,70 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         checkAndLinkZeroUserCallsCount += 1
         checkAndLinkZeroUserClosure?()
     }
+    //MARK: - fetchCurrentZeroUser
+
+    var fetchCurrentZeroUserUnderlyingCallsCount = 0
+    var fetchCurrentZeroUserCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchCurrentZeroUserUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchCurrentZeroUserUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchCurrentZeroUserUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchCurrentZeroUserUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchCurrentZeroUserCalled: Bool {
+        return fetchCurrentZeroUserCallsCount > 0
+    }
+
+    var fetchCurrentZeroUserUnderlyingReturnValue: ZCurrentUser?
+    var fetchCurrentZeroUserReturnValue: ZCurrentUser? {
+        get {
+            if Thread.isMainThread {
+                return fetchCurrentZeroUserUnderlyingReturnValue
+            } else {
+                var returnValue: ZCurrentUser?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchCurrentZeroUserUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchCurrentZeroUserUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchCurrentZeroUserUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchCurrentZeroUserClosure: (() async -> ZCurrentUser?)?
+
+    func fetchCurrentZeroUser() async -> ZCurrentUser? {
+        fetchCurrentZeroUserCallsCount += 1
+        if let fetchCurrentZeroUserClosure = fetchCurrentZeroUserClosure {
+            return await fetchCurrentZeroUserClosure()
+        } else {
+            return fetchCurrentZeroUserReturnValue
+        }
+    }
     //MARK: - fetchZeroFeeds
 
     var fetchZeroFeedsLimitSkipUnderlyingCallsCount = 0
@@ -6123,6 +6187,70 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return await joinChannelRoomAliasOrIdClosure(roomAliasOrId)
         } else {
             return joinChannelRoomAliasOrIdReturnValue
+        }
+    }
+    //MARK: - initializeThirdWebWalletForUser
+
+    var initializeThirdWebWalletForUserUnderlyingCallsCount = 0
+    var initializeThirdWebWalletForUserCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return initializeThirdWebWalletForUserUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = initializeThirdWebWalletForUserUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                initializeThirdWebWalletForUserUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    initializeThirdWebWalletForUserUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var initializeThirdWebWalletForUserCalled: Bool {
+        return initializeThirdWebWalletForUserCallsCount > 0
+    }
+
+    var initializeThirdWebWalletForUserUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var initializeThirdWebWalletForUserReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return initializeThirdWebWalletForUserUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = initializeThirdWebWalletForUserUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                initializeThirdWebWalletForUserUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    initializeThirdWebWalletForUserUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var initializeThirdWebWalletForUserClosure: (() async -> Result<Void, ClientProxyError>)?
+
+    func initializeThirdWebWalletForUser() async -> Result<Void, ClientProxyError> {
+        initializeThirdWebWalletForUserCallsCount += 1
+        if let initializeThirdWebWalletForUserClosure = initializeThirdWebWalletForUserClosure {
+            return await initializeThirdWebWalletForUserClosure()
+        } else {
+            return initializeThirdWebWalletForUserReturnValue
         }
     }
     //MARK: - loadMediaContentForSource

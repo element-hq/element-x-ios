@@ -7,6 +7,10 @@ public struct ZCurrentUser: Codable, Identifiable {
     public let matrixAccessToken: String?
     public let matrixId: String?
     public let profileSummary: ZMatrixUserProfile?
+    public let primaryZID: String?
+    public let totalRewards: String?
+    public let wallets: [ZWallet]?
+    public let primaryWalletAddress: String?
     
     public var profileImageURL: URL? {
         URL(string: profileSummary?.profileImage ?? "")
@@ -33,4 +37,21 @@ extension ZCurrentUser: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
+}
+
+public struct ZWallet: Codable {
+    let id: String
+    let userId: String
+    let publicAddress: String
+    let isDefault: Bool
+    let isMultiSig: Bool
+    let balance: String?
+    let balanceCheckedAt: String?
+    let dailyLimit: String?
+    let requiredConfirmations: Int?
+    let name: String?
+    let data: String?
+    let isThirdWeb: Bool
+    let createdAt: String?
+    let updatedAt: String?
 }

@@ -245,6 +245,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func checkAndLinkZeroUser()
     
+    func fetchCurrentZeroUser() async -> ZCurrentUser?
+    
     // MARK: - Zero Feed
     
     func fetchZeroFeeds(limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError>
@@ -262,4 +264,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func fetchUserZIds() async -> Result<[String], ClientProxyError>
     
     func joinChannel(roomAliasOrId: String) async -> Result<String, ClientProxyError>
+    
+    // MARK: - Zero Wallets
+    
+    func initializeThirdWebWalletForUser() async -> Result<Void, ClientProxyError>
 }

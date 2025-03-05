@@ -166,6 +166,7 @@ class ClientProxy: ClientProxyProtocol {
     private let zeroUserAccountApi: ZeroAccountApiProtocol
     private let zeroPostsApi: ZeroPostsApiProtocol
     private let zeroChannelsApi: ZeroChannelsApiProtocol
+    private let zeroWalletsApi: ZeroWalletsApiProtocol
     
     init(client: ClientProtocol,
          needsSlidingSyncMigration: Bool,
@@ -196,6 +197,7 @@ class ClientProxy: ClientProxyProtocol {
         zeroUserAccountApi = ZeroAccountApi(appSettings: appSettings)
         zeroPostsApi = ZeroPostsApi(appSettings: appSettings)
         zeroChannelsApi = ZeroChannelsApi(appSettings: appSettings)
+        zeroWalletsApi = ZeroWalletsApi(appSettings: appSettings)
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
@@ -969,7 +971,7 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let deleteAccountResult = try await zeroUserAccountApi.deleteAccount()
             switch deleteAccountResult {
-            case .success(let success):
+            case .success(_):
                 return .success(())
             case .failure(let error):
                 return .failure(.zeroError(error))
@@ -990,6 +992,15 @@ class ClientProxy: ClientProxyProtocol {
             } catch {
                 MXLog.error("Failed linking matrixId to zero user. Error: \(error)")
             }
+        }
+    }
+    
+    func fetchCurrentZeroUser() async -> ZCurrentUser? {
+        do {
+            return try await zeroMatrixUsersService.fetchCurrentUser()
+        } catch {
+            MXLog.error("Failed to fetch current zero user. Error: \(error)")
+            return nil
         }
     }
     
@@ -1097,6 +1108,21 @@ class ClientProxy: ClientProxyProtocol {
             }
         } catch {
             MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func initializeThirdWebWalletForUser() async -> Result<Void, ClientProxyError> {
+        do {
+            let result = try await zeroWalletsApi.initializeThirdWebWallet()
+            switch result {
+            case .success:
+                return .success(())
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to initialize third web wallet for user: \(error)")
             return .failure(.zeroError(error))
         }
     }
