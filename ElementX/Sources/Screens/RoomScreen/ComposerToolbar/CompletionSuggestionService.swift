@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 private enum SuggestionTriggerRegex {
-    static let atOrHash = /[@#]\w+/
+    static let atOrHash = /[@#]\w*/
     
     static let at: Character = "@"
     static let hash: Character = "#"
