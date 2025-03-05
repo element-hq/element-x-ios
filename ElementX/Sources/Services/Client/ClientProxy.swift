@@ -702,6 +702,15 @@ class ClientProxy: ClientProxyProtocol {
     func getElementWellKnown() async -> Result<ElementWellKnown?, ClientProxyError> {
         await client.getElementWellKnown().map(ElementWellKnown.init)
     }
+    
+    func clearCaches() async -> Result<Void, ClientProxyError> {
+        do {
+            return try await .success(client.clearCaches())
+        } catch {
+            MXLog.error("Failed clearing client caches with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
         
     // MARK: Ignored users
     
