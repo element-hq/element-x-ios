@@ -757,13 +757,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         stopSync(isBackgroundTask: false)
         userSessionFlowCoordinator?.stop()
         
-        let userID = userSession.clientProxy.userID
         tearDownUserSession()
     
         // Allow for everything to deallocate properly
         Task {
             try? await Task.sleep(for: .seconds(2))
-            userSessionStore.clearCache(for: userID)
+            await userSession.clientProxy.clearCaches()
             stateMachine.processEvent(.startWithExistingSession)
             hideLoadingIndicator()
         }

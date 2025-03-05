@@ -91,15 +91,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             credentials.restorationToken.sessionDirectories.delete()
         }
     }
-    
-    func clearCache(for userID: String) {
-        guard let credentials = keychainController.restorationTokens().first(where: { $0.userID == userID }) else {
-            MXLog.error("Failed to clearing caches: Credentials missing")
-            return
-        }
-        credentials.restorationToken.sessionDirectories.deleteTransientUserData()
-    }
-    
+        
     // MARK: - Private
     
     private func buildUserSessionWithClient(_ clientProxy: ClientProxyProtocol) -> UserSessionProtocol {

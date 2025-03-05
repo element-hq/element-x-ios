@@ -4258,6 +4258,71 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return getElementWellKnownReturnValue
         }
     }
+    //MARK: - clearCaches
+
+    var clearCachesUnderlyingCallsCount = 0
+    var clearCachesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return clearCachesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = clearCachesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                clearCachesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    clearCachesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var clearCachesCalled: Bool {
+        return clearCachesCallsCount > 0
+    }
+
+    var clearCachesUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var clearCachesReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return clearCachesUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = clearCachesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                clearCachesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    clearCachesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var clearCachesClosure: (() async -> Result<Void, ClientProxyError>)?
+
+    @discardableResult
+    func clearCaches() async -> Result<Void, ClientProxyError> {
+        clearCachesCallsCount += 1
+        if let clearCachesClosure = clearCachesClosure {
+            return await clearCachesClosure()
+        } else {
+            return clearCachesReturnValue
+        }
+    }
     //MARK: - ignoreUser
 
     var ignoreUserUnderlyingCallsCount = 0
@@ -17571,47 +17636,6 @@ class UserSessionStoreMock: UserSessionStoreProtocol, @unchecked Sendable {
             self.logoutUserSessionReceivedInvocations.append(userSession)
         }
         logoutUserSessionClosure?(userSession)
-    }
-    //MARK: - clearCache
-
-    var clearCacheForUnderlyingCallsCount = 0
-    var clearCacheForCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return clearCacheForUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = clearCacheForUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                clearCacheForUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    clearCacheForUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var clearCacheForCalled: Bool {
-        return clearCacheForCallsCount > 0
-    }
-    var clearCacheForReceivedUserID: String?
-    var clearCacheForReceivedInvocations: [String] = []
-    var clearCacheForClosure: ((String) -> Void)?
-
-    func clearCache(for userID: String) {
-        clearCacheForCallsCount += 1
-        clearCacheForReceivedUserID = userID
-        DispatchQueue.main.async {
-            self.clearCacheForReceivedInvocations.append(userID)
-        }
-        clearCacheForClosure?(userID)
     }
 }
 class VoiceMessageCacheMock: VoiceMessageCacheProtocol, @unchecked Sendable {
