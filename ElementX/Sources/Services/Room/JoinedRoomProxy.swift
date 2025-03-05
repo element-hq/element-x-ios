@@ -135,15 +135,17 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         
         await timeline.subscribeForUpdates()
         
-        subscribeToRoomInfoUpdates()
-        
-        if isEncrypted {
-            subscribeToIdentityStatusChanges()
+        Task {
+            subscribeToRoomInfoUpdates()
+            
+            subscribeToTypingNotifications()
+            
+            await subscribeToKnockRequests()
+            
+            if isEncrypted { // This is actually blocking on the rust side and might make network requests
+                subscribeToIdentityStatusChanges()
+            }
         }
-        
-        subscribeToTypingNotifications()
-        
-        await subscribeToKnockRequests()
     }
     
     func subscribeToRoomInfoUpdates() {
