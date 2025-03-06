@@ -16,18 +16,27 @@ struct CreateFeedScreen: View {
             .zeroList()
             .navigationTitle("New Post")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                if !context.feedText.isEmpty {
-                    toolbar
-                }
-            }
+            .toolbar { toolbar }
             .alert(item: $context.alertInfo)
     }
     
-    private var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .confirmationAction) {
-            Button(L10n.actionCreate) {
-                context.send(viewAction: .createPost)
+    @ToolbarContentBuilder
+    var toolbar: some ToolbarContent {
+        if !context.feedText.isEmpty {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Post") {
+                    context.send(viewAction: .createPost)
+                }
+            }
+        }
+        ToolbarItem(placement: .cancellationAction) {
+            Button {
+                context.send(viewAction: .dismissPost)
+            } label: {
+                Image(systemName: "xmark")
+                    .resizable()
+                    .frame(width: 12, height: 12)
+                    .padding()
             }
         }
     }
@@ -46,11 +55,11 @@ private struct CreateFeedContent: View {
                                     contentID: context.viewState.userID,
                                     avatarSize: .user(on: .home),
                                     mediaProvider: context.mediaProvider)
-                    .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
+                .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
                 
                 ZStack(alignment: .topLeading) {
                     if context.feedText.isEmpty {
-                        Text("Share what's on your mind...")
+                        Text("What's happening?")
                             .font(.zero.bodyLG)
                             .foregroundStyle(.compound.textSecondary)
                             .frame(alignment: .topLeading)
@@ -64,7 +73,7 @@ private struct CreateFeedContent: View {
                         .foregroundStyle(.compound.textPrimary)
                         .focused($isTextEditorFocused)
                         .frame(alignment: .topLeading)
-                        // .lineSpacing(6)
+                    // .lineSpacing(6)
                 }
             }
             .padding()

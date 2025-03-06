@@ -15,6 +15,7 @@ struct CreateFeedScreenCoordinatorParameters {
 
 enum CreateFeedScreenCoordinatorAction {
     case newPostCreated
+    case dismissPost
 }
 
 final class CreateFeedScreenCoordinator: CoordinatorProtocol {
@@ -38,6 +39,8 @@ final class CreateFeedScreenCoordinator: CoordinatorProtocol {
                 switch action {
                 case .newFeedPosted:
                     actionsSubject.send(.newPostCreated)
+                case .dismissPost:
+                    actionsSubject.send(.dismissPost)
                 }
             }
             .store(in: &cancellables)

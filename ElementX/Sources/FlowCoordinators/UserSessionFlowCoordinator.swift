@@ -1106,7 +1106,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] action in
                 guard let self else { return }
                 switch action {
-                case .newPostCreated:
+                case .newPostCreated, .dismissPost:
                     self.navigationSplitCoordinator.setSheetCoordinator(nil)
                 }
             }

@@ -50,6 +50,8 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
         switch viewAction {
         case .createPost:
             createNewPost()
+        case .dismissPost:
+            actionsSubject.send(.dismissPost)
         }
     }
     
