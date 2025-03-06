@@ -94,15 +94,15 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     var pusherNotificationClientIdentifier: String? { get }
     
-    var roomSummaryProvider: RoomSummaryProviderProtocol? { get }
+    var roomSummaryProvider: RoomSummaryProviderProtocol { get }
     
     /// Used for listing rooms that shouldn't be affected by the main `roomSummaryProvider` filtering
     /// But can still be filtered by queries, since this may be shared across multiple views, remember to reset
     /// The filtering state when you are done with it
-    var alternateRoomSummaryProvider: RoomSummaryProviderProtocol? { get }
+    var alternateRoomSummaryProvider: RoomSummaryProviderProtocol { get }
     
     /// Used for listing rooms, can't be filtered nor its state observed
-    var staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol? { get }
+    var staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol { get }
     
     var roomsToAwait: Set<String> { get set }
     

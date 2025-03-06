@@ -2267,9 +2267,21 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     var underlyingIgnoredUsersPublisher: CurrentValuePublisher<[String]?, Never>!
     var pusherNotificationClientIdentifier: String?
-    var roomSummaryProvider: RoomSummaryProviderProtocol?
-    var alternateRoomSummaryProvider: RoomSummaryProviderProtocol?
-    var staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol?
+    var roomSummaryProvider: RoomSummaryProviderProtocol {
+        get { return underlyingRoomSummaryProvider }
+        set(value) { underlyingRoomSummaryProvider = value }
+    }
+    var underlyingRoomSummaryProvider: RoomSummaryProviderProtocol!
+    var alternateRoomSummaryProvider: RoomSummaryProviderProtocol {
+        get { return underlyingAlternateRoomSummaryProvider }
+        set(value) { underlyingAlternateRoomSummaryProvider = value }
+    }
+    var underlyingAlternateRoomSummaryProvider: RoomSummaryProviderProtocol!
+    var staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol {
+        get { return underlyingStaticRoomSummaryProvider }
+        set(value) { underlyingStaticRoomSummaryProvider = value }
+    }
+    var underlyingStaticRoomSummaryProvider: StaticRoomSummaryProviderProtocol!
     var roomsToAwait: Set<String> {
         get { return underlyingRoomsToAwait }
         set(value) { underlyingRoomsToAwait = value }
