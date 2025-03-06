@@ -695,7 +695,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                    mediaProvider: userSession.mediaProvider)
         self.timelineController = timelineController
         
-        let completionSuggestionService = CompletionSuggestionService(roomProxy: roomProxy)
+        let completionSuggestionService = CompletionSuggestionService(roomProxy: roomProxy,
+                                                                      roomListPublisher: userSession.clientProxy.staticRoomSummaryProvider?.roomListPublisher.eraseToAnyPublisher() ?? Empty().replaceEmpty(with: []).eraseToAnyPublisher())
         let composerDraftService = ComposerDraftService(roomProxy: roomProxy, timelineItemfactory: timelineItemFactory)
         
         let parameters = RoomScreenCoordinatorParameters(clientProxy: userSession.clientProxy,
