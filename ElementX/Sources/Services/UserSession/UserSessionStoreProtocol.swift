@@ -12,6 +12,7 @@ enum UserSessionStoreError: Error {
     case missingCredentials
     case failedRestoringLogin
     case failedSettingUpSession
+    case failedSettingUpClientProxy(Error)
 }
 
 // sourcery: AutoMockable

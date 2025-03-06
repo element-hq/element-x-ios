@@ -831,9 +831,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: Global search
     
     private func presentGlobalSearch() {
-        guard let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider else {
-            fatalError("Global search room summary provider unavailable")
-        }
+        let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider
         
         let coordinator = GlobalSearchScreenCoordinator(parameters: .init(roomSummaryProvider: roomSummaryProvider,
                                                                           mediaProvider: userSession.mediaProvider))
@@ -935,9 +933,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: Sharing
     
     private func presentRoomSelectionScreen(sharePayload: ShareExtensionPayload, animated: Bool) {
-        guard let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider else {
-            fatalError()
-        }
+        let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider
         
         let stackCoordinator = NavigationStackCoordinator()
         
