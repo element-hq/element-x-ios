@@ -3053,6 +3053,7 @@
 			isa = PBXGroup;
 			children = (
 				01C4C7DB37597D7D8379511A /* Assets.xcassets */,
+				D174C6E7DCA00AAFC0169925 /* ElementCall */,
 				A0C06C0F6A8621B22BFAEB56 /* Localizations */,
 				8AEA6A91159FA0D3EAFCCB0D /* Sounds */,
 			);
@@ -5485,6 +5486,13 @@
 				40D9A816C45E0278C29DF883 /* SupportingFiles */,
 			);
 			path = ShareExtension;
+			sourceTree = "<group>";
+		};
+		D174C6E7DCA00AAFC0169925 /* ElementCall */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ElementCall;
 			sourceTree = "<group>";
 		};
 		D382E465AF067C1BF888BF8E /* View */ = {
@@ -8534,7 +8542,7 @@
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 25.03.05;
+				version = 25.03.06;
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {

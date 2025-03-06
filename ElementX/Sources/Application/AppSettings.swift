@@ -49,7 +49,7 @@ final class AppSettings {
         case fuzzyRoomListSearchEnabled
         case enableOnlySignedDeviceIsolationMode
         case knockingEnabled
-        case eventCacheEnabled
+        case eventCacheEnabledV2
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -298,7 +298,7 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.hideTimelineMedia, defaultValue: false, storageType: .userDefaults(store))
     var hideTimelineMedia
     
-    @UserPreference(key: UserDefaultsKeys.eventCacheEnabled, defaultValue: false, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.eventCacheEnabledV2, defaultValue: true, storageType: .userDefaults(store))
     var eventCacheEnabled
 }
 
