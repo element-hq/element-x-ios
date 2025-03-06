@@ -280,6 +280,24 @@ lane :prepare_next_release do
   sh("git commit -m 'Prepare next release'")
 
   git_push()
+
+  rebase_main_onto_current_branch()
+end
+
+def rebase_main_onto_current_branch
+  # Capture the current branch name
+  current_branch = sh("git rev-parse --abbrev-ref HEAD").strip
+
+  UI.message("Current branch: #{current_branch}")
+
+  # Switch to main and update it
+  sh("git checkout main")
+  sh("git pull origin main")
+  sh("git rebase #{current_branch}")
+
+  git_push()
+
+  UI.success("Successfully rebased main onto #{current_branch}")
 end
 
 lane :tag_nightly do |options|
