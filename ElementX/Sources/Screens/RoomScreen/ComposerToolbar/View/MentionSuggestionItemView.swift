@@ -15,11 +15,11 @@ struct MentionSuggestionItemView: View {
         HStack(alignment: .center, spacing: 16) {
             switch item.suggestionType {
             case .user(let user):
-                LoadableAvatarImage(url: user.avatarURL, name: user.displayName, contentID: user.id, avatarSize: .user(on: .suggestions), mediaProvider: mediaProvider)
+                LoadableAvatarImage(url: user.avatarURL, name: user.displayName, contentID: user.id, avatarSize: .user(on: .completionSuggestions), mediaProvider: mediaProvider)
             case .allUsers(let avatar):
-                RoomAvatarImage(avatar: avatar, avatarSize: .room(on: .suggestions), mediaProvider: mediaProvider)
+                RoomAvatarImage(avatar: avatar, avatarSize: .room(on: .completionSuggestions), mediaProvider: mediaProvider)
             case .room(let room):
-                RoomAvatarImage(avatar: room.avatar, avatarSize: .room(on: .suggestions), mediaProvider: mediaProvider)
+                RoomAvatarImage(avatar: room.avatar, avatarSize: .room(on: .completionSuggestions), mediaProvider: mediaProvider)
             }
             VStack(alignment: .leading, spacing: 0) {
                 Text(item.displayName)
