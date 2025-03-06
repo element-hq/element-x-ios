@@ -45,6 +45,10 @@ final class RoomSelectionScreenCoordinator: CoordinatorProtocol {
         }
         .store(in: &cancellables)
     }
+    
+    func stop() {
+        viewModel.stop()
+    }
         
     func toPresentable() -> AnyView {
         AnyView(RoomSelectionScreen(context: viewModel.context))

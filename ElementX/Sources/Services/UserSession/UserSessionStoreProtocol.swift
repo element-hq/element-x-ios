@@ -36,7 +36,4 @@ protocol UserSessionStoreProtocol {
     
     /// Logs out of the specified session.
     func logout(userSession: UserSessionProtocol)
-    
-    /// Clears our all the matrix sdk state data for the specified session
-    func clearCache(for userID: String)
 }

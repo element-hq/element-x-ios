@@ -51,7 +51,7 @@ class PreviewTests: XCTestCase {
     
     // MARK: - Snapshots
 
-    func assertSnapshots(matching preview: _Preview, testName: String = #function) async throws {
+    func assertSnapshots(matching preview: _Preview, testName: String = #function, step: Int) async throws {
         let preferences = SnapshotPreferences()
         
         let preferenceReadingView = preview.content
@@ -68,6 +68,9 @@ class PreviewTests: XCTestCase {
             try await deferred.fulfill()
         }
         
+        var sanitizedSuiteName = String(testName.suffix(testName.count - "test".count).dropLast(2))
+        sanitizedSuiteName = sanitizedSuiteName.prefix(1).lowercased() + sanitizedSuiteName.dropFirst()
+        
         for deviceName in snapshotDevices {
             guard var device = PreviewDevice(rawValue: deviceName).snapshotDevice() else {
                 fatalError("Unknown device name: \(deviceName)")
@@ -76,11 +79,19 @@ class PreviewTests: XCTestCase {
             device.safeArea = .one
             // Ignore specific device display scale
             let traits = UITraitCollection(displayScale: 2.0)
+            
+            var testName = ""
+            if let displayName = preview.displayName {
+                testName = "\(displayName)-\(deviceName)-\(localeCode)"
+            } else {
+                testName = "\(deviceName)-\(localeCode)-\(step)"
+            }
+            
             if let failure = assertSnapshots(matching: preview.content,
-                                             name: preview.displayName,
+                                             name: testName,
                                              isScreen: preview.layout == .device,
                                              device: device,
-                                             testName: testName + deviceName + "-" + localeCode,
+                                             testName: sanitizedSuiteName,
                                              traits: traits,
                                              preferences: preferences) {
                 XCTFail(failure)

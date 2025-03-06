@@ -60,7 +60,6 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         switch viewAction {
         case .cancel:
             actionsSubject.send(.dismiss)
-            roomSummaryProvider.setFilter(.all(filters: []))
         case .send:
             Task { await forward() }
         case .selectRoom(let roomID):
@@ -70,6 +69,11 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
         case .reachedBottom:
             updateVisibleRange(edge: .bottom)
         }
+    }
+    
+    func stop() {
+        // This is a shared provider so we should reset the filtering when we are done with the view
+        roomSummaryProvider.setFilter(.all(filters: []))
     }
     
     // MARK: - Private

@@ -101,10 +101,15 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     var roomSummaryProvider: RoomSummaryProviderProtocol? { get }
     
-    var roomsToAwait: Set<String> { get set }
-    
     /// Used for listing rooms that shouldn't be affected by the main `roomSummaryProvider` filtering
+    /// But can still be filtered by queries, since this may be shared across multiple views, remember to reset
+    /// The filtering state when you are done with it
     var alternateRoomSummaryProvider: RoomSummaryProviderProtocol? { get }
+    
+    /// Used for listing rooms, can't be filtered nor its state observed
+    var staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol? { get }
+    
+    var roomsToAwait: Set<String> { get set }
     
     var notificationSettings: NotificationSettingsProxyProtocol { get }
     
@@ -181,6 +186,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func isAliasAvailable(_ alias: String) async -> Result<Bool, ClientProxyError>
     
     func getElementWellKnown() async -> Result<ElementWellKnown?, ClientProxyError>
+    
+    @discardableResult func clearCaches() async -> Result<Void, ClientProxyError>
 
     // MARK: - Ignored users
     

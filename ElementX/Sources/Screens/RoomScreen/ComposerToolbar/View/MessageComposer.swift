@@ -239,12 +239,9 @@ private struct MessageComposerStyleModifier<Header: View>: ViewModifier {
     
     @ViewBuilder
     private var icon: some View {
-        if isEncrypted {
-            CompoundIcon(\.lockSolid, size: .xSmall, relativeTo: .compound.bodyMD)
-                .foregroundStyle(.compound.iconSuccessPrimary)
-        } else {
+        if !isEncrypted {
             CompoundIcon(\.lockOff, size: .xSmall, relativeTo: .compound.bodyMD)
-                .foregroundStyle(.compound.iconTertiary)
+                .foregroundStyle(.compound.iconInfoPrimary)
         }
     }
 }

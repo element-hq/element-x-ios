@@ -47,6 +47,11 @@ class GlobalSearchScreenViewModel: GlobalSearchScreenViewModelType, GlobalSearch
         updateRooms(with: roomSummaryProvider.roomListPublisher.value)
     }
     
+    func stop() {
+        // This is a shared provider so we should reset the filtering when we are done with the view
+        roomSummaryProvider.setFilter(.all(filters: []))
+    }
+    
     // MARK: - Public
     
     override func process(viewAction: GlobalSearchScreenViewAction) {
@@ -55,7 +60,6 @@ class GlobalSearchScreenViewModel: GlobalSearchScreenViewModelType, GlobalSearch
         switch viewAction {
         case .dismiss:
             actionsSubject.send(.dismiss)
-            roomSummaryProvider.setFilter(.all(filters: [])) // This is a shared provider
         case .select(let roomID):
             actionsSubject.send(.select(roomID: roomID))
         case .reachedTop:

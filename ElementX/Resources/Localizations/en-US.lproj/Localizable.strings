@@ -355,6 +355,7 @@
 "rich_text_editor_code_block" = "Toggle code block";
 "rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Message…";
+"rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
 "rich_text_editor_create_link" = "Create a link";
 "rich_text_editor_edit_link" = "Edit link";
 "rich_text_editor_format_bold" = "Apply bold format";
@@ -936,7 +937,6 @@
 "screen_roomlist_main_space_title" = "Chats";
 "screen_roomlist_mark_as_read" = "Mark as read";
 "screen_roomlist_mark_as_unread" = "Mark as unread";
-"screen_roomlist_room_directory_button_title" = "Browse all rooms";
 "screen_server_confirmation_message_login_element_dot_io" = "A private server for Element employees.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix is an open network for secure, decentralized communication.";
 "screen_server_confirmation_message_register" = "This is where your conversations will live — just like you would use an email provider to keep your emails.";

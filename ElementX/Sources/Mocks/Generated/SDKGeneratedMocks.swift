@@ -552,6 +552,46 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - clearCaches
+
+    open var clearCachesThrowableError: Error?
+    var clearCachesUnderlyingCallsCount = 0
+    open var clearCachesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return clearCachesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = clearCachesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                clearCachesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    clearCachesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var clearCachesCalled: Bool {
+        return clearCachesCallsCount > 0
+    }
+    open var clearCachesClosure: (() async throws -> Void)?
+
+    open override func clearCaches() async throws {
+        if let error = clearCachesThrowableError {
+            throw error
+        }
+        clearCachesCallsCount += 1
+        try await clearCachesClosure?()
+    }
+
     //MARK: - createRoom
 
     open var createRoomRequestThrowableError: Error?
@@ -3387,6 +3427,52 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             self.setDisplayNameNameReceivedInvocations.append(name)
         }
         try await setDisplayNameNameClosure?(name)
+    }
+
+    //MARK: - setMediaRetentionPolicy
+
+    open var setMediaRetentionPolicyPolicyThrowableError: Error?
+    var setMediaRetentionPolicyPolicyUnderlyingCallsCount = 0
+    open var setMediaRetentionPolicyPolicyCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setMediaRetentionPolicyPolicyUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setMediaRetentionPolicyPolicyUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setMediaRetentionPolicyPolicyUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setMediaRetentionPolicyPolicyUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var setMediaRetentionPolicyPolicyCalled: Bool {
+        return setMediaRetentionPolicyPolicyCallsCount > 0
+    }
+    open var setMediaRetentionPolicyPolicyReceivedPolicy: MediaRetentionPolicy?
+    open var setMediaRetentionPolicyPolicyReceivedInvocations: [MediaRetentionPolicy] = []
+    open var setMediaRetentionPolicyPolicyClosure: ((MediaRetentionPolicy) async throws -> Void)?
+
+    open override func setMediaRetentionPolicy(policy: MediaRetentionPolicy) async throws {
+        if let error = setMediaRetentionPolicyPolicyThrowableError {
+            throw error
+        }
+        setMediaRetentionPolicyPolicyCallsCount += 1
+        setMediaRetentionPolicyPolicyReceivedPolicy = policy
+        DispatchQueue.main.async {
+            self.setMediaRetentionPolicyPolicyReceivedInvocations.append(policy)
+        }
+        try await setMediaRetentionPolicyPolicyClosure?(policy)
     }
 
     //MARK: - setPusher
@@ -13723,6 +13809,52 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
             self.reportContentEventIdScoreReasonReceivedInvocations.append((eventId: eventId, score: score, reason: reason))
         }
         try await reportContentEventIdScoreReasonClosure?(eventId, score, reason)
+    }
+
+    //MARK: - reportRoom
+
+    open var reportRoomReasonThrowableError: Error?
+    var reportRoomReasonUnderlyingCallsCount = 0
+    open var reportRoomReasonCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return reportRoomReasonUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = reportRoomReasonUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                reportRoomReasonUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    reportRoomReasonUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var reportRoomReasonCalled: Bool {
+        return reportRoomReasonCallsCount > 0
+    }
+    open var reportRoomReasonReceivedReason: String?
+    open var reportRoomReasonReceivedInvocations: [String?] = []
+    open var reportRoomReasonClosure: ((String?) async throws -> Void)?
+
+    open override func reportRoom(reason: String?) async throws {
+        if let error = reportRoomReasonThrowableError {
+            throw error
+        }
+        reportRoomReasonCallsCount += 1
+        reportRoomReasonReceivedReason = reason
+        DispatchQueue.main.async {
+            self.reportRoomReasonReceivedInvocations.append(reason)
+        }
+        try await reportRoomReasonClosure?(reason)
     }
 
     //MARK: - resetPowerLevels
