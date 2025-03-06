@@ -38,7 +38,7 @@ jobs:
         run: source ci_scripts/ci_common.sh && setup_github_actions_environment
       
       - name: Configure Enterprise
-        run: bundle exec fastlane config_enterprise
+        run: bundle exec fastlane config_element_pro
         env:
           MAPLIBRE_API_KEY: WeDontNeedOneForUnitTests
           SENTRY_DSN: https://sentry.localhost
