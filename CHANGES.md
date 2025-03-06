@@ -1,3 +1,39 @@
+## Changes in 25.03.2 (2025-03-06)
+
+### What's Changed
+
+✨ Features
+* Show DM recipient verification badges on the room details screen profile button by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3824
+* Show room encryption state in the composer by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3841
+* Join room by address by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3840
+* Only show a badge in the composer if the room is unencrypted. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3866
+* Room mentioning in the composer by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3868
+* Re-enable the error screens in group calls by @hughns in https://github.com/element-hq/element-x-ios/pull/3856
+
+🐛 Bugfixes
+* show "Room" for unresolved event permalinks by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3854
+* Private rooms are now created with the `.invited` room history visibility by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3853
+* Use a static room summary provider to resolve room summaries through id and aliases by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3863
+* Prevent various room subscription task from blocking opening rooms by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3873
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3861
+
+🧱 Build
+* Project updates. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3837
+* Set APP_GROUP_IDENTIFIER directly. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3847
+
+Others
+* Increase the time before we show loading indicators when processing user session and flow coordinators routes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3844
+* Bump the RustSDK to v25.02.28 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3855
+* Prevent PRs with the X-Blocked label from being merged by @robintown in https://github.com/element-hq/element-x-ios/pull/3864
+* Revamp test snapshot naming conventions by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3869
+* Bump the RustSDK to v25.03.05 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3870
+* FF event cache true by default and updated the SDK by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3874
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/25.03.1...25.03.2
+
 ## Changes in 25.03.1 (2025-02-26)
 
 ### What's Changed
