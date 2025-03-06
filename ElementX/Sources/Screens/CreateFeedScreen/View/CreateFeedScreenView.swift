@@ -30,13 +30,8 @@ struct CreateFeedScreen: View {
             }
         }
         ToolbarItem(placement: .cancellationAction) {
-            Button {
+            Button(L10n.actionCancel){
                 context.send(viewAction: .dismissPost)
-            } label: {
-                Image(systemName: "xmark")
-                    .resizable()
-                    .frame(width: 12, height: 12)
-                    .padding()
             }
         }
     }
