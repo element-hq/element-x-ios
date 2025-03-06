@@ -27,6 +27,8 @@ setup_xcode_cloud_environment () {
 
     bundle config path vendor/bundle
     bundle install --jobs 4 --retry 3
+    # Xcode Cloud shallow clones the repo. We need to deepen it to fetch tags, commit history and be able to rebase main on develop at the end of releases.
+    git fetch --unshallow --quiet
 }
 
 install_xcode_cloud_brew_dependencies () {
@@ -56,10 +58,6 @@ generate_what_to_test_notes() {
     if [[ -d "$CI_APP_STORE_SIGNED_APP_PATH" ]]; then
         TESTFLIGHT_DIR_PATH=TestFlight
         TESTFLIGHT_NOTES_FILE_NAME=WhatToTest.en-US.txt
-
-        # Xcode Cloud shallow clones the repo, we need to deepen it to fetch tags and commit history
-        # Instead of trying `--deepen=<depth>` just do a full unshallow to avoid future surprises
-        git fetch --unshallow --quiet
         
         LATEST_TAG=""
         if [ "$CI_WORKFLOW" = "Release" ]; then
