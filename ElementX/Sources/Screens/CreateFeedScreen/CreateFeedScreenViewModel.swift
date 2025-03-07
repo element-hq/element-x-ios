@@ -17,6 +17,7 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
     private let createFeedProtocol: CreateFeedProtocol
     
     private var currentUserWalletAddress: String? = nil
+    private var defaultChannelZId: String? = nil
     
     private var actionsSubject: PassthroughSubject<CreateFeedScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<CreateFeedScreenViewModelAction, Never> {
@@ -57,22 +58,40 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
     
     private func fetchAndCheckCurrentUser() {
         Task {
-            if let walletAddress = await fetchPrimaryWalletAddress() {
-                currentUserWalletAddress = walletAddress
-            } else {
-                _ = await clientProxy.initializeThirdWebWalletForUser()
-                currentUserWalletAddress = await fetchPrimaryWalletAddress()
+            if let (address, channelZId) = await fetchUserAddressAndChannelInfo(), !address.isEmpty {
+                currentUserWalletAddress = address
+                defaultChannelZId = channelZId
+                return
+            }
+            // Initialize wallet and fetch details again
+            _ = await clientProxy.initializeThirdWebWalletForUser()
+            if let (nAddress, nChannelZId) = await fetchUserAddressAndChannelInfo() {
+                currentUserWalletAddress = nAddress
+                defaultChannelZId = nChannelZId
             }
         }
     }
 
-    private func fetchPrimaryWalletAddress() async -> String? {
+    private func fetchUserAddressAndChannelInfo() async -> (address: String, channelZId: String)? {
         guard let user = await clientProxy.fetchCurrentZeroUser() else { return nil }
-        return user.primaryWalletAddress ?? user.wallets?.first?.publicAddress
+        let walletAddress = user.wallets?.first(where: { $0.isThirdWeb })?.publicAddress ?? ""
+        let channelZId = user.primaryZID ?? ""
+        return walletAddress.isEmpty ? nil : (walletAddress, channelZId)
     }
     
     private func createNewPost() {
-        guard let userWalletAddress = currentUserWalletAddress else { return }
+        guard let userWalletAddress = currentUserWalletAddress else {
+            state.bindings.alertInfo = .init(id: UUID(),
+                                             title: L10n.commonError,
+                                             message: "User default wallet is not initialized.")
+            return
+        }
+        guard let defaultChannelZId = defaultChannelZId else {
+            state.bindings.alertInfo = .init(id: UUID(),
+                                             title: L10n.commonError,
+                                             message: "Please set user primaryZId in profile settings.")
+            return
+        }
         
         Task {
             let userIndicatorID = UUID().uuidString
@@ -84,7 +103,7 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
                                                                   title: "Posting...",
                                                                   persistent: true))
             
-            let postFeedResult = await clientProxy.postNewFeed(channelZId: "",
+            let postFeedResult = await clientProxy.postNewFeed(channelZId: defaultChannelZId,
                                                                userWalletAddress: userWalletAddress,
                                                                content: state.bindings.feedText)
             switch postFeedResult {
