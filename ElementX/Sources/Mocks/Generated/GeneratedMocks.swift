@@ -2296,11 +2296,6 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingShowNewUserRewardsIntimationPublisher = value }
     }
     var underlyingShowNewUserRewardsIntimationPublisher: CurrentValuePublisher<Bool, Never>!
-    var primaryZeroId: CurrentValuePublisher<String?, Never> {
-        get { return underlyingPrimaryZeroId }
-        set(value) { underlyingPrimaryZeroId = value }
-    }
-    var underlyingPrimaryZeroId: CurrentValuePublisher<String?, Never>!
     var messengerInvitePublisher: CurrentValuePublisher<ZeroMessengerInvite, Never> {
         get { return underlyingMessengerInvitePublisher }
         set(value) { underlyingMessengerInvitePublisher = value }
@@ -3531,17 +3526,17 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return loadUserDisplayNameReturnValue
         }
     }
-    //MARK: - setUserDisplayName
+    //MARK: - setUserInfo
 
-    var setUserDisplayNameUnderlyingCallsCount = 0
-    var setUserDisplayNameCallsCount: Int {
+    var setUserInfoPrimaryZIdUnderlyingCallsCount = 0
+    var setUserInfoPrimaryZIdCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return setUserDisplayNameUnderlyingCallsCount
+                return setUserInfoPrimaryZIdUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = setUserDisplayNameUnderlyingCallsCount
+                    returnValue = setUserInfoPrimaryZIdUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -3549,29 +3544,29 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                setUserDisplayNameUnderlyingCallsCount = newValue
+                setUserInfoPrimaryZIdUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    setUserDisplayNameUnderlyingCallsCount = newValue
+                    setUserInfoPrimaryZIdUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var setUserDisplayNameCalled: Bool {
-        return setUserDisplayNameCallsCount > 0
+    var setUserInfoPrimaryZIdCalled: Bool {
+        return setUserInfoPrimaryZIdCallsCount > 0
     }
-    var setUserDisplayNameReceivedName: String?
-    var setUserDisplayNameReceivedInvocations: [String] = []
+    var setUserInfoPrimaryZIdReceivedArguments: (name: String, primaryZId: String?)?
+    var setUserInfoPrimaryZIdReceivedInvocations: [(name: String, primaryZId: String?)] = []
 
-    var setUserDisplayNameUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var setUserDisplayNameReturnValue: Result<Void, ClientProxyError>! {
+    var setUserInfoPrimaryZIdUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var setUserInfoPrimaryZIdReturnValue: Result<Void, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return setUserDisplayNameUnderlyingReturnValue
+                return setUserInfoPrimaryZIdUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = setUserDisplayNameUnderlyingReturnValue
+                    returnValue = setUserInfoPrimaryZIdUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -3579,26 +3574,26 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                setUserDisplayNameUnderlyingReturnValue = newValue
+                setUserInfoPrimaryZIdUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    setUserDisplayNameUnderlyingReturnValue = newValue
+                    setUserInfoPrimaryZIdUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var setUserDisplayNameClosure: ((String) async -> Result<Void, ClientProxyError>)?
+    var setUserInfoPrimaryZIdClosure: ((String, String?) async -> Result<Void, ClientProxyError>)?
 
-    func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError> {
-        setUserDisplayNameCallsCount += 1
-        setUserDisplayNameReceivedName = name
+    func setUserInfo(_ name: String, primaryZId: String?) async -> Result<Void, ClientProxyError> {
+        setUserInfoPrimaryZIdCallsCount += 1
+        setUserInfoPrimaryZIdReceivedArguments = (name: name, primaryZId: primaryZId)
         DispatchQueue.main.async {
-            self.setUserDisplayNameReceivedInvocations.append(name)
+            self.setUserInfoPrimaryZIdReceivedInvocations.append((name: name, primaryZId: primaryZId))
         }
-        if let setUserDisplayNameClosure = setUserDisplayNameClosure {
-            return await setUserDisplayNameClosure(name)
+        if let setUserInfoPrimaryZIdClosure = setUserInfoPrimaryZIdClosure {
+            return await setUserInfoPrimaryZIdClosure(name, primaryZId)
         } else {
-            return setUserDisplayNameReturnValue
+            return setUserInfoPrimaryZIdReturnValue
         }
     }
     //MARK: - loadUserAvatarURL
@@ -5337,41 +5332,6 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     func dismissRewardsIntimation() {
         dismissRewardsIntimationCallsCount += 1
         dismissRewardsIntimationClosure?()
-    }
-    //MARK: - loadUserPrimaryZeroId
-
-    var loadUserPrimaryZeroIdUnderlyingCallsCount = 0
-    var loadUserPrimaryZeroIdCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return loadUserPrimaryZeroIdUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loadUserPrimaryZeroIdUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loadUserPrimaryZeroIdUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loadUserPrimaryZeroIdUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var loadUserPrimaryZeroIdCalled: Bool {
-        return loadUserPrimaryZeroIdCallsCount > 0
-    }
-    var loadUserPrimaryZeroIdClosure: (() -> Void)?
-
-    func loadUserPrimaryZeroId() {
-        loadUserPrimaryZeroIdCallsCount += 1
-        loadUserPrimaryZeroIdClosure?()
     }
     //MARK: - loadZeroMessengerInvite
 

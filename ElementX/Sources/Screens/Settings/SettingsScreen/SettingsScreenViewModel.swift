@@ -34,9 +34,11 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
         
-        userSession.clientProxy.primaryZeroId
+        userSession.clientProxy.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.primaryZeroId, on: self)
+            .sink { [weak self] currentUser in
+                self?.state.primaryZeroId = currentUser?.primaryZID
+            }
             .store(in: &cancellables)
         
         userSession.sessionSecurityStatePublisher
@@ -88,7 +90,6 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             await userSession.clientProxy.loadUserDisplayName()
             await state.accountProfileURL = userSession.clientProxy.accountURL(action: .profile)
             await state.accountSessionsListURL = userSession.clientProxy.accountURL(action: .sessionsList)
-            userSession.clientProxy.loadUserPrimaryZeroId()
         }
         
         dismissRewardsIntimation(userSession.clientProxy)

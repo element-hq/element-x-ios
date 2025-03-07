@@ -55,10 +55,22 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
             }
             .store(in: &cancellables)
         
+        clientProxy.zeroCurrentUserPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] currentUser in
+                guard let self else { return }
+
+                state.currentPrimaryZId = currentUser?.primaryZID ?? state.nonePrimaryZId
+                state.bindings.primaryZId = state.currentPrimaryZId
+            }
+            .store(in: &cancellables)
+        
         Task {
             await self.clientProxy.loadUserAvatarURL()
             await self.clientProxy.loadUserDisplayName()
         }
+        
+        fetchUserZIds()
     }
     
     // MARK: - Public
@@ -126,9 +138,14 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
                         }
                     }
                     
-                    if state.nameDidChange {
+                    if state.nameDidChange || state.primaryZIdDidChange {
+                        let newPrimaryZId: String? = state.primaryZIdDidChange ? (
+                            state.bindings.primaryZId == state.nonePrimaryZId ? "" : state.bindings.primaryZId
+                        ) : nil
                         group.addTask {
-                            try await self.clientProxy.setUserDisplayName(self.state.bindings.name).get()
+                            try await self.clientProxy.setUserInfo(self.state.bindings.name,
+                                                                   primaryZId: newPrimaryZId)
+                            .get()
                         }
                     }
                     
@@ -138,6 +155,20 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
                 userIndicatorController.alertInfo = .init(id: .init(),
                                                           title: L10n.screenEditProfileErrorTitle,
                                                           message: L10n.screenEditProfileError)
+            }
+        }
+    }
+    
+    private func fetchUserZIds() {
+        Task {
+            let result = await clientProxy.fetchUserZIds()
+            switch result {
+            case .success(let zIds):
+                var userZIds: [String] = zIds
+                userZIds.append(state.nonePrimaryZId)
+                state.bindings.userZeroIds = userZIds
+            case .failure(let error):
+                MXLog.error("Failed to fetch user ZIds: \(error)")
             }
         }
     }

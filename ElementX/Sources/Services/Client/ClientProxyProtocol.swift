@@ -161,7 +161,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     @discardableResult func loadUserDisplayName() async -> Result<Void, ClientProxyError>
     
-    func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError>
+    func setUserInfo(_ name: String, primaryZId: String?) async -> Result<Void, ClientProxyError>
 
     @discardableResult func loadUserAvatarURL() async -> Result<Void, ClientProxyError>
     
@@ -223,12 +223,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func getUserRewards(shouldCheckRewardsIntiamtion: Bool) async -> Result<Void, ClientProxyError>
     func dismissRewardsIntimation()
-    
-    // MARK: - ZERO Primary Id
-
-    func loadUserPrimaryZeroId()
-    
-    var primaryZeroId: CurrentValuePublisher<String?, Never> { get }
     
     // MARK: - Zero Messenger Invite
     

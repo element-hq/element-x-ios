@@ -59,7 +59,7 @@ extension ClientProxyMock {
         createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         uploadMediaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         loadUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
-        setUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        setUserInfoPrimaryZIdReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         loadUserAvatarURLReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         setUserAvatarMediaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         removeUserAvatarReturnValue = .failure(.sdkError(ClientProxyMockError.generic))

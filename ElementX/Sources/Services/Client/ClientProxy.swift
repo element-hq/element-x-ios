@@ -614,18 +614,20 @@ class ClientProxy: ClientProxyProtocol {
             userDisplayNameSubject.send(displayName)
             return .success(())
         } catch {
-            MXLog.error("Failed loading user display name with error: \(error)")
+            MXLog.error("Failed loading user display name Owith error: \(error)")
             return .failure(.sdkError(error))
         }
     }
     
-    func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError> {
+    func setUserInfo(_ name: String, primaryZId: String?) async -> Result<Void, ClientProxyError> {
         do {
             try await client.setDisplayName(name: name)
-            try await zeroApiProxy.matrixUsersService.updateUserName(displayName: name)
+            try await zeroApiProxy.matrixUsersService.updateUserInfo(displayName: name, primaryZId: primaryZId)
             Task {
                 await self.loadUserDisplayName()
+                
             }
+            _ = try await fetchZeroCurrentUser()
             return .success(())
         } catch {
             MXLog.error("Failed setting user display name with error: \(error)")
@@ -666,18 +668,6 @@ class ClientProxy: ClientProxyProtocol {
         } catch {
             MXLog.error("Failed setting user avatar with error: \(error)")
             return .failure(.sdkError(error))
-        }
-    }
-    
-    func loadUserPrimaryZeroId() {
-        Task {
-            do {
-                let userId = try client.userId()
-                let zeroProfile = try await zeroApiProxy.matrixUsersService.fetchZeroUser(userId: userId)
-                primaryZeroIdSubject.send(zeroProfile?.primaryZID)
-            } catch {
-                MXLog.error("Failed loading user primary zero id with error: \(error)")
-            }
         }
     }
     
@@ -959,7 +949,7 @@ class ClientProxy: ClientProxyProtocol {
                     }
                 }
                 group.addTask {
-                    try await self.setUserDisplayName(displayName).get()
+                    try await self.setUserInfo(displayName, primaryZId: nil).get()
                 }
                 try await group.waitForAll()
             }

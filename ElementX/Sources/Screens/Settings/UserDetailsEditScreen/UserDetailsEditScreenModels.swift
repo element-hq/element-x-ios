@@ -21,6 +21,8 @@ struct UserDetailsEditScreenViewState: BindableState {
     
     var currentDisplayName: String?
     
+    var currentPrimaryZId: String = ""
+    
     var localMedia: MediaInfo?
     
     var bindings: UserDetailsEditScreenViewStateBindings
@@ -28,23 +30,32 @@ struct UserDetailsEditScreenViewState: BindableState {
     var nameDidChange: Bool {
         bindings.name != currentDisplayName
     }
+    
+    var primaryZIdDidChange: Bool {
+        bindings.primaryZId != currentPrimaryZId
+    }
       
     var avatarDidChange: Bool {
         localMedia != nil || selectedAvatarURL != currentAvatarURL
     }
     
     var canSave: Bool {
-        !bindings.name.isEmpty && (avatarDidChange || nameDidChange)
+        !bindings.name.isEmpty && (avatarDidChange || nameDidChange || primaryZIdDidChange)
     }
     
     var showDeleteImageAction: Bool {
         localMedia != nil || selectedAvatarURL != nil
     }
+    
+    var nonePrimaryZId = "None (wallet address)"
 }
 
 struct UserDetailsEditScreenViewStateBindings {
     var name = ""
+    var primaryZId: String = ""
+    var userZeroIds: [String] = []
     var showMediaSheet = false
+    var showZIdsSheet = false
 }
 
 enum UserDetailsEditScreenViewAction {
