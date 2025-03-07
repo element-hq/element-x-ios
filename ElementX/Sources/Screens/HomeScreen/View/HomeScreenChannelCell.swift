@@ -12,14 +12,29 @@ struct HomeScreenChannelCell: View {
     let onChannelSelected: (HomeScreenChannel) -> Void
     
     var body: some View {
-        Text(channel.displayName)
-            .font(.zero.bodyLG)
-            .foregroundStyle(.compound.textPrimary)
-            .padding(.vertical, 12)
-            .padding(.horizontal, 24)
-            .lineLimit(1)
-            .onTapGesture {
-                onChannelSelected(channel)
+        HStack {
+            Text(channel.displayName)
+                .font(.zero.bodyLG)
+                .foregroundStyle(.compound.textPrimary)
+                .lineLimit(1)
+            
+            Spacer()
+            
+            if channel.notificationsCount > 0 {
+                Text(channel.notificationsCount > 99 ? "99+" : String(channel.notificationsCount))
+                    .font(.compound.bodyXSSemibold)
+                    .foregroundStyle(.zero.bgAccentRest)
+                    .background {
+                        Circle()
+                            .frame(width: 20, height: 20)
+                            .foregroundStyle(.zero.bgAccentRest.opacity(0.2))
+                    }
             }
+        }
+        .padding(.vertical, 12)
+        .padding(.horizontal, 24)
+        .onTapGesture {
+            onChannelSelected(channel)
+        }
     }
 }

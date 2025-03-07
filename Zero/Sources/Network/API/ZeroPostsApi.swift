@@ -14,7 +14,7 @@ protocol ZeroPostsApiProtocol {
     func fetchPostReplies(postId: String, limit: Int, skip: Int) async throws -> Result<[ZPost], Error>
     func addMeowsToPst(amount: Int, postId: String) async throws -> Result<ZPost, Error>
     
-    func createNewPost(channelZId: String, userWalletAddress: String, content: String) async throws -> Result<ZPost, Error>
+    func createNewPost(channelZId: String, userWalletAddress: String, content: String, replyToPost: String?) async throws -> Result<ZPost, Error>
 }
 
 class ZeroPostsApi: ZeroPostsApiProtocol {
@@ -113,7 +113,7 @@ class ZeroPostsApi: ZeroPostsApiProtocol {
         }
     }
     
-    func createNewPost(channelZId: String, userWalletAddress: String, content: String) async throws -> Result<ZPost, any Error> {
+    func createNewPost(channelZId: String, userWalletAddress: String, content: String, replyToPost: String?) async throws -> Result<ZPost, any Error> {
         let unsignedMessage = ZNewPostUnsignedMessage(text: content, walletAddress: userWalletAddress, zid: channelZId)
         let parameters: [String: String] = [
             "text": content,

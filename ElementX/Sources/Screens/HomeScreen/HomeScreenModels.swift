@@ -342,6 +342,8 @@ struct HomeScreenChannel: Identifiable, Equatable {
     let channelFullName: String
     let displayName: AttributedString
     
+    var notificationsCount: UInt = 0
+    
     static func placeholder() -> HomeScreenChannel {
         .init(id: UUID().uuidString,
               channelFullName: "Placeholder Channel Name",
