@@ -28,7 +28,13 @@ setup_xcode_cloud_environment () {
     bundle config path vendor/bundle
     bundle install --jobs 4 --retry 3
     # Xcode Cloud shallow clones the repo. We need to deepen it to fetch tags, commit history and be able to rebase main on develop at the end of releases.
-    git fetch --unshallow --quiet
+    # Check if the repository is shallow
+    if git rev-parse --is-shallow-repository; then
+        echo "Repository is shallow. Fetching full history..."
+        git fetch --unshallow --quiet
+    else
+        echo "Repository is already fully cloned."
+    fi
 }
 
 install_xcode_cloud_brew_dependencies () {
