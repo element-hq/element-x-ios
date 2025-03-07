@@ -26,7 +26,7 @@ struct FeedDetailsContent: View {
                     : AnyView(actualContent)
             
             //Add post reply content
-            addPostReplyView
+            //addPostReplyView
         }
 
     }

@@ -195,8 +195,8 @@ struct HomeScreen: View {
             switch selectedTab {
             case .chat:
                 newRoomButton
-            case .feed:
-                newFeedButton
+//            case .feed:
+//                newFeedButton
             default:
                 EmptyView()
             }
