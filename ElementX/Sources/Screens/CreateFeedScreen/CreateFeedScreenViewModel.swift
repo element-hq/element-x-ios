@@ -39,11 +39,6 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
             .weakAssign(to: \.state.userAvatarURL, on: self)
             .store(in: &cancellables)
         
-        clientProxy.userDisplayNamePublisher
-            .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.userDisplayName, on: self)
-            .store(in: &cancellables)
-        
         fetchAndCheckCurrentUser()
     }
     
@@ -105,7 +100,8 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
             
             let postFeedResult = await clientProxy.postNewFeed(channelZId: defaultChannelZId,
                                                                userWalletAddress: userWalletAddress,
-                                                               content: state.bindings.feedText)
+                                                               content: state.bindings.feedText,
+                                                               replyToPost: nil)
             switch postFeedResult {
             case .success(_):
                 createFeedProtocol.onNewFeedPosted()

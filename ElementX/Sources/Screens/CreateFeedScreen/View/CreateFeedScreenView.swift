@@ -46,7 +46,7 @@ private struct CreateFeedContent: View {
         VStack(alignment: .leading) {
             HStack(alignment: .top) {
                 LoadableAvatarImage(url: context.viewState.userAvatarURL,
-                                    name: context.viewState.userDisplayName,
+                                    name: nil,
                                     contentID: context.viewState.userID,
                                     avatarSize: .user(on: .home),
                                     mediaProvider: context.mediaProvider)

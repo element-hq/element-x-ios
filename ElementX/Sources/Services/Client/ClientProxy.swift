@@ -1075,11 +1075,12 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func postNewFeed(channelZId: String, userWalletAddress: String, content: String) async -> Result<ZPost, ClientProxyError> {
+    func postNewFeed(channelZId: String, userWalletAddress: String, content: String, replyToPost: String?) async -> Result<ZPost, ClientProxyError> {
         do {
             let postFeedResult = try await zeroApiProxy.postsApi.createNewPost(channelZId: channelZId,
-                                                                      userWalletAddress: userWalletAddress,
-                                                                      content: content)
+                                                                               userWalletAddress: userWalletAddress,
+                                                                               content: content,
+                                                                               replyToPost: replyToPost)
             switch postFeedResult {
             case .success(let post):
                 return .success(post)

@@ -34,6 +34,7 @@ final class FeedDetailsScreenCoordinator: CoordinatorProtocol {
         self.isFeedDetailsRefreshable = parameters.isFeedDetailsRefreshable
         viewModel = FeedDetailsScreenViewModel(userSession: parameters.userSession,
                                                feedUpdatedProtocol: parameters.feedUpdatedProtocol,
+                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                feedItem: parameters.feedItem)
         viewModel.actions
             .sink { [weak self] action in

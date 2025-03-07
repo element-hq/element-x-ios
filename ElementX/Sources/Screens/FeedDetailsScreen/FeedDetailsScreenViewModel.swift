@@ -14,28 +14,43 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
     
     private let clientProxy: ClientProxyProtocol
     private let feedUpdatedProtocol: FeedDetailsUpdatedProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let POST_REPLIES_PAGE_COUNT = 10
     private var isFetchRepliesInProgress = false
+    
+    private var currentUserWalletAddress: String? = nil
+    private var defaultChannelZId: String? = nil
     
     private var actionsSubject: PassthroughSubject<FeedDetailsScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<FeedDetailsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol, feedUpdatedProtocol: FeedDetailsUpdatedProtocol, feedItem: HomeScreenPost) {
+    init(userSession: UserSessionProtocol,
+         feedUpdatedProtocol: FeedDetailsUpdatedProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol,
+         feedItem: HomeScreenPost) {
         self.clientProxy = userSession.clientProxy
         self.feedUpdatedProtocol = feedUpdatedProtocol
+        self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: .init(bindings: .init(feed: feedItem)), mediaProvider: userSession.mediaProvider)
+        super.init(initialViewState: .init(userID: clientProxy.userID, bindings: .init(feed: feedItem)), mediaProvider: userSession.mediaProvider)
         
         userSession.clientProxy.userRewardsPublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.userRewards, on: self)
             .store(in: &cancellables)
         
+        clientProxy.userAvatarURLPublisher
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.userAvatarURL, on: self)
+            .store(in: &cancellables)
+        
         fetchFeed(feedItem.id)
         fetchFeedReplies(feedItem.id)
+        
+        fetchAndCheckCurrentUser()
     }
     
     override func process(viewAction: FeedDetailsScreenViewAction) {
@@ -50,6 +65,8 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             forceRefreshFeed()
         case .meowTapped(let postId, let amount, let isPostAReply):
             addMeowToPost(postId, amount, isPostAReply: isPostAReply)
+        case .postReply:
+            break
         }
     }
     
@@ -106,6 +123,29 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
         }
     }
     
+    private func fetchAndCheckCurrentUser() {
+        Task {
+            if let (address, channelZId) = await fetchUserAddressAndChannelInfo(), !address.isEmpty {
+                currentUserWalletAddress = address
+                defaultChannelZId = channelZId
+                return
+            }
+            // Initialize wallet and fetch details again
+            _ = await clientProxy.initializeThirdWebWalletForUser()
+            if let (nAddress, nChannelZId) = await fetchUserAddressAndChannelInfo() {
+                currentUserWalletAddress = nAddress
+                defaultChannelZId = nChannelZId
+            }
+        }
+    }
+
+    private func fetchUserAddressAndChannelInfo() async -> (address: String, channelZId: String)? {
+        guard let user = await clientProxy.fetchCurrentZeroUser() else { return nil }
+        let walletAddress = user.wallets?.first(where: { $0.isThirdWeb })?.publicAddress ?? ""
+        let channelZId = user.primaryZID ?? ""
+        return walletAddress.isEmpty ? nil : (walletAddress, channelZId)
+    }
+    
     private func displayError() {
         state.bindings.alertInfo = .init(id: UUID(),
                                          title: L10n.commonError,
@@ -140,6 +180,49 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             case .failure(let error):
                 MXLog.error("Failed to add meow: \(error)")
                 displayError()
+            }
+        }
+    }
+    
+    private func postFeedReply() {
+        if state.bindings.myPostReply.isEmpty {
+            return
+        }
+        
+        guard let userWalletAddress = currentUserWalletAddress else {
+            state.bindings.alertInfo = .init(id: UUID(),
+                                             title: L10n.commonError,
+                                             message: "User default wallet is not initialized.")
+            return
+        }
+        guard let defaultChannelZId = defaultChannelZId else {
+            state.bindings.alertInfo = .init(id: UUID(),
+                                             title: L10n.commonError,
+                                             message: "Please set user primaryZId in profile settings.")
+            return
+        }
+        
+        Task {
+            let userIndicatorID = UUID().uuidString
+            defer {
+                userIndicatorController.retractIndicatorWithId(userIndicatorID)
+            }
+            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
+                                                                  type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                                  title: "Posting...",
+                                                                  persistent: true))
+            
+            let postFeedResult = await clientProxy.postNewFeed(channelZId: defaultChannelZId,
+                                                               userWalletAddress: userWalletAddress,
+                                                               content: state.bindings.myPostReply,
+                                                               replyToPost: state.bindings.feed.id)
+            switch postFeedResult {
+            case .success(_):
+                forceRefreshFeed()
+            case .failure(_):
+                state.bindings.alertInfo = .init(id: UUID(),
+                                                 title: L10n.commonError,
+                                                 message: L10n.errorUnknown)
             }
         }
     }

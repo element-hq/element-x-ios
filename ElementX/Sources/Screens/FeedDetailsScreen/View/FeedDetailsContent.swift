@@ -20,9 +20,15 @@ struct FeedDetailsContent: View {
     }
     
     private var feedDetails: some View {
-        isRefreshable
-                ? AnyView(actualContent.refreshable { context.send(viewAction: .forceRefreshFeed) })
-                : AnyView(actualContent)
+        VStack {
+            isRefreshable
+                    ? AnyView(actualContent.refreshable { context.send(viewAction: .forceRefreshFeed) })
+                    : AnyView(actualContent)
+            
+            //Add post reply content
+            addPostReplyView
+        }
+
     }
     
     private var actualContent: some View {
@@ -78,6 +84,39 @@ struct FeedDetailsContent: View {
             .animation(.elementDefault, value: context.viewState.repliesListMode)
             .animation(.none, value: context.viewState.visibleReplies)
         }
+    }
+    
+    private var addPostReplyView: some View {
+        HStack {
+            LoadableAvatarImage(url: context.viewState.userAvatarURL,
+                                name: nil,
+                                contentID: context.viewState.userID,
+                                avatarSize: .user(on: .home),
+                                mediaProvider: context.mediaProvider)
+            
+            // TODO: make textfield multi-line
+            TextField(text: $context.myPostReply) {
+                Text("Post your reply").foregroundColor(.compound.textSecondary)
+            }
+            .textFieldStyle(.element())
+            .disableAutocorrection(true)
+            .autocapitalization(.none)
+            
+            Button {
+                context.send(viewAction: .postReply)
+            } label: {
+                CompoundIcon(\.sendSolid)
+                    .scaledPadding(6, relativeTo: .title)
+                    .foregroundColor(context.myPostReply.isEmpty ? .compound.iconDisabled : .zero.iconAccentTertiary)
+                    .background {
+                        Circle()
+                            .foregroundColor(context.myPostReply.isEmpty ? .clear : Asset.Colors.zeroDarkGrey.swiftUIColor)
+                    }
+                    .scaledPadding(4, relativeTo: .compound.headingLG)
+            }
+            .disabled(context.myPostReply.isEmpty)
+        }
+        .padding()
     }
 }
 

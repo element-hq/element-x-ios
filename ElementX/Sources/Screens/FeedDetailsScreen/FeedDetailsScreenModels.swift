@@ -9,6 +9,9 @@ import Foundation
 import UIKit
 
 struct FeedDetailsScreenViewState: BindableState {
+    let userID: String
+    var userAvatarURL: URL?
+    
     var bindings: FeedDetailsScreenViewStateBindings
     
     var feedReplies: [HomeScreenPost] = []
@@ -34,6 +37,8 @@ struct FeedDetailsScreenViewState: BindableState {
 }
 
 struct FeedDetailsScreenViewStateBindings {
+    var myPostReply: String = ""
+    
     var feed: HomeScreenPost = HomeScreenPost.placeholder()
     var alertInfo: AlertInfo<UUID>?
 }
@@ -48,6 +53,7 @@ enum FeedDetailsScreenViewAction {
     case loadMoreRepliesIfNeeded
     case forceRefreshFeed
     case meowTapped(_ postId: String, amount: Int, isPostAReply: Bool)
+    case postReply
 }
 
 enum FeedRepliesListMode: CustomStringConvertible {

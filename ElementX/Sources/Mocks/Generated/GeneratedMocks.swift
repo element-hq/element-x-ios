@@ -6053,15 +6053,15 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     //MARK: - postNewFeed
 
-    var postNewFeedChannelZIdUserWalletAddressContentUnderlyingCallsCount = 0
-    var postNewFeedChannelZIdUserWalletAddressContentCallsCount: Int {
+    var postNewFeedChannelZIdUserWalletAddressContentReplyToPostUnderlyingCallsCount = 0
+    var postNewFeedChannelZIdUserWalletAddressContentReplyToPostCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return postNewFeedChannelZIdUserWalletAddressContentUnderlyingCallsCount
+                return postNewFeedChannelZIdUserWalletAddressContentReplyToPostUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = postNewFeedChannelZIdUserWalletAddressContentUnderlyingCallsCount
+                    returnValue = postNewFeedChannelZIdUserWalletAddressContentReplyToPostUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -6069,29 +6069,29 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                postNewFeedChannelZIdUserWalletAddressContentUnderlyingCallsCount = newValue
+                postNewFeedChannelZIdUserWalletAddressContentReplyToPostUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    postNewFeedChannelZIdUserWalletAddressContentUnderlyingCallsCount = newValue
+                    postNewFeedChannelZIdUserWalletAddressContentReplyToPostUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var postNewFeedChannelZIdUserWalletAddressContentCalled: Bool {
-        return postNewFeedChannelZIdUserWalletAddressContentCallsCount > 0
+    var postNewFeedChannelZIdUserWalletAddressContentReplyToPostCalled: Bool {
+        return postNewFeedChannelZIdUserWalletAddressContentReplyToPostCallsCount > 0
     }
-    var postNewFeedChannelZIdUserWalletAddressContentReceivedArguments: (channelZId: String, userWalletAddress: String, content: String)?
-    var postNewFeedChannelZIdUserWalletAddressContentReceivedInvocations: [(channelZId: String, userWalletAddress: String, content: String)] = []
+    var postNewFeedChannelZIdUserWalletAddressContentReplyToPostReceivedArguments: (channelZId: String, userWalletAddress: String, content: String, replyToPost: String?)?
+    var postNewFeedChannelZIdUserWalletAddressContentReplyToPostReceivedInvocations: [(channelZId: String, userWalletAddress: String, content: String, replyToPost: String?)] = []
 
-    var postNewFeedChannelZIdUserWalletAddressContentUnderlyingReturnValue: Result<ZPost, ClientProxyError>!
-    var postNewFeedChannelZIdUserWalletAddressContentReturnValue: Result<ZPost, ClientProxyError>! {
+    var postNewFeedChannelZIdUserWalletAddressContentReplyToPostUnderlyingReturnValue: Result<ZPost, ClientProxyError>!
+    var postNewFeedChannelZIdUserWalletAddressContentReplyToPostReturnValue: Result<ZPost, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return postNewFeedChannelZIdUserWalletAddressContentUnderlyingReturnValue
+                return postNewFeedChannelZIdUserWalletAddressContentReplyToPostUnderlyingReturnValue
             } else {
                 var returnValue: Result<ZPost, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = postNewFeedChannelZIdUserWalletAddressContentUnderlyingReturnValue
+                    returnValue = postNewFeedChannelZIdUserWalletAddressContentReplyToPostUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -6099,26 +6099,26 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                postNewFeedChannelZIdUserWalletAddressContentUnderlyingReturnValue = newValue
+                postNewFeedChannelZIdUserWalletAddressContentReplyToPostUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    postNewFeedChannelZIdUserWalletAddressContentUnderlyingReturnValue = newValue
+                    postNewFeedChannelZIdUserWalletAddressContentReplyToPostUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var postNewFeedChannelZIdUserWalletAddressContentClosure: ((String, String, String) async -> Result<ZPost, ClientProxyError>)?
+    var postNewFeedChannelZIdUserWalletAddressContentReplyToPostClosure: ((String, String, String, String?) async -> Result<ZPost, ClientProxyError>)?
 
-    func postNewFeed(channelZId: String, userWalletAddress: String, content: String) async -> Result<ZPost, ClientProxyError> {
-        postNewFeedChannelZIdUserWalletAddressContentCallsCount += 1
-        postNewFeedChannelZIdUserWalletAddressContentReceivedArguments = (channelZId: channelZId, userWalletAddress: userWalletAddress, content: content)
+    func postNewFeed(channelZId: String, userWalletAddress: String, content: String, replyToPost: String?) async -> Result<ZPost, ClientProxyError> {
+        postNewFeedChannelZIdUserWalletAddressContentReplyToPostCallsCount += 1
+        postNewFeedChannelZIdUserWalletAddressContentReplyToPostReceivedArguments = (channelZId: channelZId, userWalletAddress: userWalletAddress, content: content, replyToPost: replyToPost)
         DispatchQueue.main.async {
-            self.postNewFeedChannelZIdUserWalletAddressContentReceivedInvocations.append((channelZId: channelZId, userWalletAddress: userWalletAddress, content: content))
+            self.postNewFeedChannelZIdUserWalletAddressContentReplyToPostReceivedInvocations.append((channelZId: channelZId, userWalletAddress: userWalletAddress, content: content, replyToPost: replyToPost))
         }
-        if let postNewFeedChannelZIdUserWalletAddressContentClosure = postNewFeedChannelZIdUserWalletAddressContentClosure {
-            return await postNewFeedChannelZIdUserWalletAddressContentClosure(channelZId, userWalletAddress, content)
+        if let postNewFeedChannelZIdUserWalletAddressContentReplyToPostClosure = postNewFeedChannelZIdUserWalletAddressContentReplyToPostClosure {
+            return await postNewFeedChannelZIdUserWalletAddressContentReplyToPostClosure(channelZId, userWalletAddress, content, replyToPost)
         } else {
-            return postNewFeedChannelZIdUserWalletAddressContentReturnValue
+            return postNewFeedChannelZIdUserWalletAddressContentReplyToPostReturnValue
         }
     }
     //MARK: - fetchUserZIds

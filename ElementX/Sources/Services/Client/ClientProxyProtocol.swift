@@ -264,7 +264,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func addMeowsToFeed(feedId: String, amount: Int) async -> Result<ZPost, ClientProxyError>
     
-    func postNewFeed(channelZId: String, userWalletAddress: String, content: String) async -> Result<ZPost, ClientProxyError>
+    func postNewFeed(channelZId: String, userWalletAddress: String, content: String, replyToPost: String?) async -> Result<ZPost, ClientProxyError>
     
     // MARK: - Zero Channels
     
