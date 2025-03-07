@@ -2311,6 +2311,11 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingDirectMemberZeroProfilePublisher = value }
     }
     var underlyingDirectMemberZeroProfilePublisher: CurrentValuePublisher<ZMatrixUser?, Never>!
+    var zeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser?, Never> {
+        get { return underlyingZeroCurrentUserPublisher }
+        set(value) { underlyingZeroCurrentUserPublisher = value }
+    }
+    var underlyingZeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser?, Never>!
 
     //MARK: - isOnlyDeviceLeft
 
@@ -5706,70 +5711,6 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     func checkAndLinkZeroUser() {
         checkAndLinkZeroUserCallsCount += 1
         checkAndLinkZeroUserClosure?()
-    }
-    //MARK: - fetchCurrentZeroUser
-
-    var fetchCurrentZeroUserUnderlyingCallsCount = 0
-    var fetchCurrentZeroUserCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return fetchCurrentZeroUserUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchCurrentZeroUserUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchCurrentZeroUserUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchCurrentZeroUserUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var fetchCurrentZeroUserCalled: Bool {
-        return fetchCurrentZeroUserCallsCount > 0
-    }
-
-    var fetchCurrentZeroUserUnderlyingReturnValue: ZCurrentUser?
-    var fetchCurrentZeroUserReturnValue: ZCurrentUser? {
-        get {
-            if Thread.isMainThread {
-                return fetchCurrentZeroUserUnderlyingReturnValue
-            } else {
-                var returnValue: ZCurrentUser?? = nil
-                DispatchQueue.main.sync {
-                    returnValue = fetchCurrentZeroUserUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                fetchCurrentZeroUserUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    fetchCurrentZeroUserUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var fetchCurrentZeroUserClosure: (() async -> ZCurrentUser?)?
-
-    func fetchCurrentZeroUser() async -> ZCurrentUser? {
-        fetchCurrentZeroUserCallsCount += 1
-        if let fetchCurrentZeroUserClosure = fetchCurrentZeroUserClosure {
-            return await fetchCurrentZeroUserClosure()
-        } else {
-            return fetchCurrentZeroUserReturnValue
-        }
     }
     //MARK: - fetchZeroFeeds
 

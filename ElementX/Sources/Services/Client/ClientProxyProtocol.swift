@@ -247,12 +247,11 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     // MARK: - Zero User Profile
     
     var directMemberZeroProfilePublisher: CurrentValuePublisher<ZMatrixUser?, Never> { get }
+    var zeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser?, Never> { get }
         
     func zeroProfile(userId: String) async
     
     func checkAndLinkZeroUser()
-    
-    func fetchCurrentZeroUser() async -> ZCurrentUser?
     
     // MARK: - Zero Feed
     

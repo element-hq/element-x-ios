@@ -157,6 +157,11 @@ class ClientProxy: ClientProxyProtocol {
         directMemberZeroProfileSubject.asCurrentValuePublisher()
     }
     
+    private let zeroCurrentUserSubject = CurrentValueSubject<ZCurrentUser?, Never>(nil)
+    var zeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser?, Never> {
+        zeroCurrentUserSubject.asCurrentValuePublisher()
+    }
+    
     var roomsToAwait: Set<String> = []
     
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
@@ -996,22 +1001,18 @@ class ClientProxy: ClientProxyProtocol {
     func checkAndLinkZeroUser() {
         Task {
             do {
-                guard let currentUser = try await zeroApiProxy.matrixUsersService.fetchCurrentUser() else { return }
+                guard let currentUser = try await fetchZeroCurrentUser() else { return }
                 if currentUser.matrixId == nil {
                     _ = try await zeroApiProxy.createAccountApi.linkMatrixUserToZero(matrixUserId: userID)
+                }
+                let thirdWebWalletAddress = currentUser.wallets?.first(where: { $0.isThirdWeb })
+                if thirdWebWalletAddress == nil {
+                    _ = try await zeroApiProxy.walletsApi.initializeThirdWebWallet()
+                    _ = try await fetchZeroCurrentUser()
                 }
             } catch {
                 MXLog.error("Failed linking matrixId to zero user. Error: \(error)")
             }
-        }
-    }
-    
-    func fetchCurrentZeroUser() async -> ZCurrentUser? {
-        do {
-            return try await zeroApiProxy.matrixUsersService.fetchCurrentUser()
-        } catch {
-            MXLog.error("Failed to fetch current zero user. Error: \(error)")
-            return nil
         }
     }
     
@@ -1485,6 +1486,12 @@ class ClientProxy: ClientProxyProtocol {
         } catch {
             MXLog.error("Failed to join invited room: \(roomId) with error: \(error)")
         }
+    }
+    
+    private func fetchZeroCurrentUser() async throws -> ZCurrentUser? {
+        let currentUser = try await zeroApiProxy.matrixUsersService.fetchCurrentUser()
+        zeroCurrentUserSubject.send(currentUser)
+        return currentUser
     }
 }
 

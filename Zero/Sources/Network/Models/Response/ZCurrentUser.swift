@@ -39,6 +39,12 @@ extension ZCurrentUser: Hashable {
     }
 }
 
+extension ZCurrentUser {
+    var thirdWebWalletAddress: String? {
+        wallets?.first(where: { $0.isThirdWeb })?.publicAddress
+    }
+}
+
 public struct ZWallet: Codable {
     let id: String
     let userId: String

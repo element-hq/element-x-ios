@@ -47,10 +47,16 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             .weakAssign(to: \.state.userAvatarURL, on: self)
             .store(in: &cancellables)
         
+        clientProxy.zeroCurrentUserPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] currentUser in
+                self?.currentUserWalletAddress = currentUser?.thirdWebWalletAddress
+                self?.defaultChannelZId = currentUser?.primaryZID
+            }
+            .store(in: &cancellables)
+        
         fetchFeed(feedItem.id)
         fetchFeedReplies(feedItem.id)
-        
-        fetchAndCheckCurrentUser()
     }
     
     override func process(viewAction: FeedDetailsScreenViewAction) {
@@ -122,30 +128,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             }
         }
     }
-    
-    private func fetchAndCheckCurrentUser() {
-        Task {
-            if let (address, channelZId) = await fetchUserAddressAndChannelInfo(), !address.isEmpty {
-                currentUserWalletAddress = address
-                defaultChannelZId = channelZId
-                return
-            }
-            // Initialize wallet and fetch details again
-            _ = await clientProxy.initializeThirdWebWalletForUser()
-            if let (nAddress, nChannelZId) = await fetchUserAddressAndChannelInfo() {
-                currentUserWalletAddress = nAddress
-                defaultChannelZId = nChannelZId
-            }
-        }
-    }
-
-    private func fetchUserAddressAndChannelInfo() async -> (address: String, channelZId: String)? {
-        guard let user = await clientProxy.fetchCurrentZeroUser() else { return nil }
-        let walletAddress = user.wallets?.first(where: { $0.isThirdWeb })?.publicAddress ?? ""
-        let channelZId = user.primaryZID ?? ""
-        return walletAddress.isEmpty ? nil : (walletAddress, channelZId)
-    }
-    
+        
     private func displayError() {
         state.bindings.alertInfo = .init(id: UUID(),
                                          title: L10n.commonError,
