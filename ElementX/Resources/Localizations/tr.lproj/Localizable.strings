@@ -139,7 +139,9 @@
 "common_chat_backup" = "Sohbet yedekleme";
 "common_copyright" = "Telif Hakkı";
 "common_creating_room" = "Oda yaratmak...";
+"common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "Sol oda";
+"common_current_user_rejected_invite" = "Invite declined";
 "common_dark" = "Koyu";
 "common_date_date_at_time" = "%1$@ %2$@";
 "common_date_this_month" = "Bu ay";
@@ -355,6 +357,7 @@
 "rich_text_editor_code_block" = "Kod Bloğunu Aç/Kapat";
 "rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Mesaj…";
+"rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
 "rich_text_editor_create_link" = "Bir bağlantı oluştur";
 "rich_text_editor_edit_link" = "Bağlantıyı Düzenle";
 "rich_text_editor_format_bold" = "Kalın biçimi uygula";
@@ -936,7 +939,6 @@
 "screen_roomlist_main_space_title" = "Sohbetler";
 "screen_roomlist_mark_as_read" = "Okundu olarak işaretle";
 "screen_roomlist_mark_as_unread" = "Okunmamış olarak işaretle";
-"screen_roomlist_room_directory_button_title" = "Tüm odalara göz at";
 "screen_server_confirmation_message_login_element_dot_io" = "Element çalışanları için özel bir sunucu.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix, güvenli, merkezi olmayan iletişim için açık bir ağdır.";
 "screen_server_confirmation_message_register" = "Konuşmalarınızın saklanacağı yer burasıdır - tıpkı e-postalarınızı saklamak için bir e-posta sağlayıcısı kullandığınız gibi.";

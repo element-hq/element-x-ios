@@ -139,7 +139,9 @@
 "common_chat_backup" = "Chat-Backup";
 "common_copyright" = "Copyright";
 "common_creating_room" = "Raum wird erstellt...";
+"common_current_user_canceled_knock" = "Anfrage storniert";
 "common_current_user_left_room" = "Hat den Raum verlassen";
+"common_current_user_rejected_invite" = "Einladung abgelehnt";
 "common_dark" = "Dunkel";
 "common_date_date_at_time" = "%1$@bei %2$@";
 "common_date_this_month" = "Diesen Monat";
@@ -353,8 +355,9 @@
 "rich_text_editor_bullet_list" = "Aufzählungsliste umschalten";
 "rich_text_editor_close_formatting_options" = "Formatierungsoptionen schließen";
 "rich_text_editor_code_block" = "Codeblock umschalten";
-"rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
+"rich_text_editor_composer_encrypted_placeholder" = "Verschlüsselte Nachricht...";
 "rich_text_editor_composer_placeholder" = "Nachricht...";
+"rich_text_editor_composer_unencrypted_placeholder" = "Unverschlüsselte Nachricht";
 "rich_text_editor_create_link" = "Einen Link erstellen";
 "rich_text_editor_edit_link" = "Link bearbeiten";
 "rich_text_editor_format_bold" = "Fettes Format anwenden";
@@ -445,7 +448,7 @@
 "screen_resolve_send_failure_unsigned_device_title" = "Deine Nachricht wurde nicht gesendet, weil %1$@ nicht alle Geräte verifiziert hat";
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Mindestens eines Ihrer Geräte ist nicht verifiziert worden. Sie können die Nachricht trotzdem senden, oder den Vorgang zunächst abbrechen und es später erneut versuchen, nachdem Sie alle Ihrer Geräte verifiziert haben.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Ihre Nachricht wurde nicht geschickt, da Sie eines oder mehrere Ihrer Geräte nicht verifiziert haben.";
-"screen_room_event_pill" = "Message in %1$@";
+"screen_room_event_pill" = "Nachricht in %1$@";
 "screen_room_mentions_at_room_subtitle" = "Alle Mitglieder benachrichtigen";
 "screen_room_multiple_knock_requests_view_all_button_title" = "Alles ansehen";
 "screen_room_pinned_banner_indicator" = "%1$@ von %2$@";
@@ -480,12 +483,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Veröffentlichung von Räumen";
 "screen_security_and_privacy_room_visibility_section_footer" = "Chatroomadressen sind Möglichkeiten, Chatrooms zu finden und auf sie zuzugreifen. So können Sie Ihren Chatroom auch problemlos mit anderen teilen. Die Adresse ist auch erforderlich, um den Chatroom in einem %1$@ öffentlichen Chatroomverzeichnis sichtbar zu machen.";
 "screen_security_and_privacy_title" = "Sicherheit & Datenschutz";
-"screen_start_chat_join_room_by_address_action" = "Join room by address";
-"screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
-"screen_start_chat_join_room_by_address_placeholder" = "Enter...";
-"screen_start_chat_join_room_by_address_room_found" = "Matching room found";
-"screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
-"screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
+"screen_start_chat_join_room_by_address_action" = "Raum per Adresse betreten";
+"screen_start_chat_join_room_by_address_invalid_address" = "Keine gültige Adresse";
+"screen_start_chat_join_room_by_address_placeholder" = "Eintreten...";
+"screen_start_chat_join_room_by_address_room_found" = "Passender Raum gefunden";
+"screen_start_chat_join_room_by_address_room_not_found" = "Raum nicht gefunden";
+"screen_start_chat_join_room_by_address_supporting_text" = "z. B. #room -name:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Nachricht nicht gesendet, weil sich die verifizierte Identität von %1$@ geändert hat.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Nachricht wurde nicht gesendet, weil %1$@ nicht alle Geräte verifiziert hat";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Die Nachricht wurde nicht gesendet, weil Sie eines oder mehrere Ihrer Geräte nicht verifiziert haben.";
@@ -936,7 +939,6 @@
 "screen_roomlist_main_space_title" = "Chats";
 "screen_roomlist_mark_as_read" = "Als gelesen markieren";
 "screen_roomlist_mark_as_unread" = "Als ungelesen markieren";
-"screen_roomlist_room_directory_button_title" = "Alle Räume durchsuchen";
 "screen_server_confirmation_message_login_element_dot_io" = "Ein privater Server für die Mitarbeiter von Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix ist ein offenes Netzwerk für eine sichere, dezentrale Kommunikation.";
 "screen_server_confirmation_message_register" = "Hier werden deine Gespräche gespeichert - so wie du deine E-Mails bei einem E-Mail-Anbieter aufbewahren würden.";

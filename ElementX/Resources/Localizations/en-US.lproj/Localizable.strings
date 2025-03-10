@@ -139,7 +139,9 @@
 "common_chat_backup" = "Chat backup";
 "common_copyright" = "Copyright";
 "common_creating_room" = "Creating room…";
+"common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "Left room";
+"common_current_user_rejected_invite" = "Invite declined";
 "common_dark" = "Dark";
 "common_date_date_at_time" = "%1$@ at %2$@";
 "common_date_this_month" = "This month";

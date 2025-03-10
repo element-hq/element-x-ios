@@ -13,9 +13,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d digit entered</string>
+			<string>%1$d siffer angitt</string>
 			<key>other</key>
-			<string>%1$d digits entered</string>
+			<string>%1$d sifre angitt</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -29,9 +29,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Read by %1$@ and %2$d other</string>
+			<string>Lest av %1$@ og %2$d andre</string>
 			<key>other</key>
-			<string>Read by %1$@ and %2$d others</string>
+			<string>Lest av %1$@ og %2$d andre</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -173,9 +173,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %1$d attempt to unlock</string>
+			<string>Du har %1$d forsøk på å låse opp</string>
 			<key>other</key>
-			<string>You have %1$d attempts to unlock</string>
+			<string>Du har %1$d forsøk på å låse opp</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -189,9 +189,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Wrong PIN. You have %1$d more chance</string>
+			<string>Feil PIN-kode. Du har %1$d forsøk igjen</string>
 			<key>other</key>
-			<string>Wrong PIN. You have %1$d more chances</string>
+			<string>Feil PIN-kode. Du har %1$d forsøk igjen</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -205,9 +205,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Pinned message</string>
+			<string>%1$d Festet melding</string>
 			<key>other</key>
-			<string>%1$d Pinned messages</string>
+			<string>%1$d Festede meldinger</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -269,9 +269,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@, %2$@ and %3$d other</string>
+			<string>%1$@, %2$@ og %3$d annet</string>
 			<key>other</key>
-			<string>%1$@, %2$@ and %3$d others</string>
+			<string>%1$@, %2$@ og %3$d andre</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members_second_component_ios</key>
@@ -301,9 +301,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ is typing</string>
+			<string>%1$@ skriver</string>
 			<key>other</key>
-			<string>%1$@ are typing</string>
+			<string>%1$@ skriver</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
