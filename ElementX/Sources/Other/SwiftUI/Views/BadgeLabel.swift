@@ -26,15 +26,15 @@ private struct BadgeLabelStyle: LabelStyle {
     let isHighlighted: Bool
     
     var titleColor: Color {
-        isHighlighted ? .compound._badgeTextSuccess : .compound._badgeTextSubtle
+        isHighlighted ? .compound.textBadgeAccent : .compound.textBadgeInfo
     }
     
     var iconColor: Color {
-        isHighlighted ? .compound.iconSuccessPrimary : .compound.iconSecondary
+        isHighlighted ? .compound.iconSuccessPrimary : .compound.iconInfoPrimary
     }
     
     var backgroundColor: Color {
-        isHighlighted ? .compound._bgBadgeSuccess : .compound.bgSubtlePrimary
+        isHighlighted ? .compound.bgBadgeAccent : .compound.bgBadgeInfo
     }
     
     func makeBody(configuration: Configuration) -> some View {
