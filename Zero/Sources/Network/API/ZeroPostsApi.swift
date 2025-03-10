@@ -116,7 +116,7 @@ class ZeroPostsApi: ZeroPostsApiProtocol {
     func createNewPost(channelZId: String, content: String, replyToPost: String?) async throws -> Result<Void, any Error> {
         var parameters: [String: String] = ["text": content]
         if let replyToPostId = replyToPost {
-            parameters["replyToPost"] = replyToPostId
+            parameters["replyTo"] = replyToPostId
         }
         
         let requestChannelZId = channelZId.replacingOccurrences(of: ZeroContants.ZERO_CHANNEL_PREFIX, with: "")
@@ -125,7 +125,7 @@ class ZeroPostsApi: ZeroPostsApiProtocol {
         
         let result: Result<Void, Error> = try await APIManager.shared.authorisedRequest(requestUrl, method: .post, appSettings: appSettings, parameters: parameters)
         switch result {
-        case .success():
+        case .success:
             return .success(())
         case .failure(let error):
             return .failure(error)

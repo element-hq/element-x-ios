@@ -196,7 +196,9 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                                                                replyToPost: state.bindings.feed.id)
             switch postFeedResult {
             case .success(_):
+                state.bindings.myPostReply = ""
                 forceRefreshFeed()
+                feedUpdatedProtocol.onFeedUpdated(state.bindings.feed.id)
             case .failure(_):
                 state.bindings.alertInfo = .init(id: UUID(),
                                                  title: L10n.commonError,
