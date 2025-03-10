@@ -72,7 +72,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
         case .meowTapped(let postId, let amount, let isPostAReply):
             addMeowToPost(postId, amount, isPostAReply: isPostAReply)
         case .postReply:
-            break
+            postFeedReply()
         }
     }
     

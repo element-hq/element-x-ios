@@ -15,6 +15,8 @@ struct FeedDetailsContent: View {
     let isRefreshable: Bool
     let scrollViewAdapter: ScrollViewAdapter
     
+    @FocusState private var isPostTextFieldFocused: Bool  // Focus state
+    
     var body: some View {
         feedDetails
     }
@@ -26,7 +28,7 @@ struct FeedDetailsContent: View {
                     : AnyView(actualContent)
             
             //Add post reply content
-            //addPostReplyView
+            addPostReplyView
         }
 
     }
@@ -94,13 +96,16 @@ struct FeedDetailsContent: View {
                                 avatarSize: .user(on: .home),
                                 mediaProvider: context.mediaProvider)
             
-            // TODO: make textfield multi-line
-            TextField(text: $context.myPostReply) {
-                Text("Post your reply").foregroundColor(.compound.textSecondary)
-            }
-            .textFieldStyle(.element())
-            .disableAutocorrection(true)
-            .autocapitalization(.none)
+            TextField("Post your reply", text: $context.myPostReply,  axis: .vertical)
+                .lineLimit(1...5)
+                .focused($isPostTextFieldFocused)
+                .textFieldStyle(.element())
+                .disableAutocorrection(true)
+                .autocapitalization(.none)
+                .onSubmit {
+                    context.myPostReply.append("\n")
+                    isPostTextFieldFocused = true
+                }
             
             Button {
                 context.send(viewAction: .postReply)

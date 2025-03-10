@@ -114,9 +114,11 @@ class ZeroPostsApi: ZeroPostsApiProtocol {
     }
     
     func createNewPost(channelZId: String, content: String, replyToPost: String?) async throws -> Result<Void, any Error> {
-        let parameters: [String: String] = [
-            "text": content
-        ]
+        var parameters: [String: String] = ["text": content]
+        if let replyToPostId = replyToPost {
+            parameters["replyToPost"] = replyToPostId
+        }
+        
         let requestChannelZId = channelZId.replacingOccurrences(of: ZeroContants.ZERO_CHANNEL_PREFIX, with: "")
         let requestUrl = FeedEndPoints.newPostEndPoint
             .replacingOccurrences(of: FeedConstants.channel_path_param, with: requestChannelZId)
