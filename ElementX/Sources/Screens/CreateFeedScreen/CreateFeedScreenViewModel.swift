@@ -58,12 +58,12 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
     }
     
     private func createNewPost() {
-        guard let userWalletAddress = currentUserWalletAddress else {
-            state.bindings.alertInfo = .init(id: UUID(),
-                                             title: L10n.commonError,
-                                             message: "User default wallet is not initialized.")
-            return
-        }
+//        guard let userWalletAddress = currentUserWalletAddress else {
+//            state.bindings.alertInfo = .init(id: UUID(),
+//                                             title: L10n.commonError,
+//                                             message: "User default wallet is not initialized.")
+//            return
+//        }
         guard let defaultChannelZId = defaultChannelZId else {
             state.bindings.alertInfo = .init(id: UUID(),
                                              title: L10n.commonError,
@@ -82,11 +82,10 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
                                                                   persistent: true))
             
             let postFeedResult = await clientProxy.postNewFeed(channelZId: defaultChannelZId,
-                                                               userWalletAddress: userWalletAddress,
                                                                content: state.bindings.feedText,
                                                                replyToPost: nil)
             switch postFeedResult {
-            case .success(_):
+            case .success:
                 createFeedProtocol.onNewFeedPosted()
                 actionsSubject.send(.newFeedPosted)
             case .failure(_):

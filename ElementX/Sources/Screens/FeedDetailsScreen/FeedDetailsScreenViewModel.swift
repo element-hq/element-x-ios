@@ -168,16 +168,12 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
     }
     
     private func postFeedReply() {
-        if state.bindings.myPostReply.isEmpty {
-            return
-        }
-        
-        guard let userWalletAddress = currentUserWalletAddress else {
-            state.bindings.alertInfo = .init(id: UUID(),
-                                             title: L10n.commonError,
-                                             message: "User default wallet is not initialized.")
-            return
-        }
+//        guard let userWalletAddress = currentUserWalletAddress else {
+//            state.bindings.alertInfo = .init(id: UUID(),
+//                                             title: L10n.commonError,
+//                                             message: "User default wallet is not initialized.")
+//            return
+//        }
         guard let defaultChannelZId = defaultChannelZId else {
             state.bindings.alertInfo = .init(id: UUID(),
                                              title: L10n.commonError,
@@ -196,7 +192,6 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                                                                   persistent: true))
             
             let postFeedResult = await clientProxy.postNewFeed(channelZId: defaultChannelZId,
-                                                               userWalletAddress: userWalletAddress,
                                                                content: state.bindings.myPostReply,
                                                                replyToPost: state.bindings.feed.id)
             switch postFeedResult {
