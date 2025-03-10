@@ -101,7 +101,7 @@ struct SecureBackupScreen: View {
                 
                 // Forgot recovery key option
                 ZeroListRow(label: .plain(title: "Forgot recovery key?",
-                                          description: "Create a new recovery key in case you lost your current one."),
+                                          description: "Reset your identity and create a new recovery key in case you lost your current one."),
                             kind: .navigationLink { context.send(viewAction: .forceResetKey) })
                 .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
                 

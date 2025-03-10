@@ -71,7 +71,7 @@ struct ZeroLoginScreen: View {
                 Text("Email").foregroundColor(.compound.textSecondary)
             }
             .focused($isUsernameFocused)
-            .textFieldStyle(.authentication(accessibilityIdentifier: A11yIdentifiers.loginScreen.emailUsername))
+            .textFieldStyle(.element(accessibilityIdentifier: A11yIdentifiers.loginScreen.emailUsername))
             .disableAutocorrection(true)
             .textContentType(.emailAddress)
             .keyboardType(.emailAddress)

@@ -20,13 +20,13 @@ class ClientProxy: ClientProxyProtocol {
     private let mediaLoader: MediaLoaderProtocol
     private let clientQueue: DispatchQueue
     
-    private var roomListService: RoomListService?
+    private var roomListService: RoomListService
     // periphery: ignore - only for retain
     private var roomListStateUpdateTaskHandle: TaskHandle?
     // periphery: ignore - only for retain
     private var roomListStateLoadingStateUpdateTaskHandle: TaskHandle?
 
-    private var syncService: SyncService?
+    private var syncService: SyncService
     // periphery: ignore - only for retain
     private var syncServiceStateUpdateTaskHandle: TaskHandle?
     
@@ -43,8 +43,10 @@ class ClientProxy: ClientProxyProtocol {
     
     // These following summary providers both operate on the same allRooms() list but
     // can apply their own filtering and pagination
-    private(set) var roomSummaryProvider: RoomSummaryProviderProtocol?
-    private(set) var alternateRoomSummaryProvider: RoomSummaryProviderProtocol?
+    private(set) var roomSummaryProvider: RoomSummaryProviderProtocol
+    private(set) var alternateRoomSummaryProvider: RoomSummaryProviderProtocol
+    
+    private(set) var staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol
     
     let notificationSettings: NotificationSettingsProxyProtocol
 
@@ -155,22 +157,21 @@ class ClientProxy: ClientProxyProtocol {
         directMemberZeroProfileSubject.asCurrentValuePublisher()
     }
     
+    private let zeroCurrentUserSubject = CurrentValueSubject<ZCurrentUser?, Never>(nil)
+    var zeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser?, Never> {
+        zeroCurrentUserSubject.asCurrentValuePublisher()
+    }
+    
     var roomsToAwait: Set<String> = []
     
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
     
-    private let zeroMatrixUsersService: ZeroMatrixUsersService
-    private let zeroRewardsApi: ZeroRewardsApiProtocol
-    private let zeroMessengerInviteApi: ZeroMessengerInviteApiProtocol
-    private let zeroCreateAccountApi: ZeroCreateAccountApiProtocol
-    private let zeroUserAccountApi: ZeroAccountApiProtocol
-    private let zeroPostsApi: ZeroPostsApiProtocol
-    private let zeroChannelsApi: ZeroChannelsApiProtocol
+    private let zeroApiProxy: ZeroApiProxyProtocol
     
     init(client: ClientProtocol,
          needsSlidingSyncMigration: Bool,
          networkMonitor: NetworkMonitorProtocol,
-         appSettings: AppSettings) async {
+         appSettings: AppSettings) async throws {
         self.client = client
         self.networkMonitor = networkMonitor
         self.appSettings = appSettings
@@ -183,19 +184,25 @@ class ClientProxy: ClientProxyProtocol {
         
         secureBackupController = SecureBackupController(encryption: client.encryption())
         
+        zeroApiProxy = ZeroApiProxy(client: client, appSettings: appSettings)
+        
         self.needsSlidingSyncMigration = needsSlidingSyncMigration
         
-        /// Configure Zero Utlils, Services and APIs
-        let zeroUsersApi = ZeroUsersApi(appSettings: appSettings)
-        zeroMatrixUsersService = ZeroMatrixUsersService(zeroUsersApi: zeroUsersApi,
-                                                        appSettings: appSettings,
-                                                        client: client)
-        zeroRewardsApi = ZeroRewardsApi(appSettings: appSettings)
-        zeroMessengerInviteApi = ZeroMessengerInviteApi(appSettings: appSettings)
-        zeroCreateAccountApi = ZeroCreateAccountApi(appSettings: appSettings)
-        zeroUserAccountApi = ZeroAccountApi(appSettings: appSettings)
-        zeroPostsApi = ZeroPostsApi(appSettings: appSettings)
-        zeroChannelsApi = ZeroChannelsApi(appSettings: appSettings)
+        let configuredAppService = try await ClientProxyServices(client: client,
+                                                                 actionsSubject: actionsSubject,
+                                                                 notificationSettings: notificationSettings,
+                                                                 appSettings: appSettings,
+                                                                 zeroApiProxy: zeroApiProxy)
+        
+        syncService = configuredAppService.syncService
+        roomListService = configuredAppService.roomListService
+        roomSummaryProvider = configuredAppService.roomSummaryProvider
+        alternateRoomSummaryProvider = configuredAppService.alternateRoomSummaryProvider
+        staticRoomSummaryProvider = configuredAppService.staticRoomSummaryProvider
+        
+        syncServiceStateUpdateTaskHandle = createSyncServiceStateObserver(syncService)
+        roomListStateUpdateTaskHandle = createRoomListServiceObserver(roomListService)
+        roomListStateLoadingStateUpdateTaskHandle = createRoomListLoadingStateUpdateObserver(roomListService)
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
@@ -211,8 +218,6 @@ class ClientProxy: ClientProxyProtocol {
                 }
             }
             .store(in: &cancellables)
-        
-        await configureAppService()
 
         loadUserAvatarURLFromCache()
         
@@ -246,7 +251,7 @@ class ClientProxy: ClientProxyProtocol {
             }
             .store(in: &cancellables)
         
-        await loadZeroMessengerInvite()
+        _ = await loadZeroMessengerInvite()
     }
     
     var userID: String {
@@ -326,7 +331,7 @@ class ClientProxy: ClientProxyProtocol {
         MXLog.info("Starting sync")
         
         Task {
-            await syncService?.start()
+            await syncService.start()
             
             // If we are using OIDC we want to cache the account management URL in volatile memory on the SDK side.
             // To avoid the cache being invalidated while the app is backgrounded, we cache at every sync start.
@@ -365,12 +370,6 @@ class ClientProxy: ClientProxyProtocol {
         if restartTask != nil {
             MXLog.warning("Removing the sync service restart task.")
             restartTask = nil
-        }
-        
-        guard let syncService else {
-            MXLog.warning("No sync service to stop.")
-            completion?()
-            return
         }
         
         // Capture the sync service strongly as this method is called on deinit and so the
@@ -446,6 +445,7 @@ class ClientProxy: ClientProxyProtocol {
                                                   avatar: avatarURL?.absoluteString,
                                                   powerLevelContentOverride: isKnockingOnly ? Self.knockingRoomCreationPowerLevelOverrides : Self.roomCreationPowerLevelOverrides,
                                                   joinRuleOverride: isKnockingOnly ? .knock : nil,
+                                                  historyVisibilityOverride: isRoomPrivate ? .invited : nil,
                                                   // This is an FFI naming mistake, what is required is the `aliasLocalPart` not the whole alias
                                                   canonicalAlias: aliasLocalPart)
             let roomID = try await client.createRoom(request: parameters)
@@ -540,12 +540,6 @@ class ClientProxy: ClientProxyProtocol {
             return room
         }
         
-        // Else wait for the visible rooms list to go into fully loaded
-        guard let roomSummaryProvider else {
-            MXLog.error("Rooms summary provider not setup yet")
-            return nil
-        }
-        
         if !roomSummaryProvider.statePublisher.value.isLoaded {
             _ = await roomSummaryProvider.statePublisher.values.first { $0.isLoaded }
         }
@@ -558,10 +552,6 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func leaveRoom(_ roomID: String) async -> Result<Void, ClientProxyError> {
-        guard let roomListService else {
-            MXLog.error("Failed retrieving room: \(roomID), room list service not set up")
-            return .failure(.failedResolvingRoomAlias)
-        }
         do {
             let roomListItem = try roomListService.room(roomId: roomID)
             let invitedRoom = try roomListItem.invitedRoom()
@@ -576,7 +566,7 @@ class ClientProxy: ClientProxyProtocol {
     func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewProxyProtocol, ClientProxyError> {
         do {
             let roomPreview = try await client.getRoomPreviewFromRoomId(roomId: identifier, viaServers: via)
-            return try .success(RoomPreviewProxy(roomId: identifier, roomPreview: roomPreview, zeroUsersService: zeroMatrixUsersService))
+            return try .success(RoomPreviewProxy(roomId: identifier, roomPreview: roomPreview, zeroUsersService: zeroApiProxy.matrixUsersService))
         } catch ClientError.MatrixApi(.forbidden, _, _) {
             MXLog.error("Failed retrieving preview for room: \(identifier) is private")
             return .failure(.roomPreviewIsPrivate)
@@ -587,15 +577,11 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func roomSummaryForIdentifier(_ identifier: String) -> RoomSummary? {
-        // the alternate room summary provider is not impacted by filtering
-        alternateRoomSummaryProvider?.roomListPublisher.value.first { $0.id == identifier }
+        staticRoomSummaryProvider.roomListPublisher.value.first(where: { $0.id == identifier })
     }
     
     func roomSummaryForAlias(_ alias: String) -> RoomSummary? {
-        // the alternate room summary provider is not impacted by filtering
-        alternateRoomSummaryProvider?.roomListPublisher.value.first { roomSummary in
-            roomSummary.canonicalAlias == alias || roomSummary.alternativeAliases.contains(alias)
-        }
+        staticRoomSummaryProvider.roomListPublisher.value.first(where: { $0.canonicalAlias == alias || $0.alternativeAliases.contains(alias) })
     }
 
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
@@ -604,18 +590,20 @@ class ClientProxy: ClientProxyProtocol {
             userDisplayNameSubject.send(displayName)
             return .success(())
         } catch {
-            MXLog.error("Failed loading user display name with error: \(error)")
+            MXLog.error("Failed loading user display name Owith error: \(error)")
             return .failure(.sdkError(error))
         }
     }
     
-    func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError> {
+    func setUserInfo(_ name: String, primaryZId: String?) async -> Result<Void, ClientProxyError> {
         do {
             try await client.setDisplayName(name: name)
-            try await zeroMatrixUsersService.updateUserName(displayName: name)
+            try await zeroApiProxy.matrixUsersService.updateUserInfo(displayName: name, primaryZId: primaryZId)
             Task {
                 await self.loadUserDisplayName()
+                
             }
+            _ = try await fetchZeroCurrentUser()
             return .success(())
         } catch {
             MXLog.error("Failed setting user display name with error: \(error)")
@@ -649,25 +637,13 @@ class ClientProxy: ClientProxyProtocol {
             }
             Task {
                 if let urlString = try await client.avatarUrl() {
-                    try await zeroMatrixUsersService.updateUserAvatar(avatarUrl: urlString)
+                    try await zeroApiProxy.matrixUsersService.updateUserAvatar(avatarUrl: urlString)
                 }
             }
             return .success(())
         } catch {
             MXLog.error("Failed setting user avatar with error: \(error)")
             return .failure(.sdkError(error))
-        }
-    }
-    
-    func loadUserPrimaryZeroId() {
-        Task {
-            do {
-                let userId = try client.userId()
-                let zeroProfile = try await zeroMatrixUsersService.fetchZeroUser(userId: userId)
-                primaryZeroIdSubject.send(zeroProfile?.primaryZID)
-            } catch {
-                MXLog.error("Failed loading user primary zero id with error: \(error)")
-            }
         }
     }
     
@@ -713,7 +689,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError> {
         do {
-            let zeroUsers = try await zeroMatrixUsersService.searchZeroUsers(query: searchTerm)
+            let zeroUsers = try await zeroApiProxy.matrixUsersService.searchZeroUsers(query: searchTerm)
             let matrixUsers = try await zeroUsers.concurrentMap { zeroUser in
                 let userProfile = try await self.client.getProfile(userId: zeroUser.matrixId)
                 return UserProfileProxy(sdkUserProfile: userProfile, zeroUserProfile: zeroUser)
@@ -728,7 +704,7 @@ class ClientProxy: ClientProxyProtocol {
     func profile(for userID: String) async -> Result<UserProfileProxy, ClientProxyError> {
         do {
             async let sdkProfile = client.getProfile(userId: userID)
-            async let zeroProfile = zeroMatrixUsersService.fetchZeroUser(userId: userID)
+            async let zeroProfile = zeroApiProxy.matrixUsersService.fetchZeroUser(userId: userID)
             // Await both results
             let (sdkProfileResult, zeroProfileResult) = try await (sdkProfile, zeroProfile)
             return .success(.init(zeroUserProfile: zeroProfileResult, sdkUserProfile: sdkProfileResult))
@@ -740,7 +716,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func zeroProfile(userId: String) async {
         do {
-            let zeroProfile = try await zeroMatrixUsersService.fetchZeroUser(userId: userId)
+            let zeroProfile = try await zeroApiProxy.matrixUsersService.fetchZeroUser(userId: userId)
             directMemberZeroProfileSubject.send(zeroProfile)
         } catch {
             MXLog.error("Failed retrieving zero profile for userID: \(userID) with error: \(error)")
@@ -782,6 +758,15 @@ class ClientProxy: ClientProxyProtocol {
     
     func getElementWellKnown() async -> Result<ElementWellKnown?, ClientProxyError> {
         await client.getElementWellKnown().map(ElementWellKnown.init)
+    }
+    
+    func clearCaches() async -> Result<Void, ClientProxyError> {
+        do {
+            return try await .success(client.clearCaches())
+        } catch {
+            MXLog.error("Failed clearing client caches with error: \(error)")
+            return .failure(.sdkError(error))
+        }
     }
         
     // MARK: Ignored users
@@ -864,10 +849,10 @@ class ClientProxy: ClientProxyProtocol {
                 userRewardsSubject.send(oldRewards)
             }
             
-            let apiRewards = try await zeroRewardsApi.fetchMyRewards()
+            let apiRewards = try await zeroApiProxy.rewardsApi.fetchMyRewards()
             switch apiRewards {
             case .success(let zRewards):
-                let apiCurrency = try await zeroRewardsApi.loadZeroCurrenyRate()
+                let apiCurrency = try await zeroApiProxy.rewardsApi.loadZeroCurrenyRate()
                 switch apiCurrency {
                 case .success(let zCurrency):
                     let zeroRewards = ZeroRewards(rewards: zRewards, currency: zCurrency)
@@ -902,7 +887,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func loadZeroMessengerInvite() async -> Result<Void, ClientProxyError> {
         do {
-            let apiMessengerInvite = try await zeroMessengerInviteApi.fetchMessengerInvite()
+            let apiMessengerInvite = try await zeroApiProxy.messengerInviteApi.fetchMessengerInvite()
             switch apiMessengerInvite {
             case .success(let invite):
                 let zeroMessengerInvite = ZeroMessengerInvite(messengerInvite: invite)
@@ -919,7 +904,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func isProfileCompletionRequired() async -> Bool {
         do {
-            let currentUser = try await zeroMatrixUsersService.fetchCurrentUser()
+            let currentUser = try await zeroApiProxy.matrixUsersService.fetchCurrentUser()
             if let user = currentUser {
                 return user.displayName.isEmpty || user.displayName.stringMatchesUserIdFormatRegex()
             } else {
@@ -940,13 +925,13 @@ class ClientProxy: ClientProxyProtocol {
                     }
                 }
                 group.addTask {
-                    try await self.setUserDisplayName(displayName).get()
+                    try await self.setUserInfo(displayName, primaryZId: nil).get()
                 }
                 try await group.waitForAll()
             }
             let userId = try client.userId().matrixIdToCleanHex()
             let avatarUrl = try await client.avatarUrl() ?? ""
-            let result = try await zeroCreateAccountApi
+            let result = try await zeroApiProxy.createAccountApi
                 .finaliseCreateAccount(request: ZFinaliseCreateAccount(inviteCode: inviteCode, name: displayName, userId: userId, profileImageUrl: avatarUrl))
             
             switch result {
@@ -966,9 +951,9 @@ class ClientProxy: ClientProxyProtocol {
     
     func deleteUserAccount() async -> Result<Void, ClientProxyError> {
         do {
-            let deleteAccountResult = try await zeroUserAccountApi.deleteAccount()
+            let deleteAccountResult = try await zeroApiProxy.userAccountApi.deleteAccount()
             switch deleteAccountResult {
-            case .success(let success):
+            case .success(_):
                 return .success(())
             case .failure(let error):
                 return .failure(.zeroError(error))
@@ -982,9 +967,14 @@ class ClientProxy: ClientProxyProtocol {
     func checkAndLinkZeroUser() {
         Task {
             do {
-                guard let currentUser = try await zeroMatrixUsersService.fetchCurrentUser() else { return }
+                guard let currentUser = try await fetchZeroCurrentUser() else { return }
                 if currentUser.matrixId == nil {
-                    _ = try await zeroCreateAccountApi.linkMatrixUserToZero(matrixUserId: userID)
+                    _ = try await zeroApiProxy.createAccountApi.linkMatrixUserToZero(matrixUserId: userID)
+                }
+                let thirdWebWalletAddress = currentUser.wallets?.first(where: { $0.isThirdWeb })
+                if thirdWebWalletAddress == nil {
+                    _ = try await zeroApiProxy.walletsApi.initializeThirdWebWallet()
+                    _ = try await fetchZeroCurrentUser()
                 }
             } catch {
                 MXLog.error("Failed linking matrixId to zero user. Error: \(error)")
@@ -994,7 +984,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func fetchZeroFeeds(limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
         do {
-            let zeroPostsResult = try await zeroPostsApi.fetchPosts(limit: limit, skip: skip)
+            let zeroPostsResult = try await zeroApiProxy.postsApi.fetchPosts(limit: limit, skip: skip)
             switch zeroPostsResult {
             case .success(let posts):
                 return .success(posts)
@@ -1009,7 +999,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func fetchFeedDetails(feedId: String) async -> Result<ZPost, ClientProxyError> {
         do {
-            let zeroPostResult = try await zeroPostsApi.fetchPostDetails(postId: feedId)
+            let zeroPostResult = try await zeroApiProxy.postsApi.fetchPostDetails(postId: feedId)
             switch zeroPostResult {
             case .success(let post):
                 return .success(post)
@@ -1024,7 +1014,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func fetchFeedReplies(feedId: String, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
         do {
-            let zeroFeedRepliesResult = try await zeroPostsApi.fetchPostReplies(postId: feedId, limit: limit, skip: skip)
+            let zeroFeedRepliesResult = try await zeroApiProxy.postsApi.fetchPostReplies(postId: feedId, limit: limit, skip: skip)
             switch zeroFeedRepliesResult {
             case .success(let replies):
                 return .success(replies)
@@ -1039,7 +1029,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func addMeowsToFeed(feedId: String, amount: Int) async -> Result<ZPost, ClientProxyError> {
         do {
-            let zeroAddPostMeowResult = try await zeroPostsApi.addMeowsToPst(amount: amount, postId: feedId)
+            let zeroAddPostMeowResult = try await zeroApiProxy.postsApi.addMeowsToPst(amount: amount, postId: feedId)
             switch zeroAddPostMeowResult {
             case .success(let post):
                 return .success(post)
@@ -1052,9 +1042,26 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func postNewFeed(channelZId: String, content: String, replyToPost: String?) async -> Result<Void, ClientProxyError> {
+        do {
+            let postFeedResult = try await zeroApiProxy.postsApi.createNewPost(channelZId: channelZId,
+                                                                               content: content,
+                                                                               replyToPost: replyToPost)
+            switch postFeedResult {
+            case .success:
+                return .success(())
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
     func fetchUserZIds() async -> Result<[String], ClientProxyError> {
         do {
-            let zIdsResult = try await zeroChannelsApi.fetchZeroIds()
+            let zIdsResult = try await zeroApiProxy.channelsApi.fetchZeroIds()
             switch zIdsResult {
             case .success(let zIds):
                 return .success(zIds)
@@ -1069,7 +1076,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func joinChannel(roomAliasOrId: String) async -> Result<String, ClientProxyError> {
         do {
-            let joinChannelResult = try await zeroChannelsApi.joinChannel(roomAliasOrId: roomAliasOrId)
+            let joinChannelResult = try await zeroApiProxy.channelsApi.joinChannel(roomAliasOrId: roomAliasOrId)
             switch joinChannelResult {
             case .success(let roomId):
                 _ = await joinRoom(roomAliasOrId, via: [])
@@ -1079,6 +1086,21 @@ class ClientProxy: ClientProxyProtocol {
             }
         } catch {
             MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func initializeThirdWebWalletForUser() async -> Result<Void, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.walletsApi.initializeThirdWebWallet()
+            switch result {
+            case .success:
+                return .success(())
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to initialize third web wallet for user: \(error)")
             return .failure(.zeroError(error))
         }
     }
@@ -1137,62 +1159,7 @@ class ClientProxy: ClientProxyProtocol {
             self.userAvatarURLSubject.value = urlString.flatMap(URL.init)
         }
     }
-
-    private func configureAppService() async {
-        guard syncService == nil else {
-            fatalError("This shouldn't be called more than once")
-        }
-        
-        do {
-            let syncService = try await client
-                .syncService()
-                .withCrossProcessLock()
-                .withUtdHook(delegate: ClientDecryptionErrorDelegate(actionsSubject: actionsSubject))
-                .finish()
-            
-            let roomListService = syncService.roomListService()
-            
-            let roomMessageEventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(cacheKey: "roomList",
-                                                                                                                               mentionBuilder: PlainMentionBuilder()), destination: .roomList)
-            let eventStringBuilder = RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID, shouldDisambiguateDisplayNames: false),
-                                                            messageEventStringBuilder: roomMessageEventStringBuilder,
-                                                            shouldDisambiguateDisplayNames: false,
-                                                            shouldPrefixSenderName: true)
-            
-            roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
-                                                      eventStringBuilder: eventStringBuilder,
-                                                      name: "AllRooms",
-                                                      shouldUpdateVisibleRange: true,
-                                                      notificationSettings: notificationSettings,
-                                                      appSettings: appSettings,
-                                                      zeroUsersService: zeroMatrixUsersService,
-                                                      onJoinRoomExplicitly: { [weak self] roomId in
-                await self?.joinRoomExplicitly(roomId)
-            })
-            try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
-            
-            alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
-                                                               eventStringBuilder: eventStringBuilder,
-                                                               name: "AlternateAllRooms",
-                                                               notificationSettings: notificationSettings,
-                                                               appSettings: appSettings,
-                                                               zeroUsersService: zeroMatrixUsersService,
-                                                               onJoinRoomExplicitly: { [weak self] roomId in
-                await self?.joinRoomExplicitly(roomId)
-            })
-            try await alternateRoomSummaryProvider?.setRoomList(roomListService.allRooms())
-                        
-            self.syncService = syncService
-            self.roomListService = roomListService
-
-            syncServiceStateUpdateTaskHandle = createSyncServiceStateObserver(syncService)
-            roomListStateUpdateTaskHandle = createRoomListServiceObserver(roomListService)
-            roomListStateLoadingStateUpdateTaskHandle = createRoomListLoadingStateUpdateObserver(roomListService)
-        } catch {
-            MXLog.error("Failed building room list service with error: \(error)")
-        }
-    }
-
+    
     private func createSyncServiceStateObserver(_ syncService: SyncService) -> TaskHandle {
         syncService.state(listener: SyncServiceStateObserverProxy { [weak self] state in
             guard let self else { return }
@@ -1264,11 +1231,6 @@ class ClientProxy: ClientProxyProtocol {
     }()
     
     private func buildRoomForIdentifier(_ roomID: String) async -> RoomProxyType? {
-        guard let roomListService else {
-            MXLog.error("Failed retrieving room: \(roomID), room list service not set up")
-            return nil
-        }
-                
         do {
             let roomListItem = try roomListService.room(roomId: roomID)
             
@@ -1277,26 +1239,24 @@ class ClientProxy: ClientProxyProtocol {
                 return try await .invited(InvitedRoomProxy(roomListItem: roomListItem,
                                                            roomPreview: roomListItem.previewRoom(via: []),
                                                            ownUserID: userID,
-                                                           zeroUsersService: zeroMatrixUsersService))
+                                                           zeroUsersService: zeroApiProxy.matrixUsersService))
             case .knocked:
                 if appSettings.knockingEnabled {
                     return try await .knocked(KnockedRoomProxy(roomListItem: roomListItem,
                                                                roomPreview: roomListItem.previewRoom(via: []),
                                                                ownUserID: userID,
-                                                               zeroUsersService: zeroMatrixUsersService))
+                                                               zeroUsersService: zeroApiProxy.matrixUsersService))
                 }
                 return nil
             case .joined:
                 if roomListItem.isTimelineInitialized() == false {
                     try await roomListItem.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
-                }
-                let zeroChatApi = ZeroChatApi(appSettings: appSettings)
-                
+                }                
                 let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,
                                                           roomListItem: roomListItem,
                                                           room: roomListItem.fullRoom(),
-                                                          zeroChatApi: zeroChatApi,
-                                                          zeroUsersService: zeroMatrixUsersService)
+                                                          zeroChatApi: zeroApiProxy.chatApi,
+                                                          zeroUsersService: zeroApiProxy.matrixUsersService)
                 
                 return .joined(roomProxy)
             case .left:
@@ -1305,7 +1265,7 @@ class ClientProxy: ClientProxyProtocol {
                 return try await .banned(BannedRoomProxy(roomListItem: roomListItem,
                                                          roomPreview: roomListItem.previewRoom(via: []),
                                                          ownUserID: userID,
-                                                         zeroUsersService: zeroMatrixUsersService))
+                                                         zeroUsersService: zeroApiProxy.matrixUsersService))
             }
         } catch {
             MXLog.error("Failed retrieving room: \(roomID), with error: \(error)")
@@ -1402,7 +1362,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func verifyUserPassword(_ password: String) async -> Result<Void, ClientProxyError> {
         do {
-            let verifyPasswordResult = try await zeroUserAccountApi.verifyPassword(password: password)
+            let verifyPasswordResult = try await zeroApiProxy.userAccountApi.verifyPassword(password: password)
             switch verifyPasswordResult {
             case .success:
                 return .success(())
@@ -1422,6 +1382,12 @@ class ClientProxy: ClientProxyProtocol {
         } catch {
             MXLog.error("Failed to join invited room: \(roomId) with error: \(error)")
         }
+    }
+    
+    private func fetchZeroCurrentUser() async throws -> ZCurrentUser? {
+        let currentUser = try await zeroApiProxy.matrixUsersService.fetchCurrentUser()
+        zeroCurrentUserSubject.send(currentUser)
+        return currentUser
     }
 }
 
@@ -1539,5 +1505,63 @@ private class SendQueueRoomErrorListenerProxy: SendQueueRoomErrorListener {
     
     func onError(roomId: String, error: ClientError) {
         onErrorClosure(roomId, error)
+    }
+}
+
+private struct ClientProxyServices {
+    let syncService: SyncService
+    let roomListService: RoomListService
+    let roomSummaryProvider: RoomSummaryProviderProtocol
+    let alternateRoomSummaryProvider: RoomSummaryProviderProtocol
+    let staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol
+    
+    init(client: ClientProtocol,
+         actionsSubject: PassthroughSubject<ClientProxyAction, Never>,
+         notificationSettings: NotificationSettingsProxyProtocol,
+         appSettings: AppSettings,
+         zeroApiProxy: ZeroApiProxyProtocol) async throws {
+        let syncService = try await client
+            .syncService()
+            .withCrossProcessLock()
+            .withUtdHook(delegate: ClientDecryptionErrorDelegate(actionsSubject: actionsSubject))
+            .finish()
+        
+        let roomListService = syncService.roomListService()
+        
+        let roomMessageEventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(cacheKey: "roomList",
+                                                                                                                           mentionBuilder: PlainMentionBuilder()), destination: .roomList)
+        let eventStringBuilder = try RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: client.userId(), shouldDisambiguateDisplayNames: false),
+                                                            messageEventStringBuilder: roomMessageEventStringBuilder,
+                                                            shouldDisambiguateDisplayNames: false,
+                                                            shouldPrefixSenderName: true)
+        
+        roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
+                                                  eventStringBuilder: eventStringBuilder,
+                                                  name: "AllRooms",
+                                                  shouldUpdateVisibleRange: true,
+                                                  notificationSettings: notificationSettings,
+                                                  appSettings: appSettings,
+                                                  zeroUsersService: zeroApiProxy.matrixUsersService)
+        try await roomSummaryProvider.setRoomList(roomListService.allRooms())
+        
+        alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
+                                                           eventStringBuilder: eventStringBuilder,
+                                                           name: "AlternateAllRooms",
+                                                           notificationSettings: notificationSettings,
+                                                           appSettings: appSettings,
+                                                           zeroUsersService: zeroApiProxy.matrixUsersService)
+        try await alternateRoomSummaryProvider.setRoomList(roomListService.allRooms())
+        
+        staticRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
+                                                        eventStringBuilder: eventStringBuilder,
+                                                        name: "StaticAllRooms",
+                                                        roomListPageSize: .max,
+                                                        notificationSettings: notificationSettings,
+                                                        appSettings: appSettings,
+                                                        zeroUsersService: zeroApiProxy.matrixUsersService)
+        try await staticRoomSummaryProvider.setRoomList(roomListService.allRooms())
+        
+        self.syncService = syncService
+        self.roomListService = roomListService
     }
 }

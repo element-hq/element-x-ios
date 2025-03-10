@@ -353,6 +353,7 @@
 "rich_text_editor_bullet_list" = "Aktiver/deaktiver punktliste";
 "rich_text_editor_close_formatting_options" = "Lukk formateringsvalg";
 "rich_text_editor_code_block" = "Aktiver kodeblokk";
+"rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Melding...";
 "rich_text_editor_create_link" = "Opprett en lenke";
 "rich_text_editor_edit_link" = "Rediger lenke";
@@ -431,8 +432,8 @@
 "screen_media_details_uploaded_by" = "Uploaded by";
 "screen_media_details_uploaded_on" = "Uploaded on";
 "screen_media_upload_preview_caption_warning" = "Captions might not be visible to people using older apps.";
-"screen_media_upload_preview_error_failed_processing" = "Kunne ikke behandle media for opplasting, vennligst prøv igjen.";
-"screen_media_upload_preview_error_failed_sending" = "Opplasting av media mislyktes, vennligst prøv igjen.";
+"screen_media_upload_preview_error_failed_processing" = "Kunne ikke behandle medier for opplasting, vennligst prøv igjen.";
+"screen_media_upload_preview_error_failed_sending" = "Opplasting av medier mislyktes, vennligst prøv igjen.";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
@@ -479,6 +480,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Room publishing";
 "screen_security_and_privacy_room_visibility_section_footer" = "Room addresses are ways to find and access rooms. This also ensures you can easily share your room with others.\nThe address is also required to make the room visible in %1$@ public room directory.";
 "screen_security_and_privacy_title" = "Security & privacy";
+"screen_start_chat_join_room_by_address_action" = "Join room by address";
+"screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
+"screen_start_chat_join_room_by_address_placeholder" = "Enter...";
+"screen_start_chat_join_room_by_address_room_found" = "Matching room found";
+"screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
+"screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Meldingen ble ikke sendt fordi %1$@ ikke har verifisert alle enheter.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
@@ -1195,7 +1202,7 @@
 "screen_room_details_room_name_label" = "Romnavn";
 "screen_room_details_security_title" = "Sikkerhet";
 "screen_room_details_topic_title" = "Emne";
-"screen_room_error_failed_processing_media" = "Kunne ikke behandle media for opplasting, vennligst prøv igjen.";
+"screen_room_error_failed_processing_media" = "Kunne ikke behandle medier for opplasting, vennligst prøv igjen.";
 "screen_room_member_list_manage_member_remove_confirmation_ban" = "Fjern og utesteng medlem";
 "screen_room_notification_settings_mode_all_messages" = "Alle meldinger";
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Bare omtaler og nøkkelord";

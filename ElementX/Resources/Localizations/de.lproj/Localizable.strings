@@ -353,6 +353,7 @@
 "rich_text_editor_bullet_list" = "Aufzählungsliste umschalten";
 "rich_text_editor_close_formatting_options" = "Formatierungsoptionen schließen";
 "rich_text_editor_code_block" = "Codeblock umschalten";
+"rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Nachricht...";
 "rich_text_editor_create_link" = "Einen Link erstellen";
 "rich_text_editor_edit_link" = "Link bearbeiten";
@@ -479,6 +480,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Veröffentlichung von Räumen";
 "screen_security_and_privacy_room_visibility_section_footer" = "Chatroomadressen sind Möglichkeiten, Chatrooms zu finden und auf sie zuzugreifen. So können Sie Ihren Chatroom auch problemlos mit anderen teilen. Die Adresse ist auch erforderlich, um den Chatroom in einem %1$@ öffentlichen Chatroomverzeichnis sichtbar zu machen.";
 "screen_security_and_privacy_title" = "Sicherheit & Datenschutz";
+"screen_start_chat_join_room_by_address_action" = "Join room by address";
+"screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
+"screen_start_chat_join_room_by_address_placeholder" = "Enter...";
+"screen_start_chat_join_room_by_address_room_found" = "Matching room found";
+"screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
+"screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Nachricht nicht gesendet, weil sich die verifizierte Identität von %1$@ geändert hat.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Nachricht wurde nicht gesendet, weil %1$@ nicht alle Geräte verifiziert hat";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Die Nachricht wurde nicht gesendet, weil Sie eines oder mehrere Ihrer Geräte nicht verifiziert haben.";

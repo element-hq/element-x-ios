@@ -65,7 +65,7 @@ struct CreateAccountScreen: View {
                 Text("Email Address").foregroundColor(.compound.textSecondary)
             }
             .focused($isEmailFocused)
-            .textFieldStyle(.authentication(accessibilityIdentifier: "create-account_email_address"))
+            .textFieldStyle(.element(accessibilityIdentifier: "create-account_email_address"))
             .disableAutocorrection(true)
             .textContentType(.emailAddress)
             .keyboardType(.emailAddress)

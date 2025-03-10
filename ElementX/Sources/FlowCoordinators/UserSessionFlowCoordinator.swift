@@ -147,10 +147,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     func asyncHandleAppRoute(_ appRoute: AppRoute, animated: Bool) async {
-        showLoadingIndicator(delay: .seconds(0.25))
-        defer {
-            hideLoadingIndicator()
-        }
+        showLoadingIndicator(delay: .seconds(0.5))
+        defer { hideLoadingIndicator() }
         
         await clearPresentedSheets(animated: animated)
         
@@ -521,10 +519,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.startEncryptionResetFlow)
                 case .presentStartChatScreen:
                     stateMachine.processEvent(.showStartChatScreen)
+                case .presentCreateFeedScreen(let createFeedProtocol):
+                    presentCreateFeedScreen(createFeedProtocol)
                 case .presentGlobalSearch:
                     presentGlobalSearch()
-                case .presentRoomDirectorySearch:
-                    stateMachine.processEvent(.showRoomDirectorySearchScreen)
                 case .logoutWithoutConfirmation:
                     self.actionsSubject.send(.logout)
                 case .logout:
@@ -670,10 +668,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .close:
-                self.navigationSplitCoordinator.setSheetCoordinator(nil)
+                navigationSplitCoordinator.setSheetCoordinator(nil)
             case .openRoom(let roomID):
-                self.navigationSplitCoordinator.setSheetCoordinator(nil)
-                self.stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+                stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
+            case .openRoomDirectorySearch:
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+                stateMachine.processEvent(.showRoomDirectorySearchScreen)
             }
         }
         .store(in: &cancellables)
@@ -684,9 +685,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             self?.stateMachine.processEvent(.dismissedStartChatScreen)
         }
     }
-    
-    // MARK: Session Verification
-    
+        
     // MARK: Calls
     
     private func presentCallScreen(genericCallLink url: URL) {
@@ -849,9 +848,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: Global search
     
     private func presentGlobalSearch() {
-        guard let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider else {
-            fatalError("Global search room summary provider unavailable")
-        }
+        let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider
         
         let coordinator = GlobalSearchScreenCoordinator(parameters: .init(roomSummaryProvider: roomSummaryProvider,
                                                                           mediaProvider: userSession.mediaProvider))
@@ -953,9 +950,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: Sharing
     
     private func presentRoomSelectionScreen(sharePayload: ShareExtensionPayload, animated: Bool) {
-        guard let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider else {
-            fatalError()
-        }
+        let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider
         
         let stackCoordinator = NavigationStackCoordinator()
         
@@ -1098,5 +1093,23 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         } else {
             navigationSplitCoordinator.setDetailCoordinator(coordinator)
         }
+    }
+    
+    private func presentCreateFeedScreen(_ createFeedProtocol: CreateFeedProtocol) {
+        let createFeedNavigationStackCoordinator = NavigationStackCoordinator()
+        let coordinator = CreateFeedScreenCoordinator(parameters: .init(userSession: userSession, createFeedProtocol: createFeedProtocol))
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .newPostCreated, .dismissPost:
+                    self.navigationSplitCoordinator.setSheetCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
+        
+        createFeedNavigationStackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationSplitCoordinator.setSheetCoordinator(createFeedNavigationStackCoordinator)
     }
 }

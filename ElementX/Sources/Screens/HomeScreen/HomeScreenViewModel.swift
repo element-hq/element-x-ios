@@ -12,7 +12,7 @@ import SwiftUI
 
 typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, HomeScreenViewAction>
 
-class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol, FeedDetailsUpdatedProtocol {
+class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol, FeedDetailsUpdatedProtocol, CreateFeedProtocol {
     private let userSession: UserSessionProtocol
     private let analyticsService: AnalyticsService
     private let appSettings: AppSettings
@@ -28,7 +28,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private let HOME_SCREEN_POST_PAGE_COUNT = 10
     private var isFetchPostsInProgress = false
     
-    private var channelRoomIdMap: [String: String] = [:]
+    private var channelRoomMap: [String: RoomSummary] = [:]
     
     init(userSession: UserSessionProtocol,
          analyticsService: AnalyticsService,
@@ -55,9 +55,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             .weakAssign(to: \.state.userDisplayName, on: self)
             .store(in: &cancellables)
         
-        userSession.clientProxy.primaryZeroId
+        userSession.clientProxy.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
-            .weakAssign(to: \.state.primaryZeroId, on: self)
+            .sink { [weak self] currentUser in
+                self?.state.primaryZeroId = currentUser?.primaryZID
+            }
             .store(in: &cancellables)
         
         userSession.sessionSecurityStatePublisher
@@ -112,10 +114,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         
         appSettings.$hideUnreadMessagesBadge
             .sink { [weak self] _ in self?.updateRooms() }
-            .store(in: &cancellables)
-        
-        appSettings.$publicSearchEnabled
-            .weakAssign(to: \.state.isRoomDirectorySearchEnabled, on: self)
             .store(in: &cancellables)
         
         appSettings.$seenInvites
@@ -182,6 +180,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             roomSummaryProvider?.updateVisibleRange(range)
         case .startChat:
             actionsSubject.send(.presentStartChatScreen)
+        case .newFeed:
+            actionsSubject.send(.presentCreateFeedScreen(createFeedProtocol: self))
         case .globalSearch:
             actionsSubject.send(.presentGlobalSearch)
         case .markRoomAsUnread(let roomIdentifier):
@@ -220,8 +220,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             Task {
                 await markRoomAsFavourite(roomIdentifier, isFavourite: isFavourite)
             }
-        case .selectRoomDirectorySearch:
-            actionsSubject.send(.presentRoomDirectorySearch)
         case .acceptInvite(let roomIdentifier):
             Task {
                 await acceptInvite(roomID: roomIdentifier)
@@ -330,7 +328,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             Task {
                 await self.userSession.clientProxy.loadUserAvatarURL()
                 await self.userSession.clientProxy.loadUserDisplayName()
-                self.userSession.clientProxy.loadUserPrimaryZeroId()
             }
         }
     }
@@ -600,6 +597,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                     let mappedChannels = zIds.sorted().map { HomeScreenChannel(channelZId: $0) }
                     state.channels = mappedChannels.uniqued(on: \.id)
                     state.channelsListMode = .channels
+                    mapChannelsToRoom()
                 }
             case .failure(let error):
                 state.channelsListMode = .empty
@@ -610,8 +608,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     }
     
     private func joinZeroChannel(_ channel: HomeScreenChannel) {
-        if let channelRoomId = channelRoomIdMap[channel.id] {
-            actionsSubject.send(.presentRoom(roomIdentifier: channelRoomId))
+        if let channelRoom = channelRoomMap[channel.id] {
+            actionsSubject.send(.presentRoom(roomIdentifier: channelRoom.id))
             return
         }
         
@@ -627,20 +625,37 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             let roomAliasResult = await userSession.clientProxy.resolveRoomAlias(channel.id)
             switch roomAliasResult {
             case .success(let roomInfo):
-                channelRoomIdMap[channel.id] = roomInfo.roomId
+                getRoomSummaryFromAlias(channel.id)
                 actionsSubject.send(.presentRoom(roomIdentifier: roomInfo.roomId))
             case .failure(let error):
                 MXLog.error("Failed to resolve room alias: \(channel.id). Error: \(error)")
                 let joinChannelResult = await userSession.clientProxy.joinChannel(roomAliasOrId: channel.id)
                 switch joinChannelResult {
                 case .success(let roomId):
-                    channelRoomIdMap[channel.id] = roomId
+                    getRoomSummaryFromAlias(channel.id)
                     actionsSubject.send(.presentRoom(roomIdentifier: roomId))
                 case .failure(let failure):
                     MXLog.error("Failed to join channel: \(failure)")
                     displayError()
                 }
             }
+        }
+    }
+    
+    private func getRoomSummaryFromAlias(_ alias: String) {
+        if let roomSummary = userSession.clientProxy.roomSummaryForAlias(alias) {
+            channelRoomMap[alias] = roomSummary
+        }
+    }
+    
+    private func mapChannelsToRoom() {
+        state.channels = state.channels.map { homeChannel in
+            var updatedChannel = homeChannel
+            if let roomSummary = userSession.clientProxy.roomSummaryForAlias(homeChannel.id) {
+                channelRoomMap[homeChannel.id] = roomSummary
+                updatedChannel.notificationsCount = roomSummary.unreadNotificationsCount
+            }
+            return updatedChannel
         }
     }
     
@@ -659,5 +674,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 MXLog.error("Failed to fetch updated feed details: \(error)")
             }
         }
+    }
+    
+    func onNewFeedPosted() {
+        fetchPosts(isForceRefresh: true)
     }
 }

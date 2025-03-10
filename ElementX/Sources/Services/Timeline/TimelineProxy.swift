@@ -622,13 +622,13 @@ final class TimelineProxy: TimelineProxyProtocol {
 }
 
 private final class RoomPaginationStatusListener: PaginationStatusListener {
-    private let onUpdateClosure: (LiveBackPaginationStatus) -> Void
+    private let onUpdateClosure: (RoomPaginationStatus) -> Void
 
-    init(_ onUpdateClosure: @escaping (LiveBackPaginationStatus) -> Void) {
+    init(_ onUpdateClosure: @escaping (RoomPaginationStatus) -> Void) {
         self.onUpdateClosure = onUpdateClosure
     }
 
-    func onUpdate(status: LiveBackPaginationStatus) {
+    func onUpdate(status: RoomPaginationStatus) {
         onUpdateClosure(status)
     }
 }

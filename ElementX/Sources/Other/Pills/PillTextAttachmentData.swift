@@ -12,13 +12,6 @@ enum PillType: Codable, Equatable {
     enum EventRoom: Codable, Equatable {
         case roomAlias(String)
         case roomID(String)
-        
-        var value: String {
-            switch self {
-            case .roomAlias(let value), .roomID(let value):
-                return value
-            }
-        }
     }
     
     case event(room: EventRoom)

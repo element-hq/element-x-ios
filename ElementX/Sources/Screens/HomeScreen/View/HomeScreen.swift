@@ -22,7 +22,7 @@ struct HomeScreen: View {
     @State private var navigationBarContainer: UIView?
     @State private var hairlineView: UIView?
     
-    @State private var isHomeTabSelected: Bool = true
+    @State private var selectedTab: HomeTab = .chat
     
     var body: some View {
         HomeTabView(
@@ -35,8 +35,8 @@ struct HomeScreen: View {
             channelTabContent: {
                 HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
             },
-            onTabSelected: { tabIndex in
-                isHomeTabSelected = tabIndex == 0
+            onTabSelected: { _, tab in
+                selectedTab = tab
             }
         )
             .alert(item: $context.alertInfo)
@@ -191,9 +191,14 @@ struct HomeScreen: View {
             .accessibilityLabel(L10n.commonSettings)
         }
         
-        if isHomeTabSelected {
-            ToolbarItem(placement: .primaryAction) {
+        ToolbarItem(placement: .primaryAction) {
+            switch selectedTab {
+            case .chat:
                 newRoomButton
+            case .feed:
+                newFeedButton
+            default:
+                EmptyView()
             }
         }
     }
@@ -208,6 +213,22 @@ struct HomeScreen: View {
         case .empty, .rooms:
             Button {
                 context.send(viewAction: .startChat)
+            } label: {
+                CompoundIcon(\.plus)
+            }
+            .accessibilityLabel(L10n.actionStartChat)
+            .accessibilityIdentifier(A11yIdentifiers.homeScreen.startChat)
+        default:
+            EmptyView()
+        }
+    }
+    
+    @ViewBuilder
+    private var newFeedButton: some View {
+        switch context.viewState.postListMode {
+        case .empty, .posts:
+            Button {
+                context.send(viewAction: .newFeed)
             } label: {
                 CompoundIcon(\.plus)
             }

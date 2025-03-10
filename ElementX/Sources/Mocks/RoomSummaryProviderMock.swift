@@ -197,7 +197,7 @@ extension Array where Element == RoomSummary {
                     unreadMentionsCount: 0,
                     unreadNotificationsCount: 0,
                     notificationMode: .mute,
-                    canonicalAlias: nil,
+                    canonicalAlias: "#prelude-foundation:matrix.org",
                     alternativeAliases: [],
                     hasOngoingCall: true,
                     isMarkedUnread: false,

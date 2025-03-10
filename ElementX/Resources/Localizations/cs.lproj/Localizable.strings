@@ -353,6 +353,7 @@
 "rich_text_editor_bullet_list" = "Přepnout seznam s odrážkami";
 "rich_text_editor_close_formatting_options" = "Zavřít možnosti formátování";
 "rich_text_editor_code_block" = "Přepnout blok kódu";
+"rich_text_editor_composer_encrypted_placeholder" = "Šifrovaná zpráva...";
 "rich_text_editor_composer_placeholder" = "Zpráva...";
 "rich_text_editor_create_link" = "Vytvořit odkaz";
 "rich_text_editor_edit_link" = "Upravit odkaz";
@@ -444,7 +445,7 @@
 "screen_resolve_send_failure_unsigned_device_title" = "Vaše zpráva nebyla odeslána, protože%1$@ neověřil(a) všechna zařízení";
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Jedno nebo více vašich zařízení není ověřeno. Zprávu můžete přesto odeslat, nebo ji můžete prozatím zrušit a zkusit to znovu později, až ověříte všechna svá zařízení.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Vaše zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení";
-"screen_room_event_pill" = "Message in %1$@";
+"screen_room_event_pill" = "Zpráva v %1$@";
 "screen_room_mentions_at_room_subtitle" = "Informujte celou místnost";
 "screen_room_multiple_knock_requests_view_all_button_title" = "Zobrazit vše";
 "screen_room_pinned_banner_indicator" = "%1$@ z %2$@";
@@ -479,6 +480,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Publikování místnosti";
 "screen_security_and_privacy_room_visibility_section_footer" = "Adresy místností představují způsoby, jak najít místnosti a získat k nim přístup. Díky tomu můžete svoji místnost snadno sdílet s ostatními.\nAdresa je také vyžadována pro zobrazení místnosti v adresáři veřejných místností %1$@.";
 "screen_security_and_privacy_title" = "Zabezpečení a soukromí";
+"screen_start_chat_join_room_by_address_action" = "Vstoupit do místnosti pomocí adresy";
+"screen_start_chat_join_room_by_address_invalid_address" = "Neplatná adresa";
+"screen_start_chat_join_room_by_address_placeholder" = "Zadejte...";
+"screen_start_chat_join_room_by_address_room_found" = "Odpovídající místnost nalezena";
+"screen_start_chat_join_room_by_address_room_not_found" = "Místnost nebyla nalezena";
+"screen_start_chat_join_room_by_address_supporting_text" = "např. #room-name:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Zpráva nebyla odeslána, protože ověřená identita uživatele %1$@ se změnila.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Zpráva nebyla odeslána, protože%1$@ neověřil(a) všechna zařízení.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení.";

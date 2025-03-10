@@ -51,4 +51,8 @@ class GlobalSearchScreenCoordinator: CoordinatorProtocol {
     func toPresentable() -> AnyView {
         AnyView(GlobalSearchScreen(context: viewModel.context))
     }
+    
+    func stop() {
+        viewModel.stop()
+    }
 }

@@ -99,12 +99,17 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     var pusherNotificationClientIdentifier: String? { get }
     
-    var roomSummaryProvider: RoomSummaryProviderProtocol? { get }
-    
-    var roomsToAwait: Set<String> { get set }
+    var roomSummaryProvider: RoomSummaryProviderProtocol { get }
     
     /// Used for listing rooms that shouldn't be affected by the main `roomSummaryProvider` filtering
-    var alternateRoomSummaryProvider: RoomSummaryProviderProtocol? { get }
+    /// But can still be filtered by queries, since this may be shared across multiple views, remember to reset
+    /// The filtering state when you are done with it
+    var alternateRoomSummaryProvider: RoomSummaryProviderProtocol { get }
+    
+    /// Used for listing rooms, can't be filtered nor its state observed
+    var staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol { get }
+    
+    var roomsToAwait: Set<String> { get set }
     
     var notificationSettings: NotificationSettingsProxyProtocol { get }
     
@@ -156,7 +161,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     @discardableResult func loadUserDisplayName() async -> Result<Void, ClientProxyError>
     
-    func setUserDisplayName(_ name: String) async -> Result<Void, ClientProxyError>
+    func setUserInfo(_ name: String, primaryZId: String?) async -> Result<Void, ClientProxyError>
 
     @discardableResult func loadUserAvatarURL() async -> Result<Void, ClientProxyError>
     
@@ -181,6 +186,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func isAliasAvailable(_ alias: String) async -> Result<Bool, ClientProxyError>
     
     func getElementWellKnown() async -> Result<ElementWellKnown?, ClientProxyError>
+    
+    @discardableResult func clearCaches() async -> Result<Void, ClientProxyError>
 
     // MARK: - Ignored users
     
@@ -217,12 +224,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func getUserRewards(shouldCheckRewardsIntiamtion: Bool) async -> Result<Void, ClientProxyError>
     func dismissRewardsIntimation()
     
-    // MARK: - ZERO Primary Id
-
-    func loadUserPrimaryZeroId()
-    
-    var primaryZeroId: CurrentValuePublisher<String?, Never> { get }
-    
     // MARK: - Zero Messenger Invite
     
     var messengerInvitePublisher: CurrentValuePublisher<ZeroMessengerInvite, Never> { get }
@@ -240,6 +241,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     // MARK: - Zero User Profile
     
     var directMemberZeroProfilePublisher: CurrentValuePublisher<ZMatrixUser?, Never> { get }
+    var zeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser?, Never> { get }
         
     func zeroProfile(userId: String) async
     
@@ -255,9 +257,15 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func addMeowsToFeed(feedId: String, amount: Int) async -> Result<ZPost, ClientProxyError>
     
+    func postNewFeed(channelZId: String, content: String, replyToPost: String?) async -> Result<Void, ClientProxyError>
+    
     // MARK: - Zero Channels
     
     func fetchUserZIds() async -> Result<[String], ClientProxyError>
     
     func joinChannel(roomAliasOrId: String) async -> Result<String, ClientProxyError>
+    
+    // MARK: - Zero Wallets
+    
+    func initializeThirdWebWalletForUser() async -> Result<Void, ClientProxyError>
 }

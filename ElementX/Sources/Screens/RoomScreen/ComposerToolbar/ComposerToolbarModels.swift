@@ -73,6 +73,8 @@ struct ComposerToolbarViewState: BindableState {
     var audioPlayerState: AudioPlayerState
     var audioRecorderState: AudioRecorderState
     
+    let isRoomEncrypted: Bool
+    
     var bindings: ComposerToolbarViewStateBindings
 
     var isUploading: Bool {

@@ -79,19 +79,22 @@ struct MentionBuilder: MentionBuilderProtocol {
                                                                    .font: attributesToRestore.font,
                                                                    .foregroundColor: attributesToRestore.foregroundColor]
         attachmentAttributes.addBlockquoteIfNeeded(attributesToRestore.blockquote)
-        
+
         setPillAttachment(attachment: attachment,
                           attributedString: attributedString,
                           in: range,
                           with: attachmentAttributes)
     }
     
-    func handleRoomAliasMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, roomAlias: String) {
+    func handleRoomAliasMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, roomAlias: String, roomDisplayName: String?) {
         let attributesToRestore = getAttributesToRestore(for: attributedString, in: range)
         
         let attachmentData = PillTextAttachmentData(type: .roomAlias(roomAlias), font: attributesToRestore.font)
         guard let attachment = PillTextAttachment(attachmentData: attachmentData) else {
             attributedString.addAttribute(.MatrixRoomAlias, value: roomAlias, range: range)
+            if let roomDisplayName {
+                attributedString.addAttribute(.MatrixRoomDisplayName, value: roomDisplayName, range: range)
+            }
             return
         }
         
@@ -100,6 +103,7 @@ struct MentionBuilder: MentionBuilderProtocol {
                                                                    .font: attributesToRestore.font,
                                                                    .foregroundColor: attributesToRestore.foregroundColor]
         attachmentAttributes.addBlockquoteIfNeeded(attributesToRestore.blockquote)
+        attachmentAttributes.addMatrixRoomNameIfNeeded(roomDisplayName)
         
         setPillAttachment(attachment: attachment,
                           attributedString: attributedString,
@@ -178,6 +182,12 @@ private extension Dictionary where Key == NSAttributedString.Key, Value == Any {
     mutating func addMatrixUsernameIfNeeded(_ value: String?) {
         if let value {
             self[.MatrixUserDisplayName] = value
+        }
+    }
+    
+    mutating func addMatrixRoomNameIfNeeded(_ value: String?) {
+        if let value {
+            self[.MatrixRoomDisplayName] = value
         }
     }
 }

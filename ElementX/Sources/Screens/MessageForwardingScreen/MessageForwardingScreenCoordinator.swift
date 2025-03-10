@@ -53,4 +53,8 @@ final class MessageForwardingScreenCoordinator: CoordinatorProtocol {
     func toPresentable() -> AnyView {
         AnyView(MessageForwardingScreen(context: viewModel.context))
     }
+    
+    func stop() {
+        viewModel.stop()
+    }
 }

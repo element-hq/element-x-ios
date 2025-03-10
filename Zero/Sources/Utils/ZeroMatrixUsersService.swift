@@ -56,8 +56,8 @@ class ZeroMatrixUsersService {
         _ = try await zeroUsersApi.updateUserProfile(displayName: nil, profileImage: avatarUrl, primaryZID: nil)
     }
     
-    func updateUserName(displayName: String) async throws {
-        _ = try await zeroUsersApi.updateUserProfile(displayName: displayName, profileImage: nil, primaryZID: nil)
+    func updateUserInfo(displayName: String, primaryZId: String?) async throws {
+        _ = try await zeroUsersApi.updateUserProfile(displayName: displayName, profileImage: nil, primaryZID: primaryZId)
     }
     
     func getMatrixUserProfile(userId: String) async throws -> UserProfile {

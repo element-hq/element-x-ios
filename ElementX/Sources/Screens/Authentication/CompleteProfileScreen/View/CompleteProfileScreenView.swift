@@ -56,7 +56,7 @@ struct CompleteProfileScreen: View {
                 Text("DisplayName").foregroundColor(.compound.textSecondary)
             }
             .focused($isDisplayNameFocused)
-            .textFieldStyle(.authentication(accessibilityIdentifier: "complete-profile_display_name"))
+            .textFieldStyle(.element(accessibilityIdentifier: "complete-profile_display_name"))
             .disableAutocorrection(true)
             .autocapitalization(.none)
             .submitLabel(.done)

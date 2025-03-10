@@ -20,8 +20,8 @@ enum HomeScreenViewModelAction {
     case presentSettingsScreen
     case presentFeedbackScreen
     case presentStartChatScreen
+    case presentCreateFeedScreen(createFeedProtocol: CreateFeedProtocol)
     case presentGlobalSearch
-    case presentRoomDirectorySearch
     case logoutWithoutConfirmation
     case logout
     case postTapped(_ post: HomeScreenPost, feedUpdatedProtocol: FeedDetailsUpdatedProtocol)
@@ -34,6 +34,7 @@ enum HomeScreenViewAction {
     case confirmLeaveRoom(roomIdentifier: String)
     case showSettings
     case startChat
+    case newFeed
     case setupRecovery
     case confirmRecoveryKey
     case resetEncryption
@@ -43,7 +44,6 @@ enum HomeScreenViewAction {
     case markRoomAsUnread(roomIdentifier: String)
     case markRoomAsRead(roomIdentifier: String)
     case markRoomAsFavourite(roomIdentifier: String, isFavourite: Bool)
-    case selectRoomDirectorySearch
     
     case acceptInvite(roomIdentifier: String)
     case declineInvite(roomIdentifier: String)
@@ -154,9 +154,7 @@ struct HomeScreenViewState: BindableState {
     var canLoadMorePosts: Bool = true
     
     var hasPendingInvitations = false
-    
-    var isRoomDirectorySearchEnabled = false
-    
+        
     var selectedRoomID: String?
     
     var visibleRooms: [HomeScreenRoom] {
@@ -343,6 +341,8 @@ struct HomeScreenChannel: Identifiable, Equatable {
     let id: String
     let channelFullName: String
     let displayName: AttributedString
+    
+    var notificationsCount: UInt = 0
     
     static func placeholder() -> HomeScreenChannel {
         .init(id: UUID().uuidString,

@@ -178,9 +178,11 @@ struct ComposerToolbar: View {
                         selectedRange: $context.selectedRange,
                         composerView: composerView,
                         mode: context.viewState.composerMode,
+                        placeholder: placeholder,
                         composerFormattingEnabled: context.composerFormattingEnabled,
                         showResizeGrabber: context.composerFormattingEnabled,
-                        isExpanded: $context.composerExpanded) {
+                        isExpanded: $context.composerExpanded,
+                        isEncrypted: context.viewState.isRoomEncrypted) {
             sendMessage()
         } editAction: {
             context.send(viewAction: .editLastMessage)
@@ -243,10 +245,19 @@ struct ComposerToolbar: View {
     private var placeholder: String {
         switch context.viewState.composerMode {
         case .reply(_, _, let isThread):
-            return isThread ? L10n.actionReplyInThread : L10n.richTextEditorComposerPlaceholder
+            return isThread ? L10n.actionReplyInThread : composerPlaceholder
         default:
-            return L10n.richTextEditorComposerPlaceholder
+            return composerPlaceholder
         }
+    }
+    
+    private var composerPlaceholder: String {
+//        if context.viewState.isRoomEncrypted {
+//            return L10n.richTextEditorComposerPlaceholder
+//        } else {
+//            return L10n.richTextEditorComposerUnencryptedPlaceholder
+//        }
+        return L10n.richTextEditorComposerPlaceholder
     }
     
     private var composerView: WysiwygComposerView {
@@ -332,8 +343,11 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
                                                             mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
                                                             analyticsService: ServiceLocator.shared.analytics,
                                                             composerDraftService: ComposerDraftServiceMock())
-    static let suggestions: [SuggestionItem] = [.user(item: MentionSuggestionItem(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil, range: .init(), rawSuggestionText: "")),
-                                                .user(item: MentionSuggestionItem(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: .mockMXCUserAvatar, range: .init(), rawSuggestionText: ""))]
+    
+    static let suggestions: [SuggestionItem] = [
+        .init(suggestionType: .user(.init(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)), range: .init(), rawSuggestionText: ""),
+        .init(suggestionType: .user(.init(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: .mockMXCUserAvatar)), range: .init(), rawSuggestionText: "")
+    ]
     
     static var previews: some View {
         ComposerToolbar.mock(focused: true)

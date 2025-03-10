@@ -12,16 +12,18 @@ enum StartChatScreenErrorType: Error {
     case unknown
 }
 
-enum StartChatScreenViewModelAction {
+enum StartChatScreenViewModelAction: Equatable {
     case close
     case createRoom
-    case openRoom(withIdentifier: String)
+    case showRoom(withIdentifier: String)
+    case openRoomDirectorySearch
 }
 
 struct StartChatScreenViewState: BindableState {
     let userID: String
     var bindings = StartChatScreenViewStateBindings()
     var usersSection: UserDiscoverySection = .init(type: .suggestions, users: [])
+    var isRoomDirectoryEnabled = false
 
     var isSearching: Bool {
         !bindings.searchQuery.isEmpty
@@ -30,15 +32,19 @@ struct StartChatScreenViewState: BindableState {
     var hasEmptySearchResults: Bool {
         isSearching && usersSection.type == .searchResult && usersSection.users.isEmpty
     }
+    
+    var joinByAddressState: JoinByAddressState = .example
 }
 
 struct StartChatScreenViewStateBindings {
     var searchQuery = ""
+    var roomAddress = ""
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<StartChatScreenErrorType>?
     
     var selectedUserToInvite: UserProfileProxy?
+    var isJoinRoomByAddressSheetPresented = false
 }
 
 enum StartChatScreenViewAction {
@@ -46,4 +52,13 @@ enum StartChatScreenViewAction {
     case createRoom
     case createDM(user: UserProfileProxy)
     case selectUser(UserProfileProxy)
+    case joinRoomByAddress
+    case openRoomDirectorySearch
+}
+
+enum JoinByAddressState: Equatable {
+    case example
+    case invalidAddress
+    case addressNotFound
+    case addressFound(address: String, roomID: String)
 }

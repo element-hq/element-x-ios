@@ -56,10 +56,6 @@ generate_what_to_test_notes() {
     if [[ -d "$CI_APP_STORE_SIGNED_APP_PATH" ]]; then
         TESTFLIGHT_DIR_PATH=TestFlight
         TESTFLIGHT_NOTES_FILE_NAME=WhatToTest.en-US.txt
-
-        # Xcode Cloud shallow clones the repo, we need to deepen it to fetch tags and commit history
-        # Instead of trying `--deepen=<depth>` just do a full unshallow to avoid future surprises
-        git fetch --unshallow --quiet
         
         LATEST_TAG=""
         if [ "$CI_WORKFLOW" = "Release" ]; then
@@ -84,4 +80,9 @@ generate_what_to_test_notes() {
 
         echo "$NOTES" > $TESTFLIGHT_DIR_PATH/$TESTFLIGHT_NOTES_FILE_NAME
     fi
+}
+
+fetch_unshallow_repository() {
+    # Xcode Cloud shallow clones the repo. We need to deepen it to fetch tags, commit history and be able to rebase main on develop at the end of releases.
+    git fetch --unshallow --quiet
 }

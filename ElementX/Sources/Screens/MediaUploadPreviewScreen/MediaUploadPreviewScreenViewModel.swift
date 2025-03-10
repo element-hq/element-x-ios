@@ -40,7 +40,10 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         // Start processing the media whilst the user is reviewing it/adding a caption.
         processingTask = Task { await mediaUploadingPreprocessor.processMedia(at: url) }
         
-        super.init(initialViewState: MediaUploadPreviewScreenViewState(url: url, title: title, shouldShowCaptionWarning: shouldShowCaptionWarning))
+        super.init(initialViewState: MediaUploadPreviewScreenViewState(url: url,
+                                                                       title: title,
+                                                                       shouldShowCaptionWarning: shouldShowCaptionWarning,
+                                                                       isRoomEncrypted: roomProxy.isEncrypted))
     }
     
     override func process(viewAction: MediaUploadPreviewScreenViewAction) {

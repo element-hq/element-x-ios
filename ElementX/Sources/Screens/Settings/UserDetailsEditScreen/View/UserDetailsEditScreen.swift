@@ -25,6 +25,8 @@ struct UserDetailsEditScreen: View {
             }
             
             nameSection
+            
+            zIdsSection
         }
         .zeroList()
         .scrollDismissesKeyboard(.immediately)
@@ -79,6 +81,23 @@ struct UserDetailsEditScreen: View {
         }
     }
     
+    private var zIdsSection: some View {
+        Section {
+            ZeroListRow(label: .plain(title: context.primaryZId),
+                        kind: .button(action: {
+                context.showZIdsSheet = true
+            }))
+            .sheet(isPresented: $context.showZIdsSheet, onDismiss: {
+                context.showZIdsSheet = false
+            }, content: {
+                userZIdsSheet
+            })
+        } header: {
+            Text("Primary ZID")
+                .compoundListSectionHeader()
+        }
+    }
+    
     private var avatarOverlayIcon: some View {
         CompoundIcon(\.editSolid, size: .xSmall, relativeTo: .compound.bodyLG)
             .foregroundColor(.white)
@@ -109,6 +128,26 @@ struct UserDetailsEditScreen: View {
 //                Text(L10n.actionRemove)
 //            }
 //        }
+    }
+    
+    @ViewBuilder
+    private var userZIdsSheet: some View {
+        ScrollView {
+            LazyVStack(alignment: .leading) {
+                ForEach(context.userZeroIds, id: \.self) { zId in
+                    Button(action: {
+                        context.primaryZId = zId
+                        context.showZIdsSheet = false
+                    }) {
+                        Text(zId)
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                }
+            }
+            .padding(.vertical, 24)
+            .presentationDetents([.medium, .large])
+        }
     }
 }
 

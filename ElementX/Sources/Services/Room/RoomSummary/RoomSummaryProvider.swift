@@ -16,8 +16,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let shouldUpdateVisibleRange: Bool
     private let notificationSettings: NotificationSettingsProxyProtocol
     private let appSettings: AppSettings
-    
-    private let roomListPageSize = 200
+
+    private let roomListPageSize: UInt32
     
     private let serialDispatchQueue: DispatchQueue
     
@@ -62,6 +62,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
          eventStringBuilder: RoomEventStringBuilder,
          name: String,
          shouldUpdateVisibleRange: Bool = false,
+         roomListPageSize: UInt32 = 200,
          notificationSettings: NotificationSettingsProxyProtocol,
          appSettings: AppSettings,
          zeroUsersService: ZeroMatrixUsersService,
@@ -73,6 +74,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.shouldUpdateVisibleRange = shouldUpdateVisibleRange
         self.notificationSettings = notificationSettings
         self.appSettings = appSettings
+        self.roomListPageSize = roomListPageSize
         self.zeroUsersService = zeroUsersService
         self.onJoinRoomExplicitly = onJoinRoomExplicitly
         
@@ -94,7 +96,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.roomList = roomList
         
         do {
-            listUpdatesSubscriptionResult = roomList.entriesWithDynamicAdapters(pageSize: UInt32(roomListPageSize), listener: RoomListEntriesListenerProxy { [weak self] updates in
+            listUpdatesSubscriptionResult = roomList.entriesWithDynamicAdapters(pageSize: try UInt32(roomListPageSize), listener: RoomListEntriesListenerProxy { [weak self] updates in
                 guard let self else { return }
                 diffsPublisher.send(updates)
             })

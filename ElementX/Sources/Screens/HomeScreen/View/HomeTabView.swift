@@ -7,13 +7,23 @@
 
 import SwiftUI
 
+enum HomeTab: CaseIterable {
+    case chat
+    case channels
+    case feed
+    
+    static func from(index: Int) -> HomeTab {
+        return Self.allCases.indices.contains(index) ? Self.allCases[index] : .chat // by-default `chat` tab is selected
+    }
+}
+
 struct HomeTabView<Content1: View, Content2: View, Content3: View>: View {
     @State private var selectedTab = 0
     
     let chatTabContent: Content1
     let homeTabContent: Content2
     let channelTabContent: Content3
-    let onTabSelected: (Int) -> Void
+    let onTabSelected: (Int, HomeTab) -> Void
     
     private let tabs = [
         (
@@ -36,7 +46,7 @@ struct HomeTabView<Content1: View, Content2: View, Content3: View>: View {
     init(@ViewBuilder chatTabContent: () -> Content1,
          @ViewBuilder homeTabContent: () -> Content2,
          @ViewBuilder channelTabContent: () -> Content3,
-         onTabSelected: @escaping (Int) -> Void) {
+         onTabSelected: @escaping (Int, HomeTab) -> Void) {
         self.chatTabContent = chatTabContent()
         self.homeTabContent = homeTabContent()
         self.channelTabContent = channelTabContent()
@@ -75,7 +85,7 @@ struct HomeTabView<Content1: View, Content2: View, Content3: View>: View {
             .background(.ultraThickMaterial)
         }
         .onChange(of: selectedTab) { _, newValue in
-            self.onTabSelected(newValue)
+            self.onTabSelected(newValue, HomeTab.from(index: newValue))
         }
     }
     

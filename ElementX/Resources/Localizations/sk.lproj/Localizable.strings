@@ -353,6 +353,7 @@
 "rich_text_editor_bullet_list" = "Prepnúť zoznam odrážok";
 "rich_text_editor_close_formatting_options" = "Zatvoriť možnosti formátovania";
 "rich_text_editor_code_block" = "Prepnúť blok kódu";
+"rich_text_editor_composer_encrypted_placeholder" = "Šifrovaná správa...";
 "rich_text_editor_composer_placeholder" = "Správa…";
 "rich_text_editor_create_link" = "Vytvoriť odkaz";
 "rich_text_editor_edit_link" = "Upraviť odkaz";
@@ -479,6 +480,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Zverejnenie miestnosti";
 "screen_security_and_privacy_room_visibility_section_footer" = "Adresy miestností predstavujú spôsoby, ako nájsť a získať prístup k miestnostiam. Toto tiež zaisťuje, že môžete jednoducho zdieľať svoju miestnosť s ostatnými. \nAdresa je tiež potrebná, aby bola miestnosť viditeľná v adresári verejných miestností %1$@.";
 "screen_security_and_privacy_title" = "Bezpečnosť a súkromie";
+"screen_start_chat_join_room_by_address_action" = "Pripojte sa do miestnosti podľa adresy";
+"screen_start_chat_join_room_by_address_invalid_address" = "Neplatná adresa";
+"screen_start_chat_join_room_by_address_placeholder" = "Zadajte...";
+"screen_start_chat_join_room_by_address_room_found" = "Nájdená zodpovedajúca miestnosť";
+"screen_start_chat_join_room_by_address_room_not_found" = "Miestnosť sa nenašla";
+"screen_start_chat_join_room_by_address_supporting_text" = "napr. #nazov-miestnosti:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Správa nebola odoslaná, pretože sa zmenila overená totožnosť používateľa %1$@.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Správa nebola odoslaná, pretože %1$@ neoveril/a všetky zariadenia.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Správa nebola odoslaná, pretože ste neoverili jedno alebo viac svojich zariadení.";
