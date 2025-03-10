@@ -17,7 +17,7 @@ The application is a total rewrite of [Element iOS](https://github.com/element-h
 
 ## Rust SDK
 
-Element X leverages the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) through an FFI layer exposed as a [swift package](https://github.com/matrix-org/matrix-rust-components-swift) that the final client can directly import and use. We're doing this as a way to share code between platforms, with [Element X Android](https://github.com/element-hq/element-x-android) using the same SDK.
+Element X leverages the [Matrix Rust SDK](https://github.com/voyzme/matrix-rust-sdk) through an FFI layer exposed as a [swift package](https://github.com/matrix-org/matrix-rust-components-swift) that the final client can directly import and use. We're doing this as a way to share code between platforms, with [Element X Android](https://github.com/element-hq/element-x-android) using the same SDK.
 
 ## Status
 
