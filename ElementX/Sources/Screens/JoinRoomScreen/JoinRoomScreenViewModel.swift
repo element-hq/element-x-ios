@@ -140,19 +140,19 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             roomInfo = invitedRoomProxy.info
         case .knocked(let knockedRoomProxy):
             roomInfo = knockedRoomProxy.info
-            if let roomSummaryProvider = clientProxy.staticRoomSummaryProvider {
-                membershipStateChangeCancellable = roomSummaryProvider.roomListPublisher
-                    .compactMap { summaries -> Void? in
-                        guard let roomSummary = summaries.first(where: { $0.id == roomInfo?.id }),
-                              roomSummary.roomListItem.membership() != .knocked else {
-                            return nil
-                        }
-                        return ()
+            membershipStateChangeCancellable = clientProxy
+                .staticRoomSummaryProvider
+                .roomListPublisher
+                .compactMap { summaries -> Void? in
+                    guard let roomSummary = summaries.first(where: { $0.id == roomInfo?.id }),
+                          roomSummary.roomListItem.membership() != .knocked else {
+                        return nil
                     }
-                    .sink { [weak self] in
-                        Task { await self?.loadRoomDetails() }
-                    }
-            }
+                    return ()
+                }
+                .sink { [weak self] in
+                    Task { await self?.loadRoomDetails() }
+                }
         case .banned(let bannedRoomProxy):
             roomInfo = bannedRoomProxy.info
         default:

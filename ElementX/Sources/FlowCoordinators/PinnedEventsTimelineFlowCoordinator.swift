@@ -134,9 +134,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentMessageForwarding(with forwardingItem: MessageForwardingItem) {
-        guard let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider else {
-            fatalError()
-        }
+        let roomSummaryProvider = userSession.clientProxy.alternateRoomSummaryProvider
         
         let stackCoordinator = NavigationStackCoordinator()
         

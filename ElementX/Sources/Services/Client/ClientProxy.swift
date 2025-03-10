@@ -20,13 +20,13 @@ class ClientProxy: ClientProxyProtocol {
     private let mediaLoader: MediaLoaderProtocol
     private let clientQueue: DispatchQueue
     
-    private var roomListService: RoomListService?
+    private var roomListService: RoomListService
     // periphery: ignore - only for retain
     private var roomListStateUpdateTaskHandle: TaskHandle?
     // periphery: ignore - only for retain
     private var roomListStateLoadingStateUpdateTaskHandle: TaskHandle?
 
-    private var syncService: SyncService?
+    private var syncService: SyncService
     // periphery: ignore - only for retain
     private var syncServiceStateUpdateTaskHandle: TaskHandle?
     
@@ -43,10 +43,10 @@ class ClientProxy: ClientProxyProtocol {
     
     // These following summary providers both operate on the same allRooms() list but
     // can apply their own filtering and pagination
-    private(set) var roomSummaryProvider: RoomSummaryProviderProtocol?
-    private(set) var alternateRoomSummaryProvider: RoomSummaryProviderProtocol?
+    private(set) var roomSummaryProvider: RoomSummaryProviderProtocol
+    private(set) var alternateRoomSummaryProvider: RoomSummaryProviderProtocol
     
-    private(set) var staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol?
+    private(set) var staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol
     
     let notificationSettings: NotificationSettingsProxyProtocol
 
@@ -171,7 +171,7 @@ class ClientProxy: ClientProxyProtocol {
     init(client: ClientProtocol,
          needsSlidingSyncMigration: Bool,
          networkMonitor: NetworkMonitorProtocol,
-         appSettings: AppSettings) async {
+         appSettings: AppSettings) async throws {
         self.client = client
         self.networkMonitor = networkMonitor
         self.appSettings = appSettings
@@ -184,9 +184,25 @@ class ClientProxy: ClientProxyProtocol {
         
         secureBackupController = SecureBackupController(encryption: client.encryption())
         
+        zeroApiProxy = ZeroApiProxy(client: client, appSettings: appSettings)
+        
         self.needsSlidingSyncMigration = needsSlidingSyncMigration
         
-        zeroApiProxy = ZeroApiProxy(client: client, appSettings: appSettings)
+        let configuredAppService = try await ClientProxyServices(client: client,
+                                                                 actionsSubject: actionsSubject,
+                                                                 notificationSettings: notificationSettings,
+                                                                 appSettings: appSettings,
+                                                                 zeroApiProxy: zeroApiProxy)
+        
+        syncService = configuredAppService.syncService
+        roomListService = configuredAppService.roomListService
+        roomSummaryProvider = configuredAppService.roomSummaryProvider
+        alternateRoomSummaryProvider = configuredAppService.alternateRoomSummaryProvider
+        staticRoomSummaryProvider = configuredAppService.staticRoomSummaryProvider
+        
+        syncServiceStateUpdateTaskHandle = createSyncServiceStateObserver(syncService)
+        roomListStateUpdateTaskHandle = createRoomListServiceObserver(roomListService)
+        roomListStateLoadingStateUpdateTaskHandle = createRoomListLoadingStateUpdateObserver(roomListService)
 
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
@@ -202,8 +218,6 @@ class ClientProxy: ClientProxyProtocol {
                 }
             }
             .store(in: &cancellables)
-        
-        await configureAppService()
 
         loadUserAvatarURLFromCache()
         
@@ -317,7 +331,7 @@ class ClientProxy: ClientProxyProtocol {
         MXLog.info("Starting sync")
         
         Task {
-            await syncService?.start()
+            await syncService.start()
             
             // If we are using OIDC we want to cache the account management URL in volatile memory on the SDK side.
             // To avoid the cache being invalidated while the app is backgrounded, we cache at every sync start.
@@ -356,12 +370,6 @@ class ClientProxy: ClientProxyProtocol {
         if restartTask != nil {
             MXLog.warning("Removing the sync service restart task.")
             restartTask = nil
-        }
-        
-        guard let syncService else {
-            MXLog.warning("No sync service to stop.")
-            completion?()
-            return
         }
         
         // Capture the sync service strongly as this method is called on deinit and so the
@@ -532,12 +540,6 @@ class ClientProxy: ClientProxyProtocol {
             return room
         }
         
-        // Else wait for the visible rooms list to go into fully loaded
-        guard let roomSummaryProvider else {
-            MXLog.error("Rooms summary provider not setup yet")
-            return nil
-        }
-        
         if !roomSummaryProvider.statePublisher.value.isLoaded {
             _ = await roomSummaryProvider.statePublisher.values.first { $0.isLoaded }
         }
@@ -550,10 +552,6 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func leaveRoom(_ roomID: String) async -> Result<Void, ClientProxyError> {
-        guard let roomListService else {
-            MXLog.error("Failed retrieving room: \(roomID), room list service not set up")
-            return .failure(.failedResolvingRoomAlias)
-        }
         do {
             let roomListItem = try roomListService.room(roomId: roomID)
             let invitedRoom = try roomListItem.invitedRoom()
@@ -579,33 +577,11 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func roomSummaryForIdentifier(_ identifier: String) -> RoomSummary? {
-        // the alternate room summary provider is not impacted by filtering
-        guard let provider = staticRoomSummaryProvider else {
-            MXLog.verbose("Missing room summary provider")
-            return nil
-        }
-        
-        guard let roomSummary = provider.roomListPublisher.value.first(where: { $0.id == identifier }) else {
-            MXLog.verbose("Missing room summary, count: \(provider.roomListPublisher.value.count)")
-            return nil
-        }
-        
-        return roomSummary
+        staticRoomSummaryProvider.roomListPublisher.value.first(where: { $0.id == identifier })
     }
     
     func roomSummaryForAlias(_ alias: String) -> RoomSummary? {
-        // the alternate room summary provider is not impacted by filtering
-        guard let provider = staticRoomSummaryProvider else {
-            MXLog.verbose("Missing room summary provider")
-            return nil
-        }
-        
-        guard let roomSummary = provider.roomListPublisher.value.first(where: { $0.canonicalAlias == alias || $0.alternativeAliases.contains(alias) }) else {
-            MXLog.verbose("Missing room summary, count: \(provider.roomListPublisher.value.count)")
-            return nil
-        }
-        
-        return roomSummary
+        staticRoomSummaryProvider.roomListPublisher.value.first(where: { $0.canonicalAlias == alias || $0.alternativeAliases.contains(alias) })
     }
 
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
@@ -1184,71 +1160,7 @@ class ClientProxy: ClientProxyProtocol {
             self.userAvatarURLSubject.value = urlString.flatMap(URL.init)
         }
     }
-
-    private func configureAppService() async {
-        guard syncService == nil else {
-            fatalError("This shouldn't be called more than once")
-        }
-        
-        do {
-            let syncService = try await client
-                .syncService()
-                .withCrossProcessLock()
-                .withUtdHook(delegate: ClientDecryptionErrorDelegate(actionsSubject: actionsSubject))
-                .finish()
-            
-            let roomListService = syncService.roomListService()
-            
-            let roomMessageEventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(cacheKey: "roomList",
-                                                                                                                               mentionBuilder: PlainMentionBuilder()), destination: .roomList)
-            let eventStringBuilder = RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID, shouldDisambiguateDisplayNames: false),
-                                                            messageEventStringBuilder: roomMessageEventStringBuilder,
-                                                            shouldDisambiguateDisplayNames: false,
-                                                            shouldPrefixSenderName: true)
-            
-            roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
-                                                      eventStringBuilder: eventStringBuilder,
-                                                      name: "AllRooms",
-                                                      shouldUpdateVisibleRange: true,
-                                                      notificationSettings: notificationSettings,
-                                                      appSettings: appSettings,
-                                                      zeroUsersService: zeroApiProxy.matrixUsersService,
-                                                      onJoinRoomExplicitly: { [weak self] roomId in
-                await self?.joinRoomExplicitly(roomId)
-            })
-            try await roomSummaryProvider?.setRoomList(roomListService.allRooms())
-            
-            alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
-                                                               eventStringBuilder: eventStringBuilder,
-                                                               name: "AlternateAllRooms",
-                                                               notificationSettings: notificationSettings,
-                                                               appSettings: appSettings,
-                                                               zeroUsersService: zeroApiProxy.matrixUsersService,
-                                                               onJoinRoomExplicitly: { [weak self] roomId in
-                await self?.joinRoomExplicitly(roomId)
-            })
-            try await alternateRoomSummaryProvider?.setRoomList(roomListService.allRooms())
-            
-            staticRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
-                                                            eventStringBuilder: eventStringBuilder,
-                                                            name: "StaticAllRooms",
-                                                            roomListPageSize: .max,
-                                                            notificationSettings: notificationSettings,
-                                                            appSettings: appSettings,
-                                                            zeroUsersService: zeroApiProxy.matrixUsersService)
-            try await staticRoomSummaryProvider?.setRoomList(roomListService.allRooms())
-                        
-            self.syncService = syncService
-            self.roomListService = roomListService
-
-            syncServiceStateUpdateTaskHandle = createSyncServiceStateObserver(syncService)
-            roomListStateUpdateTaskHandle = createRoomListServiceObserver(roomListService)
-            roomListStateLoadingStateUpdateTaskHandle = createRoomListLoadingStateUpdateObserver(roomListService)
-        } catch {
-            MXLog.error("Failed building room list service with error: \(error)")
-        }
-    }
-
+    
     private func createSyncServiceStateObserver(_ syncService: SyncService) -> TaskHandle {
         syncService.state(listener: SyncServiceStateObserverProxy { [weak self] state in
             guard let self else { return }
@@ -1320,11 +1232,6 @@ class ClientProxy: ClientProxyProtocol {
     }()
     
     private func buildRoomForIdentifier(_ roomID: String) async -> RoomProxyType? {
-        guard let roomListService else {
-            MXLog.error("Failed retrieving room: \(roomID), room list service not set up")
-            return nil
-        }
-                
         do {
             let roomListItem = try roomListService.room(roomId: roomID)
             
@@ -1599,5 +1506,63 @@ private class SendQueueRoomErrorListenerProxy: SendQueueRoomErrorListener {
     
     func onError(roomId: String, error: ClientError) {
         onErrorClosure(roomId, error)
+    }
+}
+
+private struct ClientProxyServices {
+    let syncService: SyncService
+    let roomListService: RoomListService
+    let roomSummaryProvider: RoomSummaryProviderProtocol
+    let alternateRoomSummaryProvider: RoomSummaryProviderProtocol
+    let staticRoomSummaryProvider: StaticRoomSummaryProviderProtocol
+    
+    init(client: ClientProtocol,
+         actionsSubject: PassthroughSubject<ClientProxyAction, Never>,
+         notificationSettings: NotificationSettingsProxyProtocol,
+         appSettings: AppSettings,
+         zeroApiProxy: ZeroApiProxyProtocol) async throws {
+        let syncService = try await client
+            .syncService()
+            .withCrossProcessLock()
+            .withUtdHook(delegate: ClientDecryptionErrorDelegate(actionsSubject: actionsSubject))
+            .finish()
+        
+        let roomListService = syncService.roomListService()
+        
+        let roomMessageEventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(cacheKey: "roomList",
+                                                                                                                           mentionBuilder: PlainMentionBuilder()), destination: .roomList)
+        let eventStringBuilder = try RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: client.userId(), shouldDisambiguateDisplayNames: false),
+                                                            messageEventStringBuilder: roomMessageEventStringBuilder,
+                                                            shouldDisambiguateDisplayNames: false,
+                                                            shouldPrefixSenderName: true)
+        
+        roomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
+                                                  eventStringBuilder: eventStringBuilder,
+                                                  name: "AllRooms",
+                                                  shouldUpdateVisibleRange: true,
+                                                  notificationSettings: notificationSettings,
+                                                  appSettings: appSettings,
+                                                  zeroUsersService: zeroApiProxy.matrixUsersService)
+        try await roomSummaryProvider.setRoomList(roomListService.allRooms())
+        
+        alternateRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
+                                                           eventStringBuilder: eventStringBuilder,
+                                                           name: "AlternateAllRooms",
+                                                           notificationSettings: notificationSettings,
+                                                           appSettings: appSettings,
+                                                           zeroUsersService: zeroApiProxy.matrixUsersService)
+        try await alternateRoomSummaryProvider.setRoomList(roomListService.allRooms())
+        
+        staticRoomSummaryProvider = RoomSummaryProvider(roomListService: roomListService,
+                                                        eventStringBuilder: eventStringBuilder,
+                                                        name: "StaticAllRooms",
+                                                        roomListPageSize: .max,
+                                                        notificationSettings: notificationSettings,
+                                                        appSettings: appSettings,
+                                                        zeroUsersService: zeroApiProxy.matrixUsersService)
+        try await staticRoomSummaryProvider.setRoomList(roomListService.allRooms())
+        
+        self.syncService = syncService
+        self.roomListService = roomListService
     }
 }

@@ -379,26 +379,28 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             shouldMakeAnotherPass = false
             attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, stop in
                 guard let value else { return }
-                
                 shouldMakeAnotherPass = true
                 
                 // Remove the attribute so it doesn't get inherited by the new string
                 attributedString.removeAttribute(.link, range: range)
                 
-                guard let userID = attributedString.attribute(.MatrixUserID, at: range.location, effectiveRange: nil) as? String else {
+                if let userID = attributedString.attribute(.MatrixUserID, at: range.location, effectiveRange: nil) as? String {
+//                    let displayName = attributedString.attribute(.MatrixUserDisplayName, at: range.location, effectiveRange: nil)
+//                    attributedString.replaceCharacters(in: range, with: "[\(displayName ?? userID)](\(value))")
+                    guard let displayName = mentionedUsersMap[userID] as? String else { return }
+                    let cleanedMatrixId = userID.matrixIdToCleanHex()
+                    let replacementMentionString = "@[\(displayName)](user:\(cleanedMatrixId))"
+                    attributedString.replaceCharacters(in: range, with: replacementMentionString)
+                    
+                    userIDs.insert(userID)
+                    stop.pointee = true
+                } else if let roomAlias = attributedString.attribute(.MatrixRoomAlias, at: range.location, effectiveRange: nil) as? String {
+                    let displayName = attributedString.attribute(.MatrixRoomDisplayName, at: range.location, effectiveRange: nil)
+                    attributedString.replaceCharacters(in: range, with: "[\(displayName ?? roomAlias)](\(value))")
+                    stop.pointee = true
+                } else {
                     return
                 }
-                guard let displayName = mentionedUsersMap[userID] as? String else {
-                    return
-                }
-                let cleanedMatrixId = userID.matrixIdToCleanHex()
-                let replacementMentionString = "@[\(displayName)](user:\(cleanedMatrixId))"
-                
-                // attributedString.replaceCharacters(in: range, with: "[\(displayName ?? userID)](\(value))")
-                attributedString.replaceCharacters(in: range, with: replacementMentionString)
-                userIDs.insert(userID)
-                
-                stop.pointee = true
             }
         } while shouldMakeAnotherPass
         
@@ -479,26 +481,27 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
     }
     
     private func handleSuggestion(_ suggestion: SuggestionItem) {
-        switch suggestion {
-        case let .user(item):
-            guard let url = try? URL(string: matrixToUserPermalink(userId: item.id)) else {
+        switch suggestion.suggestionType {
+        case let .user(user):
+            guard let url = try? URL(string: matrixToUserPermalink(userId: user.id)) else {
                 MXLog.error("Could not build user permalink")
                 return
             }
             
             if context.composerFormattingEnabled {
-                wysiwygViewModel.setMention(url: url.absoluteString, name: item.id, mentionType: .user)
+                wysiwygViewModel.setMention(url: url.absoluteString, name: user.id, mentionType: .user)
             } else {
                 mentionedUsersMap[suggestion.id] = suggestion.displayName
                 let attributedString = NSMutableAttributedString(attributedString: state.bindings.plainComposerText)
-                mentionBuilder.handleUserMention(for: attributedString, in: suggestion.range, url: url, userID: item.id, userDisplayName: item.displayName)
+                mentionBuilder.handleUserMention(for: attributedString, in: suggestion.range, url: url, userID: user.id, userDisplayName: user.displayName)
                 /// Appending space after each mention to maintain text formatting
                 attributedString.appendString(" ")
                 state.bindings.plainComposerText = attributedString
-                let newSelectedRange = NSRange(location: state.bindings.selectedRange.location - item.rawSuggestionText.count, length: 0)
+                
+                let newSelectedRange = NSRange(location: state.bindings.selectedRange.location - suggestion.rawSuggestionText.count, length: 0)
                 state.bindings.selectedRange = newSelectedRange
             }
-        case let .allUsers(item):
+        case .allUsers:
             if context.composerFormattingEnabled {
                 wysiwygViewModel.setAtRoomMention()
             } else {
@@ -508,7 +511,23 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 attributedString.appendString(" ")
                 state.bindings.plainComposerText = attributedString
                 
-                let newSelectedRange = NSRange(location: state.bindings.selectedRange.location - item.rawSuggestionText.count, length: 0)
+                let newSelectedRange = NSRange(location: state.bindings.selectedRange.location - suggestion.rawSuggestionText.count, length: 0)
+                state.bindings.selectedRange = newSelectedRange
+            }
+        case let .room(room):
+            guard let url = try? URL(string: matrixToRoomAliasPermalink(roomAlias: room.canonicalAlias)) else {
+                MXLog.error("Could not build alias permalink")
+                return
+            }
+            
+            if context.composerFormattingEnabled {
+                wysiwygViewModel.setMention(url: url.absoluteString, name: room.name, mentionType: .room)
+            } else {
+                let attributedString = NSMutableAttributedString(attributedString: state.bindings.plainComposerText)
+                mentionBuilder.handleRoomAliasMention(for: attributedString, in: suggestion.range, url: url, roomAlias: room.canonicalAlias, roomDisplayName: room.name)
+                state.bindings.plainComposerText = attributedString
+                
+                let newSelectedRange = NSRange(location: state.bindings.selectedRange.location - suggestion.rawSuggestionText.count, length: 0)
                 state.bindings.selectedRange = newSelectedRange
             }
         }

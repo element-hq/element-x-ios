@@ -64,7 +64,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         do {
             let session = try client.session()
             let userID = try client.userId()
-            let clientProxy = await setupProxyForClient(client, needsSlidingSyncMigration: false)
+            let clientProxy = try await setupProxyForClient(client, needsSlidingSyncMigration: false)
             
             keychainController.setRestorationToken(RestorationToken(session: session,
                                                                     sessionDirectories: sessionDirectories,
@@ -138,17 +138,26 @@ class UserSessionStore: UserSessionStoreProtocol {
             
             MXLog.info("Set up session for user \(credentials.userID) at: \(credentials.restorationToken.sessionDirectories)")
             
-            return await .success(setupProxyForClient(client, needsSlidingSyncMigration: credentials.restorationToken.needsSlidingSyncMigration))
+            return try await .success(setupProxyForClient(client, needsSlidingSyncMigration: credentials.restorationToken.needsSlidingSyncMigration))
+        } catch UserSessionStoreError.failedSettingUpClientProxy(let error) {
+            // If this has failed, there is likely something wrong with the creation of the sync service
+            // There is nothing we can do, but at the same time we don't want the user to the get logged out
+            // So it's better to crash here and let the app restart
+            fatalError("Failed setting up the client proxy with error: \(error)")
         } catch {
             MXLog.error("Failed restoring login with error: \(error)")
             return .failure(.failedRestoringLogin)
         }
     }
     
-    private func setupProxyForClient(_ client: ClientProtocol, needsSlidingSyncMigration: Bool) async -> ClientProxyProtocol {
-        await ClientProxy(client: client,
-                          needsSlidingSyncMigration: needsSlidingSyncMigration,
-                          networkMonitor: networkMonitor,
-                          appSettings: appSettings)
+    private func setupProxyForClient(_ client: ClientProtocol, needsSlidingSyncMigration: Bool) async throws -> ClientProxyProtocol {
+        do {
+            return try await ClientProxy(client: client,
+                                         needsSlidingSyncMigration: needsSlidingSyncMigration,
+                                         networkMonitor: networkMonitor,
+                                         appSettings: appSettings)
+        } catch {
+            throw UserSessionStoreError.failedSettingUpClientProxy(error)
+        }
     }
 }

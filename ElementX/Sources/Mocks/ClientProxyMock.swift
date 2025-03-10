@@ -13,7 +13,7 @@ struct ClientProxyMockConfiguration {
     var userIDServerName: String?
     var userID: String = RoomMemberProxyMock.mockMe.userID
     var deviceID: String?
-    var roomSummaryProvider: RoomSummaryProviderProtocol? = RoomSummaryProviderMock(.init())
+    var roomSummaryProvider: RoomSummaryProviderProtocol = RoomSummaryProviderMock(.init())
     var roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol?
     
     var recoveryState: SecureBackupRecoveryState = .enabled
@@ -86,7 +86,7 @@ extension ClientProxyMock {
         resetIdentityReturnValue = .success(IdentityResetHandleSDKMock(.init()))
         
         roomForIdentifierClosure = { [weak self] identifier in
-            guard let room = self?.roomSummaryProvider?.roomListPublisher.value.first(where: { $0.id == identifier }) else {
+            guard let room = self?.roomSummaryProvider.roomListPublisher.value.first(where: { $0.id == identifier }) else {
                 return nil
             }
             

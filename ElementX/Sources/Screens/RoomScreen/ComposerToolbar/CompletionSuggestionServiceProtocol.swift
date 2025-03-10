@@ -12,6 +12,7 @@ import WysiwygComposer
 struct SuggestionTrigger: Equatable {
     enum SuggestionType: Equatable {
         case user
+        case room
     }
     
     let type: SuggestionType
@@ -19,40 +20,62 @@ struct SuggestionTrigger: Equatable {
     let range: NSRange
 }
 
-enum SuggestionItem: Identifiable, Equatable {
-    case user(item: MentionSuggestionItem)
-    case allUsers(item: MentionSuggestionItem)
-    
-    var id: String {
-        switch self {
-        case .user(let user):
-            return user.id
-        case .allUsers:
-            return PillConstants.atRoom
-        }
+struct SuggestionItem: Identifiable, Equatable {
+    enum SuggestionType: Equatable {
+        case user(User)
+        case allUsers(RoomAvatar)
+        case room(Room)
     }
     
-    var range: NSRange {
-        switch self {
-        case .user(let item), .allUsers(let item):
-            return item.range
-        }
+    struct User: Equatable {
+        let id: String
+        let displayName: String?
+        let avatarURL: URL?
     }
     
-    var displayName: String? {
-        switch self {
-        case .user(let item), .allUsers(let item):
-            return item.displayName
-        }
+    struct Room: Equatable {
+        let id: String
+        let canonicalAlias: String
+        let name: String
+        let avatar: RoomAvatar
     }
-}
-
-struct MentionSuggestionItem: Identifiable, Equatable {
-    let id: String
-    let displayName: String?
-    let avatarURL: URL?
+    
+    let suggestionType: SuggestionType
     let range: NSRange
     let rawSuggestionText: String
+    
+    var id: String {
+        switch suggestionType {
+        case .user(let user):
+            user.id
+        case .allUsers:
+            PillConstants.atRoom
+        case .room(let room):
+            room.id
+        }
+    }
+    
+    var displayName: String {
+        switch suggestionType {
+        case .allUsers:
+            return PillConstants.everyone
+        case .user(let user):
+            return user.displayName ?? user.id
+        case .room(let room):
+            return room.name
+        }
+    }
+    
+    var subtitle: String? {
+        switch suggestionType {
+        case .allUsers:
+            return nil
+        case .user(let user):
+            return user.displayName == nil ? nil : user.id
+        case .room(let room):
+            return room.canonicalAlias
+        }
+    }
 }
 
 // sourcery: AutoMockable
@@ -69,6 +92,8 @@ extension WysiwygComposer.SuggestionPattern {
         switch key {
         case .at:
             return SuggestionTrigger(type: .user, text: text, range: .init(location: Int(start), length: Int(end)))
+        case .hash:
+            return SuggestionTrigger(type: .room, text: text, range: .init(location: Int(start), length: Int(end)))
         default:
             return nil
         }
