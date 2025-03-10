@@ -525,11 +525,11 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func roomSummaryForIdentifier(_ identifier: String) -> RoomSummary? {
-        staticRoomSummaryProvider.roomListPublisher.value.first(where: { $0.id == identifier })
+        staticRoomSummaryProvider.roomListPublisher.value.first { $0.id == identifier }
     }
     
     func roomSummaryForAlias(_ alias: String) -> RoomSummary? {
-        staticRoomSummaryProvider.roomListPublisher.value.first(where: { $0.canonicalAlias == alias || $0.alternativeAliases.contains(alias) })
+        staticRoomSummaryProvider.roomListPublisher.value.first { $0.canonicalAlias == alias || $0.alternativeAliases.contains(alias) }
     }
 
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
