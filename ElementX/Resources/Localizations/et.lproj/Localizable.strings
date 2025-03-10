@@ -139,7 +139,9 @@
 "common_chat_backup" = "Vestluse varukoopia";
 "common_copyright" = "Autoriõigused";
 "common_creating_room" = "Loome jututoa…";
+"common_current_user_canceled_knock" = "Päring on tühistatud";
 "common_current_user_left_room" = "Lahkus jututoast";
+"common_current_user_rejected_invite" = "Keeldusid kutsest";
 "common_dark" = "Tume";
 "common_date_date_at_time" = "%1$@, %2$@";
 "common_date_this_month" = "Sel kuul";
@@ -355,6 +357,7 @@
 "rich_text_editor_code_block" = "Lülita lähtekoodi lõik sisse/välja";
 "rich_text_editor_composer_encrypted_placeholder" = "Krüptitud sõnum…";
 "rich_text_editor_composer_placeholder" = "Sõnum…";
+"rich_text_editor_composer_unencrypted_placeholder" = "Krüptimata sõnum…";
 "rich_text_editor_create_link" = "Lisa link";
 "rich_text_editor_edit_link" = "Muuda linki";
 "rich_text_editor_format_bold" = "Kasuta paksu kirja";
@@ -936,7 +939,6 @@
 "screen_roomlist_main_space_title" = "Vestlused";
 "screen_roomlist_mark_as_read" = "Märgi loetuks";
 "screen_roomlist_mark_as_unread" = "Märgi mitteloetuks";
-"screen_roomlist_room_directory_button_title" = "Sirvi kõiki jututube";
 "screen_server_confirmation_message_login_element_dot_io" = "Privaatne server Elemendi töötajate jaoks.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix on avatud võrk turvalise ja hajutatud suhtluse jaoks.";
 "screen_server_confirmation_message_register" = "See on koht, kus sinu vestlused elavad – just nagu kasutaksid oma e-kirjade säilitamiseks e-postiteenuse pakkujat.";

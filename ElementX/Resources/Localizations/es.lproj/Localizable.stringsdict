@@ -205,9 +205,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Pinned message</string>
+			<string>%1$d mensaje fijado</string>
 			<key>other</key>
-			<string>%1$d Pinned messages</string>
+			<string>%1$d mensajes fijados</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -237,9 +237,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ +%2$d other want to join this room</string>
+			<string>%1$@ y %2$d más quieren unirse a esta sala</string>
 			<key>other</key>
-			<string>%1$@ +%2$d others want to join this room</string>
+			<string>%1$@ y otros %2$d más quieren unirse a esta sala</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>
@@ -317,9 +317,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Found %1$d push provider: %2$@</string>
+			<string>Se encontró %1$d proveedor de push: %2$@</string>
 			<key>other</key>
-			<string>Found %1$d push providers: %2$@</string>
+			<string>Se encontraron %1$d proveedores de push: %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_unified_push_success</key>
@@ -333,9 +333,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d distributor found: %2$@.</string>
+			<string>%1$d distribuidor encontrado: %2$@.</string>
 			<key>other</key>
-			<string>%1$d distributors found: %2$@.</string>
+			<string>%1$d distribuidores encontrados: %2$@.</string>
 		</dict>
 	</dict>
 </dict>

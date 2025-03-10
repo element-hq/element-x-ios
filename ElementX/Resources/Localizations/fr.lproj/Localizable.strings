@@ -139,7 +139,9 @@
 "common_chat_backup" = "Sauvegarde des discussions";
 "common_copyright" = "Droits d’auteur";
 "common_creating_room" = "Création du salon…";
+"common_current_user_canceled_knock" = "Demande annulée";
 "common_current_user_left_room" = "Quitter le salon";
+"common_current_user_rejected_invite" = "Invitation refusée";
 "common_dark" = "Sombre";
 "common_date_date_at_time" = "%1$@ à %2$@";
 "common_date_this_month" = "Ce mois-ci";
@@ -355,6 +357,7 @@
 "rich_text_editor_code_block" = "Afficher le bloc de code";
 "rich_text_editor_composer_encrypted_placeholder" = "Message chiffré…";
 "rich_text_editor_composer_placeholder" = "Message…";
+"rich_text_editor_composer_unencrypted_placeholder" = "Message non chiffré...";
 "rich_text_editor_create_link" = "Créer un lien";
 "rich_text_editor_edit_link" = "Modifier le lien";
 "rich_text_editor_format_bold" = "Appliquer le format gras";
@@ -936,7 +939,6 @@
 "screen_roomlist_main_space_title" = "Conversations";
 "screen_roomlist_mark_as_read" = "Marquer comme lu";
 "screen_roomlist_mark_as_unread" = "Marquer comme non lu";
-"screen_roomlist_room_directory_button_title" = "Parcourir tous les salons";
 "screen_server_confirmation_message_login_element_dot_io" = "Un serveur privé pour les employés d’Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix est un réseau ouvert pour une communication sécurisée et décentralisée.";
 "screen_server_confirmation_message_register" = "C’est ici que vos conversations seront enregistrées, comme vous le feriez avec un fournisseur de messagerie pour conserver vos e-mails.";

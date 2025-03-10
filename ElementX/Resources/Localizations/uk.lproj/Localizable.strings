@@ -120,7 +120,7 @@
 "action_yes" = "Так";
 "action_yes_try_again" = "Так, повторити спробу";
 "banner_migrate_to_native_sliding_sync_action" = "Вийти та оновити";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
+"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ більше не підтримує старий протокол. Вийдіть і знов увійдіть, щоб продовжити користуватися застосунком.";
 "banner_migrate_to_native_sliding_sync_description" = "Ваш сервер тепер підтримує новий, швидший протокол. Вийдіть із системи та увійдіть знову, щоб оновити систему зараз. Якщо ви зробите це зараз, це допоможе вам уникнути примусового виходу з системи, коли старий протокол буде видалено пізніше.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Ваш домашній сервер більше не підтримує старий протокол. Будь ласка, вийдіть і увійдіть знову, щоб продовжити використання програми.";
 "banner_migrate_to_native_sliding_sync_title" = "Доступне оновлення";
@@ -139,7 +139,9 @@
 "common_chat_backup" = "Резервне копіювання бесіди";
 "common_copyright" = "Авторське право";
 "common_creating_room" = "Створення кімнати...";
+"common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "Виходить з кімнати";
+"common_current_user_rejected_invite" = "Invite declined";
 "common_dark" = "Темна";
 "common_date_date_at_time" = "%1$@ о %2$@";
 "common_date_this_month" = "Цього місяця";
@@ -274,7 +276,7 @@
 "crypto_identity_change_pin_violation" = "Ідентичність %1$@, схоже, змінилася. %2$@";
 "crypto_identity_change_pin_violation_new" = "Ідентичність %1$@ %2$@ схоже, змінилася. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
-"crypto_identity_change_profile_pin_violation" = "%1$@’s verified identity has changed.";
+"crypto_identity_change_profile_pin_violation" = "Верифікована ідентичність %1$@ змінилася.";
 "crypto_identity_change_verification_violation_new" = "Верифіковано особистість %1$@ %2$@ змінилася. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Відкликати верифікацію";
 "dialog_permission_camera" = "Щоб дозволити застосунку використовувати камеру, надайте дозвіл у системних налаштуваннях.";
@@ -353,8 +355,9 @@
 "rich_text_editor_bullet_list" = "Перемкнути маркований список";
 "rich_text_editor_close_formatting_options" = "Закрити параметри форматування";
 "rich_text_editor_code_block" = "Перемкнути блок коду";
-"rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
+"rich_text_editor_composer_encrypted_placeholder" = "Зашифроване повідомлення…";
 "rich_text_editor_composer_placeholder" = "Повідомлення...";
+"rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
 "rich_text_editor_create_link" = "Створити посилання";
 "rich_text_editor_edit_link" = "Редагувати посилання";
 "rich_text_editor_format_bold" = "Жирний формат";
@@ -445,7 +448,7 @@
 "screen_resolve_send_failure_unsigned_device_title" = "Ваше повідомлення не було надіслано, тому що %1$@ не перевірив усі пристрої";
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Один або кілька ваших пристроїв не підтверджено. Ви можете відправити повідомлення в будь-якому випадку, або ж скасувати відправку і спробувати пізніше, коли перевірите всі свої пристрої.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Ваше повідомлення не було надіслано, оскільки ви не підтвердили один або декілька своїх пристроїв";
-"screen_room_event_pill" = "Message in %1$@";
+"screen_room_event_pill" = "Повідомлення в %1$@";
 "screen_room_mentions_at_room_subtitle" = "Сповістити всю кімнату";
 "screen_room_multiple_knock_requests_view_all_button_title" = "Переглянути все";
 "screen_room_pinned_banner_indicator" = "%1$@ із %2$@";
@@ -480,12 +483,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Публікація в кімнаті";
 "screen_security_and_privacy_room_visibility_section_footer" = "Адреси кімнат — це спосіб знайти та отримати доступ до кімнат. Це також гарантує, що ви зможете легко поділитися своєю кімнатою з іншими.\nАдреса також необхідна, щоб зробити кімнату видимою в каталозі загальнодоступних кімнат %1$@.";
 "screen_security_and_privacy_title" = "Безпека й приватність";
-"screen_start_chat_join_room_by_address_action" = "Join room by address";
-"screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
-"screen_start_chat_join_room_by_address_placeholder" = "Enter...";
-"screen_start_chat_join_room_by_address_room_found" = "Matching room found";
-"screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
-"screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
+"screen_start_chat_join_room_by_address_action" = "Приєднатися до кімнати за адресою";
+"screen_start_chat_join_room_by_address_invalid_address" = "Недійсна адреса";
+"screen_start_chat_join_room_by_address_placeholder" = "Введіть...";
+"screen_start_chat_join_room_by_address_room_found" = "Знайдено відповідну кімнату";
+"screen_start_chat_join_room_by_address_room_not_found" = "Кімната не знайдена";
+"screen_start_chat_join_room_by_address_supporting_text" = "наприклад, #room-name:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Повідомлення не надіслано, оскільки підтверджена особистість %1$@ змінилася.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Повідомлення не надіслано, оскільки %1$@ перевірив не всі пристрої.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Повідомлення не надіслано, оскільки ви не підтвердили один або кілька своїх пристроїв.";
@@ -936,7 +939,6 @@
 "screen_roomlist_main_space_title" = "Бесіди";
 "screen_roomlist_mark_as_read" = "Позначити прочитаним";
 "screen_roomlist_mark_as_unread" = "Позначити непрочитаним";
-"screen_roomlist_room_directory_button_title" = "Переглянути всі кімнати";
 "screen_server_confirmation_message_login_element_dot_io" = "Приватний сервер для співробітників Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix — це відкрита мережа для безпечної, децентралізованої комунікації.";
 "screen_server_confirmation_message_register" = "Тут розміщуватимуться ваші розмови — так само як у поштовій скриньці для зберігання своїх електронних листів.";
@@ -968,7 +970,7 @@
 "screen_session_verification_they_match" = "Вони збігаються";
 "screen_session_verification_use_another_device_subtitle" = "Перш ніж починати перевірку звідси, переконайтеся, що програму відкрито на іншому пристрої.";
 "screen_session_verification_use_another_device_title" = "Відкрийте додаток на іншому перевіреному пристрої";
-"screen_session_verification_user_initiator_subtitle" = "For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.";
+"screen_session_verification_user_initiator_subtitle" = "Для додаткової безпеки верифікуйте цього користувача, порівнявши набір емоджі на ваших пристроях. Зробіть це, використовуючи надійний спосіб спілкування.";
 "screen_session_verification_user_initiator_title" = "Верифікувати цього користувача?";
 "screen_session_verification_user_responder_subtitle" = "Для додаткової безпеки інший користувач хоче верифікувати вашу особистість. Вам буде показано набір емоджі для порівняння.";
 "screen_session_verification_waiting_another_device_subtitle" = "Ви повинні побачити спливаюче вікно на іншому пристрої. Почніть перевірку звідти.";
