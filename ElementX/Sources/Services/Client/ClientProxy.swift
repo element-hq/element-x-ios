@@ -896,7 +896,6 @@ class ClientProxy: ClientProxyProtocol {
             switch roomListItem.membership() {
             case .invited:
                 return try await .invited(InvitedRoomProxy(roomListItem: roomListItem,
-                                                           roomPreview: roomListItem.previewRoom(via: []),
                                                            ownUserID: userID))
             case .knocked:
                 if appSettings.knockingEnabled {
