@@ -137,11 +137,14 @@ struct MessageText: UIViewRepresentable {
                 return true
             }
         }
-        
+                
         @available(iOS 17.0, *)
         func textView(_ textView: UITextView, menuConfigurationFor textItem: UITextItem, defaultMenu: UIMenu) -> UITextItem.MenuConfiguration? {
             switch textItem.content {
             case let .link(url):
+                guard !url.requiresConfirmation else {
+                    return nil
+                }
                 // We don't want to show a URL preview for permalinks
                 let isPermalink = parseMatrixEntityFrom(uri: url.absoluteString) != nil
                 return .init(preview: isPermalink ? nil : .default, menu: defaultMenu)

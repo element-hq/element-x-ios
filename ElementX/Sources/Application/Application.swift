@@ -11,6 +11,7 @@ import SwiftUI
 struct Application: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @Environment(\.openURL) private var openURL
+    @State private var alert: AlertInfo<ApplicationAlertType>?
     
     private var appCoordinator: AppCoordinatorProtocol!
 
@@ -34,13 +35,21 @@ struct Application: App {
                     if appCoordinator.handleDeepLink(url, isExternalURL: false) {
                         return .handled
                     }
+                    
+                    if let confirmationParameters = url.confirmationParameters {
+                        alert = .init(id: .confirmURL,
+                                      title: "Test",
+                                      message: "Test",
+                                      primaryButton: .init(title: "Confirm") { openURL(confirmationParameters.internalURL) },
+                                      secondaryButton: .init(title: L10n.actionCancel, action: nil))
+                        
+                        return .handled
+                    }
 
                     return .systemAction
                 })
-                .onOpenURL {
-                    if !appCoordinator.handleDeepLink($0, isExternalURL: true) {
-                        openURLInSystemBrowser($0)
-                    }
+                .onOpenURL { url in
+                    openURL(url)
                 }
                 .onContinueUserActivity("INStartVideoCallIntent") { userActivity in
                     // `INStartVideoCallIntent` is to be replaced with `INStartCallIntent`
@@ -50,10 +59,17 @@ struct Application: App {
                 .task {
                     appCoordinator.start()
                 }
+                .alert(item: $alert)
         }
     }
     
     // MARK: - Private
+    
+    private func openURL(_ url: URL) {
+        if !appCoordinator.handleDeepLink(url, isExternalURL: true) {
+            openURLInSystemBrowser(url)
+        }
+    }
 
     /// Hide the status bar so it doesn't interfere with the screenshot tests
     private var shouldHideStatusBar: Bool {
@@ -80,4 +96,8 @@ struct Application: App {
         
         openURL(url)
     }
+}
+
+enum ApplicationAlertType {
+    case confirmURL
 }
