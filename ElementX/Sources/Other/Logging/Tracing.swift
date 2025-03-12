@@ -23,7 +23,7 @@ enum Tracing {
     
     static let fileExtension = "log"
     
-    static func setup(logLevel: LogLevel, currentTarget: String, filePrefix: String?) {
+    static func buildConfiguration(logLevel: LogLevel, currentTarget: String, filePrefix: String?) -> TracingConfiguration {
         let fileName = if let filePrefix {
             "\(Tracing.filePrefix)-\(filePrefix)"
         } else {
@@ -38,13 +38,13 @@ enum Tracing {
         // the logs contain any sensitive data. See `integration-tests.yml`
         let level: LogLevel = ProcessInfo.isRunningIntegrationTests ? .trace : logLevel
         
-        setupTracing(config: .init(logLevel: level.rustLogLevel,
-                                   extraTargets: [currentTarget],
-                                   writeToStdoutOrSystem: true,
-                                   writeToFiles: .init(path: logsDirectory.path(percentEncoded: false),
-                                                       filePrefix: fileName,
-                                                       fileSuffix: fileExtension,
-                                                       maxFiles: maxFiles)))
+        return .init(logLevel: level.rustLogLevel,
+                     extraTargets: [currentTarget],
+                     writeToStdoutOrSystem: true,
+                     writeToFiles: .init(path: logsDirectory.path(percentEncoded: false),
+                                         filePrefix: fileName,
+                                         fileSuffix: fileExtension,
+                                         maxFiles: maxFiles))
     }
     
     /// A list of all log file URLs, sorted chronologically. This is only public for testing purposes, within
