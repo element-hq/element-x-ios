@@ -136,9 +136,9 @@ class AttributedStringBuilderTests: XCTestCase {
     }
     
     func testRenderHTMLStringWithLinkInHeader() {
-        let h1HTMLString = "<h1><a href=\"https://www.matrix.org/\">Matrix.org</a></h1>"
-        let h2HTMLString = "<h2><a href=\"https://www.matrix.org/\">Matrix.org</a></h2>"
-        let h3HTMLString = "<h3><a href=\"https://www.matrix.org/\">Matrix.org</a></h3>"
+        let h1HTMLString = "<h1><a href=\"https://matrix.org/\">Matrix.org</a></h1>"
+        let h2HTMLString = "<h2><a href=\"https://matrix.org/\">Matrix.org</a></h2>"
+        let h3HTMLString = "<h3><a href=\"https://matrix.org/\">Matrix.org</a></h3>"
         
         guard let h1AttributedString = attributedStringBuilder.fromHTML(h1HTMLString),
               let h2AttributedString = attributedStringBuilder.fromHTML(h2HTMLString),
@@ -168,9 +168,9 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssert(h1Font.pointSize > UIFont.preferredFont(forTextStyle: .body).pointSize)
         XCTAssert(h1Font.pointSize <= maxHeaderPointSize)
         
-        XCTAssertEqual(h1AttributedString.runs.first?.link?.host, "www.matrix.org")
-        XCTAssertEqual(h2AttributedString.runs.first?.link?.host, "www.matrix.org")
-        XCTAssertEqual(h3AttributedString.runs.first?.link?.host, "www.matrix.org")
+        XCTAssertEqual(h1AttributedString.runs.first?.link?.host, "matrix.org")
+        XCTAssertEqual(h2AttributedString.runs.first?.link?.host, "matrix.org")
+        XCTAssertEqual(h3AttributedString.runs.first?.link?.host, "matrix.org")
     }
     
     func testRenderHTMLStringWithIFrame() {
