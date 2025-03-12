@@ -230,7 +230,7 @@ lane :release_to_github do
     repository_name: "element-hq/element-x-ios",
     api_token: api_token,
     name: release_version,
-    tag_name: release_version,
+    tag_name: "release/#{release_version}",
     is_generate_release_notes: true,
   )
   
