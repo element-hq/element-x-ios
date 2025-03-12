@@ -66,7 +66,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                                                                                       title: L10n.commonVoiceMessage,
                                                                                       duration: 0),
                                                               audioRecorderState: .init(),
-                                                              isRoomEncrypted: roomProxy.isEncrypted,
+                                                              isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted,
                                                               bindings: .init()),
                    mediaProvider: mediaProvider)
 

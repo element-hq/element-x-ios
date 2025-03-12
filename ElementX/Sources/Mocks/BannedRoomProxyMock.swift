@@ -29,6 +29,7 @@ extension BannedRoomProxyMock {
 extension RoomInfo {
     @MainActor init(_ configuration: BannedRoomProxyMockConfiguration) {
         self.init(id: configuration.id,
+                  encryptionState: .notEncrypted,
                   creator: nil,
                   displayName: configuration.name,
                   rawName: nil,

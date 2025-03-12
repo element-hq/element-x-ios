@@ -42,6 +42,7 @@ struct RoomInfoProxy: BaseRoomInfoProxyProtocol {
         return .room(id: id, name: displayName, avatarURL: avatarURL)
     }
 
+    var isEncrypted: Bool { roomInfo.encryptionState == .encrypted }
     var isDirect: Bool { roomInfo.isDirect }
     var isPublic: Bool { roomInfo.isPublic }
     var isSpace: Bool { roomInfo.isSpace }

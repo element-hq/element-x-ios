@@ -29,7 +29,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         self.userIndicatorController = userIndicatorController
         super.init(initialViewState: SecurityAndPrivacyScreenViewState(serverName: clientProxy.userIDServerName ?? "",
                                                                        accessType: roomProxy.infoPublisher.value.joinRule.toSecurityAndPrivacyRoomAccessType,
-                                                                       isEncryptionEnabled: roomProxy.isEncrypted,
+                                                                       isEncryptionEnabled: roomProxy.infoPublisher.value.isEncrypted,
                                                                        historyVisibility: roomProxy.infoPublisher.value.historyVisibility.toSecurityAndPrivacyHistoryVisibility))
         
         setupRoomDirectoryVisibility()

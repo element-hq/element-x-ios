@@ -63,8 +63,6 @@ enum KnockRequestsState {
 
 // sourcery: AutoMockable
 protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
-    var isEncrypted: Bool { get }
-    
     var infoPublisher: CurrentValuePublisher<RoomInfoProxy, Never> { get }
 
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> { get }
@@ -190,7 +188,7 @@ extension JoinedRoomProxyProtocol {
                     name: infoPublisher.value.displayName,
                     avatar: infoPublisher.value.avatar,
                     canonicalAlias: infoPublisher.value.canonicalAlias,
-                    isEncrypted: isEncrypted,
+                    isEncrypted: infoPublisher.value.isEncrypted,
                     isPublic: infoPublisher.value.isPublic,
                     isDirect: infoPublisher.value.isDirect)
     }
