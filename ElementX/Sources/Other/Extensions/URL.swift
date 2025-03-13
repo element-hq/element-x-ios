@@ -126,23 +126,26 @@ extension URL: @retroactive ExpressibleByStringLiteral {
 }
 
 struct ConfirmURLParameters {
+    static let internalURLKey = "internalURL"
+    static let displayStringKey = "displayString"
+    
     let internalURL: URL
-    let linkString: String
+    let displayString: String
     
     var urlQueryItems: [URLQueryItem] {
-        [URLQueryItem(name: "internalURL", value: internalURL.absoluteString),
-         URLQueryItem(name: "linkString", value: linkString)]
+        [URLQueryItem(name: Self.internalURLKey, value: internalURL.absoluteString),
+         URLQueryItem(name: Self.displayStringKey, value: displayString)]
     }
 }
 
 extension ConfirmURLParameters {
     init?(queryItems: [URLQueryItem]) {
-        guard let internalURLString = queryItems.first(where: { $0.name == "internalURL" })?.value,
+        guard let internalURLString = queryItems.first(where: { $0.name == Self.internalURLKey })?.value,
               let internalURL = URL(string: internalURLString),
-              let externalURLString = queryItems.first(where: { $0.name == "linkString" })?.value else {
+              let externalURLString = queryItems.first(where: { $0.name == Self.displayStringKey })?.value else {
             return nil
         }
-        linkString = externalURLString
+        displayString = externalURLString
         self.internalURL = internalURL
     }
 }

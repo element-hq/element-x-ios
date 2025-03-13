@@ -61,6 +61,10 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
         navigationRootCoordinator.toPresentable()
     }
     
+    func handlePotentialPhishingAttempt(url: URL, openURLAction: @escaping (URL) -> Void) -> Bool {
+        fatalError("Not implemented.")
+    }
+    
     func handleDeepLink(_ url: URL, isExternalURL: Bool) -> Bool {
         fatalError("Not implemented.")
     }

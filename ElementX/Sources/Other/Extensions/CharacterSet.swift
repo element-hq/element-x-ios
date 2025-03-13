@@ -28,4 +28,5 @@ extension CharacterSet {
     }()
     
     static let matrixUserIDAllowedCharacters = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz0123456789._=-/@:")
+    static let roomAliasAllowedCharacters = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz0123456789!$&‘()*+/;=?@[]-._:#")
 }
