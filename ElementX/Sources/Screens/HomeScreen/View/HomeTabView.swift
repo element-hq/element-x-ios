@@ -11,18 +11,21 @@ enum HomeTab: CaseIterable {
     case chat
     case channels
     case feed
+    case myFeed
     
     static func from(index: Int) -> HomeTab {
         return Self.allCases.indices.contains(index) ? Self.allCases[index] : .chat // by-default `chat` tab is selected
     }
 }
 
-struct HomeTabView<Content1: View, Content2: View, Content3: View>: View {
+struct HomeTabView<Content1: View, Content2: View, Content3: View, Content4: View>: View {
     @State private var selectedTab = 0
     
     let chatTabContent: Content1
     let homeTabContent: Content2
     let channelTabContent: Content3
+    let myFeedTabContent: Content4
+    
     let onTabSelected: (Int, HomeTab) -> Void
     
     private let tabs = [
@@ -40,16 +43,23 @@ struct HomeTabView<Content1: View, Content2: View, Content3: View>: View {
             title: "Feed",
             icon: Asset.Images.homeTabFeedIcon,
             selectedIcon: Asset.Images.homeTabFeedFillIcon
+        ),
+        (
+            title: "My Feed",
+            icon: Asset.Images.homeTabMyfeedIcon,
+            selectedIcon: Asset.Images.homeTabMyfeedFillIcon
         )
     ]
     
     init(@ViewBuilder chatTabContent: () -> Content1,
          @ViewBuilder homeTabContent: () -> Content2,
          @ViewBuilder channelTabContent: () -> Content3,
+         @ViewBuilder myFeedTabContent: () -> Content4,
          onTabSelected: @escaping (Int, HomeTab) -> Void) {
         self.chatTabContent = chatTabContent()
         self.homeTabContent = homeTabContent()
         self.channelTabContent = channelTabContent()
+        self.myFeedTabContent = myFeedTabContent()
         self.onTabSelected = onTabSelected
     }
     
@@ -62,6 +72,8 @@ struct HomeTabView<Content1: View, Content2: View, Content3: View>: View {
                     channelTabContent
                 case 2:
                     homeTabContent
+                case 3:
+                    myFeedTabContent
                 default:
                     chatTabContent
                 }

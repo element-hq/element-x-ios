@@ -9,7 +9,7 @@ import Alamofire
 import Foundation
 
 protocol ZeroPostsApiProtocol {
-    func fetchPosts(limit: Int, skip: Int) async throws -> Result<[ZPost], Error>
+    func fetchPosts(channelZId: String?, limit: Int, skip: Int) async throws -> Result<[ZPost], Error>
     func fetchPostDetails(postId: String) async throws -> Result<ZPost, Error>
     func fetchPostReplies(postId: String, limit: Int, skip: Int) async throws -> Result<[ZPost], Error>
     func addMeowsToPst(amount: Int, postId: String) async throws -> Result<ZPost, Error>
@@ -27,16 +27,21 @@ class ZeroPostsApi: ZeroPostsApiProtocol {
     
     // MARK: - Public
     
-    func fetchPosts(limit: Int = 10, skip: Int = 0) async throws -> Result<[ZPost], Error> {
+    func fetchPosts(channelZId: String?, limit: Int = 10, skip: Int = 0) async throws -> Result<[ZPost], Error> {
         let parameters: [String: Any] = [
             "limit": limit,
             "skip": skip,
             "include_replies": "true",
             "include_meows": "true"
         ]
+        let requestUrl = if let channel = channelZId {
+            FeedEndPoints.postsEndPoint.appending("/channel/\(channel)")
+        } else {
+            FeedEndPoints.postsEndPoint
+        }
         let result: Result<ZPosts, Error> = try await APIManager
             .shared
-            .authorisedRequest(FeedEndPoints.postsEndPoint,
+            .authorisedRequest(requestUrl,
                                method: .get,
                                appSettings: appSettings,
                                parameters: parameters,

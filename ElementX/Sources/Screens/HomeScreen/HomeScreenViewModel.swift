@@ -27,6 +27,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     
     private let HOME_SCREEN_POST_PAGE_COUNT = 10
     private var isFetchPostsInProgress = false
+    private var isFetchMyPostsInProgress = false
     
     private var channelRoomMap: [String: RoomSummary] = [:]
     
@@ -143,15 +144,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         
         updateRooms()
         
-        fetchPosts()
-        
-        fetchChannels()
-                
+        fetchZeroHomeScreenData()
+                                
         Task {
             await checkSlidingSyncMigration()
         }
-        
-        checkAndLinkZeroUser()
     }
     
     // MARK: - Public
@@ -230,10 +227,22 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             loadUserRewards()
         case .rewardsIntimated:
             dismissNewRewardsIntimation()
-        case .loadMorePostsIfNeeded:
-            fetchPosts()
-        case .forceRefreshPosts:
-            fetchPosts(isForceRefresh: true)
+        case .loadMorePostsIfNeeded(let forMyPosts):
+            Task {
+                if forMyPosts {
+                    await fetchMyPosts()
+                } else {
+                    await fetchPosts()
+                }
+            }
+        case .forceRefreshPosts(let forMyPosts):
+            Task {
+                if forMyPosts {
+                    await fetchMyPosts(isForceRefresh: true)
+                } else {
+                    await fetchPosts(isForceRefresh: true)
+                }
+            }
         case .postTapped(let post):
             actionsSubject.send(.postTapped(post, feedUpdatedProtocol: self))
         case .openArweaveLink(let post):
@@ -241,7 +250,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         case .addMeowToPost(let postId, let amount):
             addMeowToPost(postId, amount)
         case .forceRefreshChannels:
-            fetchChannels(isForceRefresh: true)
+            Task { await fetchChannels(isForceRefresh: true) }
         case .channelTapped(let channel):
             joinZeroChannel(channel)
         }
@@ -513,47 +522,99 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
     }
     
-    private func checkAndLinkZeroUser() {
-        userSession.clientProxy.checkAndLinkZeroUser()
+    private func fetchZeroHomeScreenData() {
+        Task {
+            _ = await (userSession.clientProxy.checkAndLinkZeroUser(),
+                       fetchChannels(),
+                       fetchPosts(),
+                       fetchMyPosts())
+        }
     }
     
-    private func fetchPosts(isForceRefresh: Bool = false) {
+    private func checkAndLinkZeroUser() async {
+        await userSession.clientProxy.checkAndLinkZeroUser()
+    }
+    
+    private func fetchPosts(isForceRefresh: Bool = false) async {
         guard !isFetchPostsInProgress else { return }
         isFetchPostsInProgress = true
         
-        Task {
-            defer { isFetchPostsInProgress = false } // Ensure flag is reset when the task completes
-            
-            state.postListMode = state.posts.isEmpty ? .skeletons : .posts
-            let skipItems = isForceRefresh ? 0 : state.posts.count
-            let postsResult = await userSession.clientProxy.fetchZeroFeeds(limit: HOME_SCREEN_POST_PAGE_COUNT,
-                                                                           skip: skipItems)
-            switch postsResult {
-            case .success(let posts):
-                let hasNoPosts = posts.isEmpty
-                if hasNoPosts {
-                    state.postListMode = state.posts.isEmpty ? .empty : .posts
-                    state.canLoadMorePosts = false
-                } else {
-                    var homePosts: [HomeScreenPost] = isForceRefresh ? [] : state.posts
-                    for post in posts {
-                        let homePost = HomeScreenPost(loggedInUserId: userSession.clientProxy.userID,
-                                                      post: post,
-                                                      rewardsDecimalPlaces: state.userRewards.decimals)
-                        homePosts.append(homePost)
-                    }
-                    state.posts = homePosts.uniqued(on: \.id)
-                    state.postListMode = .posts
-                }
-            case .failure(let error):
-                MXLog.error("Failed to fetch zero posts: \(error)")
+        defer { isFetchPostsInProgress = false } // Ensure flag is reset when the task completes
+        
+        state.postListMode = state.posts.isEmpty ? .skeletons : .posts
+        let skipItems = isForceRefresh ? 0 : state.posts.count
+        let postsResult = await userSession.clientProxy.fetchZeroFeeds(channelZId: nil,
+                                                                       limit: HOME_SCREEN_POST_PAGE_COUNT,
+                                                                       skip: skipItems)
+        switch postsResult {
+        case .success(let posts):
+            let hasNoPosts = posts.isEmpty
+            if hasNoPosts {
                 state.postListMode = state.posts.isEmpty ? .empty : .posts
-                switch error {
-                case .postsLimitReached:
-                    state.canLoadMorePosts = false
-                default:
-                    displayError()
+                state.canLoadMorePosts = false
+            } else {
+                var homePosts: [HomeScreenPost] = isForceRefresh ? [] : state.posts
+                for post in posts {
+                    let homePost = HomeScreenPost(loggedInUserId: userSession.clientProxy.userID,
+                                                  post: post,
+                                                  rewardsDecimalPlaces: state.userRewards.decimals)
+                    homePosts.append(homePost)
                 }
+                state.posts = homePosts.uniqued(on: \.id)
+                state.postListMode = .posts
+            }
+        case .failure(let error):
+            MXLog.error("Failed to fetch zero posts: \(error)")
+            state.postListMode = state.posts.isEmpty ? .empty : .posts
+            switch error {
+            case .postsLimitReached:
+                state.canLoadMorePosts = false
+            default:
+                displayError()
+            }
+        }
+    }
+    
+    private func fetchMyPosts(isForceRefresh: Bool = false) async {
+        guard let primaryZeroId = state.primaryZeroId?.replacingOccurrences(of: ZeroContants.ZERO_CHANNEL_PREFIX, with: "") else {
+            state.myPostListMode = .empty
+            return
+        }
+        guard !isFetchMyPostsInProgress else { return }
+        isFetchMyPostsInProgress = true
+        
+        defer { isFetchMyPostsInProgress = false } // Ensure flag is reset when the task completes
+        
+        state.myPostListMode = state.myPosts.isEmpty ? .skeletons : .posts
+        let skipItems = isForceRefresh ? 0 : state.myPosts.count
+        let postsResult = await userSession.clientProxy.fetchZeroFeeds(channelZId: primaryZeroId,
+                                                                       limit: HOME_SCREEN_POST_PAGE_COUNT,
+                                                                       skip: skipItems)
+        switch postsResult {
+        case .success(let posts):
+            let hasNoPosts = posts.isEmpty
+            if hasNoPosts {
+                state.myPostListMode = state.myPosts.isEmpty ? .empty : .posts
+                state.canLoadMoreMyPosts = false
+            } else {
+                var homePosts: [HomeScreenPost] = isForceRefresh ? [] : state.myPosts
+                for post in posts {
+                    let homePost = HomeScreenPost(loggedInUserId: userSession.clientProxy.userID,
+                                                  post: post,
+                                                  rewardsDecimalPlaces: state.userRewards.decimals)
+                    homePosts.append(homePost)
+                }
+                state.myPosts = homePosts.uniqued(on: \.id)
+                state.myPostListMode = .posts
+            }
+        case .failure(let error):
+            MXLog.error("Failed to fetch zero posts: \(error)")
+            state.myPostListMode = state.myPosts.isEmpty ? .empty : .posts
+            switch error {
+            case .postsLimitReached:
+                state.canLoadMoreMyPosts = false
+            default:
+                displayError()
             }
         }
     }
@@ -585,25 +646,23 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
     }
     
-    private func fetchChannels(isForceRefresh: Bool = false) {
-        Task {
-            state.channelsListMode = .skeletons
-            let channelsResult = await userSession.clientProxy.fetchUserZIds()
-            switch channelsResult {
-            case .success(let zIds):
-                if zIds.isEmpty {
-                    state.channelsListMode = .empty
-                } else {
-                    let mappedChannels = zIds.sorted().map { HomeScreenChannel(channelZId: $0) }
-                    state.channels = mappedChannels.uniqued(on: \.id)
-                    state.channelsListMode = .channels
-                    mapChannelsToRoom()
-                }
-            case .failure(let error):
+    private func fetchChannels(isForceRefresh: Bool = false) async {
+        state.channelsListMode = .skeletons
+        let channelsResult = await userSession.clientProxy.fetchUserZIds()
+        switch channelsResult {
+        case .success(let zIds):
+            if zIds.isEmpty {
                 state.channelsListMode = .empty
-                MXLog.error("Failed to fetch channels: \(error)")
-                displayError()
+            } else {
+                let mappedChannels = zIds.sorted().map { HomeScreenChannel(channelZId: $0) }
+                state.channels = mappedChannels.uniqued(on: \.id)
+                state.channelsListMode = .channels
+                mapChannelsToRoom()
             }
+        case .failure(let error):
+            state.channelsListMode = .empty
+            MXLog.error("Failed to fetch channels: \(error)")
+            displayError()
         }
     }
     
@@ -677,6 +736,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     }
     
     func onNewFeedPosted() {
-        fetchPosts(isForceRefresh: true)
+        Task {
+            await (fetchPosts(isForceRefresh: true),
+                   fetchMyPosts(isForceRefresh: true))
+        }
     }
 }

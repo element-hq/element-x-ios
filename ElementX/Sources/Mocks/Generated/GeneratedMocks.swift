@@ -5678,23 +5678,23 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var checkAndLinkZeroUserCalled: Bool {
         return checkAndLinkZeroUserCallsCount > 0
     }
-    var checkAndLinkZeroUserClosure: (() -> Void)?
+    var checkAndLinkZeroUserClosure: (() async -> Void)?
 
-    func checkAndLinkZeroUser() {
+    func checkAndLinkZeroUser() async {
         checkAndLinkZeroUserCallsCount += 1
-        checkAndLinkZeroUserClosure?()
+        await checkAndLinkZeroUserClosure?()
     }
     //MARK: - fetchZeroFeeds
 
-    var fetchZeroFeedsLimitSkipUnderlyingCallsCount = 0
-    var fetchZeroFeedsLimitSkipCallsCount: Int {
+    var fetchZeroFeedsChannelZIdLimitSkipUnderlyingCallsCount = 0
+    var fetchZeroFeedsChannelZIdLimitSkipCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return fetchZeroFeedsLimitSkipUnderlyingCallsCount
+                return fetchZeroFeedsChannelZIdLimitSkipUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = fetchZeroFeedsLimitSkipUnderlyingCallsCount
+                    returnValue = fetchZeroFeedsChannelZIdLimitSkipUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -5702,29 +5702,29 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                fetchZeroFeedsLimitSkipUnderlyingCallsCount = newValue
+                fetchZeroFeedsChannelZIdLimitSkipUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    fetchZeroFeedsLimitSkipUnderlyingCallsCount = newValue
+                    fetchZeroFeedsChannelZIdLimitSkipUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var fetchZeroFeedsLimitSkipCalled: Bool {
-        return fetchZeroFeedsLimitSkipCallsCount > 0
+    var fetchZeroFeedsChannelZIdLimitSkipCalled: Bool {
+        return fetchZeroFeedsChannelZIdLimitSkipCallsCount > 0
     }
-    var fetchZeroFeedsLimitSkipReceivedArguments: (limit: Int, skip: Int)?
-    var fetchZeroFeedsLimitSkipReceivedInvocations: [(limit: Int, skip: Int)] = []
+    var fetchZeroFeedsChannelZIdLimitSkipReceivedArguments: (channelZId: String?, limit: Int, skip: Int)?
+    var fetchZeroFeedsChannelZIdLimitSkipReceivedInvocations: [(channelZId: String?, limit: Int, skip: Int)] = []
 
-    var fetchZeroFeedsLimitSkipUnderlyingReturnValue: Result<[ZPost], ClientProxyError>!
-    var fetchZeroFeedsLimitSkipReturnValue: Result<[ZPost], ClientProxyError>! {
+    var fetchZeroFeedsChannelZIdLimitSkipUnderlyingReturnValue: Result<[ZPost], ClientProxyError>!
+    var fetchZeroFeedsChannelZIdLimitSkipReturnValue: Result<[ZPost], ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return fetchZeroFeedsLimitSkipUnderlyingReturnValue
+                return fetchZeroFeedsChannelZIdLimitSkipUnderlyingReturnValue
             } else {
                 var returnValue: Result<[ZPost], ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = fetchZeroFeedsLimitSkipUnderlyingReturnValue
+                    returnValue = fetchZeroFeedsChannelZIdLimitSkipUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -5732,26 +5732,26 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                fetchZeroFeedsLimitSkipUnderlyingReturnValue = newValue
+                fetchZeroFeedsChannelZIdLimitSkipUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    fetchZeroFeedsLimitSkipUnderlyingReturnValue = newValue
+                    fetchZeroFeedsChannelZIdLimitSkipUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var fetchZeroFeedsLimitSkipClosure: ((Int, Int) async -> Result<[ZPost], ClientProxyError>)?
+    var fetchZeroFeedsChannelZIdLimitSkipClosure: ((String?, Int, Int) async -> Result<[ZPost], ClientProxyError>)?
 
-    func fetchZeroFeeds(limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
-        fetchZeroFeedsLimitSkipCallsCount += 1
-        fetchZeroFeedsLimitSkipReceivedArguments = (limit: limit, skip: skip)
+    func fetchZeroFeeds(channelZId: String?, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
+        fetchZeroFeedsChannelZIdLimitSkipCallsCount += 1
+        fetchZeroFeedsChannelZIdLimitSkipReceivedArguments = (channelZId: channelZId, limit: limit, skip: skip)
         DispatchQueue.main.async {
-            self.fetchZeroFeedsLimitSkipReceivedInvocations.append((limit: limit, skip: skip))
+            self.fetchZeroFeedsChannelZIdLimitSkipReceivedInvocations.append((channelZId: channelZId, limit: limit, skip: skip))
         }
-        if let fetchZeroFeedsLimitSkipClosure = fetchZeroFeedsLimitSkipClosure {
-            return await fetchZeroFeedsLimitSkipClosure(limit, skip)
+        if let fetchZeroFeedsChannelZIdLimitSkipClosure = fetchZeroFeedsChannelZIdLimitSkipClosure {
+            return await fetchZeroFeedsChannelZIdLimitSkipClosure(channelZId, limit, skip)
         } else {
-            return fetchZeroFeedsLimitSkipReturnValue
+            return fetchZeroFeedsChannelZIdLimitSkipReturnValue
         }
     }
     //MARK: - fetchFeedDetails
