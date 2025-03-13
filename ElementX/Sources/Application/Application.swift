@@ -11,7 +11,6 @@ import SwiftUI
 struct Application: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @Environment(\.openURL) private var openURL
-    @State private var alert: AlertInfo<ApplicationAlertType>?
     
     private var appCoordinator: AppCoordinatorProtocol!
 
@@ -36,20 +35,16 @@ struct Application: App {
                         return .handled
                     }
                     
-                    if let confirmationParameters = url.confirmationParameters {
-                        alert = .init(id: .confirmURL,
-                                      title: "Test",
-                                      message: "Test",
-                                      primaryButton: .init(title: "Confirm") { openURL(confirmationParameters.internalURL) },
-                                      secondaryButton: .init(title: L10n.actionCancel, action: nil))
-                        
+                    if appCoordinator.handlePotentialPhishingAttempt(url: url, openURLAction: { url in
+                        openURL(url, isExternalURL: false)
+                    }) {
                         return .handled
                     }
 
                     return .systemAction
                 })
                 .onOpenURL { url in
-                    openURL(url)
+                    openURL(url, isExternalURL: true)
                 }
                 .onContinueUserActivity("INStartVideoCallIntent") { userActivity in
                     // `INStartVideoCallIntent` is to be replaced with `INStartCallIntent`
@@ -59,14 +54,13 @@ struct Application: App {
                 .task {
                     appCoordinator.start()
                 }
-                .alert(item: $alert)
         }
     }
     
     // MARK: - Private
     
-    private func openURL(_ url: URL) {
-        if !appCoordinator.handleDeepLink(url, isExternalURL: true) {
+    private func openURL(_ url: URL, isExternalURL: Bool) {
+        if !appCoordinator.handleDeepLink(url, isExternalURL: isExternalURL) {
             openURLInSystemBrowser(url)
         }
     }
@@ -96,8 +90,4 @@ struct Application: App {
         
         openURL(url)
     }
-}
-
-enum ApplicationAlertType {
-    case confirmURL
 }

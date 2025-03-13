@@ -195,6 +195,19 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         )
     }
     
+    func handlePotentialPhishingAttempt(url: URL, openURLAction: @escaping (URL) -> Void) -> Bool {
+        guard let confirmationParameters = url.confirmationParameters else {
+            return false
+        }
+        ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                        title: L10n.dialogConfirmLinkTitle,
+                                                                        message: L10n.dialogConfirmLinkMessage(confirmationParameters.displayString,
+                                                                                                               confirmationParameters.internalURL.absoluteString),
+                                                                        primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                                                        secondaryButton: .init(title: L10n.actionContinue) { openURLAction(confirmationParameters.internalURL) })
+        return true
+    }
+
     func handleDeepLink(_ url: URL, isExternalURL: Bool) -> Bool {
         // Parse into an AppRoute to redirect these in a type safe way.
         
