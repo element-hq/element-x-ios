@@ -35,6 +35,9 @@ struct HomeScreen: View {
             channelTabContent: {
                 HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
             },
+            myFeedTabContent: {
+                HomeMyPostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+            },
             onTabSelected: { _, tab in
                 selectedTab = tab
             }
@@ -195,7 +198,7 @@ struct HomeScreen: View {
             switch selectedTab {
             case .chat:
                 newRoomButton
-            case .feed:
+            case .feed, .myFeed:
                 newFeedButton
             default:
                 EmptyView()

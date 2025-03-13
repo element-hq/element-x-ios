@@ -47,7 +47,7 @@ struct HomePostsContent: View {
                             ProgressView()
                                 .padding()
                                 .onAppear {
-                                    context.send(viewAction: .loadMorePostsIfNeeded)
+                                    context.send(viewAction: .loadMorePostsIfNeeded(false))
                                 }
                         }
                     }
@@ -63,7 +63,7 @@ struct HomePostsContent: View {
             .animation(.elementDefault, value: context.viewState.postListMode)
             .animation(.none, value: context.viewState.visiblePosts)
             .refreshable {
-                context.send(viewAction: .forceRefreshPosts)
+                context.send(viewAction: .forceRefreshPosts(false))
             }
         }
     }

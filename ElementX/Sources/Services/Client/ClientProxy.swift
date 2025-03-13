@@ -964,27 +964,25 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func checkAndLinkZeroUser() {
-        Task {
-            do {
-                guard let currentUser = try await fetchZeroCurrentUser() else { return }
-                if currentUser.matrixId == nil {
-                    _ = try await zeroApiProxy.createAccountApi.linkMatrixUserToZero(matrixUserId: userID)
-                }
-                let thirdWebWalletAddress = currentUser.wallets?.first(where: { $0.isThirdWeb })
-                if thirdWebWalletAddress == nil {
-                    _ = try await zeroApiProxy.walletsApi.initializeThirdWebWallet()
-                    _ = try await fetchZeroCurrentUser()
-                }
-            } catch {
-                MXLog.error("Failed linking matrixId to zero user. Error: \(error)")
+    func checkAndLinkZeroUser() async {
+        do {
+            guard let currentUser = try await fetchZeroCurrentUser() else { return }
+            if currentUser.matrixId == nil {
+                _ = try await zeroApiProxy.createAccountApi.linkMatrixUserToZero(matrixUserId: userID)
             }
+            let thirdWebWalletAddress = currentUser.wallets?.first(where: { $0.isThirdWeb })
+            if thirdWebWalletAddress == nil {
+                _ = try await zeroApiProxy.walletsApi.initializeThirdWebWallet()
+                _ = try await fetchZeroCurrentUser()
+            }
+        } catch {
+            MXLog.error("Failed linking matrixId to zero user. Error: \(error)")
         }
     }
     
-    func fetchZeroFeeds(limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
+    func fetchZeroFeeds(channelZId: String?, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
         do {
-            let zeroPostsResult = try await zeroApiProxy.postsApi.fetchPosts(limit: limit, skip: skip)
+            let zeroPostsResult = try await zeroApiProxy.postsApi.fetchPosts(channelZId: channelZId, limit: limit, skip: skip)
             switch zeroPostsResult {
             case .success(let posts):
                 return .success(posts)

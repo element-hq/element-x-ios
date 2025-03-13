@@ -51,8 +51,8 @@ enum HomeScreenViewAction {
     case loadRewards
     case rewardsIntimated
     
-    case loadMorePostsIfNeeded
-    case forceRefreshPosts
+    case loadMorePostsIfNeeded(_ forMyPostsTab: Bool)
+    case forceRefreshPosts(_ forMyPostsTab: Bool)
     case addMeowToPost(postId: String, amount: Int)
     
     case postTapped(_ post: HomeScreenPost)
@@ -145,13 +145,16 @@ struct HomeScreenViewState: BindableState {
         
     var rooms: [HomeScreenRoom] = []
     var posts: [HomeScreenPost] = []
+    var myPosts: [HomeScreenPost] = []
     var channels: [HomeScreenChannel] = []
     
     var roomListMode: HomeScreenRoomListMode = .skeletons
     var postListMode: HomeScreenPostListMode = .skeletons
+    var myPostListMode: HomeScreenPostListMode = .skeletons
     var channelsListMode: HomeScreenChannelListMode = .skeletons
     
     var canLoadMorePosts: Bool = true
+    var canLoadMoreMyPosts: Bool = true
     
     var hasPendingInvitations = false
         
@@ -170,6 +173,13 @@ struct HomeScreenViewState: BindableState {
         }
         
         return posts
+    }
+    var visibleMyPosts: [HomeScreenPost] {
+        if myPostListMode == .skeletons {
+            return placeholderPosts
+        }
+        
+        return myPosts
     }
     var visibleChannels: [HomeScreenChannel] {
         if channelsListMode == .skeletons {
