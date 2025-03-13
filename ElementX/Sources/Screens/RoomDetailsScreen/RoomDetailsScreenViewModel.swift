@@ -208,13 +208,18 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     }
     
     private func updateRoomInfo(_ roomInfo: RoomInfoProxy) {
+        state.isEncrypted = roomInfo.isEncrypted
+        state.isDirect = roomInfo.isDirect
+        state.bindings.isFavourite = roomInfo.isFavourite
+        
+        state.joinedMembersCount = roomInfo.joinedMembersCount
+        
         state.details = roomProxy.details
         
         let topic = attributedStringBuilder.fromPlain(roomInfo.topic)
         state.topic = topic
         state.topicSummary = topic?.unattributedStringByReplacingNewlinesWithSpaces()
-        state.joinedMembersCount = roomInfo.joinedMembersCount
-        state.bindings.isFavourite = roomInfo.isFavourite
+        
         switch roomInfo.joinRule {
         case .knock, .knockRestricted:
             state.isKnockableRoom = true
