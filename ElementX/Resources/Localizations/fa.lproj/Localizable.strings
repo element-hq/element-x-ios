@@ -139,7 +139,9 @@
 "common_chat_backup" = "پشتیبان گپ";
 "common_copyright" = "حق رونوشت";
 "common_creating_room" = "ایجاد کردن اتاق…";
+"common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "اتاق را ترک کرد";
+"common_current_user_rejected_invite" = "Invite declined";
 "common_dark" = "تیره";
 "common_date_date_at_time" = "%1$@ at %2$@";
 "common_date_this_month" = "This month";
@@ -355,6 +357,7 @@
 "rich_text_editor_code_block" = "تغییر حالت بلوک کد";
 "rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "پیام…";
+"rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
 "rich_text_editor_create_link" = "ایجاد پیوند";
 "rich_text_editor_edit_link" = "ویرایش پیوند";
 "rich_text_editor_format_bold" = "اعمال قالب توپر";
@@ -936,7 +939,6 @@
 "screen_roomlist_main_space_title" = "گپ‌ها";
 "screen_roomlist_mark_as_read" = "علامت‌گذاری به عنوان خوانده شده";
 "screen_roomlist_mark_as_unread" = "نشان به ناخوانده";
-"screen_roomlist_room_directory_button_title" = "مرور همهٔ اتاق‌ها";
 "screen_server_confirmation_message_login_element_dot_io" = "A private server for Element employees.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "ماتریکس شبکه‌ای بار برای ارتباطات نامتمرکز و امن است.";
 "screen_server_confirmation_message_register" = "جایی که گفت‌وگوهایتان خواهند زیست — درست مثل استفاده‌تان از فراهم کنندهٔ رایانامه‌ای برای نگه داشتن رایانامه‌هایتان.";

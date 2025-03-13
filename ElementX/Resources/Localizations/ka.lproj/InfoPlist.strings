@@ -1,5 +1,5 @@
-"NSCameraUsageDescription" = "To take pictures or videos and send them as a message Element X needs access to the camera.";
-"NSFaceIDUsageDescription" = "Face ID is used to access your app.";
-"NSLocationWhenInUseUsageDescription" = "Grant location access so that Element X can share your location.";
-"NSMicrophoneUsageDescription" = "To record and send messages with audio, Element X needs to access the microphone.";
-"NSPhotoLibraryUsageDescription" = "This lets you save images and videos to your photo library.";
+"NSCameraUsageDescription" = "სურათის ან ვიდეოს გადასაღებად და შემდგომ გასაგზავნად Element X კამერასთან წვდომა სჭირდება.";
+"NSFaceIDUsageDescription" = "Face ID გამოიყენება თქვენს აპლიკაციასთან წვდომისათვის.";
+"NSLocationWhenInUseUsageDescription" = "მიანიჭეთ Element X-ს წვდომა ადგილმდებარეობასთან მისი გასაზიარებლად";
+"NSMicrophoneUsageDescription" = "ხმოვანი შეტყობინების გასაგზავნად Element X-ს თქვენს მიკროფონთან წვდომა სჭირდება.";
+"NSPhotoLibraryUsageDescription" = "ეს გაძლევთ საშუალებას, შეინახოთ სურათები და ვიდეოები თქვენს ფოტო ბიბლიოთეკაში.";

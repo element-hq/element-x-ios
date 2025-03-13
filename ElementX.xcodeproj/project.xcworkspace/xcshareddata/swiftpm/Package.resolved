@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-design-tokens",
       "state" : {
-        "revision" : "3e3f83f61ad48acc8532636a773ccdeafd3834fe",
-        "version" : "4.0.0"
+        "revision" : "45818d8a7183a6838414791de50fbcea6a49100c",
+        "version" : "4.0.1"
       }
     },
     {
@@ -33,7 +33,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-ios",
       "state" : {
-        "revision" : "5af528a2925816ab0ee1945c6321e7c476baca8a"
+        "revision" : "978a953fac36472b772dbd38263ebc81b96bfdce"
       }
     },
     {
@@ -257,8 +257,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa",
       "state" : {
-        "revision" : "5a601a24aa1b3fb29fcdb824633f050e08257e92",
-        "version" : "8.30.1"
+        "revision" : "0e1a296df619339f5f1a7349b4cfe31fb221a031",
+        "version" : "8.35.1"
       }
     },
     {

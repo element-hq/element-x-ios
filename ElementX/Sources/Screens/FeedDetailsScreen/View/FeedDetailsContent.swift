@@ -108,6 +108,7 @@ struct FeedDetailsContent: View {
                 }
             
             Button {
+                isPostTextFieldFocused = false
                 context.send(viewAction: .postReply)
             } label: {
                 CompoundIcon(\.sendSolid)

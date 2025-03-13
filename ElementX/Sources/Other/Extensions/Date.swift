@@ -41,7 +41,7 @@ extension Date {
     func timeAgo() -> String {
         let seconds = Int(Date().timeIntervalSince(self))
         
-        if seconds < 0 { return "Just now" }
+        if seconds <= 0 { return "Just now" }
         
         if seconds < 60 { return "\(seconds)s ago" }
         

@@ -139,7 +139,9 @@
 "common_chat_backup" = "Chat back-up";
 "common_copyright" = "Copyright";
 "common_creating_room" = "Kamer maken...";
+"common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "Heeft de kamer verlaten";
+"common_current_user_rejected_invite" = "Invite declined";
 "common_dark" = "Donker";
 "common_date_date_at_time" = "%1$@ at %2$@";
 "common_date_this_month" = "This month";
@@ -355,6 +357,7 @@
 "rich_text_editor_code_block" = "Codeblok in-/uitschakelen";
 "rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Bericht...";
+"rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
 "rich_text_editor_create_link" = "Maak een link";
 "rich_text_editor_edit_link" = "Link bewerken";
 "rich_text_editor_format_bold" = "Vetgedrukte opmaak toepassen";
@@ -936,7 +939,6 @@
 "screen_roomlist_main_space_title" = "Chats";
 "screen_roomlist_mark_as_read" = "Markeren als gelezen";
 "screen_roomlist_mark_as_unread" = "Markeren als ongelezen";
-"screen_roomlist_room_directory_button_title" = "Blader door alle kamers";
 "screen_server_confirmation_message_login_element_dot_io" = "Een privéserver voor medewerkers van Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix is een open netwerk voor veilige, gedecentraliseerde communicatie.";
 "screen_server_confirmation_message_register" = "Dit is waar je gesprekken zullen worden bewaard — net zoals je een e-mailprovider zou gebruiken om je e-mails te bewaren.";

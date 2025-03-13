@@ -139,7 +139,9 @@
 "common_chat_backup" = "聊天记录备份";
 "common_copyright" = "版权";
 "common_creating_room" = "正在创建聊天室...";
+"common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "离开聊天室";
+"common_current_user_rejected_invite" = "Invite declined";
 "common_dark" = "深色";
 "common_date_date_at_time" = "%1$@在 %2$@";
 "common_date_this_month" = "本月";
@@ -355,6 +357,7 @@
 "rich_text_editor_code_block" = "切换代码块";
 "rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "消息...";
+"rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
 "rich_text_editor_create_link" = "创建链接";
 "rich_text_editor_edit_link" = "编辑链接";
 "rich_text_editor_format_bold" = "应用粗体格式";
@@ -936,7 +939,6 @@
 "screen_roomlist_main_space_title" = "全部聊天";
 "screen_roomlist_mark_as_read" = "标记为已读";
 "screen_roomlist_mark_as_unread" = "标记为未读";
-"screen_roomlist_room_directory_button_title" = "浏览所有聊天室";
 "screen_server_confirmation_message_login_element_dot_io" = "专为 Element 员工提供的私人服务器。";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix 是一个用于安全、去中心化通信的开放网络。";
 "screen_server_confirmation_message_register" = "这是您的对话将存在的地方，就像您使用电子邮件提供方来保存电子邮件一样。";

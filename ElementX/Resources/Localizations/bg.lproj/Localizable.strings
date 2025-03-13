@@ -139,7 +139,9 @@
 "common_chat_backup" = "Резервно копие на чатовете";
 "common_copyright" = "Copyright";
 "common_creating_room" = "Създаване на стая…";
+"common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "Left room";
+"common_current_user_rejected_invite" = "Invite declined";
 "common_dark" = "Тъмен";
 "common_date_date_at_time" = "%1$@ at %2$@";
 "common_date_this_month" = "This month";
@@ -355,6 +357,7 @@
 "rich_text_editor_code_block" = "Toggle code block";
 "rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Съобщение…";
+"rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
 "rich_text_editor_create_link" = "Създаване на връзка";
 "rich_text_editor_edit_link" = "Редактиране на връзката";
 "rich_text_editor_format_bold" = "Прилагане на удебелен формат";
@@ -936,7 +939,6 @@
 "screen_roomlist_main_space_title" = "Всички чатове";
 "screen_roomlist_mark_as_read" = "Отбелязване като прочетено";
 "screen_roomlist_mark_as_unread" = "Отбелязване като непрочетено";
-"screen_roomlist_room_directory_button_title" = "Browse all rooms";
 "screen_server_confirmation_message_login_element_dot_io" = "A private server for Element employees.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix е отворена мрежа за сигурна, децентрализирана комуникация.";
 "screen_server_confirmation_message_register" = "Това е мястото, където ще живеят вашите разговори — точно както бихте използвали имейл доставчик, за да съхранявате вашите имейли.";

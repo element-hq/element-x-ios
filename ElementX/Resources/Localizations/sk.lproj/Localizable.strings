@@ -139,7 +139,9 @@
 "common_chat_backup" = "Záloha konverzácie";
 "common_copyright" = "Autorské práva";
 "common_creating_room" = "Vytváranie miestnosti...";
+"common_current_user_canceled_knock" = "Žiadosť bola zrušená";
 "common_current_user_left_room" = "Opustil/a miestnosť";
+"common_current_user_rejected_invite" = "Pozvánka bola odmietnutá";
 "common_dark" = "Tmavý";
 "common_date_date_at_time" = "%1$@ o %2$@";
 "common_date_this_month" = "Tento mesiac";
@@ -355,6 +357,7 @@
 "rich_text_editor_code_block" = "Prepnúť blok kódu";
 "rich_text_editor_composer_encrypted_placeholder" = "Šifrovaná správa...";
 "rich_text_editor_composer_placeholder" = "Správa…";
+"rich_text_editor_composer_unencrypted_placeholder" = "Nešifrovaná správa...";
 "rich_text_editor_create_link" = "Vytvoriť odkaz";
 "rich_text_editor_edit_link" = "Upraviť odkaz";
 "rich_text_editor_format_bold" = "Použiť tučný formát";
@@ -936,7 +939,6 @@
 "screen_roomlist_main_space_title" = "Všetky konverzácie";
 "screen_roomlist_mark_as_read" = "Označiť ako prečítané";
 "screen_roomlist_mark_as_unread" = "Označiť ako neprečítané";
-"screen_roomlist_room_directory_button_title" = "Prehliadať všetky miestnosti";
 "screen_server_confirmation_message_login_element_dot_io" = "Súkromný server pre zamestnancov spoločnosti Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix je otvorená sieť pre bezpečnú a decentralizovanú komunikáciu.";
 "screen_server_confirmation_message_register" = "Tu budú žiť vaše konverzácie - podobne ako používate poskytovateľa e-mailových služieb na uchovávanie e-mailov.";
