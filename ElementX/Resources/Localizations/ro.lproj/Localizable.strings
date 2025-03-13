@@ -139,7 +139,9 @@
 "common_chat_backup" = "Backup conversații";
 "common_copyright" = "Drepturi de autor";
 "common_creating_room" = "Se creează camera…";
+"common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "Ați parăsit camera";
+"common_current_user_rejected_invite" = "Invite declined";
 "common_dark" = "Întunecat";
 "common_date_date_at_time" = "%1$@ at %2$@";
 "common_date_this_month" = "This month";
@@ -355,6 +357,7 @@
 "rich_text_editor_code_block" = "Comutați blocul de cod";
 "rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Mesaj…";
+"rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
 "rich_text_editor_create_link" = "Creați un link";
 "rich_text_editor_edit_link" = "Editați link-ul";
 "rich_text_editor_format_bold" = "Aplicați formatul aldin";
@@ -936,7 +939,6 @@
 "screen_roomlist_main_space_title" = "Toate conversatiile";
 "screen_roomlist_mark_as_read" = "Marcați ca citită";
 "screen_roomlist_mark_as_unread" = "Marcați ca necitită";
-"screen_roomlist_room_directory_button_title" = "Răsfoiți toate camerele";
 "screen_server_confirmation_message_login_element_dot_io" = "Un server privat pentru angajații Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix este o rețea deschisă pentru o comunicare sigură și descentralizată.";
 "screen_server_confirmation_message_register" = "Aici vor trăi conversațiile dvs. - la fel cum ați folosi un furnizor de e-mail pentru a vă păstra e-mailurile.";

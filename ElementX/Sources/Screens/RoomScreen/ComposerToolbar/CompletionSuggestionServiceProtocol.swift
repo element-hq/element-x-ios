@@ -69,7 +69,7 @@ struct SuggestionItem: Identifiable, Equatable {
     var subtitle: String? {
         switch suggestionType {
         case .allUsers:
-            return nil
+            return PillConstants.atRoom
         case .user(let user):
             return user.displayName == nil ? nil : user.id
         case .room(let room):

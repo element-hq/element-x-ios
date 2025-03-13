@@ -120,7 +120,7 @@
 "action_yes" = "Igen";
 "action_yes_try_again" = "Igen, újrapróbálkozás";
 "banner_migrate_to_native_sliding_sync_action" = "Kijelentkezés és frissítés";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
+"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ már nem támogatja a régi protokollt. Kérjük, jelentkezzen ki és jelentkezzen be újra az alkalmazás használatának folytatásához.";
 "banner_migrate_to_native_sliding_sync_description" = "A kiszolgálója mostantól egy új, gyorsabb protokollt támogat. A frissítéshez jelentkezzen ki, majd jelentkezzen be újra. Ha ezt most megteszi, elkerülheti a kényszerített kijelentkeztetést a régi protokollt eltávolításakor.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "A Matrix-kiszolgáló már nem támogatja a régi protokollt. Az alkalmazás további használatához jelentkezzen ki és be.";
 "banner_migrate_to_native_sliding_sync_title" = "Frissítés érhető el";
@@ -139,7 +139,9 @@
 "common_chat_backup" = "Csevegés biztonsági mentése";
 "common_copyright" = "Szerzői jogok";
 "common_creating_room" = "Szoba létrehozása…";
+"common_current_user_canceled_knock" = "Kérés megszakítva";
 "common_current_user_left_room" = "Elhagyta a szobát";
+"common_current_user_rejected_invite" = "Meghívás elutasítva";
 "common_dark" = "Sötét";
 "common_date_date_at_time" = "%1$@ itt: %2$@";
 "common_date_this_month" = "Ebben a hónapban";
@@ -353,8 +355,9 @@
 "rich_text_editor_bullet_list" = "Felsorolás be/ki";
 "rich_text_editor_close_formatting_options" = "Formázási beállítások bezárása";
 "rich_text_editor_code_block" = "Kódblokk be/ki";
-"rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
+"rich_text_editor_composer_encrypted_placeholder" = "Titkosított üzenet...";
 "rich_text_editor_composer_placeholder" = "Üzenet…";
+"rich_text_editor_composer_unencrypted_placeholder" = "Titkosítatlan üzenet…";
 "rich_text_editor_create_link" = "Hivatkozás létrehozása";
 "rich_text_editor_edit_link" = "Hivatkozás szerkesztése";
 "rich_text_editor_format_bold" = "Félkövér formátum alkalmazása";
@@ -445,7 +448,7 @@
 "screen_resolve_send_failure_unsigned_device_title" = "Az üzenet nem lett elküldve, mert %1$@ nem ellenőrizte az összes eszközét";
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Egy vagy több eszköze nincs ellenőrizve. Így is elküldheti az üzenetet, vagy egyelőre megszakíthatja, és később, az összes eszköz ellenőrzése után újrapróbálkozhat.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Az üzenet nem lett elküldve, mert egy vagy több eszközét nem ellenőrizte";
-"screen_room_event_pill" = "Message in %1$@";
+"screen_room_event_pill" = "Üzenet a következőben: %1$@";
 "screen_room_mentions_at_room_subtitle" = "Az egész szoba értesítése";
 "screen_room_multiple_knock_requests_view_all_button_title" = "Összes megtekintése";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";
@@ -480,12 +483,12 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Szoba közzététele";
 "screen_security_and_privacy_room_visibility_section_footer" = "A szobacímek a szobák megtalálásának és elérésnek módjai. Ez azt is biztosítja, hogy könnyen megoszthatja a szobáját másokkal.\nA cím szükséges ahhoz is, hogy a nyilvános szoba láthatóvá váljon a(z) %1$@ kiszolgáló nyilvános szobakatalógusában.";
 "screen_security_and_privacy_title" = "Biztonság és adatvédelem";
-"screen_start_chat_join_room_by_address_action" = "Join room by address";
-"screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
-"screen_start_chat_join_room_by_address_placeholder" = "Enter...";
-"screen_start_chat_join_room_by_address_room_found" = "Matching room found";
-"screen_start_chat_join_room_by_address_room_not_found" = "Room not found";
-"screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
+"screen_start_chat_join_room_by_address_action" = "Csatlakozás a szobához cím szerint";
+"screen_start_chat_join_room_by_address_invalid_address" = "Nem érvényes cím";
+"screen_start_chat_join_room_by_address_placeholder" = "Írja be...";
+"screen_start_chat_join_room_by_address_room_found" = "Megfelelő szoba található";
+"screen_start_chat_join_room_by_address_room_not_found" = "Szoba nem található";
+"screen_start_chat_join_room_by_address_supporting_text" = "pl. #szoba-neve:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Az üzenet nem lett elküldve, mert %1$@ ellenőrzött személyazonossága megváltozott.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Az üzenet nem lett elküldve, mert %1$@ nem ellenőrizte az összes eszközét.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Az üzenet nem lett elküldve, mert egy vagy több eszközét nem ellenőrizte.";
@@ -936,7 +939,6 @@
 "screen_roomlist_main_space_title" = "Összes csevegés";
 "screen_roomlist_mark_as_read" = "Megjelölés olvasottként";
 "screen_roomlist_mark_as_unread" = "Megjelölés olvasatlanként";
-"screen_roomlist_room_directory_button_title" = "Összes szoba böngészése";
 "screen_server_confirmation_message_login_element_dot_io" = "Egy privát kiszolgáló az Element alkalmazottai számára.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "A Matrix egy nyitott hálózat a biztonságos, decentralizált kommunikációhoz.";
 "screen_server_confirmation_message_register" = "Itt lesznek a beszélgetései – ahogyan egy e-mail-szolgáltatást is használna a levelei kezeléséhez.";

@@ -120,7 +120,7 @@
 "action_yes" = "Tak";
 "action_yes_try_again" = "Tak, spróbuj ponownie";
 "banner_migrate_to_native_sliding_sync_action" = "Wyloguj się i zaktualizuj";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
+"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ już nie wspiera starego protokołu. Zaloguj się ponownie, aby dalej korzystać z aplikacji.";
 "banner_migrate_to_native_sliding_sync_description" = "Twój serwer obsługuje teraz nowy, szybszy protokół. Wyloguj się i zaloguj ponownie, aby uaktualnić teraz. Zrobienie tego teraz pomoże uniknąć wymuszonego wylogowania, gdy stary protokół zostanie później usunięty.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Twój serwer domowy już nie wspiera starego protokołu. Zaloguj się ponownie, aby kontynuować korzystanie z aplikacji.";
 "banner_migrate_to_native_sliding_sync_title" = "Dostępna aktualizacja";
@@ -139,7 +139,9 @@
 "common_chat_backup" = "Backup czatu";
 "common_copyright" = "Prawa autorskie";
 "common_creating_room" = "Tworzenie pokoju...";
+"common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "Opuszczono pokój";
+"common_current_user_rejected_invite" = "Invite declined";
 "common_dark" = "Ciemny";
 "common_date_date_at_time" = "%1$@ o %2$@";
 "common_date_this_month" = "W tym miesiącu";
@@ -274,7 +276,7 @@
 "crypto_identity_change_pin_violation" = "Tożsamość %1$@ mogła ulec zmianie. %2$@";
 "crypto_identity_change_pin_violation_new" = "Wygląda na to, że tożsamość %1$@ %2$@ uległa zmianie. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
-"crypto_identity_change_profile_pin_violation" = "%1$@’s verified identity has changed.";
+"crypto_identity_change_profile_pin_violation" = "Zweryfikowana tożsamość %1$@ uległa zmianie";
 "crypto_identity_change_verification_violation_new" = "Zweryfikowana tożsamość %1$@ %2$@ uległa zmianie.  %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Wycofaj weryfikację";
 "dialog_permission_camera" = "Aby umożliwić aplikacji korzystanie z aparatu, prosimy o udzielenie zezwolenia w ustawieniach systemowych.";
@@ -355,6 +357,7 @@
 "rich_text_editor_code_block" = "Przełącz blok kodu";
 "rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Wiadomość...";
+"rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
 "rich_text_editor_create_link" = "Utwórz link";
 "rich_text_editor_edit_link" = "Edytuj link";
 "rich_text_editor_format_bold" = "Zastosuj pogrubienie";
@@ -445,7 +448,7 @@
 "screen_resolve_send_failure_unsigned_device_title" = "Twoja wiadomość nie została wysłana, ponieważ %1$@ nie zweryfikował swoich wszystkich urządzeń";
 "screen_resolve_send_failure_you_unsigned_device_subtitle" = "Jedno lub więcej z Twoich urządzeń jest niezweryfikowanych. Wyślij wiadomość mimo to lub anuluj i spróbuj ponownie po zweryfikowaniu wszystkich swoich urządzeń.";
 "screen_resolve_send_failure_you_unsigned_device_title" = "Twoja wiadomość nie została wysłana, ponieważ nie zweryfikowałeś jednego lub więcej swoich urządzeń.";
-"screen_room_event_pill" = "Message in %1$@";
+"screen_room_event_pill" = "Wiadomość w %1$@";
 "screen_room_mentions_at_room_subtitle" = "Powiadom cały pokój";
 "screen_room_multiple_knock_requests_view_all_button_title" = "Wyświetl wszystkie";
 "screen_room_pinned_banner_indicator" = "%1$@ z %2$@";
@@ -936,7 +939,6 @@
 "screen_roomlist_main_space_title" = "Wszystkie czaty";
 "screen_roomlist_mark_as_read" = "Oznacz jako przeczytane";
 "screen_roomlist_mark_as_unread" = "Oznacz jako nieprzeczytane";
-"screen_roomlist_room_directory_button_title" = "Przeglądaj wszystkie pokoje";
 "screen_server_confirmation_message_login_element_dot_io" = "Serwer prywatny dla pracowników Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix to otwarta sieć do bezpiecznej i zdecentralizowanej komunikacji.";
 "screen_server_confirmation_message_register" = "Tutaj będą przechowywane Twoje konwersacje - w podobnej formie jak wiadomości widnieją na skrzynce e-mail.";

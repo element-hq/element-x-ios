@@ -139,7 +139,9 @@
 "common_chat_backup" = "Αντίγραφο ασφαλείας συνομιλίας";
 "common_copyright" = "Πνευματικά δικαιώματα";
 "common_creating_room" = "Δημιουργία δωματίου...";
+"common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "Αποχώρησε από το δωμάτιο";
+"common_current_user_rejected_invite" = "Invite declined";
 "common_dark" = "Σκοτεινό";
 "common_date_date_at_time" = "%1$@ at %2$@";
 "common_date_this_month" = "Αυτό το μήνα";
@@ -355,6 +357,7 @@
 "rich_text_editor_code_block" = "Διακόπτης μπλοκ κώδικα";
 "rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Μήνυμα...";
+"rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
 "rich_text_editor_create_link" = "Δημιούργησε έναν σύνδεσμο";
 "rich_text_editor_edit_link" = "Επεξεργασία συνδέσμου";
 "rich_text_editor_format_bold" = "Εφαρμογή έντονης μορφής";
@@ -936,7 +939,6 @@
 "screen_roomlist_main_space_title" = "Συνομιλίες";
 "screen_roomlist_mark_as_read" = "Επισήμανση ως αναγνωσμένου";
 "screen_roomlist_mark_as_unread" = "Επισήμανση ως μη αναγνωσμένου";
-"screen_roomlist_room_directory_button_title" = "Περιήγηση σε όλα τα δωμάτια";
 "screen_server_confirmation_message_login_element_dot_io" = "Ένας ιδιωτικός διακομιστής για υπαλλήλους του Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Το Matrix είναι ένα ανοιχτό δίκτυο για ασφαλή, αποκεντρωμένη επικοινωνία.";
 "screen_server_confirmation_message_register" = "Εδώ θα ζουν οι συνομιλίες σου - όπως θα χρησιμοποιούσες έναν πάροχο email για να διατηρήσεις τα email σου.";

@@ -139,7 +139,9 @@
 "common_chat_backup" = "Резервная копия чатов";
 "common_copyright" = "Авторское право";
 "common_creating_room" = "Создание комнаты…";
+"common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "Покинул комнату";
+"common_current_user_rejected_invite" = "Invite declined";
 "common_dark" = "Тёмное";
 "common_date_date_at_time" = "%1$@ в %2$@";
 "common_date_this_month" = "В этом месяце";
@@ -355,6 +357,7 @@
 "rich_text_editor_code_block" = "Переключить блок кода";
 "rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Сообщение...";
+"rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
 "rich_text_editor_create_link" = "Создать ссылку";
 "rich_text_editor_edit_link" = "Редактировать ссылку";
 "rich_text_editor_format_bold" = "Применить жирный шрифт";
@@ -936,7 +939,6 @@
 "screen_roomlist_main_space_title" = "Все чаты";
 "screen_roomlist_mark_as_read" = "Пометить как прочитанное";
 "screen_roomlist_mark_as_unread" = "Отметить как непрочитанное";
-"screen_roomlist_room_directory_button_title" = "Просмотреть все комнаты";
 "screen_server_confirmation_message_login_element_dot_io" = "Частный сервер для сотрудников Element.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix — это открытая сеть для безопасной децентрализованной связи.";
 "screen_server_confirmation_message_register" = "Здесь будут храниться ваши разговоры — точно так же, как если бы вы использовали почтового провайдера для хранения своих писем.";

@@ -139,7 +139,9 @@
 "common_chat_backup" = "Chatning zaxira nusxasi";
 "common_copyright" = "Mualliflik huquqi";
 "common_creating_room" = "Xona yaratilmoqda…";
+"common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "Xonani tark etdi";
+"common_current_user_rejected_invite" = "Invite declined";
 "common_dark" = "Dark";
 "common_date_date_at_time" = "%1$@ at %2$@";
 "common_date_this_month" = "This month";
@@ -355,6 +357,7 @@
 "rich_text_editor_code_block" = "Kod blokini almashtirish";
 "rich_text_editor_composer_encrypted_placeholder" = "Encrypted message…";
 "rich_text_editor_composer_placeholder" = "Xabar…";
+"rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
 "rich_text_editor_create_link" = "Havola yarating";
 "rich_text_editor_edit_link" = "Havolani tahrirlash";
 "rich_text_editor_format_bold" = "Qalin formatni qo'llang";
@@ -936,7 +939,6 @@
 "screen_roomlist_main_space_title" = "Suhbatlar";
 "screen_roomlist_mark_as_read" = "Mark as read";
 "screen_roomlist_mark_as_unread" = "Mark as unread";
-"screen_roomlist_room_directory_button_title" = "Browse all rooms";
 "screen_server_confirmation_message_login_element_dot_io" = "Element xodimlari uchun shaxsiy server.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix xavfsiz, markazlashmagan aloqa uchun ochiq tarmoqdir.";
 "screen_server_confirmation_message_register" = "Bu sizning suhbatlaringiz yashaydigan joy - xuddi siz elektron pochta xabarlaringizni saqlash uchun elektron pochta provayderidan foydalanganingiz kabi.";
