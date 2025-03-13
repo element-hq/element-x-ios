@@ -100,10 +100,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     var ownUserID: String { room.ownUserId() }
     var info: RoomInfoProxy { infoSubject.value }
     
-    var isEncrypted: Bool {
-        (try? room.isEncrypted()) ?? false
-    }
-    
     init(roomListService: RoomListServiceProtocol,
          roomListItem: RoomListItemProtocol,
          room: RoomProtocol) async throws {
@@ -116,6 +112,14 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         
         Task {
             await updateMembers()
+            
+            // Try to update the encryption state if it's unknown.
+            // This is an edge case as sliding sync should pass
+            // that information down to the room info on the rust side.
+            if room.encryptionState() == .unknown {
+                MXLog.error("The encryption state should almost always be known.")
+                _ = try? await room.latestEncryptionState()
+            }
         }
     }
     
@@ -142,7 +146,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             
             await subscribeToKnockRequests()
             
-            if isEncrypted { // This is actually blocking on the rust side and might make network requests
+            if infoPublisher.value.isEncrypted {
                 subscribeToIdentityStatusChanges()
             }
         }

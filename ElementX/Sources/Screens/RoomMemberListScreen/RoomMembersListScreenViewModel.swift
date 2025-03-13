@@ -120,7 +120,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             
             for member in members {
                 var verificationState: UserIdentityVerificationState = .notVerified
-                if roomProxy.isEncrypted, // We don't care about identity statuses on non-encrypted rooms
+                if roomProxy.infoPublisher.value.isEncrypted, // We don't care about identity statuses on non-encrypted rooms
                    case let .success(userIdentity) = await clientProxy.userIdentity(for: member.userID),
                    let userIdentity {
                     verificationState = userIdentity.verificationState

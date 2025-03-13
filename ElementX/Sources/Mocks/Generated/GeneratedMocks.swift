@@ -6212,11 +6212,6 @@ class InvitedRoomProxyMock: InvitedRoomProxyProtocol, @unchecked Sendable {
     }
 }
 class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
-    var isEncrypted: Bool {
-        get { return underlyingIsEncrypted }
-        set(value) { underlyingIsEncrypted = value }
-    }
-    var underlyingIsEncrypted: Bool!
     var infoPublisher: CurrentValuePublisher<RoomInfoProxy, Never> {
         get { return underlyingInfoPublisher }
         set(value) { underlyingInfoPublisher = value }

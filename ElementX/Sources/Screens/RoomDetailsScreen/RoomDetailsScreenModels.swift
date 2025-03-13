@@ -38,8 +38,8 @@ struct DMRecipientInfo {
 struct RoomDetailsScreenViewState: BindableState {
     var details: RoomDetails
     
-    let isEncrypted: Bool
-    let isDirect: Bool
+    var isEncrypted: Bool
+    var isDirect: Bool
     var permalink: URL?
 
     var topic: AttributedString?

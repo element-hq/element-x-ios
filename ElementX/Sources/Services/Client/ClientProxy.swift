@@ -148,7 +148,7 @@ class ClientProxy: ClientProxyProtocol {
         
         mediaLoader = MediaLoader(client: client)
         
-        notificationSettings = NotificationSettingsProxy(notificationSettings: client.getNotificationSettings())
+        notificationSettings = await NotificationSettingsProxy(notificationSettings: client.getNotificationSettings())
         
         secureBackupController = SecureBackupController(encryption: client.encryption())
         
@@ -525,11 +525,11 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func roomSummaryForIdentifier(_ identifier: String) -> RoomSummary? {
-        staticRoomSummaryProvider.roomListPublisher.value.first(where: { $0.id == identifier })
+        staticRoomSummaryProvider.roomListPublisher.value.first { $0.id == identifier }
     }
     
     func roomSummaryForAlias(_ alias: String) -> RoomSummary? {
-        staticRoomSummaryProvider.roomListPublisher.value.first(where: { $0.canonicalAlias == alias || $0.alternativeAliases.contains(alias) })
+        staticRoomSummaryProvider.roomListPublisher.value.first { $0.canonicalAlias == alias || $0.alternativeAliases.contains(alias) }
     }
 
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
@@ -806,16 +806,13 @@ class ClientProxy: ClientProxyProtocol {
 
     private func loadUserAvatarURLFromCache() {
         loadCachedAvatarURLTask = Task {
-            let urlString = await Task.dispatch(on: clientQueue) {
-                do {
-                    return try self.client.cachedAvatarUrl()
-                } catch {
-                    MXLog.error("Failed to look for the avatar url in the cache: \(error)")
-                    return nil
-                }
+            do {
+                let urlString = try await self.client.cachedAvatarUrl()
+                guard !Task.isCancelled else { return }
+                self.userAvatarURLSubject.value = urlString.flatMap(URL.init)
+            } catch {
+                MXLog.error("Failed to look for the avatar url in the cache: \(error)")
             }
-            guard !Task.isCancelled else { return }
-            self.userAvatarURLSubject.value = urlString.flatMap(URL.init)
         }
     }
     

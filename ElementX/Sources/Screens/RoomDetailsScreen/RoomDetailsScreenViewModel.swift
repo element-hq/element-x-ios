@@ -65,7 +65,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         let topic = attributedStringBuilder.fromPlain(roomProxy.infoPublisher.value.topic)
         
         super.init(initialViewState: .init(details: roomProxy.details,
-                                           isEncrypted: roomProxy.isEncrypted,
+                                           isEncrypted: roomProxy.infoPublisher.value.isEncrypted,
                                            isDirect: roomProxy.infoPublisher.value.isDirect,
                                            topic: topic,
                                            topicSummary: topic?.unattributedStringByReplacingNewlinesWithSpaces(),
@@ -208,13 +208,18 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     }
     
     private func updateRoomInfo(_ roomInfo: RoomInfoProxy) {
+        state.isEncrypted = roomInfo.isEncrypted
+        state.isDirect = roomInfo.isDirect
+        state.bindings.isFavourite = roomInfo.isFavourite
+        
+        state.joinedMembersCount = roomInfo.joinedMembersCount
+        
         state.details = roomProxy.details
         
         let topic = attributedStringBuilder.fromPlain(roomInfo.topic)
         state.topic = topic
         state.topicSummary = topic?.unattributedStringByReplacingNewlinesWithSpaces()
-        state.joinedMembersCount = roomInfo.joinedMembersCount
-        state.bindings.isFavourite = roomInfo.isFavourite
+        
         switch roomInfo.joinRule {
         case .knock, .knockRestricted:
             state.isKnockableRoom = true
@@ -250,7 +255,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     }
     
     private func updateMemberIdentityVerificationStates() async {
-        guard roomProxy.isEncrypted else {
+        guard roomProxy.infoPublisher.value.isEncrypted else {
             // We don't care about identity statuses on non-encrypted rooms
             return
         }
@@ -309,7 +314,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private func fetchRoomNotificationSettings() async {
         do {
             let notificationMode = try await notificationSettingsProxy.getNotificationSettings(roomId: roomProxy.id,
-                                                                                               isEncrypted: roomProxy.isEncrypted,
+                                                                                               isEncrypted: roomProxy.infoPublisher.value.isEncrypted,
                                                                                                isOneToOne: roomProxy.infoPublisher.value.activeMembersCount == 2)
             state.notificationSettingsState = .loaded(settings: notificationMode)
         } catch {
@@ -327,7 +332,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .mute:
             do {
                 try await notificationSettingsProxy.unmuteRoom(roomId: roomProxy.id,
-                                                               isEncrypted: roomProxy.isEncrypted,
+                                                               isEncrypted: roomProxy.infoPublisher.value.isEncrypted,
                                                                isOneToOne: roomProxy.infoPublisher.value.activeMembersCount == 2)
             } catch {
                 state.bindings.alertInfo = AlertInfo(id: .alert,

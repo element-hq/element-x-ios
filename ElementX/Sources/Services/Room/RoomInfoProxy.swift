@@ -42,6 +42,13 @@ struct RoomInfoProxy: BaseRoomInfoProxyProtocol {
         return .room(id: id, name: displayName, avatarURL: avatarURL)
     }
 
+    // Here we're assuming unknown rooms are unencrypted.
+    // Fortunately https://github.com/matrix-org/matrix-rust-sdk/pull/4778 makes that very much of an edge case and we
+    // also automatically start a `latestEncryptionState` fetch if needed.
+    // In the worst case, even if we are to assume a room is unencrypted, the SDK will still determine the correct
+    // state before any message is sent.
+    var isEncrypted: Bool { roomInfo.encryptionState == .encrypted }
+    
     var isDirect: Bool { roomInfo.isDirect }
     var isPublic: Bool { roomInfo.isPublic }
     var isSpace: Bool { roomInfo.isSpace }

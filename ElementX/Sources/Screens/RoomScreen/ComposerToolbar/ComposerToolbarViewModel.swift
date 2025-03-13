@@ -62,13 +62,18 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         mentionBuilder = MentionBuilder()
         attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", mentionBuilder: mentionBuilder)
         
-        super.init(initialViewState: ComposerToolbarViewState(audioPlayerState: .init(id: .recorderPreview,
-                                                                                      title: L10n.commonVoiceMessage,
-                                                                                      duration: 0),
+        super.init(initialViewState: ComposerToolbarViewState(audioPlayerState: .init(id: .recorderPreview, title: L10n.commonVoiceMessage, duration: 0),
                                                               audioRecorderState: .init(),
-                                                              isRoomEncrypted: roomProxy.isEncrypted,
+                                                              isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted,
                                                               bindings: .init()),
                    mediaProvider: mediaProvider)
+        
+        roomProxy.infoPublisher
+            .map(\.isEncrypted)
+            .receive(on: DispatchQueue.main)
+            .removeDuplicates()
+            .weakAssign(to: \.state.isRoomEncrypted, on: self)
+            .store(in: &cancellables)
 
         context.$viewState
             .map(\.composerMode)

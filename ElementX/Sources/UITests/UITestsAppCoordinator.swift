@@ -30,7 +30,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
         
         windowManager.delegate = self
         
-        MXLog.configure(currentTarget: "uitests", filePrefix: nil, logLevel: .debug)
+        MXLog.configure(currentTarget: "uitests")
         
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         

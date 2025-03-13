@@ -91,7 +91,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
     func urlForOIDCLogin() async -> Result<OIDCAuthorizationDataProxy, AuthenticationServiceError> {
         guard let client else { return .failure(.oidcError(.urlFailure)) }
         do {
-            let oidcData = try await client.urlForOidc(oidcConfiguration: appSettings.oidcConfiguration.rustValue, prompt: .consent)
+            let oidcData = try await client.urlForOidc(oidcConfiguration: appSettings.oidcConfiguration.rustValue,
+                                                       prompt: .consent)
             return .success(OIDCAuthorizationDataProxy(underlyingData: oidcData))
         } catch {
             MXLog.error("Failed to get URL for OIDC login: \(error)")
