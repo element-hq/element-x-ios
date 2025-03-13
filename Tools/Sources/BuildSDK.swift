@@ -75,8 +75,9 @@ struct BuildSDK: ParsableCommand {
         }
         
         output.enumerateLines { line, _ in
-            if requiredTargets.keys.contains(line) {
-                requiredTargets[line] = true
+            let trimmedLine = line.trimmingCharacters(in: .whitespaces)
+            if requiredTargets.keys.contains(trimmedLine) {
+                requiredTargets[trimmedLine] = true
             }
         }
         
@@ -87,12 +88,12 @@ struct BuildSDK: ParsableCommand {
     /// Clones the Rust SDK if a copy isn't found in the parent directory.
     func cloneSDKIfNeeded() throws {
         guard !FileManager.default.fileExists(atPath: URL.sdkDirectory.path) else { return }
-        try Zsh.run(command: "git clone https://github.com/matrix-org/matrix-rust-sdk", directory: .parentDirectory)
+        try Zsh.run(command: "git clone git@github.com:voyzme/matrix-rust-sdk.git", directory: .parentDirectory)
     }
     
     /// Checkout the specified branch of the SDK if supplied.
     func checkoutBranchIfSupplied() throws {
-        guard let branch else { return }
+        let branch = branch ?? "voyzme"
         try Zsh.run(command: "git checkout \(branch)", directory: .sdkDirectory)
     }
     
