@@ -127,11 +127,11 @@ extension URL: @retroactive ExpressibleByStringLiteral {
 
 struct ConfirmURLParameters {
     let internalURL: URL
-    let linkString: String
+    let displayString: String
     
     var urlQueryItems: [URLQueryItem] {
         [URLQueryItem(name: "internalURL", value: internalURL.absoluteString),
-         URLQueryItem(name: "linkString", value: linkString)]
+         URLQueryItem(name: "displayString", value: displayString)]
     }
 }
 
@@ -139,10 +139,10 @@ extension ConfirmURLParameters {
     init?(queryItems: [URLQueryItem]) {
         guard let internalURLString = queryItems.first(where: { $0.name == "internalURL" })?.value,
               let internalURL = URL(string: internalURLString),
-              let externalURLString = queryItems.first(where: { $0.name == "linkString" })?.value else {
+              let externalURLString = queryItems.first(where: { $0.name == "displayString" })?.value else {
             return nil
         }
-        linkString = externalURLString
+        displayString = externalURLString
         self.internalURL = internalURL
     }
 }

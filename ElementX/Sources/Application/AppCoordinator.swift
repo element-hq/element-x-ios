@@ -195,6 +195,24 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         )
     }
     
+    func handlePotentialPhishingLink(url: URL, openURLAction: @escaping (URL) -> Void) -> Bool {
+        guard let confirmationParameters = url.confirmationParameters else {
+            return false
+        }
+        
+        // this function is called from a UI update, so to avoid any UI state update which would create slow downs
+        // we dispatch it on the next main thread run.
+        DispatchQueue.main.async {
+            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                            title: L10n.dialogConfirmLinkTitle,
+                                                                            message: L10n.dialogConfirmLinkMessage(confirmationParameters.displayString,
+                                                                                                                   confirmationParameters.internalURL.absoluteString),
+                                                                            primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                                                            secondaryButton: .init(title: L10n.actionContinue) { openURLAction(confirmationParameters.internalURL) })
+        }
+        return true
+    }
+
     func handleDeepLink(_ url: URL, isExternalURL: Bool) -> Bool {
         // Parse into an AppRoute to redirect these in a type safe way.
         
