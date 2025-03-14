@@ -618,6 +618,14 @@ internal enum L10n {
   }
   /// Withdraw verification
   internal static var cryptoIdentityChangeWithdrawVerificationAction: String { return L10n.tr("Localizable", "crypto_identity_change_withdraw_verification_action") }
+  /// The link %1$@ is taking you to another site %2$@
+  /// 
+  /// Are you sure you want to continue?
+  internal static func dialogConfirmLinkMessage(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "dialog_confirm_link_message", String(describing: p1), String(describing: p2))
+  }
+  /// Double-check this link
+  internal static var dialogConfirmLinkTitle: String { return L10n.tr("Localizable", "dialog_confirm_link_title") }
   /// In order to let the application use the camera, please grant the permission in the system settings.
   internal static var dialogPermissionCamera: String { return L10n.tr("Localizable", "dialog_permission_camera") }
   /// Please grant the permission in the system settings.

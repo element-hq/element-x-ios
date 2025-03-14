@@ -102,6 +102,7 @@ targets:
     - path: ../../ElementX/Sources/Other/Extensions/UNNotificationContent.swift
     - path: ../../ElementX/Sources/Other/Extensions/URL.swift
     - path: ../../ElementX/Sources/Other/Extensions/UTType.swift
+    - path: ../../ElementX/Sources/Other/Extensions/CharacterSet.swift
     - path: ../../ElementX/Sources/Other/HTMLParsing
     - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
     - path: ../../ElementX/Sources/Other/Logging

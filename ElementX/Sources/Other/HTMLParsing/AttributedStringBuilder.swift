@@ -98,6 +98,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         
         let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
         removeDefaultForegroundColors(mutableAttributedString)
+        detectPhishingAttempts(mutableAttributedString)
         addLinksAndMentions(mutableAttributedString)
         replaceMarkedBlockquotes(mutableAttributedString)
         replaceMarkedCodeBlocks(mutableAttributedString)
@@ -177,19 +178,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 return nil
             }
             
-            var link = String(string[matchRange])
-            
-            if !link.contains("://") {
-                link.insert(contentsOf: "https://", at: link.startIndex)
-            }
-            
-            // Don't include punctuation characters at the end of links
-            // e.g `https://element.io/blog:` <- which is a valid link but the wrong place
-            while !link.isEmpty,
-                  link.rangeOfCharacter(from: .punctuationCharacters, options: .backwards)?.upperBound == link.endIndex {
-                link = String(link.dropLast())
-            }
-            
+            let link = sanitizeLink(String(string[matchRange]))
             return TextParsingMatch(type: .link(urlString: link), range: match.range)
         })
         
@@ -278,7 +267,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     func detectPermalinks(_ attributedString: NSMutableAttributedString) {
         attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
             if value != nil {
-                if let url = value as? URL, let matrixEntity = parseMatrixEntityFrom(uri: url.absoluteString) {
+                if let url = value as? URL,
+                   let matrixEntity = parseMatrixEntityFrom(uri: url.absoluteString) {
                     switch matrixEntity.id {
                     case .user(let userID):
                         mentionBuilder.handleUserMention(for: attributedString, in: range, url: url, userID: userID, userDisplayName: nil)
@@ -302,7 +292,41 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             }
         }
     }
+        
+    private func detectPhishingAttempts(_ attributedString: NSMutableAttributedString) {
+        attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
+            guard value != nil, let internalURL = value as? URL else {
+                return
+            }
+            let displayString = attributedString.attributedSubstring(from: range).string
+            
+            guard PhishingDetector.isPhishingAttempt(displayString: displayString, internalURL: internalURL) else {
+                return
+            }
+            handlePhishingAttempt(for: attributedString, in: range, internalURL: internalURL, displayString: displayString)
+        }
+    }
     
+    private func handlePhishingAttempt(for attributedString: NSMutableAttributedString,
+                                       in range: NSRange,
+                                       internalURL: URL,
+                                       displayString: String) {
+        // Let's remove the existing link attribute
+        attributedString.removeAttribute(.link, range: range)
+        
+        var urlComponents = URLComponents()
+        urlComponents.scheme = URL.confirmationScheme
+        urlComponents.host = ""
+        let parameters = ConfirmURLParameters(internalURL: internalURL, displayString: displayString)
+        urlComponents.queryItems = parameters.urlQueryItems
+        
+        guard let finalURL = urlComponents.url else {
+            return
+        }
+        
+        attributedString.addAttribute(.link, value: finalURL, range: range)
+    }
+        
     private func removeDTCoreTextArtifacts(_ attributedString: NSMutableAttributedString) {
         guard attributedString.length > 0 else {
             return
@@ -395,4 +419,107 @@ private struct TextParsingMatch {
             return nil
         }
     }
+}
+
+private enum PhishingDetector {
+    static func isPhishingAttempt(displayString: String, internalURL: URL) -> Bool {
+        // Some phishing attempts can be hidden by using the unicode character "﹒" instead of "."
+        let disambiguatedDisplayString = displayString.replacingOccurrences(of: "﹒", with: ".")
+        let linkMatch = MatrixEntityRegex.linkRegex.firstMatch(in: disambiguatedDisplayString)
+        let linkMatchLength = linkMatch?.range.length ?? 0
+
+        // We check if we the link string contains a matrix user ID.
+        if let match = MatrixEntityRegex.userIdentifierRegex.firstMatch(in: disambiguatedDisplayString),
+           // If there is a bigger permalink including it we leave it handled by the link branch
+           linkMatchLength <= match.range.length,
+           let matchRange = Range(match.range, in: disambiguatedDisplayString) {
+            let identifier = String(disambiguatedDisplayString[matchRange])
+            
+            // We also make sure that the link string is just the user ID
+            // We also trim any invalid character that might hide the phishing attempt
+            // Like by using whitespaces emojis or other invalid symbols e.g click here [👉️ @alice:matrix.org](https://matrix.org)
+            let trimmedDisplayString = disambiguatedDisplayString.lowercased().trimmingCharacters(in: .matrixUserIDAllowedCharacters.inverted)
+            if identifier == trimmedDisplayString,
+               isMatrixUserIDPhishingAttempt(internalURL: internalURL, identifier: identifier) {
+                return true
+            }
+            // We check if we the link string contains a room alias.
+        } else if let match = MatrixEntityRegex.roomAliasRegex.firstMatch(in: disambiguatedDisplayString),
+                  // If there is a bigger permalink including it we leave it handled by the link branch
+                  linkMatchLength <= match.range.length,
+                  let matchRange = Range(match.range, in: disambiguatedDisplayString) {
+            let alias = String(disambiguatedDisplayString[matchRange])
+            
+            // We also make sure that the link string is just the user ID
+            // We also trim any invalid character that might hide the phishing attempt
+            // Like by using whitespaces emojis or other invalid symbols e.g click here [👉️ #room:matrix.org](https://matrix.org)
+            let trimmedDisplayString = disambiguatedDisplayString.lowercased().trimmingCharacters(in: .roomAliasAllowedCharacters.inverted)
+            if alias == trimmedDisplayString,
+               isRoomAliasPhishingAttempt(internalURL: internalURL, alias: alias) {
+                return true
+            }
+            // Else we check if the link string is itself what is considered a tappable link for the OS
+        } else if linkMatch != nil {
+            // Then we compare the external URL with the internal one
+            // To avoid false positives like [Matrix.org](https://matrix.org) we sanitize and lowercase
+            // And trim invalid characters that might hide phishing attemps
+            // Like emoji whitespaces and other invalid symbols e.g click here [👉️ https://element.io](https://matrix.org)
+            let trimmedDisplayString = sanitizeLink(disambiguatedDisplayString).lowercased().trimmingCharacters(in: .urlAllowedCharacters.inverted)
+            if trimmedDisplayString != sanitizeLink(internalURL.absoluteString).lowercased().removingPercentEncoding {
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    private static func isMatrixUserIDPhishingAttempt(internalURL: URL, identifier: String) -> Bool {
+        // if is not a matrix entity then is a phishing attempt
+        guard let internalMatrixEntity = parseMatrixEntityFrom(uri: internalURL.absoluteString) else {
+            return true
+        }
+        
+        // If it is we check if is a user
+        switch internalMatrixEntity.id {
+        case .user(let id):
+            // If it is, and it does not match the external one, it's a phishing attempt
+            return id != identifier
+        default:
+            break
+        }
+        return true
+    }
+    
+    private static func isRoomAliasPhishingAttempt(internalURL: URL, alias: String) -> Bool {
+        // if is not a matrix entity then is a phishing attempt
+        guard let internalMatrixEntity = parseMatrixEntityFrom(uri: internalURL.absoluteString) else {
+            return true
+        }
+        
+        // If it is we check if is a user
+        switch internalMatrixEntity.id {
+        case .roomAlias(let internalAlias):
+            // If it is, and it does not match the external one, it's a phishing attempt
+            return alias != internalAlias
+        default:
+            break
+        }
+        return true
+    }
+}
+
+private func sanitizeLink(_ string: String) -> String {
+    var link = string
+    if !link.contains("://") {
+        link.insert(contentsOf: "https://", at: link.startIndex)
+    }
+    
+    // Don't include punctuation characters at the end of links
+    // e.g `https://element.io/blog:` <- which is a valid link but the wrong place
+    while !link.isEmpty,
+          link.rangeOfCharacter(from: .punctuationCharacters, options: .backwards)?.upperBound == link.endIndex {
+        link = String(link.dropLast())
+    }
+    
+    return link
 }

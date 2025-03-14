@@ -34,13 +34,17 @@ struct Application: App {
                     if appCoordinator.handleDeepLink(url, isExternalURL: false) {
                         return .handled
                     }
+                    
+                    if appCoordinator.handlePotentialPhishingLink(url: url, openURLAction: { url in
+                        openURL(url, isExternalURL: false)
+                    }) {
+                        return .handled
+                    }
 
                     return .systemAction
                 })
-                .onOpenURL {
-                    if !appCoordinator.handleDeepLink($0, isExternalURL: true) {
-                        openURLInSystemBrowser($0)
-                    }
+                .onOpenURL { url in
+                    openURL(url, isExternalURL: true)
                 }
                 .onContinueUserActivity("INStartVideoCallIntent") { userActivity in
                     // `INStartVideoCallIntent` is to be replaced with `INStartCallIntent`
@@ -54,6 +58,12 @@ struct Application: App {
     }
     
     // MARK: - Private
+    
+    private func openURL(_ url: URL, isExternalURL: Bool) {
+        if !appCoordinator.handleDeepLink(url, isExternalURL: isExternalURL) {
+            openURLInSystemBrowser(url)
+        }
+    }
 
     /// Hide the status bar so it doesn't interfere with the screenshot tests
     private var shouldHideStatusBar: Bool {
