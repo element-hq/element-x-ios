@@ -1874,6 +1874,10 @@
 		798C78842D79394E00C1272F /* ElementTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7673F2B0B038FAB2A8D16AD /* ElementTextFieldStyle.swift */; };
 		798C78852D79397700C1272F /* JoinRoomByAddressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A13364350970987B93F6018 /* JoinRoomByAddressView.swift */; };
 		79959F8E45C3749997482A7F /* TimelineItemBubbledStylerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A459AE4B6566B2FA99E86B2 /* TimelineItemBubbledStylerView.swift */; };
+		79AD65502D84FC2C005C5934 /* HomeNotificationsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */; };
+		79AD65512D84FC2C005C5934 /* HomeNotificationsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */; };
+		79AD65532D84FD0B005C5934 /* HomeScreenNotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */; };
+		79AD65542D84FD0B005C5934 /* HomeScreenNotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */; };
 		79B8E34A2D660B68000304AE /* UserIdentityProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F793C422BDACE0C60C774F4 /* UserIdentityProxyProtocol.swift */; };
 		79B8E34B2D660BA9000304AE /* UserIdentityProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8536B40F578BA7FDB23D97B1 /* UserIdentityProxyMock.swift */; };
 		79B8E34C2D660BBB000304AE /* UserIdentityProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 964093C7CA8823CAB7FFD88E /* UserIdentityProxy.swift */; };
@@ -3363,6 +3367,8 @@
 		7984575A2D60846F0039623F /* HomeScreenPostFooterItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenPostFooterItem.swift; sourceTree = "<group>"; };
 		7984575D2D60849D0039623F /* HomeScreenPostMeowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenPostMeowButton.swift; sourceTree = "<group>"; };
 		798457602D6090D20039623F /* FeedDetailsUpdatedProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsUpdatedProtocol.swift; sourceTree = "<group>"; };
+		79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNotificationsContent.swift; sourceTree = "<group>"; };
+		79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenNotificationCell.swift; sourceTree = "<group>"; };
 		79FAC366FF299BCC555D756E /* ElementWellKnown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementWellKnown.swift; sourceTree = "<group>"; };
 		7A03E073077D92AA19C43DCF /* IdentityConfirmationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityConfirmationScreenCoordinator.swift; sourceTree = "<group>"; };
 		7AAD8C633AA57948B34EDCF7 /* RoomChangeRolesScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomChangeRolesScreenViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -5678,6 +5684,8 @@
 				793FA5B62D5B33DE00893AC4 /* HomeScreenPostCell.swift */,
 				790393792D4D62B40022E293 /* HomePostsContent.swift */,
 				795CF4452D834F5A0014B537 /* HomeMyPostsContent.swift */,
+				79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */,
+				79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */,
 				7903937F2D50DFE60022E293 /* HomeScreenPostList.swift */,
 				7984575A2D60846F0039623F /* HomeScreenPostFooterItem.swift */,
 				7984575D2D60849D0039623F /* HomeScreenPostMeowButton.swift */,
@@ -9492,6 +9500,7 @@
 				18E9A58F2C9829970082DDA4 /* MessageComposer.swift in Sources */,
 				18E9A5902C9829970082DDA4 /* MessageComposerTextField.swift in Sources */,
 				18E9A5912C9829970082DDA4 /* MessageForwardingScreen.swift in Sources */,
+				79AD65542D84FD0B005C5934 /* HomeScreenNotificationCell.swift in Sources */,
 				18E9A5922C9829970082DDA4 /* MessageForwardingScreenCoordinator.swift in Sources */,
 				189334A22D071BEE00CC87B9 /* MediaEventsTimelineFlowCoordinator.swift in Sources */,
 				18E9A5932C9829970082DDA4 /* MessageForwardingScreenModels.swift in Sources */,
@@ -9966,6 +9975,7 @@
 				18E9A7042C9829970082DDA4 /* TimelineProxyProtocol.swift in Sources */,
 				18E9A7052C9829970082DDA4 /* TimelineReactionsView.swift in Sources */,
 				18E9A7062C9829970082DDA4 /* TimelineReadReceiptsView.swift in Sources */,
+				79AD65512D84FC2C005C5934 /* HomeNotificationsContent.swift in Sources */,
 				18E9A7072C9829970082DDA4 /* TimelineReplyView.swift in Sources */,
 				18E9A7082C9829970082DDA4 /* TimelineSenderAvatarView.swift in Sources */,
 				18E9A7092C9829970082DDA4 /* TimelineStartRoomTimelineItem.swift in Sources */,
@@ -10468,6 +10478,7 @@
 				07376A5274822EB45CC320C7 /* InvitedRoomProxyMock.swift in Sources */,
 				B8D9960F77B213FD1B0B0FD3 /* JoinRoomByAddressView.swift in Sources */,
 				6A54F52443EC52AC5CD772C0 /* JoinRoomScreen.swift in Sources */,
+				79AD65502D84FC2C005C5934 /* HomeNotificationsContent.swift in Sources */,
 				AFE2AB612A1460E49578D746 /* JoinRoomScreenCoordinator.swift in Sources */,
 				1882EB9A2C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift in Sources */,
 				7903937E2D50DA930022E293 /* DateUtil.swift in Sources */,
@@ -10519,6 +10530,7 @@
 				29491EE7AE37E239E839C5A3 /* LocationSharingScreenModels.swift in Sources */,
 				5EDBDE802761B5ECB54E6787 /* LogLevel.swift in Sources */,
 				36DE961B784087D5E18EF9BA /* LogViewerScreen.swift in Sources */,
+				79AD65532D84FD0B005C5934 /* HomeScreenNotificationCell.swift in Sources */,
 				795A0C892D78453B000928B7 /* ZeroAuthApiProxy.swift in Sources */,
 				CF38B70D8C6DD42C00A56A27 /* LogViewerScreenCoordinator.swift in Sources */,
 				5518DA4A6C9B4FC4B497EA9A /* LogViewerScreenModels.swift in Sources */,
@@ -11402,7 +11414,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.11.7;
+				MARKETING_VERSION = 0.11.8;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -11438,7 +11450,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.11.7;
+				MARKETING_VERSION = 0.11.8;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;

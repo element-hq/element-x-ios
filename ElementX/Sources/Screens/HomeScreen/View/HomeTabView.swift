@@ -10,6 +10,7 @@ import SwiftUI
 enum HomeTab: CaseIterable {
     case chat
     case channels
+    case notifications
     case feed
     case myFeed
     
@@ -18,13 +19,14 @@ enum HomeTab: CaseIterable {
     }
 }
 
-struct HomeTabView<Content1: View, Content2: View, Content3: View, Content4: View>: View {
+struct HomeTabView<Content1: View, Content2: View, Content3: View, Content4: View, Content5: View>: View {
     @State private var selectedTab = 0
     
     let chatTabContent: Content1
-    let homeTabContent: Content2
-    let channelTabContent: Content3
-    let myFeedTabContent: Content4
+    let channelTabContent: Content2
+    let notificationsTabContent: Content3
+    let homeTabContent: Content4
+    let myFeedTabContent: Content5
     
     let onTabSelected: (Int, HomeTab) -> Void
     
@@ -40,6 +42,11 @@ struct HomeTabView<Content1: View, Content2: View, Content3: View, Content4: Vie
             selectedIcon: Asset.Images.homeTabExplorerFillIcon
         ),
         (
+            title: "Notifications",
+            icon: Asset.Images.homeTabNotificationsIcon,
+            selectedIcon: Asset.Images.homeTabNotificationsFillIcon
+        ),
+        (
             title: "Feed",
             icon: Asset.Images.homeTabFeedIcon,
             selectedIcon: Asset.Images.homeTabFeedFillIcon
@@ -52,13 +59,15 @@ struct HomeTabView<Content1: View, Content2: View, Content3: View, Content4: Vie
     ]
     
     init(@ViewBuilder chatTabContent: () -> Content1,
-         @ViewBuilder homeTabContent: () -> Content2,
-         @ViewBuilder channelTabContent: () -> Content3,
-         @ViewBuilder myFeedTabContent: () -> Content4,
+         @ViewBuilder channelTabContent: () -> Content2,
+         @ViewBuilder notificationsTabContent: () -> Content3,
+         @ViewBuilder homeTabContent: () -> Content4,
+         @ViewBuilder myFeedTabContent: () -> Content5,
          onTabSelected: @escaping (Int, HomeTab) -> Void) {
         self.chatTabContent = chatTabContent()
-        self.homeTabContent = homeTabContent()
         self.channelTabContent = channelTabContent()
+        self.notificationsTabContent = notificationsTabContent()
+        self.homeTabContent = homeTabContent()
         self.myFeedTabContent = myFeedTabContent()
         self.onTabSelected = onTabSelected
     }
@@ -71,8 +80,10 @@ struct HomeTabView<Content1: View, Content2: View, Content3: View, Content4: Vie
                 case 1:
                     channelTabContent
                 case 2:
-                    homeTabContent
+                    notificationsTabContent
                 case 3:
+                    homeTabContent
+                case 4:
                     myFeedTabContent
                 default:
                     chatTabContent

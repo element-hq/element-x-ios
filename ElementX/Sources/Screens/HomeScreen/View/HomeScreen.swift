@@ -29,11 +29,14 @@ struct HomeScreen: View {
             chatTabContent: {
                 HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
             },
-            homeTabContent: {
-                HomePostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-            },
             channelTabContent: {
                 HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+            },
+            notificationsTabContent: {
+                HomeNotificationsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+            },
+            homeTabContent: {
+                HomePostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
             },
             myFeedTabContent: {
                 HomeMyPostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
