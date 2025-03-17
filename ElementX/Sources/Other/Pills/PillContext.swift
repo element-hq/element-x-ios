@@ -39,13 +39,8 @@ extension PillContext {
 }
 
 enum PillViewState: Equatable {
-    enum PillImage: Equatable {
-        case link
-        case roomAvatar(RoomAvatar)
-    }
-    
     case mention(isOwnMention: Bool, displayText: String)
-    case reference(avatar: PillImage, displayText: String)
+    case reference(displayText: String)
     case undefined
     
     var isOwnMention: Bool {
@@ -59,7 +54,7 @@ enum PillViewState: Equatable {
     
     var displayText: String {
         switch self {
-        case .mention(_, let displayText), .reference(_, let displayText):
+        case .mention(_, let displayText), .reference(let displayText):
             return displayText
         case .undefined:
             return ""
@@ -72,15 +67,6 @@ enum PillViewState: Equatable {
             return true
         default:
             return false
-        }
-    }
-    
-    var image: PillImage? {
-        switch self {
-        case .reference(let avatar, _):
-            return avatar
-        default:
-            return nil
         }
     }
 }

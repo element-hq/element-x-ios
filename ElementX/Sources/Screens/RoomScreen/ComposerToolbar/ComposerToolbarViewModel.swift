@@ -413,7 +413,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 // Remove the attribute so it doesn't get inherited by the new string
                 attributedString.removeAttribute(.MatrixAllUsersMention, range: range)
                 
-                attributedString.replaceCharacters(in: range, with: PillConstants.atRoom)
+                attributedString.replaceCharacters(in: range, with: PillUtilities.atRoom)
                 containsAtRoom = true
                 
                 stop.pointee = true
@@ -464,7 +464,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             
             let attributedString: NSMutableAttributedString
             // This is the all room mention special case
-            if urlString == PillConstants.composerAtRoomURLString {
+            if urlString == PillUtilities.composerAtRoomURLString {
                 attributedString = NSMutableAttributedString(string: string, attributes: [.MatrixAllUsersMention: true])
             } else {
                 attributedString = NSMutableAttributedString(string: string, attributes: [.link: URL(string: urlString) as Any])

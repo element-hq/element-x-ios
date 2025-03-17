@@ -198,7 +198,7 @@ struct TimelineReplyView: View {
                 }
                 
                 if attributes[.MatrixAllUsersMention] as? Bool == true {
-                    attributedString.replaceCharacters(in: range, with: PillConstants.atRoom)
+                    attributedString.replaceCharacters(in: range, with: PillUtilities.atRoom)
                 }
             }
             return attributedString.string

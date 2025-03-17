@@ -31,33 +31,14 @@ struct PillView: View {
     
     @ViewBuilder
     private var mainContent: some View {
-        HStack(spacing: 4) {
-            image
-            Text(context.viewState.displayText)
-                .font(.compound.bodyLGSemibold)
-                .foregroundColor(textColor)
-                .lineLimit(1)
-        }
-        .padding(.leading, 4)
-        .padding(.trailing, 6)
-        .padding(.vertical, 1)
-        .background { Capsule().foregroundColor(backgroundColor) }
-    }
-    
-    @ViewBuilder
-    private var image: some View {
-        if let image = context.viewState.image {
-            switch image {
-            case .link:
-                CompoundIcon(\.link, size: .custom(12), relativeTo: .compound.bodyLGSemibold)
-                    .padding(2)
-                    .foregroundStyle(.compound.bgCanvasDefault)
-                    .background(.compound.textLinkExternal)
-                    .clipShape(Circle())
-            case .roomAvatar(let avatar):
-                RoomAvatarImage(avatar: avatar, avatarSize: .custom(16), mediaProvider: mediaProvider)
-            }
-        }
+        Text(context.viewState.displayText)
+            .font(.compound.bodyLGSemibold)
+            .foregroundColor(textColor)
+            .lineLimit(1)
+            .padding(.leading, 4)
+            .padding(.trailing, 6)
+            .padding(.vertical, 1)
+            .background { Capsule().foregroundColor(backgroundColor) }
     }
 }
 
@@ -67,26 +48,43 @@ struct PillView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         PillView(mediaProvider: mockMediaProvider,
                  context: PillContext.mock(viewState: .mention(isOwnMention: false,
-                                                               displayText: "@Alice"))) { }
-            .frame(maxWidth: PillConstants.mockMaxWidth)
+                                                               displayText: PillUtilities.userPillDisplayText(username: "User",
+                                                                                                              userID: "@alice:matrix.org")))) { }
+            .frame(maxWidth: PillUtilities.mockMaxWidth)
             .previewDisplayName("User")
         PillView(mediaProvider: mockMediaProvider,
                  context: PillContext.mock(viewState: .mention(isOwnMention: false,
-                                                               displayText: "@Alice but with a very very long name"))) { }
-            .frame(maxWidth: PillConstants.mockMaxWidth)
+                                                               displayText: PillUtilities.userPillDisplayText(username: "Alice but with a very long name",
+                                                                                                              userID: "@alice:matrix.org")))) { }
+            .frame(maxWidth: PillUtilities.mockMaxWidth)
             .previewDisplayName("User with a long name")
         PillView(mediaProvider: mockMediaProvider,
+                 context: PillContext.mock(viewState: .mention(isOwnMention: false,
+                                                               displayText: PillUtilities.userPillDisplayText(username: nil, userID: "@alice:matrix.org")))) { }
+            .frame(maxWidth: PillUtilities.mockMaxWidth)
+            .previewDisplayName("User with missing name")
+        PillView(mediaProvider: mockMediaProvider,
                  context: PillContext.mock(viewState: .mention(isOwnMention: true,
-                                                               displayText: "@Alice"))) { }
-            .frame(maxWidth: PillConstants.mockMaxWidth)
+                                                               displayText: PillUtilities.userPillDisplayText(username: "Alice", userID: "@alice:matrix.org")))) { }
+            .frame(maxWidth: PillUtilities.mockMaxWidth)
             .previewDisplayName("Own user")
         PillView(mediaProvider: mockMediaProvider,
-                 context: PillContext.mock(viewState: .reference(avatar: .roomAvatar(.room(id: "roomID", name: "Room", avatarURL: nil)), displayText: "Room"))) { }
-            .frame(maxWidth: PillConstants.mockMaxWidth)
+                 context: PillContext.mock(viewState: .reference(displayText: PillUtilities.roomPillDisplayText(roomName: "Room",
+                                                                                                                rawRoomText: "#room:matrix.org")))) { }
+            .frame(maxWidth: PillUtilities.mockMaxWidth)
             .previewDisplayName("Room")
         PillView(mediaProvider: mockMediaProvider,
-                 context: PillContext.mock(viewState: .reference(avatar: .link, displayText: L10n.screenRoomEventPill("Room")))) { }
-            .frame(maxWidth: PillConstants.mockMaxWidth)
+                 context: PillContext.mock(viewState: .reference(displayText: PillUtilities.roomPillDisplayText(roomName: nil,
+                                                                                                                rawRoomText: "#room:matrix.org")))) { }
+            .frame(maxWidth: PillUtilities.mockMaxWidth)
+            .previewDisplayName("Room without name")
+        PillView(mediaProvider: mockMediaProvider,
+                 context: PillContext.mock(viewState: .reference(displayText: PillUtilities.eventPillDisplayText(roomName: "Room", rawRoomText: "#room:matrix.org")))) { }
+            .frame(maxWidth: PillUtilities.mockMaxWidth)
             .previewDisplayName("Message link")
+        PillView(mediaProvider: mockMediaProvider,
+                 context: PillContext.mock(viewState: .reference(displayText: PillUtilities.eventPillDisplayText(roomName: nil, rawRoomText: "#room:matrix.org")))) { }
+            .frame(maxWidth: PillUtilities.mockMaxWidth)
+            .previewDisplayName("Message link without room name")
     }
 }
