@@ -139,9 +139,9 @@
 "common_chat_backup" = "Keskustelujen varmuuskopiointi";
 "common_copyright" = "Tekijänoikeudet";
 "common_creating_room" = "Luodaan huonetta...";
-"common_current_user_canceled_knock" = "Request canceled";
+"common_current_user_canceled_knock" = "Pyyntö peruutettu";
 "common_current_user_left_room" = "Poistuit huoneesta";
-"common_current_user_rejected_invite" = "Invite declined";
+"common_current_user_rejected_invite" = "Kutsu hylätty";
 "common_dark" = "Tumma";
 "common_date_date_at_time" = "%1$@ klo %2$@";
 "common_date_this_month" = "Tässä kuussa";
@@ -279,6 +279,8 @@
 "crypto_identity_change_profile_pin_violation" = "Käyttäjän %1$@ vahvistettu identiteetti on muuttunut.";
 "crypto_identity_change_verification_violation_new" = "Käyttäjän %1$@ %2$@ vahvistettu identiteetti on muuttunut. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Peruuta vahvistus";
+"dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
+"dialog_confirm_link_title" = "Double-check this link";
 "dialog_permission_camera" = "Jotta sovellus voisi käyttää kameraa, anna lupa järjestelmän asetuksista.";
 "dialog_permission_generic" = "Anna lupa järjestelmän asetuksista.";
 "dialog_permission_location_description_ios" = "Myönnä lupa laitteen sijaintiasetuksista.";
@@ -357,7 +359,7 @@
 "rich_text_editor_code_block" = "Koodilohko päälle/pois";
 "rich_text_editor_composer_encrypted_placeholder" = "Salattu viesti...";
 "rich_text_editor_composer_placeholder" = "Viesti...";
-"rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
+"rich_text_editor_composer_unencrypted_placeholder" = "Salaamaton viesti...";
 "rich_text_editor_create_link" = "Luo linkki";
 "rich_text_editor_edit_link" = "Muokkaa linkkiä";
 "rich_text_editor_format_bold" = "Käytä lihavoitua muotoa";
