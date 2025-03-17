@@ -554,8 +554,8 @@ class ClientProxy: ClientProxyProtocol {
     func leaveRoom(_ roomID: String) async -> Result<Void, ClientProxyError> {
         do {
             let roomListItem = try roomListService.room(roomId: roomID)
-            let invitedRoom = try roomListItem.invitedRoom()
-            try await invitedRoom.leave()
+            let invitedRoomPreview = try await roomListItem.previewRoom(via: [])
+            try await invitedRoomPreview.leave()
             return .success(())
         } catch {
             MXLog.error(error)

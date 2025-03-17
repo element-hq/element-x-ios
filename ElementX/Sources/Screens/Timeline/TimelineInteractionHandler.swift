@@ -86,7 +86,7 @@ class TimelineInteractionHandler {
         self.clientProxy = clientProxy
         pollInteractionHandler = PollInteractionHandler(analyticsService: analyticsService, roomProxy: roomProxy)
         
-        zeroAttachmentService = ZeroAttachmentService(appSettings: appSettings, isRoomEncrypted: roomProxy.isEncrypted)
+        zeroAttachmentService = ZeroAttachmentService(appSettings: appSettings, isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted)
     }
     
     // MARK: Timeline Item Action Menu

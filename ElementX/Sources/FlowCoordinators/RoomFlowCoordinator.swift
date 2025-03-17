@@ -275,7 +275,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         // early return above could result in trying to access the room's timeline provider
         // before it has been set which triggers a fatal error.
         self.roomProxy = roomProxy
-        zeroAttachmentService.setRoomEncrypted(roomProxy.isEncrypted)
+        zeroAttachmentService.setRoomEncrypted(roomProxy.infoPublisher.value.isEncrypted)
     }
     
     // swiftlint:disable:next function_body_length

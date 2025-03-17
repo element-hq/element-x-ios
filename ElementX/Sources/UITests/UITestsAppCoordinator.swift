@@ -695,7 +695,7 @@ class MockScreen: Identifiable {
             
             clientProxy.roomForIdentifierReturnValue = .joined(roomProxy)
             
-            let zeroAttachmentService = ZeroAttachmentService(appSettings: ServiceLocator.shared.settings, isRoomEncrypted: roomProxy.isEncrypted)
+            let zeroAttachmentService = ZeroAttachmentService(appSettings: ServiceLocator.shared.settings, isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted)
             
             let timelineController = TimelineController(roomProxy: roomProxy,
                                                         timelineProxy: roomProxy.timeline,

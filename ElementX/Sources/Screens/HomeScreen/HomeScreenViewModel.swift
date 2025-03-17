@@ -487,13 +487,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         
         userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
         
-//        guard case let .invited(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
-//            displayError()
-//            return
-//        }
-//        
-//        let result = await roomProxy.rejectInvitation()
-        let result = await userSession.clientProxy.leaveRoom(roomID)
+        guard case let .invited(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            displayError()
+            return
+        }
+        
+        let result = await roomProxy.rejectInvitation()
+//        let result = await userSession.clientProxy.leaveRoom(roomID)
         
         if case .failure = result {
             displayError()
