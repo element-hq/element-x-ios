@@ -11,32 +11,42 @@ struct HomeScreenNotificationCell: View {
     let room: HomeScreenRoom
     let context: HomeScreenViewModel.Context
     
-    var notificationText: String {
+    var notificationText: AttributedString {
         let isRoomDM = room.isDirect
+        let baseText: String
 
         switch room.type {
         case .invite:
-            return isRoomDM ? "\(room.name) invited you to chat" : "You are invited to join \(room.name)"
+            baseText = isRoomDM ? "\(room.name) invited you to chat" : "You are invited to join \(room.name)"
         case .room:
             if isRoomDM {
-                return room.unreadNotificationsCount > 1 ?
-                    "\(room.name) sent you new messages" :
+                baseText = room.unreadNotificationsCount > 1 ?
+                    "\(room.name) sent you \(room.unreadNotificationsCount) new messages" :
                     "\(room.name) sent you a new message"
             } else {
-                return room.unreadNotificationsCount > 1 ?
+                baseText = room.unreadNotificationsCount > 1 ?
                     "You have \(room.unreadNotificationsCount) new messages in \(room.name)" :
                     "You have a new message in \(room.name)"
             }
         default:
-            return "You may have new messages in \(room.name)"
+            baseText = "You may have new messages in \(room.name)"
         }
+        
+        var attributedText = AttributedString(baseText)
+        let roomNameRange = attributedText.range(of: room.name)!
+        attributedText[roomNameRange].font = .compound.bodyMDSemibold
+        if room.unreadNotificationsCount > 1 {
+            let unreadCountRange = attributedText.range(of: String(room.unreadNotificationsCount))!
+            attributedText[unreadCountRange].font = .compound.bodyMDSemibold
+        }
+        return attributedText
     }
     
     var body: some View {
         VStack(alignment: .leading) {
             Text(notificationText)
                 .font(.zero.bodyMD)
-                .foregroundStyle(.compound.textSecondary)
+                .foregroundStyle(.compound.textPrimary)
                 .padding()
             
             Divider()
