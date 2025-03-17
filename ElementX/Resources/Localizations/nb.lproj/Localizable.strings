@@ -279,6 +279,8 @@
 "crypto_identity_change_profile_pin_violation" = "%1$@’s verified identity has changed.";
 "crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ verified identity has changed.  %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
+"dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
+"dialog_confirm_link_title" = "Double-check this link";
 "dialog_permission_camera" = "For å la programmet bruke kameraet, vennligst gi tillatelse i systeminnstillingene.";
 "dialog_permission_generic" = "Vennligst gi tillatelse i systeminnstillingene.";
 "dialog_permission_location_description_ios" = "Gi tilgang i Innstillinger -> Plassering.";
@@ -538,7 +540,7 @@
 "screen_app_lock_setup_pin_forbidden_dialog_title" = "Velg en annen PIN-kode";
 "screen_app_lock_setup_pin_mismatch_dialog_content" = "Skriv inn samme PIN-kode to ganger";
 "screen_app_lock_setup_pin_mismatch_dialog_title" = "PIN-kodene samsvarer ikke";
-"screen_app_lock_signout_alert_message" = "Du må logge på på nytt og opprette en ny PIN-kode for å fortsette";
+"screen_app_lock_signout_alert_message" = "Du må logge inn på nytt og opprette en ny PIN-kode for å fortsette";
 "screen_app_lock_signout_alert_title" = "Du blir logget av";
 "screen_blocked_users_empty" = "Du har ingen blokkerte brukere";
 "screen_blocked_users_unblocking" = "Fjerner blokkering …";

@@ -80,6 +80,7 @@ targets:
     - path: ../SupportingFiles
     - path: ../../ElementX/Sources/ShareExtension
     - path: ../../ElementX/Sources/Application/AppSettings.swift
+    - path: ../../ElementX/Sources/Application/TargetConfiguration.swift
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
     - path: ../../ElementX/Sources/Other/Extensions/FileManager.swift
     - path: ../../ElementX/Sources/Other/Extensions/NSItemProvider.swift

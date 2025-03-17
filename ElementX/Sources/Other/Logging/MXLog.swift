@@ -14,29 +14,14 @@ import MatrixRustSDK
  Its purpose is to provide a common entry for customizing logging and should be used throughout the code.
  */
 enum MXLog {
-    private enum Constants {
-        static let target = "elementx"
-    }
-    
-    // Rust side crashes if invoking setupTracing multiple times
-    private static var didConfigureOnce = false
-    
     private static var rootSpan: Span!
     private static var currentTarget: String!
     
-    static func configure(currentTarget: String,
-                          filePrefix: String?,
-                          logLevel: LogLevel) {
-        guard !didConfigureOnce else { return }
-        
-        Tracing.setup(logLevel: logLevel, currentTarget: currentTarget, filePrefix: filePrefix)
-        
+    static func configure(currentTarget: String) {
         self.currentTarget = currentTarget
         
         rootSpan = Span(file: #file, line: #line, level: .info, target: self.currentTarget, name: "root")
         rootSpan.enter()
-        
-        didConfigureOnce = true
     }
     
     static func createSpan(_ name: String,
@@ -134,10 +119,6 @@ enum MXLog {
                                    function: String = #function,
                                    line: Int = #line,
                                    column: Int = #column) -> Span {
-        guard didConfigureOnce else {
-            fatalError()
-        }
-        
         if Span.current().isNone() {
             rootSpan.enter()
         }
@@ -152,7 +133,7 @@ enum MXLog {
                             function: String = #function,
                             line: Int = #line,
                             column: Int = #column) {
-        guard didConfigureOnce else {
+        guard let rootSpan else {
             return
         }
         

@@ -282,6 +282,12 @@ struct HomeScreenRoom: Identifiable, Equatable {
         
     let canonicalAlias: String?
     
+    let unreadNotificationsCount: UInt
+    
+    var isAChannel: Bool {
+        name.starts(with: ZeroContants.ZERO_CHANNEL_PREFIX)
+    }
+    
     static func placeholder() -> HomeScreenRoom {
         HomeScreenRoom(id: UUID().uuidString,
                        roomID: nil,
@@ -294,7 +300,8 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        timestamp: "Now",
                        lastMessage: placeholderLastMessage,
                        avatar: .room(id: "", name: "", avatarURL: nil),
-                       canonicalAlias: nil)
+                       canonicalAlias: nil,
+                       unreadNotificationsCount: 0)
     }
 }
 
@@ -394,7 +401,9 @@ extension HomeScreenRoom {
                   timestamp: summary.lastMessageFormattedTimestamp,
                   lastMessage: summary.lastMessage,
                   avatar: summary.avatar,
-                  canonicalAlias: summary.canonicalAlias)
+                  canonicalAlias: summary.canonicalAlias,
+                  unreadNotificationsCount: summary.unreadMessagesCount // settings to unread messages count to show new messages count only
+        )
     }
 }
 

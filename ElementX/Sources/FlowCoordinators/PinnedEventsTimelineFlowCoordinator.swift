@@ -51,7 +51,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         self.appMediator = appMediator
         self.emojiProvider = emojiProvider
         
-        zeroAttachmentService = ZeroAttachmentService(appSettings: appSettings, isRoomEncrypted: roomProxy.isEncrypted)
+        zeroAttachmentService = ZeroAttachmentService(appSettings: appSettings, isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted)
     }
     
     func start() {

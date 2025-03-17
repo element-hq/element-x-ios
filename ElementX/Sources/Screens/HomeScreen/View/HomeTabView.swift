@@ -11,6 +11,7 @@ enum HomeTab: CaseIterable {
     case chat
     case channels
     case feed
+    case notifications
     case myFeed
     
     static func from(index: Int) -> HomeTab {
@@ -18,47 +19,50 @@ enum HomeTab: CaseIterable {
     }
 }
 
-struct HomeTabView<Content1: View, Content2: View, Content3: View, Content4: View>: View {
+struct HomeTabView<Content1: View, Content2: View, Content3: View, Content4: View, Content5: View>: View {
     @State private var selectedTab = 0
     
     let chatTabContent: Content1
-    let homeTabContent: Content2
-    let channelTabContent: Content3
-    let myFeedTabContent: Content4
+    let channelTabContent: Content2
+    let notificationsTabContent: Content3
+    let homeTabContent: Content4
+    let myFeedTabContent: Content5
     
     let onTabSelected: (Int, HomeTab) -> Void
     
     private let tabs = [
         (
             title: "Chat",
-            icon: Asset.Images.homeTabChatIcon,
-            selectedIcon: Asset.Images.homeTabChatFillIcon
+            icon: Asset.Images.homeTabChatIcon
         ),
         (
             title: "Channels",
-            icon: Asset.Images.homeTabExplorerIcon,
-            selectedIcon: Asset.Images.homeTabExplorerFillIcon
+            icon: Asset.Images.homeTabExplorerIcon
         ),
         (
             title: "Feed",
-            icon: Asset.Images.homeTabFeedIcon,
-            selectedIcon: Asset.Images.homeTabFeedFillIcon
+            icon: Asset.Images.homeTabFeedIcon
+        ),
+        (
+            title: "Notifications",
+            icon: Asset.Images.homeTabNotificationsIcon
         ),
         (
             title: "My Feed",
-            icon: Asset.Images.homeTabMyfeedIcon,
-            selectedIcon: Asset.Images.homeTabMyfeedFillIcon
+            icon: Asset.Images.homeTabProfileIcon
         )
     ]
     
     init(@ViewBuilder chatTabContent: () -> Content1,
-         @ViewBuilder homeTabContent: () -> Content2,
-         @ViewBuilder channelTabContent: () -> Content3,
-         @ViewBuilder myFeedTabContent: () -> Content4,
+         @ViewBuilder channelTabContent: () -> Content2,
+         @ViewBuilder notificationsTabContent: () -> Content3,
+         @ViewBuilder homeTabContent: () -> Content4,
+         @ViewBuilder myFeedTabContent: () -> Content5,
          onTabSelected: @escaping (Int, HomeTab) -> Void) {
         self.chatTabContent = chatTabContent()
-        self.homeTabContent = homeTabContent()
         self.channelTabContent = channelTabContent()
+        self.notificationsTabContent = notificationsTabContent()
+        self.homeTabContent = homeTabContent()
         self.myFeedTabContent = myFeedTabContent()
         self.onTabSelected = onTabSelected
     }
@@ -73,6 +77,8 @@ struct HomeTabView<Content1: View, Content2: View, Content3: View, Content4: Vie
                 case 2:
                     homeTabContent
                 case 3:
+                    notificationsTabContent
+                case 4:
                     myFeedTabContent
                 default:
                     chatTabContent
@@ -87,7 +93,7 @@ struct HomeTabView<Content1: View, Content2: View, Content3: View, Content4: Vie
                     ForEach(0..<tabs.count, id: \.self) { index in
                         tabButton(
                             title: tabs[index].title,
-                            icon: selectedTab == index ? tabs[index].selectedIcon : tabs[index].icon,
+                            icon: tabs[index].icon,
                             isSelected: selectedTab == index,
                             index: index
                         )
@@ -107,6 +113,7 @@ struct HomeTabView<Content1: View, Content2: View, Content3: View, Content4: Vie
             VStack {
                 Image(asset: icon)
                     .font(.system(size: 18))
+                    .foregroundStyle(isSelected ? .zero.bgAccentRest : .compound.textSecondary)
             }
             .frame(maxWidth: .infinity) // Equal width for all buttons
             .padding(.vertical, 10)

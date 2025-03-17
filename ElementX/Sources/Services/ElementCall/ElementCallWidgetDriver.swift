@@ -70,7 +70,7 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
             return .failure(.roomInvalid)
         }
         
-        let useEncryption = (try? room.isEncrypted()) ?? false
+        let useEncryption = await (try? room.latestEncryptionState() == .encrypted) ?? false
         
         let widgetSettings: WidgetSettings
         do {

@@ -30,7 +30,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
         
         windowManager.delegate = self
         
-        MXLog.configure(currentTarget: "uitests", filePrefix: nil, logLevel: .debug)
+        MXLog.configure(currentTarget: "uitests")
         
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         
@@ -695,7 +695,7 @@ class MockScreen: Identifiable {
             
             clientProxy.roomForIdentifierReturnValue = .joined(roomProxy)
             
-            let zeroAttachmentService = ZeroAttachmentService(appSettings: ServiceLocator.shared.settings, isRoomEncrypted: roomProxy.isEncrypted)
+            let zeroAttachmentService = ZeroAttachmentService(appSettings: ServiceLocator.shared.settings, isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted)
             
             let timelineController = TimelineController(roomProxy: roomProxy,
                                                         timelineProxy: roomProxy.timeline,

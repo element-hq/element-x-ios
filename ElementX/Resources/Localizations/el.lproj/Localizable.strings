@@ -279,6 +279,8 @@
 "crypto_identity_change_profile_pin_violation" = "%1$@’s verified identity has changed.";
 "crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ verified identity has changed.  %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
+"dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
+"dialog_confirm_link_title" = "Double-check this link";
 "dialog_permission_camera" = "Για να επιτρέψεις στην εφαρμογή να χρησιμοποιεί την κάμερα, παραχώρησε την άδεια στις ρυθμίσεις συστήματος.";
 "dialog_permission_generic" = "Παρακαλώ παραχώρησε την άδεια στις ρυθμίσεις συστήματος.";
 "dialog_permission_location_description_ios" = "Παραχώρησε πρόσβαση στις Ρυθμίσεις -> Τοποθεσία.";

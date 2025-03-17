@@ -139,9 +139,9 @@
 "common_chat_backup" = "Резервне копіювання бесіди";
 "common_copyright" = "Авторське право";
 "common_creating_room" = "Створення кімнати...";
-"common_current_user_canceled_knock" = "Request canceled";
+"common_current_user_canceled_knock" = "Запит скасовано";
 "common_current_user_left_room" = "Виходить з кімнати";
-"common_current_user_rejected_invite" = "Invite declined";
+"common_current_user_rejected_invite" = "Запрошення відхилено";
 "common_dark" = "Темна";
 "common_date_date_at_time" = "%1$@ о %2$@";
 "common_date_this_month" = "Цього місяця";
@@ -279,6 +279,8 @@
 "crypto_identity_change_profile_pin_violation" = "Верифікована ідентичність %1$@ змінилася.";
 "crypto_identity_change_verification_violation_new" = "Верифіковано особистість %1$@ %2$@ змінилася. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Відкликати верифікацію";
+"dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
+"dialog_confirm_link_title" = "Double-check this link";
 "dialog_permission_camera" = "Щоб дозволити застосунку використовувати камеру, надайте дозвіл у системних налаштуваннях.";
 "dialog_permission_generic" = "Надайте дозвіл в системних налаштуваннях.";
 "dialog_permission_location_description_ios" = "Надайте доступ в Налаштуваннях -> Місцезнаходження.";
@@ -357,7 +359,7 @@
 "rich_text_editor_code_block" = "Перемкнути блок коду";
 "rich_text_editor_composer_encrypted_placeholder" = "Зашифроване повідомлення…";
 "rich_text_editor_composer_placeholder" = "Повідомлення...";
-"rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
+"rich_text_editor_composer_unencrypted_placeholder" = "Незашифроване повідомлення…";
 "rich_text_editor_create_link" = "Створити посилання";
 "rich_text_editor_edit_link" = "Редагувати посилання";
 "rich_text_editor_format_bold" = "Жирний формат";

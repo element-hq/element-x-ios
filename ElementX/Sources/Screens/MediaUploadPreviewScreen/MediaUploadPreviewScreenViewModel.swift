@@ -43,7 +43,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         super.init(initialViewState: MediaUploadPreviewScreenViewState(url: url,
                                                                        title: title,
                                                                        shouldShowCaptionWarning: shouldShowCaptionWarning,
-                                                                       isRoomEncrypted: roomProxy.isEncrypted))
+                                                                       isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted))
     }
     
     override func process(viewAction: MediaUploadPreviewScreenViewAction) {
