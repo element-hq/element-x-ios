@@ -52,8 +52,7 @@ extension JoinedRoomProxyMock {
         self.init()
 
         id = configuration.id
-        isEncrypted = configuration.isEncrypted
-        
+
         timeline = TimelineProxyMock(.init(isAutoUpdating: configuration.shouldUseAutoUpdatingTimeline,
                                            timelineStartReached: configuration.timelineStartReached))
 
@@ -137,6 +136,7 @@ extension JoinedRoomProxyMock {
 extension RoomInfo {
     @MainActor init(_ configuration: JoinedRoomProxyMockConfiguration) {
         self.init(id: configuration.id,
+                  encryptionState: configuration.isEncrypted ? .encrypted : .notEncrypted,
                   creator: nil,
                   displayName: configuration.name,
                   rawName: configuration.name,

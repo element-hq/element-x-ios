@@ -9,8 +9,6 @@ import Foundation
 import MatrixRustSDK
 
 enum ExtensionLogger {
-    private static var isConfigured = false
-
     /// Memory formatter, uses exact 2 fraction digits and no grouping
     private static var numberFormatter: NumberFormatter {
         let formatter = NumberFormatter()
@@ -64,15 +62,6 @@ enum ExtensionLogger {
             return ""
         }
         return "\(formattedStr) MB"
-    }
-
-    static func configure(currentTarget: String, logLevel: LogLevel) {
-        guard !isConfigured else {
-            return
-        }
-        isConfigured = true
-
-        MXLog.configure(currentTarget: currentTarget, filePrefix: currentTarget, logLevel: logLevel)
     }
 
     static func logMemory(with tag: String) {

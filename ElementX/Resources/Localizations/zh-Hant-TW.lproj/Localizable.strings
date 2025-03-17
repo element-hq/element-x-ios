@@ -279,6 +279,8 @@
 "crypto_identity_change_profile_pin_violation" = "%1$@ 的已驗證身份變更了。";
 "crypto_identity_change_verification_violation_new" = "%1$@ 的 %2$@ 驗證身份已變更。%3$@";
 "crypto_identity_change_withdraw_verification_action" = "撤回驗證";
+"dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
+"dialog_confirm_link_title" = "Double-check this link";
 "dialog_permission_camera" = "為了讓應用程式使用相機，請到系統設定中開啟權限。";
 "dialog_permission_generic" = "請到系統設定中開啟權限。";
 "dialog_permission_location_description_ios" = "在「設定」->「位置」中開啟權限。";

@@ -19,7 +19,7 @@
 "a11y_show_password" = "Näita salasõna";
 "a11y_start_call" = "Helista";
 "a11y_user_menu" = "Kasutajamenüü";
-"a11y_voice_message_record" = "Salvesta häälsõnum";
+"a11y_voice_message_record" = "Salvesta häälsõnum.";
 "a11y_voice_message_stop_recording" = "Lõpeta salvestamine";
 "a11y.view_details" = "Vaata üksikasju";
 "action_accept" = "Nõustu";
@@ -279,6 +279,8 @@
 "crypto_identity_change_profile_pin_violation" = "%1$@ kasutaja verifitseeritud identiteet on muutunud.";
 "crypto_identity_change_verification_violation_new" = "%1$@ kasutaja (%2$@ kasutajanimi) verifitseeritud identiteet on muutunud. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Võta verifitseerimine tagasi";
+"dialog_confirm_link_message" = "%1$@ link viib sind teise veebisaiti %2$@\n\nKas sa oled kindel, et soovid jätkata?";
+"dialog_confirm_link_title" = "Palun kontrolli seda linki mõttega";
 "dialog_permission_camera" = "Selleks, et rakendus saaks kaamerat kasutada, palun luba see süsteemi seadistuses.";
 "dialog_permission_generic" = "Palun luba süsteemi seadistustest vajalikud õigused.";
 "dialog_permission_location_description_ios" = "Luba õigused Seadistused -> Asukoht valikust.";

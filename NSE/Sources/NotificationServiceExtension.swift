@@ -78,12 +78,12 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             // - NotificationID could not be resolved
             return contentHandler(request.content)
         }
+        
+        Target.nse.configure(logLevel: settings.logLevel)
 
         handler = contentHandler
         modifiedContent = request.content.mutableCopy() as? UNMutableNotificationContent
-
-        ExtensionLogger.configure(currentTarget: "nse", logLevel: settings.logLevel)
-
+        
         MXLog.info("\(tag) #########################################")
         ExtensionLogger.logMemory(with: tag)
         MXLog.info("\(tag) Payload came: \(request.content.userInfo)")

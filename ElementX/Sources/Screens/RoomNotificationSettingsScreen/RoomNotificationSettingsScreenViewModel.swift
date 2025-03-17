@@ -75,11 +75,14 @@ class RoomNotificationSettingsScreenViewModel: RoomNotificationSettingsScreenVie
     }
     
     private func fetchRoomNotificationSettings() async {
-        state.shouldDisplayMentionsOnlyDisclaimer = roomProxy.isEncrypted ? await !notificationSettingsProxy.canPushEncryptedEventsToDevice() : false
+        let isEncrypted = roomProxy.infoPublisher.value.isEncrypted
+        
+        state.shouldDisplayMentionsOnlyDisclaimer = isEncrypted ? await !notificationSettingsProxy.canPushEncryptedEventsToDevice() : false
+        
         do {
             // `isOneToOne` here is not the same as `isDirect` on the room. From the point of view of the push rule, a one-to-one room is a room with exactly two active members.
             let settings = try await notificationSettingsProxy.getNotificationSettings(roomId: roomProxy.id,
-                                                                                       isEncrypted: roomProxy.isEncrypted,
+                                                                                       isEncrypted: isEncrypted,
                                                                                        isOneToOne: roomProxy.infoPublisher.value.activeMembersCount == 2)
             guard !Task.isCancelled else { return }
             state.notificationSettingsState = .loaded(settings: settings)

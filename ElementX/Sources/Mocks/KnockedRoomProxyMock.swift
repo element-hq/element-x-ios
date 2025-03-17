@@ -29,6 +29,7 @@ extension KnockedRoomProxyMock {
 extension RoomInfo {
     @MainActor init(_ configuration: KnockedRoomProxyMockConfiguration) {
         self.init(id: configuration.id,
+                  encryptionState: .notEncrypted,
                   creator: nil,
                   displayName: configuration.name,
                   rawName: nil,

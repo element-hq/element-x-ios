@@ -279,6 +279,8 @@
 "crypto_identity_change_profile_pin_violation" = "Overená totožnosť používateľa %1$@ sa zmenila.";
 "crypto_identity_change_verification_violation_new" = "Overená identita používateľa %1$@ %2$@ sa zmenila. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Zrušiť overenie";
+"dialog_confirm_link_message" = "Odkaz %1$@ vás presmeruje na inú stránku %2$@\n\nNaozaj chcete pokračovať?";
+"dialog_confirm_link_title" = "Dôkladne skontrolujte tento odkaz";
 "dialog_permission_camera" = "Aby aplikácia mohla používať fotoaparát, udeľte povolenie v systémových nastaveniach.";
 "dialog_permission_generic" = "Udeľte prosím povolenie v systémových nastaveniach.";
 "dialog_permission_location_description_ios" = "Udeľte prístup v časti Nastavenia -> Poloha.";

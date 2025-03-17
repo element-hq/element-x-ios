@@ -15,11 +15,11 @@ class ShareExtensionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        Target.shareExtension.configure(logLevel: appSettings.logLevel)
+        
         addChild(hostingController)
         view.addMatchedSubview(hostingController.view)
         hostingController.didMove(toParent: self)
-        
-        MXLog.configure(currentTarget: "shareextension", filePrefix: "shareextension", logLevel: appSettings.logLevel)
     }
     
     override func viewDidAppear(_ animated: Bool) {

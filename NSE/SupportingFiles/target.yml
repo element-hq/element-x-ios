@@ -83,6 +83,7 @@ targets:
     - path: ../../ElementX/Sources/AppHooks/AppHooks.swift
     - path: ../../ElementX/Sources/AppHooks/Hooks/ClientBuilderHook.swift
     - path: ../../ElementX/Sources/Application/AppSettings.swift
+    - path: ../../ElementX/Sources/Application/TargetConfiguration.swift
     - path: ../../ElementX/Sources/Generated/Assets.swift
     - path: ../../ElementX/Sources/Generated/Strings.swift
     - path: ../../ElementX/Sources/Other/Avatars.swift
