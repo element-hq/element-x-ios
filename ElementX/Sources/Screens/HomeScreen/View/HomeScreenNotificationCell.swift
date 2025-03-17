@@ -13,20 +13,25 @@ struct HomeScreenNotificationCell: View {
     
     var notificationText: AttributedString {
         let isRoomDM = room.isDirect
+        let isChannel = room.isAChannel
         let baseText: String
 
         switch room.type {
         case .invite:
             baseText = isRoomDM ? "\(room.name) invited you to chat" : "You are invited to join \(room.name)"
         case .room:
+            
             if isRoomDM {
                 baseText = room.unreadNotificationsCount > 1 ?
-                    "\(room.name) sent you \(room.unreadNotificationsCount) new messages" :
-                    "\(room.name) sent you a new message"
-            } else {
+                    "\(room.unreadNotificationsCount) unread messages in your conversation with \(room.name)" :
+                    "\(room.unreadNotificationsCount) unread message in your conversation with \(room.name)"
+            }
+            else {
+                let channelPostfix = isChannel ? "feed channel." : "channel."
+                
                 baseText = room.unreadNotificationsCount > 1 ?
-                    "You have \(room.unreadNotificationsCount) new messages in \(room.name)" :
-                    "You have a new message in \(room.name)"
+                "\(room.unreadNotificationsCount) unread messages in the \(room.name) \(channelPostfix)" :
+                "\(room.unreadNotificationsCount) unread message in the \(room.name) \(channelPostfix)"
             }
         default:
             baseText = "You may have new messages in \(room.name)"
@@ -44,10 +49,17 @@ struct HomeScreenNotificationCell: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(notificationText)
-                .font(.zero.bodyMD)
-                .foregroundStyle(.compound.textPrimary)
-                .padding()
+            HStack {
+                RoomAvatarImage(avatar: room.avatar,
+                                avatarSize: .room(on: .notificationSettings),
+                                mediaProvider: context.mediaProvider)
+                    .accessibilityHidden(true)
+                
+                Text(notificationText)
+                    .font(.zero.bodyMD)
+                    .foregroundStyle(.compound.textPrimary)
+            }
+            .padding()
             
             Divider()
         }

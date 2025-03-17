@@ -33,28 +33,23 @@ struct HomeTabView<Content1: View, Content2: View, Content3: View, Content4: Vie
     private let tabs = [
         (
             title: "Chat",
-            icon: Asset.Images.homeTabChatIcon,
-            selectedIcon: Asset.Images.homeTabChatFillIcon
+            icon: Asset.Images.homeTabChatIcon
         ),
         (
             title: "Channels",
-            icon: Asset.Images.homeTabExplorerIcon,
-            selectedIcon: Asset.Images.homeTabExplorerFillIcon
-        ),
-        (
-            title: "Notifications",
-            icon: Asset.Images.homeTabNotificationsIcon,
-            selectedIcon: Asset.Images.homeTabNotificationsFillIcon
+            icon: Asset.Images.homeTabExplorerIcon
         ),
         (
             title: "Feed",
-            icon: Asset.Images.homeTabFeedIcon,
-            selectedIcon: Asset.Images.homeTabFeedFillIcon
+            icon: Asset.Images.homeTabFeedIcon
+        ),
+        (
+            title: "Notifications",
+            icon: Asset.Images.homeTabNotificationsIcon
         ),
         (
             title: "My Feed",
-            icon: Asset.Images.homeTabMyfeedIcon,
-            selectedIcon: Asset.Images.homeTabMyfeedFillIcon
+            icon: Asset.Images.homeTabProfileIcon
         )
     ]
     
@@ -80,9 +75,9 @@ struct HomeTabView<Content1: View, Content2: View, Content3: View, Content4: Vie
                 case 1:
                     channelTabContent
                 case 2:
-                    notificationsTabContent
-                case 3:
                     homeTabContent
+                case 3:
+                    notificationsTabContent
                 case 4:
                     myFeedTabContent
                 default:
@@ -98,7 +93,7 @@ struct HomeTabView<Content1: View, Content2: View, Content3: View, Content4: Vie
                     ForEach(0..<tabs.count, id: \.self) { index in
                         tabButton(
                             title: tabs[index].title,
-                            icon: selectedTab == index ? tabs[index].selectedIcon : tabs[index].icon,
+                            icon: tabs[index].icon,
                             isSelected: selectedTab == index,
                             index: index
                         )
@@ -118,6 +113,7 @@ struct HomeTabView<Content1: View, Content2: View, Content3: View, Content4: Vie
             VStack {
                 Image(asset: icon)
                     .font(.system(size: 18))
+                    .foregroundStyle(isSelected ? .zero.bgAccentRest : .compound.textSecondary)
             }
             .frame(maxWidth: .infinity) // Equal width for all buttons
             .padding(.vertical, 10)

@@ -284,6 +284,10 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     let unreadNotificationsCount: UInt
     
+    var isAChannel: Bool {
+        name.starts(with: ZeroContants.ZERO_CHANNEL_PREFIX)
+    }
+    
     static func placeholder() -> HomeScreenRoom {
         HomeScreenRoom(id: UUID().uuidString,
                        roomID: nil,
