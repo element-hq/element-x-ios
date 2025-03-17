@@ -279,6 +279,8 @@
 "crypto_identity_change_profile_pin_violation" = "L'identità verificata di %1$@ è cambiata.";
 "crypto_identity_change_verification_violation_new" = "L'identità %2$@ verificata di %1$@ è cambiata. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Ritira verifica";
+"dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
+"dialog_confirm_link_title" = "Double-check this link";
 "dialog_permission_camera" = "Per permettere all'applicazione di usare la fotocamera, concedi l'autorizzazione nelle impostazioni di sistema.";
 "dialog_permission_generic" = "Concedi l'autorizzazione nelle impostazioni di sistema.";
 "dialog_permission_location_description_ios" = "Concedi l'accesso in Impostazioni -> Condividi la mia posizione.";

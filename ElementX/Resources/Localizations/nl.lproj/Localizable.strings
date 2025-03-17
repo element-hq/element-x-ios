@@ -21,9 +21,9 @@
 "a11y_user_menu" = "Gebruikersmenu";
 "a11y_voice_message_record" = "Spraakbericht opnemen.";
 "a11y_voice_message_stop_recording" = "Opnemen stoppen";
-"a11y.view_details" = "View details";
+"a11y.view_details" = "Details bekijken";
 "action_accept" = "Accepteren";
-"action_add_caption" = "Add caption";
+"action_add_caption" = "Beschrijving toevoegen";
 "action_add_to_timeline" = "Toevoegen aan tijdlijn";
 "action_back" = "Terug";
 "action_call" = "Bellen";
@@ -69,7 +69,7 @@
 "action_learn_more" = "Meer informatie";
 "action_leave" = "Verlaten";
 "action_leave_conversation" = "Gesprek verlaten";
-"action_leave_room" = "Ruimte verlaten";
+"action_leave_room" = "Kamer verlaten";
 "action_load_more" = "Meer laden";
 "action_manage_account" = "Account beheren";
 "action_manage_devices" = "Apparaten beheren";
@@ -279,6 +279,8 @@
 "crypto_identity_change_profile_pin_violation" = "%1$@’s verified identity has changed.";
 "crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ verified identity has changed.  %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
+"dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
+"dialog_confirm_link_title" = "Double-check this link";
 "dialog_permission_camera" = "Geef toestemming in de systeeminstellingen om de applicatie de camera te laten gebruiken.";
 "dialog_permission_generic" = "Geef hiervoor toestemming in de systeeminstellingen.";
 "dialog_permission_location_description_ios" = "Verleen toegang via Instellingen -> Locatie.";
@@ -605,7 +607,7 @@
 "screen_deactivate_account_description_bold_part" = "onomkeerbaar";
 "screen_deactivate_account_list_item_1" = "Je account %1$@ (je kunt niet opnieuw inloggen en je ID kan niet opnieuw worden gebruikt)";
 "screen_deactivate_account_list_item_1_bold_part" = "permanent uitschakelen";
-"screen_deactivate_account_list_item_2" = "Je verwijderen uit alle chatrooms.";
+"screen_deactivate_account_list_item_2" = "Je verwijderen uit alle chatkamers.";
 "screen_deactivate_account_list_item_3" = "Je accountgegevens verwijderen van onze identiteitsserver.";
 "screen_deactivate_account_list_item_4" = "Je berichten zijn nog steeds zichtbaar voor geregistreerde gebruikers, maar niet beschikbaar voor nieuwe of niet-geregistreerde gebruikers als je ervoor kiest ze te verwijderen.";
 "screen_edit_poll_delete_confirmation" = "Weet je zeker dat je deze peiling wilt verwijderen?";
@@ -1197,7 +1199,7 @@
 "screen_room_change_role_unsaved_changes_title" = "Wijzigingen opslaan?";
 "screen_room_details_invite_people_title" = "Mensen uitnodigen";
 "screen_room_details_leave_conversation_title" = "Gesprek verlaten";
-"screen_room_details_leave_room_title" = "Ruimte verlaten";
+"screen_room_details_leave_room_title" = "Kamer verlaten";
 "screen_room_details_media_gallery_title" = "Media and files";
 "screen_room_details_notification_title" = "Meldingen";
 "screen_room_details_roles_and_permissions" = "Rollen en rechten";

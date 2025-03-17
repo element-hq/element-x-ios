@@ -279,6 +279,8 @@
 "crypto_identity_change_profile_pin_violation" = "Zweryfikowana tożsamość %1$@ uległa zmianie";
 "crypto_identity_change_verification_violation_new" = "Zweryfikowana tożsamość %1$@ %2$@ uległa zmianie.  %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Wycofaj weryfikację";
+"dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
+"dialog_confirm_link_title" = "Double-check this link";
 "dialog_permission_camera" = "Aby umożliwić aplikacji korzystanie z aparatu, prosimy o udzielenie zezwolenia w ustawieniach systemowych.";
 "dialog_permission_generic" = "Proszę nadać uprawnienia w ustawieniach systemowych.";
 "dialog_permission_location_description_ios" = "Przyznaj dostęp w Ustawienia -> Lokalizacja.";
