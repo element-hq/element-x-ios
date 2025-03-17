@@ -745,6 +745,22 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(link.absoluteString, "https://matrix.org")
     }
     
+    func testValidLinkWithRTLOverride() {
+        let htmlString = "<a href=\"https://matrix.org\">\u{202E}https://matrix.org</a>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+                
+        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
+            XCTFail("Couldn't find the link")
+            return
+        }
+        XCTAssertFalse(link.requiresConfirmation)
+        XCTAssertEqual(link.absoluteString, "https://matrix.org")
+    }
+    
     func testPhishingUserID() {
         let htmlString = "Hey check the following user <a href=\"https://matrix.org\">@alice:matrix.org</a>"
         
