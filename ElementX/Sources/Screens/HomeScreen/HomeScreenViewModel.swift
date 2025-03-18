@@ -712,7 +712,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             var updatedChannel = homeChannel
             if let roomSummary = userSession.clientProxy.roomSummaryForAlias(homeChannel.id) {
                 channelRoomMap[homeChannel.id] = roomSummary
-                updatedChannel.notificationsCount = roomSummary.unreadNotificationsCount
+                updatedChannel.notificationsCount = roomSummary.unreadMessagesCount
             }
             return updatedChannel
         }

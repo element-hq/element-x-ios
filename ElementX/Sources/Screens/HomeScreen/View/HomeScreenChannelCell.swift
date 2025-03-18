@@ -31,10 +31,11 @@ struct HomeScreenChannelCell: View {
                     }
             }
         }
-        .padding(.vertical, 12)
-        .padding(.horizontal, 24)
+        .contentShape(Rectangle())
         .onTapGesture {
             onChannelSelected(channel)
         }
+        .padding(.vertical, 12)
+        .padding(.horizontal, 24)
     }
 }

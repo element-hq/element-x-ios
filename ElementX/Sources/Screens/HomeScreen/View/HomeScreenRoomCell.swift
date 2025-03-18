@@ -122,6 +122,16 @@ struct HomeScreenRoomCell: View {
                 if room.badges.isDotShown {
                     Circle()
                         .frame(width: 12, height: 12)
+//                    ZStack {
+//                        Circle()
+//                            .frame(width: 16, height: 16, alignment: .center)
+//                        if room.unreadNotificationsCount > 0 {
+//                            Text("\(room.unreadNotificationsCount)")
+//                                .font(.compound.bodyXS)
+//                                .foregroundColor(.black)
+//                                .frame(alignment: .center)
+//                        }
+//                    }
                 }
             }
             .foregroundColor(room.isHighlighted ? Asset.Colors.blue11.swiftUIColor : .compound.iconQuaternary)
