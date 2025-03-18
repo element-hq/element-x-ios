@@ -7,6 +7,7 @@
 
 import Foundation
 
+// interesting
 struct PollRoomTimelineItem: Equatable, EventBasedTimelineItemProtocol {
     let id: TimelineItemIdentifier
     let poll: Poll

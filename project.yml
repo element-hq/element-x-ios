@@ -1,11 +1,8 @@
----
 name: ElementX
 attributes:
   ORGANIZATIONNAME: Element
-
 fileGroups:
 - project.yml
-
 options:
   groupSortPosition: bottom
   createIntermediateGroups: true
@@ -34,7 +31,6 @@ options:
     - Other
     - UITests
   postGenCommand: cd Tools/XcodeGen && sh postGenCommand.sh
-
 settings:
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: true
   ENABLE_BITCODE: false
@@ -44,7 +40,6 @@ settings:
   MARKETING_VERSION: 1.9.7
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
-
 include:
 - path: app.yml
 - path: ElementX/SupportingFiles/target.yml
@@ -54,37 +49,24 @@ include:
 - path: IntegrationTests/SupportingFiles/target.yml
 - path: NSE/SupportingFiles/target.yml
 - path: ShareExtension/SupportingFiles/target.yml
-# - path: NCE/SupportingFiles/target.yml (not used yet)
-# - path: MyAppVariant/override.yml
-
 packages:
-  # Element/Matrix dependencies
   MatrixRustSDK:
-    url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 1.0.69
-    # path: ../matrix-rust-sdk
+    path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
     revision: 80edb8829b4ca00c0a52a39b7d9024e3ebdc1acb
-    # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
     minorVersion: 0.28.0
-    # path: ../matrix-analytics-events
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
     minorVersion: 1.3.3
-    # path: ../emojibase-bindings
   SwiftOGG:
     url: https://github.com/element-hq/swift-ogg
     minorVersion: 0.0.3
-    # path: ../swift-ogg
   WysiwygComposer:
     url: https://github.com/element-hq/matrix-rich-text-editor-swift
     exactVersion: 2.37.12
-    # path: ../matrix-rich-text-editor/platforms/ios/lib/WysiwygComposer
-  
-  # External dependencies
   Algorithms:
     url: https://github.com/apple/swift-algorithms
     minorVersion: 1.0.0
@@ -136,7 +118,6 @@ packages:
   Version:
     url: https://github.com/mxcl/Version
     minorVersion: 2.1.0
-
 aggregateTargets:
   Periphery:
     buildScripts:

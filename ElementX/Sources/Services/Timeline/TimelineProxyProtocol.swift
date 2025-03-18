@@ -81,7 +81,7 @@ protocol TimelineProxyProtocol {
                           audioInfo: AudioInfo,
                           waveform: [UInt16],
                           progressSubject: CurrentValueSubject<Double, Never>?,
-                          requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
+                          requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<String, TimelineProxyError>
     
     func sendReadReceipt(for eventID: String, type: ReceiptType) async -> Result<Void, TimelineProxyError>
     

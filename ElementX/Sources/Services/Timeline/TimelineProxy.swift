@@ -359,7 +359,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                           audioInfo: AudioInfo,
                           waveform: [UInt16],
                           progressSubject: CurrentValueSubject<Double, Never>?,
-                          requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+                          requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<String, TimelineProxyError> {
         MXLog.info("Sending voice message")
         
         let handle = timeline.sendVoiceMessage(url: url.path(percentEncoded: false),
@@ -375,14 +375,13 @@ final class TimelineProxy: TimelineProxyProtocol {
         await requestHandle(handle)
         
         do {
-            try await handle.join()
-            MXLog.info("Finished sending voice message")
+            let eventId = try await handle.join().eventId()
+            MXLog.error("Finished sending voice message, eventId \(eventId)")
+            return .success(eventId)
         } catch {
             MXLog.error("Failed sending vocie message with error: \(error)")
             return .failure(.sdkError(error))
         }
-        
-        return .success(())
     }
     
     func sendMessage(_ message: String,

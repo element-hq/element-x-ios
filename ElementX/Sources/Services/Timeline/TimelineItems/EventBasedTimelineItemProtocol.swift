@@ -38,6 +38,7 @@ extension EventBasedTimelineItemProtocol {
         self is RedactedRoomTimelineItem
     }
     
+    // interesting
     var pollIfAvailable: Poll? {
         (self as? PollRoomTimelineItem)?.poll
     }

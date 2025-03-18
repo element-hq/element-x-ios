@@ -43,6 +43,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private var paginateForwardsTask: Task<Void, Never>?
 
     init(roomProxy: JoinedRoomProxyProtocol,
+         // interesting
          focussedEventID: String? = nil,
          timelineController: RoomTimelineControllerProtocol,
          mediaProvider: MediaProviderProtocol,

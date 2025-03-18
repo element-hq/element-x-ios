@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.2.5 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.2.6 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -4278,6 +4278,81 @@ open class ClientSDKMock: MatrixRustSDK.Client {
             return try userIdServerNameClosure()
         } else {
             return userIdServerNameReturnValue
+        }
+    }
+
+    //MARK: - voyzmeSummarize
+
+    open var voyzmeSummarizeRoomIdOrAliasEventIdThrowableError: Error?
+    var voyzmeSummarizeRoomIdOrAliasEventIdUnderlyingCallsCount = 0
+    open var voyzmeSummarizeRoomIdOrAliasEventIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return voyzmeSummarizeRoomIdOrAliasEventIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = voyzmeSummarizeRoomIdOrAliasEventIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                voyzmeSummarizeRoomIdOrAliasEventIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    voyzmeSummarizeRoomIdOrAliasEventIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var voyzmeSummarizeRoomIdOrAliasEventIdCalled: Bool {
+        return voyzmeSummarizeRoomIdOrAliasEventIdCallsCount > 0
+    }
+    open var voyzmeSummarizeRoomIdOrAliasEventIdReceivedArguments: (roomIdOrAlias: String, eventId: String)?
+    open var voyzmeSummarizeRoomIdOrAliasEventIdReceivedInvocations: [(roomIdOrAlias: String, eventId: String)] = []
+
+    var voyzmeSummarizeRoomIdOrAliasEventIdUnderlyingReturnValue: String!
+    open var voyzmeSummarizeRoomIdOrAliasEventIdReturnValue: String! {
+        get {
+            if Thread.isMainThread {
+                return voyzmeSummarizeRoomIdOrAliasEventIdUnderlyingReturnValue
+            } else {
+                var returnValue: String? = nil
+                DispatchQueue.main.sync {
+                    returnValue = voyzmeSummarizeRoomIdOrAliasEventIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                voyzmeSummarizeRoomIdOrAliasEventIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    voyzmeSummarizeRoomIdOrAliasEventIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var voyzmeSummarizeRoomIdOrAliasEventIdClosure: ((String, String) async throws -> String)?
+
+    open override func voyzmeSummarize(roomIdOrAlias: String, eventId: String) async throws -> String {
+        if let error = voyzmeSummarizeRoomIdOrAliasEventIdThrowableError {
+            throw error
+        }
+        voyzmeSummarizeRoomIdOrAliasEventIdCallsCount += 1
+        voyzmeSummarizeRoomIdOrAliasEventIdReceivedArguments = (roomIdOrAlias: roomIdOrAlias, eventId: eventId)
+        DispatchQueue.main.async {
+            self.voyzmeSummarizeRoomIdOrAliasEventIdReceivedInvocations.append((roomIdOrAlias: roomIdOrAlias, eventId: eventId))
+        }
+        if let voyzmeSummarizeRoomIdOrAliasEventIdClosure = voyzmeSummarizeRoomIdOrAliasEventIdClosure {
+            return try await voyzmeSummarizeRoomIdOrAliasEventIdClosure(roomIdOrAlias, eventId)
+        } else {
+            return voyzmeSummarizeRoomIdOrAliasEventIdReturnValue
         }
     }
 }
@@ -17033,14 +17108,43 @@ open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHand
     open var joinCalled: Bool {
         return joinCallsCount > 0
     }
-    open var joinClosure: (() async throws -> Void)?
 
-    open override func join() async throws {
+    var joinUnderlyingReturnValue: SendMessageResponse!
+    open var joinReturnValue: SendMessageResponse! {
+        get {
+            if Thread.isMainThread {
+                return joinUnderlyingReturnValue
+            } else {
+                var returnValue: SendMessageResponse? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var joinClosure: (() async throws -> SendMessageResponse)?
+
+    open override func join() async throws -> SendMessageResponse {
         if let error = joinThrowableError {
             throw error
         }
         joinCallsCount += 1
-        try await joinClosure?()
+        if let joinClosure = joinClosure {
+            return try await joinClosure()
+        } else {
+            return joinReturnValue
+        }
     }
 }
 open class SendHandleSDKMock: MatrixRustSDK.SendHandle {
@@ -17161,6 +17265,82 @@ open class SendHandleSDKMock: MatrixRustSDK.SendHandle {
         }
         tryResendCallsCount += 1
         try await tryResendClosure?()
+    }
+}
+open class SendMessageResponseSDKMock: MatrixRustSDK.SendMessageResponse {
+    init() {
+        super.init(noPointer: .init())
+    }
+
+    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    }
+
+    fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - eventId
+
+    var eventIdUnderlyingCallsCount = 0
+    open var eventIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return eventIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = eventIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                eventIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    eventIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var eventIdCalled: Bool {
+        return eventIdCallsCount > 0
+    }
+
+    var eventIdUnderlyingReturnValue: String!
+    open var eventIdReturnValue: String! {
+        get {
+            if Thread.isMainThread {
+                return eventIdUnderlyingReturnValue
+            } else {
+                var returnValue: String? = nil
+                DispatchQueue.main.sync {
+                    returnValue = eventIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                eventIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    eventIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var eventIdClosure: (() -> String)?
+
+    open override func eventId() -> String {
+        eventIdCallsCount += 1
+        if let eventIdClosure = eventIdClosure {
+            return eventIdClosure()
+        } else {
+            return eventIdReturnValue
+        }
     }
 }
 open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificationController {

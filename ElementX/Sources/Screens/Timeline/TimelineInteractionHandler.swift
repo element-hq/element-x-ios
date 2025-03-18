@@ -99,6 +99,7 @@ class TimelineInteractionHandler {
         }
         
         switch action {
+        // interesting
         case .copy:
             guard let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol else {
                 return
@@ -324,6 +325,7 @@ class TimelineInteractionHandler {
     }
     
     func startRecordingVoiceMessage() async {
+        // Start recording voice message here.
         voiceMessageRecorderObserver = voiceMessageRecorder.actions
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in

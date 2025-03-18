@@ -1020,6 +1020,15 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
+    
+//    func voyzmeSummarize(for userID: String) async -> Result<String, ClientProxyError> {
+//        do {
+//            return try await .success(client.voyzmeSummarize(roomIdOrAlias: , eventId: ))
+//        } catch {
+//            MXLog.error("Failed to summarize identity: \(error)")
+//            return .failure(.sdkError(error))
+//        }
+//    }
 }
 
 extension ClientProxy: MediaLoaderProtocol {

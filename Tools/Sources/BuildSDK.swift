@@ -9,11 +9,13 @@ enum Profile: String, ExpressibleByArgument {
 }
 
 enum Target: String, ExpressibleByArgument, CaseIterable {
+    // Only build for iOS devices, skip simulators and Macs.
+    // It takes forever anyway.
     case iOS = "aarch64-apple-ios"
-    case simulatorARM64 = "aarch64-apple-ios-sim"
-    case simulatorIntel = "x86_64-apple-ios"
-    case macARM64 = "aarch64-apple-darwin"
-    case macIntel = "x86_64-apple-darwin"
+    // case simulatorARM64 = "aarch64-apple-ios-sim"
+    // case simulatorIntel = "x86_64-apple-ios"
+    // case macARM64 = "aarch64-apple-darwin"
+    // case macIntel = "x86_64-apple-darwin"
 }
 
 struct BuildSDK: ParsableCommand {
@@ -93,7 +95,7 @@ struct BuildSDK: ParsableCommand {
     
     /// Checkout the specified branch of the SDK if supplied.
     func checkoutBranchIfSupplied() throws {
-        let branch = branch ?? "voyzme"
+        let branch = branch ?? "voyzme_new"
         try Zsh.run(command: "git checkout \(branch)", directory: .sdkDirectory)
     }
     
@@ -105,12 +107,7 @@ struct BuildSDK: ParsableCommand {
         if device > 0 {
             buildCommand.append(" --target \(Target.iOS.rawValue)")
         } else if simulator > 0 {
-            let hostArchitecture = try Zsh.run(command: "arch")
-            if hostArchitecture?.trimmingCharacters(in: .whitespacesAndNewlines) == "arm64" {
-                buildCommand.append(" --target \(Target.simulatorARM64.rawValue)")
-            } else {
-                buildCommand.append(" --target \(Target.simulatorIntel.rawValue)")
-            }
+            print("sim")
         } else if !target.isEmpty {
             target.forEach { buildCommand.append(" --target \($0.rawValue)") }
         }

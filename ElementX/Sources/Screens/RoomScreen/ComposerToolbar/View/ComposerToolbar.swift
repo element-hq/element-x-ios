@@ -128,6 +128,7 @@ struct ComposerToolbar: View {
     
     private var sendButton: some View {
         Button {
+            // interesting
             sendMessage()
         } label: {
             CompoundIcon(context.viewState.composerMode.isEdit ? \.check : \.sendSolid)

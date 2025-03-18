@@ -57,6 +57,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     // MARK: - Recording
     
     func startRecording() async {
+        // Voyzme: should prolly plug the real-time STT somewhere here.
         await stopPlayback()
         previewAudioPlayer?.reset()
         recordingCancelled = false
@@ -181,7 +182,10 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
                                                                audioInfo: audioInfo,
                                                                waveform: waveform,
                                                                progressSubject: nil) { _ in }
-        
+        // Voyzme: at the moment STT is not available yet; let's pretend it's there at the moment the audio is ready to be
+        // sent, and use gibberish data.
+//        let result = await roomProxy.timeline.sendSTT()
+
         if case .failure(let error) = result {
             MXLog.error("Failed to send the voice message. \(error)")
             return .failure(.failedSendingVoiceMessage)

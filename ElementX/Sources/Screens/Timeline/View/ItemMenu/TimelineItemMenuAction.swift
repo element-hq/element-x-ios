@@ -63,6 +63,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     case report
     case react
     case toggleReaction(key: String)
+    // interesting
     case endPoll(pollStartID: String)
     case pin
     case unpin
