@@ -85,7 +85,7 @@ struct UserDetailsEditScreen: View {
         Section {
             ZeroListRow(label: .plain(title: context.primaryZId),
                         kind: .button(action: {
-                context.showZIdsSheet = true
+                context.showZIdsSheet = !context.userZeroIds.isEmpty
             }))
             .sheet(isPresented: $context.showZIdsSheet, onDismiss: {
                 context.showZIdsSheet = false
