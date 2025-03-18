@@ -372,4 +372,33 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         service.processTextMessage("#pr test @al", selectedRange: .init(location: 9, length: 1))
         try await deffered.fulfill()
     }
+    
+    func testSuggestionsContainingNonAlphanumericCharacters() async throws {
+        let alice: RoomMemberProxyMock = .mockAlice
+        // We keep the users in the tests since they should not appear in the suggestions when using the room trigger
+        let members: [RoomMemberProxyMock] = [alice, .mockBob, .mockCharlie, .mockMe]
+        let roomProxyMock = JoinedRoomProxyMock(.init(id: "roomID", name: "test", members: members))
+        let roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
+        let service = CompletionSuggestionService(roomProxy: roomProxyMock,
+                                                  roomListPublisher: roomSummaryProvider.roomListPublisher.eraseToAnyPublisher())
+        
+        var deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == []
+        }
+        
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(service.suggestionsPublisher) { suggestions in
+            suggestions == [.init(suggestionType: .room(.init(id: "6",
+                                                              canonicalAlias: "#prelude-foundation:matrix.org",
+                                                              name: "Prelude to Foundation",
+                                                              avatar: .room(id: "6",
+                                                                            name: "Prelude to Foundation",
+                                                                            avatarURL: nil))),
+                                  range: .init(),
+                                  rawSuggestionText: "#prelude-")]
+        }
+        service.setSuggestionTrigger(.init(type: .room, text: "#prelude-", range: .init()))
+        try await deferred.fulfill()
+    }
 }
