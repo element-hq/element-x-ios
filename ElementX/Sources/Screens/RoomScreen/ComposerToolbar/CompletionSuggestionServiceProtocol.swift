@@ -49,7 +49,7 @@ struct SuggestionItem: Identifiable, Equatable {
         case .user(let user):
             user.id
         case .allUsers:
-            PillConstants.atRoom
+            PillUtilities.atRoom
         case .room(let room):
             room.id
         }
@@ -58,7 +58,7 @@ struct SuggestionItem: Identifiable, Equatable {
     var displayName: String {
         switch suggestionType {
         case .allUsers:
-            return PillConstants.everyone
+            return PillUtilities.everyone
         case .user(let user):
             return user.displayName ?? user.id
         case .room(let room):
@@ -69,7 +69,7 @@ struct SuggestionItem: Identifiable, Equatable {
     var subtitle: String? {
         switch suggestionType {
         case .allUsers:
-            return PillConstants.atRoom
+            return PillUtilities.atRoom
         case .user(let user):
             return user.displayName == nil ? nil : user.id
         case .room(let room):

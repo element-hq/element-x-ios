@@ -102,12 +102,13 @@ targets:
     - path: ../../ElementX/Sources/Other/Extensions/UNNotificationContent.swift
     - path: ../../ElementX/Sources/Other/Extensions/URL.swift
     - path: ../../ElementX/Sources/Other/Extensions/UTType.swift
+    - path: ../../ElementX/Sources/Other/Extensions/CharacterSet.swift
     - path: ../../ElementX/Sources/Other/HTMLParsing
     - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
     - path: ../../ElementX/Sources/Other/Logging
     - path: ../../ElementX/Sources/Other/MatrixEntityRegex.swift
     - path: ../../ElementX/Sources/Other/NetworkMonitor
-    - path: ../../ElementX/Sources/Other/Pills/PillConstants.swift
+    - path: ../../ElementX/Sources/Other/Pills/PillUtilities.swift
     - path: ../../ElementX/Sources/Other/Pills/PlainMentionBuilder.swift
     - path: ../../ElementX/Sources/Other/SwiftUI/Views/PlaceholderAvatarImage.swift
     - path: ../../ElementX/Sources/Other/TestablePreview.swift

@@ -100,6 +100,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         
         let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
         removeDefaultForegroundColors(mutableAttributedString)
+        detectPhishingAttempts(mutableAttributedString)
         addLinksAndMentions(mutableAttributedString)
         replaceMarkedBlockquotes(mutableAttributedString)
         replaceMarkedCodeBlocks(mutableAttributedString)
@@ -190,19 +191,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 return nil
             }
             
-            var link = String(string[matchRange])
-            
-            if !link.contains("://") {
-                link.insert(contentsOf: "https://", at: link.startIndex)
-            }
-            
-            // Don't include punctuation characters at the end of links
-            // e.g `https://element.io/blog:` <- which is a valid link but the wrong place
-            while !link.isEmpty,
-                  link.rangeOfCharacter(from: .punctuationCharacters, options: .backwards)?.upperBound == link.endIndex {
-                link = String(link.dropLast())
-            }
-            
+            let link = String(string[matchRange]).asSanitizedLink
             return TextParsingMatch(type: .link(urlString: link), range: match.range)
         })
         
@@ -296,7 +285,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     func detectPermalinks(_ attributedString: NSMutableAttributedString) {
         attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
             if value != nil {
-                if let url = value as? URL, let matrixEntity = parseMatrixEntityFrom(uri: url.absoluteString) {
+                if let url = value as? URL,
+                   let matrixEntity = parseMatrixEntityFrom(uri: url.absoluteString) {
                     switch matrixEntity.id {
                     case .user(let userID):
                         mentionBuilder.handleUserMention(for: attributedString, in: range, url: url, userID: userID, userDisplayName: nil)
@@ -320,7 +310,41 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             }
         }
     }
+        
+    private func detectPhishingAttempts(_ attributedString: NSMutableAttributedString) {
+        attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
+            guard value != nil, let internalURL = value as? URL else {
+                return
+            }
+            let displayString = attributedString.attributedSubstring(from: range).string
+            
+            guard PhishingDetector.isPhishingAttempt(displayString: displayString, internalURL: internalURL) else {
+                return
+            }
+            handlePhishingAttempt(for: attributedString, in: range, internalURL: internalURL, displayString: displayString)
+        }
+    }
     
+    private func handlePhishingAttempt(for attributedString: NSMutableAttributedString,
+                                       in range: NSRange,
+                                       internalURL: URL,
+                                       displayString: String) {
+        // Let's remove the existing link attribute
+        attributedString.removeAttribute(.link, range: range)
+        
+        var urlComponents = URLComponents()
+        urlComponents.scheme = URL.confirmationScheme
+        urlComponents.host = ""
+        let parameters = ConfirmURLParameters(internalURL: internalURL, displayString: displayString)
+        urlComponents.queryItems = parameters.urlQueryItems
+        
+        guard let finalURL = urlComponents.url else {
+            return
+        }
+        
+        attributedString.addAttribute(.link, value: finalURL, range: range)
+    }
+        
     private func removeDTCoreTextArtifacts(_ attributedString: NSMutableAttributedString) {
         guard attributedString.length > 0 else {
             return
