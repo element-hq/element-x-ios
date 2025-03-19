@@ -45,7 +45,7 @@ protocol AuthenticationServiceProtocol {
     /// Asks the SDK to abort an ongoing OIDC login if we didn't get a callback to complete the request with.
     func abortOIDCLogin(data: OIDCAuthorizationDataProxy) async
     /// Completes an OIDC login that was started using ``urlForOIDCLogin``.
-    func loginWithOIDCCallback(_ callbackURL: URL, data: OIDCAuthorizationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError>
+    func loginWithOIDCCallback(_ callbackURL: URL) async -> Result<UserSessionProtocol, AuthenticationServiceError>
     /// Performs a password login using the current homeserver.
     func login(username: String, password: String, initialDeviceName: String?, deviceID: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError>
     /// Completes registration using the credentials obtained via the helper URL.

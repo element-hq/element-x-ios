@@ -47,7 +47,7 @@ class OIDCAuthenticationPresenter: NSObject {
             return .failure(.oidcError(.unknown))
         }
         
-        switch await authenticationService.loginWithOIDCCallback(url, data: oidcData) {
+        switch await authenticationService.loginWithOIDCCallback(url) {
         case .success(let userSession):
             return .success(userSession)
         case .failure(let error):

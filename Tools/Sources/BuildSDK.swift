@@ -68,7 +68,7 @@ struct BuildSDK: ParsableCommand {
     /// but only when the ``target`` option hasn't been supplied.
     func checkRustupTargets() throws {
         guard target.isEmpty, device == 0, simulator == 0 else { return }
-        guard let output = try Zsh.run(command: "rustup show") else { throw Error.rustupOutputFailure }
+        guard let output = try Zsh.run(command: "rustup target list --toolchain stable --installed") else { throw Error.rustupOutputFailure }
         
         var requiredTargets = Target.allCases.reduce(into: [String: Bool]()) { partialResult, target in
             partialResult[target.rawValue] = false

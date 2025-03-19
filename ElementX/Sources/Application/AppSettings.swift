@@ -267,7 +267,12 @@ final class AppSettings {
 
     // MARK: - Element Call
     
-    let elementCallBaseURL: URL = "https://call.element.io"
+    let elementCallBaseURL: URL = "https://call.element.io/room"
+    
+    // These are publicly availble on https://call.element.io so we don't neeed to treat them as secrets
+    let elementCallPosthogAPIHost = "https://posthog-element-call.element.io"
+    let elementCallPosthogAPIKey = "phc_rXGHx9vDmyEvyRxPziYtdVIv0ahEv8A9uLWFcCi1WcU"
+    let elementCallPosthogSentryDSN = "https://3bd2f95ba5554d4497da7153b552ffb5@sentry.tools.element.io/41"
     
     @UserPreference(key: UserDefaultsKeys.elementCallBaseURLOverride, defaultValue: nil, storageType: .userDefaults(store))
     var elementCallBaseURLOverride: URL?
