@@ -16,10 +16,14 @@ struct HomeScreenInviteCell: View {
     let room: HomeScreenRoom
     let context: HomeScreenViewModel.Context
     
+    private var avatar: RoomAvatar {
+        context.viewState.hideInviteAvatars ? .room(id: room.id, name: room.name, avatarURL: nil) : room.avatar
+    }
+    
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
             if dynamicTypeSize < .accessibility3 {
-                RoomAvatarImage(avatar: room.avatar,
+                RoomAvatarImage(avatar: avatar,
                                 avatarSize: .custom(52),
                                 mediaProvider: context.mediaProvider)
                     .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
@@ -71,7 +75,9 @@ struct HomeScreenInviteCell: View {
     private var inviterView: some View {
         if let inviter = room.inviter,
            !room.isDirect {
-            RoomInviterLabel(inviter: inviter, mediaProvider: context.mediaProvider)
+            RoomInviterLabel(inviter: inviter,
+                             shouldHideAvatar: context.viewState.hideInviteAvatars,
+                             mediaProvider: context.mediaProvider)
                 .font(.compound.bodyMD)
                 .foregroundStyle(.compound.textSecondary)
         }

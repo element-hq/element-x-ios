@@ -12,6 +12,7 @@ import SwiftUI
 protocol CommonSettingsProtocol {
     var logLevel: LogLevel { get }
     var enableOnlySignedDeviceIsolationMode: Bool { get }
+    var hideInviteAvatars: Bool { get }
     var hideTimelineMedia: Bool { get }
     var eventCacheEnabled: Bool { get }
 }
@@ -40,6 +41,7 @@ final class AppSettings {
         case appAppearance
         case sharePresence
         case hideUnreadMessagesBadge
+        case hideInviteAvatars
         case hideTimelineMedia
         
         case elementCallBaseURLOverride
@@ -306,6 +308,9 @@ final class AppSettings {
     /// Configuration to enable only signed device isolation mode for  crypto. In this mode only devices signed by their owner will be considered in e2ee rooms.
     @UserPreference(key: UserDefaultsKeys.enableOnlySignedDeviceIsolationMode, defaultValue: false, storageType: .userDefaults(store))
     var enableOnlySignedDeviceIsolationMode
+    
+    @UserPreference(key: UserDefaultsKeys.hideInviteAvatars, defaultValue: false, storageType: .userDefaults(store))
+    var hideInviteAvatars
     
     @UserPreference(key: UserDefaultsKeys.hideTimelineMedia, defaultValue: false, storageType: .userDefaults(store))
     var hideTimelineMedia

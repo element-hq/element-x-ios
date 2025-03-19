@@ -106,6 +106,8 @@ struct HomeScreenViewState: BindableState {
         return rooms
     }
     
+    var hideInviteAvatars = false
+    
     var bindings = HomeScreenViewStateBindings()
     
     var placeholderRooms: [HomeScreenRoom] {

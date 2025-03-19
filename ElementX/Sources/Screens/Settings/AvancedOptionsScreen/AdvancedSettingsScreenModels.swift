@@ -34,7 +34,8 @@ protocol AdvancedSettingsProtocol: AnyObject {
     var viewSourceEnabled: Bool { get set }
     var appAppearance: AppAppearance { get set }
     var sharePresence: Bool { get set }
-    
+    var hideTimelineMedia: Bool { get set }
+    var hideInviteAvatars: Bool { get set }
     var optimizeMediaUploads: Bool { get set }
 }
 
