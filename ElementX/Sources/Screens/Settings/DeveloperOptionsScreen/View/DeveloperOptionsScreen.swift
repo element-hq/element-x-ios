@@ -46,12 +46,6 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
-            Section("Room") {
-                Toggle(isOn: $context.hideTimelineMedia) {
-                    Text("Hide image & video previews")
-                }
-            }
-            
             Section("Join rules") {
                 Toggle(isOn: $context.knockingEnabled) {
                     Text("Knocking")

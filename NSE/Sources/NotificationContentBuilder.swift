@@ -93,7 +93,8 @@ struct NotificationContentBuilder {
         notification = try await notification.addSenderIcon(using: mediaProvider,
                                                             senderID: notificationItem.senderID,
                                                             senderName: notificationItem.senderDisplayName ?? notificationItem.roomDisplayName,
-                                                            icon: icon(for: notificationItem))
+                                                            icon: icon(for: notificationItem),
+                                                            forcePlaceholder: settings.hideInviteAvatars)
         notification.body = body
         
         return notification

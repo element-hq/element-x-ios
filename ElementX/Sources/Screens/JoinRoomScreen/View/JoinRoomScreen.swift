@@ -58,7 +58,9 @@ struct JoinRoomScreen: View {
     private var defaultView: some View {
         VStack(spacing: 16) {
             if let inviter = context.viewState.roomDetails?.inviter {
-                RoomInviterLabel(inviter: inviter, mediaProvider: context.mediaProvider)
+                RoomInviterLabel(inviter: inviter,
+                                 shouldHideAvatar: context.viewState.hideInviteAvatars,
+                                 mediaProvider: context.mediaProvider)
                     .multilineTextAlignment(.center)
                     .font(.compound.bodyMD)
                     .foregroundStyle(.compound.textSecondary)
