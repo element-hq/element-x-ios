@@ -14,8 +14,12 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     private var backPaginationStatusObservationToken: TaskHandle?
     
-    // The default values don't matter here, they will be updated when calling subscribeToPagination.
-    private let backPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
+    // The default values shouldn't matter here as they will be updated when calling subscribeToPagination
+    // but empirically we randomly see the timeline start virtual item when we shouldn't.
+    // We believe there's a race condition between the default values the status publisher
+    // so we're going to default the backwards one to .idle. Worst case it's going to do
+    // one extra back pagination.
+    private let backPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.idle)
     private let forwardPaginationStatusSubject = CurrentValueSubject<PaginationStatus, Never>(.timelineEndReached)
     
     private let kind: TimelineKind
