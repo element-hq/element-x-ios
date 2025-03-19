@@ -16,7 +16,6 @@ included:
   - Tools/Scripts/Templates
 excluded:
   - "*/Sources/Generated/*"
-  - IntegrationTests # prints to stdout for performance tests.
   - Tools/Sources # Our command-line tools use a lot of print commands.
 
 line_length:
